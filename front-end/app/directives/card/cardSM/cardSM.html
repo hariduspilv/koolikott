@@ -31,7 +31,18 @@
               data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
             </span>
           </li>
-          <li class="ellipsis">Ühiskonnaõpetus</li>
+          <li data-ng-if="subjects.length > 0" class="ellipsis">
+            <span data-ng-repeat="subject in subjects track by $index">
+              <span data-translate="{{subject}}"></span><span
+              data-ng-bind="$index < subjects.length - 1 ? ', ' : ''"></span>
+            </span>
+          </li>
+          <li data-ng-if="subjects.length === 0" class="ellipsis">
+            <span data-ng-repeat="domain in domains track by $index">
+              <span data-translate="{{domain}}"></span><span
+              data-ng-bind="$index < domains.length - 1 ? ', ' : ''"></span>
+            </span>
+          </li>
         </ul>
       </a>
     </md-card-content>

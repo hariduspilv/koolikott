@@ -1,8 +1,8 @@
 'use strict'
 
 angular.module('koolikottApp').directive('dopCardSm', [
-    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService', 'storageService',
-    function (translationService, serverCallService, iconService, authenticatedUserService, targetGroupService, storageService) {
+    'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService', 'storageService', 'taxonService',
+    function (translationService, serverCallService, iconService, authenticatedUserService, targetGroupService, storageService, taxonService) {
         return {
             scope: {
                 learningObject: '=',
@@ -13,6 +13,8 @@ angular.module('koolikottApp').directive('dopCardSm', [
                 $scope.selected = false;
                 $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                $scope.domains = [];
+                $scope.subjects = [];
 
                 function init() {
                     if ($scope.learningObject.type === '.Material') {
@@ -21,9 +23,11 @@ angular.module('koolikottApp').directive('dopCardSm', [
                         $scope.learningObjectType = 'portfolio';
                     }
                     $scope.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups($scope.learningObject.targetGroups);
+                    loadDomainsAndSubjects();
                 }
 
                 init();
+
                 $scope.navigateTo = function (learningObject, $event) {
                     $event.preventDefault();
 
@@ -85,6 +89,21 @@ angular.module('koolikottApp').directive('dopCardSm', [
 
                     return authenticated;
                 };
+
+                function loadDomainsAndSubjects() {
+                    $scope.learningObject.taxons.forEach(function (taxon) {
+                        var domain = taxonService.getDomain(taxon);
+                        var subject = taxonService.getSubject(taxon);
+
+                        if (domain) {
+                            $scope.domains.push("DOMAIN_" + domain.name.toUpperCase());
+                        }
+
+                        if (subject) {
+                            $scope.subjects.push("SUBJECT_" + subject.name.toUpperCase());
+                        }
+                    });
+                }
 
                 $rootScope.$watch('selectedMaterials', function (newValue) {
                     if (newValue && newValue.length == 0) {
