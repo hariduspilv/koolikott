@@ -33,7 +33,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                 function getContentType() {
                     var baseUrl = document.location.origin;
                     // If the initial type is a LINK, try to ask the type from our proxy
-                    if(matchType(getSource($scope.material)) === 'LINK' || !getSource($scope.material).startsWith(baseUrl) ){
+                    if(getSource($scope.material) && (matchType(getSource($scope.material)) === 'LINK' || !getSource($scope.material).startsWith(baseUrl)) ){
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                     } else {
