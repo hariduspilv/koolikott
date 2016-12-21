@@ -99,6 +99,10 @@ angular.module('koolikottApp')
                             $scope.detailedSearch.isVisible = true;
                         });
 
+                        $scope.$on('detailedSearch:close', function () {
+                            $scope.detailedSearch.isVisible = false;
+                        });
+
                         $scope.closeDetailedSearch = function () {
                             $timeout(function () {
                                 $scope.clearTaxonSelector();

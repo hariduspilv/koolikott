@@ -41,6 +41,8 @@ angular.module('koolikottApp')
                         $rootScope.selectedMaterials.push(material);
                         material.selected = true;
                     }
+
+                    $rootScope.$broadcast("detailedSearch:close");
                 };
 
                 init();
