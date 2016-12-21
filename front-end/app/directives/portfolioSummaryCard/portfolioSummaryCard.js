@@ -187,7 +187,7 @@ angular.module('koolikottApp')
 
                 $scope.getTargetGroups = function () {
                     if ($scope.portfolio) {
-                        return targetGroupService.getLabelByTargetGroupsOrAll($scope.portfolio.targetGroups);
+                        return targetGroupService.getConcentratedLabelByTargetGroups($scope.portfolio.targetGroups);
                     }
                 };
 

@@ -419,7 +419,7 @@ angular.module('koolikottApp')
 
                         function getTargetGroups() {
                             if ($scope.material.targetGroups[0]) {
-                                return targetGroupService.getLabelByTargetGroupsOrAll($scope.material.targetGroups);
+                                return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                             }
                         }
                     }
