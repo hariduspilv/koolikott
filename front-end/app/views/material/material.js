@@ -31,12 +31,8 @@ angular.module('koolikottApp')
                 $scope.fallbackType = matchType(materialSource);
                 $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
                 serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-            } else {
-                if(!isEmpty(materialSource)){
-                    $scope.sourceType = matchType(getSource($scope.material));
-                }else{
-                    $scope.sourceType = "LINK";
-                }
+            } if (materialSource) {
+                $scope.sourceType = matchType(getSource($scope.material));
             }
         }
 
