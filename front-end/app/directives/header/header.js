@@ -321,6 +321,10 @@ angular.module('koolikottApp')
                             && $scope.isViewMaterialOrPortfolioPage)));
                         };
 
+                        $scope.getPortfolioVisibility = function () {
+                            return storageService.getPortfolio().visibility;
+                        };
+
                     }
                 };
             }
