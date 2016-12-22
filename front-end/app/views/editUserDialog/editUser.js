@@ -50,6 +50,10 @@ angular.module('koolikottApp')
             }
         }, true);
 
+        $scope.isEmpty = function (object) {
+          return _.isEmpty(object);
+        };
+
         function updateUserSuccess(user) {
             if (isEmpty(user)) {
                 fail();

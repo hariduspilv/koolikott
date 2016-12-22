@@ -307,8 +307,16 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
 
                 function initWatches() {
 
-                    $rootScope.$watch('savedPortfolio', function (newValue, oldValue) {
-                        if (newValue && oldValue && newValue !== oldValue) {
+                    $scope.$watch(function() {
+                        return storageService.getPortfolio()
+                    }, function (newValue, oldValue) {
+                        if (newValue && oldValue && (newValue !== oldValue)) {
+                            setEditModePrefill();
+                        }
+                    }, true);
+
+                    $rootScope.$watch("isEditPortfolioMode", function (newValue, oldValue) {
+                        if (newValue && (newValue !== oldValue)) {
                             setEditModePrefill();
                         }
                     }, true);
@@ -448,7 +456,7 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
 
                 function setEditModePrefill() {
                     if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
-                        $scope.detailedSearch.taxon = storageService.getPortfolio().taxon;
+                        $scope.detailedSearch.taxon = storageService.getPortfolio().taxons[0];
                         $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
                         prefilling = true;
 

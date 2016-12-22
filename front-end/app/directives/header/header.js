@@ -329,8 +329,9 @@ angular.module('koolikottApp')
                         };
 
                         $scope.getPortfolioVisibility = function () {
-                            if(!storageService.getPortfolio()) return;
-                            return storageService.getPortfolio().visibility;
+                            if (storageService.getPortfolio()) {
+                                return storageService.getPortfolio().visibility;
+                            }
                         };
 
                     }
