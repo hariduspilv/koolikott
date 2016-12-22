@@ -10,20 +10,22 @@ angular.module('koolikottApp')
                     templateUrl: 'directives/header/header.html',
                     link: function () {
                         var scrollTimer,
-                        $detailedSearch = angular.element(document.getElementById('navmenu')),
+                        detailedSearch = document.getElementById('detailedSearch'),
+                        $detailedSearch = angular.element(detailedSearch),
                         $header = document.getElementById('md-toolbar-header');
 
                         angular.element($window).on('scroll', function () {
                             clearTimeout(scrollTimer);
                             scrollTimer = setTimeout(function () {
                                 var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
-                                isDetailedSearchHidden = document.getElementById('detailedSearch').getAttribute('aria-hidden');
+                                isDetailedSearchHidden = detailedSearch.getAttribute('aria-hidden');
 
                                 if ($backdrop.length === 0 && isDetailedSearchHidden) {
                                     if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 960) {
-                                        $detailedSearch.addClass('nav-position--fixed');
+                                        console.log($detailedSearch);
+                                        $detailedSearch.addClass('md-toolbar-filter--fixed');
                                     } else {
-                                        $detailedSearch.removeClass('nav-position--fixed');
+                                        $detailedSearch.removeClass('md-toolbar-filter--fixed');
                                     }
                                 }
                             }, 200);

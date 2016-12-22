@@ -4,7 +4,7 @@
   left:0;
   right:0;
   overflow: hidden;
-  z-index: 10;
+  z-index: 15;
 }
 
 .navbar.md-red {
@@ -145,12 +145,7 @@
 
 .nav-position {
   width: 100%;
-  z-index: 10;
-
-  &--fixed {
-    position: fixed;
-    top: 0;
-  }
+  z-index: 15;
 }
 
 #header-simple-search-input{

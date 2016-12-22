@@ -9,7 +9,7 @@ md-sidenav {
   @media (min-width: $layout-breakpoint-md) {
     background-color: transparent;
     box-shadow: none;
-    z-index: 5;
+    z-index: 10;
   }
 
   md-toolbar {

@@ -8,12 +8,6 @@ $border-color: rgba(0,0,0,0.12);
 
 .filter-wrapper {
   padding-top: 0;
-
-  @media (min-width: $layout-breakpoint-md) {
-    &.nav-open {
-      margin-left: $sidenav-width;
-    }
-  }
 }
 
 .filter-content {
@@ -164,5 +158,13 @@ md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min
 
   .suggestion-hidden {
     visibility: hidden;
+  }
+}
+
+.md-toolbar-filter {
+  &--fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 10;
   }
 }
