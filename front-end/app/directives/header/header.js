@@ -22,7 +22,6 @@ angular.module('koolikottApp')
 
                                 if ($backdrop.length === 0 && isDetailedSearchHidden) {
                                     if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 960) {
-                                        console.log($detailedSearch);
                                         $detailedSearch.addClass('md-toolbar-filter--fixed');
                                     } else {
                                         $detailedSearch.removeClass('md-toolbar-filter--fixed');
