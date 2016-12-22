@@ -173,8 +173,9 @@ app.config(
             }]);
         }
 
-        app.run(function ($rootScope, metadataService, APP_VERSION, taxonService) {
+        app.run(function ($rootScope, metadataService, APP_VERSION, taxonService, FB_APP_ID) {
             $rootScope.APP_VERSION = APP_VERSION;
+            $rootScope.FB_APP_ID = FB_APP_ID;
             $rootScope.hasAppInitated = false;
             metadataService.loadEducationalContexts(setTaxons);
 
