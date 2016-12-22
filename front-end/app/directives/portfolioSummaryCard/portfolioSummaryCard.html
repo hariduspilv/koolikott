@@ -1,5 +1,5 @@
 <md-card class="card-lg card-mb-20" id="portfolio-card">
-  <div layout="column" layout-gt-xs="row">
+  <div layout-gt-xs="row">
     <!-- left large side  -->
     <div flex flex-gt-xs="75" layout="column" class="left-side">
       <!-- left headline -->
@@ -65,7 +65,6 @@
             <small class="md-caption">
               <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
             </small>
-          </small>
           <br>
           <span class="ellipsis" data-ng-repeat="taxon in portfolio.taxons | limitTo:2 track by $index">
             <span class="ellipsis" data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
@@ -141,7 +140,7 @@
 
 
   <!-- right small side  -->
-  <div layout="column" flex flex-gt-xs="25" class="right-side">
+  <div flex flex-gt-xs="25" class="right-side">
     <!-- Hidden because waiting for correct design-->
     <div class="card-media">
       <div class="ribbon"></div>
