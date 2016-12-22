@@ -128,6 +128,7 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 var level1 = _.intersection(targetGroups, groups[1].children);
                 if (level1.length === 3) addToResult(groups[1].label);
                 else if (level1.length === 2) {
+                    level1.sort();
                     if (parseInt(level1[0].slice(-1)) === parseInt(level1[1].slice(-1)) - 1) {
                         result.push(level1[0].slice(-1) + ".-" + (level1[1].slice(-1)) + ". " + $translate.instant(GRADE));
                     }else{
@@ -141,6 +142,7 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 var level2 = _.intersection(targetGroups, groups[2].children);
                 if (level2.length === 3) addToResult(groups[2].label);
                 else if (level2.length === 2) {
+                    level2.sort();
                     if (parseInt(level2[0].slice(-1)) === parseInt(level2[1].slice(-1)) - 1) {
                         result.push(level2[0].slice(-1) + ".-" + (level2[1].slice(-1)) + ". " + $translate.instant(GRADE));
                     }else{
@@ -154,6 +156,7 @@ angular.module('koolikottApp').factory('targetGroupService', [
                 var level3 = _.intersection(targetGroups, groups[3].children);
                 if (level3.length === 3) addToResult(groups[3].label);
                 else if (level3.length === 2) {
+                    level3.sort();
                     if (parseInt(level3[0].slice(-1)) === parseInt(level3[1].slice(-1)) - 1) {
                         result.push(level3[0].slice(-1) + ".-" + (level3[1].slice(-1)) + ". " + $translate.instant(GRADE));
                     }else{
