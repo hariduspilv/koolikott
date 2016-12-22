@@ -421,13 +421,11 @@ angular.module('koolikottApp')
                     });
 
                     $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
-                        if (newValue !== oldValue) {
-                            if (newValue && newValue.length > 0) {
-                                $scope.showErrorOverlay = true;
-                                $timeout(function () {
-                                    $scope.showErrorOverlay = false;
-                                }, 6000);
-                            }
+                        if (newValue && newValue.$error) {
+                            $scope.showErrorOverlay = true;
+                            $timeout(function () {
+                                $scope.showErrorOverlay = false;
+                            }, 6000);
                         }
                     });
 
