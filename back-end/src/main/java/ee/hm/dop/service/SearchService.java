@@ -136,7 +136,7 @@ public class SearchService {
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
         if (!filtersAsQuery.isEmpty()) {
             if (!queryString.isEmpty()) {
-                queryString = format("(%s) AND %s", queryString, filtersAsQuery);
+                queryString = format("((%s) OR (\"%s\")) AND %s", queryString, queryString, filtersAsQuery);
             } else {
                 queryString = filtersAsQuery;
             }
