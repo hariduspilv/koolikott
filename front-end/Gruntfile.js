@@ -436,7 +436,8 @@ module.exports = function (grunt) {
                     name: 'DOPconstants'
                 },
                 constants: {
-                    APP_VERSION: grunt.file.readJSON('package.json').version
+                    APP_VERSION: grunt.file.readJSON('package.json').version,
+                    FB_APP_ID: '225966171178748'
                 }
             }
         },
