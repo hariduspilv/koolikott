@@ -64,7 +64,7 @@
          data-taxon="newPortfolio.taxons[$index]"
          data-is-add-portfolio-view="true" flex></div>
     <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === newPortfolio.taxons.length"
-               data-ng-click="addNewTaxon()" data-ng-disabled="newPortfolio.taxon">
+               data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(newPortfolio.taxons[0])">
       <md-icon>add_circle</md-icon>
       <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
     </md-button>
