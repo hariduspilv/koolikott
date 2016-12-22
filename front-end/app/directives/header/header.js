@@ -16,13 +16,16 @@ angular.module('koolikottApp')
                         angular.element($window).on('scroll', function() {
                             clearTimeout(scrollTimer);
                             scrollTimer = setTimeout(function() {
-                                var $backdrop = document.querySelector('.md-menu-backdrop');
+                                var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop');
+                                var isDetailedSearchHidden = document.getElementById('detailedSearch').getAttribute('aria-hidden');
 
-                                if (!$backdrop) {
+                                if ($backdrop.length === 0 && isDetailedSearchHidden) {
                                     if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 600) {
                                         $detailedSearch.style.position = 'fixed';
+                                        $detailedSearch.style.top = '0';
                                     } else {
                                         $detailedSearch.style.position = 'static';
+                                        $detailedSearch.style.top = 'auto';
                                     }
                                 }
                             }, 200);
