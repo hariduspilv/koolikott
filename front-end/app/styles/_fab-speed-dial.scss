@@ -13,6 +13,10 @@
   position: fixed !important;
 }
 
+.md-fab.main-fab {
+    background-color: $main-fab;
+}
+
 .fab-closed-icon,
 .fab-open-icon {
   position: absolute;
@@ -37,7 +41,7 @@
   .md-is-open & {
     opacity: 0;
     transform: scale(0) rotate(0);
-    animation: fa-spin .3s 1 linear;
+    animation: fa-spin .8s 1 linear;
   }
 }
 
@@ -54,11 +58,15 @@
   box-shadow: $whiteframe-shadow-7dp;
 }
 
-.main-fab__btn.md-button.md-mini.md-fab:not([disabled]):hover,
-.main-fab__btn.md-button.md-mini.md-fab:not([disabled]):focus {
-  background-color: lighten($color-accent, 10%);
+.main-fab__btn.md-button.md-mini.md-fab:not([disabled]) {
+  background-color: $green1;
 }
 
-.md-is-open .md-button.md-warn.md-fab  {
-  background-color: $color-accent;
+.main-fab__btn.md-button.md-mini.md-fab:not([disabled]):hover,
+.main-fab__btn.md-button.md-mini.md-fab:not([disabled]):focus {
+  background-color: lighten($green1, 10%);
 }
+
+// .md-is-open .md-button.md-fab  {
+//   background-color: $color-accent;
+// }

@@ -1,7 +1,7 @@
 <md-fab-speed-dial data-ng-show="hasPermission()" class="md-fab-bottom-right md-scale main-fab-button ng-hide" md-open="isOpen"
                    md-direction="up" ng-mouseenter="setFabState(true)" ng-mouseleave="setFabState(false)">
   <md-fab-trigger>
-    <md-button ng-if="hasPermission()" aria-label="Lisa kogumik" class="md-fab md-warn" data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">
+    <md-button ng-if="hasPermission()" aria-label="Lisa kogumik" class="md-fab main-fab" data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_PORTFOLIO"></span>
       </md-tooltip>
