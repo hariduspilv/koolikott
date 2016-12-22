@@ -155,6 +155,10 @@ angular.module('koolikottApp')
                     }
                 });
 
+                $scope.updatePortfolio = function (portfolio) {
+                    setPortfolio(portfolio);
+                };
+
                 /*
                  * Admin dashboard listeners
                  * Events are sent from errorMessage

@@ -13,9 +13,9 @@ angular.module('koolikottApp')
                         $detailedSearch = angular.element(document.getElementById('navmenu')),
                         $header = document.getElementById('md-toolbar-header');
 
-                        angular.element($window).on('scroll', function() {
+                        angular.element($window).on('scroll', function () {
                             clearTimeout(scrollTimer);
-                            scrollTimer = setTimeout(function() {
+                            scrollTimer = setTimeout(function () {
                                 var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
                                 isDetailedSearchHidden = document.getElementById('detailedSearch').getAttribute('aria-hidden');
 
@@ -171,7 +171,7 @@ angular.module('koolikottApp')
                             $scope.clearInlineSuggestion();
                         };
 
-                        function isSearchResultPage () {
+                        function isSearchResultPage() {
                             return $location.url().startsWith('/' + searchService.getSearchURLbase());
                         }
 
