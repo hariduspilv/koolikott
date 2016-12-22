@@ -6,52 +6,54 @@
       <div layout="row">
         <h1 flex data-ng-bind="portfolio.title"></h1>
 
-        <div dop-share
-        data-title="portfolio.title"
-        data-description="portfolio.summary"
-        data-object="portfolio"></div>
+        <div class="card-menus" layout="row">
+          <div dop-share
+          data-title="portfolio.title"
+          data-description="portfolio.summary"
+          data-object="portfolio"></div>
 
-        <md-menu>
-          <md-button class="md-icon-button" ng-click="$mdOpenMenu()" id="material-menu">
-            <md-icon md-menu-origin>more_vert</md-icon>
-          </md-button>
-          <md-menu-content width="4" id="material-actions">
-            <md-menu-item data-ng-if="!isEditPortfolioMode && canEdit()">
-              <md-button data-ng-click="editPortfolio()" id="material-edit">
-                <md-icon md-menu-align-target>edit</md-icon>
-                <span data-translate="EDIT_PORTFOLIO"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-item data-ng-if="isEditPortfolioMode">
-              <md-button data-ng-click="showEditMetadataDialog()">
-                <md-icon md-menu-align-target>edit</md-icon>
-                <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
-              </md-button>
-            </md-menu-item>
+          <md-menu>
+            <md-button class="md-icon-button" ng-click="$mdOpenMenu()" id="material-menu">
+              <md-icon md-menu-origin>more_vert</md-icon>
+            </md-button>
+            <md-menu-content width="4" id="material-actions">
+              <md-menu-item data-ng-if="!isEditPortfolioMode && canEdit()">
+                <md-button data-ng-click="editPortfolio()" id="material-edit">
+                  <md-icon md-menu-align-target>edit</md-icon>
+                  <span data-translate="EDIT_PORTFOLIO"></span>
+                </md-button>
+              </md-menu-item>
+              <md-menu-item data-ng-if="isEditPortfolioMode">
+                <md-button data-ng-click="showEditMetadataDialog()">
+                  <md-icon md-menu-align-target>edit</md-icon>
+                  <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
+                </md-button>
+              </md-menu-item>
 
-            <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted">
-              <md-button data-ng-click="confirmPortfolioDeletion()">
-                <md-icon md-menu-align-target>delete</md-icon>
-                <span data-translate="PORTFOLIO_DELETE"></span>
-              </md-button>
-            </md-menu-item>
+              <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted">
+                <md-button data-ng-click="confirmPortfolioDeletion()">
+                  <md-icon md-menu-align-target>delete</md-icon>
+                  <span data-translate="PORTFOLIO_DELETE"></span>
+                </md-button>
+              </md-menu-item>
 
-            <md-menu-item data-ng-if="isAdminOrModerator() && portfolio.deleted && !isAdminButtonsShowing()">
-              <md-button data-ng-click="restorePortfolio()">
-                <md-icon md-menu-align-target>undo</md-icon>
-                <span data-translate="BUTTON_RESTORE"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
-            <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
+              <md-menu-item data-ng-if="isAdminOrModerator() && portfolio.deleted && !isAdminButtonsShowing()">
+                <md-button data-ng-click="restorePortfolio()">
+                  <md-icon md-menu-align-target>undo</md-icon>
+                  <span data-translate="BUTTON_RESTORE"></span>
+                </md-button>
+              </md-menu-item>
+              <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
+              <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
 
-            <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
+              <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
 
-            <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
-            <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper
-            data-learning-object="portfolio"></md-menu-item>
-          </md-menu-content>
-        </md-menu>
+              <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
+              <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper
+              data-learning-object="portfolio"></md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </div>
       </div>
       <!-- left meta  -->
       <div layout="row">
