@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopShare',
 [
-    '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare',
-    function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare) {
+    '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare', 'FB_APP_ID',
+    function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare, FB_APP_ID) {
         return {
             scope: {
                 title: '=',
@@ -119,7 +119,8 @@ angular.module('koolikottApp')
                                 'socialshareUrl': $scope.pageUrl,
                                 'socialshareTitle': $translate.instant('READING_RECOMMENDATION') + ':' + $scope.title,
                                 'socialshareMedia': $scope.pictureName,
-                                'socialshareType': 'share'
+                                'socialshareType': 'share',
+                                'socialshareVia': FB_APP_ID
                               }
                             });
                             break;
