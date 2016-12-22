@@ -28,56 +28,58 @@
         <h1 flex data-ng-if="sourceType !== 'LINK'"
         data-ng-bind="getCorrectLanguageString(material.titles)"></h1>
 
-        <div dop-share
-        data-title="getCorrectLanguageString(material.titles)"
-        data-description="getCorrectLanguageString(material.descriptions)"
-        data-object="material"></div>
+        <div class="card-menus" layout="row">
+          <div dop-share
+          data-title="getCorrectLanguageString(material.titles)"
+          data-description="getCorrectLanguageString(material.descriptions)"
+          data-object="material"></div>
 
-        <md-menu>
-          <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-            <md-icon md-menu-origin>more_vert</md-icon>
-          </md-button>
-          <md-menu-content width="4" class="material-menu-icon">
-
-            <md-menu-item
-            data-ng-if="isAdmin() || isUsersMaterial() || isModerator()">
-            <md-button data-ng-click="edit()">
-              <md-icon md-menu-align-target>edit</md-icon>
-              <span data-translate="MATERIAL_EDIT"></span>
+          <md-menu>
+            <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+              <md-icon md-menu-origin>more_vert</md-icon>
             </md-button>
+            <md-menu-content width="4" class="material-menu-icon">
+
+              <md-menu-item
+              data-ng-if="isAdmin() || isUsersMaterial() || isModerator()">
+              <md-button data-ng-click="edit()">
+                <md-icon md-menu-align-target>edit</md-icon>
+                <span data-translate="MATERIAL_EDIT"></span>
+              </md-button>
+            </md-menu-item>
+
+            <md-menu-item data-ng-if="isAdmin() && material.deleted && !isAdminButtonsShowing()">
+              <md-button data-ng-click="restoreMaterial()">
+                <md-icon md-menu-align-target>undo</md-icon>
+                <span data-translate="BUTTON_RESTORE"></span>
+              </md-button>
+            </md-menu-item>
+
+            <md-menu-item data-ng-if="isAdmin() && !material.deleted && !isAdminButtonsShowing()">
+              <md-button data-ng-click="confirmMaterialDeletion()">
+                <md-icon md-menu-align-target>delete</md-icon>
+                <span data-translate="MATERIAL_DELETE"></span>
+              </md-button>
+            </md-menu-item>
+
+            <md-menu-item dop-copy-permalink data-url="pageUrl"></md-menu-item>
+            <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
+            <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
+
+            <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
+
+            <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
+            data-learning-object="material"></md-menu-item>
+
+            <md-menu-item data-ng-if="!isAdmin()"
+            dop-report-broken-link></md-menu-item>
+
+            <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
+            data-learning-object="material">
           </md-menu-item>
-
-          <md-menu-item data-ng-if="isAdmin() && material.deleted && !isAdminButtonsShowing()">
-            <md-button data-ng-click="restoreMaterial()">
-              <md-icon md-menu-align-target>undo</md-icon>
-              <span data-translate="BUTTON_RESTORE"></span>
-            </md-button>
-          </md-menu-item>
-
-          <md-menu-item data-ng-if="isAdmin() && !material.deleted && !isAdminButtonsShowing()">
-            <md-button data-ng-click="confirmMaterialDeletion()">
-              <md-icon md-menu-align-target>delete</md-icon>
-              <span data-translate="MATERIAL_DELETE"></span>
-            </md-button>
-          </md-menu-item>
-
-          <md-menu-item dop-copy-permalink data-url="pageUrl"></md-menu-item>
-          <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
-          <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
-
-          <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
-
-          <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
-          data-learning-object="material"></md-menu-item>
-
-          <md-menu-item data-ng-if="!isAdmin()"
-          dop-report-broken-link></md-menu-item>
-
-          <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
-          data-learning-object="material">
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
+        </md-menu-content>
+      </md-menu>
+    </div>
   </div>
 
   <!-- left meta  -->

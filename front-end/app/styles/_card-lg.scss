@@ -32,9 +32,17 @@
   .md-button {
     font-weight: 400;
   }
-  .md-menu {
-    margin-top: -$md-padding;
+  .card-menus {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    margin-top: $md-padding;
+    .md-button {
+      margin: 0;
+    }
   }
+
   .card-media {
     margin-left: -$md-padding;
     height: auto;
@@ -60,11 +68,11 @@
     position: relative;
     display: block;
     border-left: none;
-    padding-left: 0;
+    padding-left: $md-padding;
     @media (min-width: $layout-breakpoint-xs) {
       border-left-width: 1px;
       border-left-style: solid;
-      padding-left: $md-padding;
+
       border-left-color: $border-color;
     }
     md-content {

@@ -315,7 +315,11 @@ function isObjectEmpty(obj) {
 }
 
 function getSource(material) {
-    return material.source ? material.source : material.uploadedFile.url;
+    if (material.source) {
+        return material.source;
+    } else if (material.uploadedFile) {
+        return material.uploadedFile.url
+    }
 }
 
 /**
@@ -403,21 +407,10 @@ function matchType(type) {
     } else if (isPictureLink(type)) {
         return 'PICTURE';
     } else if (isEbookLink(type)) {
-        if (isIE()) {
-            return 'LINK';
-        }
         return 'EBOOK';
     } else if (isPDFLink(type)) {
-        if (isIE()) {
-            return 'LINK';
-        }
         return 'PDF';
     } else {
         return 'LINK';
     }
-}
-
-function isIE() {
-    return !!(navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
-    navigator.userAgent.match(/rv 11/)));
 }

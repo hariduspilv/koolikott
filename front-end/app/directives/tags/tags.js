@@ -208,12 +208,21 @@ angular.module('koolikottApp')
                             addSystemTag($scope.newTag.tagName)
                                 .then(function (response) {
                                     addTagSuccess(response.data.learningObject);
-                                    $scope.newTag.tagName = null;
                                     showSystemTagDialog(response.data.tagTypeName);
+                                    updateLearningObject(response.data.learningObject);
+                                    $scope.newTag.tagName = null;
                                     $rootScope.$broadcast("errorMessage:updateChanged");
                                 }).catch(function(e) {
                                     $scope.newTag.tagName = null;
                                 });
+                        }
+
+                        function updateLearningObject (learningObject) {
+                            if (learningObject.type === ".Material") {
+                                $scope.$parent.updateMaterial(learningObject);
+                            } else if (learningObject.type === ".Portfolio") {
+                                $scope.$parent.updatePortfolio(learningObject);
+                            }
                         }
 
                         function showSystemTagDialog(tagType) {
@@ -222,8 +231,8 @@ angular.module('koolikottApp')
                             $mdDialog.show(
                                 $mdDialog.alert()
                                     .clickOutsideToClose(true)
-                                    .title('Süsteemne märksõna valitud')
-                                    .textContent('Valisid süsteemse märksõna. Vastav väärtus on lisatud materjali külge!')
+                                    .title($translate.instant('SYSTEM_TAG_DIALOG_TITLE'))
+                                    .textContent($translate.instant('SYSTEM_TAG_DIALOG_CONTENT'))
                                     .ok('Ok')
                                     .closeTo('#' + tagType + '-close')
                             )

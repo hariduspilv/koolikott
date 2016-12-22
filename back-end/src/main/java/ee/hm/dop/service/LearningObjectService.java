@@ -126,24 +126,32 @@ public class LearningObjectService extends BaseService {
         ResourceType resourceType = resourceTypeService.findResourceByTranslation(tagName);
         TargetGroup targetGroup = targetGroupService.getByTranslation(tagName);
 
+        boolean hasChanged = false;
         if (taxon != null) {
             addTaxon(learningObject, taxon);
             changedLearningObject.setTaxon(taxon);
             tagDTO.setTagTypeName("taxon");
+            hasChanged = true;
         } else if (learningObject instanceof Material && resourceType != null) {
             addResourceType((Material) learningObject, resourceType);
             changedLearningObject.setResourceType(resourceType);
             tagDTO.setTagTypeName("resourcetype");
-
+            hasChanged = true;
         } else if (targetGroup != null) {
             addTargetGroup(targetGroup, learningObject);
             changedLearningObject.setTargetGroup(targetGroup);
             tagDTO.setTagTypeName("targetgroup");
+            hasChanged = true;
         }
 
         changedLearningObjectService.addChanged(changedLearningObject);
-        tagDTO.setLearningObject(getLearningObjectDAO().update(learningObject));
+
+        LearningObject updatedLearningObject = getLearningObjectDAO().update(learningObject);
+        updatedLearningObject.setChanged(hasChanged ? (updatedLearningObject.getChanged() + 1) : updatedLearningObject.getChanged());
+        tagDTO.setLearningObject(updatedLearningObject);
+
         solrEngineService.updateIndex();
+
         return tagDTO;
     }
 

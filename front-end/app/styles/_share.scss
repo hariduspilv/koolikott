@@ -1,13 +1,10 @@
 .share {
-  position: absolute;
-  top: 0;
-  right: 50px;
-  margin-right: -$md-padding;
-  z-index: 1;
 
-  @media (min-width: $layout-breakpoint-xs) {
-    margin-right: 0;
-  }
+  // margin-right: -$md-padding;
+  //
+  // @media (min-width: $layout-breakpoint-xs) {
+  //   margin-right: 0;
+  // }
 
   &.md-is-open {
     .md-raised.share__btn {
