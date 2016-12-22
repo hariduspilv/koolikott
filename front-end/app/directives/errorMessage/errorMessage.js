@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopErrorMessage',
 [
-    '$location', 'serverCallService', 'userDataService', '$timeout', 'changedLearningObjectService',
-    function ($location, serverCallService, userDataService, $timeout, changedLearningObjectService) {
+    '$location', 'serverCallService', 'userDataService', '$timeout', 'changedLearningObjectService', '$routeParams',
+    function ($location, serverCallService, userDataService, $timeout, changedLearningObjectService, $routeParams) {
         return {
             scope: {
                 data: '='
@@ -43,6 +43,8 @@ angular.module('koolikottApp')
                         return $scope.$parent.material.id;
                     } else if ($scope.$parent.portfolio) {
                         return $scope.$parent.portfolio.id;
+                    } else {
+                        return $routeParams.id;
                     }
                 }
 
