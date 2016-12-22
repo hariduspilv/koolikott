@@ -202,6 +202,12 @@ md-card {
       @include pattern-color($green2);
     }
   }
+  &.assignment {
+    background-color: $pinky;
+    .pattern .sheet {
+      @include pattern-color($pinky);
+    }
+  }
   &.dvr {
     background-color: $greengrass;
     .pattern .sheet {
@@ -209,9 +215,9 @@ md-card {
     }
   }
   &.portfolio {
-    background-color: $royal;
+    background-color: $lilac;
     .pattern .sheet {
-      @include pattern-color($royal);
+      @include pattern-color($lilac);
     }
   }
   &.casino {
@@ -239,9 +245,9 @@ md-card {
     }
   }
   &.web {
-    background-color: $lilac;
+    background-color: $royal;
     .pattern .sheet {
-      @include pattern-color($lilac);
+      @include pattern-color($royal);
     }
   }
 }
