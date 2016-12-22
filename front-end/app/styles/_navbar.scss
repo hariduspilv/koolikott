@@ -146,7 +146,13 @@
 .nav-position {
   width: 100%;
   z-index: 10;
+
+  &--fixed {
+    position: fixed;
+    top: 0;
+  }
 }
+
 #header-simple-search-input{
   background-color: transparent;
 }

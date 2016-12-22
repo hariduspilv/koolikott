@@ -9,23 +9,21 @@ angular.module('koolikottApp')
                     scope: true,
                     templateUrl: 'directives/header/header.html',
                     link: function () {
-                        var scrollTimer;
-                        var $detailedSearch = document.getElementById('navmenu');
-                        var $header = document.getElementById('md-toolbar-header');
+                        var scrollTimer,
+                        $detailedSearch = angular.element(document.getElementById('navmenu')),
+                        $header = document.getElementById('md-toolbar-header');
 
                         angular.element($window).on('scroll', function() {
                             clearTimeout(scrollTimer);
                             scrollTimer = setTimeout(function() {
-                                var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop');
-                                var isDetailedSearchHidden = document.getElementById('detailedSearch').getAttribute('aria-hidden');
+                                var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
+                                isDetailedSearchHidden = document.getElementById('detailedSearch').getAttribute('aria-hidden');
 
                                 if ($backdrop.length === 0 && isDetailedSearchHidden) {
-                                    if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 600) {
-                                        $detailedSearch.style.position = 'fixed';
-                                        $detailedSearch.style.top = '0';
+                                    if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 960) {
+                                        $detailedSearch.addClass('nav-position--fixed');
                                     } else {
-                                        $detailedSearch.style.position = 'static';
-                                        $detailedSearch.style.top = 'auto';
+                                        $detailedSearch.removeClass('nav-position--fixed');
                                     }
                                 }
                             }, 200);
@@ -89,7 +87,7 @@ angular.module('koolikottApp')
                             $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                             broadcastSearchOpen();
 
-                            if ($window.innerWidth < 600) {
+                            if ($window.innerWidth < 960) {
                                 $anchorScroll();
                             }
                         };
@@ -104,6 +102,10 @@ angular.module('koolikottApp')
 
                         $scope.$on('detailedSearch:close', function () {
                             $scope.detailedSearch.isVisible = false;
+                        });
+
+                        $scope.$on('detailedSearch:empty', function () {
+                            $scope.closeDetailedSearch();
                         });
 
                         $scope.closeDetailedSearch = function () {

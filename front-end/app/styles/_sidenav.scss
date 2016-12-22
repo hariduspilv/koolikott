@@ -9,24 +9,15 @@ md-sidenav {
   @media (min-width: $layout-breakpoint-md) {
     background-color: transparent;
     box-shadow: none;
-    z-index: 3;
+    z-index: 5;
   }
-}
 
-md-sidenav {
   md-toolbar {
     padding: 0 22px;
-  }
-  @media (min-width: $layout-breakpoint-md) {
-    md-toolbar {
+
+    @media (min-width: $layout-breakpoint-md) {
       min-height: 64px;
     }
-  }
-  md-toolbar.md-primary .md-toolbar-tools.md-subhead {
-    box-shadow: rgba(0, 0, 0, 0.2) -3px 1px 3px 0px, rgba(0, 0, 0, 0.137255) -1px 1px 1px 0px, rgba(0, 0, 0, 0.117647) -1px 2px 1px -1px;
-  }
-  md-content {
-    z-index: -1;
   }
 }
 
