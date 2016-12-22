@@ -63,7 +63,7 @@ angular.module('koolikottApp')
                 mobileIdLoginSuccessCallback();
             }
 
-            $rootScope.isUserTabOpen = true;
+            $rootScope.justLoggedIn = true;
         }
 
         function logoutSuccess(data) {

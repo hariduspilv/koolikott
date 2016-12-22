@@ -232,7 +232,9 @@ app.config(
                     $location.path('/' + user.username + '/portfolios');
                 }
 
-                $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
+                $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.justLoggedIn);
+
+                $rootScope.justLoggedIn = false;
 
                 if ($rootScope.isEditPortfolioPage) {
                     $rootScope.isEditPortfolioMode = true;
