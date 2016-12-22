@@ -152,7 +152,6 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                         $scope.sourceType = 'EBOOK';
                         $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
                     } else if (isPDFLink($scope.material.source)) {
-                        $scope.material.source += "#toolbar=0&navpanes=0&zoom=100";
                         $scope.sourceType = 'PDF';
                     } else {
                         embedService.getEmbed(getSource($scope.material), embedCallback);
