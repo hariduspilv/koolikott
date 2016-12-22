@@ -27,7 +27,8 @@
     "angular-embed": "3.0.2",
     "angular-drag-and-drop-lists": "1.4.0",
     "cssua.js": "cssuseragent#^2.1.31",
-    "lodash": "^4.17.2"
+    "lodash": "^4.17.2",
+    "angular-socialshare": "angularjs-socialshare#^2.3.4"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",

@@ -10,9 +10,9 @@
 
   <md-fab-actions>
     <div data-ng-repeat="item in shareMediaPlaces">
-      <md-button class="md-fab md-raised md-mini share__btn share__btn--{{item.name}}" target="{{item.target}}"
-                 aria-label="{{item.name}}" data-ng-href="{{item.url}}"
-                 data-ng-click="checkOwnerAndShowDialog($event, item)">
+      <md-button class="md-fab md-raised md-mini share__btn share__btn--{{item.provider}}"
+                 aria-label="{{item.provider}}"
+                 data-ng-click="share($event, item)">
         <span class="share__icon {{item.icon}}"></span>
       </md-button>
     </div>
@@ -34,15 +34,15 @@
       <md-dialog-actions layout="row">
         <span flex></span>
         <md-button class="md-primary md-cancel-button" data-ng-click="back()" aria-label="Tagasi" data-translate="BUTTON_CANCEL"></md-button>
-        <md-button data-ng-hide="showButtons" class="md-primary md-confirm-button" data-ng-href="{{url}}" target="{{target}}"
+        <md-button data-ng-hide="showButtons" class="md-primary md-confirm-button"
                    aria-label="Jaga"
                    data-ng-click="success()" data-translate="BUTTON_SHARE">
         </md-button>
-        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button" data-ng-href="{{url}}" target="{{target}}"
+        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button"
                    aria-label="Ainult lingiga"
                    data-ng-click="updatePortfolio('NOT_LISTED')" data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED">
         </md-button>
-        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button" data-ng-href="{{url}}" target="{{target}}"
+        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button"
                    aria-label="Avalik"
                    data-ng-click="updatePortfolio('PUBLIC')" data-translate="PORTFOLIO_VISIBILITY_PUBLIC">
         </md-button>

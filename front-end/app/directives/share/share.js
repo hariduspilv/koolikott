@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopShare',
 [
-    '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService',
-    function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService) {
+    '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare',
+    function($rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare) {
         return {
             scope: {
                 title: '=',
@@ -47,24 +47,16 @@ angular.module('koolikottApp')
 
                 $scope.shareMediaPlaces = [
                     {
-                        'name': 'email',
-                        'url': 'mailto:?subject=' + $translate.instant('READING_RECOMMENDATION') + ':%20' + $scope.title + '&body=' + $translate.instant('WELCOME_READ_HERE') + ':' + $scope.pageUrl,
-                        'target': '_self',
+                        'provider': 'email',
                         'icon': 'icon-mail-squared'
                     }, {
-                        'name': 'google',
-                        'url': 'https://plus.google.com/share?url=' + $scope.pageUrl,
-                        'target': '_blank',
+                        'provider': 'google',
                         'icon': 'icon-gplus-squared'
                     }, {
-                        'name': 'twitter',
-                        'url': 'https://twitter.com/intent/tweet?url=' + $scope.pageUrl + '&amp;text=' + $translate.instant('READING_RECOMMENDATION') + ':%20' + $scope.title,
-                        'target': '_blank',
+                        'provider': 'twitter',
                         'icon': 'icon-twitter-squared'
                     }, {
-                        'name': 'facebook',
-                        'url': 'https://www.facebook.com/sharer.php?u=' + $scope.pageUrl,
-                        'target': '_blank',
+                        'provider': 'facebook',
                         'icon': 'icon-facebook-squared'
                     }
                 ];
@@ -93,19 +85,20 @@ angular.module('koolikottApp')
                     }
                 }
 
-                $scope.checkOwnerAndShowDialog = function ($event, item) {
+                $scope.share = function ($event, item) {
                     if ($scope.object.type === '.Material') {
-                        return;
-                    }
-
-                    if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
-                        $event.preventDefault();
-                        showWarningDialog($event, item);
+                        setShareParams(item);
+                    } else if ($scope.object.type === '.Portfolio') {
+                        if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
+                            $event.preventDefault();
+                            showWarningDialog($event, item);
+                        } else {
+                            setShareParams(item);
+                        }
                     }
                 };
 
                 function showWarningDialog (ev, item) {
-                    $scope.dialogItem = item;
                     $mdDialog.show({
                         templateUrl: 'sharedialog.tmpl.html',
                         controller: DialogController,
@@ -117,12 +110,45 @@ angular.module('koolikottApp')
                     });
                 }
 
-                function setShareParams() {
-                    $rootScope.shareUrl = $scope.pageUrl;
-                    $rootScope.shareTitle = $scope.title;
-                    $rootScope.shareDescription = $scope.description;
-                    if ($scope.pictureName) {
-                        $rootScope.shareImage = $location.protocol() + '://' + $location.host() + ':' +  $location.port() + '/rest/picture/' + $scope.pictureName;
+                function setShareParams(item) {
+                    switch (item.provider) {
+                        case 'facebook':
+                            Socialshare.share({
+                              'provider': item.provider,
+                              'attrs': {
+                                'socialshareUrl': $scope.pageUrl,
+                                'socialshareTitle': $translate.instant('READING_RECOMMENDATION') + ':' + $scope.title,
+                                'socialshareMedia': $scope.pictureName,
+                                'socialshareType': 'share'
+                              }
+                            });
+                            break;
+                        case 'twitter':
+                            Socialshare.share({
+                              'provider': item.provider,
+                              'attrs': {
+                                'socialshareUrl': $scope.pageUrl,
+                                'socialshareText': $translate.instant('READING_RECOMMENDATION') + ': ' + $scope.title
+                              }
+                            });
+                            break;
+                        case 'google':
+                            Socialshare.share({
+                              'provider': item.provider,
+                              'attrs': {
+                                'socialshareUrl': $scope.pageUrl
+                              }
+                            });
+                            break;
+                        case 'email':
+                            Socialshare.share({
+                              'provider': item.provider,
+                              'attrs': {
+                                'socialshareSubject': $translate.instant('READING_RECOMMENDATION') + ': ' + $scope.title,
+                                'socialshareBody': $translate.instant('WELCOME_READ_HERE') + ': ' + $scope.pageUrl
+                              }
+                            });
+                            break;
                     }
                 }
 
@@ -139,13 +165,13 @@ angular.module('koolikottApp')
                         $scope.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
                     }
 
-                    $scope.url = locals.item.url;
-                    $scope.target = locals.item.target;
-
                     $scope.updatePortfolio = function (state) {
                         var portfolioClone = angular.copy(locals.portfolio);
                         portfolioClone.visibility = state;
                         serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
+
+                        setShareParams(locals.item);
+
                         $mdDialog.cancel();
                     };
 
@@ -159,7 +185,7 @@ angular.module('koolikottApp')
                     }
 
                     function updateFail() {
-                        console.log("Updating portfolio failed")
+                        console.log("Updating portfolio failed");
                     }
 
                     $scope.back = function() {
@@ -167,11 +193,11 @@ angular.module('koolikottApp')
                     }
 
                     $scope.success = function() {
+                        setShareParams(locals.item);
+
                         $mdDialog.cancel();
                     }
                 }
-
-                setShareParams();
             }
         };
     }

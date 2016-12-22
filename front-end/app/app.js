@@ -12,7 +12,8 @@ var app = angular.module('koolikottApp', [
     'textAngular',
     'md.data.table',
     'infinite-scroll',
-    'youtube-embed'
+    'youtube-embed',
+    '720kb.socialshare'
 ]);
 
 var provideProvider = null;
@@ -172,13 +173,6 @@ app.config(
             }]);
         }
 
-        function setDefaultShareParams($rootScope, $location) {
-            $rootScope.shareTitle = 'e-Koolikott';
-            $rootScope.shareUrl = $location.absUrl();
-            $rootScope.shareDescription = 'e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum. The portal allows finding educational materials located in different digital tool collections. The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.'
-            $rootScope.shareImage = '';
-        }
-
         app.run(function ($rootScope, metadataService, APP_VERSION, taxonService) {
             $rootScope.APP_VERSION = APP_VERSION;
             $rootScope.hasAppInitated = false;
@@ -237,7 +231,6 @@ app.config(
                 if (isViewMyProfile && $location.path() === '/' + authenticatedUserService.getUser().username) {
                     $location.path('/' + user.username + '/portfolios');
                 }
-                if (!$rootScope.isViewPortforlioPage || !$rootScope.isViewMaterialPage) setDefaultShareParams($rootScope, $location);
 
                 $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage);
 
