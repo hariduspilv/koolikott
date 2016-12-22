@@ -38,7 +38,7 @@
             </md-input-container>
           </div>
 
-          <div data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
+          <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching">
             <div class="card-container">
               <div data-ng-repeat="item in items" class="card-container__item">
                 <div data-dop-card-sm learning-object="item"></div>
