@@ -407,7 +407,17 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
         List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
         if (materialsWithGivenSource != null && materialsWithGivenSource.size() > 0) {
-            if (!materialsWithGivenSource.get(0).getId().equals(material.getId())) {
+            if (!listContainsMaterial(materialsWithGivenSource, material)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean listContainsMaterial(List<Material> list, Material material) {
+        for (Material m : list) {
+            if (m.getId().equals(material.getId())) {
                 return true;
             }
         }
