@@ -40,6 +40,10 @@ angular.module('koolikottApp')
                 $scope.addMaterialsToChapter = function(chapter, portfolio) {
                     $scope.isSaving = true;
 
+                    if(chapter && !chapter.contentRows) {
+                        chapter.contentRows = [];
+                    }
+
                     if (chapter && chapter.contentRows) {
                         for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                             var selectedMaterial = $rootScope.selectedMaterials[i];
