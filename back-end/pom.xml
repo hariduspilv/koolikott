@@ -4,7 +4,7 @@
 	<groupId>ee.hm</groupId>
 	<artifactId>kott</artifactId>
 	<packaging>jar</packaging>
-	<version>1.7.0</version>
+	<version>1.8.0</version>
 	
 	<properties>
 		<slf4j.version>1.7.12</slf4j.version>
