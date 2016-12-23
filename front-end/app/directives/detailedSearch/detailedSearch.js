@@ -456,8 +456,9 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
 
                 function setEditModePrefill() {
                     if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
-                        $scope.detailedSearch.taxon = storageService.getPortfolio().taxons[0];
-                        $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
+                        // TODO: prefilling removed for v1.7 release
+                        // $scope.detailedSearch.taxon = storageService.getPortfolio().taxons[0];
+                        // $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
                         prefilling = true;
 
                         $scope.detailedSearch.type = "material";
