@@ -15,6 +15,9 @@ angular.module('koolikottApp')
                 function init() {
                     var portfolio = storageService.getEmptyPortfolio();
 
+                    if (!portfolio) portfolio = storageService.getPortfolio();
+                    else storageService.setEmptyPortfolio(null);
+
                     $scope.newPortfolio = createPortfolio();
                     $scope.portfolio = portfolio;
                     $scope.newPortfolio.chapters = portfolio.chapters;
