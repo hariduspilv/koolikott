@@ -49,7 +49,7 @@ angular.module('koolikottApp')
                         toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
                     }
 
-                    storageService.setPortfolio(emptyPortfolio);
+                    storageService.setEmptyPortfolio(emptyPortfolio);
 
                     $mdDialog.show({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
