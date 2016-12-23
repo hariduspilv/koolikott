@@ -1,9 +1,9 @@
 <md-card class="md-whiteframe-2dp embed-card">
-  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage">
+  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage" data-ng-click="navigateToMaterial(material, $event)">
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
-    <md-card-header-text flex data-ng-click="navigateToMaterial(material, $event)" class="ellipsis">
+    <md-card-header-text flex class="ellipsis">
       <a data-ng-href="{{'/material?materialId=' + material.id}}" class="md-title no-link ellipsis"
          data-ng-bind="getCorrectLanguageTitle(material)">
       </a>
