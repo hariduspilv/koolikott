@@ -92,13 +92,13 @@
   <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType || sourceType === 'LINK' ">
     <div layout="row" layout-align="space-between center">
       <!--Link as backup - if iframe is internally not working-->
-      <a href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70"
+      <a href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
          target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
                     || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK'">
         <span class="item-link" data-ng-bind="material.source"></span>
       </a>
       <!--Up and down-->
-      <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" flex-xs="30" layout="row" layout-align="end end" class="align-right">
+      <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" flex-xs="30" flex-sm="30" layout="row" layout-align="end end" class="align-right">
         <md-button ng-disabled="rowIndex === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
                    ng-click="listItemUp()">
           <md-icon class="material-icons">arrow_upward</md-icon>
