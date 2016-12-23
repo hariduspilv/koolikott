@@ -41,6 +41,7 @@ angular.module('koolikottApp')
                 }
 
                 $scope.cancel = function () {
+                    $rootScope.newPortfolioCreated = false;
                     $mdDialog.hide();
                 };
 
@@ -99,8 +100,6 @@ angular.module('koolikottApp')
                                 ],
                                 openCloseChapter: true
                             });
-
-                            $rootScope.newPortfolioCreated = true;
                         }
 
                         storageService.setPortfolio(portfolio);

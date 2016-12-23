@@ -51,6 +51,8 @@ angular.module('koolikottApp')
 
                     storageService.setEmptyPortfolio(emptyPortfolio);
 
+                    $rootScope.newPortfolioCreated = true;
+
                     $mdDialog.show({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                         controller: 'addPortfolioDialogController'
