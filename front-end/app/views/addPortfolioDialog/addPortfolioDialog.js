@@ -13,7 +13,7 @@ angular.module('koolikottApp')
                 var uploadingPicture = false;
 
                 function init() {
-                    var portfolio = storageService.getPortfolio();
+                    var portfolio = storageService.getEmptyPortfolio();
 
                     $scope.newPortfolio = createPortfolio();
                     $scope.portfolio = portfolio;
