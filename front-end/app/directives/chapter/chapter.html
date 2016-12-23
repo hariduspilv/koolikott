@@ -3,24 +3,25 @@
     <md-card class="card-lg chapter-card">
 
       <!--View-->
-      <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row"
-                       data-ng-click="ocChapter(chapter)">
+      <md-card-content data-ng-if="!isEditable" layout="row">
         <div flex>
-          <div flex layout="row">
-            <h2 ng-class="{'chapter-title': chapter.text.length == undefined || chapter.text.length == 0}"
+          <div layout="row" class="pointer" data-ng-click="ocChapter(chapter)">
+            <h2 data-ng-class="{'chapter-title': chapter.text.length == undefined || chapter.text.length == 0}"
                 data-ng-bind="chapter.title"></h2>
             <div class="chapter-arrow" data-ng-class="{'toggled': !isCollapsed}">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             </div>
+            <md-tooltip md-direction="bottom">
+              <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
+              <span data-ng-if="!isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
+            </md-tooltip>
           </div>
-          <div class="md-body-1 textangular-view"
+          <div uib-collapse="isCollapsed">
+            <div class="md-body-1 textangular-view"
                ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
                data-ng-bind-html="chapter.text"></div>
+          </div>
         </div>
-        <md-tooltip md-direction="bottom">
-          <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
-          <span data-ng-if="!isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
-        </md-tooltip>
       </md-card-content>
 
       <!--Edit-->
@@ -106,24 +107,23 @@
       <md-card class="card-lg chapter-card">
 
         <!--View-->
-        <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row"
-                         ng-click="ocSubChapter(subchapter)">
+        <md-card-content data-ng-if="!isEditable" layout="row">
           <div flex>
-            <div layout="row">
+            <div layout="row" class="pointer" data-ng-click="ocSubChapter(subchapter)">
               <h3>{{subchapter.title}}</h3>
               <div class="chapter-arrow" data-ng-class="{'toggled': !subisCollapsed[subchapter.$$hashKey]}">
                 <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               </div>
+              <md-tooltip md-direction="bottom">
+                <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
+                <span data-ng-if="!subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
+              </md-tooltip>
             </div>
             <div uib-collapse="subisCollapsed[subchapter.$$hashKey]">
               <p class="md-body-1" data-ng-class="{'hide': subchapter.text.length == undefined || subchapter.text.length == 0}"
                 data-ng-bind-html="subchapter.text"></p>
             </div>
           </div>
-          <md-tooltip md-direction="bottom">
-            <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
-            <span data-ng-if="!subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
-          </md-tooltip>
         </md-card-content>
 
         <!--Edit-->
