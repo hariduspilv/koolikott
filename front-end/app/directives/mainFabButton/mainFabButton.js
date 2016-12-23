@@ -17,7 +17,7 @@ angular.module('koolikottApp')
                 },false);
 
                 $rootScope.$watch('selectedSingleMaterial', function (newValue) {
-                    $scope.userHasSelectedMaterials = newValue !== null;
+                    $scope.userHasSelectedMaterials = newValue !== null && newValue !== undefined;
                 },false);
 
                 $scope.showAddPortfolioDialog = function(e) {
