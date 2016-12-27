@@ -28,6 +28,14 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     }
                 }
 
+                $scope.$watch(function () {
+                    return $scope.material;
+                }, function () {
+                    if ($scope.material && $scope.material.id) {
+                        getContentType();
+                    }
+                });
+
                 function getContentType() {
                     var baseUrl = document.location.origin;
                     var materialSource = getSource($scope.material);
