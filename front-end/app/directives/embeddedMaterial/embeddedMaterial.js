@@ -12,7 +12,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                 contentRow: '='
             },
             templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
-            controller: function ($scope, $rootScope, $location) {
+            controller: ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
                 init();
 
                 function init() {
@@ -233,7 +233,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     }
                 }
 
-            }
+            }]
         };
     }
 ]);

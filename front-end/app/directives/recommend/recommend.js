@@ -11,7 +11,7 @@ angular.module('koolikottApp')
                 portfolio: '='
             },
             templateUrl: 'directives/recommend/recommend.html',
-            controller: function($scope, $location) {
+            controller: ['$scope', '$location', function($scope, $location) {
 
                 $scope.recommend = function() {
                     if (authenticatedUserService.isAdmin()) {
@@ -53,7 +53,7 @@ angular.module('koolikottApp')
                     log("Request failed");
                 }
 
-            }
+            }]
         };
     }
 ]);

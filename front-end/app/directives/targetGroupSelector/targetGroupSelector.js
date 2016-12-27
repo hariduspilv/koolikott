@@ -1,6 +1,8 @@
 'use strict'
 
-angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
+angular.module('koolikottApp')
+.directive('dopTargetGroupSelector',
+function () {
     return {
         scope: {
             targetGroups: '=',
@@ -9,7 +11,7 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
             markRequired: '='
         },
         templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-        controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate, taxonService) {
+        controller: ['$scope', '$rootScope', '$timeout', 'targetGroupService', '$translate', 'taxonService', function ($scope, $rootScope, $timeout, targetGroupService, $translate, taxonService) {
             $scope.isReady = false;
             init();
 
@@ -213,6 +215,6 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                     $scope.selectedTargetGroup = targetGroupService.getLabelByTargetGroups($scope.targetGroups);
                 }
             }
-        }
+        }]
     };
 });

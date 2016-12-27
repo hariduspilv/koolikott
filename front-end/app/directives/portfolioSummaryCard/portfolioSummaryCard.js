@@ -12,7 +12,7 @@ angular.module('koolikottApp')
                 submitClick: "&"
             },
             templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
-            controller: function ($scope, $location) {
+            controller: ['$scope', function ($scope) {
 
                 function init() {
                     $scope.pageUrl = $location.absUrl();
@@ -211,7 +211,7 @@ angular.module('koolikottApp')
                     }, true);
 
                     init();
-                }
+                }]
             };
         }
     ]);

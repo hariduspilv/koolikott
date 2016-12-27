@@ -10,7 +10,7 @@ angular.module('koolikottApp')
                 learningObject: '='
             },
             templateUrl: 'directives/card/cardXS/cardXS.html',
-            controller: function($scope, $location) {
+            controller: ['$scope', '$location', function($scope, $location) {
 
                 $scope.navigateTo = function (learningObject, $event) {
                     $event.preventDefault();
@@ -51,7 +51,7 @@ angular.module('koolikottApp')
                         return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
                     }
                 }
-            }
+            }]
         }
     }
 ]);

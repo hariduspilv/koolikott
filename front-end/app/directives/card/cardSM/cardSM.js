@@ -1,6 +1,8 @@
 'use strict'
 
-angular.module('koolikottApp').directive('dopCardSm', [
+angular.module('koolikottApp')
+.directive('dopCardSm',
+[
     'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService', 'storageService', 'taxonService',
     function (translationService, serverCallService, iconService, authenticatedUserService, targetGroupService, storageService, taxonService) {
         return {
@@ -9,7 +11,7 @@ angular.module('koolikottApp').directive('dopCardSm', [
                 chapter: '=?'
             },
             templateUrl: 'directives/card/cardSM/cardSM.html',
-            controller: function ($scope, $location, $rootScope, targetGroupService) {
+            controller: ['$scope', '$location', '$rootScope', function ($scope, $location, $rootScope) {
                 $scope.selected = false;
                 $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
@@ -105,7 +107,7 @@ angular.module('koolikottApp').directive('dopCardSm', [
                         $scope.learningObject.selected = false;
                     }
                 });
-            }
+            }]
         };
     }
 ]);

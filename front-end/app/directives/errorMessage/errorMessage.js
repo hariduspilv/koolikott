@@ -10,7 +10,7 @@ angular.module('koolikottApp')
                 data: '='
             },
             templateUrl: 'directives/errorMessage/errorMessage.html',
-            controller: function ($rootScope, $scope) {
+            controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
 
                 $timeout(function () {
                     setChangedData();
@@ -127,7 +127,7 @@ angular.module('koolikottApp')
                 $scope.markCorrectMaterial = function () {
                     $scope.$emit("markCorrect:learningObject");
                 };
-            }
+            }]
         }
     }
 ]);

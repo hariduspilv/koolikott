@@ -12,7 +12,7 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
                 isVisible: '='
             },
             templateUrl: 'detailedSearch.html',
-            controller: function ($scope, $rootScope, $timeout, $window, $anchorScroll) {
+            controller: ['$scope', '$rootScope', '$timeout', '$window', '$anchorScroll', function ($scope, $rootScope, $timeout, $window, $anchorScroll) {
                 $scope.queryIn = $scope.queryIn ? $scope.queryIn : "";
 
                 var BASIC_EDUCATION_ID = 2;
@@ -465,7 +465,7 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
                     }
                 }
 
-            }
+            }]
         };
     }
 ]);

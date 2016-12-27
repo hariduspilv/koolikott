@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopSidenavTaxon',
 [
-    'RecursionHelper', 'searchService', 'taxonService',
-    function (RecursionHelper, searchService, taxonService) {
+    'RecursionHelper', 'searchService', 'taxonService', 'serverCallService',
+    function (RecursionHelper, searchService, taxonService, serverCallService) {
         return {
             scope: {
                 taxon: '=',
@@ -14,7 +14,7 @@ angular.module('koolikottApp')
             compile: function (element) {
                 return RecursionHelper.compile(element);
             },
-            controller: function ($rootScope, $scope, $location, serverCallService, $timeout) {
+            controller: ['$rootScope', '$scope', '$location', '$timeout', function ($rootScope, $scope, $location, $timeout) {
                 $scope.opened = null;
                 $scope.hasChildren = false;
 
@@ -129,7 +129,7 @@ angular.module('koolikottApp')
                     return key + taxon.name.toUpperCase() + "_COUNT"
 
                 }
-            }
+            }]
         }
     }
 ]);

@@ -13,7 +13,7 @@ angular.module('koolikottApp')
                 dislikeMessage: '@'
             },
             templateUrl: 'directives/rating/rating.html',
-            controller: function($scope, $mdToast, $translate, serverCallService, authenticatedUserService) {
+            controller: ['$scope', function($scope) {
 
                 $scope.isAuthenticated = authenticatedUserService.isAuthenticated;
 
@@ -139,6 +139,6 @@ angular.module('koolikottApp')
                 }
 
                 init();
-            }
+            }]
         };
     }]);

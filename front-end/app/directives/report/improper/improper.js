@@ -3,14 +3,14 @@
 angular.module('koolikottApp')
 .directive('dopReportImproper',
 [
-    'translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope', 'toastService',
-    function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope, toastService) {
+    'translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope', 'toastService', 'serverCallService',
+    function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope, toastService, serverCallService) {
         return {
             scope: {
                 learningObject: '='
             },
             templateUrl: 'directives/report/improper/improper.html',
-            controller: function ($scope, serverCallService) {
+            controller: ['$scope', function ($scope) {
                 $scope.isReported = false;
 
                 $scope.$watch('learningObject', function (newLearningObject) {
@@ -72,7 +72,7 @@ angular.module('koolikottApp')
                 function setImproperFailed() {
                     $rootScope.isReportedByUser = false;
                 }
-            }
+            }]
         };
     }
 ]);

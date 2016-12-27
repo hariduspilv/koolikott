@@ -10,7 +10,7 @@ angular.module('koolikottApp')
                         learningObject: '='
                     },
                     templateUrl: 'directives/tags/tags.html',
-                    controller: function ($scope, $mdToast, $translate, serverCallService, searchService, authenticatedUserService, $location) {
+                    controller: ['$scope', function ($scope) {
                         var allUpVoteForms;
 
                         function init() {
@@ -266,7 +266,7 @@ angular.module('koolikottApp')
                         }
 
                         init();
-                    }
+                    }]
                 }
             }
         ]);

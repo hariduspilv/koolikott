@@ -13,7 +13,7 @@ angular.module('koolikottApp')
                 failCallback: '&'
             },
             templateUrl: 'directives/slideshare/slideshare.html',
-            controller: function($scope) {
+            controller: ['$scope', function($scope) {
                 getSlideshareData();
 
                 function getSlideshareData() {
@@ -40,7 +40,7 @@ angular.module('koolikottApp')
                     log("Failed to get slideshare data. ");
                     $scope.failCallback();
                 }
-            }
+            }]
         };
     }
 ]);

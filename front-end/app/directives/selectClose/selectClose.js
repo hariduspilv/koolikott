@@ -10,11 +10,11 @@ angular.module('koolikottApp')
             link: function(scope, element, attrs) {
                 element.children('md-select-menu[multiple]').append($compile('<div data-ng-include="\'directives/selectClose/selectClose.html\'"></div>')(scope));
             },
-            controller: function($scope) {
+            controller: ['$scope', function($scope) {
                 $scope.closeSelect = function () {
                     angular.element(document.querySelector('.md-select-backdrop')).triggerHandler('click');
                 }
-            }
+            }]
         };
     }
 ]);

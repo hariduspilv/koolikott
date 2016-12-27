@@ -12,7 +12,7 @@ function () {
             touched: '='
         },
         bindToController: true,
-        controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter, taxonService) {
+        controller: ['$scope', 'serverCallService', '$rootScope', '$timeout', 'metadataService', '$filter', 'taxonService', function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter, taxonService) {
             var EDUCATIONAL_CONTEXTS;
             var ctrl = this;
             // get educational contexts
@@ -163,7 +163,7 @@ function () {
                     ctrl.taxonPath.subtopic = taxonService.getSubtopic(ctrl.taxon);
                 }
             }
-        },
+        }],
         controllerAs: 'ctrl',
         templateUrl: 'directives/taxonSelector/taxonSelector.html'
     };

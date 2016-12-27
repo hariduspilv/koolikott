@@ -30,7 +30,7 @@ angular.module('koolikottApp')
                             }, 200);
                         });
                     },
-                    controller: function ($scope, $location, authenticationService, authenticatedUserService, $rootScope, $anchorScroll) {
+                    controller: ['$scope', '$location', '$rootScope', '$anchorScroll', function ($scope, $location, $rootScope, $anchorScroll) {
 
                         $scope.detailedSearch = {};
                         $scope.detailedSearch.isVisible = false;
@@ -359,7 +359,7 @@ angular.module('koolikottApp')
                             }
                         };
 
-                    }
+                    }]
                 };
             }
         ]);

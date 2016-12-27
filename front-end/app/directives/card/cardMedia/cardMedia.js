@@ -11,7 +11,7 @@ angular.module('koolikottApp')
                 isAuthenticated: '='
             },
             templateUrl: 'directives/card/cardMedia/cardMedia.html',
-            controller: function ($scope, $rootScope) {
+            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
                 $scope.learningObjectType;
 
                 function init () {
@@ -46,7 +46,7 @@ angular.module('koolikottApp')
                 };
 
                 init();
-            }
+            }]
         }
     }
 ]);

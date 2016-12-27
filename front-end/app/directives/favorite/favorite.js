@@ -10,7 +10,7 @@ angular.module('koolikottApp')
                 learningObject: '='
             },
             templateUrl: 'directives/favorite/favorite.html',
-            controller: function ($scope, serverCallService, authenticatedUserService) {
+            controller: ['$scope', function ($scope) {
                 $timeout(function () {
                     if ($scope.learningObject && isLoggedIn()) {
                         if ($scope.learningObject.favorite) {
@@ -70,7 +70,7 @@ angular.module('koolikottApp')
                 function isLoggedIn() {
                     return authenticatedUserService.isAuthenticated();
                 }
-            }
+            }]
         };
     }
 ]);

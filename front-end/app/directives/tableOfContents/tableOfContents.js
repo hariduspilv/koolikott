@@ -11,7 +11,7 @@ angular.module('koolikottApp')
                 readonly: '=readonly'
             },
             templateUrl: 'directives/tableOfContents/tableOfContents.html',
-            controller: function($scope, $rootScope, $mdSidenav) {
+            controller: ['$scope', '$rootScope', '$mdSidenav', function($scope, $rootScope, $mdSidenav) {
 
                 function init() {
                     // Scroll to hash
@@ -85,7 +85,7 @@ angular.module('koolikottApp')
 
                 init();
 
-            }
+            }]
         };
     }
 ]);

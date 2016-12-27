@@ -11,7 +11,7 @@ angular.module('koolikottApp')
                 isSub: '='
             },
             templateUrl: 'directives/chapter/chapterToolbar/chapterToolbar.html',
-            controller: function($scope) {
+            controller: ['$scope', function($scope) {
                 $scope.isEditable = $rootScope.isEditPortfolioMode;
 
                 $scope.addMaterial = function() {
@@ -59,6 +59,6 @@ angular.module('koolikottApp')
                         document.getElementById('header-search-input').focus();
                     }
                 };
-            }
+            }]
         }
     }]);

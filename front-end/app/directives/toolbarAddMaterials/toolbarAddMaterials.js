@@ -8,7 +8,7 @@ angular.module('koolikottApp')
         return {
             scope: true,
             templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
-            controller: function ($scope, $rootScope) {
+            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
 
                 function init() {
                     if($rootScope.isEditPortfolioMode) {
@@ -129,7 +129,7 @@ angular.module('koolikottApp')
 
                 init();
 
-            }
+            }]
         };
     }
 ]);

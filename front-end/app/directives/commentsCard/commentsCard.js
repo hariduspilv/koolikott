@@ -16,7 +16,7 @@ angular.module('koolikottApp')
                 if (angular.isUndefined($scope.comments))
                 $scope.comments = [];
             },
-            controller: function($scope) {
+            controller: ['$scope', function($scope) {
                 var COMMENTS_PER_PAGE = 5;
 
                 $scope.isAuthorized = function() {
@@ -68,6 +68,6 @@ angular.module('koolikottApp')
                     angular.element(document.getElementById('comment-list')).find('textarea').css('height', '112px');
                 }
 
-            }
+            }]
         };
     }]);

@@ -10,7 +10,7 @@ angular.module('koolikottApp')
                 learningObject: '='
             },
             templateUrl: 'directives/restrict/restrict.html',
-            controller: function ($scope) {
+            controller: ['$scope', function ($scope) {
                 if ($scope.learningObject && $scope.learningObject.creator) {
                     $scope.isCreatorRestricted = isUserRestricted($scope.learningObject.creator);
                 }
@@ -53,7 +53,7 @@ angular.module('koolikottApp')
                 function isUserRestricted(user) {
                     return user.role === 'RESTRICTED';
                 }
-            }
+            }]
         };
     }
 ]);

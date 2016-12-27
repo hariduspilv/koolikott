@@ -8,7 +8,7 @@ angular.module('koolikottApp')
         return {
             scope: false,
             templateUrl: 'directives/report/brokenLink/brokenLink.html',
-            controller: function($scope, $rootScope) {
+            controller: ['$scope', '$rootScope', function($scope, $rootScope) {
 
                 $scope.isAdmin = authenticatedUserService.isAdmin();
 
@@ -54,7 +54,7 @@ angular.module('koolikottApp')
                 function queryFailed() {
                     log("Request failed");
                 }
-            }
+            }]
         };
     }
 ]);

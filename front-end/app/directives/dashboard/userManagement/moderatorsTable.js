@@ -5,7 +5,7 @@ angular.module('koolikottApp')
 function () {
     return {
         templateUrl: 'directives/dashboard/userManagement/usersTable.html',
-        controller: function ($scope, $filter, serverCallService) {
+        controller: ['$scope', '$filter', 'serverCallService', function ($scope, $filter, serverCallService) {
             $scope.showTaxonColumn = true;
             $scope = $scope.$parent;
 
@@ -33,6 +33,6 @@ function () {
             };
 
             init();
-        }
+        }]
     }
 });

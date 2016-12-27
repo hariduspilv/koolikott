@@ -3,11 +3,11 @@
 angular.module('koolikottApp')
 .directive('dopAlert',
 [
-    'translationService', '$rootScope', 'alertService', 'toastService',
-    function(translationService, $rootScope, alertService, toastService) {
+    'translationService', 'alertService', 'toastService',
+    function(translationService, alertService, toastService) {
         return {
             scope: true,
-            controller: function($scope, $timeout) {
+            controller: ['$scope', '$timeout', function($scope, $timeout) {
                 $scope.$watch(function() {
                     return alertService.getAlert();
                 },
@@ -22,6 +22,6 @@ angular.module('koolikottApp')
                     }
                 }, true
             );
-        }
+        }]
     };
 }]);

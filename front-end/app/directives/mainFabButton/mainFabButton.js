@@ -8,7 +8,7 @@ angular.module('koolikottApp')
         return {
             scope: true,
             templateUrl: 'directives/mainFabButton/mainFabButton.html',
-            controller: function($scope, $location, $rootScope, $route, $filter, $mdDialog, serverCallService, authenticatedUserService, storageService, toastService) {
+            controller: ['$scope', '$location', '$rootScope', '$route', '$filter', '$mdDialog', function($scope, $location, $rootScope, $route, $filter, $mdDialog) {
                 $scope.isOpen = false;
                 $scope.userHasSelectedMaterials = false;
 
@@ -107,7 +107,7 @@ angular.module('koolikottApp')
                 function isTouchDevice() {
                     return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
                 }
-            }
+            }]
         }
     }
 ]);

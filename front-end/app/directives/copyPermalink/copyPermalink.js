@@ -18,7 +18,7 @@ function() {
 
             new Clipboard('#' + _id);
         },
-        controller: function($scope, $location, toastService) {
+        controller: ['$scope', '$location', 'toastService', function($scope, $location, toastService) {
             if (!$scope.url) {
                 $scope.url = $location.absUrl();
             }
@@ -26,6 +26,6 @@ function() {
             $scope.showToast = function () {
                 toastService.show("COPY_PERMALINK_SUCCESS")
             };
-        }
+        }]
     };
 });

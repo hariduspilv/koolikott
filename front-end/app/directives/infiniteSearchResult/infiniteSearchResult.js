@@ -1,6 +1,8 @@
 'use strict'
 
-angular.module('koolikottApp').directive('dopInfiniteSearchResult', [
+angular.module('koolikottApp')
+.directive('dopInfiniteSearchResult',
+[
     'serverCallService',
     function (serverCallService) {
         return {
@@ -12,7 +14,7 @@ angular.module('koolikottApp').directive('dopInfiniteSearchResult', [
                 filter: '='
             },
             templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
-            controller: function ($scope, $location, serverCallService, searchService, $timeout) {
+            controller: ['$scope', '$location', 'searchService', '$timeout', function ($scope, $location, searchService, $timeout) {
                 $scope.searching = false;
                 $scope.accessor = {};
                 var searchCount = 0;
@@ -120,7 +122,7 @@ angular.module('koolikottApp').directive('dopInfiniteSearchResult', [
                 };
 
                 init();
-            }
+            }]
         };
     }
 ]);

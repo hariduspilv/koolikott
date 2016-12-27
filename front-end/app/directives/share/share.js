@@ -12,7 +12,7 @@ angular.module('koolikottApp')
                 object: '='
             },
             templateUrl: 'directives/share/share.html',
-            controller: function($scope) {
+            controller: ['$scope', function($scope) {
 
                 $scope.isVisible = function () {
                     if ($scope.object && $scope.object.deleted) {
@@ -199,7 +199,7 @@ angular.module('koolikottApp')
                         $mdDialog.cancel();
                     }
                 }
-            }
+            }]
         };
     }
 ]);

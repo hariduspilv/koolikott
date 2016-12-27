@@ -3,12 +3,12 @@
 angular.module('koolikottApp')
 .directive('dopSidenav',
 [
-    'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService',
-    function () {
+    'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', 'metadataService',
+    function (serverCallService, $location, $sce, searchService, authenticatedUserService, $mdDialog, userDataService, metadataService) {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
+            controller: ['$rootScope', '$scope', '$location', '$timeout', function ($rootScope, $scope, $location, $timeout) {
                 $scope.isTaxonomyOpen = true;
                 $scope.dashboardOpen = $location.path().startsWith("/dashboard");
 
@@ -179,7 +179,7 @@ angular.module('koolikottApp')
                     }
                 };
 
-            }
+            }]
         }
     }
 ]);

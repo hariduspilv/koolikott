@@ -12,7 +12,7 @@ angular.module('koolikottApp')
                 onDelete: '&'
             },
             templateUrl: 'directives/chapter/chapter.html',
-            controller: function ($scope, $rootScope) {
+            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
                 $scope.isEditable = $rootScope.isEditPortfolioMode;
                 $scope.isCollapsed = false;
                 $scope.subisCollapsed = [];
@@ -50,6 +50,6 @@ angular.module('koolikottApp')
                     $scope.deleteChapter = function () {
                         $scope.onDelete()($scope.chapter);
                     };
-                }
+                }]
             };
         }]);
