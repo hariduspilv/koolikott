@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import javax.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -117,7 +118,7 @@ public class SearchService {
 
         if (!learningObjectIds.isEmpty()) {
             learningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
-                if(loggedInUser != null) {
+                if (loggedInUser != null) {
                     UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
                     if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);
                     else searchable.setFavorite(false);
@@ -136,7 +137,7 @@ public class SearchService {
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
         if (!filtersAsQuery.isEmpty()) {
             if (!queryString.isEmpty()) {
-                queryString = format("((%s) OR (\"%s\")) AND %s", queryString, queryString, filtersAsQuery);
+                queryString = format("((%s) OR (\"%s\")) %s %s", queryString, queryString, searchFilter.getSearchType(), filtersAsQuery);
             } else {
                 queryString = filtersAsQuery;
             }
@@ -187,16 +188,30 @@ public class SearchService {
         filters.add(getResourceTypeAsQuery(searchFilter));
         filters.add(isSpecialEducationAsQuery(searchFilter));
         filters.add(issuedFromAsQuery(searchFilter));
-        filters.add(getCrossCurricularThemeAsQuery(searchFilter));
-        filters.add(getKeyCompetenceAsQuery(searchFilter));
+        filters.add(getCrossCurricularThemesAsQuery(searchFilter));
+        filters.add(getKeyCompetencesAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
         filters.add(getCreatorAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
+        String query = StringUtils.join(filters, format(" %s ", searchFilter.getSearchType()));
+        return query.concat(getExcludedAsQuery(searchFilter));
+    }
 
-        return StringUtils.join(filters, " AND ");
+    private String getExcludedAsQuery(SearchFilter searchFilter) {
+        List<Long> excluded = searchFilter.getExcluded();
+        List<String> result = new ArrayList<>();
+        if (excluded != null && !excluded.isEmpty()) {
+            excluded.forEach(id -> {
+                result.add("-id:" + id.toString());
+            });
+
+            return " AND " + StringUtils.join(result, " AND ");
+        }
+
+        return "";
     }
 
     private String getLanguageAsQuery(SearchFilter searchFilter) {
@@ -237,7 +252,9 @@ public class SearchService {
             List<String> filters = new ArrayList<>();
 
             for (TargetGroup targetGroup : searchFilter.getTargetGroups()) {
-                filters.add(format("target_group:\"%s\"", targetGroup.getId()));
+                if(targetGroup != null) {
+                    filters.add(format("target_group:\"%s\"", targetGroup.getId()));
+                }
             }
 
             if (filters.size() == 1) {
@@ -370,19 +387,39 @@ public class SearchService {
         return "";
     }
 
-    private String getCrossCurricularThemeAsQuery(SearchFilter searchFilter) {
-        CrossCurricularTheme crossCurricularTheme = searchFilter.getCrossCurricularTheme();
-        if (crossCurricularTheme != null) {
-            return format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase());
+    private String getCrossCurricularThemesAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getCrossCurricularThemes() != null && !searchFilter.getCrossCurricularThemes().isEmpty()) {
+            List<String> themes = new ArrayList<>();
+
+            for (CrossCurricularTheme crossCurricularTheme : searchFilter.getCrossCurricularThemes()) {
+                themes.add(format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase()));
+            }
+
+            if (themes.size() == 1) {
+                return themes.get(0);
+            }
+
+            return "(" + StringUtils.join(themes, " OR ") + ")";
         }
+
         return "";
     }
 
-    private String getKeyCompetenceAsQuery(SearchFilter searchFilter) {
-        KeyCompetence keyCompetence = searchFilter.getKeyCompetence();
-        if (keyCompetence != null) {
-            return format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase());
+    private String getKeyCompetencesAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getKeyCompetences() != null && !searchFilter.getKeyCompetences().isEmpty()) {
+            List<String> competences = new ArrayList<>();
+
+            for (KeyCompetence keyCompetence : searchFilter.getKeyCompetences()) {
+                competences.add(format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase()));
+            }
+
+            if (competences.size() == 1) {
+                return competences.get(0);
+            }
+
+            return "(" + StringUtils.join(competences, " OR ") + ")";
         }
+
         return "";
     }
 

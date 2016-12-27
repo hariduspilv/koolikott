@@ -22,9 +22,9 @@ public class SearchFilter {
 
     private Integer issuedFrom;
 
-    private CrossCurricularTheme crossCurricularTheme;
+    private List<CrossCurricularTheme> crossCurricularThemes;
 
-    private KeyCompetence keyCompetence;
+    private List<KeyCompetence> keyCompetences;
 
     private List<Visibility> visibility;
 
@@ -39,6 +39,18 @@ public class SearchFilter {
     private Long creator;
 
     private User requestingUser;
+
+    private String searchType = "AND";
+
+    private List<Long> excluded;
+
+    public List<Long> getExcluded() {
+        return excluded;
+    }
+
+    public void setExcluded(List<Long> excluded) {
+        this.excluded = excluded;
+    }
 
     public List<Taxon> getTaxons() {
         return taxon;
@@ -104,20 +116,20 @@ public class SearchFilter {
         this.issuedFrom = issuedFrom;
     }
 
-    public CrossCurricularTheme getCrossCurricularTheme() {
-        return crossCurricularTheme;
+    public List<CrossCurricularTheme> getCrossCurricularThemes() {
+        return crossCurricularThemes;
     }
 
-    public void setCrossCurricularTheme(CrossCurricularTheme crossCurricularTheme) {
-        this.crossCurricularTheme = crossCurricularTheme;
+    public void setCrossCurricularThemes(List<CrossCurricularTheme> crossCurricularThemes) {
+        this.crossCurricularThemes = crossCurricularThemes;
     }
 
-    public KeyCompetence getKeyCompetence() {
-        return keyCompetence;
+    public List<KeyCompetence> getKeyCompetences() {
+        return keyCompetences;
     }
 
-    public void setKeyCompetence(KeyCompetence keyCompetence) {
-        this.keyCompetence = keyCompetence;
+    public void setKeyCompetences(List<KeyCompetence> keyCompetences) {
+        this.keyCompetences = keyCompetences;
     }
 
     public List<Visibility> getVisibility() {
@@ -174,6 +186,14 @@ public class SearchFilter {
 
     public void setRequestingUser(User requestingUser) {
         this.requestingUser = requestingUser;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
     }
 
     public enum SortDirection {

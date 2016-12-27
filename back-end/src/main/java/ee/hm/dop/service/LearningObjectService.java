@@ -240,6 +240,7 @@ public class LearningObjectService extends BaseService {
     }
 
     public UserFavorite hasFavorited(Long id, User loggedInUser) {
+        if(id == null || loggedInUser == null) return null;
         return userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser);
     }
 

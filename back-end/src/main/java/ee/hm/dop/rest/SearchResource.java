@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,14 +67,16 @@ public class SearchResource extends BaseResource {
                                @QueryParam("resourceType") String resourceTypeName,
                                @QueryParam("specialEducation") boolean isSpecialEducation,
                                @QueryParam("issuedFrom") Integer issuedFrom,
-                               @QueryParam("crossCurricularTheme") Long crossCurricularThemeId,
-                               @QueryParam("keyCompetence") Long keyCompetenceId,
+                               @QueryParam("crossCurricularTheme") List<Long> crossCurricularThemeIds,
+                               @QueryParam("keyCompetence") List<Long> keyCompetenceIds,
                                @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature,
                                @QueryParam("sort") String sort,
                                @QueryParam("sortDirection") String sortDirection,
                                @QueryParam("limit") Long limit,
                                @QueryParam("creator") Long creator,
-                               @QueryParam("private") boolean myPrivates) {
+                               @QueryParam("private") boolean myPrivates,
+                               @QueryParam("isORSearch") Boolean isORSearch,
+                               @QueryParam("excluded") List<Long> excluded) {
 
         List<Taxon> taxons = taxonIds
                 .stream()
@@ -87,12 +90,23 @@ public class SearchResource extends BaseResource {
 
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
-        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
-                .getCrossCurricularThemeById(crossCurricularThemeId);
-        KeyCompetence keyCompetence = keyCompetenceService.getKeyCompetenceById(keyCompetenceId);
+
+        List<CrossCurricularTheme> themes = crossCurricularThemeIds
+                .stream()
+                .map(id -> crossCurricularThemeService.getCrossCurricularThemeById(id))
+                .collect(Collectors.toList());
+
+        List<KeyCompetence> competences = keyCompetenceIds
+                .stream()
+                .map(id -> keyCompetenceService.getKeyCompetenceById(id))
+                .collect(Collectors.toList());
 
         if (paid == null) {
             paid = true;
+        }
+
+        if (isORSearch == null) {
+            isORSearch = false;
         }
 
         if (start == null) {
@@ -108,14 +122,20 @@ public class SearchResource extends BaseResource {
         searchFilter.setResourceType(resourceType);
         searchFilter.setSpecialEducation(isSpecialEducation);
         searchFilter.setIssuedFrom(issuedFrom);
-        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
-        searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setCrossCurricularThemes(themes);
+        searchFilter.setKeyCompetences(competences);
         searchFilter.setCurriculumLiterature(isCurriculumLiterature);
         searchFilter.setSort(sort);
         searchFilter.setSortDirection(SearchFilter.SortDirection.getByValue(sortDirection));
         searchFilter.setCreator(creator);
         searchFilter.setRequestingUser(getLoggedInUser());
         searchFilter.setMyPrivates(myPrivates);
+        searchFilter.setExcluded(excluded);
+        if (isORSearch) {
+            searchFilter.setSearchType("OR");
+        } else {
+            searchFilter.setSearchType("AND");
+        }
 
         return searchService.search(query, start, limit, searchFilter);
     }

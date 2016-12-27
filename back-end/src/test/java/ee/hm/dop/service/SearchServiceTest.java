@@ -668,12 +668,18 @@ public class SearchServiceTest {
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setId(1L);
         crossCurricularTheme.setName("test_theme");
-        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
+        searchFilter.setCrossCurricularThemes(new ArrayList<CrossCurricularTheme>() {
+            {
+                add(crossCurricularTheme);
+            }
+        });
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
-        searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setKeyCompetences(new ArrayList<KeyCompetence>() {{
+            add(keyCompetence);
+        }});
 
         searchFilter.setIssuedFrom(2010);
 
@@ -721,7 +727,7 @@ public class SearchServiceTest {
         replay(targetGroupService);
 
         searchFilter.setTargetGroups(Collections.singletonList(targetGroupService
-                        .getByName(TargetGroupEnum.SIX_SEVEN.name())));
+                .getByName(TargetGroupEnum.SIX_SEVEN.name())));
 
         verify(targetGroupService);
 
@@ -801,7 +807,9 @@ public class SearchServiceTest {
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setId(1L);
         crossCurricularTheme.setName("test_theme");
-        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
+        searchFilter.setCrossCurricularThemes(new ArrayList<CrossCurricularTheme>() {{
+            add(crossCurricularTheme);
+        }});
         String tokenizedQuery = "((test) OR (\"test\")) AND cross_curricular_theme:\"test_theme\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -817,7 +825,11 @@ public class SearchServiceTest {
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
-        searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setKeyCompetences(new ArrayList<KeyCompetence>() {
+            {
+                add(keyCompetence);
+            }
+        });
         String tokenizedQuery = "((test) OR (\"test\")) AND key_competence:\"test_competence\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -833,7 +845,11 @@ public class SearchServiceTest {
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
-        searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setKeyCompetences(new ArrayList<KeyCompetence>() {
+            {
+                add(keyCompetence);
+            }
+        });
         String tokenizedQuery = "((test) OR (\"test\")) AND key_competence:\"test_competence\" AND ((visibility:\"public\" OR visibility:\"not_listed\" OR visibility:\"private\") OR type:\"material\")";
         long start = 0;
 

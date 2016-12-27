@@ -1,11 +1,19 @@
+<h4 class="md-subhead" data-translate="SIMILAR"></h4>
+
+<div data-ng-repeat="item in similar" data-ng-href="{{getItemLink(item)}}" role="list"
+     aria-label="Ava sarnane materjal">
+  <div data-dop-card-xs data-learning-object="item"></div>
+</div>
+
+
 <h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
 
 <div data-ng-repeat="item in recommendations" role="list" aria-label="Ava soovitatud materjal">
-  <div data-dop-card-xs learning-object="item"></div>
+  <div data-dop-card-xs data-learning-object="item"></div>
 </div>
 
-<div layout="row">
-  <span flex></span>
+<div data-layout="row">
+  <span data-flex></span>
   <md-button data-ng-click="showMoreRecommendations()">
     <span data-translate="SHOW_MORE"></span>
     <md-icon class="md-primary">
@@ -13,19 +21,3 @@
     </md-icon>
   </md-button>
 </div>
-
-<h4 class="md-subhead" data-translate="MOST_LIKED"></h4>
-
-<div data-ng-repeat="item in mostLikedList" role="list" aria-label="Ava soovitatud materjal">
-  <div data-dop-card-xs learning-object="item"></div>
-</div>
-
-<md-list role="list">
-  <md-list-item
-    role="listitem"
-    ng-repeat="section in ::admin.sections"
-    ng-class="{'active': $state.includes(section.active), 'disabled': section.disabled}"
-    ng-click="!section.disabled && $state.go(section.state)">
-    <span ng-bind="::section.label"></span>
-  </md-list-item>
-</md-list>
