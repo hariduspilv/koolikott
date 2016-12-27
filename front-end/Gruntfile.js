@@ -312,8 +312,9 @@ module.exports = function (grunt) {
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
                         'directives/**/**/*.html',
-                        'utils/**/**/*.{html,ttf,png,css}',
-                        'utils/preloader/*.*'
+                        'utils/**/**/*.{html,ttf,png,css,js}',
+                        'utils/preloader/*.*',
+                        'libs/**/**/*.{js,map}'
                     ]
                 }, {
                     expand: true,
