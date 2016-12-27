@@ -700,10 +700,10 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     String attachmentLocation(HeadMethod head, String extension, String mime_type){
         Header[] contentDisposition = head.getResponseHeaders("Content-Disposition");
         Header[] contentType = head.getResponseHeaders("Content-Type");
-        if (contentDisposition.length > 0 && contentDisposition[0].getValue().endsWith(extension)) {
+        if (contentDisposition.length > 0 && contentDisposition[0].getValue().toLowerCase().endsWith(extension)) {
             return "Content-Disposition";
         }
-        if (contentType.length > 0 && contentType[0].getValue().endsWith(mime_type)) {
+        if (contentType.length > 0 && contentType[0].getValue().toLowerCase().endsWith(mime_type)) {
             return "Content-Type";
         }
         return null;
