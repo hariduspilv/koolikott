@@ -4,7 +4,7 @@
  * @author Jordan Silva
  *
  */
-var LOGIN_ORIGIN = "loginOrigin";
+const LOGIN_ORIGIN = "loginOrigin";
 
 function log() {
     if (console && console.log) {
@@ -425,4 +425,3 @@ function isIE() {
     return !!(navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
     navigator.userAgent.match(/rv 11/)));
 }
-

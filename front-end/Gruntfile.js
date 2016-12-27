@@ -31,10 +31,6 @@ module.exports = function (grunt) {
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
-            bower: {
-                files: ['bower.json'],
-                tasks: ['wiredep']
-            },
             js: {
                 files: [
                     '<%= yeoman.app %>/directives/**/**/*.js',
@@ -170,18 +166,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // Automatically inject Bower components into the app
-        wiredep: {
-            app: {
-                src: ['<%= yeoman.app %>/index.html'],
-                ignorePath: /\.\.\//
-            },
-            sass: {
-                src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                ignorePath: /(\.\.\/){1,2}<%= yeoman.app %>\/libs\//
-            }
-        },
-
         sass: {
             options: {
                 includePaths: [
@@ -214,7 +198,8 @@ module.exports = function (grunt) {
                 src: [
                     '<%= yeoman.dist.app %>/styles/{,*/}*.css',
                     '<%= yeoman.dist.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.dist.app %>/fonts/*'
+                    '<%= yeoman.dist.app %>/fonts/*',
+                    '<%= yeoman.dist.app %>/js/*'
                 ]
             }
         },
@@ -323,13 +308,11 @@ module.exports = function (grunt) {
                         '.htaccess',
                         '*.html',
                         '*.js',
-                        'views/**/**/*.{html,js}',
+                        'views/**/**/*.html',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
-                        'directives/**/**/*.{html,js}',
-                        'libs/**/**/*.{js,map}',
-                        'services/*.js',
-                        'utils/**/**/*.{html,ttf,png,css,js}',
+                        'directives/**/**/*.html',
+                        'utils/**/**/*.{html,ttf,png,css}',
                         'utils/preloader/*.*'
                     ]
                 }, {
@@ -441,6 +424,21 @@ module.exports = function (grunt) {
                 }
             }
         },
+
+        // ES6 syntax
+        babel: {
+            options: {
+                presets: ['es2015']
+            },
+            dist: {
+                files: {
+                    '.tmp/concat/js/config.js': '.tmp/concat/js/config.js',
+                    '.tmp/concat/js/controllers.js': '.tmp/concat/js/controllers.js',
+                    '.tmp/concat/js/directives.js': '.tmp/concat/js/directives.js',
+                    '.tmp/concat/js/services.js': '.tmp/concat/js/services.js'
+                }
+            }
+        }
     });
 
     grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -450,7 +448,6 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'wiredep',
             'concurrent:server',
             'postcss:dist',
             'configureProxies:server',
@@ -461,16 +458,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'wiredep',
         'useminPrepare',
         'concurrent:dist',
         'postcss:dist',
         'concat',
+        'babel',
         'ngAnnotate',
         'copy:dist',
         'ngconstant:dist',
         'cdnify',
         'cssmin',
+        'uglify',
         'filerev',
         'usemin',
         'htmlmin'
