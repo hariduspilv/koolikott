@@ -1,4 +1,4 @@
-## e-Koolikott 1.7.0 (23.12.2016)
+## e-Koolikott 1.7.0 (testimisel)
 
 ### Lisandunud
 * Pluss nupu (FAB nupu) täiendamine #137 https://github.com/hariduspilv/koolikott/issues/137
