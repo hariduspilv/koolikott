@@ -407,14 +407,14 @@ function matchType(type) {
     } else if (isPictureLink(type)) {
         return 'PICTURE';
     } else if (isEbookLink(type)) {
-        if (isIE()) {
-            return 'LINK';
-        }
+        // if (isIE()) {
+        //     return 'LINK';
+        // }
         return 'EBOOK';
     } else if (isPDFLink(type)) {
-        if (isIE()) {
-            return 'LINK';
-        }
+        // if (isIE()) {
+        //     return 'LINK';
+        // }
         return 'PDF';
     } else {
         return 'LINK';

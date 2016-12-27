@@ -155,9 +155,11 @@ angular.module('koolikottApp')
                     }
                 });
 
-                $scope.updatePortfolio = function (portfolio) {
-                    setPortfolio(portfolio);
-                };
+                $scope.$on("tags:updatePortfolio", function (event, value) {
+                    if (!_.isEqual(value, $scope.portfolio)) {
+                        setPortfolio(value);
+                    }
+                });
 
                 /*
                  * Admin dashboard listeners

@@ -191,12 +191,6 @@ angular.module('koolikottApp')
                     }
                 };
 
-                $scope.updatePortfolio = function(newPortfolio) {
-                    if (!_.isEqual(newPortfolio, $scope.portfolio)) {
-                        $scope.$parent.updatePortfolio(newPortfolio)
-                    }
-                };
-
                 $scope.isAdminButtonsShowing = function () {
                     return $scope.isAdmin() && (($rootScope.learningObjectDeleted == false
                         && $rootScope.learningObjectImproper == false

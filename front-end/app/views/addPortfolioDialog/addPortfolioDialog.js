@@ -45,14 +45,21 @@ angular.module('koolikottApp')
                     $mdDialog.hide();
                 };
 
-                $scope.$watch(function () {
-                    return $scope.newPicture;
-                }, function (newPicture) {
-                    if (newPicture) {
+                $scope.fileUpload = function (files, file, newFile) {
+                    if (newFile && newFile[0] && newFile[0].$error) {
+                        processInvalidUpload();
+                    } else if (newFile && newFile[0] && !newFile[0].$error) {
                         uploadingPicture = true;
-                        pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
+                        pictureUploadService.upload(newFile[0], pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
                     }
-                });
+                };
+
+                function processInvalidUpload() {
+                    $scope.showErrorOverlay = true;
+                    $timeout(function () {
+                        $scope.showErrorOverlay = false;
+                    }, 6000);
+                }
 
                 function pictureUploadSuccess(picture) {
                     $scope.newPortfolio.picture = picture;
@@ -158,15 +165,6 @@ angular.module('koolikottApp')
                 $scope.isSet = function (index) {
                     return $scope.newPortfolio.taxons[index] && $scope.newPortfolio.taxons[index].level && $scope.newPortfolio.taxons[index].level !== ".EducationalContext";
                 };
-
-                $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
-                    if (newValue && newValue.$error) {
-                        $scope.showErrorOverlay = true;
-                        $timeout(function () {
-                            $scope.showErrorOverlay = false;
-                        }, 6000);
-                    }
-                });
 
                 function getMaxPictureSize() {
                     serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);

@@ -3,22 +3,22 @@
 angular.module('koolikottApp')
     .directive('dopHeader',
         [
-            'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window', '$translate', 'storageService',
-            function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window, $translate, storageService) {
+            'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window', '$translate', 'storageService', 'dialogService',
+            function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window, $translate, storageService, dialogService) {
                 return {
                     scope: true,
                     templateUrl: 'directives/header/header.html',
                     link: function () {
                         var scrollTimer,
-                        detailedSearch = document.getElementById('detailedSearch'),
-                        $detailedSearch = angular.element(detailedSearch),
-                        $header = document.getElementById('md-toolbar-header');
+                            detailedSearch = document.getElementById('detailedSearch'),
+                            $detailedSearch = angular.element(detailedSearch),
+                            $header = document.getElementById('md-toolbar-header');
 
                         angular.element($window).on('scroll', function () {
                             clearTimeout(scrollTimer);
                             scrollTimer = setTimeout(function () {
                                 var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
-                                isDetailedSearchHidden = detailedSearch.getAttribute('aria-hidden');
+                                    isDetailedSearchHidden = detailedSearch.getAttribute('aria-hidden');
 
                                 if ($backdrop.length === 0 && isDetailedSearchHidden) {
                                     if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 960) {
@@ -285,8 +285,7 @@ angular.module('koolikottApp')
                         }
 
                         $scope.saveAndExitPortfolio = function () {
-                            var url = "rest/portfolio/update";
-                            serverCallService.makePost(url, storageService.getPortfolio(), saveAndExitPortfolioSuccess, updatePortfolioFailed);
+                            startSaving(storageService.getPortfolio());
                         };
 
                         function saveAndExitPortfolioSuccess(portfolio) {
@@ -300,6 +299,31 @@ angular.module('koolikottApp')
 
                         function updatePortfolioFailed() {
                             log('Updating portfolio failed.');
+                        }
+
+                        function saveAndExit() {
+                            var url = "rest/portfolio/update";
+                            serverCallService.makePost(url, storageService.getPortfolio(), saveAndExitPortfolioSuccess, updatePortfolioFailed);
+                        }
+
+                        function startSaving(portfolio) {
+                            if (portfolio.visibility === 'PUBLIC') saveAndExit();
+                            else showVisibilityChangeDialog();
+                        }
+
+                        function showVisibilityChangeDialog() {
+                            var makePublic = function () {
+                                storageService.getPortfolio().visibility = 'PUBLIC';
+                                saveAndExit();
+                            };
+
+                            dialogService.showConfirmationDialog(
+                                "{{'PORTFOLIO_MAKE_PRIVATE' | translate}}",
+                                "{{'PORTFOLIO_WARNING' | translate}}",
+                                "{{'PORTFOLIO_YES' | translate}}",
+                                "{{'PORTFOLIO_NO' | translate}}",
+                                makePublic,
+                                saveAndExit);
                         }
 
                         $scope.$watch(function () {
