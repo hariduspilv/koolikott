@@ -173,7 +173,8 @@ app.config(
             }]);
         }
 
-        app.run(function ($rootScope, metadataService, APP_VERSION, taxonService, FB_APP_ID) {
+        app.run(['$rootScope', 'metadataService', 'APP_VERSION', 'taxonService', 'FB_APP_ID',
+            function ($rootScope, metadataService, APP_VERSION, taxonService, FB_APP_ID) {
             $rootScope.APP_VERSION = APP_VERSION;
             $rootScope.FB_APP_ID = FB_APP_ID;
             $rootScope.hasAppInitated = false;
@@ -183,7 +184,7 @@ app.config(
                 $rootScope.taxon = taxon;
                 taxonService.setTaxons(taxon);
             }
-        });
+        }]);
 
         function isViewMyProfilePage($location, user) {
             return user && $location.path().startsWith('/' + user.username);
@@ -258,7 +259,7 @@ app.config(
             });
         }]);
 
-        app.run(function (APP_VERSION) {
+        app.run(['APP_VERSION', function (APP_VERSION) {
             var savedVersion = localStorage.getItem('version');
             if (!savedVersion || savedVersion !== APP_VERSION) {
                 var userData = localStorage.getItem('authenticatedUser');
@@ -268,7 +269,7 @@ app.config(
                     localStorage.setItem('authenticatedUser', userData);
                 }
             }
-        });
+        }]);
 
         app.run(['$rootScope', '$location', function ($rootScope, $location) {
             var history = [];

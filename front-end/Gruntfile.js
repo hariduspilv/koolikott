@@ -311,7 +311,7 @@ module.exports = function (grunt) {
                         'views/**/**/*.html',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
-                        'directives/**/**/*.{html,js}',
+                        'directives/**/**/*.html',
                         'utils/**/**/*.{html,ttf,png,css,js}',
                         'utils/preloader/*.*',
                         'libs/**/**/*.{js,map}'
@@ -435,6 +435,7 @@ module.exports = function (grunt) {
                 files: {
                     '.tmp/concat/js/config.js': '.tmp/concat/js/config.js',
                     '.tmp/concat/js/controllers.js': '.tmp/concat/js/controllers.js',
+                    '.tmp/concat/js/directives.js': '.tmp/concat/js/directives.js',
                     '.tmp/concat/js/services.js': '.tmp/concat/js/services.js'
                 }
             }
