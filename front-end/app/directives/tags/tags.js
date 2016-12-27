@@ -189,11 +189,6 @@ angular.module('koolikottApp')
 
                         $scope.tagSelected = function () {
                             if ($scope.newTag && $scope.newTag.tagName) {
-                                $scope.addTag();
-                            }
-                        };
-                        $scope.tagSelected = function () {
-                            if ($scope.newTag && $scope.newTag.tagName) {
                                 processSystemTag();
                             }
                         };
@@ -219,9 +214,9 @@ angular.module('koolikottApp')
 
                         function updateLearningObject (learningObject) {
                             if (learningObject.type === ".Material") {
-                                $scope.$parent.updateMaterial(learningObject);
+                                $scope.$emit("tags:updateMaterial", learningObject);
                             } else if (learningObject.type === ".Portfolio") {
-                                $scope.$parent.updatePortfolio(learningObject);
+                                $scope.$emit("tags:updatePortfolio", learningObject)
                             }
                         }
 

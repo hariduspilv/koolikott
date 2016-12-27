@@ -254,9 +254,9 @@ angular.module('koolikottApp')
                     processMaterial();
                 };
 
-                $scope.updateMaterial = function (newMaterial) {
-                  updateMaterial(newMaterial, $scope.material);
-                };
+                $scope.$on("tags:updateMaterial", function(event, value) {
+                    updateMaterial(value, $scope.material);
+                });
 
                 $scope.isAdminButtonsShowing = function () {
                     return ($rootScope.learningObjectDeleted == false
