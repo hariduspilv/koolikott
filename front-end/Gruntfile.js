@@ -488,6 +488,26 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
+    // difference is strip_code
+    grunt.registerTask('build-live', [
+        'clean:dist',
+        'useminPrepare',
+        'concurrent:dist',
+        'postcss:dist',
+        'concat',
+        'babel',
+        'ngAnnotate',
+        'copy:dist',
+        'strip_code',
+        'ngconstant:dist',
+        'cdnify',
+        'cssmin',
+        'uglify',
+        'filerev',
+        'usemin',
+        'htmlmin'
+    ]);
+
     grunt.registerTask('default', [
         'newer:jshint',
         'build'
@@ -499,8 +519,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('package-live', [
-        'build',
-        'strip_code',
+        'build-live',
         'compress:live'
     ]);
 
