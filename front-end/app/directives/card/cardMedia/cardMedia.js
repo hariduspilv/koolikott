@@ -12,7 +12,6 @@ angular.module('koolikottApp')
             },
             templateUrl: 'directives/card/cardMedia/cardMedia.html',
             controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
-                $scope.learningObjectType;
 
                 function init () {
                     if ($scope.learningObject.type === '.Material') {
@@ -28,7 +27,7 @@ angular.module('koolikottApp')
                     $event.stopPropagation();
 
                     if ($rootScope.selectedMaterials) {
-                        var index = $rootScope.selectedMaterials.indexOf(material);
+                        let index = $rootScope.selectedMaterials.indexOf(material);
                         if (index == -1) {
                             $rootScope.selectedMaterials.push(material);
                             material.selected = true;
