@@ -130,15 +130,18 @@ angular.module('koolikottApp')
                     }
 
                     $scope.portfolio.chapters.push({
-                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                        title: '',
                         subchapters: [],
                         materials: [],
                         openCloseChapter: true
                     });
 
+                    let chapterID = `chapter-${$scope.portfolio.chapters.length - 1}`;
+
                     $timeout(function () {
-                        goToElement('chapter-' + ($scope.portfolio.chapters.length - 1));
-                    }, 0);
+                        goToElement(chapterID);
+                        focusInput(chapterID);
+                    });
                 };
 
                 function goToElement(elementID) {

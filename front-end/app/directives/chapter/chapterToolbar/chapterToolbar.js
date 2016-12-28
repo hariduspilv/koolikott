@@ -8,10 +8,11 @@ angular.module('koolikottApp')
         return {
             scope: {
                 chapter: '=',
-                isSub: '='
+                isSub: '=',
+                index: '='
             },
             templateUrl: 'directives/chapter/chapterToolbar/chapterToolbar.html',
-            controller: ['$scope', function($scope) {
+            controller: ['$scope', '$timeout', function($scope, $timeout) {
                 $scope.isEditable = $rootScope.isEditPortfolioMode;
 
                 $scope.addMaterial = function() {
@@ -37,12 +38,18 @@ angular.module('koolikottApp')
                 }
 
                 $scope.addNewSubChapter = function() {
-                    var subChapters = $scope.chapter.subchapters;
+                    let subChapters = $scope.chapter.subchapters;
 
                     subChapters.push({
-                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
+                        title: '',
                         materials: [],
                         openCloseChapter: true
+                    });
+
+                    let subChapterID = `chapter-${$scope.index}-${subChapters.length - 1}`;
+
+                    $timeout(function () {
+                        focusInput(subChapterID);
                     });
                 };
 

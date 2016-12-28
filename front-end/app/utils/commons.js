@@ -425,3 +425,8 @@ function isIE() {
     return !!(navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
     navigator.userAgent.match(/rv 11/)));
 }
+
+function focusInput(elementID) {
+    const $parent = angular.element(document.getElementById(elementID));
+    $parent.find('input')[0].focus();
+}
