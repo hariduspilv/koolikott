@@ -14,17 +14,16 @@
     color: rgba(255, 255, 255, 0);
   }
 
+  &.is-visible {
+    .favorite__icon {
+      color: rgba(255, 255, 255, .8);
+    }
+  }
 
   &.has-favorited {
     .favorite__icon {
       color: $gold;
       text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
-    }
-  }
-
-  &.is-visible {
-    .favorite__icon {
-      color: rgba(255, 255, 255, .8);
     }
   }
 }
