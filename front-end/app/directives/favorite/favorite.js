@@ -10,7 +10,10 @@ angular.module('koolikottApp')
                 learningObject: '='
             },
             templateUrl: 'directives/favorite/favorite.html',
-            controller: ['$scope', function ($scope) {
+            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
+                $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+                $scope.isViewMaterialOrPortfolioPage = $rootScope.isViewMaterialOrPortfolioPage;
+
                 $timeout(function () {
                     if ($scope.learningObject && isLoggedIn()) {
                         if ($scope.learningObject.favorite) {
