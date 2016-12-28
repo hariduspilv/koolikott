@@ -38,6 +38,7 @@
     "grunt-sass": "^1.2.1",
     "grunt-selenium-standalone": "^0.1.2",
     "grunt-shell-spawn": "^0.3.10",
+    "grunt-strip-code": "^1.0.4",
     "grunt-svgmin": "^2.0.0",
     "grunt-text-replace": "^0.4.0",
     "grunt-usemin": "^3.0.0",

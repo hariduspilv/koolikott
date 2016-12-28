@@ -416,7 +416,7 @@ module.exports = function (grunt) {
         ngconstant: {
             dist: {
                 options: {
-                    dest: 'dist/dop/constants.js',
+                    dest: '<%= yeoman.dist.app %>/constants.js',
                     name: 'DOPconstants'
                 },
                 constants: {
@@ -439,7 +439,20 @@ module.exports = function (grunt) {
                     '.tmp/concat/js/services.js': '.tmp/concat/js/services.js'
                 }
             }
-        }
+        },
+
+        // remove dev login for live
+        strip_code: {
+            options: {
+                blocks: [{
+                        start_block: "<!-- remove-html-for-live -->",
+                        end_block: "<!-- end-remove-html-for-live -->"
+                    }]
+            },
+            your_target: {
+                src: '<%= yeoman.dist.app %>/index.html'
+            },
+        },
     });
 
     grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
@@ -487,6 +500,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('package-live', [
         'build',
+        'strip_code',
         'compress:live'
     ]);
 
