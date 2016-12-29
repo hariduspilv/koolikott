@@ -35,22 +35,15 @@
   }
 
   .card-cover {
-    width: 100%;
-    max-width: 300px;
-
+    border-radius: 0 $border-radius $border-radius 0;
     @media (min-width: $layout-breakpoint-xs) {
-      height: 134px;
       border-radius: $border-radius $border-radius 0 0;
-    }
-
-    @media (min-width: $layout-breakpoint-lg) {
-      height: 156px;
     }
   }
 
   md-card-content {
     height: 100%;
-    padding-bottom: 0;
+    padding-bottom: 10px;
 
     .md-caption {
       color: rgba(0, 0, 0, 0.54);

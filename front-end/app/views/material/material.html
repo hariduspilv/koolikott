@@ -1,5 +1,5 @@
-<section layout="row" layout-xs="column" role="main">
-  <article role="main" id="page-view-material" flex-gt-xs="75">
+<section layout="column" layout-gt-sm="row" role="main">
+  <article role="main" id="page-view-material" flex="100" flex-gt-sm="75">
     <div ng-if="modUser()" dop-error-message></div>
 
     <!-- same as portfolioSummaryCard in directives -->
@@ -371,7 +371,7 @@
 </md-card-actions>
 </md-card>
 </article>
-<aside flex-gt-xs="25">
-  <div data-dop-aside data-learning-object="material"></div>
+<aside flex-gt-sm="25" flex="100">
+  <div data-dop-aside data-learning-object="material" layout="row" layout-gt-sm="column"></div>
 </aside>
 </section>
