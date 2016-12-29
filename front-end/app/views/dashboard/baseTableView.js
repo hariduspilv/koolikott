@@ -1,10 +1,8 @@
 'use strict';
 
-angular.module('koolikottApp')
-.controller('baseTableViewController',
-[
-    '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route',
-    function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route) {
+angular.module('koolikottApp').controller('baseTableViewController', [
+    '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService',
+    function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService) {
         $scope.viewPath = $location.path();
         var collection = null;
         var filtredCollection = null;
@@ -44,7 +42,7 @@ angular.module('koolikottApp')
         };
 
         $scope.editUser = function (user) {
-            if(!user) return;
+            if (!user) return;
             var editUserScope = $scope.$new(true);
             editUserScope.user = user;
 
@@ -126,31 +124,31 @@ angular.module('koolikottApp')
                 if (a && b) {
 
                     if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
-                    return new Date(b.added) - new Date(a.added);
+                        return new Date(b.added) - new Date(a.added);
 
                     if (order === 'byUpdatedAt' || order === '-byUpdatedAt')
-                    return new Date(b.updated) - new Date(a.updated);
+                        return new Date(b.updated) - new Date(a.updated);
 
                     if ((order === 'bySubmittedBy' || order == '-bySubmittedBy') && a.creator && b.creator) {
                         var aName = a.creator.name + ' ' + a.creator.surname;
                         var bName = b.creator.name + ' ' + b.creator.surname;
                         if (a.reportCount > 1)
-                        aName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
+                            aName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
                         if (b.reportCount > 1)
-                        bName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
+                            bName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
 
                         return aName.localeCompare(bName);
                     }
 
                     if (order === 'byReportCount' || order === '-byReportCount')
-                    return b.reportCount - a.reportCount;
+                        return b.reportCount - a.reportCount;
                 }
 
                 return 0;
             });
 
             if (order.slice(0, 1) === '-')
-            data.reverse();
+                data.reverse();
         }
 
         function filterItems() {
@@ -163,19 +161,19 @@ angular.module('koolikottApp')
 
                 if (data.learningObject && data.learningObject.type) {
                     if (data.learningObject.type === '.Material')
-                    text = $scope.getCorrectLanguageTitle(data.learningObject);
+                        text = $scope.getCorrectLanguageTitle(data.learningObject);
                     if (data.learningObject.type === '.Portfolio')
-                    text = data.learningObject.title;
+                        text = data.learningObject.title;
                 }
 
                 if (data.material)
-                text = $scope.getCorrectLanguageTitle(data.material);
+                    text = $scope.getCorrectLanguageTitle(data.material);
 
                 if (data.type === '.Material')
-                text = $scope.getCorrectLanguageTitle(data);
+                    text = $scope.getCorrectLanguageTitle(data);
 
                 if (data.type === '.Portfolio')
-                text = data.title;
+                    text = data.title;
 
                 if (text) {
                     return text.toLowerCase().indexOf($scope.query.filter.toLowerCase()) !== -1;
@@ -200,11 +198,23 @@ angular.module('koolikottApp')
 
         $scope.onReorder = function (order) {
             if (filtredCollection !== null)
-            orderItems(filtredCollection, order);
+                orderItems(filtredCollection, order);
             else
-            orderItems(collection, order);
+                orderItems(collection, order);
 
             $scope.data = paginate($scope.query.page, $scope.query.limit);
+        };
+
+        $scope.getTaxonTranslation = function (taxon) {
+            if (taxon.level = ".TaxonDTO") {
+                taxon = taxonService.getFullTaxon(taxon.id);
+            }
+
+            if (taxon.level !== '.EducationalContext') {
+                return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
+            } else {
+                return taxon.name.toUpperCase();
+            }
         };
 
         function paginate(page, limit) {
@@ -212,7 +222,7 @@ angular.module('koolikottApp')
             var take = skip + limit;
 
             if (filtredCollection !== null)
-            return filtredCollection.slice(skip, take);
+                return filtredCollection.slice(skip, take);
 
             return collection.slice(skip, take);
         }
@@ -244,8 +254,8 @@ angular.module('koolikottApp')
         };
 
         /**
-        *  Merge reports so that every learning object is represented by only 1 row in the table.
-        */
+         *  Merge reports so that every learning object is represented by only 1 row in the table.
+         */
         function mergeReports(items) {
             var merged = [];
 

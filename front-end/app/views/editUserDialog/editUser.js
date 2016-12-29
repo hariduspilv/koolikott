@@ -1,18 +1,18 @@
 'use strict'
 
-angular.module('koolikottApp')
-.controller('editUserController',
-[
+angular.module('koolikottApp').controller('editUserController', [
     '$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService', 'authenticatedUserService', '$location',
     function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter, taxonService, authenticatedUserService, $location) {
         var ROLE_MODERATOR = "MODERATOR";
 
         function init() {
             if (!$scope.user) return;
+
             $scope.selectedRole = $scope.user.role;
             if ($scope.user.userTaxons.length === 0) {
                 $scope.user.userTaxons = [{}];
             }
+
             serverCallService.makeGet("rest/role", {}, getRolesSuccess, fail)
         }
 
@@ -51,7 +51,7 @@ angular.module('koolikottApp')
         }, true);
 
         $scope.isEmpty = function (object) {
-          return _.isEmpty(object);
+            return _.isEmpty(object);
         };
 
         function updateUserSuccess(user) {

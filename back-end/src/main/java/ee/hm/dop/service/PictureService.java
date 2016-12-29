@@ -1,12 +1,5 @@
 package ee.hm.dop.service;
 
-import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.PictureDAO;
 import ee.hm.dop.dao.ThumbnailDAO;
 import ee.hm.dop.model.OriginalPicture;
@@ -17,11 +10,18 @@ import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import javax.inject.Inject;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
+
+import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 public class PictureService {
 
@@ -144,6 +144,28 @@ public class PictureService {
         }
 
         return newPicture;
+    }
+
+    public Picture createFromURL(String url) {
+
+        try {
+            BufferedImage image = ImageIO.read(new URL(url));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            ImageIO.write(image, "jpg", baos);
+
+            baos.flush();
+
+            OriginalPicture result = new OriginalPicture();
+            result.setData(baos.toByteArray());
+
+            baos.close();
+
+            return create(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void createThumbnails(Picture picture) {

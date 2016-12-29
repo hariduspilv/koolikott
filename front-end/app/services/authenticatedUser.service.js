@@ -1,16 +1,11 @@
 'use strict';
 
-angular.module('koolikottApp')
-.factory('authenticatedUserService',
-[
+angular.module('koolikottApp').factory('authenticatedUserService', [
     '$location',
     function ($location) {
 
         var instance = {
             setAuthenticatedUser: function (authenticatedUser) {
-                // HACK: Handling stack overflow caused by taxons
-                authenticatedUser.user.userTaxons = instance.getFirstLevelTaxons(authenticatedUser.user.userTaxons);
-
                 localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
             },
 
@@ -63,16 +58,6 @@ angular.module('koolikottApp')
 
                 return null;
             },
-
-            getFirstLevelTaxons: function (userTaxons) {
-                var taxonList = [];
-                userTaxons.forEach(function (entry) {
-                    var taxon = {'id': entry.id};
-                    taxonList.push(taxon);
-                });
-
-                return taxonList;
-            }
         };
 
         return instance;
