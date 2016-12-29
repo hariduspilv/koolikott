@@ -675,21 +675,17 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         HttpClient client = new HttpClient();
         GetMethod get = new GetMethod(url_param);
         HeadMethod head = new HeadMethod(url_param);
-        client.executeMethod(head);
+        client.executeMethod(get);
 
-        if(Objects.equals(attachmentLocation(head, PDF_EXTENSION, PDF_MIME_TYPE), "Content-Disposition")){
+        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE), "Content-Disposition")) {
             contentDisposition = head.getResponseHeaders("Content-Disposition")[0].getValue();
-            client.executeMethod(get);
             contentDisposition = contentDisposition.replace("attachment", "Inline");
-            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
-                    contentDisposition).build();
         }
-        if (Objects.equals(attachmentLocation(head, PDF_EXTENSION, PDF_MIME_TYPE), "Content-Type")) {
-            client.executeMethod(get);
+        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Type")) {
             // Content-Disposition is missing, try to extract the filename from url instead
             String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
             contentDisposition = format("Inline; filename=\"%s\"", fileName);
-        }else{
+        } else {
             return Response.noContent().build();
         }
 
@@ -697,9 +693,9 @@ public class MaterialService extends BaseService implements LearningObjectHandle
                 contentDisposition).build();
     }
 
-    String attachmentLocation(HeadMethod head, String extension, String mime_type){
-        Header[] contentDisposition = head.getResponseHeaders("Content-Disposition");
-        Header[] contentType = head.getResponseHeaders("Content-Type");
+    String attachmentLocation(GetMethod get, String extension, String mime_type) {
+        Header[] contentDisposition = get.getResponseHeaders("Content-Disposition");
+        Header[] contentType = get.getResponseHeaders("Content-Type");
         if (contentDisposition.length > 0 && contentDisposition[0].getValue().toLowerCase().endsWith(extension)) {
             return "Content-Disposition";
         }
