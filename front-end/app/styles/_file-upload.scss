@@ -7,20 +7,30 @@
   border-radius: 2px;
   transition: all .25s;
   background: rgba(0,0,0, .1);
+  padding: 1px 0;
+  max-height: 100px;
 
 	&.dragover,
   &:hover {
     border-color: rgba(0,0,0,.15);
     background: rgba(0,0,0, .15);
+    .error-wrapper {
+      background-color: #d9d9d9;
+    }
 	}
 
-  span {
-    background: rgba(0,0,0, 0);
+  .error-wrapper {
+    background-color: #e6e6e6;
+    padding: 0 20px;
   }
 
 	&.dragover-err {
     border-color: $error;
 	}
+
+  .text-small.text-light {
+    padding: 0 20px;
+  }
 }
 
 .drop-box-preview-container {
@@ -29,6 +39,8 @@
 }
 
 .drop-box-preview {
+  overflow: hidden;
+  max-height: 100px;
   img {
     height: auto;
     width: 100%;

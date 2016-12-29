@@ -6,7 +6,7 @@ md-card {
     position: relative;
   }
   .card-cover {
-    @include aspect-ratio(3,2);
+    // @include aspect-ratio(3,2);
 
     img {
       width: 100%;
