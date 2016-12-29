@@ -59,13 +59,6 @@ angular.module('koolikottApp')
                     });
                 };
 
-                $scope.showAddMaterialsToPortfolioDialog = function() {
-                    $mdDialog.show({
-                        templateUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio.html',
-                        controller: 'addMaterialToExistingPortfolioController'
-                    });
-                };
-
                 $scope.showAddMaterialDialog = function() {
                     $mdDialog.show({
                         templateUrl: 'addMaterialDialog.html',
