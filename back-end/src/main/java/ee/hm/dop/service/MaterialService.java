@@ -25,7 +25,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
@@ -702,7 +701,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         if (contentType.length > 0 && contentType[0].getValue().toLowerCase().endsWith(mime_type)) {
             return "Content-Type";
         }
-        return null;
+        return "Invalid";
     }
 
 }

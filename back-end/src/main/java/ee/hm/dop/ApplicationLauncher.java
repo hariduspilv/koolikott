@@ -2,6 +2,7 @@ package ee.hm.dop;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
+import static org.opensaml.DefaultBootstrap.SYSPROP_HTTPCLIENT_HTTPS_DISABLE_HOSTNAME_VERIFICATION;
 
 import java.util.concurrent.Executors;
 
@@ -85,6 +86,7 @@ public class ApplicationLauncher {
 
     private static void initOpenSaml() {
         try {
+            System.setProperty(SYSPROP_HTTPCLIENT_HTTPS_DISABLE_HOSTNAME_VERIFICATION, "true");
             DefaultBootstrap.bootstrap();
         } catch (ConfigurationException e) {
             logger.error("Error initializing OpenSAML library.");
