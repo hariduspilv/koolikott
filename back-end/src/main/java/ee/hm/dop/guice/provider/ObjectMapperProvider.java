@@ -5,6 +5,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +25,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         mapper = new ObjectMapper();
 
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.disable(MapperFeature.USE_GETTERS_AS_SETTERS);

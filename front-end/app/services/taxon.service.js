@@ -1,12 +1,11 @@
 'use strict';
 
-angular.module('koolikottApp')
-.factory('taxonService',
-[
+angular.module('koolikottApp').factory('taxonService', [
     '$rootScope',
     function ($rootScope) {
 
         var CHILD_TAXON_KEYS = ['domains', 'subjects', 'topics', 'subtopics', 'modules', 'specializations'];
+
         var constants = {
             EDUCATIONAL_CONTEXT: '.EducationalContext',
             DOMAIN: '.Domain',
@@ -16,6 +15,7 @@ angular.module('koolikottApp')
             SPECIALIZATION: '.Specialization',
             MODULE: '.Module'
         };
+
         var taxonMap;
 
         function mapTaxon(taxon) {
@@ -40,6 +40,10 @@ angular.module('koolikottApp')
         }
 
         function getTaxonByLevel(taxon, level) {
+            if(taxon.level === ".TaxonDTO") {
+                taxon = taxonMap['t' + taxon.id];
+            }
+
             if (taxon.level === constants.EDUCATIONAL_CONTEXT) {
                 return taxon.level === level ? taxon : null;
             }

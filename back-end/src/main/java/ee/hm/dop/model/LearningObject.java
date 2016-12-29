@@ -9,6 +9,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
@@ -137,6 +138,7 @@ public abstract class LearningObject implements Searchable {
             inverseJoinColumns = {@JoinColumn(name = "taxon")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "taxon"}))
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
+    @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
