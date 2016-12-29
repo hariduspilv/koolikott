@@ -127,7 +127,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                     $scope.mobileSearch.isVisible = true;
 
                     $timeout(() => {
-                        angular.element(document.getElementById('header-simple-search-input')).focus();
+                        document.getElementById('header-simple-search-input').focus();
                     });
                 }
 
