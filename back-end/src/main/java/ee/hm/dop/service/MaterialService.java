@@ -674,11 +674,10 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         String contentDisposition;
         HttpClient client = new HttpClient();
         GetMethod get = new GetMethod(url_param);
-        HeadMethod head = new HeadMethod(url_param);
         client.executeMethod(get);
 
-        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE), "Content-Disposition")) {
-            contentDisposition = head.getResponseHeaders("Content-Disposition")[0].getValue();
+        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Disposition")) {
+            contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();
             contentDisposition = contentDisposition.replace("attachment", "Inline");
         }
         if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Type")) {
