@@ -679,17 +679,18 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Disposition")) {
             contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();
             contentDisposition = contentDisposition.replace("attachment", "Inline");
+            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
+                    contentDisposition).build();
         }
         if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Type")) {
             // Content-Disposition is missing, try to extract the filename from url instead
             String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
             contentDisposition = format("Inline; filename=\"%s\"", fileName);
-        } else {
-            return Response.noContent().build();
+            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
+                    contentDisposition).build();
         }
 
-        return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
-                contentDisposition).build();
+        return Response.noContent().build();
     }
 
     String attachmentLocation(GetMethod get, String extension, String mime_type) {
