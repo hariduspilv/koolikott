@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.RoleDeserializer;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 
 import java.util.List;
 
@@ -48,6 +50,8 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "taxon")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"user", "taxon"}))
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
+    @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
 
     public Long getId() {

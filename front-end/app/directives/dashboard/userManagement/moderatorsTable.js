@@ -23,15 +23,6 @@ function () {
                 console.log("Failed to get users")
             }
 
-            $scope.getTaxonTranslation = function (taxon) {
-                if (taxon.level !== '.EducationalContext') {
-                    return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
-                } else {
-                    return taxon.name.toUpperCase();
-                }
-
-            };
-
             init();
         }]
     }
