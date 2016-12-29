@@ -1,13 +1,13 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Taxon;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Taxon;
 
 public class TaxonDAO extends BaseDAO<Taxon> {
 
@@ -27,20 +27,8 @@ public class TaxonDAO extends BaseDAO<Taxon> {
     }
 
     public List<EducationalContext> findAllEducationalContext() {
-        List<Taxon> resultList = createQuery("FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'", Taxon.class)
-                .getResultList();
-
-        List<EducationalContext> educationalContexts = new ArrayList<>();
-
-        for (Taxon taxon : resultList) {
-            educationalContexts.add((EducationalContext) taxon);
-        }
-
-        return educationalContexts;
-    }
-
-    public List<Taxon> findReducedTaxon() {
-        return createQuery("FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'", Taxon.class)
+        return (List<EducationalContext>) (List<?>) getEntityManager()
+                .createNamedQuery("findAllEducationalContext", Taxon.class)
                 .getResultList();
     }
 
