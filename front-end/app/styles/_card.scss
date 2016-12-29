@@ -6,11 +6,20 @@ md-card {
     position: relative;
   }
   .card-cover {
-    // @include aspect-ratio(3,2);
-
+    @include aspect-ratio(3,2);
+    overflow: hidden;
+    max-width: 300px;
+    height: 100%;
     img {
+      height: 100%;
       width: 100%;
-      border-radius: 0 $border-radius $border-radius 0;
+      @media (min-width: $layout-breakpoint-xs) {
+        height: 100%;
+        width: auto;
+      }
+      .ua-ie & {
+        height: auto;
+      }
     }
   }
 
@@ -54,6 +63,10 @@ md-card {
 .card-image {
   height: 100%;
   position: relative;
+  @include aspect-ratio(3,2);
+  &:before {
+    padding-bottom: 0;
+  }
 }
 
 .card-hover {
@@ -99,16 +112,16 @@ md-card {
   width: auto;
 
   // Commented out because will be put back in the future
-  // &:after {
-  //   content: "";
-  //   box-shadow: inset 0 0 3em rgba(0,0,0, .15);
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   z-index: 2;
-  // }
+  &:after {
+    content: "";
+    box-shadow: inset 0 0 3em rgba(0,0,0, .15);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
 
   md-icon.icon-kind {
     position: absolute;

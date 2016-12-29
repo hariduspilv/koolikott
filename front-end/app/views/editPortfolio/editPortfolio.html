@@ -1,5 +1,5 @@
-<section layout="row" layout-xs="column" role="main">
-  <article flex-gt-xs="75">
+<section layout="column" layout-gt-sm="row" role="main">
+  <article flex="100"  flex-gt-xs="75">
 
     <md-card class="card-mb-20" data-ng-if="showFirstMessage">
       <md-toolbar>
@@ -22,7 +22,7 @@
       </md-button>
     </md-card>
   </article>
-  <aside flex-gt-xs="25">
-    <div data-dop-aside data-learning-object="portfolio"></div>
+  <aside flex-gt-sm="25" flex="100">
+    <div data-dop-aside data-learning-object="portfolio" layout="row" layout-gt-sm="column"></div>
   </aside>
 </section>
