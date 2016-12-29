@@ -207,8 +207,9 @@ angular.module('koolikottApp')
                 };
 
                 $scope.isTabTwoValid = function () {
+                    var hasCorrectTaxon = $scope.material.taxons && $scope.material.taxons[0] && $scope.material.taxons[0].level && $scope.material.taxons[0].level !== ".EducationalContext";
                     return $scope.educationalContextId === 4 || ($scope.material.targetGroups && $scope.material.targetGroups.length > 0)
-                        && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true);
+                        && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true) && hasCorrectTaxon;
                 };
 
                 $scope.isTabThreeValid = function () {
