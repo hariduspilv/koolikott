@@ -20,6 +20,13 @@ angular.module('koolikottApp')
                         successCallback(response.data);
                     }, errorCallback, finallyCallback);
                 });
+            },
+
+            uploadFromUrl: function (url) {
+                return serverCallService.makePut("/rest/picture/fromUrl", url)
+                    .then(response => {
+                        return response.data;
+                    })
             }
         };
 

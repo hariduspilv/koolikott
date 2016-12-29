@@ -309,8 +309,11 @@
       <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>:
     </small>
     <br>
-    <span data-ng-if="material.licenseType"
-    data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
+
+    <span data-ng-if="material.licenseType" ng-switch on="material.licenseType.name">
+      <a ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms" data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}" target="_blank"></a>
+      <span ng-switch-default data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
+    </span>
     <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
   </p>
 
