@@ -95,21 +95,24 @@ md-card {
   @include aspect-ratio(3,2);
   max-width: 300px;
   height: 100%;
+
   .ua-safari & {
     height: auto;
   }
+
   img {
     height: 100%;
     width: 100%;
+
     @media (min-width: $layout-breakpoint-xs) {
       height: 100%;
       width: auto;
     }
+
     .ua-ie & {
       height: auto;
     }
   }
-
 
   // Commented out because will be put back in the future
   &:after {
