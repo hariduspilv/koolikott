@@ -1,5 +1,18 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
+import static java.lang.String.format;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
@@ -28,19 +41,6 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
-
-import javax.inject.Inject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
-import static java.lang.String.format;
 
 public class SearchService {
 

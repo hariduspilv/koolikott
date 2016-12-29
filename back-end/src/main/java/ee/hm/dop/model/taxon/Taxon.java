@@ -31,10 +31,10 @@ public abstract class Taxon {
 
     @Id
     @GeneratedValue
-    private Long id;
+    protected Long id;
 
     @Column(nullable = false, insertable = false)
-    private String name;
+    protected String name;
 
     @Transient
     private Long parentId;

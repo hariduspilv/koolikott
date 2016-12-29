@@ -1,10 +1,8 @@
 'use strict';
 
-angular.module('koolikottApp')
-.factory('metadataService',
-[
-    'serverCallService', '$filter', '$timeout',
-    function (serverCallService, $filter, $timeout) {
+angular.module('koolikottApp').factory('metadataService', [
+    'serverCallService', '$filter', '$timeout', 'taxonService',
+    function (serverCallService, $filter, $timeout, taxonService) {
         var instance;
 
         var CROSS_CURRICULAR_THEMES;
@@ -30,7 +28,6 @@ angular.module('koolikottApp')
         });
 
         function init() {
-            serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
             serverCallService.makeGet("rest/learningMaterialMetadata/crossCurricularTheme", {}, getCrossCurricularThemesSuccess, getCrossCurricularThemesFail);
             serverCallService.makeGet("rest/learningMaterialMetadata/keyCompetence", {}, getKeyCompetencesSuccess, getKeyCompetencesFail);
             serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
@@ -144,6 +141,7 @@ angular.module('koolikottApp')
 
         function getEducationalContextSuccess(data) {
             if (!isEmpty(data)) {
+                taxonService.setTaxons(data);
                 EDUCATIONAL_CONTEXT = data;
                 educationalContextsCallbacks.forEach(function (callback) {
                     callback(data);
@@ -216,8 +214,9 @@ angular.module('koolikottApp')
                 if (EDUCATIONAL_CONTEXT) {
                     callback(EDUCATIONAL_CONTEXT);
                 } else {
+                    serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
                     // Save callback, call it when data arrives
-                    educationalContextsCallbacks.push(callback);
+                    if (callback) educationalContextsCallbacks.push(callback);
                 }
             },
 
@@ -230,7 +229,7 @@ angular.module('koolikottApp')
                 }
             },
 
-            updateUsedResourceTypes: function(callback) {
+            updateUsedResourceTypes: function (callback) {
                 serverCallService.makeGet("rest/learningMaterialMetadata/resourceType/used", {}, getUsedResourceTypeSuccess, getResourceTypeFail);
                 USED_RESOURCE_TYPES = null;
                 this.loadUsedResourceTypes(callback);
