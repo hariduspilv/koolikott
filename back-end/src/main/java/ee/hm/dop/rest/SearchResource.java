@@ -131,11 +131,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setRequestingUser(getLoggedInUser());
         searchFilter.setMyPrivates(myPrivates);
         searchFilter.setExcluded(excluded);
-        if (isORSearch) {
-            searchFilter.setSearchType("OR");
-        } else {
-            searchFilter.setSearchType("AND");
-        }
+        if (isORSearch) searchFilter.setSearchType("OR");
 
         return searchService.search(query, start, limit, searchFilter);
     }
