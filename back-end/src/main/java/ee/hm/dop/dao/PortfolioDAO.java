@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.LearningObject;
@@ -36,6 +37,13 @@ public class PortfolioDAO extends LearningObjectDAO {
         List<LearningObject> learningObjects = super.findDeletedLearningObjects();
         removeNot(Portfolio.class, learningObjects);
         return learningObjects;
+    }
+
+    public Long findCountByCreator(User creator) {
+        Query query = getEntityManager()
+                .createQuery("SELECT count(*) FROM Portfolio p WHERE p.creator = :creator AND p.deleted = false")
+                .setParameter("creator", creator);
+        return (Long) query.getSingleResult();
     }
 
     /**

@@ -63,6 +63,10 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
                 .collect(Collectors.toList());
     }
 
+    public Long getCountByCreator(User creator) {
+        return portfolioDAO.findCountByCreator(creator);
+    }
+
     public void incrementViewCount(Portfolio portfolio) {
         Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
         if (originalPortfolio == null) {
