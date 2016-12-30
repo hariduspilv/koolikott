@@ -7,4 +7,20 @@ aside {
     margin: 0 0 $md-padding/2;
   }
 
+  &>.layout-row > .flex-50 {
+    &:first-of-type {
+      padding-right: $md-padding/2;
+      @media (min-width: $layout-breakpoint-sm) {
+        padding-left: 0;
+      }
+    }
+    &:last-of-type {
+      padding-left: $md-padding/2;
+      @media (min-width: $layout-breakpoint-sm) {
+        padding-left: 0;
+      }
+    }
+  }
+
+
 }
