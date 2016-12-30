@@ -1,18 +1,19 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.User;
+import java.math.BigInteger;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.math.BigInteger;
-import java.util.List;
+
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.User;
 
 public class MaterialDAO extends LearningObjectDAO {
     @Inject
@@ -28,10 +29,14 @@ public class MaterialDAO extends LearningObjectDAO {
         return castTo(Material.class, super.findById(materialId));
     }
 
-    public List<LearningObject> findDeletedMaterials() {
-        List<LearningObject> learningObjects = super.findDeletedLearningObjects();
-        removeNot(Material.class, learningObjects);
-        return learningObjects;
+    public List<Material> findDeletedMaterials() {
+        TypedQuery<Material> query = createQuery("SELECT m FROM Material m WHERE m.deleted = true", Material.class);
+        return query.getResultList();
+    }
+
+    public Long findDeletedMaterialsCount() {
+        Query query = getEntityManager().createQuery("SELECT count(*) FROM Material m WHERE m.deleted = true");
+        return (Long) query.getSingleResult();
     }
 
     /**

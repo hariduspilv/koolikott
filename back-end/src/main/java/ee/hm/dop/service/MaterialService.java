@@ -1,5 +1,22 @@
 package ee.hm.dop.service;
 
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.UserLikeDAO;
@@ -30,23 +47,6 @@ import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
 
 public class MaterialService extends BaseService implements LearningObjectHandler {
 
@@ -89,6 +89,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
     @Inject
     private Configuration configuration;
+    private Long deletedMaterialsCount;
 
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
@@ -513,9 +514,11 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public List<Material> getDeletedMaterials() {
-        List<Material> materials = new ArrayList<>();
-        materialDAO.findDeletedMaterials().forEach(material -> materials.add((Material) material));
-        return materials;
+        return materialDAO.findDeletedMaterials();
+    }
+
+    public Long getDeletedMaterialsCount() {
+        return materialDAO.findDeletedMaterialsCount();
     }
 
     public List<BrokenContent> getBrokenMaterials() {
@@ -702,5 +705,4 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         }
         return "Invalid";
     }
-
 }

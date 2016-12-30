@@ -1,14 +1,13 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.UserService;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -24,14 +23,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import ee.hm.dop.model.BrokenContent;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLike;
+import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.UserService;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -230,7 +231,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
-        if(user != null) {
+        if (user != null) {
             return materialService.hasSetBroken(materialId, getLoggedInUser());
         }
 
@@ -250,7 +251,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public Response getDeletedMaterialsCount() {
-        return Response.ok(materialService.getDeletedMaterials().size()).build();
+        return Response.ok(materialService.getDeletedMaterialsCount()).build();
 
     }
 
