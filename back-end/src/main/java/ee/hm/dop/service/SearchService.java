@@ -77,14 +77,10 @@ public class SearchService {
             List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
             searchResult.setStart(response.getStart());
-            // "- documents.size() + sortedSearchable.size()" needed in case
-            // SearchEngine and DB are not sync because of re-indexing time.
+            searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+
             if (limit == null || limit > 0) {
-                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
                 searchResult.setItems(sortedSearchable);
-            } else if (limit == 0) {
-                //When limit is 0 - only getting metainfo
-                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
             }
         }
 
@@ -143,7 +139,7 @@ public class SearchService {
 
                 //Search for full phrase also, as they are more relevant
                 if (!tokenizedQueryString.toLowerCase().startsWith(TAG)) {
-                    queryString = queryString.concat(format("OR (\"%s\")", tokenizedQueryString));
+                    queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
                 }
 
                 queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
