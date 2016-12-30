@@ -28,6 +28,7 @@ angular.module('koolikottApp').factory('metadataService', [
         });
 
         function init() {
+            serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
             serverCallService.makeGet("rest/learningMaterialMetadata/crossCurricularTheme", {}, getCrossCurricularThemesSuccess, getCrossCurricularThemesFail);
             serverCallService.makeGet("rest/learningMaterialMetadata/keyCompetence", {}, getKeyCompetencesSuccess, getKeyCompetencesFail);
             serverCallService.makeGet("rest/learningMaterialMetadata/licenseType", {}, getLicenseTypeSuccess, getLicenseTypeFail);
@@ -214,7 +215,6 @@ angular.module('koolikottApp').factory('metadataService', [
                 if (EDUCATIONAL_CONTEXT) {
                     callback(EDUCATIONAL_CONTEXT);
                 } else {
-                    serverCallService.makeGet("rest/learningMaterialMetadata/educationalContext", {}, getEducationalContextSuccess, getEducationalContextFail);
                     // Save callback, call it when data arrives
                     if (callback) educationalContextsCallbacks.push(callback);
                 }
