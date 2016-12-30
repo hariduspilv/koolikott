@@ -1,121 +1,124 @@
 <md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-sm="75" flex id="add-portfolio-modal"
-class="fullscreen-dialog">
-<md-toolbar class="md-accent">
-  <div class="md-toolbar-tools" flex>
-    <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
-    <span flex></span>
-    <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
-    aria-label="Sulge kogumiku lisamise modaalaken">
-    <md-icon>close</md-icon>
-  </md-button>
-</div>
-</md-toolbar>
-<md-content class="md-padding">
-  <div layout="row" layout-align="center center" layout-align-xs="start stretch">
-    <form name="addPortfolioForm" flex-xs="70" flex-gt-xs="90">
-      <md-input-container class="md-block" layout-fill>
-        <label>
-          <span data-translate="PORTFOLIO_TITLE"></span>
-        </label>
-        <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
-        <div data-ng-messages="addPortfolioForm.title.$error">
-          <div data-ng-message="required" data-ng-hide="newPortfolio.title.length > 0"
-            data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
+           class="fullscreen-dialog">
+  <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools" flex>
+      <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
+      <span flex></span>
+      <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
+                 aria-label="Sulge kogumiku lisamise modaalaken">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-content class="md-padding">
+    <div layout="row" layout-align="center center" layout-align-xs="start stretch">
+      <form name="addPortfolioForm" flex-xs="70" flex-gt-xs="90">
+        <md-input-container class="md-block" layout-fill>
+          <label>
+            <span data-translate="PORTFOLIO_TITLE"></span>
+          </label>
+          <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
+          <div data-ng-messages="addPortfolioForm.title.$error">
+            <div data-ng-message="required" data-ng-hide="newPortfolio.title.length > 0"
+                 data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
           </div>
         </md-input-container>
       </form>
       <div flex-xs="30" flex-sm="25" flex-md="20" flex-gt-md="15">
         <div data-ngf-drop data-ngf-select data-ngf-change="fileUpload($files, $file, $newFiles)" class="drop-box"
-        data-ngf-drag-over-class="'dragover'"
-        data-ngf-multiple="false"
-        data-accept="image/*"
-        data-ngf-pattern="'image/*'"
-        data-ngf-max-size="{{maxPictureSize + 'MB'}}"
-        layout="row"
-        layout-align="center center">
+             data-ngf-drag-over-class="'dragover'"
+             data-ngf-multiple="false"
+             data-accept="image/*"
+             data-ngf-pattern="'image/*'"
+             data-ngf-max-size="{{maxPictureSize + 'MB'}}"
+             layout="row"
+             layout-align="center center">
 
-        <!-- image preview -->
-        <md-input-container data-ng-if="newPicture || newPortfolio.picture"
-        class="md-block drop-box-preview-container">
-        <div class="drop-box-preview">
-          <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
-          ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
-          <img data-ng-if="!newPicture && newPortfolio.picture"
-          data-ng-src="rest/picture/{{newPortfolio.picture.name}}"
-          ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
+          <!-- image preview -->
+          <md-input-container data-ng-if="newPicture || newPortfolio.picture"
+                              class="md-block drop-box-preview-container">
+            <div class="drop-box-preview">
+              <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
+                   ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
+              <img data-ng-if="!newPicture && newPortfolio.picture"
+                   data-ng-src="rest/picture/{{newPortfolio.picture.name}}"
+                   ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
+            </div>
+          </md-input-container>
+          <p class="text-small text-light" data-ng-class="{'text-error': showErrorOverlay}"
+             data-ng-if="!newPicture && !newPortfolio.picture">
+            <span data-translate="LOAD_IMAGE"></span>
+            <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
+          </p>
+          <div class="error-wrapper" data-ng-if="showErrorOverlay">
+            <span class="text-error" data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
+          </div>
         </div>
-      </md-input-container>
-      <p class="text-small text-light" data-ng-class="{'text-error': showErrorOverlay}" data-ng-if="!newPicture && !newPortfolio.picture">
-        <span data-translate="LOAD_IMAGE"></span>
-        <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
-      </p>
-      <div class="error-wrapper" data-ng-if="showErrorOverlay">
-        <span class="text-error" data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
+
+
+        <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
       </div>
     </div>
 
+    <div layout="row" layout-align="none center" data-ng-repeat="taxon in newPortfolio.taxons track by $index">
+      <div data-dop-taxon-selector
+           data-taxon="newPortfolio.taxons[$index]"
+           data-is-domain-required="{trigger: true}"
+           data-flex>
+      </div>
+      <md-button class="md-icon-button md-accent-2" data-ng-show="newPortfolio.taxons.length > 1"
+                 data-ng-click="deleteTaxon($index)">
+        <md-icon>close</md-icon>
+        <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
+      </md-button>
+      <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === newPortfolio.taxons.length"
+                 data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(newPortfolio.taxons[0])">
+        <md-icon>add_circle</md-icon>
+        <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
+      </md-button>
 
+    </div>
 
+    <div data-dop-target-group-selector
+         data-target-groups="newPortfolio.targetGroups"
+         data-is-required="{trigger: true}">
+    </div>
 
-    <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
-  </div>
-</div>
+    <md-input-container class="md-block margin-top-36" data-ng-show="!isSummaryVisible">
+      <label>
+        <span data-translate="PORTFOLIO_SUMMARY"></span>
+      </label>
+      <input type="text" data-ng-click="openSummary()">
+    </md-input-container>
+    <md-input-container class="md-block text-angular-portfolio-container animate-if margin-top-36"
+                        data-ng-if="isSummaryVisible">
+      <div text-angular id="add-portfolio-description-input" name="add-portfolio-description-input"
+           class="textangular-editor" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
+           ng-model="newPortfolio.summary"></div>
+    </md-input-container>
 
-<div layout="row" layout-align="none center" data-ng-repeat="taxon in newPortfolio.taxons track by $index">
-  <div data-dop-taxon-selector
-  data-taxon="newPortfolio.taxons[$index]"
-  data-is-add-portfolio-view="true" flex></div>
-  <md-button class="md-icon-button md-accent-2" data-ng-show="newPortfolio.taxons.length > 1"
-    data-ng-click="deleteTaxon($index)">
-    <md-icon>close</md-icon>
-    <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
-  </md-button>
-  <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === newPortfolio.taxons.length"
-  data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(newPortfolio.taxons[0])">
-  <md-icon>add_circle</md-icon>
-  <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
-</md-button>
+  </md-content>
 
-</div>
-
-<div data-dop-target-group-selector data-target-groups="newPortfolio.targetGroups"
-data-is-required="{trigger: true}"></div>
-
-<md-input-container class="md-block margin-top-36" data-ng-show="!isSummaryVisible">
-  <label>
-    <span data-translate="PORTFOLIO_SUMMARY"></span>
-  </label>
-  <input type="text" data-ng-click="openSummary()">
-</md-input-container>
-<md-input-container class="md-block text-angular-portfolio-container animate-if margin-top-36"
-data-ng-if="isSummaryVisible">
-<div text-angular id="add-portfolio-description-input" name="add-portfolio-description-input"
-class="textangular-editor" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
-ng-model="newPortfolio.summary"></div>
-</md-input-container>
-
-</md-content>
-
-<md-dialog-actions>
-  <span flex></span>
-  <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving"
-  data-ng-click="cancel()">
-  <span data-translate="BUTTON_CANCEL"></span>
-</md-button>
-<md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button"
-data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving"
-class="md-primary md-raised">
-<span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
-<md-icon>arrow_forward</md-icon>
-</md-button>
-<md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button"
-data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving"
-class="md-primary md-raised">
-<md-icon>arrow_forward</md-icon>
-<span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
-</md-button>
-<md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
-data-ng-show="isSaving"></md-progress-circular>
-</md-dialog-actions>
-</form>
+  <md-dialog-actions>
+    <span flex></span>
+    <md-button aria-label="Tühista kogumiku lisamine" id="add-portfolio-cancel-button" data-ng-disabled="isSaving"
+               data-ng-click="cancel()">
+      <span data-translate="BUTTON_CANCEL"></span>
+    </md-button>
+    <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button"
+               data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving"
+               class="md-primary md-raised">
+      <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
+      <md-icon>arrow_forward</md-icon>
+    </md-button>
+    <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button"
+               data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving"
+               class="md-primary md-raised">
+      <md-icon>arrow_forward</md-icon>
+      <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
+    </md-button>
+    <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                          data-ng-show="isSaving"></md-progress-circular>
+  </md-dialog-actions>
+  </form>
 </md-dialog>

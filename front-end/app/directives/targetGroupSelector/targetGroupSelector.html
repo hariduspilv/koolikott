@@ -1,15 +1,16 @@
+<!--Without this the form will not initialize in addMaterialDialog-->
+<form name="dummy-for-init">
+</form>
 <form name="targetGroupForm">
   <md-input-container class="md-block">
     <label>
       <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
-      <span data-ng-if="isRequired.trigger">*</span>
     </label>
     <md-select multiple class="select"
                data-ng-model="selectedTargetGroup"
-               name="targetGroup"
+               name="targetGroupSelect"
                md-selected-text="selectedTargetGroups"
                md-on-open="update()"
-               md-no-asterisk
                ng-required="isRequired.trigger"
                aria-label="Vanuse valiku menüü"
                dop-select-close>
@@ -18,13 +19,12 @@
           <span data-translate="TARGET_GROUP_{{group.label}}"></span>
         </md-option>
         <md-option ng-if="child" class="select__child" data-ng-repeat="child in group.children" value="{{child}}">
-          <span data-translate="TARGET_GROUP_{{child.toUpperCase()}}"/>
+          <span data-translate="TARGET_GROUP_{{child.toUpperCase()}}"></span>
         </md-option>
       </div>
     </md-select>
-    <div ng-messages="targetGroupForm.targetGroup.$error"
-         data-ng-if="isReady">
-      <div ng-message="required" data-ng-show="(isRequired.trigger && markRequired && selectedTargetGroup.length === 0)"
+    <div data-ng-messages="targetGroupForm.targetGroupSelect.$error">
+      <div data-ng-message="required"
            class="validation-messages" data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
     </div>
   </md-input-container>

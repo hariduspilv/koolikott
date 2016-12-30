@@ -13,7 +13,8 @@ var app = angular.module('koolikottApp', [
     'md.data.table',
     'infinite-scroll',
     'youtube-embed',
-    '720kb.socialshare'
+    '720kb.socialshare',
+    'ngMessages'
 ]);
 
 var provideProvider = null;

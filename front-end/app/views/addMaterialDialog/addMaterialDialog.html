@@ -1,4 +1,5 @@
-<md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-gt-sm="75" flex class="fullscreen-dialog">
+<md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-gt-sm="75" flex
+           class="fullscreen-dialog">
   <form name="addMaterialForm">
     <md-toolbar class="md-accent">
       <div class="md-toolbar-tools" flex>
@@ -67,7 +68,6 @@
 
                 <!--URL and Upload block-->
                 <div flex layout="row" layout-xs="column" class="md-padding">
-
                   <!--Material source-->
                   <div data-ng-hide="fileUploaded || uploadingFile" flex-gt-xs="40" flex-gt-sm="55">
                     <md-input-container flex layout-fill>
@@ -79,19 +79,16 @@
                              id="add-material-url-input"
                              type="text"
                              required dop-validate-url>
-                      <div data-ng-messages="addMaterialForm.source.$error" data-multiple
-                           data-ng-show="addMaterialForm.source.$touched || addMaterialForm.$submitted">
-                        <div data-ng-message class="invalid-url-message"
-                             data-ng-show="isURLInvalid()"
+                      <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
+                        <div data-ng-show="isURLInvalid()" data-ng-message="url" class="invalid-url-message"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
 
-                        <div data-ng-message data-ng-show="addMaterialForm.source.$error.exists">
+                        <div data-ng-message="exists">
                           <span data-translate="MATERIAL_ALREADY_EXISTS"></span>
                           <a target="_blank" data-ng-href="{{'/material?id=' + existingMaterial.id}}"
                              data-translate="LOOK_AT_EXISTNG_MATERIAL"> </a>
                         </div>
-                        <div data-ng-message
-                             data-ng-show="addMaterialForm.source.$error.deleted"
+                        <div data-ng-message="deleted"
                              data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
                       </div>
 
@@ -131,7 +128,7 @@
                       <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
                         <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
                       </div>
-                      <div data-ng-message="file"
+                      <div data-ng-messages="file"
                            data-ng-show="invalidFile && invalidFile.length > 0"
                            class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"> {{maxFileSize}}MB</span>
                       </div>
@@ -159,10 +156,8 @@
                   <md-input-container flex flex-order-xs="2">
                     <label data-translate="MATERIAL_TITLE"></label>
                     <input data-ng-model="metadata.title" name="title" data-ng-required="$index === 0">
-                    <div data-ng-messages="addMaterialForm.title.$error"
-                         data-ng-show="addMaterialForm.title.$touched || addMaterialForm.$submitted">
-                      <div data-ng-message="required" data-ng-show="$index === 0 && !(metadata.title.length > 0)"
-                           data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
+                    <div data-ng-messages="addMaterialForm.title.$error">
+                      <div data-ng-message="required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
                     </div>
                   </md-input-container>
                   <md-input-container flex-gt-xs="20" flex-order-xs="1" class="md-padding">
@@ -223,7 +218,10 @@
               <div layout="row" data-ng-repeat="taxon in material.taxons track by $index">
                 <div data-dop-taxon-selector
                      data-taxon="material.taxons[$index]"
-                     data-is-add-material-view="true" flex></div>
+                     data-is-domain-required="{trigger: true}"
+                     data-mark-required="addMaterialForm.$submitted"
+                     data-flex>
+                </div>
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length"
                            data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(material.taxons[0])">
                   <md-icon>add_circle</md-icon>
@@ -244,10 +242,13 @@
               <div layout="row" flex layout-align="space-between center">
 
                 <!--Target groups-->
-                <div data-dop-target-group-selector data-target-groups="material.targetGroups"
+                <div data-dop-target-group-selector
+                     data-target-groups="material.targetGroups"
+                     data-ng-show="educationalContextId !== 4"
+                     data-taxon="material.taxons[0]"
+                     data-mark-required="addMaterialForm.$submitted"
                      data-is-required="{trigger: true}"
-                     data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]"
-                     data-mark-required="addMaterialForm.$submitted" flex="20">
+                     data-flex="20">
                 </div>
 
                 <!--Tags-->
@@ -259,14 +260,14 @@
                           md-max-chips="100"
                           md-autocomplete-snap flex>
                   <md-autocomplete
-                      md-selected-item="newTag.selectedItem"
-                      md-search-text="newTag.tagName"
-                      md-items="tag in doSuggest(newTag.tagName)"
-                      md-item-text="tag"
-                      md-input-maxlength="100"
-                      md-input-minlength="0"
-                      placeholder="{{'MATERIAL_ADD_TAG' | translate}}">
-                      <span md-highlight-text="newTag.tagName">{{tag}}</span>
+                    md-selected-item="newTag.selectedItem"
+                    md-search-text="newTag.tagName"
+                    md-items="tag in doSuggest(newTag.tagName)"
+                    md-item-text="tag"
+                    md-input-maxlength="100"
+                    md-input-minlength="0"
+                    placeholder="{{'MATERIAL_ADD_TAG' | translate}}">
+                    <span md-highlight-text="newTag.tagName">{{tag}}</span>
                   </md-autocomplete>
                 </md-chips>
               </div>
@@ -438,7 +439,7 @@
                   </a>
                 </div>
 
-                <div data-ng-message="file"
+                <div data-ng-messages="file"
                      data-ng-show="invalidReview && invalidReview.length > 0"
                      class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}}MB
                 </div>
