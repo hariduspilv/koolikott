@@ -32,6 +32,8 @@ angular.module('koolikottApp').directive('dopHeader', [
 
                 $scope.detailedSearch = {};
                 $scope.detailedSearch.isVisible = false;
+                $scope.mobileSearch = {};
+                $scope.mobileSearch.isVisible = false;
                 $scope.showLanguageSelection = false;
                 $scope.selectedLanguage = translationService.getLanguage();
                 $scope.searchFields = {};
@@ -120,6 +122,22 @@ angular.module('koolikottApp').directive('dopHeader', [
                     $scope.detailedSearch.isVisible = false;
                     $scope.detailedSearch.queryIn = "";
                 };
+
+                $scope.openMobileSearch = () => {
+                    $scope.mobileSearch.isVisible = true;
+
+                    $timeout(() => {
+                        document.getElementById('header-simple-search-input').focus();
+                    });
+                }
+
+                $scope.closeMobileSearch = (emptySearch) => {
+                    $scope.mobileSearch.isVisible = false;
+
+                    if (emptySearch) {
+                        $scope.detailedSearch.accessor.clearSimpleSearch();
+                    }
+                }
 
                 $scope.suggest.doSuggest = function (query) {
                     if (query == null) {

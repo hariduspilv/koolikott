@@ -35,22 +35,21 @@
   }
 
   .card-cover {
-    width: 100%;
-    max-width: 300px;
-
+    border-radius: 0 $border-radius $border-radius 0;
     @media (min-width: $layout-breakpoint-xs) {
-      height: 134px;
       border-radius: $border-radius $border-radius 0 0;
-    }
-
-    @media (min-width: $layout-breakpoint-lg) {
-      height: 156px;
     }
   }
 
   md-card-content {
     height: 100%;
-    padding-bottom: 0;
+    padding-bottom: 10px;
+
+    .ua-safari & {
+      @media (max-width: $layout-breakpoint-xs - 1) {
+        height: auto;
+      }
+    }
 
     .md-caption {
       color: rgba(0, 0, 0, 0.54);
@@ -59,6 +58,12 @@
     p,
     ul {
       margin: 0;
+    }
+  }
+
+  .card__content-wrapper {
+    @media (min-width: $layout-breakpoint-xs) {
+      height: 100%;
     }
   }
 

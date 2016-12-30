@@ -503,7 +503,7 @@
                   <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType"
                              ng-model-options="{trackBy: '$value.id'}">
                     <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
-                    <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenceTypes"
+                    <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes"
                                data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
                     </md-option>
                   </md-select>

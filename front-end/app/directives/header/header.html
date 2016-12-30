@@ -9,7 +9,7 @@
             outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown">
   <div class="md-toolbar-tools" layout="row" layout-align="start center">
     <!-- logo and menu button -->
-    <div class="navbar-logo-area">
+    <div class="navbar-logo-area" data-ng-if="!mobileSearch.isVisible">
       <div flex layout="row" layout-align="start center">
         <!-- toggle menu icon -->
         <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
@@ -29,8 +29,12 @@
       </div>
     </div>
     <!-- search bar with filter icon -->
-    <div class="navbar-search-area">
-      <div class="navbar-search" layout="row" hide show-gt-xs flex>
+    <div class="navbar-search-area" data-ng-class="{'has-mobile-search-open layout-align-start-center': mobileSearch.isVisible}">
+      <md-button aria-label="Tagasi" class="md-icon-button" data-ng-click="closeMobileSearch(true)" data-ng-if="mobileSearch.isVisible">
+        <md-icon class="md-48">arrow_backward</md-icon>
+      </md-button>
+
+      <div class="navbar-search" layout="row" flex>
         <md-button aria-label="Otsi" class="md-icon-button" id="header-show-search-button" ng-click="search()">
           <md-icon>search</md-icon>
         </md-button>
@@ -60,7 +64,7 @@
           </md-autocomplete>
           <span class="inline-suggestion"><span class="suggestion-hidden">{{hiddenInline}}</span>{{inlineSuggestion}}</span>
         </md-input-container>
-        <div>
+        <div data-ng-if="!mobileSearch.isVisible">
           <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
                      data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
@@ -73,23 +77,22 @@
             <md-icon>close</md-icon>
           </md-button>
         </div>
+        <div data-ng-if="mobileSearch.isVisible">
+          <md-button aria-label="Sulge mobiilne otsing" class="md-icon-button" id="header-hide-mobile-search-icon"
+                     data-ng-click="closeMobileSearch()" data-ng-if="mobileSearch.isVisible">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
       </div>
 
     </div>
     <span class="flex" hide-gt-lg></span>
     <!-- language menu, login and user menu button -->
-    <div class="navbar-buttons-area">
+    <div class="navbar-buttons-area" data-ng-if="!mobileSearch.isVisible">
       <div class="button-container mobile-search-button">
-        <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
-                   data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon hide show-gt-xs>filter_list</md-icon>
-          <md-icon hide-gt-xs>search</md-icon>
-        </md-button>
-        <md-button aria-label="Sulge detailotsing" class="md-icon-button" id="header-hide-detailed-search-icon"
-                   data-ng-click="closeDetailedSearch()" data-ng-if="detailedSearch.isVisible">
-          <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_DETAILED_SEARCH"></span></md-tooltip>
-          <md-icon>close</md-icon>
+        <md-button aria-label="Ava mobiilne otsing" class="md-icon-button" id="header-show-mobile-search-icon"
+                   data-ng-click="openMobileSearch()" data-ng-if="!mobileSearch.isVisible">
+          <md-icon>search</md-icon>
         </md-button>
       </div>
       <div class="button-container" data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">

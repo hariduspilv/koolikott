@@ -19,7 +19,19 @@
     width: 25px;
   }
 
-  .card-cover .icon-kind {
-    font-size: 2rem;
+  .card-cover {
+    .icon-kind {
+      font-size: 2rem;
+    }
+  }
+  .card-cover {
+    @include aspect-ratio(3,2);
+    img {
+      height: 100%;
+      width: 100%;
+      .ua-ie & {
+        height: auto;
+      }
+    }
   }
 }

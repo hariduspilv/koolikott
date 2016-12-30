@@ -96,8 +96,8 @@ $lines-to-show: 3;
 
 $font-size: $font-small;
 $line-height: 1.2;
-$lines-to-show: 3;
-.three-rows-xs {
+$lines-to-show: 2;
+.two-rows-xs {
   display: block; /* Fallback for non-webkit */
   display: -webkit-box;
   max-width: 400px;

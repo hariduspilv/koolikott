@@ -1,23 +1,24 @@
-<h4 class="md-subhead" data-translate="SIMILAR"></h4>
+<div  flex="50" flex-gt-sm="100" class="md-padding">
+  <h4 class="md-subhead" data-translate="SIMILAR"></h4>
 
-<div data-ng-repeat="item in similar" data-ng-href="{{getItemLink(item)}}" role="list"
-     aria-label="Ava sarnane materjal">
+  <div data-ng-repeat="item in similar" data-ng-href="{{getItemLink(item)}}" role="list"
+  aria-label="Ava sarnane materjal">
   <div data-dop-card-xs data-learning-object="item"></div>
 </div>
-
-
-<h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
-
-<div data-ng-repeat="item in recommendations" role="list" aria-label="Ava soovitatud materjal">
-  <div data-dop-card-xs data-learning-object="item"></div>
 </div>
 
-<div data-layout="row">
-  <span data-flex></span>
-  <md-button data-ng-click="showMoreRecommendations()">
-    <span data-translate="SHOW_MORE"></span>
-    <md-icon class="md-primary">
-      keyboard_arrow_right
-    </md-icon>
-  </md-button>
+<div flex="50" flex-gt-sm="100" class="md-padding">
+  <h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
+
+  <div data-ng-repeat="item in recommendations" role="list" aria-label="Ava soovitatud materjal">
+    <div data-dop-card-xs data-learning-object="item"></div>
+  </div>
+
+  <div data-layout="row">
+    <span data-flex></span>
+    <md-button data-ng-click="showMoreRecommendations()">
+      <span data-translate="SHOW_MORE"></span>
+      <md-icon class="md-primary">keyboard_arrow_right</md-icon>
+    </md-button>
+  </div>
 </div>
