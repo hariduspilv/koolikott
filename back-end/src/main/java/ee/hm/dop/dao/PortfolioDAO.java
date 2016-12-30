@@ -33,10 +33,9 @@ public class PortfolioDAO extends LearningObjectDAO {
         return castTo(Portfolio.class, super.findById(portfolioId));
     }
 
-    public List<LearningObject> findDeletedPortfolios() {
-        List<LearningObject> learningObjects = super.findDeletedLearningObjects();
-        removeNot(Portfolio.class, learningObjects);
-        return learningObjects;
+    public List<Portfolio> findDeletedPortfolios() {
+        TypedQuery<Portfolio> query = createQuery("SELECT p FROM Portfolio p WHERE p.deleted = true", Portfolio.class);
+        return query.getResultList();
     }
 
     public Long findCountByCreator(User creator) {
@@ -65,5 +64,10 @@ public class PortfolioDAO extends LearningObjectDAO {
         List<LearningObject> learningObjects = super.findByCreator(creator, start, maxResults);
         removeNot(Portfolio.class, learningObjects);
         return learningObjects;
+    }
+
+    public Long findDeletedPortfoliosCount() {
+        Query query = getEntityManager().createQuery("SELECT count(*) FROM Portfolio p WHERE p.deleted = true");
+        return (Long) query.getSingleResult();
     }
 }

@@ -172,6 +172,6 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public Response getDeletedPortfoliosCount() {
-        return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
+        return Response.ok(portfolioService.getDeletedPortfoliosCount()).build();
     }
 }

@@ -17,6 +17,7 @@ import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -219,8 +220,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         chapter.getContentRows().forEach(chapterRow -> chapterRow.getLearningObjects().replaceAll(learningObject -> {
             if (learningObject instanceof ChapterObject) {
                 return chapterObjectDAO.update((ChapterObject) learningObject);
-            }
-            else return learningObject;
+            } else return learningObject;
         }));
     }
 
@@ -282,9 +282,11 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     }
 
     public List<Portfolio> getDeletedPortfolios() {
-        List<Portfolio> portfolios = new ArrayList<>();
-        portfolioDAO.findDeletedPortfolios().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
-        return portfolios;
+        return portfolioDAO.findDeletedPortfolios();
+    }
+
+    public Long getDeletedPortfoliosCount() {
+        return portfolioDAO.findDeletedPortfoliosCount();
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
