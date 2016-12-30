@@ -49,6 +49,7 @@ public class SearchService {
     private static final String PORTFOLIO_TYPE = "portfolio";
 
     private static final String ALL_TYPE = "all";
+    public static final String TAG = "tag:";
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -132,12 +133,20 @@ public class SearchService {
     }
 
     private SearchResponse doSearch(String query, long start, Long limit, SearchFilter searchFilter) {
-        String queryString = getTokenizedQueryString(query);
+        String tokenizedQueryString = getTokenizedQueryString(query);
+        String queryString = "";
 
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
         if (!filtersAsQuery.isEmpty()) {
-            if (!queryString.isEmpty()) {
-                queryString = format("((%s) OR (\"%s\")) %s %s", queryString, queryString, searchFilter.getSearchType(), filtersAsQuery);
+            if (!tokenizedQueryString.isEmpty()) {
+                queryString = format("((%s)", tokenizedQueryString);
+
+                //Search for full phrase also, as they are more relevant
+                if (!tokenizedQueryString.toLowerCase().startsWith(TAG)) {
+                    queryString = queryString.concat(format("OR (\"%s\")", tokenizedQueryString));
+                }
+
+                queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
             } else {
                 queryString = filtersAsQuery;
             }
@@ -252,7 +261,7 @@ public class SearchService {
             List<String> filters = new ArrayList<>();
 
             for (TargetGroup targetGroup : searchFilter.getTargetGroups()) {
-                if(targetGroup != null) {
+                if (targetGroup != null) {
                     filters.add(format("target_group:\"%s\"", targetGroup.getId()));
                 }
             }
