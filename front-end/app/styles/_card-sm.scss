@@ -23,6 +23,10 @@
 .card-sm {
   width: 100%;
   overflow: hidden;
+  &:hover {
+    background-color: $selected-gray;
+    cursor: pointer;
+  }
 
   @media (min-width: $layout-breakpoint-xs) {
     height: 280px;
