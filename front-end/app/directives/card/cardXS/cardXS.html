@@ -1,13 +1,13 @@
 <md-card class="card-xs" data-ng-click="navigateTo(learningObject, $event)" layout="row">
   <md-card-content flex="50">
-    <h6 class="two-rows-xs" data-ng-if="learningObject.type === '.Portfolio'" data-ng-bind="learningObject.title"></h6>
-    <h6 class="two-rows-xs" data-ng-if="learningObject.type === '.Material'" data-ng-bind="getCorrectLanguageTitle(learningObject)"></h6>
+    <h6 class="two-rows-xs" data-ng-if="isPortfolio(learningObject.type)" data-ng-bind="learningObject.title"></h6>
+    <h6 class="two-rows-xs" data-ng-if="isMaterial(learningObject.type)" data-ng-bind="getCorrectLanguageTitle(learningObject)"></h6>
     <p class="md-caption ellipsis">
-      <span data-ng-if="learningObject.type === '.Portfolio'" class="authors">
+      <span data-ng-if="isPortfolio(learningObject.type)" class="authors">
         <span data-ng-bind="formatName(learningObject.creator.name)"></span>
         <span data-ng-bind="formatSurname(learningObject.creator.surname)"></span>
       </span>
-      <span data-ng-if="learningObject.type === '.Material'" data-ng-repeat="author in learningObject.authors" class="authors">
+      <span data-ng-if="isMaterial(learningObject.type)" data-ng-repeat="author in learningObject.authors" class="authors">
         <span data-ng-bind="formatName(author.name)"></span>
         <span data-ng-bind="formatSurname(author.surname)"></span>
         <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>

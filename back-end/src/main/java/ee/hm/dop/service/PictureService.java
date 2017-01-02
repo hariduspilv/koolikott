@@ -152,7 +152,7 @@ public class PictureService {
             BufferedImage image = ImageIO.read(new URL(url));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-            ImageIO.write(image, "jpg", baos);
+            ImageIO.write(image, DEFAULT_PICTURE_FORMAT, baos);
 
             baos.flush();
 
@@ -163,9 +163,8 @@ public class PictureService {
 
             return create(result);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
-        return null;
     }
 
     private void createThumbnails(Picture picture) {

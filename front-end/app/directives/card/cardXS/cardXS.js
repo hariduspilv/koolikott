@@ -15,7 +15,7 @@ angular.module('koolikottApp')
                 $scope.navigateTo = function (learningObject, $event) {
                     $event.preventDefault();
 
-                    if (learningObject.type == '.Material') {
+                    if (isMaterial(learningObject.type)) {
                         storageService.setMaterial(learningObject);
 
                         $location.path('/material').search({
@@ -23,7 +23,7 @@ angular.module('koolikottApp')
                         });
                     }
 
-                    if (learningObject.type == '.Portfolio') {
+                    if (isPortfolio(learningObject.type)) {
                         storageService.setPortfolio(learningObject);
 
                         $location.path('/portfolio').search({
@@ -34,16 +34,24 @@ angular.module('koolikottApp')
 
                 $scope.formatName = function(name) {
                     return formatNameToInitials(name);
-                }
+                };
 
                 $scope.formatSurname = function(surname) {
                     return formatSurnameToInitialsButLast(surname);
-                }
+                };
 
                 $scope.getCorrectLanguageTitle = function (material) {
                     if (material) {
                         return getCorrectLanguageString(material.titles, material.language);
                     }
+                };
+
+                $scope.isMaterial = function (type) {
+                    return isMaterial(type);
+                };
+
+                $scope.isPortfolio = function (type) {
+                    return isPortfolio(type);
                 };
 
                 function getCorrectLanguageString(languageStringList, materialLanguage) {
