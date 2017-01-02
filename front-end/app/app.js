@@ -14,7 +14,8 @@ var app = angular.module('koolikottApp', [
     'infinite-scroll',
     'youtube-embed',
     '720kb.socialshare',
-    'ngMessages'
+    'ngMessages',
+    'angular-tour'
 ]);
 
 var provideProvider = null;
@@ -251,6 +252,8 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $rootScope.sideNavOpen = true;
             }
 
+            $rootScope.$broadcast('tour:close');
+
             $rootScope.hasAppInitated = true;
         });
     }]);
@@ -280,24 +283,6 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
     };
 }]);
 
-app.run(['$rootScope', '$location', '$timeout', function ($rootScope, $location, $timeout) {
-    if (!window.history || !history.replaceState) {
-        return;
-    }
-
-    $rootScope.$on('duScrollspy:becameActive', function ($event, $element) {
-        //Automatically update location
-        var hash = $element.prop('hash');
-        if (hash) {
-            $timeout(function () {
-                // replace hash
-                var newUrl = $location.url().split('#', 1);
-                history.replaceState('', '', newUrl[0] + hash);
-            });
-        }
-    });
-}]);
-
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', function ($rootScope, authenticatedUserService, $route, $location) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         for (var i in $route.routes) {
@@ -318,14 +303,6 @@ app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', functi
             }
         }
     });
-}]);
-
-app.run(['$rootScope', 'authenticatedUserService', function ($rootScope, authenticatedUserService) {
-    $rootScope.$watch(function () {
-        return authenticatedUserService.isAuthenticated();
-    }, function (isAuthenticated) {
-        $rootScope.showMainFabButton = isAuthenticated;
-    }, true);
 }]);
 
 app.run(['$templateCache', '$sce', '$templateRequest', function ($templateCache, $sce, $templateRequest) {

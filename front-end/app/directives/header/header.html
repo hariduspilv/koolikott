@@ -127,7 +127,7 @@
         </md-menu>
 
         <!-- info menu -->
-        <md-menu>
+        <md-menu id="menu-help">
           <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
                      ng-click="$mdOpenMenu($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_HELP"></span></md-tooltip>
@@ -149,6 +149,11 @@
                          data-ng-href="mailto:e-koolikott@hm.ee?subject={{ 'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT' | translate }}"
                          id="help-menu-email">
                 <span data-translate="GIVE_FEEDBACK_LINK"></span>
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button aria-label="Vaata tuuri" data-ng-click="openTour()" id="tour-menu">
+                <span data-translate="VIEW_TOUR"></span>
               </md-button>
             </md-menu-item>
           </md-menu-content>

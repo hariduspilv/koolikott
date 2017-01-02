@@ -29,7 +29,6 @@ angular.module('koolikottApp').directive('dopHeader', [
                 });
             },
             controller: ['$scope', '$location', '$rootScope', '$anchorScroll', function ($scope, $location, $rootScope, $anchorScroll) {
-
                 $scope.detailedSearch = {};
                 $scope.detailedSearch.isVisible = false;
                 $scope.mobileSearch = {};
@@ -378,6 +377,8 @@ angular.module('koolikottApp').directive('dopHeader', [
                         return storageService.getPortfolio().visibility;
                     }
                 };
+
+                $scope.openTour = () => $rootScope.$broadcast('tour:open');
 
             }]
         };

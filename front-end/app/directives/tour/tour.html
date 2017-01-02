@@ -1,0 +1,49 @@
+<!-- Tour for most pages -->
+<tour data-ng-if="!$ctrl.isEditPageTour"
+      data-step="$ctrl.currentStep"
+      data-post-tour="$ctrl.tourComplete()">
+  <virtual-step
+    tourtip="Siin on sinu asjad ja taksonoomia"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-placement="right"
+    tourtip-step="0"
+    tourtip-element="#sidebar-left"></virtual-step>
+  <virtual-step
+    tourtip="Siit saad avada täpse otsingu"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-step="1"
+    tourtip-element="#header-show-detailed-search-icon"></virtual-step>
+  <virtual-step
+    data-ng-if="$ctrl.hasPermission()"
+    tourtip="Siin saad lisada uue kogumiku või materjali"
+    tourtip-next-label="{{!$ctrl.isOpenedByUser ? 'FORWARD' : 'CLOSE' | translate}}"
+    tourtip-placement="top"
+    tourtip-step="2"
+    tourtip-element="#main-fab-button"></virtual-step>
+  <virtual-step
+    data-ng-if="!$ctrl.isOpenedByUser"
+    tourtip="Siit saad uuesti tuuri näha."
+    tourtip-next-label="{{'CLOSE' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-step="{{$ctrl.hasPermission() ? 3 : 2}}"
+    tourtip-element="#menu-help"></virtual-step>
+</tour>
+
+<!-- Edit page tour -->
+<tour data-ng-if="$ctrl.isEditPageTour"
+      data-step="$ctrl.currentStep"
+      data-post-tour="$ctrl.tourComplete()">
+  <virtual-step
+    tourtip="Siin on sinu asjad ja taksonoomia"
+    tourtip-next-label="Edasi"
+    tourtip-placement="right"
+    tourtip-step="0"
+    tourtip-element="#sidebar-left"></virtual-step>
+  <virtual-step
+    tourtip="Siit saad avada täpse otsingu"
+    tourtip-next-label="Edasi"
+    tourtip-placement="bottom"
+    tourtip-step="1"
+    tourtip-element="#header-show-detailed-search-icon"></virtual-step>
+</tour>
