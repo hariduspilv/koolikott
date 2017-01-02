@@ -438,7 +438,8 @@ module.exports = function (grunt) {
                     '.tmp/concat/js/config.js': '.tmp/concat/js/config.js',
                     '.tmp/concat/js/controllers.js': '.tmp/concat/js/controllers.js',
                     '.tmp/concat/js/directives.js': '.tmp/concat/js/directives.js',
-                    '.tmp/concat/js/services.js': '.tmp/concat/js/services.js'
+                    '.tmp/concat/js/services.js': '.tmp/concat/js/services.js',
+                    '.tmp/concat/js/components.js': '.tmp/concat/js/components.js'
                 }
             }
         },
