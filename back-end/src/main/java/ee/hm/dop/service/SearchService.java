@@ -1,20 +1,8 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
-import static java.lang.String.format;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
@@ -42,6 +30,18 @@ import ee.hm.dop.model.taxon.Topic;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
+import static java.lang.String.format;
+
 public class SearchService {
 
     private static final String MATERIAL_TYPE = "material";
@@ -59,6 +59,9 @@ public class SearchService {
 
     @Inject
     private UserFavoriteDAO userFavoriteDAO;
+
+    @Inject
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         SearchResult searchResult = new SearchResult();
@@ -114,7 +117,7 @@ public class SearchService {
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
         if (!learningObjectIds.isEmpty()) {
-            learningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
+            reducedLearningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
                 if (loggedInUser != null) {
                     UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
                     if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);

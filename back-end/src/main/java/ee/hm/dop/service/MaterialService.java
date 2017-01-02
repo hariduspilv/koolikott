@@ -1,24 +1,8 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
@@ -32,6 +16,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -47,6 +32,22 @@ import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 public class MaterialService extends BaseService implements LearningObjectHandler {
 
@@ -90,6 +91,9 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     @Inject
     private Configuration configuration;
     private Long deletedMaterialsCount;
+
+    @Inject
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
@@ -438,8 +442,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         }
     }
 
-    public List<LearningObject> getByCreator(User creator, int start, int maxResults) {
-        return materialDAO.findByCreator(creator, start, maxResults);
+    public List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
+        return reducedLearningObjectDAO.findMaterialByCreator(creator, start, maxResults);
     }
 
     public long getByCreatorSize(User creator) {

@@ -14,13 +14,21 @@ angular.module('koolikottApp')
             controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
 
                 function init () {
-                    if ($scope.learningObject.type === '.Material') {
+                    if (isMaterial($scope.learningObject.type)) {
                         $scope.learningObjectType = 'material';
                         $scope.materialType = iconService.getMaterialIcon($scope.learningObject.resourceTypes);
-                    } else if ($scope.learningObject.type === '.Portfolio') {
+                    } else if (isPortfolio($scope.learningObject.type)) {
                         $scope.learningObjectType = 'portfolio';
                     }
                 }
+
+                $scope.isMaterial = function (type) {
+                    return isMaterial(type);
+                };
+
+                $scope.isPortfolio = function (type) {
+                    return isPortfolio(type);
+                };
 
                 $scope.pickMaterial = function ($event, material) {
                     $event.preventDefault();

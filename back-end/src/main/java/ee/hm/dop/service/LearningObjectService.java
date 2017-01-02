@@ -7,6 +7,7 @@ import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagDTO;
@@ -244,7 +245,7 @@ public class LearningObjectService extends BaseService {
         return userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser);
     }
 
-    public List<LearningObject> getUserFavorites(User loggedInUser, int start, int maxResult) {
+    public List<ReducedLearningObject> getUserFavorites(User loggedInUser, int start, int maxResult) {
         return userFavoriteDAO.findUsersFavoritedLearningObjects(loggedInUser, start, maxResult);
     }
 

@@ -28,7 +28,7 @@ angular.module('koolikottApp')
                 $scope.navigateTo = function (learningObject, $event) {
                     $event.preventDefault();
 
-                    if (learningObject.type == '.Material') {
+                    if (isMaterial(learningObject.type)) {
                         storageService.setMaterial(learningObject);
 
                         $location.path('/material').search({
@@ -36,7 +36,7 @@ angular.module('koolikottApp')
                         });
                     }
 
-                    if (learningObject.type == '.Portfolio') {
+                    if (isPortfolio(learningObject.type)) {
                         storageService.setPortfolio(learningObject);
 
                         $location.path('/portfolio').search({
@@ -80,11 +80,19 @@ angular.module('koolikottApp')
 
                 $scope.isAuthenticated = function () {
                     var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
-                    if (!authenticated && $scope.learningObject.type == '.Material') {
+                    if (!authenticated && isMaterial($scope.learningObject.type)) {
                         $scope.learningObject.selected = false;
                     }
 
                     return authenticated;
+                };
+
+                $scope.isMaterial = function (type) {
+                    return isMaterial(type);
+                };
+
+                $scope.isPortfolio = function (type) {
+                    return isPortfolio(type);
                 };
 
                 function loadDomainsAndSubjects() {

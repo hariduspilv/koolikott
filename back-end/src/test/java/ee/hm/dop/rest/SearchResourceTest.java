@@ -1,20 +1,11 @@
 package ee.hm.dop.rest;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.ReducedMaterial;
+import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
@@ -24,6 +15,14 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import org.junit.Test;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.*;
 
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
@@ -369,6 +368,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
                 assertTrue(searchable instanceof Material);
             } else if (searchable.getType().equals("portfolio")) {
                 assertTrue(searchable instanceof Portfolio);
+            } else if (searchable.getType().equals("reducedportfolio")) {
+                assertTrue(searchable instanceof ReducedPortfolio);
+            } else if (searchable.getType().equals("reducedmaterial")) {
+                assertTrue(searchable instanceof ReducedMaterial);
             } else {
                 fail("No such Searchable type: " + searchable.getType());
             }

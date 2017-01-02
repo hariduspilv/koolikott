@@ -1,13 +1,14 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.ReducedLearningObject;
+import ee.hm.dop.model.ReducedMaterial;
+import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
@@ -37,10 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -58,6 +56,9 @@ public class SearchServiceTest {
 
     @Mock
     private TargetGroupService targetGroupService;
+
+    @Mock
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     @TestSubject
     private SearchService searchService = new SearchService();
@@ -975,12 +976,12 @@ public class SearchServiceTest {
                             long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
 
-        List<LearningObject> learningObjects = new ArrayList<>();
+        List<ReducedLearningObject> learningObjects = new ArrayList<>();
         List<Long> learningObjectIdentifiers = getIdentifiers(searchables);
 
-        List<Material> materials = collectMaterialsFrom(searchables);
+        List<ReducedMaterial> materials = collectMaterialsFrom(searchables);
         learningObjects.addAll(materials);
-        List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
+        List<ReducedPortfolio> portfolios = collectPortfoliosFrom(searchables);
         learningObjects.addAll(portfolios);
 
         if (limit == null) {
@@ -989,7 +990,7 @@ public class SearchServiceTest {
             expect(solrEngineService.search(tokenizedQuery, start, limit, expectedSort)).andReturn(searchResponse);
         }
 
-        expect(learningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
+        expect(reducedLearningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
             for (Long id : learningObjectIdentifiers) {
                 expect(userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
@@ -1042,24 +1043,24 @@ public class SearchServiceTest {
         return searchResponse;
     }
 
-    private List<Material> collectMaterialsFrom(List<Searchable> searchables) {
-        List<Material> materials = new ArrayList<>();
+    private List<ReducedMaterial> collectMaterialsFrom(List<Searchable> searchables) {
+        List<ReducedMaterial> materials = new ArrayList<>();
 
         for (Searchable searchable : searchables) {
-            if (searchable instanceof Material) {
-                materials.add((Material) searchable);
+            if (searchable instanceof ReducedMaterial) {
+                materials.add((ReducedMaterial) searchable);
             }
         }
 
         return materials;
     }
 
-    private List<Portfolio> collectPortfoliosFrom(List<Searchable> searchables) {
-        List<Portfolio> portfolios = new ArrayList<>();
+    private List<ReducedPortfolio> collectPortfoliosFrom(List<Searchable> searchables) {
+        List<ReducedPortfolio> portfolios = new ArrayList<>();
 
         for (Searchable searchable : searchables) {
-            if (searchable instanceof Portfolio) {
-                portfolios.add((Portfolio) searchable);
+            if (searchable instanceof ReducedPortfolio) {
+                portfolios.add((ReducedPortfolio) searchable);
             }
         }
 
@@ -1074,21 +1075,21 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(solrEngineService, learningObjectDAO, userFavoriteDAO);
+        replay(solrEngineService, learningObjectDAO, userFavoriteDAO, reducedLearningObjectDAO);
     }
 
     private void verifyAll() {
-        verify(solrEngineService, learningObjectDAO, userFavoriteDAO);
+        verify(solrEngineService, learningObjectDAO, userFavoriteDAO, reducedLearningObjectDAO);
     }
 
-    private Material createMaterial(Long id) {
-        Material material = new Material();
+    private ReducedMaterial createMaterial(Long id) {
+        ReducedMaterial material = new ReducedMaterial();
         material.setId(id);
         return material;
     }
 
-    private Portfolio createPortfolio(Long id) {
-        Portfolio portfolio = new Portfolio();
+    private ReducedPortfolio createPortfolio(Long id) {
+        ReducedPortfolio portfolio = new ReducedPortfolio();
         portfolio.setId(id);
         return portfolio;
     }

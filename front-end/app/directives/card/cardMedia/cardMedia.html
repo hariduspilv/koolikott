@@ -10,7 +10,7 @@
 
   <div data-ng-if="isAuthenticated" data-dop-favorite data-learning-object="learningObject"></div>
 
-  <div class="ribbon" data-ng-if="learningObject.type === '.Portfolio'"></div>
+  <div class="ribbon" data-ng-if="isPortfolio(learningObject.type)"></div>
 
   <!-- noimage -->
   <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}" data-ng-if="!learningObject.picture" class="card-cover {{learningObjectType}} {{materialType}}" flex="100" flex-order="-1" flex-order-xs="1">
@@ -19,13 +19,13 @@
       <div class="sheet low-right"></div>
       <div class="sheet low-left"></div>
     </div>
-    <md-icon data-ng-if="learningObject.type === '.Portfolio'" class="icon-kind">book</md-icon>
-    <md-icon data-ng-if="learningObject.type === '.Material'" class="icon-kind">{{materialType}}</md-icon>
+    <md-icon data-ng-if="isPortfolio(learningObject.type)" class="icon-kind">book</md-icon>
+    <md-icon data-ng-if="isMaterial(learningObject.type)" class="icon-kind">{{materialType}}</md-icon>
 
     <div class="card-hover {{learningObjectType}} {{materialType}}">
       <div data-ng-if="isAuthenticated" data-dop-favorite data-learning-object="learningObject"></div>
 
-      <div class="pick" data-ng-if="isAuthenticated && learningObject.type === '.Material'" layout-align="end start">
+      <div class="pick" data-ng-if="isAuthenticated && isMaterial(learningObject.type)" layout-align="end start">
         <md-tooltip md-direction="bottom">
           <span data-ng-show="!learningObject.selected" data-translate="PICK_MATERIAL"></span>
           <span data-ng-show="learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
@@ -35,8 +35,8 @@
         <md-icon data-ng-click="pickMaterial($event, learningObject)" class="checked">check_circle</md-icon>
       </div>
 
-      <md-icon data-ng-if="learningObject.type === '.Portfolio'" class="icon-kind">book</md-icon>
-      <md-icon data-ng-if="learningObject.type === '.Material'" class="icon-kind">{{materialType}}</md-icon>
+      <md-icon data-ng-if="isPortfolio(learningObject.type)" class="icon-kind">book</md-icon>
+      <md-icon data-ng-if="isMaterial(learningObject.type)" class="icon-kind">{{materialType}}</md-icon>
     </div>
   </a>
 
@@ -52,7 +52,7 @@
     <div class="card-hover {{learningObjectType}} {{materialType}}">
       <div data-ng-if="isAuthenticated" data-dop-favorite data-learning-object="learningObject"></div>
 
-      <div class="pick" data-ng-if="isAuthenticated && learningObject.type === '.Material'" layout-align="end start">
+      <div class="pick" data-ng-if="isAuthenticated && isMaterial(learningObject.type)" layout-align="end start">
         <md-tooltip md-direction="bottom">
           <span data-ng-show="!learningObject.selected" data-translate="PICK_MATERIAL"></span>
           <span data-ng-show="learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
@@ -61,8 +61,8 @@
         <md-icon data-ng-click="pickMaterial($event, learningObject)" class="checked">check_circle</md-icon>
       </div>
 
-      <md-icon data-ng-if="learningObject.type === '.Portfolio'" class="icon-kind">book</md-icon>
-      <md-icon data-ng-if="learningObject.type === '.Material'" class="icon-kind">{{materialType}}</md-icon>
+      <md-icon data-ng-if="isPortfolio(learningObject.type)" class="icon-kind">book</md-icon>
+      <md-icon data-ng-if="isMaterial(learningObject.type)" class="icon-kind">{{materialType}}</md-icon>
     </div>
   </a>
 </div>

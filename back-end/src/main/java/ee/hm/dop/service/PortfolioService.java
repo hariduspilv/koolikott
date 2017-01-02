@@ -2,6 +2,7 @@ package ee.hm.dop.service;
 
 import ee.hm.dop.dao.ChapterObjectDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserLikeDAO;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
@@ -10,6 +11,8 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.ReducedLearningObject;
+import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
@@ -42,6 +45,9 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
 
+    @Inject
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
+
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
@@ -57,8 +63,8 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         return portfolio;
     }
 
-    public List<LearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return portfolioDAO.findByCreator(creator, start, maxResults)
+    public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
+        return reducedLearningObjectDAO.findPortfolioByCreator(creator, start, maxResults)
                 .stream()
                 .filter(p -> hasPermissionsToAccess(loggedInUser, p))
                 .collect(Collectors.toList());
@@ -367,6 +373,13 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         return isPublic(portfolio) || isNotListed(portfolio) || isUserAdminOrModerator(loggedInUser) || isUserCreator(portfolio, loggedInUser);
     }
 
+    private boolean hasPermissionsToAccess(User user, ReducedLearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof ReducedPortfolio)) return false;
+        ReducedPortfolio portfolio = (ReducedPortfolio) learningObject;
+
+        return isPublic(portfolio) || isUserAdminOrModerator(user) || isUserCreator(portfolio, user);
+    }
+
     @Override
     public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
@@ -381,6 +394,14 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         Portfolio portfolio = (Portfolio) learningObject;
 
         return isUserAdminOrModerator(user) || isUserCreator(portfolio, user);
+    }
+
+    private boolean isUserCreator(ReducedPortfolio reducedPortfolio, User user) {
+        return user != null && reducedPortfolio.getCreator().getId().equals(user.getId());
+    }
+
+    private boolean isPublic(ReducedPortfolio reducedPortfolio) {
+        return reducedPortfolio.getVisibility() == Visibility.PUBLIC && !reducedPortfolio.isDeleted();
     }
 
     @Override

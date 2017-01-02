@@ -422,11 +422,19 @@ function matchType(type) {
 }
 
 function isIE() {
-    return !!(navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
+    return (navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
     navigator.userAgent.match(/rv 11/)));
 }
 
 function focusInput(elementID) {
     const $parent = angular.element(document.getElementById(elementID));
     $parent.find('input')[0].focus();
+}
+
+function isMaterial(type) {
+    return type === ".Material" || type === ".ReducedMaterial"
+}
+
+function isPortfolio(type) {
+    return type === ".Portfolio" || type === ".ReducedPortfolio"
 }

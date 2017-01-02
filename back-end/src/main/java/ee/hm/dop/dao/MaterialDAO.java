@@ -1,19 +1,18 @@
 package ee.hm.dop.dao;
 
-import java.math.BigInteger;
-import java.util.List;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.User;
+import java.math.BigInteger;
+import java.util.List;
 
 public class MaterialDAO extends LearningObjectDAO {
     @Inject
