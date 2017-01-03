@@ -41,6 +41,6 @@ function changedLearningObject() {
     return {
         templateUrl: 'directives/dashboard/changedLearningObject/changed.html',
         controllerAs: 'vm',
-        controller: changedLearningObjectCtrl
+        controller: ['$scope', '$filter', 'serverCallService', changedLearningObjectCtrl]
     }
 }
