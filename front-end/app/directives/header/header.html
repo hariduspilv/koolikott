@@ -12,7 +12,7 @@
     <div class="navbar-logo-area" data-ng-if="!mobileSearch.isVisible">
       <div flex layout="row" layout-align="start center">
         <!-- toggle menu icon -->
-        <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')">
+        <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" id="header-show-sidenav-button">
           <md-icon class="md-48">menu</md-icon>
         </md-button>
         <md-button data-ng-if="isEditModeAndNotEditView" data-ng-click="$root.back(); closeDetailedSearch()">
