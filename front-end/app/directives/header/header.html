@@ -64,7 +64,7 @@
           </md-autocomplete>
           <span class="inline-suggestion"><span class="suggestion-hidden">{{hiddenInline}}</span>{{inlineSuggestion}}</span>
         </md-input-container>
-        <div data-ng-if="!mobileSearch.isVisible">
+        <div data-ng-if="!mobileSearch.isVisible" data-hide-sm>
           <md-button aria-label="Ava detailotsing" class="md-icon-button" id="header-show-detailed-search-icon"
                      data-ng-click="openDetailedSearch()" data-ng-if="!detailedSearch.isVisible">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_OPEN_DETAILED_SEARCH"></span></md-tooltip>

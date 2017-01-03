@@ -28,7 +28,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                     }, 200);
                 });
             },
-            controller: ['$scope', '$location', '$rootScope', '$anchorScroll', function ($scope, $location, $rootScope, $anchorScroll) {
+            controller: ['$scope', '$location', '$rootScope', function ($scope, $location, $rootScope) {
                 $scope.detailedSearch = {};
                 $scope.detailedSearch.isVisible = false;
                 $scope.mobileSearch = {};
@@ -86,33 +86,17 @@ angular.module('koolikottApp').directive('dopHeader', [
                     $location.url(searchService.getURL());
                 };
 
-                $scope.openDetailedSearch = function () {
+                $scope.openDetailedSearch = () => {
                     $scope.detailedSearch.isVisible = true;
                     $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     broadcastSearchOpen();
-
-                    if ($window.innerWidth < 960) {
-                        $anchorScroll();
-                    }
                 };
 
                 function broadcastSearchOpen() {
                     $scope.$broadcast("detailedSearch:open");
                 }
 
-                $scope.$on('detailedSearch:open', function () {
-                    $scope.detailedSearch.isVisible = true;
-                });
-
-                $scope.$on('detailedSearch:close', function () {
-                    $scope.detailedSearch.isVisible = false;
-                });
-
-                $scope.$on('detailedSearch:empty', function () {
-                    $scope.closeDetailedSearch();
-                });
-
-                $scope.closeDetailedSearch = function () {
+                $scope.closeDetailedSearch = () => {
                     $timeout(function () {
                         $scope.clearTaxonSelector();
                         $scope.detailedSearch.accessor.clear();
@@ -137,6 +121,11 @@ angular.module('koolikottApp').directive('dopHeader', [
                         $scope.detailedSearch.accessor.clearSimpleSearch();
                     }
                 }
+
+                $scope.$on('detailedSearch:open', () => $scope.detailedSearch.isVisible = true);
+                $scope.$on('detailedSearch:close', () => $scope.detailedSearch.isVisible = false);
+                $scope.$on('detailedSearch:empty', () => $scope.closeDetailedSearch());
+                $scope.$on('mobileSearch:open', () => $scope.openMobileSearch());
 
                 $scope.suggest.doSuggest = function (query) {
                     if (query == null) {

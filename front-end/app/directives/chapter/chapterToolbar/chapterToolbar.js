@@ -2,70 +2,72 @@
 
 angular.module('koolikottApp')
 .directive('dopChapterToolbar',
-[
-    'translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$anchorScroll',
-    function(translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $anchorScroll) {
-        return {
-            scope: {
-                chapter: '=',
-                isSub: '=',
-                index: '='
-            },
-            templateUrl: 'directives/chapter/chapterToolbar/chapterToolbar.html',
-            controller: ['$scope', '$timeout', function($scope, $timeout) {
-                $scope.isEditable = $rootScope.isEditPortfolioMode;
+function() {
+    return {
+        scope: {
+            chapter: '=',
+            isSub: '=',
+            index: '='
+        },
+        templateUrl: 'directives/chapter/chapterToolbar/chapterToolbar.html',
+        controller: ['$scope', '$timeout', 'translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$anchorScroll', '$window', function($scope, $timeout, translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $anchorScroll, $window) {
+            $scope.isEditable = $rootScope.isEditPortfolioMode;
 
-                $scope.addMaterial = function() {
-                    var addMaterialScope = $scope.$new(true);
+            $scope.addMaterial = function() {
+                var addMaterialScope = $scope.$new(true);
 
-                    addMaterialScope.uploadMode = true;
-                    addMaterialScope.material = {};
-                    addMaterialScope.isChapterMaterial = true;
-                    storageService.setMaterial(null);
+                addMaterialScope.uploadMode = true;
+                addMaterialScope.material = {};
+                addMaterialScope.isChapterMaterial = true;
+                storageService.setMaterial(null);
 
-                    $mdDialog.show({
-                        templateUrl: 'addMaterialDialog.html',
-                        controller: 'addMaterialDialogController',
-                        scope: addMaterialScope
-                    }).then(closeDialog);
-                };
+                $mdDialog.show({
+                    templateUrl: 'addMaterialDialog.html',
+                    controller: 'addMaterialDialogController',
+                    scope: addMaterialScope
+                }).then(closeDialog);
+            };
 
-                function closeDialog(material) {
-                    if (material) {
-                        if(!$scope.chapter.contentRows) $scope.chapter.contentRows = [];
-                        $scope.chapter.contentRows.push({learningObjects: [material]});
-                    }
+            function closeDialog(material) {
+                if (material) {
+                    if(!$scope.chapter.contentRows) $scope.chapter.contentRows = [];
+                    $scope.chapter.contentRows.push({learningObjects: [material]});
                 }
+            }
 
-                $scope.addNewSubChapter = function() {
-                    let subChapters = $scope.chapter.subchapters;
+            $scope.addNewSubChapter = function() {
+                let subChapters = $scope.chapter.subchapters;
 
-                    subChapters.push({
-                        title: '',
-                        materials: [],
-                        openCloseChapter: true
-                    });
+                subChapters.push({
+                    title: '',
+                    materials: [],
+                    openCloseChapter: true
+                });
 
-                    let subChapterID = `chapter-${$scope.index}-${subChapters.length - 1}`;
+                let subChapterID = `chapter-${$scope.index}-${subChapters.length - 1}`;
 
-                    $timeout(function () {
-                        focusInput(subChapterID);
-                    });
-                };
+                $timeout(function () {
+                    focusInput(subChapterID);
+                });
+            };
 
-                $scope.openMenu = function($mdOpenMenu, ev) {
-                    $mdOpenMenu(ev);
-                };
+            $scope.openMenu = function($mdOpenMenu, ev) {
+                $mdOpenMenu(ev);
+            };
 
-                $scope.openDetailedSearch = function () {
-                    $rootScope.savedChapter = $scope.chapter;
+            $scope.openDetailedSearch = function () {
+                $rootScope.savedChapter = $scope.chapter;
+                if ($window.innerWidth >= 960) {
                     $rootScope.$broadcast("detailedSearch:open");
-                    $rootScope.isPlaceholderVisible = true;
+                } else {
+                    $rootScope.$broadcast("mobileSearch:open");
+                }
+                $rootScope.isPlaceholderVisible = true;
 
-                    if ($rootScope.isEditPortfolioPage) {
-                        document.getElementById('header-search-input').focus();
-                    }
-                };
-            }]
-        }
-    }]);
+                if ($rootScope.isEditPortfolioPage) {
+                    document.getElementById('header-search-input').focus();
+                }
+            };
+        }]
+    }
+});
