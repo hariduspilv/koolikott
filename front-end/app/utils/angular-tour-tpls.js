@@ -16,7 +16,7 @@
   angular.module('tour/tour.tpl.html', []).run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="small button tour-next-tip"></a>\n' + '        <a ng-click="closeTour()" class="tour-close-tip">&times;</a>\n' + '    </div>\n' + '</div>');
+      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + '        <a ng-click="closeTour()" class="md-button md-ink-ripple tour-next-tip">&times;</a>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="md-button md-primary md-ink-ripple tour-next-tip"></a>\n'  + '    </div>\n' + '</div>');
     }
   ]);
   angular.module('angular-tour.tour', []).constant('tourConfig', {

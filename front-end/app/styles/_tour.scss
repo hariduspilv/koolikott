@@ -1,19 +1,18 @@
 .tour-tip {
   display: none;
   position: absolute;
-  background: #1C252E;
-  color: #FFF;
+  background: #eee;
   z-index: 101;
   top: 0;
   left: 2.5%;
   font-family: inherit;
   font-weight: 400;
   max-width: 400px;
-  border-radius: 10px;
+  border-radius: $border-radius;
+  box-shadow: $whiteframe-shadow-4dp;
 }
 
 .tour-tip p {
-  color: #CBD0D4;
   font-size: .9em;
   line-height: 1.5em;
   margin: 0 0 1.125em;
@@ -38,7 +37,7 @@
   border-width: 0;
   margin: 0 0 1.25em;
   padding: .5em 1.25em .6em;
-  border-radius: 8px;
+  border-radius: $border-radius;
 }
 
 .tour-tip button small,
@@ -65,20 +64,20 @@
 .tour-tip .tour-arrow.tt-top {
   border-style: solid;
   bottom: -27px;
-  border-color: #1C252E transparent transparent !important;
+  border-color: #eee transparent transparent !important;
 }
 
 .tour-tip .tour-arrow.tt-bottom {
   border-style: solid;
   top: -28px;
-  border-color: transparent transparent #1C252E !important;
+  border-color: transparent transparent #eee !important;
 }
 
 .tour-tip .tour-arrow.tt-right {
   border-style: solid;
   left: -27px;
   top: 28px;
-  border-color: transparent #1C252E transparent transparent !important;
+  border-color: transparent #eee transparent transparent !important;
 }
 
 .tour-tip .tour-arrow.tt-left {
@@ -100,9 +99,9 @@
   position: absolute;
   right: 12px;
   top: 10px;
-  color: #fff !important;
+  color: rgba(0,0,0,.56) !important;
   text-decoration: none;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 0.5 !important;
   cursor: pointer;
@@ -110,7 +109,7 @@
 
 .tour-tip .tour-close-tip:hover,
 .tour-tip .tour-close-tip:focus {
-  color: #eee !important;
+  color: rgba(0,0,0,.78) !important;
 }
 
 .tour-backdrop {
