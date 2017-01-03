@@ -16,14 +16,14 @@
   angular.module('tour/tour.tpl.html', []).run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + '        <a ng-click="closeTour()" ng-bind="ttCloseLabel" class="md-button md-ink-ripple tour-next-tip"> </a>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="md-button md-primary md-ink-ripple tour-next-tip"></a>\n'  + '    </div>\n' + '</div>');
+      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="md-padding" layout="row">    <span flex></span>   <a ng-click="closeTour()" ng-bind="ttCloseLabel" class="md-button md-ink-ripple"> </a>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="md-button md-primary md-ink-ripple md-raised"><md-icon class="material-icons">arrow_forward</md-icon></a> </div> \n'  + '    </div>\n' + '</div>');
     }
   ]);
   angular.module('angular-tour.tour', []).constant('tourConfig', {
     placement: 'top',
     animation: true,
     nextLabel: 'Next',
-    closeLabel: 'Close',
+    closeLabel: 'KATKESTA',
     scrolling: false,
     scrollSpeed: 500,
     margin: 28,
