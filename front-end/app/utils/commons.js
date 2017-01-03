@@ -315,6 +315,7 @@ function isObjectEmpty(obj) {
 }
 
 function getSource(material) {
+    if (!material) return;
     if (material.source) {
         return material.source;
     } else if (material.uploadedFile) {

@@ -8,7 +8,7 @@ angular.module('koolikottApp')
                 var increaseViewCountPromise;
 
                 function init() {
-                    if (storageService.getPortfolio()) {
+                    if (storageService.getPortfolio() && storageService.getPortfolio().type !== ".ReducedPortfolio") {
                         setPortfolio(storageService.getPortfolio());
                         increaseViewCount();
                     } else {

@@ -10,9 +10,8 @@ angular.module('koolikottApp')
                 $scope.pageUrl = $location.absUrl();
                 $scope.getMaterialSuccess = getMaterialSuccess;
 
-                if (storageService.getMaterial()) {
+                if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial") {
                     $scope.material = storageService.getMaterial();
-                    storageService.setMaterial(null);
 
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
@@ -132,7 +131,6 @@ angular.module('koolikottApp')
                     $scope.material.source = getSource($scope.material);
                     getContentType();
                     processMaterial();
-                    storageService.setMaterial(null);
 
                     $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                     $rootScope.learningObjectImproper = ($scope.material.improper > 0);
