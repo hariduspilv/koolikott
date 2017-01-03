@@ -51,7 +51,7 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                         }
                     });
 
-                    $scope.$on("targetGroupSelector:close", () => {
+                    $scope.$on("targetGroupSelector:clear", () => {
                         fill();
                         resetIfInvalid();
                     });
