@@ -51,6 +51,11 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                         }
                     });
 
+                    $scope.$on("targetGroupSelector:close", () => {
+                        fill();
+                        resetIfInvalid();
+                    });
+
                     $scope.$watch('taxon', function (newTaxon, oldTaxon) {
                         if (newTaxon !== oldTaxon && !$rootScope.isEditPortfolioMode) {
                             let newEdCtx = taxonService.getEducationalContext(newTaxon);

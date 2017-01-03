@@ -98,8 +98,10 @@ angular.module('koolikottApp').directive('dopHeader', [
 
                 $scope.closeDetailedSearch = () => {
                     $timeout(function () {
-                        $scope.clearTaxonSelector();
-                        $scope.detailedSearch.accessor.clear();
+                        if (!$rootScope.isEditPortfolioMode) {
+                            $scope.clearTaxonSelector();
+                            $scope.detailedSearch.accessor.clear();
+                        }
                     }, 500);
                     dontSearch = true;
                     $scope.detailedSearch.isVisible = false;

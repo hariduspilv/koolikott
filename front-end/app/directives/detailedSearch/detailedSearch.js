@@ -314,6 +314,8 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
                     $rootScope.$watch("isEditPortfolioMode", function (newValue, oldValue) {
                         if (newValue && (newValue !== oldValue)) {
                             setEditModePrefill();
+                        } else if (!newValue && (newValue !== oldValue)) {
+                            $scope.clear();
                         }
                     }, true);
 
@@ -423,6 +425,8 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
                         'taxon': {},
                         'language': null
                     };
+
+                    $scope.$broadcast("targetGroupSelector:clear");
 
                     if ($rootScope.isEditPortfolioMode) {
                         $scope.detailedSearch.type = "material";
