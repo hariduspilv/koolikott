@@ -20,7 +20,6 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                     fill();
                     addListeners();
                     selectValue();
-                    $scope.selectedTargetGroups = getSelectedText();
 
                     $timeout(function () {
                         $scope.isReady = true;
@@ -42,10 +41,20 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                         }
                     }, false);
 
+                    $scope.$on('detailedSearch:taxonChange', (event, taxonChange) => {
+                        let newEdCtx = taxonService.getEducationalContext(taxonChange.newValue);
+                        let oldEdCtx = taxonService.getEducationalContext(taxonChange.oldValue);
+
+                        if (!_.isEqual(newEdCtx, oldEdCtx)) {
+                            fill();
+                            resetIfInvalid();
+                        }
+                    });
+
                     $scope.$watch('taxon', function (newTaxon, oldTaxon) {
-                        if (newTaxon !== oldTaxon) {
-                            var newEdCtx = taxonService.getEducationalContext(newTaxon);
-                            var oldEdCtx = taxonService.getEducationalContext(oldTaxon);
+                        if (newTaxon !== oldTaxon && !$rootScope.isEditPortfolioMode) {
+                            let newEdCtx = taxonService.getEducationalContext(newTaxon);
+                            let oldEdCtx = taxonService.getEducationalContext(oldTaxon);
 
                             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                                 fill();
@@ -53,12 +62,6 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                             }
                         }
                     });
-
-                    $scope.$watch('targetGroups', function (newGroups, oldGroups) {
-                        if (newGroups !== oldGroups) {
-                            $scope.selectedTargetGroups = getSelectedText();
-                        }
-                    }, false);
 
                     $scope.$watch('markRequired', function (markRequired) {
                         if (markRequired && $scope.isRequired && $scope.selectedTargetGroup.length === 0) {
@@ -157,13 +160,13 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                 };
 
                 // Reduced text for select label
-                function getSelectedText() {
+                $scope.getSelectedText = function() {
                     if ($scope.targetGroups && $scope.targetGroups.length > 0) {
-                        return targetGroupService.getSelectedText($scope.targetGroups);
+                        return _.join(targetGroupService.getSelectedText($scope.targetGroups), ', ');
                     } else {
                         return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
                     }
-                }
+                };
 
                 function getMissingGrades(selectedTargetGroup, targetGroups) {
                     var result = [];
@@ -216,7 +219,11 @@ angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
                     if (!$scope.selectedTargetGroup) {
                         $scope.selectedTargetGroup = targetGroupService.getLabelByTargetGroups($scope.targetGroups);
                     }
-                }
+                };
+
+                $scope.$on("detailedSearch:prefillTargetGroup", function (event, args) {
+                    $scope.selectedTargetGroup  = targetGroupService.getLabelByTargetGroups(args);
+                });
             }]
     };
 });

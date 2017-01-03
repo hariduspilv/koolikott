@@ -80,6 +80,11 @@ angular.module('koolikottApp').directive('dopTaxonSelector', function () {
                     ctrl.taxon = value;
                 });
 
+                $scope.$on('detailedSearch:prefillTaxon', (e, taxon) => {
+                   ctrl.taxon = taxon;
+                   buildTaxonPath();
+                });
+
                 ctrl.selectTaxon = function (taxon) {
                     ctrl.taxon = taxon;
                 };
