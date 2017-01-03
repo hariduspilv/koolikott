@@ -11,7 +11,7 @@
     </md-select>
   </md-input-container>
 </div>
-<h3 data-ng-show="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
+<h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
 
 <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="card-container">
   <div data-ng-repeat="item in items track by item.id" class="card-container__item" flex-xs="grow">
@@ -19,10 +19,10 @@
   </div>
 </div>
 
-<div data-ng-show="!allResultsLoaded() && searching">
-  <p data-ng-show="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
+<div data-ng-if="!allResultsLoaded() && searching">
+  <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
      data-translate="SEARCH_LOADING"></p>
-  <div data-ng-show="start === 0" layout="column" layout-align="center center" class="min-height-500">
+  <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
     <md-progress-circular></md-progress-circular>
   </div>
 </div>

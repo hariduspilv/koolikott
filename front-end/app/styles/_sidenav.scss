@@ -119,9 +119,8 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
     .sidenav__count {
       color: $color-selected-menu;
-      .portfolio-container .md-red & {
+      .main-container .md-red & {
         color: $color-admin;
-
       }
     }
   }
@@ -137,13 +136,13 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   &.is-active {
     color: $color-selected-menu;
     background: rgba(0, 0, 0, 0.1);
-    .portfolio-container .md-red & {
+    .main-container .md-red & {
       color: $color-admin;
     }
 
     .sidenav__icon {
       color: $color-selected-menu;
-      .portfolio-container .md-red & {
+      .main-container .md-red & {
         color: $color-admin;
       }
     }
@@ -190,7 +189,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
   &--link {
     color: $color-selected-menu;
-    .portfolio-container .md-red & {
+    .main-container .md-red & {
       color: $color-admin;
     }
   }
