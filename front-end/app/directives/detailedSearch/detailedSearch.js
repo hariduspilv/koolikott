@@ -369,8 +369,15 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
                     if (newValue.CLIL !== oldValue.CLIL) return true;
                     if (newValue.taxon !== oldValue.taxon && $scope.detailedSearch.taxon) {
                         $scope.detailedSearch.educationalContext = taxonService.getEducationalContext($scope.detailedSearch.taxon);
+                        portfolioEditModeProcess({newValue: newValue.taxon, oldValue: oldValue.taxon});
                         clearHiddenFields();
                         return true;
+                    }
+                }
+
+                function portfolioEditModeProcess(taxonChange) {
+                    if ($rootScope.isEditPortfolioMode) {
+                        $scope.$broadcast("detailedSearch:taxonChange", taxonChange);
                     }
                 }
 
@@ -452,9 +459,12 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
 
                 function setEditModePrefill() {
                     if ($rootScope.isEditPortfolioMode && storageService.getPortfolio()) {
-                        // TODO: prefilling removed for v1.7 release
-                        // $scope.detailedSearch.taxon = storageService.getPortfolio().taxons[0];
-                        // $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
+                        $scope.detailedSearch.taxon = storageService.getPortfolio().taxons[0];
+                        $scope.detailedSearch.targetGroups = storageService.getPortfolio().targetGroups;
+
+                        $scope.$broadcast("detailedSearch:prefillTaxon", storageService.getPortfolio().taxons[0]);
+                        $scope.$broadcast("detailedSearch:prefillTargetGroup", storageService.getPortfolio().targetGroups);
+
                         prefilling = true;
 
                         $scope.detailedSearch.type = "material";

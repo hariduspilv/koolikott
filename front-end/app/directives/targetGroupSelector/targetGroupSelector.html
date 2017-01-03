@@ -6,10 +6,11 @@
     <label>
       <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
     </label>
+
     <md-select multiple class="select"
                data-ng-model="selectedTargetGroup"
                name="targetGroupSelect"
-               md-selected-text="selectedTargetGroups"
+               md-selected-text="getSelectedText()"
                md-on-open="update()"
                ng-required="isRequired.trigger"
                aria-label="Vanuse valiku menüü"
