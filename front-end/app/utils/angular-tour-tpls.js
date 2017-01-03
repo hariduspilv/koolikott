@@ -16,13 +16,14 @@
   angular.module('tour/tour.tpl.html', []).run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + '        <a ng-click="closeTour()" class="md-button md-ink-ripple tour-next-tip">&times;</a>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="md-button md-primary md-ink-ripple tour-next-tip"></a>\n'  + '    </div>\n' + '</div>');
+      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + '        <a ng-click="closeTour()" ng-bind="ttCloseLabel" class="md-button md-ink-ripple tour-next-tip"> </a>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="md-button md-primary md-ink-ripple tour-next-tip"></a>\n'  + '    </div>\n' + '</div>');
     }
   ]);
   angular.module('angular-tour.tour', []).constant('tourConfig', {
     placement: 'top',
     animation: true,
     nextLabel: 'Next',
+    closeLabel: 'Close',
     scrolling: false,
     scrollSpeed: 500,
     margin: 28,
@@ -169,6 +170,9 @@
             scope.ttPlacement = (val || tourConfig.placement).toLowerCase().trim();
             scope.centered = scope.ttPlacement.indexOf('center') === 0;
           });
+          attrs.$observe('tourtipCloseLabel', function (val) {
+            scope.ttCloseLabel = val || tourConfig.closeLabel;
+          });
           attrs.$observe('tourtipNextLabel', function (val) {
             scope.ttNextLabel = val || tourConfig.nextLabel;
           });
@@ -202,6 +206,7 @@
           });
           //Init assignments (fix for Angular 1.3+)
           scope.ttNextLabel = tourConfig.nextLabel;
+          scope.ttCloseLabel = tourConfig.closeLabel;
           scope.ttContainerElement = tourConfig.containerElement;
           scope.ttPlacement = tourConfig.placement.toLowerCase().trim();
           scope.centered = false;

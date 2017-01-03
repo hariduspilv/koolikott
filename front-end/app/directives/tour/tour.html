@@ -5,6 +5,8 @@
   <virtual-step
     tourtip="Menüü-ikoon kontrollib sisukorda. Sisukorras on sinu isiklikud asjad ja selle alamlehe sisukord, millel viibid."
     tourtip-next-label="{{'FORWARD' | translate}}"
+      tourtip-close-label="{{'KATKESTA' | translate}}"
+
     tourtip-placement="right"
     tourtip-step="0"
     tourtip-element="#header-show-sidenav-button"></virtual-step>
@@ -35,34 +37,34 @@
     tourtip-element="#menu-help"></virtual-step>
   <virtual-step
     tourtip="Sinu initsiaal näitab, et oled sisse loginud. Samast kohast saad ka väljuda."
-    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="bottom"
     tourtip-step="5"
     tourtip-element="#header-user-menu-icon"></virtual-step>
   <virtual-step
     tourtip="Sisuosas saad materjale ja kogumikke sirvida, neid lemmikuks salvestada ja lugemiseks avada."
     tourtip-next-label="{{'FORWARD' | translate}}"
-    tourtip-placement="bottom"
+    tourtip-placement="top"
     tourtip-step="6"
     tourtip-element="#main-content"></virtual-step>
   <virtual-step
     tourtip="Materjalide tüüpe eristab ikoon ja taustavärv (kui pole lisatud illustreerivat pilti). Materjal on väline link või koolikotti üles laetud üllitis - mäng, video, tekst, pilt, õpik, raamat jne jne. Materjale saad märkida kogumikku lisamiseks. "
     tourtip-next-label="{{'FORWARD' | translate}}"
-    tourtip-placement="bottom"
-    tourtip-step="6"
-    tourtip-element="#material-1"></virtual-step>
+    tourtip-placement="top"
+    tourtip-step="7"
+    tourtip-element="#material-card-7"></virtual-step>
   <virtual-step
     tourtip="Kogumiku tunned ära järjehoidja-ikooni ja lilla taustavärvi järgi. Kogumikud on koostatud kasutajate poolt ja võivad sisaldada nii tekste kui materjale."
     tourtip-next-label="{{'FORWARD' | translate}}"
-    tourtip-placement="bottom"
-    tourtip-step="7"
-    tourtip-element="#portfolio-1"></virtual-step>
+    tourtip-placement="top"
+    tourtip-step="8"
+    tourtip-element="#portfolio-card-107"></virtual-step>
   <virtual-step
     data-ng-if="$ctrl.hasPermission()"
     tourtip="Siin saad lisada uue kogumiku või materjali"
     tourtip-next-label="{{!$ctrl.isOpenedByUser ? 'FORWARD' : 'CLOSE' | translate}}"
     tourtip-placement="top"
-    tourtip-step="6"
+    tourtip-step="9"
     tourtip-element="#main-fab-button"></virtual-step>
 
 </tour>
