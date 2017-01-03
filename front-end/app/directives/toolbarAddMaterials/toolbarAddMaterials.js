@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopToolbarAddMaterials',
 [
-    '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q', 'storageService',
-    function ($translate, authenticatedUserService, serverCallService, toastService, $q, storageService) {
+    '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q', 'storageService', 'materialService',
+    function ($translate, authenticatedUserService, serverCallService, toastService, $q, storageService, materialService) {
         return {
             scope: true,
             templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
@@ -45,14 +45,15 @@ angular.module('koolikottApp')
                     }
 
                     if (chapter && chapter.contentRows) {
-                        for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
-                            var selectedMaterial = $rootScope.selectedMaterials[i];
-                            chapter.contentRows.push({learningObjects: [selectedMaterial]});
+                        for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                            materialService.getMaterialById($rootScope.selectedMaterials[i].id)
+                                .then((data) => {
+                                    chapter.contentRows.push({learningObjects: [data]});
+                                });
                         }
                     }
 
                     serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
-
                     $rootScope.$broadcast('detailedSearch:empty');
                 };
 
