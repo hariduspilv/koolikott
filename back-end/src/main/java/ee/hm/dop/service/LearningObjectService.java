@@ -180,13 +180,21 @@ public class LearningObjectService extends BaseService {
     private LearningObject getLearningObjectByType(Long learningObjectId, String type) {
         LearningObject learningObject = null;
 
-        if (".Material".equals(type)) {
+        if (isMaterial(type)) {
             learningObject = materialDAO.findById(learningObjectId);
-        } else if (".Portfolio".equals(type)) {
+        } else if (isPortfolio(type)) {
             learningObject = portfolioDAO.findById(learningObjectId);
         }
 
         return learningObject;
+    }
+
+    private boolean isMaterial(String type) {
+        return ".Material".equals(type) || ".ReducedMaterial".equals(type);
+    }
+
+    private boolean isPortfolio(String type) {
+        return ".Portfolio".equals(type) || ".ReducedPortfolio".equals(type);
     }
 
     private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,
