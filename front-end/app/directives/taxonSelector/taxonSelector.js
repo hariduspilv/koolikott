@@ -94,7 +94,7 @@ angular.module('koolikottApp').directive('dopTaxonSelector', function () {
                     $scope.$watch(function () {
                         if (ctrl.taxon) return ctrl.taxon;
                     }, function (newTaxon, oldTaxon) {
-                        if (oldTaxon && newTaxon !== oldTaxon) {
+                        if (oldTaxon && (newTaxon !== oldTaxon) || _.isEmpty(ctrl.taxonPath)) {
                             buildTaxonPath();
                         }
                     }, false);
