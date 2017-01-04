@@ -5,13 +5,12 @@
   <virtual-step
     tourtip="Menüü-ikoon kontrollib sisukorda. Sisukorras on sinu isiklikud asjad ja selle alamlehe sisukord, millel viibid."
     tourtip-next-label="{{'EDASI' | translate}}"
-    tourtip-close-label="{{'KATKESTA' | translate}}"
     tourtip-placement="right"
     tourtip-offset-horizontal="-26"
     tourtip-step="0"
     tourtip-element="#header-show-sidenav-button"></virtual-step>
   <virtual-step
-    tourtip="Logo viib alati esilehele."
+    tourtip="Logo viib alati tagasi esilehele."
     tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="bottom"
     tourtip-offset-vertical="-30"
@@ -25,7 +24,7 @@
     tourtip-step="2"
     tourtip-element="#header-show-search-button"></virtual-step>
   <virtual-step
-    tourtip="…või koostada detailse otsingu. Detailotsing värskendab otsitulemusi lennult, seepärast ei leia sa siit tavapärast otsingu nuppu."
+    tourtip="…või täpsustada seda kasutades detailset otsingut. Detailotsing värskendab otsitulemusi lennult, seepärast ei leia sa siit tavapärast otsingu nuppu."
     tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="bottom"
     tourtip-offset-vertical="-30"
@@ -34,41 +33,42 @@
     tourtip-element="#header-show-detailed-search-icon"></virtual-step>
   <virtual-step
     data-ng-if="!$ctrl.isOpenedByUser"
-    tourtip="? ikooni alt leiad lisaks üldinfole ka käsiloleva tutvustuse"
+    tourtip="Abiikooni rippmenüüst leiad lisaks üldinfole ka käsiloleva tutvustuse. "
     tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="left"
     tourtip-step="{{$ctrl.hasPermission() ? 4 : 5}}"
     tourtip-element="#menu-help"></virtual-step>
   <virtual-step
-    tourtip="Sinu initsiaal näitab, et oled sisse loginud. Samast kohast saad ka väljuda."
+    tourtip="Sinu nimetäht näitab, et oled sisse loginud. Samast rippmenüüst saad ka väljuda."
     tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="left"
     tourtip-step="5"
     tourtip-element="#header-user-menu-icon"></virtual-step>
   <virtual-step
-    tourtip="Sisuosas saad materjale ja kogumikke sirvida, neid lemmikuks salvestada ja lugemiseks avada."
+    tourtip="Sisuosas saad materjale ja kogumikke sirvida, neid lemmikuks salvestada ja lugemiseks avada. Vaikimisi kuvatakse uuemad eespool."
     tourtip-next-label="{{'EDASI' | translate}}"
-    tourtip-placement="top"
+    tourtip-placement="left"
     tourtip-offset-vertical="200"
     tourtip-offset-horizontal="100"
     tourtip-step="6"
-    tourtip-element="#main-content"></virtual-step>
+    tourtip-element="#content-sort-select"></virtual-step>
   <virtual-step
-    tourtip="Materjalide tüüpe eristab ikoon ja taustavärv (kui pole lisatud illustreerivat pilti). Materjal on väline link või koolikotti üles laetud üllitis - mäng, video, tekst, pilt, õpik, raamat jne jne. Materjale saad märkida kogumikku lisamiseks. "
+    tourtip="Materjal on väline link või koolikotti üles laetud väljaanne - mäng, video, tekst, pilt, õpik, raamat jne. Materjalide tüüpe eristab ikoon ja taustavärv. Materjale saad kogumikku lisamiseks linnutada. "
     tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="right"
     tourtip-step="7"
-    tourtip-element="#material-card-7"></virtual-step>
+    tourtip-element="#material-card-10800"></virtual-step>
   <virtual-step
-    tourtip="Kogumiku tunned ära järjehoidja-ikooni ja lilla taustavärvi järgi. Kogumikud on koostatud kasutajate poolt ja võivad sisaldada nii tekste kui materjale."
+    tourtip="Kogumikud on koostatud kasutajate poolt ja võivad sisaldada nii tekste kui materjale. Kogumiku tunned ära järjehoidja-ikooni ja taustavärvi järgi."
     tourtip-next-label="{{'EDASI' | translate}}"
     tourtip-placement="right"
     tourtip-step="8"
     tourtip-element="#portfolio-card-107"></virtual-step>
   <virtual-step
     data-ng-if="$ctrl.hasPermission()"
-    tourtip="Siin saad lisada uue kogumiku või materjali"
-    tourtip-next-label="{{!$ctrl.isOpenedByUser ? 'EDASI' : 'CLOSE' | translate}}"
+    tourtip="Tegevusnupu kaudu saad lisada uusi koolikoti materjale või kogumikke. Tee algust nüüd!"
+    tourtip-close-label="{{' ' | translate}}"
+    tourtip-next-label="{{!$ctrl.isOpenedByUser ? 'EDASI' : 'SULGE' | translate}}"
     tourtip-placement="left"
     tourtip-step="9"
     tourtip-element="#main-fab-button"></virtual-step>

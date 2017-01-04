@@ -1,7 +1,7 @@
 <div layout="row">
   <h2 data-ng-if="title" class="md-headline" data-translate="{{title}}" flex></h2>
 
-  <md-input-container data-ng-if="filter" flex-xs="auto" flex-sm="30" flex-gt-sm="20">
+  <md-input-container data-ng-if="filter" flex-xs="auto" flex-sm="30" flex-gt-sm="20" id="content-sort-select">
     <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
       <md-option ng-click="sort()" data-translate="RESET_SORT"></md-option>
 
