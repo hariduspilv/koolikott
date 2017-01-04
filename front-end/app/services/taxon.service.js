@@ -3,9 +3,9 @@
 angular.module('koolikottApp').factory('taxonService', [
     function () {
 
-        var CHILD_TAXON_KEYS = ['domains', 'subjects', 'topics', 'subtopics', 'modules', 'specializations'];
+        const CHILD_TAXON_KEYS = ['domains', 'subjects', 'topics', 'subtopics', 'modules', 'specializations'];
 
-        var constants = {
+        const constants = {
             EDUCATIONAL_CONTEXT: '.EducationalContext',
             DOMAIN: '.Domain',
             SUBJECT: '.Subject',
@@ -15,12 +15,13 @@ angular.module('koolikottApp').factory('taxonService', [
             MODULE: '.Module'
         };
 
-        var taxonMap;
+        let taxonMap;
+        let taxons;
 
         function mapTaxon(taxon) {
             taxonMap['t' + taxon.id] = taxon;
 
-            var children = getTaxonChildren(taxon);
+            let children = getTaxonChildren(taxon);
 
             children.forEach(function (child) {
                 mapTaxon(child);
@@ -28,8 +29,8 @@ angular.module('koolikottApp').factory('taxonService', [
         }
 
         function getTaxonChildren(taxon) {
-            for (var i = 0; i < CHILD_TAXON_KEYS.length; i++) {
-                var key = CHILD_TAXON_KEYS[i];
+            for (let i = 0; i < CHILD_TAXON_KEYS.length; i++) {
+                let key = CHILD_TAXON_KEYS[i];
                 if (taxon[key] && taxon[key].length > 0) {
                     return taxon[key];
                 }
@@ -80,6 +81,8 @@ angular.module('koolikottApp').factory('taxonService', [
             },
 
             setTaxons: function (educationalContexts) {
+                taxons = educationalContexts;
+
                 taxonMap = Object.create(null);
                 educationalContexts.forEach(function (educationalContext) {
                     mapTaxon(educationalContext);
@@ -116,6 +119,10 @@ angular.module('koolikottApp').factory('taxonService', [
 
             getTaxon: function (taxon, level) {
                 if (taxon && taxonMap) return getTaxonByLevel(taxon, level);
+            },
+
+            getTaxons: function () {
+                return taxons;
             }
         }
     }
