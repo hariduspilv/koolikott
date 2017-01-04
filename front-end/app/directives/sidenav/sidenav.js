@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopSidenav',
 [
-    'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', 'metadataService',
-    function (serverCallService, $location, $sce, searchService, authenticatedUserService, $mdDialog, userDataService, metadataService) {
+    'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', 'metadataService', 'taxonService',
+    function (serverCallService, $location, $sce, searchService, authenticatedUserService, $mdDialog, userDataService, metadataService, taxonService) {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
@@ -20,6 +20,8 @@ angular.module('koolikottApp')
                     'build',
                     'palette'
                 ];
+
+                $timeout(() => $scope.taxon = taxonService.getTaxons());
 
                 $scope.$watch(function () {
                     return $location.url();
