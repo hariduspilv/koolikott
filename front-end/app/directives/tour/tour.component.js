@@ -8,9 +8,9 @@ angular.module('koolikottApp')
     controller: DopTourController
 });
 
-DopTourController.$inject = ['$rootScope', 'authenticatedUserService', 'tourConfig'];
+DopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig'];
 
-function DopTourController ($rootScope, authenticatedUserService, tourConfig) {
+function DopTourController ($rootScope, $scope, authenticatedUserService, tourConfig) {
     let vm = this;
 
     vm.currentStep = 0;
@@ -24,13 +24,8 @@ function DopTourController ($rootScope, authenticatedUserService, tourConfig) {
         tourConfig.scrollSpeed = false;
     }
 
-    $rootScope.$on('tour:open', () => {
-        vm.tourStart();
-    });
-
-    $rootScope.$on('tour:close', () => {
-        vm.tourComplete();
-    });
+    $scope.$on('tour:open', () => vm.tourStart());
+    $scope.$on('tour:close', () => vm.tourComplete());
 
     vm.tourStart = (startStep = 0) => {
         vm.currentStep = startStep;
