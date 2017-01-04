@@ -135,9 +135,9 @@ angular.module('koolikottApp')
                                 if (!$scope.learningObject.source && learningObject.uploadedFile) {
                                     $scope.learningObject.source = learningObject.uploadedFile.url;
                                 }
-                                if (learningObject.type === ".Portfolio") {
+                                if (isPortfolio(learningObject.type)) {
                                     storageService.setPortfolio(learningObject);
-                                } else if (learningObject.type === ".Material") {
+                                } else if (isMaterial(learningObject.type)) {
                                     storageService.setMaterial(learningObject);
                                 }
 
@@ -213,9 +213,9 @@ angular.module('koolikottApp')
                         }
 
                         function updateLearningObject (learningObject) {
-                            if (learningObject.type === ".Material") {
+                            if (isMaterial(learningObject.type)) {
                                 $scope.$emit("tags:updateMaterial", learningObject);
-                            } else if (learningObject.type === ".Portfolio") {
+                            } else if (isPortfolio(learningObject.type)) {
                                 $scope.$emit("tags:updatePortfolio", learningObject)
                             }
                         }

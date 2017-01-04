@@ -6,9 +6,9 @@ angular.module('koolikottApp')
 function changedLearningObjectService($rootScope, serverCallService, storageService) {
 
     function updateLearningObject(learningObject) {
-        if (learningObject.type === ".Material") {
+        if (isMaterial(learningObject.type)) {
             storageService.setMaterial(learningObject);
-        } else if (learningObject.type === ".Portfolio") {
+        } else if (isPortfolio(learningObject.type)) {
             storageService.setPortfolio(learningObject);
         }
     }

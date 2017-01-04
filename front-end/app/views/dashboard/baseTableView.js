@@ -112,7 +112,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         $scope.getLearningObjectUrl = function (learningObject) {
             if (!learningObject) return;
 
-            if (learningObject.type === ".Portfolio") {
+            if (isPortfolio(learningObject.type)) {
                 return "/portfolio?id=" + learningObject.id;
             } else {
                 return "/material?id=" + learningObject.id;
@@ -160,9 +160,9 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                 var text;
 
                 if (data.learningObject && data.learningObject.type) {
-                    if (data.learningObject.type === '.Material')
+                    if (isMaterial(data.learningObject.type))
                         text = $scope.getCorrectLanguageTitle(data.learningObject);
-                    if (data.learningObject.type === '.Portfolio')
+                    if (isPortfolio(data.learningObject.type))
                         text = data.learningObject.title;
                 }
 
