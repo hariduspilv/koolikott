@@ -355,6 +355,8 @@ angular.module('koolikottApp').directive('dopHeader', [
                 };
 
                 $scope.isHeaderRed = function () {
+                    $rootScope.$broadcast('header:red');
+
                     return ($scope.isAdminOrModerator()
                     && ($scope.isViewAdminPanelPage
                     || (($scope.learningObjectImproper

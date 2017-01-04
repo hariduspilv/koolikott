@@ -181,6 +181,8 @@ angular.module('koolikottApp')
                     }
                 };
 
+                $scope.$on('header:red', () => $scope.isHeaderRed = true);
+
             }]
         }
     }

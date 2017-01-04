@@ -1,5 +1,10 @@
-<md-sidenav md-is-open="$root.sideNavOpen" class="md-sidenav-left sidenav" md-component-id="left" id="sidebar-left"
-            layout="column" layout-align="space-between strech">
+<md-sidenav md-is-open="$root.sideNavOpen"
+            class="md-sidenav-left sidenav"
+            data-ng-class="{'md-red': isHeaderRed}"
+            md-component-id="left"
+            id="sidebar-left"
+            layout="column"
+            layout-align="space-between strech">
 
   <!-- Portfolio Header and Chapters -->
   <md-toolbar class="sidenav__mobile-logo md-hue-1" layout="row" layout-align="center center">
@@ -217,4 +222,3 @@
     </div>
   </div>
 </md-sidenav>
-
