@@ -29,8 +29,8 @@
       </md-button>
     </md-chip-template>
   </md-chips>
-</div>
-  <form name="addTagForm" id="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()" class="detail-view-tags">
+
+  <form name="addTagForm" id="addTagForm" data-ng-show="isAllowed()" ng-submit="addTag()">
     <md-autocomplete class="tags"
                      md-selected-item="newTag.selectedItem"
                      md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
@@ -49,7 +49,7 @@
       </md-item-template>
     </md-autocomplete>
   </form>
-
+</div>
 
 <div layout="row">
   <md-button data-ng-show="showMoreTags" ng-click="showMore()">
