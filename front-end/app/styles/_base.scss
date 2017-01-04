@@ -122,6 +122,15 @@ md-datepicker {
   margin-top: 36px;
 }
 
+// Remove when #101 is complete
+.type-block {
+  margin-top: 40px;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
 .preloader {
   position: absolute;
   top: 0;
