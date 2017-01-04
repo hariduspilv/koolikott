@@ -16,14 +16,14 @@
   angular.module('tour/tour.tpl.html', []).run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="md-padding" layout="row">    <span flex></span>   <a ng-click="closeTour()" ng-bind="ttCloseLabel" class="md-button md-ink-ripple"> </a>\n' + '        <a ng-click="proceed()" ng-bind="ttNextLabel" class="md-button md-primary md-ink-ripple md-raised"><md-icon class="material-icons">arrow_forward</md-icon></a> </div> \n'  + '    </div>\n' + '</div>');
+      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="tour-actions-wrapper" layout="row">       <md-button class="md-icon-button md-ink-ripple" ng-click="closeTour()" ><md-icon class="material-icons">close</md-icon></md-button><span flex></span>\n' + '         <md-button class="md-icon-button md-primary md-ink-ripple"  ng-click="proceed()"><md-icon class="material-icons">arrow_forward</md-icon></md-button></div> \n'  + '    </div>\n' + '</div>');
     }
   ]);
   angular.module('angular-tour.tour', []).constant('tourConfig', {
     placement: 'top',
     animation: true,
     nextLabel: 'Next',
-    closeLabel: 'KATKESTA',
+    closeLabel: 'close',
     scrolling: false,
     scrollSpeed: 500,
     margin: 28,

@@ -1,18 +1,18 @@
 .tour-tip {
   display: none;
   position: absolute;
-  background: #e0e0e0;
+  background: rgba(224,224,224, 0.95);
   z-index: 101;
   top: 0;
   left: 2.5%;
-
-  max-width: 400px;
+  max-width: 300px;
   border-radius: $border-radius;
-  box-shadow: $whiteframe-shadow-7dp;
+  box-shadow: $whiteframe-shadow-9dp;
   p {
     font-size: $font-medium;
-    line-height: 1.5em;
+    line-height: 1.5;
     margin: $md-padding $md-padding 0;
+    color: #000;
   }
   .tour-arrow {
     display: block;
@@ -23,23 +23,26 @@
     border: inset 14px;
     border-style: solid;
     &.tt-top {
-      bottom: -27px;
-      border-color: #e0e0e0 transparent transparent !important;
+      bottom: -24px;
+      border-color: rgba(224,224,224, 0.95) transparent transparent;
     }
     &.tt-bottom {
-      top: -28px;
-      border-color: transparent transparent #e0e0e0 !important;
+      top: -25px;
+      border-color: transparent transparent rgba(224,224,224, 0.95);
     }
     &.tt-right {
-      left: -27px;
+      left: -24px;
       top: 28px;
-      border-color: transparent #e0e0e0 transparent transparent !important;
+      border-color: transparent rgba(224,224,224, 0.95) transparent transparent;
     }
     &.tt-left {
       left: 100%;
-      top: 28px;
-      border-color: transparent transparent transparent #1c252e !important;
+      top: 25px;
+      border-color: transparent transparent transparent rgba(224,224,224, 0.95);
     }
+  }
+  button .material-icons {
+    font-size: $font-normal;
   }
 }
 
