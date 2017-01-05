@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('koolikottApp').factory('metadataService', [
-    'serverCallService', '$filter', '$timeout', 'taxonService',
-    function (serverCallService, $filter, $timeout, taxonService) {
+    'serverCallService', '$filter', '$timeout', 'taxonService', '$rootScope',
+    function (serverCallService, $filter, $timeout, taxonService, $rootScope) {
         var instance;
 
         var CROSS_CURRICULAR_THEMES;
@@ -143,6 +143,8 @@ angular.module('koolikottApp').factory('metadataService', [
         function getEducationalContextSuccess(data) {
             if (!isEmpty(data)) {
                 taxonService.setTaxons(data);
+                taxonService.setSidenavTaxons(data);
+
                 EDUCATIONAL_CONTEXT = data;
                 educationalContextsCallbacks.forEach(function (callback) {
                     callback(data);

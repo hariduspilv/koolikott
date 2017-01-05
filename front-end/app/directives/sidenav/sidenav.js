@@ -1,8 +1,7 @@
 'use strict'
 
 angular.module('koolikottApp')
-.directive('dopSidenav',
-[
+.directive('dopSidenav', [
     'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', 'metadataService', 'taxonService',
     function (serverCallService, $location, $sce, searchService, authenticatedUserService, $mdDialog, userDataService, metadataService, taxonService) {
         return {
@@ -21,7 +20,14 @@ angular.module('koolikottApp')
                     'palette'
                 ];
 
-                $timeout(() => $scope.taxon = taxonService.getTaxons());
+
+                $scope.$watch(function () {
+                   return taxonService.getSidenavTaxons();
+                }, function (newValue) {
+                    if (newValue) {
+                        $scope.taxon = newValue;
+                    }
+                });
 
                 $scope.$watch(function () {
                     return $location.url();

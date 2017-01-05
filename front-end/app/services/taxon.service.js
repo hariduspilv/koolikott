@@ -16,7 +16,7 @@ angular.module('koolikottApp').factory('taxonService', [
         };
 
         let taxonMap;
-        let taxons;
+        let sidenavTaxons;
 
         function mapTaxon(taxon) {
             taxonMap['t' + taxon.id] = taxon;
@@ -81,8 +81,6 @@ angular.module('koolikottApp').factory('taxonService', [
             },
 
             setTaxons: function (educationalContexts) {
-                taxons = educationalContexts;
-
                 taxonMap = Object.create(null);
                 educationalContexts.forEach(function (educationalContext) {
                     mapTaxon(educationalContext);
@@ -121,8 +119,12 @@ angular.module('koolikottApp').factory('taxonService', [
                 if (taxon && taxonMap) return getTaxonByLevel(taxon, level);
             },
 
-            getTaxons: function () {
-                return taxons;
+            setSidenavTaxons: function (taxons) {
+                sidenavTaxons = taxons;
+            },
+
+            getSidenavTaxons: function () {
+                return sidenavTaxons;
             }
         }
     }
