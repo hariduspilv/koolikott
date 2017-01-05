@@ -20,8 +20,13 @@ angular.module('koolikottApp')
                     'palette'
                 ];
 
-                $scope.$on("populateSidenav", () => {
-                    $scope.taxon = taxonService.getSidenavTaxons()
+
+                $scope.$watch(function () {
+                   return taxonService.getSidenavTaxons();
+                }, function (newValue) {
+                    if (newValue) {
+                        $scope.taxon = newValue;
+                    }
                 });
 
                 $scope.$watch(function () {

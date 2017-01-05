@@ -145,8 +145,6 @@ angular.module('koolikottApp').factory('metadataService', [
                 taxonService.setTaxons(data);
                 taxonService.setSidenavTaxons(data);
 
-                $rootScope.$broadcast("populateSidenav");
-
                 EDUCATIONAL_CONTEXT = data;
                 educationalContextsCallbacks.forEach(function (callback) {
                     callback(data);
