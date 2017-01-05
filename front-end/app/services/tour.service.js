@@ -1,41 +1,40 @@
 
-class TourService {
-    constructor(serverCallService) {
-        this.serverCallService = serverCallService;
-    }
+function TourService(serverCallService) {
 
-    isValidUserTourData(userTourData) {
+    function isValidUserTourData(userTourData) {
         return !!userTourData && !!userTourData.user;
     }
 
-    getUserTourData() {
-        return this.serverCallService.makeGet('rest/userTourData', {})
+    function addUserTourData(userTourData) {
+        return serverCallService.makePut('rest/userTourData', userTourData)
             .then((response) => {
                 return response.data
             })
     }
 
-    setGeneralTourSeen(userTourData) {
-        if(!this.isValidUserTourData(userTourData)) return;
+    return {
+        getUserTourData() {
+            return serverCallService.makeGet('rest/userTourData', {})
+                .then((response) => {
+                    return response.data
+                })
+        },
 
-        userTourData.generalTour = true;
-        return this.adduserTourData(userTourData);
-    }
+        setGeneralTourSeen(userTourData) {
+            if(!isValidUserTourData(userTourData)) return;
 
-    setEditTourSeen(userTourData) {
-        if(!this.isValidUserTourData(userTourData)) return;
+            userTourData.generalTour = true;
+            return addUserTourData(userTourData);
+        },
 
-        userTourData.editTour = true;
-        return this.adduserTourData(userTourData);
-    }
+        setEditTourSeen(userTourData) {
+            if(!this.isValidUserTourData(userTourData)) return;
 
-    adduserTourData(userTourData) {
-        return this.serverCallService.makePut('rest/userTourData', userTourData)
-            .then((response) => {
-                return response.data
-            })
+            userTourData.editTour = true;
+            return addUserTourData(userTourData);
+        }
     }
 }
 
 angular.module('koolikottApp')
-    .service('tourService', [TourService]);
+    .service('tourService', ['serverCallService', TourService]);
