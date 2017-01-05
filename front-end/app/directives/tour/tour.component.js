@@ -8,9 +8,9 @@ angular.module('koolikottApp')
     controller: dopTourController
 });
 
-dopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig', '$mdDialog', '$window', '$timeout'];
+dopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig', '$mdDialog', '$window', '$timeout', 'tourService'];
 
-function dopTourController ($rootScope, $scope, authenticatedUserService, tourConfig, $mdDialog, $window, $timeout) {
+function dopTourController ($rootScope, $scope, authenticatedUserService, tourConfig, $mdDialog, $window, $timeout, tourService) {
     let vm = this;
 
     vm.currentStep = -1; // disable tour on load
@@ -21,8 +21,20 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
 
         // TODO: show modal only on first login
         if ($window.innerWidth >= 960 && vm.isAuthenticated() && !$rootScope.isEditPortfolioPage) {
-            openModal();
+            startGeneralTour();
         }
+    };
+
+    function startGeneralTour() {
+        tourService.getUserTourData()
+            .then((data) => {
+
+                vm.userTourData = data;
+
+                if (!data.generalTour) {
+                    openModal();
+                }
+            });
     }
 
     function openModal () {
@@ -44,7 +56,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
         vm.isEditPageTour = isEditPage;
         vm.currentStep = startStep;
         vm.isOpenedByUser = isOpenedByUser;
-    }
+    };
 
     vm.tourStartCancelled = () => {
         vm.isCancelledTour = true;
@@ -55,11 +67,15 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
         $timeout(() => {
             vm.tourComplete();
         }, 3000);
-    }
+    };
 
     vm.tourComplete = () => {
         vm.currentStep = -1;
         vm.isOpenedByUser = false;
         vm.isCancelledTour = false;
+
+        if (vm.isAuthenticated()) {
+            vm.userTourData = tourService.setGeneralTourSeen(vm.userTourData);
+        }
     }
 }
