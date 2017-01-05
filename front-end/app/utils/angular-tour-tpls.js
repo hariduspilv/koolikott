@@ -16,15 +16,16 @@
   angular.module('tour/tour.tpl.html', []).run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="tour-actions-wrapper" layout="row">       <md-button class="md-icon-button md-ink-ripple" ng-click="closeTour()" ><md-icon class="material-icons">close</md-icon></md-button><span flex></span>\n' + '         <md-button class="md-icon-button md-primary md-ink-ripple"  ng-click="proceed()"><md-icon class="material-icons">arrow_forward</md-icon></md-button></div> \n'  + '    </div>\n' + '</div>');
+      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="tour-actions-wrapper" layout="row">       <md-button class="md-icon-button md-ink-ripple" ng-click="closeTour()" ><md-icon class="material-icons">close</md-icon></md-button><span flex></span>\n' + '         <md-button class="md-icon-button md-primary md-ink-ripple" ng-if="!ttNextVisible" data-ng-click="proceed()"><md-icon class="material-icons">arrow_forward</md-icon></md-button></div> \n'  + '    </div>\n' + '</div>');
     }
   ]);
   angular.module('angular-tour.tour', []).constant('tourConfig', {
     placement: 'top',
     animation: true,
     nextLabel: 'Next',
-    closeLabel: 'close',
-    scrolling: false,
+    closeLabel: 'Close',
+    scrolling: true,
+    scrollTo: true,
     scrollSpeed: 500,
     margin: 28,
     backDrop: false,
@@ -176,6 +177,12 @@
           attrs.$observe('tourtipNextLabel', function (val) {
             scope.ttNextLabel = val || tourConfig.nextLabel;
           });
+          attrs.$observe('tourtipNextVisible', function (val) {
+            scope.ttNextVisible = val;
+          });
+          attrs.$observe('tourtipScrollTo', function (val) {
+            scope.ttScrollTo = val || tourConfig.scrollTo;
+          });
           attrs.$observe('tourtipContainerElement', function (val) {
             scope.ttContainerElement = val || tourConfig.containerElement;
           });
@@ -207,6 +214,7 @@
           //Init assignments (fix for Angular 1.3+)
           scope.ttNextLabel = tourConfig.nextLabel;
           scope.ttCloseLabel = tourConfig.closeLabel;
+          scope.ttScrollTo = tourConfig.scrollTo;
           scope.ttContainerElement = tourConfig.containerElement;
           scope.ttPlacement = tourConfig.placement.toLowerCase().trim();
           scope.centered = false;
@@ -335,7 +343,8 @@
               tourtip.css(ttPosition);
               // Scroll to the tour tip
               var ttPositionTop = parseInt(ttPosition.top), ttPositionLeft = parseInt(ttPosition.left);
-              if (tourConfig.scrolling) {
+
+              if (tourConfig.scrolling && scope.ttScrollTo !== 'false') {
                  scrollTo(tourtip, scope.ttContainerElement, -150, -300, tourConfig.scrollSpeed, ttPositionTop, ttPositionLeft);
               }
             };

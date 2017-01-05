@@ -139,8 +139,8 @@
                 <span data-translate="ABOUT_PAGE_LINK_TITLE"></span>
               </md-button>
             </md-menu-item>
-            <md-menu-item>
-              <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-href="/help" id="help-menu">
+            <md-menu-item data-ng-if="canShowTour">
+              <md-button aria-label="Kuidas e-Koolikotti kasutada" data-ng-click="openTour()" id="help-menu">
                 <span data-translate="HELP_PAGE_LINK_TITLE"></span>
               </md-button>
             </md-menu-item>
@@ -149,11 +149,6 @@
                          data-ng-href="mailto:e-koolikott@hm.ee?subject={{ 'FEEDBACK_ABOUT_EKOOLIKOTT_SUBJECT' | translate }}"
                          id="help-menu-email">
                 <span data-translate="GIVE_FEEDBACK_LINK"></span>
-              </md-button>
-            </md-menu-item>
-            <md-menu-item>
-              <md-button aria-label="Vaata tuuri" data-ng-click="openTour()" id="tour-menu">
-                <span data-translate="VIEW_TOUR"></span>
               </md-button>
             </md-menu-item>
           </md-menu-content>
@@ -191,6 +186,11 @@
         </md-menu>
       </div>
       <div class="button-container" data-ng-if="isEditPortfolioMode">
+        <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
+                   data-ng-click="openTour(true)">
+          <md-tooltip><span data-translate="HEADER_TOOLTIP_HELP"></span></md-tooltip>
+          <md-icon>help</md-icon>
+        </md-button>
         <md-menu>
           <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>

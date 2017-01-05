@@ -1,0 +1,18 @@
+<md-dialog aria-label="Tuuri modaalaken" flex="30">
+  <md-content class="md-padding">
+    <h3>Tere, Erkki!</h3>
+    <p>Rõõm sind siin näha! Kas soovid, et näitame sulle, mida siin teha saad?</p>
+  </md-content>
+
+  <md-dialog-actions>
+    <span flex></span>
+    <md-button aria-label="Ei soovi tuuri" id="tour-cancel-button"
+               data-ng-click="vm.cancel()">
+      <span>Ei, mitte praegu</span>
+    </md-button>
+    <md-button class="md-primary md-raised" aria-label="Soovin näha tuuri" id="tour-show-button"
+               data-ng-click="vm.showTour()">
+      <span>Jah</span>
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>

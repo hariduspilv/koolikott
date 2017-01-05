@@ -22,10 +22,6 @@ angular.module('koolikottApp')
                 templateUrl: 'views/material/material.html',
                 controller: 'materialController'
             })
-            .when('/help', {
-                templateUrl: 'views/static/abstractStaticPage.html',
-                controller: 'helpController'
-            })
             .when('/about', {
                 templateUrl: 'views/static/abstractStaticPage.html',
                 controller: 'aboutController'

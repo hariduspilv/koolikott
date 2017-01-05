@@ -41,11 +41,16 @@ angular.module('koolikottApp').directive('dopHeader', [
                 $scope.suggest = {};
                 $scope.suggest.suggestions = null;
                 $scope.suggest.selectedItem = null;
+                $scope.canShowTour = false;
                 var dontSearch = false;
 
                 const VISIBILITY_PUBLIC = "PUBLIC";
                 const VISIBILITY_PRIVATE = "PRIVATE";
                 const VISIBILITY_NOT_LISTED = "NOT_LISTED";
+
+                if ($window.innerWidth >= 960) {
+                    $scope.canShowTour = true;
+                }
 
                 $scope.detailedSearch.accessor = {
                     clearSimpleSearch: function () {
@@ -64,6 +69,7 @@ angular.module('koolikottApp').directive('dopHeader', [
 
                 $scope.logout = function () {
                     authenticationService.logout();
+                    $rootScope.$broadcast('tour:close');
                     $location.url('/');
                 };
 
@@ -375,7 +381,13 @@ angular.module('koolikottApp').directive('dopHeader', [
                     }
                 };
 
-                $scope.openTour = () => $rootScope.$broadcast('tour:open');
+                $scope.openTour = (isEditPage = false) => {
+                    if (isEditPage) {
+                        $rootScope.$broadcast('tour:start:editPage');
+                    } else {
+                        $rootScope.$broadcast('tour:start');
+                    }
+                }
 
             }]
         };

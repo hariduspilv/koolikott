@@ -5,35 +5,61 @@ angular.module('koolikottApp')
     restrict: 'E',
     templateUrl: 'directives/tour/tour.html',
     bindings: {},
-    controller: DopTourController
+    controller: dopTourController
 });
 
-DopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig'];
+dopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig', '$mdDialog', '$window', '$timeout'];
 
-function DopTourController ($rootScope, $scope, authenticatedUserService, tourConfig) {
+function dopTourController ($rootScope, $scope, authenticatedUserService, tourConfig, $mdDialog, $window, $timeout) {
     let vm = this;
 
-    vm.currentStep = 0;
+    vm.currentStep = -1; // disable tour on load
     vm.isOpenedByUser = false;
 
     vm.$onInit = () => {
-        vm.isEditPageTour = $rootScope.isEditPortfolioPage ? true : false;
+        // TODO: show editPage tour if has not seen before
 
-        vm.hasPermission = () => authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
-
-        tourConfig.scrollSpeed = false;
+        // TODO: show modal only on first login
+        if ($window.innerWidth >= 960 && vm.isAuthenticated() && !$rootScope.isEditPortfolioPage) {
+            openModal();
+        }
     }
 
-    $scope.$on('tour:open', () => vm.tourStart());
+    function openModal () {
+        $mdDialog.show({
+            templateUrl: 'directives/tour/modal/tour.modal.html',
+            controller: 'tourModalController',
+            controllerAs: 'vm'
+        });
+    }
+
+    vm.isAuthenticated = () => authenticatedUserService.isAuthenticated();
+
+    $scope.$on('tour:start', () => vm.tourStart());
+    $scope.$on('tour:start:editPage', () => vm.tourStart(0, true, true));
+    $scope.$on('tour:start:cancelled', () => vm.tourStartCancelled());
     $scope.$on('tour:close', () => vm.tourComplete());
 
-    vm.tourStart = (startStep = 0) => {
+    vm.tourStart = (startStep = 0, isOpenedByUser = true, isEditPage = false) => {
+        vm.isEditPageTour = isEditPage;
         vm.currentStep = startStep;
-        vm.isOpenedByUser = true;
+        vm.isOpenedByUser = isOpenedByUser;
+    }
+
+    vm.tourStartCancelled = () => {
+        vm.isCancelledTour = true;
+        vm.isEditPageTour = false;
+        vm.isOpenedByUser = false;
+        vm.currentStep = 0;
+
+        $timeout(() => {
+            vm.tourComplete();
+        }, 3000);
     }
 
     vm.tourComplete = () => {
         vm.currentStep = -1;
         vm.isOpenedByUser = false;
+        vm.isCancelledTour = false;
     }
 }
