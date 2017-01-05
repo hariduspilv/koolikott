@@ -38,4 +38,4 @@ class TourService {
 }
 
 angular.module('koolikottApp')
-    .service('tourService', TourService);
+    .service('tourService', [TourService]);
