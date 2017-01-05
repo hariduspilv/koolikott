@@ -355,14 +355,18 @@ angular.module('koolikottApp').directive('dopHeader', [
                 };
 
                 $scope.isHeaderRed = function () {
-                    $rootScope.$broadcast('header:red');
-
-                    return ($scope.isAdminOrModerator()
-                    && ($scope.isViewAdminPanelPage
-                    || (($scope.learningObjectImproper
-                    || $scope.learningObjectBroken
-                    || $scope.learningObjectChanged)
-                    && $scope.isViewMaterialOrPortfolioPage)));
+                    if ($scope.isAdminOrModerator()
+                        && ($scope.isViewAdminPanelPage
+                        || (($scope.learningObjectImproper
+                        || $scope.learningObjectBroken
+                        || $scope.learningObjectChanged)
+                        && $scope.isViewMaterialOrPortfolioPage))) {
+                        $rootScope.$broadcast('header:red');
+                        return true;
+                    } else {
+                        $rootScope.$broadcast('header:default');
+                        return false;
+                    }
                 };
 
                 $scope.getPortfolioVisibility = function () {
