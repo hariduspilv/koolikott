@@ -129,9 +129,11 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     if (order === 'byUpdatedAt' || order === '-byUpdatedAt')
                         return new Date(b.updated) - new Date(a.updated);
 
-                    if ((order === 'bySubmittedBy' || order == '-bySubmittedBy') && a.creator && b.creator) {
-                        var aName = a.creator.name + ' ' + a.creator.surname;
-                        var bName = b.creator.name + ' ' + b.creator.surname;
+                    if ((order === 'bySubmittedBy' || order == '-bySubmittedBy')) {
+
+                        let aName = a.creator ? a.creator.name + ' ' + a.creator.surname : translationService.instant('UNKNOWN');
+                        let bName = b.creator ? b.creator.name + ' ' + b.creator.surname : translationService.instant('UNKNOWN');
+
                         if (a.reportCount > 1)
                             aName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
                         if (b.reportCount > 1)
