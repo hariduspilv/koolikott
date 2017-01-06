@@ -27,6 +27,20 @@ angular.module('koolikottApp')
                 return $translate.proposedLanguage() || $translate.use() || $translate.preferredLanguage();
             },
 
+            getLanguageCode: function () {
+                let lang = this.getLanguage();
+                switch (lang) {
+                    case "est":
+                        return "et";
+                    case "eng":
+                        return "en";
+                    case "rus":
+                        return "ru";
+                    default:
+                        return "et";
+                }
+            },
+
             instant : function(translationId, interpolateParams, interpolationId, forceLanguage) {
                 return $translate.instant(translationId, interpolateParams, interpolationId, forceLanguage);
             }

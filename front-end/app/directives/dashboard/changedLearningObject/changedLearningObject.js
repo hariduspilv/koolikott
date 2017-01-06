@@ -5,7 +5,7 @@ angular.module('koolikottApp')
 
 function changedLearningObject() {
 
-    function changedLearningObjectCtrl($scope, $filter, serverCallService) {
+    function changedLearningObjectCtrl($scope, $filter, serverCallService, taxonService) {
         var $parent = $scope.$parent;
 
         function init() {
@@ -26,10 +26,7 @@ function changedLearningObject() {
         }
 
         function getTaxonTranslationKey(taxon) {
-            if (!taxon || !taxon.name) return "";
-            // Level names start with '.' which has to be removed
-            var prefix = taxon.level.substring(1).toUpperCase();
-            return prefix + "_" + taxon.name.toUpperCase();
+            return taxonService.getTaxonTranslationKey(taxon);
         }
 
         init();
@@ -40,6 +37,6 @@ function changedLearningObject() {
 
     return {
         templateUrl: 'directives/dashboard/changedLearningObject/changed.html',
-        controller: ['$scope', '$filter', 'serverCallService', changedLearningObjectCtrl]
+        controller: ['$scope', '$filter', 'serverCallService', 'taxonService', changedLearningObjectCtrl]
     }
 }

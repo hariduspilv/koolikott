@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('koolikottApp').controller('baseTableViewController', [
-    '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService',
-    function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService) {
+    '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService', 'sortService',
+    function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
         $scope.viewPath = $location.path();
         var collection = null;
         var filtredCollection = null;
@@ -89,7 +89,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                 collection = data;
                 $scope.itemsCount = data.length;
 
-                orderItems(data, $scope.query.order);
+                sortService.orderItems(data, $scope.query.order);
                 $scope.data = data.slice(0, $scope.query.limit);
             }
         };
@@ -118,40 +118,6 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                 return "/material?id=" + learningObject.id;
             }
         };
-
-        function orderItems(data, order) {
-            data = data.sort(function (a, b) {
-                if (a && b) {
-
-                    if (order === 'bySubmittedAt' || order === '-bySubmittedAt')
-                        return new Date(b.added) - new Date(a.added);
-
-                    if (order === 'byUpdatedAt' || order === '-byUpdatedAt')
-                        return new Date(b.updated) - new Date(a.updated);
-
-                    if ((order === 'bySubmittedBy' || order == '-bySubmittedBy')) {
-
-                        let aName = a.creator ? a.creator.name + ' ' + a.creator.surname : translationService.instant('UNKNOWN');
-                        let bName = b.creator ? b.creator.name + ' ' + b.creator.surname : translationService.instant('UNKNOWN');
-
-                        if (a.reportCount > 1)
-                            aName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
-                        if (b.reportCount > 1)
-                            bName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
-
-                        return aName.localeCompare(bName);
-                    }
-
-                    if (order === 'byReportCount' || order === '-byReportCount')
-                        return b.reportCount - a.reportCount;
-                }
-
-                return 0;
-            });
-
-            if (order.slice(0, 1) === '-')
-                data.reverse();
-        }
 
         function filterItems() {
             filtredCollection = collection.filter(function (data) {
@@ -200,9 +166,9 @@ angular.module('koolikottApp').controller('baseTableViewController', [
 
         $scope.onReorder = function (order) {
             if (filtredCollection !== null)
-                orderItems(filtredCollection, order);
+                sortService.orderItems(filtredCollection, order);
             else
-                orderItems(collection, order);
+                sortService.orderItems(collection, order);
 
             $scope.data = paginate($scope.query.page, $scope.query.limit);
         };

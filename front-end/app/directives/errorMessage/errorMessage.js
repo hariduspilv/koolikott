@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopErrorMessage',
 [
-    '$location', 'serverCallService', 'userDataService', '$timeout', 'changedLearningObjectService', '$routeParams',
-    function ($location, serverCallService, userDataService, $timeout, changedLearningObjectService, $routeParams) {
+    '$location', 'serverCallService', 'userDataService', '$timeout', 'changedLearningObjectService', '$routeParams', 'taxonService',
+    function ($location, serverCallService, userDataService, $timeout, changedLearningObjectService, $routeParams, taxonService) {
         return {
             scope: {
                 data: '='
@@ -56,28 +56,19 @@ angular.module('koolikottApp')
                 };
 
                 $scope.getChangeName = function (item) {
-                    if (item.taxon) return getTaxonTranslationKey(item.taxon);
+                    if (item.taxon) return taxonService.getTaxonTranslationKey(item.taxon);
                     else if (item.resourceType) return item.resourceType.name;
                     else if (item.targetGroup) return "TARGET_GROUP_" + item.targetGroup;
                     else return "";
                 };
 
-                function getTaxonTranslationKey(taxon) {
-                    if (!taxon || !taxon.name) return "";
-                    // Level names start with '.' which has to be removed
-                    var prefix = taxon.level.substring(1).toUpperCase();
-                    return prefix + "_" + taxon.name.toUpperCase();
-                }
-
                 $scope.acceptChanges = function () {
                     changedLearningObjectService.acceptChanges(getCurrentLearningObjectId());
                 };
 
-
                 $scope.revertChanges = function () {
                     changedLearningObjectService.revertChanges(getCurrentLearningObjectId());
                 };
-
 
                 $rootScope.setReason = function (reason) {
                     $scope.reason = reason;

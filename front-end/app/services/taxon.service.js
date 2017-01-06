@@ -125,7 +125,19 @@ angular.module('koolikottApp').factory('taxonService', [
 
             getSidenavTaxons: function () {
                 return sidenavTaxons;
-            }
+            },
+
+            getTaxonTranslationKey: function (taxon) {
+                if (taxon.level = ".TaxonDTO") {
+                    taxon = this.getFullTaxon(taxon.id);
+                }
+
+                if (taxon.level !== '.EducationalContext') {
+                    return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
+                } else {
+                    return taxon.name.toUpperCase();
+                }
+            },
         }
     }
 ]);
