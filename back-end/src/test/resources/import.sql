@@ -52,6 +52,10 @@ insert into User(id, userName, name, surName, idCode, role, publisher) values (1
 insert into User(id, userName, name, surName, idCode, role, publisher) values (14, 'user.to.be.banned2', 'November', 'Juliet', '38256133108', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (15, 'restricted.user2', 'Restricted', 'User', '89898989892', 'RESTRICTED', null);
 
+-- UserTourData
+
+INSERT INTO UserTourData(id, user, generalTour, editTour) VALUES (1, 1, 1, 0);
+
 -- AuthenticatedUser
 
 insert into AuthenticatedUser(id, user_id, token, firstLogin, person) values (1, 1, 'token', false, null);

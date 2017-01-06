@@ -12,6 +12,10 @@ public class UserTourDataService {
     private UserTourDataDAO userTourDataDAO;
 
     public UserTourData getUserTourData(User user) {
+        if (user == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
         UserTourData userTourData = userTourDataDAO.getUserTourData(user);
 
         if (userTourData == null) {
@@ -25,6 +29,10 @@ public class UserTourDataService {
     }
 
     public UserTourData addUserTourData(UserTourData userTourData) {
+        if (userTourData.getUser() == null) {
+            throw new IllegalArgumentException();
+        }
+
         return userTourDataDAO.addUserTourData(userTourData);
     }
 }
