@@ -14,6 +14,7 @@
   &:hover {
     border-color: rgba(0,0,0,.15);
     background: rgba(0,0,0, .15);
+
     .error-wrapper {
       background-color: #d9d9d9;
     }
@@ -22,6 +23,7 @@
   .error-wrapper {
     background-color: #e6e6e6;
     padding: 0 20px;
+    width: 100%;
   }
 
 	&.dragover-err {
@@ -41,6 +43,7 @@
 .drop-box-preview {
   overflow: hidden;
   max-height: 100px;
+
   img {
     height: auto;
     width: 100%;
@@ -69,9 +72,11 @@
 .drop-box__icon {
   font-size: 4.6em;
   color: rgba(255, 255, 255, 1);
+
   @media (min-width: $layout-breakpoint-xs) {
     font-size: 2.6em;
   }
+
   @media (min-width: $layout-breakpoint-sm) {
     font-size: 3.6em;
   }
