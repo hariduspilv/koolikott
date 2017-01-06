@@ -213,7 +213,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                     }
 
                     $scope.searchFields.searchQuery = newValue || "";
-                    if (newValue !== oldValue && !$scope.detailedSearch.isVisible && !dontSearch) {
+                    if (newValue !== oldValue && !$scope.detailedSearch.isVisible && (!dontSearch || newValue)) {
                         $scope.search();
                     } else if ($scope.detailedSearch.isVisible) {
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;

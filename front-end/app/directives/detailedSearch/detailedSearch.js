@@ -329,7 +329,7 @@ angular.module('koolikottApp').directive('dopDetailedSearch', [
                     $scope.$watch('detailedSearch', function (newValue, oldValue) {
                         if (!$scope.detailedSearch.taxon) $scope.detailedSearch.educationalContext = null;
 
-                        if ($scope.isVisible && !prefilling && hasSearchChanged(newValue, oldValue)) {
+                        if ($scope.isVisible && (!prefilling || newValue.main) && hasSearchChanged(newValue, oldValue)) {
                             filterTypeSearch();
                             $scope.search();
                         } else if (prefilling) {
