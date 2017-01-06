@@ -361,12 +361,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                 };
 
                 $scope.isHeaderRed = function () {
-                    if ($scope.isAdminOrModerator()
-                        && ($scope.isViewAdminPanelPage
-                        || (($scope.learningObjectImproper
-                        || $scope.learningObjectBroken
-                        || $scope.learningObjectChanged)
-                        && $scope.isViewMaterialOrPortfolioPage))) {
+                    if ($scope.isAdminOrModerator() && ($scope.isViewAdminPanelPage || (($scope.learningObjectImproper || $scope.learningObjectBroken || $scope.learningObjectChanged) && ($scope.isViewMaterialOrPortfolioPage && !$rootScope.learningObjectDeleted)))) {
                         $rootScope.$broadcast('header:red');
                         return true;
                     } else {
