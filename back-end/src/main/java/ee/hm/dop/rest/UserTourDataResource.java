@@ -27,6 +27,6 @@ public class UserTourDataResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public UserTourData addUserTourData(UserTourData userTourData) {
-        return userTourDataService.addUserTourData(userTourData);
+        return userTourDataService.addUserTourData(userTourData, getLoggedInUser());
     }
 }

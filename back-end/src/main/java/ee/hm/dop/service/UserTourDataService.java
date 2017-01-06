@@ -28,9 +28,13 @@ public class UserTourDataService {
         return userTourData;
     }
 
-    public UserTourData addUserTourData(UserTourData userTourData) {
-        if (userTourData.getUser() == null) {
+    public UserTourData addUserTourData(UserTourData userTourData, User loggedInUser) {
+        if (userTourData.getUser() == null || loggedInUser == null) {
             throw new IllegalArgumentException();
+        }
+
+        if (!userTourData.getUser().getId().equals(loggedInUser.getId())) {
+            throw new RuntimeException("Access denied");
         }
 
         return userTourDataDAO.addUserTourData(userTourData);

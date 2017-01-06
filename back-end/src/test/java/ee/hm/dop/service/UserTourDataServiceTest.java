@@ -9,9 +9,7 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
@@ -35,11 +33,12 @@ public class UserTourDataServiceTest {
 
         replay(userTourDataDAO);
 
-        UserTourData userTourData = userTourDataDAO.getUserTourData(user);
+        UserTourData userTourData = userTourDataService.getUserTourData(user);
 
         verify(userTourDataDAO);
 
         assertNotNull(userTourData);
+        assertEquals(userTourData.getUser().getId(), user.getId());
         assertTrue(userTourData.isGeneralTour());
     }
 
@@ -52,16 +51,14 @@ public class UserTourDataServiceTest {
         newData.setUser(user);
 
         expect(userTourDataDAO.getUserTourData(user)).andReturn(null);
-        expect(userTourDataDAO.getUserTourData(user)).andReturn(newData);
+        expect(userTourDataDAO.addUserTourData(anyObject(UserTourData.class))).andReturn(newData);
 
         replay(userTourDataDAO);
 
-        assertNull(userTourDataDAO.getUserTourData(user));
-
-        UserTourData userTourData = userTourDataDAO.getUserTourData(user);
-
-        assertNotNull(userTourData);
+        UserTourData userTourData = userTourDataService.getUserTourData(user);
         assertEquals(userTourData.getUser().getId(), user.getId());
+        assertFalse(userTourData.isGeneralTour());
+        assertFalse(userTourData.isEditTour());
 
         verify(userTourDataDAO);
     }
@@ -81,8 +78,8 @@ public class UserTourDataServiceTest {
 
         replay(userTourDataDAO);
 
-        UserTourData added = userTourDataDAO.addUserTourData(newData);
-        UserTourData receivedData = userTourDataDAO.getUserTourData(user);
+        UserTourData added = userTourDataService.addUserTourData(newData, user);
+        UserTourData receivedData = userTourDataService.getUserTourData(user);
 
         verify(userTourDataDAO);
 
