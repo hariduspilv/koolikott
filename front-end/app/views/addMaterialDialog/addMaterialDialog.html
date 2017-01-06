@@ -361,7 +361,7 @@
                   <md-input-container flex data-ng-required="!material.publishers[0].name || $index === 0">
                     <label>
                       <span data-translate="MATERIAL_AUTHOR_NAME"></span>
-                      <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
+                      <span data-ng-hide="author.name || $index > 0">*</span>
                     </label>
                     <input data-ng-model="author.name" id="material-author-{{$index}}-name"
                            data-ng-required="author.name" name="firstname" md-maxlength="50" maxlength="50">
@@ -372,7 +372,7 @@
                   <md-input-container flex>
                     <label>
                       <span data-translate="MATERIAL_AUTHOR_SURNAME"></span>
-                      <span data-ng-hide="material.publishers[0].name || $index > 0">*</span>
+                      <span data-ng-hide="author.name || author.surname || $index > 0">*</span>
                     </label>
                     <input data-ng-model="author.surname" data-ng-required="author.name" name="surname"
                            md-maxlength="50" maxlength="50">
