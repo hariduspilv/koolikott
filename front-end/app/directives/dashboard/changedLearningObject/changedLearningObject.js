@@ -5,24 +5,18 @@ angular.module('koolikottApp')
 
 function changedLearningObject() {
 
-    function changedLearningObjectCtrl($scope, $filter, serverCallService, taxonService) {
-        var $parent = $scope.$parent;
+    function changedLearningObjectCtrl($scope, $filter, changedLearningObjectService, taxonService) {
+        const $parent = $scope.$parent;
 
         function init() {
             $parent.title = $filter('translate')('DASHBOARD_CHANGED_LEARNING_OBJECTS');
-            serverCallService.makeGet("rest/changed", {}, success, fail);
-        }
 
-        function success(data) {
-            if (data) {
-                $scope.getItemsSuccess(data, 'byTitle', true);
-            } else {
-                fail();
-            }
-        }
-
-        function fail() {
-            console.log("Failed to get improper materials")
+            changedLearningObjectService.getChangedList()
+                .then((data) => {
+                    if (data) {
+                        $scope.getItemsSuccess(data, 'byTitle', true);
+                    }
+                });
         }
 
         function getTaxonTranslationKey(taxon) {
@@ -37,6 +31,6 @@ function changedLearningObject() {
 
     return {
         templateUrl: 'directives/dashboard/changedLearningObject/changed.html',
-        controller: ['$scope', '$filter', 'serverCallService', 'taxonService', changedLearningObjectCtrl]
+        controller: ['$scope', '$filter', 'changedLearningObjectService', 'taxonService', changedLearningObjectCtrl]
     }
 }

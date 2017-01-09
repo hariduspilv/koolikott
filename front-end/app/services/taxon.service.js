@@ -138,6 +138,39 @@ angular.module('koolikottApp').factory('taxonService', [
                     return taxon.name.toUpperCase();
                 }
             },
+
+            getDomainSubjectMap: function (taxons) {
+                let resultMap = {};
+
+                const self = this;
+                taxons.forEach(function (taxon) {
+                    const domain = self.getDomain(taxon);
+                    const subject = self.getSubject(taxon);
+
+                    let domainName = domain ? "DOMAIN_" + domain.name.toUpperCase() : null;
+                    let subjectName = subject ? "SUBJECT_" + subject.name.toUpperCase() : null;
+
+                    if (_.has(resultMap, domainName)) {
+                        if (subjectName && !resultMap[domainName].includes(subjectName)) {
+                            resultMap[domainName].push(subjectName);
+                        }
+                    } else {
+                        subjectName ? resultMap[domainName] = [subjectName] : resultMap[domainName] = [];
+                    }
+                });
+
+                return resultMap;
+            },
+
+            getTaxonFromDomainSubjectMap: function (map) {
+                const domains = _.keys(map);
+                if (!domains || domains.length === 0) return [];
+
+                if (domains.length > 1) return domains;
+                if (domains[0].length > 1) return domains;
+
+                return _.flatten(_.values(map));
+            }
         }
     }
 ]);

@@ -14,11 +14,18 @@ function changedLearningObjectService($rootScope, serverCallService, storageServ
     }
 
     return {
+        getChangedList: function () {
+            return serverCallService.makeGet("rest/changed", {})
+                .then((response) => {
+                    return response.data;
+                });
+        },
+
         getChangedData: function (learningObjectId) {
             if (learningObjectId) {
-                var queryUrl = "rest/changed/" + learningObjectId;
+                let queryUrl = "rest/changed/" + learningObjectId;
                 return serverCallService.makeGet(queryUrl, {})
-                    .then(function (response) {
+                    .then((response) => {
                         return response.data
                     });
             }
@@ -27,7 +34,7 @@ function changedLearningObjectService($rootScope, serverCallService, storageServ
         acceptChanges: function (learningObjectId) {
             if (learningObjectId) {
                 serverCallService.makeGet("rest/changed/" + learningObjectId + "/acceptAll", {})
-                    .then(function (response) {
+                    .then((response) => {
                         $rootScope.learningObjectChanged = false;
                     });
             }
@@ -36,7 +43,7 @@ function changedLearningObjectService($rootScope, serverCallService, storageServ
         revertChanges: function (learningObjectId) {
             if (learningObjectId) {
                 serverCallService.makeGet("rest/changed/" + learningObjectId + "/revertAll", {})
-                    .then(function (response) {
+                    .then((response) => {
                         updateLearningObject(response.data);
                         $rootScope.learningObjectChanged = false;
                     });

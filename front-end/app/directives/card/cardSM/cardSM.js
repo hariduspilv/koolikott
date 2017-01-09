@@ -18,6 +18,8 @@ angular.module('koolikottApp')
                 $scope.domains = [];
                 $scope.subjects = [];
 
+                let domainSubjectMap = {};
+
                 function init() {
                     $scope.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups($scope.learningObject.targetGroups);
                     loadDomainsAndSubjects();
@@ -95,20 +97,14 @@ angular.module('koolikottApp')
                     return isPortfolio(type);
                 };
 
+
                 function loadDomainsAndSubjects() {
-                    $scope.learningObject.taxons.forEach(function (taxon) {
-                        var domain = taxonService.getDomain(taxon);
-                        var subject = taxonService.getSubject(taxon);
-
-                        if (domain) {
-                            $scope.domains.push("DOMAIN_" + domain.name.toUpperCase());
-                        }
-
-                        if (subject) {
-                            $scope.subjects.push("SUBJECT_" + subject.name.toUpperCase());
-                        }
-                    });
+                    domainSubjectMap = taxonService.getDomainSubjectMap($scope.learningObject.taxons);
                 }
+
+                $scope.getTaxons = function() {
+                    return taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
+                };
 
                 $rootScope.$watch('selectedMaterials', function (newValue) {
                     if (newValue && newValue.length == 0) {
