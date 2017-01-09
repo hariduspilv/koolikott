@@ -249,11 +249,11 @@
 		</dependency>
 
 		<!--For writing custom filters with Solr-->
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-analysis-extras</artifactId>
-			<version>6.1.0</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.apache.solr</groupId>-->
+			<!--<artifactId>solr-analysis-extras</artifactId>-->
+			<!--<version>6.1.0</version>-->
+		<!--</dependency>-->
 
 
 	</dependencies>
