@@ -247,6 +247,15 @@
 			<artifactId>imageio-jpeg</artifactId>
 			<version>3.3.1</version>
 		</dependency>
+
+		<!--For writing custom filters with Solr-->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-analysis-extras</artifactId>
+			<version>6.1.0</version>
+		</dependency>
+
+
 	</dependencies>
 	
 	<build>

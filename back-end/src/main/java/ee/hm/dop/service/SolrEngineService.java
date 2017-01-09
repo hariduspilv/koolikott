@@ -1,7 +1,8 @@
 package ee.hm.dop.service;
 
+import java.util.List;
+
 import ee.hm.dop.model.solr.SearchResponse;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
 public interface SolrEngineService {
 
@@ -9,7 +10,7 @@ public interface SolrEngineService {
 
     public SearchResponse search(String query, long start, long limit, String sort);
 
-    public SpellCheckResponse.Suggestion suggest(String query, boolean suggestTags);
+    public List<String> suggest(String query, boolean suggestTags);
 
     public void updateIndex();
 

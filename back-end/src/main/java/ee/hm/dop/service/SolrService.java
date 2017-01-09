@@ -9,7 +9,7 @@ import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
+import org.apache.solr.client.solrj.response.Suggestion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +21,8 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -75,26 +77,37 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public SpellCheckResponse.Suggestion suggest(String query, boolean suggestTags) {
+    public List<String> suggest(String query, boolean suggestTags) {
         if (query.isEmpty()) {
             return null;
         }
         QueryResponse qr = null;
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setRequestHandler(suggestTags ? SUGGEST_TAG_URL : SUGGEST_URL);
-        solrQuery.set("spellcheck.q", query);
-        solrQuery.set("suggest.count", SUGGEST_COUNT);
+        solrQuery.setQuery(query);
+        List<String> suggestions = new ArrayList<>();
+
         try {
             qr = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
         } catch (SolrServerException | IOException e) {
             logger.error("The SolrServer encountered an error.");
         }
 
-        String queryString = query.replaceAll("\\+", " ").toLowerCase();
-        SpellCheckResponse spellCheckResponse = qr != null ? qr.getSpellCheckResponse() : null;
-        if (spellCheckResponse != null) {
-            return spellCheckResponse.getSuggestion(queryString);
+        if (qr != null && qr.getSuggesterResponse() != null) {
+            List<Suggestion> combinedSuggestions = new ArrayList<>();
+            if(suggestTags){
+                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopTagSuggester"));
+            }else{
+                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
+                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
+            }
+            for(Suggestion suggestion: combinedSuggestions){
+                suggestions.add(suggestion.getTerm());
+            }
+            return suggestions;
         }
+
+
 
         return null;
     }

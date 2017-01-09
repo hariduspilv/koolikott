@@ -15,8 +15,6 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.service.SolrEngineService;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
 
 /**
  * Guice provider of Search Engine Service.
@@ -228,7 +226,7 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
-    public SpellCheckResponse.Suggestion suggest(String query, boolean searchTags) {
+    public List<String> suggest(String query, boolean searchTags) {
         return null;
     }
 

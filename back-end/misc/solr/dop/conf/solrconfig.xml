@@ -1303,9 +1303,8 @@
     given query. It implements SpellCheckComponent so that we could use the parameter onlyMorePopular, or else it would
     give us an unordered response. -->
 
-    <searchComponent name="suggest" class="solr.SpellCheckComponent">
-        <str name="queryAnalyzerFieldType">suggest_phrase</str>
-        <lst name="spellchecker">
+    <searchComponent name="suggest" class="solr.SuggestComponent">
+        <lst name="suggester">
             <str name="name">dopSuggester</str>
             <str name="suggestAnalyzerFieldType">suggest_analyzer</str>
             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
@@ -1314,23 +1313,32 @@
             <str name="fieldType">suggest_phrase</str>
             <str name="buildOnCommit">true</str>
         </lst>
+        <lst name="suggester">
+            <str name="name">linkSuggester</str>
+            <str name="suggestAnalyzerFieldType">text</str>
+            <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+            <str name="lookupImpl">FSTLookupFactory</str>
+            <str name="field">source</str>
+            <str name="fieldType">link</str>
+            <str name="buildOnCommit">true</str>
+        </lst>
     </searchComponent>
 
     <requestHandler name="/suggest" class="solr.SearchHandler" startup="lazy">
         <lst name="defaults">
-            <str name="spellcheck">true</str>
-            <str name="spellcheck.dictionary">dopSuggester</str>
-            <str name="spellcheck.count">5</str>
-            <str name="spellcheck.onlyMorePopular">true</str>
+            <str name="suggest">true</str>
+            <str name="suggest.dictionary">dopSuggester</str>
+            <str name="suggest.dictionary">linkSuggester</str>
+            <str name="suggest.count">5</str>
         </lst>
         <arr name="components">
             <str>suggest</str>
         </arr>
     </requestHandler>
 
-    <searchComponent name="suggest_tag" class="solr.SpellCheckComponent">
+    <searchComponent name="suggest_tag" class="solr.SuggestComponent">
         <str name="queryAnalyzerFieldType">suggest_tag_phrase</str>
-        <lst name="spellchecker">
+        <lst name="suggester">
             <str name="name">dopTagSuggester</str>
             <str name="suggestAnalyzerFieldType">suggest_analyzer</str>
             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
@@ -1344,10 +1352,9 @@
 
     <requestHandler name="/suggest_tag" class="solr.SearchHandler" startup="lazy">
         <lst name="defaults">
-            <str name="spellcheck">true</str>
-            <str name="spellcheck.dictionary">dopTagSuggester</str>
-            <str name="spellcheck.count">5</str>
-            <str name="spellcheck.onlyMorePopular">true</str>
+            <str name="suggest">true</str>
+            <str name="suggest.dictionary">dopTagSuggester</str>
+            <str name="suggest.count">5</str>
         </lst>
         <arr name="components">
             <str>suggest_tag</str>
