@@ -1,13 +1,12 @@
 package ee.hm.dop.dao;
 
-import java.util.List;
+import ee.hm.dop.model.Language;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.Language;
+import java.util.List;
 
 public class LanguageDAO extends BaseDAO<Language> {
 

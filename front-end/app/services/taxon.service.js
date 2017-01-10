@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('koolikottApp').factory('taxonService', [
-    function () {
+angular.module('koolikottApp').factory('taxonService', ['translationService',
+    function (translationService) {
 
         const CHILD_TAXON_KEYS = ['domains', 'subjects', 'topics', 'subtopics', 'modules', 'specializations'];
 
@@ -163,13 +163,18 @@ angular.module('koolikottApp').factory('taxonService', [
             },
 
             getTaxonFromDomainSubjectMap: function (map) {
+                let result = [];
                 const domains = _.keys(map);
                 if (!domains || domains.length === 0) return [];
 
-                if (domains.length > 1) return domains;
-                if (domains[0].length > 1) return domains;
+                domains.forEach((domain) => {
+                   if (map[domain].length === 1) result = result.concat(map[domain]);
+                   else result.push(domain);
+                });
 
-                return _.flatten(_.values(map));
+                // Workaround for taxons with missing translations
+                // "HELPER_" prefix can be removed once all taxons are translated
+                return _.uniq(result.map(r => translationService.instant("HELPER_" + r)));
             }
         }
     }
