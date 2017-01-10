@@ -149,7 +149,7 @@
 
     <!-- Material -->
     <field name="source" type="link" indexed="true" stored="false" multiValued="true"/>
-    <field name="search_source" type="search_link" indexed="true" stored="false" multiValued="true"/>
+    <field name="search_source" type="search_link" indexed="true" stored="false" multiValued="false"/>
     <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -207,7 +207,6 @@
     <copyField source="language" dest="text"/>
     <copyField source="publisher" dest="text"/>
     <copyField source="peerReview" dest="text"/>
-    <copyField source="source" dest="search_source"/>
 
     <copyField source="title" dest="suggest_phrase"/>
     <copyField source="description" dest="suggest_phrase"/>

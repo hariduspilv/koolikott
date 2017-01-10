@@ -299,6 +299,8 @@
 
                 <entity name="Source" query="select source from Material where id='${LearningObject.id}'"/>
 
+                <entity name="search_source" query="select source as search_source from Material where id='${LearningObject.id}'"/>
+
                 <entity name="Material_Title"
                         query="select title as title_id from Material_Title where material='${Material.id}'">
                     <entity name="LanguageString"
