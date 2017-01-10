@@ -38,15 +38,15 @@
                        layout="row"
                        layout-align="center center" flex>
 
-                <span flex data-ng-if="!newPicture && !material.picture && !showErrorOverlay">
-                  <md-icon>insert_photo</md-icon><br/>
-                  <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
-                    <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
-                  </span>
-                </span>
+                    <span flex data-ng-if="!newPicture && !material.picture && !showErrorOverlay">
+                      <md-icon>insert_photo</md-icon><br/>
+                      <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
+                        <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
+                      </span>
+                    </span>
 
                     <!-- image preview -->
-                    <md-input-container data-ng-if="newPicture || material.picture"
+                    <md-input-container data-ng-if="(newPicture || material.picture) && !showErrorOverlay"
                                         class="md-block drop-box-preview-container">
                       <div class="drop-box-preview">
                         <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
