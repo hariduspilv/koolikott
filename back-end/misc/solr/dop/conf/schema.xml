@@ -148,7 +148,8 @@
     <field name="tag_up_vote" type="text_general" indexed="false" stored="false" multiValued="true"/>
 
     <!-- Material -->
-    <field name="source" type="link" indexed="true" stored="false" multiValued="false"/>
+    <field name="source" type="link" indexed="true" stored="false" multiValued="true"/>
+    <field name="search_source" type="search_link" indexed="true" stored="false" multiValued="true"/>
     <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -206,7 +207,7 @@
     <copyField source="language" dest="text"/>
     <copyField source="publisher" dest="text"/>
     <copyField source="peerReview" dest="text"/>
-    <copyField source="source" dest="text"/>
+    <copyField source="source" dest="search_source"/>
 
     <copyField source="title" dest="suggest_phrase"/>
     <copyField source="description" dest="suggest_phrase"/>
@@ -234,9 +235,19 @@
     indexing process splits it into shingles -->
 
     <fieldType name="link" class="solr.TextField">
-        <analyzer>
+        <analyzer type="index">
             <tokenizer class="solr.KeywordTokenizerFactory"/>
             <filter class="ee.hm.FilteredLinkFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="search_link" class="solr.TextField">
+        <analyzer>
+            <tokenizer class="solr.NGramTokenizerFactory" minGramSize="2" maxGramSize="10"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
 
@@ -244,6 +255,13 @@
         <analyzer>
             <tokenizer class="solr.StandardTokenizerFactory"/>
             <filter class="solr.ShingleFilterFactory" maxShingleSize="3" outputUnigrams="true"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="suggest_source" class="solr.TextField" positionIncrementGap="100">
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>

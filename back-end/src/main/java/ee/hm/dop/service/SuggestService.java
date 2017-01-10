@@ -29,9 +29,7 @@ public class SuggestService {
     }
 
     private List<String> doSuggest(String query, boolean suggestTags){
-        String queryString = getTokenizedQueryString(query);
-
-        return solrEngineService.suggest(queryString, suggestTags);
+        return solrEngineService.suggest(query, suggestTags);
     }
 
 }
