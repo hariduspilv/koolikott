@@ -3,6 +3,12 @@ h1 {
   font-size: 32px;
   margin-top: 10px;
   margin-bottom: 10px;
+  a {
+    color: $heading-color;
+    &:hover {
+      color: $link-color;
+    }
+  }
 }
 
 h2 {
@@ -13,12 +19,12 @@ h2 {
 h1 {
   font-weight: 300;
   color: $heading-color;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 300;
   line-height: 1.2;
 
   @media (min-width: $layout-breakpoint-xs) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 }
 
