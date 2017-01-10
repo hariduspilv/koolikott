@@ -4,50 +4,14 @@ md-card {
   .card-image {
     height: 100%;
     position: relative;
-  }
-
-  &:hover {
-    .card-hover {
-      opacity: .8;
-      z-index: 3;
-
-      md-icon {
-        color: rgba(255, 255, 255, 1);
-        text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
-      }
-    }
-  }
-
-  &.active {
-    background-color: $selected-gray;
-    cursor: pointer;
-
-    .card-hover {
-      opacity: 1;
-
-      md-icon {
-        color: rgba(255, 255, 255, .8);
-
-        &.unchecked {
-          display: none;
-        }
-
-        &.checked {
-          display: block;
-        }
-      }
+    @include aspect-ratio(3,2);
+    &:before {
+      padding-bottom: 0;
     }
   }
 }
 
-.card-image {
-  height: 100%;
-  position: relative;
-  @include aspect-ratio(3,2);
-  &:before {
-    padding-bottom: 0;
-  }
-}
+
 
 .card-hover {
   position: absolute;
@@ -198,69 +162,71 @@ md-card {
 
 .card-cover,
 .embeddedMaterial {
-  &.description {
-    background-color: $green1;
-    .pattern .sheet {
-      @include pattern-color($green1);
+  &.description .pattern {
+      background-color: $green1;
+      .sheet {
+        @include pattern-color($green1);
+      }
     }
-  }
-  &.image {
+
+  &.image .pattern {
     background-color: $blue;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($blue);
     }
   }
-  &.assessment {
+  &.assessment .pattern {
     background-color: $green2;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($green2);
     }
   }
-  &.assignment {
-    background-color: $pinky;
-    .pattern .sheet {
-      @include pattern-color($pinky);
+  &.assignment .pattern {
+      background-color: $pinky;
+      .sheet {
+        @include pattern-color($pinky);
+      }
     }
-  }
-  &.dvr {
+
+  &.dvr .pattern {
     background-color: $greengrass;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($greengrass);
     }
   }
-  &.portfolio {
+  &.portfolio .pattern {
     background-color: $lilac;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($lilac);
     }
   }
-  &.casino {
+  &.casino .pattern {
     background-color: $violet;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($violet);
     }
   }
-  &.web_asset {
+  &.web_asset .pattern {
     background-color: $navy;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($navy);
     }
   }
-  &.audiotrack {
+  &.audiotrack .pattern {
     background-color: $cyan;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($cyan);
     }
   }
-  &.ondemand_video {
+  &.ondemand_video .pattern {
     background-color: $salad;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($salad);
     }
   }
-  &.web {
+  &.web .pattern {
     background-color: $royal;
-    .pattern .sheet {
+    .sheet {
       @include pattern-color($royal);
     }
   }

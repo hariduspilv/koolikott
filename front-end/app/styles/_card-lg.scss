@@ -1,10 +1,5 @@
 .card-lg {
   position: relative;
-  &:hover {
-    background: #fff;
-    cursor: default;
-      overflow: hidden;
-  }
   h1 {
     font-weight: 300;
     color: $heading-color;
@@ -47,13 +42,27 @@
     margin-left: -$md-padding;
     height: auto;
   }
+
   .card-cover {
     border-radius: 0;
-    @media (min-width: $layout-breakpoint-xs) {
-      height: auto;
-      max-height: 300px;
-      &.portfolio {
-        height: 150px;
+    &:hover {
+      background-color: $selected-gray;
+      cursor: pointer;
+      .card-hover {
+        opacity: .8;
+        z-index: 3;
+
+        md-icon {
+          color: rgba(255, 255, 255, 1);
+          text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+        }
+      }
+    }
+    img {
+      width: 100%;
+      @media (min-width: $layout-breakpoint-xs) {
+        height: auto;
+        max-height: 300px;
       }
     }
   }
@@ -140,6 +149,7 @@ a.embed-link{
 }
 
 .embed-link img{
+  width: 100%;
   max-width: 500px;
   max-height: 500px;
 }

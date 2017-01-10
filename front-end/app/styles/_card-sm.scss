@@ -23,10 +23,6 @@
 .card-sm {
   width: 100%;
   overflow: hidden;
-  &:hover {
-    background-color: $selected-gray;
-    cursor: pointer;
-  }
 
   @media (min-width: $layout-breakpoint-xs) {
     height: 280px;
@@ -36,6 +32,41 @@
   @media (min-width: $layout-breakpoint-lg) {
     height: 330px;
     width: 234px;
+  }
+
+  &:hover {
+    background-color: $selected-gray;
+    cursor: pointer;
+    .card-hover {
+      opacity: .8;
+      z-index: 3;
+
+      md-icon {
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+      }
+    }
+  }
+
+  &.active {
+    background-color: $selected-gray;
+    cursor: pointer;
+
+    .card-hover {
+      opacity: 1;
+
+      md-icon {
+        color: rgba(255, 255, 255, .8);
+
+        &.unchecked {
+          display: none;
+        }
+
+        &.checked {
+          display: block;
+        }
+      }
+    }
   }
 
   .card-cover {
