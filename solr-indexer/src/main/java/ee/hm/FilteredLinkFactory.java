@@ -39,9 +39,10 @@ final class FilteredLink extends TokenFilter {
 
     @Override
     public boolean incrementToken() throws IOException {
-        if (!input.incrementToken() && step == 0 || step > 2) {
+        if (!input.incrementToken() && step == 0) {
             return false;
         }
+        if(step > 2){step = 0;}
         if(step == 0)originalString = charTermAttr.toString();
 
         /* youtube.com */

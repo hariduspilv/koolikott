@@ -37,6 +37,8 @@
     -->
     <luceneMatchVersion>6.1.0</luceneMatchVersion>
 
+    <lib dir="/home/joonas/Programs/solr-6.1.0/dist"/>
+
     <!-- <lib/> directives can be used to instruct Solr to load any Jars
          identified and use them to resolve any "plugins" specified in
          your solrconfig.xml or schema.xml (ie: Analyzers, Request
@@ -1305,6 +1307,31 @@
     given query. It implements SpellCheckComponent so that we could use the parameter onlyMorePopular, or else it would
     give us an unordered response. -->
 
+    <!--<searchComponent name="suggest" class="solr.SuggestComponent">-->
+    <!--<str name="queryAnalyzerFieldType">suggest_phrase</str>-->
+    <!--<lst name="spellchecker">-->
+    <!--<str name="name">dopSuggester</str>-->
+    <!--<str name="suggestAnalyzerFieldType">suggest_analyzer</str>-->
+    <!--<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>-->
+    <!--<str name="lookupImpl">FSTLookupFactory</str>-->
+    <!--<str name="field">suggest_phrase</str>-->
+    <!--<str name="fieldType">suggest_phrase</str>-->
+    <!--<str name="buildOnCommit">true</str>-->
+    <!--</lst>-->
+    <!--</searchComponent>-->
+
+    <!--<requestHandler name="/suggest" class="solr.SearchHandler" startup="lazy">-->
+    <!--<lst name="defaults">-->
+    <!--<str name="spellcheck">true</str>-->
+    <!--<str name="spellcheck.dictionary">dopSuggester</str>-->
+    <!--<str name="spellcheck.count">5</str>-->
+    <!--<str name="spellcheck.onlyMorePopular">true</str>-->
+    <!--</lst>-->
+    <!--<arr name="components">-->
+    <!--<str>suggest</str>-->
+    <!--</arr>-->
+    <!--</requestHandler>-->
+
     <searchComponent name="suggest" class="solr.SuggestComponent">
         <lst name="suggester">
             <str name="name">dopSuggester</str>
@@ -1320,7 +1347,7 @@
             <str name="suggestAnalyzerFieldType">text</str>
             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
             <str name="lookupImpl">FSTLookupFactory</str>
-            <str name="field">source</str>
+            <str name="field">suggest_source</str>
             <str name="fieldType">link</str>
             <str name="buildOnCommit">true</str>
         </lst>
