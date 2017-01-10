@@ -14,7 +14,7 @@
 <h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
 
 <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="card-container">
-  <div data-ng-repeat="item in items track by item.id" class="card-container__item" flex-xs="grow">
+  <div data-ng-repeat="item in items track by $index" class="card-container__item" flex-xs="grow">
     <div data-dop-card-sm learning-object="item"></div>
   </div>
 </div>
