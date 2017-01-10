@@ -12,6 +12,8 @@ h1 {
     color: $heading-color;
     &:hover {
       color: $link-color;
+      text-decoration: none;
+      border-bottom: 1px solid $link-color;
     }
   }
 }
@@ -23,7 +25,7 @@ h2 {
 
 .md-body-1 {
   color: #222;
-  font-size: 16px;
+  font-size: $font-normal;
   font-weight: 300;
   line-height: 20px;
   overflow: hidden;
@@ -35,30 +37,16 @@ h2 {
 }
 
 .md-body-2 {
-  &.meta {
-    line-height: 1.2;
-    color: #333;
-    padding-right: 10px;
-    md-icon.material-icons {
-      font-size: inherit;
-      vertical-align: baseline;
-    }
+  line-height: $body-lineheight;
+  a:hover {
+    text-decoration: none;
+    border-bottom: 1px solid $link-color;
   }
-  .md-caption {
-    font-weight: 300;
-  }
-  a {
-    font-size: 15px;
-    font-weight: 400;
-    &:hover {
-      text-decoration: none;
-      border-bottom: 1px solid $link-color;
-    }
-    h1 {
-      display: block;
-      text-decoration: none;
-    }
-  }
+}
+
+.md-caption.caption-light {
+  font-weight: 300;
+  margin-bottom: 0;
 }
 
 .no-link, .no-link:hover {
@@ -75,60 +63,68 @@ h2 {
   white-space: nowrap;
 }
 
-$font-size: 26px;
-$line-height: 1.4;
-$lines-to-show: 3;
-
 .three-rows {
   display: block; /* Fallback for non-webkit */
   display: -webkit-box;
   max-width: 400px;
-  height: $font-size*$line-height*$lines-to-show; /* Fallback for non-webkit */
+  height: $font-large*$body-lineheight*$lines-three; /* Fallback for non-webkit */
   margin: 0 0 5px 0;
-  font-size: $font-size;
-  line-height: $line-height;
-  -webkit-line-clamp: $lines-to-show;
+  font-size: $font-large;
+  line-height: $body-lineheight;
+  -webkit-line-clamp: $lines-three;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-$font-size: $font-small;
-$line-height: 1.2;
 $lines-to-show: 2;
 .two-rows-xs {
   display: block; /* Fallback for non-webkit */
   display: -webkit-box;
   max-width: 400px;
-  max-height: $font-size*$line-height*$lines-to-show; /* Fallback for non-webkit */
+  max-height: $font-small*$small-lineheight*$lines-two; /* Fallback for non-webkit */
   margin: 0;
-  font-size: $font-size;
-  line-height: $line-height;
+  font-size: $font-small;
+  line-height: $small-lineheight;
   font-weight: 400;
-  -webkit-line-clamp: $lines-to-show;
+  -webkit-line-clamp: $lines-two;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-$font-size2: 16px;
-$line-height2: 1.2;
-$lines-to-show2: 2;
-
 .two-rows {
   display: block; /* Fallback for non-webkit */
   display: -webkit-box;
   // max-width: 200px;
-  max-height: $font-size2*$line-height2*$lines-to-show2; /* Fallback for non-webkit */
+  max-height: $font-normal*$small-lineheight*$lines-two; /* Fallback for non-webkit */
   margin: 0;
-  font-size: $font-size2;
-  line-height: $line-height2;
-  -webkit-line-clamp: $lines-to-show2;
+  font-size: $font-normal;
+  line-height: $small-lineheight;
+  -webkit-line-clamp: $lines-two;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 400;
   color: $color-body;
+}
+
+.two-rows-meta {
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  letter-spacing: 0.010em;
+  max-height: $font-medium*$body-lineheight*$lines-two; /* Fallback for non-webkit */
+  margin: 0;
+  font-size: $font-medium;
+  line-height: $body-lineheight;
+  -webkit-line-clamp: $lines-two;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  color: $color-body;
+  padding-right: $md-padding;
+  margin-bottom: $md-padding;
 }
 
 .wrapped {

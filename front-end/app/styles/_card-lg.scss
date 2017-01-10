@@ -76,6 +76,9 @@
     }
     md-content {
       margin-top: $md-padding;
+      p {
+        margin: $md-padding/2 0;
+      }
     }
   }
   md-card-actions {
