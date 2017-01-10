@@ -5,7 +5,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
     function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
         $scope.viewPath = $location.path();
         var collection = null;
-        var filtredCollection = null;
+        var filteredCollection = null;
 
         $scope.itemsCount = 0;
 
@@ -120,7 +120,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         };
 
         function filterItems() {
-            filtredCollection = collection.filter(function (data) {
+            filteredCollection = collection.filter(function (data) {
                 if (!data) {
                     return;
                 }
@@ -148,8 +148,8 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                 }
             });
 
-            $scope.itemsCount = filtredCollection.length;
-            $scope.data = filtredCollection;
+            $scope.itemsCount = filteredCollection.length;
+            $scope.data = filteredCollection;
         }
 
         $scope.getCorrectLanguageTitle = function (item) {
@@ -165,8 +165,8 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         };
 
         $scope.onReorder = function (order) {
-            if (filtredCollection !== null)
-                sortService.orderItems(filtredCollection, order);
+            if (filteredCollection !== null)
+                sortService.orderItems(filteredCollection, order);
             else
                 sortService.orderItems(collection, order);
 
@@ -189,8 +189,8 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             var skip = (page - 1) * limit;
             var take = skip + limit;
 
-            if (filtredCollection !== null)
-                return filtredCollection.slice(skip, take);
+            if (filteredCollection !== null)
+                return filteredCollection.slice(skip, take);
 
             return collection.slice(skip, take);
         }
@@ -203,7 +203,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             $scope.filter.show = false;
             $scope.query.filter = '';
             $scope.itemsCount = collection.length;
-            filtredCollection = null;
+            filteredCollection = null;
 
             $scope.data = paginate($scope.query.page, $scope.query.limit);
 

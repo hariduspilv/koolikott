@@ -1,23 +1,23 @@
 package ee.hm.dop.service;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-
-import java.util.Map;
-
 import ee.hm.dop.dao.LanguageDAO;
 import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 @RunWith(EasyMockRunner.class)
 public class TranslationServiceTest {
@@ -78,8 +78,13 @@ public class TranslationServiceTest {
         Map<String, String> translations = createMock(Map.class);
 
         expect(languageDAO.findByCode(languageCode)).andReturn(language);
-        expect(translationDAO.findTranslationGroupFor(language)).andReturn(translationGroup);
-        expect(translationGroup.getTranslations()).andReturn(translations);
+        expect(translationDAO.findTranslationGroupFor(language)).andReturn(translationGroup).times(2);
+        expect(translationGroup.getTranslations()).andReturn(translations).times(3);
+        expect(languageDAO.findByCode("et")).andReturn(language);
+        expect(translations.entrySet()).andReturn(new HashSet<>());
+
+        translations.putAll(new HashMap<>());
+        EasyMock.expectLastCall();
 
         replayAll(language, translationGroup, translations);
 
