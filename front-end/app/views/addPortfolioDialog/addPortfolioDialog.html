@@ -37,7 +37,7 @@
           <!-- image preview -->
           <md-input-container data-ng-if="newPicture || newPortfolio.picture"
                               class="md-block drop-box-preview-container">
-            <div class="drop-box-preview">
+            <div class="drop-box-preview" ng-if="!showErrorOverlay">
               <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
                    ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
               <img data-ng-if="!newPicture && newPortfolio.picture"
@@ -46,7 +46,7 @@
             </div>
           </md-input-container>
           <p class="text-small text-light" data-ng-class="{'text-error': showErrorOverlay}"
-             data-ng-if="!newPicture && !newPortfolio.picture">
+             data-ng-if="!newPicture && !newPortfolio.picture && !showErrorOverlay">
             <span data-translate="LOAD_IMAGE"></span>
             <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
           </p>
