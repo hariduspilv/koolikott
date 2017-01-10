@@ -118,7 +118,7 @@ angular.module('koolikottApp')
                               'attrs': {
                                 'socialshareUrl': $scope.pageUrl,
                                 'socialshareTitle': $translate.instant('READING_RECOMMENDATION') + ': ' + $scope.title,
-                                'socialshareMedia': $scope.pictureName,
+                                'socialshareMedia': $location.$$protocol + '://' + $location.$$host + '/rest/picture/thumbnail/lg/' + $scope.pictureName,
                                 'socialshareType': 'share',
                                 'socialshareVia': FB_APP_ID
                               }
