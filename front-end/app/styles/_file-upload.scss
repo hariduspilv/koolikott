@@ -7,21 +7,19 @@
   border-radius: 2px;
   transition: all .25s;
   background: rgba(0,0,0, .1);
-  padding: 1px 0;
+  height: 100px;
   max-height: 100px;
+  min-height: 100px;
+  padding: 0;
+  box-sizing: content-box;
 
-	&.dragover,
+  &.dragover,
   &:hover {
     border-color: rgba(0,0,0,.15);
     background: rgba(0,0,0, .15);
-
-    .error-wrapper {
-      background-color: #d9d9d9;
-    }
-	}
+  }
 
   .error-wrapper {
-    background-color: #e6e6e6;
     padding: 0 20px;
     width: 100%;
   }
@@ -38,6 +36,7 @@
 .drop-box-preview-container {
   margin-top: 0;
   margin-bottom: 0;
+  padding: 0;
 }
 
 .drop-box-preview {
@@ -62,13 +61,6 @@
   }
 }
 
-.drop-box:before {
-  content: '';
-  padding: 50% 0;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 .drop-box__icon {
   font-size: 4.6em;
   color: rgba(255, 255, 255, 1);
@@ -87,4 +79,5 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: $font-medium;
 }
