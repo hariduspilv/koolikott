@@ -39,7 +39,7 @@ function() {
                 let subChapters = $scope.chapter.subchapters;
 
                 subChapters.push({
-                    title: '',
+                    title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
                     materials: [],
                     openCloseChapter: true
                 });

@@ -98,7 +98,7 @@ angular.module('koolikottApp')
                         if (!portfolio.chapters || portfolio.chapters.length === 0) {
                             portfolio.chapters = [];
                             portfolio.chapters.push({
-                                title: '',
+                                title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
                                 subchapters: [],
                                 contentRows: [
                                     {
