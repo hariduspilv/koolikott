@@ -66,27 +66,24 @@
           </p>
 
           <p class="two-rows-meta">
-            <span data-ng-repeat="taxon in portfolio.taxons track by $index">
-              <span data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
-              <span data-ng-if="getEducationalContext(taxon)"
-              data-translate="{{getEducationalContext(taxon)}}"></span>
+            <span data-ng-repeat="taxon in getPortfolioEducationalContexts() track by $index">
+              <span data-translate="{{taxon.name.toUpperCase()}}"></span><span
+              data-ng-bind="$index < getPortfolioEducationalContexts().length - 1 ? ', ' : ''"></span>
             </span>
-            <span data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
+            <span data-ng-if="!getPortfolioEducationalContexts().length" data-translate="UNKNOWN">Unknown</span>
           </p>
-
         </div>
 
-        <div flex data-ng-if="!getPortfolioSubjects().length === 0">
+        <div flex data-ng-if="!getPortfolioSubjects().length">
           <p class="md-caption caption-light">
             <span data-translate="DETAIL_VIEW_DOMAIN"></span>
           </p>
           <p class="two-rows-meta">
-            <span data-ng-repeat="taxon in portfolio.taxons track by $index">
-              <span data-ng-if="getDomain(taxon)"
-              data-translate="{{'DOMAIN_' + getDomain(taxon)}}"></span>
-              <span data-ng-if="!getDomain(taxon)" data-translate="UNKNOWN">Unknown</span>
+            <span data-ng-repeat="taxon in getPortfolioDomains() track by $index">
+              <span data-translate="{{taxon}}"></span><span
+              data-ng-bind="$index < getPortfolioDomains().length - 1 ? ', ' : ''"></span>
             </span>
-            <span data-ng-if="!portfolio.taxons" data-translate="UNKNOWN">Unknown</span>
+            <span data-ng-if="!getPortfolioDomains().length" data-translate="UNKNOWN">Unknown</span>
           </p>
         </div>
 
@@ -95,13 +92,13 @@
             <span data-translate="DETAIL_VIEW_SUBJECT"></span>
           </p>
           <p class="two-rows-meta">
-            <span data-ng-repeat="taxon in portfolio.taxons track by $index">
-              <span data-ng-if="getSubject(taxon)"
-              data-translate="{{'SUBJECT_' + getSubject(taxon)}}"></span>
-              <span data-ng-if="!getSubject(taxon)" data-translate="UNKNOWN">Unknown</span>
+            <span data-ng-repeat="taxon in getPortfolioSubjects() track by $index">
+              <span data-translate="{{taxon}}"></span><span
+              data-ng-bind="$index < getPortfolioSubjects().length - 1 ? ', ' : ''"></span>
             </span>
           </p>
         </div>
+
         <!--TAXON END-->
         <div flex>
           <p class="md-caption caption-light">
