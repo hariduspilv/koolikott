@@ -1,5 +1,5 @@
 <div id="page-search-result">
-  <div layout="row">
+  <div layout="row" layout-align="space-between center">
     <h2 class="md-headline">
       <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
       <span data-ng-if="!searching">
@@ -22,9 +22,8 @@
         </span>
       </span>
     </h2>
-    <span flex></span>
 
-    <md-input-container flex-xs="auto" flex-sm="30" flex-gt-sm="20">
+    <md-input-container flex-xs="60" flex-sm="30" flex-gt-sm="20">
       <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
         <md-option ng-click="sort('','')" data-translate="RESET_SORT"></md-option>
 
