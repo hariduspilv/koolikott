@@ -3,58 +3,127 @@
 angular.module('koolikottApp')
 .directive('dopToolbarAddMaterials',
 [
-    '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q', 'storageService', 'materialService',
-    function ($translate, authenticatedUserService, serverCallService, toastService, $q, storageService, materialService) {
+    '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', '$q', 'storageService', 'materialService', '$mdDialog', '$filter', 'portfolioService',
+    function ($translate, authenticatedUserService, serverCallService, toastService, $q, storageService, materialService, $mdDialog, $filter, portfolioService) {
         return {
             scope: true,
             templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
-            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
+            controllerAs: 'vm',
+            controller: ['$rootScope', function ($rootScope) {
+
+                var vm = this;
 
                 function init() {
                     if($rootScope.isEditPortfolioMode) {
-                        $scope.isPortfolioEdit = true;
-                        $scope.portfolio = storageService.getPortfolio();
+                        vm.isPortfolioEdit = true;
+                        vm.portfolio = storageService.getPortfolio();
 
                         if($rootScope.savedChapter) {
-                            $scope.chapter = $rootScope.savedChapter;
+                            vm.chapter = $rootScope.savedChapter;
                         }
+                    } else {
+                        loadUserPortfolios();
                     }
                 }
 
-                $scope.getPortfolioSelectLabel = function() {
-                    if($scope.portfolio && $scope.portfolio.title) {
-                        return $scope.portfolio.title;
+                function getPortfolioSelectLabel() {
+                    if(vm.portfolio && vm.portfolio.title) {
+                        return vm.portfolio.title;
                     } else {
                         return $translate.instant('CHOOSE_PORTFOLIO');
                     }
                 };
 
-                $scope.getChapterSelectLabel = function() {
-                    if($scope.chapter && $scope.chapter.title) {
-                        return $scope.chapter.title;
+                function getChapterSelectLabel() {
+                    if(vm.chapter && vm.chapter.title) {
+                        return vm.chapter.title;
+                    } else if(vm.chapter == true) {
+                        return "Lisa uude peatükki";
                     } else {
                         return $translate.instant('CHOOSE_PORTFOLIO_CHAPTER');
                     }
                 };
 
-                $scope.addMaterialsToChapter = function(chapter, portfolio) {
-                    $scope.isSaving = true;
+                function addMaterialsToChapter(chapter, portfolio) {
+                    vm.isSaving = true;
+                    if(vm.chapter == true) {
+                        if(!portfolio.chapters) {
+                            portfolio.chapters = [];
+                        }
 
-                    if(chapter && !chapter.contentRows) {
-                        chapter.contentRows = [];
-                    }
+                        let contentRows = [];
 
-                    if (chapter && chapter.contentRows) {
                         for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
                             materialService.getMaterialById($rootScope.selectedMaterials[i].id)
                                 .then((data) => {
+                                contentRows.push({learningObjects: [data]});
+
+                                // Last cycle
+                                if($rootScope.selectedMaterials.length == i+1) {
+                                    portfolio.chapters.push({
+                                        title: '',
+                                        contentRows: contentRows
+                                    });
+                                    serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
+                                    $rootScope.$broadcast('detailedSearch:empty');
+                                }
+                            });
+                        }
+                    } else {
+                        if(chapter && !chapter.contentRows) {
+                            chapter.contentRows = [];
+                        }
+
+                        if (chapter && chapter.contentRows) {
+                            for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                                materialService.getMaterialById($rootScope.selectedMaterials[i].id)
+                                    .then((data) => {
                                     chapter.contentRows.push({learningObjects: [data]});
-                                });
+
+                                // Last cycle
+                                if($rootScope.selectedMaterials.length == i+1) {
+                                    serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
+                                    $rootScope.$broadcast('detailedSearch:empty');
+                                }
+                            });
+                            }
                         }
                     }
+                };
 
-                    serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
-                    $rootScope.$broadcast('detailedSearch:empty');
+                function showAddPortfolioDialog() {
+                    var emptyPortfolio = createPortfolio();
+
+                    if($rootScope.selectedMaterials) {
+                        emptyPortfolio.chapters = [];
+
+                        emptyPortfolio.chapters.push({
+                            title: '',
+                            contentRows: []
+                        });
+
+                        if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0) {
+                            for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
+                                materialService.getMaterialById($rootScope.selectedMaterials[i].id)
+                                    .then((data) => {
+                                    emptyPortfolio.chapters[0].contentRows.push({learningObjects: [data]});
+
+                                    if($rootScope.selectedMaterials.length == i+1) {
+                                        toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
+
+                                        storageService.setPortfolio(emptyPortfolio);
+
+                                        $mdDialog.show({
+                                            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                                            controller: 'addPortfolioDialogController'
+                                        });
+
+                                        removeSelection();
+                                    }
+                                });
+                            }
+                        }
+                    }
                 };
 
                 /*
@@ -65,22 +134,20 @@ angular.module('koolikottApp')
                     if (isEmpty(data)) {
                         getUsersPortfoliosFail();
                     } else {
-                        $scope.usersPortfolios = data.items;
-                        $scope.$broadcast("getUsersPortfolios:done");
+                        vm.usersPortfolios = data.items;
                     }
-                    $scope.deferred.resolve();
                 };
 
                 function getUsersPortfoliosFail() {
-                    $scope.deferred.resolve();
-                    console.log('Failed to get portfolios.');
+                    toastService.show('LOADING_PORTFOLIOS_FAIL');
+                    removeSelection();
                 };
 
                 function addMaterialsToChapterSuccess(portfolio) {
                     if (isEmpty(portfolio)) {
                         addMaterialsToChapterFailed();
                     } else {
-                        $scope.removeSelection();
+                        removeSelection();
                         toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS');
 
                         if ($rootScope.isEditPortfolioMode) {
@@ -91,7 +158,7 @@ angular.module('koolikottApp')
 
                 function addMaterialsToChapterFailed() {
                     console.log('Failed to update portfolio.');
-                    $scope.isSaving = false;
+                    vm.isSaving = false;
                     toastService.show('PORTFOLIO_ADD_MATERIAL_FAIL');
                 }
 
@@ -99,7 +166,7 @@ angular.module('koolikottApp')
                 * End of callbacks
                 */
 
-                $scope.removeSelection = function() {
+                function removeSelection() {
                     for(var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                         $rootScope.selectedMaterials[i].selected = false;
                     }
@@ -107,29 +174,50 @@ angular.module('koolikottApp')
                     $rootScope.selectedMaterials = [];
                 };
 
-                $scope.getUsersPortfolios = function () {
-
-                    if(!$scope.usersPortfolios) {
-                        $scope.deferred = $q.defer();
-                    }
-
+                function loadUserPortfolios() {
                     var user = authenticatedUserService.getUser();
                     var params = {
                         'username': user.username
                     };
                     var url = "rest/portfolio/getByCreator";
                     serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
-
-                    return $scope.deferred.promise;
-
                 };
 
-                $scope.portfolioSelectChange = function() {
-                    $scope.chapter = null;
+                function portfolioSelectChange() {
+                    vm.chapter = null;
+                    loadPortfolioChapters(vm.portfolio);
                 };
 
+                function loadPortfolioChapters(portfolio) {
+                    vm.loadingChapters = true;
+                    vm.loadingChaptersFailed = false;
+                    portfolioService.getPortfolioById(portfolio.id)
+                        .then((data) => {
+                        vm.portfolio = data;
+                        vm.loadingChapters = false;
+                    }, () => {
+                        vm.loadingChapters = false;
+                        vm.loadingChaptersFailed = true;
+                        toastService.show('LOADING_PORTFOLIOS_FAIL');
+                    });
+                }
+
+                function setChapter(data) {
+                    vm.chapter = data;
+                }
+
+                // Exports
+                vm.setChapter = setChapter;
+                vm.loadPortfolioChapters = loadPortfolioChapters;
+                vm.portfolioSelectChange = portfolioSelectChange;
+                vm.removeSelection = removeSelection;
+                vm.showAddPortfolioDialog = showAddPortfolioDialog;
+                vm.addMaterialsToChapter = addMaterialsToChapter;
+                vm.getPortfolioSelectLabel = getPortfolioSelectLabel;
+                vm.getChapterSelectLabel = getChapterSelectLabel;
+
+                // Run init
                 init();
-
             }]
         };
     }
