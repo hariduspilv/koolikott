@@ -190,6 +190,8 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio already exists.");
         }
 
+        cleanTextFields(portfolio);
+
         Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
         saveNewObjectsInChapters(safePortfolio);
 
@@ -198,6 +200,8 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
+
+        cleanTextFields(portfolio);
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
         saveNewObjectsInChapters(originalPortfolio);
@@ -209,6 +213,17 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         processChanges(portfolio);
 
         return updatedPortfolio;
+    }
+
+    private void cleanTextFields(Portfolio portfolio) {
+        String regex = "[^\\u0000-\\uFFFF]";
+        String replacement = "\uFFFD";
+
+        if (portfolio.getTitle() != null)
+            portfolio.setTitle(portfolio.getTitle().replaceAll(regex, replacement));
+
+        if (portfolio.getSummary() != null)
+            portfolio.setSummary(portfolio.getSummary().replaceAll(regex, replacement));
     }
 
     private void saveNewObjectsInChapters(Portfolio originalPortfolio) {

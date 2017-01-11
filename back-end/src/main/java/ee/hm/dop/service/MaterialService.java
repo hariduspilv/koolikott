@@ -459,6 +459,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             logger.info("Updating material");
         }
 
+        cleanTextFields(material);
+
         checkKeyCompetences(material);
         checkCrossCurricularThemes(material);
 
@@ -468,6 +470,17 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         material = applyRestrictions(material);
 
         return (Material) materialDAO.update(material);
+    }
+
+    private void cleanTextFields(Material material) {
+        String regex = "[^\\u0000-\\uFFFF]";
+        String replacement = "\uFFFD";
+
+        if (material.getTitles() != null)
+            material.getTitles().forEach(title -> title.setText(title.getText().replaceAll(regex, replacement)));
+
+        if (material.getDescriptions() != null)
+            material.getDescriptions().forEach(desc -> desc.setText(desc.getText().replaceAll(regex, replacement)));
     }
 
     private Material applyRestrictions(Material material) {

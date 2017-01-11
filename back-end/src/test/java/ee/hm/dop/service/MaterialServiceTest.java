@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -116,11 +115,15 @@ public class MaterialServiceTest {
 
         long materialId = 1;
         Material material = createMock(Material.class);
+
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
         expect(material.getPeerReviews()).andReturn(null).times(2);
+        expect(material.getTitles()).andReturn(null);
+        expect(material.getDescriptions()).andReturn(null);
+
         material.setRepository(null);
         material.setRecommendation(null);
         material.setPeerReviews(null);
@@ -135,7 +138,7 @@ public class MaterialServiceTest {
 
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(MaterialService.BASICEDUCATION);
-        expect(material.getTaxons()).andReturn(Arrays.asList(educationalContext)).times(3);
+        expect(material.getTaxons()).andReturn(Collections.singletonList(educationalContext)).times(3);
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1004L);
@@ -194,22 +197,32 @@ public class MaterialServiceTest {
 
         long materialId = 1;
         Material material = createMock(Material.class);
+
         expect(material.getId()).andReturn(materialId).times(3);
+
         material.setRecommendation(null);
+
         expect(materialDAO.findByIdNotDeleted(materialId)).andReturn(original);
+
         material.setRepository(repository);
+
         expect(materialDAO.update(material)).andReturn(material);
+
         material.setViews(0L);
         material.setAdded(null);
         material.setPeerReviews(null);
         material.setSource("http://www.creatematerial.example.com");
         material.setUpdated(EasyMock.anyObject(DateTime.class));
+
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getTaxons()).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getSource()).andReturn("http://www.creatematerial.example.com").times(3);
         expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(material.getTitles()).andReturn(null);
+        expect(material.getDescriptions()).andReturn(null);
+
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
 
