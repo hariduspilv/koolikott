@@ -4,7 +4,10 @@ md-card {
 
   .card-image {
     position: relative;
-    height: 100%; // fix for IE
+
+    .ua-ie & {
+      height: 100%;
+    }
   }
 }
 
