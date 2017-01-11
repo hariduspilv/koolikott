@@ -1,7 +1,7 @@
 <md-toolbar class="md-hue-1 toolbar-add-materials md-whiteframe-1dp">
   <div class="md-toolbar-tools" layout="row" layout-nowrap="">
     <div class="toolbar-add-materials__left" layout="row" layout-align="start center">
-      <md-button class="md-hue-1 toolbar-add-materials__button" data-ng-click="removeSelection()" data-ng-disabled="isSaving">
+      <md-button class="md-hue-1 toolbar-add-materials__button" data-ng-click="vm.removeSelection()" data-ng-disabled="isSaving">
         <md-icon>arrow_backward</md-icon>
         <span class="vertical-center toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_BACK"></span>
       </md-button>
@@ -9,23 +9,30 @@
     <div class="toolbar-add-materials__center" layout="row" layout-xs="column" layout-align="center center"  layout-align-gt-md="start center" flex="grow">
       <p class="md-subhead toolbar-add-materials__info"><span translate="TOOLBAR_ADD_CHOSEN"></span>: <span class="toolbar-add-materials__count" data-ng-bind="selectedMaterials.length"></span></p>
       <div class="toolbar-add-materials__divider"></div>
-      <p class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_PORTFOLIO"></p>
-      <md-select aria-label="Vali kogumik" md-selected-text="getPortfolioSelectLabel()" data-ng-model="portfolio" data-ng-disabled="isPortfolioEdit"
-                 md-on-open="getUsersPortfolios()" class="toolbar-add-materials__select" data-ng-change="portfolioSelectChange()">
-        <md-option data-ng-value="portfolio" data-ng-repeat="portfolio in usersPortfolios">{{portfolio.title}}</md-option>
+      <md-progress-circular class="md-primary toolbar-add-materials__progress--no-margin" md-mode="indeterminate" md-diameter="30"
+                            data-ng-show="!vm.usersPortfolios && !vm.isPortfolioEdit && !vm.portfolio"></md-progress-circular>
+      <p data-ng-show="vm.usersPortfolios || vm.isPortfolioEdit && vm.portfolio" class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_PORTFOLIO"></p>
+      <md-button data-ng-show="vm.usersPortfolios && vm.usersPortfolios.length == 0" data-ng-click="vm.showAddPortfolioDialog()" class="md-raised md-primary" data-translate="LOO UUS"></md-button>
+      <md-select data-ng-show="vm.usersPortfolios && vm.usersPortfolios.length > 0 || vm.isPortfolioEdit && vm.portfolio" aria-label="Vali kogumik" md-selected-text="vm.getPortfolioSelectLabel()" data-ng-model="vm.portfolio" data-ng-disabled="isPortfolioEdit"
+                 class="toolbar-add-materials__select" data-ng-change="vm.portfolioSelectChange()">
+        <md-option data-ng-value="portfolio" data-ng-repeat="portfolio in vm.usersPortfolios track by $index">{{portfolio.title}}</md-option>
       </md-select>
-      <p class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_CHAPTER"></p>
-      <md-select aria-label="Vali peatükk" md-selected-text="getChapterSelectLabel()" data-ng-disabled="!portfolio" data-ng-model="chapter" class="toolbar-add-materials__select">
-        <md-option data-ng-value="chapter" data-ng-repeat-start="chapter in portfolio.chapters">{{chapter.title}}</md-option>
-        <md-option data-ng-value="subchapter" class="toolbar-add-materials__subchapter" data-ng-repeat-end data-ng-repeat="subchapter in chapter.subchapters">{{subchapter.title}}</md-option>
+      <p data-ng-if="vm.usersPortfolios && vm.usersPortfolios.length > 0 || vm.isPortfolioEdit && vm.portfolio" class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_CHAPTER"></p>
+      <md-progress-circular class="md-primary toolbar-add-materials__progress--no-margin" md-mode="indeterminate" md-diameter="30"
+                            data-ng-show="vm.loadingChapters"></md-progress-circular>
+      <md-button data-ng-show="vm.loadingChaptersFailed" data-ng-click="vm.loadPortfolioChapters(portfolio)" class="md-raised md-primary" data-translate="LOAD_AGAIN"></md-button>
+      <md-select data-ng-show="vm.usersPortfolios && vm.usersPortfolios.length > 0 && !vm.loadingChapters && !vm.loadingChaptersFailed || vm.isPortfolioEdit && vm.portfolio" aria-label="Vali peatükk" md-selected-text="vm.getChapterSelectLabel()" data-ng-disabled="!vm.portfolio || !vm.portfolio.chapters" data-ng-model="vm.chapter" class="toolbar-add-materials__select">
+        <md-option data-ng-value="chapter" data-ng-repeat-start="chapter in vm.portfolio.chapters track by $index">{{chapter.title}}</md-option>
+        <md-option data-ng-value="subchapter" class="toolbar-add-materials__subchapter" data-ng-repeat-end data-ng-repeat="subchapter in chapter.subchapters track by $index">{{subchapter.title}}</md-option>
+        <md-option data-ng-value="true">Lisa uus peatükk</md-option>
       </md-select>
     </div>
     <div class="toolbar-add-materials__right" layout="row" layout-align="end center">
-      <md-button class="md-primary toolbar-add-materials__button" data-ng-if="!isSaving" data-ng-disabled="!chapter" data-ng-click="addMaterialsToChapter(chapter, portfolio)">
+      <md-button class="md-primary toolbar-add-materials__button" data-ng-if="!vm.isSaving" data-ng-disabled="!vm.chapter" data-ng-click="vm.addMaterialsToChapter(vm.chapter, vm.portfolio)">
         <md-icon>done</md-icon>
       </md-button>
       <md-progress-circular class="md-primary toolbar-add-materials__progress" md-mode="indeterminate" md-diameter="30"
-                            data-ng-show="isSaving"></md-progress-circular>
+                            data-ng-show="vm.isSaving"></md-progress-circular>
     </div>
   </div>
 </md-toolbar>
