@@ -155,6 +155,7 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
                             resultMap[domainName].push(subjectName);
                         }
                     } else {
+                        if (!domainName) return;
                         subjectName ? resultMap[domainName] = [subjectName] : resultMap[domainName] = [];
                     }
                 });
@@ -172,9 +173,26 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
                    else result.push(domain);
                 });
 
+                if (translationService.getLanguageCode() === "et") {
+                    return _.uniq(result.map(item => translationService.instant(item)))
+                }
+
                 // Workaround for taxons with missing translations
                 // "HELPER_" prefix can be removed once all taxons are translated
-                return _.uniq(result.map(r => translationService.instant("HELPER_" + r)));
+                let translatedList = [];
+                let cleanedResult = [];
+
+                result.forEach(r => {
+                    let translated = translationService.instant("HELPER_" + r);
+                    if (translated.startsWith("HELPER_")) translated = translationService.instant(r);
+                    
+                    if (r && !translatedList.includes(translated)) {
+                        translatedList.push(translated);
+                        cleanedResult.push(r)
+                    }
+                });
+
+                return cleanedResult;
             }
         }
     }
