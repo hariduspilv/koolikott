@@ -28,6 +28,12 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
+if (typeof String.prototype.includes === 'undefined') {
+    String.prototype.includes = function() {
+        return String.prototype.indexOf.apply(this, arguments) !== -1;
+    };
+}
+
 function isEmpty(str) {
     if (!str || str === undefined) {
         return true;
