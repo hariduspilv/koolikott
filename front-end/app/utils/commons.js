@@ -1,9 +1,9 @@
 /**
- * Common constants and functions.
- *
- * @author Jordan Silva
- *
- */
+* Common constants and functions.
+*
+* @author Jordan Silva
+*
+*/
 const LOGIN_ORIGIN = "loginOrigin";
 
 function log() {
@@ -28,11 +28,21 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
-if (typeof String.prototype.includes === 'undefined') {
-    String.prototype.includes = function() {
-        return String.prototype.indexOf.apply(this, arguments) !== -1;
+if (!String.prototype.includes) {
+    String.prototype.includes = function(search, start) {
+        'use strict';
+        if (typeof start !== 'number') {
+            start = 0;
+        }
+
+        if (start + search.length > this.length) {
+            return false;
+        } else {
+            return this.indexOf(search, start) !== -1;
+        }
     };
 }
+
 
 function isEmpty(str) {
     if (!str || str === undefined) {
@@ -47,23 +57,23 @@ function isEmpty(str) {
 }
 
 /**
- * Converts a string date into Date object. String format must be 'dd.MM.yyyy'
- * @param dateString
- * @returns {Date}
- */
+* Converts a string date into Date object. String format must be 'dd.MM.yyyy'
+* @param dateString
+* @returns {Date}
+*/
 function stringToDate(dateString) {
     var date = dateString.split(".");
     return new Date(date[2], date[1] - 1, date[0]);
 }
 
 /**
- * Compares two dates. If dates are in String format, it is converted to Date. String format must be 'dd.MM.yyyy'.
- * @param date1
- * @param date2
- * @return a negative integer, zero, or a positive integer as the
- *         first argument is less than, equal to, or greater than the
- *         second.
- */
+* Compares two dates. If dates are in String format, it is converted to Date. String format must be 'dd.MM.yyyy'.
+* @param date1
+* @param date2
+* @return a negative integer, zero, or a positive integer as the
+*         first argument is less than, equal to, or greater than the
+*         second.
+*/
 function compareDate(date1, date2) {
     if (typeof date1 === 'string') {
         date1 = stringToDate(date1);
@@ -77,8 +87,8 @@ function compareDate(date1, date2) {
 }
 
 /**
- * Copies the first object to the second
- */
+* Copies the first object to the second
+*/
 function copyObject(first, second) {
     clearObject(second);
 
@@ -88,8 +98,8 @@ function copyObject(first, second) {
 }
 
 /**
- * Clear an object, deleting all its properties
- */
+* Clear an object, deleting all its properties
+*/
 function clearObject(object) {
     for (prop in object) {
         if (object.hasOwnProperty(prop)) {
@@ -99,8 +109,8 @@ function clearObject(object) {
 }
 
 /**
- * Check if complex item (element) is in an array using comparator
- */
+* Check if complex item (element) is in an array using comparator
+*/
 Array.prototype.indexOfWithComparator = function (obj, comparator) {
     for (var i = 0; i < this.length; i++) {
         if (comparator(obj, this[i]) === 0) {
@@ -112,9 +122,9 @@ Array.prototype.indexOfWithComparator = function (obj, comparator) {
 };
 
 /**
- * Gets the string in the correct language
- * @return the string in the correct language
- */
+* Gets the string in the correct language
+* @return the string in the correct language
+*/
 function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
     if (!values || values.length === 0) {
         return;
@@ -138,9 +148,9 @@ function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
 }
 
 /**
- * Gets the text if it exists in the specified language.
- * @return the queryed text.
- */
+* Gets the text if it exists in the specified language.
+* @return the queryed text.
+*/
 function getLanguageString(values, language) {
     if (!language) {
         return null;
@@ -330,23 +340,23 @@ function getSource(material) {
 }
 
 /**
- * Check if list of objects contains element
- * @param list
- * @param field
- * @param value
- * @returns {boolean}
- */
+* Check if list of objects contains element
+* @param list
+* @param field
+* @param value
+* @returns {boolean}
+*/
 function listContains(list, field, value) {
     return list.filter(function (e) {
-            return e[field] === value;
-        }).length > 0
+        return e[field] === value;
+    }).length > 0
 }
 
 /**
- * Move element in list from old_index to new_index
- * @param old_index
- * @param new_index
- */
+* Move element in list from old_index to new_index
+* @param old_index
+* @param new_index
+*/
 Array.prototype.move = function (old_index, new_index) {
     while (old_index < 0) {
         old_index += this.length;
