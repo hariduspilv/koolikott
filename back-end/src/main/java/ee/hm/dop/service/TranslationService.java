@@ -32,16 +32,15 @@ public class TranslationService {
             return null;
         }
 
-        if ("et".equals(languageCode.toLowerCase())) {
-            return translationGroupFor.getTranslations();
-        } else {
+        if ("eng".equals(language.getCode()) || "rus".equals(language.getCode())) {
             Map<String, String> map = getDomainsAndSubjectsInEstonian();
             if (map != null) {
-                translationGroupFor.getTranslations().putAll(map);
+                map.putAll(translationGroupFor.getTranslations());
+                return map;
             }
-            return translationGroupFor.getTranslations();
         }
 
+        return translationGroupFor.getTranslations();
     }
 
     /**
@@ -49,14 +48,14 @@ public class TranslationService {
      * because some taxons are not yet translated into all three languages.
      * These translations are used in front-end to remove duplicate translations.
      * For example:
-     *  "Matemaatika" and "Mathematics" should be same, but since some taxons don't have translations
-     *  "Matemaatika" is same in all three languages. As a workaround taxons are compared in estonian.
+     * "Matemaatika" and "Mathematics" should be same, but since some taxons don't have translations
+     * "Matemaatika" is same in all three languages. As a workaround taxons are compared in estonian.
      *
-     *  This method can be removed after all taxons are translated
+     * This method can be removed after all taxons are translated
      * @return
      */
     private Map<String, String> getDomainsAndSubjectsInEstonian() {
-        Language language = languageDAO.findByCode("et");
+        Language language = languageDAO.findByCode("est");
         if (language == null) {
             return null;
         }
