@@ -88,32 +88,36 @@
         <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
       </p>
       <p class="two-rows-meta">
-        <span data-ng-repeat="educationalContext in getMaterialEducationalContexts()  track by $index">
-          <span data-translate="{{educationalContext.name.toUpperCase() }}"></span>
+        <span data-ng-repeat="educationalContext in getMaterialEducationalContexts() track by $index">
+          <span data-translate="{{educationalContext.name.toUpperCase() }}"></span><span
+          data-ng-bind="$index < getMaterialEducationalContexts().length - 1 ? ', ' : ''"></span>
         </span>
-        <span data-ng-if="!getMaterialEducationalContexts().length"
-        data-translate="UNKNOWN">Unknown</span>
+        <span data-ng-if="!getMaterialEducationalContexts().length" data-translate="UNKNOWN">Unknown</span>
       </p>
     </div>
+
     <div flex data-ng-if="getMaterialSubjects().length === 0">
       <p class="md-caption caption-light">
         <span data-translate="DETAIL_VIEW_DOMAIN"></span>
       </p>
       <p class="two-rows-meta">
-        <span data-ng-repeat="domain in getMaterialDomains()  track by $index">
-          <span data-translate="{{'DOMAIN_' + domain.name.toUpperCase() }}"></span>
+        <span data-ng-repeat="domain in getMaterialDomains() track by $index">
+          <span data-translate="{{domain}}"></span><span
+          data-ng-bind="$index < getMaterialDomains().length - 1 ? ', ' : ''"></span>
         </span>
         <span data-ng-if="!getMaterialDomains().length"
         data-translate="UNKNOWN">Unknown</span>
       </p>
     </div>
+
     <div flex data-ng-if="getMaterialSubjects().length > 0">
       <p class="md-caption caption-light">
         <span data-translate="DETAIL_VIEW_SUBJECT"></span>
       </p>
       <p class="two-rows-meta">
         <span data-ng-repeat="subject in getMaterialSubjects()  track by $index">
-          <span data-translate="{{'SUBJECT_' + subject.name.toUpperCase() }}"></span>
+          <span data-translate="{{subject}}"></span><span
+          data-ng-bind="$index < getMaterialSubjects().length - 1 ? ', ' : ''"></span>
         </span>
       </p>
     </div>

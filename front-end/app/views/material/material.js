@@ -174,35 +174,35 @@ angular.module('koolikottApp')
                     if (!$scope.material || !$scope.material.taxons) return;
 
                     $scope.material.taxons.forEach(function (taxon) {
-                        var edCtx = taxonService.getEducationalContext(taxon);
-                        if (edCtx) educationalContexts.push(edCtx);
+                        let edCtx = taxonService.getEducationalContext(taxon);
+                        if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
                     });
 
                     return educationalContexts;
                 };
 
                 $scope.getMaterialDomains = function () {
-                    var domains = [];
+                    let domains = [];
                     if (!$scope.material || !$scope.material.taxons) return;
 
                     $scope.material.taxons.forEach(function (taxon) {
-                        var domain = taxonService.getDomain(taxon);
+                        let domain = taxonService.getDomain(taxon);
                         if (domain) domains.push(domain);
                     });
 
-                    return domains;
+                    return taxonService.removeDuplicatesFromDomainOrSubjectList(domains.map(dom => "DOMAIN_" + dom.name.toUpperCase()));
                 };
 
                 $scope.getMaterialSubjects = function () {
-                    var subjects = [];
+                    let subjects = [];
                     if (!$scope.material || !$scope.material.taxons) return;
 
                     $scope.material.taxons.forEach(function (taxon) {
-                        var subject = taxonService.getSubject(taxon);
+                        let subject = taxonService.getSubject(taxon);
                         if (subject) subjects.push(subject);
                     });
 
-                    return subjects;
+                    return taxonService.removeDuplicatesFromDomainOrSubjectList(subjects.map(sub => "SUBJECT_" + sub.name.toUpperCase()));
                 };
 
                 $scope.getCorrectLanguageString = function (languageStringList) {
