@@ -210,7 +210,13 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         };
 
         $scope.isTabTwoValid = function () {
-            let hasCorrectTaxon = $scope.material.taxons && $scope.material.taxons[0] && $scope.material.taxons[0].level && $scope.material.taxons[0].level !== ".EducationalContext";
+            let hasCorrectTaxon = true;
+            angular.forEach($scope.material.taxons, (key, value) => {
+                if (!isTaxonSet(value)) {
+                    hasCorrectTaxon = false;
+                }
+            });
+
             return $scope.educationalContextId === 4 || ($scope.material.targetGroups && $scope.material.targetGroups.length > 0)
                 && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true) && hasCorrectTaxon;
         };
@@ -218,6 +224,10 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         $scope.isTabThreeValid = function () {
             return areAuthorsValid() && (hasAuthors() || hasPublisher()) && $scope.material.issueDate.year;
         };
+
+        function isTaxonSet (index) {
+            return $scope.material.taxons && $scope.material.taxons[index] && $scope.material.taxons[index].level && $scope.material.taxons[index].level !== ".EducationalContext";
+        }
 
         function hasPublisher() {
             return $scope.material.publishers[0] && $scope.material.publishers[0].name;

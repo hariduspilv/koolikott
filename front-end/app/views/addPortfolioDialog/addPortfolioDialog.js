@@ -146,8 +146,14 @@ angular.module('koolikottApp')
                 };
 
                 $scope.isValid = function () {
-                    var portfolio = $scope.newPortfolio;
-                    var hasCorrectTaxon = portfolio.taxons && portfolio.taxons[0] && portfolio.taxons[0].level && portfolio.taxons[0].level !== ".EducationalContext";
+                    let portfolio = $scope.newPortfolio;
+
+                    let hasCorrectTaxon = true;
+                    angular.forEach(portfolio.taxons, (key, value) => {
+                        if (!isTaxonSet(value)) {
+                            hasCorrectTaxon = false;
+                        }
+                    });
 
                     return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
                 };
@@ -162,7 +168,7 @@ angular.module('koolikottApp')
                     $scope.saving = false;
                 }
 
-                $scope.isSet = function (index) {
+                function isTaxonSet (index) {
                     return $scope.newPortfolio.taxons[index] && $scope.newPortfolio.taxons[index].level && $scope.newPortfolio.taxons[index].level !== ".EducationalContext";
                 };
 
