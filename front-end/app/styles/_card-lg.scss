@@ -38,6 +38,7 @@
     &:hover {
       background-color: $selected-gray;
       cursor: pointer;
+
       .card-hover {
         opacity: .8;
         z-index: 3;
@@ -48,11 +49,10 @@
         }
       }
     }
+
     img {
-      width: 100%;
       @media (min-width: $layout-breakpoint-xs) {
         height: auto;
-        max-height: 300px;
       }
     }
   }

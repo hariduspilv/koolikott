@@ -72,8 +72,15 @@
 
   .card-cover {
     border-radius: 0 $border-radius $border-radius 0;
+
     @media (min-width: $layout-breakpoint-xs) {
       border-radius: $border-radius $border-radius 0 0;
+    }
+
+    &:before {
+      @media (min-width: $layout-breakpoint-xs) {
+        padding-bottom: 70%;
+      }
     }
   }
 

@@ -3,7 +3,6 @@ md-card {
   transition: all 0.3s;
 
   .card-image {
-    height: 100%;
     position: relative;
   }
 }
@@ -44,9 +43,9 @@ md-card {
 }
 
 .card-cover {
-  overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
 
   &:before {
     content: '';
@@ -63,15 +62,6 @@ md-card {
     height: 100%;
     width: 100%;
     display: block;
-
-    // @media (min-width: $layout-breakpoint-xs) {
-    //   height: 100%;
-    //   width: auto;
-    // }
-    //
-    // .ua-ie & {
-    //   height: auto;
-    // }
   }
 
   &:after {
@@ -85,7 +75,7 @@ md-card {
     z-index: 2;
   }
 
-  md-icon.icon-kind {
+  .icon-kind {
     position: absolute;
     left: 50%;
     top: 50%;

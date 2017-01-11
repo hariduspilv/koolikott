@@ -60,15 +60,4 @@
       font-size: 2rem;
     }
   }
-
-  .card-cover {
-    img {
-      height: 100%;
-      width: 100%;
-
-      .ua-ie & {
-        height: auto;
-      }
-    }
-  }
 }
