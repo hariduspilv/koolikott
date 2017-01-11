@@ -38,8 +38,7 @@ angular.module('koolikottApp')
 
                 return serverCallService.makeGet(url, {q: query})
                 .then(function(response) {
-                    /* Limit the response to 4 elements since we dont know how many results will come */
-                    return response.data.slice(0,4);
+                    return response.data;
                 });
             }
         }

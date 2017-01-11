@@ -104,7 +104,7 @@ public class SolrService implements SolrEngineService {
             for(Suggestion suggestion: combinedSuggestions){
                 suggestions.add(suggestion.getTerm());
             }
-            return suggestions;
+            return suggestions.subList(0, SUGGEST_COUNT - 1);
         }
 
 
