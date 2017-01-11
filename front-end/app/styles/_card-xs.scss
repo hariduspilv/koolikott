@@ -1,12 +1,14 @@
 .card-xs {
   margin: 0 0 $md-padding 0;
-  
+
   @media (min-width: $layout-breakpoint-xs) {
     border-radius: 0 $border-radius $border-radius 0;
   }
+
   &:hover {
     background-color: $selected-gray;
     cursor: pointer;
+
     .card-hover {
       opacity: .8;
       z-index: 3;
@@ -58,11 +60,12 @@
       font-size: 2rem;
     }
   }
+
   .card-cover {
-    @include aspect-ratio(3,2);
     img {
       height: 100%;
       width: 100%;
+
       .ua-ie & {
         height: auto;
       }

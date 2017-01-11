@@ -1,17 +1,12 @@
 md-card {
   margin: 0; //to overwrite AM 8px
   transition: all 0.3s;
+
   .card-image {
     height: 100%;
     position: relative;
-    @include aspect-ratio(3,2);
-    &:before {
-      padding-bottom: 0;
-    }
   }
 }
-
-
 
 .card-hover {
   position: absolute;
@@ -52,30 +47,33 @@ md-card {
   overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  width: auto;
-  @include aspect-ratio(3,2);
-  max-width: 300px;
-  height: 100%;
 
-  .ua-safari & {
-    height: auto;
+  &:before {
+    content: '';
+    display: block;
+    height: 0;
+    width: 100%;
+    padding-bottom: 66.67%;
   }
 
   img {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
+    display: block;
 
-    @media (min-width: $layout-breakpoint-xs) {
-      height: 100%;
-      width: auto;
-    }
-
-    .ua-ie & {
-      height: auto;
-    }
+    // @media (min-width: $layout-breakpoint-xs) {
+    //   height: 100%;
+    //   width: auto;
+    // }
+    //
+    // .ua-ie & {
+    //   height: auto;
+    // }
   }
 
-  // Commented out because will be put back in the future
   &:after {
     content: "";
     box-shadow: inset 0 0 3em rgba(0,0,0, .15);
@@ -131,6 +129,8 @@ md-card {
 
 .pattern {
   position: absolute;
+  top: 0;
+  left: 0;
   transform: rotateY(180deg);
   width: 100%;
   height: 100%;

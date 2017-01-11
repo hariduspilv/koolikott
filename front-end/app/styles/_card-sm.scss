@@ -37,6 +37,7 @@
   &:hover {
     background-color: $selected-gray;
     cursor: pointer;
+
     .card-hover {
       opacity: .8;
       z-index: 3;
