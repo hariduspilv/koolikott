@@ -38,7 +38,7 @@ angular.module('koolikottApp')
                     if(vm.chapter && vm.chapter.title) {
                         return vm.chapter.title;
                     } else if(vm.chapter == true) {
-                        return "Lisa uude peatükki";
+                        return $translate.instant('ADD_TO_NEW_CHAPTER');
                     } else {
                         return $translate.instant('CHOOSE_PORTFOLIO_CHAPTER');
                     }
