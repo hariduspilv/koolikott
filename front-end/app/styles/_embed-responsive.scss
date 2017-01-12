@@ -21,3 +21,7 @@
 .embed-responsive-container.embed-video, .embed-responsive-container.embed-audio{
   line-height: 0;
 }
+
+.embed-responsive-container iframe {
+  border: none;
+}
