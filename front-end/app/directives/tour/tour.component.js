@@ -20,7 +20,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
         // TODO: show editPage tour if has not seen before
 
         // TODO: show modal only on first login
-        if ($window.innerWidth >= 960 && vm.isAuthenticated() && !$rootScope.isEditPortfolioPage) {
+        if ($window.innerWidth >= BREAK_SM && vm.isAuthenticated() && !$rootScope.isEditPortfolioPage) {
             startGeneralTour();
         }
     };

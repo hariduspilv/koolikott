@@ -15,7 +15,7 @@
         <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" id="header-show-sidenav-button">
           <md-icon class="md-48">menu</md-icon>
         </md-button>
-        <md-button data-ng-if="isEditModeAndNotEditView" data-ng-click="$root.back(); closeDetailedSearch()">
+        <md-button data-ng-if="isEditModeAndNotEditView" data-ng-click="$root.back(); closeDetailedSearch()" data-ng-class="{'md-icon-button': isMobileView}">
           <md-icon class="md-48">arrow_backward</md-icon>
           <span class="vertical-center" hide-xs hide-sm data-translate="BACK"></span>
         </md-button>

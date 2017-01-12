@@ -36,7 +36,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                             isDetailedSearchHidden = detailedSearch.getAttribute('aria-hidden');
 
                         if ($backdrop.length === 0 && isDetailedSearchHidden && !isSuggestVisible) {
-                            if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 960) {
+                            if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= BREAK_SM) {
                                 $detailedSearch.addClass('md-toolbar-filter--fixed');
                             } else {
                                 $detailedSearch.removeClass('md-toolbar-filter--fixed');
@@ -60,15 +60,25 @@ angular.module('koolikottApp').directive('dopHeader', [
                 $scope.suggest.suggestions = null;
                 $scope.suggest.selectedItem = null;
                 $scope.canShowTour = false;
+                $scope.isMobileView = false;
                 var dontSearch = false;
 
                 const VISIBILITY_PUBLIC = "PUBLIC";
                 const VISIBILITY_PRIVATE = "PRIVATE";
                 const VISIBILITY_NOT_LISTED = "NOT_LISTED";
 
-                if ($window.innerWidth >= 960) {
-                    $scope.canShowTour = true;
+                function checkWindowWidth () {
+                    if (isMobile()) {
+                        $scope.isMobileView = true;
+                    }
+
+                    if ($window.innerWidth >= BREAK_SM) {
+                        $scope.canShowTour = true;
+                    }
                 }
+
+                checkWindowWidth();
+                angular.element($window).on('resize', () => checkWindowWidth());
 
                 $scope.detailedSearch.accessor = {
                     clearSimpleSearch: function () {

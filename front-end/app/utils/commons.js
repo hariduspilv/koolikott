@@ -5,6 +5,13 @@
 *
 */
 const LOGIN_ORIGIN = "loginOrigin";
+const BREAK_XS = 600;
+const BREAK_SM = 960;
+const BREAK_LG = 1280;
+
+function isMobile () {
+    return window.innerWidth < BREAK_XS;
+}
 
 function log() {
     if (console && console.log) {

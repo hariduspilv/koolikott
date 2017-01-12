@@ -56,7 +56,7 @@ angular.module('koolikottApp')
 
             $scope.openDetailedSearch = function () {
                 $rootScope.savedChapter = $scope.chapter;
-                if ($window.innerWidth >= 960) {
+                if ($window.innerWidth >= BREAK_SM) {
                     $rootScope.$broadcast("detailedSearch:open");
                 } else {
                     $rootScope.$broadcast("mobileSearch:open");

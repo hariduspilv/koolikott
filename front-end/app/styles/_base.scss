@@ -49,7 +49,7 @@ ul {
 }
 
 // material bugfixes
-@media (min-width: 960px) {
+@media (min-width: $layout-breakpoint-sm) {
   .layout-column > .flex-gt-sm-25 {
     max-width: 25%;
   }
