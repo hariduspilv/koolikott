@@ -134,11 +134,7 @@ function copyObject(first, second) {
 * Clear an object, deleting all its properties
 */
 function clearObject(object) {
-    for (prop in object) {
-        if (object.hasOwnProperty(prop)) {
-            delete object[prop];
-        }
-    }
+    Object.keys(object).forEach(key => delete object[key]);
 }
 
 /**
