@@ -61,7 +61,11 @@
   display: none !important;
 }
 
-@media screen and (max-width: $layout-breakpoint-xs){
+@media screen and (max-width: $layout-breakpoint-xs) {
+  // Fix for window resize not calculating height correctly https://github.com/angular/material/issues/4513
+  body > .md-dialog-container {
+    height: 100vh !important;
+  }
 
   .fullscreen-dialog {
     height:100%;

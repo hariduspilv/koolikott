@@ -55,7 +55,8 @@ angular.module('koolikottApp')
 
                     $mdDialog.show({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                        controller: 'addPortfolioDialogController'
+                        controller: 'addPortfolioDialogController',
+                        fullscreen: false
                     });
                 };
 
