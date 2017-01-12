@@ -11,7 +11,8 @@ angular.module('koolikottApp')
                 url: '=?',
                 title: '=',
                 subtitle: '=',
-                filter: '='
+                filter: '=',
+                cache: '<?'
             },
             templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
             controller: ['$scope', '$location', 'searchService', '$timeout', function ($scope, $location, searchService, $timeout) {
@@ -34,9 +35,9 @@ angular.module('koolikottApp')
                 }];
 
                 // Pagination variables
-                var maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
-                var expectedItemCount = maxResults;
-                var initialParams = $scope.params;
+                let maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
+                let expectedItemCount = maxResults;
+                let initialParams = $scope.params;
 
                 $scope.items = [];
 
@@ -78,7 +79,15 @@ angular.module('koolikottApp')
                     $scope.params.maxResults = maxResults;
                     $scope.params.start = $scope.start;
 
-                    serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail, {}, false, true);
+                    serverCallService.makeGet(
+                        $scope.url,
+                        $scope.params,
+                        searchSuccess,
+                        searchFail,
+                        {},
+                        false,
+                        $scope.cache === false ? $scope.cache : true
+                    );
                 }
 
                 function searchSuccess(data) {

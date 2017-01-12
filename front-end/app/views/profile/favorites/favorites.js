@@ -5,6 +5,7 @@ angular.module('koolikottApp')
 [
     '$scope',
     function ($scope) {
+        $scope.cache = false;
         $scope.url = "rest/learningObject/usersFavorite";
         $scope.params = {
             'maxResults': 20

@@ -6,6 +6,7 @@ angular.module('koolikottApp')
     '$scope', '$route', 'authenticatedUserService',
     function ($scope, $route, authenticatedUserService) {
         function init() {
+            $scope.cache = false;
             $scope.url = "rest/portfolio/getByCreator";
             $scope.params = {
                 'maxResults': 20,
