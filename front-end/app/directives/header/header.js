@@ -328,6 +328,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                         toastService.show('PORTFOLIO_SAVED');
                         storageService.setPortfolio(null);
                         $location.url('/portfolio?id=' + portfolio.id);
+                        dontSearch = true; // otherwise reload will trigger search if search has values
                         $route.reload();
                     }
                 }
