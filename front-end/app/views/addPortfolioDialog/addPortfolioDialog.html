@@ -107,13 +107,13 @@
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
       <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button"
-                 data-ng-disabled="!isValid()" data-ng-click="create()" data-ng-hide="isSaving"
+                 data-ng-disabled="!isValid() || isSaving" data-ng-click="create()"
                  class="md-primary md-raised">
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
         <md-icon>arrow_forward</md-icon>
       </md-button>
       <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button"
-                 data-ng-disabled="!isValid()" data-ng-click="update()" data-ng-hide="isSaving"
+                 data-ng-disabled="!isValid() || isSaving" data-ng-click="update()"
                  class="md-primary md-raised">
         <md-icon>arrow_forward</md-icon>
         <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>

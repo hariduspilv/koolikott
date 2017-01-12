@@ -75,7 +75,7 @@ angular.module('koolikottApp')
                 }
 
                 $scope.create = function () {
-                    $scope.saving = true;
+                    $scope.isSaving = true;
 
                     if (uploadingPicture) {
                         $timeout($scope.create, 500, false);
@@ -121,7 +121,7 @@ angular.module('koolikottApp')
                 }
 
                 $scope.update = function () {
-                    $scope.saving = true;
+                    $scope.isSaving = true;
 
                     if (uploadingPicture) {
                         $timeout($scope.create, 500, false);
@@ -165,7 +165,7 @@ angular.module('koolikottApp')
                 };
 
                 function savePortfolioFinally() {
-                    $scope.saving = false;
+                    $scope.isSaving = false;
                 }
 
                 function isTaxonSet (index) {
