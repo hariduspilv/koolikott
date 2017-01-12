@@ -3,8 +3,9 @@
 angular.module('koolikottApp').factory('targetGroupService', [
     '$translate',
     function ($translate) {
-        var GRADE = "GRADE";
-        var groups = [
+        const GRADE = "GRADE";
+        const LEVEL = "LEVEL";
+        const groups = [
             {
                 label: 'PRESCHOOL',
                 children: ['ZERO_FIVE', 'SIX_SEVEN']
@@ -23,6 +24,89 @@ angular.module('koolikottApp').factory('targetGroupService', [
             }
         ];
 
+        function getTargetGroupTranslation(value) {
+            if (value) return [$translate.instant('TARGET_GROUP_' + value)];
+            else return [];
+        }
+
+        function processLevel(targetGroups, groupParentMap, levelNr) {
+            let result = [];
+
+            let level = _.intersection(targetGroups, groups[levelNr].children);
+
+            if (level.length === 3) {
+                groupParentMap[levelNr] = groups[levelNr];
+            } else if (level.length === 2) {
+                // groupParentMap is not updated, meaning levels are not consecutive
+                // If parent from previous level exists then it should be added to result
+                result.push(...mergeSchoolLevels(groupParentMap));
+                clearObject(groupParentMap);
+
+                result.push(...mergeGroups(level));
+            } else {
+                result.push(...mergeSchoolLevels(groupParentMap));
+                clearObject(groupParentMap);
+
+                result.push(...getTargetGroupTranslation(level[0]));
+            }
+
+            return result;
+        }
+
+        /**
+         * Merge groups together if possible
+         * e.g 1. grade, 2.grade => 1-2. grade
+         * @param level
+         * @returns {[*]}
+         */
+        function mergeGroups(level) {
+            level.sort();
+            if (parseInt(level[0].slice(-1)) === parseInt(level[1].slice(-1)) - 1) {
+                return [level[0].slice(-1) + ".-" + (level[1].slice(-1)) + ". " + $translate.instant(GRADE)];
+            } else {
+                return [level[0].slice(-1) + ", " + level[1].slice(-1) + ". " + $translate.instant(GRADE)];
+            }
+        }
+
+        /**
+         * parameter map: {key: level number, value: label}
+         * @param map
+         * @returns {Array}
+         */
+        function mergeSchoolLevels(map) {
+            let keys = _.keys(map);
+            let result = [];
+
+            if (keys.length > 1) {
+                keys = _.keys(map).map(key => parseInt(key));
+                keys.sort();
+
+                for (let i = 0; i < keys.length; i++) {
+                    if (keys[i] === (keys[i + 1] - 1)) { // check if next element is consecutive
+                        let start = keys[i];
+                        let end;
+                        for (let j = i + 1; j < keys.length; j++) { // look for the end of consecutive elements
+                            if (keys[j] !== keys[j + 1] - 1) {
+                                end = keys[j];
+                                i = j;
+                            }
+                        }
+
+                        // merge (e.g level1.. level3 => I-III level)
+                        result.push("I".repeat(start) + "-" + "I".repeat(end) + " " + $translate.instant(LEVEL));
+                    } else {
+                        result.push(...getTargetGroupTranslation(map[keys[i]].label));
+                    }
+                }
+
+            } else if (keys.length === 1) {
+                result.push(...getTargetGroupTranslation(map[_.keys(map)[0]].label));
+            }
+
+            return result;
+        }
+
+
         return {
 
             /**
@@ -40,10 +124,10 @@ angular.module('koolikottApp').factory('targetGroupService', [
                     return [];
                 }
 
-                var targetGroups = selectedTargetGroup.slice();
+                let targetGroups = selectedTargetGroup.slice();
 
-                for (var i = 0; i < groups.length; i++) {
-                    var index = targetGroups.indexOf(groups[i].label);
+                for (let i = 0; i < groups.length; i++) {
+                    let index = targetGroups.indexOf(groups[i].label);
                     if (index != -1) {
                         targetGroups.splice(index, 1);
                     }
@@ -56,20 +140,20 @@ angular.module('koolikottApp').factory('targetGroupService', [
              * Adds necessary parents and returns an array that is used by the select
              */
             getLabelByTargetGroups: function (targetGroups) {
-                var selectedTargetGroup = [];
+                let selectedTargetGroup = [];
 
                 if (targetGroups) {
                     selectedTargetGroup = targetGroups;
 
-                    for (var i = 0; i < groups.length; i++) {
-                        var hasChildren = this.hasAllChildren(groups[i], selectedTargetGroup);
+                    for (let i = 0; i < groups.length; i++) {
+                        let hasChildren = this.hasAllChildren(groups[i], selectedTargetGroup);
 
                         if (hasChildren) {
                             if (selectedTargetGroup.indexOf(groups[i].label) == -1) {
                                 selectedTargetGroup.push(groups[i].label);
                             }
                         } else {
-                            var index = selectedTargetGroup.indexOf(groups[i].label);
+                            let index = selectedTargetGroup.indexOf(groups[i].label);
                             if (index != -1) {
                                 selectedTargetGroup.splice(index, 1);
                             }
@@ -83,12 +167,12 @@ angular.module('koolikottApp').factory('targetGroupService', [
             },
 
             getMinimalGroups: function (targetGroups) {
-                var list = [];
+                let list = [];
 
                 if (targetGroups) {
-                    for (var i = 0; i < groups.length; i++) {
-                        var buffer = [];
-                        var j;
+                    for (let i = 0; i < groups.length; i++) {
+                        let buffer = [];
+                        let j;
 
                         for (j = 0; j < groups[i].children.length; j++) {
 
@@ -100,7 +184,7 @@ angular.module('koolikottApp').factory('targetGroupService', [
                         if (buffer.length == j) {
                             list.push(groups[i].label);
                         } else if (buffer.length >= 1) {
-                            for (var x = 0; x < buffer.length; x++) {
+                            for (let x = 0; x < buffer.length; x++) {
                                 list.push(buffer[x]);
                             }
                         }
@@ -112,63 +196,31 @@ angular.module('koolikottApp').factory('targetGroupService', [
 
             getConcentratedLabelByTargetGroups: function (targetGroups) {
                 if (!targetGroups) return [];
-                var result = [];
+                let result = [];
 
-                function addToResult(value) {
-                    if (value) result.push($translate.instant('TARGET_GROUP_' + value));
-                }
+                let groupParentMap = {};
 
                 //Preschool
-                var preschool = _.intersection(targetGroups, groups[0].children);
-                if (preschool.length === 2) addToResult(groups[0].label);
-                else {
-                    addToResult(preschool[0]);
-                }
+                let preschool = _.intersection(targetGroups, groups[0].children);
+                if (preschool.length === 2) result.push(...getTargetGroupTranslation(groups[0].label));
+                else result.push(...getTargetGroupTranslation(preschool[0]));
+
+
                 //1st level
-                var level1 = _.intersection(targetGroups, groups[1].children);
-                if (level1.length === 3) addToResult(groups[1].label);
-                else if (level1.length === 2) {
-                    level1.sort();
-                    if (parseInt(level1[0].slice(-1)) === parseInt(level1[1].slice(-1)) - 1) {
-                        result.push(level1[0].slice(-1) + ".-" + (level1[1].slice(-1)) + ". " + $translate.instant(GRADE));
-                    }else{
-                        result.push(level1[0].slice(-1) + ", " + level1[1].slice(-1) + ". " + $translate.instant(GRADE));
-                    }
-                } else {
-                    addToResult(level1[0]);
-                }
+                result.push(...processLevel(targetGroups, groupParentMap, 1));
 
                 //2nd level
-                var level2 = _.intersection(targetGroups, groups[2].children);
-                if (level2.length === 3) addToResult(groups[2].label);
-                else if (level2.length === 2) {
-                    level2.sort();
-                    if (parseInt(level2[0].slice(-1)) === parseInt(level2[1].slice(-1)) - 1) {
-                        result.push(level2[0].slice(-1) + ".-" + (level2[1].slice(-1)) + ". " + $translate.instant(GRADE));
-                    }else{
-                        result.push(level2[0].slice(-1) + ", " + level2[1].slice(-1) + ". " + $translate.instant(GRADE));
-                    }
-                } else {
-                    addToResult(level2[0]);
-                }
+                result.push(...processLevel(targetGroups, groupParentMap, 2));
 
                 //3d level
-                var level3 = _.intersection(targetGroups, groups[3].children);
-                if (level3.length === 3) addToResult(groups[3].label);
-                else if (level3.length === 2) {
-                    level3.sort();
-                    if (parseInt(level3[0].slice(-1)) === parseInt(level3[1].slice(-1)) - 1) {
-                        result.push(level3[0].slice(-1) + ".-" + (level3[1].slice(-1)) + ". " + $translate.instant(GRADE));
-                    }else{
-                        result.push(level3[0].slice(-1) + ", " + level3[1].slice(-1) + ". " + $translate.instant(GRADE));
-                    }
-                } else {
-                    addToResult(level3[0]);
-                }
+                result.push(...processLevel(targetGroups, groupParentMap, 3));
+
+                // In case of 1-3 school level
+                result.push(...mergeSchoolLevels(groupParentMap));
 
                 //Gymnasium
                 if (targetGroups.indexOf(groups[4].label) !== -1 || targetGroups.indexOf(groups[4].children[0]) !== -1) {
-                    addToResult(groups[4].label);
+                    result.push(...getTargetGroupTranslation(groups[4].label));
                 }
 
                 return result;
@@ -182,9 +234,9 @@ angular.module('koolikottApp').factory('targetGroupService', [
                     return [];
                 }
 
-                var list = this.getMinimalGroups(targetGroups);
-                var result = [];
-                for (var i = 0; i < list.length; i++) {
+                let list = this.getMinimalGroups(targetGroups);
+                let result = [];
+                for (let i = 0; i < list.length; i++) {
                     result.push($translate.instant("TARGET_GROUP_" + list[i]));
                 }
 
@@ -192,7 +244,7 @@ angular.module('koolikottApp').factory('targetGroupService', [
             },
 
             isParent: function (item) {
-                for (var i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (item == groups[i].label) {
                         return true;
                     }
@@ -202,8 +254,8 @@ angular.module('koolikottApp').factory('targetGroupService', [
             },
 
             hasAllChildren: function (group, selectedTargetGroup) {
-                var i = 0;
-                var j = 0;
+                let i = 0;
+                let j = 0;
                 for (i; i < group.children.length; i++) {
                     if (selectedTargetGroup && selectedTargetGroup.indexOf(group.children[i]) != -1) {
                         j++;
