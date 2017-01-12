@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopFavorite',
 [
-    'serverCallService', 'authenticatedUserService', 'toastService', '$timeout',
-    function (serverCallService, authenticatedUserService, toastService, $timeout) {
+    'serverCallService', 'authenticatedUserService', 'toastService', '$timeout', 'materialService', 'portfolioService',
+    function (serverCallService, authenticatedUserService, toastService, $timeout, materialService, portfolioService) {
         return {
             scope: {
                 learningObject: '='
@@ -39,7 +39,20 @@ angular.module('koolikottApp')
                     $event.stopPropagation();
 
                     if (isLoggedIn()) {
-                        serverCallService.makePost("rest/learningObject/favorite", $scope.learningObject, addFavoriteSuccess, addFavoriteFail);
+
+                        if (isPortfolio($scope.learningObject.type)) {
+                            portfolioService.getPortfolioById($scope.learningObject.id)
+                                .then(data => {
+                                    serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
+                                });
+                        } else if (isMaterial($scope.learningObject.type)) {
+                            materialService.getMaterialById($scope.learningObject.id)
+                                .then(data => {
+                                    serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
+                                });
+                        }
+
+
                         $scope.hasFavorited = true;
                     }
                 };
