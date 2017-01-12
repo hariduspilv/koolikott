@@ -39,15 +39,15 @@ angular.module('koolikottApp').factory('targetGroupService', [
             } else if (level.length === 2) {
                 // groupParentMap is not updated, meaning levels are not consecutive
                 // If parent from previous level exists then it should be added to result
-                Array.prototype.push.apply(result, mergeSchoolLevels(groupParentMap));
+                result.push(...mergeSchoolLevels(groupParentMap));
                 clearObject(groupParentMap);
 
-                Array.prototype.push.apply(result, mergeGroups(level));
+                result.push(...mergeGroups(level));
             } else {
-                Array.prototype.push.apply(result, mergeSchoolLevels(groupParentMap));
+                result.push(...mergeSchoolLevels(groupParentMap));
                 clearObject(groupParentMap);
 
-                Array.prototype.push.apply(result, getTargetGroupTranslation(level[0]));
+                result.push(...getTargetGroupTranslation(level[0]));
             }
 
             return result;
@@ -95,12 +95,12 @@ angular.module('koolikottApp').factory('targetGroupService', [
                         // merge (e.g level1.. level3 => I-III level)
                         result.push("I".repeat(start) + "-" + "I".repeat(end) + " " + $translate.instant(LEVEL));
                     } else {
-                        Array.prototype.push.apply(result, getTargetGroupTranslation(map[keys[i]].label));
+                        result.push(...getTargetGroupTranslation(map[keys[i]].label));
                     }
                 }
 
             } else if (keys.length === 1) {
-                Array.prototype.push.apply(result, getTargetGroupTranslation(map[_.keys(map)[0]].label));
+                result.push(...getTargetGroupTranslation(map[_.keys(map)[0]].label));
             }
 
             return result;
@@ -202,25 +202,25 @@ angular.module('koolikottApp').factory('targetGroupService', [
 
                 //Preschool
                 let preschool = _.intersection(targetGroups, groups[0].children);
-                if (preschool.length === 2) Array.prototype.push.apply(result, getTargetGroupTranslation(groups[0].label));
-                else Array.prototype.push.apply(result, getTargetGroupTranslation(preschool[0]));
+                if (preschool.length === 2) result.push(...getTargetGroupTranslation(groups[0].label));
+                else result.push(...getTargetGroupTranslation(preschool[0]));
 
 
                 //1st level
-                Array.prototype.push.apply(result, processLevel(targetGroups, groupParentMap, 1));
+                result.push(...processLevel(targetGroups, groupParentMap, 1));
 
                 //2nd level
-                Array.prototype.push.apply(result, processLevel(targetGroups, groupParentMap, 2));
+                result.push(...processLevel(targetGroups, groupParentMap, 2));
 
                 //3d level
-                Array.prototype.push.apply(result, processLevel(targetGroups, groupParentMap, 3));
+                result.push(...processLevel(targetGroups, groupParentMap, 3));
 
                 // In case of 1-3 school level
-                Array.prototype.push.apply(result, mergeSchoolLevels(groupParentMap));
+                result.push(...mergeSchoolLevels(groupParentMap));
 
                 //Gymnasium
                 if (targetGroups.indexOf(groups[4].label) !== -1 || targetGroups.indexOf(groups[4].children[0]) !== -1) {
-                    Array.prototype.push.apply(result, getTargetGroupTranslation(groups[4].label));
+                    result.push(...getTargetGroupTranslation(groups[4].label));
                 }
 
                 return result;
