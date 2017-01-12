@@ -42,7 +42,7 @@ angular.module('koolikottApp')
             $scope.pictureName = '';
 
             $timeout(() => {
-                if ($scope.object) {
+                if ($scope.object && $scope.object.picture) {
                     $scope.pictureName = $scope.object.picture.name;
                 }
             });
