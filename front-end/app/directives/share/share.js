@@ -39,9 +39,12 @@ angular.module('koolikottApp')
 
             $scope.isOpen = false;
             $scope.pageUrl = $location.absUrl();
+            $scope.pictureName = '';
 
             $timeout(() => {
-                $scope.pictureName = $scope.object.picture ? $scope.object.picture.name : '';
+                if ($scope.object) {
+                    $scope.pictureName = $scope.object.picture.name;
+                }
             });
 
             $scope.shareMediaPlaces = [

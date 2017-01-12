@@ -1,8 +1,7 @@
 'use strict'
 
 angular.module('koolikottApp')
-.directive('dopChapterToolbar',
-function() {
+.directive('dopChapterToolbar', function() {
     return {
         scope: {
             chapter: '=',
@@ -10,7 +9,7 @@ function() {
             index: '='
         },
         templateUrl: 'directives/chapter/chapterToolbar/chapterToolbar.html',
-        controller: ['$scope', '$timeout', 'translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$anchorScroll', '$window', function($scope, $timeout, translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $anchorScroll, $window) {
+        controller: ['$scope', '$timeout', 'translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$window', function($scope, $timeout, translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $window) {
             $scope.isEditable = $rootScope.isEditPortfolioMode;
 
             $scope.addMaterial = function() {

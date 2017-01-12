@@ -1,24 +1,41 @@
 'use strict'
 
 angular.module('koolikottApp').directive('dopHeader', [
-    'translationService', '$location', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$window', '$translate', 'storageService', 'dialogService',
-    function (translationService, $location, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $window, $translate, storageService, dialogService) {
+    '$window',
+    function ($window) {
         return {
             scope: true,
             templateUrl: 'directives/header/header.html',
             link: function () {
-                var scrollTimer,
+                let scrollTimer,
                     detailedSearch = document.getElementById('detailedSearch'),
                     $detailedSearch = angular.element(detailedSearch),
-                    $header = document.getElementById('md-toolbar-header');
+                    $header = document.getElementById('md-toolbar-header'),
+                    isSuggestVisible = false;
+
+                setTimeout(() => {
+                    let headerInput = document.getElementById('header-search-input');
+
+                    headerInput.addEventListener('focus', function() {
+                        if (headerInput.value != '') {
+                            isSuggestVisible = true;
+                        } else {
+                            isSuggestVisible = false;
+                        }
+                    });
+
+                    headerInput.addEventListener('blur', function() {
+                        isSuggestVisible = false;
+                    });
+                });
 
                 angular.element($window).on('scroll', function () {
                     clearTimeout(scrollTimer);
                     scrollTimer = setTimeout(function () {
-                        var $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
+                        let $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
                             isDetailedSearchHidden = detailedSearch.getAttribute('aria-hidden');
 
-                        if ($backdrop.length === 0 && isDetailedSearchHidden) {
+                        if ($backdrop.length === 0 && isDetailedSearchHidden && !isSuggestVisible) {
                             if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= 960) {
                                 $detailedSearch.addClass('md-toolbar-filter--fixed');
                             } else {
@@ -28,7 +45,8 @@ angular.module('koolikottApp').directive('dopHeader', [
                     }, 200);
                 });
             },
-            controller: ['$scope', '$location', '$rootScope', function ($scope, $location, $rootScope) {
+            controller: ['$scope', '$location', '$rootScope', 'translationService', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$translate', 'storageService', 'dialogService',
+            function ($scope, $location, $rootScope, translationService, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $translate, storageService, dialogService) {
                 $scope.detailedSearch = {};
                 $scope.detailedSearch.isVisible = false;
                 $scope.mobileSearch = {};
@@ -144,6 +162,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                     if ($scope.doInlineSuggestion) {
                         suggestInline($scope.suggest.suggestions);
                     }
+
                     return $scope.suggest.suggestions;
                 };
 
@@ -158,7 +177,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                         var searchTextLength = $scope.searchFields.searchQuery.length;
                         $scope.hiddenInline = firstSuggestion.substring(0, searchTextLength);
                         $scope.inlineSuggestion = firstSuggestion.substring(searchTextLength);
-                    })
+                    });
                 }
 
                 $scope.clearInlineSuggestion = function () {
