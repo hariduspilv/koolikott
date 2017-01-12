@@ -423,7 +423,7 @@ module.exports = function (grunt) {
                 constants: {
                     APP_VERSION: grunt.file.readJSON('package.json').version,
                     FB_APP_ID: '225966171178748',
-                    YOUTUBE_API_KEY: 'AIzaSyDiAfuCVBNwz2ApCht3CZrgft-CeO6yI2A'
+                    YOUTUBE_API_KEY: 'AIzaSyDj2NUAQo5prRJOYzjtdmUzhoQcdtytizE'
                 }
             }
         },
