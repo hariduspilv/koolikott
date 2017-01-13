@@ -40,12 +40,12 @@ angular.module('koolikottApp')
 
                     if (isLoggedIn()) {
 
-                        if (isPortfolio($scope.learningObject.type)) {
+                        if ($scope.learningObject.type === ".ReducedPortfolio") {
                             portfolioService.getPortfolioById($scope.learningObject.id)
                                 .then(data => {
                                     serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
                                 });
-                        } else if (isMaterial($scope.learningObject.type)) {
+                        } else if ($scope.learningObject.type === ".ReducedMaterial") {
                             materialService.getMaterialById($scope.learningObject.id)
                                 .then(data => {
                                     serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
