@@ -95,18 +95,20 @@ public class SolrService implements SolrEngineService {
 
         if (qr != null && qr.getSuggesterResponse() != null) {
             List<Suggestion> combinedSuggestions = new ArrayList<>();
-            if(suggestTags){
+
+            if (suggestTags) {
                 combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopTagSuggester"));
-            }else{
+            } else {
                 combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
                 combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
             }
-            for(Suggestion suggestion: combinedSuggestions){
+
+            for (Suggestion suggestion : combinedSuggestions) {
                 suggestions.add(suggestion.getTerm());
             }
-            return suggestions.subList(0, SUGGEST_COUNT - 1);
-        }
 
+            return suggestions.size() > SUGGEST_COUNT ? suggestions.subList(0, SUGGEST_COUNT - 1) : suggestions;
+        }
 
 
         return null;
