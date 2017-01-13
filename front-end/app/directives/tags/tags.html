@@ -2,24 +2,24 @@
   <span data-translate="DETAIL_VIEW_TAGS"></span>:
 </p>
 <div layout="row" layout-xs="column">
-  <md-chips ng-model="vm.upVoteForms" readonly="true" md-removable="vm.isEditPortfolioMode"
-            md-on-remove="vm.removeTag($chip.tag)">
+  <md-chips ng-model="$ctrl.upVoteForms" readonly="true" md-removable="$ctrl.isEditPortfolioMode"
+            md-on-remove="$ctrl.removeTag($chip.tag)">
     <md-chip-template>
-      <md-button data-ng-if="(vm.isAllowed() && !$root.isReportedByUser) && !vm.isAdmin() && !vm.isEditPortfolioMode"
+      <md-button data-ng-if="($ctrl.isAllowed() && !$root.isReportedByUser) && !$ctrl.isAdmin() && !$ctrl.isEditPortfolioMode"
                  class="md-icon-button"
-                 ng-click="vm.reportTag($chip.tag)">
+                 ng-click="$ctrl.reportTag($chip.tag)">
         <md-icon class="material-icons md-light md-48">error_outline</md-icon>
         <md-tooltip>
           <span data-translate="TAG_TOOLTIP_REPORT_AS_IMPROPER"></span>
         </md-tooltip>
       </md-button>
 
-      <a href="search/result?q=tag:'{{$chip.tag}}'" data-ng-click="vm.getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
+      <a href="search/result?q=tag:'{{$chip.tag}}'" data-ng-click="$ctrl.getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
 
-      <md-button data-ng-if="!$chip.tagUpVote && vm.isAllowed()" class="md-icon-button" ng-click="vm.upVote($chip)">
+      <md-button data-ng-if="!$chip.tagUpVote && $ctrl.isAllowed()" class="md-icon-button" ng-click="$ctrl.upVote($chip)">
         <md-icon>plus_one</md-icon>
       </md-button>
-      <md-button data-ng-if="$chip.tagUpVote && vm.isAllowed()" class="md-icon-button" ng-click="vm.removeUpVote($chip)">
+      <md-button data-ng-if="$chip.tagUpVote && $ctrl.isAllowed()" class="md-icon-button" ng-click="$ctrl.removeUpVote($chip)">
         <md-tooltip>
           <span data-translate="TAG_TOOLTIP_REMOVE_UPVOTE"></span>
         </md-tooltip>
@@ -28,36 +28,36 @@
     </md-chip-template>
   </md-chips>
 
-  <form name="addTagForm" id="addTagForm" data-ng-if="vm.isAllowed()" ng-submit="vm.addTag()">
+  <form name="addTagForm" id="addTagForm" data-ng-if="$ctrl.isAllowed()" ng-submit="$ctrl.addTag()">
     <md-autocomplete class="tags"
-                     md-selected-item="vm.newTag.selectedItem"
+                     md-selected-item="$ctrl.newTag.selectedItem"
                      md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
                      md-item-text="tag"
-                     md-items="tag in vm.doSuggest(vm.newTag.tagName)"
-                     md-search-text="vm.newTag.tagName"
-                     md-search-text-change="vm.limitTextLength()"
+                     md-items="tag in $ctrl.doSuggest($ctrl.newTag.tagName)"
+                     md-search-text="$ctrl.newTag.tagName"
+                     md-search-text-change="$ctrl.limitTextLength()"
                      md-input-maxlength="100"
                      md-input-minlength="0"
                      md-no-cache="true"
                      md-menu-class="suggest-dropdown"
-                     md-selected-item-change="vm.tagSelected(tag)"
+                     md-selected-item-change="$ctrl.tagSelected(tag)"
                      ng-model-options="{debounce: 100}">
       <md-item-template>
-        <span md-highlight-text="vm.newTag.tagName">{{ tag }}</span>
+        <span md-highlight-text="$ctrl.newTag.tagName">{{ tag }}</span>
       </md-item-template>
     </md-autocomplete>
   </form>
 </div>
 
 <div layout="row">
-  <md-button data-ng-show="vm.showMoreTags" ng-click="vm.showMore()">
+  <md-button data-ng-show="$ctrl.showMoreTags" ng-click="$ctrl.showMore()">
     <span data-translate="SHOW_MORE"></span>
     <md-icon class="md-primary">
       keyboard_arrow_right
     </md-icon>
   </md-button>
 
-  <md-button data-ng-show="!vm.showMoreTags && vm.upVoteForms.length > 10" ng-click="vm.showLess()">
+  <md-button data-ng-show="!$ctrl.showMoreTags && $ctrl.upVoteForms.length > 10" ng-click="$ctrl.showLess()">
     <span data-translate="SHOW_LESS"></span>
     <md-icon class="md-primary">
       keyboard_arrow_right

@@ -7,7 +7,6 @@ angular.module('koolikottApp')
             isEditPortfolioMode: '<?'
         },
         templateUrl: 'directives/tags/tags.html',
-        controllerAs: 'vm',
         controller: TagsController
     });
 
