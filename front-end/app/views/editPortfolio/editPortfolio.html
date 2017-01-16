@@ -9,8 +9,8 @@
     <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
 
     <div id="portfolio-chapters">
-      <div data-ng-repeat="chapter in portfolio.chapters">
-        <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
+      <div data-ng-repeat="chapter in portfolio.chapters track by $index">
+        <dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
       </div>
     </div>
 

@@ -4,7 +4,7 @@
     <div data-dop-portfolio-summary-card comment="newComment" submit-click="addComment()" data-portfolio="portfolio"></div>
     <div id="portfolio-chapters">
       <div data-ng-repeat="chapter in portfolio.chapters">
-        <div data-dop-chapter data-chapter="chapter" data-index="{{$index}}"></div>
+        <dop-chapter data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
       </div>
     </div>
   </article>
