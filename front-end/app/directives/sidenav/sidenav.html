@@ -182,9 +182,9 @@
       </ul>
     </div>
 
-    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode"
+    <div uib-accordion-group class="panel-default" data-ng-if="isViewPortforlioPage || isEditPortfolioMode"
          is-open="$root.isViewPortfolioAndEdit">
-      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+      <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
     </div>
 
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"

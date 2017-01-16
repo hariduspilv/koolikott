@@ -248,7 +248,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $rootScope.selectedMaterials = null;
             }
 
-            if (window.innerWidth > 1280 && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
+            if (window.innerWidth > BREAK_LG && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
                 $rootScope.sideNavOpen = true;
             }
 

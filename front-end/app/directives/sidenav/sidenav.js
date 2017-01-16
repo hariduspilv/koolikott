@@ -73,7 +73,7 @@ angular.module('koolikottApp')
                     return location === $location.path();
                 };
 
-                if (window.innerWidth > 1280) {
+                if (window.innerWidth > BREAK_LG) {
                     $rootScope.sideNavOpen = true;
                 }
 
