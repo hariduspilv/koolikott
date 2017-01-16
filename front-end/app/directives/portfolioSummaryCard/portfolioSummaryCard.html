@@ -133,8 +133,8 @@
             data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
           </md-tooltip>
         </div>
-        <div data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted" data-dop-favorite
-        data-learning-object="portfolio"></div>
+        <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted"
+        data-learning-object="portfolio"></dop-favorite>
 
         <!-- imaged -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">

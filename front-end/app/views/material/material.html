@@ -164,8 +164,8 @@
 <!-- right small side  -->
 <div flex flex-gt-xs="25" class="right-side">
   <div class="card-media">
-    <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted" data-dop-favorite
-    data-learning-object="material"></div>
+    <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted"
+    data-learning-object="material"></dop-favorite>
     <div data-ng-if="!material.picture" class="card-cover {{getType()}}">
       <div class="pattern">
         <div class="sheet up-left"></div>

@@ -1,8 +1,8 @@
-<div class="md-icon-button md-button favorite" data-ng-class="{'has-favorited': hasFavorited, 'is-visible': isEditPortfolioMode || isViewMaterialOrPortfolioPage}">
+<div class="md-icon-button md-button favorite" data-ng-class="{'has-favorited': $ctrl.hasFavorited, 'is-visible': $ctrl.isEditPortfolioMode || $ctrl.isViewMaterialOrPortfolioPage}">
   <md-tooltip md-direction="bottom">
-    <span data-ng-if="!hasFavorited" data-translate="ADD_TO_FAVORITE"></span>
-    <span data-ng-if="hasFavorited" data-translate="REMOVE_FROM_FAVORITES"></span>
+    <span data-ng-if="!$ctrl.hasFavorited" data-translate="ADD_TO_FAVORITE"></span>
+    <span data-ng-if="$ctrl.hasFavorited" data-translate="REMOVE_FROM_FAVORITES"></span>
 	</md-tooltip>
-  <md-icon class="favorite__icon" data-ng-if="!hasFavorited" data-ng-click="favorite($event)">star_outline</md-icon>
-  <md-icon class="favorite__icon" data-ng-if="hasFavorited" data-ng-click="removeFavorite($event)">star</md-icon>
+  <md-icon class="favorite__icon" data-ng-if="!$ctrl.hasFavorited" data-ng-click="$ctrl.favorite($event)">star_outline</md-icon>
+  <md-icon class="favorite__icon" data-ng-if="$ctrl.hasFavorited" data-ng-click="$ctrl.removeFavorite($event)">star</md-icon>
 </div>
