@@ -93,10 +93,4 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
     }
 
     vm.getTaxons = () => taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
-
-    $rootScope.$watch('selectedMaterials', (newValue) => {
-        if (newValue && newValue.length == 0) {
-            vm.learningObject.selected = false;
-        }
-    });
 }
