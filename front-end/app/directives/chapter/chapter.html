@@ -49,7 +49,7 @@
           </md-input-container>
         </div>
         <div layout="row" layout-align="space-between center">
-          <div dop-chapter-toolbar data-chapter="$ctrl.chapter" data-index="$ctrl.index" data-is-sub="false"></div>
+          <dop-chapter-toolbar data-chapter="$ctrl.chapter" data-index="$ctrl.index" data-is-sub="false"></dop-chapter-toolbar>
           <md-button class="md-icon-button" data-ng-click="$ctrl.deleteChapter($index)">
             <md-icon>delete</md-icon>
             <md-tooltip md-direction="bottom">
@@ -156,7 +156,7 @@
             </md-input-container>
           </div>
           <div layout="row" layout-align="space-between center">
-            <div dop-chapter-toolbar data-chapter="subchapter" data-index="$ctrl.index" data-sub-index="$index" data-is-sub="true"></div>
+            <dop-chapter-toolbar data-chapter="subchapter" data-index="$ctrl.index" data-sub-index="$index" data-is-sub="true"></dop-chapter-toolbar>
             <md-button class="md-icon-button" data-ng-click="$ctrl.onDeleteSubChapter(subchapter)">
               <md-icon>delete</md-icon>
               <md-tooltip md-direction="bottom">
