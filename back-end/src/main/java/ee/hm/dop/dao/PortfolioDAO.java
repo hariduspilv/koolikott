@@ -70,4 +70,10 @@ public class PortfolioDAO extends LearningObjectDAO {
         Query query = getEntityManager().createQuery("SELECT count(*) FROM Portfolio p WHERE p.deleted = true");
         return (Long) query.getSingleResult();
     }
+
+    public List<Portfolio> findNewestPortfolios(int numberOfMaterials, int startPosition) {
+        return createQuery("FROM Portfolio port WHERE port.deleted = false ORDER BY added DESC, id DESC",
+                Portfolio.class).setFirstResult(startPosition).setMaxResults(numberOfMaterials)
+                .getResultList();
+    }
 }

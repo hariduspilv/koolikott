@@ -1,18 +1,19 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.User;
+import java.math.BigInteger;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.math.BigInteger;
-import java.util.List;
+
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Repository;
+import ee.hm.dop.model.User;
 
 public class MaterialDAO extends LearningObjectDAO {
     @Inject
@@ -111,5 +112,11 @@ public class MaterialDAO extends LearningObjectDAO {
         String queryString = "SELECT Count(lo.id) FROM LearningObject lo INNER JOIN Material m ON lo.id=m.id WHERE lo.creator = :creator AND lo.deleted = FALSE";
         Query query = entityManager.createNativeQuery(queryString);
         return ((BigInteger) query.setParameter("creator", creator).getSingleResult()).longValue();
+    }
+
+    public List<Material> findNewestMaterials(int numberOfMaterials, int startPosition) {
+        return createQuery("FROM Material mat WHERE mat.deleted = false ORDER BY added DESC, id DESC",
+                Material.class).setFirstResult(startPosition).setMaxResults(numberOfMaterials)
+                .getResultList();
     }
 }

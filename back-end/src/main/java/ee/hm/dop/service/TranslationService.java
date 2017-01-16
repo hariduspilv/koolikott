@@ -1,13 +1,16 @@
 package ee.hm.dop.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import ee.hm.dop.dao.LanguageDAO;
 import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.TranslationGroup;
-
-import javax.inject.Inject;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TranslationService {
 
@@ -50,8 +53,9 @@ public class TranslationService {
      * For example:
      * "Matemaatika" and "Mathematics" should be same, but since some taxons don't have translations
      * "Matemaatika" is same in all three languages. As a workaround taxons are compared in estonian.
-     *
+     * <p>
      * This method can be removed after all taxons are translated
+     *
      * @return
      */
     private Map<String, String> getDomainsAndSubjectsInEstonian() {
@@ -75,5 +79,13 @@ public class TranslationService {
     public String getTranslationKeyByTranslation(String translation) {
         return translationDAO.getTranslationKeyByTranslation(translation);
     }
+
+    public static LanguageString filterByLanguage(List<LanguageString> languageStringList, String lang) {
+        for (LanguageString languageString : languageStringList) {
+            if (languageString.getLanguage().getCode().equals(lang)) return languageString;
+        }
+        return null;
+    }
+
 
 }
