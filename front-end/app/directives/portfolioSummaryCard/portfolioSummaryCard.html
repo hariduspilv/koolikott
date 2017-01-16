@@ -74,28 +74,16 @@
           </p>
         </div>
 
-        <div flex data-ng-if="!getPortfolioSubjects().length">
+        <div flex>
           <p class="md-caption caption-light">
             <span data-translate="DETAIL_VIEW_DOMAIN"></span>
           </p>
           <p class="two-rows-meta">
-            <span data-ng-repeat="taxon in getPortfolioDomains() track by $index">
+            <span data-ng-repeat="taxon in getTaxons() track by $index">
               <span data-translate="{{taxon}}"></span><span
-              data-ng-bind="$index < getPortfolioDomains().length - 1 ? ', ' : ''"></span>
+              data-ng-bind="$index < getTaxons().length - 1 ? ', ' : ''"></span>
             </span>
-            <span data-ng-if="!getPortfolioDomains().length" data-translate="UNKNOWN">Unknown</span>
-          </p>
-        </div>
-
-        <div flex data-ng-if="getPortfolioSubjects().length > 0">
-          <p class="md-caption caption-light">
-            <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-          </p>
-          <p class="two-rows-meta">
-            <span data-ng-repeat="taxon in getPortfolioSubjects() track by $index">
-              <span data-translate="{{taxon}}"></span><span
-              data-ng-bind="$index < getPortfolioSubjects().length - 1 ? ', ' : ''"></span>
-            </span>
+            <span data-ng-if="!getTaxons().length" data-translate="UNKNOWN">Unknown</span>
           </p>
         </div>
 

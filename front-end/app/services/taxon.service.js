@@ -140,6 +140,8 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
             },
 
             getDomainSubjectMap: function (taxons) {
+                if (_.isEmpty(taxonMap)) return;
+
                 let resultMap = {};
 
                 const self = this;

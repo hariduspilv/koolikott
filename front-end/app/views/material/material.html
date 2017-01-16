@@ -96,29 +96,16 @@
       </p>
     </div>
 
-    <div flex data-ng-if="getMaterialSubjects().length === 0">
+    <div flex>
       <p class="md-caption caption-light">
         <span data-translate="DETAIL_VIEW_DOMAIN"></span>
       </p>
       <p class="two-rows-meta">
-        <span data-ng-repeat="domain in getMaterialDomains() track by $index">
-          <span data-translate="{{domain}}"></span><span
-          data-ng-bind="$index < getMaterialDomains().length - 1 ? ', ' : ''"></span>
-        </span>
-        <span data-ng-if="!getMaterialDomains().length"
-        data-translate="UNKNOWN">Unknown</span>
-      </p>
-    </div>
-
-    <div flex data-ng-if="getMaterialSubjects().length > 0">
-      <p class="md-caption caption-light">
-        <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-      </p>
-      <p class="two-rows-meta">
-        <span data-ng-repeat="subject in getMaterialSubjects()  track by $index">
-          <span data-translate="{{subject}}"></span><span
-          data-ng-bind="$index < getMaterialSubjects().length - 1 ? ', ' : ''"></span>
-        </span>
+            <span data-ng-repeat="taxon in getTaxons() track by $index">
+              <span data-translate="{{taxon}}"></span><span
+              data-ng-bind="$index < getTaxons().length - 1 ? ', ' : ''"></span>
+            </span>
+        <span data-ng-if="!getTaxons().length" data-translate="UNKNOWN">Unknown</span>
       </p>
     </div>
 
