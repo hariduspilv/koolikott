@@ -371,7 +371,7 @@ function getSource(material) {
     if (material.source) {
         return material.source;
     } else if (material.uploadedFile) {
-        return material.uploadedFile.url
+        return decodeURIComponent(escape(decodeURIComponent(material.uploadedFile.url)));
     }
 }
 

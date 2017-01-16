@@ -387,9 +387,9 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         function init() {
             // TODO: Decode cyrillic letters
-            // if ($scope.material && $scope.material.uploadedFile) {
-            //     $scope.material.uploadedFile.name = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
-            // }
+            if ($scope.material && $scope.material.uploadedFile) {
+                $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
+            }
 
             if ($scope.isChapterMaterial) {
                 var addChapterMaterialUrl = $scope.material.source;
@@ -597,6 +597,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $scope.fileUploaded = true;
             $scope.uploadingFile = false;
             $scope.material.uploadedFile = file;
+            $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
             $scope.step.isMaterialUrlStepValid = true;
         }
 
