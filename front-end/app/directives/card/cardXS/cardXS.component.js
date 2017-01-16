@@ -14,7 +14,7 @@ dopCardXsController.$inject = ['$location', 'translationService', 'storageServic
 function dopCardXsController ($location, translationService, storageService) {
     let vm = this;
 
-    vm.navigateTo = function (learningObject, $event) {
+    vm.navigateTo = (learningObject, $event) => {
         $event.preventDefault();
 
         if (isMaterial(learningObject.type)) {
@@ -34,27 +34,17 @@ function dopCardXsController ($location, translationService, storageService) {
         }
     };
 
-    vm.formatName = function(name) {
-        return formatNameToInitials(name);
-    };
+    vm.formatName = (name) => formatNameToInitials(name);
+    vm.formatSurname = (surname) => formatSurnameToInitialsButLast(surname);
 
-    vm.formatSurname = function(surname) {
-        return formatSurnameToInitialsButLast(surname);
-    };
-
-    vm.getCorrectLanguageTitle = function (material) {
+    vm.getCorrectLanguageTitle = (material) => {
         if (material) {
             return getCorrectLanguageString(material.titles, material.language);
         }
     };
 
-    vm.isMaterial = function (type) {
-        return isMaterial(type);
-    };
-
-    vm.isPortfolio = function (type) {
-        return isPortfolio(type);
-    };
+    vm.isMaterial = (type) => isMaterial(type);
+    vm.isPortfolio = (type) => isPortfolio(type);
 
     function getCorrectLanguageString(languageStringList, materialLanguage) {
         if (languageStringList) {
