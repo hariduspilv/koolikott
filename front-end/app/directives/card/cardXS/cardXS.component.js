@@ -17,7 +17,7 @@ function dopCardXsController ($location, translationService, storageService) {
     vm.navigateTo = function (learningObject, $event) {
         $event.preventDefault();
 
-        if (vm.isMaterial(learningObject.type)) {
+        if (isMaterial(learningObject.type)) {
             storageService.setMaterial(learningObject);
 
             $location.path('/material').search({
@@ -25,7 +25,7 @@ function dopCardXsController ($location, translationService, storageService) {
             });
         }
 
-        if (vm.isPortfolio(learningObject.type)) {
+        if (isPortfolio(learningObject.type)) {
             storageService.setPortfolio(learningObject);
 
             $location.path('/portfolio').search({

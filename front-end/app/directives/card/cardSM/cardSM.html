@@ -1,42 +1,43 @@
 <md-card class="card-sm" data-ng-class="{ active: learningObject.selected }"
-         id="{{isMaterial(learningObject.type) ? 'material' : 'portfolio'}}-card-{{learningObject.id}}"
-         data-ng-click="navigateTo(learningObject, $event)"
+         id="{{$ctrl.isMaterial(learningObject.type) ? 'material' : 'portfolio'}}-card-{{$ctrl.learningObject.id}}"
+         data-ng-click="$ctrl.navigateTo($ctrl.learningObject, $event)"
          layout="column" layout-xs="row">
-  <div data-dop-card-media data-learning-object="learningObject" data-is-authenticated="isAuthenticated()" flex
+  <div data-dop-card-media data-learning-object="$ctrl.learningObject" data-is-authenticated="$ctrl.isAuthenticated()" flex
        flex-order="1" flex-order-xs="2"></div>
 
   <!-- content -->
   <div layout="column" flex flex-order="2" flex-order-xs="1" class="card__content-wrapper">
     <md-card-content layout="column">
-      <h3 class="two-rows" data-ng-if="isPortfolio(learningObject.type)"
-          data-ng-bind="learningObject.title"></h3>
-      <h3 class="two-rows" data-ng-if="isMaterial(learningObject.type)"
-          data-ng-bind="getCorrectLanguageTitle(learningObject)"></h3>
+      <h3 class="two-rows" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)"
+          data-ng-bind="$ctrl.learningObject.title"></h3>
+      <h3 class="two-rows" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)"
+          data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"></h3>
       <p class="md-caption ellipsis">
-      <span data-ng-if="isPortfolio(learningObject.type)" class="authors">
-        <span data-ng-bind="formatName(learningObject.creator.name)"></span>
-        <span data-ng-bind="formatSurname(learningObject.creator.surname)"></span>
+      <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="authors">
+        <span data-ng-bind="$ctrl.formatName($ctrl.learningObject.creator.name)"></span>
+        <span data-ng-bind="$ctrl.formatSurname($ctrl.learningObject.creator.surname)"></span>
       </span>
-        <span data-ng-if="isMaterial(learningObject.type)" data-ng-repeat="author in learningObject.authors"
+        <span data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-repeat="author in $ctrl.learningObject.authors track by $index"
               class="authors">
-      <span data-ng-bind="formatName(author.name)"></span>
-      <span data-ng-bind="formatSurname(author.surname)"></span>
-      <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+      <span data-ng-bind="$ctrl.formatName(author.name)"></span>
+      <span data-ng-bind="$ctrl.formatSurname(author.surname)"></span>
+      <span data-ng-bind="$index < $ctrl.learningObject.authors.length - 1 ? ', ' : ''"></span>
     </span>
       </p>
       <span flex></span>
       <div layout="row" layout-align="none end">
         <div class="md-caption" flex="50">
           <p class="two-rows-xs">
-        <span data-ng-repeat="group in targetGroups">
-          <span data-ng-bind="group"></span><span data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
+        <span data-ng-repeat="group in $ctrl.targetGroups track by $index">
+          <span data-ng-bind="group"></span><span data-ng-bind="$index < $ctrl.targetGroups.length - 1 ? ', ' : ''"></span>
         </span>
           </p>
         </div>
         <div class="md-caption text-right" flex="50">
           <p class="two-rows-xs">
-            <span data-ng-repeat="taxon in getTaxons() track by $index">
-              <span data-translate="{{taxon}}"></span><span data-ng-bind="$index < getTaxons().length - 1 ? ', ' : ''"></span>
+            <span data-ng-repeat="taxon in $ctrl.getTaxons()">
+              <span data-translate="{{taxon}}"></span>
+              <span data-ng-bind="$index < $ctrl.getTaxons().length - 1 ? ', ' : ''"></span>
             </span>
           </p>
         </div>
@@ -49,15 +50,15 @@
 
     <md-card-actions class="md-caption" layout="row" layout-align="start center">
       <md-icon>thumb_up</md-icon>
-      <span>{{ learningObject.likes }}</span>
+      <span data-ng-bind="$ctrl.learningObject.likes"></span>
       <md-icon>thumb_down</md-icon>
-      <span>{{ learningObject.dislikes }}</span>
+      <span data-ng-bind="$ctrl.learningObject.dislikes"></span>
       <span flex></span>
       <md-icon>comment</md-icon>
-      <span data-ng-bind="learningObject.commentCount"></span>
+      <span data-ng-bind="$ctrl.learningObject.commentCount"></span>
       <span flex></span>
       <md-icon>visibility</md-icon>
-      <span data-ng-bind="learningObject.views"></span>
+      <span data-ng-bind="$ctrl.learningObject.views"></span>
     </md-card-actions>
   </div>
 </md-card>
