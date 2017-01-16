@@ -33,7 +33,6 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.writer.Writer;
 
-//import java.util.logging.Logger;
 
 public abstract class AbstractAtomProvider<T extends Element> implements
         MessageBodyWriter<T>, MessageBodyReader<T> {
@@ -45,16 +44,16 @@ public abstract class AbstractAtomProvider<T extends Element> implements
 
     @Override
     public long getSize(T element, Class<?> type, Type genericType,
-                        Annotation[] annotations, MediaType mt) {
+                        Annotation[] annotations, MediaType mediaType) {
         return -1;
     }
 
     @Override
     public void writeTo(T element, Class<?> clazz, Type type,
-                        Annotation[] a, MediaType mt,
+                        Annotation[] a, MediaType mediaType,
                         MultivaluedMap<String, Object> headers, OutputStream os)
             throws IOException {
-        if (MediaType.APPLICATION_JSON_TYPE.isCompatible(mt)) {
+        if (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
             Writer w = createWriter("json");
             if (w == null) {
                 // throw ExceptionUtils.toNotSupportedException(null, null);
@@ -74,14 +73,11 @@ public abstract class AbstractAtomProvider<T extends Element> implements
 
     protected Writer createWriter(String writerName) {
         Writer w = ATOM_ENGINE.getWriterFactory().getWriter(writerName);
-        if (w == null) {
-            //LOG.fine("Atom writer \"" + writerName + "\" is not available");
-        }
         return w;
     }
 
     @Override
-    public T readFrom(Class<T> clazz, Type t, Annotation[] a, MediaType mt,
+    public T readFrom(Class<T> clazz, Type t, Annotation[] a, MediaType mediaType,
                       MultivaluedMap<String, String> headers, InputStream is)
             throws IOException {
         Parser parser = ATOM_ENGINE.getParser();

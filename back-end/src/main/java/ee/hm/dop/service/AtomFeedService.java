@@ -25,6 +25,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.commons.configuration.Configuration;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +59,6 @@ public class AtomFeedService {
 
     private String lang;
 
-    private List<Entry> entryList = new ArrayList<>();
-
     public AtomFeedService() {
         Abdera abdera = new Abdera();
         factory = abdera.getFactory();
@@ -82,6 +81,8 @@ public class AtomFeedService {
     }
 
     private Feed getFeedEntries() {
+        List<Entry> entryList = new ArrayList<>();
+
         for (Material material : materialDAO.findNewestMaterials(maxFeedItems, 0)) {
             Entry entry = materialToEntry(material);
             if (entry != null)
@@ -109,60 +110,82 @@ public class AtomFeedService {
 
     private Entry materialToEntry(Material material) {
         Entry entry = factory.newEntry();
+
         entry.setId(format("material:%d", material.getId()));
         String title = translateMaterialTitle(material.getTitles());
+
         if (title != null)
             entry.setTitle(title);
         else
             return null;
+
         for (Author author : material.getAuthors()) {
             entry.addAuthor(format("%s %s", author.getName(), author.getSurname()));
         }
+
         entry.setUpdated(material.getAdded().toDate());
         entry.addLink(format("%s/material?id=%s", configuration.getString(SERVER_ADDRESS), material.getId().toString()));
+
         return entry;
     }
 
     private Entry portfolioToEntry(Portfolio portfolio) {
         Entry entry = factory.newEntry();
+
         entry.setId(format("portfolio:%d", portfolio.getId()));
         entry.setTitle(format(translateString("FEED_PORTFOLIO_TITLE"), portfolio.getTitle()));
         entry.addAuthor(format("%s %s", portfolio.getOriginalCreator().getName(), portfolio.getOriginalCreator().getSurname()));
         entry.addLink(format("%s/portfolio?id=%s", configuration.getString(SERVER_ADDRESS), portfolio.getId()));
         entry.setUpdated(portfolio.getAdded().toDate());
+
         return entry;
     }
 
     private Entry versionToEntry(Version version) {
         Entry entry = factory.newEntry();
+
         entry.setId(format("version:%d", version.getId()));
         entry.setTitle(format(translateString("FEED_VERSION_TITLE"), version.getVersion()));
         entry.addLink("https://github.com/hariduspilv/koolikott/blob/master/CHANGELOG.md");
         entry.setUpdated(version.getReleased().toDate());
+
         return entry;
     }
 
     private void checkVersion() {
         String projectVersion = configuration.getString("version");
         Version persistedVersion = versionDAO.getLatestVersion();
-        if(projectVersion == null)
+
+        if(projectVersion == null){
             logger.error("Project version could not be obtained!");
-        if (persistedVersion == null || !projectVersion.equals(persistedVersion.getVersion()))
-            versionDAO.addVersion(projectVersion);
+            return;
+        }
+
+        if (persistedVersion == null || !projectVersion.equals(persistedVersion.getVersion())){
+            Version version = new Version();
+            version.setVersion(projectVersion);
+            version.setReleased(new DateTime());
+            versionDAO.addVersion(version);
+        }
     }
 
     private String translateMaterialTitle(List<LanguageString> titles) {
         String titleTranslation = translateString("FEED_MATERIAL_TITLE");
+
         if(titleTranslation == null){
             return null;
         }
 
-        if (filterByLanguage(titles, lang) != null && filterByLanguage(titles, lang).getText() != null) {
-            return format(titleTranslation, filterByLanguage(titles, lang).getText());
+        LanguageString translation = filterByLanguage(titles, lang);
+        if (translation != null && translation.getText() != null) {
+            return format(titleTranslation, translation.getText());
         }
-        if (filterByLanguage(titles, "est") != null && filterByLanguage(titles, "est").getText() != null) {
-            return format(titleTranslation, filterByLanguage(titles, "est").getText());
+
+        LanguageString fallbackTranslation = filterByLanguage(titles, "est");
+        if (fallbackTranslation != null && fallbackTranslation.getText() != null) {
+            return format(titleTranslation, fallbackTranslation.getText());
         }
+
         if (!titles.isEmpty() && titles.get(0).getText() != null) {
             return format(titleTranslation, titles.get(0).getText());
         }
@@ -172,6 +195,7 @@ public class AtomFeedService {
 
     private String translateString(String toTranslate) {
         Long langCode = languageDAO.findByCode(lang).getId();
+
         return translationDAO.getTranslationByKeyAndLangcode(toTranslate, langCode);
     }
 

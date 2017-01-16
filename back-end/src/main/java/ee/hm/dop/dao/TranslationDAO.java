@@ -11,15 +11,8 @@ import ee.hm.dop.model.TranslationGroup;
 
 public class TranslationDAO {
 
-    public static enum TranslationGroupEnum {
-        EST, RUS, ENG
-    }
-
     @Inject
     private EntityManager entityManager;
-
-    @Inject
-    private LanguageDAO languageDAO;
 
     public TranslationGroup findTranslationGroupFor(Language language) {
         TypedQuery<TranslationGroup> findByLanguage = entityManager.createQuery(
