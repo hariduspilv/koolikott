@@ -13,35 +13,13 @@ angular.module('koolikottApp')
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: ['$scope', function ($scope) {
 
+                    let domainSubjectMap = {};
+
                     function init() {
                         $scope.pageUrl = $location.absUrl();
                         $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
                     }
-
-                    $scope.getPortfolioSubjects = function () {
-                        let subjects = [];
-                        if (!$scope.portfolio || !$scope.portfolio.taxons) return;
-
-                        $scope.portfolio.taxons.forEach(function (taxon) {
-                            let subject = taxonService.getSubject(taxon);
-                            if (subject && !subjects.includes(subject)) subjects.push(subject);
-                        });
-
-                        return taxonService.removeDuplicatesFromDomainOrSubjectList(subjects.map(sub => "SUBJECT_" + sub.name.toUpperCase()));
-                    };
-
-                    $scope.getPortfolioDomains = function () {
-                        let domains = [];
-                        if (!$scope.portfolio || !$scope.portfolio.taxons) return;
-
-                        $scope.portfolio.taxons.forEach(function (taxon) {
-                            let domain = taxonService.getDomain(taxon);
-                            if (domain && !domains.includes(domain)) domains.push(domain);
-                        });
-
-                        return taxonService.removeDuplicatesFromDomainOrSubjectList(domains.map(dom => "DOMAIN_" + dom.name.toUpperCase()));
-                    };
 
                     $scope.isOwner = function () {
                         if (!authenticatedUserService.isAuthenticated()) {
@@ -115,6 +93,16 @@ angular.module('koolikottApp')
                             'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
                             'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
                             deletePortfolio);
+                    };
+
+                    function loadDomainsAndSubjects() {
+                        if (!$scope.portfolio || !$scope.portfolio.taxons) return;
+                        domainSubjectMap = taxonService.getDomainSubjectMap($scope.portfolio.taxons);
+                    }
+
+                    $scope.getTaxons = function() {
+                        loadDomainsAndSubjects();
+                        return taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
                     };
 
                     function getSubject(taxon) {

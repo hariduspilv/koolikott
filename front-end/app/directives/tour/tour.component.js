@@ -2,9 +2,8 @@
 
 angular.module('koolikottApp')
 .component('dopTour', {
-    restrict: 'E',
-    templateUrl: 'directives/tour/tour.html',
     bindings: {},
+    templateUrl: 'directives/tour/tour.html',
     controller: dopTourController
 });
 

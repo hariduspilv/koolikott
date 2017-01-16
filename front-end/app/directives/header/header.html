@@ -194,9 +194,9 @@
         <md-menu>
           <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
-            <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">visibility</md-icon>
+            <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
             <md-icon data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'">link</md-icon>
-            <md-icon data-ng-if="getPortfolioVisibility() === 'PRIVATE'">visibility_off</md-icon>
+            <md-icon data-ng-if="getPortfolioVisibility() === 'PRIVATE'">lock</md-icon>
           </md-button>
           <md-menu-content width="4">
             <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
@@ -204,12 +204,12 @@
             <md-menu-item>
               <md-button data-ng-if="getPortfolioVisibility() === 'PUBLIC'"
                          aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
-                <md-icon>visibility</md-icon>
+                <md-icon>lock_open</md-icon>
                 <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
               </md-button>
               <md-button data-ng-if="getPortfolioVisibility() != 'PUBLIC'"
                          aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-                <md-icon>visibility</md-icon>
+                <md-icon>lock_open</md-icon>
                 <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
               </md-button>
             </md-menu-item>
@@ -231,12 +231,12 @@
             <md-menu-item>
               <md-button data-ng-if="getPortfolioVisibility() === 'PRIVATE'"
                          aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
-                <md-icon>visibility_off</md-icon>
+                <md-icon>lock</md-icon>
                 <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
               </md-button>
               <md-button data-ng-if="getPortfolioVisibility() != 'PRIVATE'"
                          aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
-                <md-icon>visibility_off</md-icon>
+                <md-icon>lock</md-icon>
                 <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
               </md-button>
             </md-menu-item>
