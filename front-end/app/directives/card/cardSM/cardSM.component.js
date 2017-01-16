@@ -76,7 +76,7 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
 
     vm.formatDate = (date) => formatDateToDayMonthYear(date);
 
-    vm.isAuthenticated = function () {
+    vm.isAuthenticated = () => {
         var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
         if (!authenticated && isMaterial(vm.learningObject.type)) {
             vm.learningObject.selected = false;
@@ -94,7 +94,7 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
 
     vm.getTaxons = () => taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
 
-    $rootScope.$watch('selectedMaterials', function (newValue) {
+    $rootScope.$watch('selectedMaterials', (newValue) => {
         if (newValue && newValue.length == 0) {
             vm.learningObject.selected = false;
         }

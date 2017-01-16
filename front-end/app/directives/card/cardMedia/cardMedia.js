@@ -1,59 +1,51 @@
-'use strict'
+'use strict';
 
 angular.module('koolikottApp')
-.directive('dopCardMedia',
-[
-    'iconService',
-    function (iconService) {
-        return {
-            scope: {
-                learningObject: '=',
-                isAuthenticated: '='
-            },
-            templateUrl: 'directives/card/cardMedia/cardMedia.html',
-            controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
+.component('dopCardMedia', {
+    bindings: {
+        learningObject: '=',
+        isAuthenticated: '<'
+    },
+    templateUrl: 'directives/card/cardMedia/cardMedia.html',
+    controller: dopCardMediaController
+});
 
-                function init () {
-                    if (isMaterial($scope.learningObject.type)) {
-                        $scope.learningObjectType = 'material';
-                        $scope.materialType = iconService.getMaterialIcon($scope.learningObject.resourceTypes);
-                    } else if (isPortfolio($scope.learningObject.type)) {
-                        $scope.learningObjectType = 'portfolio';
-                    }
-                }
+dopCardMediaController.$inject = ['$rootScope', 'iconService'];
 
-                $scope.isMaterial = function (type) {
-                    return isMaterial(type);
-                };
+function dopCardMediaController ($rootScope, iconService) {
+    let vm = this;
 
-                $scope.isPortfolio = function (type) {
-                    return isPortfolio(type);
-                };
-
-                $scope.pickMaterial = function ($event, material) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-
-                    if ($rootScope.selectedMaterials) {
-                        let index = $rootScope.selectedMaterials.indexOf(material);
-                        if (index == -1) {
-                            $rootScope.selectedMaterials.push(material);
-                            material.selected = true;
-                        } else {
-                            $rootScope.selectedMaterials.splice(index, 1);
-                            material.selected = false;
-                        }
-                    } else {
-                        $rootScope.selectedMaterials = [];
-                        $rootScope.selectedMaterials.push(material);
-                        material.selected = true;
-                    }
-
-                    $rootScope.$broadcast("detailedSearch:close");
-                };
-
-                init();
-            }]
+    vm.$onInit = () => {
+        if (isMaterial(vm.learningObject.type)) {
+            vm.learningObjectType = 'material';
+            vm.materialType = iconService.getMaterialIcon(vm.learningObject.resourceTypes);
+        } else if (isPortfolio(vm.learningObject.type)) {
+            vm.learningObjectType = 'portfolio';
         }
     }
-]);
+
+    vm.isMaterial = (type) => isMaterial(type);
+    vm.isPortfolio = (type) => isPortfolio(type);
+
+    vm.pickMaterial = ($event, material) => {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        if ($rootScope.selectedMaterials) {
+            let index = $rootScope.selectedMaterials.indexOf(material);
+            if (index == -1) {
+                $rootScope.selectedMaterials.push(material);
+                material.selected = true;
+            } else {
+                $rootScope.selectedMaterials.splice(index, 1);
+                material.selected = false;
+            }
+        } else {
+            $rootScope.selectedMaterials = [];
+            $rootScope.selectedMaterials.push(material);
+            material.selected = true;
+        }
+
+        $rootScope.$broadcast("detailedSearch:close");
+    };
+}
