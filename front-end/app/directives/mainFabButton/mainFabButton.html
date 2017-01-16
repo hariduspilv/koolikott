@@ -1,4 +1,4 @@
-<md-fab-speed-dial data-ng-show="hasPermission() && !$root.isEditPortfolioMode" class="md-fab-bottom-right md-scale main-fab-button ng-hide" md-open="isOpen"
+<md-fab-speed-dial data-ng-show="hasPermission() && !$root.isEditPortfolioMode && (!$root.selectedMaterials || $root.selectedMaterials.length == 0)" class="md-fab-bottom-right md-scale main-fab-button ng-hide" md-open="isOpen"
                    md-direction="up" ng-mouseenter="setFabState(true)" ng-mouseleave="setFabState(false)" id="main-fab-button">
   <md-fab-trigger>
     <md-button ng-if="hasPermission()" aria-label="Lisa kogumik" class="md-fab main-fab" data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">

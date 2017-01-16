@@ -5,8 +5,9 @@ angular.module('koolikottApp')
     return {
         scope: {
             chapter: '=',
-            isSub: '=',
-            index: '='
+            isSub: '<',
+            index: '<',
+            subIndex: '<'
         },
         templateUrl: 'directives/chapter/chapterToolbar/chapterToolbar.html',
         controller: ['$scope', '$timeout', 'translationService', '$mdDialog', '$rootScope', 'storageService', 'serverCallService', '$filter', '$window', function($scope, $timeout, translationService, $mdDialog, $rootScope, storageService, serverCallService, $filter, $window) {
@@ -54,7 +55,13 @@ angular.module('koolikottApp')
             };
 
             $scope.openDetailedSearch = function () {
-                $rootScope.savedChapter = $scope.chapter;
+
+                if($scope.subIndex) {
+                    $rootScope.savedIndexes = $scope.index + '_' + $scope.subIndex;
+                } else {
+                    $rootScope.savedIndexes = $scope.index;
+                }
+
                 if ($window.innerWidth >= BREAK_SM) {
                     $rootScope.$broadcast("detailedSearch:open");
                 } else {
