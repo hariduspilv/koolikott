@@ -1,5 +1,5 @@
 <div class="portfolio-chapter">
-  <div id="chapter-{{index}}">
+  <div id="chapter-{{$ctrl.index}}">
     <md-card class="card-lg chapter-card">
 
       <!--View-->
@@ -69,7 +69,7 @@
         <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
             data-layout-gt-sm="row">
           <li data-ng-if="!$ctrl.isEditable"
-              id="chapterMaterial-{{index}}-{{$index}}"
+              id="chapterMaterial-{{$ctrl.index}}-{{$index}}"
               data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
               data-dop-embedded-material
               data-material="learningObject"
@@ -88,7 +88,7 @@
               data-dnd-selected="models.selected = item"
               data-ng-class="{'selected': models.selected === item}"
 
-              id="chapterMaterial-draggable-{{index}}-{{$index}}"
+              id="chapterMaterial-draggable-{{$ctrl.index}}-{{$index}}"
               data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
               data-dop-embedded-material
               data-material="learningObject"
@@ -104,7 +104,7 @@
   </div>
 
   <div class="portfolio-chapter-subchapters">
-    <div class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}"
+    <div class="portfolio-chapter-subchapter" id="chapter-{{$ctrl.index}}-{{$index}}"
          data-ng-repeat="subchapter in $ctrl.chapter.subchapters track by $index">
       <md-card class="card-lg chapter-card">
 
@@ -156,7 +156,7 @@
             </md-input-container>
           </div>
           <div layout="row" layout-align="space-between center">
-            <div dop-chapter-toolbar data-chapter="subchapter" data-index="index" data-is-sub="true"></div>
+            <div dop-chapter-toolbar data-chapter="subchapter" data-index="$ctrl.index" data-is-sub="true"></div>
             <md-button class="md-icon-button" data-ng-click="$ctrl.onDeleteSubChapter(subchapter)">
               <md-icon>delete</md-icon>
               <md-tooltip md-direction="bottom">
@@ -176,7 +176,7 @@
           <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
               data-layout-gt-sm="row">
             <li data-ng-if="!$ctrl.isEditable"
-                id="subChapterMaterial-{{index}}-{{$index}}"
+                id="subChapterMaterial-{{$ctrl.index}}-{{$index}}"
                 data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
                 data-dop-embedded-material
                 data-material="learningObject"
@@ -195,7 +195,7 @@
                 data-dnd-selected="models.selected = item"
                 data-ng-class="{'selected': models.selected === item}"
 
-                id="subchapterMaterial-editable-{{index}}-{{$index}}"
+                id="subchapterMaterial-editable-{{$ctrl.index}}-{{$index}}"
                 data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
                 data-dop-embedded-material
                 data-material="learningObject"
