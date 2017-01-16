@@ -199,10 +199,10 @@
     </div>
     <span flex></span>
     <!-- rating control -->
-    <div data-ng-if="!isEditPortfolioMode && portfolio.type" data-dop-rating
-    data-portfolio="portfolio"
-    like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
-    dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}">
-  </div>
-</md-card-actions>
+    <dop-rating data-ng-if="!isEditPortfolioMode && portfolio.type"
+      data-portfolio="portfolio"
+      like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
+      dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}">
+    </dop-rating>
+  </md-card-actions>
 </md-card>

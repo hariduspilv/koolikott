@@ -332,9 +332,9 @@
   <span flex></span>
   <!-- rating control -->
   <div data-ng-if="material.type">
-    <div data-ng-if="material" data-dop-rating data-material="material"
+    <dop-rating data-ng-if="material" data-material="material"
     like-message="{{ 'MATERIAL_LIKED' | translate }}"
-    dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
+    dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></dop-rating>
   </div>
 </md-card-actions>
 </md-card>
