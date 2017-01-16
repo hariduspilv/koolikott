@@ -1,19 +1,19 @@
-<md-card class="card-xs" data-ng-click="navigateTo(learningObject, $event)" layout="row">
+<md-card class="card-xs" data-ng-click="$ctrl.navigateTo($ctrl.learningObject, $event)" layout="row">
   <md-card-content flex="50">
-    <h6 class="two-rows-xs" data-ng-if="isPortfolio(learningObject.type)" data-ng-bind="learningObject.title"></h6>
-    <h6 class="two-rows-xs" data-ng-if="isMaterial(learningObject.type)" data-ng-bind="getCorrectLanguageTitle(learningObject)"></h6>
+    <h6 class="two-rows-xs" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" data-ng-bind="$ctrl.learningObject.title"></h6>
+    <h6 class="two-rows-xs" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"></h6>
     <p class="md-caption ellipsis">
-      <span data-ng-if="isPortfolio(learningObject.type)" class="authors">
-        <span data-ng-bind="formatName(learningObject.creator.name)"></span>
-        <span data-ng-bind="formatSurname(learningObject.creator.surname)"></span>
+      <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="authors">
+        <span data-ng-bind="$ctrl.formatName($ctrl.learningObject.creator.name)"></span>
+        <span data-ng-bind="$ctrl.formatSurname($ctrl.learningObject.creator.surname)"></span>
       </span>
-      <span data-ng-if="isMaterial(learningObject.type)" data-ng-repeat="author in learningObject.authors" class="authors">
-        <span data-ng-bind="formatName(author.name)"></span>
-        <span data-ng-bind="formatSurname(author.surname)"></span>
-        <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
+      <span data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-repeat="author in $ctrl.learningObject.authors track by $index" class="authors">
+        <span data-ng-bind="$ctrl.formatName(author.name)"></span>
+        <span data-ng-bind="$ctrl.formatSurname(author.surname)"></span>
+        <span data-ng-bind="$index < $ctrl.learningObject.authors.length - 1 ? ', ' : ''"></span>
       </span>
     </p>
   </md-card-content>
 
-  <div data-dop-card-media data-learning-object="learningObject" flex="50"></div>
+  <div data-dop-card-media data-learning-object="$ctrl.learningObject" flex="50"></div>
 </md-card>

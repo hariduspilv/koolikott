@@ -25,6 +25,8 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AtomFeedService {
 
@@ -47,6 +49,8 @@ public class AtomFeedService {
 
     @Inject
     private LanguageDAO languageDAO;
+
+    private static Logger logger = LoggerFactory.getLogger(AtomFeedService.class);
 
     private Factory factory;
 
@@ -141,20 +145,25 @@ public class AtomFeedService {
     private void checkVersion() {
         String projectVersion = configuration.getString("version");
         Version persistedVersion = versionDAO.getLatestVersion();
+        if(projectVersion == null)
+            logger.error("Project version could not be obtained!");
         if (persistedVersion == null || !projectVersion.equals(persistedVersion.getVersion()))
             versionDAO.addVersion(projectVersion);
     }
 
     private String translateMaterialTitle(List<LanguageString> titles) {
         String titleTranslation = translateString("FEED_MATERIAL_TITLE");
+        if(titleTranslation == null){
+            return null;
+        }
 
-        if (filterByLanguage(titles, lang) != null) {
+        if (filterByLanguage(titles, lang) != null && filterByLanguage(titles, lang).getText() != null) {
             return format(titleTranslation, filterByLanguage(titles, lang).getText());
         }
-        if (filterByLanguage(titles, "est") != null) {
+        if (filterByLanguage(titles, "est") != null && filterByLanguage(titles, "est").getText() != null) {
             return format(titleTranslation, filterByLanguage(titles, "est").getText());
         }
-        if (!titles.isEmpty()) {
+        if (!titles.isEmpty() && titles.get(0).getText() != null) {
             return format(titleTranslation, titles.get(0).getText());
         }
 

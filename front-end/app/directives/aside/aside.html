@@ -4,7 +4,7 @@
 
     <div data-ng-repeat="item in similar" data-ng-href="{{getItemLink(item)}}" role="list"
     aria-label="Ava sarnane materjal">
-      <div data-dop-card-xs data-learning-object="item"></div>
+      <dop-card-xs data-learning-object="item"></dop-card-xs>
     </div>
   </div>
 
@@ -12,7 +12,7 @@
     <h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
 
     <div data-ng-repeat="item in recommendations" role="list" aria-label="Ava soovitatud materjal">
-      <div data-dop-card-xs data-learning-object="item"></div>
+      <dop-card-xs data-learning-object="item"></dop-card-xs>
     </div>
 
     <div data-layout="row" data-ng-if="!$root.isEditPortfolioPage">
