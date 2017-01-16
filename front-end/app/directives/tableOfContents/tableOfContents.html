@@ -1,7 +1,7 @@
 <uib-accordion-heading>
   <a id="sidebarPortfolio" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row" layout-align="space-between center" data-ng-class="{'is-opened': $root.isViewPortfolioAndEdit}">
     <div layout="row" layout-align="center center">
-      <span class="sidenav__name">{{ portfolio.title }}</span>
+      <span class="sidenav__name" data-ng-bind="portfolio.title"></span>
     </div>
     <md-icon class="material-icons sidenav__icon sidenav__icon--animate">keyboard_arrow_right</md-icon>
   </a>
@@ -9,15 +9,17 @@
 
 <!-- Subitems -->
 <ul class="sidenav__list" data-du-scroll-container="scrollable-content">
-  <li class="sidenav__item" layout="column" data-ng-repeat="chapter in portfolio.chapters">
+  <li class="sidenav__item" layout="column" data-ng-repeat="chapter in portfolio.chapters track by $index">
     <a data-ng-href="#chapter-{{$index}}" id="toc-chapter-{{$index}}" class="sidenav__header" md-ink-ripple layout="row" layout-align="start center" data-ng-click="gotoChapter($event, $index); closeSidenav('left');">
-      <span class="sidenav__name">{{chapter.title}}</span>
+      <span class="sidenav__name" data-ng-if="chapter.title" data-ng-bind="chapter.title"></span>
+      <span class="sidenav__name" data-ng-if="!chapter.title" data-translate="PORTFOLIO_CHAPTER_TITLE_MISSING"></span>
     </a>
 
     <ul class="sidenav__list sidenav__list--sub">
-      <li class="sidenav__item" layout="column" data-ng-repeat="subchapter in chapter.subchapters">
+      <li class="sidenav__item" layout="column" data-ng-repeat="subchapter in chapter.subchapters track by $index">
         <a data-ng-href="#chapter-{{$parent.$index}}-{{$index}}" id="toc-chapter-{{$parent.$index}}-{{$index}}" class="sidenav__header" md-ink-ripple layout="row" layout-align="start center" data-ng-click="gotoChapter($event, $parent.$index, $index); closeSidenav('left');">
-          <span class="sidenav__name">{{subchapter.title}}</span>
+          <span class="sidenav__name" data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
+          <span class="sidenav__name" data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
         </a>
       </li>
     </ul>

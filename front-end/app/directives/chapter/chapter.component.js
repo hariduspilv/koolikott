@@ -24,8 +24,6 @@ function dopChapterController ($rootScope, translationService, dialogService) {
         angular.forEach(vm.chapter.subchapters, (value, key) => {
             vm.subisCollapsed[value.$$hashKey] = false;
         }, log);
-
-        console.log(vm.chapter);
     }
 
     // Open/Close Chapter

@@ -42,12 +42,20 @@ angular.module('koolikottApp')
 
                             if (indexes.length > 1) {
                                 // Subchapter
+                                if (vm.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title === '') {
+                                    return $translate.instant('PORTFOLIO_CHAPTER_TITLE_MISSING');
+                                }
+
                                 return vm.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title;
                             } else if (indexes[0] === -1) {
                                 // New chapter
                                 return $translate.instant('ADD_TO_NEW_CHAPTER');
                             } else {
                                 // Old chapter
+                                if (vm.portfolio.chapters[indexes[0]].title === '') {
+                                    return $translate.instant('PORTFOLIO_SUBCHAPTER_TITLE_MISSING');
+                                }
+
                                 return vm.portfolio.chapters[indexes[0]].title;
                             }
                         } else {

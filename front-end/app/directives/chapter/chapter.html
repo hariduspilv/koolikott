@@ -6,8 +6,10 @@
       <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
         <div flex>
           <div layout="row" class="pointer" data-ng-click="$ctrl.ocChapter($ctrl.chapter)">
-            <h2 data-ng-class="{'chapter-title': $ctrl.chapter.text.length == undefined || $ctrl.chapter.text.length == 0}"
-                data-ng-bind="$ctrl.chapter.title"></h2>
+            <h2 data-ng-class="{'chapter-title': $ctrl.chapter.text.length == undefined || $ctrl.chapter.text.length == 0}">
+              <span data-ng-if="$ctrl.chapter.title" data-ng-bind="$ctrl.chapter.title"></span>
+              <span data-ng-if="!$ctrl.chapter.title" data-translate="PORTFOLIO_CHAPTER_TITLE_MISSING"></span>
+            </h2>
             <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.isCollapsed}">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             </div>
@@ -110,7 +112,10 @@
         <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
           <div flex>
             <div layout="row" class="pointer" data-ng-click="$ctrl.ocSubChapter(subchapter)">
-              <h3 data-ng-bind="subchapter.title"></h3>
+              <h3>
+                <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
+                <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
+              </h3>
               <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[subchapter.$$hashKey]}">
                 <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               </div>
