@@ -54,7 +54,7 @@ public class TranslationDAO {
     public String getTranslationByKeyAndLangcode(String translationKey, Long langCode) {
 
         String translation = null;
-        Query query = entityManager.createNativeQuery("SELECT t.translation FROM Translation t WHERE lower(t.translationKey) = :translationKey AND t.translationGroup = :translationGroup");
+        Query query = entityManager.createNativeQuery("SELECT t.translation FROM Translation t WHERE t.translationKey = :translationKey AND t.translationGroup = :translationGroup");
 
         try {
             translation = (String) query.setParameter("translationKey", translationKey).setParameter("translationGroup", langCode).getSingleResult();
