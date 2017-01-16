@@ -12,7 +12,7 @@ dopToolbarAddMaterialsController.$inject = ['$rootScope', '$translate', 'authent
 function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedUserService, serverCallService, toastService, storageService, materialService, $mdDialog, portfolioService) {
     let vm = this;
 
-    function init() {
+    vm.$onInit = () => {
         if ($rootScope.isEditPortfolioMode) {
             vm.isPortfolioEdit = true;
             vm.portfolio = storageService.getPortfolio();
@@ -238,7 +238,4 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
     vm.addMaterialsToChapter = addMaterialsToChapter;
     vm.getPortfolioSelectLabel = getPortfolioSelectLabel;
     vm.getChapterSelectLabel = getChapterSelectLabel;
-
-    // Run init
-    init();
 }
