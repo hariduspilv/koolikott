@@ -130,7 +130,7 @@ angular.module('koolikottApp')
                     }
 
                     $scope.portfolio.chapters.push({
-                        title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                        title: '',
                         subchapters: [],
                         materials: [],
                         openCloseChapter: true

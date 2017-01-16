@@ -38,7 +38,7 @@ angular.module('koolikottApp')
                 let subChapters = $scope.chapter.subchapters;
 
                 subChapters.push({
-                    title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_SUBCHAPTER_TITLE'),
+                    title: '',
                     materials: [],
                     openCloseChapter: true
                 });
