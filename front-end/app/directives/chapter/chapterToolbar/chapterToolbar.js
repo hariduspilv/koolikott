@@ -39,8 +39,7 @@ angular.module('koolikottApp')
 
                 subChapters.push({
                     title: '',
-                    materials: [],
-                    openCloseChapter: true
+                    materials: []
                 });
 
                 let subChapterID = `chapter-${$scope.index}-${subChapters.length - 1}`;

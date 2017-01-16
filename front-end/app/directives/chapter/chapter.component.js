@@ -17,7 +17,7 @@ function dopChapterController ($rootScope, translationService, dialogService) {
     let vm = this;
 
     vm.$onInit = () => {
-        vm.isEditable = $rootScope.isEditPortfolioMode;
+        vm.isEditable = $rootScope.isEditPortfolioMode
         vm.isCollapsed = vm.chapter.openCloseChapter ? true : false;
         vm.subisCollapsed = [];
 

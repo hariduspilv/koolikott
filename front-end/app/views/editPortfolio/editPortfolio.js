@@ -133,7 +133,7 @@ angular.module('koolikottApp')
                         title: '',
                         subchapters: [],
                         materials: [],
-                        openCloseChapter: true
+                        openCloseChapter: false
                     });
 
                     let chapterID = `chapter-${$scope.portfolio.chapters.length - 1}`;
