@@ -25,104 +25,127 @@ angular.module('koolikottApp')
                     }
 
                     function getPortfolioSelectLabel() {
-                        if (vm.portfolio && vm.portfolio.title) {
-                            return vm.portfolio.title;
+                        if (vm.portfolio != null) {
+                            if (vm.portfolio.title) {
+                                return vm.portfolio.title;
+                            } else if (vm.portfolio === -1) {
+                                return $translate.instant('ADD_TO_NEW_PORTFOLIO');
+                            }
                         } else {
                             return $translate.instant('CHOOSE_PORTFOLIO');
                         }
-                    };
+                    }
 
                     function getChapterSelectLabel() {
-                        if (vm.chapter && vm.chapter.title) {
-                            return vm.chapter.title;
-                        } else if (vm.chapter == true) {
-                            return $translate.instant('ADD_TO_NEW_CHAPTER');
+                        if (vm.chapter != null) {
+                            var indexes = vm.chapter.split("_").map((item) => { return parseInt(item) });
+
+                            if (indexes.length > 1) {
+                                // Subchapter
+                                return vm.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title;
+                            } else if (indexes[0] === -1) {
+                                // New chapter
+                                return $translate.instant('ADD_TO_NEW_CHAPTER');
+                            } else {
+                                // Old chapter
+                                return vm.portfolio.chapters[indexes[0]].title;
+                            }
                         } else {
                             return $translate.instant('CHOOSE_PORTFOLIO_CHAPTER');
                         }
-                    };
+                    }
+
+                    function upgradeMaterials(materials) {
+                        return new Promise(function(resolve) {
+                            let list = [];
+                            let count = 0;
+                            materials.forEach(function(item, index, array) {
+                                materialService.getMaterialById(item.id)
+                                    .then((data) => {
+                                        list.push({learningObjects: [data]});
+                                        count++;
+
+                                        if (count === array.length) {
+                                            if(array.length == list.length) {
+                                                resolve(list);
+                                            } else {
+                                                console.log("Something went horribly wrong")
+                                                console.log(array);
+                                                console.log(list);
+                                            }
+                                        }
+                                    })
+                            })
+                        })
+                    }
 
                     function addMaterialsToChapter(chapter, portfolio) {
                         vm.isSaving = true;
-                        if (vm.chapter == true) {
-                            if (!portfolio.chapters) {
-                                portfolio.chapters = [];
-                            }
 
-                            let contentRows = [];
+                        var tempPortfolio = createPortfolio();
+                        var indexes = chapter.split("_").map((item) => { return parseInt(item) });
 
-                            for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
-                                materialService.getMaterialById($rootScope.selectedMaterials[i].id)
-                                    .then((data) => {
-                                        contentRows.push({learningObjects: [data]});
+                        var chapterIndex = indexes[0];
+                        var subchapterIndex = indexes[1]; // Undefined if subchapter wasn't selected
 
-                                        // Last cycle
-                                        if ($rootScope.selectedMaterials.length == i + 1) {
-                                            portfolio.chapters.push({
-                                                title: '',
-                                                contentRows: contentRows
-                                            });
-                                            serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
-                                            $rootScope.$broadcast('detailedSearch:empty');
-                                        }
-                                    });
-                            }
+                        if (portfolio === -1) {
+                            // New portfolio
+                            tempPortfolio = createPortfolio();
                         } else {
-                            if (chapter && !chapter.contentRows) {
-                                chapter.contentRows = [];
-                            }
+                            tempPortfolio = portfolio;
+                        }
 
-                            if (chapter && chapter.contentRows) {
-                                for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
-                                    materialService.getMaterialById($rootScope.selectedMaterials[i].id)
-                                        .then((data) => {
-                                            chapter.contentRows.push({learningObjects: [data]});
-
-                                            // Last cycle
-                                            if ($rootScope.selectedMaterials.length == i + 1) {
-                                                serverCallService.makePost("rest/portfolio/update", portfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
-                                                $rootScope.$broadcast('detailedSearch:empty');
-                                            }
-                                        });
-                                }
+                        if (indexes[0] === -1) {
+                            // New chapter in old portfolio
+                            if (!tempPortfolio.chapters || tempPortfolio.chapters.length <= 0) {
+                                tempPortfolio.chapters = [];
+                                chapterIndex = 0;
+                            } else {
+                                chapterIndex = tempPortfolio.chapters.length;
                             }
                         }
-                    };
 
-                    function showAddPortfolioDialog() {
-                        var emptyPortfolio = createPortfolio();
+                        // Got portfolio, got indexes
 
-                        if ($rootScope.selectedMaterials) {
-                            emptyPortfolio.chapters = [];
+                        upgradeMaterials($rootScope.selectedMaterials).then(function(data) {
+                            // Do something with the data
+                            // data = contentRows
 
-                            emptyPortfolio.chapters.push({
-                                title: '',
-                                contentRows: []
-                            });
-
-                            if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0) {
-                                for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
-                                    materialService.getMaterialById($rootScope.selectedMaterials[i].id)
-                                        .then((data) => {
-                                            emptyPortfolio.chapters[0].contentRows.push({learningObjects: [data]});
-
-                                            if ($rootScope.selectedMaterials.length == i + 1) {
-                                                toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
-
-                                                storageService.setPortfolio(emptyPortfolio);
-
-                                                $mdDialog.show({
-                                                    templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                                                    controller: 'addPortfolioDialogController'
-                                                });
-
-                                                removeSelection();
-                                            }
-                                        });
+                            if (subchapterIndex == null) {
+                                if (indexes[0] == -1) {
+                                    tempPortfolio.chapters[chapterIndex] = {
+                                        title: '',
+                                        contentRows: []
+                                    };
                                 }
+                                data.forEach((contentRow) => {
+                                    tempPortfolio.chapters[chapterIndex].contentRows.push(contentRow);
+                                });
+
+                            } else {
+                                data.forEach((contentRow) => {
+                                    tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows.push(contentRow);
+                                });
                             }
-                        }
-                    };
+
+                            if (portfolio == -1) {
+                                toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
+
+                                storageService.setPortfolio(tempPortfolio);
+
+                                $mdDialog.show({
+                                    templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                                    controller: 'addPortfolioDialogController'
+                                });
+
+                                removeSelection();
+                            } else {
+                                // If adding to an existing portfolio
+                                serverCallService.makePost("rest/portfolio/update", tempPortfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
+                                $rootScope.$broadcast('detailedSearch:empty');
+                            }
+                        });
+                    }
 
                     /*
                      * Callbacks for serverCallService
@@ -134,12 +157,12 @@ angular.module('koolikottApp')
                         } else {
                             vm.usersPortfolios = data.items;
                         }
-                    };
+                    }
 
                     function getUsersPortfoliosFail() {
                         toastService.show('LOADING_PORTFOLIOS_FAIL');
                         removeSelection();
-                    };
+                    }
 
                     function addMaterialsToChapterSuccess(portfolio) {
                         if (isEmpty(portfolio)) {
@@ -170,7 +193,7 @@ angular.module('koolikottApp')
                         }
 
                         $rootScope.selectedMaterials = [];
-                    };
+                    }
 
                     function loadUserPortfolios() {
                         var user = authenticatedUserService.getUser();
@@ -179,12 +202,17 @@ angular.module('koolikottApp')
                         };
                         var url = "rest/portfolio/getByCreator";
                         serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
-                    };
+                    }
 
                     function portfolioSelectChange() {
                         vm.chapter = null;
-                        loadPortfolioChapters(vm.portfolio);
-                    };
+
+                        if(vm.portfolio != -1) {
+                            loadPortfolioChapters(vm.portfolio);
+                        } else {
+                            vm.chapter = "-1";
+                        }
+                    }
 
                     function loadPortfolioChapters(portfolio) {
                         vm.loadingChapters = true;
@@ -200,16 +228,10 @@ angular.module('koolikottApp')
                             });
                     }
 
-                    function setChapter(data) {
-                        vm.chapter = data;
-                    }
-
                     // Exports
-                    vm.setChapter = setChapter;
                     vm.loadPortfolioChapters = loadPortfolioChapters;
                     vm.portfolioSelectChange = portfolioSelectChange;
                     vm.removeSelection = removeSelection;
-                    vm.showAddPortfolioDialog = showAddPortfolioDialog;
                     vm.addMaterialsToChapter = addMaterialsToChapter;
                     vm.getPortfolioSelectLabel = getPortfolioSelectLabel;
                     vm.getChapterSelectLabel = getChapterSelectLabel;
