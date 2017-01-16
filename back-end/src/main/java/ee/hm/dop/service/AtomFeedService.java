@@ -153,6 +153,9 @@ public class AtomFeedService {
 
     private String translateMaterialTitle(List<LanguageString> titles) {
         String titleTranslation = translateString("FEED_MATERIAL_TITLE");
+        if(titleTranslation == null){
+            return null;
+        }
 
         if (filterByLanguage(titles, lang) != null && filterByLanguage(titles, lang).getText() != null) {
             return format(titleTranslation, filterByLanguage(titles, lang).getText());
