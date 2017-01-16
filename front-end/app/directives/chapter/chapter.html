@@ -59,16 +59,16 @@
     </md-card>
 
     <!--Chapter rows-->
-    <ul data-ng-show="$ctrl.chapter.contentRows.length" class="portfolio-chapter-chapter-materials"
+    <ul data-ng-if="$ctrl.chapter.contentRows.length" class="portfolio-chapter-chapter-materials"
         uib-collapse="$ctrl.isCollapsed">
       <li data-ng-repeat="(rowIndex, contentRow) in $ctrl.chapter.contentRows track by $index" flex>
 
         <!--LearningObjects in the row-->
-        <ul data-ng-show="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
+        <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
             data-layout-gt-sm="row">
           <li data-ng-if="!$ctrl.isEditable"
               id="chapterMaterial-{{index}}-{{$index}}"
-              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
               data-dop-embedded-material
               data-material="learningObject"
               data-chapter="chapter"
@@ -87,7 +87,7 @@
               data-ng-class="{'selected': models.selected === item}"
 
               id="chapterMaterial-draggable-{{index}}-{{$index}}"
-              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
               data-dop-embedded-material
               data-material="learningObject"
               data-chapter="chapter"
@@ -163,16 +163,16 @@
       </md-card>
 
       <!--Subchapter rows-->
-      <ul data-ng-show="subchapter.contentRows.length" class="portfolio-chapter-subchapter-materials"
+      <ul data-ng-if="subchapter.contentRows.length" class="portfolio-chapter-subchapter-materials"
           uib-collapse="$ctrl.subisCollapsed[subchapter.$$hashKey]">
         <li data-ng-repeat="(rowIndex, contentRow) in subchapter.contentRows track by $index" flex>
 
           <!--LearningObjects in the row-->
-          <ul data-ng-show="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
+          <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
               data-layout-gt-sm="row">
             <li data-ng-if="!$ctrl.isEditable"
                 id="subChapterMaterial-{{index}}-{{$index}}"
-                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
                 data-dop-embedded-material
                 data-material="learningObject"
                 data-chapter="subchapter"
@@ -191,7 +191,7 @@
                 data-ng-class="{'selected': models.selected === item}"
 
                 id="subchapterMaterial-editable-{{index}}-{{$index}}"
-                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects"
+                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
                 data-dop-embedded-material
                 data-material="learningObject"
                 data-chapter="subchapter"
