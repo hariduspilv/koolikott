@@ -154,7 +154,7 @@ public class AtomFeedService {
         if (filterByLanguage(titles, "est") != null) {
             return format(titleTranslation, filterByLanguage(titles, "est").getText());
         }
-        if (!titles.isEmpty()) {
+        if (!titles.isEmpty() && titles.get(0).getText() != null) {
             return format(titleTranslation, titles.get(0).getText());
         }
 
