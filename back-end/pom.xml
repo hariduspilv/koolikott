@@ -248,15 +248,27 @@
 			<version>3.3.1</version>
 		</dependency>
 
-		<!--For writing custom filters with Solr-->
-		<!--<dependency>-->
-			<!--<groupId>org.apache.solr</groupId>-->
-			<!--<artifactId>solr-analysis-extras</artifactId>-->
-			<!--<version>6.1.0</version>-->
-		<!--</dependency>-->
+		<!--Atom Feed-->
+		<dependency>
+			<groupId>org.apache.abdera</groupId>
+			<artifactId>abdera-server</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 
-
+		<!--Required by OpenSAML XMLtooling (Apache Adebra prerequisite)-->
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.11.0</version>
+		</dependency>
 	</dependencies>
+
+	<!--For writing custom filters with Solr-->
+	<!--<dependency>-->
+	<!--<groupId>org.apache.solr</groupId>-->
+	<!--<artifactId>solr-analysis-extras</artifactId>-->
+	<!--<version>6.1.0</version>-->
+	<!--</dependency>-->
 	
 	<build>
         <plugins>
@@ -312,6 +324,15 @@
 	            </executions>
 		      </plugin>
         </plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>db/migration/V*__Test_data_migration_*.sql</exclude>
+				</excludes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
     </build>
     
     <profiles>
@@ -366,6 +387,7 @@
                         <excludes>
                             <exclude>db/migration/V*__Test_data_migration_*.sql</exclude>
                         </excludes>
+						<filtering>true</filtering>
                     </resource>
                 </resources>
 			</build>

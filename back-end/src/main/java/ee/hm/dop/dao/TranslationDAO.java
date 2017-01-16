@@ -1,18 +1,25 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.TranslationGroup;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.TranslationGroup;
+
 public class TranslationDAO {
+
+    public static enum TranslationGroupEnum {
+        EST, RUS, ENG
+    }
 
     @Inject
     private EntityManager entityManager;
+
+    @Inject
+    private LanguageDAO languageDAO;
 
     public TranslationGroup findTranslationGroupFor(Language language) {
         TypedQuery<TranslationGroup> findByLanguage = entityManager.createQuery(
@@ -42,5 +49,19 @@ public class TranslationDAO {
         }
 
         return translationKey;
+    }
+
+    public String getTranslationByKeyAndLangcode(String translationKey, Long langCode) {
+
+        String translation = null;
+        Query query = entityManager.createNativeQuery("SELECT t.translation FROM Translation t WHERE lower(t.translationKey) = :translationKey AND t.translationGroup = :translationGroup");
+
+        try {
+            translation = (String) query.setParameter("translationKey", translationKey).setParameter("translationGroup", langCode).getSingleResult();
+        } catch (NoResultException ex) {
+            // ignore
+        }
+
+        return translation;
     }
 }
