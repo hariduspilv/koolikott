@@ -1,5 +1,5 @@
-<md-card class="card-sm" data-ng-class="{ active: learningObject.selected }"
-         id="{{$ctrl.isMaterial(learningObject.type) ? 'material' : 'portfolio'}}-card-{{$ctrl.learningObject.id}}"
+<md-card class="card-sm" data-ng-class="{ active: $ctrl.learningObject.selected }"
+         id="{{$ctrl.isMaterial($ctrl.learningObject.type) ? 'material' : 'portfolio'}}-card-{{$ctrl.learningObject.id}}"
          data-ng-click="$ctrl.navigateTo($ctrl.learningObject, $event)"
          layout="column" layout-xs="row">
   <dop-card-media data-learning-object="$ctrl.learningObject" data-is-authenticated="$ctrl.isAuthenticated()" flex
