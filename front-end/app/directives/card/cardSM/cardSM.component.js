@@ -93,4 +93,12 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
     }
 
     vm.getTaxons = () => taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
+
+    vm.hoverEnter = () => {
+        vm.cardHover = true;
+    };
+
+    vm.hoverLeave = () => {
+        vm.cardHover = false;
+    }
 }
