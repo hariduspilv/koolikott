@@ -31,6 +31,55 @@
   .card-media {
     margin-left: -$md-padding;
     height: auto;
+
+    .pick {
+      position: absolute;
+      padding: 10px;
+      left: 0;
+      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 10;
+      cursor: pointer;
+      visibility: hidden;
+
+      md-icon {
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, .6);
+      }
+
+      .checked {
+        display: none;
+      }
+
+      &:hover {
+        .checked {
+          display: block;
+        }
+
+        .unchecked {
+          display: none;
+        }
+      }
+    }
+
+    &.active {
+      .pick {
+        visibility: visible;
+      }
+
+      .checked {
+        display: block;
+      }
+
+      .unchecked {
+        display: none;
+      }
+    }
+
+    &:hover {
+      .pick {
+        visibility: visible;
+      }
+    }
   }
 
   .card-cover {
