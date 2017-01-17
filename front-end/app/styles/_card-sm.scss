@@ -23,6 +23,7 @@
 .card-sm {
   width: 100%;
   overflow: hidden;
+  position: relative;
 
   @media (min-width: $layout-breakpoint-xs) {
     height: 280px;

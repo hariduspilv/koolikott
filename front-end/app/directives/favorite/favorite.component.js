@@ -1,23 +1,35 @@
 'use strict'
 
 angular.module('koolikottApp')
-.component('dopFavorite', {
-    bindings: {
-        learningObject: '='
-    },
-    templateUrl: 'directives/favorite/favorite.html',
-    controller: dopFavoriteController
-});
+    .component('dopFavorite', {
+        bindings: {
+            learningObject: '<',
+            hover: '<'
+        },
+        templateUrl: 'directives/favorite/favorite.html',
+        controller: dopFavoriteController
+    });
 
 dopFavoriteController.$inject = ['$rootScope', 'serverCallService', 'authenticatedUserService', 'toastService', '$timeout', 'materialService', 'portfolioService'];
 
-function dopFavoriteController ($rootScope, serverCallService, authenticatedUserService, toastService, $timeout, materialService, portfolioService) {
+function dopFavoriteController($rootScope, serverCallService, authenticatedUserService, toastService, $timeout, materialService, portfolioService) {
     let vm = this;
 
     vm.$onInit = () => {
         vm.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
         vm.isViewMaterialOrPortfolioPage = $rootScope.isViewMaterialOrPortfolioPage;
 
+        getFavoriteData();
+    };
+
+    vm.$onChanges = (changes) => {
+        // When asynchronous learningObject request finishes after component init
+        if (changes.learningObject && changes.learningObject.currentValue && !changes.learningObject.previousValue) {
+            getFavoriteData();
+        }
+    };
+
+    function getFavoriteData() {
         if (vm.learningObject && isLoggedIn()) {
             if (vm.learningObject.favorite) {
                 vm.hasFavorited = true;
@@ -44,14 +56,14 @@ function dopFavoriteController ($rootScope, serverCallService, authenticatedUser
         if (isLoggedIn()) {
             if (isPortfolio(vm.learningObject.type)) {
                 portfolioService.getPortfolioById(vm.learningObject.id)
-                .then(data => {
-                    serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
-                });
+                    .then(data => {
+                        serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
+                    });
             } else if (isMaterial(vm.learningObject.type)) {
                 materialService.getMaterialById(vm.learningObject.id)
-                .then(data => {
-                    serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
-                });
+                    .then(data => {
+                        serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
+                    });
             }
 
 
@@ -76,9 +88,7 @@ function dopFavoriteController ($rootScope, serverCallService, authenticatedUser
         $event.stopPropagation();
 
         if (isLoggedIn() && vm.hasFavorited) {
-            serverCallService.makeDelete("rest/learningObject/favorite", {'id': vm.learningObject.id}, function () {
-            }, function () {
-            });
+            serverCallService.makeDelete("rest/learningObject/favorite", {'id': vm.learningObject.id});
             vm.hasFavorited = false;
             toastService.show("REMOVED_FROM_FAVORITES");
         }

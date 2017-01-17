@@ -4,20 +4,8 @@
   right: 0;
   z-index: 5;
 
-  &:hover {
-    .favorite__icon {
-      color: rgba(255, 255, 255, .8);
-    }
-  }
-
   .favorite__icon {
-    color: rgba(255, 255, 255, 0);
-  }
-
-  &.is-visible {
-    .favorite__icon {
-      color: rgba(255, 255, 255, .8);
-    }
+    color: rgba(255, 255, 255, .8);
   }
 
   &.has-favorited {
