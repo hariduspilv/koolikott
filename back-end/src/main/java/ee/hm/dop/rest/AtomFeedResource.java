@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import ee.hm.dop.service.AtomFeedService;
@@ -19,24 +20,9 @@ public class AtomFeedResource {
     private AtomFeedService atomFeedService;
 
     @GET
-    @Path("et/feed")
+    @Path("{lang}/feed")
     @Produces("application/atom+xml")
-    public Feed getMaterialsET() {
-        return atomFeedService.getFeed("est");
-    }
-
-    @GET
-    @Path("en/feed")
-    @Produces("application/atom+xml")
-    public Feed getMaterialsEN() {
-        return atomFeedService.getFeed("eng");
-
-    }
-
-    @GET
-    @Path("ru/feed")
-    @Produces("application/atom+xml")
-    public Feed getMaterialsRU() {
-        return atomFeedService.getFeed("rus");
+    public Feed getMaterials(@PathParam("lang") String lang) {
+        return atomFeedService.getFeed(lang);
     }
 }

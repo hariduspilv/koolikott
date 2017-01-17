@@ -163,7 +163,7 @@
 
 <!-- right small side  -->
 <div flex flex-gt-xs="25" class="right-side">
-  <div class="card-media" data-ng-class="{'active': material.selected}">
+  <div class="card-media">
     <div class="pick" data-ng-if="isLoggedIn()" layout-align="end start">
       <md-tooltip md-direction="bottom">
         <span data-ng-show="!material.selected" data-translate="PICK_MATERIAL"></span>
@@ -173,8 +173,8 @@
       <md-icon class="unchecked">check</md-icon>
       <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
     </div>
-    <div data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted" data-dop-favorite
-    data-learning-object="material"></div>
+    <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted"
+    data-learning-object="material"></dop-favorite>
     <div data-ng-if="!material.picture" class="card-cover {{getType()}}">
       <div class="pattern">
         <div class="sheet up-left"></div>
@@ -341,9 +341,9 @@
   <span flex></span>
   <!-- rating control -->
   <div data-ng-if="material.type">
-    <div data-ng-if="material" data-dop-rating data-material="material"
+    <dop-rating data-ng-if="material" data-material="material"
     like-message="{{ 'MATERIAL_LIKED' | translate }}"
-    dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></div>
+    dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></dop-rating>
   </div>
 </md-card-actions>
 </md-card>

@@ -133,8 +133,8 @@
             data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
           </md-tooltip>
         </div>
-        <div data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted" data-dop-favorite
-        data-learning-object="portfolio"></div>
+        <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted"
+        data-learning-object="portfolio"></dop-favorite>
 
         <!-- imaged -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">
@@ -199,10 +199,10 @@
     </div>
     <span flex></span>
     <!-- rating control -->
-    <div data-ng-if="!isEditPortfolioMode && portfolio.type" data-dop-rating
-    data-portfolio="portfolio"
-    like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
-    dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}">
-  </div>
-</md-card-actions>
+    <dop-rating data-ng-if="!isEditPortfolioMode && portfolio.type"
+      data-portfolio="portfolio"
+      like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
+      dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}">
+    </dop-rating>
+  </md-card-actions>
 </md-card>
