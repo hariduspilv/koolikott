@@ -87,22 +87,46 @@ angular.module('koolikottApp')
                 .when('/:username', {
                     templateUrl: 'views/profile/profile.html',
                     controller: 'profileController',
-                    resolve: isLoggedIn
+                    resolve: {
+                        isLoggedIn: function (authenticatedUserService, $location) {
+                            if (!authenticatedUserService.isAuthenticated()) {
+                                $location.path('/')
+                            }
+                        }
+                    }
                 })
                 .when('/:username/materials', {
                     templateUrl: 'views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
-                    resolve: isLoggedIn
+                    resolve: {
+                        isLoggedIn: function (authenticatedUserService, $location) {
+                            if (!authenticatedUserService.isAuthenticated()) {
+                                $location.path('/')
+                            }
+                        }
+                    }
                 })
                 .when('/:username/portfolios', {
                     templateUrl: 'views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
-                    resolve: isLoggedIn
+                    resolve: {
+                        isLoggedIn: function (authenticatedUserService, $location) {
+                            if (!authenticatedUserService.isAuthenticated()) {
+                                $location.path('/')
+                            }
+                        }
+                    }
                 })
                 .when('/:username/favorites', {
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
-                    resolve: isLoggedIn
+                    resolve: {
+                        isLoggedIn: function (authenticatedUserService, $location) {
+                            if (!authenticatedUserService.isAuthenticated()) {
+                                $location.path('/')
+                            }
+                        }
+                    }
                 })
                 .when('/dev/login/:idCode', {
                     templateUrl: 'views/dev/login/login.html',
@@ -111,10 +135,3 @@ angular.module('koolikottApp')
         }
     ]);
 
-let isLoggedIn = {
-    isLoggedIn: function (authenticatedUserService, $location) {
-        if (!authenticatedUserService.isAuthenticated()) {
-            $location.path('/')
-        }
-    }
-};
