@@ -361,11 +361,11 @@
                   <md-input-container flex data-ng-required="!material.publishers[0].name || $index === 0">
                     <label>
                       <span data-translate="MATERIAL_AUTHOR_NAME"></span>
-                      <span data-ng-hide="author.name || $index > 0">*</span>
+                      <span data-ng-hide="author.name || author.surname || $index > 0">*</span>
                     </label>
                     <input data-ng-model="author.name" id="material-author-{{$index}}-name"
-                           data-ng-required="author.name" name="firstname" md-maxlength="50" maxlength="50">
-                    <div ng-messages="addMaterialForm.name.$error" data-ng-show="!author.name && author.surname">
+                           data-ng-required="author.surname" name="firstname" md-maxlength="50">
+                    <div ng-messages="addMaterialForm.firstname.$error" data-ng-show="!author.name && author.surname">
                       <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
                     </div>
                   </md-input-container>
@@ -375,7 +375,7 @@
                       <span data-ng-hide="author.name || author.surname || $index > 0">*</span>
                     </label>
                     <input data-ng-model="author.surname" data-ng-required="author.name" name="surname"
-                           md-maxlength="50" maxlength="50">
+                           md-maxlength="50">
                     <div ng-messages="addMaterialForm.surname.$error" data-ng-show="author.name && !author.surname">
                       <div ng-message="required" data-translate="LAST_NAME_REQUIRED"></div>
                     </div>
@@ -393,7 +393,7 @@
                 </div>
               </div>
               <div
-                data-ng-show="!isAuthorOrPublisherSet() && (addMaterialForm.firstname.$touched || addMaterialForm.surname.$touched || addMaterialForm.$submitted)">
+                data-ng-if="!isAuthorOrPublisherSet() && (addMaterialForm.firstname.$touched || addMaterialForm.surname.$touched || addMaterialForm.$submitted)">
                 <div data-translate="MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY"
                      class="validation-messages"></div>
               </div>

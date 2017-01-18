@@ -26,7 +26,7 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
 
         vm.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups(vm.learningObject.targetGroups);
         loadDomainsAndSubjects();
-    }
+    };
 
     vm.navigateTo = (learningObject, $event) => {
         $event.preventDefault();

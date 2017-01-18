@@ -160,7 +160,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         };
 
         $scope.isAuthorOrPublisherSet = function () {
-            return ($scope.material.authors[0].name && $scope.material.authors[0].surname) || $scope.material.publishers[0];
+            return ($scope.material.authors[0].name && $scope.material.authors[0].surname) || ($scope.material.publishers[0] ? $scope.material.publishers[0].name : false);
         };
 
         $scope.isAdmin = function () {
