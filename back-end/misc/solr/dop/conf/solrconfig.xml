@@ -823,6 +823,7 @@
             <int name="rows">10</int>
             <str name="qf">search_source</str>
             <str name="qf">text</str>
+            <str name="qf">title^2</str>
             <str name="defType">edismax</str>
         </lst>
         <!-- In addition to defaults, "appends" params can be specified
