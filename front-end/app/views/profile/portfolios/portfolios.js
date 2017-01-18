@@ -6,9 +6,6 @@ angular.module('koolikottApp')
     '$scope', '$route', 'authenticatedUserService',
     function ($scope, $route, authenticatedUserService) {
         function init() {
-            if(authenticatedUserService.getUser() == null){
-                return window.location.href = "/";
-            }
             $scope.cache = false;
             $scope.url = "rest/portfolio/getByCreator";
             $scope.params = {
