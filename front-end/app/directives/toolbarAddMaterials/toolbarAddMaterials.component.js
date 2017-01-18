@@ -29,7 +29,7 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
         if (vm.portfolio != null) {
             if (vm.portfolio.title) {
                 return vm.portfolio.title;
-            } else if (vm.portfolio === -1) {
+            } else if (vm.portfolio === '-1') {
                 return $translate.instant('ADD_TO_NEW_PORTFOLIO');
             }
         } else {
@@ -40,7 +40,7 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
     function getChapterSelectLabel() {
         if (vm.chapter != null) {
 
-            var indexes = vm.chapter.split("_").map((item) => { return parseInt(item) });
+            let indexes = vm.chapter.split('_').map((item) => { return parseInt(item) });
 
             if (indexes.length > 1) {
                 if (vm.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title === '') {
@@ -82,21 +82,19 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
         // Start spinner
         vm.isSaving = true;
 
-        var tempPortfolio = createPortfolio();
-        var indexes = chapter.split("_").map((item) => { return parseInt(item) });
+        let tempPortfolio = createPortfolio();
+        let indexes = chapter.split('_').map((item) => { return parseInt(item) });
 
         // Indexes in arrays
-        var chapterIndex = indexes[0];
-        var subchapterIndex = indexes[1];
+        let chapterIndex = indexes[0];
+        let subchapterIndex = indexes[1];
 
-        if (portfolio === -1) {
-            tempPortfolio = createPortfolio();
-        } else {
+        if (portfolio !== '-1') {
             tempPortfolio = portfolio;
         }
 
         if (indexes[0] === -1) {
-            if (!tempPortfolio.chapters || tempPortfolio.chapters.length <= 0) {
+            if (!tempPortfolio.chapters || tempPortfolio.chapters.length === 0) {
                 tempPortfolio.chapters = [];
                 chapterIndex = 0;
             } else {
@@ -107,7 +105,7 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
         upgradeMaterials($rootScope.selectedMaterials).then(function(data) {
 
             if (subchapterIndex == null) {
-                if (indexes[0] == -1) {
+                if (indexes[0] === -1) {
                     tempPortfolio.chapters[chapterIndex] = {
                         title: ''
                     };
@@ -130,7 +128,7 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
                 });
             }
 
-            if (portfolio == -1) {
+            if (portfolio === '-1') {
                 toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
 
                 storageService.setPortfolio(tempPortfolio);
@@ -191,7 +189,7 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
      */
 
     function removeSelection() {
-        for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
+        for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
             $rootScope.selectedMaterials[i].selected = false;
         }
 
@@ -199,21 +197,21 @@ function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedU
     }
 
     function loadUserPortfolios() {
-        var user = authenticatedUserService.getUser();
-        var params = {
+        let user = authenticatedUserService.getUser();
+        let params = {
             'username': user.username
         };
-        var url = "rest/portfolio/getByCreator";
+        let url = "rest/portfolio/getByCreator";
         serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
     }
 
     function portfolioSelectChange() {
         vm.chapter = null;
 
-        if(vm.portfolio != -1) {
+        if(vm.portfolio !== '-1') {
             loadPortfolioChapters(vm.portfolio);
         } else {
-            vm.chapter = "-1";
+            vm.chapter = '-1';
         }
     }
 

@@ -15,7 +15,7 @@
       <md-select data-ng-show="$ctrl.usersPortfolios || $ctrl.isPortfolioEdit && $ctrl.portfolio" aria-label="Vali kogumik" md-selected-text="$ctrl.getPortfolioSelectLabel()" data-ng-model="$ctrl.portfolio" data-ng-disabled="$ctrl.isPortfolioEdit"
                  class="toolbar-add-materials__select" data-ng-change="$ctrl.portfolioSelectChange()">
         <md-option data-ng-value="portfolio" data-ng-repeat="portfolio in $ctrl.usersPortfolios track by $index">{{portfolio.title}}</md-option>
-        <md-option data-ng-value="-1" data-translate="ADD_TO_NEW_PORTFOLIO"></md-option>
+        <md-option data-ng-value="'-1'" data-translate="ADD_TO_NEW_PORTFOLIO"></md-option>
       </md-select>
       <p data-ng-if="$ctrl.usersPortfolios || $ctrl.isPortfolioEdit && $ctrl.portfolio" class="md-subhead toolbar-add-materials__info toolbar-add-materials__info--hidden" translate="TOOLBAR_ADD_CHAPTER"></p>
       <md-progress-circular class="md-primary toolbar-add-materials__progress--no-margin" md-mode="indeterminate" md-diameter="30"
@@ -34,7 +34,7 @@
       </md-select>
     </div>
     <div class="toolbar-add-materials__right" layout="row" layout-align="end center">
-      <md-button aria-label="Lisa" class="md-primary toolbar-add-materials__button" data-ng-if="!$ctrl.isSaving" data-ng-disabled="!$ctrl.portfolio || !$ctrl.chapter && $ctrl.portfolio != -1" data-ng-click="$ctrl.addMaterialsToChapter($ctrl.chapter, $ctrl.portfolio)">
+      <md-button aria-label="Lisa" class="md-primary toolbar-add-materials__button" data-ng-if="!$ctrl.isSaving" data-ng-disabled="!$ctrl.portfolio || !$ctrl.chapter && $ctrl.portfolio !== '-1'" data-ng-click="$ctrl.addMaterialsToChapter($ctrl.chapter, $ctrl.portfolio)">
         <md-icon>done</md-icon>
       </md-button>
       <md-progress-circular class="md-primary toolbar-add-materials__progress" md-mode="indeterminate" md-diameter="30"
