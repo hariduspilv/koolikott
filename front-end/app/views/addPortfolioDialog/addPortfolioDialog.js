@@ -105,7 +105,7 @@ angular.module('koolikottApp')
                                         learningObjects: []
                                     }
                                 ],
-                                openCloseChapter: true
+                                openCloseChapter: false
                             });
                         }
 
