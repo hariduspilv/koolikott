@@ -21,8 +21,6 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                         return response.data;
                     });
             }
-
-            serverCallService.makePut(url, JSON.stringify(tag.tagName), successCallback, failCallback);
         },
 
         reportTag(tag, learningObject, successCallback, failCallback) {
