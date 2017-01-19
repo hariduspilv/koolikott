@@ -87,46 +87,23 @@ angular.module('koolikottApp')
                 .when('/:username', {
                     templateUrl: 'views/profile/profile.html',
                     controller: 'profileController',
-                    resolve: {
-                        isLoggedIn: function (authenticatedUserService, $location) {
-                            if (!authenticatedUserService.isAuthenticated()) {
-                                $location.path('/')
-                            }
-                        }
-                    }
+                    permissions: ['USER']
                 })
                 .when('/:username/materials', {
                     templateUrl: 'views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
-                    resolve: {
-                        isLoggedIn: function (authenticatedUserService, $location) {
-                            if (!authenticatedUserService.isAuthenticated()) {
-                                $location.path('/')
-                            }
-                        }
-                    }
+                    permissions: ['USER']
                 })
                 .when('/:username/portfolios', {
                     templateUrl: 'views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
-                    resolve: {
-                        isLoggedIn: function (authenticatedUserService, $location) {
-                            if (!authenticatedUserService.isAuthenticated()) {
-                                $location.path('/')
-                            }
-                        }
-                    }
+                    permissions: ['USER']
                 })
                 .when('/:username/favorites', {
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
-                    resolve: {
-                        isLoggedIn: function (authenticatedUserService, $location) {
-                            if (!authenticatedUserService.isAuthenticated()) {
-                                $location.path('/')
-                            }
-                        }
-                    }
+                    permissions: ['USER']
+
                 })
                 .when('/dev/login/:idCode', {
                     templateUrl: 'views/dev/login/login.html',
