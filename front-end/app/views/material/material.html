@@ -163,7 +163,7 @@
 
 <!-- right small side  -->
 <div flex flex-gt-xs="25" class="right-side">
-  <div class="card-media">
+  <div class="card-media" data-ng-class="{'active': material.selected}">
     <div class="pick" data-ng-if="isLoggedIn()" layout-align="end start">
       <md-tooltip md-direction="bottom">
         <span data-ng-show="!material.selected" data-translate="PICK_MATERIAL"></span>
