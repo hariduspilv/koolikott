@@ -431,8 +431,7 @@ module.exports = function (grunt) {
         // ES6 syntax
         babel: {
             options: {
-                presets: ['es2015'],
-                plugins: ['es6-promise']
+                presets: ['es2015']
             },
             dist: {
                 files: {
