@@ -4,7 +4,8 @@ angular.module('koolikottApp')
 .component('dopCardMedia', {
     bindings: {
         learningObject: '=',
-        isAuthenticated: '<'
+        isAuthenticated: '<',
+        disablePick: '<'
     },
     templateUrl: 'directives/card/cardMedia/cardMedia.html',
     controller: dopCardMediaController
