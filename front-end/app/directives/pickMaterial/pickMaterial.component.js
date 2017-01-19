@@ -3,7 +3,7 @@
 angular.module('koolikottApp')
     .component('dopPickMaterial', {
         bindings: {
-            learningObject: '='
+            learningObject: '<'
         },
         templateUrl: 'directives/pickMaterial/pickMaterial.html',
         controller: dopPickMaterialController
