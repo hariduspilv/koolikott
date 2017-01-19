@@ -116,15 +116,15 @@
                 <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
                 <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
               </h3>
-              <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[subchapter.$$hashKey]}">
+              <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[subchapter.id]}">
                 <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               </div>
               <md-tooltip md-direction="bottom">
-                <span data-ng-if="$ctrl.subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
-                <span data-ng-if="!$ctrl.subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
+                <span data-ng-if="$ctrl.subisCollapsed[subchapter.id]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
+                <span data-ng-if="!$ctrl.subisCollapsed[subchapter.id]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
               </md-tooltip>
             </div>
-            <div uib-collapse="$ctrl.subisCollapsed[subchapter.$$hashKey]">
+            <div uib-collapse="$ctrl.subisCollapsed[subchapter.id]">
               <p class="md-body-1" data-ng-class="{'hide': subchapter.text.length == undefined || subchapter.text.length == 0}"
                 data-ng-bind-html="subchapter.text"></p>
             </div>
@@ -134,11 +134,11 @@
         <!--Edit-->
         <md-card-content data-ng-if="$ctrl.isEditable">
           <div layout="row" layout-align="start center">
-            <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[subchapter.$$hashKey]}" data-ng-click="$ctrl.ocSubChapter(subchapter)">
+            <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[subchapter.id]}" data-ng-click="$ctrl.ocSubChapter(subchapter)">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               <md-tooltip md-direction="bottom">
-                <span data-ng-if="$ctrl.subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
-                <span data-ng-if="!$ctrl.subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
+                <span data-ng-if="$ctrl.subisCollapsed[subchapter.id]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
+                <span data-ng-if="!$ctrl.subisCollapsed[subchapter.id]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
               </md-tooltip>
             </div>
             <md-input-container class="md-block subchapter-title" flex>
@@ -147,7 +147,7 @@
                      placeholder="{{ 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE' | translate }}">
             </md-input-container>
           </div>
-          <div uib-collapse="$ctrl.subisCollapsed[subchapter.$$hashKey]">
+          <div uib-collapse="$ctrl.subisCollapsed[subchapter.id]">
             <md-input-container class="md-block">
 
               <div text-angular class="textangular-editor" id="subchapter-input"
@@ -169,7 +169,7 @@
 
       <!--Subchapter rows-->
       <ul data-ng-if="subchapter.contentRows.length" class="portfolio-chapter-subchapter-materials"
-          uib-collapse="$ctrl.subisCollapsed[subchapter.$$hashKey]">
+          uib-collapse="$ctrl.subisCollapsed[subchapter.id]">
         <li data-ng-repeat="(rowIndex, contentRow) in subchapter.contentRows track by $index" flex>
 
           <!--LearningObjects in the row-->

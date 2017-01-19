@@ -22,7 +22,7 @@ function dopChapterController ($rootScope, translationService, dialogService) {
         vm.subisCollapsed = [];
 
         angular.forEach(vm.chapter.subchapters, (value, key) => {
-            vm.subisCollapsed[value.$$hashKey] = false;
+            vm.subisCollapsed[value.id] = false;
         }, log);
     }
 
@@ -30,7 +30,7 @@ function dopChapterController ($rootScope, translationService, dialogService) {
     vm.ocChapter = () => vm.isCollapsed = !vm.isCollapsed;
 
     // Open/Close SubChapter
-    vm.ocSubChapter = (subChapter) => vm.subisCollapsed[subChapter.$$hashKey] = !vm.subisCollapsed[subChapter.$$hashKey];
+    vm.ocSubChapter = (subChapter) => vm.subisCollapsed[subChapter.id] = !vm.subisCollapsed[subChapter.id];
 
     vm.onDeleteSubChapter = (subChapter) => {
         var deleteSubChapter = () => vm.chapter.subchapters.splice(vm.chapter.subchapters.indexOf(subChapter), 1);
