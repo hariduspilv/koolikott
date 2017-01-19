@@ -21,6 +21,10 @@ angular.module('koolikottApp')
                     templateUrl: 'views/material/material.html',
                     controller: 'materialController'
                 })
+                .when('/help', {
+                    templateUrl: 'views/static/abstractStaticPage.html',
+                    controller: 'helpController'
+                })
                 .when('/about', {
                     templateUrl: 'views/static/abstractStaticPage.html',
                     controller: 'aboutController'
@@ -87,22 +91,22 @@ angular.module('koolikottApp')
                 .when('/:username', {
                     templateUrl: 'views/profile/profile.html',
                     controller: 'profileController',
-                    permissions: ['USER']
+                    resolve: UserPathResolver
                 })
                 .when('/:username/materials', {
                     templateUrl: 'views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
-                    permissions: ['USER']
+                    resolve: UserPathResolver
                 })
                 .when('/:username/portfolios', {
                     templateUrl: 'views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
-                    permissions: ['USER']
+                    resolve: UserPathResolver
                 })
                 .when('/:username/favorites', {
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
-                    permissions: ['USER']
+                    resolve: UserPathResolver
 
                 })
                 .when('/dev/login/:idCode', {
@@ -112,3 +116,10 @@ angular.module('koolikottApp')
         }
     ]);
 
+let UserPathResolver = {
+    isLoggedIn: ['authenticatedUserService', '$location', function (authenticatedUserService, $location) {
+        if (!authenticatedUserService.isAuthenticated()) {
+            $location.path("/");
+        }
+    }]
+};
