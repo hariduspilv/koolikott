@@ -437,27 +437,5 @@ angular.module('koolikottApp')
                     return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
             }
-
-            $scope.pickMaterial = ($event, material) => {
-                $event.preventDefault();
-                $event.stopPropagation();
-
-                if ($rootScope.selectedMaterials) {
-                    let index = $rootScope.selectedMaterials.indexOf(material);
-                    if (index == -1) {
-                        $rootScope.selectedMaterials.push(material);
-                        material.selected = true;
-                    } else {
-                        $rootScope.selectedMaterials.splice(index, 1);
-                        material.selected = false;
-                    }
-                } else {
-                    $rootScope.selectedMaterials = [];
-                    $rootScope.selectedMaterials.push(material);
-                    material.selected = true;
-                }
-
-                $rootScope.$broadcast("detailedSearch:close");
-            };
         }
     ]);

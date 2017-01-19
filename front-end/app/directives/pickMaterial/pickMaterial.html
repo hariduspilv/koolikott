@@ -1,0 +1,9 @@
+<div class="pick" layout-align="end start" data-ng-if="$ctrl.isVisible()">
+  <md-tooltip md-direction="bottom">
+    <span data-ng-show="!$ctrl.learningObject.selected" data-translate="PICK_MATERIAL"></span>
+    <span data-ng-show="$ctrl.learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
+  </md-tooltip>
+
+  <md-icon class="unchecked">check</md-icon>
+  <md-icon data-ng-click="$ctrl.pickMaterial($event)" class="checked">check_circle</md-icon>
+</div>

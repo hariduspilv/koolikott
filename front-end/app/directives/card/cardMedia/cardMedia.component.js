@@ -26,26 +26,4 @@ function dopCardMediaController ($rootScope, iconService) {
 
     vm.isMaterial = (type) => isMaterial(type);
     vm.isPortfolio = (type) => isPortfolio(type);
-
-    vm.pickMaterial = ($event, material) => {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        if ($rootScope.selectedMaterials) {
-            let index = $rootScope.selectedMaterials.indexOf(material);
-            if (index == -1) {
-                $rootScope.selectedMaterials.push(material);
-                material.selected = true;
-            } else {
-                $rootScope.selectedMaterials.splice(index, 1);
-                material.selected = false;
-            }
-        } else {
-            $rootScope.selectedMaterials = [];
-            $rootScope.selectedMaterials.push(material);
-            material.selected = true;
-        }
-
-        $rootScope.$broadcast("detailedSearch:close");
-    };
 }

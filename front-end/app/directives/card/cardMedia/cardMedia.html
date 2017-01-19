@@ -38,17 +38,7 @@
          class="md-card-image"/>
 
     <div class="card-hover {{$ctrl.learningObjectType}} {{$ctrl.materialType}}">
-      <div class="pick" data-ng-if="$ctrl.isAuthenticated && $ctrl.isMaterial($ctrl.learningObject.type)"
-           layout-align="end start">
-        <md-tooltip md-direction="bottom">
-          <span data-ng-show="!$ctrl.learningObject.selected" data-translate="PICK_MATERIAL"></span>
-          <span data-ng-show="$ctrl.learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
-        </md-tooltip>
-
-        <md-icon class="unchecked">check</md-icon>
-        <md-icon data-ng-click="$ctrl.pickMaterial($event, $ctrl.learningObject)" class="checked">check_circle</md-icon>
-      </div>
-
+      <dop-pick-material data-learning-object="$ctrl.learningObject"></dop-pick-material>
       <md-icon data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="icon-kind">book</md-icon>
       <md-icon data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" class="icon-kind">{{$ctrl.materialType}}
       </md-icon>

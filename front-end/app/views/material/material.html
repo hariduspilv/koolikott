@@ -164,15 +164,7 @@
 <!-- right small side  -->
 <div flex flex-gt-xs="25" class="right-side">
   <div class="card-media" data-ng-class="{'active': material.selected}">
-    <div class="pick" data-ng-if="isLoggedIn()" layout-align="end start">
-      <md-tooltip md-direction="bottom">
-        <span data-ng-show="!material.selected" data-translate="PICK_MATERIAL"></span>
-        <span data-ng-show="material.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
-      </md-tooltip>
-
-      <md-icon class="unchecked">check</md-icon>
-      <md-icon data-ng-click="pickMaterial($event, material)" class="checked">check_circle</md-icon>
-    </div>
+    <dop-pick-material data-learning-object="material"></dop-pick-material>
     <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted"
     data-learning-object="material"></dop-favorite>
     <div data-ng-if="!material.picture" class="card-cover {{getType()}}">
