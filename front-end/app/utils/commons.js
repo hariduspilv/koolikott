@@ -465,9 +465,9 @@ function matchType(type) {
         // }
         return 'EBOOK';
     } else if (isPDFLink(type)) {
-        // if (isIE()) {
-        //     return 'LINK';
-        // }
+        if (isIE()) {
+            return 'LINK';
+        }
         return 'PDF';
     } else {
         return 'LINK';
