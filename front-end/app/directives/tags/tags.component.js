@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 angular.module('koolikottApp')
     .component('dopTags', {
@@ -19,14 +19,15 @@ function TagsController($translate, authenticatedUserService, $rootScope,
     let vm = this;
 
     let allUpVoteForms;
-
     vm.newTag = {};
 
-    vm.$onInit = function () {
+    vm.$onInit = () => {
         init();
     };
 
-    vm.upVote = function (upVoteForm) {
+    vm.isLoggedOutAndHasNoTags = () => !authenticatedUserService.isAuthenticated() && vm.learningObject && vm.learningObject.tags.length === 0;
+
+    vm.upVote = (upVoteForm) => {
         vm.beingUpVotedForm = upVoteForm;
         let tagUpVote = {
             learningObject: vm.learningObject,
@@ -37,29 +38,25 @@ function TagsController($translate, authenticatedUserService, $rootScope,
         tagsService.addUpVode(tagUpVote, upVoteSuccess, upVoteFail);
     };
 
-    vm.isAllowed = function () {
+    vm.isAllowed = () => {
         return authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted();
     };
 
-    vm.isAdmin = function () {
-        return authenticatedUserService.isAdmin();
-    };
+    vm.isAdmin = () => authenticatedUserService.isAdmin();
 
-    vm.isNullOrZeroLength = function (arg) {
-        return !arg || !arg.length;
-    };
+    vm.isNullOrZeroLength = (arg) => !arg || !arg.length;
 
-    vm.removeUpVote = function (upVoteForm) {
+    vm.removeUpVote = (upVoteForm) => {
         tagsService.removeUpVote(upVoteForm, removeUpVoteSuccess, removeUpVoteFail);
         vm.removedUpVoteForm = upVoteForm;
     };
 
-    vm.getTagSearchURL = function ($event, tag) {
+    vm.getTagSearchURL = ($event, tag) => {
         $event.preventDefault();
         tagsService.searchByTag(tag);
     };
 
-    vm.removeTag = function (removedTag) {
+    vm.removeTag = (removedTag) => {
         if (vm.learningObject && vm.learningObject.tags) {
             vm.learningObject.tags.forEach(function (tag, index) {
                 if (tag === removedTag) {
@@ -69,39 +66,36 @@ function TagsController($translate, authenticatedUserService, $rootScope,
         }
     };
 
-    vm.addTag = function () {
+    vm.addTag = () => {
         if (vm.learningObject && vm.learningObject.id) {
             tagsService.addTag(vm.newTag, vm.learningObject, addTagSuccess, addTagFail);
             vm.newTag.tagName = null;
         }
     };
 
-    vm.reportTag = function (tag) {
+    vm.reportTag = (tag) => {
         tagsService.reportTag(tag, vm.learningObject, setImproperSuccessful);
     };
 
-    vm.showMore = function () {
+    vm.showMore = () => {
         vm.upVoteForms = allUpVoteForms;
         vm.showMoreTags = false;
     };
 
-    vm.showLess = function () {
+    vm.showLess = () => {
         vm.upVoteForms = allUpVoteForms.slice(0, 10);
         vm.showMoreTags = true;
     };
 
+    vm.doSuggest = (query) => suggestService.suggest(query, suggestService.getSuggestSystemTagURLbase());
 
-    vm.doSuggest = function (query) {
-        return suggestService.suggest(query, suggestService.getSuggestSystemTagURLbase());
-    };
-
-    vm.tagSelected = function () {
+    vm.tagSelected = () => {
         if (vm.newTag && vm.newTag.tagName) {
             processSystemTag();
         }
     };
 
-    vm.limitTextLength = function () {
+    vm.limitTextLength = () => {
         if (vm.newTag && vm.newTag.tagName && vm.newTag.tagName.length > 60) {
             vm.newTag.tagName = vm.newTag.tagName.slice(0, -1);
         }
