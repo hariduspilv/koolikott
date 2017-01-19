@@ -38,7 +38,7 @@
          class="md-card-image"/>
 
     <div class="card-hover {{$ctrl.learningObjectType}} {{$ctrl.materialType}}">
-      <dop-pick-material data-learning-object="$ctrl.learningObject"></dop-pick-material>
+      <dop-pick-material data-learning-object="$ctrl.learningObject" data-disable="$ctrl.disablePick"></dop-pick-material>
       <md-icon data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="icon-kind">book</md-icon>
       <md-icon data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" class="icon-kind">{{$ctrl.materialType}}
       </md-icon>

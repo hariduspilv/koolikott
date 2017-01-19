@@ -3,7 +3,8 @@
 angular.module('koolikottApp')
     .component('dopPickMaterial', {
         bindings: {
-            learningObject: '<'
+            learningObject: '<',
+            disable: '<'
         },
         templateUrl: 'directives/pickMaterial/pickMaterial.html',
         controller: dopPickMaterialController
@@ -15,7 +16,7 @@ function dopPickMaterialController($rootScope, authenticatedUserService) {
     let vm = this;
 
     function isVisible() {
-        return vm.learningObject && isMaterial(vm.learningObject.type) && authenticatedUserService.isAuthenticated();
+        return vm.learningObject && isMaterial(vm.learningObject.type) && authenticatedUserService.isAuthenticated() && !vm.disable;
     }
 
     function pickMaterial ($event) {
