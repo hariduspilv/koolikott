@@ -1,22 +1,5 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.dao.BrokenContentDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
@@ -28,6 +11,7 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.PeerReview;
@@ -50,10 +34,27 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
+
 public class MaterialService extends BaseService implements LearningObjectHandler {
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
-    public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
+    private static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
+    private static final int MAX_DESCRIPTION_LENGTH = 850;
     private final String PDF_EXTENSION = ".pdf\"";
     private final String PDF_MIME_TYPE = "application/pdf";
 
@@ -459,6 +460,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             logger.info("Updating material");
         }
 
+        validateDescriptions(material);
+
         cleanTextFields(material);
 
         checkKeyCompetences(material);
@@ -470,6 +473,16 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         material = applyRestrictions(material);
 
         return (Material) materialDAO.update(material);
+    }
+
+    private void validateDescriptions(Material material) {
+        if (material.getDescriptions() != null) {
+            for (LanguageString desc : material.getDescriptions()) {
+                if (desc.getText().length() > MAX_DESCRIPTION_LENGTH) {
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
     }
 
     private void cleanTextFields(Material material) {

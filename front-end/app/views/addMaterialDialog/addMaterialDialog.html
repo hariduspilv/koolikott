@@ -170,9 +170,12 @@
                     </md-select>
                   </md-input-container>
                 </div>
+
                 <div layout="row" layout-align="top center">
-                  <div text-angular id="add-material-description-input" class="textangular-editor"
-                       placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description"></div>
+
+                  <text-angular id="add-material-description-input" class="textangular-editor" name="descriptionEditor"
+                                placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description" ta-maxlength="850"></text-angular>
+
                   <div layout="column">
                     <md-button class="md-icon-button md-primary"
                                data-ng-show="$index+1 === titleDescriptionGroups.length"
