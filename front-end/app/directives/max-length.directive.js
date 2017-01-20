@@ -1,7 +1,8 @@
 /**
  * https://github.com/alexander-elgin/ta-maxlength
  */
-angular.module('koolikottApp').directive('taMaxlength', function ($timeout, textAngularManager) {
+angular.module('koolikottApp')
+    .directive('taMaxlength', ['$timeout', 'textAngularManager', function ($timeout, textAngularManager) {
     return {
         restrict: 'A',
         link: function ($scope, element, attrs) {
@@ -54,4 +55,4 @@ angular.module('koolikottApp').directive('taMaxlength', function ($timeout, text
             });
         }
     };
-});
+}]);
