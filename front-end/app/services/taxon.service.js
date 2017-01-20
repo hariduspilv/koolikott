@@ -185,21 +185,32 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
                             continue;
                         }
 
-                        domains.splice(i, 1);
-                        subjects.push(allSubjects[j]);
-                        i--;
-                        break;
+                        // Remove domain and add corresponding subject to subject list
+                        if (_.findIndex(subjects, allSubjects[j]) === -1) {
+                            domains.splice(i, 1);
+                            subjects.push(allSubjects[j]);
+                            i--;
+                            break;
+                        } else {
+                            domains.splice(i, 1);
+                            i--;
+                            break;
+                        }
                     }
                 }
 
                 let result = {};
                 domains.forEach(domain => {
-                    result[getDomainNameTranslationKey(domain)] = [];
+                    result[getDomainNameTranslation(domain)] = [];
                 });
 
                 subjects.forEach(subject => {
                     let domain = this.getDomain(subject);
-                    result[getDomainNameTranslationKey(domain)].push(getSubjectNameTranslationKey(subject));
+                    if (result[getDomainNameTranslation(domain)]) {
+                        result[getDomainNameTranslation(domain)].push(getSubjectNameTranslationKey(subject));
+                    } else {
+                        result[getDomainNameTranslation(domain)] = [getSubjectNameTranslationKey(subject)];
+                    }
                 });
 
                 return result;
