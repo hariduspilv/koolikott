@@ -225,3 +225,15 @@ md-card {
     }
   }
 }
+
+.embed-link{
+  box-shadow: none;
+}
+
+.embed-link:hover{
+  background-color: transparent;
+}
+
+.embed-link .embeded-material-footer{
+  padding-left: 0;
+}

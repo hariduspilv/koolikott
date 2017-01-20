@@ -1,4 +1,4 @@
-<md-card class="md-whiteframe-2dp embed-card">
+<md-card class="md-whiteframe-2dp embed-card" ng-class="{'embed-link': fallbackToLink}" ng-cloak="fallbackToLink">
   <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage" data-ng-click="navigateToMaterial(material, $event)">
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>

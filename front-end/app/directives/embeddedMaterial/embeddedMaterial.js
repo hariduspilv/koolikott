@@ -113,6 +113,11 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     });
                 };
 
+                $scope.fallbackToLink = function () {
+                    console.log($scope.isEditPortfolioMode || !$scope.sourceType || $scope.sourceType === 'LINK');
+                    return $scope.isEditPortfolioMode || !$scope.sourceType || $scope.sourceType === 'LINK';
+                };
+
                 $scope.$watch(function () {
                     return getSource($scope.material);
                 }, function (newValue, oldValue) {
@@ -226,6 +231,8 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                         return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
                     }
                 }
+
+
 
                 function embedCallback(res) {
                     if (res && res.data.html) {
