@@ -7,13 +7,17 @@ angular.module('koolikottApp').directive('dopAside',
                 learningObject: '=',
             },
             templateUrl: 'directives/aside/aside.html',
-            controller: ['$scope', 'serverCallService', '$location', 'searchService', '$timeout',
-                function ($scope, serverCallService, $location, searchService, $timeout) {
+            controller: ['$scope', 'serverCallService', '$location', 'searchService', '$timeout', 'authenticatedUserService',
+                function ($scope, serverCallService, $location, searchService, $timeout, authenticatedUserService) {
                     const SIDE_ITEMS_AMOUNT = 5;
                     $scope.similar = [{}, {}, {}, {}, {}];
                     $scope.recommendations = [{}, {}, {}, {}, {}];
 
                     $timeout(init());
+
+                    $scope.$on("recommendations:updated", function () {
+                        loadRecommendations();
+                    });
 
                     function init() {
                         loadRecommendations();
@@ -88,7 +92,6 @@ angular.module('koolikottApp').directive('dopAside',
                     }
 
                     function loadRecommendations() {
-
                         let params = {
                             q: 'recommended:true',
                             start: 0,
@@ -97,7 +100,9 @@ angular.module('koolikottApp').directive('dopAside',
                             limit: SIDE_ITEMS_AMOUNT
                         };
 
-                        serverCallService.makeGet("rest/search", params, getRecommendationsSuccess, getRecommendationsFail);
+                        let cache = authenticatedUserService.isAdmin() || authenticatedUserService.isModerator();
+
+                        serverCallService.makeGet("rest/search", params, getRecommendationsSuccess, getRecommendationsFail, {}, false, !cache);
                     }
 
                     function getRecommendationsSuccess(data) {

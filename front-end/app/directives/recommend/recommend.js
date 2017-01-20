@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .directive('dopRecommend',
 [
-    'translationService', 'authenticatedUserService', 'serverCallService',
-    function(translationService, authenticatedUserService, serverCallService) {
+    'translationService', 'authenticatedUserService', 'serverCallService', '$rootScope',
+    function(translationService, authenticatedUserService, serverCallService, $rootScope) {
         return {
             scope: {
                 material: '=',
@@ -23,7 +23,7 @@ angular.module('koolikottApp')
                             serverCallService.makePost(url, $scope.portfolio, querySuccess, queryFail);
                         }
                     }
-                }
+                };
 
                 $scope.removeRecommendation = function() {
                     if (authenticatedUserService.isAdmin()) {
@@ -35,7 +35,7 @@ angular.module('koolikottApp')
                             serverCallService.makePost(url, $scope.portfolio, querySuccess, queryFail);
                         }
                     }
-                }
+                };
 
                 function querySuccess(recommendation) {
                     if (isEmpty(recommendation)) {
@@ -47,6 +47,8 @@ angular.module('koolikottApp')
                     } else if ($scope.portfolio) {
                         $scope.portfolio.recommendation = recommendation;
                     }
+
+                    $rootScope.$broadcast("recommendations:updated");
                 }
 
                 function queryFail() {
