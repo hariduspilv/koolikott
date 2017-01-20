@@ -175,10 +175,11 @@ function configureTextAngular($provide, $translate) {
     }]);
 }
 
-app.run(['$rootScope', 'metadataService', 'APP_VERSION', 'taxonService', 'FB_APP_ID',
-    function ($rootScope, metadataService, APP_VERSION, taxonService, FB_APP_ID) {
+app.run(['$rootScope', 'metadataService', 'APP_VERSION', 'taxonService', 'FB_APP_ID', 'GOOGLE_SHARE_KEY',
+    function ($rootScope, metadataService, APP_VERSION, taxonService, FB_APP_ID, GOOGLE_SHARE_KEY) {
         $rootScope.APP_VERSION = APP_VERSION;
         $rootScope.FB_APP_ID = FB_APP_ID;
+        $rootScope.GOOGLE_SHARE_KEY = GOOGLE_SHARE_KEY;
         $rootScope.hasAppInitated = false;
         metadataService.loadEducationalContexts();
     }]);

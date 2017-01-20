@@ -4,7 +4,7 @@ angular.module('koolikottApp')
 .controller('shareModalController', [
     '$mdDialog', 'locals', 'authenticatedUserService', '$translate', 'Socialshare', 'serverCallService', 'toastService',
     function ($mdDialog, locals, authenticatedUserService, $translate, Socialshare, serverCallService, toastService) {
-        var vm = this;
+        let vm = this;
 
         if ((locals.isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && locals.isPrivate()) {
             vm.showButtons = true;
@@ -19,7 +19,7 @@ angular.module('koolikottApp')
         }
 
         vm.updatePortfolio = (state) => {
-            var portfolioClone = angular.copy(locals.portfolio);
+            let portfolioClone = angular.copy(locals.portfolio);
             portfolioClone.visibility = state;
             serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
 

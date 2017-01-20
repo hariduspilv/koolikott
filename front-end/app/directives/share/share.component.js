@@ -10,30 +10,10 @@ angular.module('koolikottApp')
     controller: dopShareController
 });
 
-dopShareController.$inject = ['$scope', '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare', 'FB_APP_ID', '$timeout'];
+dopShareController.$inject = ['$scope', '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare', 'FB_APP_ID', 'GOOGLE_SHARE_KEY', '$timeout'];
 
-function dopShareController($scope, $rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare, FB_APP_ID, $timeout) {
+function dopShareController($scope, $rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare, FB_APP_ID, GOOGLE_SHARE_KEY, $timeout) {
     let vm = this;
-
-    vm.isVisible = () => {
-        if (vm.object && vm.object.deleted || $rootScope.isEditPortfolioPage) {
-            return false;
-        }
-
-        if ($rootScope.isViewMaterialPage) {
-            return true;
-        }
-
-        if (vm.object) {
-            if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                return true;
-            } else if (isPrivate()) {
-                return false;
-            }
-        }
-
-        return false;
-    };
 
     vm.$onInit = () => {
         vm.isOpen = false;
@@ -61,6 +41,26 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
                 vm.pictureName = vm.object.picture.name;
             }
         });
+    };
+
+    vm.isVisible = () => {
+        if (vm.object && vm.object.deleted || $rootScope.isEditPortfolioPage) {
+            return false;
+        }
+
+        if ($rootScope.isViewMaterialPage) {
+            return true;
+        }
+
+        if (vm.object) {
+            if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
+                return true;
+            } else if (isPrivate()) {
+                return false;
+            }
+        }
+
+        return false;
     };
 
     function isPublic() {
@@ -151,11 +151,17 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
                 });
             break;
             case 'google':
-                Socialshare.share({
-                    'provider': item.provider,
-                    'attrs': {
-                        'socialshareUrl': vm.pageUrl
-                    }
+                let options = {
+                    contenturl: vm.pageUrl,
+                    clientid: `${GOOGLE_SHARE_KEY}.apps.googleusercontent.com`,
+                    cookiepolicy: $location.$$protocol + '://' + $location.$$host,
+                    prefilltext: vm.title,
+                    calltoactionurl: vm.pageUrl
+                };
+
+                gapi.interactivepost.render('shareGoogleFakeButton', options);
+                setTimeout(() => {
+                    angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click');
                 });
             break;
         }
