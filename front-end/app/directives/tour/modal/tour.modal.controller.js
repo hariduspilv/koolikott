@@ -4,7 +4,8 @@ angular.module('koolikottApp')
 .controller('tourModalController', [
     '$mdDialog', 'authenticatedUserService', '$rootScope',
     function ($mdDialog, authenticatedUserService, $rootScope) {
-            var vm = this;
+            let vm = this;
+
             vm.user = authenticatedUserService.getUser();
 
             vm.cancel = () => {

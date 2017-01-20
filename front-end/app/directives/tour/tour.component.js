@@ -40,7 +40,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
         $mdDialog.show({
             templateUrl: 'directives/tour/modal/tour.modal.html',
             controller: 'tourModalController',
-            controllerAs: 'vm'
+            controllerAs: '$ctrl'
         });
     }
 
