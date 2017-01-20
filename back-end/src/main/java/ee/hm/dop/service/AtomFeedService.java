@@ -6,6 +6,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.lang.String.format;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -69,7 +70,6 @@ public class AtomFeedService {
         this.lang = lang;
         maxFeedItems = configuration.getInt(MAX_FEED_ITEMS);
 
-        feed.sortEntriesByUpdated(true);
         feed.setId(translateString("FEED_ID"));
         feed.setTitle(translateString("FEED_TITLE"));
         feed.setIcon(format("%s/favicon.ico", configuration.getString(SERVER_ADDRESS)));
@@ -100,6 +100,8 @@ public class AtomFeedService {
             if (entry != null)
                 entryList.add(entry);
         }
+
+        entryList.sort(Comparator.comparing(Entry::getUpdated).reversed());
 
         for (Entry entry : entryList.subList(0, maxFeedItems)) {
             feed.addEntry(entry);
