@@ -92,7 +92,7 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
         domainSubjectMap = taxonService.getDomainSubjectMap(vm.learningObject.taxons);
     }
 
-    vm.getTaxons = () => taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
+    vm.getTaxons = () => taxonService.getTaxonsFromDomainSubjectMap(domainSubjectMap);
 
     vm.hoverEnter = () => {
         vm.cardHover = true;

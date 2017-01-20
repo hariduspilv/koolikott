@@ -44,8 +44,7 @@
         <div class="md-caption text-right" flex="50">
           <p class="two-rows-xs">
             <span data-ng-repeat="taxon in $ctrl.getTaxons()">
-              <span data-translate="{{taxon}}"></span>
-              <span data-ng-bind="$index < $ctrl.getTaxons().length - 1 ? ', ' : ''"></span>
+              <span data-translate="{{taxon}}"></span><span data-ng-bind="$index < $ctrl.getTaxons().length - 1 ? ', ' : ''"></span>
             </span>
           </p>
         </div>

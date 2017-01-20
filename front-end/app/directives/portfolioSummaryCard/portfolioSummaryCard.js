@@ -102,7 +102,7 @@ angular.module('koolikottApp')
 
                     $scope.getTaxons = function() {
                         loadDomainsAndSubjects();
-                        return taxonService.getTaxonFromDomainSubjectMap(domainSubjectMap);
+                        return taxonService.getTaxonsFromDomainSubjectMap(domainSubjectMap);
                     };
 
                     function getSubject(taxon) {

@@ -73,6 +73,30 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
             }
         }
 
+        function getDomainNameHelperTranslation(domainKey) {
+            return translationService.instant('HELPER_' + domainKey);
+        }
+
+        function getSubjectNameHelperTranslation(subjectKey) {
+            return translationService.instant('HELPER_' + subjectKey)
+        }
+
+        function getDomainNameTranslation(domain) {
+            return translationService.instant('DOMAIN_' + domain.name.toUpperCase())
+        }
+
+        function getSubjectNameTranslation(subject) {
+            return translationService.instant('SUBJECT_' + subject.name.toUpperCase())
+        }
+
+        function getDomainNameTranslationKey(domain) {
+            return 'DOMAIN_' + domain.name.toUpperCase()
+        }
+
+        function getSubjectNameTranslationKey(subject) {
+            return 'SUBJECT_' + subject.name.toUpperCase()
+        }
+
         return {
             constants: constants,
 
@@ -142,39 +166,60 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
             getDomainSubjectMap: function (taxons) {
                 if (_.isEmpty(taxonMap)) return;
 
-                let resultMap = {};
+                let domains = taxons.map(taxon => this.getDomain(taxon)).filter(item => {return item !== null});
+                let subjects = taxons.map(taxon => this.getSubject(taxon)).filter(item => {return item !== null});
+                let allSubjects = _.flatten(domains.map(dom => dom.subjects));
 
-                const self = this;
-                taxons.forEach(function (taxon) {
-                    const domain = self.getDomain(taxon);
-                    const subject = self.getSubject(taxon);
+                const lang = translationService.getLanguageCode();
+                for (let i = 0; i < domains.length; i++) {
+                    for (let j = 0; j < allSubjects.length; j++) {
 
-                    let domainName = domain ? "DOMAIN_" + domain.name.toUpperCase() : null;
-                    let subjectName = subject ? "SUBJECT_" + subject.name.toUpperCase() : null;
+                        // No need to compare parent with its own children
+                        if (domains[i].id === allSubjects[j].parentId) continue;
 
-                    if (_.has(resultMap, domainName)) {
-                        if (subjectName && !resultMap[domainName].includes(subjectName)) {
-                            resultMap[domainName].push(subjectName);
+                        // Check if domain and subject have same translation
+                        // Estonian translations are compared at the moment
+                        if (lang === "et" && getDomainNameTranslation(domains[i]) !== getSubjectNameTranslation(allSubjects[j])) {
+                            continue;
+                        } else if (lang !== "et" && getDomainNameHelperTranslation(getDomainNameTranslationKey(domains[i])) !== getSubjectNameHelperTranslation(getSubjectNameTranslationKey(allSubjects[j]))) {
+                            continue;
                         }
-                    } else {
-                        if (!domainName) return;
-                        subjectName ? resultMap[domainName] = [subjectName] : resultMap[domainName] = [];
+
+                        // Remove domain and add corresponding subject to subject list
+                        if (_.findIndex(subjects, allSubjects[j]) === -1) {
+                            domains.splice(i, 1);
+                            subjects.push(allSubjects[j]);
+                            i--;
+                            break;
+                        }
                     }
+                }
+
+                let result = {};
+                domains.forEach(domain => {
+                    result[getDomainNameTranslationKey(domain)] = [];
                 });
 
-                return resultMap;
+                subjects.forEach(subject => {
+                    let domain = this.getDomain(subject);
+                    result[getDomainNameTranslationKey(domain)].push(getSubjectNameTranslationKey(subject));
+                });
+
+                return result;
             },
 
-            getTaxonFromDomainSubjectMap: function (map) {
+            getTaxonsFromDomainSubjectMap: function (map) {
                 let result = [];
-                const domains = _.keys(map);
+                let domains = _.keys(map);
                 if (!domains || domains.length === 0) return [];
 
+                // Create taxon list that will be shown on card
                 domains.forEach((domain) => {
                    if (map[domain].length === 1) result = result.concat(map[domain]);
                    else result.push(domain);
                 });
 
+                // Remove remaining duplicates from final list
                 return this.removeDuplicatesFromDomainOrSubjectList(result);
             },
 
@@ -184,17 +229,17 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
                 }
 
                 // Workaround for taxons with missing translations
-                // "HELPER_" prefix can be removed once all taxons are translated
+                // "HELPER_" items can be removed once all taxons are translated
                 let translatedList = [];
                 let cleanedResult = [];
 
-                list.forEach(r => {
-                    let translated = translationService.instant("HELPER_" + r);
-                    if (translated.startsWith("HELPER_")) translated = translationService.instant(r);
+                list.forEach(item => {
+                    let translated = translationService.instant("HELPER_" + item);
+                    if (translated.startsWith("HELPER_")) translated = translationService.instant(item);
 
-                    if (r && !translatedList.includes(translated)) {
+                    if (item && !translatedList.includes(translated)) {
                         translatedList.push(translated);
-                        cleanedResult.push(r)
+                        cleanedResult.push(item)
                     }
                 });
 
