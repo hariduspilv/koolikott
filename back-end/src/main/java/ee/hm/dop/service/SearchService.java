@@ -49,7 +49,8 @@ public class SearchService {
     private static final String PORTFOLIO_TYPE = "portfolio";
 
     private static final String ALL_TYPE = "all";
-    public static final String TAG = "tag:";
+    private static final String TAG = "tag:";
+    private static final String RECOMMENDED = "recommended:";
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -141,7 +142,7 @@ public class SearchService {
                 queryString = format("((%s)", tokenizedQueryString);
 
                 //Search for full phrase also, as they are more relevant
-                if (!tokenizedQueryString.toLowerCase().startsWith(TAG)) {
+                if (!tokenizedQueryString.toLowerCase().startsWith(TAG) && !tokenizedQueryString.toLowerCase().startsWith(RECOMMENDED)) {
                     queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
                 }
 
