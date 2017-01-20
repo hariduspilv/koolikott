@@ -1,4 +1,4 @@
-<md-fab-speed-dial md-open="isOpen" md-direction="left" data-ng-show="isVisible()" class="md-scale share">
+<md-fab-speed-dial md-open="$ctrl.isOpen" md-direction="left" data-ng-show="$ctrl.isVisible()" class="md-scale share">
   <md-fab-trigger>
     <md-button class="md-icon-button share__btn share__btn--trigger">
       <md-tooltip md-direction="bottom">
@@ -9,44 +9,12 @@
   </md-fab-trigger>
 
   <md-fab-actions>
-    <div data-ng-repeat="item in shareMediaPlaces">
+    <div data-ng-repeat="item in $ctrl.shareMediaPlaces track by $index">
       <md-button class="md-fab md-raised md-mini share__btn share__btn--{{item.provider}}"
                  aria-label="{{item.provider}}"
-                 data-ng-click="share($event, item)">
+                 data-ng-click="$ctrl.share($event, item)">
         <span class="share__icon {{item.icon}}"></span>
       </md-button>
     </div>
   </md-fab-actions>
 </md-fab-speed-dial>
-
-<script type="text/ng-template" id="sharedialog.tmpl.html">
-  <md-dialog aria-label="{{ariaLabel}}" class="md-dialog-content">
-    <form ng-cloak>
-      <md-dialog-content>
-        <div class="md-dialog-content">
-          <h2 class="md-title share__title">{{title}}</h2>
-          <div class="md-dialog-content-body">
-            <p>{{context}}</p>
-          </div>
-        </div>
-      </md-dialog-content>
-
-      <md-dialog-actions layout="row">
-        <span flex></span>
-        <md-button class="md-primary md-cancel-button" data-ng-click="back()" aria-label="Tagasi" data-translate="BUTTON_CANCEL"></md-button>
-        <md-button data-ng-hide="showButtons" class="md-primary md-confirm-button"
-                   aria-label="Jaga"
-                   data-ng-click="success()" data-translate="BUTTON_SHARE">
-        </md-button>
-        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button"
-                   aria-label="Ainult lingiga"
-                   data-ng-click="updatePortfolio('NOT_LISTED')" data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED">
-        </md-button>
-        <md-button data-ng-show="showButtons" class="md-primary md-confirm-button"
-                   aria-label="Avalik"
-                   data-ng-click="updatePortfolio('PUBLIC')" data-translate="PORTFOLIO_VISIBILITY_PUBLIC">
-        </md-button>
-      </md-dialog-actions>
-    </form>
-  </md-dialog>
-</script>
