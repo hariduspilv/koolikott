@@ -39,6 +39,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -705,7 +706,14 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         String contentDisposition;
         HttpClient client = new HttpClient();
         GetMethod get = new GetMethod(url_param);
-        client.executeMethod(get);
+
+        try{
+            client.executeMethod(get);
+        }catch (UnknownHostException e){
+            logger.info("Could not contact host, returning empty response");
+            return Response.noContent().build();
+        }
+
 
         if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Disposition")) {
             contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();

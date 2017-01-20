@@ -12,7 +12,9 @@ angular.module('koolikottApp')
                 if(link) {
                     callback = cb;
                     link = link.toLowerCase();
-                    $http.get(noEmbedUrl + link).then(callback);
+                    $http.get(noEmbedUrl + link).then(callback).catch(function() {
+                        // Catch the exception, material is not embeddable
+                    })
                 }
             }
         };
