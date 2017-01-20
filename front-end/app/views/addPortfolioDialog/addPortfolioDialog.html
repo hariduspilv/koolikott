@@ -93,9 +93,10 @@
       </md-input-container>
       <md-input-container class="md-block text-angular-portfolio-container animate-if margin-top-36"
                           data-ng-if="isSummaryVisible">
-        <div text-angular id="add-portfolio-description-input" name="add-portfolio-description-input"
-             class="textangular-editor" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
-             ng-model="newPortfolio.summary"></div>
+
+        <text-angular id="add-portfolio-description-input" name="add-portfolio-description-input"
+                      class="textangular-editor" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
+                      ng-model="newPortfolio.summary" ta-maxlength="850"></text-angular>
       </md-input-container>
 
     </md-content>
