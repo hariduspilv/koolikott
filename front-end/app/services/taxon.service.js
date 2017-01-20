@@ -185,13 +185,10 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
                             continue;
                         }
 
-                        // Remove domain and add corresponding subject to subject list
-                        if (_.findIndex(subjects, allSubjects[j]) === -1) {
-                            domains.splice(i, 1);
-                            subjects.push(allSubjects[j]);
-                            i--;
-                            break;
-                        }
+                        domains.splice(i, 1);
+                        subjects.push(allSubjects[j]);
+                        i--;
+                        break;
                     }
                 }
 
