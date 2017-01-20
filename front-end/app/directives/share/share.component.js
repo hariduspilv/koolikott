@@ -3,9 +3,8 @@
 angular.module('koolikottApp')
 .component('dopShare', {
     bindings: {
-        title: '=',
-        description: '=',
-        object: '='
+        title: '<',
+        object: '<'
     },
     templateUrl: 'directives/share/share.html',
     controller: dopShareController
@@ -17,18 +16,13 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
     let vm = this;
 
     vm.isVisible = () => {
-        if (vm.object && vm.object.deleted) {
-            return false;
-        }
-
-        if ($rootScope.isEditPortfolioPage) {
+        if (vm.object && vm.object.deleted || $rootScope.isEditPortfolioPage) {
             return false;
         }
 
         if ($rootScope.isViewMaterialPage) {
             return true;
         }
-
 
         if (vm.object) {
             if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
@@ -87,16 +81,16 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
         }
 
         if (vm.object && vm.object.creator) {
-            var creatorId = vm.object.creator.id;
-            var userId = authenticatedUserService.getUser().id;
+            let creatorId = vm.object.creator.id;
+            let userId = authenticatedUserService.getUser().id;
             return creatorId === userId;
         }
     }
 
     vm.share = ($event, item) => {
-        if (vm.object.type === '.Material') {
+        if (isMaterial(vm.object.type)) {
             setShareParams(item);
-        } else if (vm.object.type === '.Portfolio') {
+        } else if (isPortfolio(vm.object.type)) {
             if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
                 $event.preventDefault();
                 showWarningDialog($event, item);
@@ -147,20 +141,20 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
                     }
                 });
             break;
-            case 'google':
-                Socialshare.share({
-                    'provider': item.provider,
-                    'attrs': {
-                        'socialshareUrl': vm.pageUrl
-                    }
-                });
-            break;
             case 'email':
                 Socialshare.share({
                     'provider': item.provider,
                     'attrs': {
                         'socialshareSubject': $translate.instant('READING_RECOMMENDATION') + ': ' + vm.title,
                         'socialshareBody': $translate.instant('WELCOME_READ_HERE') + ': ' + vm.pageUrl
+                    }
+                });
+            break;
+            case 'google':
+                Socialshare.share({
+                    'provider': item.provider,
+                    'attrs': {
+                        'socialshareUrl': vm.pageUrl
                     }
                 });
             break;
