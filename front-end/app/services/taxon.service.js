@@ -170,6 +170,13 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
                 let subjects = taxons.map(taxon => this.getSubject(taxon)).filter(item => {return item !== null});
                 let allSubjects = _.flatten(domains.map(dom => dom.subjects));
 
+                subjects.forEach(subject => {
+                    let tmp = domains.filter(domain => domain.id === this.getDomain(subject).id);
+                    if (tmp.length > 1) {
+                        subjects.push(...tmp[0].subjects);
+                    }
+                });
+
                 const lang = translationService.getLanguageCode();
                 for (let i = 0; i < domains.length; i++) {
                     for (let j = 0; j < allSubjects.length; j++) {
@@ -201,15 +208,15 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
 
                 let result = {};
                 domains.forEach(domain => {
-                    result[getDomainNameTranslation(domain)] = [];
+                    result[getDomainNameTranslationKey(domain)] = [];
                 });
 
                 subjects.forEach(subject => {
                     let domain = this.getDomain(subject);
-                    if (result[getDomainNameTranslation(domain)]) {
-                        result[getDomainNameTranslation(domain)].push(getSubjectNameTranslationKey(subject));
+                    if (result[getDomainNameTranslationKey(domain)]) {
+                        result[getDomainNameTranslationKey(domain)].push(getSubjectNameTranslationKey(subject));
                     } else {
-                        result[getDomainNameTranslation(domain)] = [getSubjectNameTranslationKey(subject)];
+                        result[getDomainNameTranslationKey(domain)] = [getSubjectNameTranslationKey(subject)];
                     }
                 });
 
