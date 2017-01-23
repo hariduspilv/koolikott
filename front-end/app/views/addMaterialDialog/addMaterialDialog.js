@@ -217,13 +217,25 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 }
             });
 
-            return $scope.educationalContextId === 4 || ($scope.material.targetGroups && $scope.material.targetGroups.length > 0)
-                && ($scope.isBasicOrSecondaryEducation() ? $scope.material.keyCompetences.length > 0 && $scope.material.crossCurricularThemes.length > 0 : true) && hasCorrectTaxon;
+            return $scope.educationalContextId === 4 || isTabTwoTargetGroupValid()
+                && ($scope.isBasicOrSecondaryEducation() ? isTabTwoKeyCompetenceValid() && isTabTwoCrossCurricularThemeValid() : true) && hasCorrectTaxon;
         };
 
         $scope.isTabThreeValid = function () {
             return areAuthorsValid() && (hasAuthors() || hasPublisher()) && $scope.material.issueDate.year;
         };
+
+        function isTabTwoCrossCurricularThemeValid() {
+            return $scope.material.crossCurricularThemes && $scope.material.crossCurricularThemes.length > 0
+        }
+
+        function isTabTwoKeyCompetenceValid() {
+            return $scope.material.keyCompetences && $scope.material.keyCompetences.length > 0
+        }
+
+        function isTabTwoTargetGroupValid() {
+            return $scope.material.targetGroups && $scope.material.targetGroups.length > 0;
+        }
 
         function isTaxonSet (index) {
             return $scope.material.taxons && $scope.material.taxons[index] && $scope.material.taxons[index].level && $scope.material.taxons[index].level !== ".EducationalContext";
