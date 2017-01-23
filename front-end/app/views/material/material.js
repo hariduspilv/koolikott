@@ -47,7 +47,7 @@ angular.module('koolikottApp')
                 }
                 if (materialSource) {
                     $scope.sourceType = matchType(getSource($scope.material));
-
+                    if($scope.sourceType == "EBOOK" && isIE())$scope.material.source += "?archive=true";
                 }
             }
 

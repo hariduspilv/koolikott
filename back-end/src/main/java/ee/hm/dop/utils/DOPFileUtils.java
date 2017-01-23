@@ -116,34 +116,4 @@ public class DOPFileUtils {
         }
 
     }
-
-    public static void unpackArchive(InputStream inputStream, String location){
-        byte[] buffer = new byte[1024];
-        ZipInputStream zis = new ZipInputStream(inputStream);
-        try {
-            ZipEntry ze = zis.getNextEntry();
-            while(ze!=null){
-
-                String fileName = ze.getName();
-                File newFile = new File(location + File.separator + fileName);
-
-                new File(newFile.getParent()).mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                ze = zis.getNextEntry();
-            }
-
-            zis.closeEntry();
-            zis.close();
-        } catch (IOException e) {
-            throw new RuntimeException("File is not a subtype of an ZIP archive");
-        }
-    }
 }

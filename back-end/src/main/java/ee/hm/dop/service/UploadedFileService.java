@@ -1,7 +1,10 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
-import static ee.hm.dop.utils.DOPFileUtils.unpackArchive;
+import static ee.hm.dop.service.ZipService.ZIP_EXTENSION;
+import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
+import static ee.hm.dop.utils.ConfigurationProperties.FILE_REVIEW_DIRECTORY;
+import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static ee.hm.dop.utils.DOPFileUtils.writeToFile;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -25,8 +28,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class UploadedFileService {
 
@@ -38,6 +39,9 @@ public class UploadedFileService {
     @Inject
     private Configuration configuration;
 
+    @Inject
+    private ZipService zipService;
+
     private UploadedFile getUploadedFileById(Long id) {
         return uploadedFileDAO.findUploadedFileById(id);
     }
@@ -48,6 +52,18 @@ public class UploadedFileService {
 
     private UploadedFile create(UploadedFile uploadedFile) {
         return uploadedFileDAO.update(uploadedFile);
+    }
+
+    public Response getArchivedFile(Long fileId){
+        String sourcePath = getUploadedFileById(fileId).getPath();
+
+        //  Check if the zip archive already exists
+        File zipFile = FileUtils.getFile(sourcePath + ZIP_EXTENSION);
+        if(zipFile.exists())return Response.ok(FileUtils.getFile(sourcePath + ZIP_EXTENSION)).build();
+
+        String outputPath = zipService.packArchive(sourcePath, sourcePath);
+
+        return Response.ok(FileUtils.getFile(outputPath)).build();
     }
 
     public Response getFile(Long fileId, String filename, final boolean isReview) {
@@ -101,7 +117,7 @@ public class UploadedFileService {
         uploadedFile.setUrl(url);
 
         if (Objects.equals(extension, EBOOK_EXTENSION)) {
-            unpackArchive(limitedSizeInputStream, path);
+            zipService.unpackArchive(limitedSizeInputStream, path);
         } else {
             writeToFile(limitedSizeInputStream, path);
         }
