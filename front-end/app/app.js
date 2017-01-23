@@ -20,18 +20,16 @@ let app = angular.module('koolikottApp', [
 
 let provideProvider = null;
 
-// Fixes empty datepicker
-// https://github.com/angular/material/issues/10168
-app.config(['$compileProvider', function($compileProvider) {
-    $compileProvider.preAssignBindingsEnabled(true);
-}]);
-
 app.config([
     '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$translateProvider', '$sceProvider', '$mdThemingProvider', '$httpProvider', '$mdDateLocaleProvider', '$anchorScrollProvider',
     function ($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
         $compileProvider.debugInfoEnabled(false);
         $httpProvider.useApplyAsync(true);
         provideProvider = $provide;
+
+        // Fixes empty datepicker
+        // https://github.com/angular/material/issues/10168
+        $compileProvider.preAssignBindingsEnabled(true);
 
         configureTranslationService($translateProvider);
         configureTheme($mdThemingProvider);
