@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('koolikottApp', [
+let app = angular.module('koolikottApp', [
     'ngRoute',
     'ngMaterial',
     'pascalprecht.translate',
@@ -18,7 +18,13 @@ var app = angular.module('koolikottApp', [
     'angular-tour'
 ]);
 
-var provideProvider = null;
+let provideProvider = null;
+
+// Fixes empty datepicker
+// https://github.com/angular/material/issues/10168
+app.config(['$compileProvider', function($compileProvider) {
+    $compileProvider.preAssignBindingsEnabled(true);
+}]);
 
 app.config([
     '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$translateProvider', '$sceProvider', '$mdThemingProvider', '$httpProvider', '$mdDateLocaleProvider', '$anchorScrollProvider',
