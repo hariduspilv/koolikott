@@ -121,7 +121,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             if (uploadingPicture) {
                 $timeout($scope.save, 500, false);
             } else {
-                var metadata = getTitlesAndDecriptions();
+                let metadata = getTitlesAndDecriptions();
                 $scope.material.titles = metadata.titles;
                 $scope.material.descriptions = metadata.descriptions;
                 $scope.material.type = ".Material";
@@ -487,7 +487,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
 
             if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
-                var encodedUrl = encodeURIComponent(newValue);
+                let encodedUrl = encodeURIComponent(newValue);
                 serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
                     getByUrlSuccess, getByUrlFail);
             }
@@ -784,7 +784,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         function saveMaterialFinally() {
-            $scope.saving = false;
+            $scope.isSaving = false;
         }
 
         function setResourceTypes(data) {

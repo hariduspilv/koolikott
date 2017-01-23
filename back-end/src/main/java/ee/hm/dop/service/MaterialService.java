@@ -28,7 +28,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -37,8 +36,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +55,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     public static final String BASICEDUCATION = "BASICEDUCATION";
     private static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
     private static final int MAX_DESCRIPTION_LENGTH = 850;
+    private static final String WWW_PREFIX = "www.";
+    private static final String DEFAULT_PROTOCOL = "http://";
     private final String PDF_EXTENSION = ".pdf\"";
     private final String PDF_MIME_TYPE = "application/pdf";
 
@@ -117,7 +118,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
-        material.setSource(cleanURL(material.getSource()));
+        material.setSource(processURL(material.getSource()));
 
         cleanPeerReviewUrls(material);
 
@@ -342,7 +343,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
-        material.setSource(cleanURL(material.getSource()));
+        material.setSource(processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error updating Material: material with given source already exists");
@@ -401,7 +402,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         if (peerReviews != null) {
             for (PeerReview peerReview : peerReviews) {
                 if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
-                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
+                    peerReview.setUrl(processURL(peerReview.getUrl()));
                 }
             }
         }
@@ -636,7 +637,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public List<Material> getBySource(String materialSource, boolean deleted) {
-        materialSource = getURLWithoutScheme(cleanURL(materialSource));
+        materialSource = getURLWithoutProtocolAndWWW(processURL(materialSource));
         if (materialSource != null) {
             return materialDAO.findBySource(materialSource, deleted);
         } else {
@@ -645,7 +646,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public Material getOneBySource(String materialSource, boolean deleted) {
-        materialSource = getURLWithoutScheme(cleanURL(materialSource));
+        materialSource = getURLWithoutProtocolAndWWW(processURL(materialSource));
         if (materialSource != null) {
             return materialDAO.findOneBySource(materialSource, deleted);
         } else {
@@ -653,46 +654,47 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         }
     }
 
-
-    private String getURLWithoutScheme(String materialSource) {
+    /**
+     * Removes protocol (http, https..) form url
+     * Removes 'www.' prefix from host
+     * @param materialSource url
+     * @return materialSource without schema and www
+     */
+    private String getURLWithoutProtocolAndWWW(String materialSource) {
         if (TextUtils.isBlank(materialSource)) return null;
 
         try {
-            URI uri = new URI(materialSource);
-            String hostName = uri.getHost();
+            URL url = new URL(materialSource);
+            String hostName = url.getHost();
 
-            if (hostName.startsWith("www.") && isValidURL(hostName.substring(4))) {
+            if (hostName.startsWith(WWW_PREFIX) && isValidURL(hostName.substring(4))) {
                 hostName = hostName.substring(4);
             }
 
-            uri = new URIBuilder()
-                    .setHost(hostName)
-                    .setPath(uri.getPath())
-                    .setCustomQuery(uri.getQuery())
-                    .build();
-
-            return uri.toString().substring(2);
-        } catch (URISyntaxException e) {
+            return String.format("%s%s", hostName, url.getFile());
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to fix URL");
+            throw new IllegalArgumentException("Source has no protocol");
         }
     }
 
-    private String cleanURL(String materialSource) {
+    /**
+     * Removes trailing slash
+     * Adds protocol if missing
+     * @param materialSource url
+     * @return url with protocol and without trailing slash
+     */
+    private String processURL(String materialSource) {
         if (TextUtils.isBlank(materialSource)) return null;
 
         try {
+            // Removes trailing slash
             materialSource = materialSource.replaceAll("/$", "");
 
-            URI uri = new URI(materialSource);
-            if (uri.getScheme() == null) {
-                uri = new URI("http://" + materialSource);
-            }
-
-            return uri.toString();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to fix URL");
+            // Throws exception if protocol is not specified
+            return new URL(materialSource).toString();
+        } catch (MalformedURLException e) {
+            return DEFAULT_PROTOCOL + materialSource;
         }
     }
 
