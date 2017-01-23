@@ -124,8 +124,8 @@ angular.module('koolikottApp')
                 }
 
                 function getTaxonCountKey(taxon) {
-                    var key = "";
-                    if (taxon.level) key = taxon.level.toUpperCase() + "_";
+                    let key = "";
+                    if (taxon.id) key = taxon.id.toString() + "_";
                     return key + taxon.name.toUpperCase() + "_COUNT"
 
                 }
