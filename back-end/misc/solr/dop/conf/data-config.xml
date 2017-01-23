@@ -293,7 +293,7 @@
             </entity>
 
             <entity name="Material"
-                    query="select id, licenseType, paid, lang, isSpecialEducation as special_education, issueDate as issue_date_id, curriculumLiterature as curriculum_literature from Material where id='${LearningObject.id}'">
+                    query="select id, source, licenseType, paid, lang, isSpecialEducation as special_education, issueDate as issue_date_id, curriculumLiterature as curriculum_literature from Material where id='${LearningObject.id}'">
 
                 <entity name="Type" query="select 'material' as type"/>
 
