@@ -14,7 +14,6 @@ angular.module('koolikottApp')
                 if (newVal) {
                     let diff = $attrs.remainingCharCount - stripHtml(newVal).length;
                     $scope.charactersRemaining = diff >= 0 ? diff : 0;
-                    $ngModel.$setValidity('charLimit', diff > 10);
                 }
             });
         }

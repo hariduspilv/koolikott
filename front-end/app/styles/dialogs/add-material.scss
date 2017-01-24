@@ -63,8 +63,8 @@
 
 .material-description-char-remaining {
   position: absolute;
-  right: 105px;
-  bottom: 75px;
+  right: 90px;
+  bottom: 10px;
 
   font-size: 12px;
   color: rgba(0, 0, 0, 0.55);
@@ -73,6 +73,10 @@
     color: $error;
   }
 
+}
+
+.relative {
+  position: relative;
 }
 
 @media screen and (max-width: $layout-breakpoint-sm) {
