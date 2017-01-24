@@ -9,6 +9,7 @@ angular.module('koolikottApp')
                 $scope.showHints = true;
                 $scope.isTouched = {};
                 $scope.isSummaryVisible = false;
+                $scope.charactersRemaining = 850;
 
                 var uploadingPicture = false;
 
@@ -189,7 +190,7 @@ angular.module('koolikottApp')
                     $scope.isSummaryVisible = true;
 
                     $timeout(function () {
-                        var editorScope = textAngularManager.retrieveEditor('add-portfolio-description-input').scope;
+                        var editorScope = textAngularManager.retrieveEditor('portfolioDescription').scope;
                         editorScope.displayElements.text.focus();
                     });
                 };

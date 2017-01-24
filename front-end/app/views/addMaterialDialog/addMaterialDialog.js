@@ -32,6 +32,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         $scope.uploadingFile = false;
         $scope.review = {};
         $scope.maxReviewSize = 10;
+        $scope.charactersRemaining = 850;
 
         init();
 

@@ -61,6 +61,26 @@
   display: none !important;
 }
 
+.material-description-char-remaining {
+  position: absolute;
+  right: 105px;
+  bottom: 75px;
+
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+
+  &.char-limit-error {
+    color: $error;
+  }
+
+}
+
+@media screen and (max-width: $layout-breakpoint-sm) {
+  .description-char-remaining {
+    bottom: 70px;
+  }
+}
+
 @media screen and (max-width: $layout-breakpoint-xs) {
   // Fix for window resize not calculating height correctly https://github.com/angular/material/issues/4513
   body > .md-dialog-container {

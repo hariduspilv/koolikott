@@ -47,8 +47,6 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     @Inject
     private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
-    private static final int MAX_DESCRIPTION_LENGTH = 850;
-
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
@@ -191,7 +189,6 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio already exists.");
         }
 
-        validateDescriptions(portfolio);
         cleanTextFields(portfolio);
 
         Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
@@ -203,7 +200,6 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 
-        validateDescriptions(portfolio);
         cleanTextFields(portfolio);
 
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
@@ -216,14 +212,6 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         processChanges(portfolio);
 
         return updatedPortfolio;
-    }
-
-    private void validateDescriptions(Portfolio portfolio) {
-        if (portfolio.getSummary() != null) {
-            if (portfolio.getSummary().length() > MAX_DESCRIPTION_LENGTH) {
-                throw new IllegalArgumentException();
-            }
-        }
     }
 
     private void cleanTextFields(Portfolio portfolio) {

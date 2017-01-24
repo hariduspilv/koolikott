@@ -1,5 +1,6 @@
 /**
  * https://github.com/alexander-elgin/ta-maxlength
+ * with some modifications
  */
 angular.module('koolikottApp')
     .directive('taMaxlength', ['$timeout', 'textAngularManager', function ($timeout, textAngularManager) {
@@ -9,9 +10,9 @@ angular.module('koolikottApp')
             let editor, maxLength = parseInt(attrs.taMaxlength);
 
             let getTruncatedContent = function(content) {
-                return _.truncate(content, {
+                return _.truncate(stripHtml(content), {
                     length: maxLength + 1,
-                    omission: '</p>'
+                    omission: ''
                 });
             };
 
@@ -20,7 +21,7 @@ angular.module('koolikottApp')
             };
 
             let getContentLength = function() {
-                return angular.element(getEditor()).text().length;
+                return stripHtml(angular.element(getEditor()).text()).length;
             };
 
             let isNavigationKey = function(keyCode) {

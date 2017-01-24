@@ -94,9 +94,13 @@
       <md-input-container class="md-block text-angular-portfolio-container animate-if margin-top-36"
                           data-ng-if="isSummaryVisible">
 
-        <text-angular id="add-portfolio-description-input" name="add-portfolio-description-input"
+        <text-angular id="add-portfolio-description-input" name="portfolioDescription"
                       class="textangular-editor" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
-                      ng-model="newPortfolio.summary" ta-maxlength="850"></text-angular>
+                      ng-model="newPortfolio.summary" ta-maxlength="850" remaining-char-count="850"></text-angular>
+        <span class="portfolio-summary-char-remaining" data-ng-class="{'char-limit-error': addPortfolioForm.portfolioDescription.$error.charLimit}">
+          <span data-translate="CHARACTERS_REMAINING"></span>
+          <span data-ng-bind="charactersRemaining"></span>
+        </span>
       </md-input-container>
 
     </md-content>

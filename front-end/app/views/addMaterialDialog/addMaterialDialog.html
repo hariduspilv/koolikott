@@ -173,8 +173,12 @@
 
                 <div layout="row" layout-align="top center">
 
-                  <text-angular id="add-material-description-input" class="textangular-editor" name="descriptionEditor"
-                                placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description" ta-maxlength="850"></text-angular>
+                  <text-angular id="add-material-description-input" class="textangular-editor char-count" name="descriptionEditor"
+                                placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description" ta-maxlength="850" remaining-char-count="850"></text-angular>
+                  <span class="material-description-char-remaining" data-ng-class="{'char-limit-error': addMaterialForm.descriptionEditor.$error.charLimit}">
+                    <span data-translate="CHARACTERS_REMAINING"></span>
+                    <span data-ng-bind="charactersRemaining"></span>
+                  </span>
 
                   <div layout="column">
                     <md-button class="md-icon-button md-primary"

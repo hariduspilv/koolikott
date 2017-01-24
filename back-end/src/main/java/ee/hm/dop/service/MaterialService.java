@@ -11,7 +11,6 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.PeerReview;
@@ -54,7 +53,6 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
     private static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
-    private static final int MAX_DESCRIPTION_LENGTH = 850;
     private static final String WWW_PREFIX = "www.";
     private static final String DEFAULT_PROTOCOL = "http://";
     private final String PDF_EXTENSION = ".pdf\"";
@@ -462,8 +460,6 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             logger.info("Updating material");
         }
 
-        validateDescriptions(material);
-
         cleanTextFields(material);
 
         checkKeyCompetences(material);
@@ -475,16 +471,6 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         material = applyRestrictions(material);
 
         return (Material) materialDAO.update(material);
-    }
-
-    private void validateDescriptions(Material material) {
-        if (material.getDescriptions() != null) {
-            for (LanguageString desc : material.getDescriptions()) {
-                if (desc.getText().length() > MAX_DESCRIPTION_LENGTH) {
-                    throw new IllegalArgumentException();
-                }
-            }
-        }
     }
 
     private void cleanTextFields(Material material) {

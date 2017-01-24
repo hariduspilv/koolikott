@@ -122,7 +122,7 @@ public class MaterialServiceTest {
         expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getTitles()).andReturn(null);
-        expect(material.getDescriptions()).andReturn(null).times(2);
+        expect(material.getDescriptions()).andReturn(null);
 
         material.setRepository(null);
         material.setRecommendation(null);
@@ -221,7 +221,7 @@ public class MaterialServiceTest {
         expect(material.getSource()).andReturn("http://www.creatematerial.example.com").times(3);
         expect(materialDAO.findBySource("creatematerial.example.com", true)).andReturn(null);
         expect(material.getTitles()).andReturn(null);
-        expect(material.getDescriptions()).andReturn(null).times(2);
+        expect(material.getDescriptions()).andReturn(null);
 
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);

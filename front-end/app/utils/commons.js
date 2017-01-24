@@ -534,3 +534,9 @@ function isMaterial(type) {
 function isPortfolio(type) {
     return type === ".Portfolio" || type === ".ReducedPortfolio"
 }
+
+function stripHtml(htmlString) {
+    let tmp = document.createElement("div");
+    tmp.innerHTML = htmlString;
+    return tmp.textContent || tmp.innerText || "";
+}
