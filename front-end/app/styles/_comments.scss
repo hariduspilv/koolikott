@@ -1,0 +1,18 @@
+.comments {
+  border-top: 1px solid $border-color;
+  padding: 16px;
+}
+
+/* Mingisugune stiil kirjutab üle kui importantit pole */
+.comments__button {
+  margin: 0 !important;
+}
+
+.comments__icon {
+  color: rgba(0,0,0, .37);
+}
+
+.comments__count {
+  color: rgba(0,0,0, .37);
+  font-weight: bold;
+}

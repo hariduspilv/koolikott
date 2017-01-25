@@ -1,18 +1,25 @@
-<div class="rating" layout="row" layout-align="end center" flex>
-  <div class="rating-button md-caption" data-ng-click="$ctrl.like()">
-	<md-tooltip md-direction="top">
-	  <span data-ng-if="$ctrl.isAuthenticated()" data-translate="RATING_LIKE"></span>
-    <span data-ng-if="!$ctrl.isAuthenticated()" data-translate="TOOLTIP_LOG_IN_TO_RATE"></span>
-	</md-tooltip>
-	<md-icon data-ng-class="{ 'md-primary' : $ctrl.isLiked }">thumb_up</md-icon>
-	<span data-ng-bind="$ctrl.rating.likes"></span>
+<div class="rating" layout="row" layout-align="space-between center" flex>
+  <div class="rating__item md-caption">
+    <md-tooltip md-direction="top">
+      <span data-translate="VIEW_COUNT"></span>
+    </md-tooltip>
+    <md-icon class="rating__icon">remove_red_eye</md-icon>
+    <span class="rating__number" data-ng-bind="$ctrl.material.views || $ctrl.portfolio.views"></span>
   </div>
-  <div class="rating-button md-caption" data-ng-click="$ctrl.dislike()">
-	<md-tooltip md-direction="top">
-	  <span data-ng-if="$ctrl.isAuthenticated()" data-translate="RATING_DISLIKE"></span>
-    <span data-ng-if="!$ctrl.isAuthenticated()" data-translate="TOOLTIP_LOG_IN_TO_RATE"></span>
-	</md-tooltip>
-	<md-icon data-ng-class="{ 'md-primary' : $ctrl.isDisliked }">thumb_down</md-icon>
-	<span data-ng-bind="$ctrl.rating.dislikes"></span>
+  <div class="rating__item rating__item--button md-caption" data-ng-click="$ctrl.like()">
+    <md-tooltip md-direction="top">
+      <span data-ng-if="$ctrl.isAuthenticated()" data-translate="RATING_LIKE"></span>
+      <span data-ng-if="!$ctrl.isAuthenticated()" data-translate="TOOLTIP_LOG_IN_TO_RATE"></span>
+    </md-tooltip>
+    <md-icon class="rating__icon" data-ng-class="{ 'md-primary' : $ctrl.isLiked }">thumb_up</md-icon>
+    <span class="rating__number" data-ng-bind="$ctrl.rating.likes"></span>
+  </div>
+  <div class="rating__item rating__item--button md-caption" data-ng-click="$ctrl.dislike()">
+    <md-tooltip md-direction="top">
+      <span data-ng-if="$ctrl.isAuthenticated()" data-translate="RATING_DISLIKE"></span>
+      <span data-ng-if="!$ctrl.isAuthenticated()" data-translate="TOOLTIP_LOG_IN_TO_RATE"></span>
+    </md-tooltip>
+    <md-icon class="rating__icon" data-ng-class="{ 'md-primary' : $ctrl.isDisliked }">thumb_down</md-icon>
+    <span class="rating__number" data-ng-bind="$ctrl.rating.dislikes"></span>
   </div>
 </div>

@@ -28,8 +28,12 @@
     }
   }
 
+  .md-body-2 {
+    margin: $md-padding/2 0;
+  }
+
   .card-media {
-    margin-left: -$md-padding;
+    position: relative;
     height: auto;
 
     .pick {
@@ -76,6 +80,9 @@
     }
 
     &:hover {
+      .card-lg__overlay {
+        visibility: visible;
+      }
       .pick {
         visibility: visible;
       }
@@ -86,7 +93,6 @@
     border-radius: 0;
     &:hover {
       background-color: $selected-gray;
-      cursor: pointer;
 
       .card-hover {
         opacity: .8;
@@ -208,4 +214,92 @@ a.embed-link{
 
 a.embed-image-padded{
   margin: $md-padding*2;
+}
+
+// New styles
+
+.card-lg__actions {
+  margin: 0;
+}
+
+.review__label {
+  color: rgba(0,0,0, .37);
+  font-size: $font-small;
+}
+
+.review__link {
+  margin: 0 !important;
+
+  md-icon {
+    color: rgba(0,0,0, .37);
+  }
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.card-lg__container {
+  padding: $md-padding;
+  position: relative;
+  overflow: hidden;
+
+  &--border-left {
+    border: none;
+
+    @media (min-width: 600px) {
+      border-left: 1px solid  rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &--padding-l-r {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &--padding-l-r-t {
+    padding-bottom: 0;
+  }
+
+  &--padding-l-r-b {
+    padding-top: 0;
+  }
+
+  &--actions {
+    padding: $md-padding/2 $md-padding;
+
+    &--border-left {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+      @media (min-width: $layout-breakpoint-xs) {
+        border-top: none;
+      }
+    }
+  }
+}
+
+.card-lg__overlay {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: flex-end;
+  color: white;
+}
+
+.card-lg__link {
+  a {
+    color: $gray-d;
+
+    &:hover {
+      color: #15c;
+    }
+  }
+}
+
+.card-lg__licenses {
+  margin-left: $md-padding/8;
 }
