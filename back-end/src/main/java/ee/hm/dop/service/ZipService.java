@@ -11,42 +11,45 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public class ZipService
-{
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ZipService {
     static final String ZIP_EXTENSION = ".zip";
     private List<String> fileList = new ArrayList<>();
-    private String outputFolder;
     private String sourceFolder;
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
 
     /**
      * Zip it
+     *
      * @param sourceFolder source ZIP file location
      * @param outputFolder output ZIP file location
      */
 
-    public String packArchive(String sourceFolder, String outputFolder){
+    public String packArchive(String sourceFolder, String outputFolder) {
         this.sourceFolder = sourceFolder;
-        this.outputFolder = outputFolder;
         String outputFile = outputFolder + ZIP_EXTENSION;
         generateFileList(new File(sourceFolder));
         zipIt(outputFile);
         return outputFile;
     }
 
-    public void zipIt(String zipFile){
+    public void zipIt(String zipFile) {
 
         byte[] buffer = new byte[1024];
 
-        try{
+        try {
             FileOutputStream fos = new FileOutputStream(zipFile);
             ZipOutputStream zos = new ZipOutputStream(fos);
 
-            System.out.println("Output to Zip : " + zipFile);
+            logger.info("Output to Zip : " + zipFile);
 
-            for(String file : this.fileList){
+            for (String file : this.fileList) {
 
-                System.out.println("File Added : " + file);
-                ZipEntry ze= new ZipEntry(file);
+                logger.info("File Added : " + file);
+                ZipEntry ze = new ZipEntry(file);
                 zos.putNextEntry(ze);
 
                 FileInputStream in =
@@ -61,30 +64,28 @@ public class ZipService
             }
 
             zos.closeEntry();
-            //remember close it
             zos.close();
 
-            System.out.println("Done");
-        }catch(IOException ex){
-            ex.printStackTrace();
+            logger.info("Archiving completed");
+        } catch (IOException ex) {
+            logger.warn("Unable to zip file/directory");
         }
     }
 
     /**
      * Traverse a directory and get all files,
      * and add the file into fileList
+     *
      * @param node file or directory
      */
-    public void generateFileList(File node){
-
-        //add file only
-        if(node.isFile()){
+    public void generateFileList(File node) {
+        if (node.isFile()) {
             fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
         }
 
-        if(node.isDirectory()){
+        if (node.isDirectory()) {
             String[] subNote = node.list();
-            for(String filename : subNote){
+            for (String filename : subNote) {
                 generateFileList(new File(node, filename));
             }
         }
@@ -93,19 +94,20 @@ public class ZipService
 
     /**
      * Format the file path for zip
+     *
      * @param file file path
      * @return Formatted file path
      */
-    private String generateZipEntry(String file){
-        return file.substring(sourceFolder.length()+1, file.length());
+    private String generateZipEntry(String file) {
+        return file.substring(sourceFolder.length() + 1, file.length());
     }
 
-    public void unpackArchive(InputStream inputStream, String location){
+    public void unpackArchive(InputStream inputStream, String location) {
         byte[] buffer = new byte[1024];
         ZipInputStream zis = new ZipInputStream(inputStream);
         try {
             ZipEntry ze = zis.getNextEntry();
-            while(ze!=null){
+            while (ze != null) {
 
                 String fileName = ze.getName();
                 File newFile = new File(location + File.separator + fileName);
