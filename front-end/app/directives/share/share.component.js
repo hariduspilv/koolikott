@@ -10,9 +10,9 @@ angular.module('koolikottApp')
     controller: dopShareController
 });
 
-dopShareController.$inject = ['$scope', '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare', 'FB_APP_ID', 'GOOGLE_SHARE_KEY', '$timeout'];
+dopShareController.$inject = ['$scope', '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare', 'FB_APP_ID', 'GOOGLE_SHARE_CLIENT_ID', '$timeout'];
 
-function dopShareController($scope, $rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare, FB_APP_ID, GOOGLE_SHARE_KEY, $timeout) {
+function dopShareController($scope, $rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare, FB_APP_ID, GOOGLE_SHARE_CLIENT_ID, $timeout) {
     let vm = this;
 
     vm.$onInit = () => {
@@ -153,7 +153,7 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
             case 'google':
                 let options = {
                     contenturl: vm.pageUrl,
-                    clientid: `${GOOGLE_SHARE_KEY}.apps.googleusercontent.com`,
+                    clientid: `${GOOGLE_SHARE_CLIENT_ID}.apps.googleusercontent.com`,
                     cookiepolicy: $location.$$protocol + '://' + $location.$$host,
                     prefilltext: vm.title,
                     calltoactionurl: vm.pageUrl
