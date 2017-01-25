@@ -15,11 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ZipService {
+    // Increase this number to reduce ZIP read/write times
+    private int COMPRESSION_MEMORY = 1024;
     static final String ZIP_EXTENSION = ".zip";
     private List<String> fileList = new ArrayList<>();
     private String sourceFolder;
     private Logger logger = LoggerFactory.getLogger(getClass());
-
 
     /**
      * Zip it
@@ -38,7 +39,7 @@ public class ZipService {
 
     public void zipIt(String zipFile) {
 
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[COMPRESSION_MEMORY];
 
         try {
             FileOutputStream fos = new FileOutputStream(zipFile);
@@ -103,7 +104,7 @@ public class ZipService {
     }
 
     public void unpackArchive(InputStream inputStream, String location) {
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[COMPRESSION_MEMORY];
         ZipInputStream zis = new ZipInputStream(inputStream);
         try {
             ZipEntry ze = zis.getNextEntry();
