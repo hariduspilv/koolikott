@@ -66,7 +66,7 @@ public class UploadedFileService {
         return Response.ok(FileUtils.getFile(outputPath)).build();
     }
 
-    public Response getFile(Long fileId, String filename, final boolean isReview) {
+    public Response getFile(Long fileId, String filename, final boolean isReview) throws UnsupportedEncodingException {
         UploadedFile file = getUploadedFileById(fileId);
         if (file == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -95,8 +95,9 @@ public class UploadedFileService {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+        /* Safari can serve directly decoded filenames, chrome/IE can server utf-8 encoded filenames */
         return Response.ok(FileUtils.getFile(path), mediaType)
-                .header("Content-Disposition", "Inline; filename=\"" + filename + "\"")
+                .header("Content-Disposition", "Inline; filename*=UTF-8''" + URLEncoder.encode(fileName, UTF_8.name()) + "\"; filename=\"" + fileName + "\"")
                 .build();
     }
 
