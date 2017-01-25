@@ -54,12 +54,12 @@ public class UploadedFileService {
         return uploadedFileDAO.update(uploadedFile);
     }
 
-    public Response getArchivedFile(Long fileId){
+    public Response getArchivedFile(Long fileId) {
         String sourcePath = getUploadedFileById(fileId).getPath();
 
         //  Check if the zip archive already exists
         File zipFile = FileUtils.getFile(sourcePath + ZIP_EXTENSION);
-        if(zipFile.exists())return Response.ok(FileUtils.getFile(sourcePath + ZIP_EXTENSION)).build();
+        if (zipFile.exists()) return Response.ok(FileUtils.getFile(sourcePath + ZIP_EXTENSION)).build();
 
         String outputPath = zipService.packArchive(sourcePath, sourcePath);
 
@@ -80,7 +80,7 @@ public class UploadedFileService {
         }
 
         String fileName = file.getName();
-        if(filename.contains("/")){
+        if (filename.contains("/")) {
             fileName = file.getName() + filename.substring(filename.indexOf("/"), filename.length());
         }
 

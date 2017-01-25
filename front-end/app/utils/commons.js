@@ -1,15 +1,15 @@
 /**
-* Common constants and functions.
-*
-* @author Jordan Silva
-*
-*/
+ * Common constants and functions.
+ *
+ * @author Jordan Silva
+ *
+ */
 const LOGIN_ORIGIN = "loginOrigin";
 const BREAK_XS = 600;
 const BREAK_SM = 960;
 const BREAK_LG = 1280;
 
-function isMobile () {
+function isMobile() {
     return window.innerWidth < BREAK_XS;
 }
 
@@ -37,56 +37,56 @@ if (typeof String.prototype.contains === 'undefined') {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, 'includes', {
-    value: function(searchElement, fromIndex) {
+    Object.defineProperty(Array.prototype, 'includes', {
+        value: function (searchElement, fromIndex) {
 
-      // 1. Let O be ? ToObject(this value).
-      if (this == null) {
-        throw new TypeError('"this" is null or not defined');
-      }
+            // 1. Let O be ? ToObject(this value).
+            if (this == null) {
+                throw new TypeError('"this" is null or not defined');
+            }
 
-      var o = Object(this);
+            var o = Object(this);
 
-      // 2. Let len be ? ToLength(? Get(O, "length")).
-      var len = o.length >>> 0;
+            // 2. Let len be ? ToLength(? Get(O, "length")).
+            var len = o.length >>> 0;
 
-      // 3. If len is 0, return false.
-      if (len === 0) {
-        return false;
-      }
+            // 3. If len is 0, return false.
+            if (len === 0) {
+                return false;
+            }
 
-      // 4. Let n be ? ToInteger(fromIndex).
-      //    (If fromIndex is undefined, this step produces the value 0.)
-      var n = fromIndex | 0;
+            // 4. Let n be ? ToInteger(fromIndex).
+            //    (If fromIndex is undefined, this step produces the value 0.)
+            var n = fromIndex | 0;
 
-      // 5. If n ≥ 0, then
-      //  a. Let k be n.
-      // 6. Else n < 0,
-      //  a. Let k be len + n.
-      //  b. If k < 0, let k be 0.
-      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+            // 5. If n ≥ 0, then
+            //  a. Let k be n.
+            // 6. Else n < 0,
+            //  a. Let k be len + n.
+            //  b. If k < 0, let k be 0.
+            var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
 
-      // 7. Repeat, while k < len
-      while (k < len) {
-        // a. Let elementK be the result of ? Get(O, ! ToString(k)).
-        // b. If SameValueZero(searchElement, elementK) is true, return true.
-        // c. Increase k by 1.
-        // NOTE: === provides the correct "SameValueZero" comparison needed here.
-        if (o[k] === searchElement) {
-          return true;
+            // 7. Repeat, while k < len
+            while (k < len) {
+                // a. Let elementK be the result of ? Get(O, ! ToString(k)).
+                // b. If SameValueZero(searchElement, elementK) is true, return true.
+                // c. Increase k by 1.
+                // NOTE: === provides the correct "SameValueZero" comparison needed here.
+                if (o[k] === searchElement) {
+                    return true;
+                }
+                k++;
+            }
+
+            // 8. Return false
+            return false;
         }
-        k++;
-      }
-
-      // 8. Return false
-      return false;
-    }
-  });
+    });
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/repeat
 if (!String.prototype.repeat) {
-    String.prototype.repeat = function(count) {
+    String.prototype.repeat = function (count) {
         'use strict';
         if (this == null) {
             throw new TypeError('can\'t convert ' + this + ' to object');
@@ -113,7 +113,7 @@ if (!String.prototype.repeat) {
             throw new RangeError('repeat count must not overflow maximum string size');
         }
         var rpt = '';
-        for (;;) {
+        for (; ;) {
             if ((count & 1) == 1) {
                 rpt += str;
             }
@@ -143,23 +143,23 @@ function isEmpty(str) {
 }
 
 /**
-* Converts a string date into Date object. String format must be 'dd.MM.yyyy'
-* @param dateString
-* @returns {Date}
-*/
+ * Converts a string date into Date object. String format must be 'dd.MM.yyyy'
+ * @param dateString
+ * @returns {Date}
+ */
 function stringToDate(dateString) {
     var date = dateString.split(".");
     return new Date(date[2], date[1] - 1, date[0]);
 }
 
 /**
-* Compares two dates. If dates are in String format, it is converted to Date. String format must be 'dd.MM.yyyy'.
-* @param date1
-* @param date2
-* @return a negative integer, zero, or a positive integer as the
-*         first argument is less than, equal to, or greater than the
-*         second.
-*/
+ * Compares two dates. If dates are in String format, it is converted to Date. String format must be 'dd.MM.yyyy'.
+ * @param date1
+ * @param date2
+ * @return a negative integer, zero, or a positive integer as the
+ *         first argument is less than, equal to, or greater than the
+ *         second.
+ */
 function compareDate(date1, date2) {
     if (typeof date1 === 'string') {
         date1 = stringToDate(date1);
@@ -173,8 +173,8 @@ function compareDate(date1, date2) {
 }
 
 /**
-* Copies the first object to the second
-*/
+ * Copies the first object to the second
+ */
 function copyObject(first, second) {
     clearObject(second);
 
@@ -184,15 +184,15 @@ function copyObject(first, second) {
 }
 
 /**
-* Clear an object, deleting all its properties
-*/
+ * Clear an object, deleting all its properties
+ */
 function clearObject(object) {
     Object.keys(object).forEach(key => delete object[key]);
 }
 
 /**
-* Check if complex item (element) is in an array using comparator
-*/
+ * Check if complex item (element) is in an array using comparator
+ */
 Array.prototype.indexOfWithComparator = function (obj, comparator) {
     for (var i = 0; i < this.length; i++) {
         if (comparator(obj, this[i]) === 0) {
@@ -204,9 +204,9 @@ Array.prototype.indexOfWithComparator = function (obj, comparator) {
 };
 
 /**
-* Gets the string in the correct language
-* @return the string in the correct language
-*/
+ * Gets the string in the correct language
+ * @return the string in the correct language
+ */
 function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
     if (!values || values.length === 0) {
         return;
@@ -230,9 +230,9 @@ function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
 }
 
 /**
-* Gets the text if it exists in the specified language.
-* @return the queryed text.
-*/
+ * Gets the text if it exists in the specified language.
+ * @return the queryed text.
+ */
 function getLanguageString(values, language) {
     if (!language) {
         return null;
@@ -422,23 +422,23 @@ function getSource(material) {
 }
 
 /**
-* Check if list of objects contains element
-* @param list
-* @param field
-* @param value
-* @returns {boolean}
-*/
+ * Check if list of objects contains element
+ * @param list
+ * @param field
+ * @param value
+ * @returns {boolean}
+ */
 function listContains(list, field, value) {
     return list.filter(function (e) {
-        return e[field] === value;
-    }).length > 0
+            return e[field] === value;
+        }).length > 0
 }
 
 /**
-* Move element in list from old_index to new_index
-* @param old_index
-* @param new_index
-*/
+ * Move element in list from old_index to new_index
+ * @param old_index
+ * @param new_index
+ */
 Array.prototype.move = function (old_index, new_index) {
     while (old_index < 0) {
         old_index += this.length;
