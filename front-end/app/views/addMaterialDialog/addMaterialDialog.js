@@ -609,7 +609,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $scope.fileUploaded = true;
             $scope.uploadingFile = false;
             $scope.material.uploadedFile = file;
-            $scope.material.uploadedFile.displayName = decodeURIComponent($scope.material.uploadedFile.name);
+            $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
             $scope.step.isMaterialUrlStepValid = true;
         }
 

@@ -417,7 +417,12 @@ function getSource(material) {
     if (material.source) {
         return material.source;
     } else if (material.uploadedFile) {
-        return decodeURIComponent(material.uploadedFile.url);
+        /*
+         Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
+         with decodeURIComponent(escape()); then we again encode it in java to utf-8 (actually a mistake)
+         which results in another decodeURIComponent();
+         */
+        return decodeURIComponent(escape(decodeURIComponent(material.uploadedFile.url)));
     }
 }
 
