@@ -67,6 +67,8 @@ angular.module('koolikottApp').directive('dopHeader', [
                 const VISIBILITY_PRIVATE = "PRIVATE";
                 const VISIBILITY_NOT_LISTED = "NOT_LISTED";
 
+                const SEARCH_DELAY = 1000;
+
                 function checkWindowWidth () {
                     if (isMobile()) {
                         $scope.isMobileView = true;
@@ -243,7 +245,11 @@ angular.module('koolikottApp').directive('dopHeader', [
 
                     $scope.searchFields.searchQuery = newValue || "";
                     if (newValue !== oldValue && !$scope.detailedSearch.isVisible && (!dontSearch || newValue)) {
-                        $scope.search();
+
+                        $timeout(function () {
+                            $scope.search();
+                        }, SEARCH_DELAY);
+
                     } else if ($scope.detailedSearch.isVisible) {
                         $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
                     }
