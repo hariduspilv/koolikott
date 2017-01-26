@@ -10,12 +10,10 @@ angular.module('koolikottApp')
     controller: dopCardSmController
 });
 
-dopCardSmController.$inject = ['$scope', '$location', '$rootScope', 'translationService', 'serverCallService', 'iconService', 'authenticatedUserService', 'targetGroupService', 'storageService', 'taxonService'];
+dopCardSmController.$inject = ['$location', '$rootScope', 'translationService', 'authenticatedUserService', 'targetGroupService', 'storageService', 'taxonService', 'taxonGroupingService'];
 
-function dopCardSmController ($scope, $location, $rootScope, translationService, serverCallService, iconService, authenticatedUserService, targetGroupService, storageService, taxonService) {
+function dopCardSmController ($location, $rootScope, translationService, authenticatedUserService, targetGroupService, storageService, taxonService, taxonGroupingService) {
     let vm = this;
-
-    let domainSubjectMap = {};
 
     vm.$onInit = () => {
         vm.selected = false;
@@ -24,8 +22,8 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
         vm.domains = [];
         vm.subjects = [];
 
+        vm.domainSubjectList = taxonGroupingService.getDomainSubjectList(vm.learningObject.taxons);
         vm.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups(vm.learningObject.targetGroups);
-        loadDomainsAndSubjects();
     };
 
     vm.navigateTo = (learningObject, $event) => {
@@ -77,7 +75,7 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
     vm.formatDate = (date) => formatDateToDayMonthYear(date);
 
     vm.isAuthenticated = () => {
-        var authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
+        let authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
         if (!authenticated && isMaterial(vm.learningObject.type)) {
             vm.learningObject.selected = false;
         }
@@ -88,11 +86,9 @@ function dopCardSmController ($scope, $location, $rootScope, translationService,
     vm.isMaterial = (type) => isMaterial(type);
     vm.isPortfolio = (type) => isPortfolio(type);
 
-    function loadDomainsAndSubjects() {
-        domainSubjectMap = taxonService.getDomainSubjectMap(vm.learningObject.taxons);
-    }
-
-    vm.getTaxons = () => taxonService.getTaxonsFromDomainSubjectMap(domainSubjectMap);
+    vm.getTaxons = () => {
+        return vm.domainSubjectList
+    };
 
     vm.hoverEnter = () => {
         vm.cardHover = true;

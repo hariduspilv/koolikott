@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
     .controller('addPortfolioDialogController',
         [
-            '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService',
-            function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService) {
+            '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService',
+            function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService) {
                 $scope.isSaving = false;
                 $scope.showHints = true;
                 $scope.isTouched = {};
@@ -95,6 +95,7 @@ angular.module('koolikottApp')
                         createPortfolioFailed();
                     } else {
                         $rootScope.$broadcast("errorMessage:updateChanged");
+                        eventService.notify("portfolio:reloadTaxonObject");
 
                         if (!portfolio.chapters || portfolio.chapters.length === 0) {
                             portfolio.chapters = [];

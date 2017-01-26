@@ -90,11 +90,11 @@
                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
               </p>
               <p class="two-rows-meta">
-                <span data-ng-repeat="educationalContext in getMaterialEducationalContexts() track by $index">
-                  <span data-translate="{{educationalContext.name.toUpperCase() }}"></span>
-                  <span data-ng-bind="$index < getMaterialEducationalContexts().length - 1 ? ', ' : ''"></span>
+                <span data-ng-repeat="educationalContext in taxonObject.educationalContexts track by $index">
+                  <span data-translate="{{educationalContext}}"></span><span
+                  data-ng-bind="$index < taxonObject.educationalContexts.length - 1 ? ', ' : ''"></span>
                 </span>
-                <span data-ng-if="!getMaterialEducationalContexts().length" data-translate="UNKNOWN">Unknown</span>
+                <span data-ng-if="!taxonObject.educationalContexts.length" data-translate="UNKNOWN">Unknown</span>
               </p>
             </div>
             <!-- Domain -->
@@ -103,29 +103,35 @@
                 <span data-translate="DETAIL_VIEW_DOMAIN"></span>
               </p>
               <p class="two-rows-meta">
-                <span data-ng-repeat="taxon in getTaxons() track by $index">
-                  <span data-translate="{{taxon}}"></span>
-                  <span data-ng-bind="$index < getTaxons().length - 1 ? ', ' : ''"></span>
+                <span data-ng-repeat="taxon in taxonObject.domainGroup track by $index">
+                  <span data-translate="{{taxon}}"></span><span
+                  data-ng-bind="$index < taxonObject.domainGroup.length - 1 ? ', ' : ''"></span>
                 </span>
-                <span data-ng-if="!getTaxons().length" data-translate="UNKNOWN">Unknown</span>
+                <span data-ng-if="!taxonObject.domainGroup.length" data-translate="UNKNOWN">Unknown</span>
               </p>
             </div>
-            <!-- Todo: Topic -->
-            <div flex>
+            <!-- Topic -->
+            <div flex data-ng-if="taxonObject.topics.length">
               <p class="md-caption caption-light">
-                <span>Teema</span>
+                <span data-translate="TAXON_PATH_TOPIC"></span>
               </p>
               <p class="two-rows-meta">
-                <span>19. sajandi II poolel</span>
+                <span data-ng-repeat="topic in taxonObject.topics track by $index">
+                  <span data-translate="{{topic}}"></span><span
+                  data-ng-bind="$index < taxonObject.topics.length - 1 ? ', ' : ''"></span>
+                </span>
               </p>
             </div>
-            <!-- Todo: Subtopic -->
-            <div flex>
+            <!-- Subtopic -->
+            <div flex data-ng-if="taxonObject.subtopics.length">
               <p class="md-caption caption-light">
-                <span>Alateema</span>
+                <span data-translate="TAXON_PATH_SUBTOPIC"></span>
               </p>
               <p class="two-rows-meta">
-                <span>30 aastane sõda</span>
+                <span data-ng-repeat="subtopic in taxonObject.subtopics track by $index">
+                  <span data-translate="{{subtopic}}"></span><span
+                  data-ng-bind="$index < taxonObject.subtopics.length - 1 ? ', ' : ''"></span>
+                </span>
               </p>
             </div>
           </div>
@@ -133,7 +139,7 @@
           <md-divider class="md-default-theme"></md-divider>
 
           <!-- Description  -->
-          <div class="card-lg__container card-lg__container--padding-l-r" >
+          <div class="card-lg__container card-lg__container--padding-l-r">
             <div class="md-body-1 description textangular-view"
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
 
@@ -154,7 +160,8 @@
           </div>
 
           <!-- Tags -->
-          <dop-tags data-ng-if="material && material.id" class="tags card-lg__container card-lg__container--padding-l-r-b"
+          <dop-tags data-ng-if="material && material.id"
+                    class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material"></dop-tags>
         </div>
 
@@ -332,63 +339,52 @@
                 <span data-ng-if="isNullOrZeroLength(targetGroups)" data-translate="UNKNOWN">Unknown</span>
               </span>
             </p>
-            <!-- Todo: Key competences -->
-            <p class="md-body-2">
+            <!-- Key competences -->
+            <p class="md-body-2 two-rows-meta" data-ng-if="material.keyCompetences.length">
               <span class="md-caption caption-light">
-                <span>Üldpädevused</span>:
+                <span data-translate="MATERIAL_KEY_COMPETENCES"></span>:
               </span>
-              <span>suhtluspädevus, kultuuri- ja väärtuspädevus</span>
+              <span data-ng-repeat="keyCompetence in material.keyCompetences track by $index">
+                <span data-translate="{{'KEY_COMPETENCE_' + keyCompetence.name.toUpperCase()}}"></span><span
+                data-ng-bind="$index < material.keyCompetences.length - 1 ? ', ' : ''"></span>
+              </span>
             </p>
-            <!-- Todo: Cross-curricular themes -->
-            <p class="md-body-2">
+            <!-- Cross-curricular themes -->
+            <p class="md-body-2 two-rows-meta" data-ng-if="material.crossCurricularThemes.length">
               <span class="md-caption caption-light">
-                <span>Läbivad teemad</span>:
+                <span data-translate="MATERIAL_CROSS_CURRICULAR_THEMES"></span>:
               </span>
-              <span>Kodanikualgatus ja ettevõtlikkus, Kultuuriline identiteet</span>
+              <span data-ng-repeat="crossCurricularTheme in material.crossCurricularThemes track by $index">
+                <span
+                  data-translate="{{'CROSS_CURRICULAR_THEME_' + crossCurricularTheme.name.toUpperCase()}}"></span><span
+                data-ng-bind="$index < material.crossCurricularThemes.length - 1 ? ', ' : ''"></span>
+              </span>
             </p>
             <!-- Paid material -->
             <p class="md-body-2" data-ng-if="material.paid">
               <span data-translate="MATERIAL_PAID"></span>
             </p>
-            <!-- Todo: Licence -->
-            <p class="md-body-2" layout="row" layout-align="start start">
+            <!-- Licence -->
+            <p class="md-body-2" layout="row" layout-align="start start" data-ng-if="material.licenseType">
               <span class="md-caption caption-light">
                 <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>:
               </span>
               <span class="card-lg__licenses">
-                <span class="license license--cc">
+                <span class="license" data-ng-class="'license--' + type" data-ng-repeat="type in getLicenseIconList()">
                   <md-tooltip md-direction="top">
-                    <span>foo</span>
+                    <span data-ng-bind="icon"></span>
                   </md-tooltip>
                 </span>
-                <span class="license license--by">
-                  <md-tooltip md-direction="top">
-                    <span>foo</span>
-                  </md-tooltip>
+
+                <span data-ng-if="!getLicenseIconList().length" data-ng-switch data-on="material.licenseType.name">
+                  <a data-ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms"
+                     data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}" target="_blank"></a>
+                  <span data-ng-switch-default data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
                 </span>
-                <span class="license license--nc">
-                  <md-tooltip md-direction="top">
-                    <span>foo</span>
-                  </md-tooltip>
-                </span>
-                <span class="license license--nd">
-                  <md-tooltip md-direction="top">
-                    <span>foo</span>
-                  </md-tooltip>
-                </span>
-                <span class="license license--sa">
-                  <md-tooltip md-direction="top">
-                    <span>foo</span>
-                  </md-tooltip>
-                </span>
+                <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
               </span>
 
-              <!--<span data-ng-if="material.licenseType" ng-switch on="material.licenseType.name">
-                <a ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms"
-                   data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}" target="_blank"></a>
-                <span ng-switch-default data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
-              </span>
-              <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>-->
+
             </p>
           </md-content>
         </div>
@@ -399,23 +395,15 @@
       <!-- SECTION 2: Actions -->
       <md-card-actions class="card-lg__actions" layout="column" layout-gt-xs="row">
         <div flex flex-gt-xs="75" class="card-lg__container" layout="row" layout-align="space-between center">
-          <!-- Todo: Container for multiple reviews -->
+          <!-- Container for multiple reviews -->
           <div class="review">
-            <span data-ng-if="material.peerReviews" class="review__label">Retsensioon: </span>
-            <span data-ng-if="material.peerReviews" data-ng-repeat="peerReview in material.peerReviews">
-                <!-- Kui on link -->
+            <span data-ng-if="material.peerReviews.length" class="review__label">Retsensioon: </span>
+            <span data-ng-repeat="peerReview in material.peerReviews">
                 <a data-ng-href="{{ peerReview.url }}" class="md-icon-button review__link" target="_blank">
                   <md-tooltip md-direction="top">
-                    <span>Lingi aadress</span>
+                    <span data-ng-bind="peerReview.url"></span>
                   </md-tooltip>
                   <md-icon>link</md-icon>
-                </a>
-                <!-- Kui on fail -->
-                <a data-ng-href="{{ peerReview.url }}" class="md-icon-button review__link" target="_blank">
-                  <md-tooltip md-direction="top">
-                    <span>Lae fail</span>
-                  </md-tooltip>
-                  <md-icon>attachment</md-icon>
                 </a>
               </span>
           </div>
@@ -432,7 +420,8 @@
             <span class="comments__count" data-ng-bind="material.comments.length"></span>
           </div>
         </div>
-        <div flex flex-gt-xs="25" class="card-lg__container card-lg__container--border-left" layout="column" layout-align="center stretch">
+        <div flex flex-gt-xs="25" class="card-lg__container card-lg__container--border-left" layout="column"
+             layout-align="center stretch">
           <!-- Ratings area -->
           <dop-rating data-ng-if="material.type" data-material="material"
                       like-message="{{ 'MATERIAL_LIKED' | translate }}"

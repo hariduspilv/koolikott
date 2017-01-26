@@ -1,20 +1,28 @@
-'use strict'
+'use strict';
 
 angular.module('koolikottApp')
     .controller('materialController', [
         '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
         'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
-        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService',
+        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService',
         function ($scope, serverCallService, $route, translationService, $rootScope,
                   searchService, $location, alertService, authenticatedUserService, dialogService,
-                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService) {
+                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService) {
 
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
             $scope.getMaterialSuccess = getMaterialSuccess;
+            $scope.taxonObject = {};
 
-            let domainSubjectMap = {};
+            const licenceTypeMap = {
+                'CCBY':  ['by'],
+                'CCBYSA': ['by', 'sa'],
+                'CCBYND': ['by', 'nd'],
+                'CCBYNC': ['by', 'nc'],
+                'CCBYNCSA': ['by', 'nc', 'sa'],
+                'CCBYNCND': ['by', 'nc', 'nd']
+            };
 
             if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial") {
                 $scope.material = storageService.getMaterial();
@@ -121,6 +129,7 @@ angular.module('koolikottApp')
                             $scope.material.uploadedFile.name;
                     }
 
+                    eventService.notify('material:reloadTaxonObject');
                     $scope.targetGroups = getTargetGroups();
                     $rootScope.learningObjectChanged = ($scope.material.changed > 0);
 
@@ -138,6 +147,11 @@ angular.module('koolikottApp')
                 $scope.material.source = getSource($scope.material);
                 getContentType();
                 processMaterial();
+
+                eventService.subscribe($scope, 'taxonService:mapInitialized', getTaxonObject);
+                eventService.subscribe($scope, 'material:reloadTaxonObject', getTaxonObject);
+
+                eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
@@ -175,6 +189,12 @@ angular.module('koolikottApp')
 
                 $rootScope.setReason(improper.reason);
             }
+
+            $scope.getLicenseIconList = function () {
+                if ($scope.material && $scope.material.licenseType) {
+                    return licenceTypeMap[$scope.material.licenseType.name];
+                }
+            };
 
             $scope.getMaterialEducationalContexts = function () {
                 var educationalContexts = [];
@@ -260,15 +280,11 @@ angular.module('koolikottApp')
                     || ($rootScope.learningObjectDeleted == true);
             };
 
-            function loadDomainsAndSubjects() {
-                if (!$scope.material || !$scope.material.taxons) return;
-                domainSubjectMap = taxonService.getDomainSubjectMap($scope.material.taxons);
+            function getTaxonObject() {
+                if ($scope.material && $scope.material.taxons) {
+                    $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.material.taxons);
+                }
             }
-
-            $scope.getTaxons = function () {
-                loadDomainsAndSubjects();
-                return taxonService.getTaxonsFromDomainSubjectMap(domainSubjectMap);
-            };
 
 
             function getSignedUserData() {

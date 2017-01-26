@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('koolikottApp').factory('taxonService', ['translationService',
-    function (translationService) {
+angular.module('koolikottApp').factory('taxonService', ['eventService',
+    function (eventService) {
 
         const CHILD_TAXON_KEYS = ['domains', 'subjects', 'topics', 'subtopics', 'modules', 'specializations'];
 
@@ -73,193 +73,92 @@ angular.module('koolikottApp').factory('taxonService', ['translationService',
             }
         }
 
-        function getDomainNameHelperTranslation(domainKey) {
-            return translationService.instant('HELPER_' + domainKey);
+        function getFullTaxon(id) {
+            return taxonMap['t' + id];
         }
 
-        function getSubjectNameHelperTranslation(subjectKey) {
-            return translationService.instant('HELPER_' + subjectKey)
+        function setTaxons(educationalContexts) {
+            taxonMap = Object.create(null);
+            educationalContexts.forEach(function (educationalContext) {
+                mapTaxon(educationalContext);
+            });
+
+            eventService.notify('taxonService:mapInitialized');
         }
 
-        function getDomainNameTranslation(domain) {
-            return translationService.instant('DOMAIN_' + domain.name.toUpperCase())
+        function getEducationalContext(taxon) {
+            return getTaxon(taxon, constants.EDUCATIONAL_CONTEXT);
         }
 
-        function getSubjectNameTranslation(subject) {
-            return translationService.instant('SUBJECT_' + subject.name.toUpperCase())
+        function getDomain(taxon) {
+            return getTaxon(taxon, constants.DOMAIN);
         }
 
-        function getDomainNameTranslationKey(domain) {
-            return 'DOMAIN_' + domain.name.toUpperCase()
+        function getSubject(taxon) {
+            return getTaxon(taxon, constants.SUBJECT);
         }
 
-        function getSubjectNameTranslationKey(subject) {
-            return 'SUBJECT_' + subject.name.toUpperCase()
+        function getTopic(taxon) {
+            return getTaxon(taxon, constants.TOPIC);
+        }
+
+        function getSubtopic(taxon) {
+            return getTaxon(taxon, constants.SUBTOPIC);
+        }
+
+        function getSpecialization(taxon) {
+            return getTaxon(taxon, constants.SPECIALIZATION);
+        }
+
+        function getModule(taxon) {
+            return getTaxon(taxon, constants.MODULE);
+        }
+
+        function getTaxon(taxon, level) {
+            if (taxon && taxonMap) return getTaxonByLevel(taxon, level);
+        }
+
+        function setSidenavTaxons(taxons) {
+            sidenavTaxons = taxons;
+        }
+
+        function getSidenavTaxons() {
+            return sidenavTaxons;
+        }
+
+        function getTaxonTranslationKey(taxon) {
+            if (taxon.level = ".TaxonDTO") {
+                taxon = getFullTaxon(taxon.id);
+            }
+
+            if (taxon.level !== '.EducationalContext') {
+                return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
+            } else {
+                return taxon.name.toUpperCase();
+            }
+        }
+
+        function isTaxonMapLoaded() {
+            return !_.isEmpty(taxonMap);
         }
 
         return {
             constants: constants,
 
-            getFullTaxon: function (id) {
-                return taxonMap['t' + id];
-            },
-
-            setTaxons: function (educationalContexts) {
-                taxonMap = Object.create(null);
-                educationalContexts.forEach(function (educationalContext) {
-                    mapTaxon(educationalContext);
-                });
-            },
-
-            getEducationalContext: function (taxon) {
-                return this.getTaxon(taxon, constants.EDUCATIONAL_CONTEXT);
-            },
-
-            getDomain: function (taxon) {
-                return this.getTaxon(taxon, constants.DOMAIN);
-            },
-
-            getSubject: function (taxon) {
-                return this.getTaxon(taxon, constants.SUBJECT);
-            },
-
-            getTopic: function (taxon) {
-                return this.getTaxon(taxon, constants.TOPIC);
-            },
-
-            getSubtopic: function (taxon) {
-                return this.getTaxon(taxon, constants.SUBTOPIC);
-            },
-
-            getSpecialization: function (taxon) {
-                return this.getTaxon(taxon, constants.SPECIALIZATION);
-            },
-
-            getModule: function (taxon) {
-                return this.getTaxon(taxon, constants.MODULE);
-            },
-
-            getTaxon: function (taxon, level) {
-                if (taxon && taxonMap) return getTaxonByLevel(taxon, level);
-            },
-
-            setSidenavTaxons: function (taxons) {
-                sidenavTaxons = taxons;
-            },
-
-            getSidenavTaxons: function () {
-                return sidenavTaxons;
-            },
-
-            getTaxonTranslationKey: function (taxon) {
-                if (taxon.level = ".TaxonDTO") {
-                    taxon = this.getFullTaxon(taxon.id);
-                }
-
-                if (taxon.level !== '.EducationalContext') {
-                    return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
-                } else {
-                    return taxon.name.toUpperCase();
-                }
-            },
-
-            getDomainSubjectMap: function (taxons) {
-                if (_.isEmpty(taxonMap)) return;
-
-                let domains = taxons.map(taxon => this.getDomain(taxon)).filter(item => {return item !== null});
-                let subjects = taxons.map(taxon => this.getSubject(taxon)).filter(item => {return item !== null});
-                let allSubjects = _.flatten(domains.map(dom => dom.subjects));
-
-                subjects.forEach(subject => {
-                    let tmp = domains.filter(domain => domain.id === this.getDomain(subject).id);
-                    if (tmp.length > 1) {
-                        subjects.push(...tmp[0].subjects);
-                    }
-                });
-
-                const lang = translationService.getLanguageCode();
-                for (let i = 0; i < domains.length; i++) {
-                    for (let j = 0; j < allSubjects.length; j++) {
-
-                        // No need to compare parent with its own children
-                        if (domains[i].id === allSubjects[j].parentId) continue;
-
-                        // Check if domain and subject have same translation
-                        // Estonian translations are compared at the moment
-                        if (lang === "et" && getDomainNameTranslation(domains[i]) !== getSubjectNameTranslation(allSubjects[j])) {
-                            continue;
-                        } else if (lang !== "et" && getDomainNameHelperTranslation(getDomainNameTranslationKey(domains[i])) !== getSubjectNameHelperTranslation(getSubjectNameTranslationKey(allSubjects[j]))) {
-                            continue;
-                        }
-
-                        // Remove domain and add corresponding subject to subject list
-                        if (_.findIndex(subjects, allSubjects[j]) === -1) {
-                            domains.splice(i, 1);
-                            subjects.push(allSubjects[j]);
-                            i--;
-                            break;
-                        } else {
-                            domains.splice(i, 1);
-                            i--;
-                            break;
-                        }
-                    }
-                }
-
-                let result = {};
-                domains.forEach(domain => {
-                    result[getDomainNameTranslationKey(domain)] = [];
-                });
-
-                subjects.forEach(subject => {
-                    let domain = this.getDomain(subject);
-                    if (result[getDomainNameTranslationKey(domain)]) {
-                        result[getDomainNameTranslationKey(domain)].push(getSubjectNameTranslationKey(subject));
-                    } else {
-                        result[getDomainNameTranslationKey(domain)] = [getSubjectNameTranslationKey(subject)];
-                    }
-                });
-
-                return result;
-            },
-
-            getTaxonsFromDomainSubjectMap: function (map) {
-                let result = [];
-                let domains = _.keys(map);
-                if (!domains || domains.length === 0) return [];
-
-                // Create taxon list that will be shown on card
-                domains.forEach((domain) => {
-                   if (map[domain].length === 1) result = result.concat(map[domain]);
-                   else result.push(domain);
-                });
-
-                // Remove remaining duplicates from final list
-                return this.removeDuplicatesFromDomainOrSubjectList(result);
-            },
-
-            removeDuplicatesFromDomainOrSubjectList: function (list) {
-                if (translationService.getLanguageCode() === "et") {
-                    return _.uniq(list.map(item => translationService.instant(item)))
-                }
-
-                // Workaround for taxons with missing translations
-                // "HELPER_" items can be removed once all taxons are translated
-                let translatedList = [];
-                let cleanedResult = [];
-
-                list.forEach(item => {
-                    let translated = translationService.instant("HELPER_" + item);
-                    if (translated.startsWith("HELPER_")) translated = translationService.instant(item);
-
-                    if (item && !translatedList.includes(translated)) {
-                        translatedList.push(translated);
-                        cleanedResult.push(item)
-                    }
-                });
-
-                return cleanedResult;
-            }
+            getFullTaxon: getFullTaxon,
+            setTaxons: setTaxons,
+            getEducationalContext: getEducationalContext,
+            getDomain: getDomain,
+            getSubject: getSubject,
+            getTopic: getTopic,
+            getSubtopic: getSubtopic,
+            getSpecialization: getSpecialization,
+            getModule: getModule,
+            getTaxon: getTaxon,
+            setSidenavTaxons: setSidenavTaxons,
+            getSidenavTaxons: getSidenavTaxons,
+            getTaxonTranslationKey: getTaxonTranslationKey,
+            isTaxonMapLoaded: isTaxonMapLoaded
         }
     }
 ]);

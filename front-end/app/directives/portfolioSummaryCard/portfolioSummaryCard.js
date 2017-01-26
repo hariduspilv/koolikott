@@ -2,8 +2,8 @@
 
 angular.module('koolikottApp')
     .directive('dopPortfolioSummaryCard', [
-        'translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService',
-        function (translationService, $location, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService, taxonService) {
+        'translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService',
+        function (translationService, $location, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService, taxonService, taxonGroupingService, eventService) {
             return {
                 scope: {
                     portfolio: '=',
@@ -15,10 +15,17 @@ angular.module('koolikottApp')
 
                     let domainSubjectMap = {};
 
+                    $scope.taxonObject = {};
+
                     function init() {
                         $scope.pageUrl = $location.absUrl();
                         $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
                         $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+
+                        eventService.subscribe($scope, 'taxonService:mapInitialized', getTaxonObject);
+                        eventService.subscribe($scope, 'portfolio:reloadTaxonObject', getTaxonObject);
+
+                        eventService.notify('portfolio:reloadTaxonObject');
                     }
 
                     $scope.isOwner = function () {
@@ -95,15 +102,11 @@ angular.module('koolikottApp')
                             deletePortfolio);
                     };
 
-                    function loadDomainsAndSubjects() {
-                        if (!$scope.portfolio || !$scope.portfolio.taxons) return;
-                        domainSubjectMap = taxonService.getDomainSubjectMap($scope.portfolio.taxons);
+                    function getTaxonObject() {
+                        if ($scope.portfolio && $scope.portfolio.taxons) {
+                            $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.portfolio.taxons);
+                        }
                     }
-
-                    $scope.getTaxons = function() {
-                        loadDomainsAndSubjects();
-                        return taxonService.getTaxonsFromDomainSubjectMap(domainSubjectMap);
-                    };
 
                     function getSubject(taxon) {
                         return taxonService.getSubject(taxon)

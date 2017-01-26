@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
     .controller('portfolioController',
         [
-            '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout', 'storageService',
-            function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout, storageService) {
+            '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout', 'storageService', 'eventService',
+            function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout, storageService, eventService) {
                 var increaseViewCountPromise;
 
                 function init() {
@@ -127,9 +127,13 @@ angular.module('koolikottApp')
                 $scope.modUser = function () {
                     return !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
                 };
+
                 $scope.$watch(function () {
                     return storageService.getPortfolio();
                 }, function (newPortfolio, oldPortfolio) {
+
+                    eventService.notify('portfolio:reloadTaxonObject');
+
                     if (newPortfolio !== oldPortfolio) {
                         setPortfolio(newPortfolio);
                     }
