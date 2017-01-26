@@ -14,6 +14,7 @@ angular.module('koolikottApp')
             $scope.pageUrl = $location.absUrl();
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
+            $scope.commentsOpen = false;
 
             const licenceTypeMap = {
                 'CCBY':  ['by'],
@@ -43,6 +44,10 @@ angular.module('koolikottApp')
                     getContentType();
                 }
             });
+
+            $scope.toggleCommentSection = function () {
+                $scope.commentsOpen = !$scope.commentsOpen;
+            };
 
             function getContentType() {
                 var baseUrl = document.location.origin;

@@ -2,7 +2,7 @@
 
 angular.module('koolikottApp')
     .directive('dopPortfolioSummaryCard', [
-        'translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService',
+        'translationService', '$location', '$mdDialog', '$rootScope', 'authenticatedUserService', '$route', 'dialogService', 'serverCallService', 'toastService', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'portfolioService',
         function (translationService, $location, $mdDialog, $rootScope, authenticatedUserService, $route, dialogService, serverCallService, toastService, storageService, targetGroupService, taxonService, taxonGroupingService, eventService) {
             return {
                 scope: {
@@ -13,7 +13,7 @@ angular.module('koolikottApp')
                 templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
                 controller: ['$scope', function ($scope) {
 
-                    let domainSubjectMap = {};
+                    $scope.commentsOpen = false;
 
                     $scope.taxonObject = {};
 
@@ -93,6 +93,10 @@ angular.module('koolikottApp')
 
                     $scope.addComment = function () {
                         $scope.submitClick();
+                    };
+
+                    $scope.toggleCommentSection = function () {
+                        $scope.commentsOpen = !$scope.commentsOpen;
                     };
 
                     $scope.confirmPortfolioDeletion = function () {

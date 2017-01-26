@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
     .controller('portfolioController',
         [
-            '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout', 'storageService', 'eventService',
-            function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout, storageService, eventService) {
+            '$scope', 'translationService', 'serverCallService', '$route', '$location', 'alertService', '$rootScope', 'authenticatedUserService', '$timeout', 'storageService', 'eventService', 'portfolioService',
+            function ($scope, translationService, serverCallService, $route, $location, alertService, $rootScope, authenticatedUserService, $timeout, storageService, eventService, portfolioService) {
                 var increaseViewCountPromise;
 
                 function init() {
@@ -18,9 +18,9 @@ angular.module('koolikottApp')
                     $scope.newComment = {};
                 }
 
-                function getPortfolio(success, fail) {
-                    var portfolioId = $route.current.params.id;
-                    serverCallService.makeGet("rest/portfolio?id=" + portfolioId, {}, getPortfolioSuccess, getPortfolioFail);
+                function getPortfolio() {
+                    portfolioService.getPortfolioById($route.current.params.id)
+                        .then(getPortfolioSuccess, getPortfolioFail);
                 }
 
                 function getPortfolioSuccess(portfolio) {
@@ -45,23 +45,14 @@ angular.module('koolikottApp')
                      */
                     increaseViewCountPromise = $timeout(function () {
                         if ($scope.portfolio) {
-                            var portfolio = createPortfolio($scope.portfolio.id);
-                            serverCallService.makePost("rest/portfolio/increaseViewCount", portfolio, function success() {
-                            }, function fail() {
-                            });
+                            portfolioService.increaseViewCount(createPortfolio($scope.portfolio.id))
                         }
                     }, 1000);
                 }
 
                 $scope.addComment = function () {
-                    var url = "rest/comment/portfolio";
-
-                    var portfolio = createPortfolio($scope.portfolio.id);
-                    var params = {
-                        'comment': $scope.newComment,
-                        'portfolio': portfolio
-                    };
-                    serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
+                    portfolioService.addComment($scope.newComment, createPortfolio($scope.portfolio.id))
+                        .then(addCommentSuccess, addCommentFailed);
                 };
 
                 function addCommentSuccess() {
