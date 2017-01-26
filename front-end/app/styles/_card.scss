@@ -7,12 +7,13 @@ md-card {
 
     .ua-ie & {
       height: 100%;
+    }
+  }
 
-      & .item-link{
-        word-wrap: break-word;
-        display: block;
-      }
-
+  .ua-ie & {
+    & .item-link{
+      word-wrap: break-word;
+      display: block;
     }
   }
 }
