@@ -11,7 +11,7 @@ angular.module('koolikottApp')
 
             let getTruncatedContent = function(content) {
                 return _.truncate(stripHtml(content), {
-                    length: maxLength + 1,
+                    length: maxLength,
                     omission: ''
                 });
             };
