@@ -8,7 +8,7 @@ md-card {
     .ua-ie & {
       height: 100%;
 
-      .item-link{
+      & .item-link{
         word-wrap: break-word;
         display: block;
       }
