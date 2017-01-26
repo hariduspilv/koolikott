@@ -135,7 +135,7 @@ function isEmpty(str) {
         return true;
     }
 
-    if (typeof str != 'String') {
+    if (typeof str != 'string') {
         return false;
     }
 

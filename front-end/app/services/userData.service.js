@@ -58,7 +58,7 @@ angular.module('koolikottApp')
         }
 
         function getImproperMaterialsCountSuccess(data) {
-            if (!isEmpty(data)) {
+            if (!_.isNil(data)) {
                 improperMaterialsCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
@@ -68,7 +68,7 @@ angular.module('koolikottApp')
         }
 
         function getImproperPortfoliosCountSuccess(data) {
-            if (!isEmpty(data)) {
+            if (!_.isNil(data)) {
                 improperPortfoliosCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
