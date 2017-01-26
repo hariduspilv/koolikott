@@ -69,10 +69,10 @@ h2 {
 
   &--2 {
     display: -webkit-box;
+    -webkit-box-orient: vertical;
     max-height: $font-small*$small-lineheight*$lines-two;
     max-width: 400px;
     -webkit-line-clamp: $lines-two;
-    -webkit-box-orient: vertical;
     white-space: normal;
   }
 
