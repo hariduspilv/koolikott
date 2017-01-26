@@ -1,18 +1,17 @@
 package ee.hm.dop.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.ImproperContentDAO;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import org.joda.time.DateTime;
 
-public class ImproperContentService {
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ImproperContentService extends BaseService {
 
     @Inject
     private ImproperContentDAO improperContentDAO;
@@ -88,23 +87,17 @@ public class ImproperContentService {
 
         return impropers
                 .stream()
-                .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()))
+                .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
                 .collect(Collectors.toList());
     }
 
     public long getImproperMaterialSize(User user) {
-        List<ImproperContent> impropers = getAll(user);
-        return impropers
-                .stream()
-                .filter(imp -> "Material".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
-                .collect(Collectors.toList()).size();
+        if (!isUserAdminOrModerator(user)) throw new RuntimeException("Logged in user must be an administrator.");
+        return improperContentDAO.getImproperMaterialCount();
     }
     public long getImproperPortfolioSize(User user) {
-        List<ImproperContent> impropers = getAll(user);
-        return impropers
-                .stream()
-                .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
-                .collect(Collectors.toList()).size();
+        if (!isUserAdminOrModerator(user)) throw new RuntimeException("Logged in user must be an administrator.");
+        return improperContentDAO.getImproperPortfolioCount();
     }
 
     /**
