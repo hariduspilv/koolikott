@@ -97,7 +97,7 @@ public class UploadedFileService {
 
         /* Safari can serve directly decoded filenames, chrome/IE can server utf-8 encoded filenames */
         return Response.ok(FileUtils.getFile(path), mediaType)
-                .header("Content-Disposition", "Inline; filename*=UTF-8''" + URLEncoder.encode(fileName, UTF_8.name()) + "\"; filename=\"" + fileName + "\"")
+                .header("Content-Disposition", "Inline; filename*=\"UTF-8''" + URLEncoder.encode(fileName, UTF_8.name()) + "\"; filename=\"" + fileName + "\"")
                 .build();
     }
 
