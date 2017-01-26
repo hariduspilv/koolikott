@@ -400,7 +400,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         function init() {
             if ($scope.material && $scope.material.uploadedFile) {
-                $scope.material.uploadedFile.displayName = decodeURIComponent($scope.material.uploadedFile.name);
+                $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
             }
 
             if ($scope.isChapterMaterial) {
