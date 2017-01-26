@@ -1,7 +1,7 @@
 <md-card class="card-xs" data-ng-click="$ctrl.navigateTo($ctrl.learningObject, $event)" layout="row">
   <md-card-content flex="50">
-    <h6 class="two-rows-xs" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" data-ng-bind="$ctrl.learningObject.title"></h6>
-    <h6 class="two-rows-xs" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"></h6>
+    <h6 class="ellipsis-2 ellipsis-2--small no-margin" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" data-ng-bind="$ctrl.learningObject.title"></h6>
+    <h6 class="ellipsis-2 ellipsis-2--small no-margin" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"></h6>
     <p class="md-caption ellipsis">
       <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="authors">
         <span data-ng-bind="$ctrl.formatName($ctrl.learningObject.creator.name)"></span>

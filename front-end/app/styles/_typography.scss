@@ -5,11 +5,14 @@ h1 {
   line-height: 1.2;
   margin-top: 10px;
   margin-bottom: 10px;
+
   @media (min-width: $layout-breakpoint-xs) {
     font-size: 2rem;
   }
+
   a {
     color: $heading-color;
+
     &:hover {
       color: $link-color;
       text-decoration: none;
@@ -31,6 +34,7 @@ h2 {
   overflow: hidden;
   text-align: left;
   line-height: 20px;
+
   &.description {
     line-height: 24px;
   }
@@ -38,6 +42,7 @@ h2 {
 
 .md-body-2 {
   line-height: $body-lineheight;
+
   a:hover {
     text-decoration: none;
     border-bottom: 1px solid $link-color;
@@ -49,7 +54,8 @@ h2 {
   margin-bottom: 0;
 }
 
-.no-link, .no-link:hover {
+.no-link,
+.no-link:hover {
   text-decoration: none;
   color: inherit;
 }
@@ -63,79 +69,46 @@ h2 {
   white-space: nowrap;
 }
 
-.three-rows {
+.ellipsis-2 {
   display: block; /* Fallback for non-webkit */
   display: -webkit-box;
   max-width: 400px;
-  height: $font-large*$body-lineheight*$lines-three; /* Fallback for non-webkit */
-  margin: 0 0 5px 0;
-  font-size: $font-large;
-  line-height: $body-lineheight;
-  -webkit-line-clamp: $lines-three;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-$lines-to-show: 2;
-.two-rows-xs {
-  display: block; /* Fallback for non-webkit */
-  display: -webkit-box;
-  max-width: 400px;
-  max-height: $font-small*$small-lineheight*$lines-two; /* Fallback for non-webkit */
-  margin: 0;
-  font-size: $font-small;
-  line-height: $small-lineheight;
-  font-weight: 400;
+  max-height: $font-small*$small-lineheight*$lines-two;
   -webkit-line-clamp: $lines-two;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-}
 
-.two-rows {
-  display: block; /* Fallback for non-webkit */
-  display: -webkit-box;
-  // max-width: 200px;
-  max-height: $font-normal*$small-lineheight*$lines-two; /* Fallback for non-webkit */
-  margin: 0;
-  font-size: $font-normal;
-  line-height: $small-lineheight;
-  -webkit-line-clamp: $lines-two;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 400;
-  color: $color-body;
-}
+  &--small {
+    font-size: $font-small;
+    line-height: $small-lineheight;
+    font-weight: 400;
+  }
 
-.two-rows-meta {
-  display: block; /* Fallback for non-webkit */
-  display: -webkit-box;
-  letter-spacing: 0.010em;
-  max-height: $font-medium*$body-lineheight*$lines-two; /* Fallback for non-webkit */
-  margin: 0;
-  font-size: $font-medium;
-  line-height: $body-lineheight;
-  -webkit-line-clamp: $lines-two;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-  color: $color-body;
-  padding-right: $md-padding;
-  margin-bottom: $md-padding;
+  &--medium {
+    max-height: $font-medium*$body-lineheight*$lines-two;
+    font-size: $font-medium;
+    line-height: $body-lineheight;
+    letter-spacing: 0.010em;
+    font-weight: 500;
+    color: $color-body;
+    padding-right: $md-padding;
+    margin-top: 0;
+    margin-bottom: $md-padding;
+  }
+
+  &--big {
+    max-height: $font-normal*$small-lineheight*$lines-two;
+    font-size: $font-normal;
+    line-height: $small-lineheight;
+    font-weight: 400;
+    color: $color-body;
+  }
 }
 
 .wrapped {
-  white-space: pre;
-  white-space: pre-wrap;
   white-space: pre-line;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -hp-pre-wrap;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .error-color {

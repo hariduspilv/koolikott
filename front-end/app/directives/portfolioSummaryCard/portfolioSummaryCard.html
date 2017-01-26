@@ -64,7 +64,7 @@
           <p class="md-caption caption-light">
             <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
           </p>
-          <p class="two-rows-meta">
+          <p class="ellipsis-2 ellipsis-2--medium">
                 <span data-ng-repeat="educationalContext in taxonObject.educationalContexts track by $index">
                   <span data-translate="{{educationalContext}}"></span><span
                   data-ng-bind="$index < taxonObject.educationalContexts.length - 1 ? ', ' : ''"></span>
@@ -77,7 +77,7 @@
           <p class="md-caption caption-light">
             <span data-translate="DETAIL_VIEW_DOMAIN"></span>
           </p>
-          <p class="two-rows-meta">
+          <p class="ellipsis-2 ellipsis-2--medium">
                 <span data-ng-repeat="taxon in taxonObject.domainGroup track by $index">
                   <span data-translate="{{taxon}}"></span><span
                   data-ng-bind="$index < taxonObject.domainGroup.length - 1 ? ', ' : ''"></span>
@@ -90,7 +90,7 @@
           <p class="md-caption caption-light">
             <span data-translate="TAXON_PATH_TOPIC"></span>
           </p>
-          <p class="two-rows-meta">
+          <p class="ellipsis-2 ellipsis-2--medium">
                 <span data-ng-repeat="topic in taxonObject.topics track by $index">
                   <span data-translate="{{topic}}"></span><span
                   data-ng-bind="$index < taxonObject.topics.length - 1 ? ', ' : ''"></span>
@@ -102,7 +102,7 @@
           <p class="md-caption caption-light">
             <span data-translate="TAXON_PATH_SUBTOPIC"></span>
           </p>
-          <p class="two-rows-meta">
+          <p class="ellipsis-2 ellipsis-2--medium">
                 <span data-ng-repeat="subtopic in taxonObject.subtopics track by $index">
                   <span data-translate="{{subtopic}}"></span><span
                   data-ng-bind="$index < taxonObject.subtopics.length - 1 ? ', ' : ''"></span>
