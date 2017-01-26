@@ -372,7 +372,7 @@
               <span class="card-lg__licenses">
                 <span class="license" data-ng-class="'license--' + type" data-ng-repeat="type in getLicenseIconList()">
                   <md-tooltip md-direction="top">
-                    <span data-ng-bind="icon"></span>
+                    <span data-ng-bind="type.toUpperCase()"></span>
                   </md-tooltip>
                 </span>
 
