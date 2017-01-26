@@ -16,9 +16,9 @@
   <!-- content -->
   <div layout="column" flex flex-order="2" flex-order-xs="1" class="card__content-wrapper">
     <md-card-content layout="column">
-      <h3 class="ellipsis-2 ellipsis-2--big no-margin" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)"
+      <h3 class="ellipsis ellipsis--2 ellipsis--big no-margin" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)"
           data-ng-bind="$ctrl.learningObject.title"></h3>
-      <h3 class="ellipsis-2 ellipsis-2--big no-margin" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)"
+      <h3 class="ellipsis ellipsis--2 ellipsis--big no-margin" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)"
           data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"></h3>
       <p class="md-caption ellipsis">
       <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="authors">
@@ -35,14 +35,14 @@
       <span flex></span>
       <div layout="row" layout-align="none end">
         <div class="md-caption" flex="50">
-          <p class="ellipsis-2">
+          <p class="ellipsis ellipsis--2">
         <span data-ng-repeat="group in $ctrl.targetGroups track by $index">
           <span data-ng-bind="group"></span><span data-ng-bind="$index < $ctrl.targetGroups.length - 1 ? ', ' : ''"></span>
         </span>
           </p>
         </div>
         <div class="md-caption text-right" flex="50">
-          <p class="ellipsis-2">
+          <p class="ellipsis ellipsis--2">
             <span data-ng-repeat="taxon in $ctrl.getTaxons()">
               <span data-translate="{{taxon}}"></span><span data-ng-bind="$index < $ctrl.getTaxons().length - 1 ? ', ' : ''"></span>
             </span>

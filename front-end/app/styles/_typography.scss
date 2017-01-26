@@ -60,24 +60,21 @@ h2 {
   color: inherit;
 }
 
-// multiline-ellipsis
 .ellipsis {
   display: block;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
 
-.ellipsis-2 {
-  display: block; /* Fallback for non-webkit */
-  display: -webkit-box;
-  max-width: 400px;
-  max-height: $font-small*$small-lineheight*$lines-two;
-  -webkit-line-clamp: $lines-two;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  &--2 {
+    display: -webkit-box;
+    max-height: $font-small*$small-lineheight*$lines-two;
+    max-width: 400px;
+    -webkit-line-clamp: $lines-two;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+  }
 
   &--small {
     font-size: $font-small;
