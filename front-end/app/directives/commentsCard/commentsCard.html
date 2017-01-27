@@ -11,7 +11,7 @@
   </div>
 
   <md-list role="list">
-    <md-list-item class="md-3-line"
+    <md-list-item class="md-3-line comments__item"
                   data-ng-repeat="comment in $ctrl.comments | orderBy: '-added' | limitTo: $ctrl.visibleCommentsCount track by $index"
                   role="listitem">
       <md-icon class="md-avatar-icon" flex="none">person</md-icon>
