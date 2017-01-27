@@ -153,7 +153,7 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
             case 'google':
                 let options = {
                     contenturl: vm.pageUrl,
-                    clientid: `${GOOGLE_SHARE_CLIENT_ID}.apps.googleusercontent.com`,
+                    clientid: GOOGLE_SHARE_CLIENT_ID,
                     cookiepolicy: $location.$$protocol + '://' + $location.$$host,
                     prefilltext: vm.title,
                     calltoactionurl: vm.pageUrl
