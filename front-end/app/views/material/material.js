@@ -4,10 +4,10 @@ angular.module('koolikottApp')
     .controller('materialController', [
         '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
         'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
-        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService',
+        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService',
         function ($scope, serverCallService, $route, translationService, $rootScope,
                   searchService, $location, alertService, authenticatedUserService, dialogService,
-                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService) {
+                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService) {
 
             $scope.showMaterialContent = false;
             $scope.newComment = {};
@@ -98,11 +98,8 @@ angular.module('koolikottApp')
             }
 
             function getMaterial(success, fail) {
-                var materialId = $route.current.params.id;
-                var params = {
-                    'materialId': materialId
-                };
-                serverCallService.makeGet("rest/material", params, success, fail);
+                materialService.getMaterialById($route.current.params.id)
+                    .then(success, fail)
             }
 
             function getMaterialSuccess(material) {
@@ -168,15 +165,7 @@ angular.module('koolikottApp')
                     }
                 }
 
-                var viewCountParams = {
-                    'type': '.Material',
-                    'id': $scope.material.id
-                };
-
-                serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, () => {
-                }, () => {
-                });
-
+                materialService.increaseViewCount($scope.material);
             }
 
             function getItemsFail() {
@@ -286,15 +275,8 @@ angular.module('koolikottApp')
             }
 
             $scope.addComment = () => {
-                var url = "rest/comment/material";
-                var params = {
-                    'comment': $scope.newComment,
-                    'material': {
-                        'type': '.Material',
-                        'id': $scope.material.id
-                    }
-                };
-                serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
+                materialService.addComment($scope.newComment, $scope.material)
+                    .then(addCommentSuccess, addCommentFailed);
             };
 
             $scope.edit = () => {
@@ -344,8 +326,8 @@ angular.module('koolikottApp')
             };
 
             function deleteMaterial() {
-                var url = "rest/material/" + $scope.material.id;
-                serverCallService.makeDelete(url, {}, deleteMaterialSuccess, deleteMaterialFailed);
+                materialService.deleteMaterial($scope.material)
+                    .then(deleteMaterialSuccess, deleteMaterialFailed);
             }
 
             function deleteMaterialSuccess() {
@@ -369,10 +351,8 @@ angular.module('koolikottApp')
             };
 
             $scope.setNotImproper = () => {
-                if ($scope.isAdmin() && $scope.material) {
-                    var url = "rest/impropers?learningObject=" + $scope.material.id;
-                    serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                }
+                materialService.setNotImproper($scope.material)
+                    .then(setNotImproperSuccessful, setNotImproperFailed);
             };
 
             function setNotImproperSuccessful() {
@@ -386,11 +366,13 @@ angular.module('koolikottApp')
             }
 
             $scope.restoreMaterial = () => {
-                serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
+                materialService.restoreMaterial($scope.material)
+                    .then(restoreSuccess, restoreFail);
             };
 
             $scope.markMaterialCorrect = () => {
-                serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
+                materialService.setMaterialCorrect($scope.material)
+                    .then(markCorrectSuccess, queryFailed);
             };
 
             function markCorrectSuccess() {
