@@ -14,7 +14,7 @@ angular.module('koolikottApp')
             $scope.pageUrl = $location.absUrl();
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
-            $scope.commentsOpen = false;
+            $scope.materialCommentsOpen = false;
 
             const licenceTypeMap = {
                 'CCBY':  ['by'],
@@ -37,9 +37,9 @@ angular.module('koolikottApp')
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
 
-            $scope.$watch(function () {
+            $scope.$watch(() => {
                 return $scope.material;
-            }, function () {
+            }, () => {
                 if ($scope.material && $scope.material.id) {
                     getContentType();
                 }
@@ -80,13 +80,13 @@ angular.module('koolikottApp')
                 console.log("Content probing failed!");
             }
 
-            $rootScope.$on('fullscreenchange', function () {
-                $scope.$apply(function () {
+            $rootScope.$on('fullscreenchange', () => {
+                $scope.$apply(() => {
                     $scope.showMaterialContent = !$scope.showMaterialContent;
                 });
             });
 
-            $scope.$watch(function () {
+            $scope.$watch(() => {
                 return storageService.getMaterial();
             }, updateMaterial);
 
@@ -173,8 +173,8 @@ angular.module('koolikottApp')
                     'id': $scope.material.id
                 };
 
-                serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, function () {
-                }, function () {
+                serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, () => {
+                }, () => {
                 });
 
             }
@@ -195,17 +195,17 @@ angular.module('koolikottApp')
                 $rootScope.setReason(improper.reason);
             }
 
-            $scope.getLicenseIconList = function () {
+            $scope.getLicenseIconList = () => {
                 if ($scope.material && $scope.material.licenseType) {
                     return licenceTypeMap[$scope.material.licenseType.name];
                 }
             };
 
-            $scope.getMaterialEducationalContexts = function () {
+            $scope.getMaterialEducationalContexts = () => {
                 var educationalContexts = [];
                 if (!$scope.material || !$scope.material.taxons) return;
 
-                $scope.material.taxons.forEach(function (taxon) {
+                $scope.material.taxons.forEach((taxon) => {
                     let edCtx = taxonService.getEducationalContext(taxon);
                     if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
                 });
@@ -213,66 +213,44 @@ angular.module('koolikottApp')
                 return educationalContexts;
             };
 
-            $scope.getCorrectLanguageString = function (languageStringList) {
+            $scope.getCorrectLanguageString = (languageStringList) => {
                 if (languageStringList) {
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
             };
 
-            $scope.formatMaterialIssueDate = function (issueDate) {
-                return formatIssueDate(issueDate);
-            };
+            $scope.formatMaterialIssueDate = (issueDate) => formatIssueDate(issueDate);
+            $scope.formatMaterialUpdatedDate = (updatedDate) => formatDateToDayMonthYear(updatedDate);
+            $scope.isNullOrZeroLength = (arg) => !arg || !arg.length;
 
-            $scope.formatMaterialUpdatedDate = function (updatedDate) {
-                return formatDateToDayMonthYear(updatedDate);
-            };
-
-            $scope.isNullOrZeroLength = function (arg) {
-                return !arg || !arg.length;
-            };
-
-            $scope.getAuthorSearchURL = function ($event, firstName, surName) {
+            $scope.getAuthorSearchURL = ($event, firstName, surName) => {
                 $event.preventDefault();
 
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
             };
 
-            $scope.showSourceFullscreen = function ($event) {
+            $scope.showSourceFullscreen = ($event) => {
                 $event.preventDefault();
 
                 $scope.fullscreenCtrl.toggleFullscreen();
             };
 
-            $scope.isLoggedIn = function () {
-                return authenticatedUserService.isAuthenticated();
-            };
+            $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
+            $scope.isAdmin = () => authenticatedUserService.isAdmin();
+            $scope.isModerator = () => authenticatedUserService.isModerator();
+            $scope.isRestricted = () => authenticatedUserService.isRestricted();
+            $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
 
-            $scope.isAdmin = function () {
-                return authenticatedUserService.isAdmin();
-            };
-
-            $scope.isModerator = function () {
-                return authenticatedUserService.isModerator();
-            };
-
-            $scope.isRestricted = function () {
-                return authenticatedUserService.isRestricted();
-            };
-
-            $scope.modUser = function () {
-                return !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
-            };
-
-            $scope.processMaterial = function () {
+            $scope.processMaterial = () => {
                 processMaterial();
             };
 
-            $scope.$on("tags:updateMaterial", function (event, value) {
+            $scope.$on("tags:updateMaterial", (event, value) => {
                 updateMaterial(value, $scope.material);
             });
 
-            $scope.isAdminButtonsShowing = function () {
+            $scope.isAdminButtonsShowing = () => {
                 return ($rootScope.learningObjectDeleted == false
                     && $rootScope.learningObjectImproper == false
                     && $rootScope.learningObjectBroken == true)
@@ -291,7 +269,6 @@ angular.module('koolikottApp')
                 }
             }
 
-
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
             }
@@ -308,7 +285,7 @@ angular.module('koolikottApp')
                 console.log("Failed to get signed user data.")
             }
 
-            $scope.addComment = function () {
+            $scope.addComment = () => {
                 var url = "rest/comment/material";
                 var params = {
                     'comment': $scope.newComment,
@@ -320,7 +297,7 @@ angular.module('koolikottApp')
                 serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
             };
 
-            $scope.edit = function () {
+            $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = $scope.material;
 
@@ -328,7 +305,7 @@ angular.module('koolikottApp')
                     templateUrl: 'addMaterialDialog.html',
                     controller: 'addMaterialDialogController',
                     scope: editMaterialScope
-                }).then(function (material) {
+                }).then((material) => {
                     if (material) {
                         $scope.material = material;
                         processMaterial();
@@ -340,9 +317,9 @@ angular.module('koolikottApp')
             function addCommentSuccess() {
                 $scope.newComment.text = "";
 
-                getMaterial(function (material) {
+                getMaterial((material) => {
                     $scope.material = material;
-                }, function () {
+                }, () => {
                     log("Comment success, but failed to reload material.");
                 });
             }
@@ -351,13 +328,13 @@ angular.module('koolikottApp')
                 log('Adding comment failed.');
             }
 
-            $scope.getType = function () {
+            $scope.getType = () => {
                 if ($scope.material === undefined || $scope.material === null) return '';
 
                 return iconService.getMaterialIcon($scope.material.resourceTypes);
             };
 
-            $scope.confirmMaterialDeletion = function () {
+            $scope.confirmMaterialDeletion = () => {
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
@@ -382,7 +359,7 @@ angular.module('koolikottApp')
                 log('Deleting material failed.');
             }
 
-            $scope.isUsersMaterial = function () {
+            $scope.isUsersMaterial = () => {
                 if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
@@ -391,7 +368,7 @@ angular.module('koolikottApp')
                 }
             };
 
-            $scope.setNotImproper = function () {
+            $scope.setNotImproper = () => {
                 if ($scope.isAdmin() && $scope.material) {
                     var url = "rest/impropers?learningObject=" + $scope.material.id;
                     serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
@@ -408,11 +385,11 @@ angular.module('koolikottApp')
                 console.log("Setting not improper failed.")
             }
 
-            $scope.restoreMaterial = function () {
+            $scope.restoreMaterial = () => {
                 serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
             };
 
-            $scope.markMaterialCorrect = function () {
+            $scope.markMaterialCorrect = () => {
                 serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
             };
 
@@ -427,19 +404,19 @@ angular.module('koolikottApp')
                 log("Request failed");
             }
 
-            $scope.$on("restore:learningObject", function () {
+            $scope.$on("restore:learningObject", () => {
                 $scope.restoreMaterial();
             });
 
-            $scope.$on("delete:learningObject", function () {
+            $scope.$on("delete:learningObject", () => {
                 deleteMaterial();
             });
 
-            $scope.$on("setNotImproper:learningObject", function () {
+            $scope.$on("setNotImproper:learningObject", () => {
                 $scope.setNotImproper();
             });
 
-            $scope.$on("markCorrect:learningObject", function () {
+            $scope.$on("markCorrect:learningObject", () => {
                 $scope.markMaterialCorrect();
             });
 
