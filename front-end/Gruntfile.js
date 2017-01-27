@@ -157,7 +157,7 @@ module.exports = function (grunt) {
                 map: true,
                 processors: [
                     require('autoprefixer')({
-                        browsers: ['last 2 versions', 'last 3 iOS versions']
+                        browsers: ['> 1%', 'last 2 versions', 'last 3 iOS versions']
                     })
                 ]
             },
@@ -173,22 +173,14 @@ module.exports = function (grunt) {
                 ]
             },
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
+                files: {
+                    '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.scss'
+                }
             },
             server: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
+                files: {
+                    '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.scss'
+                }
             }
         },
 
