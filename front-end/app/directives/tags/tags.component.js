@@ -238,4 +238,12 @@ function TagsController($translate, authenticatedUserService, $rootScope,
     function requestFailed() {
         console.log("Failed checking if already reported the resource")
     }
+
+    $rootScope.$on('materialEditModalClosed', function() {
+        let reportParams = {
+            learningObject: vm.learningObject.id
+        };
+
+        tagsService.getTagUpVotes(reportParams, getTagUpVotesReportSuccess);
+    });
 }

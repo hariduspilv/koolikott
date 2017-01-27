@@ -332,6 +332,7 @@ angular.module('koolikottApp')
                     if (material) {
                         $scope.material = material;
                         processMaterial();
+                        $rootScope.$broadcast('materialEditModalClosed');
                     }
                 });
             };
