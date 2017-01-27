@@ -28,6 +28,14 @@ angular.module('koolikottApp')
                         eventService.notify('portfolio:reloadTaxonObject');
                     }
 
+                    // Main purpose of this watch is to handle situations
+                    // where portfolio is undefined at the moment of init()
+                    $scope.$watch('portfolio', (newValue, oldValue) => {
+                        if (newValue !== oldValue) {
+                            eventService.notify('portfolio:reloadTaxonObject');
+                        }
+                    });
+
                     $scope.isOwner = function () {
                         if (!authenticatedUserService.isAuthenticated()) {
                             return false;
