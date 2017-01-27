@@ -691,7 +691,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         function prefillMetadataFromPortfolio() {
             if (storageService.getPortfolio()) {
                 if (storageService.getPortfolio().taxons) {
-                    var taxons = storageService.getPortfolio().taxons;
+                    var taxons = storageService.getPortfolio().taxons.slice();
                     $scope.material.taxons = taxons;
                     var educationalContext = taxonService.getEducationalContext(taxons[0]);
 
