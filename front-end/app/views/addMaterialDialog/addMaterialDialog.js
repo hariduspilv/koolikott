@@ -464,22 +464,25 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                     $scope.educationalContextId = newValue.id;
                 }
             }, false);
-        }
 
-        $scope.$watch(function () {
-            var a = document.getElementsByClassName("md-datepicker-input");
-            if (a[0]) return a[0].value;
-        }, function (newDate, oldDate) {
-            if (newDate !== oldDate) {
-                var dateObj = $mdDateLocale.parseDate(newDate)
-                $scope.material.issueDate = getIssueDate(dateObj);
+            $scope.$watch(function () {
+                var a = document.getElementsByClassName("md-datepicker-input");
+                if (a[0]) return a[0].value;
+            }, function (newDate, oldDate) {
+                // if newDate is undefiend, use oldDate
+                newDate = newDate ? newDate : oldDate;
 
-                //Set date for datepicker, which needs a full date
-                if ($scope.material.issueDate && $scope.material.issueDate.year) {
-                    $scope.issueDate = dateObj;
+                if (newDate !== oldDate) {
+                    var dateObj = $mdDateLocale.parseDate(newDate)
+                    $scope.material.issueDate = getIssueDate(dateObj);
+
+                    //Set date for datepicker, which needs a full date
+                    if ($scope.material.issueDate && $scope.material.issueDate.year) {
+                        $scope.issueDate = dateObj;
+                    }
                 }
-            }
-        }, true);
+            }, true);
+        }
 
         $scope.$watch('material.source', function (newValue) {
             if ($scope.addMaterialForm.source) {
