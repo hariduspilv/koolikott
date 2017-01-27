@@ -11,29 +11,27 @@ angular.module('koolikottApp')
     controller: dopChapterController
 });
 
-dopChapterController.$inject = ['$rootScope', 'translationService', 'dialogService'];
+dopChapterController.$inject = ['$rootScope', 'dialogService'];
 
-function dopChapterController ($rootScope, translationService, dialogService) {
+function dopChapterController ($rootScope, dialogService) {
     let vm = this;
 
     vm.$onInit = () => {
-        vm.isEditable = $rootScope.isEditPortfolioMode
-        vm.isCollapsed = vm.chapter.openCloseChapter ? true : false;
-        vm.subisCollapsed = [];
-
-        angular.forEach(vm.chapter.subchapters, (value, key) => {
-            vm.subisCollapsed[value.id] = false;
-        }, log);
-    }
+        vm.isEditable = $rootScope.isEditPortfolioMode;
+        vm.isCollapsed = vm.chapter.openCloseChapter;
+        vm.subisCollapsed = {};
+    };
 
     // Open/Close Chapter
     vm.ocChapter = () => vm.isCollapsed = !vm.isCollapsed;
 
     // Open/Close SubChapter
-    vm.ocSubChapter = (subChapter) => vm.subisCollapsed[subChapter.id] = !vm.subisCollapsed[subChapter.id];
+    vm.ocSubChapter = (index) => {
+        vm.subisCollapsed[index] = !vm.subisCollapsed[index];
+    };
 
     vm.onDeleteSubChapter = (subChapter) => {
-        var deleteSubChapter = () => vm.chapter.subchapters.splice(vm.chapter.subchapters.indexOf(subChapter), 1);
+        let deleteSubChapter = () => vm.chapter.subchapters.splice(vm.chapter.subchapters.indexOf(subChapter), 1);
 
         dialogService.showDeleteConfirmationDialog(
             'PORTFOLIO_DELETE_SUB_CHAPTER_CONFIRM_TITLE',
@@ -43,4 +41,4 @@ function dopChapterController ($rootScope, translationService, dialogService) {
     };
 
     vm.deleteChapter = () => vm.onDelete()(vm.chapter);
-};
+}

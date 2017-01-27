@@ -1,4 +1,3 @@
-
 angular.module('koolikottApp')
     .service('eventService', ['$rootScope', EventService]);
 

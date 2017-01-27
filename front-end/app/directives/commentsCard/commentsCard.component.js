@@ -5,7 +5,7 @@ angular.module('koolikottApp')
     bindings: {
         comments: '<',
         comment: '<',
-        open: '<',
+        isOpen: '<',
         submitClick: "&"
     },
     templateUrl: 'directives/commentsCard/commentsCard.html',
