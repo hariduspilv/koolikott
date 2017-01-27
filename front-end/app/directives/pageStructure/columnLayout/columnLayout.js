@@ -14,6 +14,14 @@ function() {
             $scope.sidenavIsOpen = function() {
                 return $mdSidenav('left').isOpen();
             };
+
+            $scope.$watch(function() {
+                return storageService.getPortfolio();
+            }, function(newPortfolio, oldPortfolio) {
+                $scope.portfolio = newPortfolio;
+            });
+
+            $scope.portfolio = storageService.getPortfolio();
         }]
     };
 });
