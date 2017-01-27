@@ -63,7 +63,7 @@ function dopChapterToolbarController ($scope, $timeout, translationService, $mdD
     };
 
     vm.openDetailedSearch = function () {
-        if (vm.subIndex) {
+        if (vm.subIndex != null) {
             $rootScope.savedIndexes = vm.index + '_' + vm.subIndex;
         } else {
             $rootScope.savedIndexes = vm.index;
