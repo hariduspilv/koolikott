@@ -40,8 +40,22 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
             if (vm.object && vm.object.picture) {
                 vm.pictureName = vm.object.picture.name;
             }
+
+            initGoogleButton();
         });
     };
+
+    function initGoogleButton () {
+        let options = {
+            contenturl: vm.pageUrl,
+            clientid: GOOGLE_SHARE_CLIENT_ID,
+            cookiepolicy: $location.$$protocol + '://' + $location.$$host,
+            prefilltext: vm.title,
+            calltoactionurl: vm.pageUrl
+        };
+
+        gapi.interactivepost.render('shareGoogleFakeButton', options);
+    }
 
     vm.isVisible = () => {
         if (vm.object && vm.object.deleted || $rootScope.isEditPortfolioPage) {
@@ -151,18 +165,7 @@ function dopShareController($scope, $rootScope, $location, $window, translationS
                 });
             break;
             case 'google':
-                let options = {
-                    contenturl: vm.pageUrl,
-                    clientid: GOOGLE_SHARE_CLIENT_ID,
-                    cookiepolicy: $location.$$protocol + '://' + $location.$$host,
-                    prefilltext: vm.title,
-                    calltoactionurl: vm.pageUrl
-                };
-
-                gapi.interactivepost.render('shareGoogleFakeButton', options);
-                setTimeout(() => {
-                    angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click');
-                });
+                angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click');
             break;
         }
     }
