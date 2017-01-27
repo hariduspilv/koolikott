@@ -171,12 +171,12 @@
                   </md-input-container>
                 </div>
 
-                <div layout="row" layout-align="top center" class="relative">
-
-                  <text-angular id="add-material-description-input" class="textangular-editor char-count" name="materialDescription-{{$index}}"
+                <div layout="row" layout-align="top center">
+                  <md-input-container class="md-block animate-if margin-top-36 remaining-charaters-wrapper" flex>
+                    <text-angular id="add-material-description-input" class="textangular-editor char-count" name="materialDescription-{{$index}}"
                                 placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description" ta-maxlength="850"></text-angular>
-                  <dop-remaining-characters class="material-description-char-remaining" text="metadata.description"></dop-remaining-characters>
-
+                    <dop-remaining-characters class="remaining-charaters" text="metadata.description"></dop-remaining-characters>
+                  </md-input-container>
                   <div layout="column">
                     <md-button class="md-icon-button md-primary"
                                data-ng-show="$index+1 === titleDescriptionGroups.length"
