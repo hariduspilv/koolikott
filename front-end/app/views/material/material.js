@@ -45,7 +45,7 @@ angular.module('koolikottApp')
                 }
             });
 
-            $scope.toggleCommentSection = function () {
+            $scope.toggleCommentSection = () => {
                 $scope.commentsOpen = !$scope.commentsOpen;
             };
 
