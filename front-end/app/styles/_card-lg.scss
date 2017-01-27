@@ -1,6 +1,14 @@
 .card-lg {
   position: relative;
 
+  .embed-link{
+    box-shadow: none;
+  }
+
+  .embed-link:hover{
+    background-color: transparent;
+  }
+
   h2 {
     color: $heading-color;
     font-size: 1.5rem;
