@@ -10,10 +10,8 @@ angular.module('koolikottApp')
             let editor, maxLength = parseInt(attrs.taMaxlength);
 
             let getTruncatedContent = function(content) {
-                return _.truncate(stripHtml(content), {
-                    length: maxLength,
-                    omission: ''
-                });
+                const truncater = new JsTruncateHtml();
+                return truncater.truncate(content, 850);
             };
 
             let getEditor = function() {
