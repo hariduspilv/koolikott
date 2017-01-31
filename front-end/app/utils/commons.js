@@ -545,3 +545,14 @@ function stripHtml(htmlString) {
     tmp.innerHTML = htmlString;
     return tmp.textContent || tmp.innerText || "";
 }
+
+function countOccurrences(value, text) {
+    let count = 0;
+    let index = text.indexOf(value);
+    while (index !== -1) {
+        count++;
+        index = text.indexOf(value, index + 1);
+    }
+
+    return count;
+}

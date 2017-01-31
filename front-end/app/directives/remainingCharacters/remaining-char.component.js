@@ -15,7 +15,9 @@ function DopRemainingCharactersController() {
     const MAX_CHARACTERS = 850;
 
     vm.getRemainingCharacters = function () {
-        let remaining = MAX_CHARACTERS - stripHtml(vm.text ? vm.text : "").length;
+        let text = vm.text ? vm.text : "";
+        // max char - text length - newlines
+        let remaining = MAX_CHARACTERS - stripHtml(text).length - countOccurrences('</p>', text);
         return remaining >= 0 ? remaining : 0;
     }
 }

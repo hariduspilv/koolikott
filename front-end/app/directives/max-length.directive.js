@@ -11,8 +11,9 @@ angular.module('koolikottApp')
 
             let getTruncatedContent = function(content) {
                 return $.truncate(content, {
-                    length: maxLength + 1,
-                    ellipsis: '&#10;'
+                    // maxLength - newlines
+                    length: maxLength - countOccurrences('</p>', content) + 1,
+                    ellipsis: ''
                 });
             };
 
@@ -21,7 +22,7 @@ angular.module('koolikottApp')
             };
 
             let getContentLength = function() {
-                return stripHtml(angular.element(getEditor()).text()).length;
+                return angular.element(getEditor()).text().length;
             };
 
             let isNavigationKey = function(keyCode) {
@@ -32,6 +33,11 @@ angular.module('koolikottApp')
                 return event.ctrlKey && ([65, 67, 88].indexOf(event.keyCode) !== -1);
             };
 
+            let getLength = function () {
+                // text length + newlines
+                return getContentLength() + countOccurrences('</p>', angular.element(getEditor())[0].innerHTML);
+            };
+
             $scope.$watch(function() {
                 let editorInstance = textAngularManager.retrieveEditor(attrs.name);
 
@@ -39,7 +45,7 @@ angular.module('koolikottApp')
                     editor = editorInstance;
 
                     getEditor().addEventListener('keydown', function(e) {
-                        if(!isNavigationKey(e.keyCode) && !isCopying(e) && (getContentLength() >= maxLength)) {
+                        if(!isNavigationKey(e.keyCode) && !isCopying(e) && (getLength() >= maxLength)) {
                             e.preventDefault();
                             return false;
                         }
@@ -48,7 +54,7 @@ angular.module('koolikottApp')
 
                 return editorInstance === undefined ? '' : editor.scope.html;
             }, function(modifiedContent) {
-                if(getContentLength() > maxLength) {
+                if(getLength() > maxLength) {
                     $timeout(function() {
                         editor.scope.html = getTruncatedContent(modifiedContent);
                     });
