@@ -1,3 +1,36 @@
+## e-Koolikott 1.8.0 (31.01.2017)
+
+### Lisandunud
+* Suure kaardi muudatused #91 https://github.com/hariduspilv/koolikott/issues/91
+* Uuendatud kogumiku vaate disain (muutmise vaatest ja view vaatest) #129 https://github.com/hariduspilv/koolikott/issues/129
+* Väikesel kaardil hariduse kuvamise loogika muudatus #165 https://github.com/hariduspilv/koolikott/issues/165
+* Päringute ja veebi cachemine #70 https://github.com/hariduspilv/koolikott/issues/70
+* Vähendada väikestele kaartidele laetavat informatsiooni back-endist #144 https://github.com/hariduspilv/koolikott/issues/144
+* Soovituse loogika paremmenüüle #143 https://github.com/hariduspilv/koolikott/issues/143
+* Youtube API #59 https://github.com/hariduspilv/koolikott/issues/59
+* Placeholderi lisamine kogumiku muutmise vaates sisukorda ja valge päise dropdowni #166 https://github.com/hariduspilv/koolikott/issues/166
+* Materjali detailvaatest materjali lisamine olemasolevasse kogumikku #167 https://github.com/hariduspilv/koolikott/issues/167
+* Materjali "linnutamisel" materjali lisamine uude kogumikku #168 https://github.com/hariduspilv/koolikott/issues/168
+* Uudisvoo pakkumine #75 https://github.com/hariduspilv/koolikott/issues/75
+* Kogumiku muutmise detailvaates nähtavuse ikoonide ühtlustamine #169 https://github.com/hariduspilv/koolikott/issues/169
+* Valge päise täiendus #162 https://github.com/hariduspilv/koolikott/issues/162
+* E-koolikoti default pilt #161 https://github.com/hariduspilv/koolikott/issues/161
+* Lehepõhised scss failid eemaldada #160 https://github.com/hariduspilv/koolikott/issues/160
+* Parem detailvaate layout suurusele sm #157 https://github.com/hariduspilv/koolikott/issues/157
+* Eemaldada teavituse dialoog avaliku kogumiku muutmisel #152 https://github.com/hariduspilv/koolikott/issues/152
+* Mobiilivaate täiendused #141 https://github.com/hariduspilv/koolikott/issues/141
+* Õppevara lingi indekseerimine #131 https://github.com/hariduspilv/koolikott/issues/131
+* Materjali lisamise modaali täiendus #126 https://github.com/hariduspilv/koolikott/issues/126
+* Tööriista riba lisamine kogumiku muutmise vaatesse #121 https://github.com/hariduspilv/koolikott/issues/121
+* Kogumiku loomisel peab ainevaldkonna alt olema võimalik valida mitut õppeainet #114 https://github.com/hariduspilv/koolikott/issues/114
+* Lisada tooltipid 3 kohta #156 https://github.com/hariduspilv/koolikott/issues/156
+* Haridustaseme valikmenüü muudatused #154 https://github.com/hariduspilv/koolikott/issues/154
+* Lihtotsing mobiilis #88 https://github.com/hariduspilv/koolikott/issues/88
+
+### Parandatud
+* Sotsiaalvõrku jagamisel sisu puudu #149 https://github.com/hariduspilv/koolikott/issues/149
+
+
 ## e-Koolikott 1.7.0 (28.12.2016)
 
 ### Lisandunud
