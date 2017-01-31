@@ -150,7 +150,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             });
 
             $scope.itemsCount = filteredCollection.length;
-            $scope.data = filteredCollection;
+            $scope.data = paginate($scope.query.page, $scope.query.limit);
         }
 
         $scope.getCorrectLanguageTitle = function (item) {
