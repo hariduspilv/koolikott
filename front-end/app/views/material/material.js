@@ -4,10 +4,10 @@ angular.module('koolikottApp')
     .controller('materialController', [
         '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
         'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
-        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService',
+        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce',
         function ($scope, serverCallService, $route, translationService, $rootScope,
                   searchService, $location, alertService, authenticatedUserService, dialogService,
-                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService) {
+                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce) {
 
             $scope.showMaterialContent = false;
             $scope.newComment = {};
@@ -139,7 +139,7 @@ angular.module('koolikottApp')
                         if (authenticatedUserService.isAuthenticated()) {
                             getSignedUserData()
                         } else {
-                            $scope.material.iframeSource = $scope.material.source;
+                            $scope.material.iframeSource = $sce.trustAsResourceUrl($scope.material.source);
                         }
                     }
                 }
@@ -219,10 +219,9 @@ angular.module('koolikottApp')
                 $location.url(searchService.getURL());
             };
 
-            $scope.showSourceFullscreen = ($event) => {
+            $scope.showSourceFullscreen = ($event, ctrl) => {
                 $event.preventDefault();
-
-                $scope.fullscreenCtrl.toggleFullscreen();
+                ctrl.toggleFullscreen();
             };
 
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
