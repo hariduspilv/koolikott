@@ -105,7 +105,7 @@
         </a>
 
         <div data-ng-if="showMaterialContent && embeddedDataIframe" data-ng-bind-html="embeddedDataIframe"></div>
-        <iframe ng-src="iframeSource" data-ng-if="showMaterialContent && !embeddedDataIframe" width="100%" height="100%"></iframe>
+        <iframe ng-src="{{iframeSource}}" data-ng-if="showMaterialContent && !embeddedDataIframe" width="100%" height="100%"></iframe>
       </div>
 
 
