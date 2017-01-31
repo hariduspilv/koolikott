@@ -1,19 +1,33 @@
 'use strict'
 
 angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
-    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService', 'storageService',
-    function (translationService, iconService, embedService, serverCallService, dialogService, storageService) {
+    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService', 'storageService', '$rootScope', '$sce',
+    function (translationService, iconService, embedService, serverCallService, dialogService, storageService, $rootScope, $sce) {
         return {
             scope: {
                 material: '=',
                 chapter: '=',
                 objIndex: '=',
                 rowIndex: '=',
-                contentRow: '='
+                contentRow: '=',
+                embeddable: '='
             },
             templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
             controller: ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
                 init();
+
+                $scope.showMaterialContent = false;
+
+                $rootScope.$on('fullscreenchange', () => {
+                    $scope.$apply(() => {
+                        $scope.showMaterialContent = !$scope.showMaterialContent;
+                    });
+                });
+
+                $scope.showSourceFullscreen = ($event, ctrl) => {
+                    $event.preventDefault();
+                    ctrl.toggleFullscreen();
+                };
 
                 function init() {
                     $scope.canPlayVideo = false;
@@ -243,10 +257,14 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                         } else {
                             $scope.embeddedData = res.data.html.replace("http:", "");
                         }
+                    } else {
+                        if ($scope.material.source) {
+                            $scope.iframeSource = $sce.trustAsResourceUrl($scope.material.source.replace("http:", ""));
+                        }
                     }
                 }
 
-            }]
+            }],
         };
     }
 ]);
