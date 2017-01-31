@@ -93,17 +93,29 @@
     <div layout="row" layout-align="space-between center">
       <!--Link as backup - if iframe is internally not working-->
       <a href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
-         target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
-                    || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK'">
+         target="_blank" data-ng-if="((!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
+                    || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK') && !embeddable">
         <span class="item-link" data-ng-bind="material.source"></span>
       </a>
-      <!--Up and down-->
+
+
+      <div class="fullscreen-iframe" data-ng-if="sourceType === 'LINK' && embeddable" ngsf-fullscreen="fullscreenCtrl">
+        <a class="wrapped regular-link md-primary" data-ng-href="#" ng-click="showSourceFullscreen($event, fullscreenCtrl)">
+          <span class="item-link" data-ng-bind="material.source"></span>
+        </a>
+
+        <div data-ng-if="showMaterialContent && embeddedDataIframe" data-ng-bind-html="embeddedDataIframe"></div>
+        <iframe ng-src="iframeSource" data-ng-if="showMaterialContent && !embeddedDataIframe" width="100%" height="100%"></iframe>
+      </div>
+
+
+<!--Up and down-->
       <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" flex-xs="30" flex-sm="30" layout="row" layout-align="end end" class="align-right">
         <md-button ng-disabled="rowIndex === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
                    ng-click="listItemUp()">
           <md-icon class="material-icons">arrow_upward</md-icon>
         </md-button>
-        <md-button ng-disabled="rowIndex === chapter.contentRows.length -1 " class="md-icon-button"
+        <md-button ng-disabled="rowIndex === chapter.contentRows.length -1" class="md-icon-button"
                    aria-label="Liiguta materjali alla" ng-click="listItemDown()">
           <md-icon class="material-icons">arrow_downward</md-icon>
         </md-button>
