@@ -466,14 +466,14 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }, false);
 
             $scope.$watch(function () {
-                var a = document.getElementsByClassName("md-datepicker-input");
+                let a = document.getElementsByClassName("md-datepicker-input");
                 if (a[0]) return a[0].value;
             }, function (newDate, oldDate) {
                 // if newDate is undefiend, use oldDate
                 newDate = newDate ? newDate : oldDate;
 
-                if (newDate !== oldDate) {
-                    var dateObj = $mdDateLocale.parseDate(newDate)
+                if (newDate !== oldDate || !$scope.material.issueDate) {
+                    var dateObj = $mdDateLocale.parseDate(newDate);
                     $scope.material.issueDate = getIssueDate(dateObj);
 
                     //Set date for datepicker, which needs a full date
