@@ -3,8 +3,8 @@
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
-    <md-card-header-text flex class="ellipsis">
-      <a data-ng-href="{{'/material?id=' + material.id}}" class="md-title no-link ellipsis"
+    <md-card-header-text flex class="ellipsis embed-responsive-header-text">
+      <a data-ng-href="{{'/material?id=' + material.id}}" class="md-title no-link ellipsis ellipsis--multiline"
          data-ng-bind="getCorrectLanguageTitle(material)">
       </a>
       <span class="md-subhead ellipsis">

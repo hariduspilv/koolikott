@@ -101,6 +101,10 @@ h2 {
     font-weight: 400;
     color: $color-body;
   }
+
+  &--multiline {
+    white-space: normal;
+  }
 }
 
 .wrapped {
