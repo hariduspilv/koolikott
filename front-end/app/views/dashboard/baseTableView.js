@@ -25,6 +25,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         init();
 
         function init() {
+            $scope.filter.show = false;
             serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
         }
 
