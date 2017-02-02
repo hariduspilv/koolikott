@@ -94,7 +94,7 @@ angular.module('koolikottApp')
                     url: url,
                     data: data,
                     headers: headers
-                }).then(successCallback, errorCallback).finally(finallyCallback);
+                }).then(successCallback, errorCallback, finallyCallback);
             }
         };
 
