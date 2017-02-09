@@ -78,8 +78,7 @@
                              name="source"
                              id="add-material-url-input"
                              type="text"
-                             required dop-validate-url
-                             data-ng-click="sourceIsFocused()">
+                             required dop-validate-url>
                       <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                         <div data-ng-show="isURLInvalid()" data-ng-message="url" class="invalid-url-message"
                              data-translate="MATERIAL_URL_IS_INVALID"></div>
@@ -91,8 +90,6 @@
                         </div>
                         <div data-ng-message="deleted"
                              data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
-                        <div data-ng-message="filenameTooLong"
-                             data-translate="MATERIAL_FILE_NAME_TOO_LONG"></div>
                       </div>
 
                     </md-input-container>
@@ -105,13 +102,9 @@
                       <md-progress-linear md-mode="indeterminate" flex></md-progress-linear>
                     </div>
                     <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
-                      <h5 data-ng-messages="addMaterialForm.source.$error">
-                        <div data-ng-show="!addMaterialForm.source.$error.filenameTooLong">
-                          <span data-translate="ADD_FILE_SUCCESS"></span>:
-                          <span class="ellipsis">{{ material.uploadedFile.displayName }}</span>
-                        </div>
-                          <div data-ng-message="filenameTooLong" class="invalid-file-message"
-                               data-translate="MATERIAL_FILE_NAME_TOO_LONG"></div>
+                      <h5>
+                        <span data-translate="ADD_FILE_SUCCESS"></span>:
+                        <span class="ellipsis">{{ material.uploadedFile.displayName }}</span>
                       </h5>
                     </div>
                   </div>
@@ -180,12 +173,9 @@
 
                 <div layout="row" layout-align="top center">
                   <md-input-container class="md-block animate-if margin-top-36 remaining-charaters-wrapper" flex>
-                    <text-angular id="add-material-description-input" class="textangular-editor char-count"
-                                  name="materialDescription-{{$index}}"
-                                  placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description"
-                                  ta-maxlength="850"></text-angular>
-                    <dop-remaining-characters class="remaining-charaters"
-                                              text="metadata.description"></dop-remaining-characters>
+                    <text-angular id="add-material-description-input" class="textangular-editor char-count" name="materialDescription-{{$index}}"
+                                placeholder="{{'MATERIAL_DESCRIPTION' | translate}}" ng-model="metadata.description" ta-maxlength="850"></text-angular>
+                    <dop-remaining-characters class="remaining-charaters" text="metadata.description"></dop-remaining-characters>
                   </md-input-container>
                   <div layout="column">
                     <md-button class="md-icon-button md-primary"

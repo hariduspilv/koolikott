@@ -40,7 +40,7 @@ public class ReviewFileResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadReview(@FormDataParam("review") InputStream review,
+    public UploadedFile uploadReview(@FormDataParam("review") InputStream review,
                                      @FormDataParam("review") FormDataContentDisposition reviewDetail) throws UnsupportedEncodingException {
         return uploadedFileService.uploadFile(review, reviewDetail, configuration.getString(FILE_REVIEW_DIRECTORY), "/rest/review/");
     }

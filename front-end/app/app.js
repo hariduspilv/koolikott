@@ -22,8 +22,8 @@ let app = angular.module('koolikottApp', [
 let provideProvider = null;
 
 app.config([
-    '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$translateProvider', '$sceProvider', '$mdThemingProvider', '$httpProvider', '$mdDateLocaleProvider', '$anchorScrollProvider', '$qProvider',
-    function ($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider, $qProvider) {
+    '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$translateProvider', '$sceProvider', '$mdThemingProvider', '$httpProvider', '$mdDateLocaleProvider', '$anchorScrollProvider',
+    function ($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider) {
         $compileProvider.debugInfoEnabled(false);
         $httpProvider.useApplyAsync(true);
         provideProvider = $provide;
@@ -70,9 +70,6 @@ app.config([
             $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
             $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
         }
-
-        // disable logging of unhandled rejections as its broken in ui-router
-        $qProvider.errorOnUnhandledRejections(false);
 
         $locationProvider.html5Mode(true);
         $anchorScrollProvider.disableAutoScrolling();

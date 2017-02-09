@@ -33,8 +33,6 @@ public class UploadedFileService {
 
     private static final String EBOOK_EXTENSION = "epub";
 
-    private final String FILENAME_TOO_LONG_RESPONSE = "{\"cause\": \"filename too long\"}";
-
     @Inject
     private UploadedFileDAO uploadedFileDAO;
 
@@ -103,19 +101,13 @@ public class UploadedFileService {
                 .build();
     }
 
-    public Response uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail, String rootPath, String restPath) throws UnsupportedEncodingException {
+    public UploadedFile uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail, String rootPath, String restPath) throws UnsupportedEncodingException {
         String extension = FilenameUtils.getExtension(fileDetail.getFileName());
         LimitedSizeInputStream limitedSizeInputStream = new LimitedSizeInputStream(configuration.getInt(DOCUMENT_MAX_FILE_SIZE), fileInputStream);
 
         UploadedFile uploadedFile = new UploadedFile();
         String filenameCleaned = fileDetail.getFileName().replaceAll(" ", "+");
         String filename = URLEncoder.encode(filenameCleaned, UTF_8.name());
-
-        if (filename.length() > 255) {
-            // Add informative response so ajax could identify the cause of bad response
-            return Response.status(Response.Status.BAD_REQUEST).entity(FILENAME_TOO_LONG_RESPONSE).build();
-        }
-
         uploadedFile.setName(filename);
         uploadedFile = create(uploadedFile);
 
@@ -131,6 +123,6 @@ public class UploadedFileService {
             writeToFile(limitedSizeInputStream, path);
         }
 
-        return Response.status(Response.Status.CREATED).entity(update(uploadedFile)).build();
+        return update(uploadedFile);
     }
 }

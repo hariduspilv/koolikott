@@ -37,7 +37,7 @@ public class UploadedFileResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,
+    public UploadedFile uploadFile(@FormDataParam("file") InputStream fileInputStream,
                                    @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
         return uploadedFileService.uploadFile(fileInputStream, fileDetail, configuration.getString(FILE_UPLOAD_DIRECTORY), "/rest/uploadedFile/");
     }

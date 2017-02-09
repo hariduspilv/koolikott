@@ -365,10 +365,6 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         };
 
-        $scope.sourceIsFocused = function () {
-            $scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
-        };
-
         function loadMetadata() {
             metadataService.loadResourceTypes(setResourceTypes);
             metadataService.loadKeyCompetences(setKeyCompetences);
@@ -612,7 +608,6 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         function fileUploadSuccess(file) {
-            $scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
             $scope.material.source = null;
             $scope.fileUploaded = true;
             $scope.uploadingFile = false;
@@ -621,11 +616,8 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $scope.step.isMaterialUrlStepValid = true;
         }
 
-        function fileUploadFailed(response) {
-            if(response.data.cause == "filename too long"){
-                $scope.addMaterialForm.source.$setValidity("filenameTooLong", false);
-                $scope.addMaterialForm.source.$setTouched();
-            }
+        function fileUploadFailed() {
+            log('File upload failed.');
         }
 
         function fileUploadFinally() {

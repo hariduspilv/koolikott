@@ -20,10 +20,10 @@ public class UploadedFile {
     private String name;
 
     // Path variable is not used, it is built in function instead
-    @Column(columnDefinition = "TEXT")
+    @Column
     private String path;
 
-    @Column(columnDefinition = "TEXT")
+    @Column
     private String url;
 
     public Long getId() {
