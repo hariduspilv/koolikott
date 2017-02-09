@@ -75,8 +75,6 @@ function dopChapterToolbarController ($scope, $timeout, translationService, $mdD
             $rootScope.$broadcast("mobileSearch:open");
         }
 
-        $rootScope.isPlaceholderVisible = true;
-
         if (vm.isEditable) {
             document.getElementById('header-search-input').focus();
         }

@@ -1,4 +1,3 @@
-
 function TourService(serverCallService) {
 
     function isValidUserTourData(userTourData) {
@@ -8,16 +7,16 @@ function TourService(serverCallService) {
     function addUserTourData(userTourData) {
         return serverCallService.makePut('rest/userTourData', userTourData)
             .then((response) => {
-                return response.data
-            })
+                return response.data;
+            });
     }
 
     return {
         getUserTourData() {
             return serverCallService.makeGet('rest/userTourData', {})
                 .then((response) => {
-                    return response.data
-                })
+                    return response.data;
+                });
         },
 
         setGeneralTourSeen(userTourData) {
@@ -28,7 +27,7 @@ function TourService(serverCallService) {
         },
 
         setEditTourSeen(userTourData) {
-            if(!this.isValidUserTourData(userTourData)) return;
+            if(!isValidUserTourData(userTourData)) return;
 
             userTourData.editTour = true;
             return addUserTourData(userTourData);

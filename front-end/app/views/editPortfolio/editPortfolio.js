@@ -18,6 +18,7 @@ angular.module('koolikottApp')
                     }
 
                     if ($rootScope.newPortfolioCreated) {
+                        $rootScope.$broadcast('tour:start:editPage:firstTime');
                         $scope.showFirstMessage = true;
                         $rootScope.newPortfolioCreated = false;
                     }
@@ -101,7 +102,6 @@ angular.module('koolikottApp')
                     }
 
                     storageService.setPortfolio(portfolio);
-                    $rootScope.isPlaceholderVisible = false;
                 }
 
 

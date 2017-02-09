@@ -261,7 +261,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $rootScope.sideNavOpen = true;
             }
 
-            $rootScope.$broadcast('tour:close');
+            $rootScope.$broadcast('tour:close:pageSwitch');
 
             $rootScope.hasAppInitated = true;
         });

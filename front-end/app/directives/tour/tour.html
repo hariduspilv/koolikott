@@ -1,122 +1,43 @@
 <!-- Tour for most pages for authenticated user -->
-<tour data-ng-if="!$ctrl.isEditPageTour && !$ctrl.isCancelledTour && $ctrl.isAuthenticated()"
+<tour data-ng-if="!$ctrl.isEditPageTour && !$ctrl.isCancelledTour"
       data-step="$ctrl.currentStep"
       data-post-tour="$ctrl.tourComplete()">
   <virtual-step
-    tourtip="Menüü-ikoon kontrollib sisukorda. Sisukorras on sinu isiklikud asjad ja selle alamlehe sisukord, millel viibid."
+    tourtip="{{'TOUR_SIDENAV' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
     tourtip-placement="right"
-    tourtip-offset-horizontal="-26"
+    tourtip-offset-vertical="-15"
+    tourtip-offset-horizontal="-40"
     tourtip-step="0"
-    tourtip-element="#header-show-sidenav-button"></virtual-step>
+    tourtip-element="#sidebarHeader"></virtual-step>
   <virtual-step
-    tourtip="Logo viib alati tagasi esilehele."
+    tourtip="{{'TOUR_DETAILEDSEARCH' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
     tourtip-placement="bottom"
-    tourtip-offset-vertical="-30"
+    tourtip-offset-vertical="-20"
+    tourtip-offset-horizontal="-15"
     tourtip-step="1"
-    tourtip-element="#logo"></virtual-step>
-  <virtual-step
-    tourtip="Otsikasti saad kasutada lihtotsingu jaoks..."
-    tourtip-placement="bottom"
-    tourtip-offset-vertical="-30"
-    tourtip-step="2"
-    tourtip-element="#header-show-search-button"></virtual-step>
-  <virtual-step
-    tourtip="…või täpsustada seda kasutades detailset otsingut. Detailotsing värskendab otsitulemusi lennult, seepärast ei leia sa siit tavapärast otsingu nuppu."
-    tourtip-placement="bottom"
-    tourtip-offset-vertical="-30"
-    tourtip-offset-horizontal="-26"
-    tourtip-step="3"
     tourtip-element="#header-show-detailed-search-icon"></virtual-step>
   <virtual-step
-    tourtip="Abiikooni rippmenüüst leiad lisaks üldinfole ka käsiloleva tutvustuse. "
-    tourtip-placement="left"
-    tourtip-step="4"
-    tourtip-element="#menu-help"></virtual-step>
-  <virtual-step
-    tourtip="Sinu nimetäht näitab, et oled sisse loginud. Samast rippmenüüst saad ka väljuda."
-    tourtip-placement="left"
-    tourtip-step="5"
-    tourtip-element="#header-user-menu-icon"></virtual-step>
-  <virtual-step
-    tourtip="Sisuosas saad materjale ja kogumikke sirvida, neid lemmikuks salvestada ja lugemiseks avada. Vaikimisi kuvatakse uuemad eespool."
-    tourtip-placement="left"
-    tourtip-offset-vertical="200"
-    tourtip-offset-horizontal="100"
-    tourtip-step="6"
-    tourtip-element="#main-content"></virtual-step>
-  <!-- TODO: find first material from page -->
-  <virtual-step
-    tourtip="Materjal on väline link või koolikotti üles laetud väljaanne - mäng, video, tekst, pilt, õpik, raamat jne. Materjalide tüüpe eristab ikoon ja taustavärv. Materjale saad kogumikku lisamiseks linnutada. "
-    tourtip-placement="right"
-    tourtip-step="7"
-    tourtip-element="#material-card-10800"></virtual-step>
-  <!-- TODO: find first portfolio from page -->
-  <virtual-step
-    tourtip="Kogumikud on koostatud kasutajate poolt ja võivad sisaldada nii tekste kui materjale. Kogumiku tunned ära järjehoidja-ikooni ja taustavärvi järgi."
-    tourtip-placement="right"
-    tourtip-step="8"
-    tourtip-element="#portfolio-card-107"></virtual-step>
-  <virtual-step
-    tourtip="Tegevusnupu kaudu saad lisada uusi koolikoti materjale või kogumikke. Tee algust nüüd!"
+    tourtip="{{'TOUR_HELP' | translate}}"
+    tourtip-placement="bottom"
     tourtip-next-visible="false"
-    tourtip-scroll-to="false"
-    tourtip-placement="left"
-    tourtip-step="9"
-    tourtip-element="#main-fab-button"></virtual-step>
-</tour>
-
-<!-- Tour for not authenticated user -->
-<tour data-ng-if="!$ctrl.isAuthenticated()"
-      data-step="$ctrl.currentStep"
-      data-post-tour="$ctrl.tourComplete()">
-  <virtual-step
-    tourtip="Menüü-ikoon kontrollib sisukorda. Sisukorras on sinu isiklikud asjad ja selle alamlehe sisukord, millel viibid."
-    tourtip-placement="right"
-    tourtip-offset-horizontal="-26"
-    tourtip-step="0"
-    tourtip-element="#header-show-sidenav-button"></virtual-step>
-  <virtual-step
-    tourtip="Logo viib alati tagasi esilehele."
-    tourtip-placement="bottom"
-    tourtip-offset-vertical="-30"
-    tourtip-step="1"
-    tourtip-element="#logo"></virtual-step>
-  <virtual-step
-    tourtip="Otsikasti saad kasutada lihtotsingu jaoks..."
-    tourtip-placement="bottom"
-    tourtip-offset-vertical="-30"
+    tourtip-offset-vertical="-10"
+    tourtip-offset-horizontal="15"
     tourtip-step="2"
-    tourtip-element="#header-show-search-button"></virtual-step>
-  <virtual-step
-    tourtip="…või täpsustada seda kasutades detailset otsingut. Detailotsing värskendab otsitulemusi lennult, seepärast ei leia sa siit tavapärast otsingu nuppu."
-    tourtip-placement="bottom"
-    tourtip-offset-vertical="-30"
-    tourtip-offset-horizontal="-26"
-    tourtip-step="3"
-    tourtip-element="#header-show-detailed-search-icon"></virtual-step>
-  <virtual-step
-    tourtip="Abiikooni rippmenüüst leiad lisaks üldinfole ka käsiloleva tutvustuse. "
-    tourtip-placement="left"
-    tourtip-step="4"
     tourtip-element="#menu-help"></virtual-step>
-  <virtual-step
-    tourtip="Sisuosas saad materjale ja kogumikke sirvida, neid lemmikuks salvestada ja lugemiseks avada. Vaikimisi kuvatakse uuemad eespool."
-    tourtip-placement="top"
-    tourtip-next-visible="false"
-    tourtip-offset-vertical="200"
-    tourtip-offset-horizontal="100"
-    tourtip-step="5"
-    tourtip-element="#main-content"></virtual-step>
 </tour>
 
-<!-- Cancelled from modal tour -->
+<!-- Cancelled from first show -->
 <tour data-ng-if="$ctrl.isCancelledTour"
       data-step="$ctrl.currentStep"
       data-post-tour="$ctrl.tourComplete()">
   <virtual-step
-    tourtip="Abiikooni rippmenüüst leiad lisaks üldinfole ka käsiloleva tutvustuse. "
-    tourtip-placement="left"
+    tourtip="{{'TOUR_CANCELLED_HELP' | translate}}"
+    tourtip-placement="bottom"
     tourtip-next-visible="false"
+    tourtip-offset-vertical="-10"
+    tourtip-offset-horizontal="-10"
     tourtip-step="0"
     tourtip-element="#menu-help"></virtual-step>
 </tour>
@@ -124,17 +45,27 @@
 <!-- Edit page tour -->
 <tour data-ng-if="$ctrl.isEditPageTour"
       data-step="$ctrl.currentStep"
-      data-post-tour="$ctrl.tourComplete()">
+      data-post-tour="$ctrl.tourComplete(true)">
   <virtual-step
-    tourtip="Siin on sinu asjad ja taksonoomia"
-    tourtip-next-label="Edasi"
+    tourtip="{{'TOUR_EDIT_SIDENAV' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
     tourtip-placement="right"
+    tourtip-offset-vertical="-15"
+    tourtip-offset-horizontal="-40"
     tourtip-step="0"
-    tourtip-element="#sidebar-left"></virtual-step>
+    tourtip-element="#sidebarHeader"></virtual-step>
   <virtual-step
-    tourtip="Siit saad avada täpse otsingu"
-    tourtip-next-label="Edasi"
+    tourtip="{{'TOUR_EDIT_SEARCH' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-offset-vertical="-20"
     tourtip-placement="bottom"
     tourtip-step="1"
-    tourtip-element="#header-show-detailed-search-icon"></virtual-step>
+    tourtip-element="#header-search-input"></virtual-step>
+  <virtual-step
+    tourtip="{{'TOUR_EDIT_CHANGE_VISIBLITY' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-next-visible="false"
+    tourtip-offset-vertical="-10"
+    tourtip-step="2"
+    tourtip-element="#change-visibility"></virtual-step>
 </tour>

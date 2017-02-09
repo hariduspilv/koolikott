@@ -1,19 +1,21 @@
 .tour-tip {
   display: none;
-  position: absolute;
-  background: rgba(224,224,224, 0.95);
-  z-index: 101;
+  position: fixed;
+  background: rgba(255,255,255, 0.95);
+  z-index: 75;
   top: 0;
   left: 2.5%;
-  max-width: 300px;
+  width: 300px;
   border-radius: $border-radius;
   box-shadow: $whiteframe-shadow-9dp;
+
   p {
     font-size: $font-medium;
     line-height: 1.5;
     margin: $md-padding $md-padding 0;
     color: #000;
   }
+
   .tour-arrow {
     display: block;
     position: absolute;
@@ -22,42 +24,24 @@
     height: 0;
     border: inset 14px;
     border-style: solid;
+
     &.tt-top {
       bottom: -24px;
-      border-color: rgba(224,224,224, 0.95) transparent transparent;
+      border-color: rgba(255,255,255, 0.95) transparent transparent;
     }
     &.tt-bottom {
       top: -25px;
-      border-color: transparent transparent rgba(224,224,224, 0.95);
+      border-color: transparent transparent rgba(255,255,255, 0.95);
     }
     &.tt-right {
       left: -24px;
       top: 28px;
-      border-color: transparent rgba(224,224,224, 0.95) transparent transparent;
+      border-color: transparent rgba(255,255,255, 0.95) transparent transparent;
     }
     &.tt-left {
       left: 100%;
       top: 25px;
-      border-color: transparent transparent transparent rgba(224,224,224, 0.95);
+      border-color: transparent transparent transparent rgba(255,255,255, 0.95);
     }
   }
-  button .material-icons {
-    font-size: $font-normal;
-  }
-}
-
-.tour-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 100;
-}
-
-.tour-element-active {
-  z-index: 120 !important;
-  position: relative;
-  background: #fff;
 }

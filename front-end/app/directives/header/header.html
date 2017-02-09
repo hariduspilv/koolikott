@@ -57,7 +57,7 @@
                            id="header-simple-search-input"
                            md-menu-class="suggest-dropdown"
                            ng-model-options="{ debounce: 200 }"
-                           placeholder="{{(isPlaceholderVisible && isEditPortfolioPage) ? getTranslation('HEADER_SEARCH_PLACEHOLDER') : ''}}">
+                           placeholder="{{isEditPortfolioPage ? getTranslation('HEADER_SEARCH_PLACEHOLDER') : ''}}">
             <md-item-template>
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
             </md-item-template>
@@ -192,7 +192,7 @@
             <md-icon>help</md-icon>
          </md-button>
         <md-menu>
-          <md-button aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
             <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
             <md-icon data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'">link</md-icon>
