@@ -31,6 +31,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
                 }
             });
 
+        // TODO: Remove for live
         openFirstTourItem();
     }
 

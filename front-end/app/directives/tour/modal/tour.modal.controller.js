@@ -6,19 +6,19 @@ angular.module('koolikottApp')
     function ($mdDialog, authenticatedUserService, $rootScope) {
             let vm = this;
 
-            $('body').addClass('tour-modal-is-showing');
+            angular.element('body').addClass('tour-modal-is-showing');
 
             vm.user = authenticatedUserService.getUser();
 
             vm.cancel = () => {
                 $rootScope.$broadcast('tour:start:cancelled');
-                $('body').removeClass('tour-modal-is-showing');
+                angular.element('body').removeClass('tour-modal-is-showing');
                 $mdDialog.hide();
             }
 
             vm.showTour = () => {
                 $rootScope.$broadcast('tour:start');
-                $('body').removeClass('tour-modal-is-showing');
+                angular.element('body').removeClass('tour-modal-is-showing');
                 $mdDialog.hide();
             }
         }
