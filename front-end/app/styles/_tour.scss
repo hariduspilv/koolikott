@@ -45,3 +45,38 @@
     border-color: transparent transparent transparent rgba(255,255,255, 0.95);
   }
 }
+
+.tour-modal {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  md-dialog-actions {
+    justify-content: flex-start;
+  }
+}
+
+.tour-main-fab-background {
+  background-color: $main-fab;
+  position: absolute;
+  right: -120px;
+  bottom: -130px;
+  width: 300px;
+  height: 300px;
+  transform: scale(0.5);
+  border-radius: 99em;
+}
+
+.tour-modal-is-showing {
+  position: fixed;
+  width: 100%;
+  top: 0px;
+
+  .main-fab-button {
+    z-index: 85;
+  }
+
+  .md-fab.main-fab {
+    box-shadow: none;
+  }
+}

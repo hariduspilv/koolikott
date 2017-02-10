@@ -7,9 +7,9 @@ angular.module('koolikottApp')
     controller: dopTourController
 });
 
-dopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig', '$window', '$timeout', 'tourService'];
+dopTourController.$inject = ['$rootScope', '$scope', 'authenticatedUserService', 'tourConfig', '$window', '$timeout', 'tourService', '$mdDialog'];
 
-function dopTourController ($rootScope, $scope, authenticatedUserService, tourConfig, $window, $timeout, tourService) {
+function dopTourController ($rootScope, $scope, authenticatedUserService, tourConfig, $window, $timeout, tourService, $mdDialog) {
     let vm = this;
 
     vm.currentStep = -1; // disable tour on load
@@ -35,7 +35,11 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
     }
 
     function openFirstTourItem () {
-
+        $mdDialog.show({
+            templateUrl: 'directives/tour/modal/tour.modal.html',
+            controller: 'tourModalController',
+            controllerAs: '$ctrl'
+        });
     }
 
     vm.isAuthenticated = () => authenticatedUserService.isAuthenticated();
@@ -58,10 +62,11 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
 
     vm.tourStartCancelled = () => {
         vm.isCancelledTour = true;
+        vm.tourStart(0, false);
 
         $timeout(() => {
-            vm.tourComplete(0, false);
-        }, 3000);
+            vm.tourComplete();
+        }, 5000);
     };
 
     vm.tourComplete = (isEditPage = false, isPageSwitch = false) => {
