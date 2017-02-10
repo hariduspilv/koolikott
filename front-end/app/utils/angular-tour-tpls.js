@@ -195,6 +195,9 @@
           attrs.$observe('tourtipOffsetHorizontal', function (val) {
             scope.offsetHorizontal = parseInt(val, 10) || 0;
           });
+          attrs.$observe('tourtipArrowOffset', function (val) {
+            scope.arrowOffset = parseInt(val, 10) || 0;
+          });
           //defaults: null
           attrs.$observe('onShow', function (val) {
             scope.onStepShow = val || null;
@@ -221,6 +224,7 @@
           scope.ttMargin = tourConfig.margin;
           scope.offsetHorizontal = 0;
           scope.offsetVertical = 0;
+          scope.arrowOffset = 0;
           scope.ttSourceScope = tourConfig.useSourceScope;
           scope.ttOpen = false;
           scope.ttAnimation = tourConfig.animation;
@@ -283,7 +287,16 @@
               };
               break;
             case 'bottom':
-              var _left = position.left - containerLeft + scope.offsetHorizontal;
+                var _left;
+                if (!container) {
+                    var body = angular.element('body');
+                    var bodyPosition = body[0].getBoundingClientRect();
+                    if (tourtip.width() + position.left > bodyPosition.width) {
+                        _left = bodyPosition.width - tourtip.width() - 10;
+                    }
+                } else {
+                    _left = position.left - containerLeft + scope.offsetHorizontal;
+                }
               ttPosition = {
                 top: top + position.height + scope.ttMargin + scope.offsetVertical,
                 left: _left > 0 ? _left : minimumLeft
@@ -323,13 +336,25 @@
             ttPosition.left += 'px';
             return ttPosition;
           }
+          function positionArrow(element, ttPosition) {
+              var arrowPosition = {};
+              var position = element[0].getBoundingClientRect();
+              if (scope.ttPlacement === 'bottom') {
+                  arrowPosition = {
+                      left: position.left - parseInt(ttPosition.left.slice(0, -2)) + scope.arrowOffset
+                  }
+
+                  arrowPosition.left += 'px';
+              }
+              return arrowPosition;
+          }
           function show() {
             if (!scope.ttContent) {
               return;
             }
-            if (scope.ttAnimation)
+            if (scope.ttAnimation) {
               tourtip.fadeIn();
-            else {
+            } else {
               tourtip.css({ display: 'block' });
             }
             var targetElement = scope.ttElement ? angular.element(scope.ttElement) : element;
@@ -339,8 +364,10 @@
             var updatePosition = function () {
               var offsetElement = scope.ttContainerElement === 'body' ? undefined : angular.element(scope.ttContainerElement);
               var ttPosition = calculatePosition(targetElement, offsetElement);
+              var ttArrowPosition = positionArrow(targetElement, ttPosition);
               // Now set the calculated positioning.
               tourtip.css(ttPosition);
+              tourtip.find('.tour-arrow').css(ttArrowPosition);
               // Scroll to the tour tip
               var ttPositionTop = parseInt(ttPosition.top), ttPositionLeft = parseInt(ttPosition.left);
 
