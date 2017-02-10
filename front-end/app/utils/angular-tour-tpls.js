@@ -261,7 +261,7 @@
             // Get the position of the directive element
             var position = element[0].getBoundingClientRect();
             //make it relative against page or fixed container, not the window
-            var top = position.top + window.pageYOffset;
+            var top = position.top + (tourtip.css('position') === 'fixed' ? 0 : window.pageYOffset);
             var containerLeft = 0;
             if (container && container[0]) {
               top = top - container[0].getBoundingClientRect().top + container[0].scrollTop;
