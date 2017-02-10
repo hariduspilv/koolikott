@@ -293,6 +293,8 @@
                     var bodyPosition = body[0].getBoundingClientRect();
                     if (tourtip.width() + position.left > bodyPosition.width) {
                         _left = bodyPosition.width - tourtip.width() - 10;
+                    } else {
+                        _left = position.left - containerLeft + scope.offsetHorizontal;
                     }
                 } else {
                     _left = position.left - containerLeft + scope.offsetHorizontal;
