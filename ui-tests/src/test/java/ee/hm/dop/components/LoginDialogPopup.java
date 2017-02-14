@@ -10,7 +10,7 @@ public class LoginDialogPopup extends PageComponent {
 	
 	private By mobileIdCodeField = By.id("login-personal-code");
     private By mobilePhoneNumberField = By.id("login-phone-number");
-    private By mobileLoginConfirmation = By.id("login-mobile-id-button");
+    private By mobileLoginButton= By.cssSelector("button[id*='login-mobile-id-button']");
     private By eKoolLoginButton = By.id("login-ekool-button");
     private By stuudiumButton = By.id("login-stuudium-button");
     
@@ -37,9 +37,8 @@ public class LoginDialogPopup extends PageComponent {
         return this;
     }
     
-    public LoginConfirmationPopup clickLoginWithID() {
-        getDriver().findElement(mobileLoginConfirmation).click();
-        PageHelpers.waitForSeconds(3500);
+    public LoginConfirmationPopup clickLoginWithMobileID() {
+        getDriver().findElement(mobileLoginButton).click();
         return new LoginConfirmationPopup();
     }
 

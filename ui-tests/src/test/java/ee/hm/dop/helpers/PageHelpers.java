@@ -60,6 +60,23 @@ public class PageHelpers extends SeleniumUser {
 			}
 		}
 	 
+	 public static void pressEnter() {
+
+			try {	
+
+				Robot robot = new Robot();
+
+				robot.keyPress(KeyEvent.VK_ENTER);
+				robot.keyRelease(KeyEvent.VK_ENTER);
+
+
+				robot.delay(50);
+
+			} catch (Exception exp) {
+				exp.printStackTrace();
+			}
+		}
+	 
 	 
 	 
 	 public static String getDate(int period,String format)
@@ -72,18 +89,8 @@ public class PageHelpers extends SeleniumUser {
 	 }
 	 
 	 
-	 
-
-		/*public static void getScreenshot() {
-			File scrFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
-			String currentDir = System.getProperty("user.dir");
-			try {
-				FileUtils.copyFile(scrFile, new File(currentDir + "\\screenshots\\" + System.currentTimeMillis() + ".png"));
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-		}*/
+	
+		
 	
 	public static String generateUrl(int length) {
 		String allowedChars = "abcdefghijklmnopqrstuvwxyz" + // alphabets
@@ -110,7 +117,7 @@ public class PageHelpers extends SeleniumUser {
 			
 			Robot robot = new Robot();
 			
-			robot.delay(100);
+			robot.delay(250);
 
 			robot.keyPress(KeyEvent.VK_CONTROL);
 			robot.keyPress(KeyEvent.VK_V);
@@ -118,12 +125,13 @@ public class PageHelpers extends SeleniumUser {
 			robot.keyRelease(KeyEvent.VK_V);
 			robot.keyRelease(KeyEvent.VK_CONTROL);
 
-			robot.delay(600);
+			robot.delay(250);
 
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_ENTER);
 			
 			robot.delay(50);
+
 
 		
 

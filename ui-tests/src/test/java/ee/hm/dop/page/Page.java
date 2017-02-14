@@ -5,6 +5,7 @@ import ee.hm.dop.components.FabButton;
 import ee.hm.dop.components.Header;
 import ee.hm.dop.components.LeftMenu;
 import ee.hm.dop.components.Logo;
+import ee.hm.dop.components.PrivacyConfirmationPopup;
 import ee.hm.dop.components.SimpleSearch;
 import ee.hm.dop.components.UserMenu;
 import ee.hm.dop.tests.SeleniumUser;
@@ -45,6 +46,12 @@ public abstract class Page extends SeleniumUser {
 
 	public AdvancedSearch getAdvancedSearch () {
 		return advancedSearch ;
+	}
+	
+	private static final PrivacyConfirmationPopup privacyConfirmationPopup  = new PrivacyConfirmationPopup ();
+
+	public PrivacyConfirmationPopup getPrivacyConfirmationPopup () {
+		return privacyConfirmationPopup ;
 	}
 	
 	private static final LandingPage landingPage = new LandingPage();

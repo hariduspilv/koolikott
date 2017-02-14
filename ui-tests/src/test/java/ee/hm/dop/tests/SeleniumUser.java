@@ -23,6 +23,7 @@ public abstract class SeleniumUser {
         	
     		//driver.get("https://oxygen.netgroupdigital.com/#/");
         	driver.manage().window().maximize();
+        	driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
             Runtime.getRuntime().addShutdownHook(new Thread() {

@@ -20,10 +20,11 @@ public class PortfolioViewPage extends Page {
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By fabButton = By.id("add-portfolio");
 	private By preTag = By.tagName("pre");
+	private By shareWithLinkIcon = By.xpath("//md-icon[text()='link']");
 	private By copyPortfolioButton = By.xpath("//button[@data-ng-click='copyPortfolio()']");
 	private By portfolioTitle = By.xpath("//h1[@data-ng-bind='portfolio.title']");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
-	private By materialBox = By.cssSelector("md-card-content.portfolio-noedit-item.layout-row");
+	private By materialBox = By.cssSelector("div.pointer.layout-row");
 	private By notImproperContent = By.cssSelector("span.reason > span");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 			
@@ -31,10 +32,13 @@ public class PortfolioViewPage extends Page {
 
 	public PortfolioViewPage clickActionsMenu() {
 		PageHelpers.waitForVisibility(menuBar);
+		//getDriver().navigate().refresh();
 		getDriver().findElement(menuBar).click();
 		PageHelpers.waitForSeconds(1500);
 		return this;
 	}
+	
+
 
 	public PortfolioViewPage moveCursorToCopyPortfolio() {
 		Actions builder = new Actions(getDriver());
@@ -52,16 +56,15 @@ public class PortfolioViewPage extends Page {
 	}
 
 	public EditPortfolioPage clickEditPortfolio() {
+		PageHelpers.waitForVisibility(editPortfolio);
 		getDriver().findElement(editPortfolio).sendKeys(Keys.ENTER);
-		PageHelpers.waitForSeconds(1500);
-		getDriver().navigate().refresh();
 		PageHelpers.waitForSeconds(1500);
 		return new EditPortfolioPage();
 	}
 
 	public PortfolioViewPage addToRecommendationsList() {
 		getDriver().findElement(recommendationList).sendKeys(Keys.ENTER);
-		PageHelpers.waitForSeconds(3500);
+		PageHelpers.waitForSeconds(2500);
 		return this;
 	}
 
@@ -91,9 +94,10 @@ public class PortfolioViewPage extends Page {
 	}
 	
 	public PortfolioViewPage insertTagAndEnter1() {
+		PageHelpers.waitForSeconds(1000);
 		getDriver().findElement(insertTag).sendKeys(PageHelpers.getDate(0, "dd/MM/yyyy"));
-		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
-		PageHelpers.waitForSeconds(1500);
+		getDriver().findElement(insertTag ).sendKeys(Keys.ENTER);
+		PageHelpers.waitForSeconds(1000);
 		return this;
 
 	}
@@ -103,6 +107,12 @@ public class PortfolioViewPage extends Page {
         return getDriver().findElement(notImproperContent).isDisplayed();
 
 	}
+	
+	public boolean isPortfolioPrivacyShareOnlyWithLink() {
+		PageHelpers.waitForVisibility(shareWithLinkIcon);
+        return getDriver().findElement(shareWithLinkIcon).isDisplayed();
+
+	}
 
 	public String getTagText() {
 		return getDriver().findElement(addedTag).getText();
@@ -110,6 +120,7 @@ public class PortfolioViewPage extends Page {
 	}
 	
 	public boolean getPreTag() {
+		PageHelpers.waitForVisibility(preTag);
 		return getDriver().findElement(preTag).isDisplayed();
 
 	}

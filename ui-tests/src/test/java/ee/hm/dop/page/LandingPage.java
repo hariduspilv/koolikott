@@ -7,8 +7,8 @@ import ee.hm.dop.helpers.PageHelpers;
 
 public class LandingPage extends Page {
 
-    private By searchResultPortfolio = By.xpath("//h4[@data-ng-bind='portfolio.title']");
-    private By searchResultMaterial = By.xpath("//h4[@data-ng-bind='getCorrectLanguageTitle(material)']");
+    private By searchResultPortfolio = By.xpath("//h3[@data-ng-bind='learningObject.title']");
+    private By searchResultMaterial = By.xpath("//h3[@data-ng-bind='getCorrectLanguageTitle(learningObject)']");
     private By recommendationsList = By.xpath("//h4[@data-ng-bind='item.title']");
     private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
     private By newFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");
@@ -19,15 +19,15 @@ public class LandingPage extends Page {
 	public MyPortfoliosPage chooseUserType(String userType) {
 
 		if (userType == "Admin")
-			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/89898989898");
+			getDriver().get("oxygen.netgroupdigital.com/dev/login/89898989898");
 		    PageHelpers.waitForSeconds(1500);
 
 		if (userType == "SmallPublisher")
-			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/12345678900");
+			getDriver().get("oxygen.netgroupdigital.com/dev/login/12345678900");
 		    PageHelpers.waitForSeconds(2500);
 
 		if (userType == "User")
-			getDriver().get("oxygen.netgroupdigital.com/#/dev/login/38202020234");
+			getDriver().get("oxygen.netgroupdigital.com/dev/login/38202020234");
 		    PageHelpers.waitForSeconds(1500);
 		
 		if (userType == "Moderator")

@@ -24,10 +24,12 @@ public class MaterialTests {
 				.moveCursorToAddMaterial()
 				.clickAddMaterial()
 				.setHyperLink()
-				.uploadPhoto()
 				.setMaterialTitle()
+				.uploadPhoto()
 				.addDescription()
 				.clickNextStep()
+				.selectEducation()
+				.selectSubjectArea()
 				.selectTargetGroup()
 				.clickAddMaterial()
 				.getCreatorName();
@@ -84,9 +86,9 @@ public class MaterialTests {
 				.clickCreatePortfolioButton()
 				.setChapterTitle()
 				.clickAddMaterial()
-				.sendHyperLink()
-				.uploadPhoto()
+				.setHyperLink()
 				.setMaterialTitle()
+				.uploadPhoto()
 				.addDescription()
 				.clickNextStep()
 				.clickNextStep()
@@ -95,13 +97,15 @@ public class MaterialTests {
 				.insertPublishersName()
 				.clickAddMaterial()
 				.clickExitAndSave()
+				.getPrivacyConfirmationPopup()
+				.makePortfolioPublic()
 				.isMaterialBoxIsDisplayed();
 
 		assertTrue(isMaterialBoxIsDisplayed);
 
 	}
 	
-	@Test
+	/*@Test
 	public void selectAndAddMaterialToNewPortfolio() {
 
 		boolean materialIsDisplayed = goToLandingPage()
@@ -122,24 +126,22 @@ public class MaterialTests {
 
 		assertTrue(materialIsDisplayed);
 
-	}
+	}*/
 	
 	@Test
 	public void selectAndAddMaterialToTheExistingPortfolio() {
 
-		boolean successMessage = goToLandingPage()
+		String successMessage = goToLandingPage()
 				.chooseUserType("SmallPublisher")
 				.getLeftMenu()
 				.clickMyMaterials()
 				.clickToSelectMaterial()
-				.getFabButton()
-				.moveCursorToAddMaterialToExistingPortfolio()
-				.clickToAddMaterialToExistingPortfolio()
-				.choosePortfolio()
-				.choosePortfolioChapter()
-				.successMessageIsDisplayed();
+				.selectPortfolio()
+				.selectChapter()
+				.clickDone()
+				.getSuccessMessage();
 
-		assertTrue(successMessage);
+		Assert.assertEquals("Materjal(id) edukalt lisatud", successMessage);
 
 	}
 	

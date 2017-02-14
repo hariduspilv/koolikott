@@ -14,7 +14,6 @@ public class FabButton extends PageComponent {
 	private By addMaterialToExistingPortfolio = By.xpath("//button[@data-ng-click='showAddMaterialsToPortfolioDialog()']");
 	
 	public AddPortfolioBasic clickAddPortfolio() {
-		PageHelpers.waitForSeconds(1500);
 		PageHelpers.waitForVisibility(fabButton);
 		getDriver().findElement(fabButton).click();
 		return new AddPortfolioBasic();

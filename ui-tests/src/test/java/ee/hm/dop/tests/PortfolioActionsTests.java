@@ -1,80 +1,32 @@
 package ee.hm.dop.tests;
 
 import static org.junit.Assert.*;
-
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
 import static ee.hm.dop.page.LandingPage.goToLandingPage;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 
-    @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
-public class PortfolioTests {
+public class PortfolioActionsTests {
+	
 
 	@Test
-	public void createPortfolio() {
+	public void shareWithLinkPrivacy() {
 
-		String domainText = goToLandingPage()
+		boolean privacyIsShareWithLink = goToLandingPage()
 				.chooseUserType("SmallPublisher")
-				.getFabButton()
-				.clickAddPortfolio()
-				.uploadPhoto()
-				.insertPortfolioTitle()
-				.selectEducationalContext()
-				.selectSubjectArea()
-				.selectAgeGroup()
-				.addDescription()
-				.clickCreatePortfolioButton()
-				.getDomainText();
-
-		Assert.assertEquals("0-5", domainText);
-
-	}
-	
-	@Test
-	public void createPortfolioCopy() {
-
-		boolean portfolioCopyWasMade = goToLandingPage()
-				.chooseUserType("User")
-				.getFabButton()
-				.clickAddPortfolio()
-				.uploadPhoto()
-				.insertPortfolioTitle()
-				.selectEducationalContext()
-				.selectSubjectArea()
-				.selectAgeGroup()
-				.addDescription()
-				.clickCreatePortfolioButton()
-				.clickExitAndSave()
-				.moveCursorToCopyPortfolio()
-				.clickCopyPortfolio()
-				.insertSpecificPortfolioTitle("(Copy)")
-				.savePortfolioCopy()
-				.clickExitAndSave()
-				.wordCopyIsAddedToPortfolioTitle();
-		
-		assertTrue(portfolioCopyWasMade);
-
-	}
-	
-
-	@Test
-	public void makePortfolioVisible() {
-
-		String visibility = goToLandingPage()
-				.chooseUserType("User")
 				.getLeftMenu()
 				.getMyPortfoliosPage()
 				.openPortfolio()
 				.clickActionsMenu()
 				.clickEditPortfolio()
 				.clickVisibilityButton()
-				.selectMakePublic()
-				.isPortfolioChangedToPublic();
+				.selectShareWithLink()
+				.clickExitAndSave()
+				.getPrivacyConfirmationPopup()
+				.clickExitAndStayPrivate()
+				.isPortfolioPrivacyShareOnlyWithLink();
 				
-		Assert.assertEquals("visibility", visibility);
+				assertTrue(privacyIsShareWithLink);
 
 	}
 	
@@ -95,7 +47,7 @@ public class PortfolioTests {
 				.clickDashboard()
 				.clickImproperPortfolios()
 				.getDashboardPage()
-				//.clickToOrderImproperPortfolios()
+				.clickToOrderImproperPortfolios()
 				.clickOpenPortfolioFromDashboard()
 				.setContentIsNotImproper()
 				.contentsIsNotImproper();
@@ -104,34 +56,22 @@ public class PortfolioTests {
 
 	}
 	
-	@Test
-	public void removePortfolio() {
-
-		String deletedPortfolioToast = goToLandingPage()
-				.chooseUserType("Admin")
-				.openPortfolio()
-				.clickActionsMenu()
-				.clickRemovePortfolio()
-				.confirmImproperContent()
-				.getLandingPage()
-				.isPortfolioDeletedToastVisible();
-
-		Assert.assertEquals("Kogumik kustutatud", deletedPortfolioToast);
-
-	}
 	
 	@Test
 	public void editChapterDescription() {
 
 		boolean preTag = goToLandingPage()
-				.chooseUserType("User")
+				.chooseUserType("SmallPublisher")
 				.getLeftMenu()
 				.getMyPortfoliosPage()
 				.openPortfolio()
 				.clickActionsMenu()
 				.clickEditPortfolio()
+				.addNewChapter()
 				.addDescription()
 				.clickExitAndSave()
+				.getPrivacyConfirmationPopup()
+				.makePortfolioPublic()
 				.clickActionsMenu()
 				.clickEditPortfolio()
 				.clickToSelectDescription()
@@ -155,20 +95,23 @@ public class PortfolioTests {
 				.chooseUserType("SmallPublisher")
 				.getFabButton()
 				.clickAddPortfolio()
-				.uploadPhoto()
 				.insertPortfolioTitle()
+				.uploadPhoto()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
 				.addDescription()
 				.clickCreatePortfolioButton()
 				.clickExitAndSave()
+				.getPrivacyConfirmationPopup()
+				.makePortfolioPublic()
 				.insertTagAndEnter1()
 				.getUserMenu()
 				.logOff()
 				.chooseUserType("Admin")
 				.getSimpleSearch()
 				.insertSearchCriteriaAndSearch1()
+				.sortResults()
 				.openSearchResultPortfolio()
 				.clickActionsMenu()
 				.addToRecommendationsList()

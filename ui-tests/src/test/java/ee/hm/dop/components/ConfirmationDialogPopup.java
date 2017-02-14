@@ -2,7 +2,6 @@ package ee.hm.dop.components;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-
 import ee.hm.dop.helpers.PageHelpers;
 import ee.hm.dop.page.PortfolioViewPage;
 

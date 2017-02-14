@@ -1,5 +1,4 @@
 package ee.hm.dop.tests;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
 
@@ -18,15 +17,15 @@ public class LoginTests {
 				.logoutIfLoggedIn()
 				.getHeader()
 				.clickLogin()
-				.insertMobileIDCode("14212128025")
-				.insertMobilePhoneNumber("+37200007")
-				.clickLoginWithID() 
+				.insertMobileIDCode("11412090004")
+				.insertMobilePhoneNumber("+37200000766")
+				.clickLoginWithMobileID() 
 				.clickHideLogin()
 				.getUserMenu()
 				.clickProfileIcon()
 				.getUserName();
 
-		Assert.assertEquals("Seitsmes Testnumber", userName);
+		Assert.assertEquals("Mary Änn O’connež-Šuslik", userName);
 
 	}
 	
@@ -69,65 +68,4 @@ public class LoginTests {
 
 	}
 	
-	@Test
-	public void loginAsNewUserToMyPortfoliosPage() {
-
-		boolean addPortfolioMessage = goToLandingPage()
-				.getUserMenu()
-				.logoutIfLoggedIn()
-				.getLeftMenu()
-				.clickMyThings()
-				.clickMyPortfolios()
-				.getLoginDialogPopup()
-				.insertMobileIDCode("14212128025")
-				.insertMobilePhoneNumber("+37200007")
-				.clickLoginWithID() 
-				.clickHideLogin1()
-				.getAddPortfolioMessageText();
-
-		assertTrue(addPortfolioMessage);
-
-	}
-	
-	@Test
-	public void loginAsNewUserToMyMaterialsPage() {
-
-		boolean addMaterialMessage = goToLandingPage()
-				.getUserMenu()
-				.logoutIfLoggedIn()
-				.getLeftMenu()
-				.clickMyThings()
-				.clickMyMaterialsWhenNotLoggedIn()
-				.getLoginDialogPopup()
-				.insertMobileIDCode("14212128025")
-				.insertMobilePhoneNumber("+37200007")
-				.clickLoginWithID() 
-				.clickHideLogin2()
-				.getAddMaterialMessageText();
-
-		assertTrue(addMaterialMessage);
-
-	}
-	
-	@Test
-	public void loginAsNewUserToMyFavoritesPage() {
-
-		boolean addFavoritesMessage = goToLandingPage()
-				.getUserMenu()
-				.logoutIfLoggedIn()
-				.getLeftMenu()
-				.clickMyThings()
-				.clickMyFavorites()
-				.getLoginDialogPopup()
-				.insertMobileIDCode("14212128025")
-				.insertMobilePhoneNumber("+37200007")
-				.clickLoginWithID() 
-				.clickHideLogin3()
-				.getAddFavoritesMessageText();
-
-		assertTrue(addFavoritesMessage);
-
-	}
-
-
 }

@@ -19,6 +19,10 @@ public class MaterialTaxonomyPart extends PageComponent {
 			"/html/body/div[4]/md-dialog/form/md-dialog-content/md-tabs/md-tabs-content-wrapper/md-tab-content[2]/div/md-content/div[3]/div[3]/md-chips/md-chips-wrap/div/div/md-autocomplete/md-autocomplete-wrap/input");	
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
 	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
+	private By educationalContext = By.xpath("(//md-select[@id='taxonEducationalSelect'])[2]");
+	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
+	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
+	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
 
 	
 	public MaterialTaxonomyPart selectTargetGroup() {
@@ -27,6 +31,22 @@ public class MaterialTaxonomyPart extends PageComponent {
 		getDriver().findElements(closeButton).get(2).click();
 		return this;
 
+	}
+	
+	public MaterialTaxonomyPart selectEducation() {
+		PageHelpers.waitForVisibility(educationalContext);
+		getDriver().findElement(educationalContext).click();
+		PageHelpers.waitForSeconds(1000);
+		getDriver().findElements(basicEducation).get(1).click();
+		return this;
+
+	}
+	
+	public MaterialTaxonomyPart selectSubjectArea() {
+		getDriver().findElement(subjectArea).click();
+		PageHelpers.waitForSeconds(1000);
+		getDriver().findElement(subject).click();
+		return this;
 	}
 
 	public MaterialTaxonomyPart selectTargetGroup1() {

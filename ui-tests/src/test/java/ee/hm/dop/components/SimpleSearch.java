@@ -6,6 +6,7 @@ import org.openqa.selenium.Keys;
 
 import ee.hm.dop.helpers.PageHelpers;
 import ee.hm.dop.page.LandingPage;
+import ee.hm.dop.page.SearchResultsPage;
 
 public class SimpleSearch extends PageComponent {
 	
@@ -37,12 +38,11 @@ public class SimpleSearch extends PageComponent {
 		return new LandingPage();
 	}
 	
-	public LandingPage insertSearchCriteriaAndSearch1() {
+	public SearchResultsPage insertSearchCriteriaAndSearch1() {
 		PageHelpers.waitForVisibility(simpleSearch);
 		getDriver().findElement(simpleSearch).sendKeys("tag:" + PageHelpers.getDate(0, "dd/MM/yyyy"));
-		getDriver().findElement(simpleSearch).sendKeys(Keys.ENTER);
-		PageHelpers.waitForSeconds(1500);
-		return new LandingPage();
+		PageHelpers.waitForSeconds(2500);
+		return new SearchResultsPage();
 	}
 
 }

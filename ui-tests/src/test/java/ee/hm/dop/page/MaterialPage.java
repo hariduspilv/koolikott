@@ -18,7 +18,7 @@ public class MaterialPage extends Page {
 	private By isLiked = By.cssSelector("div.rating-button.md-caption > span");
 	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By unselectedStar = By.xpath("//md-icon[@data-ng-if='!hasFavorited']");
-	private By selectedStar = By.xpath("//md-icon[@data-ng-if='hasFavorited']");
+	private By selectedStar = By.xpath("//md-icon[@data-ng-if='$ctrl.hasFavorited']");
 	private By showMoreButton = By.xpath("//button[@ng-click='showMore()']");
 	private By materialDescription = By.xpath("//div[@data-ng-bind-html='getCorrectLanguageString(material.descriptions)']");
 	private By materialType = By.xpath("//md-card[@id='material-card']/md-card-content/div/div/div[2]/div[3]/p/span");
@@ -47,6 +47,7 @@ public class MaterialPage extends Page {
 	}
 	
 	public MaterialPage unselectStar() {
+		getDriver().navigate().refresh();
 		PageHelpers.waitForVisibility(selectedStar);
 		getDriver().findElement(selectedStar).click();
 		return this;
@@ -109,6 +110,7 @@ public class MaterialPage extends Page {
 	}
 	
 	public boolean starIsSelected() {
+		getDriver().navigate().refresh();
 		PageHelpers.waitForVisibility(selectedStar);
 		return getDriver().findElement(selectedStar).isDisplayed();
 

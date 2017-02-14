@@ -13,7 +13,7 @@ public class AddPortfolioBasic extends PageComponent {
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By insertTag = By.xpath("//input[@ng-keydown='$mdChipsCtrl.inputKeydown($event)']");
 	private By createPortfolio = By.id("add-portfolio-create-button");
-	private By insertPhoto = By.xpath("//span/md-icon[text()='insert_photo']");
+	private By insertPhoto = By.cssSelector("p.text-small.text-light > span");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
 	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
 	private By ageGroup = By.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
@@ -134,24 +134,23 @@ public class AddPortfolioBasic extends PageComponent {
 	public AddPortfolioBasic selectEducationalContext() {
 		PageHelpers.waitForVisibility(educationalContext);
 		getDriver().findElement(educationalContext).click();
-		PageHelpers.waitForSeconds(1500);
+		PageHelpers.waitForSeconds(1000);
 		getDriver().findElements(basicEducation).get(1).click();
-		PageHelpers.waitForSeconds(2500);
 		return this;
 	}
 	
 	public AddPortfolioBasic selectSubjectArea() {
 		getDriver().findElement(subjectArea).click();
-		PageHelpers.waitForSeconds(1500);
+		PageHelpers.waitForSeconds(1000);
 		getDriver().findElement(subject).click();
 		return this;
 	}
 	
 	public AddPortfolioBasic selectAgeGroup() {
 		getDriver().findElement(ageGroup).click();
-		PageHelpers.waitForSeconds(1500);
+		PageHelpers.waitForSeconds(1000);
 		getDriver().findElement(age).click();
-		PageHelpers.waitForSeconds(1500);
+		PageHelpers.waitForSeconds(1000);
 		getDriver().findElements(closeButton).get(1).click();
 		return this;
 	}
@@ -187,8 +186,7 @@ public class AddPortfolioBasic extends PageComponent {
 				"c:\\Images\\monochrome.jpg", "c:\\Images\\winter1.jpg", "c:\\Images\\art.jpg", "c:\\Images\\urban.jpg",
 				"c:\\Images\\moon.jpg", "c:\\Images\\spring.jpg", "c:\\Images\\piers.jpg", "c:\\Images\\mirror.jpg",
 				"c:\\Images\\jar.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\dance.jpg", "c:\\Images\\phones1.jpg",
-				"c:\\Images\\ocean.jpg", "c:\\Images\\winter_sun.jpg", "c:\\Images\\cityscape.jpg",
-				"c:\\Images\\sheep.jpg", "c:\\Images\\snow_lake.jpg", "c:\\Images\\liberty.jpg" };
+				"c:\\Images\\ocean.jpg", "c:\\Images\\winter_sun.jpg","c:\\Images\\sheep.jpg", "c:\\Images\\snow_lake.jpg", "c:\\Images\\liberty.jpg" };
 		String randomFile = picsArray[new Random().nextInt(picsArray.length)];
 		PageHelpers.uploadFile(randomFile);
 		PageHelpers.waitForSeconds(1500);
