@@ -106,11 +106,11 @@
                     </div>
                     <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
                       <h5 data-ng-messages="addMaterialForm.source.$error">
-                        <div data-ng-show="!addMaterialForm.source.$error.filenameTooLong">
+                        <div data-ng-if="!addMaterialForm.source.$error.filenameTooLong">
                           <span data-translate="ADD_FILE_SUCCESS"></span>:
                           <span class="ellipsis">{{ material.uploadedFile.displayName }}</span>
                         </div>
-                          <div data-ng-message="filenameTooLong" class="invalid-file-message"
+                          <div data-ng-message="filenameTooLong" class="text-error"
                                data-translate="MATERIAL_FILE_NAME_TOO_LONG"></div>
                       </h5>
                     </div>

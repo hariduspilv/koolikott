@@ -622,6 +622,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         function fileUploadFailed(response) {
+            console.log("File upload failed");
             if(response.data.cause == "filename too long"){
                 $scope.addMaterialForm.source.$setValidity("filenameTooLong", false);
                 $scope.addMaterialForm.source.$setTouched();
