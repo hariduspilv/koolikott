@@ -1,0 +1,20 @@
+<md-dialog aria-label="Tuuri modaalaken" flex="40" flex-gt-md="30" class="tour-modal">
+  <md-content class="md-padding">
+    <h4>Lisa uus kogumik või materjal</h4>
+    <p class="md-body-1">Siit saad lisada uusi kogumikke ning materjale. Kas soovid näha, mida e-koolikotis veel teha saab?</p>
+  </md-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Ei soovi tuuri" id="tour-cancel-button"
+               data-ng-click="$ctrl.cancel()">
+      <span>Sain aru</span>
+    </md-button>
+    <md-button class="md-primary" aria-label="Soovin näha tuuri" id="tour-show-button"
+               data-ng-click="$ctrl.showTour()">
+      <span>Näita tuuri</span>
+      <md-icon>arrow_forward</md-icon>
+    </md-button>
+  </md-dialog-actions>
+
+  <span class="tour-main-fab-background"></span>
+</md-dialog>

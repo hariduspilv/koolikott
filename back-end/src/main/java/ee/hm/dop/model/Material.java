@@ -1,12 +1,8 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
-
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,13 +16,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"repositoryIdentifier", "repository"})})
@@ -87,16 +81,6 @@ public class Material extends LearningObject implements Searchable {
             inverseJoinColumns = {@JoinColumn(name = "peerReview")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "peerReview"}))
     private List<PeerReview> peerReviews;
-
-    @ManyToMany(fetch = EAGER)
-    @Fetch(FetchMode.SELECT)
-    @JoinTable(
-            name = "Material_Taxon",
-            joinColumns = {@JoinColumn(name = "material")},
-            inverseJoinColumns = {@JoinColumn(name = "taxon")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "taxon"}))
-    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
-    private List<Taxon> taxons;
 
     @ManyToOne
     @JoinColumn(name = "licenseType")
@@ -200,14 +184,6 @@ public class Material extends LearningObject implements Searchable {
 
     public void setPeerReviews(List<PeerReview> peerReviews) {
         this.peerReviews = peerReviews;
-    }
-
-    public List<Taxon> getTaxons() {
-        return taxons;
-    }
-
-    public void setTaxons(List<Taxon> taxons) {
-        this.taxons = taxons;
     }
 
     public LicenseType getLicenseType() {

@@ -2,6 +2,7 @@ package ee.hm.dop.service;
 
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
@@ -11,6 +12,7 @@ import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.Visibility;
@@ -47,6 +49,8 @@ public class SearchService {
     private static final String PORTFOLIO_TYPE = "portfolio";
 
     private static final String ALL_TYPE = "all";
+    private static final String TAG = "tag:";
+    private static final String RECOMMENDED = "recommended:";
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -56,6 +60,9 @@ public class SearchService {
 
     @Inject
     private UserFavoriteDAO userFavoriteDAO;
+
+    @Inject
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         SearchResult searchResult = new SearchResult();
@@ -74,14 +81,10 @@ public class SearchService {
             List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
             searchResult.setStart(response.getStart());
-            // "- documents.size() + sortedSearchable.size()" needed in case
-            // SearchEngine and DB are not sync because of re-indexing time.
+            searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+
             if (limit == null || limit > 0) {
-                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
                 searchResult.setItems(sortedSearchable);
-            } else if (limit == 0) {
-                //When limit is 0 - only getting metainfo
-                searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
             }
         }
 
@@ -115,8 +118,8 @@ public class SearchService {
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
         if (!learningObjectIds.isEmpty()) {
-            learningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
-                if(loggedInUser != null) {
+            reducedLearningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
+                if (loggedInUser != null) {
                     UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
                     if (userFavorite != null && userFavorite.getId() != null) searchable.setFavorite(true);
                     else searchable.setFavorite(false);
@@ -130,12 +133,20 @@ public class SearchService {
     }
 
     private SearchResponse doSearch(String query, long start, Long limit, SearchFilter searchFilter) {
-        String queryString = getTokenizedQueryString(query);
+        String tokenizedQueryString = getTokenizedQueryString(query);
+        String queryString = "";
 
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
         if (!filtersAsQuery.isEmpty()) {
-            if (!queryString.isEmpty()) {
-                queryString = format("(%s) AND %s", queryString, filtersAsQuery);
+            if (!tokenizedQueryString.isEmpty()) {
+                queryString = format("((%s)", tokenizedQueryString);
+
+                //Search for full phrase also, as they are more relevant
+                if (!tokenizedQueryString.toLowerCase().startsWith(TAG) && !tokenizedQueryString.toLowerCase().startsWith(RECOMMENDED)) {
+                    queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
+                }
+
+                queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
             } else {
                 queryString = filtersAsQuery;
             }
@@ -186,16 +197,30 @@ public class SearchService {
         filters.add(getResourceTypeAsQuery(searchFilter));
         filters.add(isSpecialEducationAsQuery(searchFilter));
         filters.add(issuedFromAsQuery(searchFilter));
-        filters.add(getCrossCurricularThemeAsQuery(searchFilter));
-        filters.add(getKeyCompetenceAsQuery(searchFilter));
+        filters.add(getCrossCurricularThemesAsQuery(searchFilter));
+        filters.add(getKeyCompetencesAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
         filters.add(getCreatorAsQuery(searchFilter));
 
         // Remove empty elements
         filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
+        String query = StringUtils.join(filters, format(" %s ", searchFilter.getSearchType()));
+        return query.concat(getExcludedAsQuery(searchFilter));
+    }
 
-        return StringUtils.join(filters, " AND ");
+    private String getExcludedAsQuery(SearchFilter searchFilter) {
+        List<Long> excluded = searchFilter.getExcluded();
+        List<String> result = new ArrayList<>();
+        if (excluded != null && !excluded.isEmpty()) {
+            excluded.forEach(id -> {
+                result.add("-id:" + id.toString());
+            });
+
+            return " AND " + StringUtils.join(result, " AND ");
+        }
+
+        return "";
     }
 
     private String getLanguageAsQuery(SearchFilter searchFilter) {
@@ -235,8 +260,10 @@ public class SearchService {
         if (searchFilter.getTargetGroups() != null && !searchFilter.getTargetGroups().isEmpty()) {
             List<String> filters = new ArrayList<>();
 
-            for (String targetGroup : searchFilter.getTargetGroups()) {
-                filters.add(format("target_group:\"%s\"", targetGroup.toLowerCase()));
+            for (TargetGroup targetGroup : searchFilter.getTargetGroups()) {
+                if (targetGroup != null) {
+                    filters.add(format("target_group:\"%s\"", targetGroup.getId()));
+                }
             }
 
             if (filters.size() == 1) {
@@ -369,19 +396,39 @@ public class SearchService {
         return "";
     }
 
-    private String getCrossCurricularThemeAsQuery(SearchFilter searchFilter) {
-        CrossCurricularTheme crossCurricularTheme = searchFilter.getCrossCurricularTheme();
-        if (crossCurricularTheme != null) {
-            return format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase());
+    private String getCrossCurricularThemesAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getCrossCurricularThemes() != null && !searchFilter.getCrossCurricularThemes().isEmpty()) {
+            List<String> themes = new ArrayList<>();
+
+            for (CrossCurricularTheme crossCurricularTheme : searchFilter.getCrossCurricularThemes()) {
+                themes.add(format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase()));
+            }
+
+            if (themes.size() == 1) {
+                return themes.get(0);
+            }
+
+            return "(" + StringUtils.join(themes, " OR ") + ")";
         }
+
         return "";
     }
 
-    private String getKeyCompetenceAsQuery(SearchFilter searchFilter) {
-        KeyCompetence keyCompetence = searchFilter.getKeyCompetence();
-        if (keyCompetence != null) {
-            return format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase());
+    private String getKeyCompetencesAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getKeyCompetences() != null && !searchFilter.getKeyCompetences().isEmpty()) {
+            List<String> competences = new ArrayList<>();
+
+            for (KeyCompetence keyCompetence : searchFilter.getKeyCompetences()) {
+                competences.add(format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase()));
+            }
+
+            if (competences.size() == 1) {
+                return competences.get(0);
+            }
+
+            return "(" + StringUtils.join(competences, " OR ") + ")";
         }
+
         return "";
     }
 

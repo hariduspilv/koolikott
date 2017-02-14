@@ -1,17 +1,21 @@
 .tags {
-	margin-right: 20px;
-	margin-bottom: 15px;
-	padding-bottom: 10px;
+
 	.meta {
-			margin: 20px 0 0 0;
+		margin: 10px 0;
 	}
+
 	md-input-container {
-		margin: 5px 0;
+		margin: 10px 0 5px 0;
 		min-width: 150px;
 	}
+
 	md-chips.md-default-theme .md-chips,
 	md-chips .md-chips {
 		box-shadow: none;
+	}
+
+	md-progress-linear.md-inline {
+		bottom: 0;
 	}
 }
 
@@ -30,30 +34,36 @@ md-chips,
 	font-size: 13px;
 	padding: 0px;
 	vertical-align: middle;
+
 	.md-chip {
 		padding: 0px 12px;
 		height: 28px;
 		line-height: 28px;
 		background: darken(#f3f6fb, 3%);
+
 		button.md-chip-remove md-icon	{
 			top: 45%;
 			left: 45%;
 			transform: translate3d(-45%, -45%, 0);
 			fill: lighten(#15c, 30%);
 			transition: color .3s ease;
+
 			&:hover {
 				fill: #15c;
 			}
 		}
+
 		.md-chip-remove-container {
 			right: 6px;
 			line-height: 32px;
 		}
+
 		.md-chip-remove {
 			width: 16px;
 			height: 16px;
 			position: static;
 		}
+
 		.md-button.md-icon-button {
 			line-height: 1;
 			margin: 0px 3px;
@@ -61,26 +71,32 @@ md-chips,
 			width: 16px;
 			min-height: 15px;
 			padding: 0;
+
 			&:first-child {
 				margin-right: 3px;
 				margin-left: 0px;
 			}
+
 			&:last-child {
 				margin-left: 3px;
 				margin-right: 0px;
 			}
+
 			.material-icons,
 			md-icon {
 				color: lighten(#15c, 30%);
 				transition: color .3s ease;
+
 				&:hover {
 					color: #15c;
 				}
 			}
+
 			.material-icons {
 				font-size: 16px;
 				line-height: inherit;
 			}
+
 			a {
 				line-height: 20px;
 			}
@@ -100,12 +116,14 @@ md-chips,
 		margin-right: 3px;
 		margin-left: 0;
 	}
+
 	md-chip-template .material-icons {
 		position: absolute;
 		top: 0;
 		left: 0;
 		color: #81abf5;
     transition: color .3s ease;
+
 		&:hover {
 			color: #15c;
 		}

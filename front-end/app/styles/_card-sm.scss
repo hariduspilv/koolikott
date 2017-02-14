@@ -1,0 +1,131 @@
+// card-sm layout
+.card-container {
+  margin-left: -$md-padding/2;
+  margin-right: -$md-padding/2;
+}
+
+.card-container__item {
+  margin: 0 0 $md-padding 0;
+  @media (min-width: $layout-breakpoint-xs) {
+    margin: 0 $md-padding/2 $md-padding $md-padding/2;
+  }
+
+  &--empty {
+    margin: 0 $md-padding 0 0;
+
+    md-card.card-sm {
+      height: 100%;
+    }
+  }
+}
+
+// card-sm specific. bases on card
+.card-sm {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    height: 280px;
+    width: 201px;
+  }
+
+  @media (min-width: $layout-breakpoint-lg) {
+    height: 330px;
+    width: 234px;
+  }
+
+  &:hover {
+    background-color: $selected-gray;
+    cursor: pointer;
+
+    .card-hover {
+      opacity: .8;
+      z-index: 3;
+
+      md-icon {
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+      }
+    }
+  }
+
+  &.active {
+    background-color: $selected-gray;
+    cursor: pointer;
+
+    .card-hover {
+      opacity: 1;
+
+      md-icon {
+        color: rgba(255, 255, 255, .8);
+
+        &.unchecked {
+          display: none;
+        }
+
+        &.checked {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .card-cover {
+    border-radius: 0 $border-radius $border-radius 0;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      border-radius: $border-radius $border-radius 0 0;
+    }
+
+    &:before {
+      @media (min-width: $layout-breakpoint-xs) {
+        padding-bottom: 70%;
+      }
+    }
+  }
+
+  md-card-content {
+    height: 100%;
+    padding-bottom: 10px;
+
+    .ua-safari & {
+      @media (max-width: $layout-breakpoint-xs - 1) {
+        height: auto;
+      }
+    }
+
+    .md-caption {
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    p,
+    ul {
+      margin: 0;
+    }
+  }
+
+  .card__content-wrapper {
+    @media (min-width: $layout-breakpoint-xs) {
+      height: 100%;
+    }
+  }
+
+  md-card-actions {
+    margin-right: $md-padding;
+    margin-left: $md-padding;
+    color: rgba(0, 0, 0, 0.38);
+    font-weight: 400;
+    flex-shrink: 0;
+
+    md-icon {
+      margin: 0 $border-radius 0 5px;
+      font-size: $caption-font-size-base;
+      color: rgba(0, 0, 0, 0.3);
+
+      &:first-of-type {
+        margin: 0 3px 0 0px;
+      }
+    }
+  }
+}

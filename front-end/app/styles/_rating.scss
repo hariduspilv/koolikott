@@ -1,0 +1,32 @@
+.rating__item {
+  display: inline-block;
+  color: rgba(0,0,0, .37);
+  text-align: center;
+
+  &--button {
+    cursor: pointer;
+
+    .rating__icon {
+      &:hover {
+        color: rgba(0,0,0, .54);
+      }
+      &.md-primary {
+        color: $md-primary;
+      }
+    }
+  }
+}
+
+.rating__icon {
+  vertical-align: middle;
+  font-size: 20px;
+  color: rgba(0,0,0, .37);
+  transition: color .3s;
+}
+
+.rating__number {
+  display: inline-block;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 0 5px;
+}

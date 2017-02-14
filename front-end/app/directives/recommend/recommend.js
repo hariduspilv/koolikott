@@ -1,17 +1,17 @@
-define([
-    'app',
-    'services/translationService',
-    'services/authenticatedUserService',
-    'services/serverCallService'
-], function(app) {
-    app.directive('dopRecommend', ['translationService', 'authenticatedUserService', 'serverCallService', function(translationService, authenticatedUserService, serverCallService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopRecommend',
+[
+    'translationService', 'authenticatedUserService', 'serverCallService', '$rootScope',
+    function(translationService, authenticatedUserService, serverCallService, $rootScope) {
         return {
             scope: {
                 material: '=',
                 portfolio: '='
             },
             templateUrl: 'directives/recommend/recommend.html',
-            controller: function($scope, $location) {
+            controller: ['$scope', '$location', function($scope, $location) {
 
                 $scope.recommend = function() {
                     if (authenticatedUserService.isAdmin()) {
@@ -23,7 +23,7 @@ define([
                             serverCallService.makePost(url, $scope.portfolio, querySuccess, queryFail);
                         }
                     }
-                }
+                };
 
                 $scope.removeRecommendation = function() {
                     if (authenticatedUserService.isAdmin()) {
@@ -35,7 +35,7 @@ define([
                             serverCallService.makePost(url, $scope.portfolio, querySuccess, queryFail);
                         }
                     }
-                }
+                };
 
                 function querySuccess(recommendation) {
                     if (isEmpty(recommendation)) {
@@ -47,13 +47,15 @@ define([
                     } else if ($scope.portfolio) {
                         $scope.portfolio.recommendation = recommendation;
                     }
+
+                    $rootScope.$broadcast("recommendations:updated");
                 }
 
                 function queryFail() {
                     log("Request failed");
                 }
 
-            }
+            }]
         };
-    }]);
-});
+    }
+]);

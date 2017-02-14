@@ -1,27 +1,31 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.model.Visibility.PRIVATE;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
+import ee.hm.dop.dao.ChapterObjectDAO;
 import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserLikeDAO;
+import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterObject;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.ReducedLearningObject;
+import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import org.joda.time.DateTime;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 public class PortfolioService extends BaseService implements LearningObjectHandler {
 
@@ -32,7 +36,16 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     private UserLikeDAO userLikeDAO;
 
     @Inject
+    private ChapterObjectDAO chapterObjectDAO;
+
+    @Inject
     private SolrEngineService solrEngineService;
+
+    @Inject
+    private ChangedLearningObjectService changedLearningObjectService;
+
+    @Inject
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
@@ -41,7 +54,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         } else {
             portfolio = portfolioDAO.findByIdNotDeleted(portfolioId);
 
-            if (!hasPermissionsToAccess(loggedInUser, portfolio)) {
+            if (!hasPermissionsToView(loggedInUser, portfolio)) {
                 throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
             }
         }
@@ -49,11 +62,15 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         return portfolio;
     }
 
-    public List<LearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return portfolioDAO.findByCreator(creator, start, maxResults)
+    public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
+        return reducedLearningObjectDAO.findPortfolioByCreator(creator, start, maxResults)
                 .stream()
                 .filter(p -> hasPermissionsToAccess(loggedInUser, p))
                 .collect(Collectors.toList());
+    }
+
+    public Long getCountByCreator(User creator) {
+        return portfolioDAO.findCountByCreator(creator);
     }
 
     public void incrementViewCount(Portfolio portfolio) {
@@ -72,7 +89,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -87,7 +104,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -108,7 +125,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -122,7 +139,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         }
         Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -172,20 +189,70 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio already exists.");
         }
 
+        cleanTextFields(portfolio);
+
         Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        saveNewObjectsInChapters(safePortfolio);
+
         return doCreate(safePortfolio, creator, creator);
     }
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 
+        cleanTextFields(portfolio);
+
         originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+        saveNewObjectsInChapters(originalPortfolio);
         originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
         solrEngineService.updateIndex();
 
+        processChanges(portfolio);
+
         return updatedPortfolio;
+    }
+
+    private void cleanTextFields(Portfolio portfolio) {
+        String regex = "[^\\u0000-\\uFFFF]";
+        String replacement = "\uFFFD";
+
+        if (portfolio.getTitle() != null)
+            portfolio.setTitle(portfolio.getTitle().replaceAll(regex, replacement));
+
+        if (portfolio.getSummary() != null)
+            portfolio.setSummary(portfolio.getSummary().replaceAll(regex, replacement));
+    }
+
+    private void saveNewObjectsInChapters(Portfolio originalPortfolio) {
+        if (originalPortfolio.getChapters() == null) return;
+        originalPortfolio.getChapters().forEach(chapter -> {
+            saveAndUpdateChapterObjects(chapter);
+            if (chapter.getSubchapters() != null) {
+                chapter.getSubchapters().forEach(this::saveAndUpdateChapterObjects);
+            }
+        });
+    }
+
+    private void saveAndUpdateChapterObjects(Chapter chapter) {
+        if (chapter.getContentRows() == null) return;
+        chapter.getContentRows().forEach(chapterRow -> chapterRow.getLearningObjects().replaceAll(learningObject -> {
+            if (learningObject instanceof ChapterObject) {
+                return chapterObjectDAO.update((ChapterObject) learningObject);
+            } else return learningObject;
+        }));
+    }
+
+    private void processChanges(Portfolio portfolio) {
+        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
+        if (changes == null || changes.isEmpty()) return;
+
+        for (ChangedLearningObject change : changes) {
+            if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
+                changedLearningObjectService.removeChangeById(change.getId());
+            }
+        }
     }
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
@@ -195,7 +262,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
         Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToAccess(loggedInUser, originalPortfolio)) {
+        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -235,9 +302,11 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     }
 
     public List<Portfolio> getDeletedPortfolios() {
-        List<Portfolio> portfolios = new ArrayList<>();
-        portfolioDAO.findDeletedPortfolios().forEach(portfolio -> portfolios.add((Portfolio) portfolio));
-        return portfolios;
+        return portfolioDAO.findDeletedPortfolios();
+    }
+
+    public Long getDeletedPortfoliosCount() {
+        return portfolioDAO.findDeletedPortfoliosCount();
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
@@ -279,7 +348,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
                 Chapter copy = new Chapter();
                 copy.setTitle(chapter.getTitle());
                 copy.setText(chapter.getText());
-                copy.setMaterials(chapter.getMaterials());
+                copy.setContentRows(chapter.getContentRows());
                 copy.setSubchapters(copyChapters(chapter.getSubchapters()));
 
                 copyChapters.add(copy);
@@ -295,7 +364,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         safePortfolio.setSummary(portfolio.getSummary());
         safePortfolio.setTags(portfolio.getTags());
         safePortfolio.setTargetGroups(portfolio.getTargetGroups());
-        safePortfolio.setTaxon(portfolio.getTaxon());
+        safePortfolio.setTaxons(portfolio.getTaxons());
         safePortfolio.setChapters(portfolio.getChapters());
         safePortfolio.setPicture(portfolio.getPicture());
 
@@ -307,11 +376,22 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         originalPortfolio.setSummary(portfolio.getSummary());
         originalPortfolio.setTags(portfolio.getTags());
         originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
-        originalPortfolio.setTaxon(portfolio.getTaxon());
+        originalPortfolio.setTaxons(portfolio.getTaxons());
         originalPortfolio.setChapters(portfolio.getChapters());
         originalPortfolio.setVisibility(portfolio.getVisibility());
         originalPortfolio.setPicture(portfolio.getPicture());
         return originalPortfolio;
+    }
+
+    private boolean hasPermissionsToView(User loggedInUser, Portfolio portfolio) {
+        return isPublic(portfolio) || isNotListed(portfolio) || isUserAdminOrModerator(loggedInUser) || isUserCreator(portfolio, loggedInUser);
+    }
+
+    private boolean hasPermissionsToAccess(User user, ReducedLearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof ReducedPortfolio)) return false;
+        ReducedPortfolio portfolio = (ReducedPortfolio) learningObject;
+
+        return isPublic(portfolio) || isUserAdminOrModerator(user) || isUserCreator(portfolio, user);
     }
 
     @Override
@@ -330,8 +410,20 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         return isUserAdminOrModerator(user) || isUserCreator(portfolio, user);
     }
 
+    private boolean isUserCreator(ReducedPortfolio reducedPortfolio, User user) {
+        return user != null && reducedPortfolio.getCreator().getId().equals(user.getId());
+    }
+
+    private boolean isPublic(ReducedPortfolio reducedPortfolio) {
+        return reducedPortfolio.getVisibility() == Visibility.PUBLIC && !reducedPortfolio.isDeleted();
+    }
+
     @Override
     public boolean isPublic(LearningObject learningObject) {
         return ((Portfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
+    }
+
+    private boolean isNotListed(LearningObject learningObject) {
+        return ((Portfolio) learningObject).getVisibility() == Visibility.NOT_LISTED && !learningObject.isDeleted();
     }
 }

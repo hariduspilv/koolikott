@@ -1,528 +1,105 @@
-.pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  .sheet {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    transform: rotate(45deg);
-    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.2));
-    &.up-left {
-      left: -25%;
-      top: 17%;
-    }
-    &.low-left {
-      left: -60%;
-      top: 45%;
-    }
-    &.low-right {
-      right: -33%;
-      bottom: -45%;
-      height: 150%;
-    }
-  }
-}
-
 md-card {
-  position: relative; // to position the corner
   margin: 0; //to overwrite AM 8px
-  width: 100%;
-  max-width: 100%;
-  min-width: 100%;
-  img,
-  .card-cover img {
-    height: auto !important;
-    width: 100%;
-  }
-  .md-button {
-    font-weight: 400;
-  }
-  h2 {
-    margin-top: 0;
-  }
-  .md-body-1 {
-    color: #222;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 20px;
-    overflow: hidden;
-    text-align: left;
-    line-height: 20px;
-    &.description {
-      line-height: 24px;
-    }
-  }
-  .no-link, .no-link:hover {
-    text-decoration: none;
-    color: inherit;
-  }
+  transition: all 0.3s;
 
-  .minContentHeight {
-    min-height: 45%;
-  }
-
-  md-card-actions {
-    padding-top: 10px;
-    margin-top: 0;
-  }
-  .md-caption {
-    &.one-row {
-      min-height: 14px;
-      margin-top: 8px;
-    }
-  }
-
-  .md-body-2 {
-    &.meta {
-      line-height: 1.2;
-      color: #333;
-      padding-right: 10px;
-      md-icon.material-icons {
-        font-size: inherit;
-        vertical-align: baseline;
-      }
-    }
-    .md-caption {
-      font-weight: 300;
-    }
-    a {
-      font-size: 15px;
-      font-weight: 400;
-      &:hover {
-        text-decoration: none;
-        border-bottom: 1px solid $link-color;
-      }
-      h1 {
-        display: block;
-        text-decoration: none;
-
-      }
-    }
-  }
-
-  &.card-sm .card-cover,
-  &.card-lg .card-cover,
-  .embeddedMaterial {
-    &.imaged {
-      background-color: transparent !important;
-    }
-    &.description {
-      background-color: $green1;
-      .pattern .sheet {
-        @include pattern-color($green1);
-      }
-    }
-    &.assessment {
-      background-color: $green2;
-      .pattern .sheet {
-        @include pattern-color($green2);
-      }
-    }
-    &.dvr {
-      background-color: $greengrass;
-      .pattern .sheet {
-        @include pattern-color($greengrass);
-      }
-    }
-    &.portfolio {
-      background-color: $royal;
-      .pattern .sheet {
-        @include pattern-color($royal);
-      }
-    }
-    &.casino {
-      background-color: $violet;
-      .pattern .sheet {
-        @include pattern-color($violet);
-      }
-    }
-    &.web_asset {
-      background-color: $navy;
-      .pattern .sheet {
-        @include pattern-color($navy);
-      }
-    }
-    &.audiotrack {
-      background-color: $cyan;
-      .pattern .sheet {
-        @include pattern-color($cyan);
-      }
-    }
-    &.ondemand_video {
-      background-color: $salad;
-      .pattern .sheet {
-        @include pattern-color($salad);
-      }
-    }
-  }
-
-  &.embed-card {
-    transition: all 0.5s;
-    &:hover {
-      background-color: #eee;
-
-    }
-    &.active {
-      background-color: #eee;
-    }
-  }
-
-  .embed-header {
-    .pick {
-      position: absolute;
-      padding: 10px;
-      right: 0;
-      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-      .checked {
-        display: none;
-      }
-      &:hover {
-        cursor: pointer;
-        .checked {
-          display: block;
-        }
-        .unchecked {
-          display: none;
-        }
-      }
-    }
-  }
-
-  .embeded-material-footer {
-    padding-top: 0px;
-  }
-
-
-  &.card-sm {
-    height: 330px;
-    width: 234px;
-    @media (min-width: $layout-breakpoint-xs) {
-      height: 270px;
-      width: 190px;
-    }
-    @media (min-width: $layout-breakpoint-lg) {
-      height: 330px;
-      width: 234px;
-    }
-
-
-    md-icon.icon-kind {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%,-50%);
-      font-size: 48px;
-      color: rgba(255, 255, 255, .7);
-      z-index: 1;
-      text-shadow: 1px 1px 1px rgba(0, 0,0, .2);
-    }
-    &:hover {
-      background-color: #eee;
-      cursor: pointer;
-      .card-hover {
-        opacity: .8;
-        md-icon {
-          color: rgba(255, 255, 255, 1);
-        }
-      }
-    }
-    &.active {
-      background-color: #eee;
-      cursor: pointer;
-      .card-hover {
-        opacity: 1;
-        md-icon {
-          color: rgba(255, 255, 255, 8);
-          &.unchecked {
-            display: none;
-          }
-          &.checked {
-            display: block;
-          }
-        }
-      }
-    }
-
-    md-card-content {
-      padding: 0;
-      max-height: 50%;
-      min-height: 35%;
-    }
-    .card-cover {
-      height: 50%;
-      border-radius: 2px 2px 0 0;
-      overflow: hidden;
-      position: relative;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      background-color: $green1;
-    }
-
-    .card-hover {
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0.7);
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      opacity: 0;
-      .pick {
-        position: absolute;
-        padding: 10px;
-        right: 0;
-        transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-        .checked {
-          display: none;
-        }
-        &:hover {
-          .checked {
-            display: block;
-          }
-          .unchecked {
-            display: none;
-          }
-        }
-      }
-      md-icon.icon-kind {
-        color: rgba(255, 255, 255, 0.6);
-      }
-    }
-    md-card-actions {
-      height: 10%;
-      color: rgba(0, 0, 0, 0.4);
-      font-weight: 600;
-      md-icon {
-        margin: 0 3px 0 8px;
-        font-size: $caption-font-size-base;
-        color: rgba(0, 0, 0, 0.3);
-      }
-    }
-  }
-  &.card-lg {
-    overflow: hidden;
-    h1 {
-      font-weight: 300;
-      color: $heading-color;
-      font-size: 24px;
-      margin: 0 0 10px 0;
-      font-weight: 300;
-      line-height: 28px;
-      padding: 25px 0 0 0;
-    }
-    @media (min-width: $layout-breakpoint-xs) {
-      h1 {
-        font-size: 30px;
-        line-height: 35px;
-        padding: 0 25px 0 0;
-      }
-    }
-    h2 {
-      color: $heading-color;
-      font-size: 20px;
-      font-weight: normal;
-      text-transform: uppercase;
-    }
-
-    h3 {
-      color: $heading-color;
-      font-size: 14px;
-      font-weight: normal;
-      text-transform: uppercase;
-    }
-
-    .md-menu {
-      margin-top: -15px;
-      margin-right: -15px;
-
-      @media (min-width: $layout-breakpoint-xs) {
-        margin-right: 0;
-      }
-    }
-    md-card-content:not(.noPadding) {
-      padding: $card-lg-padding;
-    }
-    .on-left {
-      padding-right: $card-lg-padding;
-    }
-    .divider-left {
-      position: relative;
-      display: block;
-      border-left: none;
-      padding-left: 0;
-      md-content {
-        margin-top: 20px;
-      }
-    }
-    .card-cover {
-      @include aspect-ratio(3,2);
-      max-height: auto;
-      background: $green2;
-      overflow: hidden;
-      position: relative;
-      margin-right: -$card-lg-padding;
-      margin-top: 0;
-      margin-left: -$card-lg-padding;
-      text-align: center;
-      md-icon {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        font-size: 48px;
-        color: rgba(255, 255, 255, 0.8);
-      }
-      .card-hover {
-        transition: all 0.5s;
-        cursor: pointer;
-        position: absolute;
-        background-color: rgba(0, 0, 0, 0);
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        md-icon {
-          color: rgba(255, 255, 255, 0);
-        }
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.7);
-          md-icon {
-            color: rgba(255, 255, 255, 1);
-          }
-        }
-      }
-      &:hover {
-        .icon-kind {
-          color: rgba(255, 255, 255, 0);
-        }
-      }
-    }
-    @media (min-width: 600px) {
-      .card-cover {
-        max-height: 300px;
-        margin-top: -$card-lg-padding;
-
-      }
-      .divider-left {
-        border-left-width: 1px;
-        border-left-style: solid;
-        padding-left: $card-lg-padding;
-        border-left-color: $border-color;
-      }
-    }
-    .actions {
-      margin-top: 10px;
-      margin-bottom: -10px;
-      .md-button {
-        margin-left: -5px;
-      }
-    }
-  }
-
-  .embed-card-content {
-    padding: 0px;
-    background-color: #fff;
-  }
-}
-
-.card-mb-20 {
-  margin-bottom: 20px;
-}
-
-// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
-.embed-responsive-item {
-  overflow: hidden;
-}
-
-.corner {
-  background-image: url('../images/detail/corner.png');
-  background-repeat: no-repeat;
-  background-position: right top;
-  position: absolute;
-  right: -2px;
-  top: -1px;
-  height: 60px;
-  width: 60px;
-  z-index: 1;
-
-  .card-lg & {
-    top: 0;
-    right: -25px;
-
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -25px;
-    }
-  }
-}
-
-md-card .card-menu {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
-
-.placeholder-card {
-  &:hover {
-    background-color: #fff !important;
-    cursor: default !important;
-  }
-
-  .card-cover {
-    background-color: #f5f5f5;
-  }
-  md-card-content {
+  .card-image {
     position: relative;
 
-    .title-placeholder {
-      background-color: #f5f5f5;
-      width: 90%;
-      height: 18px;
-    }
-
-    .author-placeholder {
-      background-color: #f5f5f5;
-      width: 75%;
-      height: 12px;
-      margin-top: 32px;
-    }
-  }
-}
-
-.card-container__item {
-  margin: 0 15px 15px 0;
-
-  &--empty {
-    margin: 0 15px 0 0;
-
-    md-card.card-sm {
+    .ua-ie & {
       height: 100%;
     }
   }
+
+  .ua-ie & {
+    & .item-link{
+      word-wrap: break-word;
+      display: block;
+      word-break: break-all;
+    }
+
+    & .wrapped.regular-link{
+      display: -ms-flexbox;
+    }
+  }
 }
 
-a.embed-link{
-  line-height: 0px;
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 1);
+.card-hover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+
+  .pick {
+    position: absolute;
+    padding: 10px;
+    left: 0;
+    transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    .checked {
+      display: none;
+    }
+
+    &:hover {
+      .checked {
+        display: block;
+      }
+
+      .unchecked {
+        display: none;
+      }
+    }
+  }
+
+  md-icon.icon-kind {
+    color: rgba(255, 255, 255, 0.6);
+  }
 }
 
-.embed-link img{
-  max-width: 500px;
-  max-height: 500px;
-}
+.card-cover {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
 
-.embed-link:hover img{
-  opacity: .8;
-  transition: ease all 0.5s;
-}
+  &:before {
+    content: '';
+    display: block;
+    height: 0;
+    width: 100%;
+    padding-bottom: 66.67%;
+  }
 
-.embed-card-picture{
-  line-height: 0;
-  display: inline-block;
-}
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: block;
+  }
 
-a.embed-image-padded{
-  margin: 25px;
+  &:after {
+    content: "";
+    box-shadow: inset 0 0 3em rgba(0,0,0, .15);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .icon-kind {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 3rem;
+    color: rgba(0,0,0, 0.33);
+    z-index: 1;
+  }
 }
 
 .card__icon-holder {
@@ -531,21 +108,132 @@ a.embed-image-padded{
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
 
   md-icon {
-    padding: 8px 14px;
+    padding: 9px 23px;
     color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0,0, .37);
+  }
+}
+
+.ribbon {
+  position: absolute;
+  left: 20px;
+  top: -3px;
+  background-image: url('../images/bookmark.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
+  filter: url(#drop-shadow);
+  filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+  opacity: .6;
+  z-index: 1;
+  width: 33px;
+  height: 53px;
+}
+
+.pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+  width: 100%;
+  height: 100%;
+}
+
+.sheet {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: rotate(45deg);
+  filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.2));
+
+  &.up-left {
+    left: -25%;
+    top: 17%;
   }
 
-  .card-lg & {
-    top: 0;
-    left: -25px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+  &.low-left {
+    left: -60%;
+    top: 45%;
+  }
 
-    @media (min-width: $layout-breakpoint-xs) {
-      top: -15px;
-      left: 0;
+  &.low-right {
+    right: -33%;
+    bottom: -45%;
+    height: 150%;
+  }
+}
+
+.card-cover,
+.embeddedMaterial {
+  &.description .pattern {
+      background-color: $green1;
+      .sheet {
+        @include pattern-color($green1);
+      }
+    }
+
+  &.image .pattern {
+    background-color: $blue;
+    .sheet {
+      @include pattern-color($blue);
+    }
+  }
+  &.assessment .pattern {
+    background-color: $green2;
+    .sheet {
+      @include pattern-color($green2);
+    }
+  }
+  &.assignment .pattern {
+      background-color: $pinky;
+      .sheet {
+        @include pattern-color($pinky);
+      }
+    }
+
+  &.dvr .pattern {
+    background-color: $greengrass;
+    .sheet {
+      @include pattern-color($greengrass);
+    }
+  }
+  &.portfolio .pattern {
+    background-color: $lilac;
+    .sheet {
+      @include pattern-color($lilac);
+    }
+  }
+  &.casino .pattern {
+    background-color: $violet;
+    .sheet {
+      @include pattern-color($violet);
+    }
+  }
+  &.web_asset .pattern {
+    background-color: $navy;
+    .sheet {
+      @include pattern-color($navy);
+    }
+  }
+  &.audiotrack .pattern {
+    background-color: $cyan;
+    .sheet {
+      @include pattern-color($cyan);
+    }
+  }
+  &.ondemand_video .pattern {
+    background-color: $salad;
+    .sheet {
+      @include pattern-color($salad);
+    }
+  }
+  &.web .pattern {
+    background-color: $royal;
+    .sheet {
+      @include pattern-color($royal);
     }
   }
 }

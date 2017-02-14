@@ -1,202 +1,262 @@
-define([
-    'app',
-    'angular-youtube-mb',
-    'directives/slideshare/slideshare',
-    'services/translationService',
-    'services/iconService',
-    'services/embedService'
-], function (app) {
-    app.directive('dopEmbeddedMaterial', ['translationService', 'iconService', 'embedService', 'dialogService',
-        function (translationService, iconService, embedService, dialogService) {
-            return {
-                scope: {
-                    material: '=',
-                    chapter: '=',
-                    index: '='
-                },
-                templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
-                controller: function ($scope, $rootScope, $location) {
-                    init();
+'use strict'
 
-                    function init() {
-                        $scope.canPlayVideo = false;
-                        $scope.canPlayAudio = false;
-                        $scope.videoType = "";
-                        $scope.audioType = "";
-                        $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
-                        $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
+    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService', 'storageService', '$rootScope', '$sce',
+    function (translationService, iconService, embedService, serverCallService, dialogService, storageService, $rootScope, $sce) {
+        return {
+            scope: {
+                material: '=',
+                chapter: '=',
+                objIndex: '=',
+                rowIndex: '=',
+                contentRow: '=',
+                embeddable: '='
+            },
+            templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
+            controller: ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
+                init();
 
-                        if ($scope.material) {
-                            $scope.materialType = getType();
-                            getSourceType();
-                        }
-                    }
+                $scope.showMaterialContent = false;
 
-                    $scope.removeMaterial = function ($event, material) {
-                        $event.preventDefault();
-                        $event.stopPropagation();
-
-                        var removeMaterialFromChapter = function () {
-                            var index = $scope.chapter.materials.indexOf(material);
-                            $scope.chapter.materials.splice(index, 1);
-                        };
-
-                        dialogService.showDeleteConfirmationDialog(
-                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
-                            'PORTFOLIO_DELETE_MATERIAL_CONFIRM_MESSAGE',
-                            removeMaterialFromChapter);
-                    };
-
-                    $scope.getCorrectLanguageTitle = function (material) {
-                        if (material) {
-                            return getCorrectLanguageString(material.titles, material.language);
-                        }
-                    };
-
-                    $scope.moveItem = function (origin, destination) {
-                        var temp = $scope.chapter.materials[destination];
-                        $scope.chapter.materials[destination] = $scope.chapter.materials[origin];
-                        $scope.chapter.materials[origin] = temp;
-                    };
-
-                    $scope.listItemUp = function (itemIndex) {
-                        $scope.moveItem(itemIndex, itemIndex - 1);
-                    };
-
-                    $scope.listItemDown = function (itemIndex) {
-                        $scope.moveItem(itemIndex, itemIndex + 1);
-                    };
-
-                    $scope.navigateToMaterial = function (material, $event) {
-                        $event.preventDefault();
-                        $rootScope.savedMaterial = material;
-
-                        $location.path('/material').search({
-                            materialId: material.id
-                        });
-                    };
-
-                    $scope.$watch(function () {
-                        return $scope.material.source;
-                    }, function (newValue, oldValue) {
-                        if ($scope.material && $scope.material.source) {
-                            getSourceType();
-                            canPlayVideoFormat();
-                            canPlayAudioFormat();
-                        }
+                $rootScope.$on('fullscreenchange', () => {
+                    $scope.$apply(() => {
+                        $scope.showMaterialContent = !$scope.showMaterialContent;
                     });
+                });
 
-                    function canPlayVideoFormat() {
-                        var extension = $scope.material.source.split('.').pop();
-                        var v = document.createElement('video');
-                        /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
-                        if (extension == "ogv") {
-                            extension = "ogg"
-                        }
-                        if (v.canPlayType && v.canPlayType('video/' + extension)) {
-                            $scope.videoType = extension;
-                            $scope.canPlayVideo = true;
-                        }
+                $scope.showSourceFullscreen = ($event, ctrl) => {
+                    $event.preventDefault();
+                    ctrl.toggleFullscreen();
+                };
+
+                function init() {
+                    $scope.canPlayVideo = false;
+                    $scope.canPlayAudio = false;
+                    $scope.videoType = "";
+                    $scope.audioType = "";
+                    $scope.sourceType = "";
+                    $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
+                    $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
+
+                    if ($scope.material) {
+                        $scope.materialType = getType();
+                        canPlayAudioFormat();
+                        canPlayVideoFormat();
+                        getSourceType();
+                        getContentType();
                     }
-
-                    function canPlayAudioFormat() {
-                        var extension = $scope.material.source.split('.').pop();
-                        var v = document.createElement('audio');
-                        if (v.canPlayType && v.canPlayType('audio/' + extension)) {
-                            $scope.audioType = extension;
-                            $scope.canPlayAudio = true;
-                        }
-                    }
-
-                    function getSourceType() {
-                        if (isYoutubeVideo($scope.material.source)) {
-                            $scope.sourceType = 'YOUTUBE';
-                        } else if (isSlideshareLink($scope.material.source)) {
-                            $scope.sourceType = 'SLIDESHARE';
-                        } else if (isVideoLink($scope.material.source)) {
-                            $scope.sourceType = 'VIDEO';
-                        } else if (isAudioLink($scope.material.source)) {
-                            $scope.sourceType = 'AUDIO';
-                        } else if (isPictureLink($scope.material.source)) {
-                            $scope.sourceType = 'PICTURE';
-                        } else if (isEbookLink($scope.material.source)) {
-                            $scope.sourceType = 'EBOOK';
-                            $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
-                        } else if (isPDFLink($scope.material.source)) {
-                            $scope.sourceType = 'PDF';
-                        } else {
-                            embedService.getEmbed(getSource($scope.material), embedCallback);
-                        }
-                    }
-
-                    function isYoutubeVideo(url) {
-                        // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
-                        var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                        return url && url.match(youtubeUrlRegex);
-                    }
-
-                    function isSlideshareLink(url) {
-                        var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
-                        return url && url.match(slideshareUrlRegex);
-                    }
-
-                    function isVideoLink(url) {
-                        if (!url) return;
-                        var extension = url.split('.').pop().toLowerCase();
-                        return extension == "mp4" || extension == "ogv" || extension == "webm";
-                    }
-
-                    function isAudioLink(url) {
-                        if (!url) return;
-                        var extension = url.split('.').pop().toLowerCase();
-                        return extension == "mp3" || extension == "ogg" || extension == "wav";
-                    }
-
-                    function isPictureLink(url) {
-                        if (!url) return;
-                        var extension = url.split('.').pop().toLowerCase();
-                        return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
-                    }
-
-                    function isEbookLink(url){
-                        if (!url) return;
-                        var extension = url.split('.').pop().toLowerCase();
-                        return extension == "epub";
-                    }
-
-                    function isPDFLink(url){
-                        if (!url) return;
-                        var extension = url.split('.').pop().toLowerCase();
-                        return extension == "pdf";
-                    }
-
-                    function getType() {
-                        if ($scope.material === undefined || $scope.material === null) return '';
-
-                        return iconService.getMaterialIcon($scope.material.resourceTypes);
-                    }
-
-                    function getCorrectLanguageString(languageStringList, materialLanguage) {
-                        if (languageStringList) {
-                            return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
-                        }
-                    }
-
-                    function embedCallback(res) {
-                        if (res && res.data.html) {
-                            $scope.embeddedDataIframe = null;
-                            $scope.embeddedData = null;
-                            $scope.sourceType = 'NOEMBED';
-
-                            if (res.data.html.contains("<iframe")) {
-                                $scope.embeddedDataIframe = res.data.html.replace("http:", "");
-                            } else {
-                                $scope.embeddedData = res.data.html.replace("http:", "");
-                            }
-                        }
-                    }
-
                 }
-            };
-        }]);
-});
+
+                $scope.$watch(function () {
+                    return $scope.material;
+                }, function () {
+                    if ($scope.material && $scope.material.id) {
+                        getContentType();
+                    }
+                });
+
+                function getContentType() {
+                    var baseUrl = document.location.origin;
+                    var materialSource = getSource($scope.material);
+                    // If the initial type is a LINK, try to ask the type from our proxy
+                    if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
+                        $scope.fallbackType = matchType(materialSource);
+                        $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                        serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                    }
+                    if (materialSource) {
+                        $scope.sourceType = matchType(getSource($scope.material));
+                    }
+                }
+
+                function probeContentSuccess(response) {
+                    if (!response()['content-disposition']) {
+                        $scope.sourceType = $scope.fallbackType;
+                        return;
+                    }
+                    var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                    $scope.sourceType = matchType(filename);
+                    if ($scope.sourceType !== 'LINK') {
+                        if ($scope.sourceType == 'PDF')$scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
+                    }
+                }
+
+                function probeContentFail() {
+                    console.log("Content probing failed!");
+                }
+
+                $scope.removeMaterial = function ($event, material) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    var removeMaterialFromChapter = function () {
+                        var index = $scope.contentRow.learningObjects.indexOf(material);
+                        $scope.contentRow.learningObjects.splice(index, 1);
+                    };
+
+                    dialogService.showDeleteConfirmationDialog(
+                        'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
+                        'PORTFOLIO_DELETE_MATERIAL_CONFIRM_MESSAGE',
+                        removeMaterialFromChapter);
+                };
+
+                $scope.getCorrectLanguageTitle = function (material) {
+                    if (material) {
+                        return getCorrectLanguageString(material.titles, material.language);
+                    }
+                };
+
+                $scope.moveItem = function (origin, destination) {
+                    if ($scope.contentRow && $scope.contentRow.learningObjects.length < 2) {
+                        $scope.chapter.contentRows.splice(origin, 1);
+                    }
+
+                    $scope.chapter.contentRows.splice(destination, 0, {learningObjects: [$scope.material]});
+                };
+
+                $scope.listItemUp = function () {
+                    $scope.moveItem($scope.rowIndex, $scope.rowIndex - 1);
+                };
+
+                $scope.listItemDown = function () {
+                    $scope.moveItem($scope.rowIndex, $scope.rowIndex + 1);
+                };
+
+                $scope.navigateToMaterial = function (material, $event) {
+                    $event.preventDefault();
+                    storageService.setMaterial(material);
+
+
+                    $location.path('/material').search({
+                        id: material.id
+                    });
+                };
+
+                $scope.fallbackToLink = function () {
+                    return $scope.isEditPortfolioMode || !$scope.sourceType || $scope.sourceType === 'LINK';
+                };
+
+                function canPlayVideoFormat() {
+                    var extension = getSource($scope.material).split('.').pop();
+                    var v = document.createElement('video');
+                    /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
+                    if (extension == "ogv") {
+                        extension = "ogg"
+                    }
+                    if (v.canPlayType && v.canPlayType('video/' + extension)) {
+                        $scope.videoType = extension;
+                        $scope.canPlayVideo = true;
+                    }
+                }
+
+                function canPlayAudioFormat() {
+                    var extension = getSource($scope.material).split('.').pop();
+                    var v = document.createElement('audio');
+                    if (v.canPlayType && v.canPlayType('audio/' + extension)) {
+                        $scope.audioType = extension;
+                        $scope.canPlayAudio = true;
+                    }
+                }
+
+                function getSourceType() {
+                    if (isYoutubeVideo($scope.material.source)) {
+                        $scope.sourceType = 'YOUTUBE';
+                    } else if (isSlideshareLink($scope.material.source)) {
+                        $scope.sourceType = 'SLIDESHARE';
+                    } else if (isVideoLink($scope.material.source)) {
+                        $scope.sourceType = 'VIDEO';
+                    } else if (isAudioLink($scope.material.source)) {
+                        $scope.sourceType = 'AUDIO';
+                    } else if (isPictureLink($scope.material.source)) {
+                        $scope.sourceType = 'PICTURE';
+                    } else if (isEbookLink($scope.material.source)) {
+                        if (isIE()) {
+                            $scope.sourceType = 'LINK';
+                            $scope.material.source += "?archive=true";
+                            return;
+                        }
+                        $scope.sourceType = 'EBOOK';
+                        $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
+                    } else if (isPDFLink($scope.material.source)) {
+                        $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + $scope.material.source;
+                        $scope.sourceType = 'PDF';
+                    } else {
+                        embedService.getEmbed(getSource($scope.material), embedCallback);
+                    }
+                }
+
+                function isYoutubeVideo(url) {
+                    // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+                    var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                    return url && url.match(youtubeUrlRegex);
+                }
+
+                function isSlideshareLink(url) {
+                    var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+                    return url && url.match(slideshareUrlRegex);
+                }
+
+                function isVideoLink(url) {
+                    if (!url) return;
+                    var extension = url.split('.').pop().toLowerCase();
+                    return extension == "mp4" || extension == "ogv" || extension == "webm";
+                }
+
+                function isAudioLink(url) {
+                    if (!url) return;
+                    var extension = url.split('.').pop().toLowerCase();
+                    return extension == "mp3" || extension == "ogg" || extension == "wav";
+                }
+
+                function isPictureLink(url) {
+                    if (!url) return;
+                    var extension = url.split('.').pop().toLowerCase();
+                    return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
+                }
+
+                function isEbookLink(url) {
+                    if (!url) return;
+                    var extension = url.split('.').pop().toLowerCase();
+                    return extension == "epub";
+                }
+
+                function isPDFLink(url) {
+                    if (!url) return;
+                    var extension = url.split('.').pop().toLowerCase();
+                    return extension == "pdf";
+                }
+
+                function getType() {
+                    if ($scope.material === undefined || $scope.material === null) return '';
+
+                    return iconService.getMaterialIcon($scope.material.resourceTypes);
+                }
+
+                function getCorrectLanguageString(languageStringList, materialLanguage) {
+                    if (languageStringList) {
+                        return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
+                    }
+                }
+
+                function embedCallback(res) {
+                    if (res && res.data.html) {
+                        $scope.embeddedDataIframe = null;
+                        $scope.embeddedData = null;
+                        $scope.sourceType = 'NOEMBED';
+
+                        if (res.data.html.contains("<iframe")) {
+                            $scope.embeddedDataIframe = res.data.html.replace("http:", "");
+                        } else {
+                            $scope.embeddedData = res.data.html.replace("http:", "");
+                        }
+                    } else {
+                        if ($scope.material.source) {
+                            $scope.iframeSource = $sce.trustAsResourceUrl($scope.material.source.replace("http:", ""));
+                        }
+                    }
+                }
+
+            }],
+        };
+    }
+]);

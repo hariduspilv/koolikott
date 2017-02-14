@@ -16,14 +16,14 @@ public class UploadedFile {
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String name;
 
     // Path variable is not used, it is built in function instead
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String path;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String url;
 
     public Long getId() {

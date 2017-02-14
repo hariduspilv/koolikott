@@ -1,17 +1,16 @@
 package ee.hm.dop.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import org.junit.Test;
+
+import javax.inject.Inject;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TaxonDAOTest extends DatabaseTestBase {
 
@@ -20,7 +19,7 @@ public class TaxonDAOTest extends DatabaseTestBase {
 
     @Test
     public void findTaxonById() {
-        Long id = new Long(11);
+        Long id = 11L;
         String name = "ForeignLanguage";
 
         Domain domain = (Domain) taxonDAO.findTaxonById(id);
@@ -32,7 +31,7 @@ public class TaxonDAOTest extends DatabaseTestBase {
 
     @Test
     public void findEducationalContextByName() {
-        Long id = new Long(1);
+        Long id = 1L;
         String name = "PRESCHOOLEDUCATION";
 
         EducationalContext educationalContext = taxonDAO.findEducationalContextByName(name);
@@ -42,7 +41,7 @@ public class TaxonDAOTest extends DatabaseTestBase {
 
     @Test
     public void findEducationalContextByNameWrongCase() {
-        Long id = new Long(1);
+        Long id = 1L;
         String name = "PRESCHOOLEDUCATION";
 
         EducationalContext educationalContext = taxonDAO.findEducationalContextByName("preschooleducation");

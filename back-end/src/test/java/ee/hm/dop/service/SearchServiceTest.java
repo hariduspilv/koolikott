@@ -1,13 +1,14 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.ReducedLearningObject;
+import ee.hm.dop.model.ReducedMaterial;
+import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Role;
 import ee.hm.dop.model.SearchFilter;
@@ -37,10 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -59,13 +57,16 @@ public class SearchServiceTest {
     @Mock
     private TargetGroupService targetGroupService;
 
+    @Mock
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
+
     @TestSubject
     private SearchService searchService = new SearchService();
 
     @Test
     public void search() {
         String query = "people";
-        String tokenizedQuery = "(people) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((people) OR (\"people\")) AND ((visibility:\"public\") OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
         List<Searchable> searchables = Arrays.asList(createMaterial(7L), createMaterial(1L), createPortfolio(4L),
@@ -156,7 +157,7 @@ public class SearchServiceTest {
     public void searchWithFiltersNull() {
         String query = "airplane";
         SearchFilter searchFilter = new SearchFilter();
-        String tokenizedQuery = "(airplane) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((airplane) OR (\"airplane\")) AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -172,7 +173,7 @@ public class SearchServiceTest {
         educationalContext.setId(2L);
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
-        String tokenizedQuery = "(pythagoras) AND educational_context:\"preschool\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND educational_context:\"preschool\""
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -196,7 +197,7 @@ public class SearchServiceTest {
         domain.setEducationalContext(educationalContext);
 
         searchFilter.setTaxons(Collections.singletonList(domain));
-        String tokenizedQuery = "(pythagoras) AND domain:\"cool_domain\" AND educational_context:\"preschool\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -226,7 +227,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxons(Collections.singletonList(subject));
 
-        String tokenizedQuery = "(pythagoras) AND subject:\"cool_subject\" AND domain:\"cool_domain\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND subject:\"cool_subject\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -256,7 +257,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxons(Collections.singletonList(specialization));
 
-        String tokenizedQuery = "(pythagoras) AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -291,7 +292,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxons(Collections.singletonList(module));
 
-        String tokenizedQuery = "(pythagoras) AND module:\"cool_module\" AND specialization:\"cool_specialization\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND module:\"cool_module\" AND specialization:\"cool_specialization\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -320,7 +321,7 @@ public class SearchServiceTest {
         topic.setDomain(domain);
 
         searchFilter.setTaxons(Collections.singletonList(topic));
-        String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND domain:\"cool_domain\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND topic:\"cool_topic\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -354,7 +355,7 @@ public class SearchServiceTest {
         topic.setSubject(subject);
 
         searchFilter.setTaxons(Collections.singletonList(topic));
-        String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -394,7 +395,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxons(Collections.singletonList(topic));
 
-        String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND module:\"cool_module\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND topic:\"cool_topic\" AND module:\"cool_module\""
                 + " AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
@@ -429,7 +430,7 @@ public class SearchServiceTest {
         subtopic.setTopic(topic);
 
         searchFilter.setTaxons(Collections.singletonList(subtopic));
-        String tokenizedQuery = "(pythagoras) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -468,7 +469,7 @@ public class SearchServiceTest {
         subtopic.setTopic(topic);
 
         searchFilter.setTaxons(Collections.singletonList(subtopic));
-        String tokenizedQuery = "(pythagoras) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND subject:\"cool_subject\" AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
@@ -514,7 +515,7 @@ public class SearchServiceTest {
 
         searchFilter.setTaxons(Collections.singletonList(subtopic));
 
-        String tokenizedQuery = "(pythagoras) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND subtopic:\"cool_subtopic\" AND topic:\"cool_topic\""
                 + " AND module:\"cool_module\" AND specialization:\"cool_specialization\" AND domain:\"cool_domain\""
                 + " AND educational_context:\"preschool\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
@@ -529,7 +530,7 @@ public class SearchServiceTest {
         String query = "textbooks";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
-        String tokenizedQuery = "(textbooks) AND (paid:\"false\" OR type:\"portfolio\")"
+        String tokenizedQuery = "((textbooks) OR (\"textbooks\")) AND (paid:\"false\" OR type:\"portfolio\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -543,7 +544,7 @@ public class SearchServiceTest {
         String query = "textbooks";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(true);
-        String tokenizedQuery = "(textbooks) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((textbooks) OR (\"textbooks\")) AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -556,7 +557,7 @@ public class SearchServiceTest {
         String query = "sky";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("material");
-        String tokenizedQuery = "(sky) AND type:\"material\" AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((sky) OR (\"sky\")) AND type:\"material\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -569,7 +570,7 @@ public class SearchServiceTest {
         String query = "sky";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setType("all");
-        String tokenizedQuery = "(sky) AND (type:\"material\" OR type:\"portfolio\") AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((sky) OR (\"sky\")) AND (type:\"material\" OR type:\"portfolio\") AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -586,7 +587,7 @@ public class SearchServiceTest {
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setPaid(false);
-        String tokenizedQuery = "(pythagoras) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")"
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND educational_context:\"preschool\" AND (paid:\"false\" OR type:\"portfolio\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -604,7 +605,7 @@ public class SearchServiceTest {
         educationalContext.setName("PRESCHOOL");
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setType("portfolio");
-        String tokenizedQuery = "(pythagoras) AND educational_context:\"preschool\" AND type:\"portfolio\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND educational_context:\"preschool\" AND type:\"portfolio\""
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -619,7 +620,7 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setPaid(false);
         searchFilter.setType("material");
-        String tokenizedQuery = "(pythagoras) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\""
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -668,16 +669,16 @@ public class SearchServiceTest {
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setId(1L);
         crossCurricularTheme.setName("test_theme");
-        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
+        searchFilter.setCrossCurricularThemes(Collections.singletonList(crossCurricularTheme));
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
-        searchFilter.setKeyCompetence(keyCompetence);
+        searchFilter.setKeyCompetences(Collections.singletonList(keyCompetence));
 
         searchFilter.setIssuedFrom(2010);
 
-        String tokenizedQuery = "(pythagoras) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
+        String tokenizedQuery = "((pythagoras) OR (\"pythagoras\")) AND topic:\"cool_topic\" AND subject:\"cool_subject\""
                 + " AND domain:\"cool_domain\" AND educational_context:\"preschool\""
                 + " AND (paid:\"false\" OR type:\"portfolio\") AND type:\"material\" AND resource_type:\"extrabook\""
                 + " AND special_education:\"true\""
@@ -698,7 +699,7 @@ public class SearchServiceTest {
         Language language = new Language();
         language.setCode("mmm");
         searchFilter.setLanguage(language);
-        String tokenizedQuery = "(alpha beta) AND (language:\"mmm\" OR type:\"portfolio\")"
+        String tokenizedQuery = "((alpha beta) OR (\"alpha beta\")) AND (language:\"mmm\" OR type:\"portfolio\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -713,15 +714,19 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
 
         TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setId(2L);
         targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
+
+        expect(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name())).andReturn(targetGroupSixSeven);
 
         replay(targetGroupService);
 
-        searchFilter.setTargetGroups(Collections.singletonList(TargetGroupEnum.SIX_SEVEN.name()));
+        searchFilter.setTargetGroups(Collections.singletonList(targetGroupService
+                .getByName(TargetGroupEnum.SIX_SEVEN.name())));
 
         verify(targetGroupService);
 
-        String tokenizedQuery = "(umm) AND target_group:\"six_seven\" AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((umm) OR (\"umm\")) AND target_group:\"2\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -735,17 +740,23 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
 
         TargetGroup targetGroupSixSeven = new TargetGroup();
+        targetGroupSixSeven.setId(2L);
         targetGroupSixSeven.setName(TargetGroupEnum.SIX_SEVEN.name());
         TargetGroup targetGroupZeroFive = new TargetGroup();
+        targetGroupZeroFive.setId(1L);
         targetGroupZeroFive.setName(TargetGroupEnum.ZERO_FIVE.name());
+
+        expect(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name())).andReturn(targetGroupSixSeven);
+        expect(targetGroupService.getByName(TargetGroupEnum.ZERO_FIVE.name())).andReturn(targetGroupZeroFive);
 
         replay(targetGroupService);
 
-        searchFilter.setTargetGroups(Arrays.asList(TargetGroupEnum.SIX_SEVEN.name(), TargetGroupEnum.ZERO_FIVE.name()));
+        searchFilter.setTargetGroups(Arrays.asList(targetGroupService.getByName(TargetGroupEnum.SIX_SEVEN.name()),
+                targetGroupService.getByName(TargetGroupEnum.ZERO_FIVE.name())));
 
         verify(targetGroupService);
 
-        String tokenizedQuery = "(umm) AND (target_group:\"six_seven\" OR target_group:\"zero_five\")"
+        String tokenizedQuery = "((umm) OR (\"umm\")) AND (target_group:\"2\" OR target_group:\"1\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
 
         long start = 0;
@@ -763,7 +774,7 @@ public class SearchServiceTest {
         resourceType.setId(1L);
         resourceType.setName("EXTRABOOK");
         searchFilter.setResourceType(resourceType);
-        String tokenizedQuery = "(test) AND resource_type:\"extrabook\" AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((test) OR (\"test\")) AND resource_type:\"extrabook\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -776,7 +787,7 @@ public class SearchServiceTest {
         String query = "test";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSpecialEducation(true);
-        String tokenizedQuery = "(test) AND special_education:\"true\" AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((test) OR (\"test\")) AND special_education:\"true\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -791,8 +802,8 @@ public class SearchServiceTest {
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setId(1L);
         crossCurricularTheme.setName("test_theme");
-        searchFilter.setCrossCurricularTheme(crossCurricularTheme);
-        String tokenizedQuery = "(test) AND cross_curricular_theme:\"test_theme\" AND ((visibility:\"public\") OR type:\"material\")";
+        searchFilter.setCrossCurricularThemes(Collections.singletonList(crossCurricularTheme));
+        String tokenizedQuery = "((test) OR (\"test\")) AND cross_curricular_theme:\"test_theme\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -807,8 +818,8 @@ public class SearchServiceTest {
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
-        searchFilter.setKeyCompetence(keyCompetence);
-        String tokenizedQuery = "(test) AND key_competence:\"test_competence\" AND ((visibility:\"public\") OR type:\"material\")";
+        searchFilter.setKeyCompetences(Collections.singletonList(keyCompetence));
+        String tokenizedQuery = "((test) OR (\"test\")) AND key_competence:\"test_competence\" AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
         List<Searchable> searchables = Arrays.asList(createMaterial(9L), createMaterial(2L), createPortfolio(1L));
@@ -823,8 +834,8 @@ public class SearchServiceTest {
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("test_competence");
-        searchFilter.setKeyCompetence(keyCompetence);
-        String tokenizedQuery = "(test) AND key_competence:\"test_competence\" AND ((visibility:\"public\" OR visibility:\"not_listed\" OR visibility:\"private\") OR type:\"material\")";
+        searchFilter.setKeyCompetences(Collections.singletonList(keyCompetence));
+        String tokenizedQuery = "((test) OR (\"test\")) AND key_competence:\"test_competence\" AND ((visibility:\"public\" OR visibility:\"not_listed\" OR visibility:\"private\") OR type:\"material\")";
         long start = 0;
 
         User loggedInUser = new User();
@@ -843,7 +854,7 @@ public class SearchServiceTest {
         String query = "airplane";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setIssuedFrom(2012);
-        String tokenizedQuery = "(airplane) AND (issue_date_year:[2012 TO *]"
+        String tokenizedQuery = "((airplane) OR (\"airplane\")) AND (issue_date_year:[2012 TO *]"
                 + " OR (added:[2012-01-01T00:00:00Z TO *] AND type:\"portfolio\"))"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
@@ -859,7 +870,7 @@ public class SearchServiceTest {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSort("somefield");
         searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
-        String tokenizedQuery = "(english language) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((english language) OR (\"english language\")) AND ((visibility:\"public\") OR type:\"material\")";
         String expectedSort = "somefield desc";
         long start = 0;
 
@@ -873,7 +884,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(true);
-        String tokenizedQuery = "(german language) AND peerReview:[* TO *]"
+        String tokenizedQuery = "((german language) OR (\"german language\")) AND peerReview:[* TO *]"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -887,7 +898,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(false);
-        String tokenizedQuery = "(german language)"
+        String tokenizedQuery = "((german language) OR (\"german language\"))"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 
@@ -901,7 +912,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(false);
-        String tokenizedQuery = "(german language)"
+        String tokenizedQuery = "((german language) OR (\"german language\"))"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
         Long limit = 3L;
@@ -914,7 +925,7 @@ public class SearchServiceTest {
     @Test
     public void searchNotFromStart() {
         String query = "people";
-        String tokenizedQuery = "(people) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((people) OR (\"people\")) AND ((visibility:\"public\") OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 50;
 
@@ -926,7 +937,7 @@ public class SearchServiceTest {
     @Test
     public void searchHasMoreResultsThanMaxResultsPerPage() {
         String query = "people";
-        String tokenizedQuery = "(people) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((people) OR (\"people\")) AND ((visibility:\"public\") OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
         long totalResults = 1450;
@@ -939,7 +950,7 @@ public class SearchServiceTest {
     @Test
     public void searchReturnsOnlyMaterials() {
         String query = "people";
-        String tokenizedQuery = "(people) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((people) OR (\"people\")) AND ((visibility:\"public\") OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
 
@@ -951,7 +962,7 @@ public class SearchServiceTest {
     @Test
     public void searchReturnsOnlyPortfolios() {
         String query = "people";
-        String tokenizedQuery = "(people) AND ((visibility:\"public\") OR type:\"material\")";
+        String tokenizedQuery = "((people) OR (\"people\")) AND ((visibility:\"public\") OR type:\"material\")";
         SearchFilter searchFilter = new SearchFilter();
         long start = 0;
 
@@ -965,12 +976,12 @@ public class SearchServiceTest {
                             long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {
         SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
 
-        List<LearningObject> learningObjects = new ArrayList<>();
+        List<ReducedLearningObject> learningObjects = new ArrayList<>();
         List<Long> learningObjectIdentifiers = getIdentifiers(searchables);
 
-        List<Material> materials = collectMaterialsFrom(searchables);
+        List<ReducedMaterial> materials = collectMaterialsFrom(searchables);
         learningObjects.addAll(materials);
-        List<Portfolio> portfolios = collectPortfoliosFrom(searchables);
+        List<ReducedPortfolio> portfolios = collectPortfoliosFrom(searchables);
         learningObjects.addAll(portfolios);
 
         if (limit == null) {
@@ -979,7 +990,7 @@ public class SearchServiceTest {
             expect(solrEngineService.search(tokenizedQuery, start, limit, expectedSort)).andReturn(searchResponse);
         }
 
-        expect(learningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
+        expect(reducedLearningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
             for (Long id : learningObjectIdentifiers) {
                 expect(userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
@@ -1032,24 +1043,24 @@ public class SearchServiceTest {
         return searchResponse;
     }
 
-    private List<Material> collectMaterialsFrom(List<Searchable> searchables) {
-        List<Material> materials = new ArrayList<>();
+    private List<ReducedMaterial> collectMaterialsFrom(List<Searchable> searchables) {
+        List<ReducedMaterial> materials = new ArrayList<>();
 
         for (Searchable searchable : searchables) {
-            if (searchable instanceof Material) {
-                materials.add((Material) searchable);
+            if (searchable instanceof ReducedMaterial) {
+                materials.add((ReducedMaterial) searchable);
             }
         }
 
         return materials;
     }
 
-    private List<Portfolio> collectPortfoliosFrom(List<Searchable> searchables) {
-        List<Portfolio> portfolios = new ArrayList<>();
+    private List<ReducedPortfolio> collectPortfoliosFrom(List<Searchable> searchables) {
+        List<ReducedPortfolio> portfolios = new ArrayList<>();
 
         for (Searchable searchable : searchables) {
-            if (searchable instanceof Portfolio) {
-                portfolios.add((Portfolio) searchable);
+            if (searchable instanceof ReducedPortfolio) {
+                portfolios.add((ReducedPortfolio) searchable);
             }
         }
 
@@ -1064,21 +1075,21 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(solrEngineService, learningObjectDAO, userFavoriteDAO);
+        replay(solrEngineService, learningObjectDAO, userFavoriteDAO, reducedLearningObjectDAO);
     }
 
     private void verifyAll() {
-        verify(solrEngineService, learningObjectDAO, userFavoriteDAO);
+        verify(solrEngineService, learningObjectDAO, userFavoriteDAO, reducedLearningObjectDAO);
     }
 
-    private Material createMaterial(Long id) {
-        Material material = new Material();
+    private ReducedMaterial createMaterial(Long id) {
+        ReducedMaterial material = new ReducedMaterial();
         material.setId(id);
         return material;
     }
 
-    private Portfolio createPortfolio(Long id) {
-        Portfolio portfolio = new Portfolio();
+    private ReducedPortfolio createPortfolio(Long id) {
+        ReducedPortfolio portfolio = new ReducedPortfolio();
         portfolio.setId(id);
         return portfolio;
     }

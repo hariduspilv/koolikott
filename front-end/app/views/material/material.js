@@ -1,40 +1,32 @@
-define([
-    'app',
-    'angularAMD',
-    'angular-screenfull',
-    'directives/copyPermalink/copyPermalink',
-    'directives/report/improper/improper',
-    'directives/report/brokenLink/brokenLink',
-    'directives/recommend/recommend',
-    'directives/rating/rating',
-    'directives/commentsCard/commentsCard',
-    'directives/tags/tags',
-    'directives/restrict/restrict',
-    'directives/favorite/favorite',
-    'directives/errorMessage/errorMessage',
-    'services/serverCallService',
-    'services/translationService',
-    'services/searchService',
-    'services/alertService',
-    'services/authenticatedUserService',
-    'services/dialogService',
-    'services/iconService',
-    'services/toastService',
-    'services/storageService',
-    'services/targetGroupService',
-    'services/taxonService',
-    'directives/embeddedMaterial/embeddedMaterial',
-    'directives/share/share'
-], function (app, angularAMD) {
-    return ['$scope', 'serverCallService', '$route', 'translationService', '$rootScope', 'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService', 'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService',
-        function ($scope, serverCallService, $route, translationService, $rootScope, searchService, $location, alertService, authenticatedUserService, dialogService, toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService) {
+'use strict';
+
+angular.module('koolikottApp')
+    .controller('materialController', [
+        '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
+        'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
+        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce',
+        function ($scope, serverCallService, $route, translationService, $rootScope,
+                  searchService, $location, alertService, authenticatedUserService, dialogService,
+                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce) {
+
             $scope.showMaterialContent = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
+            $scope.getMaterialSuccess = getMaterialSuccess;
+            $scope.taxonObject = {};
+            $scope.materialCommentsOpen = false;
 
-            if ($rootScope.savedMaterial) {
-                $scope.material = $rootScope.savedMaterial;
-                $rootScope.savedMaterial = null;
+            const licenceTypeMap = {
+                'CCBY':  ['by'],
+                'CCBYSA': ['by', 'sa'],
+                'CCBYND': ['by', 'nd'],
+                'CCBYNC': ['by', 'nc'],
+                'CCBYNCSA': ['by', 'nc', 'sa'],
+                'CCBYNCND': ['by', 'nc', 'nd']
+            };
+
+            if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial") {
+                $scope.material = storageService.getMaterial();
 
                 if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                     $rootScope.selectedSingleMaterial = $scope.material;
@@ -45,26 +37,69 @@ define([
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
 
-            $rootScope.$on('fullscreenchange', function () {
-                $scope.$apply(function () {
+            $scope.$watch(() => {
+                return $scope.material;
+            }, () => {
+                if ($scope.material && $scope.material.id) {
+                    getContentType();
+                }
+            });
+
+            $scope.toggleCommentSection = () => {
+                $scope.commentsOpen = !$scope.commentsOpen;
+            };
+
+            function getContentType() {
+                var baseUrl = document.location.origin;
+                var materialSource = getSource($scope.material);
+                // If the initial type is a LINK, try to ask the type from our proxy
+                if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
+                    $scope.fallbackType = matchType(materialSource);
+                    $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                    serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                }
+                if (materialSource) {
+                    $scope.sourceType = matchType(getSource($scope.material));
+                    if ($scope.sourceType == "EBOOK" && isIE())$scope.material.source += "?archive=true";
+                }
+            }
+
+            function probeContentSuccess(response) {
+                if (!response()['content-disposition']) {
+                    $scope.sourceType = $scope.fallbackType;
+                    return;
+                }
+                var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                $scope.sourceType = matchType(filename);
+                if ($scope.sourceType !== 'LINK') {
+                    $scope.material.source = $scope.proxyUrl;
+                }
+            }
+
+            function probeContentFail() {
+                console.log("Content probing failed!");
+            }
+
+            $rootScope.$on('fullscreenchange', () => {
+                $scope.$apply(() => {
                     $scope.showMaterialContent = !$scope.showMaterialContent;
                 });
             });
 
-            $scope.$watch(function () {
+            $scope.$watch(() => {
                 return storageService.getMaterial();
-            }, function (newMaterial, oldMaterial) {
+            }, updateMaterial);
+
+            function updateMaterial(newMaterial, oldMaterial) {
                 if (newMaterial !== oldMaterial) {
                     $scope.material = newMaterial;
+                    processMaterial();
                 }
-            });
+            }
 
             function getMaterial(success, fail) {
-                var materialId = $route.current.params.materialId;
-                var params = {
-                    'materialId': materialId
-                };
-                serverCallService.makeGet("rest/material", params, success, fail);
+                materialService.getMaterialById($route.current.params.id)
+                    .then(success, fail)
             }
 
             function getMaterialSuccess(material) {
@@ -74,6 +109,7 @@ define([
                     $location.url("/");
                 } else {
                     $scope.material = material;
+
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
                     }
@@ -89,19 +125,21 @@ define([
 
             function processMaterial() {
                 if ($scope.material) {
-                    $scope.sourceType = setSourceType($scope.material.source);
                     if ($scope.sourceType == "EBOOK") {
                         $scope.ebookLink = "/libs/bibi/bib/i/?book=" +
                             $scope.material.uploadedFile.id + "/" +
                             $scope.material.uploadedFile.name;
                     }
+
+                    eventService.notify('material:reloadTaxonObject');
                     $scope.targetGroups = getTargetGroups();
+                    $rootScope.learningObjectChanged = ($scope.material.changed > 0);
 
                     if ($scope.material.embeddable && $scope.sourceType === 'LINK') {
                         if (authenticatedUserService.isAuthenticated()) {
                             getSignedUserData()
                         } else {
-                            $scope.material.iframeSource = $scope.material.source;
+                            $scope.material.iframeSource = $sce.trustAsResourceUrl($scope.material.source);
                         }
                     }
                 }
@@ -109,8 +147,13 @@ define([
 
             function init() {
                 $scope.material.source = getSource($scope.material);
+                getContentType();
                 processMaterial();
-                storageService.setMaterial(null);
+
+                eventService.subscribe($scope, 'taxonService:mapInitialized', getTaxonObject);
+                eventService.subscribe($scope, 'material:reloadTaxonObject', getTaxonObject);
+
+                eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
@@ -122,14 +165,7 @@ define([
                     }
                 }
 
-                var viewCountParams = {
-                    'type': '.Material',
-                    'id': $scope.material.id
-                };
-
-                serverCallService.makePost("rest/material/increaseViewCount", viewCountParams, function () {
-                }, function () {
-                });
+                materialService.increaseViewCount($scope.material);
             }
 
             function getItemsFail() {
@@ -148,94 +184,61 @@ define([
                 $rootScope.setReason(improper.reason);
             }
 
-            $scope.getMaterialEducationalContexts = function () {
+            $scope.getLicenseIconList = () => {
+                if ($scope.material && $scope.material.licenseType) {
+                    return licenceTypeMap[$scope.material.licenseType.name];
+                }
+            };
+
+            $scope.getMaterialEducationalContexts = () => {
                 var educationalContexts = [];
                 if (!$scope.material || !$scope.material.taxons) return;
 
-                $scope.material.taxons.forEach(function (taxon) {
-                    var edCtx = taxonService.getEducationalContext(taxon);
-                    if (edCtx) educationalContexts.push(edCtx);
+                $scope.material.taxons.forEach((taxon) => {
+                    let edCtx = taxonService.getEducationalContext(taxon);
+                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
                 });
 
                 return educationalContexts;
             };
 
-            $scope.getMaterialDomains = function () {
-                var domains = [];
-                if (!$scope.material || !$scope.material.taxons) return;
-
-                $scope.material.taxons.forEach(function (taxon) {
-                    var domain = taxonService.getDomain(taxon);
-                    if (domain) domains.push(domain);
-                });
-
-                return domains;
-            };
-
-            $scope.getMaterialSubjects = function () {
-                var subjects = [];
-                if (!$scope.material || !$scope.material.taxons) return;
-
-                $scope.material.taxons.forEach(function (taxon) {
-                    var subject = taxonService.getSubject(taxon);
-                    if (subject) subjects.push(subject);
-                });
-
-                return subjects;
-            };
-
-            $scope.getCorrectLanguageString = function (languageStringList) {
+            $scope.getCorrectLanguageString = (languageStringList) => {
                 if (languageStringList) {
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
             };
 
-            $scope.formatMaterialIssueDate = function (issueDate) {
-                return formatIssueDate(issueDate);
-            };
+            $scope.formatMaterialIssueDate = (issueDate) => formatIssueDate(issueDate);
+            $scope.formatMaterialUpdatedDate = (updatedDate) => formatDateToDayMonthYear(updatedDate);
+            $scope.isNullOrZeroLength = (arg) => !arg || !arg.length;
 
-            $scope.formatMaterialUpdatedDate = function (updatedDate) {
-                return formatDateToDayMonthYear(updatedDate);
-            };
-
-            $scope.isNullOrZeroLength = function (arg) {
-                return !arg || !arg.length;
-            };
-
-            $scope.getAuthorSearchURL = function ($event, firstName, surName) {
+            $scope.getAuthorSearchURL = ($event, firstName, surName) => {
                 $event.preventDefault();
 
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
             };
 
-            $scope.showSourceFullscreen = function ($event) {
+            $scope.showSourceFullscreen = ($event, ctrl) => {
                 $event.preventDefault();
-
-                $scope.fullscreenCtrl.toggleFullscreen();
+                ctrl.toggleFullscreen();
             };
 
-            $scope.isLoggedIn = function () {
-                return authenticatedUserService.isAuthenticated();
+            $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
+            $scope.isAdmin = () => authenticatedUserService.isAdmin();
+            $scope.isModerator = () => authenticatedUserService.isModerator();
+            $scope.isRestricted = () => authenticatedUserService.isRestricted();
+            $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
+
+            $scope.processMaterial = () => {
+                processMaterial();
             };
 
-            $scope.isAdmin = function () {
-                return authenticatedUserService.isAdmin();
-            };
+            $scope.$on("tags:updateMaterial", (event, value) => {
+                updateMaterial(value, $scope.material);
+            });
 
-            $scope.isModerator = function () {
-                return authenticatedUserService.isModerator();
-            };
-
-            $scope.isRestricted = function () {
-                return authenticatedUserService.isRestricted();
-            };
-
-            $scope.modUser = function () {
-                return !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
-            };
-
-            $scope.isAdminButtonsShowing = function () {
+            $scope.isAdminButtonsShowing = () => {
                 return ($rootScope.learningObjectDeleted == false
                     && $rootScope.learningObjectImproper == false
                     && $rootScope.learningObjectBroken == true)
@@ -248,6 +251,11 @@ define([
                     || ($rootScope.learningObjectDeleted == true);
             };
 
+            function getTaxonObject() {
+                if ($scope.material && $scope.material.taxons) {
+                    $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.material.taxons);
+                }
+            }
 
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
@@ -265,30 +273,24 @@ define([
                 console.log("Failed to get signed user data.")
             }
 
-            $scope.addComment = function () {
-                var url = "rest/comment/material";
-                var params = {
-                    'comment': $scope.newComment,
-                    'material': {
-                        'type': '.Material',
-                        'id': $scope.material.id
-                    }
-                };
-                serverCallService.makePost(url, params, addCommentSuccess, addCommentFailed);
+            $scope.addComment = () => {
+                materialService.addComment($scope.newComment, $scope.material)
+                    .then(addCommentSuccess, addCommentFailed);
             };
 
-            $scope.edit = function () {
+            $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = $scope.material;
 
-                $mdDialog.show(angularAMD.route({
+                $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
-                    controllerUrl: 'views/addMaterialDialog/addMaterialDialog',
+                    controller: 'addMaterialDialogController',
                     scope: editMaterialScope
-                })).then(function (material) {
+                }).then((material) => {
                     if (material) {
                         $scope.material = material;
                         processMaterial();
+                        $rootScope.$broadcast('materialEditModalClosed');
                     }
                 });
             };
@@ -296,9 +298,9 @@ define([
             function addCommentSuccess() {
                 $scope.newComment.text = "";
 
-                getMaterial(function (material) {
+                getMaterial((material) => {
                     $scope.material = material;
-                }, function () {
+                }, () => {
                     log("Comment success, but failed to reload material.");
                 });
             }
@@ -307,13 +309,13 @@ define([
                 log('Adding comment failed.');
             }
 
-            $scope.getType = function () {
+            $scope.getType = () => {
                 if ($scope.material === undefined || $scope.material === null) return '';
 
                 return iconService.getMaterialIcon($scope.material.resourceTypes);
             };
 
-            $scope.confirmMaterialDeletion = function () {
+            $scope.confirmMaterialDeletion = () => {
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
@@ -323,8 +325,8 @@ define([
             };
 
             function deleteMaterial() {
-                var url = "rest/material/" + $scope.material.id;
-                serverCallService.makeDelete(url, {}, deleteMaterialSuccess, deleteMaterialFailed);
+                materialService.deleteMaterial($scope.material)
+                    .then(deleteMaterialSuccess, deleteMaterialFailed);
             }
 
             function deleteMaterialSuccess() {
@@ -338,7 +340,7 @@ define([
                 log('Deleting material failed.');
             }
 
-            $scope.isUsersMaterial = function () {
+            $scope.isUsersMaterial = () => {
                 if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
@@ -347,11 +349,9 @@ define([
                 }
             };
 
-            $scope.setNotImproper = function () {
-                if ($scope.isAdmin() && $scope.material) {
-                    url = "rest/impropers?learningObject=" + $scope.material.id;
-                    serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                }
+            $scope.setNotImproper = () => {
+                materialService.setNotImproper($scope.material)
+                    .then(setNotImproperSuccessful, setNotImproperFailed);
             };
 
             function setNotImproperSuccessful() {
@@ -364,12 +364,14 @@ define([
                 console.log("Setting not improper failed.")
             }
 
-            $scope.restoreMaterial = function () {
-                serverCallService.makePost("rest/material/restore", $scope.material, restoreSuccess, restoreFail);
+            $scope.restoreMaterial = () => {
+                materialService.restoreMaterial($scope.material)
+                    .then(restoreSuccess, restoreFail);
             };
 
-            $scope.markMaterialCorrect = function () {
-                serverCallService.makePost("rest/material/setNotBroken", $scope.material, markCorrectSuccess, queryFailed);
+            $scope.markMaterialCorrect = () => {
+                materialService.setMaterialCorrect($scope.material)
+                    .then(markCorrectSuccess, queryFailed);
             };
 
             function markCorrectSuccess() {
@@ -383,19 +385,19 @@ define([
                 log("Request failed");
             }
 
-            $scope.$on("restore:learningObject", function () {
+            $scope.$on("restore:learningObject", () => {
                 $scope.restoreMaterial();
             });
 
-            $scope.$on("delete:learningObject", function () {
+            $scope.$on("delete:learningObject", () => {
                 deleteMaterial();
             });
 
-            $scope.$on("setNotImproper:learningObject", function () {
+            $scope.$on("setNotImproper:learningObject", () => {
                 $scope.setNotImproper();
             });
 
-            $scope.$on("markCorrect:learningObject", function () {
+            $scope.$on("markCorrect:learningObject", () => {
                 $scope.markMaterialCorrect();
             });
 
@@ -412,8 +414,8 @@ define([
 
             function getTargetGroups() {
                 if ($scope.material.targetGroups[0]) {
-                    return targetGroupService.getLabelByTargetGroupsOrAll($scope.material.targetGroups);
+                    return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
             }
-        }];
-});
+        }
+    ]);

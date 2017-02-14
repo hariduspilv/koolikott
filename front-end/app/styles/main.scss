@@ -12,11 +12,14 @@
 @import "_icon";
 @import "_typography";
 @import "_card";
+@import "_card-xs";
+@import "_card-sm";
+@import "_card-lg";
 @import "_navbar";
 @import "_button";
 @import "_file-upload"; // Üle vaadata
 @import "_toolbar";
-@import "_sidebar";
+@import "_aside";
 @import "_sidenav";
 @import "_input";
 @import "_chip";
@@ -30,17 +33,16 @@
 @import "_layout";
 @import "_error-message";
 @import "_logo";
+@import "_rating";
 @import "_md-toast";
 @import "_favorite";
 @import "_share";
 @import "_dialog";
 @import "_toolbar-add-materials";
-
-// Page specific stylesheets
-@import "pages/add";
-@import "pages/home";
-@import "pages/static";
-@import "pages/profile";
+@import "_tour";
+@import "_comments";
+@import "_license";
+@import "_remaining-charaters";
 
 // Dialog specific stylesheets
 @import "dialogs/add-material";

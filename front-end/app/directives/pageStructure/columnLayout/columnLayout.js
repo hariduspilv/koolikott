@@ -1,31 +1,27 @@
-define([
-    'angularAMD',
-    'directives/tableOfContents/tableOfContents',
-    'directives/alert/alert'
-], function(angularAMD) {
-    angularAMD.directive('dopColumnLayout', function() {
-        return {
-            scope: true,
-            templateUrl: 'directives/pageStructure/columnLayout/columnLayout.html',
-            controller: function($scope, $rootScope, $mdSidenav, $window) {
-                $scope.toggleSidenav = function() {
-                    $mdSidenav('left').toggle();
-                };
+'use strict'
 
-                $scope.sidenavIsOpen = function() {
-                    setTimeout(function() {
-                        return $mdSidenav('left').isOpen();
-                    }, 100);
-                };
+angular.module('koolikottApp')
+.directive('dopColumnLayout',
+function() {
+    return {
+        scope: true,
+        templateUrl: 'directives/pageStructure/columnLayout/columnLayout.html',
+        controller: ['$scope', '$rootScope', '$mdSidenav', '$window', 'storageService', '$timeout', function($scope, $rootScope, $mdSidenav, $window, storageService, $timeout) {
+            $scope.toggleSidenav = function() {
+                $mdSidenav('left').toggle();
+            };
 
-                $scope.$watch(function() {
-                    return $rootScope.savedPortfolio;
-                }, function(newPortfolio, oldPortfolio) {
-                    $scope.portfolio = newPortfolio;
-                });
+            $scope.sidenavIsOpen = function() {
+                return $mdSidenav('left').isOpen();
+            };
 
-                $scope.portfolio = $rootScope.savedPortfolio;
-            }
-        };
-    });
+            $scope.$watch(function() {
+                return storageService.getPortfolio();
+            }, function(newPortfolio, oldPortfolio) {
+                $scope.portfolio = newPortfolio;
+            });
+
+            $scope.portfolio = storageService.getPortfolio();
+        }]
+    };
 });

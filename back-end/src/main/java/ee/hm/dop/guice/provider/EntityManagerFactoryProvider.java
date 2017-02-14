@@ -1,16 +1,5 @@
 package ee.hm.dop.guice.provider;
 
-import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_PASSWORD;
-import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_URL;
-import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_USERNAME;
-import static java.lang.String.format;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -18,6 +7,14 @@ import ee.hm.dop.db.DatabaseMigrator;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.HashMap;
+import java.util.Map;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static java.lang.String.format;
 
 /**
  * Guice provider of Entity Manager Factory.
@@ -75,6 +72,9 @@ public class EntityManagerFactoryProvider implements Provider<EntityManagerFacto
         properties.put("hibernate.c3p0.numHelperThreads", "11");
         properties.put("hibernate.cache.use_query_cache", "true");
         properties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
+
+        properties.put("hibernate.connection.useUnicode", "true");
+        properties.put("hibernate.connection.characterEncoding", "utf8");
 
         // Configurable options
         properties.put("hibernate.connection.url", configuration.getString(DATABASE_URL));

@@ -1,15 +1,14 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/authenticatedUserService',
-    'services/storageService'
-], function(angularAMD) {
-    angularAMD.directive('dopMainFabButton', ['$rootScope', 'serverCallService', '$route', 'storageService', '$filter',  'toastService',
-        function($rootScope, serverCallService, $route, storageService, $filter, toastService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopMainFabButton',
+[
+    'serverCallService', 'authenticatedUserService', 'storageService', 'toastService',
+    function(serverCallService, authenticatedUserService, storageService, toastService) {
         return {
             scope: true,
             templateUrl: 'directives/mainFabButton/mainFabButton.html',
-            controller: function($scope, $mdDialog, $location, authenticatedUserService, $rootScope) {
+            controller: ['$scope', '$location', '$rootScope', '$route', '$filter', '$mdDialog', function($scope, $location, $rootScope, $route, $filter, $mdDialog) {
                 $scope.isOpen = false;
                 $scope.userHasSelectedMaterials = false;
 
@@ -18,17 +17,18 @@ define([
                 },false);
 
                 $rootScope.$watch('selectedSingleMaterial', function (newValue) {
-                        $scope.userHasSelectedMaterials = newValue !== null;
+                    $scope.userHasSelectedMaterials = newValue !== null && newValue !== undefined;
                 },false);
 
-                $scope.showAddPortfolioDialog = function() {
+                $scope.showAddPortfolioDialog = function(e) {
+                    e.preventDefault();
                     var emptyPortfolio = createPortfolio();
 
                     if($scope.userHasSelectedMaterials || $rootScope.selectedSingleMaterial) {
                         emptyPortfolio.chapters = [];
 
                         emptyPortfolio.chapters.push({
-                            title: $filter('translate')('PORTFOLIO_DEFAULT_NEW_CHAPTER_TITLE'),
+                            title: '',
                             subchapters: [],
                             materials: []
                         });
@@ -36,34 +36,35 @@ define([
                         if ($rootScope.selectedMaterials && $rootScope.selectedMaterials.length > 0) {
                             for (var i = 0; i < $rootScope.selectedMaterials.length; i++) {
                                 var selectedMaterial = $rootScope.selectedMaterials[i];
-                                emptyPortfolio.chapters[0].materials.push(selectedMaterial);
+                                emptyPortfolio.chapters[0].contentRows.push({learningObjects: [selectedMaterial]});
                             }
                         } else if($rootScope.selectedSingleMaterial != null) {
-                            emptyPortfolio.chapters[0].materials.push($rootScope.selectedSingleMaterial);
+                            if (emptyPortfolio.chapters[0].contentRows) {
+                                emptyPortfolio.chapters[0].contentRows.push({learningObjects: [$rootScope.selectedSingleMaterial]})
+                            } else {
+                                emptyPortfolio.chapters[0].contentRows = [{learningObjects: [$rootScope.selectedSingleMaterial]}]
+                            }
                         }
+
                         toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
                     }
 
-                    storageService.setPortfolio(emptyPortfolio);
+                    storageService.setEmptyPortfolio(emptyPortfolio);
 
-                    $mdDialog.show(angularAMD.route({
+                    $rootScope.newPortfolioCreated = true;
+
+                    $mdDialog.show({
                         templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                        controllerUrl: 'views/addPortfolioDialog/addPortfolioDialog'
-                    }));
-                };
-
-                $scope.showAddMaterialsToPortfolioDialog = function() {
-                    $mdDialog.show(angularAMD.route({
-                        templateUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio.html',
-                        controllerUrl: 'views/addMaterialToExistingPortfolio/addMaterialToExistingPortfolio'
-                    }));
+                        controller: 'addPortfolioDialogController',
+                        fullscreen: false
+                    });
                 };
 
                 $scope.showAddMaterialDialog = function() {
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'addMaterialDialog.html',
-                        controllerUrl: 'views/addMaterialDialog/addMaterialDialog'
-                    }))
+                        controller: 'addMaterialDialogController'
+                    });
                 };
 
                 $scope.copyPortfolio = function() {
@@ -76,7 +77,7 @@ define([
                     if (isEmpty(portfolio)) {
                         createPortfolioFailed();
                     } else {
-                        $rootScope.savedPortfolio = portfolio;
+                        storageService.setPortfolio(portfolio);
                         $rootScope.openMetadataDialog = true;
                         $mdDialog.hide();
                         $location.url('/portfolio/edit?id=' + portfolio.id);
@@ -90,7 +91,17 @@ define([
                 $scope.hasPermission = function() {
                     return authenticatedUserService.getUser() && !authenticatedUserService.isRestricted();
                 };
-            }
-        };
-    }]);
-});
+
+                $scope.setFabState = function(state) {
+                    if(!isTouchDevice()) {
+                        $scope.isOpen = state;
+                    }
+                };
+
+                function isTouchDevice() {
+                    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+                }
+            }]
+        }
+    }
+]);

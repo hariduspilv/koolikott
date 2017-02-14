@@ -1,0 +1,80 @@
+<!-- Tour for most pages for authenticated user -->
+<tour data-ng-if="!$ctrl.isEditPageTour && !$ctrl.isCancelledTour"
+      data-step="$ctrl.currentStep"
+      data-post-tour="$ctrl.tourComplete()">
+  <virtual-step
+    tourtip="{{($root.isViewPortforlioPage ? 'TOUR_EDIT_SIDENAV' : 'TOUR_SIDENAV') | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-placement="right"
+    tourtip-offset-vertical="-15"
+    tourtip-offset-horizontal="-40"
+    tourtip-step="0"
+    tourtip-element="#sidenavHeader"></virtual-step>
+  <virtual-step
+    tourtip="{{'TOUR_DETAILEDSEARCH' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-offset-vertical="-20"
+    tourtip-arrow-offset="6"
+    tourtip-step="1"
+    tourtip-element="#header-show-detailed-search-icon"></virtual-step>
+  <virtual-step
+    tourtip="{{'TOUR_HELP' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-next-visible="false"
+    tourtip-offset-vertical="-10"
+    tourtip-arrow-offset="40"
+    tourtip-step="2"
+    tourtip-element="#menu-help"></virtual-step>
+</tour>
+
+<!-- Cancelled from first show -->
+<tour data-ng-if="$ctrl.isCancelledTour"
+      data-step="$ctrl.currentStep"
+      data-post-tour="$ctrl.tourComplete()">
+  <virtual-step
+    tourtip="{{'TOUR_CANCELLED_HELP' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-next-visible="false"
+    tourtip-offset-vertical="-10"
+    tourtip-arrow-offset="12"
+    tourtip-step="0"
+    tourtip-element="#menu-help"></virtual-step>
+</tour>
+
+<!-- Edit page tour -->
+<tour data-ng-if="$ctrl.isEditPageTour"
+      data-step="$ctrl.currentStep"
+      data-post-tour="$ctrl.tourComplete(true)">
+  <virtual-step
+    tourtip="{{'TOUR_EDIT_SIDENAV' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-placement="right"
+    tourtip-offset-vertical="-15"
+    tourtip-offset-horizontal="-40"
+    tourtip-step="0"
+    tourtip-element="#sidenavHeader"></virtual-step>
+  <virtual-step
+    tourtip="{{'TOUR_EDIT_SEARCH' | translate}}"
+    tourtip-next-label="{{'FORWARD' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-offset-vertical="-20"
+    tourtip-arrow-offset="40"
+    tourtip-placement="bottom"
+    tourtip-step="1"
+    tourtip-element="#header-search-input"></virtual-step>
+  <virtual-step
+    tourtip="{{'TOUR_EDIT_CHANGE_VISIBLITY' | translate}}"
+    tourtip-close-label="{{'CLOSE' | translate}}"
+    tourtip-placement="bottom"
+    tourtip-next-visible="false"
+    tourtip-offset-vertical="-10"
+    tourtip-arrow-offset="35"
+    tourtip-step="2"
+    tourtip-element="#change-visibility"></virtual-step>
+</tour>

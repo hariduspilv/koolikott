@@ -1,15 +1,14 @@
 package ee.hm.dop.dao;
 
-import static org.joda.time.DateTime.now;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
 
+import javax.persistence.TypedQuery;
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.User;
+import static org.joda.time.DateTime.now;
 
 public class LearningObjectDAO extends BaseDAO<LearningObject> {
 

@@ -1,21 +1,25 @@
-<md-sidenav md-is-open="$root.sideNavOpen" class="md-sidenav-left sidenav" md-component-id="left" id="sidebar-left"
-            layout="column" layout-align="space-between strech">
+<md-sidenav md-is-open="$root.sideNavOpen"
+            class="md-sidenav-left sidenav"
+            data-ng-class="{'md-red': isHeaderRed}"
+            md-component-id="left"
+            id="sidebar-left"
+            layout="column"
+            layout-align="space-between strech">
 
   <!-- Portfolio Header and Chapters -->
-  <md-toolbar class="md-hue-1" layout="row" layout-align="space-between center">
+  <md-toolbar class="sidenav__mobile-logo md-hue-1" layout="row" layout-align="center center">
     <div>
-      <a data-ng-href="/" class="logo logo-bw" id="logo-sidenav"></a>
-      <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
-    </div>
-    <div>
-      <md-icon class="material-icons pointer sidenav__icon" data-ng-click="toggleSidenav('left')">keyboard_arrow_left
+      <md-icon class="material-icons pointer sidenav__icon" data-ng-click="toggleSidenav('left')">arrow_backward
       </md-icon>
       <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_SIDENAV"></span></md-tooltip>
+    </div>
+    <div class="text-center" flex="grow">
+      <a data-ng-href="/" class="logo logo-bw" id="logo-sidenav"></a>
+      <md-tooltip><span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span></md-tooltip>
     </div>
   </md-toolbar>
 
   <md-divider></md-divider>
-  <div id="alert" data-dop-alert></div>
 
   <uib-accordion close-others="false">
     <div uib-accordion-group class="panel-default" is-open="$root.isUserTabOpen">
@@ -160,20 +164,32 @@
                 <span class="sidenav__count" data-ng-bind="restrictedUsersCount"></span>
               </a>
             </li>
+            <li class="sidenav__item" layout="column" ng-if="isAdmin()">
+              <a id="changedLearningObjects" class="sidenav__header" md-ink-ripple layout="row"
+                 layout-align="space-between center"
+                 data-ng-class="{'is-active': isLocation('/dashboard/changedLearningObjects')}"
+                 data-ng-href="/dashboard/changedLearningObjects" data-ng-click="updateChangedLearningObjectCount()">
+                <div layout="row" layout-align="center center">
+                  <md-icon class="material-icons sidenav__icon">priority_high</md-icon>
+                  <span data-translate="DASHBOARD_CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
+                </div>
+                <span class="sidenav__count" data-ng-bind="changedLearningObjectCount"></span>
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
     </div>
 
-    <div uib-accordion-group class="panel-default" ng-if="isViewPortforlioPage || isEditPortfolioMode"
+    <div uib-accordion-group class="panel-default" data-ng-if="isViewPortforlioPage || isEditPortfolioMode"
          is-open="$root.isViewPortfolioAndEdit">
-      <div data-dop-table-of-contents data-portfolio="portfolio" data-readonly="!isEditPortfolioMode"></div>
+      <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
     </div>
 
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"
          data-ng-if="!isViewPortforlioPage && !isEditPortfolioMode">
       <uib-accordion-heading>
-        <a id="sidenavTaxon" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
+        <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}"
            data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div layout="row" layout-align="center center">

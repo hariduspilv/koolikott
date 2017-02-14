@@ -7,6 +7,7 @@ module.exports = function (grunt) {
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
+    require('es6-promise').polyfill();
 
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-webdriver');
@@ -31,10 +32,6 @@ module.exports = function (grunt) {
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
-            bower: {
-                files: ['bower.json'],
-                tasks: ['wiredep']
-            },
             js: {
                 files: [
                     '<%= yeoman.app %>/directives/**/**/*.js',
@@ -161,24 +158,12 @@ module.exports = function (grunt) {
                 map: true,
                 processors: [
                     require('autoprefixer')({
-                        browsers: ['last 2 versions', 'last 3 iOS versions']
+                        browsers: ['> 1%', 'last 2 versions', 'last 3 iOS versions']
                     })
                 ]
             },
             dist: {
                 src: '.tmp/styles/{,*/}*.css'
-            }
-        },
-
-        // Automatically inject Bower components into the app
-        wiredep: {
-            app: {
-                src: ['<%= yeoman.app %>/index.html'],
-                ignorePath: /\.\.\//
-            },
-            sass: {
-                src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                ignorePath: /(\.\.\/){1,2}<%= yeoman.app %>\/libs\//
             }
         },
 
@@ -189,22 +174,14 @@ module.exports = function (grunt) {
                 ]
             },
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
+                files: {
+                    '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.scss'
+                }
             },
             server: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
+                files: {
+                    '.tmp/styles/main.css': '<%= yeoman.app %>/styles/main.scss'
+                }
             }
         },
 
@@ -214,7 +191,8 @@ module.exports = function (grunt) {
                 src: [
                     '<%= yeoman.dist.app %>/styles/{,*/}*.css',
                     '<%= yeoman.dist.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.dist.app %>/fonts/*'
+                    '<%= yeoman.dist.app %>/fonts/*',
+                    '<%= yeoman.dist.app %>/js/*'
                 ]
             }
         },
@@ -322,11 +300,15 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         '*.html',
+                        '*.js',
                         'views/**/**/*.html',
+                        'views/dev/login/login.js',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
                         'directives/**/**/*.html',
-                        'utils/**/**/*.{html,ttf,png,css}'
+                        'utils/**/**/*.{html,ttf,png,css,js}',
+                        'utils/preloader/*.*',
+                        'libs/**/**/*.{js,map}'
                     ]
                 }, {
                     expand: true,
@@ -359,33 +341,10 @@ module.exports = function (grunt) {
                 'sass'
             ],
             dist: [
-                'sass',
+                'sass:dist',
                 'imagemin',
                 'svgmin'
             ]
-        },
-
-        // r.js compile config
-        requirejs: {
-            dist: {
-                options: {
-                    baseUrl: '.tmp/<%= yeoman.app %>',
-                    mainConfigFile: '.tmp/<%= yeoman.app %>/require.config.js',
-                    dir: '<%= yeoman.dist.app %>',
-                    modules: [{
-                        name: 'require.config'
-                    }],
-                    preserveLicenseComments: false, // remove all comments
-                    removeCombined: true,
-                    keepBuildDir: true,
-                    optimize: 'uglify2',
-                    uglify2: {
-                        mangle: true,
-                        dead_code: true,
-                        drop_debugger: true
-                    }
-                }
-            }
         },
 
         // Create compressed archive for deployment
@@ -451,13 +410,45 @@ module.exports = function (grunt) {
         ngconstant: {
             dist: {
                 options: {
-                    dest: 'dist/dop/constants.js',
+                    dest: '<%= yeoman.dist.app %>/constants.js',
                     name: 'DOPconstants'
                 },
                 constants: {
-                    APP_VERSION: grunt.file.readJSON('package.json').version
+                    APP_VERSION: grunt.file.readJSON('package.json').version,
+                    FB_APP_ID: '225966171178748',
+                    YOUTUBE_API_KEY: 'AIzaSyDj2NUAQo5prRJOYzjtdmUzhoQcdtytizE',
+                    GOOGLE_SHARE_CLIENT_ID: '1016780519485-6qksf3e0kggsrq983c47lb6h9schut9p.apps.googleusercontent.com'
                 }
             }
+        },
+
+        // ES6 syntax
+        babel: {
+            options: {
+                presets: ['es2015']
+            },
+            dist: {
+                files: {
+                    '.tmp/concat/js/config.js': '.tmp/concat/js/config.js',
+                    '.tmp/concat/js/controllers.js': '.tmp/concat/js/controllers.js',
+                    '.tmp/concat/js/directives.js': '.tmp/concat/js/directives.js',
+                    '.tmp/concat/js/services.js': '.tmp/concat/js/services.js',
+                    '.tmp/concat/js/components.js': '.tmp/concat/js/components.js'
+                }
+            }
+        },
+
+        // remove dev login for live
+        strip_code: {
+            options: {
+                blocks: [{
+                        start_block: "<!-- remove-html-for-live -->",
+                        end_block: "<!-- end-remove-html-for-live -->"
+                    }]
+            },
+            your_target: {
+                src: '<%= yeoman.dist.app %>/index.html'
+            },
         },
     });
 
@@ -468,7 +459,6 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'wiredep',
             'concurrent:server',
             'postcss:dist',
             'configureProxies:server',
@@ -479,19 +469,39 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'wiredep',
         'useminPrepare',
         'concurrent:dist',
         'postcss:dist',
         'concat',
+        'babel',
         'ngAnnotate',
         'copy:dist',
         'ngconstant:dist',
         'cdnify',
         'cssmin',
+        'uglify',
         'filerev',
         'usemin',
-        'requirejs:dist',
+        'htmlmin'
+    ]);
+
+    // difference is strip_code
+    grunt.registerTask('build-live', [
+        'clean:dist',
+        'useminPrepare',
+        'concurrent:dist',
+        'postcss:dist',
+        'concat',
+        'babel',
+        'ngAnnotate',
+        'copy:dist',
+        'strip_code',
+        'ngconstant:dist',
+        'cdnify',
+        'cssmin',
+        'uglify',
+        'filerev',
+        'usemin',
         'htmlmin'
     ]);
 
@@ -506,7 +516,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('package-live', [
-        'build',
+        'build-live',
         'compress:live'
     ]);
 

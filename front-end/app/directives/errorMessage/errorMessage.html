@@ -1,3 +1,30 @@
+<!-- CHANGED -->
+<div class="error-message-container md-whiteframe-4dp" flex layout="row" data-ng-show="showChanged() && changes">
+  <md-icon>priority_high</md-icon>
+  <p>
+    <span data-translate="MESSAGE_CHANGED_LEARNING_OBJECT"></span>
+  </p>
+    <ul class="reason">
+      <li data-ng-repeat="item in changes">
+        <span>{{getChangeType(item) | translate}}</span>: <span>{{getChangeName(item) | translate}}</span>
+      </li>
+    </ul>
+
+  <span data-flex></span>
+  <button class="md-button error-message-button" data-ng-click="revertChanges()">
+    <md-icon class="button-icon">undo</md-icon>
+    <md-tooltip>
+      <span data-translate="UNDO_CHANGES"></span>
+    </md-tooltip></button>
+  </button>
+  <button class="md-button error-message-button" data-ng-click="acceptChanges()">
+    <md-icon class="button-icon">done</md-icon>
+    <md-tooltip>
+      <span data-translate="ACCEPT_CHANGES"></span>
+    </md-tooltip></button>
+  </button>
+</div>
+
 <!-- DELETED -->
 <div class="error-message-container md-whiteframe-4dp" flex layout="row" ng-show="showDeleted()">
   <md-icon>delete</md-icon>

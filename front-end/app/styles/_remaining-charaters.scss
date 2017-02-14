@@ -1,0 +1,15 @@
+.remaining-charaters-wrapper {
+  position: relative;
+}
+
+.remaining-charaters {
+  position: absolute;
+  right: 45px;
+  bottom: $md-padding;
+  font-size: $font-small;
+  color: $color-muted;
+
+  .char-limit-error {
+    color: $error;
+  }
+}

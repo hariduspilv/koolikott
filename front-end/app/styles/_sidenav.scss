@@ -9,28 +9,15 @@ md-sidenav {
   @media (min-width: $layout-breakpoint-md) {
     background-color: transparent;
     box-shadow: none;
-    z-index: 3;
+    z-index: 10;
   }
-}
 
-.md-toolbar-tools {
-  font-size: 18px;
-}
-
-md-sidenav {
   md-toolbar {
     padding: 0 22px;
-  }
-  @media (min-width: $layout-breakpoint-md) {
-    md-toolbar {
+
+    @media (min-width: $layout-breakpoint-md) {
       min-height: 64px;
     }
-  }
-  md-toolbar.md-primary .md-toolbar-tools.md-subhead {
-    box-shadow: rgba(0, 0, 0, 0.2) -3px 1px 3px 0px, rgba(0, 0, 0, 0.137255) -1px 1px 1px 0px, rgba(0, 0, 0, 0.117647) -1px 2px 1px -1px;
-  }
-  md-content {
-    z-index: -1;
   }
 }
 
@@ -132,6 +119,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
     .sidenav__count {
       color: $color-selected-menu;
+
+      .main-container .md-red & {
+        color: $color-admin;
+      }
     }
   }
 
@@ -147,8 +138,16 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
     color: $color-selected-menu;
     background: rgba(0, 0, 0, 0.1);
 
+    .main-container .md-red & {
+      color: $color-admin;
+    }
+
     .sidenav__icon {
       color: $color-selected-menu;
+
+      .main-container .md-red & {
+        color: $color-admin;
+      }
     }
   }
 
@@ -193,6 +192,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
   &--link {
     color: $color-selected-menu;
+
+    .main-container .md-red & {
+      color: $color-admin;
+    }
   }
 
   .md-ripple-container {

@@ -1,0 +1,23 @@
+.license {
+  display: inline-block;
+  text-indent: -9999px;
+  width: 15px;
+  height: 15px;
+  background-size: contain;
+
+  &--cc {
+    background-image: url('/images/cc.svg');
+  }
+  &--by {
+    background-image: url('/images/by.svg');
+  }
+  &--nc {
+    background-image: url('/images/nc.svg');
+  }
+  &--nd {
+    background-image: url('/images/nd.svg');
+  }
+  &--sa {
+    background-image: url('/images/sa.svg');
+  }
+}

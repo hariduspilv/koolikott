@@ -1,14 +1,11 @@
 package ee.hm.dop.dao;
 
-import java.util.List;
+import ee.hm.dop.model.ResourceType;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
 import javax.persistence.TypedQuery;
-
-
-import ee.hm.dop.model.ResourceType;
+import java.util.List;
 
 public class ResourceTypeDAO {
 

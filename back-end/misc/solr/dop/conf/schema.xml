@@ -16,10 +16,10 @@
  limitations under the License.
 -->
 
-<!--  
+<!--
  This is the Solr schema file. This file should be named "schema.xml" and
  should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default) 
+ (i.e. ./solr/conf/schema.xml by default)
  or located where the classloader for the Solr webapp can find it.
 
  This example schema is the recommended starting point for users.
@@ -148,6 +148,9 @@
     <field name="tag_up_vote" type="text_general" indexed="false" stored="false" multiValued="true"/>
 
     <!-- Material -->
+    <field name="source" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="suggest_source" type="link" indexed="true" stored="false" multiValued="true"/>
+    <field name="search_source" type="search_link" indexed="true" stored="false" multiValued="true"/>
     <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -160,9 +163,9 @@
     <field name="publisher" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Tag suggestion -->
-    <field name="taxon_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    <field name="resource_type_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    <field name="target_group_name" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="taxon_name" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
+    <field name="resource_type_name" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
+    <field name="target_group_name" type="suggest_tag_phrase" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Portfolio -->
     <field name="summary" type="text_general" indexed="true" stored="false"/>
@@ -205,6 +208,8 @@
     <copyField source="language" dest="text"/>
     <copyField source="publisher" dest="text"/>
     <copyField source="peerReview" dest="text"/>
+    <copyField source="source" dest="suggest_source"/>
+    <copyField source="source" dest="search_source"/>
 
     <copyField source="title" dest="suggest_phrase"/>
     <copyField source="description" dest="suggest_phrase"/>
@@ -231,6 +236,23 @@
     solution to it is ShingleFilterFactory which queries the whole word ("test port"->"test portfolio") as the
     indexing process splits it into shingles -->
 
+    <fieldType name="link" class="solr.TextField">
+        <analyzer type="index">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="ee.hm.FilteredLinkFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <fieldType name="search_link" class="solr.TextField">
+        <analyzer>
+            <tokenizer class="solr.NGramTokenizerFactory" minGramSize="2" maxGramSize="10"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
     <fieldType name="suggest_phrase" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
             <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -239,10 +261,16 @@
         </analyzer>
     </fieldType>
 
+    <fieldType name="suggest_source" class="solr.TextField" positionIncrementGap="100">
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
     <fieldType name="suggest_tag_phrase" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
-            <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-            <filter class="solr.ShingleFilterFactory" maxShingleSize="3" outputUnigrams="true"/>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
@@ -326,7 +354,7 @@
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
          is a more restricted form of the canonical representation of dateTime
-         http://www.w3.org/TR/xmlschema-2/#dateTime    
+         http://www.w3.org/TR/xmlschema-2/#dateTime
          The trailing "Z" designates UTC time and is mandatory.
          Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
          All other components are mandatory.
@@ -341,7 +369,7 @@
                NOW/DAY+6MONTHS+3DAYS
                   ... 6 months and 3 days in the future from the start of
                       the current day
-                      
+
          Consult the TrieDateField javadocs for more information.
 
          Note: For faster range queries, consider the tdate type
@@ -357,11 +385,11 @@
 
     <!-- The "RandomSortField" is not used to store or search any
          data.  You can declare fields of this type it in your schema
-         to generate pseudo-random orderings of your docs for sorting 
+         to generate pseudo-random orderings of your docs for sorting
          or function purposes.  The ordering is generated based on the field
          name and the version of the index. As long as the index version
          remains unchanged, and the same field name is reused,
-         the ordering of the docs will be consistent.  
+         the ordering of the docs will be consistent.
          If you want different psuedo-random orderings of documents,
          for the same version of the index, use a dynamicField and
          change the field name in the request.

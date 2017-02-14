@@ -12,18 +12,14 @@
 
 .textangular-editor, .textangular-view {
   pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.428571429;
-    word-break: break-word;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin: 0 0 16px 0;
-    word-wrap: break-word;
+    font-size: $font-medium;
+    padding: $md-padding;
+    line-height: $body-lineheight;
+    background-color: $bg-gray;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    margin: 0 0 $md-padding 0;
+    overflow-x: scroll;
   }
   blockquote {
     padding: 0 1em;
@@ -69,7 +65,7 @@
   overflow: hidden;
   padding: 7px 0;
 
-  @media (min-width: 600px){
+  @media (min-width: $layout-breakpoint-xs){
     flex-direction: row-reverse;
   }
 
@@ -81,7 +77,7 @@
     @media (min-width: 340px) {
       padding: 4px;
     }
-    @media (min-width: 600px) {
+    @media (min-width: $layout-breakpoint-xs) {
       padding: 0;
     }
     md-icon {
@@ -96,7 +92,7 @@
     flex-direction: row;
     flex-wrap: wrap;
 
-    @media (min-width: 600px) {
+    @media (min-width: $layout-breakpoint-xs) {
       flex-direction: column;
      }
   }
@@ -104,7 +100,7 @@
   // Toolbar style ( contains btn-group )
   .ta-toolbar {
     padding: 10px 10px 0 0;
-    @media (min-width: 600px) {
+    @media (min-width: $layout-breakpoint-xs) {
       padding: 10px 5px;
     }
     &.focussed {

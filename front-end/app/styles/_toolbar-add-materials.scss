@@ -4,7 +4,7 @@
   left:0;
   right:0;
   overflow: hidden;
-  z-index: 10;
+  z-index: 20;
   max-height: none;
 
   @media (max-width: $layout-breakpoint-xs) {
@@ -23,6 +23,10 @@
 
 .toolbar-add-materials__progress {
   margin: 0 14px;
+
+  &--no-margin {
+    margin: 0;
+  }
 }
 
 .toolbar-add-materials__info {
@@ -44,6 +48,7 @@
 .toolbar-add-materials__select {
   width: 200px;
   margin: 0 20px;
+
   .md-select-value {
     font-size: $font-medium;
 
@@ -104,4 +109,8 @@
       margin-left: $button-width;
     }
   }
+}
+
+.toolbar-add-materials__subchapter {
+  padding-left: 25px;
 }

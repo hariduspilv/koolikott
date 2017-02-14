@@ -62,4 +62,6 @@ public interface ConfigurationProperties {
     String FILE_UPLOAD_DIRECTORY = "file.upload.directory";
     String DOCUMENT_MAX_FILE_SIZE = "file.document.upload.max.size";
     String FILE_REVIEW_DIRECTORY = "file.review.directory";
+
+    String MAX_FEED_ITEMS = "feed.items.max";
 }

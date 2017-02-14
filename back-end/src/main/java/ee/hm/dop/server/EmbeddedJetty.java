@@ -9,6 +9,8 @@ import com.google.inject.servlet.GuiceFilter;
 import ee.hm.dop.config.DOPApplication;
 import ee.hm.dop.rest.filter.TransactionFilter;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.gzip.GzipHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
@@ -50,7 +52,15 @@ public class EmbeddedJetty {
 
         addFilters(servletContextHandler);
         configureDynamicContentServlet(servletContextHandler);
+        servletContextHandler.setGzipHandler(getGzipHandler());
+
         return servletContextHandler;
+    }
+
+    private GzipHandler getGzipHandler() {
+        GzipHandler gzipHandler = new GzipHandler();
+        gzipHandler.setIncludedMimeTypes("application/json");
+        return gzipHandler;
     }
 
     private void configureDynamicContentServlet(ServletContextHandler servletContextHandler) {

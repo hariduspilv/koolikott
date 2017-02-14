@@ -11,10 +11,6 @@
   display: block;
 }
 
-.portfolio-noedit-item {
-  cursor: pointer;
-}
-
 .portfolio-chapter {
   h2 {
     margin: 0;
@@ -46,8 +42,6 @@
   .md-body-1  {
     font-size: 14px;
     line-height: 22px;
-    -webkit-column-count: 2; /* Chrome, Safari, Opera */
-    -moz-column-count: 2; /* Firefox */
     column-count: 2;
   }
 }
@@ -56,6 +50,7 @@
 .portfolio-chapter-subchapter-materials {
   margin-top: 0px;
   margin-bottom: 0;
+  padding-left: 0;
 }
 
 /**

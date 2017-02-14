@@ -1,0 +1,35 @@
+aside {
+  @media (min-width: $layout-breakpoint-sm) {
+    padding-left: $md-padding;
+  }
+
+  .md-subhead {
+    margin: 0 0 $md-padding/2;
+  }
+
+  .layout-column > .flex-sm-50 {
+    &:first-of-type {
+      padding-right: 0;
+
+      @media (min-width: $layout-breakpoint-xs) {
+        padding-right: $md-padding/2;
+      }
+
+      @media (min-width: $layout-breakpoint-sm) {
+        padding-right: 0;
+      }
+    }
+
+    &:last-of-type {
+      padding-left: 0;
+
+      @media (min-width: $layout-breakpoint-xs) {
+        padding-left: $md-padding/2;
+      }
+
+      @media (min-width: $layout-breakpoint-sm) {
+        padding-left: 0;
+      }
+    }
+  }
+}

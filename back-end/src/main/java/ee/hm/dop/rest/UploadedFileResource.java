@@ -14,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -36,7 +37,7 @@ public class UploadedFileResource extends BaseResource {
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public UploadedFile uploadFile(@FormDataParam("file") InputStream fileInputStream,
+    public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,
                                    @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
         return uploadedFileService.uploadFile(fileInputStream, fileDetail, configuration.getString(FILE_UPLOAD_DIRECTORY), "/rest/uploadedFile/");
     }
@@ -44,7 +45,8 @@ public class UploadedFileResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("{id}/{filename:.*}")
-    public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename) throws UnsupportedEncodingException {
+    public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename, @QueryParam("archive") boolean archive) throws UnsupportedEncodingException {
+        if (archive) return uploadedFileService.getArchivedFile(fileId);
         return uploadedFileService.getFile(fileId, filename, false);
     }
 

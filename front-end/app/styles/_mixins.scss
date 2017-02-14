@@ -1,8 +1,7 @@
-// responsive aspect ratio, http://codepen.io/jakob-e/pen/LEdWNB
-@mixin aspect-ratio($ratio-or-width, $height: null) {
-  $padding: if($height, percentage($height/$ratio-or-width), percentage(1/$ratio-or-width));
-  &:before { content:''; float: left; padding-bottom: $padding;  }
-  &:after  { content:''; display: table; clear: both;  }
+// Helper function
+// Return null rather than throwing an error if index is outside list range.
+@function nth-or-null($list, $index) {
+  @return if(length($list) >= $index, nth($list, $index), null);
 }
 
 // source http://codepen.io/SitePoint/pen/bNWXdQ
@@ -130,4 +129,9 @@
   }
 
   @return $shadows;
+}
+
+@mixin pattern-color($color) {
+  background-image: linear-gradient(45deg, lighten($color, 5%), darken($color, 5%));
+  background-color: lighten($color, 5%);
 }

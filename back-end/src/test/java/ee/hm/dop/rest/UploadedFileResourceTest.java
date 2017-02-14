@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
@@ -82,7 +83,7 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
         Long id = uploadedFile.getId();
         assertNotNull(id);
         String filename = uploadedFile.getPath().replaceAll(REGEX, "");
-        assertEquals(HTTP_OK, response.getStatus());
+        assertEquals(HTTP_CREATED, response.getStatus());
         assertNotNull(uploadedFile.getId());
         assertEquals(configuration.getString(SERVER_ADDRESS) + "/rest/uploadedFile/" + id + "/" + uploadedFile.getName(), uploadedFile.getUrl());
         assertEquals(filename, uploadedFile.getPath().replaceAll(REGEX, ""));

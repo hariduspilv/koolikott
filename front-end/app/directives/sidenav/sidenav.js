@@ -1,16 +1,13 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/searchService',
-    'services/userDataService',
-    'directives/learningObjectRow/learningObjectRow',
-    'directives/sidenavTaxon/sidenavTaxon'
-], function (angularAMD) {
-    angularAMD.directive('dopSidenav', ['serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', function () {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopSidenav', [
+    'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', 'metadataService', 'taxonService',
+    function (serverCallService, $location, $sce, searchService, authenticatedUserService, $mdDialog, userDataService, metadataService, taxonService) {
         return {
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
-            controller: function ($rootScope, $scope, $location, serverCallService, searchService, $timeout, metadataService, authenticatedUserService, $sce, $mdDialog, userDataService) {
+            controller: ['$rootScope', '$scope', '$location', '$timeout', function ($rootScope, $scope, $location, $timeout) {
                 $scope.isTaxonomyOpen = true;
                 $scope.dashboardOpen = $location.path().startsWith("/dashboard");
 
@@ -23,10 +20,19 @@ define([
                     'palette'
                 ];
 
+
+                $scope.$watch(function () {
+                   return taxonService.getSidenavTaxons();
+                }, function (newValue) {
+                    if (newValue) {
+                        $scope.taxon = newValue;
+                    }
+                });
+
                 $scope.$watch(function () {
                     return $location.url();
                 }, function () {
-                    $rootScope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1;
+                    $rootScope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1 || $location.url().indexOf('/search') != -1;
                 }, true);
 
                 $scope.$watch(function () {
@@ -67,18 +73,18 @@ define([
                     return location === $location.path();
                 };
 
-                if (window.innerWidth > 1280) {
+                if (window.innerWidth > BREAK_LG) {
                     $rootScope.sideNavOpen = true;
                 }
 
                 $scope.status = true;
 
                 function openLoginDialog(e) {
-                    $mdDialog.show(angularAMD.route({
+                    $mdDialog.show({
                         templateUrl: 'views/loginDialog/loginDialog.html',
-                        controllerUrl: 'views/loginDialog/loginDialog',
+                        controller: 'loginDialogController',
                         targetEvent: e
-                    }));
+                    });
                 }
 
                 $scope.updateBrokenMaterialsCount = function () {
@@ -140,7 +146,11 @@ define([
                         $scope.restrictedUsersCount = data;
                     });
                 };
-
+                $scope.updateChangedLearningObjectCount = function () {
+                    userDataService.loadChangedLearningObjectCount(function (data) {
+                        $scope.changedLearningObjectCount = data;
+                    });
+                };
                 $scope.updateUserCounts = function () {
                     if (authenticatedUserService.isAuthenticated()) {
                         $scope.updateUserFavoritesCount();
@@ -164,6 +174,7 @@ define([
                         $scope.updateImproperPortfoliosCount();
                         $scope.updateModeratorsCount();
                         $scope.updateRestrictedUsersCount();
+                        $scope.updateChangedLearningObjectCount();
                     }
                 };
 
@@ -176,7 +187,10 @@ define([
                     }
                 };
 
-            }
+                $scope.$on('header:red', () => $scope.isHeaderRed = true);
+                $scope.$on('header:default', () => $scope.isHeaderRed = false);
+
+            }]
         }
-    }]);
-});
+    }
+]);

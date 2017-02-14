@@ -1,9 +1,10 @@
-define([
-    'angularAMD',
-    'services/recursionHelper',
-    'services/taxonService'
-], function (angularAMD) {
-    angularAMD.directive('dopSidenavTaxon', ['RecursionHelper', 'searchService', 'taxonService', function (RecursionHelper, searchService, taxonService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopSidenavTaxon',
+[
+    'RecursionHelper', 'searchService', 'taxonService', 'serverCallService',
+    function (RecursionHelper, searchService, taxonService, serverCallService) {
         return {
             scope: {
                 taxon: '=',
@@ -13,7 +14,7 @@ define([
             compile: function (element) {
                 return RecursionHelper.compile(element);
             },
-            controller: function ($rootScope, $scope, $location, serverCallService, $timeout) {
+            controller: ['$rootScope', '$scope', '$location', '$timeout', function ($rootScope, $scope, $location, $timeout) {
                 $scope.opened = null;
                 $scope.hasChildren = false;
 
@@ -123,12 +124,12 @@ define([
                 }
 
                 function getTaxonCountKey(taxon) {
-                    var key = "";
-                    if (taxon.level) key = taxon.level.toUpperCase() + "_";
+                    let key = "";
+                    if (taxon.id) key = taxon.id.toString() + "_";
                     return key + taxon.name.toUpperCase() + "_COUNT"
 
                 }
-            }
+            }]
         }
-    }]);
-});
+    }
+]);

@@ -1,9 +1,9 @@
 package ee.hm.dop.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -27,21 +27,23 @@ public class TaxonDAO extends BaseDAO<Taxon> {
     }
 
     public List<EducationalContext> findAllEducationalContext() {
-        List<Taxon> resultList = createQuery("FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'", Taxon.class)
+        return (List<EducationalContext>) (List<?>) getEntityManager()
+                .createNamedQuery("findAllEducationalContext", Taxon.class)
                 .getResultList();
-
-        List<EducationalContext> educationalContexts = new ArrayList<>();
-
-        for (Taxon taxon : resultList) {
-            educationalContexts.add((EducationalContext) taxon);
-        }
-
-        return educationalContexts;
     }
 
-    public List<Taxon> findReducedTaxon() {
-        return createQuery("FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'", Taxon.class)
-                .getResultList();
+    public Taxon findTaxonByName(String name) {
+        Taxon taxon = null;
+        try {
+            taxon = createQuery("SELECT t FROM Taxon t WHERE lower(t.name)=:name", Taxon.class)
+                    .setParameter("name", name.toLowerCase())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        }
+
+        return taxon;
     }
 
     public Taxon findTaxonByRepoName(String name, String repoTable, Class<? extends Taxon> level) {

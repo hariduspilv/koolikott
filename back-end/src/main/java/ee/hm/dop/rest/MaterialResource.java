@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
@@ -59,13 +60,13 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("getAllBySource")
+    @Path("getOneBySource")
     @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getAllMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
+    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getBySource(materialSource, true);
+        return materialService.getOneBySource(materialSource, true);
     }
 
     @POST
@@ -230,7 +231,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
-        if(user != null) {
+        if (user != null) {
             return materialService.hasSetBroken(materialId, getLoggedInUser());
         }
 
@@ -250,7 +251,14 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public Response getDeletedMaterialsCount() {
-        return Response.ok(materialService.getDeletedMaterials().size()).build();
+        return Response.ok(materialService.getDeletedMaterialsCount()).build();
 
+    }
+
+    @GET
+    @Path("externalMaterial/")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
+        return materialService.getProxyUrl(url_param);
     }
 }

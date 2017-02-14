@@ -26,7 +26,7 @@
     <td md-cell data-ng-if="item.reportCount === 1 && item.creator">{{item.creator.name}} {{item.creator.surname}}</td>
     <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
     <td md-cell>
-      <a ng-href="/material?materialId={{item.material.id}}">
+      <a ng-href="/material?id={{item.material.id}}">
         <md-button aria-label="Ava material" class="md-raised md-default" data-translate="BUTTON_OPEN"></md-button>
       </a>
     </td>

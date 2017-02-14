@@ -1,17 +1,25 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
-import java.util.List;
-
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -25,21 +33,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.NoClass;
-import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
-import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-import org.owasp.html.HtmlPolicyBuilder;
-import org.owasp.html.PolicyFactory;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.MINIMAL_CLASS,
@@ -132,6 +130,17 @@ public abstract class LearningObject implements Searchable {
     @Column(nullable = false)
     private Long views = (long) 0;
 
+    @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "LearningObject_Taxon",
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "taxon"}))
+    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
+    @JsonSerialize(contentUsing = TaxonSerializer.class)
+    private List<Taxon> taxons;
+
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
 
@@ -143,6 +152,9 @@ public abstract class LearningObject implements Searchable {
 
     @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.deleted = 0)")
     private int improper;
+
+    @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
+    private int changed;
 
     /**
      * Last time when something was done to this LearningObject. It includes
@@ -299,5 +311,21 @@ public abstract class LearningObject implements Searchable {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public int getChanged() {
+        return changed;
+    }
+
+    public void setChanged(int changed) {
+        this.changed = changed;
+    }
+
+    public List<Taxon> getTaxons() {
+        return taxons;
+    }
+
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
     }
 }

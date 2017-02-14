@@ -1,15 +1,15 @@
 package ee.hm.dop.dao;
 
-import java.util.List;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.ReducedLearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserFavorite;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
+import java.util.List;
 
 public class UserFavoriteDAO extends BaseDAO<UserFavorite> {
     @Inject
@@ -36,9 +36,9 @@ public class UserFavoriteDAO extends BaseDAO<UserFavorite> {
         query.executeUpdate();
     }
 
-    public List<LearningObject> findUsersFavoritedLearningObjects(User user, int start, int maxResults) {
-        String query = "SELECT uf.learningObject FROM UserFavorite uf WHERE uf.creator = :creator and uf.learningObject.deleted = false order by uf.learningObject.added desc";
-        TypedQuery<LearningObject> findAllByCreator = createQuery(query, LearningObject.class);
+    public List<ReducedLearningObject> findUsersFavoritedLearningObjects(User user, int start, int maxResults) {
+        String query = "SELECT rlo FROM UserFavorite uf, ReducedLearningObject rlo WHERE uf.creator = :creator and uf.learningObject.deleted = false and uf.learningObject.id = rlo.id order by uf.learningObject.added desc";
+        TypedQuery<ReducedLearningObject> findAllByCreator = createQuery(query, ReducedLearningObject.class);
         return findAllByCreator.setParameter("creator", user).setFirstResult(start).setMaxResults(maxResults).getResultList();
     }
 

@@ -52,6 +52,10 @@ insert into User(id, userName, name, surName, idCode, role, publisher) values (1
 insert into User(id, userName, name, surName, idCode, role, publisher) values (14, 'user.to.be.banned2', 'November', 'Juliet', '38256133108', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (15, 'restricted.user2', 'Restricted', 'User', '89898989892', 'RESTRICTED', null);
 
+-- UserTourData
+
+INSERT INTO UserTourData(id, user, generalTour, editTour) VALUES (1, 1, 1, 0);
+
 -- AuthenticatedUser
 
 insert into AuthenticatedUser(id, user_id, token, firstLogin, person) values (1, 1, 'token', false, null);
@@ -172,7 +176,7 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(5, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null)
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(7, '2001-07-01 00:00:01', null, 700, null, null, false, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, false, false, false);
@@ -266,23 +270,22 @@ insert into Material_Title(title, material) values(18, 8);
 
 -- Material_Taxon
 
-insert into Material_Taxon(material, taxon) values(1,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(2,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
-insert into Material_Taxon(material, taxon) values(3,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(4,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(5,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
-insert into Material_Taxon(material, taxon) values(6,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
-insert into Material_Taxon(material, taxon) values(6,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(1,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(2,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(3,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(4,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(5,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
+insert into LearningObject_Taxon(learningObject, taxon) values(6,20); -- PRESCHOOLEDUCATION/Mathematics/Biology
+insert into LearningObject_Taxon(learningObject, taxon) values(6,21); -- PRESCHOOLEDUCATION/Mathematics/Mathematics
 
-insert into Material_Taxon(material, taxon) values(7,11); -- PRESCHOOLEDUCATION/ForeignLanguage
+insert into LearningObject_Taxon(learningObject, taxon) values(7,11); -- PRESCHOOLEDUCATION/ForeignLanguage
 
-insert into Material_Taxon(material, taxon) values(1,2); -- BASICEDUCATION
-insert into Material_Taxon(material, taxon) values(2,4); -- HIGHEREDUCATION
-insert into Material_Taxon(material, taxon) values(3,5); -- VOCATIONALEDUCATION
-insert into Material_Taxon(material, taxon) values(4,6); -- CONTINUINGEDUCATION
-insert into Material_Taxon(material, taxon) values(5,4); -- HIGHEREDUCATION
-insert into Material_Taxon(material, taxon) values(7,5); -- VOCATIONALEDUCATION
-
+insert into LearningObject_Taxon(learningObject, taxon) values(1,2); -- BASICEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(2,4); -- HIGHEREDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(3,5); -- VOCATIONALEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(4,6); -- CONTINUINGEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(5,4); -- HIGHEREDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(7,5); -- VOCATIONALEDUCATION
 
 -- ResourceType
 
@@ -409,49 +412,66 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 -- Portfolio
 
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, 3, 6, false, 3);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 21, 5, 'The changes after 2008.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 5, 'The changes after 2008.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (102, '2012-12-29 06:00:01', null, 14, null, 4, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (102, 'New ways how to do it', null, 4, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (102, 'New ways how to do it', 4, null, 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, 4, 6, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (103, 'The newer stock market', 21, 6, 'A marvellous summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (103, 'The newer stock market', 6, 'A marvellous summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (104, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (104, 'The even newer stock market', null, 1, 'Cool summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (104, 'The even newer stock market', 1, 'Cool summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (105, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (105, 'Adding comment to a portfolio', null, 1, 'Cool summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (105, 'Adding comment to a portfolio', 1, 'Cool summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (106, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', null, 2, 'Summary.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', 2, 'Summary.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (107, '2003-10-10 07:00:11', null, 100, 5, 2, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', null, 2, 'Summary. Sum sum sum.', 'PRIVATE');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', 2, 'Summary. Sum sum sum.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', null, 2, 'Summary. Wow.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', 2, 'Summary. Wow.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (109, '2011-10-10 07:00:11', null, 100, null, 7, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', null, 7, 'Alpha.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', 7, 'Alpha.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', null, 7, 'Alpha.', 'PRIVATE');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', 7, 'Alpha.', 'PRIVATE');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (111, '2003-10-10 07:00:11', null, 100, null, 7, false, 6);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', null, 7, 'Alpha.', 'NOT_LISTED');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', 7, 'Alpha.', 'NOT_LISTED');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (112, '2003-10-10 07:00:11', null, 100, null, 9, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (112, 'This portfolio will be DELETED in tests.', null, 9, 'Alpha.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (112, 'This portfolio will be DELETED in tests.', 9, 'Alpha.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (113, '2003-12-10 06:21:10', null, 100, null, 9, false, null);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (113, 'This portfolio will be DELETED in tests by admin.', null, 9, 'Beta.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.', 'PUBLIC');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4);
-insert into Portfolio(id, title, taxon, originalCreator, summary, visibility) VALUES (114, 'Uploading picture to it', null, 6, 'Beta.', 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (114, 'Uploading picture to it', 6, 'Beta.', 'PUBLIC');
 
 -- Chapter
 
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (1, 'The crisis', 101, null, null, 0);
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (2, 'Chapter 3', 101, 'This is some text that explains what is the Chapter 3 about.' || char(10) || 'It can have many lines' || char(10) || char(10) || char(10) || 'And can also have    spaces   betwenn    the words on it', null, 2);
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (3, 'Chapter 2', 101, 'Paragraph 1' || char(10) || char(10) || 'Paragraph 2' || char(10) || char(10) || 'Paragraph 3' || char(10) || char(10) || 'Paragraph 4', null, 1);
-insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (4, 'Subprime', null, null, 1, 0); -- Subchpater of #1
+insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (4, 'Subprime', null, null, 1, 0); -- Subchapter of #1
 insert into Chapter(id, title, portfolio, textValue, parentChapter, chapterOrder) values (5, 'The big crash', null, 'Bla bla bla' || char(10) || 'Bla bla bla bla bla bla bla', 1, 1); -- Subchpater of #1
 
--- Chapter-Material
+-- Content_Row
 
-insert into Chapter_Material(chapter, material, materialOrder) values(1, 1, 0);
-insert into Chapter_Material(chapter, material, materialOrder) values(4, 5, 0);
-insert into Chapter_Material(chapter, material, materialOrder) values(4, 1, 1);
-insert into Chapter_Material(chapter, material, materialOrder) values(4, 8, 2);
-insert into Chapter_Material(chapter, material, materialOrder) values(5, 3, 0);
+insert into ContentRow(id) values(1);
+insert into ContentRow(id) values(2);
+insert into ContentRow(id) values(3);
+insert into ContentRow(id) values(4);
+insert into ContentRow(id) values(5);
+
+-- Chapter_Row
+
+insert into Chapter_Row(row, chapter, rowOrder) values(1, 1, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(2, 2, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(3, 3, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(4, 4, 0);
+insert into Chapter_Row(row, chapter, rowOrder) values(5, 5, 0);
+
+
+-- Row_Material
+
+insert into Row_Material(row, material, materialOrder) values(1, 1, 0);
+insert into Row_Material(row, material, materialOrder) values(2, 5, 0);
+insert into Row_Material(row, material, materialOrder) values(3, 1, 0);
+insert into Row_Material(row, material, materialOrder) values(4, 8, 0);
+insert into Row_Material(row, material, materialOrder) values(5, 3, 0);
 
 -- Portfolio-Tags
 
@@ -472,6 +492,10 @@ insert into LearningObject_CrossCurricularTheme(learningObject, crossCurricularT
 
 -- Portfolio Key competences
 insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (101, 1);
+
+-- Portfolio taxons
+insert into LearningObject_Taxon(learningObject, taxon) values(101, 21);
+insert into LearningObject_Taxon(learningObject, taxon) values(103, 21);
 
 -- Improper content
 

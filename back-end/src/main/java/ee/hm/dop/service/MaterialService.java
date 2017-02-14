@@ -1,39 +1,62 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
+import ee.hm.dop.dao.BrokenContentDAO;
+import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.ReducedLearningObjectDAO;
+import ee.hm.dop.dao.UserLikeDAO;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.BrokenContent;
+import ee.hm.dop.model.ChangedLearningObject;
+import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
+import ee.hm.dop.model.Publisher;
+import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.ReducedLearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.utils.TaxonUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.util.TextUtils;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
-import ee.hm.dop.dao.BrokenContentDAO;
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.UserLikeDAO;
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.service.learningObject.LearningObjectHandler;
-import ee.hm.dop.utils.TaxonUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.configuration.Configuration;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.util.TextUtils;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.joda.time.DateTime.now;
 
 public class MaterialService extends BaseService implements LearningObjectHandler {
 
     public static final String BASICEDUCATION = "BASICEDUCATION";
-    public static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
+    private static final String SECONDARYEDUCATION = "SECONDARYEDUCATION";
+    private static final String WWW_PREFIX = "www.";
+    private static final String DEFAULT_PROTOCOL = "http://";
+    private final String PDF_EXTENSION = ".pdf\"";
+    private final String PDF_MIME_TYPE = "application/pdf";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -65,7 +88,13 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     private CrossCurricularThemeService crossCurricularThemeService;
 
     @Inject
+    private ChangedLearningObjectService changedLearningObjectService;
+
+    @Inject
     private Configuration configuration;
+
+    @Inject
+    private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     public Material get(long materialId, User loggedInUser) {
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
@@ -87,16 +116,9 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
-        material.setSource(cleanURL(material.getSource()));
+        material.setSource(processURL(material.getSource()));
 
-        List<PeerReview> peerReviews = material.getPeerReviews();
-        if (peerReviews != null) {
-            for (PeerReview peerReview : peerReviews) {
-                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
-                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
-                }
-            }
-        }
+        cleanPeerReviewUrls(material);
 
         material.setCreator(creator);
 
@@ -315,35 +337,19 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public Material update(Material material, User changer, boolean updateSearchIndex) {
-        Material updatedMaterial = null;
-
         if (material == null || material.getId() == null) {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
-        material.setSource(cleanURL(material.getSource()));
-
-        List<PeerReview> peerReviews = material.getPeerReviews();
-        if (peerReviews != null) {
-            for (PeerReview peerReview : peerReviews) {
-                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
-                    peerReview.setUrl(cleanURL(peerReview.getUrl()));
-                }
-            }
-        }
+        material.setSource(processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error updating Material: material with given source already exists");
         }
 
-        Material originalMaterial;
+        cleanPeerReviewUrls(material);
 
-        if (isUserAdmin(changer) || isUserModerator(changer)) {
-            originalMaterial = materialDAO.findById(material.getId());
-        } else {
-            originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
-        }
-
+        Material originalMaterial = getMaterial(material, changer);
         validateMaterialUpdate(originalMaterial, changer);
 
         if (!isUserAdmin(changer)) {
@@ -358,13 +364,46 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
+        Material updatedMaterial = null;
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || isUserAdmin(changer) || isUserModerator(changer) || isThisUserMaterial(changer, originalMaterial)) {
             updatedMaterial = createOrUpdate(material);
             if (updateSearchIndex) solrEngineService.updateIndex();
         }
 
+        processChanges(updatedMaterial);
+
         return updatedMaterial;
+    }
+
+    private void processChanges(Material material) {
+        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(material.getId());
+        if (changes == null || changes.isEmpty()) return;
+
+        for (ChangedLearningObject change : changes) {
+            if (!changedLearningObjectService.learningObjectHasThis(material, change)) {
+                changedLearningObjectService.removeChangeById(change.getId());
+            }
+        }
+    }
+
+    private Material getMaterial(Material material, User changer) {
+        if (isUserAdmin(changer) || isUserModerator(changer)) {
+            return materialDAO.findById(material.getId());
+        } else {
+            return materialDAO.findByIdNotDeleted(material.getId());
+        }
+    }
+
+    private void cleanPeerReviewUrls(Material material) {
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if (peerReviews != null) {
+            for (PeerReview peerReview : peerReviews) {
+                if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
+                    peerReview.setUrl(processURL(peerReview.getUrl()));
+                }
+            }
+        }
     }
 
     private boolean materialWithSameSourceExists(Material material) {
@@ -372,7 +411,17 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
         List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
         if (materialsWithGivenSource != null && materialsWithGivenSource.size() > 0) {
-            if (!materialsWithGivenSource.get(0).getId().equals(material.getId())) {
+            if (!listContainsMaterial(materialsWithGivenSource, material)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean listContainsMaterial(List<Material> list, Material material) {
+        for (Material m : list) {
+            if (m.getId().equals(material.getId())) {
                 return true;
             }
         }
@@ -394,8 +443,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         }
     }
 
-    public List<LearningObject> getByCreator(User creator, int start, int maxResults) {
-        return materialDAO.findByCreator(creator, start, maxResults);
+    public List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
+        return reducedLearningObjectDAO.findMaterialByCreator(creator, start, maxResults);
     }
 
     public long getByCreatorSize(User creator) {
@@ -411,6 +460,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             logger.info("Updating material");
         }
 
+        cleanTextFields(material);
+
         checkKeyCompetences(material);
         checkCrossCurricularThemes(material);
 
@@ -420,6 +471,17 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         material = applyRestrictions(material);
 
         return (Material) materialDAO.update(material);
+    }
+
+    private void cleanTextFields(Material material) {
+        String regex = "[^\\u0000-\\uFFFF]";
+        String replacement = "\uFFFD";
+
+        if (material.getTitles() != null)
+            material.getTitles().forEach(title -> title.setText(title.getText().replaceAll(regex, replacement)));
+
+        if (material.getDescriptions() != null)
+            material.getDescriptions().forEach(desc -> desc.setText(desc.getText().replaceAll(regex, replacement)));
     }
 
     private Material applyRestrictions(Material material) {
@@ -470,9 +532,11 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public List<Material> getDeletedMaterials() {
-        List<Material> materials = new ArrayList<>();
-        materialDAO.findDeletedMaterials().forEach(material -> materials.add((Material) material));
-        return materials;
+        return materialDAO.findDeletedMaterials();
+    }
+
+    public Long getDeletedMaterialsCount() {
+        return materialDAO.findDeletedMaterialsCount();
     }
 
     public List<BrokenContent> getBrokenMaterials() {
@@ -546,7 +610,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
 
         Material material = (Material) learningObject;
 
-        if(isUserAdminOrPublisher(user) || isUserCreator(material, user)){
+        if (isUserAdminOrPublisher(user) || isUserCreator(material, user)) {
             return true;
         }
 
@@ -559,7 +623,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public List<Material> getBySource(String materialSource, boolean deleted) {
-        materialSource = getURLWithoutScheme(cleanURL(materialSource));
+        materialSource = getURLWithoutProtocolAndWWW(processURL(materialSource));
         if (materialSource != null) {
             return materialDAO.findBySource(materialSource, deleted);
         } else {
@@ -567,46 +631,56 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         }
     }
 
-
-    private String getURLWithoutScheme(String materialSource) {
-        if (TextUtils.isBlank(materialSource)) return null;
-
-        try {
-            URI uri = new URI(materialSource);
-            String hostName = uri.getHost();
-
-            if (hostName.startsWith("www.") && isValidURL(hostName.substring(4))) {
-                hostName = hostName.substring(4);
-            }
-
-            uri = new URIBuilder()
-                    .setHost(hostName)
-                    .setPath(uri.getPath())
-                    .setCustomQuery(uri.getQuery())
-                    .build();
-
-            return uri.toString().substring(2);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to fix URL");
+    public Material getOneBySource(String materialSource, boolean deleted) {
+        materialSource = getURLWithoutProtocolAndWWW(processURL(materialSource));
+        if (materialSource != null) {
+            return materialDAO.findOneBySource(materialSource, deleted);
+        } else {
+            throw new RuntimeException("No material source link provided");
         }
     }
 
-    private String cleanURL(String materialSource) {
+    /**
+     * Removes protocol (http, https..) form url
+     * Removes 'www.' prefix from host
+     * @param materialSource url
+     * @return materialSource without schema and www
+     */
+    private String getURLWithoutProtocolAndWWW(String materialSource) {
         if (TextUtils.isBlank(materialSource)) return null;
 
         try {
-            materialSource = materialSource.replaceAll("/$", "");
+            URL url = new URL(materialSource);
+            String hostName = url.getHost();
 
-            URI uri = new URI(materialSource);
-            if (uri.getScheme() == null) {
-                uri = new URI("http://" + materialSource);
+            if (hostName.startsWith(WWW_PREFIX) && isValidURL(hostName.substring(4))) {
+                hostName = hostName.substring(4);
             }
 
-            return uri.toString();
-        } catch (URISyntaxException e) {
+            return String.format("%s%s", hostName, url.getFile());
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to fix URL");
+            throw new IllegalArgumentException("Source has no protocol");
+        }
+    }
+
+    /**
+     * Removes trailing slash
+     * Adds protocol if missing
+     * @param materialSource url
+     * @return url with protocol and without trailing slash
+     */
+    private String processURL(String materialSource) {
+        if (TextUtils.isBlank(materialSource)) return null;
+
+        try {
+            // Removes trailing slash
+            materialSource = materialSource.replaceAll("/$", "");
+
+            // Throws exception if protocol is not specified
+            return new URL(materialSource).toString();
+        } catch (MalformedURLException e) {
+            return DEFAULT_PROTOCOL + materialSource;
         }
     }
 
@@ -614,5 +688,47 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         Pattern p = Pattern.compile("^(?:https?://)?(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
         Matcher m = p.matcher(url);
         return m.matches();
+    }
+
+    public Response getProxyUrl(String url_param) throws IOException {
+        String contentDisposition;
+        HttpClient client = new HttpClient();
+        GetMethod get = new GetMethod(url_param);
+
+        try{
+            client.executeMethod(get);
+        }catch (UnknownHostException e){
+            logger.info("Could not contact host, returning empty response");
+            return Response.noContent().build();
+        }
+
+
+        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Disposition")) {
+            contentDisposition = get.getResponseHeaders("Content-Disposition")[0].getValue();
+            contentDisposition = contentDisposition.replace("attachment", "Inline");
+            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
+                    contentDisposition).build();
+        }
+        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals("Content-Type")) {
+            // Content-Disposition is missing, try to extract the filename from url instead
+            String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
+            contentDisposition = format("Inline; filename=\"%s\"", fileName);
+            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header("Content-Disposition",
+                    contentDisposition).build();
+        }
+
+        return Response.noContent().build();
+    }
+
+    String attachmentLocation(GetMethod get, String extension, String mime_type) {
+        Header[] contentDisposition = get.getResponseHeaders("Content-Disposition");
+        Header[] contentType = get.getResponseHeaders("Content-Type");
+        if (contentDisposition.length > 0 && contentDisposition[0].getValue().toLowerCase().endsWith(extension)) {
+            return "Content-Disposition";
+        }
+        if (contentType.length > 0 && contentType[0].getValue().toLowerCase().endsWith(mime_type)) {
+            return "Content-Type";
+        }
+        return "Invalid";
     }
 }

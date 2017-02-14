@@ -1,25 +1,26 @@
-define([
-    'angularAMD',
-    'services/serverCallService',
-    'services/taxonService'
-], function (angularAMD) {
-    var EDUCATIONAL_CONTEXTS;
+'use strict'
 
-    angularAMD.directive('dopTaxonSelector', function () {
-        return {
-            scope: {
-                taxon: '=',
-                disableEducationalContext: '=',
-                isAddPortfolioView: '=',
-                isAddMaterialView: '=',
-                touched: '='
-            },
-            bindToController: true,
-            controller: function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter, taxonService) {
-                var ctrl = this;
+angular.module('koolikottApp').directive('dopTaxonSelector', function () {
+    return {
+        scope: {
+            taxon: '=',
+            disableEducationalContext: '=',
+            isDomainRequired: '=',
+            touched: '=',
+            isSearch: '=?',
+            markRequired: '='
+        },
+        bindToController: true,
+        controllerAs: 'ctrl',
+        templateUrl: 'directives/taxonSelector/taxonSelector.html',
+        controller: ['$scope', 'serverCallService', '$rootScope', '$timeout', 'metadataService', '$filter', 'taxonService',
+            function ($scope, serverCallService, $rootScope, $timeout, metadataService, $filter, taxonService) {
+                let EDUCATIONAL_CONTEXTS;
+                let ctrl = this;
+
                 // get educational contexts
                 if (!EDUCATIONAL_CONTEXTS) {
-                    metadataService.loadEducationalContexts(getEducationalContextsSuccess)
+                    metadataService.loadEducationalContexts(getEducationalContextsSuccess);
                 } else {
                     init();
                 }
@@ -79,6 +80,11 @@ define([
                     ctrl.taxon = value;
                 });
 
+                $scope.$on('detailedSearch:prefillTaxon', (e, taxon) => {
+                   ctrl.taxon = taxon;
+                   buildTaxonPath();
+                });
+
                 ctrl.selectTaxon = function (taxon) {
                     ctrl.taxon = taxon;
                 };
@@ -86,12 +92,21 @@ define([
                 function addTaxonPathListeners() {
                     //Triggers on taxon reset
                     $scope.$watch(function () {
-                        if (ctrl.taxon) return ctrl.taxon.id;
+                        if (ctrl.taxon) return ctrl.taxon;
                     }, function (newTaxon, oldTaxon) {
-                        if (oldTaxon && newTaxon !== oldTaxon) {
+                        if (oldTaxon && (newTaxon !== oldTaxon) || _.isEmpty(ctrl.taxonPath)) {
                             buildTaxonPath();
                         }
                     }, false);
+
+                    $scope.$watch('ctrl.markRequired', function (markRequired) {
+                        if (markRequired) {
+                            $scope.taxonForm.educationalContext.$touched = true;
+                            $scope.taxonForm.domain.$touched = true;
+                            $scope.taxonForm.domainAndSubject.$touched = true;
+                            $scope.taxonForm.secondaryEducationDomainAndSubject.$touched = true
+                        }
+                    }, true);
                 }
 
                 function getEducationalContextsSuccess(educationalContexts) {
@@ -165,9 +180,6 @@ define([
                         ctrl.taxonPath.subtopic = taxonService.getSubtopic(ctrl.taxon);
                     }
                 }
-            },
-            controllerAs: 'ctrl',
-            templateUrl: 'directives/taxonSelector/taxonSelector.html'
-        };
-    });
+            }]
+    };
 });

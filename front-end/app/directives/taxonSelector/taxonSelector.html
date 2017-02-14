@@ -1,18 +1,29 @@
-<form name="taxonForm" data-layout-xs="column" data-layout-gt-sm="row" flex>
+<form name="taxonForm" data-layout-xs="column" data-layout-gt-sm="row" data-flex>
   <!-- Educational Context -->
   <md-input-container class="md-block" flex>
     <label for="taxonEducationalSelect">
       <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.educationalContext" id="taxonEducationalSelect"
-               data-ng-disabled="ctrl.disableEducationalContext" name="educationalContext" aria-label="Haridustase"
+    <md-select data-ng-model="ctrl.taxonPath.educationalContext"
+               id="taxonEducationalSelect"
+               data-ng-disabled="ctrl.disableEducationalContext"
+               name="educationalContext"
+               aria-label="Haridustase"
+               ng-required="ctrl.isDomainRequired.trigger"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{}" ng-click="ctrl.reset({})"></md-option>
-      <md-option ng-value="educationalContext" ng-repeat="educationalContext in ctrl.educationalContexts"
+      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{'id':0}"
+                 ng-click="ctrl.reset({'id':0})"></md-option>
+      <md-option ng-value="educationalContext"
+                 ng-repeat="educationalContext in ctrl.educationalContexts track by educationalContext.id"
                  data-translate="{{educationalContext.name.toUpperCase()}}"
                  data-ng-click="ctrl.selectEducationalContext(educationalContext)"></md-option>
     </md-select>
+
+    <div data-ng-messages="taxonForm.educationalContext.$error">
+      <div data-ng-message="required"
+           class="validation-messages"
+           data-translate="PORTFOLIO_EDUCATIONAL_CONTEXT_REQUIRED"></div>
+    </div>
   </md-input-container>
 
   <!-- Domain -->
@@ -21,16 +32,26 @@
     class="md-block" flex>
     <label for="taxonDomainSelect">
       <span data-translate="TAXON_PATH_DOMAIN"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domain" id="taxonDomainSelect" name="domain" aria-label="Ainevaldkond"
+    <md-select data-ng-model="ctrl.taxonPath.domain"
+               id="taxonDomainSelect"
+               name="domain"
+               aria-label="Ainevaldkond"
+               ng-required="ctrl.isDomainRequired.trigger"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_DOMAIN" ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_DOMAIN"
+                 ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option ng-value="domain"
                  ng-repeat="domain in ctrl.taxonPath.educationalContext.domains | orderBy: ctrl.translateTaxon"
                  data-translate="DOMAIN_{{domain.name.toUpperCase()}}"
                  data-ng-click="ctrl.selectTaxon(domain)"></md-option>
     </md-select>
+
+    <div data-ng-messages="taxonForm.domain.$error">
+      <div data-ng-message="required"
+           class="validation-messages"
+           data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
+    </div>
   </md-input-container>
 
   <!-- Subject -->
@@ -39,7 +60,6 @@
     class="md-block" flex>
     <label for="taxonSubjectSelect">
       <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddMaterialView">*</span>
     </label>
     <md-select data-ng-model="ctrl.taxonPath.subject" id="taxonSubjectSelect" name="subject" aria-label="Teema"
                ng-model-options="{trackBy: '$value.id'}">
@@ -56,12 +76,15 @@
     class="md-block" flex>
     <label for="taxonDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonDomainSubjectsSelect"
-               name="domainAndSubject" aria-label="Ainevaldkond ja teema" class="select"
+    <md-select data-ng-model="ctrl.taxonPath.domainSubject"
+               id="taxonDomainSubjectsSelect"
+               name="domainAndSubject"
+               aria-label="Ainevaldkond ja teema"
+               ng-required="ctrl.isDomainRequired.trigger"
+               class="select"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
+      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects"
                  data-ng-class="{ 'select__child' : domainSubject.level === '.Subject',
@@ -72,6 +95,12 @@
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}">
       </md-option>
     </md-select>
+
+    <div data-ng-messages="taxonForm.domainAndSubject.$error">
+      <div data-ng-message="required"
+           class="validation-messages"
+           data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
+    </div>
   </md-input-container>
 
   <!-- Domain and Subject together for Secondary Education -->
@@ -80,12 +109,15 @@
     class="md-block" flex>
     <label for="taxonSecondaryEducationDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-      <span data-ng-if="ctrl.isAddPortfolioView">*</span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domainSubject" id="taxonSecondaryEducationDomainSubjectsSelect"
-               name="secondaryEducationDomainAndSubject" aria-label="Ainevaldkond ja teema" class="select"
+    <md-select data-ng-model="ctrl.taxonPath.domainSubject"
+               id="taxonSecondaryEducationDomainSubjectsSelect"
+               name="secondaryEducationDomainAndSubject"
+               aria-label="Ainevaldkond ja teema"
+               ng-required="ctrl.isDomainRequired.trigger"
+               class="select"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_DOMAIN_AND_SUBJECT"
+      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_DOMAIN_AND_SUBJECT"
                  ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
       <md-option data-ng-class="{ 'select__child' : domainSubject.level === '.Subject',
                  'select__parent' : domainSubject.level === '.Domain'}"
@@ -94,6 +126,12 @@
                  data-ng-click="ctrl.selectTaxon(domainSubject)"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
     </md-select>
+
+    <div data-ng-messages="taxonForm.secondaryEducationDomainAndSubject.$error">
+      <div data-ng-message="required"
+           class="validation-messages"
+           data-translate="PORTFOLIO_DOMAIN_REQUIRED"></div>
+    </div>
   </md-input-container>
 
   <!-- Specialization-->

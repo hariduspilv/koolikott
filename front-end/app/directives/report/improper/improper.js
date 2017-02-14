@@ -1,21 +1,21 @@
-define([
-    'app',
-    'services/translationService',
-    'services/authenticatedUserService'
-], function (app) {
-    app.directive('dopReportImproper', ['translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope', 'toastService',
-        function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope, toastService) {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopReportImproper',
+[
+    'translationService', '$mdDialog', '$translate', 'authenticatedUserService', '$rootScope', 'toastService', 'serverCallService',
+    function (translationService, $mdDialog, $translate, authenticatedUserService, $rootScope, toastService, serverCallService) {
         return {
             scope: {
                 learningObject: '='
             },
             templateUrl: 'directives/report/improper/improper.html',
-            controller: function ($scope, serverCallService) {
+            controller: ['$scope', function ($scope) {
                 $scope.isReported = false;
 
                 $scope.$watch('learningObject', function (newLearningObject) {
                     if (newLearningObject) {
-                    	getHasReported();
+                        getHasReported();
                     }
                 }, false);
 
@@ -29,7 +29,7 @@ define([
                 }
 
                 function requestSuccessful(improper) {
-                	var isImproper = improper.length > 0;
+                    var isImproper = improper.length > 0;
                     if ($scope.isAdmin) {
                         $scope.isReported = isImproper;
                     } else {
@@ -43,10 +43,10 @@ define([
 
                 $scope.showConfirmationDialog = function () {
                     var confirm = $mdDialog.confirm()
-                        .title($translate.instant('REPORT_IMPROPER_TITLE'))
-                        .content($translate.instant('REPORT_IMPROPER_CONTENT'))
-                        .ok($translate.instant('BUTTON_NOTIFY'))
-                        .cancel($translate.instant('BUTTON_CANCEL'));
+                    .title($translate.instant('REPORT_IMPROPER_TITLE'))
+                    .content($translate.instant('REPORT_IMPROPER_CONTENT'))
+                    .ok($translate.instant('BUTTON_NOTIFY'))
+                    .cancel($translate.instant('BUTTON_CANCEL'));
 
                     $mdDialog.show(confirm).then(function () {
                         var entity = {
@@ -61,18 +61,18 @@ define([
                 $scope.isAdmin = authenticatedUserService.isAdmin();
 
                 function setImproperSuccessful(improper) {
-                	if (!improper) {
-                		setImproperFailed();
-                	} else {
+                    if (!improper) {
+                        setImproperFailed();
+                    } else {
                         $rootScope.isReportedByUser = true;
                         toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN');
-                	}
+                    }
                 }
 
                 function setImproperFailed() {
                     $rootScope.isReportedByUser = false;
                 }
-            }
+            }]
         };
-    }]);
-});
+    }
+]);

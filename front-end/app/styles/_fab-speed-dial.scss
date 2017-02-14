@@ -1,9 +1,72 @@
-.main-fab-button {
-  position: fixed !important;
-
-  .md-fab-action-item {
-    .md-button md-icon {
-      color: rgba(0,0,0,0.54);
-    }
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
   }
 }
+
+.main-fab-button {
+  position: fixed !important;
+}
+
+.md-fab.main-fab {
+    background-color: $main-fab;
+}
+
+.fab-closed-icon,
+.fab-open-icon {
+  position: absolute;
+  top: $md-padding;
+  left: $md-padding;
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+}
+
+.fab-open-icon {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.fab-closed-icon {
+  opacity: 1;
+  transform: scale(1) rotate(-359deg);
+  text-shadow: 1px 1px 2px rgba(0, 0,0, .37);
+  // animation: fa-spin 1.5s infinite ease;
+  // we will use the line when the logic for CTA on profile page is ready
+
+  .md-is-open & {
+    opacity: 0;
+    transform: scale(0) rotate(0);
+    animation: fa-spin .8s 1 linear;
+  }
+}
+
+.fab-open-icon {
+  .md-is-open & {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.md-button.md-warn.md-fab:not([disabled]):hover,
+.md-button.md-warn.md-fab:not([disabled]):focus {
+  background-color: lighten($color-accent, 10%);
+  box-shadow: $whiteframe-shadow-7dp;
+}
+
+.main-fab__btn.md-button.md-mini.md-fab:not([disabled]) {
+  background-color: $green1;
+}
+
+.main-fab__btn.md-button.md-mini.md-fab:not([disabled]):hover,
+.main-fab__btn.md-button.md-mini.md-fab:not([disabled]):focus {
+  background-color: lighten($green1, 10%);
+}
+
+// .md-is-open .md-button.md-fab  {
+//   background-color: $color-accent;
+// }

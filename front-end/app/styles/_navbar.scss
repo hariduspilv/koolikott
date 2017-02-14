@@ -4,7 +4,7 @@
   left:0;
   right:0;
   overflow: hidden;
-  z-index: 5;
+  z-index: 15;
 }
 
 .navbar.md-red {
@@ -36,14 +36,23 @@
   }
 }
 
-
 .navbar-search-area {
   width: 100%;
   max-width: $layout-breakpoint-md;
   display: none;
+
+  &.has-mobile-search-open {
+    display: flex;
+
+    .md-icon-button {
+      margin-left: 0;
+    }
+  }
+
   @media (min-width: $layout-breakpoint-xs) {
     display: inline-block;
   }
+
   @media (min-width: $layout-breakpoint-lg) {
     margin-left: auto;
     margin-right: auto;
@@ -54,24 +63,29 @@
   @media (min-width: $layout-breakpoint-xs) {
     flex: 0 0 auto;
   }
+
   @media (min-width: $layout-breakpoint-lg) {
     position: absolute;
     width: $nav-button-area-width;
     right: $md-padding;
     top: 11px;
   }
+
   .button-container {
     display: inline-block;
+
     @media (max-width: 350px) {
       .md-icon-button {
         width: 35px;
       }
     }
   }
+
   .mobile-search-button {
     @media (min-width: $layout-breakpoint-xs) {
       display: none;
     }
+
     button {
       margin: 0;
       padding: 0;
@@ -88,15 +102,25 @@
 .navbar-search {
   border-radius: 2px;
   padding: 4px 0;
+  background: rgba(255,255,255,.15);
 
-  @media (min-width: $layout-breakpoint-xs) {
-    background: rgba(255,255,255,.15);
-  }
   @media (min-width: $layout-breakpoint-lg) {
     margin-left: $button-width;
   }
 
-  md-input-container {
+  .nav-search__autocomplete {
+    background-color: transparent;
+
+    & > md-autocomplete-wrap {
+      box-shadow: none;
+
+      & > button {
+        display: none;
+      }
+    }
+
+  }
+  .nav-search__input-container {
     padding: 0;
     margin: 0;
 
@@ -109,6 +133,10 @@
       &[disabled] {
         background-image: none;
       }
+
+      &::placeholder {
+        color: rgba(255,255,255, .6);
+      }
     }
 
     .md-errors-spacer {
@@ -118,8 +146,6 @@
 }
 
 .upside-down {
-  -ms-transform: rotate(180deg); /* IE 9 */
-  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
   transform: rotate(180deg);
 }
 
@@ -131,8 +157,9 @@
 
 .nav-position {
   width: 100%;
-  z-index: 10;
+  z-index: 15;
 }
+
 #header-simple-search-input{
   background-color: transparent;
 }

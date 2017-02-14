@@ -1,13 +1,14 @@
 package ee.hm.dop.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.TypedQuery;
-
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
+
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImproperContentDAO extends BaseDAO<ImproperContent> {
 
@@ -46,5 +47,17 @@ public class ImproperContentDAO extends BaseDAO<ImproperContent> {
         getEntityManager().createQuery("update ImproperContent i set i.deleted = true where i.id in :impropers") //
                 .setParameter("impropers", ids) //
                 .executeUpdate();
+    }
+
+    public long getImproperPortfolioCount() {
+        String queryString = "SELECT Count(DISTINCT imp.learningObject) FROM ImproperContent imp INNER JOIN Portfolio p ON imp.learningObject=p.id INNER JOIN LearningObject lo ON lo.id=p.id WHERE imp.deleted = false AND lo.deleted=false";
+        Query query = getEntityManager().createNativeQuery(queryString);
+        return ((BigInteger) query.getSingleResult()).longValue();
+    }
+
+    public long getImproperMaterialCount() {
+        String queryString = "SELECT Count(DISTINCT imp.learningObject) FROM ImproperContent imp INNER JOIN Material m ON imp.learningObject=m.id INNER JOIN LearningObject lo ON lo.id=m.id WHERE imp.deleted = false AND lo.deleted=false";
+        Query query = getEntityManager().createNativeQuery(queryString);
+        return ((BigInteger) query.getSingleResult()).longValue();
     }
 }

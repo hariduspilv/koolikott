@@ -1,8 +1,10 @@
-define([
-    'app',
-    'services/authenticationService'
-], function(app) {
-    return ['authenticationService', '$route', function(authenticationService, $route) {
+'use strict'
+
+angular.module('koolikottApp')
+.controller('loginRedirectController',
+[
+    'authenticationService', '$route',
+    function(authenticationService, $route) {
         authenticationService.authenticateUsingOAuth($route.current.params.token);
-    }];
-});
+    }
+]);

@@ -8,12 +8,6 @@ $border-color: rgba(0,0,0,0.12);
 
 .filter-wrapper {
   padding-top: 0;
-
-  @media (min-width: $layout-breakpoint-md) {
-    &.nav-open {
-      margin-left: $sidenav-width;
-    }
-  }
 }
 
 .filter-content {
@@ -148,5 +142,30 @@ md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min
 @media (max-width: $layout-breakpoint-md) {
   h2.sidenav-login-title {
     font-size: 10pt;
+  }
+}
+
+.md-toolbar-text {
+  font-size: 18px;
+  padding: 0 16px;
+}
+
+.inline-suggestion {
+  position: absolute;
+  top: 8px;
+  pointer-events: none;
+  opacity: 0.5;
+
+  .suggestion-hidden {
+    visibility: hidden;
+  }
+}
+
+.md-toolbar-filter {
+  &--fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
   }
 }

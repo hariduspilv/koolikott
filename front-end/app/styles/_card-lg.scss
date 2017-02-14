@@ -1,0 +1,313 @@
+.card-lg {
+  position: relative;
+
+  .embed-link{
+    box-shadow: none;
+  }
+
+  .embed-link:hover{
+    background-color: transparent;
+  }
+
+  h2 {
+    color: $heading-color;
+    font-size: 1.5rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-top: 0;
+  }
+  h3 {
+    color: $heading-color;
+    font-size: $font-medium;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+  .md-button {
+    font-weight: 400;
+  }
+  .card-menus {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    margin-top: $md-padding;
+    .md-button {
+      margin: 0;
+    }
+  }
+
+  .md-body-2 {
+    margin: $md-padding/2 0;
+  }
+
+  .card-media {
+    position: relative;
+    height: auto;
+
+    .pick {
+      position: absolute;
+      padding: 10px;
+      left: 0;
+      transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 10;
+      cursor: pointer;
+      visibility: hidden;
+
+      md-icon {
+        color: rgba(255, 255, 255, 1);
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, .6);
+      }
+
+      .checked {
+        display: none;
+      }
+
+      &:hover {
+        .checked {
+          display: block;
+        }
+
+        .unchecked {
+          display: none;
+        }
+      }
+    }
+
+    &.active {
+      .pick {
+        visibility: visible;
+      }
+
+      .checked {
+        display: block;
+      }
+
+      .unchecked {
+        display: none;
+      }
+    }
+
+    &:hover {
+      .card-lg__overlay {
+        visibility: visible;
+      }
+      .pick {
+        visibility: visible;
+      }
+    }
+  }
+
+  .card-cover {
+    border-radius: 0;
+    &:hover {
+      background-color: $selected-gray;
+
+      .card-hover {
+        opacity: .8;
+        z-index: 3;
+
+        md-icon {
+          color: rgba(255, 255, 255, 1);
+          text-shadow: 1px 1px 1px rgba(0, 0,0, .6);
+        }
+      }
+    }
+
+    img {
+      @media (min-width: $layout-breakpoint-xs) {
+        height: auto;
+      }
+    }
+  }
+  .left-side {
+    padding: $md-padding;
+    position: relative;
+    md-divider {
+      margin-right: -$md-padding;
+    }
+  }
+  .right-side {
+    position: relative;
+    display: block;
+    border-left: none;
+    padding-left: $md-padding;
+    @media (min-width: $layout-breakpoint-xs) {
+      border-left-width: 1px;
+      border-left-style: solid;
+
+      border-left-color: $border-color;
+    }
+    md-content {
+      margin-top: $md-padding;
+      p {
+        margin: $md-padding/2 0;
+      }
+    }
+  }
+  md-card-actions {
+    .md-button {
+      margin-left: -$md-padding/2;
+    }
+  }
+}
+
+// embed card by mart laus
+.noPadding {
+  padding: 0;
+}
+.embed-header {
+  .pick {
+    position: absolute;
+    padding: $md-padding;
+    right: 0;
+    transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    .checked {
+      display: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      .checked {
+        display: block;
+      }
+
+      .unchecked {
+        display: none;
+      }
+    }
+  }
+}
+
+.embed-card-content {
+  padding: 0px;
+  background-color: #fff;
+}
+
+.embeded-material-footer {
+  padding-top: 0px;
+}
+
+.card-mb-20 {
+  margin-bottom: $md-padding*2;
+}
+
+// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
+.embed-responsive-item {
+  overflow: hidden;
+}
+
+a.embed-link{
+  line-height: 0px;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 1);
+}
+
+.embed-link img{
+  width: 100%;
+  max-width: 500px;
+  max-height: 500px;
+}
+
+.embed-link:hover img{
+  opacity: .8;
+  transition: ease all 0.5s;
+}
+
+.embed-card-picture{
+  line-height: 0;
+  display: inline-block;
+}
+
+a.embed-image-padded{
+  margin: $md-padding*2;
+}
+
+// New styles
+
+.card-lg__actions {
+  margin: 0;
+}
+
+.review__label {
+  color: rgba(0,0,0, .37);
+  font-size: $font-small;
+}
+
+.review__link {
+  margin: 0 !important;
+
+  md-icon {
+    color: rgba(0,0,0, .37);
+  }
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.card-lg__container {
+  padding: $md-padding;
+  position: relative;
+  overflow: hidden;
+
+  &--border-left {
+    border: none;
+
+    @media (min-width: 600px) {
+      border-left: 1px solid  rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &--padding-l-r {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &--padding-l-r-t {
+    padding-bottom: 0;
+  }
+
+  &--padding-l-r-b {
+    padding-top: 0;
+  }
+
+  &--actions {
+    padding: $md-padding/2 $md-padding;
+
+    &--border-left {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+      @media (min-width: $layout-breakpoint-xs) {
+        border-top: none;
+      }
+    }
+  }
+}
+
+.card-lg__overlay {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: flex-end;
+  color: white;
+}
+
+.card-lg__link {
+  a {
+    color: $gray-d;
+
+    &:hover {
+      color: #15c;
+    }
+  }
+}
+
+.card-lg__licenses {
+  margin-left: $md-padding/8;
+}

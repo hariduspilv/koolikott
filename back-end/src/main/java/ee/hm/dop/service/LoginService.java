@@ -1,13 +1,5 @@
 package ee.hm.dop.service;
 
-import static java.lang.String.format;
-
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
-import javax.inject.Inject;
-import javax.xml.soap.SOAPException;
-
 import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.exceptions.DuplicateTokenException;
@@ -22,6 +14,13 @@ import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.xml.soap.SOAPException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
+import static java.lang.String.format;
 
 public class LoginService {
 

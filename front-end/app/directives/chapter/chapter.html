@@ -1,53 +1,56 @@
 <div class="portfolio-chapter">
-  <div id="chapter-{{index}}">
+  <div id="chapter-{{$ctrl.index}}">
     <md-card class="card-lg chapter-card">
 
       <!--View-->
-      <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row"
-                       ng-click="toggle($event); ocChapter()">
+      <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
         <div flex>
-          <div flex layout="row">
-            <h2 ng-class="{'chapter-title': chapter.text.length == undefined || chapter.text.length == 0}"
-                data-ng-bind="chapter.title"></h2>
-            <div class="chapter-arrow toggled">
+          <div layout="row" class="pointer" data-ng-click="$ctrl.ocChapter($ctrl.chapter)">
+            <h2 data-ng-class="{'chapter-title': $ctrl.chapter.text.length == undefined || $ctrl.chapter.text.length == 0}">
+              <span data-ng-if="$ctrl.chapter.title" data-ng-bind="$ctrl.chapter.title"></span>
+              <span data-ng-if="!$ctrl.chapter.title" data-translate="PORTFOLIO_CHAPTER_TITLE_MISSING"></span>
+            </h2>
+            <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.isCollapsed}">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             </div>
+            <md-tooltip md-direction="bottom">
+              <span data-ng-if="$ctrl.isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
+              <span data-ng-if="!$ctrl.isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
+            </md-tooltip>
           </div>
-          <div class="md-body-1 textangular-view"
-               ng-class="{'hide': chapter.text.length == undefined || chapter.text.length == 0}"
-               data-ng-bind-html="chapter.text"></div>
+          <div uib-collapse="$ctrl.isCollapsed">
+            <div class="md-body-1 textangular-view"
+               data-ng-class="{'hide': $ctrl.chapter.text.length == undefined || $ctrl.chapter.text.length == 0}"
+               data-ng-bind-html="$ctrl.chapter.text"></div>
+          </div>
         </div>
-        <md-tooltip md-direction="bottom">
-          <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
-          <span data-ng-if="!isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
-        </md-tooltip>
       </md-card-content>
 
       <!--Edit-->
-      <md-card-content data-ng-if="isEditable">
+      <md-card-content data-ng-if="$ctrl.isEditable">
         <div layout="row" layout-align="start center">
-          <div class="chapter-arrow toggled" ng-click="editToggle($event); ocChapter()">
+          <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.isCollapsed}" data-ng-click="$ctrl.ocChapter(chapter)">
             <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             <md-tooltip md-direction="bottom">
-              <span data-ng-if="isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
-              <span data-ng-if="!isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
+              <span data-ng-if="$ctrl.isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
+              <span data-ng-if="!$ctrl.isCollapsed" data-translate="TOOLTIP_CLOSE_CHAPTER">Close chapter</span>
             </md-tooltip>
           </div>
           <md-input-container class="md-block chapter-title" flex>
             <label></label>
             <input class="md-headline" placeholder="{{ 'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate }}"
-                   data-ng-model="chapter.title">
+                   data-ng-model="$ctrl.chapter.title">
           </md-input-container>
         </div>
-        <div uib-collapse="isCollapsed">
+        <div uib-collapse="$ctrl.isCollapsed">
           <md-input-container class="md-block">
             <div text-angular id="add-material-description-input" class="chapter-content-textarea textangular-editor"
-                 placeholder="{{'PORTFOLIO_CHAPTER_CONTENT' | translate}}" data-ng-model="chapter.text"></div>
+                 placeholder="{{'PORTFOLIO_CHAPTER_CONTENT' | translate}}" data-ng-model="$ctrl.chapter.text"></div>
           </md-input-container>
         </div>
         <div layout="row" layout-align="space-between center">
-          <div dop-chapter-toolbar data-chapter="chapter" data-is-sub="false"></div>
-          <md-button class="md-icon-button" data-ng-click="deleteChapter($index)">
+          <dop-chapter-toolbar data-chapter="$ctrl.chapter" data-index="$ctrl.index" data-is-sub="false"></dop-chapter-toolbar>
+          <md-button class="md-icon-button" data-ng-click="$ctrl.deleteChapter($index)">
             <md-icon>delete</md-icon>
             <md-tooltip md-direction="bottom">
               <span data-translate="DELETE_CHAPTER"></span>
@@ -57,53 +60,85 @@
       </md-card-content>
     </md-card>
 
-    <!--Chapter materials-->
-    <ul ng-show="chapter.materials.length" dnd-list="chapter.materials"
-        class="portfolio-chapter-chapter-materials" uib-collapse="isCollapsed">
-      <li id="chapterMaterial-{{index}}-{{$index}}"
-          ng-repeat="material in chapter.materials"
-          dnd-draggable="getParsedMaterial(material)"
-          dnd-moved="chapter.materials.splice($index, 1)"
-          dnd-effect-allowed="move"
-          dnd-selected="models.selected = item"
-          ng-class="{'selected': models.selected === item}"
-          data-dop-embedded-material
-          material="material" chapter="chapter" index="$index" data-flex></li>
+    <!--Chapter rows-->
+    <ul data-ng-if="$ctrl.chapter.contentRows.length" class="portfolio-chapter-chapter-materials"
+        uib-collapse="$ctrl.isCollapsed">
+      <li data-ng-repeat="(rowIndex, contentRow) in $ctrl.chapter.contentRows track by $index" flex>
+
+        <!--LearningObjects in the row-->
+        <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
+            data-layout-gt-sm="row">
+          <li data-ng-if="!$ctrl.isEditable"
+              id="chapterMaterial-{{$ctrl.index}}-{{$index}}"
+              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
+              data-dop-embedded-material
+              data-material="learningObject"
+              data-chapter="$ctrl.chapter"
+              data-row-index="rowIndex"
+              data-obj-index="columnIndex"
+              data-flex>
+          </li>
+
+          <!--Enable drag-n-drop with new ui-->
+          <li data-ng-if="$ctrl.isEditable"
+              dnd-disable-if="true"
+              data-dnd-draggable="learningObject"
+              data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
+              data-dnd-effect-allowed="move"
+              data-dnd-selected="models.selected = item"
+              data-ng-class="{'selected': models.selected === item}"
+
+              id="chapterMaterial-draggable-{{$ctrl.index}}-{{$index}}"
+              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
+              data-dop-embedded-material
+              data-material="learningObject"
+              data-chapter="$ctrl.chapter"
+              data-content-row="contentRow"
+              data-row-index="rowIndex"
+              data-obj-index="columnIndex"
+              data-flex>
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 
   <div class="portfolio-chapter-subchapters">
-    <div class="portfolio-chapter-subchapter" id="chapter-{{index}}-{{$index}}"
-         data-ng-repeat="subchapter in chapter.subchapters">
+    <div class="portfolio-chapter-subchapter" id="chapter-{{$ctrl.index}}-{{$index}}"
+         data-ng-repeat="subchapter in $ctrl.chapter.subchapters track by $index">
       <md-card class="card-lg chapter-card">
 
         <!--View-->
-        <md-card-content class="portfolio-noedit-item" data-ng-if="!isEditable" layout="row"
-                         ng-click="toggle($event); ocSubChapter(subchapter)">
+        <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
           <div flex>
-            <div layout="row">
-              <h3>{{subchapter.title}}</h3>
-              <div class="chapter-arrow toggled">
+            <div layout="row" class="pointer" data-ng-click="$ctrl.ocSubChapter($index)">
+              <h3>
+                <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
+                <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
+              </h3>
+              <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[$index]}">
                 <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               </div>
+              <md-tooltip md-direction="bottom">
+                <span data-ng-if="$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
+                <span data-ng-if="!$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
+              </md-tooltip>
             </div>
-            <p class="md-body-1" ng-class="{'hide': subchapter.text.length == undefined || subchapter.text.length == 0}"
-               data-ng-bind-html="subchapter.text"></p>
+            <div uib-collapse="$ctrl.subisCollapsed[$index]">
+              <p class="md-body-1" data-ng-class="{'hide': subchapter.text.length == undefined || subchapter.text.length == 0}"
+                data-ng-bind-html="subchapter.text"></p>
+            </div>
           </div>
-          <md-tooltip md-direction="bottom">
-            <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
-            <span data-ng-if="!subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
-          </md-tooltip>
         </md-card-content>
 
         <!--Edit-->
-        <md-card-content data-ng-if="isEditable">
+        <md-card-content data-ng-if="$ctrl.isEditable">
           <div layout="row" layout-align="start center">
-            <div class="chapter-arrow toggled" ng-click="editToggle($event); ocSubChapter(subchapter)">
+            <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[$index]}" data-ng-click="$ctrl.ocSubChapter($index)">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               <md-tooltip md-direction="bottom">
-                <span data-ng-if="subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
-                <span data-ng-if="!subisCollapsed[subchapter.$$hashKey]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
+                <span data-ng-if="$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
+                <span data-ng-if="!$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
               </md-tooltip>
             </div>
             <md-input-container class="md-block subchapter-title" flex>
@@ -112,7 +147,7 @@
                      placeholder="{{ 'PORTFOLIO_ENTER_SUB_CHAPTER_TITLE' | translate }}">
             </md-input-container>
           </div>
-          <div uib-collapse="subisCollapsed[subchapter.$$hashKey]">
+          <div uib-collapse="$ctrl.subisCollapsed[$index]">
             <md-input-container class="md-block">
 
               <div text-angular class="textangular-editor" id="subchapter-input"
@@ -121,8 +156,8 @@
             </md-input-container>
           </div>
           <div layout="row" layout-align="space-between center">
-            <div dop-chapter-toolbar data-chapter="subchapter" data-is-sub="true"></div>
-            <md-button class="md-icon-button" data-ng-click="onDeleteSubChapter(subchapter)">
+            <dop-chapter-toolbar data-chapter="subchapter" data-index="$ctrl.index" data-sub-index="$index" data-is-sub="true"></dop-chapter-toolbar>
+            <md-button class="md-icon-button" data-ng-click="$ctrl.onDeleteSubChapter(subchapter)">
               <md-icon>delete</md-icon>
               <md-tooltip md-direction="bottom">
                 <span data-translate="DELETE_SUBCHAPTER"></span>
@@ -132,18 +167,45 @@
         </md-card-content>
       </md-card>
 
-      <!--Subchapter materials-->
-      <ul ng-show="subchapter.materials.length" dnd-list="chapter.materials"
-          class="portfolio-chapter-subchapter-materials" uib-collapse="subisCollapsed[subchapter.$$hashKey]">
-        <li id="subchapterMaterial-{{index}}-{{$index}}"
-            ng-repeat="material in subchapter.materials"
-            dnd-draggable="getParsedMaterial(material)"
-            dnd-moved="chapter.materials.splice($index, 1)"
-            dnd-effect-allowed="move"
-            dnd-selected="models.selected = item"
-            ng-class="{'selected': models.selected === item}"
-            data-dop-embedded-material
-            material="material" chapter="subchapter" index="$index" data-flex></li>
+      <!--Subchapter rows-->
+      <ul data-ng-if="subchapter.contentRows.length" class="portfolio-chapter-subchapter-materials"
+          uib-collapse="$ctrl.subisCollapsed[$index]">
+        <li data-ng-repeat="(rowIndex, contentRow) in subchapter.contentRows track by $index" flex>
+
+          <!--LearningObjects in the row-->
+          <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
+              data-layout-gt-sm="row">
+            <li data-ng-if="!$ctrl.isEditable"
+                id="subChapterMaterial-{{$ctrl.index}}-{{$index}}"
+                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
+                data-dop-embedded-material
+                data-material="learningObject"
+                data-chapter="subchapter"
+                data-row-index="rowIndex"
+                data-obj-index="columnIndex"
+                data-flex>
+            </li>
+
+            <!--Enable drag-n-drop with new ui-->
+            <li data-ng-if="$ctrl.isEditable"
+                data-dnd-disable-if="true"
+                data-dnd-draggable="learningObject"
+                data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
+                data-dnd-effect-allowed="move"
+                data-dnd-selected="models.selected = item"
+                data-ng-class="{'selected': models.selected === item}"
+
+                id="subchapterMaterial-editable-{{$ctrl.index}}-{{$index}}"
+                data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
+                data-dop-embedded-material
+                data-material="learningObject"
+                data-chapter="subchapter"
+                data-content-row="contentRow"
+                data-row-index="rowIndex"
+                data-obj-index="columnIndex"
+                data-flex>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

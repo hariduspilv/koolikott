@@ -1,10 +1,7 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
-
-import java.util.List;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,12 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import java.util.List;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 public class Portfolio extends LearningObject implements Searchable {
@@ -27,15 +22,10 @@ public class Portfolio extends LearningObject implements Searchable {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "taxon")
-    @JsonDeserialize(using = TaxonDeserializer.class)
-    private Taxon taxon;
-
     @Column(columnDefinition = "TEXT")
     private String summary;
 
-    @OneToMany(fetch = EAGER, cascade = { MERGE, PERSIST })
+    @OneToMany(fetch = EAGER, cascade = ALL)
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")
@@ -55,14 +45,6 @@ public class Portfolio extends LearningObject implements Searchable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Taxon getTaxon() {
-        return taxon;
-    }
-
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
     }
 
     public String getSummary() {

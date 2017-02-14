@@ -14,9 +14,21 @@ $color-body: rgba(0, 0, 0, 0.77);
 $color-muted: rgba(0, 0, 0, 0.5);
 $font-small: 12px;
 $font-medium: 14px;
+$font-normal: 16px;
+$font-large: 26px;
 $md-padding: 16px;
 $layout-breakpoint-xxs: 370px;
 $gray: #808080;
+$selected-gray: #eee;
+$border-radius: 2px;
+$main-fab: #d23f31;
+$body-lineheight: 1.4;
+$small-lineheight: 1.2;
+$lines-two: 2;
+$lines-three: 3;
+
+//ftypography
+$heading-color: #212121;
 
 // Long shadow
 $pi: 3.14159265359;
@@ -26,14 +38,15 @@ $_precision: 10;
 $green1: #00838f;
 $green2: #00695c;
 $greengrass: #43a047;
-$green4: #CDDC39;
-$pinky: #985984;
+$pinky: #9c3a7d;
 $violet: #584D78;
 $navy: #274156;
 $cyan: #00498E;
 $salad: #36AA7A;
 $royal: #2C47B2;
-$gold: #ffd700;
+$gold: #ffff00;
+$blue: #006899;
+$lilac: #6c0099;
 
 // Social
 $facebook: #3b5998;
@@ -48,11 +61,7 @@ $sidenav-width: 259px;
 $nav-button-area-width: 178px;
 $button-width: 40px;
 
-@mixin pattern-color($color) {
-  background-image: linear-gradient(45deg, lighten($color, 5%), darken($color, 5%));
-  background-color: lighten($color, 5%);
-}
-
 $gray-n: rgba(0,0,0,.6);
 $black: #000;
 $white: #fff;
+$gray-d: rgba(0,0,0,0.87);

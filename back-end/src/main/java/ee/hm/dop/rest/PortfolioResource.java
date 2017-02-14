@@ -53,7 +53,7 @@ public class PortfolioResource extends BaseResource {
         User loggedInUser = getLoggedInUser();
 
         List<Searchable> searchables = new ArrayList<>(portfolioService.getByCreator(creator, loggedInUser, start, maxResults));
-        int size = portfolioService.getByCreator(creator, loggedInUser, 0, 10000).size();
+        Long size = portfolioService.getCountByCreator(creator);
         return new SearchResult(searchables, size, start);
 
     }
@@ -67,9 +67,7 @@ public class PortfolioResource extends BaseResource {
         User creator = userService.getUserByUsername(username);
         if (creator == null) throwBadRequestException("User does not exist with this username parameter");
 
-        User loggedInUser = getLoggedInUser();
-
-        return Response.ok(portfolioService.getByCreator(creator, loggedInUser, 0, 10000).size()).build();
+        return Response.ok(portfolioService.getCountByCreator(creator)).build();
     }
 
     @POST
@@ -174,6 +172,6 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "MODERATOR"})
     public Response getDeletedPortfoliosCount() {
-        return Response.ok(portfolioService.getDeletedPortfolios().size()).build();
+        return Response.ok(portfolioService.getDeletedPortfoliosCount()).build();
     }
 }

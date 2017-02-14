@@ -8,6 +8,13 @@ html, body {
   background: $bg-gray;
   color: rgba(0, 0, 0, 0.77);
   line-height: 1.2;
+  min-width: 320px;
+}
+
+// Fix IE background going to black when md-backdrop is in dom
+html.ua-ie,
+.ua-ie body {
+  background: rgba(243, 246, 251, .99);
 }
 
 .pointer {
@@ -42,7 +49,7 @@ ul {
 }
 
 // material bugfixes
-@media (min-width: 960px) {
+@media (min-width: $layout-breakpoint-sm) {
   .layout-column > .flex-gt-sm-25 {
     max-width: 25%;
   }
@@ -98,11 +105,6 @@ md-datepicker {
   margin-top: 60px;
 }
 
-.max-width-100 {
-  max-width: 100%;
-  width: 100%;
-}
-
 .min-height-500 {
   min-height: 500px;
 }
@@ -118,4 +120,22 @@ md-datepicker {
 
 .margin-top-36 {
   margin-top: 36px;
+}
+
+// Remove when #101 is complete
+.type-block {
+  margin-top: 40px;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.preloader {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }

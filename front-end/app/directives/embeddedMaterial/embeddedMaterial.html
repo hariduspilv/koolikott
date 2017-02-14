@@ -1,13 +1,13 @@
-<md-card class="md-whiteframe-2dp embed-card">
-  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage">
+<md-card class="md-whiteframe-2dp embed-card" ng-class="{'embed-link': fallbackToLink}" ng-cloak="fallbackToLink">
+  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage" data-ng-click="navigateToMaterial(material, $event)">
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
-    <md-card-header-text flex data-ng-click="navigateToMaterial(material, $event)">
-      <a data-ng-href="{{'/material?materialId=' + material.id}}" class="md-title no-link ellipsisText"
+    <md-card-header-text flex class="ellipsis embed-responsive-header-text">
+      <a data-ng-href="{{'/material?id=' + material.id}}" class="md-title no-link ellipsis ellipsis--multiline"
          data-ng-bind="getCorrectLanguageTitle(material)">
       </a>
-      <span class="md-subhead ellipsisText">
+      <span class="md-subhead ellipsis">
         <span data-ng-repeat="author in material.authors">
           <span>{{author.name}} {{author.surname}}</span>
           <span data-ng-bind="$index < material.authors.length - 1 ? ', ' : ''"></span>
@@ -39,7 +39,7 @@
       </video>
     </div>
 
-    <div data-ng-show="sourceType === 'VIDEO' && !canPlayVideo"
+    <div data-ng-if="sourceType === 'VIDEO' && !canPlayVideo"
          class="embed-responsive-container embed-video">
       <md-toolbar class="md-warn md-tall" layout-align="center center">
         <div class="md-toolbar-tools" layout-align="center center">
@@ -66,14 +66,14 @@
       </div>
     </div>
 
-    <div data-ng-show="sourceType === 'EBOOK'"
+    <div data-ng-if="sourceType === 'EBOOK'"
          class="embed-responsive-container">
       <iframe src="{{ebookLink}}" width="100%" height="500px"></iframe>
     </div>
 
-    <div data-ng-show="sourceType === 'PDF'"
+    <div data-ng-if="sourceType === 'PDF'"
          class="embed-responsive-container">
-      <iframe src="{{material.source}}" width="100%" height="500px"></iframe>
+      <iframe src="{{material.PDFLink}}" width="100%" height="500px"></iframe>
     </div>
 
     <!--Embed iframe-->
@@ -89,22 +89,34 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType">
+  <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType || sourceType === 'LINK' ">
     <div layout="row" layout-align="space-between center">
       <!--Link as backup - if iframe is internally not working-->
-      <a href="{{material.source}}" class="wrapped regular-link md-primary"
-         target="_blank" data-ng-if="(!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
-                    || (sourceType === 'AUDIO' && !canPlayAudio))">
+      <a href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
+         target="_blank" data-ng-if="((!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
+                    || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK') && !embeddable">
         <span class="item-link" data-ng-bind="material.source"></span>
       </a>
-      <!--Up and down-->
-      <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" layout="row">
-        <md-button ng-disabled="index === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
-                   ng-click="listItemUp(index)">
+
+
+      <div class="fullscreen-iframe" data-ng-if="sourceType === 'LINK' && embeddable" ngsf-fullscreen="fullscreenCtrl">
+        <a class="wrapped regular-link md-primary" data-ng-href="#" ng-click="showSourceFullscreen($event, fullscreenCtrl)">
+          <span class="item-link" data-ng-bind="material.source"></span>
+        </a>
+
+        <div data-ng-if="showMaterialContent && embeddedDataIframe" data-ng-bind-html="embeddedDataIframe"></div>
+        <iframe ng-src="{{iframeSource}}" data-ng-if="showMaterialContent && !embeddedDataIframe" width="100%" height="100%"></iframe>
+      </div>
+
+
+<!--Up and down-->
+      <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" flex-xs="30" flex-sm="30" layout="row" layout-align="end end" class="align-right">
+        <md-button ng-disabled="rowIndex === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
+                   ng-click="listItemUp()">
           <md-icon class="material-icons">arrow_upward</md-icon>
         </md-button>
-        <md-button ng-disabled="(chapter.materials.length - 1) == index" class="md-icon-button"
-                   aria-label="Liiguta materjali alla" ng-click="listItemDown(index)">
+        <md-button ng-disabled="rowIndex === chapter.contentRows.length -1" class="md-icon-button"
+                   aria-label="Liiguta materjali alla" ng-click="listItemDown()">
           <md-icon class="material-icons">arrow_downward</md-icon>
         </md-button>
       </div>

@@ -10,7 +10,7 @@ public class TargetGroupDAO extends BaseDAO<TargetGroup> {
     }
 
     public TargetGroup getByName(String name) {
-        return getSingleResult(createQuery("FROM TargetGroup WHERE name = :name", TargetGroup.class)
-                .setParameter("name", name));
+        return getSingleResult(createQuery("FROM TargetGroup WHERE lower(name) = :name", TargetGroup.class)
+                .setParameter("name", name.toLowerCase()));
     }
 }

@@ -1,16 +1,17 @@
 <md-card class="card-lg card-mb-20" id="portfolio-card">
-  <md-card-content>
-    <div layout="column" layout-gt-xs="row">
-      <!-- left large side  -->
-      <div flex flex-gt-xs="75" layout="column" class="layout-relative">
-        <!-- left headline -->
-        <div layout="row">
-          <h1 flex data-ng-bind="portfolio.title"></h1>
 
-          <div dop-share
-               data-title="portfolio.title"
-               data-description="portfolio.summary"
-               data-object="portfolio"></div>
+  <!-- SECTION 1 -->
+  <div layout-gt-xs="row">
+    <!-- SECTION 1: Left -->
+    <div flex flex-gt-xs="75" layout="column">
+      <!-- Headline -->
+      <div class="card-lg__container card-lg__container--padding-l-r-t" layout="row">
+        <h1 flex="80" flex-gt-sm="90" data-ng-bind="portfolio.title"></h1>
+
+        <div class="card-menus" layout="row">
+          <dop-share
+            data-title="portfolio.title"
+            data-object="portfolio"></dop-share>
 
           <md-menu>
             <md-button class="md-icon-button" ng-click="$mdOpenMenu()" id="material-menu">
@@ -50,99 +51,102 @@
 
               <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
               <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper
-                            data-learning-object="portfolio"></md-menu-item>
+              data-learning-object="portfolio"></md-menu-item>
             </md-menu-content>
           </md-menu>
         </div>
-        <!-- left meta  -->
-        <div layout="row" class="on-left">
-          <div flex>
-            <p class="md-body-2 meta">
-              <small class="md-caption">
-                <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
-              </small>
-              <br>
-              <span class="hide-overflow" data-ng-if="getEducationalContext(portfolio.taxon)"
-                    data-translate="{{getEducationalContext(portfolio.taxon)}}">
-                                </span>
-              <span class="hide-overflow" data-ng-if="!getEducationalContext(portfolio.taxon)" data-translate="UNKNOWN">Unknown</span>
-            </p>
-          </div>
-          <div flex data-ng-if="!getSubject(portfolio.taxon)">
-            <p class="md-body-2 meta">
-              <small class="md-caption">
-                <span data-translate="DETAIL_VIEW_DOMAIN"></span>
-              </small>
-              <br/>
-              <span class="hide-overflow" data-ng-if="getDomain(portfolio.taxon)"
-                    data-translate="{{'DOMAIN_' + getDomain(portfolio.taxon)}}">
-                            </span>
-              <span class="hide-overflow" data-ng-if="!getDomain(portfolio.taxon)"
-                    data-translate="UNKNOWN">Unknown</span>
-            </p>
-          </div>
-          <div flex data-ng-if="getSubject(portfolio.taxon)">
-            <p class="md-body-2 meta">
-              <small class="md-caption">
-                <span data-translate="DETAIL_VIEW_SUBJECT"></span>
-              </small>
-              <br/>
-              <span class="hide-overflow" data-ng-if="getSubject(portfolio.taxon)"
-                    data-translate="{{'SUBJECT_' + getSubject(portfolio.taxon)}}">
-                            </span>
-              <span class="hide-overflow" data-ng-if="!getSubject(portfolio.taxon)"
-                    data-translate="UNKNOWN">Unknown</span>
-            </p>
-          </div>
-          <div flex>
-            <p class="md-body-2 meta">
-              <small class="md-caption">
-                <span data-translate="DETAIL_VIEW_TARGET_GROUP"></span>
-              </small>
-              <br/>
-              <span class="hide-overflow one-row" data-ng-if="portfolio.targetGroups">
-                  <span data-ng-repeat="targetGroup in getTargetGroups()">
-                    <span data-translate="{{'TARGET_GROUP_' + targetGroup}}"></span>
-                    <span>{{$last ? '' : ', '}}</span>
-                  </span>
-              </span>
-              <span class="hide-overflow" data-ng-if="!portfolio.targetGroups || !portfolio.targetGroups.length"
-                    data-translate="UNKNOWN">Unknown</span>
-            </p>
-          </div>
-        </div>
-
-        <md-divider class="md-default-theme"></md-divider>
-        <!-- left description  -->
-        <div class="on-left wrapped">
-          <div class="md-body-1 description textangular-view" data-ng-bind-html="portfolio.summary"></div>
-        </div>
-
-        <!-- left tags  -->
-        <div data-ng-if="portfolio && portfolio.id" data-dop-tags class="tags" data-learning-object="portfolio"></div>
-
       </div>
 
-      <!-- right small side  -->
-      <div layout="column" flex flex-gt-xs="25" class="divider-left" layout-align="start start">
-        <!-- Hidden because waiting for correct design-->
-        <div class="card__icon-holder" hide>
+      <!-- Meta -->
+      <div class="card-lg__container card-lg__container--padding-l-r" layout="row">
+        <!-- Education -->
+        <div flex>
+          <p class="md-caption caption-light">
+            <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
+          </p>
+          <p class="ellipsis ellipsis--2 ellipsis--medium">
+                <span data-ng-repeat="educationalContext in taxonObject.educationalContexts track by $index">
+                  <span data-translate="{{educationalContext}}"></span><span
+                  data-ng-bind="$index < taxonObject.educationalContexts.length - 1 ? ', ' : ''"></span>
+                </span>
+            <span data-ng-if="!taxonObject.educationalContexts.length" data-translate="UNKNOWN">Unknown</span>
+          </p>
+        </div>
+        <!-- Domain -->
+        <div flex>
+          <p class="md-caption caption-light">
+            <span data-translate="DETAIL_VIEW_DOMAIN"></span>
+          </p>
+          <p class="ellipsis ellipsis--2 ellipsis--medium">
+                <span data-ng-repeat="taxon in taxonObject.domainGroup track by $index">
+                  <span data-translate="{{taxon}}"></span><span
+                  data-ng-bind="$index < taxonObject.domainGroup.length - 1 ? ', ' : ''"></span>
+                </span>
+            <span data-ng-if="!taxonObject.domainGroup.length" data-translate="UNKNOWN">Unknown</span>
+          </p>
+        </div>
+        <!-- Topic -->
+        <div flex data-ng-if="taxonObject.topics.length">
+          <p class="md-caption caption-light">
+            <span data-translate="TAXON_PATH_TOPIC"></span>
+          </p>
+          <p class="ellipsis ellipsis--2 ellipsis--medium">
+                <span data-ng-repeat="topic in taxonObject.topics track by $index">
+                  <span data-translate="{{topic}}"></span><span
+                  data-ng-bind="$index < taxonObject.topics.length - 1 ? ', ' : ''"></span>
+                </span>
+          </p>
+        </div>
+        <!-- Subtopic -->
+        <div flex data-ng-if="taxonObject.subtopics.length">
+          <p class="md-caption caption-light">
+            <span data-translate="TAXON_PATH_SUBTOPIC"></span>
+          </p>
+          <p class="ellipsis ellipsis--2 ellipsis--medium">
+                <span data-ng-repeat="subtopic in taxonObject.subtopics track by $index">
+                  <span data-translate="{{subtopic}}"></span><span
+                  data-ng-bind="$index < taxonObject.subtopics.length - 1 ? ', ' : ''"></span>
+                </span>
+          </p>
+        </div>
+      </div>
+
+      <md-divider class="md-default-theme"></md-divider>
+
+      <!-- Description  -->
+      <div class="card-lg__container card-lg__container--padding-l-r" class="wrapped">
+        <div class="md-body-1 description textangular-view" data-ng-bind-html="portfolio.summary"></div>
+      </div>
+
+      <!-- Tags  -->
+      <dop-tags data-ng-if="portfolio && portfolio.id" class="tags card-lg__container card-lg__container--padding-l-r-b"
+                data-learning-object="portfolio" data-is-edit-portfolio-mode="isEditPortfolioMode"></dop-tags>
+
+    </div>
+
+
+    <!-- SECTION 1: Right  -->
+    <div flex flex-gt-xs="25" class="card-lg__container--border-left">
+      <!-- Hidden because waiting for correct design-->
+      <div class="card-media">
+        <div class="ribbon"></div>
+        <div class="card__icon-holder">
           <md-icon data-ng-if="portfolio.visibility === 'PRIVATE'">lock</md-icon>
           <md-icon data-ng-if="portfolio.visibility === 'NOT_LISTED'">link</md-icon>
           <md-tooltip md-direction="bottom">
             <span data-ng-if="portfolio.visibility === 'PRIVATE'" data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span>
             <span data-ng-if="portfolio.visibility === 'NOT_LISTED'"
-                  data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
+            data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span>
           </md-tooltip>
         </div>
-        <div data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted" data-dop-favorite
-             data-learning-object="portfolio"></div>
-        <div class="corner"></div>
+        <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted"
+        data-learning-object="portfolio"></dop-favorite>
+
         <!-- imaged -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">
           <img data-ng-src="rest/picture/thumbnail/lg/{{portfolio.picture.name}}" sizes="(max-width: 600) 600px, 300px"
-               data-ng-srcset="rest/picture/thumbnail/lg/{{portfolio.picture.name}} 300w,
-                                         rest/picture/thumbnail/lg_xs/{{portfolio.picture.name}} 600w"/>
+          data-ng-srcset="rest/picture/thumbnail/lg/{{portfolio.picture.name}} 300w,
+          rest/picture/thumbnail/lg_xs/{{portfolio.picture.name}} 600w"/>
         </div>
         <!-- noimage -->
         <div data-ng-if="!portfolio.picture" class="card-cover portfolio">
@@ -151,61 +155,87 @@
             <div class="sheet low-right"></div>
             <div class="sheet low-left"></div>
           </div>
-          <md-icon>book</md-icon>
+          <md-icon class="icon-kind">book</md-icon>
         </div>
+      </div>
 
-        <md-content>
-          <p class="md-body-2 meta">
-            <small class="md-caption">
-              <span data-translate="CREATOR"></span>:
-            </small>
-            <a data-ng-href="/{{portfolio.creator.username}}">
-              <span data-ng-bind="portfolio.creator.name"></span>
-              <span data-ng-bind="portfolio.creator.surname"></span>
-            </a>
-          </p>
+      <md-content class="card-lg__container">
+        <!-- Creator -->
+        <p class="md-body-2">
+          <span class="md-caption caption-light">
+            <span data-translate="CREATOR"></span>:
+          </span>
+          <a data-ng-href="/{{portfolio.creator.username}}">
+            <span data-ng-bind="portfolio.creator.name"></span>
+            <span data-ng-bind="portfolio.creator.surname"></span>
+          </a>
+        </p>
 
-          <p class="md-body-2 meta" data-ng-if="portfolio.creator.id != portfolio.originalCreator.id">
-            <small class="md-caption">
-              <span data-translate="ORIGINAL_CREATOR"></span>:
-            </small>
-            <a data-ng-href="/{{portfolio.originalCreator.username}}">
-              <span data-ng-bind="portfolio.originalCreator.name"></span>
-              <span data-ng-bind="portfolio.originalCreator.surname"></span>
-            </a>
-          </p>
+        <!-- Original creator -->
+        <p class="md-body-2" data-ng-if="portfolio.creator.id != portfolio.originalCreator.id">
+          <span class="md-caption caption-light">
+            <span data-translate="ORIGINAL_CREATOR"></span>:
+          </span>
+          <a data-ng-href="/{{portfolio.originalCreator.username}}">
+            <span data-ng-bind="portfolio.originalCreator.name"></span>
+            <span data-ng-bind="portfolio.originalCreator.surname"></span>
+          </a>
+        </p>
 
-          <p class="md-body-2 meta" data-ng-if="portfolio.added">
-            <small class="md-caption">
-              <span data-translate="CREATED"></span>:
-            </small>
-            {{portfolio.added | date:'dd.MM.yyyy'}}
-          </p>
+        <!-- Created -->
+        <p class="md-body-2" data-ng-if="portfolio.added">
+          <span class="md-caption caption-light">
+            <span data-translate="CREATED"></span>:
+          </span>
+          {{portfolio.added | date:'dd.MM.yyyy'}}
+        </p>
+      </md-content>
 
-          <p class="md-body-2 meta">
-            <small class="md-caption">
-              <span data-translate="VIEW_COUNT"></span>:
-            </small>
-            <span data-ng-bind="portfolio.views"></span>
-          </p>
-        </md-content>
+      <md-divider class="md-default-theme"></md-divider>
+
+      <md-content class="card-lg__container">
+        <!--Target groups-->
+        <p class="md-body-2">
+          <span class="md-caption caption-light">
+            <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>:
+          </span>
+          <span data-ng-repeat="group in getTargetGroups()">
+            <span data-ng-bind="group"></span><span
+                  data-ng-bind="$index < getTargetGroups().length - 1 ? ', ' : ''"></span>
+          </span>
+        </p>
+      </md-content>
+    </div>
+  </div>
+
+  <md-divider class="md-default-theme"></md-divider>
+
+  <!-- SECTION 2: Actions -->
+  <md-card-actions data-ng-if="!isEditPortfolioMode" class="card-lg__actions" layout="column" layout-gt-xs="row">
+    <div flex flex-gt-xs="75" class="card-lg__container" layout="row" layout-align="space-between center">
+      <!-- Reviews placeholder -->
+      <div class="review"></div>
+      <!-- Container for comments button -->
+      <div>
+        <md-button class="md-icon-button comments__button" data-ng-click="toggleCommentSection()"
+                   id="show-comments">
+          <md-icon class="comments__icon">comment</md-icon>
+          <md-tooltip md-direction="top">
+            <span data-ng-if="isLoggedIn()" data-translate="COMMENTS_TITLE"></span>
+            <span data-ng-if="!isLoggedIn()" data-translate="TOOLTIP_LOG_IN_TO_COMMENT"></span>
+          </md-tooltip>
+        </md-button>
+        <span class="comments__count" data-ng-bind="portfolio.comments.length"></span>
       </div>
     </div>
-
-    <md-divider class="md-default-theme"></md-divider>
-
-    <div layout="column" layout-gt-xs="row" class="actions">
-      <div data-ng-if="!isEditPortfolioMode && portfolio.type" flex="50" flex-gt-xs="75" class="ng-cloak" ng-cloak>
-        <div data-dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()"
-             class="ng-cloak" ng-cloak></div>
-      </div>
-      <span flex></span>
-      <!-- rating control -->
-      <div data-ng-if="!isEditPortfolioMode && portfolio.type" data-dop-rating
-           data-portfolio="portfolio"
-           like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
-           dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}">
-      </div>
+    <div flex flex-gt-xs="25" class="card-lg__container card-lg__container--border-left" layout="column" layout-align="center stretch">
+      <!-- Ratings area -->
+      <dop-rating data-ng-if="!isEditPortfolioMode && portfolio.type" data-portfolio="portfolio"
+                  like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
+                  dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"></dop-rating>
     </div>
-  </md-card-content>
+  </md-card-actions>
+
+  <!-- SECTION 3: Comments -->
+  <dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()" is-open="commentsOpen"></dop-comments-card>
 </md-card>

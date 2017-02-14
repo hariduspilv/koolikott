@@ -1,22 +1,5 @@
 package ee.hm.dop.rest;
 
-import static java.lang.String.format;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.xml.soap.SOAPException;
-
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.AuthenticatedUserService;
@@ -31,6 +14,22 @@ import org.opensaml.saml2.binding.encoding.HTTPRedirectDeflateEncoder;
 import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
 
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.xml.soap.SOAPException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+
+import static java.lang.String.format;
+
 @Path("login")
 public class LogInResource extends BaseResource {
 
@@ -38,6 +37,8 @@ public class LogInResource extends BaseResource {
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
 
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
+    private static final String LOGIN_REDIRECT_WITH_TOKEN = "../#!/loginRedirect?token=";
+    private static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "../#!/loginRedirect";
 
     @Inject
     private LoginService loginService;
@@ -88,7 +89,7 @@ public class LogInResource extends BaseResource {
     public Response taatAuthenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
         AuthenticatedUser authenticatedUser = taatService.authenticate(formParams.getFirst("SAMLResponse"),
                 formParams.getFirst("RelayState"));
-        URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
+        URI location = new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());
 
         return Response.temporaryRedirect(location).build();
     }
@@ -106,10 +107,10 @@ public class LogInResource extends BaseResource {
 
         try {
             AuthenticatedUser authenticatedUser = ekoolService.authenticate(code, getEkoolCallbackUrl());
-            URI location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
+            URI location = new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());
             return Response.temporaryRedirect(location).build();
         } catch (Exception e) {
-            URI location = new URI("../#/loginRedirect");
+            URI location = new URI(LOGIN_REDIRECT_WITHOUT_TOKEN);
             return Response.temporaryRedirect(location).build();
         }
     }
@@ -155,9 +156,10 @@ public class LogInResource extends BaseResource {
         URI location;
         try {
             AuthenticatedUser authenticatedUser = stuudiumService.authenticate(token);
-            location = new URI("../#/loginRedirect?token=" + authenticatedUser.getToken());
+            location = new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());
         } catch (Exception e) {
-            location = new URI("../#/loginRedirect");
+            e.printStackTrace();
+            location = new URI(LOGIN_REDIRECT_WITHOUT_TOKEN);
         }
         return Response.temporaryRedirect(location).build();
     }

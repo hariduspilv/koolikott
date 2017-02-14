@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -28,10 +29,14 @@ public class MaterialDAO extends LearningObjectDAO {
         return castTo(Material.class, super.findById(materialId));
     }
 
-    public List<LearningObject> findDeletedMaterials() {
-        List<LearningObject> learningObjects = super.findDeletedLearningObjects();
-        removeNot(Material.class, learningObjects);
-        return learningObjects;
+    public List<Material> findDeletedMaterials() {
+        TypedQuery<Material> query = createQuery("SELECT m FROM Material m WHERE m.deleted = true", Material.class);
+        return query.getResultList();
+    }
+
+    public Long findDeletedMaterialsCount() {
+        Query query = getEntityManager().createQuery("SELECT count(*) FROM Material m WHERE m.deleted = true");
+        return (Long) query.getSingleResult();
     }
 
     /**
@@ -74,14 +79,28 @@ public class MaterialDAO extends LearningObjectDAO {
     }
 
     public List<Material> findBySource(String materialSource, boolean deleted) {
-        String queryStart = deleted ? "FROM Material m WHERE " : "FROM Material m WHERE m.deleted = false AND ";
+        String queryStart = "FROM Material m WHERE (m.deleted = false OR m.deleted = :deleted) AND ";
 
         return createQuery(queryStart +
                         "m.source='http://www." + materialSource + "' " +
                         "OR m.source ='https://www." + materialSource + "' " +
                         "OR m.source='http://" + materialSource + "' " +
                         "OR m.source='https://" + materialSource + "'",
-                Material.class).getResultList();
+                Material.class).setParameter("deleted", deleted).getResultList();
+    }
+
+    public Material findOneBySource(String materialSource, boolean deleted) {
+        String queryStart = "FROM Material m WHERE (m.deleted = false OR m.deleted = :deleted) AND ";
+        try {
+            return createQuery(queryStart +
+                            "m.source='http://www." + materialSource + "' " +
+                            "OR m.source ='https://www." + materialSource + "' " +
+                            "OR m.source='http://" + materialSource + "' " +
+                            "OR m.source='https://" + materialSource + "'",
+                    Material.class).setParameter("deleted", deleted).setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<Language> findLanguagesUsedInMaterials() {
@@ -93,5 +112,11 @@ public class MaterialDAO extends LearningObjectDAO {
         String queryString = "SELECT Count(lo.id) FROM LearningObject lo INNER JOIN Material m ON lo.id=m.id WHERE lo.creator = :creator AND lo.deleted = FALSE";
         Query query = entityManager.createNativeQuery(queryString);
         return ((BigInteger) query.setParameter("creator", creator).getSingleResult()).longValue();
+    }
+
+    public List<Material> findNewestMaterials(int numberOfMaterials, int startPosition) {
+        return createQuery("FROM Material mat WHERE mat.deleted = false ORDER BY added DESC, id DESC",
+                Material.class).setFirstResult(startPosition).setMaxResults(numberOfMaterials)
+                .getResultList();
     }
 }

@@ -1,25 +1,23 @@
-define([
-    'app',
-    'services/serverCallService',
-    'ngInfiniteScroll',
-    'services/searchService',
-    'directives/materialBox/materialBox',
-    'directives/portfolioBox/portfolioBox'
-], function (app) {
-    app.directive('dopInfiniteSearchResult', ['serverCallService', function () {
+'use strict'
+
+angular.module('koolikottApp')
+.directive('dopInfiniteSearchResult',
+[
+    'serverCallService',
+    function (serverCallService) {
         return {
             scope: {
                 params: '=',
                 url: '=?',
                 title: '=',
                 subtitle: '=',
-                filter: '='
+                filter: '=',
+                cache: '<?'
             },
             templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
-            controller: function ($scope, $location, serverCallService, searchService) {
+            controller: ['$scope', '$location', 'searchService', '$timeout', function ($scope, $location, searchService, $timeout) {
                 $scope.searching = false;
                 $scope.accessor = {};
-                var hasInitated = false;
                 var searchCount = 0;
 
                 $scope.sortOptions = [{
@@ -37,9 +35,9 @@ define([
                 }];
 
                 // Pagination variables
-                var maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
-                var expectedItemCount = maxResults;
-                var initialParams = $scope.params;
+                let maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
+                let expectedItemCount = maxResults;
+                let initialParams = $scope.params;
 
                 $scope.items = [];
 
@@ -53,10 +51,9 @@ define([
                 }
 
                 $scope.nextPage = function () {
-                    if (hasInitated) {
-                        search();
-                    }
-                    hasInitated = true;
+                    $timeout(function () {
+                        search()
+                    });
                 };
 
                 $scope.allResultsLoaded = function () {
@@ -82,7 +79,15 @@ define([
                     $scope.params.maxResults = maxResults;
                     $scope.params.start = $scope.start;
 
-                    serverCallService.makeGet($scope.url, $scope.params, searchSuccess, searchFail);
+                    serverCallService.makeGet(
+                        $scope.url,
+                        $scope.params,
+                        searchSuccess,
+                        searchFail,
+                        {},
+                        false,
+                        $scope.cache === false ? $scope.cache : true
+                    );
                 }
 
                 function searchSuccess(data) {
@@ -126,7 +131,7 @@ define([
                 };
 
                 init();
-            }
+            }]
         };
-    }]);
-});
+    }
+]);

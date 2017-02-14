@@ -1,20 +1,18 @@
-define([
-    'angularAMD',
-    'services/targetGroupService',
-    'services/taxonService',
-    'directives/selectClose/selectClose'
-], function (angularAMD) {
-    angularAMD.directive('dopTargetGroupSelector', function () {
-        return {
-            scope: {
-                targetGroups: '=',
-                taxon: '=',
-                isRequired: '=',
-                markRequired: '='
-            },
-            templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
-            controller: function ($scope, $rootScope, $timeout, targetGroupService, $translate, taxonService) {
+'use strict'
+
+angular.module('koolikottApp').directive('dopTargetGroupSelector', function () {
+    return {
+        scope: {
+            targetGroups: '=',
+            taxon: '=',
+            isRequired: '=',
+            markRequired: '='
+        },
+        templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
+        controller: ['$scope', '$rootScope', '$timeout', 'targetGroupService', '$translate', 'taxonService',
+            function ($scope, $rootScope, $timeout, targetGroupService, $translate, taxonService) {
                 $scope.isReady = false;
+
                 init();
 
                 function init() {
@@ -22,6 +20,7 @@ define([
                     fill();
                     addListeners();
                     selectValue();
+
                     $timeout(function () {
                         $scope.isReady = true;
                     });
@@ -42,10 +41,25 @@ define([
                         }
                     }, false);
 
+                    $scope.$on('detailedSearch:taxonChange', (event, taxonChange) => {
+                        let newEdCtx = taxonService.getEducationalContext(taxonChange.newValue);
+                        let oldEdCtx = taxonService.getEducationalContext(taxonChange.oldValue);
+
+                        if (!_.isEqual(newEdCtx, oldEdCtx)) {
+                            fill();
+                            resetIfInvalid();
+                        }
+                    });
+
+                    $scope.$on("targetGroupSelector:clear", () => {
+                        fill();
+                        resetIfInvalid();
+                    });
+
                     $scope.$watch('taxon', function (newTaxon, oldTaxon) {
-                        if (newTaxon !== oldTaxon) {
-                            var newEdCtx = taxonService.getEducationalContext(newTaxon);
-                            var oldEdCtx = taxonService.getEducationalContext(oldTaxon);
+                        if (newTaxon !== oldTaxon && !$rootScope.isEditPortfolioMode) {
+                            let newEdCtx = taxonService.getEducationalContext(newTaxon);
+                            let oldEdCtx = taxonService.getEducationalContext(oldTaxon);
 
                             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                                 fill();
@@ -53,6 +67,12 @@ define([
                             }
                         }
                     });
+
+                    $scope.$watch('markRequired', function (markRequired) {
+                        if (markRequired && $scope.isRequired && $scope.selectedTargetGroup.length === 0) {
+                            $scope.targetGroupForm.targetGroupSelect.$touched = true
+                        }
+                    }, true);
                 }
 
                 function getDifference(newArray, oldArray) {
@@ -127,6 +147,8 @@ define([
                         $scope.selectedTargetGroup = [];
                     }
 
+                    var added;
+
                     if (e.group && $scope.selectedTargetGroup.indexOf(e.group.label) == -1) {
                         added = true;
                     } else {
@@ -143,15 +165,11 @@ define([
                 };
 
                 // Reduced text for select label
-                $scope.getSelectedText = function () {
+                $scope.getSelectedText = function() {
                     if ($scope.targetGroups && $scope.targetGroups.length > 0) {
-                        return targetGroupService.getSelectedText($scope.targetGroups);
+                        return _.join(targetGroupService.getSelectedText($scope.targetGroups), ', ');
                     } else {
-                        if ($scope.isRequired.trigger === true) {
-                            return $translate.instant('DETAILED_SEARCH_TARGET_GROUP') + " *";
-                        } else {
-                            return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
-                        }
+                        return $translate.instant('DETAILED_SEARCH_TARGET_GROUP');
                     }
                 };
 
@@ -206,8 +224,11 @@ define([
                     if (!$scope.selectedTargetGroup) {
                         $scope.selectedTargetGroup = targetGroupService.getLabelByTargetGroups($scope.targetGroups);
                     }
-                }
-            }
-        };
-    });
+                };
+
+                $scope.$on("detailedSearch:prefillTargetGroup", function (event, args) {
+                    $scope.selectedTargetGroup  = targetGroupService.getLabelByTargetGroups(args);
+                });
+            }]
+    };
 });

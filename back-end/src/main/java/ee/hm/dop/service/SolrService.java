@@ -1,22 +1,5 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
-import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
@@ -26,9 +9,27 @@ import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
+import org.apache.solr.client.solrj.response.Suggestion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
+import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Singleton
 public class SolrService implements SolrEngineService {
@@ -76,29 +77,43 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public SpellCheckResponse.Suggestion suggest(String query, boolean suggestTags) {
+    public List<String> suggest(String query, boolean suggestTags) {
         if (query.isEmpty()) {
             return null;
         }
         QueryResponse qr = null;
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setRequestHandler(suggestTags ? SUGGEST_TAG_URL : SUGGEST_URL);
-        solrQuery.set("spellcheck.q", query);
-        solrQuery.set("suggest.count", SUGGEST_COUNT);
+        solrQuery.setQuery(query);
+        List<String> suggestions = new ArrayList<>();
+
         try {
             qr = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
         } catch (SolrServerException | IOException e) {
             logger.error("The SolrServer encountered an error.");
         }
 
-        String queryString = query.replaceAll("\\+", " ").toLowerCase();
-        SpellCheckResponse spellCheckResponse = qr != null ? qr.getSpellCheckResponse() : null;
-        if (spellCheckResponse != null) {
-            return spellCheckResponse.getSuggestion(queryString);
+        if (qr != null && qr.getSuggesterResponse() != null) {
+            List<Suggestion> combinedSuggestions = new ArrayList<>();
+
+            if (suggestTags) {
+                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopTagSuggester"));
+            } else {
+                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
+                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
+            }
+
+            for (Suggestion suggestion : combinedSuggestions) {
+                suggestions.add(suggestion.getTerm());
+            }
+
+            return suggestions.size() > SUGGEST_COUNT ? suggestions.subList(0, SUGGEST_COUNT - 1) : suggestions;
         }
+
 
         return null;
     }
+
 
     @Override
     public void updateIndex() {

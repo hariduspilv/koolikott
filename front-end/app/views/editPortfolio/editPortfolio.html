@@ -1,17 +1,16 @@
-<section layout-gt-sm>
-  <article flex="100" role="main">
-
+<section layout="column" layout-gt-sm="row" role="main">
+  <article flex-gt-xs="75">
     <md-card class="card-mb-20" data-ng-if="showFirstMessage">
       <md-toolbar>
-        <p class="md-toolbar-tools" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
+        <p class="md-toolbar-text" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
       </md-toolbar>
     </md-card>
 
     <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
 
     <div id="portfolio-chapters">
-      <div data-ng-repeat="chapter in portfolio.chapters">
-        <div data-dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></div>
+      <div data-ng-repeat="chapter in portfolio.chapters track by $index">
+        <dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
       </div>
     </div>
 
@@ -22,4 +21,8 @@
       </md-button>
     </md-card>
   </article>
+
+  <aside flex-gt-sm="25">
+    <div data-dop-aside data-learning-object="portfolio"></div>
+  </aside>
 </section>
