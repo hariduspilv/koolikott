@@ -18,6 +18,7 @@ angular.module('koolikottApp')
                 loginFail();
             } else {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                $rootScope.$broadcast('tour:start:firstTime');
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
         }

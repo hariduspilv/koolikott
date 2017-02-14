@@ -242,6 +242,12 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
 
             $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.justLoggedIn);
 
+            if ($rootScope.justLoggedIn) {
+                $rootScope.$broadcast('tour:start:firstTime');
+            } else {
+                $rootScope.$broadcast('tour:close:pageSwitch');
+            }
+
             $rootScope.justLoggedIn = false;
 
             if ($rootScope.isEditPortfolioPage) {
@@ -260,8 +266,6 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             if (window.innerWidth > BREAK_LG && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
                 $rootScope.sideNavOpen = true;
             }
-
-            $rootScope.$broadcast('tour:close:pageSwitch');
 
             $rootScope.hasAppInitated = true;
         });

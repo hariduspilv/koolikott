@@ -15,13 +15,8 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
     vm.currentStep = -1; // disable tour on load
     vm.isOpenedByUser = false;
 
-    vm.$onInit = () => {
-        if ($window.innerWidth >= BREAK_SM && vm.isAuthenticated() && !$rootScope.isEditPortfolioPage) {
-            startGeneralTour();
-        }
-    };
-
     function startGeneralTour() {
+      if ($window.innerWidth >= BREAK_SM && vm.isAuthenticated() && !$rootScope.isEditPortfolioPage) {
         tourService.getUserTourData()
             .then((data) => {
                 vm.userTourData = data;
@@ -30,9 +25,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
                     openFirstTourItem();
                 }
             });
-
-        // TODO: Remove for live
-        openFirstTourItem();
+      }
     }
 
     function openFirstTourItem () {
@@ -45,6 +38,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
 
     vm.isAuthenticated = () => authenticatedUserService.isAuthenticated();
 
+    $scope.$on('tour:start:firstTime', () => startGeneralTour());
     $scope.$on('tour:start', () => vm.tourStart());
     $scope.$on('tour:start:editPage', () => vm.tourStart(0, true, true));
     $scope.$on('tour:start:editPage:firstTime', () => vm.tourStart(0, true, true, true));
