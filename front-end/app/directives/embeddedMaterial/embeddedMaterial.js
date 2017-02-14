@@ -34,11 +34,16 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     $scope.canPlayAudio = false;
                     $scope.videoType = "";
                     $scope.audioType = "";
+                    $scope.sourceType = "";
                     $scope.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                     if ($scope.material) {
                         $scope.materialType = getType();
+                        canPlayAudioFormat();
+                        canPlayVideoFormat();
+                        getSourceType();
+                        getContentType();
                     }
                 }
 
@@ -72,7 +77,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
                     $scope.sourceType = matchType(filename);
                     if ($scope.sourceType !== 'LINK') {
-                        $scope.material.source = $scope.proxyUrl;
+                        if ($scope.sourceType == 'PDF')$scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
                     }
                 }
 
@@ -131,16 +136,6 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     return $scope.isEditPortfolioMode || !$scope.sourceType || $scope.sourceType === 'LINK';
                 };
 
-                $scope.$watch(function () {
-                    return getSource($scope.material);
-                }, function (newValue, oldValue) {
-                    if ($scope.material && $scope.material.id) {
-                        getSourceType();
-                        canPlayVideoFormat();
-                        canPlayAudioFormat();
-                    }
-                });
-
                 function canPlayVideoFormat() {
                     var extension = getSource($scope.material).split('.').pop();
                     var v = document.createElement('video');
@@ -183,10 +178,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                         $scope.sourceType = 'EBOOK';
                         $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
                     } else if (isPDFLink($scope.material.source)) {
-                        if (isIE()) {
-                            $scope.sourceType = 'LINK';
-                            return;
-                        }
+                        $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + $scope.material.source;
                         $scope.sourceType = 'PDF';
                     } else {
                         embedService.getEmbed(getSource($scope.material), embedCallback);
