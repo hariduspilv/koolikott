@@ -513,9 +513,6 @@ function matchType(type) {
     } else if (isEbookLink(type)) {
         return 'EBOOK';
     } else if (isPDFLink(type)) {
-        if (isIE()) {
-            return 'LINK';
-        }
         return 'PDF';
     } else {
         return 'LINK';
