@@ -77,7 +77,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
                     $scope.sourceType = matchType(filename);
                     if ($scope.sourceType !== 'LINK') {
-                        if ($scope.sourceType == 'PDF')$scope.material.PDFLink = "/utils/pdf.js/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
+                        if ($scope.sourceType == 'PDF')$scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
                     }
                 }
 
@@ -178,7 +178,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                         $scope.sourceType = 'EBOOK';
                         $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
                     } else if (isPDFLink($scope.material.source)) {
-                        $scope.material.PDFLink = "/utils/pdf.js/web/viewer.html?file=" + $scope.material.source;
+                        $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + $scope.material.source;
                         $scope.sourceType = 'PDF';
                     } else {
                         embedService.getEmbed(getSource($scope.material), embedCallback);
