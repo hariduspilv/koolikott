@@ -16,7 +16,7 @@
   angular.module('tour/tour.tpl.html', []).run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="tour-actions-wrapper" layout="row">       <md-button class="md-icon-button md-ink-ripple" ng-click="closeTour()" ><md-icon class="material-icons">close</md-icon></md-button><span flex></span>\n' + '         <md-button class="md-primary md-ink-ripple" ng-if="!ttNextVisible" data-ng-click="proceed()"><span ng-bind="ttNextLabel"></span><md-icon class="material-icons">arrow_forward</md-icon></md-button></div> \n'  + '    </div>\n' + '</div>');
+      $templateCache.put('tour/tour.tpl.html', '<div class="tour-tip">\n' + '    <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>\n' + '    <div class="tour-content-wrapper">\n' + '        <p ng-bind="ttContent"></p>\n' + ' <div class="tour-actions-wrapper" layout="row">       <md-button class="md-ink-ripple" ng-click="closeTour()" aria-label="Close tour"><span ng-bind="ttCloseLabel"></span></md-button><span flex></span>\n' + '         <md-button class="md-primary md-ink-ripple" ng-if="!ttNextVisible" data-ng-click="proceed()" aria-label="Next tour item"><span ng-bind="ttNextLabel"></span><md-icon class="material-icons">arrow_forward</md-icon></md-button></div> \n'  + '    </div>\n' + '</div>');
     }
   ]);
   angular.module('angular-tour.tour', []).constant('tourConfig', {
