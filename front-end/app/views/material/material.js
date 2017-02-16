@@ -316,6 +316,14 @@ angular.module('koolikottApp')
                 return iconService.getMaterialIcon($scope.material.resourceTypes);
             };
 
+            $scope.getTypeName = () => {
+                var resourceTypes = $scope.material.resourceTypes;
+                if(resourceTypes.length == 0){
+                    return 'NONE';
+                }
+                return resourceTypes[resourceTypes.length - 1].name;
+            };
+
             $scope.confirmMaterialDeletion = () => {
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
