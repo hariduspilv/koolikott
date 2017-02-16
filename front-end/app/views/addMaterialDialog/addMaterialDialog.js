@@ -404,7 +404,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         function init() {
             if ($scope.material && $scope.material.uploadedFile) {
-                $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
+                $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.source)($scope.material.uploadedFile.name);
             }
 
             if ($scope.isChapterMaterial) {
@@ -617,7 +617,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $scope.fileUploaded = true;
             $scope.uploadingFile = false;
             $scope.material.uploadedFile = file;
-            $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
+            $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
             $scope.step.isMaterialUrlStepValid = true;
         }
 

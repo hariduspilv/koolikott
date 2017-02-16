@@ -93,6 +93,7 @@ angular.module('koolikottApp')
             function updateMaterial(newMaterial, oldMaterial) {
                 if (newMaterial !== oldMaterial) {
                     $scope.material = newMaterial;
+                    $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
                 }
             }
