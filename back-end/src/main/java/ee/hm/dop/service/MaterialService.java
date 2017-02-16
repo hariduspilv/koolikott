@@ -693,7 +693,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     public Response getProxyUrl(String url_param) throws IOException {
         String contentDisposition;
         HttpClient client = new HttpClient();
-        GetMethod get = new GetMethod(url_param);
+        GetMethod get = new GetMethod(url_param.replaceAll(" ","%20"));
 
         try{
             client.executeMethod(get);
