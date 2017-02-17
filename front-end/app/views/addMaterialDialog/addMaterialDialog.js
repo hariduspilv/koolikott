@@ -33,8 +33,19 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         $scope.review = {};
         $scope.maxReviewSize = 10;
         $scope.charactersRemaining = 850;
+        $scope.resourceTypeDTO = [];
 
         init();
+
+        $scope.isTypeSelected = function (resourceType) {
+            let materialResourceTypes = $scope.material.resourceTypes;
+
+            var isFound = materialResourceTypes.filter(function (mResourceType) {
+                return mResourceType.id == resourceType.id;
+            });
+
+            return isFound.length > 0;
+        };
 
         $scope.step.nextStep = function () {
             $scope.step.currentStep += 1;
@@ -118,6 +129,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         };
 
         $scope.save = function () {
+            $scope.material.resourceTypes = $scope.resourceTypeDTO;
             $scope.isSaving = true;
             if (uploadingPicture) {
                 $timeout($scope.save, 500, false);

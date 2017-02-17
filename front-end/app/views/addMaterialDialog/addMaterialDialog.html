@@ -207,9 +207,9 @@
               <div layout="row">
                 <md-input-container flex-xs="100" flex-gt-xs="55">
                   <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
-                  <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect"
+                  <md-select data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
                              ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
-                    <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes">
+                    <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes" ng-selected="{{ isTypeSelected(resourceType) }}">
                       <span data-translate="{{resourceType.name}}"></span>
                     </md-option>
                   </md-select>
