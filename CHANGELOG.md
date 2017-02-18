@@ -1,3 +1,9 @@
+## e-Koolikott 1.9.0 (18.02.2017)
+
+### Lisandunud
+* Avalehe ja kogumiku edit vaate tour #54 https://github.com/hariduspilv/koolikott/issues/54
+
+
 ## e-Koolikott 1.8.0 (31.01.2017)
 
 ### Lisandunud
