@@ -821,7 +821,9 @@
         <lst name="defaults">
             <str name="echoParams">explicit</str>
             <int name="rows">10</int>
-            <str name="qf">search_source</str>
+            <!-- search_source needs to have lower score since NGram generates
+            a lot of tokens that raise it -->
+            <str name="qf">search_source^0.1</str>
             <str name="qf">text</str>
             <str name="qf">title^2</str>
             <str name="defType">edismax</str>

@@ -106,11 +106,11 @@
                     </div>
                     <div data-ng-show="fileUploaded && !uploadingFile" class="upload-file-success">
                       <h5 data-ng-messages="addMaterialForm.source.$error">
-                        <div data-ng-show="!addMaterialForm.source.$error.filenameTooLong">
+                        <div data-ng-if="!addMaterialForm.source.$error.filenameTooLong">
                           <span data-translate="ADD_FILE_SUCCESS"></span>:
                           <span class="ellipsis">{{ material.uploadedFile.displayName }}</span>
                         </div>
-                          <div data-ng-message="filenameTooLong" class="invalid-file-message"
+                          <div data-ng-message="filenameTooLong" class="text-error"
                                data-translate="MATERIAL_FILE_NAME_TOO_LONG"></div>
                       </h5>
                     </div>
@@ -207,9 +207,9 @@
               <div layout="row">
                 <md-input-container flex-xs="100" flex-gt-xs="55">
                   <label data-translate="MATERIAL_VIEW_RESOURCE_TYPE"></label>
-                  <md-select data-ng-model="material.resourceTypes" id="resourceTypeSelect"
+                  <md-select data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
                              ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
-                    <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes">
+                    <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes" ng-selected="{{ isTypeSelected(resourceType) }}">
                       <span data-translate="{{resourceType.name}}"></span>
                     </md-option>
                   </md-select>

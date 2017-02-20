@@ -93,6 +93,7 @@ angular.module('koolikottApp')
             function updateMaterial(newMaterial, oldMaterial) {
                 if (newMaterial !== oldMaterial) {
                     $scope.material = newMaterial;
+                    $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
                 }
             }
@@ -313,6 +314,14 @@ angular.module('koolikottApp')
                 if ($scope.material === undefined || $scope.material === null) return '';
 
                 return iconService.getMaterialIcon($scope.material.resourceTypes);
+            };
+
+            $scope.getTypeName = () => {
+                var resourceTypes = $scope.material.resourceTypes;
+                if(resourceTypes.length == 0){
+                    return 'NONE';
+                }
+                return resourceTypes[resourceTypes.length - 1].name;
             };
 
             $scope.confirmMaterialDeletion = () => {

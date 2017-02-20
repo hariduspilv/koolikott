@@ -553,3 +553,7 @@ function countOccurrences(value, text) {
 
     return count;
 }
+
+function decodeUTF8(string){
+    return decodeURIComponent(escape(decodeURIComponent(string)));
+}

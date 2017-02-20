@@ -33,8 +33,19 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         $scope.review = {};
         $scope.maxReviewSize = 10;
         $scope.charactersRemaining = 850;
+        $scope.resourceTypeDTO = [];
 
         init();
+
+        $scope.isTypeSelected = function (resourceType) {
+            let materialResourceTypes = $scope.material.resourceTypes;
+
+            var isFound = materialResourceTypes.filter(function (mResourceType) {
+                return mResourceType.id == resourceType.id;
+            });
+
+            return isFound.length > 0;
+        };
 
         $scope.step.nextStep = function () {
             $scope.step.currentStep += 1;
@@ -118,6 +129,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         };
 
         $scope.save = function () {
+            $scope.material.resourceTypes = $scope.resourceTypeDTO;
             $scope.isSaving = true;
             if (uploadingPicture) {
                 $timeout($scope.save, 500, false);
@@ -404,7 +416,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         function init() {
             if ($scope.material && $scope.material.uploadedFile) {
-                $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
+                $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
             }
 
             if ($scope.isChapterMaterial) {
@@ -617,11 +629,12 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $scope.fileUploaded = true;
             $scope.uploadingFile = false;
             $scope.material.uploadedFile = file;
-            $scope.material.uploadedFile.displayName = decodeURIComponent(escape(decodeURIComponent($scope.material.uploadedFile.name)));
+            $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
             $scope.step.isMaterialUrlStepValid = true;
         }
 
         function fileUploadFailed(response) {
+            console.log("File upload failed");
             if(response.data.cause == "filename too long"){
                 $scope.addMaterialForm.source.$setValidity("filenameTooLong", false);
                 $scope.addMaterialForm.source.$setTouched();

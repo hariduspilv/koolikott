@@ -27,6 +27,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -693,7 +694,13 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     public Response getProxyUrl(String url_param) throws IOException {
         String contentDisposition;
         HttpClient client = new HttpClient();
-        GetMethod get = new GetMethod(url_param);
+        GetMethod get;
+
+        try{
+            get = new GetMethod(url_param);
+        }catch (IllegalArgumentException e){
+            get = new GetMethod(URIUtil.encodePath(url_param));
+        }
 
         try{
             client.executeMethod(get);
