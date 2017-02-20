@@ -14,7 +14,7 @@ public class MyMaterialsPage extends Page {
 	private By uncheckedCircle = By.xpath("//div/md-icon[text()='check']");
 	private By searchResultMaterial = By.xpath("//h3[@data-ng-bind='$ctrl.getCorrectLanguageTitle($ctrl.learningObject)']");
 	private By starIcon = By.xpath("//md-icon[@data-ng-click='$ctrl.favorite($event)']");
-	private By selectMaterialBox = By.cssSelector("h3.two-rows");
+	private By selectMaterialBox = By.xpath("//md-card[@data-ng-click='$ctrl.navigateTo($ctrl.learningObject, $event)']");
 	private By materialMessage = By.cssSelector("span.md-toast-text");
 	private By addPortfolioButton = By.id("add-portfolio");
 	private By selectPortfolioDropdown = By.xpath("(//md-select[@aria-label='Vali kogumik'])");

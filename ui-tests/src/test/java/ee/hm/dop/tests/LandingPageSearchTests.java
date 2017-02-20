@@ -73,7 +73,7 @@ public class LandingPageSearchTests {
 				.openSearchResultMaterial() 
 				.getMaterialType();
 
-		Assert.assertEquals("Heli", materialType);
+		Assert.assertEquals("audiotrack", materialType);
 
 	}
 	
@@ -85,7 +85,7 @@ public class LandingPageSearchTests {
 				.getLogo()
 				.clickLogo()
 				.getSimpleSearch()
-				.insertSearchCriteriaWithAutocomplete() 
+				.insertSearchCriteriaWithAutocomplete("do not touch") 
 				.openSearchResultMaterial()
 				.getMaterialDescription();
 
@@ -107,6 +107,8 @@ public class LandingPageSearchTests {
 				.clickToSelectMaterialLanguage() 
 				.addDescriptionInRussian()
 				.clickNextStep()
+				.selectEducation()
+				.selectSubjectArea()
 				.selectTargetGroup()
 				.clickNextStep()
 				.insertAuthorsName()

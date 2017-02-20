@@ -4,16 +4,10 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-//import java.io.File;
-//import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-//import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
-//import org.openqa.selenium.OutputType;
-//import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -139,35 +133,36 @@ public class PageHelpers extends SeleniumUser {
 			exp.printStackTrace();
 		}
 	}
+	
+	public static String generateRegisterNumber(int length) {
+		String allowedChars = "ABCDEFGHIJKLMNOPRSTUQWXZV" + // alphabets
+				"1234567890"; // numbers
+		String regnumber = "";
+		String temp = RandomStringUtils.random(length, allowedChars);
+		regnumber = temp.substring(0, temp.length() - 9); // .sendKeys(Helpers.generateRegisterNumber(20));
+		return regnumber;
+	}
 		
-		public static void uploadFile1(String fileLocation) {
+	public static void uploadFile() {
 
-			try {
-
-				setClipboardData(fileLocation);
-				
-				Robot robot = new Robot();
-				
-				robot.delay(110);
-
-				robot.keyPress(KeyEvent.VK_CONTROL);
-				robot.keyPress(KeyEvent.VK_V);
-
-				robot.keyRelease(KeyEvent.VK_V);
-				robot.keyRelease(KeyEvent.VK_CONTROL);
-
-				robot.delay(500);
-
-				robot.keyPress(KeyEvent.VK_ENTER);
-				robot.keyRelease(KeyEvent.VK_ENTER);
-				
-				robot.delay(50);
-
+		try {
 			
+			StringSelection s = new StringSelection("c:\\files\\cateyes.jpg");
+		    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(s, null);
+			
+			Robot robot = new Robot();
+			
+			robot.keyPress(java.awt.event.KeyEvent.VK_ENTER);
+			robot.keyRelease(java.awt.event.KeyEvent.VK_ENTER);
+			robot.keyPress(java.awt.event.KeyEvent.VK_CONTROL);
+			robot.keyPress(java.awt.event.KeyEvent.VK_V);
+			robot.keyRelease(java.awt.event.KeyEvent.VK_CONTROL);
+			robot.delay(2000);
+			robot.keyPress(java.awt.event.KeyEvent.VK_ENTER);
 
-			} catch (Exception exp) {
-				exp.printStackTrace();
-			}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		}
 	}
 
 	

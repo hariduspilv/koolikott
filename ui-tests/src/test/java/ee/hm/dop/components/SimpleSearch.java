@@ -22,8 +22,8 @@ public class SimpleSearch extends PageComponent {
 		return new LandingPage();
 	}
 	
-	public LandingPage insertSearchCriteriaWithAutocomplete() {
-		getDriver().findElement(simpleSearch).sendKeys("do not");
+	public LandingPage insertSearchCriteriaWithAutocomplete(String criteria) {
+		getDriver().findElement(simpleSearch).sendKeys(criteria);
 		PageHelpers.waitForVisibility(autocompleteSelecton);
 		getDriver().findElement(autocompleteSelecton).click();
 		PageHelpers.waitForSeconds(1500);

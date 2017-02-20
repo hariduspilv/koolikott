@@ -6,7 +6,7 @@ import ee.hm.dop.helpers.PageHelpers;
 
 public class PreschoolEducationResultsPage extends Page {
 	
-	private By openSearchResult = By.xpath("//div[@class='card-container__item']");
+	private By openSearchResult = By.xpath("//h3[@data-ng-bind='$ctrl.learningObject.title']");
 	private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
 	private By newFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");
 	

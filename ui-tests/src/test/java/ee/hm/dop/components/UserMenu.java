@@ -47,11 +47,10 @@ public class UserMenu extends PageComponent {
 	}
 	
 	public UserMenu clickProfileIcon() {
-		PageHelpers.waitForVisibility(userMenuIcon);;
+		PageHelpers.waitForVisibility(userMenuIcon);
 		getDriver().findElement(userMenuIcon).click();
 		PageHelpers.waitForSeconds(1500);
 		return this;
-
 	}
 	
 	public String getUserName() {

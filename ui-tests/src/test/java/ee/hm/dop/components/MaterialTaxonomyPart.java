@@ -1,6 +1,7 @@
 package ee.hm.dop.components;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import ee.hm.dop.helpers.PageHelpers;
@@ -8,8 +9,7 @@ import ee.hm.dop.page.MaterialPage;
 
 public class MaterialTaxonomyPart extends PageComponent {
 
-	private By targerGroup = By
-			.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
+	private By targetGroup = By.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
 	private By selectedTargetGroup = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
 	private By selectedTargetGroup1 = By.xpath("/html/body/div[5]/md-select-menu/md-content/md-option[2]/div[1]/span");
 	private By createMaterialButton = By.id("add-material-create-button");
@@ -23,10 +23,11 @@ public class MaterialTaxonomyPart extends PageComponent {
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
 	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
+	private By insertTag = By.xpath("(//input[starts-with(@id, 'input-')])");
 
 	
 	public MaterialTaxonomyPart selectTargetGroup() {
-		getDriver().findElement(targerGroup).click();
+		getDriver().findElement(targetGroup).click();
 		getDriver().findElement(selectedTargetGroup).click();
 		getDriver().findElements(closeButton).get(2).click();
 		return this;
@@ -50,7 +51,7 @@ public class MaterialTaxonomyPart extends PageComponent {
 	}
 
 	public MaterialTaxonomyPart selectTargetGroup1() {
-		getDriver().findElement(targerGroup).click();
+		getDriver().findElement(targetGroup).click();
 		getDriver().findElement(selectedTargetGroup1).click();
 		PageHelpers.waitForSeconds(1500);
 		return this;
@@ -95,6 +96,14 @@ public class MaterialTaxonomyPart extends PageComponent {
 		getDriver().findElement(createMaterialButton1).click();
 		PageHelpers.waitForSeconds(3500);
 		return new MaterialPage();
+	}
+	
+	public MaterialTaxonomyPart insertTagAndEnter() {
+		getDriver().findElement(insertTag).sendKeys(PageHelpers.generateRegisterNumber(18));
+		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
+		PageHelpers.waitForSeconds(1500);
+		return this;
+
 	}
 
 }

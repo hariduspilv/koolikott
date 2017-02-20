@@ -12,7 +12,7 @@ public class EditPortfolioPage extends Page {
 	private By visibilityButton = By.xpath("//button[@ng-click='$mdOpenMenu($event)']");
 	private By shareWithLink = By.xpath("//button/span[text()='Jaga ainult lingiga']");
 	private By newChapter = By.xpath("//button[@data-ng-click='addNewChapter()']");
-	private By chapterTitle = By.xpath("//input[@placeholder='Sisesta peatüki pealkiri']");
+	private By chapterTitle = By.xpath("//input[@data-ng-model='$ctrl.chapter.title']");
 	private By urlLink = By.xpath("//input[@data-ng-model='chapter.resourcePermalink']");
 	private By exitAndSave = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
 	private By materialMessage = By.cssSelector("div.md-toast-content");
@@ -28,7 +28,7 @@ public class EditPortfolioPage extends Page {
 	private By insertLink = By.name("insertLink");
 	private By updateMaterial = By.id("add-portfolio-edit-button");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
-	private By addNewMaterialButton = By.xpath("//button[@data-ng-click='openMenu($mdOpenMenu, $event)']");
+	private By addNewMaterialButton = By.xpath("//button[@data-ng-click='$ctrl.openMenu($mdOpenMenu, $event)']");
 	private By newMaterialSelection = By.xpath("//button/span[text()='Uus']");
 	private By successAlertText = By.cssSelector("p.md-toolbar-text");
 
@@ -71,7 +71,7 @@ public class EditPortfolioPage extends Page {
 
 	public EditPortfolioPage clickToInsertLink() {
 		getDriver().findElement(insertLink).click();
-		PageHelpers.uploadFile1("https://test.ee");
+		PageHelpers.uploadFile();
 		return this;
 
 	}

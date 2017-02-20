@@ -3,7 +3,6 @@ package ee.hm.dop.tests;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public abstract class SeleniumUser {
@@ -20,8 +19,6 @@ public abstract class SeleniumUser {
         if (driver == null) {
 
         	driver = new FirefoxDriver();
-        	
-    		//driver.get("https://oxygen.netgroupdigital.com/#/");
         	driver.manage().window().maximize();
         	driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

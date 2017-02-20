@@ -10,6 +10,8 @@ import static ee.hm.dop.page.LandingPage.goToLandingPage;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import ee.hm.dop.page.MaterialPage;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class MaterialTests {
@@ -88,7 +90,6 @@ public class MaterialTests {
 				.clickAddMaterial()
 				.setHyperLink()
 				.setMaterialTitle()
-				.uploadPhoto()
 				.addDescription()
 				.clickNextStep()
 				.clickNextStep()
@@ -105,29 +106,7 @@ public class MaterialTests {
 
 	}
 	
-	/*@Test
-	public void selectAndAddMaterialToNewPortfolio() {
 
-		boolean materialIsDisplayed = goToLandingPage()
-				.chooseUserType("SmallPublisher")
-				.getLeftMenu()
-				.clickMyMaterials()
-				.clickToSelectMaterial()
-				.getFabButton()
-				.clickAddPortfolio()
-				.uploadPhoto()
-				.insertPortfolioTitle()
-				.selectEducationalContext()
-				.selectSubjectArea()
-				.selectAgeGroup()
-				.addDescription()
-				.clickCreatePortfolioButton()
-				.materialMessageIsDisplayedInPortfolio();
-
-		assertTrue(materialIsDisplayed);
-
-	}*/
-	
 	@Test
 	public void selectAndAddMaterialToTheExistingPortfolio() {
 
@@ -159,29 +138,47 @@ public class MaterialTests {
 		Assert.assertEquals("1", likesNumber);
 
 	}
-
+	
 	@Test
-	public void editMaterialByAddingTag() {
+	public void addTagToMaterial() {
 
-		String tagText = goToLandingPage()
+		MaterialPage tagsAmount = goToLandingPage()	
 				.chooseUserType("SmallPublisher")
-				.getLeftMenu()
-				.clickMyMaterials()
-				.openMaterial()
-				.selectActionFromMenu()
-				.clickEditMaterial()
+				.getFabButton()
+				.moveCursorToAddPortfolio()
+				.moveCursorToAddMaterial()
+				.clickAddMaterial()
+				.setHyperLink()
+				.setMaterialTitle()
+				.addDescription()
 				.clickNextStep()
-				.insertTagAndEnter("1")
-				.clickUpdateMaterial()
-				.getTagText();
-
-		Assert.assertEquals("1", tagText);
+				.insertTagAndEnter()
+				.selectEducation()
+				.selectSubjectArea()
+				.selectTargetGroup()
+				.clickAddMaterial();
+				
+	int initialTagsAmount = tagsAmount.getTagsCount();
+	    
+	          tagsAmount = tagsAmount
+	        		  
+	            .selectActionFromMenu()
+	            .clickEditMaterial()
+	            .clickNextStep()
+	            .insertTagAndEnter()
+	            .clickUpdateMaterial();
+	            
+	int newTagsAmount = tagsAmount.getTagsCount();         
+	            
+			 
+		assertTrue(initialTagsAmount + 1 == newTagsAmount);
 
 	}
 	
+
 	@Test
 	public void addMaterialToFavoritesAndRemoveFromFavorites() {
-
+		
 		boolean starIsSelected = goToLandingPage()
 				.chooseUserType("Moderator")
 				.getLeftMenu()

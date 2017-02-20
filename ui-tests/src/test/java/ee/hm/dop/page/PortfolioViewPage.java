@@ -15,7 +15,7 @@ public class PortfolioViewPage extends Page {
 	private By improperContent = By.xpath("//button[@data-ng-click='showConfirmationDialog()']");
 	private By removeButton = By.xpath("//button[@data-ng-click='confirmPortfolioDeletion()']");
 	private By notImproperContentButton = By.xpath("//button[@data-ng-click='setNotImproperLearningObject()']");
-	private By addedTag = By.xpath("//a[@data-ng-click='getTagSearchURL($event, $chip.tag)']");
+	private By addedTag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By recommendationList = By.xpath("//button[@data-ng-click='recommend()']");
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By fabButton = By.id("add-portfolio");

@@ -1,9 +1,10 @@
 package ee.hm.dop.page;
 
 import java.util.Random;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import ee.hm.dop.components.EditMaterialMainPart;
 import ee.hm.dop.helpers.PageHelpers;
 
@@ -12,16 +13,17 @@ public class MaterialPage extends Page {
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
 	private By menuBar = By.xpath("//md-icon[text()='more_vert']");
 	private By editMaterial = By.xpath("//button[@data-ng-click='edit()']");
-	private By addedTag = By.xpath("//a[@data-ng-click='getTagSearchURL($event, $chip.tag)']");
+	private By addedTag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By publisherName = By.xpath("//span[@data-ng-repeat='publisher in material.publishers']");
-	private By likeIcon = By.cssSelector("div.rating-button.md-caption > md-icon.material-icons");
-	private By isLiked = By.cssSelector("div.rating-button.md-caption > span");
+	private By likeIcon = By.xpath("//div[@data-ng-click='$ctrl.like()']");
+	private By isLiked = By.xpath("//span[@data-ng-bind='$ctrl.rating.likes']");
 	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
-	private By unselectedStar = By.xpath("//md-icon[@data-ng-if='!hasFavorited']");
+	private By unselectedStar = By.xpath("//div[@class='md-icon-button md-button favorite']");
 	private By selectedStar = By.xpath("//md-icon[@data-ng-if='$ctrl.hasFavorited']");
-	private By showMoreButton = By.xpath("//button[@ng-click='showMore()']");
+	private By showMoreButton = By.xpath("//button[@ng-click='$ctrl.showMore()']");
 	private By materialDescription = By.xpath("//div[@data-ng-bind-html='getCorrectLanguageString(material.descriptions)']");
-	private By materialType = By.xpath("//md-card[@id='material-card']/md-card-content/div/div/div[2]/div[3]/p/span");
+	private By materialType = By.cssSelector(".audiotrack");
+	private By selectMaterialBox = By.xpath("//div[@class='card-cover  audiotrack']");
 
 	public MaterialPage insertTags() {
 		for (int i = 0; i < 13; i++) {
@@ -67,10 +69,14 @@ public class MaterialPage extends Page {
 	
 	
 	public MaterialPage checkShowButton() {
-		PageHelpers.waitForVisibility(showMoreButton);
+		PageHelpers.waitForSeconds(2500);
+		//PageHelpers.waitForVisibility(showMoreButton);
 		if (getDriver().findElement(showMoreButton).isDisplayed()){
 			getDriver().findElement(showMoreButton).click();
+		}else{
+			return this;
 		}
+			
 		return this;
 	}
 	
@@ -88,6 +94,11 @@ public class MaterialPage extends Page {
 	
 	public String getMaterialType() {
 		PageHelpers.waitForSeconds(2500);
+		PageHelpers.waitForVisibility(selectMaterialBox);
+		Actions builder = new Actions(getDriver());
+		WebElement selectMaterialElement = getDriver().findElement(selectMaterialBox);
+		builder.moveToElement(selectMaterialElement).perform();
+		PageHelpers.waitForVisibility(materialType);
 		return getDriver().findElement(materialType).getText();
 
 	}
@@ -107,6 +118,11 @@ public class MaterialPage extends Page {
 	public String getTagText() {
 		return getDriver().findElement(addedTag).getText();
 
+	}
+	
+	public int getTagsCount() {
+		PageHelpers.waitForSeconds(3000);
+		return getDriver().findElements(addedTag).size();
 	}
 	
 	public boolean starIsSelected() {
@@ -143,5 +159,7 @@ public class MaterialPage extends Page {
 		return new EditMaterialMainPart();
 
 	}
+
+
 
 }

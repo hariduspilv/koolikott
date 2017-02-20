@@ -6,7 +6,8 @@ import ee.hm.dop.helpers.PageHelpers;
 
 public class SearchResultsPage extends Page {
 	
-	private By educationalTaxon = By.cssSelector("span.hide-overflow");
+	//private By educationalTaxon = By.cssSelector("span.hide-overflow");
+	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
 	private By searchResultPortfolio = By.xpath("//h3[@data-ng-bind='$ctrl.learningObject.title']");
 	private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
     private By newFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");

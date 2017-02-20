@@ -191,39 +191,9 @@ public class AddMaterialMainPart extends PageComponent {
 
 	public AddMaterialMainPart uploadPhoto() {
 		PageHelpers.waitForVisibility(insertPhoto);
+		PageHelpers.waitForSeconds(1500);
 		getDriver().findElement(insertPhoto).click();
-		String[] picsArray = { "c:\\Images\\helmet.jpg", "c:\\Images\\hobbit.jpg", "c:\\Images\\lill.jpg",
-				"c:\\Images\\ballet.jpg", "c:\\Images\\coast.jpg", "c:\\Images\\cat1.jpg", "c:\\Images\\coffee.jpg",
-				"c:\\Images\\berry.jpg", "c:\\Images\\art.jpg", "c:\\Images\\girl.jpg", "c:\\Images\\autumn.jpg",
-				"c:\\Images\\bluberries.jpg", "c:\\Images\\sunset.jpg", "c:\\Images\\flowers.jpg",
-				"c:\\Images\\macro.jpg", "c:\\Images\\caravagio.jpg", "c:\\Images\\win.jpg", "c:\\Images\\fyodor.jpg",
-				"c:\\Images\\planet.jpg", "c:\\Images\\pictorial.jpg", "c:\\Images\\winter.jpg",
-				"c:\\Images\\mask.jpg", "c:\\Images\\legolas.jpg", "c:\\Images\\mushroom.jpg", "c:\\Images\\anime.jpg",
-				"c:\\Images\\pug1.jpg", "c:\\Images\\dali.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\zombie.jpg",
-				"c:\\Images\\sun.jpg", "c:\\Images\\stars.jpg", "c:\\Images\\cup.jpg", "c:\\Images\\fog.jpg",
-				"c:\\Images\\dragons.jpg", "c:\\Images\\jump.jpg", "c:\\Images\\beard.jpg", "c:\\Images\\yellow.jpg",
-				"c:\\Images\\dragons.jpg", "c:\\Images\\land.jpg", "c:\\Images\\legend.jpg", "c:\\Images\\pug.jpg",
-				"c:\\Images\\radars.jpg", "c:\\Images\\roses.jpg", "c:\\Images\\sand.jpg", "c:\\Images\\sea.jpg",
-				"c:\\Images\\skyscrapers.jpg", "c:\\Images\\snowflake.jpg", "c:\\Images\\space.jpg",
-				"c:\\Images\\umbrella.jpg", "c:\\Images\\woo.jpg", "c:\\Images\\evening.jpg", "c:\\Images\\aika.jpg",
-				"c:\\Images\\solar.jpg", "c:\\Images\\foliage.jpg", "c:\\Images\\london.jpg", "c:\\Images\\dress.jpg",
-				"c:\\Images\\cup1.jpg", "c:\\Images\\rail.jpg", "c:\\Images\\fields.jpg", "c:\\Images\\giacint.jpg",
-				"c:\\Images\\sport.jpg", "c:\\Images\\fish.jpg", "c:\\Images\\palma.jpg", "c:\\Images\\watch.jpg",
-				"c:\\Images\\legs.jpg", "c:\\Images\\lens.jpg", "c:\\Images\\dog.jpg", "c:\\Images\\italy.jpg",
-				"c:\\Images\\art1.jpg", "c:\\Images\\rembrandt.jpg", "c:\\Images\\flamenco.jpg",
-				"c:\\Images\\beatles.jpg", "c:\\Images\\closeup.jpg", "c:\\Images\\ninja.jpg", "c:\\Images\\lana.jpg",
-				"c:\\Images\\jeans.jpg", "c:\\Images\\field.jpg", "c:\\Images\\cateyes.jpg",
-				"c:\\Images\\ranuculus.jpg", "c:\\Images\\phones.jpg", "c:\\Images\\dog14.jpg", "c:\\Images\\mist.jpg",
-				"c:\\Images\\spices.jpg", "c:\\Images\\asfalt.jpg", "c:\\Images\\battle.jpg", "c:\\Images\\clocks.jpg",
-				"c:\\Images\\jerusalem.jpg", "c:\\Images\\pencil.jpg", "c:\\Images\\laptop.jpg",
-				"c:\\Images\\hamburg.jpg", "c:\\Images\\grass.jpg", "c:\\Images\\industrial.jpg",
-				"c:\\Images\\monochrome.jpg", "c:\\Images\\winter1.jpg", "c:\\Images\\art.jpg", "c:\\Images\\urban.jpg",
-				"c:\\Images\\moon.jpg", "c:\\Images\\spring.jpg", "c:\\Images\\piers.jpg", "c:\\Images\\mirror.jpg",
-				"c:\\Images\\jar.jpg", "c:\\Images\\cats.jpg", "c:\\Images\\dance.jpg", "c:\\Images\\phones1.jpg",
-				"c:\\Images\\ocean.jpg", "c:\\Images\\winter_sun.jpg",
-				"c:\\Images\\sheep.jpg", "c:\\Images\\snow_lake.jpg", "c:\\Images\\liberty.jpg" };
-		String randomFile = picsArray[new Random().nextInt(picsArray.length)];
-		PageHelpers.uploadFile(randomFile);
+		PageHelpers.uploadFile();
 		PageHelpers.waitForSeconds(1500);
 		return this;
 	}
@@ -231,7 +201,7 @@ public class AddMaterialMainPart extends PageComponent {
 	public AddMaterialMainPart uploadFile() {
 		PageHelpers.waitForVisibility(uploadFile);
 		getDriver().findElement(uploadFile).click();
-		PageHelpers.uploadFile1("c:\\files\\test2.docx");
+		PageHelpers.uploadFile();
 		PageHelpers.waitForSeconds(1500);
 		return this;
 	}

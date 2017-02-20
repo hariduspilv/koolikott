@@ -7,14 +7,14 @@ import ee.hm.dop.helpers.PageHelpers;
 
 public class LandingPage extends Page {
 
-    private By searchResultPortfolio = By.xpath("//h3[@data-ng-bind='learningObject.title']");
-    private By searchResultMaterial = By.xpath("//h3[@data-ng-bind='getCorrectLanguageTitle(learningObject)']");
+    private By searchResultPortfolio = By.xpath("//h3[@data-ng-bind='$ctrl.learningObject.title']");
+    private By searchResultMaterial = By.xpath("//h3[@data-ng-bind='$ctrl.getCorrectLanguageTitle($ctrl.learningObject)']");
     private By recommendationsList = By.xpath("//h4[@data-ng-bind='item.title']");
     private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
     private By newFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");
     private By userName = By.xpath("//strong");
     private By deletedPortfolioToast = By.cssSelector("span.md-toast-text");
-    
+  
     
 	public MyPortfoliosPage chooseUserType(String userType) {
 
@@ -81,6 +81,8 @@ public class LandingPage extends Page {
 	public String isPortfolioDeletedToastVisible() {
 		return getDriver().findElement(deletedPortfolioToast).getText();
 	}
+
+
 
 }
 	
