@@ -247,8 +247,12 @@
     </fieldType>
 
     <fieldType name="search_link" class="solr.TextField">
-        <analyzer>
-            <tokenizer class="solr.NGramTokenizerFactory" minGramSize="2" maxGramSize="10"/>
+        <analyzer type="index">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="ee.hm.FilteredLinkFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.NGramTokenizerFactory" minGramSize="3" maxGramSize="100"/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
