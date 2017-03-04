@@ -39,6 +39,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                     if ($scope.material) {
+                        $scope.material.source = getSource($scope.material);
                         $scope.materialType = getType();
                         canPlayAudioFormat();
                         canPlayVideoFormat();
@@ -52,6 +53,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                 }, function () {
                     if ($scope.material && $scope.material.id) {
                         getContentType();
+                        $scope.material.source = getSource($scope.material);
                     }
                 });
 
