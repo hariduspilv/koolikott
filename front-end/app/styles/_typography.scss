@@ -76,6 +76,15 @@ h2 {
     white-space: normal;
   }
 
+  &--4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $lines-four;
+    max-height: $font-small*$small-lineheight*$lines-four;
+    max-width: 400px;
+    white-space: normal;
+  }
+
   &--small {
     font-size: $font-small;
     line-height: $small-lineheight;
@@ -84,6 +93,18 @@ h2 {
 
   &--medium {
     max-height: $font-medium*$body-lineheight*$lines-two;
+    font-size: $font-medium;
+    line-height: $body-lineheight;
+    letter-spacing: 0.010em;
+    font-weight: 500;
+    color: $color-body;
+    padding-right: $md-padding;
+    margin-top: 0;
+    margin-bottom: $md-padding;
+  }
+
+  &--medium-4 {
+    max-height: $font-medium*$body-lineheight*$lines-four;
     font-size: $font-medium;
     line-height: $body-lineheight;
     letter-spacing: 0.010em;

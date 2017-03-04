@@ -322,14 +322,13 @@
               </span>
               <span>
                   <span data-ng-repeat="group in targetGroups">
-                    <span data-ng-bind="group"></span>
-                    <span data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
+                    <span data-ng-bind="group"></span><span data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
                   </span>
                 <span data-ng-if="isNullOrZeroLength(targetGroups)" data-translate="UNKNOWN">Unknown</span>
               </span>
             </p>
             <!-- Key competences -->
-            <p class="md-body-2 ellipsis ellipsis--2 ellipsis--medium" data-ng-if="material.keyCompetences.length">
+            <p class="md-body-2 ellipsis ellipsis--4 ellipsis--medium-4" data-ng-if="material.keyCompetences.length">
               <span class="md-caption caption-light">
                 <span data-translate="MATERIAL_KEY_COMPETENCES"></span>:
               </span>
