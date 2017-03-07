@@ -1,3 +1,9 @@
+
+## e-Koolikott 1.9.1 (07.03.2017)
+
+### Parandatud
+* Otsing ei toimi enam #171 https://github.com/hariduspilv/koolikott/issues/171
+
 ## e-Koolikott 1.9.0 (18.02.2017)
 
 ### Lisandunud
