@@ -884,7 +884,7 @@ public class SearchServiceTest {
         String query = "german language";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(true);
-        String tokenizedQuery = "((german language) OR (\"german language\")) AND peerReview:[* TO *]"
+        String tokenizedQuery = "((german language) OR (\"german language\")) AND (peerReview:[* TO *] OR curriculum_literature:\"true\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         long start = 0;
 

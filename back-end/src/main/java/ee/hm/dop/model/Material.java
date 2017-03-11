@@ -94,8 +94,9 @@ public class Material extends LearningObject implements Searchable {
     @JoinColumn(name = "repository")
     private Repository repository;
 
-    @Column
-    private boolean curriculumLiterature;
+    @JsonIgnore
+    @Column(nullable = false)
+    private boolean curriculumLiterature = false;
 
     /**
      * The ID in the repository. Null when created in DOP
@@ -246,6 +247,11 @@ public class Material extends LearningObject implements Searchable {
 
     public Boolean getEmbeddable() {
         return embeddable;
+    }
+
+    @JsonIgnore
+    public void setCurriculumLiterature(boolean curriculumLiterature) {
+        this.curriculumLiterature = curriculumLiterature;
     }
 
     //FIXME: curriculumLiterature variable is supported as a legacy, all new materials need peer reviews
