@@ -159,6 +159,7 @@
     <field name="language" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="special_education" type="boolean" indexed="true" stored="false" multiValued="false"/>
     <field name="issue_date_year" type="tint" indexed="true" stored="false" multiValued="false"/>
+    <field name="curriculum_literature" type="boolean" indexed="true" stored="false" multiValued="false"/>
     <field name="peerReview" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="publisher" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
@@ -208,6 +209,7 @@
     <copyField source="language" dest="text"/>
     <copyField source="publisher" dest="text"/>
     <copyField source="peerReview" dest="text"/>
+    <copyField source="curriculum_literature" dest="text"/>
     <copyField source="source" dest="suggest_source"/>
     <copyField source="source" dest="search_source"/>
 
