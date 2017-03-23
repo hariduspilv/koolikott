@@ -18,6 +18,7 @@ angular.module('koolikottApp')
                 loginFail();
             } else {
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                $rootScope.justLoggedIn = true;
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
         }
