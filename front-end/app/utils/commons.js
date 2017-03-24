@@ -557,3 +557,26 @@ function countOccurrences(value, text) {
 function decodeUTF8(string){
     return decodeURIComponent(escape(decodeURIComponent(string)));
 }
+
+if (typeof localStorage === 'object') {
+    try {
+        localStorage.setItem('localStorage', 1);
+        localStorage.removeItem('localStorage');
+    } catch (e) {
+        var tmp_storage = {};
+        var p = '__unique__';  // Prefix all keys to avoid matching built-ins
+        Storage.prototype.setItem = function(k, v){
+            tmp_storage[p + k] = v;
+        };
+        Storage.prototype.getItem = function(k){
+            return tmp_storage[p + k] === undefined ? null : tmp_storage[p + k];
+        };
+        Storage.prototype.removeItem = function(k){
+            delete tmp_storage[p + k];
+        };
+        Storage.prototype.clear = function(){
+            tmp_storage = {};
+        };
+        alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
+    }
+}
