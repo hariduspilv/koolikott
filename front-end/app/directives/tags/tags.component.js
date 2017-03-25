@@ -25,7 +25,12 @@ function TagsController($translate, authenticatedUserService, $rootScope,
         init();
     };
 
-    vm.isLoggedOutAndHasNoTags = () => !authenticatedUserService.isAuthenticated() && vm.learningObject && vm.learningObject.tags.length === 0;
+    vm.isLoggedOutAndHasNoTags = () => {
+        return !authenticatedUserService.isAuthenticated()
+            && vm.learningObject
+            && vm.learningObject.tags
+            && vm.learningObject.tags.length === 0;
+    };
 
     vm.upVote = (upVoteForm) => {
         vm.beingUpVotedForm = upVoteForm;
@@ -190,8 +195,8 @@ function TagsController($translate, authenticatedUserService, $rootScope,
                 vm.newTag.tagName = null;
                 $rootScope.$broadcast("errorMessage:updateChanged");
             }).catch(function () {
-                vm.newTag.tagName = null;
-            });
+            vm.newTag.tagName = null;
+        });
     }
 
     function updateLearningObject(learningObject) {
@@ -239,7 +244,7 @@ function TagsController($translate, authenticatedUserService, $rootScope,
         console.log("Failed checking if already reported the resource")
     }
 
-    $rootScope.$on('materialEditModalClosed', function() {
+    $rootScope.$on('materialEditModalClosed', function () {
         let reportParams = {
             learningObject: vm.learningObject.id
         };

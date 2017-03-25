@@ -17,7 +17,7 @@ angular.module('koolikottApp')
             $scope.materialCommentsOpen = false;
 
             const licenceTypeMap = {
-                'CCBY':  ['by'],
+                'CCBY': ['by'],
                 'CCBYSA': ['by', 'sa'],
                 'CCBYND': ['by', 'nd'],
                 'CCBYNC': ['by', 'nc'],
@@ -60,7 +60,7 @@ angular.module('koolikottApp')
                 }
                 if (materialSource) {
                     $scope.sourceType = matchType(getSource($scope.material));
-                    if ($scope.sourceType == "EBOOK" && isIE())$scope.material.source += "?archive=true";
+                    if ($scope.sourceType == "EBOOK" && isIE()) $scope.material.source += "?archive=true";
                 }
             }
 
@@ -317,8 +317,10 @@ angular.module('koolikottApp')
             };
 
             $scope.getTypeName = () => {
+                if (!$scope.material) return;
+
                 var resourceTypes = $scope.material.resourceTypes;
-                if(resourceTypes.length == 0){
+                if (resourceTypes.length == 0) {
                     return 'NONE';
                 }
                 return resourceTypes[resourceTypes.length - 1].name;
