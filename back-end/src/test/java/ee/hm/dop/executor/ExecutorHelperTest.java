@@ -8,6 +8,7 @@ import org.junit.*;
 
 public class ExecutorHelperTest {
 
+    @Ignore
     @Test
     public void getInitialDelayExecuteTomorrow() {
         LocalDateTime now = now();
