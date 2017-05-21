@@ -79,8 +79,8 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     if ($scope.material && $scope.material.id) {
                         $scope.material.source = getSource($scope.material);
                         $scope.materialType = getType();
-                        canPlayAudioFormat();
                         canPlayVideoFormat();
+                        canPlayAudioFormat();
                         getSourceType();
                         getContentType();
                     }
@@ -179,10 +179,29 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     if (v.canPlayType && v.canPlayType('video/' + extension)) {
                         $scope.videoType = extension;
                         $scope.canPlayVideo = true;
+
+                        let videoElement = '.embed-video-' + $scope.material.id;
+                        if ($(videoElement).length !== 0){
+
+                            let video = $('<video />', {
+                                id: 'video',
+                                src: $scope.material.source,
+                                type: 'video/' + extension,
+                                controls: true,
+                                width: '100%'
+                            });
+
+                            $(videoElement).html(video);
+                            video.load();
+                        }else{
+                            $timeout(canPlayVideoFormat, 100);
+                        }
                     }
                 }
 
                 function canPlayAudioFormat() {
+                    if($scope.canPlayVideo)return;
+
                     var extension = getSource($scope.material).split('.').pop();
                     var v = document.createElement('audio');
                     if (v.canPlayType && v.canPlayType('audio/' + extension)) {

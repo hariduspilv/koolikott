@@ -33,7 +33,7 @@
     </div>
 
     <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo"
-         class="embed-responsive-container embed-video">
+         class="embed-responsive-container embed-video-{{material.id}}">
       <video controls="true" width="100%">
         <source src="{{material.source}}" type="video/mp4">
         <source src="{{material.source}}" type="video/webm">
@@ -42,7 +42,7 @@
     </div>
 
     <div data-ng-if="sourceType === 'VIDEO' && !canPlayVideo"
-         class="embed-responsive-container embed-video">
+         class="embed-responsive-container embed-video-{{material.id}}">
       <md-toolbar class="md-warn md-tall" layout-align="center center">
         <div class="md-toolbar-tools" layout-align="center center">
           <span data-translate="NO_VIDEO_SUPPORT_FOR_BROWSER" class="line-height--normal"></span>
