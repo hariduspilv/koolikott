@@ -19,7 +19,7 @@ angular.module('koolikottApp')
                 function getSlideshareData() {
                     $.ajax({
                         type: "GET",
-                        url: 'https://www.slideshare.net/api/oembed/2?url=http://www.slideshare.net/lyndadotcom/code-drivesworld12&format=jsonp',
+                        url: 'https://www.slideshare.net/api/oembed/2?url=' + $scope.source + '&format=jsonp',
                         dataType: 'jsonp',
                         success: function (data) {
                             getSlideshareDataSuccess(data);
