@@ -79,7 +79,6 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     if ($scope.material && $scope.material.id) {
                         $scope.material.source = getSource($scope.material);
                         $scope.materialType = getType();
-                        canPlayVideoFormat();
                         canPlayAudioFormat();
                         getSourceType();
                         getContentType();
