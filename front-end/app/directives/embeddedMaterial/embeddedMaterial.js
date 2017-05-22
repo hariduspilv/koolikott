@@ -188,10 +188,12 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                                 src: $scope.material.source,
                                 type: 'video/' + extension,
                                 controls: true,
-                                width: '100%'
+                                width: '100%',
+                                preload: 'metadata'
                             });
 
                             $(videoElement).html(video);
+                            $(videoElement).bind('error', canPlayVideoFormat, true);
                             video.load();
                         }else{
                             $timeout(canPlayVideoFormat, 100);
