@@ -235,8 +235,6 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
 
                         let ebookElement = '.embed-ebook-' + $scope.material.id;
                         if ($(ebookElement).length !== 0){
-                            console.log($(ebookElement));
-                            console.log('<iframe width="100%" height="500px" src="' + $scope.ebookLink + '"></iframe>');
                             $(ebookElement).html('<iframe width="100%" height="500px" src="' + $scope.ebookLink + '"></iframe>');
                         }else{
                             $timeout(getSourceType, 100);
