@@ -60,7 +60,7 @@ public class LoginTests {
 				.insertUsernameAndPassword("Netgroup Test Kaks",  "meie teine saladus")
 				.submitStuudium()
 				.clickGivePermissionButton()
-				.getUserMenu()
+				.getUserMenu() 
 				.clickProfileIcon()
 				.getUserName();
 

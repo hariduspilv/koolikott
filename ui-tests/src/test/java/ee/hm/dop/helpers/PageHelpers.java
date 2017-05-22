@@ -165,7 +165,16 @@ public class PageHelpers extends SeleniumUser {
 		}
 	}
 
-	
+	public static boolean elementExists(By id) {
+        try {
+            getDriver().findElement(id);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+
 	
 
 }
