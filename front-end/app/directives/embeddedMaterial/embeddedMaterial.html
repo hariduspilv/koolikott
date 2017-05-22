@@ -33,14 +33,16 @@
     </div>
 
     <div data-ng-show="sourceType === 'VIDEO' && canPlayVideo"
-         class="embed-responsive-container embed-video">
+         class="embed-responsive-container embed-video-{{material.id}}">
       <video controls="true" width="100%">
-        <source src="{{material.source}}" type="video/{{videoType}}">
+        <source src="{{material.source}}" type="video/mp4">
+        <source src="{{material.source}}" type="video/webm">
+        <source src="{{material.source}}" type="video/ogg">
       </video>
     </div>
 
     <div data-ng-if="sourceType === 'VIDEO' && !canPlayVideo"
-         class="embed-responsive-container embed-video">
+         class="embed-responsive-container embed-video-{{material.id}}">
       <md-toolbar class="md-warn md-tall" layout-align="center center">
         <div class="md-toolbar-tools" layout-align="center center">
           <span data-translate="NO_VIDEO_SUPPORT_FOR_BROWSER" class="line-height--normal"></span>
@@ -67,13 +69,13 @@
     </div>
 
     <div data-ng-if="sourceType === 'EBOOK'"
-         class="embed-responsive-container">
-      <iframe src="{{ebookLink}}" width="100%" height="500px"></iframe>
+         class="embed-responsive-container embed-ebook-{{material.id}}">
+      <iframe width="100%" height="500px" src="{{ebookLink}}"></iframe>
     </div>
 
     <div data-ng-if="sourceType === 'PDF'"
-         class="embed-responsive-container">
-      <iframe src="{{material.PDFLink}}" width="100%" height="500px"></iframe>
+         class="embed-responsive-container embed-pdf-{{material.id}}">
+      <iframe width="100%" height="500px" src="{{material.PDFLink}}"></iframe>
     </div>
 
     <!--Embed iframe-->

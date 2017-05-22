@@ -132,6 +132,7 @@
     padding-bottom: 1px;
     outline: none;
     flex-grow: 2;
+    overflow: auto;
   }
   &.focussed {
     .form-control {

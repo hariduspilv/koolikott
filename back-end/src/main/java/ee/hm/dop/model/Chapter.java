@@ -1,25 +1,14 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.EAGER;
-
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import javax.persistence.UniqueConstraint;
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
+import java.util.List;
+
+import static ee.hm.dop.model.LearningObject.ALLOWED_HTML_TAGS_POLICY;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 public class Chapter {
@@ -65,6 +54,10 @@ public class Chapter {
     }
 
     public String getText() {
+        if (text != null) {
+            text = ALLOWED_HTML_TAGS_POLICY.sanitize(text);
+        }
+
         return text;
     }
 

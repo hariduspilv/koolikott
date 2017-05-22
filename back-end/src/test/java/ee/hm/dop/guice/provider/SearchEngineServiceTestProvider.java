@@ -164,7 +164,7 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     private static void addQueryWithCurriculumLiteratureTrue() {
-        String filteredQuery = "((data) OR (\"data\")) AND peerReview:[* TO *]"
+        String filteredQuery = "((data) OR (\"data\")) AND (peerReview:[* TO *] OR curriculum_literature:\"true\")"
                 + " AND ((visibility:\"public\") OR type:\"material\")";
         List<Document> filteredSearchResult = createDocumentsWithIdentifiers(2L, 7L);
         searchResponses.put(filteredQuery, filteredSearchResult);

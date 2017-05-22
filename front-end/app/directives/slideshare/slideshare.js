@@ -17,12 +17,14 @@ angular.module('koolikottApp')
                 getSlideshareData();
 
                 function getSlideshareData() {
-                    var params = {
-                        url: $scope.source,
-                        format: "jsonp",
-                        callback: "JSON_CALLBACK"
-                    };
-                    serverCallService.makeJsonp("https://www.slideshare.net/api/oembed/2", params, getSlideshareDataSuccess, getSlideshareDataFail);
+                    $.ajax({
+                        type: "GET",
+                        url: 'https://www.slideshare.net/api/oembed/2?url=' + $scope.source + '&format=jsonp',
+                        dataType: 'jsonp',
+                        success: function (data) {
+                            getSlideshareDataSuccess(data);
+                        }
+                    });
                 }
 
                 function getSlideshareDataSuccess(data) {
@@ -36,10 +38,10 @@ angular.module('koolikottApp')
                     }
                 }
 
-                function getSlideshareDataFail(data) {
-                    log("Failed to get slideshare data. ");
-                    $scope.failCallback();
-                }
+                // function getSlideshareDataFail(data) {
+                //     log("Failed to get slideshare data. ");
+                //     $scope.failCallback();
+                // }
             }]
         };
     }

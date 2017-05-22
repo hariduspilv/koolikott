@@ -1,3 +1,18 @@
+## e-Koolikott 1.9.3 (25.03.2017)
+
+### Parandatud
+* Milestone 8 & 9 parandused v2 #173 https://github.com/hariduspilv/koolikott/issues/173
+
+## e-Koolikott 1.9.2 (23.03.2017)
+
+### Parandatud
+* Milestone 8 & 9 parandused #172 https://github.com/hariduspilv/koolikott/issues/172
+
+## e-Koolikott 1.9.1 (07.03.2017)
+
+### Parandatud
+* Otsing ei toimi enam #171 https://github.com/hariduspilv/koolikott/issues/171
+
 ## e-Koolikott 1.9.0 (18.02.2017)
 
 ### Lisandunud

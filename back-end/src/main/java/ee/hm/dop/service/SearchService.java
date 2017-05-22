@@ -435,7 +435,7 @@ public class SearchService {
     private String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
         Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
         if (Boolean.TRUE.equals(isCurriculumLiterature)) {
-            return "peerReview:[* TO *]";
+            return "(peerReview:[* TO *] OR curriculum_literature:\"true\")";
         }
 
         return "";

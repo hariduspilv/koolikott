@@ -1,11 +1,11 @@
 'use strict'
 
 angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
-    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService', 'storageService', '$rootScope', '$sce',
-    function (translationService, iconService, embedService, serverCallService, dialogService, storageService, $rootScope, $sce) {
+    'translationService', 'iconService', 'embedService', 'serverCallService', 'dialogService', 'storageService', '$rootScope', '$sce', '$timeout', 'materialService', '$route',
+    function (translationService, iconService, embedService, serverCallService, dialogService, storageService, $rootScope, $sce, $timeout, materialService, $route) {
         return {
             scope: {
-                material: '=',
+                material: '=material',
                 chapter: '=',
                 objIndex: '=',
                 rowIndex: '=',
@@ -39,18 +39,49 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                     if ($scope.material) {
+                        $scope.material.source = getSource($scope.material);
                         $scope.materialType = getType();
                         canPlayAudioFormat();
                         canPlayVideoFormat();
                         getSourceType();
                         getContentType();
+                    }else{
+                        getMaterial(getMaterialSuccess, getMaterialFail);
                     }
+                }
+
+                function getMaterial(success, fail) {
+                    materialService.getMaterialById($route.current.params.id)
+                        .then(success, fail)
+                }
+
+                function getMaterialSuccess(material) {
+                    if (isEmpty(material)) {
+                        log('No data returned by getting material. Redirecting to landing page');
+                    } else {
+                        log('Material found');
+                        $scope.material = material;
+
+                        if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
+                            $rootScope.selectedSingleMaterial = $scope.material;
+                        }
+                        init();
+                    }
+                }
+
+                function getMaterialFail() {
+                    log('Getting materials failed. Redirecting to landing page');
                 }
 
                 $scope.$watch(function () {
                     return $scope.material;
                 }, function () {
                     if ($scope.material && $scope.material.id) {
+                        $scope.material.source = getSource($scope.material);
+                        $scope.materialType = getType();
+                        canPlayVideoFormat();
+                        canPlayAudioFormat();
+                        getSourceType();
                         getContentType();
                     }
                 });
@@ -140,16 +171,37 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                     var extension = getSource($scope.material).split('.').pop();
                     var v = document.createElement('video');
                     /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
-                    if (extension == "ogv") {
-                        extension = "ogg"
+                    if (extension === "ogv") {
+                        extension = "ogg";
+                        let source = $scope.material.source;
+                        $scope.material.source = source.substr(0, source.lastIndexOf(".")) + ".ogg";
                     }
                     if (v.canPlayType && v.canPlayType('video/' + extension)) {
                         $scope.videoType = extension;
                         $scope.canPlayVideo = true;
+
+                        let videoElement = '.embed-video-' + $scope.material.id;
+                        if ($(videoElement).length !== 0){
+
+                            let video = $('<video />', {
+                                id: 'video',
+                                src: $scope.material.source,
+                                type: 'video/' + extension,
+                                controls: true,
+                                width: '100%'
+                            });
+
+                            $(videoElement).html(video);
+                            video.load();
+                        }else{
+                            $timeout(canPlayVideoFormat, 100);
+                        }
                     }
                 }
 
                 function canPlayAudioFormat() {
+                    if($scope.canPlayVideo)return;
+
                     var extension = getSource($scope.material).split('.').pop();
                     var v = document.createElement('audio');
                     if (v.canPlayType && v.canPlayType('audio/' + extension)) {
@@ -175,11 +227,28 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                             $scope.material.source += "?archive=true";
                             return;
                         }
+
                         $scope.sourceType = 'EBOOK';
                         $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
+
+                        let ebookElement = '.embed-ebook-' + $scope.material.id;
+                        if ($(ebookElement).length !== 0){
+                            console.log($(ebookElement));
+                            console.log('<iframe width="100%" height="500px" src="' + $scope.ebookLink + '"></iframe>');
+                            $(ebookElement).html('<iframe width="100%" height="500px" src="' + $scope.ebookLink + '"></iframe>');
+                        }else{
+                            $timeout(getSourceType, 100);
+                        }
                     } else if (isPDFLink($scope.material.source)) {
                         $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + $scope.material.source;
                         $scope.sourceType = 'PDF';
+
+                        let pdfElement = '.embed-pdf-' + $scope.material.id;
+                        if ($(pdfElement).length !== 0){
+                            $(pdfElement).html('<iframe width="100%" height="500px" src="' + $scope.material.PDFLink + '"></iframe>');
+                        }else{
+                            $timeout(getSourceType, 100);
+                        }
                     } else {
                         embedService.getEmbed(getSource($scope.material), embedCallback);
                     }

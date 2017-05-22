@@ -1,6 +1,6 @@
 {
   "name": "e-Koolikott",
-  "version": "2.0.0",
+  "version": "1.9.4",
   "dependencies": {
     "angular": "1.6.1",
     "angular-animate": "1.5.9",
@@ -29,7 +29,7 @@
     "cssua.js": "cssuseragent#^2.1.31",
     "lodash": "^4.17.2",
     "angular-socialshare": "angularjs-socialshare#^2.3.4",
-    "angular-messages": "^1.6.1",
+    "angular-messages": "1.6.1",
     "bluebird": "^3.4.7",
     "jquery-truncate-html": "^0.0.1"
   },

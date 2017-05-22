@@ -16,6 +16,10 @@ import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.User;
 
 public class MaterialDAO extends LearningObjectDAO {
+    public static final String HTTP = "http://";
+    public static final String HTTP_WWW = HTTP + "www.";
+    public static final String HTTPS = "https://";
+    public static final String HTTPS_WWW = HTTPS + "www.";
     @Inject
     private EntityManager entityManager;
 
@@ -79,28 +83,37 @@ public class MaterialDAO extends LearningObjectDAO {
     }
 
     public List<Material> findBySource(String materialSource, boolean deleted) {
-        String queryStart = "FROM Material m WHERE (m.deleted = false OR m.deleted = :deleted) AND ";
-
-        return createQuery(queryStart +
-                        "m.source='http://www." + materialSource + "' " +
-                        "OR m.source ='https://www." + materialSource + "' " +
-                        "OR m.source='http://" + materialSource + "' " +
-                        "OR m.source='https://" + materialSource + "'",
-                Material.class).setParameter("deleted", deleted).getResultList();
+        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, deleted);
+        return materialTypedQuery.getResultList();
     }
 
     public Material findOneBySource(String materialSource, boolean deleted) {
-        String queryStart = "FROM Material m WHERE (m.deleted = false OR m.deleted = :deleted) AND ";
+        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, deleted);
         try {
-            return createQuery(queryStart +
-                            "m.source='http://www." + materialSource + "' " +
-                            "OR m.source ='https://www." + materialSource + "' " +
-                            "OR m.source='http://" + materialSource + "' " +
-                            "OR m.source='https://" + materialSource + "'",
-                    Material.class).setParameter("deleted", deleted).setMaxResults(1).getSingleResult();
+            return materialTypedQuery
+              .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    private TypedQuery<Material> getMaterialTypedQuery(String materialSource, boolean deleted) {
+        String ms1 = HTTP_WWW + materialSource;
+        String ms2 = HTTPS_WWW + materialSource;
+        String ms3 = HTTP + materialSource;
+        String ms4 = HTTPS + materialSource;
+
+        String query = "FROM Material m " +
+          "WHERE (m.deleted = false OR m.deleted = :deleted) " +
+          "AND m.source = :ms OR m.source = :ms1 OR m.source = :ms2 OR m.source = :ms3 OR m.source = :ms4";
+
+        return createQuery(query, Material.class)
+          .setParameter("ms", materialSource)
+          .setParameter("ms1", ms1)
+          .setParameter("ms2", ms2)
+          .setParameter("ms3", ms3)
+          .setParameter("ms4", ms4)
+          .setParameter("deleted", deleted);
     }
 
     public List<Language> findLanguagesUsedInMaterials() {

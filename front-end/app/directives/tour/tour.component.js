@@ -48,7 +48,7 @@ function dopTourController ($rootScope, $scope, authenticatedUserService, tourCo
     $scope.$on('tour:close:pageSwitch', () => vm.tourComplete(false, true));
 
     vm.tourStart = (startStep = 0, isOpenedByUser = true, isEditPage = false, isFirstTime = false) => {
-        if (isFirstTime && vm.userTourData.editTour) return;
+        if (isFirstTime && vm.userTourData && vm.userTourData.editTour) return;
 
         vm.isEditPageTour = isEditPage;
         vm.currentStep = startStep;
