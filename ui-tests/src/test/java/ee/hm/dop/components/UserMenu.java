@@ -13,7 +13,9 @@ public class UserMenu extends PageComponent {
 	private By userMenuDashboard = By.id("user-menu-dashboard");
 	private By loginButton = By.id("header-login-icon");
 	private By currentUser = By.cssSelector("a#user-menu-dashboard span");
-	
+	private By userTour = By.xpath("//body[@class='tour-modal-is-showing md-dialog-is-showing']");
+	private By closeTour = By.xpath("//button[@id='tour-cancel-button']");
+
 
 	public LandingPage logOff() {
 		getDriver().navigate().refresh();
@@ -47,6 +49,12 @@ public class UserMenu extends PageComponent {
 	}
 	
 	public UserMenu clickProfileIcon() {
+		
+		if (PageHelpers.elementExists(userTour) == true){
+			getDriver().findElement(closeTour).click();
+			PageHelpers.waitForSeconds(3000);
+		}
+				
 		PageHelpers.waitForVisibility(userMenuIcon);
 		getDriver().findElement(userMenuIcon).click();
 		PageHelpers.waitForSeconds(1500);

@@ -69,7 +69,7 @@ public class PortfolioActionsTests {
 				.clickEditPortfolio()
 				.addNewChapter()
 				.addDescription()
-				.clickExitAndSave()
+				.clickExitAndSave() // TODO: vahepeal test feilib, kuna avab faili, mis on juba avalikuks tehtud
 				.getPrivacyConfirmationPopup()
 				.makePortfolioPublic()
 				.clickActionsMenu()
