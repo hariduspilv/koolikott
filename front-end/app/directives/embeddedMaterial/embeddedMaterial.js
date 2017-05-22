@@ -193,7 +193,7 @@ angular.module('koolikottApp').directive('dopEmbeddedMaterial', [
                             });
 
                             $(videoElement).html(video);
-                            $(videoElement).bind('error', canPlayVideoFormat, true);
+                            $(videoElement).on('error', canPlayVideoFormat, true);
                             video.load();
                         }else{
                             $timeout(canPlayVideoFormat, 100);
