@@ -1,7 +1,6 @@
 package ee.hm.dop.service;
 
 import com.google.common.collect.ImmutableSet;
-import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDAO;
 import ee.hm.dop.model.CrossCurricularTheme;
@@ -49,14 +48,12 @@ public class SearchService {
     private static final String PORTFOLIO_TYPE = "portfolio";
 
     private static final String ALL_TYPE = "all";
-    private static final String TAG = "tag:";
-    private static final String RECOMMENDED = "recommended:";
+    private static final String SEARCH_BY_TAG_PREFIX = "tag:";
+    private static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
+    private static final String SEARCH_BY_AUTHOR_PREFIX = "author:";
 
     @Inject
     private SolrEngineService solrEngineService;
-
-    @Inject
-    private LearningObjectDAO learningObjectDAO;
 
     @Inject
     private UserFavoriteDAO userFavoriteDAO;
@@ -142,7 +139,7 @@ public class SearchService {
                 queryString = format("((%s)", tokenizedQueryString);
 
                 //Search for full phrase also, as they are more relevant
-                if (!tokenizedQueryString.toLowerCase().startsWith(TAG) && !tokenizedQueryString.toLowerCase().startsWith(RECOMMENDED)) {
+                if (fullPhraseSearch(tokenizedQueryString)) {
                     queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
                 }
 
@@ -161,6 +158,12 @@ public class SearchService {
         }
 
         return solrEngineService.search(queryString, start, limit, getSort(searchFilter));
+    }
+
+    private boolean fullPhraseSearch(String tokenizedQueryString) {
+        return !tokenizedQueryString.toLowerCase().startsWith(SEARCH_BY_TAG_PREFIX)
+                && !tokenizedQueryString.toLowerCase().startsWith(SEARCH_RECOMMENDED_PREFIX)
+                && !tokenizedQueryString.toLowerCase().startsWith(SEARCH_BY_AUTHOR_PREFIX);
     }
 
     private String getSort(SearchFilter searchFilter) {
