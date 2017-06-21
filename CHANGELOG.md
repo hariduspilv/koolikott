@@ -1,3 +1,10 @@
+## e-Koolikott 1.9.5 (21.06.2017)
+
+### Parandatud
+* Otsingu parandus #171 https://github.com/hariduspilv/koolikott/issues/171
+### Muutunud
+* Aineeksperdi õiguste muudatus #176 https://github.com/hariduspilv/koolikott/issues/176
+
 ## e-Koolikott 1.9.4 (23.05.2017)
 
 ### Parandatud
