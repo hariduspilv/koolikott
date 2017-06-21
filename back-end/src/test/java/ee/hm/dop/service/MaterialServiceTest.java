@@ -295,7 +295,7 @@ public class MaterialServiceTest {
         try {
             materialService.delete(materialID, user);
         } catch (RuntimeException e) {
-            assertEquals("Logged in user must be an administrator.", e.getMessage());
+            assertEquals("Logged in user must be an administrator or a moderator.", e.getMessage());
         }
 
         verifyAll();
