@@ -154,7 +154,7 @@ public class MaterialResource extends BaseResource {
 
     @DELETE
     @Path("{materialID}")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "MODERATOR"})
     public void delete(@PathParam("materialID") Long materialID) {
         materialService.delete(materialID, getLoggedInUser());
     }

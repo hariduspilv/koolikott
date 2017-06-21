@@ -171,8 +171,8 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         Material originalMaterial = materialDAO.findByIdNotDeleted(materialID);
         validateMaterialNotNull(originalMaterial);
 
-        if (!isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Logged in user must be an administrator.");
+        if (!isUserAdmin(loggedInUser) && !isUserModerator(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an administrator or a moderator.");
         }
 
         materialDAO.delete(originalMaterial);
