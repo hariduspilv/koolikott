@@ -64,6 +64,7 @@ To have and usable application is needed to connect to back end server. For that
 ## Installing proxy http module to redirect rest calls to back end servlet
 
 	sudo a2enmod proxy_http
+	sudo a2enmod headers
 	
 ## Installing ssl https module to allow ssl connections
 
