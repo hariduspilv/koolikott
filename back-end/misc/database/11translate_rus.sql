@@ -1,3 +1,5 @@
+USE dop;
+
 -- Russian translations
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES 
 (2,'ABOUT_PAGE_LINK_TITLE','Что такое e-Koolikott?'),

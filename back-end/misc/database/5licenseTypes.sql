@@ -1,3 +1,5 @@
+USE dop;
+
 -- License Type
 
 insert into LicenseType(id, name) values (1, 'allRightsReserved');

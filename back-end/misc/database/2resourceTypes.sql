@@ -1,3 +1,5 @@
+USE dop;
+
 insert into ResourceType(id, name) values (1, 'AUDIO');
 insert into ResourceType(id, name) values (2, 'DATA');
 insert into ResourceType(id, name) values (3, 'IMAGE');

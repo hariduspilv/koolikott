@@ -1,3 +1,5 @@
+USE dop;
+
 -- LanguageTable
 
 insert into LanguageTable(id, name, code) values (1, 'Estonian', 'est');

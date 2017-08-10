@@ -1,3 +1,5 @@
+USE dop;
+
 -- EstCore Taxon mapping
 
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (1, 1, 'preschoolEducation');

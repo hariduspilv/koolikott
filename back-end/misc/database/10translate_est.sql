@@ -1,3 +1,5 @@
+USE dop;
+
 -- Estonian translations
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES 
 (1,'ABOUT_PAGE_LINK_TITLE','Mis on e-Koolikott?'),

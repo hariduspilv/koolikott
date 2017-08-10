@@ -1,3 +1,5 @@
+USE dop;
+
 -- Key competences
 insert into KeyCompetence(id, name) values (1, 'Cultural_and_value_competence');
 insert into KeyCompetence(id, name) values (2, 'Social_and_citizenship_competence');

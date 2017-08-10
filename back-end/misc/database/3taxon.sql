@@ -1,3 +1,5 @@
+USE dop;
+
 -- Educational Context
 insert into Taxon(id, name, level) values (1, 'PRESCHOOLEDUCATION', 'EDUCATIONAL_CONTEXT');
 insert into EducationalContext(id) values (1);

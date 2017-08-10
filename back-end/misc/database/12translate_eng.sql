@@ -1,3 +1,5 @@
+USE dop;
+
 -- English translations
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES 
 (3,'ABOUT_PAGE_LINK_TITLE','What is e-Koolikott?'),
