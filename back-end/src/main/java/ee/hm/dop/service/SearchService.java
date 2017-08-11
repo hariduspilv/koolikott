@@ -89,9 +89,8 @@ public class SearchService {
     }
 
     private List<Visibility> getSearchVisibility(User loggedInUser) {
-        List<Visibility> visibilities = new ArrayList<Visibility>() {{
-            add(Visibility.PUBLIC);
-        }};
+        List<Visibility> visibilities = new ArrayList<>();
+        visibilities.add(Visibility.PUBLIC);
 
         if (loggedInUser != null) {
             if (loggedInUser.getRole() == Role.ADMIN) {

@@ -9,6 +9,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.TargetGroupEnum;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.Visibility;
@@ -87,13 +88,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals("This portfolio is private. ", portfolio.getTitle());
     }
 
-    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas-vaarikas";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
-                });
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(SearchResult.class);
+        List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());
 
