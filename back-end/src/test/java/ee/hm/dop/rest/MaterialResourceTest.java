@@ -173,7 +173,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         String username = "mati.maasikas";
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
 
-        assertEquals(3, result.getItems().size());
         assertEquals(Long.valueOf(8), result.getItems().get(0).getId());
         assertEquals(Long.valueOf(4), result.getItems().get(1).getId());
         assertEquals(Long.valueOf(1), result.getItems().get(2).getId());
