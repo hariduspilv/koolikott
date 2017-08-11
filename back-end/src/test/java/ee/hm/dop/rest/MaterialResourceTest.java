@@ -1,22 +1,5 @@
 package ee.hm.dop.rest;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TaxonDAO;
 import ee.hm.dop.model.*;
@@ -24,8 +7,20 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.MaterialService;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import javax.inject.Inject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.*;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
@@ -173,9 +168,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         String username = "mati.maasikas";
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
 
-        assertEquals(Long.valueOf(8), result.getItems().get(0).getId());
-        assertEquals(Long.valueOf(4), result.getItems().get(1).getId());
-        assertEquals(Long.valueOf(1), result.getItems().get(2).getId());
+        List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
+        assertTrue(collect.containsAll(asList(8L, 4L, 1L)));
     }
 
     @Test
@@ -217,17 +211,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setSource("http://www.whatisthis.example.ru");
 
         Subject subject = (Subject) taxonDAO.findTaxonById(22L);
-        material.setTaxons(Arrays.asList(subject));
+        material.setTaxons(asList(subject));
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("Cultural_and_value_competence");
-        material.setKeyCompetences(Arrays.asList(keyCompetence));
+        material.setKeyCompetences(asList(keyCompetence));
 
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setId(2L);
         crossCurricularTheme.setName("Environment_and_sustainable_development");
-        material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
+        material.setCrossCurricularThemes(asList(crossCurricularTheme));
 
         Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -253,17 +247,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         material.setSource("http://www.whatisthis.example.com");
 
         Subject subject = (Subject) taxonDAO.findTaxonById(21L);
-        material.setTaxons(Arrays.asList(subject));
+        material.setTaxons(asList(subject));
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1L);
         keyCompetence.setName("Cultural_and_value_competence");
-        material.setKeyCompetences(Arrays.asList(keyCompetence));
+        material.setKeyCompetences(asList(keyCompetence));
 
         CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
         crossCurricularTheme.setId(2L);
         crossCurricularTheme.setName("Environment_and_sustainable_development");
-        material.setCrossCurricularThemes(Arrays.asList(crossCurricularTheme));
+        material.setCrossCurricularThemes(asList(crossCurricularTheme));
 
         Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
