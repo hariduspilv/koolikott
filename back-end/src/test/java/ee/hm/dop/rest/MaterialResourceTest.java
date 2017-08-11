@@ -19,16 +19,7 @@ import javax.ws.rs.core.Response.Status;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TaxonDAO;
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.TargetGroupEnum;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.MaterialService;
@@ -177,19 +168,15 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, taxons.size());
     }
 
-    @Ignore
     @Test
     public void getByCreator() {
         String username = "mati.maasikas";
-        List<Material> materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(new GenericType<List<Material>>() {
-                });
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
 
-        assertEquals(3, materials.size());
-        assertEquals(Long.valueOf(8), materials.get(0).getId());
-        assertEquals(Long.valueOf(4), materials.get(1).getId());
-        assertEquals(Long.valueOf(1), materials.get(2).getId());
-        assertMaterial1(materials.get(2));
+        assertEquals(3, result.getItems().size());
+        assertEquals(Long.valueOf(8), result.getItems().get(0).getId());
+        assertEquals(Long.valueOf(4), result.getItems().get(1).getId());
+        assertEquals(Long.valueOf(1), result.getItems().get(2).getId());
     }
 
     @Test
