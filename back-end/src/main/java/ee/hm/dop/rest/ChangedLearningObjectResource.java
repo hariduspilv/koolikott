@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.RoleString;
 import ee.hm.dop.service.ChangedLearningObjectService;
 
 import javax.annotation.security.RolesAllowed;
@@ -22,7 +23,7 @@ public class ChangedLearningObjectResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ChangedLearningObject> getChanged() {
         return changedLearningObjectService.findAll();
     }
@@ -30,14 +31,14 @@ public class ChangedLearningObjectResource extends BaseResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ChangedLearningObject> getChange(@PathParam("id") long id) {
         return changedLearningObjectService.getAllByLearningObject(id);
     }
 
     @GET
     @Path("{id}/acceptAll")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response acceptAllChanges(@PathParam("id") long id) {
         changedLearningObjectService.acceptAllChanges(id);
         return Response.ok().build();
@@ -45,14 +46,14 @@ public class ChangedLearningObjectResource extends BaseResource {
 
     @GET
     @Path("{id}/revertAll")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") long id) {
         return changedLearningObjectService.revertAllChanges(id, getLoggedInUser());
     }
 
     @GET
     @Path("count")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response getCount() {
         return Response.ok(changedLearningObjectService.getCount()).build();
     }

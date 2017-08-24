@@ -24,13 +24,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
 
@@ -51,7 +45,7 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getBySource")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
@@ -61,7 +55,7 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getOneBySource")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
@@ -85,28 +79,28 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("like")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikeMaterial(Material material) {
         materialService.addUserLike(material, getLoggedInUser(), false);
     }
 
     @POST
     @Path("recommend")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({RoleString.ADMIN})
     public Recommendation recommendMaterial(Material material) {
         return materialService.addRecommendation(material, getLoggedInUser());
     }
 
     @POST
     @Path("removeRecommendation")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({RoleString.ADMIN})
     public void removedMaterialRecommendation(Material material) {
         materialService.removeRecommendation(material, getLoggedInUser());
     }
@@ -154,7 +148,7 @@ public class MaterialResource extends BaseResource {
 
     @DELETE
     @Path("{materialID}")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(@PathParam("materialID") Long materialID) {
         materialService.delete(materialID, getLoggedInUser());
     }
@@ -162,13 +156,13 @@ public class MaterialResource extends BaseResource {
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({RoleString.ADMIN})
     public void restore(Material material) {
         materialService.restore(material, getLoggedInUser());
     }
 
     @PUT
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
@@ -195,7 +189,7 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getBroken")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<BrokenContent> getBrokenMaterial() {
         return materialService.getBrokenMaterials();
@@ -204,7 +198,7 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getBroken/count")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBrokenMaterialCount() {
         return Response.ok(materialService.getBrokenMaterialCount()).build();
@@ -213,7 +207,7 @@ public class MaterialResource extends BaseResource {
     @POST
     @Path("setNotBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({RoleString.ADMIN})
     public void setNotBroken(Material material) {
         materialService.setMaterialNotBroken(material);
     }
@@ -221,7 +215,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("isBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Boolean isBroken(@QueryParam("materialId") long materialId) {
         return materialService.isBroken(materialId);
     }
@@ -241,7 +235,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<Material> getDeletedMaterials() {
         return materialService.getDeletedMaterials();
     }
@@ -249,7 +243,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("getDeleted/count")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response getDeletedMaterialsCount() {
         return Response.ok(materialService.getDeletedMaterialsCount()).build();
 

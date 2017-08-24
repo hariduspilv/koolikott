@@ -6,15 +6,12 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
-import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PortfolioService;
 
 @Path("comment")
-@RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
+@RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
 public class CommentResource extends BaseResource {
 
     @Inject

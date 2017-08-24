@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import ee.hm.dop.model.RoleString;
 import ee.hm.dop.model.UploadedFile;
 import ee.hm.dop.service.UploadedFileService;
 import org.apache.commons.configuration.Configuration;
@@ -37,7 +38,7 @@ public class ReviewFileResource extends BaseResource {
     private UploadedFileService uploadedFileService;
 
     @POST
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadReview(@FormDataParam("review") InputStream review,
