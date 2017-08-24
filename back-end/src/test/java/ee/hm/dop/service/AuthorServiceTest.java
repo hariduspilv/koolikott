@@ -43,7 +43,7 @@ public class AuthorServiceTest {
     public void createAuthor() {
         Author author = getAuthor();
 
-        expect(authorDAO.create(anyObject(Author.class))).andReturn(author);
+        expect(authorDAO.createOrUpdate(anyObject(Author.class))).andReturn(author);
 
         replay(authorDAO);
 

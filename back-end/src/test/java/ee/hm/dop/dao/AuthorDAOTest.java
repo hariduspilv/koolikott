@@ -37,7 +37,7 @@ public class AuthorDAOTest extends DatabaseTestBase {
         author.setName("Illimar");
         author.setSurname("Onomatöpöa");
 
-        Author created = authorDAO.create(author);
+        Author created = authorDAO.createOrUpdate(author);
 
         Author newAuthor = authorDAO.findAuthorByFullName(created.getName(), created.getSurname());
 
