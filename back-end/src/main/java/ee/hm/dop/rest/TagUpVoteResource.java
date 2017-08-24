@@ -16,16 +16,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.TagUpVote;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.LearningObjectService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TagUpVoteService;
 
 @Path("tagUpVotes")
-@RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
+@RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
 public class TagUpVoteResource extends BaseResource {
 
     @Inject

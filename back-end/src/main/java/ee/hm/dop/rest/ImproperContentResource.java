@@ -16,10 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.ImproperContentService;
 import ee.hm.dop.service.LearningObjectService;
 
@@ -77,7 +74,7 @@ public class ImproperContentResource extends BaseResource {
     @GET
     @Path("materials")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public List<ImproperContent> getImproperMaterials() {
         User loggedInUser = getLoggedInUser();
         return improperContentService.getImproperMaterials(loggedInUser);
@@ -86,7 +83,7 @@ public class ImproperContentResource extends BaseResource {
     @GET
     @Path("portfolios")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public List<ImproperContent> getImproperPortfolios() {
         User loggedInUser = getLoggedInUser();
         return improperContentService.getImproperPortfolios(loggedInUser);
@@ -95,7 +92,7 @@ public class ImproperContentResource extends BaseResource {
     @GET
     @Path("materials/count")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public Response getImproperMaterialsCount() {
         User loggedInUser = getLoggedInUser();
         return Response.ok(improperContentService.getImproperMaterialSize(loggedInUser)).build();
@@ -104,14 +101,14 @@ public class ImproperContentResource extends BaseResource {
     @GET
     @Path("portfolios/count")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public Response getImproperPortfoliosCount() {
         User loggedInUser = getLoggedInUser();
         return Response.ok(improperContentService.getImproperPortfolioSize(loggedInUser)).build();
     }
 
     @DELETE
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({RoleString.ADMIN})
     public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throwBadRequestException("learningObject query param is required.");
@@ -129,7 +126,7 @@ public class ImproperContentResource extends BaseResource {
 
     @DELETE
     @Path("{improperContentId}")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({RoleString.ADMIN})
     public void removeImproper(@PathParam("improperContentId") long improperContentId) {
         ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
 

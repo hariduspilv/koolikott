@@ -2,6 +2,7 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
+import ee.hm.dop.model.RoleString;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.service.PictureService;
 import org.apache.commons.configuration.Configuration;
@@ -85,7 +86,7 @@ public class PictureResource extends BaseResource {
     }
 
     @POST
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Picture uploadPicture(@FormDataParam("picture") InputStream fileInputStream) {

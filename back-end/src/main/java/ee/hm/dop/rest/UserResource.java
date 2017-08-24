@@ -15,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.RoleString;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.UserService;
@@ -30,14 +31,14 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("all")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAll() {
         return userService.getAllUsers(getLoggedInUser());
     }
 
     @POST
-    @RolesAllowed("ADMIN")
+    @RolesAllowed(RoleString.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User updateUser(User user) {
@@ -57,7 +58,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("getSignedUserData")
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     @Produces(MediaType.TEXT_PLAIN)
     public String getSignedUserData() {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
@@ -67,7 +68,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("role")
-    @RolesAllowed({"USER", "ADMIN", "RESTRICTED", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     @Produces(MediaType.TEXT_PLAIN)
     public String getLoggedInUserRole() {
         return getLoggedInUser().getRole().toString();
@@ -75,7 +76,7 @@ public class UserResource extends BaseResource {
 
     @POST
     @Path("restrictUser")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User restrictUser(User user) {
@@ -85,7 +86,7 @@ public class UserResource extends BaseResource {
 
     @POST
     @Path("removeRestriction")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User removeRestriction(User user) {
@@ -95,7 +96,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("moderator")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getModerators() {
         return userService.getModerators(getLoggedInUser());
@@ -103,7 +104,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("restrictedUser")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getRestrictedUsers() {
         return userService.getRestrictedUsers(getLoggedInUser());
@@ -111,7 +112,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("moderator/count")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public int getModeratorsCount() {
         return userService.getModerators(getLoggedInUser()).size();
@@ -119,7 +120,7 @@ public class UserResource extends BaseResource {
 
     @GET
     @Path("restrictedUser/count")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public int getRestrictedUsersCount() {
         return userService.getRestrictedUsers(getLoggedInUser()).size();
