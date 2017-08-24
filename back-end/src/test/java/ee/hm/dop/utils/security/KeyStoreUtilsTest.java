@@ -1,4 +1,4 @@
-package ee.hm.dop.security;
+package ee.hm.dop.utils.security;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

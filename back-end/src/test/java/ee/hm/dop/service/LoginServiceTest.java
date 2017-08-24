@@ -16,11 +16,12 @@ import javax.xml.soap.SOAPException;
 
 import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.dao.AuthenticationStateDAO;
-import ee.hm.dop.exceptions.DuplicateTokenException;
+import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.ehis.Person;
+import ee.hm.dop.service.ehis.EhisSOAPService;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;

@@ -12,6 +12,7 @@ import java.util.List;
 import ee.hm.dop.model.ehis.Institution;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.ehis.Role;
+import ee.hm.dop.service.ehis.EhisParser;
 import org.junit.Test;
 
 public class EhisParserTest {

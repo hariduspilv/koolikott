@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 
-import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.opensaml.xml.security.credential.Credential;

@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;

@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.ehis;
 
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_ENDPOINT;
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_INSTITUTION;
@@ -30,7 +30,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import ee.hm.dop.ehis.EhisParser;
 import ee.hm.dop.model.ehis.Person;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;

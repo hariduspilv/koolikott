@@ -1,9 +1,9 @@
-package ee.hm.dop.io;
+package ee.hm.dop.utils.io;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import ee.hm.dop.exceptions.MaxFileSizeExceededException;
+import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 
 /**
  * Created by mart on 20.09.16.

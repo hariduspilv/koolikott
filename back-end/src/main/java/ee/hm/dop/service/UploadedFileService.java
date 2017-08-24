@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.dao.UploadedFileDAO;
-import ee.hm.dop.io.LimitedSizeInputStream;
+import ee.hm.dop.utils.io.LimitedSizeInputStream;
 import ee.hm.dop.model.UploadedFile;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;

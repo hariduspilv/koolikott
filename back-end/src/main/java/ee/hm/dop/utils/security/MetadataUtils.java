@@ -1,4 +1,4 @@
-package ee.hm.dop.security;
+package ee.hm.dop.utils.security;
 
 import static java.lang.String.format;
 import static org.apache.commons.io.IOUtils.closeQuietly;

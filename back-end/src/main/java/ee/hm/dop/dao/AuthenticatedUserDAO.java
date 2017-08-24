@@ -5,8 +5,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
-import ee.hm.dop.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 
 public class AuthenticatedUserDAO {
 

@@ -14,6 +14,7 @@ import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.ehis.Institution;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.ehis.Role;
+import ee.hm.dop.service.ehis.EhisSOAPService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

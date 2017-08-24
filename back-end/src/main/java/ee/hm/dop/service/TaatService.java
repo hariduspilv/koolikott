@@ -20,7 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.xml.security.utils.Base64;
 import org.joda.time.DateTime;
