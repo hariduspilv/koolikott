@@ -1,4 +1,4 @@
-package ee.hm.dop.db;
+package ee.hm.dop.config.db;
 
 public class InactiveDbMigrator implements DatabaseMigrator {
 

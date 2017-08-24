@@ -2,7 +2,7 @@ package ee.hm.dop.config.guice.module;
 
 import com.google.inject.AbstractModule;
 import ee.hm.dop.config.guice.GuiceInjector.Module;
-import ee.hm.dop.server.EmbeddedJettyTest;
+import ee.hm.dop.config.EmbeddedJettyTest;
 
 @Module
 public class StaticModule extends AbstractModule {

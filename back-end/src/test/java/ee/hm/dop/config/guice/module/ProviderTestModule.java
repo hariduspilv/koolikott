@@ -6,8 +6,8 @@ import javax.xml.soap.SOAPConnection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
-import ee.hm.dop.db.DatabaseMigrator;
-import ee.hm.dop.db.InactiveDbMigrator;
+import ee.hm.dop.config.db.DatabaseMigrator;
+import ee.hm.dop.config.db.InactiveDbMigrator;
 import ee.hm.dop.config.guice.GuiceInjector.Module;
 import ee.hm.dop.config.guice.provider.ConfigurationTestProvider;
 import ee.hm.dop.config.guice.provider.EntityManagerFactoryTestProvider;

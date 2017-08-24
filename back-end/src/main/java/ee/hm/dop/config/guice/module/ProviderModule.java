@@ -6,8 +6,8 @@ import javax.ws.rs.client.Client;
 import javax.xml.soap.SOAPConnection;
 
 import com.google.inject.AbstractModule;
-import ee.hm.dop.db.DatabaseMigrator;
-import ee.hm.dop.db.FlywayDbMigrator;
+import ee.hm.dop.config.db.DatabaseMigrator;
+import ee.hm.dop.config.db.FlywayDbMigrator;
 import ee.hm.dop.config.guice.GuiceInjector.Module;
 import ee.hm.dop.config.guice.provider.ConfigurationProvider;
 import ee.hm.dop.config.guice.provider.EntityManagerFactoryProvider;
