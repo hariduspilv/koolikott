@@ -16,9 +16,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
 import ee.hm.dop.model.Repository;
-import ee.hm.dop.service.RepositoryService;
-import ee.hm.dop.service.SolrEngineService;
-import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;

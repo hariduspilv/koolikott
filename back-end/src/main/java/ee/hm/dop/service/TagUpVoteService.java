@@ -7,6 +7,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.solr.SolrEngineService;
 
 public class TagUpVoteService {
 

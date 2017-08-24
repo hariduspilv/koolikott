@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.synchronizer;
 
 import static java.lang.String.format;
 
@@ -15,6 +15,8 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.RepositoryURL;
+import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.PictureService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
@@ -32,16 +34,12 @@ public class RepositoryService {
 
     @Inject
     private RepositoryDAO repositoryDAO;
-
     @Inject
     private RepositoryManager repositoryManager;
-
     @Inject
     private MaterialService materialService;
-
     @Inject
     private MaterialDAO materialDAO;
-
     @Inject
     private PictureService pictureService;
 

@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.stuudium.StuudiumUser;
+import ee.hm.dop.service.login.LoginService;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration.Configuration;
 

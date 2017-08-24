@@ -14,7 +14,7 @@ import com.google.inject.Singleton;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
-import ee.hm.dop.service.SolrEngineService;
+import ee.hm.dop.service.solr.SolrEngineService;
 
 /**
  * Guice provider of Search Engine Service.

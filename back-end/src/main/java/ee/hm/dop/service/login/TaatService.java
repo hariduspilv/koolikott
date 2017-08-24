@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
 import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
@@ -20,6 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import ee.hm.dop.dao.AuthenticationStateDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.xml.security.utils.Base64;

@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.LogoutService;
+import ee.hm.dop.service.login.LogoutService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

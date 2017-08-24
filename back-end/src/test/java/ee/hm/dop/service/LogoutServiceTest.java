@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.verify;
 
 import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.login.LogoutService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

@@ -1,13 +1,11 @@
 package ee.hm.dop.service;
 
-import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
-import org.apache.solr.client.solrj.response.Suggestion;
+import ee.hm.dop.service.solr.SolrEngineService;
 
 /**
  * Created by joonas on 16.08.16.

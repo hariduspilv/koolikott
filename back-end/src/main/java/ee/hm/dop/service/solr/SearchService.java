@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.solr;
 
 import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
@@ -26,6 +26,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -38,7 +39,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.SolrService.getTokenizedQueryString;
+import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
 
 public class SearchService {

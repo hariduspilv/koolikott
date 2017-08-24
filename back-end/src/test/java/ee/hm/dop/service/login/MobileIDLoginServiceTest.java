@@ -1,6 +1,6 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
-import static ee.hm.dop.service.MobileIDLoginService.ESTONIAN_CALLING_CODE;
+import static ee.hm.dop.service.login.MobileIDLoginService.ESTONIAN_CALLING_CODE;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
@@ -18,6 +18,8 @@ import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
+import ee.hm.dop.service.login.MobileIDLoginService;
+import ee.hm.dop.service.login.MobileIDSOAPService;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;

@@ -13,7 +13,7 @@ import ee.hm.dop.service.CrossCurricularThemeService;
 import ee.hm.dop.service.KeyCompetenceService;
 import ee.hm.dop.service.LanguageService;
 import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.SearchService;
+import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.TargetGroupService;
 import ee.hm.dop.service.TaxonService;
 import ee.hm.dop.service.UserLikeService;

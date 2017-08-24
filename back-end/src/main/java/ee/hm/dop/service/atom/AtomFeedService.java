@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.atom;
 
 import static ee.hm.dop.service.TranslationService.filterByLanguage;
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FEED_ITEMS;

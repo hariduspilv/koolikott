@@ -18,6 +18,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

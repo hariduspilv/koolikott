@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.ehis;
 
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.PRINCIPAL;
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.STUDENT;

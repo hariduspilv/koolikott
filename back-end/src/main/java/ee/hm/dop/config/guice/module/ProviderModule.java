@@ -16,7 +16,7 @@ import ee.hm.dop.config.guice.provider.HttpClientProvider;
 import ee.hm.dop.config.guice.provider.SOAPConnectionProvider;
 import ee.hm.dop.config.guice.provider.SearchEngineServiceProvider;
 import ee.hm.dop.config.guice.provider.SignatureValidatorProvider;
-import ee.hm.dop.service.SolrEngineService;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.signature.SignatureValidator;
 

@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MOBILEID_ENDPOINT;
 import static ee.hm.dop.utils.ConfigurationProperties.MOBILEID_MESSAGE_TO_DISPLAY;
@@ -30,6 +30,7 @@ import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.soap.GetMobileAuthenticateStatusResponse;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
+import ee.hm.dop.service.LanguageService;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

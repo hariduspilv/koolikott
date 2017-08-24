@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.solr;
 
 import java.util.List;
 

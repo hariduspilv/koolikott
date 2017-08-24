@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import javax.inject.Inject;
 

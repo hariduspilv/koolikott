@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_CLIENT_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_CLIENT_SECRET;

@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.synchronizer;
 
 import static org.easymock.EasyMock.cmp;
 import static org.easymock.EasyMock.createMock;
@@ -20,6 +20,9 @@ import java.util.List;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.RepositoryDAO;
 import ee.hm.dop.model.*;
+import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.PictureService;
+import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
