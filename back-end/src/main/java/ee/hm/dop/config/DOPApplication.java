@@ -2,8 +2,8 @@ package ee.hm.dop.config;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.guice.GuiceInjector;
-import ee.hm.dop.guice.provider.ObjectMapperProvider;
+import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.config.guice.provider.ObjectMapperProvider;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;

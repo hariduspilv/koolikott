@@ -6,7 +6,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_USERNAME;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import ee.hm.dop.oaipmh.MaterialIterator;
 import org.apache.commons.configuration.Configuration;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
