@@ -1,8 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 
 /**

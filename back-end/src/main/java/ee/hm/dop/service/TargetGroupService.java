@@ -4,7 +4,7 @@ package ee.hm.dop.service;
 import com.google.inject.Inject;
 import ee.hm.dop.dao.TargetGroupDAO;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.TargetGroupEnum;
+import ee.hm.dop.model.enums.TargetGroupEnum;
 import org.apache.commons.lang3.Range;
 
 import java.util.HashSet;

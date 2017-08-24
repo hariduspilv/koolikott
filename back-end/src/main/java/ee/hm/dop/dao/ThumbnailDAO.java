@@ -2,7 +2,7 @@ package ee.hm.dop.dao;
 
 
 import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Size;
+import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.model.Thumbnail;
 
 public class ThumbnailDAO extends BaseDAO<Thumbnail> {

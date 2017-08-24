@@ -15,7 +15,7 @@ import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
-import ee.hm.dop.model.Visibility;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import org.joda.time.DateTime;
 

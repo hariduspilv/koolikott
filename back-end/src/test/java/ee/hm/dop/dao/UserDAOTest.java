@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 

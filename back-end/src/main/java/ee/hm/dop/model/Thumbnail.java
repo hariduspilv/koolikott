@@ -3,6 +3,7 @@ package ee.hm.dop.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.rest.jackson.map.SizeSerializer;
 
 import javax.persistence.*;

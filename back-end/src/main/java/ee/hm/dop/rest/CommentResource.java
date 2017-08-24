@@ -7,6 +7,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.PortfolioService;
 

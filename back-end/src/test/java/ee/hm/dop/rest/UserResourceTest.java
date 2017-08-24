@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 

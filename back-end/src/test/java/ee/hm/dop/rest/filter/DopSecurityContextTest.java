@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 
 import javax.ws.rs.core.UriInfo;
 
-import ee.hm.dop.model.RoleString;
+import ee.hm.dop.model.enums.RoleString;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.junit.Test;

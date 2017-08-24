@@ -1,4 +1,4 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.enums;
 
 public class RoleString {
     public static final String USER = "USER";

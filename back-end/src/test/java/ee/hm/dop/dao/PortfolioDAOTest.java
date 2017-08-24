@@ -6,7 +6,7 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.TargetGroupEnum;
+import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import org.joda.time.DateTime;

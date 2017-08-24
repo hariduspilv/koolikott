@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
 
 import java.util.List;

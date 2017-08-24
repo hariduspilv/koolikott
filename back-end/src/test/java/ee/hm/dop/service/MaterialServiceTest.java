@@ -8,7 +8,7 @@ import ee.hm.dop.model.PeerReview;
 import ee.hm.dop.model.Publisher;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 import org.easymock.Capture;

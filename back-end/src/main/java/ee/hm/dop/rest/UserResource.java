@@ -15,7 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.RoleString;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.AuthenticatedUserService;
 import ee.hm.dop.service.UserService;

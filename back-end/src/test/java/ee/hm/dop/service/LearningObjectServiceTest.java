@@ -17,7 +17,7 @@ import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Visibility;
+import ee.hm.dop.model.enums.Visibility;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

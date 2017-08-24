@@ -6,8 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.Role;
-import ee.hm.dop.model.RoleString;
+import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.model.enums.RoleString;
 
 /**
  * Created by mart on 30.11.16.
