@@ -21,6 +21,6 @@ public class AuthorService {
         Author author = new Author();
         author.setName(name);
         author.setSurname(surname);
-        return authorDAO.create(author);
+        return authorDAO.createOrUpdate(author);
     }
 }

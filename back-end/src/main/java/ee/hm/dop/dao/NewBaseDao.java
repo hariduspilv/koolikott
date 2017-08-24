@@ -58,6 +58,12 @@ public abstract class NewBaseDao<Entity extends AbstractEntity> {
         return getList(getFindByFieldQuery(field1, value1, field2, value2));
     }
 
+    public Entity createOrUpdate(Entity entity) {
+        Entity merged = getEntityManager().merge(entity);
+        getEntityManager().persist(merged);
+        return merged;
+    }
+
     public void delete(Entity deletable) {
         if (!(deletable instanceof Deletable)) {
             throw new RuntimeException();

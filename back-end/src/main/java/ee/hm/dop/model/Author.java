@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Cacheable
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "surname" }))
-public class Author {
+public class Author extends AbstractEntity{
 
     @Id
     @GeneratedValue
