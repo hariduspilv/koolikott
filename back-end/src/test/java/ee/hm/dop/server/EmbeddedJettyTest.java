@@ -5,6 +5,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.GuiceTestRunner;
+import ee.hm.dop.config.EmbeddedJetty;
 import org.apache.commons.configuration.Configuration;
 import org.junit.After;
 import org.junit.AfterClass;

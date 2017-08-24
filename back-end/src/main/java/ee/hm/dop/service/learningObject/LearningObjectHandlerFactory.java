@@ -3,7 +3,7 @@ package ee.hm.dop.service.learningObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import ee.hm.dop.guice.GuiceInjector;
+import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;

@@ -14,7 +14,7 @@ import java.util.concurrent.ScheduledFuture;
 import javax.inject.Inject;
 
 import com.google.inject.Singleton;
-import ee.hm.dop.guice.GuiceInjector;
+import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
 import ee.hm.dop.service.SolrEngineService;

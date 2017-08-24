@@ -1,7 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.model.solr.SearchResponse;
-import ee.hm.dop.tokenizer.DOPSearchStringTokenizer;
+import ee.hm.dop.utils.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;

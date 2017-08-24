@@ -1,6 +1,6 @@
 package ee.hm.dop.utils;
 
-import static ee.hm.dop.guice.GuiceInjector.getInjector;
+import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;

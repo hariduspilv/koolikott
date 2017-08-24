@@ -3,7 +3,7 @@ package ee.hm.dop.rest.jackson.map;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import ee.hm.dop.guice.GuiceInjector;
+import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.service.TargetGroupService;
 

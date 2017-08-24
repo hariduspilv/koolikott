@@ -10,8 +10,8 @@ import javax.inject.Inject;
 
 import com.google.inject.Singleton;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
-import ee.hm.dop.guice.GuiceInjector;
-import ee.hm.dop.server.EmbeddedJetty;
+import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.config.EmbeddedJetty;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.xml.ConfigurationException;
