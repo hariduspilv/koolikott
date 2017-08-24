@@ -78,11 +78,13 @@ public class SearchResource extends BaseResource {
                                @QueryParam("isORSearch") Boolean isORSearch,
                                @QueryParam("excluded") List<Long> excluded) {
 
+        //todo better search
         List<Taxon> taxons = taxonIds
                 .stream()
                 .map(taxonId -> taxonService.getTaxonById(taxonId))
                 .collect(Collectors.toList());
 
+        //todo better search
         List<TargetGroup> targetGroups = targetGroupNames
                 .stream()
                 .map(name -> targetGroupService.getByName(name))
@@ -91,11 +93,13 @@ public class SearchResource extends BaseResource {
         Language language = languageService.getLanguage(languageCode);
         ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
 
+        //todo better search
         List<CrossCurricularTheme> themes = crossCurricularThemeIds
                 .stream()
                 .map(id -> crossCurricularThemeService.getCrossCurricularThemeById(id))
                 .collect(Collectors.toList());
 
+        //todo better search
         List<KeyCompetence> competences = keyCompetenceIds
                 .stream()
                 .map(id -> keyCompetenceService.getKeyCompetenceById(id))
@@ -131,6 +135,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setRequestingUser(getLoggedInUser());
         searchFilter.setMyPrivates(myPrivates);
         searchFilter.setExcluded(excluded);
+        //todo better search
         if (isORSearch) searchFilter.setSearchType("OR");
 
         return searchService.search(query, start, limit, searchFilter);
