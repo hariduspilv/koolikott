@@ -1,4 +1,4 @@
-package ee.hm.dop.db;
+package ee.hm.dop.config.db;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_PASSWORD;
 import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_URL;

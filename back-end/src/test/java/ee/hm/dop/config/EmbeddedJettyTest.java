@@ -1,4 +1,4 @@
-package ee.hm.dop.server;
+package ee.hm.dop.config;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 
