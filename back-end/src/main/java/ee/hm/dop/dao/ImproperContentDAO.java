@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImproperContentDAO extends BaseDAO<ImproperContent> {
 
@@ -41,9 +42,7 @@ public class ImproperContentDAO extends BaseDAO<ImproperContent> {
     }
 
     public void deleteAll(List<ImproperContent> impropers) {
-        List<Long> ids = new ArrayList<>();
-        impropers.forEach(improper -> ids.add(improper.getId()));
-
+        List<Long> ids = impropers.stream().map(ImproperContent::getId).collect(Collectors.toList());
         getEntityManager().createQuery("update ImproperContent i set i.deleted = true where i.id in :impropers") //
                 .setParameter("impropers", ids) //
                 .executeUpdate();

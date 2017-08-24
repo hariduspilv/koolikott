@@ -34,8 +34,7 @@ public class AuthenticationStateDAO {
         AuthenticationState authenticationState = null;
         try {
             authenticationState = findByToken.setParameter("token", token).getSingleResult();
-        } catch (Exception e) {
-            // ignore
+        } catch (Exception ignored) {
         }
 
         return authenticationState;

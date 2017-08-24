@@ -75,6 +75,7 @@ public class ImproperContentService extends BaseService {
 
         return impropers
                 .stream()
+//todo string Material
                 .filter(imp -> "Material".equals(imp.getLearningObject().getClass().getSimpleName()))
                 .collect(Collectors.toList());
     }
@@ -87,6 +88,7 @@ public class ImproperContentService extends BaseService {
 
         return impropers
                 .stream()
+//todo string Portfolio
                 .filter(imp -> "Portfolio".equals(imp.getLearningObject().getClass().getSimpleName()) && !imp.getLearningObject().isDeleted())
                 .collect(Collectors.toList());
     }
