@@ -16,6 +16,7 @@ import javax.persistence.RollbackException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.DbUtils;

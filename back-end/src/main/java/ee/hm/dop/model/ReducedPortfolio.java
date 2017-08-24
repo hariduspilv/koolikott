@@ -1,6 +1,8 @@
 package ee.hm.dop.model;
 
 
+import ee.hm.dop.model.enums.Visibility;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import ee.hm.dop.model.enums.Visibility;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

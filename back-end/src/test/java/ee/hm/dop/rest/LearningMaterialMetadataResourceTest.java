@@ -7,7 +7,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.TargetGroupEnum;
+import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;

@@ -4,7 +4,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.FILE_REVIEW_DIRECTORY;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -17,8 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.RoleString;
-import ee.hm.dop.model.UploadedFile;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.UploadedFileService;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;

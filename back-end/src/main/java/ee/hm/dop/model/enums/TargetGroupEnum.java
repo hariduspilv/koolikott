@@ -1,8 +1,9 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.enums;
 
 import java.util.List;
 
 
+import ee.hm.dop.model.TargetGroup;
 import org.apache.commons.lang3.Range;
 
 public enum TargetGroupEnum {
@@ -30,11 +31,6 @@ public enum TargetGroupEnum {
     }
 
     public static boolean containsTargetGroup(List<TargetGroup> targetGroups, TargetGroupEnum groupEnum) {
-        for (TargetGroup targetGroup : targetGroups) {
-            if (targetGroup.getName().equals(groupEnum.name())) {
-                return true;
-            }
-        }
-        return false;
+        return targetGroups.stream().anyMatch(t -> t.getName().equals(groupEnum.name()));
     }
 }

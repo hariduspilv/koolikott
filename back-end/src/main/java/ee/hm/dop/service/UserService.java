@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
 import ee.hm.dop.dao.UserDAO;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 import org.apache.commons.lang3.text.WordUtils;

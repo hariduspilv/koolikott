@@ -25,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.MaterialService;
 import ee.hm.dop.service.UserService;
 

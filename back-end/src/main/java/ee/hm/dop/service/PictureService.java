@@ -4,7 +4,7 @@ import ee.hm.dop.dao.PictureDAO;
 import ee.hm.dop.dao.ThumbnailDAO;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Size;
+import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.model.Thumbnail;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;

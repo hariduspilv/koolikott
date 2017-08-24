@@ -1,4 +1,6 @@
-package ee.hm.dop.model;
+package ee.hm.dop.model.dto;
+
+import ee.hm.dop.model.LearningObject;
 
 public class TagDTO {
 

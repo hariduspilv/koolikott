@@ -16,7 +16,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
-import ee.hm.dop.model.Visibility;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.rest.TagUpVoteResource.TagUpVoteForm;
 import org.junit.Test;
 

@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.LearningObjectService;
 import ee.hm.dop.service.TagService;
 import ee.hm.dop.service.TagUpVoteService;
