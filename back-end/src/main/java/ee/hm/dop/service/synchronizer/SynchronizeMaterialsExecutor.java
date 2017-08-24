@@ -1,8 +1,7 @@
-package ee.hm.dop.executor;
+package ee.hm.dop.service.synchronizer;
 
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.joda.time.LocalDateTime.now;
 
 import java.util.List;
@@ -20,6 +19,7 @@ import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
 import ee.hm.dop.service.SolrEngineService;
 import ee.hm.dop.utils.DbUtils;
+import ee.hm.dop.utils.ExecutorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,7 +143,7 @@ public class SynchronizeMaterialsExecutor {
      * Package access modifier for testing purpose
      */
     long getInitialDelay(int hourOfDayToExecute) {
-        return ExecutorHelper.getInitialDelay(hourOfDayToExecute);
+        return ExecutorUtil.getInitialDelay(hourOfDayToExecute);
     }
 
     /**

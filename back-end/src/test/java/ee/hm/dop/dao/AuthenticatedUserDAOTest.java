@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.exceptions.DuplicateTokenException;
+import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import org.junit.Test;

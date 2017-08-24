@@ -1,10 +1,10 @@
-package ee.hm.dop.executor;
+package ee.hm.dop.utils;
 
 import static org.joda.time.LocalDateTime.now;
 
 import org.joda.time.LocalDateTime;
 
-public class ExecutorHelper {
+public class ExecutorUtil {
 
     /**
      * 
@@ -24,7 +24,6 @@ public class ExecutorHelper {
             firstExecution = todayScheduleTime.plusDays(1);
         }
 
-        long initialDelay = firstExecution.toDate().getTime() - System.currentTimeMillis();
-        return initialDelay;
+        return firstExecution.toDate().getTime() - System.currentTimeMillis();
     }
 }

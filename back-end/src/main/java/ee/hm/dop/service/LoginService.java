@@ -2,13 +2,14 @@ package ee.hm.dop.service;
 
 import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.dao.AuthenticationStateDAO;
-import ee.hm.dop.exceptions.DuplicateTokenException;
+import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
+import ee.hm.dop.service.ehis.EhisSOAPService;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;

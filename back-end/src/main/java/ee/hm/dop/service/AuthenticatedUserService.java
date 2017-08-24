@@ -13,7 +13,7 @@ import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import ee.hm.dop.security.KeyStoreUtils;
+import ee.hm.dop.utils.security.KeyStoreUtils;
 import ee.hm.dop.utils.EncryptionUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.Configuration;

@@ -1,4 +1,4 @@
-package ee.hm.dop.exceptions;
+package ee.hm.dop.utils.exceptions;
 
 /**
  * Created by mart.laus on 13.08.2015.

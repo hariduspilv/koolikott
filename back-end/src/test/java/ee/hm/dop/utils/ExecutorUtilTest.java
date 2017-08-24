@@ -1,12 +1,13 @@
-package ee.hm.dop.executor;
+package ee.hm.dop.utils;
 
 import static org.joda.time.LocalDateTime.now;
 import static org.junit.Assert.assertTrue;
 
+import ee.hm.dop.utils.ExecutorUtil;
 import org.joda.time.LocalDateTime;
 import org.junit.*;
 
-public class ExecutorHelperTest {
+public class ExecutorUtilTest {
 
     @Ignore
     @Test
@@ -17,7 +18,7 @@ public class ExecutorHelperTest {
         LocalDateTime expectedExecutionTime = now.withHourOfDay(hourOfDayToExecute).withMinuteOfHour(0)
                 .withSecondOfMinute(0).withMillisOfSecond(0).plusDays(1);
 
-        int delay = (int) ExecutorHelper.getInitialDelay(hourOfDayToExecute);
+        int delay = (int) ExecutorUtil.getInitialDelay(hourOfDayToExecute);
         LocalDateTime firstExecution = now.plusMillis(delay);
 
         assertTrue(Math.abs(firstExecution.toDate().getTime() - expectedExecutionTime.toDate().getTime()) < 100);
@@ -32,7 +33,7 @@ public class ExecutorHelperTest {
         LocalDateTime expectedExecutionTime = now.withHourOfDay(hourOfDayToExecute).withMinuteOfHour(0)
                 .withSecondOfMinute(0).withMillisOfSecond(0);
 
-        int delay = (int) ExecutorHelper.getInitialDelay(hourOfDayToExecute);
+        int delay = (int) ExecutorUtil.getInitialDelay(hourOfDayToExecute);
         LocalDateTime firstExecution = now.plusMillis(delay);
 
         assertTrue(Math.abs(firstExecution.toDate().getTime() - expectedExecutionTime.toDate().getTime()) < 2000);

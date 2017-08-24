@@ -1,4 +1,4 @@
-package ee.hm.dop.ehis;
+package ee.hm.dop.service.ehis;
 
 import java.io.StringReader;
 import java.util.ArrayList;

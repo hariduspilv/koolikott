@@ -1,4 +1,4 @@
-package ee.hm.dop.security;
+package ee.hm.dop.utils.security;
 
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;

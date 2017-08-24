@@ -1,4 +1,4 @@
-package ee.hm.dop.executor;
+package ee.hm.dop.service.synchronizer;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -18,6 +18,7 @@ import java.util.concurrent.ScheduledFuture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.RepositoryService;
 import ee.hm.dop.service.SolrEngineService;
+import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;

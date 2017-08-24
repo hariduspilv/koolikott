@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import com.google.inject.Singleton;
-import ee.hm.dop.executor.SynchronizeMaterialsExecutor;
+import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
 import ee.hm.dop.guice.GuiceInjector;
 import ee.hm.dop.server.EmbeddedJetty;
 import org.apache.commons.configuration.Configuration;
