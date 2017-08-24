@@ -16,7 +16,7 @@ import javax.ws.rs.ext.Provider;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.AuthenticatedUserService;
-import ee.hm.dop.service.LogoutService;
+import ee.hm.dop.service.login.LogoutService;
 import org.joda.time.DateTime;
 
 @Provider

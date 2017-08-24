@@ -17,6 +17,7 @@ import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;

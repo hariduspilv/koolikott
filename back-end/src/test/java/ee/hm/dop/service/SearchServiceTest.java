@@ -27,6 +27,8 @@ import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
+import ee.hm.dop.service.solr.SearchService;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

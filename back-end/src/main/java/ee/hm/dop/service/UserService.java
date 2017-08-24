@@ -25,7 +25,6 @@ public class UserService extends BaseService {
 
     @Inject
     private UserDAO userDAO;
-
     @Inject
     private TaxonService taxonService;
 
@@ -128,27 +127,26 @@ public class UserService extends BaseService {
     }
 
     public User update(User user, User loggedInUser) {
-        if (isUserAdmin(loggedInUser)) {
-            List<Taxon> taxons = new ArrayList<>();
-
-            //Currently allowed to update only role and taxons
-            User existingUser = getUserByUsername(user.getUsername());
-            existingUser.setRole(Role.valueOf(user.getRole().toString()));
-
-            List<Taxon> newTaxons = user.getUserTaxons();
-            newTaxons.removeAll(Collections.singleton(null));
-
-            if (newTaxons.size() > 0) {
-                taxons = user.getUserTaxons()
-                        .stream()
-                        .map(taxon -> taxonService.getTaxonById(taxon.getId()))
-                        .collect(Collectors.toList());
-            }
-
-            existingUser.setUserTaxons(taxons);
-            return userDAO.update(existingUser);
-        } else {
+        if (!isUserAdmin(loggedInUser)) {
             throw new BadRequestException("Posting user must be administrator");
         }
+        List<Taxon> taxons = new ArrayList<>();
+
+        //Currently allowed to update only role and taxons
+        User existingUser = getUserByUsername(user.getUsername());
+        existingUser.setRole(Role.valueOf(user.getRole().toString()));
+
+        List<Taxon> newTaxons = user.getUserTaxons();
+        newTaxons.removeAll(Collections.singleton(null));
+
+        if (newTaxons.size() > 0) {
+            taxons = user.getUserTaxons()
+                    .stream()
+                    .map(taxon -> taxonService.getTaxonById(taxon.getId()))
+                    .collect(Collectors.toList());
+        }
+
+        existingUser.setUserTaxons(taxons);
+        return userDAO.update(existingUser);
     }
 }

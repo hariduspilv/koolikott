@@ -21,6 +21,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TaxonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;

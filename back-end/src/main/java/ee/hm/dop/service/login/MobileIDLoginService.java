@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

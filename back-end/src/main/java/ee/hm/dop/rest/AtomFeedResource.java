@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import ee.hm.dop.service.AtomFeedService;
+import ee.hm.dop.service.atom.AtomFeedService;
 import org.apache.abdera.model.Feed;
 
 /**

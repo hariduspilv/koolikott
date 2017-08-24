@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.LoginService;
+import ee.hm.dop.service.login.LoginService;
 
 /**
  * Created by mart on 17.08.15.

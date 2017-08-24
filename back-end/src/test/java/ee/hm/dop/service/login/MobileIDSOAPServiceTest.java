@@ -1,8 +1,8 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
-import static ee.hm.dop.service.MobileIDSOAPService.AUTHENTICATION_COMPLETE;
-import static ee.hm.dop.service.MobileIDSOAPService.AUTHENTICATION_IN_PROGRESS;
-import static ee.hm.dop.service.MobileIDSOAPService.MOBILE_AUTHENTICATE_MESSAGING_MODE;
+import static ee.hm.dop.service.login.MobileIDSOAPService.AUTHENTICATION_COMPLETE;
+import static ee.hm.dop.service.login.MobileIDSOAPService.AUTHENTICATION_IN_PROGRESS;
+import static ee.hm.dop.service.login.MobileIDSOAPService.MOBILE_AUTHENTICATE_MESSAGING_MODE;
 import static ee.hm.dop.utils.ConfigurationProperties.MOBILEID_ENDPOINT;
 import static ee.hm.dop.utils.ConfigurationProperties.MOBILEID_MESSAGE_TO_DISPLAY;
 import static ee.hm.dop.utils.ConfigurationProperties.MOBILEID_NAMESPACE_PREFIX;
@@ -33,6 +33,8 @@ import javax.xml.soap.SOAPMessage;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
+import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.login.MobileIDSOAPService;
 import org.apache.commons.configuration.Configuration;
 import org.easymock.Capture;
 import org.easymock.EasyMock;

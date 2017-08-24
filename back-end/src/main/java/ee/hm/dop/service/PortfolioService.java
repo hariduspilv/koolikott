@@ -17,6 +17,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.service.solr.SolrEngineService;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;

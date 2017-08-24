@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.utils.tokenizer.DOPSearchStringTokenizer;

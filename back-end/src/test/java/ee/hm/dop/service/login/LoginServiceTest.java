@@ -1,4 +1,4 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.login;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -16,6 +16,7 @@ import javax.xml.soap.SOAPException;
 
 import ee.hm.dop.dao.AuthenticatedUserDAO;
 import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.service.UserService;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;

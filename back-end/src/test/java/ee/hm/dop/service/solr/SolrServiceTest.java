@@ -1,8 +1,8 @@
-package ee.hm.dop.service;
+package ee.hm.dop.service.solr;
 
-import static ee.hm.dop.service.SolrService.SOLR_DATAIMPORT_STATUS;
-import static ee.hm.dop.service.SolrService.SOLR_IMPORT_PARTIAL;
-import static ee.hm.dop.service.SolrService.SOLR_STATUS_BUSY;
+import static ee.hm.dop.service.solr.SolrService.SOLR_DATAIMPORT_STATUS;
+import static ee.hm.dop.service.solr.SolrService.SOLR_IMPORT_PARTIAL;
+import static ee.hm.dop.service.solr.SolrService.SOLR_STATUS_BUSY;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -12,7 +12,6 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +24,8 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.ResponseHeader;
 import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.service.solr.SolrService;
 import org.apache.commons.configuration.Configuration;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.util.SimpleOrderedMap;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
