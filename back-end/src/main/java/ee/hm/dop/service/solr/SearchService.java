@@ -27,6 +27,7 @@ import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.service.solr.SolrEngineService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
@@ -52,6 +53,7 @@ public class SearchService {
     private static final String SEARCH_BY_TAG_PREFIX = "tag:";
     private static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
     private static final String SEARCH_BY_AUTHOR_PREFIX = "author:";
+    public static final String AND = " AND ";
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -107,10 +109,7 @@ public class SearchService {
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
-        List<Long> learningObjectIds = new ArrayList<>();
-        for (Document document : documents) {
-            learningObjectIds.add(document.getId());
-        }
+        List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
 
         List<Searchable> unsortedSearchable = new ArrayList<>();
 
@@ -134,8 +133,10 @@ public class SearchService {
         String queryString = "";
 
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
-        if (!filtersAsQuery.isEmpty()) {
-            if (!tokenizedQueryString.isEmpty()) {
+        if (StringUtils.isNotEmpty(filtersAsQuery)) {
+            if (StringUtils.isEmpty(tokenizedQueryString)) {
+                queryString = filtersAsQuery;
+            } else {
                 queryString = format("((%s)", tokenizedQueryString);
 
                 //Search for full phrase also, as they are more relevant
@@ -144,8 +145,6 @@ public class SearchService {
                 }
 
                 queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
-            } else {
-                queryString = filtersAsQuery;
             }
         }
 
@@ -167,11 +166,10 @@ public class SearchService {
     }
 
     private String getSort(SearchFilter searchFilter) {
-        String sort = null;
         if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
-            sort = String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection().getValue());
+            return String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection().getValue());
         }
-        return sort;
+        return null;
     }
 
     private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
@@ -214,13 +212,9 @@ public class SearchService {
 
     private String getExcludedAsQuery(SearchFilter searchFilter) {
         List<Long> excluded = searchFilter.getExcluded();
-        List<String> result = new ArrayList<>();
-        if (excluded != null && !excluded.isEmpty()) {
-            excluded.forEach(id -> {
-                result.add("-id:" + id.toString());
-            });
-
-            return " AND " + StringUtils.join(result, " AND ");
+        if (CollectionUtils.isNotEmpty(excluded)) {
+            List<String> result = excluded.stream().map(id -> "-id:" + id.toString()).collect(Collectors.toList());
+            return AND + StringUtils.join(result, AND);
         }
 
         return "";
@@ -335,14 +329,14 @@ public class SearchService {
             }
 
             if (taxonList.size() == 1) {
-                return StringUtils.join(taxons, " AND ");
+                return StringUtils.join(taxons, AND);
             }
 
-            joinedTaxons.add("(" + StringUtils.join(taxons, " AND ") + ")");
+            joinedTaxons.add("(" + StringUtils.join(taxons, AND) + ")");
             taxons.clear();
         }
 
-        return !joinedTaxons.isEmpty() ? "(" + StringUtils.join(joinedTaxons, " OR ") + ")" : "";
+        return joinedTaxons.isEmpty() ? "" : "(" + StringUtils.join(joinedTaxons, " OR ") + ")";
     }
 
     private void addTaxonToQuery(Taxon taxon, List<String> taxons) {
