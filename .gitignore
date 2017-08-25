@@ -24,3 +24,5 @@ solr-indexer/DOP-Solr-indexer.iml
 /front-end/DOP-Front-End.iml
 .idea/
 .DS_Store
+
+/ui-tests/target/
