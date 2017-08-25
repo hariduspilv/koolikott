@@ -9,6 +9,8 @@ import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.solr.SolrEngineService;
 
+import java.util.Objects;
+
 public class TagUpVoteService {
 
     @Inject
@@ -66,7 +68,7 @@ public class TagUpVoteService {
     }
 
     private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {
-        if ((tagUpVote.getId() != null && user.getId() != tagUpVote.getUser().getId())
+        if ((tagUpVote.getId() != null && !Objects.equals(user.getId(), tagUpVote.getUser().getId()))
                 || !learningObjectService.hasPermissionsToAccess(user, tagUpVote.getLearningObject())) {
             throw new RuntimeException("Access denied");
         }

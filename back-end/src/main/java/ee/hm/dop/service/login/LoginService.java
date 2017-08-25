@@ -32,19 +32,14 @@ public class LoginService {
 
     @Inject
     private UserService userService;
-
     @Inject
     private MobileIDLoginService mobileIDLoginService;
-
     @Inject
     private AuthenticatedUserDao authenticatedUserDao;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
     @Inject
     private EhisSOAPService ehisSOAPService;
-
     private SecureRandom random = new SecureRandom();
 
     /**
@@ -53,27 +48,23 @@ public class LoginService {
      */
     public AuthenticatedUser logIn(String idCode, String name, String surname) {
         AuthenticatedUser authenticatedUser = login(idCode);
-
         if (authenticatedUser != null) {
             logger.info(format("User %s with id %s logged in.", authenticatedUser.getUser().getUsername(), idCode));
-        } else {
-            logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
+            return authenticatedUser;
+        }
+        logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
 
-            // Create new user account
-            userService.create(idCode, name, surname);
-            authenticatedUser = login(idCode);
-
-            if (authenticatedUser == null) {
-                throw new RuntimeException(format(
-                        "User with id %s tried to log in after creating account, but failed.", idCode));
-            }
-
-            authenticatedUser.setFirstLogin(true);
-            logger.info(format("User %s with id %s logged in for the first time.", authenticatedUser.getUser()
-                    .getUsername(), idCode));
+        // Create new user account
+        userService.create(idCode, name, surname);
+        AuthenticatedUser newUser = login(idCode);
+        if (newUser == null) {
+            throw new RuntimeException(format("User with id %s tried to log in after creating account, but failed.", idCode));
         }
 
-        return authenticatedUser;
+        newUser.setFirstLogin(true);
+        logger.info(format("User %s with id %s logged in for the first time.", newUser.getUser()
+                .getUsername(), idCode));
+        return newUser;
     }
 
     /**
@@ -106,7 +97,6 @@ public class LoginService {
         if (user == null) {
             return null;
         }
-
         return createAuthenticatedUser(user);
     }
 
@@ -125,17 +115,21 @@ public class LoginService {
     }
 
     private AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser) {
-        authenticatedUser.setToken(new BigInteger(130, random).toString(32));
+        authenticatedUser.setToken(secureToken());
 
         AuthenticatedUser returnedAuthenticatedUser;
         try {
             returnedAuthenticatedUser = authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         } catch (DuplicateTokenException e) {
-            authenticatedUser.setToken(new BigInteger(130, random).toString(32));
+            authenticatedUser.setToken(secureToken());
             returnedAuthenticatedUser = authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
 
         return returnedAuthenticatedUser;
+    }
+
+    private String secureToken() {
+        return new BigInteger(130, random).toString(32);
     }
 
     public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language)

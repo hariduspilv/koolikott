@@ -15,9 +15,61 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
 
 public class SearchConverter {
+    public static String composeQueryString(String query, SearchFilter searchFilter) {
+        String tokenizedQueryString = getTokenizedQueryString(query);
+        String queryString = SearchService.EMPTY;
+
+        String filtersAsQuery = getFiltersAsQuery(searchFilter);
+        if (StringUtils.isNotEmpty(filtersAsQuery)) {
+            if (StringUtils.isEmpty(tokenizedQueryString)) {
+                queryString = filtersAsQuery;
+            } else {
+                queryString = format("((%s)", tokenizedQueryString);
+
+                //Search for full phrase also, as they are more relevant
+                if (fullPhraseSearch(tokenizedQueryString)) {
+                    queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
+                }
+
+                queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
+            }
+        }
+        if (queryString.isEmpty()) {
+            throw new RuntimeException("No query string and filters present.");
+        }
+        return queryString;
+    }
+
+    /*
+         * Convert filters to Solr syntax query
+         */
+    public static String getFiltersAsQuery(SearchFilter searchFilter) {
+        List<String> filters = new LinkedList<>();
+
+        filters.add(getLanguageAsQuery(searchFilter));
+        filters.add(getTaxonsAsQuery(searchFilter));
+        filters.add(isPaidAsQuery(searchFilter));
+        filters.add(getTypeAsQuery(searchFilter));
+        filters.add(getTargetGroupsAsQuery(searchFilter));
+        filters.add(getResourceTypeAsQuery(searchFilter));
+        filters.add(isSpecialEducationAsQuery(searchFilter));
+        filters.add(issuedFromAsQuery(searchFilter));
+        filters.add(getCrossCurricularThemesAsQuery(searchFilter));
+        filters.add(getKeyCompetencesAsQuery(searchFilter));
+        filters.add(isCurriculumLiteratureAsQuery(searchFilter));
+        filters.add(getVisibilityAsQuery(searchFilter));
+        filters.add(getCreatorAsQuery(searchFilter));
+
+        // Remove empty elements
+        filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
+        String query = StringUtils.join(filters, format(" %s ", searchFilter.getSearchType()));
+        return query.concat(getExcludedAsQuery(searchFilter));
+    }
+
     public static List<Visibility> getSearchVisibility(User loggedInUser) {
         List<Visibility> visibilities = new ArrayList<>();
         visibilities.add(Visibility.PUBLIC);
@@ -33,17 +85,16 @@ public class SearchConverter {
         return visibilities;
     }
 
-    public static String getExcludedAsQuery(SearchFilter searchFilter) {
+    private static String getExcludedAsQuery(SearchFilter searchFilter) {
         List<Long> excluded = searchFilter.getExcluded();
         if (CollectionUtils.isNotEmpty(excluded)) {
             List<String> result = excluded.stream().map(id -> "-id:" + id.toString()).collect(Collectors.toList());
             return SearchService.AND + StringUtils.join(result, SearchService.AND);
         }
-
         return "";
     }
 
-    public static String getLanguageAsQuery(SearchFilter searchFilter) {
+    private static String getLanguageAsQuery(SearchFilter searchFilter) {
         Language language = searchFilter.getLanguage();
         if (language != null) {
             return format("(language:\"%s\" OR type:\"portfolio\")", language.getCode());
@@ -51,14 +102,14 @@ public class SearchConverter {
         return "";
     }
 
-    public static String isPaidAsQuery(SearchFilter searchFilter) {
+    private static String isPaidAsQuery(SearchFilter searchFilter) {
         if (!searchFilter.isPaid()) {
             return "(paid:\"false\" OR type:\"portfolio\")";
         }
         return "";
     }
 
-    public static  String getVisibilityAsQuery(SearchFilter searchFilter) {
+    private static  String getVisibilityAsQuery(SearchFilter searchFilter) {
         List<Visibility> visibilities = searchFilter.getVisibility();
         List<String> filter = visibilities
                 .stream()
@@ -70,19 +121,17 @@ public class SearchConverter {
         if (searchFilter.getRequestingUser() != null && searchFilter.getMyPrivates()) {
             query = query + " OR creator:" + searchFilter.getRequestingUser().getId();
         }
-
         return query;
     }
 
-    public static  String getCreatorAsQuery(SearchFilter searchFilter) {
+    private static  String getCreatorAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getCreator() != null) {
             return "creator:" + searchFilter.getCreator();
         }
-
         return SearchService.EMPTY;
     }
 
-    public static String getTypeAsQuery(SearchFilter searchFilter) {
+    private static String getTypeAsQuery(SearchFilter searchFilter) {
         Set<String> types = ImmutableSet.of(SearchService.MATERIAL_TYPE, SearchService.PORTFOLIO_TYPE, SearchService.ALL_TYPE);
 
         String type = searchFilter.getType();
@@ -98,7 +147,7 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static String getTargetGroupsAsQuery(SearchFilter searchFilter) {
+    private static String getTargetGroupsAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getTargetGroups() != null && !searchFilter.getTargetGroups().isEmpty()) {
             List<String> filters = new ArrayList<>();
 
@@ -115,7 +164,7 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static  void addTaxonToQuery(Taxon taxon, List<String> taxons) {
+    private static  void addTaxonToQuery(Taxon taxon, List<String> taxons) {
         String name = getTaxonName(taxon);
         String taxonLevel = getTaxonLevel(taxon);
         if (taxonLevel != null) {
@@ -123,11 +172,11 @@ public class SearchConverter {
         }
     }
 
-    public static  String getTaxonName(Taxon taxon) {
+    private static  String getTaxonName(Taxon taxon) {
         return ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
     }
 
-    public static  String getTaxonLevel(Taxon taxon) {
+    private static  String getTaxonLevel(Taxon taxon) {
         if (taxon instanceof EducationalContext) {
             return "educational_context";
         } else if (taxon instanceof Domain) {
@@ -146,7 +195,7 @@ public class SearchConverter {
         return null;
     }
 
-    public static  String getResourceTypeAsQuery(SearchFilter searchFilter) {
+    private static  String getResourceTypeAsQuery(SearchFilter searchFilter) {
         ResourceType resourceType = searchFilter.getResourceType();
         if (resourceType != null) {
             return format("resource_type:\"%s\"", resourceType.getName().toLowerCase());
@@ -154,14 +203,14 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static  String isSpecialEducationAsQuery(SearchFilter searchFilter) {
+    private static  String isSpecialEducationAsQuery(SearchFilter searchFilter) {
         if (searchFilter.isSpecialEducation()) {
             return "special_education:\"true\"";
         }
         return SearchService.EMPTY;
     }
 
-    public static  String issuedFromAsQuery(SearchFilter searchFilter) {
+    private static  String issuedFromAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getIssuedFrom() != null) {
             return format("(issue_date_year:[%s TO *] OR (added:[%s-01-01T00:00:00Z TO *] AND type:\"portfolio\"))",
                     searchFilter.getIssuedFrom(), searchFilter.getIssuedFrom());
@@ -169,7 +218,7 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static  String getCrossCurricularThemesAsQuery(SearchFilter searchFilter) {
+    private static  String getCrossCurricularThemesAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getCrossCurricularThemes() != null && !searchFilter.getCrossCurricularThemes().isEmpty()) {
             List<String> themes = new ArrayList<>();
 
@@ -187,7 +236,7 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static  String getKeyCompetencesAsQuery(SearchFilter searchFilter) {
+    private static  String getKeyCompetencesAsQuery(SearchFilter searchFilter) {
         if (searchFilter.getKeyCompetences() != null && !searchFilter.getKeyCompetences().isEmpty()) {
             List<String> competences = new ArrayList<>();
 
@@ -205,7 +254,7 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static  String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
+    private static  String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
         Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
         if (Boolean.TRUE.equals(isCurriculumLiterature)) {
             return "(peerReview:[* TO *] OR curriculum_literature:\"true\")";
@@ -214,7 +263,7 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    public static String getTaxonsAsQuery(SearchFilter searchFilter) {
+    private static String getTaxonsAsQuery(SearchFilter searchFilter) {
         List<Taxon> taxonList = searchFilter.getTaxons();
         List<String> taxons = new LinkedList<>();
         List<String> joinedTaxons = new ArrayList<>();
@@ -278,5 +327,11 @@ public class SearchConverter {
         }
 
         return joinedTaxons.isEmpty() ? SearchService.EMPTY : "(" + StringUtils.join(joinedTaxons, SearchService.OR) + ")";
+    }
+
+    private static boolean fullPhraseSearch(String tokenizedQueryString) {
+        return !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_TAG_PREFIX)
+                && !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_RECOMMENDED_PREFIX)
+                && !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_AUTHOR_PREFIX);
     }
 }

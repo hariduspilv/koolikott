@@ -24,10 +24,8 @@ public class EkoolService {
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private Client client;
-
     @Inject
     private LoginService loginService;
 
@@ -40,7 +38,6 @@ public class EkoolService {
     }
 
     public AuthenticatedUser authenticate(String code, String redirectUrl) {
-
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
         Person person = getPerson(ekoolToken);
         return loginService.logIn(person.getIdCode(), person.getFirstName(), person.getLastName());
@@ -50,10 +47,9 @@ public class EkoolService {
         MultivaluedMap<String, String> params = new MultivaluedStringMap();
         params.add("access_token", ekoolToken.getAccessToken());
 
-        Person person = client.target(getUserDataUrl()).request() //
+        return client.target(getUserDataUrl()).request() //
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE)) //
                 .readEntity(Person.class);
-        return person;
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {
@@ -65,11 +61,10 @@ public class EkoolService {
         Entity<MultivaluedMap<String, String>> entity = Entity.entity(tokenRequestParams,
                 APPLICATION_FORM_URLENCODED_TYPE);
 
-        EkoolToken ekoolToken = client.target(getEkoolTokenUrl()).request()
+        return client.target(getEkoolTokenUrl()).request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash()) //
                 .post(entity) //
                 .readEntity(EkoolToken.class);
-        return ekoolToken;
     }
 
     private String getEkoolTokenUrl() {

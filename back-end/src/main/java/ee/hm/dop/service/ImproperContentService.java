@@ -46,7 +46,7 @@ public class ImproperContentService extends BaseService {
      * @return the ImproperContent if user has rights to access
      */
     public ImproperContent get(long improperContentId, User user) {
-        ImproperContent improperContent = improperContentDao.findById(improperContentId);
+        ImproperContent improperContent = improperContentDao.findByIdValid(improperContentId);
 
         if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
@@ -61,7 +61,7 @@ public class ImproperContentService extends BaseService {
      * @return a list of improperContent that user has rights to access
      */
     public List<ImproperContent> getAll(User user) {
-        List<ImproperContent> impropers = improperContentDao.findAll();
+        List<ImproperContent> impropers = improperContentDao.findAllValid();
         removeIfHasNoAccess(user, impropers);
 
         return impropers;

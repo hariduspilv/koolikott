@@ -20,6 +20,8 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     public static final String ID = "id";
     public static final String SET_DELETED_TRUE = " set o.deleted = true ";
     public static final String UPDATE = "update ";
+    public static final String DELETED = "deleted";
+    public static final String NAME = "name";
     @Inject
     protected EntityManager entityManager;
     private Class<Entity> entity;
@@ -41,6 +43,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return getEntityManager().find(entity(), id);
     }
 
+    public Entity findByIdValid(Long id) {
+        return findByField(ID, id, DELETED, false);
+    }
+
     public List<Entity> findById(List<Long> id) {
         return getList(getFindByFieldInQuery(ID, id));
     }
@@ -49,8 +55,22 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return getList(getEntityManager().createQuery(select(), entity()));
     }
 
+    public List<Entity> findAllValid() {
+        return findByFieldList(DELETED, false);
+    }
+
+    private void isDeletable() {
+        if (!Deletable.class.isAssignableFrom(entity)) {
+            throw new RuntimeException(" Entity: " + entity + " does not implement Deletable");
+        }
+    }
+
+    public List<Entity> findAllDeleted() {
+        return findByFieldList(DELETED, true);
+    }
+
     public Entity findByName(String value) {
-        return getSingleResult(getFindByFieldQuery("name", value, false));
+        return getSingleResult(getFindByFieldQuery(NAME, value, false));
     }
 
     public Entity findByField(String field, Object value) {
@@ -69,8 +89,16 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return getSingleResult(getFindByFieldQuery(field1, value1, field2, value2));
     }
 
-    public List<Entity> findByFieldList(String field1, String value1, String field2, String value2) {
+    public Entity findByField(String field1, Object value1, String field2, Object value2, String field3, Object value3) {
+        return getSingleResult(getFindByFieldQuery(field1, value1, field2, value2, field3, value3));
+    }
+
+    public List<Entity> findByFieldList(String field1, Object value1, String field2, Object value2) {
         return getList(getFindByFieldQuery(field1, value1, field2, value2));
+    }
+
+    public List<Entity> findByFieldList(String field1, Object value1, String field2, Object value2, String field3, Object value3) {
+        return getList(getFindByFieldQuery(field1, value1, field2, value2, field3, value3));
     }
 
     public Entity createOrUpdate(Entity entity) {
@@ -79,12 +107,12 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return merged;
     }
 
-    public void delete(Entity deletable) {
-        if (!(deletable instanceof Deletable)) {
-            throw new RuntimeException();
-        }
-        getEntityManager().createQuery(UPDATE + name() + ALIAS + SET_DELETED_TRUE +
-                WHERE + fieldInEquals(ID)).executeUpdate();
+    public void setDeleted(List<Long> id) {
+//        isDeletable();
+        getEntityManager()
+                .createQuery(UPDATE + name() + ALIAS + SET_DELETED_TRUE + WHERE + fieldInEquals(ID))
+                .setParameter(ID, id)
+                .executeUpdate();
     }
 
     public void remove(Entity entity) {
@@ -114,6 +142,14 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 .createQuery(select() + WHERE + fieldEquals(field1) + AND + fieldEquals(field2), entity())
                 .setParameter(field1, value1)
                 .setParameter(field2, value2);
+    }
+
+    private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2, String field3, Object value3)  {
+        return getEntityManager()
+                .createQuery(select() + WHERE + fieldEquals(field1) + AND + fieldEquals(field2) + AND + fieldEquals(field3), entity())
+                .setParameter(field1, value1)
+                .setParameter(field2, value2)
+                .setParameter(field3, value3);
     }
 
     public Entity getSingleResult(TypedQuery<? extends Entity> query) {

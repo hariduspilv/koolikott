@@ -53,28 +53,21 @@ import org.w3c.dom.Element;
 public class TaatService {
 
     private static final String NAME = "urn:mace:dir:attribute-def:cn";
-
     private static final String SURNAME = "urn:mace:dir:attribute-def:sn";
-
     private static final String ID_CODE = "schacPersonalUniqueID";
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
     @Inject
     private LoginService loginService;
-
     @Inject
     private SignatureValidator validator;
-
     private static final SecureRandom random = new SecureRandom();
 
     private AuthnRequest buildAuthnRequest() {
-        int assertionConsumerServiceIndex = Integer
-                .valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
+        int assertionConsumerServiceIndex = Integer.valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
 
         Issuer issuer = getIssuer(configuration.getString(TAAT_CONNECTION_ID));
         NameIDPolicy nameIdPolicy = getNameIdPolicy();
@@ -123,8 +116,7 @@ public class TaatService {
     }
 
     private void validateAuthenticationToken(String authenticationStateToken) {
-        AuthenticationState authenticationState = authenticationStateDao
-                .findAuthenticationStateByToken(authenticationStateToken);
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(authenticationStateToken);
         if (authenticationState == null) {
             throw new RuntimeException("Error validating authentication state.");
         } else {

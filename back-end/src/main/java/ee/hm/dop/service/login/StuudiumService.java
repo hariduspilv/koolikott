@@ -20,10 +20,8 @@ public class StuudiumService {
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private Client client;
-
     @Inject
     private LoginService loginService;
 

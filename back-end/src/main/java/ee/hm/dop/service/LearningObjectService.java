@@ -30,41 +30,30 @@ public class LearningObjectService extends BaseService {
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
-
     @Inject
     private SolrEngineService solrEngineService;
-
     @Inject
     private UserFavoriteDao userFavoriteDao;
-
     @Inject
     private MaterialDAO materialDAO;
-
     @Inject
     private PortfolioDAO portfolioDAO;
-
     @Inject
     private TaxonService taxonService;
-
     @Inject
     private TargetGroupService targetGroupService;
-
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
-
     @Inject
     private TagService tagService;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDAO().findById(learningObjectId);
-
         if (!hasPermissionsToAccess(user, learningObject)) {
             learningObject = null;
         }
-
         return learningObject;
     }
 
@@ -209,8 +198,7 @@ public class LearningObjectService extends BaseService {
                 break;
             }
 
-            learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(
-                    learningObject));
+            learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(learningObject));
             returnableLearningObjects.addAll(learningObjects);
             startPosition += count;
             count = numberOfLearningObjects - returnableLearningObjects.size();

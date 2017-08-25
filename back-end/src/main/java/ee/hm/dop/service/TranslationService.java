@@ -16,7 +16,6 @@ public class TranslationService {
 
     @Inject
     private TranslationDAO translationDAO;
-
     @Inject
     private LanguageDao languageDao;
 

@@ -46,16 +46,14 @@ public class MobileIDSOAPService {
     private static final int POLLING_INTERVAL_IN_MILLISECONDS = 5000;
 
     /**
-     * Mobile-ID supports only these four languages
+     * Mobile-ID supports only these four languagesprotected
      */
     private static final Collection<String> supportedLanguages = Arrays.asList("est", "eng", "rus", "lit");
 
     @Inject
     private LanguageService languageService;
-
     @Inject
     private Configuration configuration;
-
     @Inject
     private SOAPConnection connection;
 
@@ -99,7 +97,7 @@ public class MobileIDSOAPService {
 
                 Thread.sleep(getPollingInterval());
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
 
         }
 

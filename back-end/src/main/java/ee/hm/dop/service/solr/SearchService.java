@@ -10,6 +10,7 @@ import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
 
 public class SearchService {
@@ -43,16 +43,24 @@ public class SearchService {
     private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
-        SearchResult searchResult = new SearchResult();
-
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
-        Long resultCount;
-        if (limit != null && limit == 0) resultCount = null;
-        else resultCount = limit;
+        String queryString = SearchConverter.composeQueryString(query, searchFilter);
 
-        SearchResponse searchResponse = doSearch(query, start, resultCount, searchFilter);
+        SearchResponse searchResponse = search(start, limit, searchFilter, queryString);
+
+        return handleResult(limit, searchFilter, searchResponse);
+    }
+
+    private SearchResponse search(long start, Long limit, SearchFilter searchFilter, String queryString) {
+        if (limit == null || limit == 0) {
+            return solrEngineService.search(queryString, start, getSort(searchFilter));
+        }
+        return solrEngineService.search(queryString, start, limit, getSort(searchFilter));
+    }
+
+    private SearchResult handleResult(Long limit, SearchFilter searchFilter, SearchResponse searchResponse) {
+        SearchResult searchResult = new SearchResult();
         Response response = searchResponse.getResponse();
-
         if (response != null) {
             List<Document> documents = response.getDocuments();
             List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser());
@@ -65,14 +73,13 @@ public class SearchService {
                 searchResult.setItems(sortedSearchable);
             }
         }
-
         return searchResult;
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<Searchable> unsortedSearchable = new ArrayList<>();
-        if (!learningObjectIds.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(learningObjectIds)) {
             reducedLearningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
                 if (loggedInUser != null) {
                     UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
@@ -82,40 +89,6 @@ public class SearchService {
             });
         }
         return unsortedSearchable;
-    }
-
-    private SearchResponse doSearch(String query, long start, Long limit, SearchFilter searchFilter) {
-        String tokenizedQueryString = getTokenizedQueryString(query);
-        String queryString = EMPTY;
-
-        String filtersAsQuery = getFiltersAsQuery(searchFilter);
-        if (StringUtils.isNotEmpty(filtersAsQuery)) {
-            if (StringUtils.isEmpty(tokenizedQueryString)) {
-                queryString = filtersAsQuery;
-            } else {
-                queryString = format("((%s)", tokenizedQueryString);
-
-                //Search for full phrase also, as they are more relevant
-                if (fullPhraseSearch(tokenizedQueryString)) {
-                    queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
-                }
-
-                queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
-            }
-        }
-        if (queryString.isEmpty()) {
-            throw new RuntimeException("No query string and filters present.");
-        }
-        if (limit == null) {
-            return solrEngineService.search(queryString, start, getSort(searchFilter));
-        }
-        return solrEngineService.search(queryString, start, limit, getSort(searchFilter));
-    }
-
-    private boolean fullPhraseSearch(String tokenizedQueryString) {
-        return !tokenizedQueryString.toLowerCase().startsWith(SEARCH_BY_TAG_PREFIX)
-                && !tokenizedQueryString.toLowerCase().startsWith(SEARCH_RECOMMENDED_PREFIX)
-                && !tokenizedQueryString.toLowerCase().startsWith(SEARCH_BY_AUTHOR_PREFIX);
     }
 
     private String getSort(SearchFilter searchFilter) {
@@ -137,29 +110,4 @@ public class SearchService {
                 .collect(Collectors.toList());
     }
 
-    /*
-     * Convert filters to Solr syntax query
-     */
-    private String getFiltersAsQuery(SearchFilter searchFilter) {
-        List<String> filters = new LinkedList<>();
-
-        filters.add(SearchConverter.getLanguageAsQuery(searchFilter));
-        filters.add(SearchConverter.getTaxonsAsQuery(searchFilter));
-        filters.add(SearchConverter.isPaidAsQuery(searchFilter));
-        filters.add(SearchConverter.getTypeAsQuery(searchFilter));
-        filters.add(SearchConverter.getTargetGroupsAsQuery(searchFilter));
-        filters.add(SearchConverter.getResourceTypeAsQuery(searchFilter));
-        filters.add(SearchConverter.isSpecialEducationAsQuery(searchFilter));
-        filters.add(SearchConverter.issuedFromAsQuery(searchFilter));
-        filters.add(SearchConverter.getCrossCurricularThemesAsQuery(searchFilter));
-        filters.add(SearchConverter.getKeyCompetencesAsQuery(searchFilter));
-        filters.add(SearchConverter.isCurriculumLiteratureAsQuery(searchFilter));
-        filters.add(SearchConverter.getVisibilityAsQuery(searchFilter));
-        filters.add(SearchConverter.getCreatorAsQuery(searchFilter));
-
-        // Remove empty elements
-        filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
-        String query = StringUtils.join(filters, format(" %s ", searchFilter.getSearchType()));
-        return query.concat(SearchConverter.getExcludedAsQuery(searchFilter));
-    }
 }

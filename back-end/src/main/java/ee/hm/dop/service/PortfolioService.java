@@ -18,6 +18,7 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.solr.SolrEngineService;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -32,19 +33,14 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
     @Inject
     private PortfolioDAO portfolioDAO;
-
     @Inject
     private UserLikeDao userLikeDao;
-
     @Inject
     private ChapterObjectDao chapterObjectDao;
-
     @Inject
     private SolrEngineService solrEngineService;
-
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
-
     @Inject
     private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
@@ -59,13 +55,11 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
                 throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
             }
         }
-
         return portfolio;
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return reducedLearningObjectDAO.findPortfolioByCreator(creator, start, maxResults)
-                .stream()
+        return reducedLearningObjectDAO.findPortfolioByCreator(creator, start, maxResults).stream()
                 .filter(p -> hasPermissionsToAccess(loggedInUser, p))
                 .collect(Collectors.toList());
     }
@@ -247,7 +241,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
     private void processChanges(Portfolio portfolio) {
         List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
-        if (changes == null || changes.isEmpty()) return;
+        if (CollectionUtils.isEmpty(changes)) return;
 
         for (ChangedLearningObject change : changes) {
             if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {

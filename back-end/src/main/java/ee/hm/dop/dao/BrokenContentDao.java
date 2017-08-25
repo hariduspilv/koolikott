@@ -23,15 +23,14 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
     }
 
     public void deleteBrokenMaterials(Long id) {
-        Query query = entityManager
-                .createQuery("UPDATE BrokenContent b set b.deleted = true WHERE b.material.id = :id");
+        Query query = entityManager.createQuery("UPDATE BrokenContent b set b.deleted = true WHERE b.material.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }
 
     public List<BrokenContent> getBrokenMaterials() {
-        return entityManager.createQuery("FROM BrokenContent b WHERE b.material IS NOT NULL AND b.deleted = false",
-                BrokenContent.class).getResultList();
+        return entityManager.createQuery("FROM BrokenContent b WHERE b.material IS NOT NULL AND b.deleted = false", entity())
+                .getResultList();
     }
 
     public long getCount() {
@@ -45,7 +44,7 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
     public List<BrokenContent> findByMaterialAndUser(long materialId, User loggedInUser) {
         TypedQuery<BrokenContent> findByData = entityManager.createQuery(
                 "FROM BrokenContent b WHERE b.material.id = :materialid AND b.creator = :user AND b.deleted = false",
-                BrokenContent.class);
+                entity());
 
         List<BrokenContent> brokenContents = null;
         try {

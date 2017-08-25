@@ -16,7 +16,7 @@ public class AuthenticationStateDao extends AbstractDao<AuthenticationState> {
     }
 
     public AuthenticationState findAuthenticationStateByToken(String token) {
-        return super.findByField("token", token);
+        return findByField("token", token);
     }
 
     public void delete(AuthenticationState authenticationState) {

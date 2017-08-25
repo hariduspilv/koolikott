@@ -59,42 +59,30 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     private static final String DEFAULT_PROTOCOL = "http://";
     private final String PDF_EXTENSION = ".pdf\"";
     private final String PDF_MIME_TYPE = "application/pdf";
-
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
     private MaterialDAO materialDAO;
-
     @Inject
     private UserLikeDao userLikeDao;
-
     @Inject
     private AuthorService authorService;
-
     @Inject
     private PublisherService publisherService;
-
     @Inject
     private SolrEngineService solrEngineService;
-
     @Inject
     private BrokenContentDao brokenContentDao;
-
     @Inject
     private PeerReviewService peerReviewService;
-
     @Inject
     private KeyCompetenceService keyCompetenceService;
-
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
-
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
-
     @Inject
     private Configuration configuration;
-
     @Inject
     private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
