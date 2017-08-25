@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Cacheable
 @JsonSerialize(using = LanguageSerializer.class)
 @JsonDeserialize(using = LanguageDeserializer.class)
-public class Language {
+public class Language extends AbstractEntity {
 
     @Id
     @GeneratedValue

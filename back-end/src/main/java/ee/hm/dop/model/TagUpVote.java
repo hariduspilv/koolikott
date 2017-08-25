@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class TagUpVote {
+public class TagUpVote extends AbstractEntity {
 
     @Id
     @GeneratedValue

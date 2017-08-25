@@ -2,7 +2,7 @@ package ee.hm.dop.service;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.TagUpVoteDAO;
+import ee.hm.dop.dao.TagUpVoteDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
@@ -12,11 +12,9 @@ import ee.hm.dop.service.solr.SolrEngineService;
 public class TagUpVoteService {
 
     @Inject
-    private TagUpVoteDAO tagUpVoteDAO;
-
+    private TagUpVoteDao tagUpVoteDao;
     @Inject
     private SolrEngineService solrEngineService;
-
     @Inject
     private LearningObjectService learningObjectService;
 
@@ -29,7 +27,7 @@ public class TagUpVoteService {
      * @return the tagUpVote if user has access
      */
     public TagUpVote get(long id, User user) {
-        TagUpVote tagUpVote = tagUpVoteDAO.findById(id);
+        TagUpVote tagUpVote = tagUpVoteDao.findById(id);
 
         if (tagUpVote != null) {
             validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
@@ -43,7 +41,7 @@ public class TagUpVoteService {
 
         tagUpVote.setUser(user);
 
-        TagUpVote returnTagUpVote = tagUpVoteDAO.update(tagUpVote);
+        TagUpVote returnTagUpVote = tagUpVoteDao.createOrUpdate(tagUpVote);
         solrEngineService.updateIndex();
 
         return returnTagUpVote;
@@ -51,12 +49,12 @@ public class TagUpVoteService {
 
     public void delete(TagUpVote tagUpVote, User user) {
         validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
-        tagUpVoteDAO.setDeleted(tagUpVote);
+        tagUpVoteDao.setDeleted(tagUpVote);
         solrEngineService.updateIndex();
     }
 
     public int getUpVoteCountFor(Tag tag, LearningObject learningObject) {
-        return tagUpVoteDAO.findByLearningObjectAndTag(learningObject, tag).size();
+        return tagUpVoteDao.findByLearningObjectAndTag(learningObject, tag).size();
     }
 
     public TagUpVote getTagUpVote(Tag tag, LearningObject learningObject, User user) {
@@ -64,7 +62,7 @@ public class TagUpVoteService {
             return null;
         }
 
-        return tagUpVoteDAO.findByTagAndUserAndLearningObject(tag, user, learningObject);
+        return tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, learningObject);
     }
 
     private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {

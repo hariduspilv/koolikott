@@ -10,10 +10,10 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 
-public class ChangedLearningObjectDAOTest extends DatabaseTestBase {
+public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
 
     @Inject
-    private ChangedLearningObjectDAO changedLearningObjectDAO;
+    private ChangedLearningObjectDao changedLearningObjectDao;
 
     @Test
     public void getAllByLearningObject() {
@@ -28,15 +28,15 @@ public class ChangedLearningObjectDAOTest extends DatabaseTestBase {
         change1.setLearningObject(material);
         change2.setLearningObject(material);
 
-        changedLearningObjectDAO.update(change1);
-        changedLearningObjectDAO.update(change2);
+        changedLearningObjectDao.createOrUpdate(change1);
+        changedLearningObjectDao.createOrUpdate(change2);
 
-        List<ChangedLearningObject> changes = changedLearningObjectDAO.getAllByLearningObject(1);
+        List<ChangedLearningObject> changes = changedLearningObjectDao.getAllByLearningObject(1);
         assertTrue(changes.size() == 2);
 
-        changedLearningObjectDAO.removeAllByLearningObject(1);
+        changedLearningObjectDao.removeAllByLearningObject(1);
 
-        List<ChangedLearningObject> changesAfter = changedLearningObjectDAO.getAllByLearningObject(1);
+        List<ChangedLearningObject> changesAfter = changedLearningObjectDao.getAllByLearningObject(1);
         assertTrue(changesAfter.size() == 0);
     }
 
@@ -58,17 +58,17 @@ public class ChangedLearningObjectDAOTest extends DatabaseTestBase {
         change2.setLearningObject(material1);
         change3.setLearningObject(material2);
 
-        changedLearningObjectDAO.update(change1);
-        changedLearningObjectDAO.update(change2);
-        changedLearningObjectDAO.update(change3);
+        changedLearningObjectDao.createOrUpdate(change1);
+        changedLearningObjectDao.createOrUpdate(change2);
+        changedLearningObjectDao.createOrUpdate(change3);
 
-        List<ChangedLearningObject> changes = changedLearningObjectDAO.findAll();
+        List<ChangedLearningObject> changes = changedLearningObjectDao.findAll();
         assertTrue(changes.size() == 3);
 
-        changedLearningObjectDAO.removeAllByLearningObject(1);
-        changedLearningObjectDAO.removeAllByLearningObject(2);
+        changedLearningObjectDao.removeAllByLearningObject(1);
+        changedLearningObjectDao.removeAllByLearningObject(2);
 
-        List<ChangedLearningObject> changesAfter = changedLearningObjectDAO.findAll();
+        List<ChangedLearningObject> changesAfter = changedLearningObjectDao.findAll();
         assertTrue(changesAfter.size() == 0);
     }
 
@@ -78,18 +78,18 @@ public class ChangedLearningObjectDAOTest extends DatabaseTestBase {
         ChangedLearningObject change2 = new ChangedLearningObject();
         ChangedLearningObject change3 = new ChangedLearningObject();
 
-        ChangedLearningObject saved1 = changedLearningObjectDAO.update(change1);
-        ChangedLearningObject saved2 = changedLearningObjectDAO.update(change2);
-        ChangedLearningObject saved3 = changedLearningObjectDAO.update(change3);
+        ChangedLearningObject saved1 = changedLearningObjectDao.createOrUpdate(change1);
+        ChangedLearningObject saved2 = changedLearningObjectDao.createOrUpdate(change2);
+        ChangedLearningObject saved3 = changedLearningObjectDao.createOrUpdate(change3);
 
-        List<ChangedLearningObject> changes = changedLearningObjectDAO.findAll();
+        List<ChangedLearningObject> changes = changedLearningObjectDao.findAll();
         assertTrue(changes.size() == 3);
 
-        assertTrue(changedLearningObjectDAO.removeById(saved1.getId()));
-        assertTrue(changedLearningObjectDAO.removeById(saved2.getId()));
-        assertTrue(changedLearningObjectDAO.removeById(saved3.getId()));
+        assertTrue(changedLearningObjectDao.removeById(saved1.getId()));
+        assertTrue(changedLearningObjectDao.removeById(saved2.getId()));
+        assertTrue(changedLearningObjectDao.removeById(saved3.getId()));
 
-        List<ChangedLearningObject> changesAfter = changedLearningObjectDAO.findAll();
+        List<ChangedLearningObject> changesAfter = changedLearningObjectDao.findAll();
         assertTrue(changesAfter.size() == 0);
     }
 

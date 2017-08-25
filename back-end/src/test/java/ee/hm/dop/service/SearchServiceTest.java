@@ -2,7 +2,7 @@ package ee.hm.dop.service;
 
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
-import ee.hm.dop.dao.UserFavoriteDAO;
+import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
 import ee.hm.dop.model.Language;
@@ -54,7 +54,7 @@ public class SearchServiceTest {
     private LearningObjectDAO learningObjectDAO;
 
     @Mock
-    private UserFavoriteDAO userFavoriteDAO;
+    private UserFavoriteDao userFavoriteDao;
 
     @Mock
     private TargetGroupService targetGroupService;
@@ -995,7 +995,7 @@ public class SearchServiceTest {
         expect(reducedLearningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
             for (Long id : learningObjectIdentifiers) {
-                expect(userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
+                expect(userFavoriteDao.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
             }
         }
 
@@ -1077,11 +1077,11 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(solrEngineService, learningObjectDAO, userFavoriteDAO, reducedLearningObjectDAO);
+        replay(solrEngineService, learningObjectDAO, userFavoriteDao, reducedLearningObjectDAO);
     }
 
     private void verifyAll() {
-        verify(solrEngineService, learningObjectDAO, userFavoriteDAO, reducedLearningObjectDAO);
+        verify(solrEngineService, learningObjectDAO, userFavoriteDao, reducedLearningObjectDAO);
     }
 
     private ReducedMaterial createMaterial(Long id) {

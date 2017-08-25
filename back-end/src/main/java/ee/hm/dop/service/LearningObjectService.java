@@ -3,7 +3,7 @@ package ee.hm.dop.service;
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
-import ee.hm.dop.dao.UserFavoriteDAO;
+import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -35,7 +35,7 @@ public class LearningObjectService extends BaseService {
     private SolrEngineService solrEngineService;
 
     @Inject
-    private UserFavoriteDAO userFavoriteDAO;
+    private UserFavoriteDao userFavoriteDao;
 
     @Inject
     private MaterialDAO materialDAO;
@@ -239,23 +239,23 @@ public class LearningObjectService extends BaseService {
         userFavorite.setCreator(loggedInUser);
         userFavorite.setLearningObject(learningObject);
 
-        return userFavoriteDAO.update(userFavorite);
+        return userFavoriteDao.createOrUpdate(userFavorite);
     }
 
     public void removeUserFavorite(Long id, User loggedInUser) {
         LearningObject learningObject = learningObjectDAO.findById(id);
 
         validateLearningObjectAndIdNotNull(learningObject);
-        userFavoriteDAO.deleteByLearningObjectAndUser(learningObject, loggedInUser);
+        userFavoriteDao.deleteByLearningObjectAndUser(learningObject, loggedInUser);
     }
 
     public UserFavorite hasFavorited(Long id, User loggedInUser) {
         if(id == null || loggedInUser == null) return null;
-        return userFavoriteDAO.findFavoriteByUserAndLearningObject(id, loggedInUser);
+        return userFavoriteDao.findFavoriteByUserAndLearningObject(id, loggedInUser);
     }
 
     public List<ReducedLearningObject> getUserFavorites(User loggedInUser, int start, int maxResult) {
-        return userFavoriteDAO.findUsersFavoritedLearningObjects(loggedInUser, start, maxResult);
+        return userFavoriteDao.findUsersFavoritedLearningObjects(loggedInUser, start, maxResult);
     }
 
     private void validateLearningObjectAndIdNotNull(LearningObject learningObject) {
@@ -265,6 +265,6 @@ public class LearningObjectService extends BaseService {
     }
 
     public long getUserFavoritesSize(User loggedInUser) {
-        return userFavoriteDAO.findUsersFavoritedLearningObjectsCount(loggedInUser);
+        return userFavoriteDao.findUsersFavoritedLearningObjectsCount(loggedInUser);
     }
 }

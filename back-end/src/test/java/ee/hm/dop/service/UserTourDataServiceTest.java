@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.UserTourDataDAO;
+import ee.hm.dop.dao.UserTourDataDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserTourData;
 import org.easymock.EasyMockRunner;
@@ -19,7 +19,7 @@ public class UserTourDataServiceTest {
     private UserTourDataService userTourDataService = new UserTourDataService();
 
     @Mock
-    private UserTourDataDAO userTourDataDAO;
+    private UserTourDataDao userTourDataDao;
 
     @Test
     public void getUserTourData() {
@@ -29,13 +29,13 @@ public class UserTourDataServiceTest {
         expected.setUser(user);
         expected.setGeneralTour(true);
 
-        expect(userTourDataDAO.getUserTourData(user)).andReturn(expected);
+        expect(userTourDataDao.getUserTourData(user)).andReturn(expected);
 
-        replay(userTourDataDAO);
+        replay(userTourDataDao);
 
         UserTourData userTourData = userTourDataService.getUserTourData(user);
 
-        verify(userTourDataDAO);
+        verify(userTourDataDao);
 
         assertNotNull(userTourData);
         assertEquals(userTourData.getUser().getId(), user.getId());
@@ -50,17 +50,17 @@ public class UserTourDataServiceTest {
         UserTourData newData = new UserTourData();
         newData.setUser(user);
 
-        expect(userTourDataDAO.getUserTourData(user)).andReturn(null);
-        expect(userTourDataDAO.addUserTourData(anyObject(UserTourData.class))).andReturn(newData);
+        expect(userTourDataDao.getUserTourData(user)).andReturn(null);
+        expect(userTourDataDao.createOrUpdate(anyObject(UserTourData.class))).andReturn(newData);
 
-        replay(userTourDataDAO);
+        replay(userTourDataDao);
 
         UserTourData userTourData = userTourDataService.getUserTourData(user);
         assertEquals(userTourData.getUser().getId(), user.getId());
         assertFalse(userTourData.isGeneralTour());
         assertFalse(userTourData.isEditTour());
 
-        verify(userTourDataDAO);
+        verify(userTourDataDao);
     }
 
     @Test
@@ -73,15 +73,15 @@ public class UserTourDataServiceTest {
         newData.setEditTour(true);
         newData.setGeneralTour(true);
 
-        expect(userTourDataDAO.addUserTourData(newData)).andReturn(newData);
-        expect(userTourDataDAO.getUserTourData(user)).andReturn(newData);
+        expect(userTourDataDao.createOrUpdate(newData)).andReturn(newData);
+        expect(userTourDataDao.getUserTourData(user)).andReturn(newData);
 
-        replay(userTourDataDAO);
+        replay(userTourDataDao);
 
         UserTourData added = userTourDataService.addUserTourData(newData, user);
         UserTourData receivedData = userTourDataService.getUserTourData(user);
 
-        verify(userTourDataDAO);
+        verify(userTourDataDao);
 
         assertNotNull(added);
         assertNotNull(receivedData);

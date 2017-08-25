@@ -2,27 +2,27 @@ package ee.hm.dop.service;
 
 
 import com.google.inject.Inject;
-import ee.hm.dop.dao.UserTourDataDAO;
+import ee.hm.dop.dao.UserTourDataDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserTourData;
 
 public class UserTourDataService {
 
     @Inject
-    private UserTourDataDAO userTourDataDAO;
+    private UserTourDataDao userTourDataDao;
 
     public UserTourData getUserTourData(User user) {
         if (user == null) {
             throw new RuntimeException("User not logged in");
         }
 
-        UserTourData userTourData = userTourDataDAO.getUserTourData(user);
+        UserTourData userTourData = userTourDataDao.getUserTourData(user);
 
         if (userTourData == null) {
             UserTourData newUserTourData = new UserTourData();
             newUserTourData.setUser(user);
 
-            userTourData = userTourDataDAO.addUserTourData(newUserTourData);
+            userTourData = userTourDataDao.createOrUpdate(newUserTourData);
         }
 
         return userTourData;
@@ -37,6 +37,6 @@ public class UserTourDataService {
             throw new RuntimeException("Access denied");
         }
 
-        return userTourDataDAO.addUserTourData(userTourData);
+        return userTourDataDao.createOrUpdate(userTourData);
     }
 }

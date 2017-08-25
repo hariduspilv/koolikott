@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
 
 
 @Entity
-public class Version {
+public class Version extends AbstractEntity {
 
     @Id
     @GeneratedValue

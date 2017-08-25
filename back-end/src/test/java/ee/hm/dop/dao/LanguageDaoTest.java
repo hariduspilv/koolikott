@@ -15,14 +15,14 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import org.junit.Test;
 
-public class LanguageDAOTest extends DatabaseTestBase {
+public class LanguageDaoTest extends DatabaseTestBase {
 
     @Inject
-    private LanguageDAO languageDAO;
+    private LanguageDao languageDao;
 
     @Test
     public void findByCode() {
-        Language language1 = languageDAO.findByCode("est");
+        Language language1 = languageDao.findByCode("est");
 
         assertNotNull(language1);
         assertEquals(new Long(1), language1.getId());
@@ -31,7 +31,7 @@ public class LanguageDAOTest extends DatabaseTestBase {
         assertEquals(1, language1.getCodes().size());
         assertEquals("et", language1.getCodes().get(0));
 
-        Language language2 = languageDAO.findByCode("fr");
+        Language language2 = languageDao.findByCode("fr");
         assertNotNull(language2);
         assertEquals(new Long(6), language2.getId());
         assertEquals("fre", language2.getCode());
@@ -42,17 +42,17 @@ public class LanguageDAOTest extends DatabaseTestBase {
 
     @Test
     public void findByCodePassingNull() {
-        assertNull(languageDAO.findByCode(null));
+        assertNull(languageDao.findByCode(null));
     }
 
     @Test
     public void findByCodePassingNotExistingLanguage() {
-        assertNull(languageDAO.findByCode("doesntExist"));
+        assertNull(languageDao.findByCode("doesntExist"));
     }
 
     @Test
     public void findAll() {
-        List<Language> languages = languageDAO.findAll();
+        List<Language> languages = languageDao.findAll();
         assertEquals(6, languages.size());
 
         List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese", "French");

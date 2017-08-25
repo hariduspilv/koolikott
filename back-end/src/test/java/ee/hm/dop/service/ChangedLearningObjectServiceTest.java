@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.ChangedLearningObjectDAO;
+import ee.hm.dop.dao.ChangedLearningObjectDao;
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
@@ -35,7 +35,7 @@ public class ChangedLearningObjectServiceTest {
     private LearningObjectService learningObjectService;
 
     @Mock
-    private ChangedLearningObjectDAO changedLearningObjectDAO;
+    private ChangedLearningObjectDao changedLearningObjectDao;
 
     @Mock
     private LearningObjectDAO learningObjectDAO;
@@ -55,10 +55,10 @@ public class ChangedLearningObjectServiceTest {
         changedLearningObject.setChanger(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(changedLearningObjectDAO.update(changedLearningObject)).andReturn(changedLearningObject);
-        expect(changedLearningObjectDAO.findAll()).andReturn(Collections.singletonList(changedLearningObject));
+        expect(changedLearningObjectDao.createOrUpdate(changedLearningObject)).andReturn(changedLearningObject);
+        expect(changedLearningObjectDao.findAll()).andReturn(Collections.singletonList(changedLearningObject));
         replay(learningObjectService);
-        replay(changedLearningObjectDAO);
+        replay(changedLearningObjectDao);
 
         ChangedLearningObject updated = changedLearningObjectService.addChanged(changedLearningObject);
 
@@ -92,11 +92,11 @@ public class ChangedLearningObjectServiceTest {
         change2.setChanger(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(changedLearningObjectDAO.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
-        expect(changedLearningObjectDAO.removeAllByLearningObject(1L)).andReturn(true);
+        expect(changedLearningObjectDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
+        expect(changedLearningObjectDao.removeAllByLearningObject(1L)).andReturn(true);
         expect(learningObjectDAO.update(material)).andReturn(material);
         replay(learningObjectService);
-        replay(changedLearningObjectDAO);
+        replay(changedLearningObjectDao);
         replay(learningObjectDAO);
 
         LearningObject updated = changedLearningObjectService.revertAllChanges(1L, user);

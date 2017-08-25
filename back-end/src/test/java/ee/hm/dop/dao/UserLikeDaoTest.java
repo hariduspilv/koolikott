@@ -12,14 +12,14 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Searchable;
 import org.junit.Test;
 
-public class UserLikeDAOTest extends DatabaseTestBase {
+public class UserLikeDaoTest extends DatabaseTestBase {
 
     @Inject
-    private UserLikeDAO userLikeDAO;
+    private UserLikeDao userLikeDao;
 
     @Test
     public void findMostLikedSince() {
-        List<Searchable> objects = userLikeDAO.findMostLikedSince(now().minusDays(100), 5);
+        List<Searchable> objects = userLikeDao.findMostLikedSince(now().minusDays(100), 5);
         assertEquals(3, objects.size());
 
         assertEquals(new Long(103), objects.get(0).getId());
@@ -29,7 +29,7 @@ public class UserLikeDAOTest extends DatabaseTestBase {
 
     @Test
     public void findMostLikedSinceFuture() {
-        List<Searchable> objects = userLikeDAO.findMostLikedSince(now().plusDays(1), 5);
+        List<Searchable> objects = userLikeDao.findMostLikedSince(now().plusDays(1), 5);
         assertTrue(objects.isEmpty());
     }
 }

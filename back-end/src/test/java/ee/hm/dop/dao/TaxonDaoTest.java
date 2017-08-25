@@ -12,17 +12,17 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TaxonDAOTest extends DatabaseTestBase {
+public class TaxonDaoTest extends DatabaseTestBase {
 
     @Inject
-    private TaxonDAO taxonDAO;
+    private TaxonDao taxonDao;
 
     @Test
     public void findTaxonById() {
         Long id = 11L;
         String name = "ForeignLanguage";
 
-        Domain domain = (Domain) taxonDAO.findTaxonById(id);
+        Domain domain = (Domain) taxonDao.findTaxonById(id);
 
         assertNotNull(domain);
         assertEquals(id, domain.getId());
@@ -34,7 +34,7 @@ public class TaxonDAOTest extends DatabaseTestBase {
         Long id = 1L;
         String name = "PRESCHOOLEDUCATION";
 
-        EducationalContext educationalContext = taxonDAO.findEducationalContextByName(name);
+        EducationalContext educationalContext = (EducationalContext) taxonDao.findContextByName(name, TaxonDao.EDUCATIONAL_CONTEXT);
 
         assertEducationalContext(id, name, educationalContext);
     }
@@ -44,7 +44,7 @@ public class TaxonDAOTest extends DatabaseTestBase {
         Long id = 1L;
         String name = "PRESCHOOLEDUCATION";
 
-        EducationalContext educationalContext = taxonDAO.findEducationalContextByName("preschooleducation");
+        EducationalContext educationalContext = (EducationalContext) taxonDao.findContextByName("preschooleducation", TaxonDao.EDUCATIONAL_CONTEXT);
 
         assertEducationalContext(id, name, educationalContext);
     }
@@ -59,13 +59,13 @@ public class TaxonDAOTest extends DatabaseTestBase {
 
     @Test
     public void findAllEducationalContext() {
-        List<EducationalContext> educationalContexts = taxonDAO.findAllEducationalContext();
+        List<EducationalContext> educationalContexts = taxonDao.findAllEducationalContext();
         assertEquals(9, educationalContexts.stream().distinct().count());
     }
 
     @Test
     public void findTaxonByRepoName() {
-        Taxon taxon = taxonDAO.findTaxonByRepoName("Mathematics", "EstCoreTaxonMapping", Domain.class);
+        Taxon taxon = taxonDao.findTaxonByRepoName("Mathematics", "EstCoreTaxonMapping", Domain.class);
 
         assertNotNull(taxon);
         assertNotNull(taxon.getId());
@@ -73,7 +73,7 @@ public class TaxonDAOTest extends DatabaseTestBase {
 
     @Test
     public void findTaxonByRepoNameIgnoreCase() {
-        Taxon taxon = taxonDAO.findTaxonByRepoName("matheMAtics", "EstCoreTaxonMapping", Domain.class);
+        Taxon taxon = taxonDao.findTaxonByRepoName("matheMAtics", "EstCoreTaxonMapping", Domain.class);
 
         assertNotNull(taxon);
         assertNotNull(taxon.getId());

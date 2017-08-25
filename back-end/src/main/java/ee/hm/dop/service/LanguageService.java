@@ -4,20 +4,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.LanguageDAO;
+import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.model.Language;
 
 public class LanguageService {
 
     @Inject
-    private LanguageDAO languageDAO;
+    private LanguageDao languageDao;
 
     public Language getLanguage(String languageCode) {
-        return languageDAO.findByCode(languageCode);
+        return languageDao.findByCode(languageCode);
     }
 
     public List<Language> getAll() {
-        return languageDAO.findAll();
+        return languageDao.findAll();
     }
 
 }

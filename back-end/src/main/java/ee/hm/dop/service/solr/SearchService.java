@@ -1,7 +1,7 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
-import ee.hm.dop.dao.UserFavoriteDAO;
+import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
@@ -38,7 +38,7 @@ public class SearchService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private UserFavoriteDAO userFavoriteDAO;
+    private UserFavoriteDao userFavoriteDao;
     @Inject
     private ReducedLearningObjectDAO reducedLearningObjectDAO;
 
@@ -75,7 +75,7 @@ public class SearchService {
         if (!learningObjectIds.isEmpty()) {
             reducedLearningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
                 if (loggedInUser != null) {
-                    UserFavorite userFavorite = userFavoriteDAO.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
+                    UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
                     searchable.setFavorite(userFavorite != null && userFavorite.getId() != null);
                 }
                 unsortedSearchable.add(searchable);
