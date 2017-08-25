@@ -27,19 +27,15 @@ public class PictureService {
 
     private static final int LG_XS_THUMBNAIL_WIDTH = 600;
     private static final int LG_THUMBNAIL_WIDTH = 300;
-
     private static final int SM_THUMBNAIL_WIDTH = 200;
     private static final int SM_THUMBNAIL_HEIGHT = 134;
-
     private static final int SM_XS_XL_THUMBNAIL_WIDTH = 300;
     private static final int SM_XS_XL_THUMBNAIL_HEIGHT = 200;
-
     private static final String DEFAULT_PICTURE_FORMAT = "jpg";
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
     private OriginalPictureDao originalPictureDao;
-
     @Inject
     private ThumbnailDao thumbnailDao;
 
@@ -51,7 +47,7 @@ public class PictureService {
     }
 
     public Thumbnail getSMThumbnailByName(String name) {
-        Thumbnail thumbnail = (Thumbnail) thumbnailDao.findByNameAndSize(name, Size.SM);
+        Thumbnail thumbnail = thumbnailDao.findByNameAndSize(name, Size.SM);
 
         if (thumbnail == null) {
             Picture existingPicture = getByName(name);
@@ -69,7 +65,7 @@ public class PictureService {
     }
 
     public Thumbnail getSMLargeThumbnailByName(String name) {
-        Thumbnail thumbnail = (Thumbnail) thumbnailDao.findByNameAndSize(name, Size.SM_XS_XL);
+        Thumbnail thumbnail = thumbnailDao.findByNameAndSize(name, Size.SM_XS_XL);
 
         if (thumbnail == null) {
             Picture existingPicture = getByName(name);
@@ -87,7 +83,7 @@ public class PictureService {
     }
 
     public Thumbnail getLGLargeThumbnailByName(String name) {
-        Thumbnail thumbnail = (Thumbnail) thumbnailDao.findByNameAndSize(name, Size.LG_XS);
+        Thumbnail thumbnail = thumbnailDao.findByNameAndSize(name, Size.LG_XS);
 
         if (thumbnail == null) {
             Picture existingPicture = getByName(name);
@@ -105,7 +101,7 @@ public class PictureService {
     }
 
     public Thumbnail getLGThumbnailByName(String name) {
-        Thumbnail thumbnail = (Thumbnail) thumbnailDao.findByNameAndSize(name, Size.LG);
+        Thumbnail thumbnail = thumbnailDao.findByNameAndSize(name, Size.LG);
 
         if (thumbnail == null) {
             Picture existingPicture = getByName(name);
@@ -182,7 +178,6 @@ public class PictureService {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, SM_THUMBNAIL_WIDTH, SM_THUMBNAIL_HEIGHT);
         thumbnail.setSize(Size.SM);
         thumbnailDao.createOrUpdate(thumbnail);
-
         return thumbnail;
     }
 
@@ -190,7 +185,6 @@ public class PictureService {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, SM_XS_XL_THUMBNAIL_WIDTH, SM_XS_XL_THUMBNAIL_HEIGHT);
         thumbnail.setSize(Size.SM_XS_XL);
         thumbnailDao.createOrUpdate(thumbnail);
-
         return thumbnail;
     }
 
@@ -198,7 +192,6 @@ public class PictureService {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, LG_XS_THUMBNAIL_WIDTH);
         thumbnail.setSize(Size.LG_XS);
         thumbnailDao.createOrUpdate(thumbnail);
-
         return thumbnail;
     }
 
@@ -206,7 +199,6 @@ public class PictureService {
         Thumbnail thumbnail = getThumbnailFromPicture(picture, LG_THUMBNAIL_WIDTH);
         thumbnail.setSize(Size.LG);
         thumbnailDao.createOrUpdate(thumbnail);
-
         return thumbnail;
     }
 

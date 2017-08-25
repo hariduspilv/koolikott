@@ -18,12 +18,10 @@ import org.slf4j.LoggerFactory;
 public class MobileIDLoginService {
 
     private static Logger logger = LoggerFactory.getLogger(MobileIDLoginService.class);
-
     protected static final String ESTONIAN_CALLING_CODE = "+372";
 
     @Inject
     private MobileIDSOAPService mobileIDSOAPService;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
 
@@ -33,15 +31,12 @@ public class MobileIDLoginService {
         if (!phoneNumber.startsWith("+")) {
             phoneNumber = ESTONIAN_CALLING_CODE + phoneNumber;
         }
-
         if (!phoneNumber.startsWith(ESTONIAN_CALLING_CODE)) {
             logger.info("Non-Estonian mobile numbers are not allowed.");
             return null;
         }
 
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
-
+        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode, language);
         if (mobileAuthenticateResponse == null) {
             return null;
         }
@@ -60,7 +55,6 @@ public class MobileIDLoginService {
             logger.info("Invalid token.");
             return false;
         }
-
         return mobileIDSOAPService.isAuthenticated(authenticationState);
     }
 

@@ -58,11 +58,6 @@ public class UserService extends BaseService {
         return userDao.createOrUpdate(user);
     }
 
-    public Role getUserRole(String userName) {
-        User user = userDao.findUserByUsername(userName);
-        return user.getRole();
-    }
-
     // Only users with role 'USER' can be restricted
     public User restrictUser(User user) {
         user = getUserByUsername(user.getUsername());

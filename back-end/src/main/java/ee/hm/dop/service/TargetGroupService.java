@@ -16,7 +16,6 @@ public class TargetGroupService {
     private static final String TARGET_GROUP_TRANSLATION_PREFIX = "TARGET_GROUP_";
     @Inject
     private TranslationService translationService;
-
     @Inject
     private TargetGroupDao targetGroupDao;
 

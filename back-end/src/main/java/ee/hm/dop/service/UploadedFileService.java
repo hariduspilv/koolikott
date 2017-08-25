@@ -37,10 +37,8 @@ public class UploadedFileService {
 
     @Inject
     private UploadedFileDao uploadedFileDao;
-
     @Inject
     private Configuration configuration;
-
     @Inject
     private ZipService zipService;
 

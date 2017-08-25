@@ -99,14 +99,10 @@ public class SolrService implements SolrEngineService {
             for (Suggestion suggestion : combinedSuggestions) {
                 suggestions.add(suggestion.getTerm());
             }
-
             return suggestions.size() > SUGGEST_COUNT ? suggestions.subList(0, SUGGEST_COUNT - 1) : suggestions;
         }
-
-
         return null;
     }
-
 
     @Override
     public void updateIndex() {
@@ -119,11 +115,8 @@ public class SolrService implements SolrEngineService {
     }
 
     SearchResponse executeCommand(String command) {
-        SearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON)
-                .get(SearchResponse.class);
-
+        SearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON).get(SearchResponse.class);
         logCommand(command, searchResponse);
-
         return searchResponse;
     }
 
@@ -132,8 +125,9 @@ public class SolrService implements SolrEngineService {
 
         String statusMessages = "";
         if (searchResponse.getStatusMessages() != null) {
-            statusMessages = "Status messages: " + searchResponse.getStatusMessages().entrySet() //
-                    .stream().map(Entry::toString).collect(Collectors.joining(";", "[", "]"));
+            statusMessages = "Status messages: " + searchResponse.getStatusMessages().entrySet().stream()
+                    .map(Entry::toString)
+                    .collect(Collectors.joining(";", "[", "]"));
         }
 
         String logMessage = String.format("Solr responded with code %s, url was %s %s", responseCode,
@@ -171,22 +165,15 @@ public class SolrService implements SolrEngineService {
     }
 
     private String encodeQuery(String query) {
-        String encodedQuery;
         try {
-            encodedQuery = URLEncoder.encode(query, UTF_8.name());
+            return URLEncoder.encode(query, UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-
-        return encodedQuery;
     }
 
     private String formatSort(String sort) {
-        if (sort != null) {
-            return encodeQuery(sort);
-        } else {
-            return "";
-        }
+        return sort != null ? encodeQuery(sort) : "";
     }
 
     private class SolrIndexThread extends Thread {

@@ -20,16 +20,17 @@ public class TagUpVoteDao extends AbstractDao<TagUpVote> {
         if (tagUpVote.getId() == null) {
             throw new InvalidParameterException("tagUpVote does not exist.");
         }
-
         tagUpVote.setDeleted(deleted);
         createOrUpdate(tagUpVote);
     }
 
     public TagUpVote findByTagAndUserAndLearningObject(Tag tag, User user, LearningObject learningObject) {
         TypedQuery<TagUpVote> query = getEntityManager().createQuery(
-                "SELECT t FROM TagUpVote t WHERE t.deleted = false " +
+                "SELECT t FROM TagUpVote t " +
+                        "WHERE t.deleted = false " +
                         "and t.learningObject = :learningObject " +
-                        "and t.user = :user and t.tag = :tag", entity())
+                        "and t.user = :user " +
+                        "and t.tag = :tag", entity())
                 .setParameter("learningObject", learningObject)
                 .setParameter("user", user)
                 .setParameter("tag", tag);
@@ -38,7 +39,10 @@ public class TagUpVoteDao extends AbstractDao<TagUpVote> {
 
     public List<TagUpVote> findByLearningObjectAndTag(LearningObject learningObject, Tag tag) {
         return getEntityManager().createQuery(
-                "SELECT t FROM TagUpVote t WHERE t.learningObject = :learningObject AND t.tag = :tag AND t.deleted = false", entity()) //
+                "SELECT t FROM TagUpVote t " +
+                        "WHERE t.learningObject = :learningObject " +
+                        "AND t.tag = :tag " +
+                        "AND t.deleted = false", entity()) //
                 .setParameter("learningObject", learningObject) //
                 .setParameter("tag", tag) //
                 .getResultList();

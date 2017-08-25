@@ -13,20 +13,18 @@ import ee.hm.dop.service.solr.SolrEngineService;
 public class SuggestService {
 
     @Inject
-    SolrEngineService solrEngineService;
+    private SolrEngineService solrEngineService;
 
-    public Response suggest(String query, boolean suggestTags){
-
-        if(query.isEmpty()){
+    public Response suggest(String query, boolean suggestTags) {
+        if (query.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-
         List<String> suggestResponse = doSuggest(query, suggestTags);
 
         return Response.ok(suggestResponse).build();
     }
 
-    private List<String> doSuggest(String query, boolean suggestTags){
+    private List<String> doSuggest(String query, boolean suggestTags) {
         return solrEngineService.suggest(query, suggestTags);
     }
 

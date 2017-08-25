@@ -14,7 +14,6 @@ public class TaxonService {
 
     @Inject
     private TranslationService translationService;
-
     @Inject
     private TaxonDao taxonDao;
 
