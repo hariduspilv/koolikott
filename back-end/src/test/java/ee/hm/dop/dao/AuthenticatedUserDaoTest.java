@@ -12,13 +12,13 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 
-public class AuthenticatedUserDAOTest extends DatabaseTestBase {
+public class AuthenticatedUserDaoTest extends DatabaseTestBase {
 
     @Inject
-    private AuthenticatedUserDAO authenticatedUserDAO;
+    private AuthenticatedUserDao authenticatedUserDao;
 
     @Inject
-    private UserDAO userDAO;
+    private UserDao userDao;
 
     @Test
     public void createAuthenticatedUser() {
@@ -28,8 +28,8 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
 
         assertEquals(user, returnedAuthenticatedUser.getUser());
 
-        authenticatedUserDAO.delete(returnedAuthenticatedUser);
-        userDAO.delete(user);
+        authenticatedUserDao.delete(returnedAuthenticatedUser);
+        userDao.delete(user);
     }
 
     @Test
@@ -43,14 +43,14 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
         authenticatedUser2.setUser(user);
 
         try {
-            authenticatedUserDAO.createAuthenticatedUser(authenticatedUser2);
+            authenticatedUserDao.createAuthenticatedUser(authenticatedUser2);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // expected
         }
 
-        authenticatedUserDAO.delete(returnedAuthenticatedUser);
-        userDAO.delete(user);
+        authenticatedUserDao.delete(returnedAuthenticatedUser);
+        userDao.delete(user);
     }
 
     @Test
@@ -61,17 +61,17 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
 
         AuthenticatedUser authenticatedUser2 = createAuthenticatedUser(user, "token2");
 
-        AuthenticatedUser returnedUser1 = authenticatedUserDAO.createAuthenticatedUser(authenticatedUser1);
-        AuthenticatedUser returnedUser2 = authenticatedUserDAO.createAuthenticatedUser(authenticatedUser2);
+        AuthenticatedUser returnedUser1 = authenticatedUserDao.createAuthenticatedUser(authenticatedUser1);
+        AuthenticatedUser returnedUser2 = authenticatedUserDao.createAuthenticatedUser(authenticatedUser2);
 
-        assertEquals(authenticatedUser1.getUser(), authenticatedUserDAO.findAuthenticatedUserByToken("token1")
+        assertEquals(authenticatedUser1.getUser(), authenticatedUserDao.findAuthenticatedUserByToken("token1")
                 .getUser());
-        assertEquals(authenticatedUser2.getUser(), authenticatedUserDAO.findAuthenticatedUserByToken("token2")
+        assertEquals(authenticatedUser2.getUser(), authenticatedUserDao.findAuthenticatedUserByToken("token2")
                 .getUser());
 
-        authenticatedUserDAO.delete(returnedUser1);
-        authenticatedUserDAO.delete(returnedUser2);
-        userDAO.delete(user);
+        authenticatedUserDao.delete(returnedUser1);
+        authenticatedUserDao.delete(returnedUser2);
+        userDao.delete(user);
     }
 
     @Test
@@ -80,10 +80,10 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
 
         AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");
 
-        assertEquals("123123", authenticatedUserDAO.findAuthenticatedUserByToken("123123").getToken());
+        assertEquals("123123", authenticatedUserDao.findAuthenticatedUserByToken("123123").getToken());
 
-        authenticatedUserDAO.delete(returnedAuthenticatedUser);
-        userDAO.delete(user);
+        authenticatedUserDao.delete(returnedAuthenticatedUser);
+        userDao.delete(user);
     }
 
     @Test
@@ -91,17 +91,17 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
         User user = getUser();
         AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");
 
-        authenticatedUserDAO.delete(returnedAuthenticatedUser);
-        assertNull(authenticatedUserDAO.findAuthenticatedUserByToken("123123"));
+        authenticatedUserDao.delete(returnedAuthenticatedUser);
+        assertNull(authenticatedUserDao.findAuthenticatedUserByToken("123123"));
 
-        userDAO.delete(user);
+        userDao.delete(user);
     }
 
     private AuthenticatedUser createAuthenticatedUser(User user, String token) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setToken(token);
         authenticatedUser.setUser(user);
-        return authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
+        return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
     }
 
     private User getUser() {
@@ -110,7 +110,7 @@ public class AuthenticatedUserDAOTest extends DatabaseTestBase {
         user.setSurname("Maasikas2");
         user.setUsername("mati2.maasikas2");
         user.setIdCode("12345678969");
-        return userDAO.update(user);
+        return userDao.createOrUpdate(user);
     }
 
 }

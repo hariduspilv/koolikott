@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
-import ee.hm.dop.dao.UserDAO;
+import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
@@ -24,16 +24,16 @@ public class UserService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Inject
-    private UserDAO userDAO;
+    private UserDao userDao;
     @Inject
     private TaxonService taxonService;
 
     public User getUserByIdCode(String idCode) {
-        return userDAO.findUserByIdCode(idCode);
+        return userDao.findUserByIdCode(idCode);
     }
 
     public User getUserByUsername(String username) {
-        return userDAO.findUserByUsername(username);
+        return userDao.findUserByUsername(username);
     }
 
     public User create(String idCode, String name, String surname) {
@@ -55,11 +55,11 @@ public class UserService extends BaseService {
         logger.info(format("Creating user: username = %s; name = %s; surname = %s; idCode = %s", user.getUsername(),
                 user.getName(), user.getSurname(), user.getIdCode()));
 
-        return userDAO.update(user);
+        return userDao.createOrUpdate(user);
     }
 
     public Role getUserRole(String userName) {
-        User user = userDAO.findUserByUsername(userName);
+        User user = userDao.findUserByUsername(userName);
         return user.getRole();
     }
 
@@ -85,21 +85,21 @@ public class UserService extends BaseService {
 
     public List<User> getModerators(User loggedInUser) {
         if (isUserAdmin(loggedInUser)) {
-            return userDAO.getUsersByRole(Role.MODERATOR);
+            return userDao.getUsersByRole(Role.MODERATOR);
         }
         return null;
     }
 
     public List<User> getRestrictedUsers(User loggedInUser) {
         if (isUserAdmin(loggedInUser)) {
-            return userDAO.getUsersByRole(Role.RESTRICTED);
+            return userDao.getUsersByRole(Role.RESTRICTED);
         }
         return null;
     }
 
     public List<User> getAllUsers(User loggedInUser) {
         if (isUserAdmin(loggedInUser)) {
-            return userDAO.getAll();
+            return userDao.findAll();
         }
         return null;
     }
@@ -112,7 +112,7 @@ public class UserService extends BaseService {
         username = Normalizer.normalize(username, Normalizer.Form.NFD);
         username = username.replaceAll("[^\\p{ASCII}]", "");
 
-        Long count = userDAO.countUsersWithSameUsername(username);
+        Long count = userDao.countUsersWithSameUsername(username);
         if (count > 0) {
             username += String.valueOf(count + 1);
         }
@@ -123,7 +123,7 @@ public class UserService extends BaseService {
     private User setUserRole(User user, Role newRole) {
         user.setRole(newRole);
         logger.info(format("Setting user %s, with id code %s role to: %s", user.getUsername(), user.getIdCode(), newRole.toString()));
-        return userDAO.update(user);
+        return userDao.createOrUpdate(user);
     }
 
     public User update(User user, User loggedInUser) {
@@ -147,6 +147,6 @@ public class UserService extends BaseService {
         }
 
         existingUser.setUserTaxons(taxons);
-        return userDAO.update(existingUser);
+        return userDao.createOrUpdate(existingUser);
     }
 }

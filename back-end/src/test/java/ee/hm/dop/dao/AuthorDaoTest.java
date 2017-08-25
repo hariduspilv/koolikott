@@ -12,10 +12,10 @@ import org.junit.Test;
 /**
  * Created by mart on 28.10.15.
  */
-public class AuthorDAOTest extends DatabaseTestBase {
+public class AuthorDaoTest extends DatabaseTestBase {
 
     @Inject
-    private AuthorDAO authorDAO;
+    private AuthorDao authorDao;
 
     @Test
     public void findAuthorByFullName() {
@@ -23,7 +23,7 @@ public class AuthorDAOTest extends DatabaseTestBase {
         String name = "Leonardo";
         String surname = "Fibonacci";
 
-        Author author = authorDAO.findAuthorByFullName(name, surname);
+        Author author = authorDao.findAuthorByFullName(name, surname);
         assertNotNull(author);
         assertNotNull(author.getId());
         assertEquals(id, author.getId());
@@ -37,9 +37,9 @@ public class AuthorDAOTest extends DatabaseTestBase {
         author.setName("Illimar");
         author.setSurname("Onomatöpöa");
 
-        Author created = authorDAO.createOrUpdate(author);
+        Author created = authorDao.createOrUpdate(author);
 
-        Author newAuthor = authorDAO.findAuthorByFullName(created.getName(), created.getSurname());
+        Author newAuthor = authorDao.findAuthorByFullName(created.getName(), created.getSurname());
 
         assertEquals(created.getId(), newAuthor.getId());
         assertEquals(created.getName(), newAuthor.getName());

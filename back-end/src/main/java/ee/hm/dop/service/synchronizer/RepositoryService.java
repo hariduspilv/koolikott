@@ -10,7 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.RepositoryDAO;
+import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
@@ -33,7 +33,7 @@ public class RepositoryService {
     private static final Logger logger = LoggerFactory.getLogger(RepositoryService.class);
 
     @Inject
-    private RepositoryDAO repositoryDAO;
+    private RepositoryDao repositoryDao;
     @Inject
     private RepositoryManager repositoryManager;
     @Inject
@@ -44,7 +44,7 @@ public class RepositoryService {
     private PictureService pictureService;
 
     public List<Repository> getAllRepositorys() {
-        List<Repository> repositories = repositoryDAO.findAll();
+        List<Repository> repositories = repositoryDao.findAll();
 
         if (repositories == null) {
             repositories = Collections.emptyList();
@@ -239,6 +239,6 @@ public class RepositoryService {
     }
 
     private void updateRepositoryData(Repository repository) {
-        repositoryDAO.updateRepository(repository);
+        repositoryDao.updateRepository(repository);
     }
 }

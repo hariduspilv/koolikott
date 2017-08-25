@@ -5,7 +5,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import ee.hm.dop.dao.AuthenticatedUserDAO;
+import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.login.LogoutService;
 import org.easymock.EasyMockRunner;
@@ -21,28 +21,28 @@ public class LogoutServiceTest {
     private LogoutService logoutService = new LogoutService();
 
     @Mock
-    private AuthenticatedUserDAO authenticatedUserDAO;
+    private AuthenticatedUserDao authenticatedUserDao;
 
     @Test
     public void logout() {
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
 
-        authenticatedUserDAO.delete(authenticatedUser);
+        authenticatedUserDao.delete(authenticatedUser);
         expectLastCall();
 
-        replay(authenticatedUserDAO);
+        replay(authenticatedUserDao);
 
         logoutService.logout(authenticatedUser);
 
-        verify(authenticatedUserDAO);
+        verify(authenticatedUserDao);
     }
 
     @Test
     public void logoutNoUser() {
-        replay(authenticatedUserDAO);
+        replay(authenticatedUserDao);
 
         logoutService.logout(null);
 
-        verify(authenticatedUserDAO);
+        verify(authenticatedUserDao);
     }
 }

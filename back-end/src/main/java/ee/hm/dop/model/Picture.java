@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @MappedSuperclass
 @JsonDeserialize(as=OriginalPicture.class)
-public abstract class Picture {
+public abstract class Picture extends AbstractEntity {
 
     @Id
     @GeneratedValue

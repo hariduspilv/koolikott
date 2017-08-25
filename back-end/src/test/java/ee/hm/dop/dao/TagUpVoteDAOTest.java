@@ -21,10 +21,10 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
     private TagUpVoteDAO tagUpVoteDAO;
 
     @Inject
-    private UserDAO userDAO;
+    private UserDao userDao;
 
     @Inject
-    private TagDAO tagDAO;
+    private TagDao tagDao;
 
     @Inject
     private MaterialDAO materialDAO;
@@ -34,8 +34,8 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
 
     @Test
     public void addUpVote() {
-        User user = userDAO.findUserByIdCode("39011220011");
-        Tag tag = tagDAO.findTagByName("matemaatika");
+        User user = userDao.findUserByIdCode("39011220011");
+        Tag tag = tagDao.findByName("matemaatika");
         Material material = materialDAO.findById(1l);
 
         TagUpVote tagUpVote = new TagUpVote();
@@ -52,8 +52,8 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
 
     @Test
     public void getUpVoteForMaterial() {
-        User user = userDAO.findUserByIdCode("39011220011");
-        Tag tag = tagDAO.findTagByName("matemaatika");
+        User user = userDao.findUserByIdCode("39011220011");
+        Tag tag = tagDao.findByName("matemaatika");
         Material material = materialDAO.findById(1l);
 
         TagUpVote tagUpVote = tagUpVoteDAO.findByTagAndUserAndLearningObject(tag, user, material);
@@ -63,8 +63,8 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
 
     @Test
     public void getUpVoteForPortfolio() {
-        User user = userDAO.findUserByIdCode("39011220011");
-        Tag tag = tagDAO.findTagByName("matemaatika");
+        User user = userDao.findUserByIdCode("39011220011");
+        Tag tag = tagDao.findByName("matemaatika");
         Portfolio portfolio = portfolioDAO.findByIdFromAll(101l);
 
         TagUpVote tagUpVote = tagUpVoteDAO.findByTagAndUserAndLearningObject(tag, user, portfolio);
@@ -74,7 +74,7 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
 
     @Test
     public void getMaterialTagUpVotes() {
-        Tag tag = tagDAO.findTagByName("matemaatika");
+        Tag tag = tagDao.findByName("matemaatika");
         Material material = materialDAO.findById(1l);
 
         List<TagUpVote> tagUpVotes = tagUpVoteDAO.findByLearningObjectAndTag(material, tag);
@@ -84,7 +84,7 @@ public class TagUpVoteDAOTest extends DatabaseTestBase {
 
     @Test
     public void getPortfolioTagUpVotes() {
-        Tag tag = tagDAO.findTagByName("matemaatika");
+        Tag tag = tagDao.findByName("matemaatika");
         Portfolio portfolio = portfolioDAO.findByIdFromAll(101l);
 
         List<TagUpVote> tagUpVotes = tagUpVoteDAO.findByLearningObjectAndTag(portfolio, tag);

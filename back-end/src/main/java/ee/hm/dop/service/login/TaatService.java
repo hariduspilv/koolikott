@@ -17,10 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.xml.security.utils.Base64;
@@ -63,7 +62,7 @@ public class TaatService {
     private Configuration configuration;
 
     @Inject
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Inject
     private LoginService loginService;
@@ -124,12 +123,12 @@ public class TaatService {
     }
 
     private void validateAuthenticationToken(String authenticationStateToken) {
-        AuthenticationState authenticationState = authenticationStateDAO
+        AuthenticationState authenticationState = authenticationStateDao
                 .findAuthenticationStateByToken(authenticationStateToken);
         if (authenticationState == null) {
             throw new RuntimeException("Error validating authentication state.");
         } else {
-            authenticationStateDAO.delete(authenticationState);
+            authenticationStateDao.delete(authenticationState);
         }
     }
 
@@ -170,7 +169,7 @@ public class TaatService {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setCreated(new DateTime());
         authenticationState.setToken(token);
-        return authenticationStateDAO.createAuthenticationState(authenticationState);
+        return authenticationStateDao.createAuthenticationState(authenticationState);
     }
 
     private Map<String, String> parseAttributes(Response response) {

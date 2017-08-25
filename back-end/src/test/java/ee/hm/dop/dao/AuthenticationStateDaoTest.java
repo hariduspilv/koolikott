@@ -12,48 +12,48 @@ import ee.hm.dop.model.AuthenticationState;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-public class AuthenticationStateDAOTest extends DatabaseTestBase {
+public class AuthenticationStateDaoTest extends DatabaseTestBase {
 
     @Inject
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Test
     public void createAuthenticationState() {
         AuthenticationState authenticationState = getAuthenticationState();
 
-        AuthenticationState returnedAuthenticationState = authenticationStateDAO
+        AuthenticationState returnedAuthenticationState = authenticationStateDao
                 .createAuthenticationState(authenticationState);
 
         assertEquals(returnedAuthenticationState.getToken(), authenticationState.getToken());
 
-        authenticationStateDAO.delete(returnedAuthenticationState);
+        authenticationStateDao.delete(returnedAuthenticationState);
     }
 
     @Test
     public void createAuthenticationStateSameToken() {
         AuthenticationState authenticationState = getAuthenticationState();
 
-        AuthenticationState returnedAuthenticationState = authenticationStateDAO
+        AuthenticationState returnedAuthenticationState = authenticationStateDao
                 .createAuthenticationState(authenticationState);
 
         AuthenticationState authenticationState2 = new AuthenticationState();
         authenticationState2.setToken("superTOKEN");
 
         try {
-            authenticationStateDAO.createAuthenticationState(authenticationState);
+            authenticationStateDao.createAuthenticationState(authenticationState);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // expected
         }
 
-        authenticationStateDAO.delete(returnedAuthenticationState);
+        authenticationStateDao.delete(returnedAuthenticationState);
     }
 
     @Test
     public void findAuthenticationStateByToken() {
         String token = "testTOKEN";
 
-        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
         assertEquals(token, authenticationState.getToken());
     }
 
@@ -61,11 +61,11 @@ public class AuthenticationStateDAOTest extends DatabaseTestBase {
     public void delete() {
         AuthenticationState authenticationState = getAuthenticationState();
 
-        AuthenticationState returnedAuthenticationState = authenticationStateDAO
+        AuthenticationState returnedAuthenticationState = authenticationStateDao
                 .createAuthenticationState(authenticationState);
 
-        authenticationStateDAO.delete(returnedAuthenticationState);
-        assertNull(authenticationStateDAO.findAuthenticationStateByToken("superTOKEN"));
+        authenticationStateDao.delete(returnedAuthenticationState);
+        assertNull(authenticationStateDao.findAuthenticationStateByToken("superTOKEN"));
     }
 
     private AuthenticationState getAuthenticationState() {

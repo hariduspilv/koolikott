@@ -13,14 +13,14 @@ import ee.hm.dop.model.Repository;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-public class RepositoryDAOTest extends DatabaseTestBase {
+public class RepositoryDaoTest extends DatabaseTestBase {
 
     @Inject
-    private RepositoryDAO repositoryDAO;
+    private RepositoryDao repositoryDao;
 
     @Test
     public void findAll() {
-        List<Repository> repositories = repositoryDAO.findAll();
+        List<Repository> repositories = repositoryDao.findAll();
 
         assertEquals(2, repositories.size());
         assertEquals("http://repo1.ee", repositories.get(0).getBaseURL());
@@ -30,16 +30,16 @@ public class RepositoryDAOTest extends DatabaseTestBase {
 
     @Test
     public void updateRepositoryData() {
-        Repository repository = repositoryDAO.findAll().get(0);
+        Repository repository = repositoryDao.findAll().get(0);
         assertNull(repository.getLastSynchronization());
 
         repository.setLastSynchronization(new DateTime());
-        repositoryDAO.updateRepository(repository);
+        repositoryDao.updateRepository(repository);
 
-        Repository repository2 = repositoryDAO.findAll().get(0);
+        Repository repository2 = repositoryDao.findAll().get(0);
         assertNotNull(repository2.getLastSynchronization());
 
         repository.setLastSynchronization(null);
-        repositoryDAO.updateRepository(repository);
+        repositoryDao.updateRepository(repository);
     }
 }

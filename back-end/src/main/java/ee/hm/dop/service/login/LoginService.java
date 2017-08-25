@@ -1,7 +1,7 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.dao.AuthenticatedUserDAO;
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticatedUserDao;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.service.UserService;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
@@ -37,10 +37,10 @@ public class LoginService {
     private MobileIDLoginService mobileIDLoginService;
 
     @Inject
-    private AuthenticatedUserDAO authenticatedUserDAO;
+    private AuthenticatedUserDao authenticatedUserDao;
 
     @Inject
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Inject
     private EhisSOAPService ehisSOAPService;
@@ -89,14 +89,14 @@ public class LoginService {
         Interval interval = new Interval(authenticationState.getCreated(), new DateTime());
         Duration duration = new Duration(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR);
         if (interval.toDuration().isLongerThan(duration)) {
-            authenticationStateDAO.delete(authenticationState);
+            authenticationStateDao.delete(authenticationState);
             return null;
         }
 
         AuthenticatedUser authenticatedUser = logIn(authenticationState.getIdCode(), authenticationState.getName(),
                 authenticationState.getSurname());
 
-        authenticationStateDAO.delete(authenticationState);
+        authenticationStateDao.delete(authenticationState);
 
         return authenticatedUser;
     }
@@ -129,10 +129,10 @@ public class LoginService {
 
         AuthenticatedUser returnedAuthenticatedUser;
         try {
-            returnedAuthenticatedUser = authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
+            returnedAuthenticatedUser = authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         } catch (DuplicateTokenException e) {
             authenticatedUser.setToken(new BigInteger(130, random).toString(32));
-            returnedAuthenticatedUser = authenticatedUserDAO.createAuthenticatedUser(authenticatedUser);
+            returnedAuthenticatedUser = authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
 
         return returnedAuthenticatedUser;
@@ -148,7 +148,7 @@ public class LoginService {
             logger.info("Authentication not valid.");
             return null;
         }
-        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
         return logIn(authenticationState);
     }
 }

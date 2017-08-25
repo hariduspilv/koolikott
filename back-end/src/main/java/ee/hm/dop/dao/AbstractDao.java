@@ -8,53 +8,68 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public abstract class NewBaseDao<Entity extends AbstractEntity> {
+public abstract class AbstractDao<Entity extends AbstractEntity> {
 
+    public static final String ALIAS = " o ";
     public static final String WHERE = " where ";
     public static final String AND = " and ";
     public static final String OR = " or ";
     public static final String ID = "id";
-    public static final String NAME = "name";
     public static final String SET_DELETED_TRUE = " set o.deleted = true ";
     public static final String UPDATE = "update ";
     @Inject
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
+    private Class<Entity> entity;
+
+    @Inject
+    public void postConstruct() {
+        entity = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    public Class<Entity> entity() {
+        return entity;
+    }
 
     protected EntityManager getEntityManager() {
         return entityManager;
     }
 
-    private static final String ALIAS = " o ";
-
-    public abstract Class<Entity> entity();
-
-    public Entity getById(Long id) {
+    public Entity findById(Long id) {
         return getEntityManager().find(entity(), id);
     }
 
-    public List<Entity> getById(List<Long> id) {
+    public List<Entity> findById(List<Long> id) {
         return getList(getFindByFieldInQuery(ID, id));
     }
 
-    public Entity getByName(String name) {
-        return getByField(NAME, name);
+    public List<Entity> findAll() {
+        return getList(getEntityManager().createQuery(select(), entity()));
     }
 
-    public Entity getByField(String field, Serializable value) {
-        return getSingleResult(getFindByFieldQuery(field, value));
+    public Entity findByName(String value) {
+        return getSingleResult(getFindByFieldQuery("name", value, false));
     }
 
-    public List<Entity> getByFieldList(String field, Serializable value) {
-        return getList(getFindByFieldQuery(field, value));
+    public Entity findByField(String field, Object value) {
+        return getSingleResult(getFindByFieldQuery(field, value, false));
     }
 
-    public Entity getByField(String field1, String value1, String field2, String value2) {
+    public Entity findByFieldLowerCase(String field, Object value) {
+        return getSingleResult(getFindByFieldQuery(field, value, true));
+    }
+
+    public List<Entity> findByFieldList(String field, Object value) {
+        return getList(getFindByFieldQuery(field, value, false));
+    }
+
+    public Entity findByField(String field1, Object value1, String field2, Object value2) {
         return getSingleResult(getFindByFieldQuery(field1, value1, field2, value2));
     }
 
-    public List<Entity> getByFieldList(String field1, String value1, String field2, String value2) {
+    public List<Entity> findByFieldList(String field1, String value1, String field2, String value2) {
         return getList(getFindByFieldQuery(field1, value1, field2, value2));
     }
 
@@ -84,11 +99,13 @@ public abstract class NewBaseDao<Entity extends AbstractEntity> {
         return getEntityManager().createQuery(select() + WHERE + fieldInEquals(field), entity()).setParameter(field, value);
     }
 
-    private TypedQuery<Entity> getFindByFieldQuery(String field, Serializable value) {
-        return getEntityManager().createQuery(select() + WHERE + fieldEquals(field), entity()).setParameter(field, value);
+    private TypedQuery<Entity> getFindByFieldQuery(String field, Object value, boolean useCase) {
+        String fieldEquals = useCase ? fieldEqualsLower(field) : fieldEquals(field);
+        return getEntityManager().createQuery(select() + WHERE + fieldEquals, entity())
+                .setParameter(field, useCase ? value.toString().toLowerCase() : value);
     }
 
-    private TypedQuery<Entity> getFindByFieldQuery(String field1, String value1, String field2, String value2) {
+    private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2) {
         return getEntityManager()
                 .createQuery(select() + WHERE + fieldEquals(field1) + AND + fieldEquals(field2), entity())
                 .setParameter(field1, value1)
@@ -118,6 +135,10 @@ public abstract class NewBaseDao<Entity extends AbstractEntity> {
 
     private String fieldEquals(String field) {
         return "o." + field + " = :" + field;
+    }
+
+    private String fieldEqualsLower(String field) {
+        return "lower(o." + field + ") = :" + field;
     }
 
     private String fieldInEquals(String field) {

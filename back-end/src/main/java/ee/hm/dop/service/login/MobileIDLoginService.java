@@ -6,7 +6,7 @@ import java.security.SecureRandom;
 import javax.inject.Inject;
 import javax.xml.soap.SOAPException;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
@@ -25,7 +25,7 @@ public class MobileIDLoginService {
     private MobileIDSOAPService mobileIDSOAPService;
 
     @Inject
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     private SecureRandom random = new SecureRandom();
 
@@ -55,7 +55,7 @@ public class MobileIDLoginService {
     }
 
     public boolean isAuthenticated(String token) throws SOAPException {
-        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
         if (authenticationState == null) {
             logger.info("Invalid token.");
             return false;
@@ -73,7 +73,7 @@ public class MobileIDLoginService {
         authenticationState.setIdCode(mobileAuthenticateResponse.getIdCode());
         authenticationState.setName(mobileAuthenticateResponse.getName());
         authenticationState.setSurname(mobileAuthenticateResponse.getSurname());
-        return authenticationStateDAO.createAuthenticationState(authenticationState);
+        return authenticationStateDao.createAuthenticationState(authenticationState);
     }
 
 }

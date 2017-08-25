@@ -6,7 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertSame;
 
-import ee.hm.dop.dao.PageDAO;
+import ee.hm.dop.dao.PageDao;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Page;
 import org.easymock.EasyMockRunner;
@@ -22,7 +22,7 @@ public class PageServiceTest {
     private PageService pageService = new PageService();
 
     @Mock
-    private PageDAO pageDao;
+    private PageDao pageDao;
 
     @Test
     public void getPageForSupportedLanguage() {

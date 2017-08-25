@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }))
-public class Page {
+public class Page extends AbstractEntity {
 
     @Id
     @GeneratedValue

@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.ResourceTypeDAO;
+import ee.hm.dop.dao.ResourceTypeDao;
 import ee.hm.dop.model.ResourceType;
 
 import javax.inject.Inject;
@@ -12,18 +12,18 @@ public class ResourceTypeService {
     private TranslationService translationService;
 
     @Inject
-    private ResourceTypeDAO resourceTypeDAO;
+    private ResourceTypeDao resourceTypeDao;
 
     public ResourceType getResourceTypeByName(String name) {
-        return resourceTypeDAO.findResourceTypeByName(name);
+        return resourceTypeDao.findByName(name);
     }
 
     public List<ResourceType> getAllResourceTypes() {
-        return resourceTypeDAO.findAllResourceTypes();
+        return resourceTypeDao.findAll();
     }
 
     public List<ResourceType> getUsedResourceTypes() {
-        return resourceTypeDAO.findUsedResourceTypes();
+        return resourceTypeDao.findUsedResourceTypes();
     }
 
     public ResourceType findResourceByTranslation(String name) {
@@ -32,6 +32,6 @@ public class ResourceTypeService {
             return null;
         }
 
-        return resourceTypeDAO.findResourceTypeByName(translationKey);
+        return resourceTypeDao.findByName(translationKey);
     }
 }

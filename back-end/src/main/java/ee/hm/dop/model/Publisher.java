@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * Created by mart.laus on 22.06.2015.
  */
 @Entity
-public class Publisher {
+public class Publisher extends AbstractEntity {
 
     @Id
     @GeneratedValue

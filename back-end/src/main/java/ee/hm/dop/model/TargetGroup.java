@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @JsonDeserialize(using = TargetGroupDeserializer.class)
 @JsonSerialize(using = TargetGroupSerializer.class)
-public class TargetGroup {
+public class TargetGroup extends AbstractEntity {
 
     @Id
     @GeneratedValue

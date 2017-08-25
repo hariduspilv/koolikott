@@ -5,7 +5,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import ee.hm.dop.dao.TagDAO;
+import ee.hm.dop.dao.TagDao;
 import ee.hm.dop.model.Tag;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -20,7 +20,7 @@ public class TagServiceTest {
     private TagService tagService = new TagService();
 
     @Mock
-    private TagDAO tagDAO;
+    private TagDao tagDao;
 
     @Test
     public void get() {
@@ -29,13 +29,13 @@ public class TagServiceTest {
         tag.setId(123L);
         tag.setName(name);
 
-        expect(tagDAO.findTagByName(name)).andReturn(tag);
+        expect(tagDao.findByName(name)).andReturn(tag);
 
-        replay(tagDAO);
+        replay(tagDao);
 
         Tag result = tagService.getTagByName(name);
 
-        verify(tagDAO);
+        verify(tagDao);
 
         assertEquals(tag, result);
     }

@@ -9,7 +9,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
-public class AuthenticationState {
+public class AuthenticationState extends AbstractEntity {
 
     @Id
     @GeneratedValue

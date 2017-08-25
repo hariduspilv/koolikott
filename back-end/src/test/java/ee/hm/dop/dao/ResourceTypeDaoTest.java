@@ -15,10 +15,10 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.List;
 
-public class ResourceTypeDAOTest extends DatabaseTestBase {
+public class ResourceTypeDaoTest extends DatabaseTestBase {
 
     @Inject
-    private ResourceTypeDAO resourceTypeDAO;
+    private ResourceTypeDao resourceTypeDao;
 
     @Inject
     private MaterialDAO materialDAO;
@@ -28,7 +28,7 @@ public class ResourceTypeDAOTest extends DatabaseTestBase {
         Long id = new Long(1001);
         String name = "TEXTBOOK1";
 
-        ResourceType returnedResourceType = resourceTypeDAO.findResourceTypeByName(name);
+        ResourceType returnedResourceType = resourceTypeDao.findByName(name);
 
         assertNotNull(returnedResourceType);
         assertNotNull(returnedResourceType.getId());
@@ -49,17 +49,17 @@ public class ResourceTypeDAOTest extends DatabaseTestBase {
         resourceType.setName("COURSE");
         material.setResourceTypes(Collections.singletonList(resourceType));
 
-        List<ResourceType> before = resourceTypeDAO.findUsedResourceTypes();
+        List<ResourceType> before = resourceTypeDao.findUsedResourceTypes();
         assertEquals(5, before.size());
 
         LearningObject newMaterial = materialDAO.update(material);
 
-        List<ResourceType> result = resourceTypeDAO.findUsedResourceTypes();
+        List<ResourceType> result = resourceTypeDao.findUsedResourceTypes();
         assertEquals(6, result.size());
 
         materialDAO.remove(newMaterial);
 
-        List<ResourceType> finalList = resourceTypeDAO.findUsedResourceTypes();
+        List<ResourceType> finalList = resourceTypeDao.findUsedResourceTypes();
         assertEquals(5, finalList.size());
     }
 

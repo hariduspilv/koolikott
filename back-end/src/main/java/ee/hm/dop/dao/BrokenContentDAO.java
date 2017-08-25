@@ -13,19 +13,13 @@ import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.User;
 import org.joda.time.DateTime;
 
-public class BrokenContentDAO {
-
-    @Inject
-    private EntityManager entityManager;
+public class BrokenContentDAO extends AbstractDao<BrokenContent> {
 
     public BrokenContent update(BrokenContent brokenontent) {
         if (brokenontent.getId() == null) {
             brokenontent.setAdded(DateTime.now());
         }
-        BrokenContent merged;
-        merged = entityManager.merge(brokenontent);
-        entityManager.persist(merged);
-        return merged;
+        return createOrUpdate(brokenontent);
     }
 
     public void deleteBrokenMaterials(Long id) {

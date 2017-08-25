@@ -2,7 +2,7 @@ package ee.hm.dop.service;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.PublisherDAO;
+import ee.hm.dop.dao.PublisherDao;
 import ee.hm.dop.model.Publisher;
 
 /**
@@ -11,16 +11,16 @@ import ee.hm.dop.model.Publisher;
 public class PublisherService {
 
     @Inject
-    private PublisherDAO publisherDAO;
+    private PublisherDao publisherDao;
 
     public Publisher getPublisherByName(String name) {
-        return publisherDAO.findPublisherByName(name);
+        return publisherDao.findByName(name);
     }
 
     public Publisher createPublisher(String name, String website) {
         Publisher publisher = new Publisher();
         publisher.setName(name);
         publisher.setWebsite(website);
-        return publisherDAO.create(publisher);
+        return publisherDao.createOrUpdate(publisher);
     }
 }
