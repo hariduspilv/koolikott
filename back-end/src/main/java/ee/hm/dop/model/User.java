@@ -18,7 +18,7 @@ import java.util.List;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue

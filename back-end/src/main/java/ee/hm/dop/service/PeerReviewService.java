@@ -2,7 +2,7 @@ package ee.hm.dop.service;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.PeerReviewDAO;
+import ee.hm.dop.dao.PeerReviewDao;
 import ee.hm.dop.model.PeerReview;
 
 /**
@@ -11,16 +11,16 @@ import ee.hm.dop.model.PeerReview;
 public class PeerReviewService {
 
     @Inject
-    private PeerReviewDAO peerReviewDAO;
+    private PeerReviewDao peerReviewDao;
 
     public PeerReview getPeerReviewByURL(String url){
-        return peerReviewDAO.getPeerReviewByURL(url);
+        return peerReviewDao.getPeerReviewByURL(url);
     }
 
     public PeerReview createPeerReview(String url) {
         PeerReview peerReview = new PeerReview();
         peerReview.setUrl(url);
-        return peerReviewDAO.create(peerReview);
+        return peerReviewDao.createOrUpdate(peerReview);
     }
 
 }

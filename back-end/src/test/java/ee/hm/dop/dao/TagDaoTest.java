@@ -12,17 +12,17 @@ import org.junit.Test;
 /**
  * Created by mart.laus on 24.07.2015.
  */
-public class TagDAOTest extends DatabaseTestBase {
+public class TagDaoTest extends DatabaseTestBase {
 
     @Inject
-    private TagDAO tagDAO;
+    private TagDao tagDao;
 
     @Test
     public void findTagByName() {
         Long id = new Long(1);
         String name = "matemaatika";
 
-        Tag returnedTag = tagDAO.findTagByName(name);
+        Tag returnedTag = tagDao.findByName(name);
 
         assertNotNull(returnedTag);
         assertNotNull(returnedTag.getId());

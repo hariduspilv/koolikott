@@ -24,7 +24,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     private PortfolioDAO portfolioDAO;
 
     @Inject
-    private UserDAO userDAO;
+    private UserDao userDao;
 
     private int threadsDone;
 
@@ -248,7 +248,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
     @Test
     public void addComment() {
 
-        User user = userDAO.findUserByIdCode("37066990099");
+        User user = userDao.findUserByIdCode("37066990099");
 
         String unique_comment = "UNIQUE" + System.currentTimeMillis();
 

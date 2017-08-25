@@ -13,13 +13,11 @@ import static org.junit.Assert.assertTrue;
 
 import javax.xml.soap.SOAPException;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
-import ee.hm.dop.service.login.MobileIDLoginService;
-import ee.hm.dop.service.login.MobileIDSOAPService;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -40,7 +38,7 @@ public class MobileIDLoginServiceTest {
     private MobileIDSOAPService mobileIDSOAPService;
 
     @Mock
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Test
     public void authenticate() throws Exception {
@@ -131,7 +129,7 @@ public class MobileIDLoginServiceTest {
         authenticationState.setSessionCode("2835728357835");
         authenticationState.setToken(token);
 
-        expect(authenticationStateDAO.findAuthenticationStateByToken(token)).andReturn(authenticationState);
+        expect(authenticationStateDao.findAuthenticationStateByToken(token)).andReturn(authenticationState);
         expect(mobileIDSOAPService.isAuthenticated(authenticationState)).andReturn(true);
 
         replayAll();
@@ -151,7 +149,7 @@ public class MobileIDLoginServiceTest {
         authenticationState.setSessionCode("2835728357835");
         authenticationState.setToken(token);
 
-        expect(authenticationStateDAO.findAuthenticationStateByToken(token)).andReturn(authenticationState);
+        expect(authenticationStateDao.findAuthenticationStateByToken(token)).andReturn(authenticationState);
         expect(mobileIDSOAPService.isAuthenticated(authenticationState)).andReturn(false);
 
         replayAll();
@@ -167,7 +165,7 @@ public class MobileIDLoginServiceTest {
     public void isAuthenticatedInvalidToken() throws SOAPException {
         String token = "invalidTOKEN";
 
-        expect(authenticationStateDAO.findAuthenticationStateByToken(token)).andReturn(null);
+        expect(authenticationStateDao.findAuthenticationStateByToken(token)).andReturn(null);
 
         replayAll();
 
@@ -181,7 +179,7 @@ public class MobileIDLoginServiceTest {
     private void expectCreateAuthenticationState(Capture<AuthenticationState> capturedAuthenticationState) {
         // Using .andReturn(capturedAuthenticationState.getValue()) would give
         // error saying "Nothing captured yet"
-        expect(authenticationStateDAO.createAuthenticationState(EasyMock.capture(capturedAuthenticationState)))
+        expect(authenticationStateDao.createAuthenticationState(EasyMock.capture(capturedAuthenticationState)))
                 .andAnswer(new IAnswer<AuthenticationState>() {
                     @Override
                     public AuthenticationState answer() throws Throwable {
@@ -208,7 +206,7 @@ public class MobileIDLoginServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(authenticationStateDAO, mobileIDSOAPService);
+        replay(authenticationStateDao, mobileIDSOAPService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -218,7 +216,7 @@ public class MobileIDLoginServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(authenticationStateDAO, mobileIDSOAPService);
+        verify(authenticationStateDao, mobileIDSOAPService);
 
         if (mocks != null) {
             for (Object object : mocks) {

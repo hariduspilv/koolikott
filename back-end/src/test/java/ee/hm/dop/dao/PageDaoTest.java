@@ -10,10 +10,10 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Page;
 import org.junit.Test;
 
-public class PageDAOTest extends DatabaseTestBase {
+public class PageDaoTest extends DatabaseTestBase {
 
     @Inject
-    private PageDAO pageDAO;
+    private PageDao pageDao;
 
     @Inject
     private LanguageDAO languageDAO;
@@ -24,7 +24,7 @@ public class PageDAOTest extends DatabaseTestBase {
         String pageLanguageCode = "eng";
         Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
 
-        Page page = pageDAO.findByNameAndLanguage(pageName, pageLanguage);
+        Page page = pageDao.findByNameAndLanguage(pageName, pageLanguage);
 
         assertEquals(Long.valueOf(6), page.getId());
         assertEquals(Long.valueOf(3), page.getLanguage().getId());
@@ -39,7 +39,7 @@ public class PageDAOTest extends DatabaseTestBase {
         String pageLanguageCode = "eng";
         Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
 
-        assertNull(pageDAO.findByNameAndLanguage(pageName, pageLanguage));
+        assertNull(pageDao.findByNameAndLanguage(pageName, pageLanguage));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class PageDAOTest extends DatabaseTestBase {
         String pageLanguageCode = "eng";
         Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
 
-        assertNull(pageDAO.findByNameAndLanguage(pageName, pageLanguage));
+        assertNull(pageDao.findByNameAndLanguage(pageName, pageLanguage));
     }
 
 }

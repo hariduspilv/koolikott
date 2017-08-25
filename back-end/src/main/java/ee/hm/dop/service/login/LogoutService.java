@@ -2,17 +2,17 @@ package ee.hm.dop.service.login;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.AuthenticatedUserDAO;
+import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
 
 public class LogoutService {
 
     @Inject
-    private AuthenticatedUserDAO authenticatedUserDAO;
+    private AuthenticatedUserDao authenticatedUserDao;
 
     public void logout(AuthenticatedUser authenticatedUser) {
         if (authenticatedUser != null) {
-            authenticatedUserDAO.delete(authenticatedUser);
+            authenticatedUserDao.delete(authenticatedUser);
         }
     }
 }

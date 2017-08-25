@@ -6,7 +6,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import ee.hm.dop.dao.UserDAO;
+import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -22,7 +22,7 @@ public class UserServiceTest {
     private UserService userService = new UserService();
 
     @Mock
-    private UserDAO userDAO;
+    private UserDao userDao;
 
     @Test
     public void create() throws Exception {
@@ -31,14 +31,14 @@ public class UserServiceTest {
         String surname = "Smith";
         String username = "john.smith";
 
-        expect(userDAO.countUsersWithSameUsername(username)).andReturn(0L);
-        expect(userDAO.update(EasyMock.anyObject(User.class))).andReturn(new User());
+        expect(userDao.countUsersWithSameUsername(username)).andReturn(0L);
+        expect(userDao.createOrUpdate(EasyMock.anyObject(User.class))).andReturn(new User());
 
-        replay(userDAO);
+        replay(userDao);
 
         User user = userService.create(idCode, name, surname);
 
-        verify(userDAO);
+        verify(userDao);
 
         assertNotNull(user);
     }
@@ -50,13 +50,13 @@ public class UserServiceTest {
         Long count = 0L;
         String username = "john.smith.second.iv";
 
-        expect(userDAO.countUsersWithSameUsername(username)).andReturn(count);
+        expect(userDao.countUsersWithSameUsername(username)).andReturn(count);
 
-        replay(userDAO);
+        replay(userDao);
 
         String nextUsername = userService.generateUsername(name, surname);
 
-        verify(userDAO);
+        verify(userDao);
 
         assertEquals(username, nextUsername);
     }
@@ -69,13 +69,13 @@ public class UserServiceTest {
         Long count = 2L;
         String expectedUsername = "john.smith3";
 
-        expect(userDAO.countUsersWithSameUsername(usernameWithoutNumber)).andReturn(count);
+        expect(userDao.countUsersWithSameUsername(usernameWithoutNumber)).andReturn(count);
 
-        replay(userDAO);
+        replay(userDao);
 
         String nextUsername = userService.generateUsername(name, surname);
 
-        verify(userDAO);
+        verify(userDao);
 
         assertEquals(expectedUsername, nextUsername);
     }
@@ -87,13 +87,13 @@ public class UserServiceTest {
         Long count = 0L;
         String username = "onne.ulle.arni.opik";
 
-        expect(userDAO.countUsersWithSameUsername(username)).andReturn(count);
+        expect(userDao.countUsersWithSameUsername(username)).andReturn(count);
 
-        replay(userDAO);
+        replay(userDao);
 
         String nextUsername = userService.generateUsername(name, surname);
 
-        verify(userDAO);
+        verify(userDao);
 
         assertEquals(username, nextUsername);
     }

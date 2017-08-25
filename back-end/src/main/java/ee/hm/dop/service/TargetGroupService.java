@@ -2,7 +2,7 @@ package ee.hm.dop.service;
 
 
 import com.google.inject.Inject;
-import ee.hm.dop.dao.TargetGroupDAO;
+import ee.hm.dop.dao.TargetGroupDao;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import org.apache.commons.lang3.Range;
@@ -18,14 +18,14 @@ public class TargetGroupService {
     private TranslationService translationService;
 
     @Inject
-    private TargetGroupDAO targetGroupDAO;
+    private TargetGroupDao targetGroupDao;
 
     public List<TargetGroup> getValues() {
-        return targetGroupDAO.getAll();
+        return targetGroupDao.findAll();
     }
 
     public TargetGroup getByName(String name) {
-        return targetGroupDAO.getByName(name);
+        return targetGroupDao.getByName(name);
     }
 
     TargetGroup getByTranslation(String translation) {
@@ -36,7 +36,7 @@ public class TargetGroupService {
 
         try {
             TargetGroupEnum targetGroupEnum = TargetGroupEnum.valueOf(translationKey.replaceFirst("^" + TARGET_GROUP_TRANSLATION_PREFIX, ""));
-            return targetGroupDAO.getByName(targetGroupEnum.name());
+            return targetGroupDao.getByName(targetGroupEnum.name());
         } catch (IllegalArgumentException e) {
             return null;
         }

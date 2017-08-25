@@ -14,14 +14,14 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.LicenseType;
 import org.junit.Test;
 
-public class LicenseTypeDAOTest extends DatabaseTestBase {
+public class LicenseTypeDaoTest extends DatabaseTestBase {
 
     @Inject
-    private LicenseTypeDAO licenseTypeDAO;
+    private LicenseTypeDao licenseTypeDao;
 
     @Test
     public void findAll() {
-        List<LicenseType> licenseTypes = licenseTypeDAO.findAll();
+        List<LicenseType> licenseTypes = licenseTypeDao.findAll();
 
         assertEquals(3, licenseTypes.size());
         for (int i = 0; i < licenseTypes.size(); i++) {

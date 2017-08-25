@@ -40,7 +40,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
@@ -67,7 +67,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     private Configuration configuration;
 
     @Inject
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Context
     private HttpServletRequest request;
@@ -151,10 +151,10 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(signature);
         assertNotNull(signatureAlgorithm);
 
-        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
         assertNotNull(authenticationState);
 
-        authenticationStateDAO.delete(authenticationState);
+        authenticationStateDao.delete(authenticationState);
     }
 
     @Test

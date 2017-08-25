@@ -15,43 +15,43 @@ import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 
-public class UserDAOTest extends DatabaseTestBase {
+public class UserDaoTest extends DatabaseTestBase {
 
     @Inject
-    private UserDAO userDAO;
+    private UserDao userDao;
 
     @Test
     public void findUserByIdCode() {
-        User user = userDAO.findUserByIdCode("39011220011");
+        User user = userDao.findUserByIdCode("39011220011");
         assertEquals("39011220011", user.getIdCode());
         assertValidUser(user);
 
-        user = userDAO.findUserByIdCode("39011220011");
+        user = userDao.findUserByIdCode("39011220011");
         assertEquals("39011220011", user.getIdCode());
         assertValidUser(user);
 
-        user = userDAO.findUserByIdCode("39011220011");
+        user = userDao.findUserByIdCode("39011220011");
         assertEquals("39011220011", user.getIdCode());
         assertValidUser(user);
     }
 
     @Test
     public void findByUsername() {
-        User user = userDAO.findUserByUsername("mati.maasikas");
+        User user = userDao.findUserByUsername("mati.maasikas");
         assertEquals(Long.valueOf(1), user.getId());
         assertEquals("mati.maasikas", user.getUsername());
         assertEquals("Mati", user.getName());
         assertEquals("Maasikas", user.getSurname());
         assertEquals("39011220011", user.getIdCode());
 
-        user = userDAO.findUserByUsername("peeter.paan");
+        user = userDao.findUserByUsername("peeter.paan");
         assertEquals(Long.valueOf(2), user.getId());
         assertEquals("peeter.paan", user.getUsername());
         assertEquals("Peeter", user.getName());
         assertEquals("Paan", user.getSurname());
         assertEquals("38011550077", user.getIdCode());
 
-        user = userDAO.findUserByUsername("voldemar.vapustav");
+        user = userDao.findUserByUsername("voldemar.vapustav");
         assertEquals(Long.valueOf(3), user.getId());
         assertEquals("voldemar.vapustav", user.getUsername());
         assertEquals("Voldemar", user.getName());
@@ -84,12 +84,12 @@ public class UserDAOTest extends DatabaseTestBase {
 
     @Test
     public void countUsersWithSameUsernameIgnoringAccents() {
-        assertEquals(Long.valueOf(2), userDAO.countUsersWithSameUsername("mati.maasikas"));
+        assertEquals(Long.valueOf(2), userDao.countUsersWithSameUsername("mati.maasikas"));
     }
 
     @Test
     public void countUsersWithSameUsernameNoResults() {
-        assertEquals(Long.valueOf(0), userDAO.countUsersWithSameUsername("there.is.no.such.username"));
+        assertEquals(Long.valueOf(0), userDao.countUsersWithSameUsername("there.is.no.such.username"));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class UserDAOTest extends DatabaseTestBase {
         user.setUsername("mati.maasikas");
         user.setIdCode("12345678901");
         try {
-            userDAO.update(user);
+            userDao.createOrUpdate(user);
             fail("Exception expected. ");
         } catch (PersistenceException e) {
             // expected
@@ -111,43 +111,43 @@ public class UserDAOTest extends DatabaseTestBase {
     public void update() {
         User user = getUser();
 
-        User returnedUser = userDAO.update(user);
-        User foundUser = userDAO.findUserByIdCode(user.getIdCode());
+        User returnedUser = userDao.createOrUpdate(user);
+        User foundUser = userDao.findUserByIdCode(user.getIdCode());
 
         assertEquals(user.getUsername(), foundUser.getUsername());
         assertEquals(user.getIdCode(), returnedUser.getIdCode());
 
-        userDAO.delete(returnedUser);
+        userDao.delete(returnedUser);
     }
 
     @Test
     public void delete() {
         User user = getUser();
 
-        User returnedUser = userDAO.update(user);
+        User returnedUser = userDao.createOrUpdate(user);
 
-        userDAO.delete(returnedUser);
+        userDao.delete(returnedUser);
 
-        assertNull(userDAO.findUserByIdCode(user.getIdCode()));
+        assertNull(userDao.findUserByIdCode(user.getIdCode()));
     }
 
     @Test
     public void getRestrictedUsers() {
-        List<User> restrictedUsers = userDAO.getUsersByRole(Role.RESTRICTED);
+        List<User> restrictedUsers = userDao.getUsersByRole(Role.RESTRICTED);
 
         assertEquals(2, restrictedUsers.size());
     }
 
     @Test
     public void getModerators() {
-        List<User> moderators = userDAO.getUsersByRole(Role.MODERATOR);
+        List<User> moderators = userDao.getUsersByRole(Role.MODERATOR);
 
         assertEquals(1, moderators.size());
     }
 
     @Test
     public void getAllUsers() {
-        List<User> allUsers = userDAO.getAll();
+        List<User> allUsers = userDao.findAll();
         assertEquals(15, allUsers.size());
     }
 

@@ -5,7 +5,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import ee.hm.dop.dao.ResourceTypeDAO;
+import ee.hm.dop.dao.ResourceTypeDao;
 import ee.hm.dop.model.ResourceType;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -20,7 +20,7 @@ public class ResourceTypeServiceTest {
     private ResourceTypeService resourceTypeService = new ResourceTypeService();
 
     @Mock
-    private ResourceTypeDAO resourceTypeDAO;
+    private ResourceTypeDao resourceTypeDao;
 
     @Test
     public void get() {
@@ -29,13 +29,13 @@ public class ResourceTypeServiceTest {
         resourceType.setId(123L);
         resourceType.setName(name);
 
-        expect(resourceTypeDAO.findResourceTypeByName(name)).andReturn(resourceType);
+        expect(resourceTypeDao.findByName(name)).andReturn(resourceType);
 
-        replay(resourceTypeDAO);
+        replay(resourceTypeDao);
 
         ResourceType result = resourceTypeService.getResourceTypeByName(name);
 
-        verify(resourceTypeDAO);
+        verify(resourceTypeDao);
 
         assertEquals(resourceType, result);
     }

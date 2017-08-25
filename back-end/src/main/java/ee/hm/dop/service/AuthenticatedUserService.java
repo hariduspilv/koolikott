@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ee.hm.dop.dao.AuthenticatedUserDAO;
+import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
@@ -22,13 +22,13 @@ import org.joda.time.DateTime;
 public class AuthenticatedUserService {
 
     @Inject
-    private AuthenticatedUserDAO authenticatedUserDAO;
+    private AuthenticatedUserDao authenticatedUserDao;
 
     @Inject
     private Configuration configuration;
 
     public AuthenticatedUser getAuthenticatedUserByToken(String token) {
-        return authenticatedUserDAO.findAuthenticatedUserByToken(token);
+        return authenticatedUserDao.findAuthenticatedUserByToken(token);
     }
 
     public String signUserData(AuthenticatedUser authenticatedUser) {

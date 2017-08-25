@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Entity
 @Cacheable
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResourceType {
+public class ResourceType extends AbstractEntity {
 
     @Id
     @GeneratedValue

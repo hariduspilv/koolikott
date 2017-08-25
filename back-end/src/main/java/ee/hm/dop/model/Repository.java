@@ -33,7 +33,7 @@ import org.joda.time.DateTime;
  * Created by mart.laus on 22.07.2015.
  */
 @Entity
-public class Repository {
+public class Repository extends AbstractEntity {
 
     @Id
     @GeneratedValue

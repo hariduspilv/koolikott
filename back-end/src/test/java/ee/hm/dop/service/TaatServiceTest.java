@@ -21,7 +21,7 @@ import static org.junit.Assert.fail;
 
 import javax.servlet.http.HttpServletResponse;
 
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.service.login.LoginService;
@@ -58,7 +58,7 @@ public class TaatServiceTest {
     private Configuration configuration;
 
     @Mock
-    private AuthenticationStateDAO authenticationStateDAO;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Mock
     private LoginService loginService;
@@ -91,7 +91,7 @@ public class TaatServiceTest {
         expect(configuration.getString(TAAT_SSO)).andReturn("https://test.taat.ee/notrealurl");
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_ID)).andReturn("testAlias");
         expect(configuration.getString(KEYSTORE_SIGNING_ENTITY_PASSWORD)).andReturn("newKeyPass");
-        expect(authenticationStateDAO.createAuthenticationState(anyObject(AuthenticationState.class)))
+        expect(authenticationStateDao.createAuthenticationState(anyObject(AuthenticationState.class)))
                 .andReturn(authenticationState);
 
         replayAll();
@@ -124,7 +124,7 @@ public class TaatServiceTest {
     @Test
     public void authenticateNullAuthenticationState() throws Exception {
         String authenticationStateToken = "token";
-        expect(authenticationStateDAO.findAuthenticationStateByToken(authenticationStateToken)).andReturn(null);
+        expect(authenticationStateDao.findAuthenticationStateByToken(authenticationStateToken)).andReturn(null);
 
         replayAll();
         try {
@@ -211,15 +211,15 @@ public class TaatServiceTest {
         authenticationState.setId(1452L);
         authenticationState.setToken(authenticationStateToken);
 
-        expect(authenticationStateDAO.findAuthenticationStateByToken(authenticationStateToken))
+        expect(authenticationStateDao.findAuthenticationStateByToken(authenticationStateToken))
                 .andReturn(authenticationState);
-        authenticationStateDAO.delete(authenticationState);
+        authenticationStateDao.delete(authenticationState);
 
         return authenticationStateToken;
     }
 
     private void replayAll(Object... mocks) {
-        replay(configuration, loginService, authenticationStateDAO, validator);
+        replay(configuration, loginService, authenticationStateDao, validator);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -229,7 +229,7 @@ public class TaatServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(configuration, loginService, authenticationStateDAO, validator);
+        verify(configuration, loginService, authenticationStateDao, validator);
 
         if (mocks != null) {
             for (Object object : mocks) {
