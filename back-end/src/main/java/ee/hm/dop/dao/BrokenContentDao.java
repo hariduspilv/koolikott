@@ -13,7 +13,7 @@ import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.User;
 import org.joda.time.DateTime;
 
-public class BrokenContentDAO extends AbstractDao<BrokenContent> {
+public class BrokenContentDao extends AbstractDao<BrokenContent> {
 
     public BrokenContent update(BrokenContent brokenontent) {
         if (brokenontent.getId() == null) {

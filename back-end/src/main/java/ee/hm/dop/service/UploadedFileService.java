@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.dao.UploadedFileDAO;
+import ee.hm.dop.dao.UploadedFileDao;
 import ee.hm.dop.utils.io.LimitedSizeInputStream;
 import ee.hm.dop.model.UploadedFile;
 import org.apache.commons.configuration.Configuration;
@@ -36,7 +36,7 @@ public class UploadedFileService {
     private final String FILENAME_TOO_LONG_RESPONSE = "{\"cause\": \"filename too long\"}";
 
     @Inject
-    private UploadedFileDAO uploadedFileDAO;
+    private UploadedFileDao uploadedFileDao;
 
     @Inject
     private Configuration configuration;
@@ -45,15 +45,15 @@ public class UploadedFileService {
     private ZipService zipService;
 
     private UploadedFile getUploadedFileById(Long id) {
-        return uploadedFileDAO.findUploadedFileById(id);
+        return uploadedFileDao.findById(id);
     }
 
     private UploadedFile update(UploadedFile uploadedFile) {
-        return uploadedFileDAO.update(uploadedFile);
+        return uploadedFileDao.createOrUpdate(uploadedFile);
     }
 
     private UploadedFile create(UploadedFile uploadedFile) {
-        return uploadedFileDAO.update(uploadedFile);
+        return uploadedFileDao.createOrUpdate(uploadedFile);
     }
 
     public Response getArchivedFile(Long fileId) {

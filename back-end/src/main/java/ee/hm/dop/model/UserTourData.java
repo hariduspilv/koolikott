@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class UserTourData {
+public class UserTourData extends AbstractEntity {
 
     @Id
     @GeneratedValue

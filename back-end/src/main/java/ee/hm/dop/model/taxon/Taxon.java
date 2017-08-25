@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -24,7 +25,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
 @NamedQuery(name = "findAllEducationalContext", query = "FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'")
-public abstract class Taxon {
+public abstract class Taxon extends AbstractEntity {
 
     @Id
     @GeneratedValue

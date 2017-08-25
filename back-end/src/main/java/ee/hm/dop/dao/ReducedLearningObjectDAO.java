@@ -15,9 +15,9 @@ public class ReducedLearningObjectDAO extends BaseDAO<ReducedLearningObject> {
     public List<ReducedLearningObject> findMaterialByCreator(User creator, int start, int maxResults) {
         Query query = createQuery("FROM ReducedMaterial rlo WHERE rlo.creator.id = :creatorId AND rlo.deleted = false order by added desc", ReducedMaterial.class);
 
-        List<ReducedLearningObject> learningObjects = findByCreator(query, creator, start, maxResults);;
+        List<ReducedLearningObject> learningObjects = findByCreator(query, creator, start, maxResults);
 //todo delete this
-//        removeNot(ReducedMaterial.class, learningObjects);
+        removeNot(ReducedMaterial.class, learningObjects);
         return learningObjects;
     }
 
@@ -26,7 +26,7 @@ public class ReducedLearningObjectDAO extends BaseDAO<ReducedLearningObject> {
 
         List<ReducedLearningObject> learningObjects = findByCreator(query, creator, start, maxResults);
 //todo delete this
-        //        removeNot(ReducedPortfolio.class, learningObjects);
+        removeNot(ReducedPortfolio.class, learningObjects);
 
         return learningObjects;
     }
@@ -34,7 +34,7 @@ public class ReducedLearningObjectDAO extends BaseDAO<ReducedLearningObject> {
     private List<ReducedLearningObject> findByCreator(Query query, User creator, int start, int maxResults) {
         query.setParameter("creatorId", creator.getId()).setFirstResult(start);
         if (maxResults > 0) {
-            return query.setMaxResults(maxResults).getResultList();
+            query.setMaxResults(maxResults);
         }
         return query.getResultList();
     }

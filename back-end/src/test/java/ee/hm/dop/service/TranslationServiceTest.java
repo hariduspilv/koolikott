@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.LanguageDAO;
+import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
@@ -23,7 +23,7 @@ public class TranslationServiceTest {
     private TranslationService translationService = new TranslationService();
 
     @Mock
-    private LanguageDAO languageDAO;
+    private LanguageDao languageDao;
 
     @Mock
     private TranslationDAO translationDAO;
@@ -42,7 +42,7 @@ public class TranslationServiceTest {
     public void getTranslationsForNotSupportedLanguage() {
         String languageCode = "notSupportedLanguageCode";
 
-        expect(languageDAO.findByCode(languageCode)).andReturn(null);
+        expect(languageDao.findByCode(languageCode)).andReturn(null);
 
         replayAll();
 
@@ -56,7 +56,7 @@ public class TranslationServiceTest {
         String languageCode = "supportedLanguageCode";
         Language language = createMock(Language.class);
 
-        expect(languageDAO.findByCode(languageCode)).andReturn(language);
+        expect(languageDao.findByCode(languageCode)).andReturn(language);
         expect(translationDAO.findTranslationGroupFor(language)).andReturn(null);
 
         replayAll(language);
@@ -74,7 +74,7 @@ public class TranslationServiceTest {
         @SuppressWarnings("unchecked")
         Map<String, String> translations = createMock(Map.class);
 
-        expect(languageDAO.findByCode(languageCode)).andReturn(language);
+        expect(languageDao.findByCode(languageCode)).andReturn(language);
         expect(translationDAO.findTranslationGroupFor(language)).andReturn(translationGroup);
         expect(translationGroup.getTranslations()).andReturn(translations);
         expect(language.getCode()).andReturn("").times(2);
@@ -87,7 +87,7 @@ public class TranslationServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(languageDAO, translationDAO);
+        replay(languageDao, translationDAO);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -97,7 +97,7 @@ public class TranslationServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(languageDAO, translationDAO);
+        verify(languageDao, translationDAO);
 
         if (mocks != null) {
             for (Object object : mocks) {

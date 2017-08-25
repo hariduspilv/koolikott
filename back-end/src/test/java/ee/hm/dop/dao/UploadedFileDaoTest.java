@@ -11,15 +11,15 @@ import org.junit.Test;
 /**
  * Created by mart on 8.08.16.
  */
-public class UploadedFileDAOTest extends DatabaseTestBase {
+public class UploadedFileDaoTest extends DatabaseTestBase {
 
     @Inject
-    private UploadedFileDAO uploadedFileDAO;
+    private UploadedFileDao uploadedFileDao;
 
     @Test
     public void findUploadedFileById() {
         long fileId = 1;
-        UploadedFile uploadedFile = uploadedFileDAO.findUploadedFileById(fileId);
+        UploadedFile uploadedFile = uploadedFileDao.findById(fileId);
         assertNotNull(uploadedFile);
         assertEquals("bookCover.jpg", uploadedFile.getName());
     }

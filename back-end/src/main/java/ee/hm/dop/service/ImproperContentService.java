@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.ImproperContentDAO;
+import ee.hm.dop.dao.ImproperContentDao;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class ImproperContentService extends BaseService {
 
     @Inject
-    private ImproperContentDAO improperContentDAO;
+    private ImproperContentDao improperContentDao;
 
     @Inject
     private LearningObjectService learningObjectService;
@@ -36,7 +36,7 @@ public class ImproperContentService extends BaseService {
         improper.setLearningObject(learningObject);
         improper.setReason(improperContent.getReason());
 
-        return improperContentDAO.update(improper);
+        return improperContentDao.createOrUpdate(improper);
     }
 
     /**
@@ -46,7 +46,7 @@ public class ImproperContentService extends BaseService {
      * @return the ImproperContent if user has rights to access
      */
     public ImproperContent get(long improperContentId, User user) {
-        ImproperContent improperContent = improperContentDAO.findById(improperContentId);
+        ImproperContent improperContent = improperContentDao.findById(improperContentId);
 
         if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
@@ -61,7 +61,7 @@ public class ImproperContentService extends BaseService {
      * @return a list of improperContent that user has rights to access
      */
     public List<ImproperContent> getAll(User user) {
-        List<ImproperContent> impropers = improperContentDAO.findAll();
+        List<ImproperContent> impropers = improperContentDao.findAll();
         removeIfHasNoAccess(user, impropers);
 
         return impropers;
@@ -95,11 +95,11 @@ public class ImproperContentService extends BaseService {
 
     public long getImproperMaterialSize(User user) {
         if (!isUserAdminOrModerator(user)) throw new RuntimeException("Logged in user must be an administrator.");
-        return improperContentDAO.getImproperMaterialCount();
+        return improperContentDao.getImproperMaterialCount();
     }
     public long getImproperPortfolioSize(User user) {
         if (!isUserAdminOrModerator(user)) throw new RuntimeException("Logged in user must be an administrator.");
-        return improperContentDAO.getImproperPortfolioCount();
+        return improperContentDao.getImproperPortfolioCount();
     }
 
     /**
@@ -113,7 +113,7 @@ public class ImproperContentService extends BaseService {
      *         creator and user has rights to access
      */
     public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
-        ImproperContent improperContent = improperContentDAO.findByLearningObjectAndCreator(learningObject, creator);
+        ImproperContent improperContent = improperContentDao.findByLearningObjectAndCreator(learningObject, creator);
 
         if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
             improperContent = null;
@@ -129,7 +129,7 @@ public class ImproperContentService extends BaseService {
      *         has rights to access
      */
     public List<ImproperContent> getByLearningObject(LearningObject learningObject, User user) {
-        List<ImproperContent> impropers = improperContentDAO.findByLearningObject(learningObject);
+        List<ImproperContent> impropers = improperContentDao.findByLearningObject(learningObject);
         removeIfHasNoAccess(user, impropers);
 
         return impropers;
@@ -143,7 +143,7 @@ public class ImproperContentService extends BaseService {
      */
     public void deleteAll(List<ImproperContent> impropers, User user) {
         removeIfHasNoAccess(user, impropers);
-        improperContentDAO.deleteAll(impropers);
+        improperContentDao.deleteAll(impropers);
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {

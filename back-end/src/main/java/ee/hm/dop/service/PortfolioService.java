@@ -1,9 +1,9 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.ChapterObjectDAO;
+import ee.hm.dop.dao.ChapterObjectDao;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
-import ee.hm.dop.dao.UserLikeDAO;
+import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterObject;
@@ -34,10 +34,10 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     private PortfolioDAO portfolioDAO;
 
     @Inject
-    private UserLikeDAO userLikeDAO;
+    private UserLikeDao userLikeDao;
 
     @Inject
-    private ChapterObjectDAO chapterObjectDAO;
+    private ChapterObjectDao chapterObjectDao;
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -109,7 +109,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
-        userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
+        userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
 
         UserLike like = new UserLike();
         like.setLearningObject(originalPortfolio);
@@ -117,7 +117,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         like.setLiked(isLiked);
         like.setAdded(DateTime.now());
 
-        return userLikeDAO.update(like);
+        return userLikeDao.update(like);
     }
 
     public void removeUserLike(Portfolio portfolio, User loggedInUser) {
@@ -130,7 +130,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
-        userLikeDAO.deletePortfolioLike(originalPortfolio, loggedInUser);
+        userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
     }
 
     public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
@@ -144,7 +144,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
-        return userLikeDAO.findPortfolioUserLike(originalPortfolio, loggedInUser);
+        return userLikeDao.findPortfolioUserLike(originalPortfolio, loggedInUser);
     }
 
     public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {
@@ -240,7 +240,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         if (chapter.getContentRows() == null) return;
         chapter.getContentRows().forEach(chapterRow -> chapterRow.getLearningObjects().replaceAll(learningObject -> {
             if (learningObject instanceof ChapterObject) {
-                return chapterObjectDAO.update((ChapterObject) learningObject);
+                return chapterObjectDao.update((ChapterObject) learningObject);
             } else return learningObject;
         }));
     }

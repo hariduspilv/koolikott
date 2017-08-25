@@ -15,14 +15,14 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.CrossCurricularTheme;
 import org.junit.Test;
 
-public class CrossCurricularThemeDAOTest extends DatabaseTestBase {
+public class CrossCurricularThemeDaoTest extends DatabaseTestBase {
 
     @Inject
-    private CrossCurricularThemeDAO crossCurricularThemeDAO;
+    private CrossCurricularThemeDao crossCurricularThemeDao;
 
     @Test
     public void findAll() {
-        List<CrossCurricularTheme> result = crossCurricularThemeDAO.findAll();
+        List<CrossCurricularTheme> result = crossCurricularThemeDao.findAll();
 
         assertEquals(2, result.size());
 
@@ -36,7 +36,7 @@ public class CrossCurricularThemeDAOTest extends DatabaseTestBase {
 
     @Test
     public void findThemeByName() {
-        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeDAO.getThemeByName("Lifelong_learning_and_career_planning");
+        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeDao.findByName("Lifelong_learning_and_career_planning");
         assertNotNull(crossCurricularTheme);
         assertEquals(crossCurricularTheme.getName(), "Lifelong_learning_and_career_planning");
         assertSame(1L, crossCurricularTheme.getId());

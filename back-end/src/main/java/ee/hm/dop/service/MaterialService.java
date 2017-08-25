@@ -1,9 +1,9 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.BrokenContentDAO;
+import ee.hm.dop.dao.BrokenContentDao;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
-import ee.hm.dop.dao.UserLikeDAO;
+import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.ChangedLearningObject;
@@ -66,7 +66,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     private MaterialDAO materialDAO;
 
     @Inject
-    private UserLikeDAO userLikeDAO;
+    private UserLikeDao userLikeDao;
 
     @Inject
     private AuthorService authorService;
@@ -78,7 +78,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     private SolrEngineService solrEngineService;
 
     @Inject
-    private BrokenContentDAO brokenContentDAO;
+    private BrokenContentDao brokenContentDao;
 
     @Inject
     private PeerReviewService peerReviewService;
@@ -272,7 +272,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
-        userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
+        userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
 
         UserLike like = new UserLike();
         like.setLearningObject(originalMaterial);
@@ -280,7 +280,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         like.setLiked(isLiked);
         like.setAdded(DateTime.now());
 
-        return userLikeDAO.update(like);
+        return userLikeDao.update(like);
     }
 
     public Recommendation addRecommendation(Material material, User loggedInUser) {
@@ -325,13 +325,13 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         Material originalMaterial = materialDAO.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
 
-        userLikeDAO.deleteMaterialLike(originalMaterial, loggedInUser);
+        userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
     }
 
     public UserLike getUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
 
-        return userLikeDAO.findMaterialUserLike(material, loggedInUser);
+        return userLikeDao.findMaterialUserLike(material, loggedInUser);
     }
 
     public void delete(Material material) {
@@ -530,7 +530,7 @@ public class MaterialService extends BaseService implements LearningObjectHandle
         brokenContent.setCreator(loggedInUser);
         brokenContent.setMaterial(material);
 
-        return brokenContentDAO.update(brokenContent);
+        return brokenContentDao.update(brokenContent);
     }
 
     public List<Material> getDeletedMaterials() {
@@ -542,11 +542,11 @@ public class MaterialService extends BaseService implements LearningObjectHandle
     }
 
     public List<BrokenContent> getBrokenMaterials() {
-        return brokenContentDAO.getBrokenMaterials();
+        return brokenContentDao.getBrokenMaterials();
     }
 
     public Long getBrokenMaterialCount() {
-        return brokenContentDAO.getCount();
+        return brokenContentDao.getCount();
     }
 
     public void setMaterialNotBroken(Material material) {
@@ -558,16 +558,16 @@ public class MaterialService extends BaseService implements LearningObjectHandle
             throw new RuntimeException("Material not found while adding broken material");
         }
 
-        brokenContentDAO.deleteBrokenMaterials(originalMaterial.getId());
+        brokenContentDao.deleteBrokenMaterials(originalMaterial.getId());
     }
 
     public Boolean hasSetBroken(long materialId, User loggedInUser) {
-        List<BrokenContent> brokenContents = brokenContentDAO.findByMaterialAndUser(materialId, loggedInUser);
+        List<BrokenContent> brokenContents = brokenContentDao.findByMaterialAndUser(materialId, loggedInUser);
         return brokenContents.size() != 0;
     }
 
     public Boolean isBroken(long materialId) {
-        List<BrokenContent> brokenContents = brokenContentDAO.findByMaterial(materialId);
+        List<BrokenContent> brokenContents = brokenContentDao.findByMaterial(materialId);
         return brokenContents.size() != 0;
     }
 

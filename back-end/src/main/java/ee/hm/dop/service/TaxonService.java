@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.TaxonDAO;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 
@@ -16,18 +16,18 @@ public class TaxonService {
     private TranslationService translationService;
 
     @Inject
-    private TaxonDAO taxonDAO;
+    private TaxonDao taxonDao;
 
     public Taxon getTaxonById(Long id) {
-        return taxonDAO.findTaxonById(id);
+        return taxonDao.findTaxonById(id);
     }
 
     public List<EducationalContext> getAllEducationalContext() {
-        return taxonDAO.findAllEducationalContext();
+        return taxonDao.findAllEducationalContext();
     }
 
     public Taxon getTaxonByEstCoreName(String name, Class level) {
-        return taxonDAO.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
+        return taxonDao.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
     }
 
     Taxon findTaxonByTranslation(String name) {
@@ -37,7 +37,7 @@ public class TaxonService {
         }
 
         String taxonName = getTaxonName(translationKey);
-        return taxonName == null ? null : taxonDAO.findTaxonByName(taxonName);
+        return taxonName == null ? null : taxonDao.findTaxonByName(taxonName);
     }
 
     private String getTaxonName(String translationKey) {

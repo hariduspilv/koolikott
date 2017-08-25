@@ -1,20 +1,13 @@
 package ee.hm.dop.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import org.joda.time.DateTime;
 
-public class UserLikeDAO extends BaseDAO<UserLike> {
+import javax.persistence.TypedQuery;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UserLikeDao extends AbstractDao<UserLike> {
 
     public UserLike findPortfolioUserLike(Portfolio portfolio, User user) {
         return findByLearningObjectAndUser(portfolio, user);
@@ -25,10 +18,10 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
     }
 
     private UserLike findByLearningObjectAndUser(LearningObject learningObject, User user) {
-        TypedQuery<UserLike> findLike = createQuery(
+        TypedQuery<UserLike> findLike = getEntityManager().createQuery(
                 "SELECT ul FROM UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid", UserLike.class) //
-                        .setParameter("loid", learningObject) //
-                        .setParameter("uid", user);
+                .setParameter("loid", learningObject) //
+                .setParameter("uid", user);
 
         return getSingleResult(findLike);
     }
@@ -42,39 +35,30 @@ public class UserLikeDAO extends BaseDAO<UserLike> {
     }
 
     private void deleteByLearningObjectAndUser(LearningObject learningObject, User user) {
-        Query query = getEntityManager()
-                .createQuery("DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid");
-        query.setParameter("loid", learningObject);
-        query.setParameter("uid", user);
-        query.executeUpdate();
+        getEntityManager()
+                .createQuery("DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid")
+                .setParameter("loid", learningObject)
+                .setParameter("uid", user)
+                .executeUpdate();
     }
 
-    @Override
     public UserLike update(UserLike userLike) {
         if (userLike.getId() == null) {
             userLike.setAdded(DateTime.now());
         }
-
-        return super.update(userLike);
+        return createOrUpdate(userLike);
     }
 
     public List<Searchable> findMostLikedSince(DateTime date, int numberOfMaterials) {
-        List<Object[]> resultList = createQuery("SELECT ul.learningObject, 2 * SUM(ul.isLiked) - COUNT(*) AS score" //
+        List<Object[]> resultList = getEntityManager().createQuery("SELECT ul.learningObject, 2 * SUM(ul.isLiked) - COUNT(*) AS score" //
                 + " FROM UserLike ul" //
                 + " WHERE ul.added > :from AND ul.learningObject.deleted = false" //
                 + " GROUP BY ul.learningObject" //
                 + " HAVING (2 * SUM(ul.isLiked) - COUNT(*)) > 0" //
                 + " ORDER BY score DESC", Object[].class) //
-                        .setParameter("from", date) //
-                        .setMaxResults(numberOfMaterials) //
-                        .getResultList();
-
-        List<Searchable> results = new ArrayList<>();
-
-        for (Object[] result : resultList) {
-            results.add((Searchable) result[0]);
-        }
-
-        return results;
+                .setParameter("from", date) //
+                .setMaxResults(numberOfMaterials) //
+                .getResultList();
+        return resultList.stream().map(result -> (Searchable) result[0]).collect(Collectors.toList());
     }
 }

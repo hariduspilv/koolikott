@@ -11,11 +11,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.LanguageDAO;
+import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.MaterialDAO;
 import ee.hm.dop.dao.PortfolioDAO;
 import ee.hm.dop.dao.TranslationDAO;
-import ee.hm.dop.dao.VersionDAO;
+import ee.hm.dop.dao.VersionDao;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
@@ -44,13 +44,13 @@ public class AtomFeedService {
     private PortfolioDAO portfolioDAO;
 
     @Inject
-    private VersionDAO versionDAO;
+    private VersionDao versionDao;
 
     @Inject
     private TranslationDAO translationDAO;
 
     @Inject
-    private LanguageDAO languageDAO;
+    private LanguageDao languageDao;
 
     private static Logger logger = LoggerFactory.getLogger(AtomFeedService.class);
 
@@ -89,7 +89,7 @@ public class AtomFeedService {
                 entryList.add(entry);
         }
 
-        for (Version version : versionDAO.getAllVersions()) {
+        for (Version version : versionDao.getAllVersions()) {
             Entry entry = versionToEntry(version);
             if (entry != null)
                 entryList.add(entry);
@@ -156,7 +156,7 @@ public class AtomFeedService {
 
     private void checkVersion() {
         String projectVersion = configuration.getString("version");
-        Version persistedVersion = versionDAO.getLatestVersion();
+        Version persistedVersion = versionDao.getLatestVersion();
 
         if(projectVersion == null){
             logger.error("Project version could not be obtained!");
@@ -167,7 +167,7 @@ public class AtomFeedService {
             Version version = new Version();
             version.setVersion(projectVersion);
             version.setReleased(new DateTime());
-            versionDAO.addVersion(version);
+            versionDao.addVersion(version);
         }
     }
 
@@ -196,7 +196,7 @@ public class AtomFeedService {
     }
 
     private String translateString(String toTranslate) {
-        Long langCode = languageDAO.findByCode(lang).getId();
+        Long langCode = languageDao.findByCode(lang).getId();
 
         return translationDAO.getTranslationByKeyAndLangcode(toTranslate, langCode);
     }

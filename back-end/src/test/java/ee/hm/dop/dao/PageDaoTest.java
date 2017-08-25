@@ -16,13 +16,13 @@ public class PageDaoTest extends DatabaseTestBase {
     private PageDao pageDao;
 
     @Inject
-    private LanguageDAO languageDAO;
+    private LanguageDao languageDao;
 
     @Test
     public void findByNameAndLang() {
         String pageName = "Help";
         String pageLanguageCode = "eng";
-        Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
+        Language pageLanguage = languageDao.findByCode(pageLanguageCode);
 
         Page page = pageDao.findByNameAndLanguage(pageName, pageLanguage);
 
@@ -37,7 +37,7 @@ public class PageDaoTest extends DatabaseTestBase {
     public void findByNameAndLangPassingNull() {
         String pageName = null;
         String pageLanguageCode = "eng";
-        Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
+        Language pageLanguage = languageDao.findByCode(pageLanguageCode);
 
         assertNull(pageDao.findByNameAndLanguage(pageName, pageLanguage));
     }
@@ -46,7 +46,7 @@ public class PageDaoTest extends DatabaseTestBase {
     public void findByNameAndLangPassingNotExistingPage() {
         String pageName = "doesntExist";
         String pageLanguageCode = "eng";
-        Language pageLanguage = languageDAO.findByCode(pageLanguageCode);
+        Language pageLanguage = languageDao.findByCode(pageLanguageCode);
 
         assertNull(pageDao.findByNameAndLanguage(pageName, pageLanguage));
     }

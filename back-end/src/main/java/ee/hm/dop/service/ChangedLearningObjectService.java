@@ -1,6 +1,6 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.ChangedLearningObjectDAO;
+import ee.hm.dop.dao.ChangedLearningObjectDao;
 import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ChangedLearningObjectService {
 
     @Inject
-    private ChangedLearningObjectDAO changedLearningObjectDAO;
+    private ChangedLearningObjectDao changedLearningObjectDao;
 
     @Inject
     private LearningObjectDAO learningObjectDAO;
@@ -26,15 +26,15 @@ public class ChangedLearningObjectService {
     private LearningObjectService learningObjectService;
 
     public long getCount() {
-        return changedLearningObjectDAO.getCount();
+        return changedLearningObjectDao.getCount();
     }
 
     public List<ChangedLearningObject> findAll() {
-        return changedLearningObjectDAO.findAll();
+        return changedLearningObjectDao.findAll();
     }
 
     public List<ChangedLearningObject> getAllByLearningObject(long id) {
-        return changedLearningObjectDAO.getAllByLearningObject(id);
+        return changedLearningObjectDao.getAllByLearningObject(id);
     }
 
     ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
@@ -53,7 +53,7 @@ public class ChangedLearningObjectService {
             return null;
         }
 
-        return changedLearningObjectDAO.update(changedLearningObject);
+        return changedLearningObjectDao.createOrUpdate(changedLearningObject);
     }
 
     private boolean hasChange(ChangedLearningObject changedLearningObject) {
@@ -61,7 +61,7 @@ public class ChangedLearningObjectService {
     }
 
     public boolean acceptAllChanges(long id) {
-        return changedLearningObjectDAO.removeAllByLearningObject(id);
+        return changedLearningObjectDao.removeAllByLearningObject(id);
     }
 
     public LearningObject revertAllChanges(long id, User user) {
@@ -69,7 +69,7 @@ public class ChangedLearningObjectService {
         if (learningObject == null) {
             throw new RuntimeException("LearningObject does not exists.");
         }
-        List<ChangedLearningObject> changedLearningObjects = changedLearningObjectDAO.getAllByLearningObject(id);
+        List<ChangedLearningObject> changedLearningObjects = changedLearningObjectDao.getAllByLearningObject(id);
 
         if (changedLearningObjects == null || changedLearningObjects.isEmpty()) {
             throw new RuntimeException("No changes for this learningObject");
@@ -127,7 +127,7 @@ public class ChangedLearningObjectService {
     }
 
     boolean removeChangeById(long id) {
-        return changedLearningObjectDAO.removeById(id);
+        return changedLearningObjectDao.removeById(id);
     }
 
     boolean learningObjectHasThis(LearningObject learningObject, ChangedLearningObject change) {

@@ -87,6 +87,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 WHERE + fieldInEquals(ID)).executeUpdate();
     }
 
+    public void remove(Entity entity) {
+        getEntityManager().remove(entity);
+    }
+
     private String getDistinctSelect() {
         return "select distinct o from " + name() + ALIAS;
     }
@@ -112,7 +116,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 .setParameter(field2, value2);
     }
 
-    private Entity getSingleResult(TypedQuery<Entity> query) {
+    public Entity getSingleResult(TypedQuery<? extends Entity> query) {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {

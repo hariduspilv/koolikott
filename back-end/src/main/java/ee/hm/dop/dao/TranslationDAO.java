@@ -40,21 +40,18 @@ public class TranslationDAO {
         } catch (NoResultException e) {
             e.printStackTrace();
         }
-
         return translationKey;
     }
 
     public String getTranslationByKeyAndLangcode(String translationKey, Long langCode) {
-
-        String translation = null;
-        Query query = entityManager.createNativeQuery("SELECT t.translation FROM Translation t WHERE t.translationKey = :translationKey AND t.translationGroup = :translationGroup");
-
         try {
-            translation = (String) query.setParameter("translationKey", translationKey).setParameter("translationGroup", langCode).getSingleResult();
+            Query query = entityManager.createNativeQuery("SELECT t.translation FROM Translation t WHERE t.translationKey = :translationKey AND t.translationGroup = :translationGroup");
+            return (String) query.setParameter("translationKey", translationKey)
+                    .setParameter("translationGroup", langCode)
+                    .getSingleResult();
         } catch (NoResultException ex) {
             // ignore
         }
-
-        return translation;
+        return null;
     }
 }

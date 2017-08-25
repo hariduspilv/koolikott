@@ -1,7 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.dao.TaxonDAO;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
@@ -42,7 +42,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private MaterialService materialService;
 
     @Inject
-    private TaxonDAO taxonDAO;
+    private TaxonDao taxonDao;
 
     @Test
     public void getMaterial() {
@@ -211,7 +211,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.ru");
 
-        Subject subject = (Subject) taxonDAO.findTaxonById(22L);
+        Subject subject = (Subject) taxonDao.findTaxonById(22L);
         material.setTaxons(asList(subject));
 
         KeyCompetence keyCompetence = new KeyCompetence();
@@ -247,7 +247,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.com");
 
-        Subject subject = (Subject) taxonDAO.findTaxonById(21L);
+        Subject subject = (Subject) taxonDao.findTaxonById(21L);
         material.setTaxons(asList(subject));
 
         KeyCompetence keyCompetence = new KeyCompetence();

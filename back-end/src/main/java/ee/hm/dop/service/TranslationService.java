@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.LanguageDAO;
+import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -18,14 +18,14 @@ public class TranslationService {
     private TranslationDAO translationDAO;
 
     @Inject
-    private LanguageDAO languageDAO;
+    private LanguageDao languageDao;
 
     public Map<String, String> getTranslationsFor(String languageCode) {
         if (languageCode == null) {
             return null;
         }
 
-        Language language = languageDAO.findByCode(languageCode);
+        Language language = languageDao.findByCode(languageCode);
         if (language == null) {
             return null;
         }
@@ -59,7 +59,7 @@ public class TranslationService {
      * @return
      */
     private Map<String, String> getDomainsAndSubjectsInEstonian() {
-        Language language = languageDAO.findByCode("est");
+        Language language = languageDao.findByCode("est");
         if (language == null) {
             return null;
         }

@@ -4,16 +4,11 @@ import ee.hm.dop.model.ChangedLearningObject;
 
 import java.util.List;
 
-public class ChangedLearningObjectDAO extends BaseDAO<ChangedLearningObject> {
+public class ChangedLearningObjectDao extends AbstractDao<ChangedLearningObject> {
 
     public List<ChangedLearningObject> getAllByLearningObject(long learningObjectId) {
-        return createQuery(
-                "FROM ChangedLearningObject clo WHERE clo.learningObject.id = :id", ChangedLearningObject.class) //
+        return getEntityManager().createQuery("FROM ChangedLearningObject clo WHERE clo.learningObject.id = :id", entity()) //
                 .setParameter("id", learningObjectId).getResultList();
-    }
-
-    public List<ChangedLearningObject> findAll() {
-        return createQuery("FROM ChangedLearningObject", ChangedLearningObject.class).getResultList();
     }
 
     public boolean removeById(long id) {

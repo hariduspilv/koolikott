@@ -10,11 +10,7 @@ import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 
-public class TagUpVoteDAO extends BaseDAO<TagUpVote> {
-
-    public TagUpVote findById(long id) {
-        return getEntityManager().find(TagUpVote.class, id);
-    }
+public class TagUpVoteDao extends AbstractDao<TagUpVote> {
 
     public void setDeleted(TagUpVote tagUpVote) {
         setDeleted(tagUpVote, true);
@@ -26,24 +22,23 @@ public class TagUpVoteDAO extends BaseDAO<TagUpVote> {
         }
 
         tagUpVote.setDeleted(deleted);
-        update(tagUpVote);
+        createOrUpdate(tagUpVote);
     }
 
     public TagUpVote findByTagAndUserAndLearningObject(Tag tag, User user, LearningObject learningObject) {
-        TypedQuery<TagUpVote> query = createQuery(
-                "SELECT t FROM TagUpVote t WHERE t.deleted = false and t.learningObject = :learningObject and t.user = :user and t.tag = :tag",
-                TagUpVote.class) //
-                .setParameter("learningObject", learningObject) //
-                .setParameter("user", user) //
+        TypedQuery<TagUpVote> query = getEntityManager().createQuery(
+                "SELECT t FROM TagUpVote t WHERE t.deleted = false " +
+                        "and t.learningObject = :learningObject " +
+                        "and t.user = :user and t.tag = :tag", entity())
+                .setParameter("learningObject", learningObject)
+                .setParameter("user", user)
                 .setParameter("tag", tag);
-
         return getSingleResult(query);
     }
 
     public List<TagUpVote> findByLearningObjectAndTag(LearningObject learningObject, Tag tag) {
-        return createQuery(
-                "SELECT t FROM TagUpVote t WHERE t.learningObject = :learningObject AND t.tag = :tag AND t.deleted = false",
-                TagUpVote.class) //
+        return getEntityManager().createQuery(
+                "SELECT t FROM TagUpVote t WHERE t.learningObject = :learningObject AND t.tag = :tag AND t.deleted = false", entity()) //
                 .setParameter("learningObject", learningObject) //
                 .setParameter("tag", tag) //
                 .getResultList();
