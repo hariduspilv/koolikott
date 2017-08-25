@@ -36,28 +36,20 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class SolrService implements SolrEngineService {
 
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
-
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
     private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=%d";
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
-
-
     static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
-
     static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
-
     static final String SOLR_STATUS_BUSY = "busy";
 
     @Inject
     private Client client;
-
     @Inject
     private Configuration configuration;
-
     private SolrClient solrClient;
-
     private SolrIndexThread indexThread;
 
     SolrService() {
@@ -86,7 +78,6 @@ public class SolrService implements SolrEngineService {
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setRequestHandler(suggestTags ? SUGGEST_TAG_URL : SUGGEST_URL);
         solrQuery.setQuery(query);
-        List<String> suggestions = new ArrayList<>();
 
         try {
             qr = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
@@ -94,6 +85,7 @@ public class SolrService implements SolrEngineService {
             logger.error("The SolrServer encountered an error.");
         }
 
+        List<String> suggestions = new ArrayList<>();
         if (qr != null && qr.getSuggesterResponse() != null) {
             List<Suggestion> combinedSuggestions = new ArrayList<>();
 
