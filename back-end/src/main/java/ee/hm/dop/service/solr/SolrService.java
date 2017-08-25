@@ -30,6 +30,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Singleton
 public class SolrService implements SolrEngineService {
@@ -164,7 +165,7 @@ public class SolrService implements SolrEngineService {
 
     static String getTokenizedQueryString(String query) {
         StringBuilder sb = new StringBuilder();
-        if (!isBlank(query)) {
+        if (isNotBlank(query)) {
             query = query.replaceAll("\\+", " ");
             DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
             while (tokenizer.hasMoreTokens()) {
