@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.UploadedFileService;
+import ee.hm.dop.service.content.UploadedFileService;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;

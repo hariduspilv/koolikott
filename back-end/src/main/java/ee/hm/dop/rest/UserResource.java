@@ -17,8 +17,8 @@ import javax.ws.rs.core.MediaType;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
-import ee.hm.dop.service.AuthenticatedUserService;
-import ee.hm.dop.service.UserService;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import ee.hm.dop.service.useractions.UserService;
 
 @Path("user")
 public class UserResource extends BaseResource {

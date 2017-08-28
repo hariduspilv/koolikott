@@ -19,8 +19,8 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.ImproperContentService;
-import ee.hm.dop.service.LearningObjectService;
+import ee.hm.dop.service.content.ImproperContentService;
+import ee.hm.dop.service.content.LearningObjectService;
 
 @Path("impropers")
 public class ImproperContentResource extends BaseResource {

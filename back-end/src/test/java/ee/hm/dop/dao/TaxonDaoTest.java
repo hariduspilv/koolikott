@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
@@ -32,7 +33,7 @@ public class TaxonDaoTest extends DatabaseTestBase {
     @Test
     public void findEducationalContextByName() {
         Long id = 1L;
-        String name = "PRESCHOOLEDUCATION";
+        String name = EducationalContextC.PRESCHOOLEDUCATION;
 
         EducationalContext educationalContext = (EducationalContext) taxonDao.findContextByName(name, TaxonDao.EDUCATIONAL_CONTEXT);
 
@@ -42,7 +43,7 @@ public class TaxonDaoTest extends DatabaseTestBase {
     @Test
     public void findEducationalContextByNameWrongCase() {
         Long id = 1L;
-        String name = "PRESCHOOLEDUCATION";
+        String name = EducationalContextC.PRESCHOOLEDUCATION;
 
         EducationalContext educationalContext = (EducationalContext) taxonDao.findContextByName("preschooleducation", TaxonDao.EDUCATIONAL_CONTEXT);
 

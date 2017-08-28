@@ -3,8 +3,8 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.dto.TagDTO;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.LearningObjectService;
-import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.metadata.TagService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;

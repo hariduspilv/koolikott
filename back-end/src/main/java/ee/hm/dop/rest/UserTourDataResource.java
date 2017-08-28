@@ -1,7 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.UserTourData;
-import ee.hm.dop.service.UserTourDataService;
+import ee.hm.dop.service.useractions.UserTourDataService;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;

@@ -7,8 +7,8 @@ import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.PortfolioService;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.PortfolioService;
 
 public class LearningObjectHandlerFactory {
 

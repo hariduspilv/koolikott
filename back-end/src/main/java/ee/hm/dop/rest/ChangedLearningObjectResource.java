@@ -3,7 +3,7 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.ChangedLearningObjectService;
+import ee.hm.dop.service.content.ChangedLearningObjectService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;

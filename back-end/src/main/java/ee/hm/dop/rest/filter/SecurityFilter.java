@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.login.LogoutService;
 import org.joda.time.DateTime;
 

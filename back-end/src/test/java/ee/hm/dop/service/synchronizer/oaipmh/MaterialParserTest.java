@@ -14,7 +14,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.metadata.LanguageService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

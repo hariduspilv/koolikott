@@ -30,7 +30,7 @@ import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.soap.GetMobileAuthenticateStatusResponse;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
-import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.metadata.LanguageService;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

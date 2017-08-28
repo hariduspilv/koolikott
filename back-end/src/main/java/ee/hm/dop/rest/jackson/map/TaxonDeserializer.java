@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.service.metadata.TaxonService;
 
 public class TaxonDeserializer extends JsonDeserializer<Taxon> {
 

@@ -11,8 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Page;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.PageService;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.content.PageService;
 
 @Path("page")
 public class PageResource extends BaseResource {

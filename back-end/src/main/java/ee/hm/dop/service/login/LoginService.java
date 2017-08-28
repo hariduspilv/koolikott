@@ -2,7 +2,7 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.service.UserService;
+import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
