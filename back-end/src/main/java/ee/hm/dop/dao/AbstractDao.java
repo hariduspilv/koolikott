@@ -1,11 +1,15 @@
 package ee.hm.dop.dao;
 
+import ee.hm.dop.ApplicationLauncher;
 import ee.hm.dop.model.AbstractEntity;
 import ee.hm.dop.model.Deletable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -13,6 +17,7 @@ import java.util.List;
 
 public abstract class AbstractDao<Entity extends AbstractEntity> {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     public static final String ALIAS = " o ";
     public static final String WHERE = " where ";
     public static final String AND = " and ";
@@ -156,7 +161,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-//            logger.debug("Query had no results.");
+            logger.debug("Query had no results." + query.getParameters());
+            return null;
+        } catch (NonUniqueResultException e){
+            logger.debug("Query had more than 1 results." + query.getParameters());
             return null;
         }
     }
