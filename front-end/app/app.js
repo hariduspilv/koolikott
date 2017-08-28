@@ -236,7 +236,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
             $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortforlioPage);
 
-            if (isViewMyProfile && $location.path() === '/' + authenticatedUserService.getUser().username) {
+            if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
             }
 
@@ -254,7 +254,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $rootScope.isEditPortfolioMode = true;
                 $rootScope.selectedMaterials = [];
                 $rootScope.selectedSingleMaterial = null;
-            } else if (editModeAllowed.indexOf(path) != -1) {
+            } else if (editModeAllowed.indexOf(path) !== -1) {
                 $rootScope.selectedSingleMaterial = null;
                 $rootScope.selectedMaterials = [];
             } else {
@@ -299,7 +299,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', function ($rootScope, authenticatedUserService, $route, $location) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         for (var i in $route.routes) {
-            if (next.indexOf(i) != -1) {
+            if (next.indexOf(i) !== -1) {
                 var permissions = $route.routes[i].permissions;
 
                 if (permissions === undefined) continue;
