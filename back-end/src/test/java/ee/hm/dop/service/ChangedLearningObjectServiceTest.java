@@ -1,7 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.dao.ChangedLearningObjectDao;
-import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -38,7 +38,7 @@ public class ChangedLearningObjectServiceTest {
     private ChangedLearningObjectDao changedLearningObjectDao;
 
     @Mock
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
 
     @Test
     public void addChanged() {
@@ -94,10 +94,10 @@ public class ChangedLearningObjectServiceTest {
         expect(learningObjectService.get(1L, user)).andReturn(material);
         expect(changedLearningObjectDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
         expect(changedLearningObjectDao.removeAllByLearningObject(1L)).andReturn(true);
-        expect(learningObjectDAO.update(material)).andReturn(material);
+        expect(learningObjectDao.createOrUpdate(material)).andReturn(material);
         replay(learningObjectService);
         replay(changedLearningObjectDao);
-        replay(learningObjectDAO);
+        replay(learningObjectDao);
 
         LearningObject updated = changedLearningObjectService.revertAllChanges(1L, user);
 

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -32,7 +32,7 @@ public class LearningObjectServiceTest {
     private LearningObjectService learningObjectService;
 
     @Mock
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
 
     @Mock
     private SolrEngineService solrEngineService;
@@ -59,8 +59,8 @@ public class LearningObjectServiceTest {
         // Needs to be modifiable
         List<LearningObject> firstLearningObjects = new ArrayList<>(
                 Arrays.asList(portfolio1, portfolio2, material1, portfolio3));
-        expect(learningObjectService.getLearningObjectDAO()).andReturn(learningObjectDAO).anyTimes();
-        expect(learningObjectDAO.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
+        expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
+        expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
 
         expect(learningObjectService.getLearningObjectHandler(portfolio1)).andReturn(new PortfolioService()).anyTimes();
         expect(learningObjectService.getLearningObjectHandler(portfolio2)).andReturn(new PortfolioService()).anyTimes();
@@ -72,7 +72,7 @@ public class LearningObjectServiceTest {
 
         List<LearningObject> secondLearningObjects = new ArrayList<>();
         secondLearningObjects.add(portfolio4);
-        expect(learningObjectDAO.findNewestLearningObjects(1, 4)).andReturn(secondLearningObjects);
+        expect(learningObjectDao.findNewestLearningObjects(1, 4)).andReturn(secondLearningObjects);
         expect(learningObjectService.getLearningObjectHandler(portfolio4)).andReturn(new PortfolioService()).anyTimes();
 
         List<LearningObject> expected = Arrays.asList(portfolio1, material1, portfolio3, portfolio4);
@@ -91,8 +91,8 @@ public class LearningObjectServiceTest {
     public void getNewestLearningObjectsWhenNoResults() {
         int numberOfLearningObjects = 4;
 
-        expect(learningObjectService.getLearningObjectDAO()).andReturn(learningObjectDAO).anyTimes();
-        expect(learningObjectDAO.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(new ArrayList<>());
+        expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
+        expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(new ArrayList<>());
         List<LearningObject> expected = Arrays.asList();
 
         replayAll(learningObjectService);
@@ -115,11 +115,11 @@ public class LearningObjectServiceTest {
         List<LearningObject> firstLearningObjects = new ArrayList<>();
         firstLearningObjects.add(portfolio1);
 
-        expect(learningObjectService.getLearningObjectDAO()).andReturn(learningObjectDAO).anyTimes();
-        expect(learningObjectDAO.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
+        expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
+        expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
         expect(learningObjectService.getLearningObjectHandler(portfolio1)).andReturn(new PortfolioService()).anyTimes();
 
-        expect(learningObjectDAO.findNewestLearningObjects(3, 4)).andReturn(new ArrayList<>());
+        expect(learningObjectDao.findNewestLearningObjects(3, 4)).andReturn(new ArrayList<>());
 
         List<LearningObject> expected = Collections.singletonList(portfolio1);
 
@@ -134,7 +134,7 @@ public class LearningObjectServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(learningObjectDAO, solrEngineService);
+        replay(learningObjectDao, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -144,7 +144,7 @@ public class LearningObjectServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(learningObjectDAO, solrEngineService);
+        verify(learningObjectDao, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -155,7 +155,7 @@ public class LearningObjectServiceTest {
 
     public LearningObjectService getLearningObjectService() throws NoSuchMethodException {
         Method getLearningObjectHandler = LearningObjectService.class.getDeclaredMethod("getLearningObjectHandler", LearningObject.class);
-        Method getLearningObjectDAO = LearningObjectService.class.getDeclaredMethod("getLearningObjectDAO");
+        Method getLearningObjectDAO = LearningObjectService.class.getDeclaredMethod("getLearningObjectDao");
 
         return createMockBuilder(LearningObjectService.class).addMockedMethods(getLearningObjectHandler, getLearningObjectDAO).createMock();
     }

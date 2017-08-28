@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Picture;
@@ -39,7 +39,7 @@ public class RepositoryService {
     @Inject
     private MaterialService materialService;
     @Inject
-    private MaterialDAO materialDAO;
+    private MaterialDao materialDao;
     @Inject
     private PictureService pictureService;
 
@@ -114,7 +114,7 @@ public class RepositoryService {
     }
 
     private void handleMaterial(Repository repository, Material material, SynchronizationAudit audit) {
-        Material existentMaterial = materialDAO.findByRepositoryAndRepositoryIdentifier(repository,
+        Material existentMaterial = materialDao.findByRepositoryAndRepositoryIdentifier(repository,
                 material.getRepositoryIdentifier());
 
         material.setRepository(repository);

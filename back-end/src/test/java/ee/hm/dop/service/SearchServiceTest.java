@@ -1,7 +1,7 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.LearningObjectDAO;
-import ee.hm.dop.dao.ReducedLearningObjectDAO;
+import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.CrossCurricularTheme;
 import ee.hm.dop.model.KeyCompetence;
@@ -51,7 +51,7 @@ public class SearchServiceTest {
     private SolrEngineService solrEngineService;
 
     @Mock
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
 
     @Mock
     private UserFavoriteDao userFavoriteDao;
@@ -60,7 +60,7 @@ public class SearchServiceTest {
     private TargetGroupService targetGroupService;
 
     @Mock
-    private ReducedLearningObjectDAO reducedLearningObjectDAO;
+    private ReducedLearningObjectDao reducedLearningObjectDao;
 
     @TestSubject
     private SearchService searchService = new SearchService();
@@ -992,7 +992,7 @@ public class SearchServiceTest {
             expect(solrEngineService.search(tokenizedQuery, start, limit, expectedSort)).andReturn(searchResponse);
         }
 
-        expect(reducedLearningObjectDAO.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
+        expect(reducedLearningObjectDao.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
             for (Long id : learningObjectIdentifiers) {
                 expect(userFavoriteDao.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
@@ -1077,11 +1077,11 @@ public class SearchServiceTest {
     }
 
     private void replayAll() {
-        replay(solrEngineService, learningObjectDAO, userFavoriteDao, reducedLearningObjectDAO);
+        replay(solrEngineService, learningObjectDao, userFavoriteDao, reducedLearningObjectDao);
     }
 
     private void verifyAll() {
-        verify(solrEngineService, learningObjectDAO, userFavoriteDao, reducedLearningObjectDAO);
+        verify(solrEngineService, learningObjectDao, userFavoriteDao, reducedLearningObjectDao);
     }
 
     private ReducedMaterial createMaterial(Long id) {

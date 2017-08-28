@@ -1,8 +1,8 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.dao.ChapterObjectDao;
-import ee.hm.dop.dao.PortfolioDAO;
-import ee.hm.dop.dao.ReducedLearningObjectDAO;
+import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
@@ -32,7 +32,7 @@ import static org.joda.time.DateTime.now;
 public class PortfolioService extends BaseService implements LearningObjectHandler {
 
     @Inject
-    private PortfolioDAO portfolioDAO;
+    private PortfolioDao portfolioDao;
     @Inject
     private UserLikeDao userLikeDao;
     @Inject
@@ -42,14 +42,14 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
-    private ReducedLearningObjectDAO reducedLearningObjectDAO;
+    private ReducedLearningObjectDao reducedLearningObjectDao;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
         if (isUserAdmin(loggedInUser) || isUserModerator(loggedInUser)) {
-            portfolio = portfolioDAO.findByIdFromAll(portfolioId);
+            portfolio = portfolioDao.findById(portfolioId);
         } else {
-            portfolio = portfolioDAO.findByIdNotDeleted(portfolioId);
+            portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
 
             if (!hasPermissionsToView(loggedInUser, portfolio)) {
                 throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
@@ -59,22 +59,22 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return reducedLearningObjectDAO.findPortfolioByCreator(creator, start, maxResults).stream()
+        return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
                 .filter(p -> hasPermissionsToAccess(loggedInUser, p))
                 .collect(Collectors.toList());
     }
 
     public Long getCountByCreator(User creator) {
-        return portfolioDAO.findCountByCreator(creator);
+        return portfolioDao.findCountByCreator(creator);
     }
 
     public void incrementViewCount(Portfolio portfolio) {
-        Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
 
-        portfolioDAO.incrementViewCount(originalPortfolio);
+        portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
     }
 
@@ -82,7 +82,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         if (isEmpty(comment.getText()) || comment.getId() != null)
             throw new RuntimeException("Comment is missing text or already exists.");
 
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
@@ -90,14 +90,14 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
         comment.setAdded(DateTime.now());
         originalPortfolio.getComments().add(comment);
-        portfolioDAO.update(originalPortfolio);
+        portfolioDao.createOrUpdate(originalPortfolio);
     }
 
     public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
@@ -118,7 +118,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
@@ -132,7 +132,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
-        Portfolio originalPortfolio = portfolioDAO.findByIdFromAll(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
@@ -146,7 +146,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio not found");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Portfolio not found or user is not admin");
         }
@@ -157,7 +157,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
 
         originalPortfolio.setRecommendation(recommendation);
 
-        originalPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
+        originalPortfolio = (Portfolio) portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
         return originalPortfolio.getRecommendation();
@@ -168,14 +168,14 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio not found");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !isUserAdmin(loggedInUser)) {
             throw new RuntimeException("Portfolio not found or user is not admin");
         }
 
         originalPortfolio.setRecommendation(null);
 
-        portfolioDAO.update(originalPortfolio);
+        portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
     }
 
@@ -201,7 +201,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         saveNewObjectsInChapters(originalPortfolio);
         originalPortfolio.setUpdated(now());
 
-        Portfolio updatedPortfolio = (Portfolio) portfolioDAO.update(originalPortfolio);
+        Portfolio updatedPortfolio = (Portfolio) portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
         processChanges(portfolio);
@@ -255,7 +255,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio not found");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
@@ -272,18 +272,18 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Portfolio must already exist.");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToUpdate(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
-        portfolioDAO.delete(originalPortfolio);
+        portfolioDao.delete(originalPortfolio);
         solrEngineService.updateIndex();
     }
 
     public void restore(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = portfolioDAO.findDeletedById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findDeletedById(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
@@ -292,16 +292,16 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Logged in user must be an administrator.");
         }
 
-        portfolioDAO.restore(originalPortfolio);
+        portfolioDao.restore(originalPortfolio);
         solrEngineService.updateIndex();
     }
 
     public List<Portfolio> getDeletedPortfolios() {
-        return portfolioDAO.findDeletedPortfolios();
+        return portfolioDao.findDeletedPortfolios();
     }
 
     public Long getDeletedPortfoliosCount() {
-        return portfolioDAO.findDeletedPortfoliosCount();
+        return portfolioDao.findDeletedPortfoliosCount();
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
@@ -313,7 +313,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
             throw new RuntimeException("Required field title must be filled.");
         }
 
-        Portfolio originalPortfolio = portfolioDAO.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToUpdate(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or the user that is updating must be logged in user must be the creator, administrator or moderator.");
@@ -329,7 +329,7 @@ public class PortfolioService extends BaseService implements LearningObjectHandl
         portfolio.setVisibility(Visibility.PRIVATE);
         portfolio.setAdded(now());
 
-        Portfolio createdPortfolio = (Portfolio) portfolioDAO.update(portfolio);
+        Portfolio createdPortfolio = (Portfolio) portfolioDao.createOrUpdate(portfolio);
         solrEngineService.updateIndex();
 
         return createdPortfolio;

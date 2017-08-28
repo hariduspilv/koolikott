@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ee.hm.dop.dao.MaterialDAO;
+import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.MaterialService;
@@ -54,7 +54,7 @@ public class RepositoryServiceTest {
     private RepositoryDao repositoryDao;
 
     @Mock
-    private MaterialDAO materialDao;
+    private MaterialDao materialDao;
 
     @Mock
     private SolrEngineService solrEngineService;

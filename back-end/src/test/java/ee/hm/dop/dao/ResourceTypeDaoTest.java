@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
 import org.joda.time.DateTime;
@@ -21,7 +20,7 @@ public class ResourceTypeDaoTest extends DatabaseTestBase {
     private ResourceTypeDao resourceTypeDao;
 
     @Inject
-    private MaterialDAO materialDAO;
+    private MaterialDao materialDao;
 
     @Test
     public void findResourceTypeByName() {
@@ -52,12 +51,12 @@ public class ResourceTypeDaoTest extends DatabaseTestBase {
         List<ResourceType> before = resourceTypeDao.findUsedResourceTypes();
         assertEquals(5, before.size());
 
-        LearningObject newMaterial = materialDAO.update(material);
+        Material newMaterial = materialDao.createOrUpdate(material);
 
         List<ResourceType> result = resourceTypeDao.findUsedResourceTypes();
         assertEquals(6, result.size());
 
-        materialDAO.remove(newMaterial);
+        materialDao.remove(newMaterial);
 
         List<ResourceType> finalList = resourceTypeDao.findUsedResourceTypes();
         assertEquals(5, finalList.size());

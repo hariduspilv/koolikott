@@ -1,7 +1,7 @@
 package ee.hm.dop.service.solr;
 
-import ee.hm.dop.dao.LearningObjectDAO;
-import ee.hm.dop.dao.ReducedLearningObjectDAO;
+import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
@@ -12,12 +12,10 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,9 +39,9 @@ public class SearchService {
     @Inject
     private UserFavoriteDao userFavoriteDao;
     @Inject
-    private ReducedLearningObjectDAO reducedLearningObjectDAO;
+    private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
@@ -88,7 +86,7 @@ public class SearchService {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<Searchable> unsortedSearchable = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(learningObjectIds)) {
-            reducedLearningObjectDAO.findAllById(learningObjectIds).forEach(searchable -> {
+            reducedLearningObjectDao.findAllById(learningObjectIds).forEach(searchable -> {
                 if (loggedInUser != null) {
                     UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
                     searchable.setFavorite(userFavorite != null && userFavorite.getId() != null);
