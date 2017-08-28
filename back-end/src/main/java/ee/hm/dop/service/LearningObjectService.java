@@ -1,8 +1,8 @@
 package ee.hm.dop.service;
 
-import ee.hm.dop.dao.LearningObjectDAO;
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
@@ -29,15 +29,15 @@ import java.util.function.BiFunction;
 public class LearningObjectService extends BaseService {
 
     @Inject
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
     private UserFavoriteDao userFavoriteDao;
     @Inject
-    private MaterialDAO materialDAO;
+    private MaterialDao materialDao;
     @Inject
-    private PortfolioDAO portfolioDAO;
+    private PortfolioDao portfolioDao;
     @Inject
     private TaxonService taxonService;
     @Inject
@@ -50,7 +50,7 @@ public class LearningObjectService extends BaseService {
     private TagService tagService;
 
     public LearningObject get(long learningObjectId, User user) {
-        LearningObject learningObject = getLearningObjectDAO().findById(learningObjectId);
+        LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
         if (!hasPermissionsToAccess(user, learningObject)) {
             learningObject = null;
         }
@@ -78,7 +78,7 @@ public class LearningObjectService extends BaseService {
         }
 
         tags.add(tag);
-        updatedLearningObject = getLearningObjectDAO().update(learningObject);
+        updatedLearningObject = getLearningObjectDao().createOrUpdate(learningObject);
         solrEngineService.updateIndex();
 
         return updatedLearningObject;
@@ -137,7 +137,7 @@ public class LearningObjectService extends BaseService {
 
         changedLearningObjectService.addChanged(changedLearningObject);
 
-        LearningObject updatedLearningObject = getLearningObjectDAO().update(learningObject);
+        LearningObject updatedLearningObject = getLearningObjectDao().createOrUpdate(learningObject);
         updatedLearningObject.setChanged(hasChanged ? (updatedLearningObject.getChanged() + 1) : updatedLearningObject.getChanged());
         tagDTO.setLearningObject(updatedLearningObject);
 
@@ -171,9 +171,9 @@ public class LearningObjectService extends BaseService {
         LearningObject learningObject = null;
 
         if (isMaterial(type)) {
-            learningObject = materialDAO.findById(learningObjectId);
+            learningObject = materialDao.findById(learningObjectId);
         } else if (isPortfolio(type)) {
-            learningObject = portfolioDAO.findById(learningObjectId);
+            learningObject = portfolioDao.findById(learningObjectId);
         }
 
         return learningObject;
@@ -208,15 +208,15 @@ public class LearningObjectService extends BaseService {
     }
 
     List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
-        return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDAO()::findNewestLearningObjects);
+        return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDao()::findNewestLearningObjects);
     }
 
     LearningObjectHandler getLearningObjectHandler(LearningObject learningObject) {
         return LearningObjectHandlerFactory.get(learningObject.getClass());
     }
 
-    LearningObjectDAO getLearningObjectDAO() {
-        return learningObjectDAO;
+    LearningObjectDao getLearningObjectDao() {
+        return learningObjectDao;
     }
 
     public UserFavorite addUserFavorite(LearningObject learningObject, User loggedInUser) {
@@ -231,7 +231,7 @@ public class LearningObjectService extends BaseService {
     }
 
     public void removeUserFavorite(Long id, User loggedInUser) {
-        LearningObject learningObject = learningObjectDAO.findById(id);
+        LearningObject learningObject = learningObjectDao.findById(id);
 
         validateLearningObjectAndIdNotNull(learningObject);
         userFavoriteDao.deleteByLearningObjectAndUser(learningObject, loggedInUser);

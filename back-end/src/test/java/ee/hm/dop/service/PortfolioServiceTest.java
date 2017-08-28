@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
-import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.enums.Role;
@@ -34,7 +34,7 @@ public class PortfolioServiceTest {
     private PortfolioService portfolioService = new PortfolioService();
 
     @Mock
-    private PortfolioDAO portfolioDAO;
+    private PortfolioDao portfolioDao;
 
     @Mock
     private SolrEngineService solrEngineService;
@@ -43,7 +43,7 @@ public class PortfolioServiceTest {
     public void get() {
         int portfolioId = 125;
         Portfolio portfolio = createMock(Portfolio.class);
-        expect(portfolioDAO.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
+        expect(portfolioDao.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
         expect(portfolio.getVisibility()).andReturn(Visibility.PUBLIC);
         expect(portfolio.isDeleted()).andReturn(false);
 
@@ -61,8 +61,8 @@ public class PortfolioServiceTest {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(99L);
         Portfolio originalPortfolio = createMock(Portfolio.class);
-        expect(portfolioDAO.findByIdFromAll(portfolio.getId())).andReturn(originalPortfolio);
-        portfolioDAO.incrementViewCount(originalPortfolio);
+        expect(portfolioDao.findById(portfolio.getId())).andReturn(originalPortfolio);
+        portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
 
         replayAll(originalPortfolio);
@@ -76,7 +76,7 @@ public class PortfolioServiceTest {
     public void incrementViewCountPortfolioNotFound() {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(99L);
-        expect(portfolioDAO.findByIdFromAll(portfolio.getId())).andReturn(null);
+        expect(portfolioDao.findById(portfolio.getId())).andReturn(null);
 
         replayAll();
 
@@ -111,7 +111,7 @@ public class PortfolioServiceTest {
         originalPortfolio.setTitle("Super title");
         originalPortfolio.setCreator(user);
 
-        expect(portfolioDAO.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
+        expect(portfolioDao.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
         expectPortfolioUpdate(capturedPortfolio);
         solrEngineService.updateIndex();
 
@@ -128,7 +128,7 @@ public class PortfolioServiceTest {
     }
 
     private void expectPortfolioUpdate(Capture<Portfolio> capturedPortfolio) {
-        expect(portfolioDAO.update(EasyMock.capture(capturedPortfolio))).andAnswer(new IAnswer<Portfolio>() {
+        expect(portfolioDao.createOrUpdate(EasyMock.capture(capturedPortfolio))).andAnswer(new IAnswer<Portfolio>() {
             @Override
             public Portfolio answer() throws Throwable {
                 return capturedPortfolio.getValue();
@@ -157,7 +157,7 @@ public class PortfolioServiceTest {
         originalPortfolio.setTitle("Super title");
         originalPortfolio.setCreator(user);
 
-        expect(portfolioDAO.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
+        expect(portfolioDao.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
         expectPortfolioUpdate(capturedPortfolio);
         solrEngineService.updateIndex();
 
@@ -172,7 +172,7 @@ public class PortfolioServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(portfolioDAO, solrEngineService);
+        replay(portfolioDao, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -182,7 +182,7 @@ public class PortfolioServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(portfolioDAO, solrEngineService);
+        verify(portfolioDao, solrEngineService);
 
         if (mocks != null) {
             for (Object object : mocks) {

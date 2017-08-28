@@ -14,21 +14,21 @@ import org.junit.Test;
 /**
  * Created by mart on 10.03.16.
  */
-public class LearningObjectDAOTest extends DatabaseTestBase {
+public class LearningObjectDaoTest extends DatabaseTestBase {
 
     @Inject
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
 
     @Test
     public void getNewest() {
-        List<LearningObject> learningObjects = learningObjectDAO.findNewestLearningObjects(8, 0);
+        List<LearningObject> learningObjects = learningObjectDao.findNewestLearningObjects(8, 0);
         assertEquals(8, learningObjects.size());
         validateNewestAreFirst(learningObjects);
     }
 
     @Test
     public void getNewestFromThird() {
-        List<LearningObject> learningObjects = learningObjectDAO.findNewestLearningObjects(8, 3);
+        List<LearningObject> learningObjects = learningObjectDao.findNewestLearningObjects(8, 3);
         assertEquals(8, learningObjects.size());
         validateNewestAreFirst(learningObjects);
     }

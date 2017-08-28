@@ -1,7 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.dao.ChangedLearningObjectDao;
-import ee.hm.dop.dao.LearningObjectDAO;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -20,7 +20,7 @@ public class ChangedLearningObjectService {
     private ChangedLearningObjectDao changedLearningObjectDao;
 
     @Inject
-    private LearningObjectDAO learningObjectDAO;
+    private LearningObjectDao learningObjectDao;
 
     @Inject
     private LearningObjectService learningObjectService;
@@ -86,7 +86,7 @@ public class ChangedLearningObjectService {
         }
 
         boolean success = acceptAllChanges(id);
-        LearningObject updatedLearningObject = learningObjectDAO.update(learningObject);
+        LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
         if (success) {
             updatedLearningObject.setChanged(0);
         }

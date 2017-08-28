@@ -12,8 +12,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LanguageDao;
-import ee.hm.dop.dao.MaterialDAO;
-import ee.hm.dop.dao.PortfolioDAO;
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.dao.VersionDao;
 import ee.hm.dop.model.Author;
@@ -38,10 +38,10 @@ public class AtomFeedService {
     private Configuration configuration;
 
     @Inject
-    private MaterialDAO materialDAO;
+    private MaterialDao materialDao;
 
     @Inject
-    private PortfolioDAO portfolioDAO;
+    private PortfolioDao portfolioDao;
 
     @Inject
     private VersionDao versionDao;
@@ -83,7 +83,7 @@ public class AtomFeedService {
     private Feed getFeedEntries() {
         List<Entry> entryList = new ArrayList<>();
 
-        for (Material material : materialDAO.findNewestMaterials(maxFeedItems, 0)) {
+        for (Material material : materialDao.findNewestMaterials(maxFeedItems, 0)) {
             Entry entry = materialToEntry(material);
             if (entry != null)
                 entryList.add(entry);
@@ -95,7 +95,7 @@ public class AtomFeedService {
                 entryList.add(entry);
         }
 
-        for (Portfolio portfolio : portfolioDAO.findNewestPortfolios(maxFeedItems, 0)) {
+        for (Portfolio portfolio : portfolioDao.findNewestPortfolios(maxFeedItems, 0)) {
             Entry entry = portfolioToEntry(portfolio);
             if (entry != null)
                 entryList.add(entry);

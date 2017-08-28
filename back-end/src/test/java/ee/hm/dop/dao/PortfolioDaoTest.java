@@ -18,10 +18,10 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class PortfolioDAOTest extends DatabaseTestBase {
+public class PortfolioDaoTest extends DatabaseTestBase {
 
     @Inject
-    private PortfolioDAO portfolioDAO;
+    private PortfolioDao portfolioDao;
 
     @Inject
     private UserDao userDao;
@@ -30,21 +30,21 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void findById() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(101);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(101);
 
         assertPortfolio1(portfolio);
     }
 
     @Test
     public void findByIdWhenPortfolioDoesNotExist() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(100000);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(100000);
         assertNull(portfolio);
     }
 
     @Test
     public void findByIdOnlyMandatoryFields() {
         Long id = 102L;
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(id);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(id);
 
         assertNotNull(portfolio);
         assertEquals(id, portfolio.getId());
@@ -66,7 +66,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         idList.add(102L);
         idList.add(103L);
 
-        List<LearningObject> result = portfolioDAO.findAllById(idList);
+        List<LearningObject> result = portfolioDao.findAllById(idList);
 
         assertEquals(3, result.size());
 
@@ -82,14 +82,14 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         List<Long> idList = new ArrayList<>();
         idList.add((long) 90123);
 
-        List<LearningObject> result = portfolioDAO.findAllById(idList);
+        List<LearningObject> result = portfolioDao.findAllById(idList);
 
         assertEquals(0, result.size());
     }
 
     @Test
     public void findAllByIdEmptyList() {
-        List<LearningObject> result = portfolioDAO.findAllById(new ArrayList<>());
+        List<LearningObject> result = portfolioDao.findAllById(new ArrayList<>());
 
         assertEquals(0, result.size());
     }
@@ -99,7 +99,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         User creator = new User();
         creator.setId(6L);
 
-        List<LearningObject> portfolios = portfolioDAO.findByCreator(creator, 0, Integer.MAX_VALUE);
+        List<LearningObject> portfolios = portfolioDao.findByCreator(creator, 0, Integer.MAX_VALUE);
         assertEquals(3, portfolios.size());
         DateTime previous = null;
 
@@ -191,18 +191,18 @@ public class PortfolioDAOTest extends DatabaseTestBase {
 
     @Test
     public void increaseViewCount() {
-        Portfolio portfolio = portfolioDAO.findByIdNotDeleted(102);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(102);
         long originalViews = portfolio.getViews();
         assertSame(14L, originalViews);
 
         portfolio.setViews(++originalViews);
-        portfolioDAO.incrementViewCount(portfolio);
+        portfolioDao.incrementViewCount(portfolio);
 
-        Portfolio returnedPortfolio = portfolioDAO.findByIdNotDeleted(102);
+        Portfolio returnedPortfolio = portfolioDao.findByIdNotDeleted(102);
         assertSame(15L, returnedPortfolio.getViews());
 
         returnedPortfolio.setViews(14L);
-        Portfolio originalPortfolio = (Portfolio) portfolioDAO.update(returnedPortfolio);
+        Portfolio originalPortfolio = (Portfolio) portfolioDao.createOrUpdate(returnedPortfolio);
         assertSame(14L, originalPortfolio.getViews());
     }
 
@@ -218,7 +218,7 @@ public class PortfolioDAOTest extends DatabaseTestBase {
                 portfolio.setId(2L);
 
                 for (int i = 0; i < 10; i++) {
-                    portfolioDAO.incrementViewCount(portfolio);
+                    portfolioDao.incrementViewCount(portfolio);
                 }
 
                 threadsDone++;
@@ -238,11 +238,11 @@ public class PortfolioDAOTest extends DatabaseTestBase {
             }
         }
 
-        Portfolio newPortfolio = portfolioDAO.findByIdNotDeleted(102L);
+        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(102L);
         assertSame(14L, newPortfolio.getViews());
 
         newPortfolio.setViews(14L);
-        portfolioDAO.update(newPortfolio);
+        portfolioDao.createOrUpdate(newPortfolio);
     }
 
     @Test
@@ -257,10 +257,10 @@ public class PortfolioDAOTest extends DatabaseTestBase {
         comment.setCreator(user);
         comment.setAdded(DateTime.now());
 
-        Portfolio newPortfolio = portfolioDAO.findByIdNotDeleted(102L);
+        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(102L);
         newPortfolio.getComments().add(comment);
 
-        portfolioDAO.update(newPortfolio);
+        portfolioDao.createOrUpdate(newPortfolio);
     }
 
 }
