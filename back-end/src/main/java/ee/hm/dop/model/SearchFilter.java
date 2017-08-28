@@ -2,6 +2,7 @@ package ee.hm.dop.model;
 
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 
@@ -195,6 +196,10 @@ public class SearchFilter {
 
     public void setSearchType(String searchType) {
         this.searchType = searchType;
+    }
+
+    public boolean isEmpty() {
+        return CollectionUtils.isEmpty(taxon);
     }
 
     public enum SortDirection {

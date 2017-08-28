@@ -4,6 +4,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +15,13 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
 
     private static final Object lock = new Object();
 
+    private Class<LearningObject> entity() {
+        return LearningObject.class;
+    }
+
     public LearningObject findByIdNotDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery(
-                "SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", LearningObject.class) //
+                "SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", entity()) //
                 .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
@@ -24,7 +29,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
 
     public LearningObject findById(long objectId) {
         TypedQuery<LearningObject> findByCode = createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id",
-                LearningObject.class) //
+                entity()) //
                 .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
@@ -32,7 +37,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
 
     public List<LearningObject> findDeletedLearningObjects() {
         TypedQuery<LearningObject> query = createQuery("SELECT lo FROM LearningObject lo WHERE lo.deleted = true",
-                LearningObject.class);
+                entity());
         return query.getResultList();
     }
 
@@ -45,13 +50,19 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
      */
     public List<LearningObject> findAllById(List<Long> idList) {
         TypedQuery<LearningObject> findAllByIdList = createQuery(
-                "SELECT lo FROM LearningObject lo WHERE lo.deleted = false AND lo.id in :idList", LearningObject.class);
+                "SELECT lo FROM LearningObject lo WHERE lo.deleted = false AND lo.id in :idList", entity());
         return findAllByIdList.setParameter("idList", idList).getResultList();
+    }
+
+    public Long findAllNotDeleted() {
+        return (Long) getEntityManager()
+                .createQuery("SELECT count(lo) FROM LearningObject lo WHERE lo.deleted = false")
+                .getSingleResult();
     }
 
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
         return createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC",
-                LearningObject.class).setFirstResult(startPosition).setMaxResults(numberOfLearningObjects)
+                entity()).setFirstResult(startPosition).setMaxResults(numberOfLearningObjects)
                 .getResultList();
     }
 
@@ -82,7 +93,7 @@ public class LearningObjectDAO extends BaseDAO<LearningObject> {
      */
     public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
         String query = "SELECT lo FROM LearningObject lo WHERE lo.creator.id = :creatorId AND lo.deleted = false order by added desc";
-        TypedQuery<LearningObject> findAllByCreator = createQuery(query, LearningObject.class);
+        TypedQuery<LearningObject> findAllByCreator = createQuery(query, entity());
 
         TypedQuery<LearningObject> typedQuery = findAllByCreator.setParameter("creatorId", creator.getId()).setFirstResult(start);
 

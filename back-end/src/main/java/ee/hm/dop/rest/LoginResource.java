@@ -31,33 +31,26 @@ import java.nio.charset.StandardCharsets;
 import static java.lang.String.format;
 
 @Path("login")
-public class LogInResource extends BaseResource {
+public class LoginResource extends BaseResource {
 
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
-
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String LOGIN_REDIRECT_WITH_TOKEN = "../#!/loginRedirect?token=";
     private static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "../#!/loginRedirect";
 
     @Inject
     private LoginService loginService;
-
     @Inject
     private TaatService taatService;
-
     @Inject
     private EkoolService ekoolService;
-
     @Inject
     private StuudiumService stuudiumService;
-
     @Inject
     private HTTPRedirectDeflateEncoder encoder;
-
     @Inject
     private AuthenticatedUserService authenticatedUserService;
-
     @Inject
     private LanguageService languageService;
 
@@ -104,7 +97,6 @@ public class LogInResource extends BaseResource {
     @GET
     @Path("ekool/success")
     public Response ekoolAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
-
         try {
             AuthenticatedUser authenticatedUser = ekoolService.authenticate(code, getEkoolCallbackUrl());
             URI location = new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());

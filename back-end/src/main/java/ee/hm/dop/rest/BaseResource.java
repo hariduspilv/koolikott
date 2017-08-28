@@ -21,13 +21,10 @@ public class BaseResource {
 
     @Context
     private HttpServletRequest request;
-
     @Context
     private HttpServletResponse response;
-
     @Inject
     private Configuration configuration;
-
     private SecurityContext securityContext;
 
     @Context

@@ -1,5 +1,6 @@
 package ee.hm.dop.service.solr;
 
+import ee.hm.dop.dao.LearningObjectDAO;
 import ee.hm.dop.dao.ReducedLearningObjectDAO;
 import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.SearchFilter;
@@ -41,12 +42,19 @@ public class SearchService {
     private UserFavoriteDao userFavoriteDao;
     @Inject
     private ReducedLearningObjectDAO reducedLearningObjectDAO;
+    @Inject
+    private LearningObjectDAO learningObjectDAO;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
         String queryString = SearchConverter.composeQueryString(query, searchFilter);
 
         SearchResponse searchResponse = search(start, limit, searchFilter, queryString);
+
+//        if (StringUtils.isBlank(query) && searchFilter.isEmpty()){
+//            Long count = learningObjectDAO.findAllNotDeleted();
+//            searchResponse.getResponse().setTotalResults(count);
+//        }
 
         return handleResult(limit, searchFilter, searchResponse);
     }
