@@ -2,25 +2,25 @@ package ee.hm.dop.config.guice.module;
 
 import com.google.inject.servlet.ServletModule;
 import ee.hm.dop.config.guice.GuiceInjector.Module;
-import ee.hm.dop.service.AuthenticatedUserService;
-import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.LicenseTypeService;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import ee.hm.dop.service.metadata.CrossCurricularThemeService;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.service.login.LogoutService;
-import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.login.MobileIDLoginService;
 import ee.hm.dop.service.login.MobileIDSOAPService;
-import ee.hm.dop.service.PageService;
-import ee.hm.dop.service.PublisherService;
+import ee.hm.dop.service.content.PageService;
+import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.synchronizer.RepositoryService;
-import ee.hm.dop.service.ResourceTypeService;
+import ee.hm.dop.service.metadata.ResourceTypeService;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.login.TaatService;
-import ee.hm.dop.service.TagService;
-import ee.hm.dop.service.TaxonService;
-import ee.hm.dop.service.TranslationService;
-import ee.hm.dop.service.UserService;
+import ee.hm.dop.service.metadata.TagService;
+import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.metadata.TranslationService;
+import ee.hm.dop.service.useractions.UserService;
 import org.opensaml.saml2.binding.encoding.HTTPRedirectDeflateEncoder;
 
 @Module

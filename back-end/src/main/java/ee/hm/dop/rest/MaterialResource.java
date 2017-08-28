@@ -26,8 +26,8 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.UserService;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.useractions.UserService;
 
 @Path("material")
 public class MaterialResource extends BaseResource {

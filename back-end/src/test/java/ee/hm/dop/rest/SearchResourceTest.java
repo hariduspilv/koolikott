@@ -10,6 +10,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
@@ -74,7 +75,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(1L);
-        educationalContext.setName("PRESCHOOLEDUCATION");
+        educationalContext.setName(EducationalContextC.PRESCHOOLEDUCATION);
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         SearchResult searchResult = doGet(buildQueryURL(null, 0, null, searchFilter), SearchResult.class);
 
@@ -213,7 +214,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
-        educationalContext.setName("BASICEDUCATION");
+        educationalContext.setName(EducationalContextC.BASICEDUCATION);
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");

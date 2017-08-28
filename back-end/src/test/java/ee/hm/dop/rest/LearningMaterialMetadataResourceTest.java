@@ -7,6 +7,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -47,7 +48,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         int domains = 0, subjects = 0;
 
         for (EducationalContext educationalContext : educationalContexts) {
-            if (educationalContext.getName().equals("PRESCHOOLEDUCATION")) {
+            if (educationalContext.getName().equals(EducationalContextC.PRESCHOOLEDUCATION)) {
                 for (Domain domain : educationalContext.getDomains()) {
                     domains++;
                     if (domain.getName().equals("Mathematics")) {

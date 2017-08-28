@@ -8,8 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.service.SuggestService;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
+import ee.hm.dop.service.solr.SuggestService;
 
 /**
  * Created by joonas on 15.08.16.

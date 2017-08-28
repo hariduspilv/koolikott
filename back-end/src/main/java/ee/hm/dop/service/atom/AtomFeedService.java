@@ -1,6 +1,6 @@
 package ee.hm.dop.service.atom;
 
-import static ee.hm.dop.service.TranslationService.filterByLanguage;
+import static ee.hm.dop.service.metadata.TranslationService.filterByLanguage;
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FEED_ITEMS;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.lang.String.format;

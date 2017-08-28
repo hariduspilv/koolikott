@@ -2,9 +2,9 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
-import ee.hm.dop.service.AuthenticatedUserService;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.login.EkoolService;
-import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.service.login.StuudiumService;
 import ee.hm.dop.service.login.TaatService;

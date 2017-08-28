@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.Language;
-import ee.hm.dop.service.LanguageService;
+import ee.hm.dop.service.metadata.LanguageService;
 
 /**
  * Converts JSON language code to Language object

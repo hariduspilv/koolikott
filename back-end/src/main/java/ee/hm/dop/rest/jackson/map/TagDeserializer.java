@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.Tag;
-import ee.hm.dop.service.TagService;
+import ee.hm.dop.service.metadata.TagService;
 
 /**
  * Converts JSON tag string into Tag.

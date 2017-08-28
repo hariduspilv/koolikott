@@ -6,7 +6,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.MaterialService;
+import ee.hm.dop.service.content.MaterialService;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
