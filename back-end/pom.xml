@@ -12,9 +12,10 @@
 		<hibernate.version>4.3.10.Final</hibernate.version>
         <jetty.version>9.3.7.v20160115</jetty.version>
         <jackson.version>2.7.0</jackson.version>
+		<!--todo jersey has 2.22 breaking changes -->
         <jersey.version>2.21</jersey.version>
 	</properties>
-	
+
 	<dependencies>
 		<!-- Jersey & Guice -->
 		<dependency>
@@ -30,6 +31,7 @@
 		<dependency>
 			<groupId>org.glassfish.hk2</groupId>
 			<artifactId>guice-bridge</artifactId>
+			<!--this version has to sort of match jersey version-->
 			<version>2.4.0-b31</version>
 		</dependency>
 		<dependency>
@@ -46,7 +48,7 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.22</version>
+			<version>${jersey.version}</version>
 		</dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -70,7 +72,7 @@
         </dependency>
 
 		<!-- Embedded Jetty -->
-		
+
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
@@ -89,7 +91,7 @@
 			<version>5.1.35</version>
 		</dependency>
 
-		
+
 		<!-- Hibernate ORM for JPA -->
 		<dependency>
 		   <groupId>org.hibernate</groupId>
@@ -113,9 +115,9 @@
             <artifactId>flyway-core</artifactId>
             <version>3.2.1</version>
         </dependency>
-        
+
         <!-- Logging -->
-        
+
         <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -126,9 +128,9 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-		
+
 		<!-- Commons -->
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
