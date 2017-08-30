@@ -24,7 +24,11 @@ public class TargetGroupService {
     }
 
     public TargetGroup getByName(String name) {
-        return targetGroupDao.getByName(name);
+        return targetGroupDao.findByName(name);
+    }
+
+    public List<TargetGroup> getByName(List<String> name) {
+        return targetGroupDao.findByName(name);
     }
 
     public TargetGroup getByTranslation(String translation) {
@@ -35,7 +39,7 @@ public class TargetGroupService {
 
         try {
             TargetGroupEnum targetGroupEnum = TargetGroupEnum.valueOf(translationKey.replaceFirst("^" + TARGET_GROUP_TRANSLATION_PREFIX, ""));
-            return targetGroupDao.getByName(targetGroupEnum.name());
+            return targetGroupDao.findByName(targetGroupEnum.name());
         } catch (IllegalArgumentException e) {
             return null;
         }

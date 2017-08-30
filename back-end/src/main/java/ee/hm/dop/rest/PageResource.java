@@ -19,7 +19,6 @@ public class PageResource extends BaseResource {
 
     @Inject
     private PageService pageService;
-
     @Inject
     private LanguageService languageService;
 

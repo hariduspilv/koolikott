@@ -40,7 +40,6 @@ public class RestModule extends ServletModule {
         bind(LicenseTypeService.class);
         bind(UserService.class);
         bind(LoginService.class);
-        bind(HTTPRedirectDeflateEncoder.class);
         bind(TaatService.class);
         bind(AuthenticatedUserService.class);
         bind(LogoutService.class);

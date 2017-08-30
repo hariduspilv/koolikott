@@ -25,7 +25,6 @@ public class UserResource extends BaseResource {
 
     @Inject
     private UserService userService;
-
     @Inject
     private AuthenticatedUserService authenticatedUserService;
 
@@ -52,7 +51,6 @@ public class UserResource extends BaseResource {
         if (isBlank(username)) {
             throwBadRequestException("Username parameter is mandatory.");
         }
-
         return userService.getUserByUsername(username);
     }
 
@@ -61,9 +59,7 @@ public class UserResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     @Produces(MediaType.TEXT_PLAIN)
     public String getSignedUserData() {
-        AuthenticatedUser authenticatedUser = getAuthenticatedUser();
-
-        return authenticatedUserService.signUserData(authenticatedUser);
+        return authenticatedUserService.signUserData(getAuthenticatedUser());
     }
 
     @GET

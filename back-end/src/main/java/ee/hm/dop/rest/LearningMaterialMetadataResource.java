@@ -33,25 +33,18 @@ public class LearningMaterialMetadataResource {
 
     @Inject
     private TaxonService taxonService;
-
     @Inject
     private LanguageService languageService;
-
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private LicenseTypeService licenseTypeService;
-
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
-
     @Inject
     private KeyCompetenceService keyCompetenceService;
-
     @Inject
     private MaterialService materialservice;
-
     @Inject
     private TargetGroupService targetGroupService;
 

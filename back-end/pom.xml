@@ -16,6 +16,8 @@
 		<!--todo jersey has 2.22 breaking changes -->
         <jersey.version>2.21</jersey.version>
         <google.guice.version>4.1.0</google.guice.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<dependencies>

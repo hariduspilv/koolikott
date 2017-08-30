@@ -38,6 +38,7 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String LOGIN_REDIRECT_WITH_TOKEN = "../#!/loginRedirect?token=";
     private static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "../#!/loginRedirect";
+    public static final String SSL_CLIENT_S_DN = "SSL_CLIENT_S_DN";
 
     @Inject
     private LoginService loginService;
@@ -58,23 +59,19 @@ public class LoginResource extends BaseResource {
     @Path("/idCard")
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser idCardLogin() {
-        AuthenticatedUser authenticatedUser = null;
-
         if (isAuthValid()) {
-            authenticatedUser = loginService.logIn(getIdCodeFromRequest(), getNameFromRequest(),
-                    getSurnameFromRequest());
+            return loginService.logIn(getIdCodeFromRequest(), getNameFromRequest(), getSurnameFromRequest());
         }
-
-        return authenticatedUser;
+        return null;
     }
 
     @GET
     @Path("/taat")
     @Produces(MediaType.APPLICATION_JSON)
-    public void taatLogin() throws MessageEncodingException {
-        BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService
-                .buildMessageContext(getResponse());
+    public String taatLogin() throws MessageEncodingException {
+        BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService.buildMessageContext(getResponse());
         encoder.encode(context);
+        return null;
     }
 
     @POST
@@ -110,18 +107,14 @@ public class LoginResource extends BaseResource {
     @GET
     @Path("stuudium")
     public Response stuudiumAuthenticate(@QueryParam("token") String token) throws URISyntaxException {
-        if (token == null) {
-            return redirectToStuudium();
-        } else {
-            return authenticateWithStuudiumToken(token);
-        }
+        return token == null ? redirectToStuudium() : authenticateWithStuudiumToken(token);
     }
 
     @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
     public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
-            @QueryParam("idCode") String idCode, @QueryParam("language") String languageCode) throws Exception {
+                                               @QueryParam("idCode") String idCode, @QueryParam("language") String languageCode) throws Exception {
         return loginService.mobileIDAuthenticate(phoneNumber, idCode, languageService.getLanguage(languageCode));
     }
 
@@ -157,18 +150,20 @@ public class LoginResource extends BaseResource {
     }
 
     private String getIdCodeFromRequest() {
-        String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
-        return getStringInUTF8(values[0].split("=")[1]);
+        return getString(0);
     }
 
     private String getNameFromRequest() {
-        String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
-        return getStringInUTF8(values[1].split("=")[1]);
+        return getString(1);
     }
 
     private String getSurnameFromRequest() {
-        String[] values = getRequest().getHeader("SSL_CLIENT_S_DN").split(",");
-        return getStringInUTF8(values[2].split("=")[1]);
+        return getString(2);
+    }
+
+    private String getString(int i) {
+        String[] values = getRequest().getHeader(SSL_CLIENT_S_DN).split(",");
+        return getStringInUTF8(values[i].split("=")[1]);
     }
 
     private boolean isAuthValid() {

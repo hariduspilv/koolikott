@@ -19,7 +19,11 @@ public class TaxonService {
     private TaxonDao taxonDao;
 
     public Taxon getTaxonById(Long id) {
-        return taxonDao.findTaxonById(id);
+        return taxonDao.findById(id);
+    }
+
+    public List<Taxon> getTaxonById(List<Long> id) {
+        return taxonDao.findById(id);
     }
 
     public List<EducationalContext> getAllEducationalContext() {
