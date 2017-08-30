@@ -108,7 +108,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertTrue(expectedPortfolios.isEmpty());
     }
 
-    @Ignore
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListed() {
         String username = "my.testuser";
@@ -120,35 +119,31 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Long.valueOf(109), portfolios.get(0).getId());
     }
 
-    @Ignore
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListedAsCreator() {
         login("78912378912");
 
         String username = "my.testuser";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
-                });
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());
         List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
-        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }
 
-    @Ignore
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListedAsAdmin() {
         login("89898989898");
 
         String username = "my.testuser";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
-                });
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());
         List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
-        List<Long> actualIds = portfolios.stream().map(p -> p.getId()).collect(Collectors.toList());
+        List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }
 

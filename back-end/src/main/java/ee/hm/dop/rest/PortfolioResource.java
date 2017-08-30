@@ -26,14 +26,12 @@ public class PortfolioResource extends BaseResource {
 
     @Inject
     private PortfolioService portfolioService;
-
     @Inject
     private UserService userService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
-
         return portfolioService.get(portfolioId, getLoggedInUser());
     }
 
