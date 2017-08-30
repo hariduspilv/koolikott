@@ -33,13 +33,11 @@ public class BaseResource {
     }
 
     protected User getLoggedInUser() {
-        User user = null;
-
-        if (isAuthenticated()) {
-            user = getAuthenticatedUser().getUser();
+        AuthenticatedUser authenticatedUser = getAuthenticatedUser();
+        if (authenticatedUser != null) {
+            return authenticatedUser.getUser();
         }
-
-        return user;
+        return null;
     }
 
     protected AuthenticatedUser getAuthenticatedUser() {
@@ -51,10 +49,6 @@ public class BaseResource {
         }
 
         return authenticatedUser;
-    }
-
-    protected boolean isAuthenticated() {
-        return getAuthenticatedUser() != null;
     }
 
     protected HttpServletRequest getRequest() {
