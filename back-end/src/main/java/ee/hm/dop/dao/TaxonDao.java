@@ -14,10 +14,6 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
     public static final String EDUCATIONAL_CONTEXT = "EDUCATIONAL_CONTEXT";
 
-    public Taxon findTaxonById(Long id) {
-        return findById(id);
-    }
-
     public Taxon findContextByName(String name, String level) {
         TypedQuery<Taxon> findByName = getEntityManager()
                 .createQuery("FROM Taxon t WHERE lower(t.name) = :name and level = :level", entity()) //

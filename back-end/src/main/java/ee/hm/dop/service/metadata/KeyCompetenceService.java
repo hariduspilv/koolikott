@@ -16,6 +16,10 @@ public class KeyCompetenceService {
         return keyCompetenceDao.findById(id);
     }
 
+    public List<KeyCompetence> getKeyCompetenceById(List<Long> id) {
+        return keyCompetenceDao.findById(id);
+    }
+
     public List<KeyCompetence> getAllKeyCompetences() {
         return keyCompetenceDao.findAll();
     }

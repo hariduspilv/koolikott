@@ -18,7 +18,7 @@ import ee.hm.dop.service.solr.SuggestService;
 public class SuggestResource extends BaseResource {
 
     @Inject
-    SuggestService suggestService;
+    private SuggestService suggestService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

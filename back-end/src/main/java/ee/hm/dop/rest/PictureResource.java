@@ -32,7 +32,6 @@ public class PictureResource extends BaseResource {
 
     @Inject
     private PictureService pictureService;
-
     @Inject
     private Configuration configuration;
 

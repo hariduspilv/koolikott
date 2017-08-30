@@ -43,14 +43,8 @@ public class RepositoryService {
     @Inject
     private PictureService pictureService;
 
-    public List<Repository> getAllRepositorys() {
-        List<Repository> repositories = repositoryDao.findAll();
-
-        if (repositories == null) {
-            repositories = Collections.emptyList();
-        }
-
-        return repositories;
+    public List<Repository> getAllRepositories() {
+        return repositoryDao.findAll();
     }
 
     public void synchronize(Repository repository) {

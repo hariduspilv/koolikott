@@ -1,8 +1,9 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.ApplicationLauncher;
+import com.google.common.collect.Lists;
 import ee.hm.dop.model.AbstractEntity;
 import ee.hm.dop.model.Deletable;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,9 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public List<Entity> findById(List<Long> id) {
+        if (CollectionUtils.isEmpty(id)){
+            return Lists.newArrayList();
+        }
         return getList(getFindByFieldInQuery(ID, id));
     }
 
@@ -76,6 +80,13 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
 
     public Entity findByName(String value) {
         return getSingleResult(getFindByFieldQuery(NAME, value, false));
+    }
+
+    public List<Entity> findByName(List<String> value) {
+        if (CollectionUtils.isEmpty(value)){
+            return Lists.newArrayList();
+        }
+        return getList(getFindByFieldInQuery(NAME, value));
     }
 
     public Entity findByField(String field, Object value) {

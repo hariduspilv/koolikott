@@ -16,6 +16,10 @@ public class CrossCurricularThemeService {
         return crossCurricularThemeDao.findById(id);
     }
 
+    public List<CrossCurricularTheme> getCrossCurricularThemeById(List<Long> id) {
+        return crossCurricularThemeDao.findById(id);
+    }
+
     public List<CrossCurricularTheme> getAllCrossCurricularThemes() {
         return crossCurricularThemeDao.findAll();
     }

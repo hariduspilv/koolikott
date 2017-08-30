@@ -29,15 +29,12 @@ public class SynchronizeMaterialsExecutor {
     private SolrEngineService solrEngineService;
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
-
-    // Guarantees that only 1 threat is running at a time
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static ScheduledFuture<?> synchronizeMaterialHandle;
 
     public synchronized void synchronizeMaterials() {
         try {
             RepositoryService repositoryService = newRepositoryService();
-            List<Repository> repositories = repositoryService.getAllRepositorys();
+            List<Repository> repositories = repositoryService.getAllRepositories();
 
             logger.info(format("Synchronizing %d repositories...", repositories.size()));
 
@@ -66,37 +63,6 @@ public class SynchronizeMaterialsExecutor {
         solrEngineService.updateIndex();
     }
 
-//    public synchronized void scheduleExecution(int hourOfDayToExecute) {
-//        if (synchronizeMaterialHandle != null) {
-//            logger.info("Synchronize Materials Executor already started.");
-//            return;
-//        }
-//
-//        final Runnable executor = new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                try {
-//                    logger.info("Starting new material synchronization process.");
-//                    synchronizeMaterials();
-//                } catch (Exception e) {
-//                    logger.error("Unexpected error while scheduling sync.", e);
-//                }
-//
-//                logger.info("Finished new material synchronization process.");
-//            }
-//        };
-//
-//
-//        long initialDelay = getInitialDelay(hourOfDayToExecute);
-//        long period = DAYS.toMillis(1);
-//
-//        logger.info("Scheduling Synchronization repository service first execution to "
-//                + now().plusMillis((int) initialDelay));
-//        synchronizeMaterialHandle = scheduler.scheduleAtFixedRate(executor, 0, 60000, MILLISECONDS);
-//    }
-
-    // FIXME: Experimental method for executing synchronization process
     public void scheduleExecution(int hourOfDayToExecute){
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -130,7 +96,7 @@ public class SynchronizeMaterialsExecutor {
             try {
                 logger.info("Was not possible to cancel service. Waiting for 100ms and try again.");
                 wait(100);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
         }
 
@@ -138,42 +104,25 @@ public class SynchronizeMaterialsExecutor {
         logger.info("Synchronization repository service canceled.");
     }
 
-    /**
-     * Package access modifier for testing purpose
-     */
     long getInitialDelay(int hourOfDayToExecute) {
         return ExecutorUtil.getInitialDelay(hourOfDayToExecute);
     }
 
     /**
      * Test only
-     * 
-     * @param synchronizeMaterialHandle
      */
     void setSynchronizeMaterialHandle(ScheduledFuture<?> synchronizeMaterialHandle) {
         SynchronizeMaterialsExecutor.synchronizeMaterialHandle = synchronizeMaterialHandle;
     }
 
-    /**
-     * Package access modifier for testing purpose
-     * 
-     */
     protected RepositoryService newRepositoryService() {
         return GuiceInjector.getInjector().getInstance(RepositoryService.class);
     }
 
-    /**
-     * Package access modifier for testing purpose
-     * 
-     */
     protected void closeTransaction() {
         DbUtils.closeTransaction();
     }
 
-    /**
-     * Package access modifier for testing purpose
-     * 
-     */
     protected void beginTransaction() {
         DbUtils.getTransaction().begin();
     }

@@ -29,7 +29,6 @@ public class UploadedFileResource extends BaseResource {
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private UploadedFileService uploadedFileService;
 

@@ -16,18 +16,19 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.ImproperContentService;
 import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.utils.UserUtil;
 
 @Path("impropers")
 public class ImproperContentResource extends BaseResource {
 
     @Inject
     private ImproperContentService improperContentService;
-
     @Inject
     private LearningObjectService learningObjectService;
 
@@ -35,15 +36,12 @@ public class ImproperContentResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ImproperContent setImproper(ImproperContent improperContent) {
-        ImproperContent improper = null;
-
         try {
-            improper = improperContentService.addImproper(improperContent, getLoggedInUser());
+            return improperContentService.addImproper(improperContent, getLoggedInUser());
         } catch (Exception e) {
             throwBadRequestException(e.getMessage());
+            return null;
         }
-
-        return improper;
     }
 
     @GET
@@ -55,7 +53,7 @@ public class ImproperContentResource extends BaseResource {
         if (learningObjectId != null) {
             LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
-            if (isUserAdmin(loggedInUser)) {
+            if (UserUtil.isUserAdmin(loggedInUser)) {
                 result.addAll(improperContentService.getByLearningObject(learningObject, loggedInUser));
             } else {
                 ImproperContent improper = improperContentService.getByLearningObjectAndCreator(learningObject,
@@ -131,17 +129,10 @@ public class ImproperContentResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN})
     public void removeImproper(@PathParam("improperContentId") long improperContentId) {
         ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
-
         if (improper == null) {
             throwNotFoundException();
         }
-
-        List<ImproperContent> impropers = new ArrayList<>();
-        impropers.add(improper);
-        improperContentService.deleteAll(impropers, getLoggedInUser());
+        improperContentService.deleteAll(Lists.newArrayList(improper), getLoggedInUser());
     }
 
-    protected boolean isUserAdmin(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getRole() == Role.ADMIN;
-    }
 }

@@ -26,7 +26,6 @@ public class LearningObjectResource extends BaseResource {
 
     @Inject
     private LearningObjectService learningObjectService;
-
     @Inject
     private TagService tagService;
 

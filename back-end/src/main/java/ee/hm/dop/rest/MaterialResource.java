@@ -34,7 +34,6 @@ public class MaterialResource extends BaseResource {
 
     @Inject
     private MaterialService materialService;
-
     @Inject
     private UserService userService;
 
@@ -48,8 +47,7 @@ public class MaterialResource extends BaseResource {
     @Path("getBySource")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
-            throws UnsupportedEncodingException {
+    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
         return materialService.getBySource(materialSource, false);
     }

@@ -17,7 +17,6 @@ public class CommentResource extends BaseResource {
 
     @Inject
     private PortfolioService portfolioService;
-
     @Inject
     private MaterialService materialService;
 
@@ -25,7 +24,6 @@ public class CommentResource extends BaseResource {
     @Path("portfolio")
     @Consumes("application/json")
     public void addPortfolioComment(AddCommentForm form) {
-
         Comment comment = form.getComment();
         User loggedInUser = getLoggedInUser();
         comment.setCreator(loggedInUser);
@@ -37,7 +35,6 @@ public class CommentResource extends BaseResource {
     @Path("material")
     @Consumes("application/json")
     public void addMaterialComment(AddCommentForm form) {
-
         Comment comment = form.getComment();
         comment.setCreator(getLoggedInUser());
 
@@ -45,7 +42,6 @@ public class CommentResource extends BaseResource {
     }
 
     public static class AddCommentForm {
-
         private Comment comment;
         private Portfolio portfolio;
         private Material material;

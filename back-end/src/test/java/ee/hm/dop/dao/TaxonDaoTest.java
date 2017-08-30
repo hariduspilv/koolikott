@@ -23,7 +23,7 @@ public class TaxonDaoTest extends DatabaseTestBase {
         Long id = 11L;
         String name = "ForeignLanguage";
 
-        Domain domain = (Domain) taxonDao.findTaxonById(id);
+        Domain domain = (Domain) taxonDao.findById(id);
 
         assertNotNull(domain);
         assertEquals(id, domain.getId());

@@ -266,7 +266,7 @@ public class RepositoryServiceTest {
 
         replayAll(repositories);
 
-        List<Repository> allRepositorys = repositoryService.getAllRepositorys();
+        List<Repository> allRepositorys = repositoryService.getAllRepositories();
 
         verifyAll(repositories);
 
@@ -275,11 +275,11 @@ public class RepositoryServiceTest {
 
     @Test
     public void getAllRepositorysWhenNoRepositories() {
-        expect(repositoryDao.findAll()).andReturn(null);
+        expect(repositoryDao.findAll()).andReturn(new ArrayList<>());
 
         replayAll();
 
-        List<Repository> allRepositorys = repositoryService.getAllRepositorys();
+        List<Repository> allRepositorys = repositoryService.getAllRepositories();
 
         verifyAll();
 

@@ -31,7 +31,6 @@ public class ReviewFileResource extends BaseResource {
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private UploadedFileService uploadedFileService;
 

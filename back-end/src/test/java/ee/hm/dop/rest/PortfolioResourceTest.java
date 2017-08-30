@@ -111,9 +111,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListed() {
         String username = "my.testuser";
-        List<Portfolio> portfolios = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(
-                new GenericType<List<Portfolio>>() {
-                });
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        List<Searchable> portfolios = result.getItems();
 
         assertEquals(1, portfolios.size());
         assertEquals(Long.valueOf(109), portfolios.get(0).getId());

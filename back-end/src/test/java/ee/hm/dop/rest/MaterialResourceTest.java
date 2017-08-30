@@ -211,7 +211,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.ru");
 
-        Subject subject = (Subject) taxonDao.findTaxonById(22L);
+        Subject subject = (Subject) taxonDao.findById(22L);
         material.setTaxons(asList(subject));
 
         KeyCompetence keyCompetence = new KeyCompetence();
@@ -247,7 +247,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.com");
 
-        Subject subject = (Subject) taxonDao.findTaxonById(21L);
+        Subject subject = (Subject) taxonDao.findById(21L);
         material.setTaxons(asList(subject));
 
         KeyCompetence keyCompetence = new KeyCompetence();
