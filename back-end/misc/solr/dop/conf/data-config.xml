@@ -10,31 +10,47 @@
          -->
 
         <entity name="Taxon" pk="id"
-                query="select concat((FLOOR(RAND() * 90000001) + 10000000), Taxon.id) as id, Translation.translation as taxon_name from Translation right join Taxon on Translation.translationKey LIKE CONCAT('%_', upper(Taxon.name))">
+                query="select concat((FLOOR(RAND() * 90000001) + 10000000), Taxon.id) as id,
+                Translation.translation as taxon_name from Translation
+                right join Taxon on Translation.translationKey LIKE CONCAT('%_', upper(Taxon.name))">
             <entity name="Type" query="select 'material' as type"/>
         </entity>
 
         <entity name="ResourceType" pk="id"
-                query="select concat((FLOOR(RAND() * 90000001) + 10000000), ResourceType.id) as id, Translation.translation as resource_type_name from Translation right join ResourceType on Translation.translationKey=upper(ResourceType.name)">
+                query="select concat((FLOOR(RAND() * 90000001) + 10000000), ResourceType.id) as id,
+                 Translation.translation as resource_type_name from Translation
+                 right join ResourceType on Translation.translationKey=upper(ResourceType.name)">
             <entity name="Type" query="select 'material' as type"/>
         </entity>
 
         <entity name="TargetGroup" pk="id"
-                query="select concat((FLOOR(RAND() * 90000001) + 10000000), TargetGroup.id) as id, Translation.translation as target_group_name from Translation right join TargetGroup on Translation.translationKey=concat('TARGET_GROUP_', upper(TargetGroup.name))">
+                query="select concat((FLOOR(RAND() * 90000001) + 10000000), TargetGroup.id) as id,
+                Translation.translation as target_group_name from Translation
+                right join TargetGroup on Translation.translationKey=concat('TARGET_GROUP_', upper(TargetGroup.name))">
             <entity name="Type" query="select 'material' as type"/>
         </entity>
 
         <entity name="LearningObject" pk="id"
-                query="select id, added, views, creator from LearningObject WHERE deleted = false"
-                deltaImportQuery="select id, added, views, creator from LearningObject where id = '${dih.delta.id}'"
-                deltaQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = false"
-                deletedPkQuery="select id from LearningObject where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}' OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}') AND deleted = true">
+                query="select id, added, views, creator from LearningObject
+                WHERE deleted = false"
+                deltaImportQuery="select id, added, views, creator from LearningObject
+                where id = '${dih.delta.id}'"
+                deltaQuery="select id from LearningObject
+                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}'
+                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}')
+                    AND deleted = false"
+                deletedPkQuery="select id from LearningObject
+                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}'
+                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}')
+                    AND deleted = true">
 
             <entity name="LearningObject_TargetGroup"
-                    query="select targetGroup as target_group from LearningObject_TargetGroup where learningObject='${LearningObject.id}'"/>
+                    query="select targetGroup as target_group from LearningObject_TargetGroup
+                        where learningObject='${LearningObject.id}'"/>
 
             <entity name="LearningObject_CrossCurricularTheme"
-                    query="select crossCurricularTheme as cross_curricular_theme_id from LearningObject_CrossCurricularTheme where learningObject='${LearningObject.id}'">
+                    query="select crossCurricularTheme as cross_curricular_theme_id from LearningObject_CrossCurricularTheme
+                        where learningObject='${LearningObject.id}'">
                 <entity name="CrossCurricularTheme"
                         query="select name as cross_curricular_theme from CrossCurricularTheme where id = '${LearningObject_CrossCurricularTheme.cross_curricular_theme_id}'"/>
             </entity>
@@ -60,34 +76,47 @@
                     query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'"/>
 
             <entity name="LearningObject_Taxon"
-                    query="select taxon as taxon_id from LearningObject_Taxon where learningObject = '${LearningObject.id}'">
+                    query="select taxon as taxon_id from LearningObject_Taxon
+                    where learningObject = '${LearningObject.id}'">
                 <!-- Travel up the taxon path -->
 
                 <!-- Get subtopic -->
                 <entity name="Subtopic"
-                        query="select t.id, t.name as subtopic, st.topic as parent from Taxon t left join Subtopic st on t.id = st.id where t.level = 'SUBTOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as subtopic, st.topic as parent from Taxon t
+                        left join Subtopic st on t.id = st.id
+                        where t.level = 'SUBTOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get topic -->
                     <entity name="Topic"
-                            query="select t.id, t.name as topic, top.module as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Subtopic.parent}'">
+                            query="select t.id, t.name as topic, top.module as parent from Taxon t
+                            left join Topic top on t.id = top.id
+                            where t.level = 'TOPIC' and t.id = '${Subtopic.parent}'">
 
                         <!-- Get module -->
                         <entity name="Module"
-                                query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${Topic.parent}'">
+                                query="select t.id, t.name as module, m.specialization as parent from Taxon t
+                                left join Module m on t.id = m.id
+                                where t.level = 'MODULE' and t.id = '${Topic.parent}'">
 
                             <!-- Get specialization -->
                             <entity name="Specialization"
-                                    query="select t.id, t.name as specialization, s.domain as parent from Taxon t left join Specialization s on t.id = s.id where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
+                                    query="select t.id, t.name as specialization, s.domain as parent from Taxon t
+                                    left join Specialization s on t.id = s.id
+                                    where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
 
                                 <!-- Get domain -->
                                 <entity name="Domain"
-                                        query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
+                                        query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                                        left join Domain d on t.id = d.id
+                                        where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
 
                                     <!-- Get educational context -->
                                     <entity name="EducationalContext"
-                                            query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                            query="select name as educational_context from Taxon
+                                             where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                                         <entity name="Translation"
-                                                query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                                query="select translation as educational_context from Translation
+                                                where translationKey = '${EducationalContext.educational_context}'"/>
                                     </entity>
                                 </entity>
                             </entity>
@@ -97,25 +126,35 @@
 
                 <!-- Get topic -->
                 <entity name="Topic"
-                        query="select t.id, t.name as topic, top.module as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as topic, top.module as parent from Taxon t
+                        left join Topic top on t.id = top.id
+                        where t.level = 'TOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get module -->
                     <entity name="Module"
-                            query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${Topic.parent}'">
+                            query="select t.id, t.name as module, m.specialization as parent from Taxon t
+                             left join Module m on t.id = m.id
+                             where t.level = 'MODULE' and t.id = '${Topic.parent}'">
 
                         <!-- Get specialization -->
                         <entity name="Specialization"
-                                query="select t.id, t.name as specialization, s.domain as parent from Taxon t left join Specialization s on t.id = s.id where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
+                                query="select t.id, t.name as specialization, s.domain as parent from Taxon t
+                                left join Specialization s on t.id = s.id
+                                where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
 
                             <!-- Get domain -->
                             <entity name="Domain"
-                                    query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
+                                    query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                                     left join Domain d on t.id = d.id
+                                     where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
 
                                 <!-- Get educational context -->
                                 <entity name="EducationalContext"
-                                        query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                        query="select name as educational_context from Taxon
+                                        where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                                     <entity name="Translation"
-                                            query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                            query="select translation as educational_context from Translation
+                                            where translationKey = '${EducationalContext.educational_context}'"/>
                                 </entity>
                             </entity>
                         </entity>
@@ -124,21 +163,29 @@
 
                 <!-- Get module -->
                 <entity name="Module"
-                        query="select t.id, t.name as module, m.specialization as parent from Taxon t left join Module m on t.id = m.id where t.level = 'MODULE' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as module, m.specialization as parent from Taxon t
+                        left join Module m on t.id = m.id
+                        where t.level = 'MODULE' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get specialization -->
                     <entity name="Specialization"
-                            query="select t.id, t.name as specialization, s.domain as parent from Taxon t left join Specialization s on t.id = s.id where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
+                            query="select t.id, t.name as specialization, s.domain as parent from Taxon t
+                            left join Specialization s on t.id = s.id
+                            where t.level = 'SPECIALIZATION' and t.id = '${Module.parent}'">
 
                         <!-- Get domain -->
                         <entity name="Domain"
-                                query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
+                                query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                                left join Domain d on t.id = d.id
+                                where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
 
                             <!-- Get educational context -->
                             <entity name="EducationalContext"
-                                    query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                    query="select name as educational_context from Taxon
+                                    where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                                 <entity name="Translation"
-                                        query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                        query="select translation as educational_context from Translation
+                                        where translationKey = '${EducationalContext.educational_context}'"/>
                             </entity>
                         </entity>
                     </entity>
@@ -146,38 +193,52 @@
 
                 <!-- Get specialization -->
                 <entity name="Specialization"
-                        query="select t.id, t.name as specialization, s.domain as parent from Taxon t left join Specialization s on t.id = s.id where t.level = 'SPECIALIZATION' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as specialization, s.domain as parent from Taxon t
+                        left join Specialization s on t.id = s.id
+                        where t.level = 'SPECIALIZATION' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get domain -->
                     <entity name="Domain"
-                            query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
+                            query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                            left join Domain d on t.id = d.id
+                            where t.level = 'DOMAIN' and t.id = '${Specialization.parent}'">
 
                         <!-- Get educational context -->
                         <entity name="EducationalContext"
-                                query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                query="select name as educational_context from Taxon
+                                where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                             <entity name="Translation"
-                                    query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                    query="select translation as educational_context from Translation
+                                    where translationKey = '${EducationalContext.educational_context}'"/>
                         </entity>
                     </entity>
                 </entity>
 
                 <!-- Get subtopic -->
                 <entity name="Subtopic"
-                        query="select t.id, t.name as subtopic, st.topic as parent from Taxon t left join Subtopic st on t.id = st.id where t.level = 'SUBTOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as subtopic, st.topic as parent from Taxon t
+                        left join Subtopic st on t.id = st.id
+                        where t.level = 'SUBTOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get topic -->
                     <entity name="Topic"
-                            query="select t.id, t.name as topic, top.domain as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Subtopic.parent}'">
+                            query="select t.id, t.name as topic, top.domain as parent from Taxon t
+                            left join Topic top on t.id = top.id
+                            where t.level = 'TOPIC' and t.id = '${Subtopic.parent}'">
 
                         <!-- Get domain -->
                         <entity name="Domain"
-                                query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Topic.parent}'">
+                                query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                                left join Domain d on t.id = d.id
+                                where t.level = 'DOMAIN' and t.id = '${Topic.parent}'">
 
                             <!-- Get educational context -->
                             <entity name="EducationalContext"
-                                    query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                    query="select name as educational_context from Taxon
+                                    where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                                 <entity name="Translation"
-                                        query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                        query="select translation as educational_context from Translation
+                                        where translationKey = '${EducationalContext.educational_context}'"/>
                             </entity>
                         </entity>
                     </entity>
@@ -185,44 +246,61 @@
 
                 <!-- Get topic -->
                 <entity name="Topic"
-                        query="select t.id, t.name as topic, top.domain as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as topic, top.domain as parent from Taxon t
+                        left join Topic top on t.id = top.id
+                        where t.level = 'TOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get domain -->
                     <entity name="Domain"
-                            query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Topic.parent}'">
+                            query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                            left join Domain d on t.id = d.id
+                            where t.level = 'DOMAIN' and t.id = '${Topic.parent}'">
 
                         <!-- Get educational context -->
                         <entity name="EducationalContext"
-                                query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                query="select name as educational_context from Taxon
+                                where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                             <entity name="Translation"
-                                    query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                    query="select translation as educational_context from Translation
+                                    where translationKey = '${EducationalContext.educational_context}'"/>
                         </entity>
                     </entity>
                 </entity>
 
                 <!-- Get subtopic -->
                 <entity name="Subtopic"
-                        query="select t.id, t.name as subtopic, st.topic as parent from Taxon t left join Subtopic st on t.id = st.id where t.level = 'SUBTOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as subtopic, st.topic as parent from Taxon t
+                        left join Subtopic st on t.id = st.id
+                        where t.level = 'SUBTOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get topic -->
                     <entity name="Topic"
-                            query="select t.id, t.name as topic, top.subject as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${Subtopic.parent}'">
+                            query="select t.id, t.name as topic, top.subject as parent from Taxon t
+                            left join Topic top on t.id = top.id
+                            where t.level = 'TOPIC' and t.id = '${Subtopic.parent}'">
 
                         <!-- Get subject -->
                         <entity name="Subject"
-                                query="select t.id, t.name as subject, s.domain as parent from Taxon t left join Subject s on t.id = s.id where t.level = 'SUBJECT' and t.id = '${Topic.parent}'">
+                                query="select t.id, t.name as subject, s.domain as parent from Taxon t
+                                left join Subject s on t.id = s.id
+                                where t.level = 'SUBJECT' and t.id = '${Topic.parent}'">
                             <entity name="Translation"
-                                    query="select translation as subject from Translation where translationKey = 'SUBJECT_${Subject.subject}'"/>
+                                    query="select translation as subject from Translation
+                                    where translationKey = 'SUBJECT_${Subject.subject}'"/>
 
                             <!-- Get domain -->
                             <entity name="Domain"
-                                    query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
+                                    query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                                    left join Domain d on t.id = d.id
+                                    where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
 
                                 <!-- Get educational context -->
                                 <entity name="EducationalContext"
-                                        query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                        query="select name as educational_context from Taxon
+                                        where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                                     <entity name="Translation"
-                                            query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                            query="select translation as educational_context from Translation
+                                            where translationKey = '${EducationalContext.educational_context}'"/>
                                 </entity>
                             </entity>
                         </entity>
@@ -231,23 +309,32 @@
 
                 <!-- Get topic -->
                 <entity name="Topic"
-                        query="select t.id, t.name as topic, top.subject as parent from Taxon t left join Topic top on t.id = top.id where t.level = 'TOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as topic, top.subject as parent from Taxon t
+                        left join Topic top on t.id = top.id
+                        where t.level = 'TOPIC' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get subject -->
                     <entity name="Subject"
-                            query="select t.id, t.name as subject, s.domain as parent from Taxon t left join Subject s on t.id = s.id where t.level = 'SUBJECT' and t.id = '${Topic.parent}'">
+                            query="select t.id, t.name as subject, s.domain as parent from Taxon t
+                            left join Subject s on t.id = s.id
+                            where t.level = 'SUBJECT' and t.id = '${Topic.parent}'">
                         <entity name="Translation"
-                                query="select translation as subject from Translation where translationKey = 'SUBJECT_${Subject.subject}'"/>
+                                query="select translation as subject from Translation
+                                where translationKey = 'SUBJECT_${Subject.subject}'"/>
 
                         <!-- Get domain -->
                         <entity name="Domain"
-                                query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
+                                query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                                left join Domain d on t.id = d.id
+                                where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
 
                             <!-- Get educational context -->
                             <entity name="EducationalContext"
-                                    query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                    query="select name as educational_context from Taxon
+                                    where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                                 <entity name="Translation"
-                                        query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                        query="select translation as educational_context from Translation
+                                        where translationKey = '${EducationalContext.educational_context}'"/>
                             </entity>
                         </entity>
                     </entity>
@@ -255,105 +342,140 @@
 
                 <!-- Get subject -->
                 <entity name="Subject"
-                        query="select t.id, t.name as subject, s.domain as parent from Taxon t left join Subject s on t.id = s.id where t.level = 'SUBJECT' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as subject, s.domain as parent from Taxon t
+                        left join Subject s on t.id = s.id
+                        where t.level = 'SUBJECT' and t.id = '${LearningObject_Taxon.taxon_id}'">
                     <entity name="Translation"
-                            query="select translation as subject from Translation where translationKey = 'SUBJECT_${Subject.subject}'"/>
+                            query="select translation as subject from Translation
+                            where translationKey = 'SUBJECT_${Subject.subject}'"/>
 
                     <!-- Get domain -->
                     <entity name="Domain"
-                            query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
+                            query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                            left join Domain d on t.id = d.id
+                            where t.level = 'DOMAIN' and t.id = '${Subject.parent}'">
 
                         <!-- Get educational context -->
                         <entity name="EducationalContext"
-                                query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                                query="select name as educational_context from Taxon
+                                where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                             <entity name="Translation"
-                                    query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                    query="select translation as educational_context from Translation
+                                    where translationKey = '${EducationalContext.educational_context}'"/>
                         </entity>
                     </entity>
                 </entity>
 
                 <!-- Get domain -->
                 <entity name="Domain"
-                        query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t left join Domain d on t.id = d.id where t.level = 'DOMAIN' and t.id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select t.id, t.name as domain, d.educationalContext as parent from Taxon t
+                        left join Domain d on t.id = d.id
+                        where t.level = 'DOMAIN' and t.id = '${LearningObject_Taxon.taxon_id}'">
 
                     <!-- Get educational context -->
                     <entity name="EducationalContext"
-                            query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
+                            query="select name as educational_context from Taxon
+                            where level = 'EDUCATIONAL_CONTEXT' and id = '${Domain.parent}'">
                         <entity name="Translation"
-                                query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                                query="select translation as educational_context from Translation
+                                where translationKey = '${EducationalContext.educational_context}'"/>
                     </entity>
                 </entity>
 
                 <!-- Get educational context -->
                 <entity name="EducationalContext"
-                        query="select name as educational_context from Taxon where level = 'EDUCATIONAL_CONTEXT' and id = '${LearningObject_Taxon.taxon_id}'">
+                        query="select name as educational_context from Taxon
+                        where level = 'EDUCATIONAL_CONTEXT' and id = '${LearningObject_Taxon.taxon_id}'">
                     <entity name="Translation"
-                            query="select translation as educational_context from Translation where translationKey = '${EducationalContext.educational_context}'"/>
+                            query="select translation as educational_context from Translation
+                            where translationKey = '${EducationalContext.educational_context}'"/>
                 </entity>
             </entity>
 
             <entity name="Material"
-                    query="select id, source, licenseType, paid, lang, isSpecialEducation as special_education, issueDate as issue_date_id, curriculumLiterature as curriculum_literature from Material where id='${LearningObject.id}'">
+                    query="select id, source, licenseType, paid, lang,
+                    isSpecialEducation as special_education,
+                    issueDate as issue_date_id,
+                    curriculumLiterature as curriculum_literature
+                    from Material where id='${LearningObject.id}'">
 
                 <entity name="Type" query="select 'material' as type"/>
 
                 <entity name="Material_Title"
-                        query="select title as title_id from Material_Title where material='${Material.id}'">
+                        query="select title as title_id from Material_Title
+                        where material='${Material.id}'">
                     <entity name="LanguageString"
-                            query="select textValue as title from LanguageString where id = '${Material_Title.title_id}'"/>
+                            query="select textValue as title from LanguageString
+                            where id = '${Material_Title.title_id}'"/>
                 </entity>
 
                 <entity name="Material_Description"
-                        query="select description as description_id from Material_Description where material='${Material.id}'">
+                        query="select description as description_id from Material_Description
+                        where material='${Material.id}'">
                     <entity name="LanguageString"
-                            query="select textValue as description from LanguageString where id = '${Material_Description.description_id}'"/>
+                            query="select textValue as description from LanguageString
+                            where id = '${Material_Description.description_id}'"/>
                 </entity>
 
                 <entity name="Material_Author"
-                        query="select author as author_id from Material_Author where material='${Material.id}'">
+                        query="select author as author_id from Material_Author
+                        where material='${Material.id}'">
                     <entity name="Author"
-                            query="select concat(name, ' ', surname) as fullname from Author where id = '${Material_Author.author_id}'">
+                            query="select concat(name, ' ', surname) as fullname from Author
+                            where id = '${Material_Author.author_id}'">
                         <field column="fullname" name="author"/>
                     </entity>
                 </entity>
 
                 <entity name="Material_Publisher"
-                        query="select publisher as publisher_id from Material_Publisher where material='${Material.id}'">
+                        query="select publisher as publisher_id from Material_Publisher
+                        where material='${Material.id}'">
                     <entity name="Publisher"
-                            query="select name as publisher from Publisher where id = '${Material_Publisher.publisher_id}'"/>
+                            query="select name as publisher from Publisher
+                            where id = '${Material_Publisher.publisher_id}'"/>
                 </entity>
 
                 <entity name="Material_PeerReview"
-                        query="select peerReview as peerReview_id from Material_PeerReview where material='${Material.id}'">
+                        query="select peerReview as peerReview_id from
+                        Material_PeerReview where material='${Material.id}'">
                     <entity name="PeerReview"
-                            query="select url from PeerReview where id = '${Material_PeerReview.peerReview_id}'">
+                            query="select url from PeerReview
+                            where id = '${Material_PeerReview.peerReview_id}'">
                         <field column="url" name="peerReview"/>
                     </entity>
                 </entity>
 
                 <entity name="Material_ResourceType"
-                        query="select resourceType as resourceType_id from Material_ResourceType where material='${Material.id}'">
+                        query="select resourceType as resourceType_id from Material_ResourceType
+                        where material='${Material.id}'">
                     <entity name="ResourceType"
-                            query="select name as resource_type from ResourceType where id = '${Material_ResourceType.resourceType_id}'"/>
+                            query="select name as resource_type from ResourceType
+                            where id = '${Material_ResourceType.resourceType_id}'"/>
                 </entity>
 
                 <entity name="LicenseType"
-                        query="select name as license_type from LicenseType where id='${Material.licenseType}'"/>
+                        query="select name as license_type from LicenseType
+                        where id='${Material.licenseType}'"/>
 
                 <entity name="Material_Language"
-                        query="select code as language from LanguageTable where id='${Material.lang}'"/>
+                        query="select code as language from LanguageTable
+                        where id='${Material.lang}'"/>
 
                 <entity name="IssueDate"
-                        query="select year as issue_date_year from IssueDate where id='${Material.issue_date_id}'"/>
+                        query="select year as issue_date_year from IssueDate
+                        where id='${Material.issue_date_id}'"/>
             </entity>
 
             <entity name="Portfolio"
-                    query="select id, title, summary, visibility from Portfolio where id='${LearningObject.id}'">
+                    query="select id, title, summary, visibility from Portfolio
+                    where id='${LearningObject.id}'">
 
                 <entity name="Type" query="select 'portfolio' as type"/>
 
                 <entity name="Chapter"
-                        query="select title as chapterTitle, textValue as chapterText from Chapter where portfolio = '${Portfolio.id}' or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')"/>
+                        query="select title as chapterTitle, textValue as chapterText from Chapter
+                        where portfolio = '${Portfolio.id}'
+                        or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')"/>
             </entity>
         </entity>
     </document>
