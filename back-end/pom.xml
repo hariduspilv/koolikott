@@ -1,59 +1,59 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ee.hm</groupId>
-	<artifactId>kott</artifactId>
-	<packaging>jar</packaging>
-	<version>1.9.6</version>
-	
-	<properties>
-		<slf4j.version>1.7.12</slf4j.version>
-        <log4j.version>2.3</log4j.version>
-		<hibernate.version>4.3.10.Final</hibernate.version>
-		<mysql.java.version>5.1.35</mysql.java.version>
-        <jetty.version>9.3.7.v20160115</jetty.version>
-        <jackson.version>2.7.0</jackson.version>
-		<!--todo jersey has 2.22 breaking changes -->
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ee.hm</groupId>
+    <artifactId>kott</artifactId>
+    <packaging>jar</packaging>
+    <version>1.9.6</version>
+
+    <properties>
+        <slf4j.version>1.7.25</slf4j.version>
+        <log4j.version>2.8.2</log4j.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
+        <jetty.version>9.4.6.v20170531</jetty.version>
+        <jackson.version>2.8.10</jackson.version>
+        <mysql.java.version>5.1.35</mysql.java.version>
+        <!--todo jersey has 2.22 breaking changes -->
         <jersey.version>2.21</jersey.version>
         <google.guice.version>4.1.0</google.guice.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-	<dependencies>
-		<!-- Jersey & Guice -->
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
+    <dependencies>
+        <!-- Jersey & Guice -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-multipart</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-		<dependency>
-			<groupId>org.glassfish.hk2</groupId>
-			<artifactId>guice-bridge</artifactId>
-			<!--this version has to sort of match jersey version-->
-			<version>2.4.0-b31</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-servlet</artifactId>
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>guice-bridge</artifactId>
+            <!--this version has to sort of match jersey version-->
+            <version>2.4.0-b31</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
             <version>${google.guice.version}</version>
-		</dependency>
+        </dependency>
         <!-- jackson-databind MUST be before jersey-media-json-jackson because we use different versions -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-base</artifactId>
@@ -69,45 +69,45 @@
             <artifactId>jackson-datatype-hibernate4</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-		<!-- Embedded Jetty -->
+        <!-- Embedded Jetty -->
 
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<version>${jetty.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
-			<version>${jetty.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
 
-		<!-- MySQL Database connector -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.java.version}</version>
-		</dependency>
+        <!-- MySQL Database connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.java.version}</version>
+        </dependency>
 
 
-		<!-- Hibernate ORM for JPA -->
-		<dependency>
-		   <groupId>org.hibernate</groupId>
-		   <artifactId>hibernate-entitymanager</artifactId>
-		   <version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
+        <!-- Hibernate ORM for JPA -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 
-		<!-- Database migration -->
+        <!-- Database migration -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
@@ -117,62 +117,62 @@
         <!-- Logging -->
 
         <dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
-		<!-- Commons -->
+        <!-- Commons -->
 
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
-	      <groupId>commons-configuration</groupId>
-	      <artifactId>commons-configuration</artifactId>
-	      <version>1.10</version>
-	    </dependency>
-	    <dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.4.1</version>
         </dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.10</version>
-		</dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
 
 
-		<!-- Others -->
+        <!-- Others -->
 
-		<dependency>
-	         <groupId>org.reflections</groupId>
-	         <artifactId>reflections</artifactId>
-	         <version>0.9.9-RC1</version>
-	     </dependency>
-	     <dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.8</version>
-		</dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.9-RC1</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.8</version>
+        </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
@@ -188,94 +188,94 @@
             <artifactId>xalan</artifactId>
             <version>2.7.2</version>
         </dependency>
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-solrj</artifactId>
-			<version>6.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml</artifactId>
-			<version>2.6.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20150729</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.ez-vcard</groupId>
-			<artifactId>ez-vcard</artifactId>
-			<version>0.9.7</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-			<artifactId>owasp-java-html-sanitizer</artifactId>
-			<version>20160827.1</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>6.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml</artifactId>
+            <version>2.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20150729</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.ez-vcard</groupId>
+            <artifactId>ez-vcard</artifactId>
+            <version>0.9.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+            <artifactId>owasp-java-html-sanitizer</artifactId>
+            <version>20160827.1</version>
+        </dependency>
 
 
-		<!-- Testing -->
-		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>3.3.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>com.h2database</groupId>
-		    <artifactId>h2</artifactId>
-		    <version>1.4.187</version>
-		    <scope>test</scope>
-		</dependency>
+        <!-- Testing -->
 
-		<!--Image processing-->
-		<dependency>
-			<groupId>org.imgscalr</groupId>
-			<artifactId>imgscalr-lib</artifactId>
-			<version>4.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.twelvemonkeys.imageio</groupId>
-			<artifactId>imageio-jpeg</artifactId>
-			<version>3.3.1</version>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.187</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!--Atom Feed-->
-		<dependency>
-			<groupId>org.apache.abdera</groupId>
-			<artifactId>abdera-server</artifactId>
-			<version>1.1.1</version>
-		</dependency>
+        <!--Image processing-->
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>3.3.1</version>
+        </dependency>
 
-		<!--Required by OpenSAML XMLtooling (Apache Adebra prerequisite)-->
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-	</dependencies>
+        <!--Atom Feed-->
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-server</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 
-	<!--For writing custom filters with Solr-->
-	<!--<dependency>-->
-	<!--<groupId>org.apache.solr</groupId>-->
-	<!--<artifactId>solr-analysis-extras</artifactId>-->
-	<!--<version>6.1.0</version>-->
-	<!--</dependency>-->
-	
-	<build>
+        <!--Required by OpenSAML XMLtooling (Apache Adebra prerequisite)-->
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+    </dependencies>
+
+    <!--For writing custom filters with Solr-->
+    <!--<dependency>-->
+    <!--<groupId>org.apache.solr</groupId>-->
+    <!--<artifactId>solr-analysis-extras</artifactId>-->
+    <!--<version>6.1.0</version>-->
+    <!--</dependency>-->
+
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-compiler-plugin</artifactId>
-		        <version>3.6.2</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.2</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -283,64 +283,64 @@
                     <debug>true</debug>
                 </configuration>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<archive>
-						<manifest>
-							<mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
-						</manifest>
-					</archive>
-					<finalName>${project.name}</finalName>
-				</configuration>
-			</plugin>			
-			<plugin>
-		        <artifactId>maven-assembly-plugin</artifactId>
-		        <version>3.1.0</version>
-		        <configuration>
-	                <descriptorRefs>
-	                    <descriptorRef>jar-with-dependencies</descriptorRef>
-	                </descriptorRefs>
-	                <archive>
-	                  <manifest>
-	                    <addClasspath>true</addClasspath>
-	                    <mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
-	                  </manifest>
-	                </archive>
-	               	<finalName>kott</finalName>
-	                <appendAssemblyId>false</appendAssemblyId>
-	            </configuration>
-	            <executions>
-	                <execution>
-	                    <id>make-assembly</id>
-	                    <phase>package</phase>
-	                    <goals>
-	                        <goal>single</goal>
-	                    </goals>
-	                </execution>
-	            </executions>
-		      </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <archive>
+                        <manifest>
+                            <mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
+                        </manifest>
+                    </archive>
+                    <finalName>${project.name}</finalName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
+                        </manifest>
+                    </archive>
+                    <finalName>kott</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>db/migration/V*__Test_data_migration_*.sql</exclude>
-				</excludes>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>db/migration/V*__Test_data_migration_*.sql</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
-    
+
     <profiles>
-    	<profile>
-    		<id>cobertura</id>
-    		<activation>
+        <profile>
+            <id>cobertura</id>
+            <activation>
                 <property>
-                	<!-- Triggered automatically when building in Jenkins -->
+                    <!-- Triggered automatically when building in Jenkins -->
                     <name>env.BUILD_NUMBER</name>
                 </property>
             </activation>
@@ -366,31 +366,31 @@
                     </plugin>
                 </plugins>
             </build>
-    	</profile>
-		<profile>
-			<id>live</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jar-plugin</artifactId>
-						<configuration>
-							<excludes>
-								<exclude>ee/hm/dop/rest/DevelopmentLoginResource.class</exclude>
-							</excludes>
-						</configuration>
-					</plugin>
-				</plugins>
+        </profile>
+        <profile>
+            <id>live</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>ee/hm/dop/rest/DevelopmentLoginResource.class</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
                 <resources>
                     <resource>
                         <directory>src/main/resources</directory>
                         <excludes>
                             <exclude>db/migration/V*__Test_data_migration_*.sql</exclude>
                         </excludes>
-						<filtering>true</filtering>
+                        <filtering>true</filtering>
                     </resource>
                 </resources>
-			</build>
-		</profile>
+            </build>
+        </profile>
     </profiles>
 </project>
