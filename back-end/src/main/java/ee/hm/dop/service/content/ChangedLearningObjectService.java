@@ -134,9 +134,9 @@ public class ChangedLearningObjectService {
         }  else if (change.getTargetGroup() != null) {
             return learningObject.getTargetGroups() != null && learningObject.getTargetGroups().contains(change.getTargetGroup());
         } else if (change.getResourceType() != null && learningObject instanceof Material) {
-            return ((Material) learningObject).getResourceTypes() != null && ((Material) learningObject).getResourceTypes().contains(change.getResourceType());
+            Material material = (Material) learningObject;
+            return material.getResourceTypes() != null && material.getResourceTypes().contains(change.getResourceType());
         }
-
         return false;
     }
 }

@@ -18,12 +18,12 @@ import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +44,8 @@ public class PortfolioService implements LearningObjectHandler {
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
     private ReducedLearningObjectDao reducedLearningObjectDao;
+    @Inject
+    private PortfolioConverter portfolioConverter;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
@@ -71,9 +73,7 @@ public class PortfolioService implements LearningObjectHandler {
 
     public void incrementViewCount(Portfolio portfolio) {
         Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
+        validateEntity(originalPortfolio);
 
         portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
@@ -95,9 +95,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
+        validate(portfolio);
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
@@ -116,9 +114,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     public void removeUserLike(Portfolio portfolio, User loggedInUser) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
+        validate(portfolio);
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
@@ -129,10 +125,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
-
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
+        validate(portfolio);
         Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
@@ -142,10 +135,14 @@ public class PortfolioService implements LearningObjectHandler {
         return userLikeDao.findPortfolioUserLike(originalPortfolio, loggedInUser);
     }
 
-    public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {
+    private void validate(Portfolio portfolio) {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");
         }
+    }
+
+    public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {
+        validate(portfolio);
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !UserUtil.isUserAdmin(loggedInUser)) {
@@ -165,9 +162,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     public void removeRecommendation(Portfolio portfolio, User loggedInUser) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
+        validate(portfolio);
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (originalPortfolio == null || !UserUtil.isUserAdmin(loggedInUser)) {
@@ -185,9 +180,9 @@ public class PortfolioService implements LearningObjectHandler {
             throw new RuntimeException("Portfolio already exists.");
         }
 
-        cleanTextFields(portfolio);
+        TextFieldUtil.cleanTextFields(portfolio);
 
-        Portfolio safePortfolio = getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        Portfolio safePortfolio = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio);
         saveNewObjectsInChapters(safePortfolio);
 
         return doCreate(safePortfolio, creator, creator);
@@ -196,9 +191,9 @@ public class PortfolioService implements LearningObjectHandler {
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 
-        cleanTextFields(portfolio);
+        TextFieldUtil.cleanTextFields(portfolio);
 
-        originalPortfolio = setPortfolioUpdatableFields(originalPortfolio, portfolio);
+        originalPortfolio = portfolioConverter.setPortfolioUpdatableFields(originalPortfolio, portfolio);
         saveNewObjectsInChapters(originalPortfolio);
         originalPortfolio.setUpdated(now());
 
@@ -208,17 +203,6 @@ public class PortfolioService implements LearningObjectHandler {
         processChanges(portfolio);
 
         return updatedPortfolio;
-    }
-
-    private void cleanTextFields(Portfolio portfolio) {
-        String regex = "[^\\u0000-\\uFFFF]";
-        String replacement = "\uFFFD";
-
-        if (portfolio.getTitle() != null)
-            portfolio.setTitle(portfolio.getTitle().replaceAll(regex, replacement));
-
-        if (portfolio.getSummary() != null)
-            portfolio.setSummary(portfolio.getSummary().replaceAll(regex, replacement));
     }
 
     private void saveNewObjectsInChapters(Portfolio originalPortfolio) {
@@ -252,23 +236,6 @@ public class PortfolioService implements LearningObjectHandler {
         }
     }
 
-    public Portfolio copy(Portfolio portfolio, User loggedInUser) {
-        if (portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        Portfolio copy = getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
-        copy.setChapters(copyChapters(originalPortfolio.getChapters()));
-
-        return doCreate(copy, loggedInUser, originalPortfolio.getCreator());
-    }
-
     public void delete(Portfolio portfolio, User loggedInUser) {
         if (portfolio.getId() == null) {
             throw new RuntimeException("Portfolio must already exist.");
@@ -288,12 +255,16 @@ public class PortfolioService implements LearningObjectHandler {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
 
         Portfolio originalPortfolio = portfolioDao.findDeletedById(portfolio.getId());
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
+        validateEntity(originalPortfolio);
 
         portfolioDao.restore(originalPortfolio);
         solrEngineService.updateIndex();
+    }
+
+    private void validateEntity(Portfolio originalPortfolio) {
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
     }
 
     public List<Portfolio> getDeletedPortfolios() {
@@ -322,7 +293,7 @@ public class PortfolioService implements LearningObjectHandler {
         return originalPortfolio;
     }
 
-    private Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {
+    public Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {
         portfolio.setViews(0L);
         portfolio.setCreator(creator);
         portfolio.setOriginalCreator(originalCreator);
@@ -335,50 +306,7 @@ public class PortfolioService implements LearningObjectHandler {
         return createdPortfolio;
     }
 
-    private List<Chapter> copyChapters(List<Chapter> chapters) {
-        List<Chapter> copyChapters = new ArrayList<>();
-
-        if (chapters != null) {
-            for (Chapter chapter : chapters) {
-                Chapter copy = new Chapter();
-                copy.setTitle(chapter.getTitle());
-                copy.setText(chapter.getText());
-                copy.setContentRows(chapter.getContentRows());
-                copy.setSubchapters(copyChapters(chapter.getSubchapters()));
-
-                copyChapters.add(copy);
-            }
-        }
-
-        return copyChapters;
-    }
-
-    private Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
-        Portfolio safePortfolio = new Portfolio();
-        safePortfolio.setTitle(portfolio.getTitle());
-        safePortfolio.setSummary(portfolio.getSummary());
-        safePortfolio.setTags(portfolio.getTags());
-        safePortfolio.setTargetGroups(portfolio.getTargetGroups());
-        safePortfolio.setTaxons(portfolio.getTaxons());
-        safePortfolio.setChapters(portfolio.getChapters());
-        safePortfolio.setPicture(portfolio.getPicture());
-
-        return safePortfolio;
-    }
-
-    private Portfolio setPortfolioUpdatableFields(Portfolio originalPortfolio, Portfolio portfolio) {
-        originalPortfolio.setTitle(portfolio.getTitle());
-        originalPortfolio.setSummary(portfolio.getSummary());
-        originalPortfolio.setTags(portfolio.getTags());
-        originalPortfolio.setTargetGroups(portfolio.getTargetGroups());
-        originalPortfolio.setTaxons(portfolio.getTaxons());
-        originalPortfolio.setChapters(portfolio.getChapters());
-        originalPortfolio.setVisibility(portfolio.getVisibility());
-        originalPortfolio.setPicture(portfolio.getPicture());
-        return originalPortfolio;
-    }
-
-    private boolean hasPermissionsToView(User loggedInUser, Portfolio portfolio) {
+    public boolean hasPermissionsToView(User loggedInUser, Portfolio portfolio) {
         return isPublic(portfolio) || isNotListed(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser);
     }
 

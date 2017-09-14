@@ -11,10 +11,12 @@ import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.content.ChangedLearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.utils.UserUtil;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -49,6 +51,9 @@ public class MaterialServiceTest {
 
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
+
+    @Mock
+    private MaterialHelper materialHelper;
 
     @Test
     public void create() {
@@ -139,7 +144,7 @@ public class MaterialServiceTest {
         Capture<DateTime> capturedUpdateDate = newCapture();
         material.setUpdated(capture(capturedUpdateDate));
 
-        ee.hm.dop.model.taxon.EducationalContext educationalContext = new ee.hm.dop.model.taxon.EducationalContext();
+        EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(EducationalContextC.BASICEDUCATION);
         expect(material.getTaxons()).andReturn(Collections.singletonList(educationalContext)).times(3);
 
@@ -291,14 +296,14 @@ public class MaterialServiceTest {
         User user = new User();
         user.setRole(Role.USER);
 
-        expect(materialDao.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
+//        expect(materialDao.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
 
         replayAll();
 
         try {
             materialService.delete(materialID, user);
         } catch (RuntimeException e) {
-            assertEquals("Logged in user must be an administrator or a moderator.", e.getMessage());
+            assertEquals(UserUtil.MUST_BE_ADMIN_OR_MODERATOR, e.getMessage());
         }
 
         verifyAll();
@@ -343,14 +348,14 @@ public class MaterialServiceTest {
         User user = new User();
         user.setRole(Role.USER);
 
-        expect(materialDao.findById(materialID)).andReturn(originalMaterial);
+//        expect(materialDao.findById(materialID)).andReturn(originalMaterial);
 
         replayAll();
 
         try {
             materialService.restore(material, user);
         } catch (RuntimeException e) {
-            assertEquals("Logged in user must be an administrator.", e.getMessage());
+            assertEquals(UserUtil.MUST_BE_ADMIN, e.getMessage());
         }
 
         verifyAll();
@@ -407,7 +412,8 @@ public class MaterialServiceTest {
         expect(materialDao.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.USER).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
-        expect(user.getUsername()).andReturn("username").anyTimes();
+//        expect(user.getUsername()).andReturn("username").anyTimes();
+        expect(user.getId()).andReturn(1L).anyTimes();
         expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
         expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
 

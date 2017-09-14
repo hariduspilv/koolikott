@@ -55,10 +55,7 @@ public class LearningObjectService {
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
-        if (!hasPermissionsToAccess(user, learningObject)) {
-            learningObject = null;
-        }
-        return learningObject;
+        return hasPermissionsToAccess(user, learningObject) ? learningObject : null;
     }
 
     public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
@@ -151,13 +148,11 @@ public class LearningObjectService {
     }
 
     private void addResourceType(Material learningObject, ResourceType resourceType) {
-        List<ResourceType> resourceTypes = learningObject.getResourceTypes();
-        resourceTypes.add(resourceType);
+        learningObject.getResourceTypes().add(resourceType);
     }
 
     private void addTargetGroup(TargetGroup targetGroup, LearningObject learningObject) {
-        List<TargetGroup> targetGroups = learningObject.getTargetGroups();
-        targetGroups.add(targetGroup);
+        learningObject.getTargetGroups().add(targetGroup);
     }
 
     private void addTaxon(LearningObject learningObject, Taxon taxon) {

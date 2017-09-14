@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -28,6 +29,8 @@ public class PortfolioResource extends BaseResource {
     private PortfolioService portfolioService;
     @Inject
     private UserService userService;
+    @Inject
+    private PortfolioCopier portfolioCopier;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -134,7 +137,7 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(Portfolio portfolio) {
-        return portfolioService.copy(portfolio, getLoggedInUser());
+        return portfolioCopier.copy(portfolio, getLoggedInUser());
     }
 
     @POST

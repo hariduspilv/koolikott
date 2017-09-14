@@ -8,6 +8,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.MaterialMetadataService;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.metadata.LanguageService;
@@ -31,6 +32,7 @@ import java.util.List;
 @Path("learningMaterialMetadata")
 public class LearningMaterialMetadataResource {
 
+    public static final String MAX_AGE_120 = "max-age=120";
     @Inject
     private TaxonService taxonService;
     @Inject
@@ -44,9 +46,9 @@ public class LearningMaterialMetadataResource {
     @Inject
     private KeyCompetenceService keyCompetenceService;
     @Inject
-    private MaterialService materialservice;
-    @Inject
     private TargetGroupService targetGroupService;
+    @Inject
+    private MaterialMetadataService materialMetadataService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,9 +56,8 @@ public class LearningMaterialMetadataResource {
     public Response getEducationalContext() {
         List<EducationalContext> taxons = taxonService.getAllEducationalContext();
         if (taxons != null) {
-            return Response.ok(taxons).header(HttpHeaders.CACHE_CONTROL, "max-age=120").build();
+            return Response.ok(taxons).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_120).build();
         }
-
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
@@ -120,7 +121,7 @@ public class LearningMaterialMetadataResource {
     @Path("usedLanguages")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Language> getUsedLanguages() {
-        return materialservice.getLanguagesUsedInMaterials();
+        return materialMetadataService.getLanguagesUsedInMaterials();
     }
 
 }
