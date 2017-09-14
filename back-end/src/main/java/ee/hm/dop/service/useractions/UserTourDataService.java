@@ -17,14 +17,11 @@ public class UserTourDataService {
         }
 
         UserTourData userTourData = userTourDataDao.getUserTourData(user);
-
         if (userTourData == null) {
             UserTourData newUserTourData = new UserTourData();
             newUserTourData.setUser(user);
-
             userTourData = userTourDataDao.createOrUpdate(newUserTourData);
         }
-
         return userTourData;
     }
 
@@ -32,11 +29,9 @@ public class UserTourDataService {
         if (userTourData.getUser() == null || loggedInUser == null) {
             throw new IllegalArgumentException();
         }
-
         if (!userTourData.getUser().getId().equals(loggedInUser.getId())) {
             throw new RuntimeException("Access denied");
         }
-
         return userTourDataDao.createOrUpdate(userTourData);
     }
 }
