@@ -189,14 +189,6 @@ public class MaterialResource extends BaseResource {
         return materialService.addBrokenMaterial(material, getLoggedInUser());
     }
 
-    @POST
-    @Path("setNotBroken")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN})
-    public void setNotBroken(Material material) {
-        materialService.setMaterialNotBroken(material);
-    }
-
     @GET
     @Path("hasSetBroken")
     @Produces(MediaType.APPLICATION_JSON)

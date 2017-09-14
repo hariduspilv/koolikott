@@ -10,4 +10,5 @@ public class EducationalContextC {
     public static final String VOCATIONALEDUCATION = "VOCATIONALEDUCATION";
 
     public static final List<String> ALL = Arrays.asList(PRESCHOOLEDUCATION, BASICEDUCATION, SECONDARYEDUCATION, VOCATIONALEDUCATION);
+    public static final List<String> BASIC_AND_SECONDARY = Arrays.asList(BASICEDUCATION, SECONDARYEDUCATION);
 }

@@ -4,57 +4,37 @@ import ee.hm.dop.dao.BrokenContentDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserLikeDao;
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.ChangedLearningObject;
-import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.PeerReview;
-import ee.hm.dop.model.Publisher;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.ReducedLearningObject;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.TaxonUtils;
+import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
-import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static java.lang.String.format;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
 public class MaterialService implements LearningObjectHandler {
 
-    private static final String DEFAULT_PROTOCOL = "http://";
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
@@ -62,27 +42,29 @@ public class MaterialService implements LearningObjectHandler {
     @Inject
     private UserLikeDao userLikeDao;
     @Inject
-    private AuthorService authorService;
-    @Inject
-    private PublisherService publisherService;
-    @Inject
     private SolrEngineService solrEngineService;
     @Inject
     private BrokenContentDao brokenContentDao;
-    @Inject
-    private PeerReviewService peerReviewService;
-    @Inject
-    private KeyCompetenceService keyCompetenceService;
-    @Inject
-    private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
     private Configuration configuration;
     @Inject
     private ReducedLearningObjectDao reducedLearningObjectDao;
+    @Inject
+    private MaterialHelper materialHelper;
+    @Inject
+    private AuthorService authorService;
+    @Inject
+    private PublisherService publisherService;
+    @Inject
+    private PeerReviewService peerReviewService;
+    @Inject
+    private KeyCompetenceService keyCompetenceService;
+    @Inject
+    private CrossCurricularThemeService crossCurricularThemeService;
 
-    public Material get(long materialId, User loggedInUser) {
+    public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
             return materialDao.findById(materialId);
         }
@@ -102,135 +84,40 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         material.setSource(UrlUtil.processURL(material.getSource()));
-
         cleanPeerReviewUrls(material);
-
         material.setCreator(creator);
-
         if (creator != null && isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
-
         material.setRecommendation(null);
-
         Material createdMaterial = createOrUpdate(material);
         if (updateSearchIndex) {
             solrEngineService.updateIndex();
         }
-
         return createdMaterial;
     }
 
-    private void checkKeyCompetences(Material material) {
-        if (!CollectionUtils.isEmpty(material.getKeyCompetences())) {
-            for (int i = 0; i < material.getKeyCompetences().size(); i++) {
-                if (material.getKeyCompetences().get(i).getId() == null) {
-                    KeyCompetence keyCompetenceByName = keyCompetenceService.findKeyCompetenceByName(material.getKeyCompetences().get(i).getName());
-                    if (keyCompetenceByName == null) {
-                        throw new IllegalArgumentException();
-                    }
-
-                    material.getKeyCompetences().set(i, keyCompetenceByName);
-                }
-            }
-        }
-    }
-
-    private void checkCrossCurricularThemes(Material material) {
-        if (!CollectionUtils.isEmpty(material.getCrossCurricularThemes())) {
-            for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
-                if (material.getCrossCurricularThemes().get(i).getId() == null) {
-                    CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(material.getCrossCurricularThemes().get(i).getName());
-                    if (crossCurricularTheme == null) {
-                        throw new IllegalArgumentException();
-                    }
-
-                    material.getCrossCurricularThemes().set(i, crossCurricularTheme);
-                }
-            }
-        }
-    }
-
+    //todo admin functionality
     public void delete(Long materialID, User loggedInUser) {
+        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
+
+
         Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
         validateMaterialNotNull(originalMaterial);
-
-        if (!UserUtil.isUserAdmin(loggedInUser) && !UserUtil.isUserModerator(loggedInUser)) {
-            throw new RuntimeException("Logged in user must be an administrator or a moderator.");
-        }
 
         materialDao.delete(originalMaterial);
         solrEngineService.updateIndex();
     }
 
+    //todo admin functionality
     public void restore(Material material, User loggedInUser) {
+        UserUtil.mustBeAdmin(loggedInUser);
+
         Material originalMaterial = materialDao.findById(material.getId());
         validateMaterialNotNull(originalMaterial);
 
-        if (!UserUtil.isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Logged in user must be an administrator.");
-        }
-
         materialDao.restore(originalMaterial);
         solrEngineService.updateIndex();
-    }
-
-    private void setPublishers(Material material) {
-        List<Publisher> publishers = material.getPublishers();
-
-        if (publishers != null) {
-            for (int i = 0; i < publishers.size(); i++) {
-                Publisher publisher = publishers.get(i);
-                if (publisher != null && publisher.getName() != null) {
-                    Publisher returnedPublisher = publisherService.getPublisherByName(publisher.getName());
-                    if (returnedPublisher != null) {
-                        publishers.set(i, returnedPublisher);
-                    } else {
-                        returnedPublisher = publisherService.createPublisher(publisher.getName(),
-                                publisher.getWebsite());
-                        publishers.set(i, returnedPublisher);
-                    }
-                } else {
-                    publishers.remove(i);
-                }
-            }
-            material.setPublishers(publishers);
-        }
-    }
-
-    private void setAuthors(Material material) {
-        List<Author> authors = material.getAuthors();
-        if (authors != null) {
-            for (int i = 0; i < authors.size(); i++) {
-                Author author = authors.get(i);
-                if (author != null && author.getName() != null && author.getSurname() != null) {
-                    Author returnedAuthor = authorService.getAuthorByFullName(author.getName(), author.getSurname());
-                    if (returnedAuthor != null) {
-                        authors.set(i, returnedAuthor);
-                    } else {
-                        returnedAuthor = authorService.createAuthor(author.getName(), author.getSurname());
-                        authors.set(i, returnedAuthor);
-                    }
-                } else {
-                    authors.remove(i);
-                }
-            }
-            material.setAuthors(authors);
-        }
-    }
-
-    private void setPeerReviews(Material material) {
-        List<PeerReview> peerReviews = material.getPeerReviews();
-        if (peerReviews != null) {
-            for (int i = 0; i < peerReviews.size(); i++) {
-                PeerReview peerReview = peerReviews.get(i);
-                PeerReview returnedPeerReview = peerReviewService.createPeerReview(peerReview.getUrl());
-                if (returnedPeerReview != null) {
-                    peerReviews.set(i, returnedPeerReview);
-                }
-            }
-        }
-        material.setPeerReviews(peerReviews);
     }
 
     public void addComment(Comment comment, Material material) {
@@ -241,9 +128,7 @@ public class MaterialService implements LearningObjectHandler {
         if (comment.getId() != null) {
             throw new RuntimeException("Comment already exists.");
         }
-
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validateMaterialNotNull(originalMaterial);
+        Material originalMaterial = validateAndFind(material);
 
         comment.setAdded(DateTime.now());
         originalMaterial.getComments().add(comment);
@@ -251,9 +136,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
-        validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validateMaterialNotNull(originalMaterial);
+        Material originalMaterial = validateAndFind(material);
 
         userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
 
@@ -267,13 +150,9 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public Recommendation addRecommendation(Material material, User loggedInUser) {
-        validateMaterialAndIdNotNull(material);
+        UserUtil.mustBeAdmin(loggedInUser);
 
-        validateUserIsAdmin(loggedInUser);
-
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-
-        validateMaterialNotNull(originalMaterial);
+        Material originalMaterial = validateAndFind(material);
 
         Recommendation recommendation = new Recommendation();
         recommendation.setCreator(loggedInUser);
@@ -287,33 +166,29 @@ public class MaterialService implements LearningObjectHandler {
         return originalMaterial.getRecommendation();
     }
 
-    public void removeRecommendation(Material material, User loggedInUser) {
+    private Material validateAndFind(Material material) {
         validateMaterialAndIdNotNull(material);
-
-        validateUserIsAdmin(loggedInUser);
-
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-
         validateMaterialNotNull(originalMaterial);
+        return originalMaterial;
+    }
 
+    public void removeRecommendation(Material material, User loggedInUser) {
+        UserUtil.mustBeAdmin(loggedInUser);
+
+        Material originalMaterial = validateAndFind(material);
         originalMaterial.setRecommendation(null);
-
         materialDao.createOrUpdate(originalMaterial);
-
         solrEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
-        validateMaterialAndIdNotNull(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validateMaterialNotNull(originalMaterial);
-
+        Material originalMaterial = validateAndFind(material);
         userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
     }
 
     public UserLike getUserLike(Material material, User loggedInUser) {
         validateMaterialAndIdNotNull(material);
-
         return userLikeDao.findMaterialUserLike(material, loggedInUser);
     }
 
@@ -325,7 +200,6 @@ public class MaterialService implements LearningObjectHandler {
         if (material == null || material.getId() == null) {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
-
         material.setSource(UrlUtil.processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {
@@ -333,31 +207,23 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         cleanPeerReviewUrls(material);
-
-        Material originalMaterial = getMaterial(material, changer);
+        Material originalMaterial = get(material.getId(), changer);
         validateMaterialUpdate(originalMaterial, changer);
-
         if (!UserUtil.isUserAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
-        //Should not be able to update repository
         material.setRepository(originalMaterial.getRepository());
-
-        // Should not be able to update view count
         material.setViews(originalMaterial.getViews());
-        // Should not be able to update added date, must keep the original
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
         Material updatedMaterial = null;
         //Null changer is the automated updating of materials during synchronization
-        if (changer == null || UserUtil.isUserAdminOrModerator(changer) || isThisUserMaterial(changer, originalMaterial)) {
+        if (changer == null || UserUtil.isUserAdminOrModerator(changer) || UserUtil.isUserCreator(originalMaterial, changer)) {
             updatedMaterial = createOrUpdate(material);
             if (updateSearchIndex) solrEngineService.updateIndex();
         }
-
         processChanges(updatedMaterial);
-
         return updatedMaterial;
     }
 
@@ -370,13 +236,6 @@ public class MaterialService implements LearningObjectHandler {
                 }
             }
         }
-    }
-
-    private Material getMaterial(Material material, User changer) {
-        if (UserUtil.isUserAdminOrModerator(changer)) {
-            return materialDao.findById(material.getId());
-        }
-        return materialDao.findByIdNotDeleted(material.getId());
     }
 
     private void cleanPeerReviewUrls(Material material) {
@@ -407,10 +266,6 @@ public class MaterialService implements LearningObjectHandler {
         return list.stream().anyMatch(m -> m.getId().equals(material.getId()));
     }
 
-    private boolean isThisUserMaterial(User user, Material originalMaterial) {
-        return user != null && originalMaterial.getCreator().getUsername().equals(user.getUsername());
-    }
-
     private void validateMaterialUpdate(Material originalMaterial, User changer) {
         if (originalMaterial == null) {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
@@ -437,29 +292,15 @@ public class MaterialService implements LearningObjectHandler {
         } else {
             logger.info("Updating material");
         }
-
-        cleanTextFields(material);
-
+        TextFieldUtil.cleanTextFields(material);
         checkKeyCompetences(material);
         checkCrossCurricularThemes(material);
-
         setAuthors(material);
         setPublishers(material);
         setPeerReviews(material);
         material = applyRestrictions(material);
 
         return materialDao.createOrUpdate(material);
-    }
-
-    private void cleanTextFields(Material material) {
-        String regex = "[^\\u0000-\\uFFFF]";
-        String replacement = "\uFFFD";
-
-        if (material.getTitles() != null)
-            material.getTitles().forEach(title -> title.setText(title.getText().replaceAll(regex, replacement)));
-
-        if (material.getDescriptions() != null)
-            material.getDescriptions().forEach(desc -> desc.setText(desc.getText().replaceAll(regex, replacement)));
     }
 
     private Material applyRestrictions(Material material) {
@@ -472,8 +313,7 @@ public class MaterialService implements LearningObjectHandler {
                     .collect(Collectors.toList());
 
             for (EducationalContext educationalContext : educationalContexts) {
-                if (educationalContext.getName().equals(EducationalContextC.BASICEDUCATION)
-                        || educationalContext.getName().equals(EducationalContextC.SECONDARYEDUCATION)) {
+                if (EducationalContextC.BASIC_AND_SECONDARY.contains(educationalContext.getName())) {
                     areKeyCompetencesAndCrossCurricularThemesAllowed = true;
                 }
             }
@@ -507,46 +347,9 @@ public class MaterialService implements LearningObjectHandler {
         return brokenContentDao.update(brokenContent);
     }
 
-    public List<Material> getDeletedMaterials() {
-        return materialDao.findDeletedMaterials();
-    }
-
-    public Long getDeletedMaterialsCount() {
-        return materialDao.findDeletedMaterialsCount();
-    }
-
-    public List<BrokenContent> getBrokenMaterials() {
-        return brokenContentDao.getBrokenMaterials();
-    }
-
-    public Long getBrokenMaterialCount() {
-        return brokenContentDao.getCount();
-    }
-
-    public void setMaterialNotBroken(Material material) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found while adding broken material");
-        }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found while adding broken material");
-        }
-
-        brokenContentDao.deleteBrokenMaterials(originalMaterial.getId());
-    }
-
     public Boolean hasSetBroken(long materialId, User loggedInUser) {
         List<BrokenContent> brokenContents = brokenContentDao.findByMaterialAndUser(materialId, loggedInUser);
         return isNotEmpty(brokenContents);
-    }
-
-    public Boolean isBroken(long materialId) {
-        List<BrokenContent> brokenContents = brokenContentDao.findByMaterial(materialId);
-        return isNotEmpty(brokenContents);
-    }
-
-    public List<Language> getLanguagesUsedInMaterials() {
-        return materialDao.findLanguagesUsedInMaterials();
     }
 
     private void validateMaterialAndIdNotNull(Material material) {
@@ -558,12 +361,6 @@ public class MaterialService implements LearningObjectHandler {
     private void validateMaterialNotNull(Material material) {
         if (material == null) {
             throw new RuntimeException("Material not found");
-        }
-    }
-
-    private void validateUserIsAdmin(User loggedInUser) {
-        if (!UserUtil.isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Only admin can do this");
         }
     }
 
@@ -595,19 +392,104 @@ public class MaterialService implements LearningObjectHandler {
 
     public List<Material> getBySource(String materialSource, boolean deleted) {
         materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
-        if (materialSource != null) {
-            return materialDao.findBySource(materialSource, deleted);
-        } else {
-            throw new RuntimeException("No material source link provided");
-        }
+        checkLink(materialSource);
+        return materialDao.findBySource(materialSource, deleted);
     }
 
     public Material getOneBySource(String materialSource, boolean deleted) {
         materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
-        if (materialSource != null) {
-            return materialDao.findOneBySource(materialSource, deleted);
-        } else {
+        checkLink(materialSource);
+        return materialDao.findOneBySource(materialSource, deleted);
+    }
+
+    private void checkLink(String materialSource) {
+        if (materialSource == null) {
             throw new RuntimeException("No material source link provided");
         }
+    }
+
+    public void checkKeyCompetences(Material material) {
+        if (isNotEmpty(material.getKeyCompetences())) {
+            for (int i = 0; i < material.getKeyCompetences().size(); i++) {
+                if (material.getKeyCompetences().get(i).getId() == null) {
+                    KeyCompetence keyCompetenceByName = keyCompetenceService.findKeyCompetenceByName(material.getKeyCompetences().get(i).getName());
+                    if (keyCompetenceByName == null) {
+                        throw new IllegalArgumentException();
+                    }
+                    material.getKeyCompetences().set(i, keyCompetenceByName);
+                }
+            }
+        }
+    }
+
+    public void checkCrossCurricularThemes(Material material) {
+        if (isNotEmpty(material.getCrossCurricularThemes())) {
+            for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
+                if (material.getCrossCurricularThemes().get(i).getId() == null) {
+                    CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService.getThemeByName(material.getCrossCurricularThemes().get(i).getName());
+                    if (crossCurricularTheme == null) {
+                        throw new IllegalArgumentException();
+                    }
+                    material.getCrossCurricularThemes().set(i, crossCurricularTheme);
+                }
+            }
+        }
+    }
+
+    public void setPublishers(Material material) {
+        List<Publisher> publishers = material.getPublishers();
+        if (publishers != null) {
+            for (int i = 0; i < publishers.size(); i++) {
+                Publisher publisher = publishers.get(i);
+                if (publisher != null && publisher.getName() != null) {
+                    Publisher returnedPublisher = publisherService.getPublisherByName(publisher.getName());
+                    if (returnedPublisher != null) {
+                        publishers.set(i, returnedPublisher);
+                    } else {
+                        returnedPublisher = publisherService.createPublisher(publisher.getName(),
+                                publisher.getWebsite());
+                        publishers.set(i, returnedPublisher);
+                    }
+                } else {
+                    publishers.remove(i);
+                }
+            }
+            material.setPublishers(publishers);
+        }
+    }
+
+    public void setAuthors(Material material) {
+        List<Author> authors = material.getAuthors();
+        if (authors != null) {
+            for (int i = 0; i < authors.size(); i++) {
+                Author author = authors.get(i);
+                if (author != null && author.getName() != null && author.getSurname() != null) {
+                    Author returnedAuthor = authorService.getAuthorByFullName(author.getName(), author.getSurname());
+                    if (returnedAuthor != null) {
+                        authors.set(i, returnedAuthor);
+                    } else {
+                        returnedAuthor = authorService.createAuthor(author.getName(), author.getSurname());
+                        authors.set(i, returnedAuthor);
+                    }
+                } else {
+                    authors.remove(i);
+                }
+            }
+            material.setAuthors(authors);
+        }
+    }
+
+    public void setPeerReviews(Material material) {
+        List<PeerReview> peerReviews = material.getPeerReviews();
+        if (peerReviews != null) {
+            for (int i = 0; i < peerReviews.size(); i++) {
+                PeerReview peerReview = peerReviews.get(i);
+                PeerReview returnedPeerReview = peerReviewService.createPeerReview(peerReview.getUrl());
+                if (returnedPeerReview != null) {
+                    peerReviews.set(i, returnedPeerReview);
+                }
+            }
+        }
+        material.setPeerReviews(peerReviews);
     }
 }
