@@ -6,7 +6,6 @@ import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 

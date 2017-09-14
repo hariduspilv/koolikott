@@ -47,7 +47,7 @@ public class PortfolioService implements LearningObjectHandler {
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         Portfolio portfolio;
-        if (UserUtil.isUserAdmin(loggedInUser) || UserUtil.isUserModerator(loggedInUser)) {
+        if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
             portfolio = portfolioDao.findById(portfolioId);
         } else {
             portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
@@ -158,7 +158,7 @@ public class PortfolioService implements LearningObjectHandler {
 
         originalPortfolio.setRecommendation(recommendation);
 
-        originalPortfolio = (Portfolio) portfolioDao.createOrUpdate(originalPortfolio);
+        originalPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
         return originalPortfolio.getRecommendation();
@@ -202,7 +202,7 @@ public class PortfolioService implements LearningObjectHandler {
         saveNewObjectsInChapters(originalPortfolio);
         originalPortfolio.setUpdated(now());
 
-        Portfolio updatedPortfolio = (Portfolio) portfolioDao.createOrUpdate(originalPortfolio);
+        Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
         processChanges(portfolio);
@@ -233,11 +233,12 @@ public class PortfolioService implements LearningObjectHandler {
 
     private void saveAndUpdateChapterObjects(Chapter chapter) {
         if (chapter.getContentRows() == null) return;
-        chapter.getContentRows().forEach(chapterRow -> chapterRow.getLearningObjects().replaceAll(learningObject -> {
-            if (learningObject instanceof ChapterObject) {
-                return chapterObjectDao.update((ChapterObject) learningObject);
-            } else return learningObject;
-        }));
+        chapter.getContentRows().forEach(chapterRow ->
+                chapterRow.getLearningObjects().replaceAll(learningObject -> {
+                    if (learningObject instanceof ChapterObject) {
+                        return chapterObjectDao.update((ChapterObject) learningObject);
+                    } else return learningObject;
+                }));
     }
 
     private void processChanges(Portfolio portfolio) {
@@ -330,7 +331,7 @@ public class PortfolioService implements LearningObjectHandler {
         portfolio.setVisibility(Visibility.PRIVATE);
         portfolio.setAdded(now());
 
-        Portfolio createdPortfolio = (Portfolio) portfolioDao.createOrUpdate(portfolio);
+        Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
         solrEngineService.updateIndex();
 
         return createdPortfolio;
@@ -387,7 +388,7 @@ public class PortfolioService implements LearningObjectHandler {
         if (learningObject == null || !(learningObject instanceof ReducedPortfolio)) return false;
         ReducedPortfolio portfolio = (ReducedPortfolio) learningObject;
 
-        return isPublic(portfolio) || UserUtil.isUserAdminOrModerator(user) || isUserCreator(portfolio, user);
+        return isPublic(portfolio) || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(portfolio, user);
     }
 
     @Override
@@ -404,10 +405,6 @@ public class PortfolioService implements LearningObjectHandler {
         Portfolio portfolio = (Portfolio) learningObject;
 
         return UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(portfolio, user);
-    }
-
-    private boolean isUserCreator(ReducedPortfolio reducedPortfolio, User user) {
-        return user != null && reducedPortfolio.getCreator().getId().equals(user.getId());
     }
 
     private boolean isPublic(ReducedPortfolio reducedPortfolio) {

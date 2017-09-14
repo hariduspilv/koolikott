@@ -186,37 +186,12 @@ public class MaterialResource extends BaseResource {
         return materialService.addBrokenMaterial(material, getLoggedInUser());
     }
 
-    @GET
-    @Path("getBroken")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<BrokenContent> getBrokenMaterial() {
-        return materialService.getBrokenMaterials();
-    }
-
-
-    @GET
-    @Path("getBroken/count")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getBrokenMaterialCount() {
-        return Response.ok(materialService.getBrokenMaterialCount()).build();
-    }
-
     @POST
     @Path("setNotBroken")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN})
     public void setNotBroken(Material material) {
         materialService.setMaterialNotBroken(material);
-    }
-
-    @GET
-    @Path("isBroken")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Boolean isBroken(@QueryParam("materialId") long materialId) {
-        return materialService.isBroken(materialId);
     }
 
     @GET
@@ -229,23 +204,6 @@ public class MaterialResource extends BaseResource {
         }
 
         return false;
-    }
-
-    @GET
-    @Path("getDeleted")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<Material> getDeletedMaterials() {
-        return materialService.getDeletedMaterials();
-    }
-
-    @GET
-    @Path("getDeleted/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response getDeletedMaterialsCount() {
-        return Response.ok(materialService.getDeletedMaterialsCount()).build();
-
     }
 
     @GET

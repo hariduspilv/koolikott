@@ -144,28 +144,4 @@ public class PortfolioResource extends BaseResource {
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
-
-    @POST
-    @Path("restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public void restore(Portfolio portfolio) {
-        portfolioService.restore(portfolio, getLoggedInUser());
-    }
-
-    @GET
-    @Path("getDeleted")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<Portfolio> getDeletedPortfolios() {
-        return portfolioService.getDeletedPortfolios();
-    }
-
-    @GET
-    @Path("getDeleted/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response getDeletedPortfoliosCount() {
-        return Response.ok(portfolioService.getDeletedPortfoliosCount()).build();
-    }
 }

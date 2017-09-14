@@ -21,14 +21,6 @@ public class TagUpVoteService {
     @Inject
     private LearningObjectService learningObjectService;
 
-    /**
-     * 
-     * @param id
-     *            the TagUpVote id
-     * @param user
-     *            the user who wants access to the TagUpVote
-     * @return the tagUpVote if user has access
-     */
     public TagUpVote get(long id, User user) {
         TagUpVote tagUpVote = tagUpVoteDao.findById(id);
 
