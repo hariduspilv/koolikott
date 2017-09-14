@@ -1,20 +1,13 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.BrokenContentDao;
-import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
-import org.apache.commons.configuration.Configuration;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;

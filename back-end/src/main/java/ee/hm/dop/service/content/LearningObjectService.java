@@ -22,6 +22,7 @@ import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.utils.LearningObjectUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -169,21 +170,13 @@ public class LearningObjectService {
     private LearningObject getLearningObjectByType(Long learningObjectId, String type) {
         LearningObject learningObject = null;
 
-        if (isMaterial(type)) {
+        if (LearningObjectUtils.isMaterial(type)) {
             learningObject = materialDao.findById(learningObjectId);
-        } else if (isPortfolio(type)) {
+        } else if (LearningObjectUtils.isPortfolio(type)) {
             learningObject = portfolioDao.findById(learningObjectId);
         }
 
         return learningObject;
-    }
-
-    private boolean isMaterial(String type) {
-        return ".Material".equals(type) || ".ReducedMaterial".equals(type);
-    }
-
-    private boolean isPortfolio(String type) {
-        return ".Portfolio".equals(type) || ".ReducedPortfolio".equals(type);
     }
 
     private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,

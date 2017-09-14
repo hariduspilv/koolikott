@@ -124,10 +124,7 @@ public class UserService {
     }
 
     public User update(User user, User loggedInUser) {
-        if (!UserUtil.isUserAdmin(loggedInUser)) {
-            throw new BadRequestException("Posting user must be administrator");
-        }
-        List<Taxon> taxons = new ArrayList<>();
+        UserUtil.mustBeAdmin(loggedInUser);
 
         //Currently allowed to update only role and taxons
         User existingUser = getUserByUsername(user.getUsername());
@@ -137,6 +134,7 @@ public class UserService {
 //        todo wierd spot
         newTaxons.removeAll(Collections.singleton(null));
 
+        List<Taxon> taxons = new ArrayList<>();
         if (newTaxons.size() > 0) {
             List<Long> ids = user.getUserTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
             taxons = taxonService.getTaxonById(ids);

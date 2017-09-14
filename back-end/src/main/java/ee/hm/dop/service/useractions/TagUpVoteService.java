@@ -23,11 +23,9 @@ public class TagUpVoteService {
 
     public TagUpVote get(long id, User user) {
         TagUpVote tagUpVote = tagUpVoteDao.findById(id);
-
         if (tagUpVote != null) {
             validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
         }
-
         return tagUpVote;
     }
 
@@ -61,7 +59,7 @@ public class TagUpVoteService {
     }
 
     private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {
-        if ((tagUpVote.getId() != null && !Objects.equals(user.getId(), tagUpVote.getUser().getId()))
+        if (tagUpVote.getId() != null && !Objects.equals(user.getId(), tagUpVote.getUser().getId())
                 || !learningObjectService.hasPermissionsToAccess(user, tagUpVote.getLearningObject())) {
             throw new RuntimeException("Access denied");
         }

@@ -9,6 +9,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
 import java.util.Iterator;
@@ -36,22 +37,28 @@ public class ChangedLearningObjectService {
     }
 
     ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
-        if (changedLearningObject == null || changedLearningObject.getLearningObject() == null) {
-            throw new RuntimeException("Invalid changed learningObject");
-        }
-
+        notNullnotNullId(changedLearningObject);
         LearningObject learningObject = learningObjectService
                 .get(changedLearningObject.getLearningObject().getId(), changedLearningObject.getChanger());
-
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject does not exists.");
-        }
+        notNull(learningObject);
 
         if (!hasChange(changedLearningObject)) {
             return null;
         }
 
         return changedLearningObjectDao.createOrUpdate(changedLearningObject);
+    }
+
+    private void notNullnotNullId(ChangedLearningObject changedLearningObject) {
+        if (changedLearningObject == null || changedLearningObject.getLearningObject() == null) {
+            throw new RuntimeException("Invalid changed learningObject");
+        }
+    }
+
+    private void notNull(LearningObject learningObject) {
+        if (learningObject == null) {
+            throw new RuntimeException("LearningObject does not exists.");
+        }
     }
 
     private boolean hasChange(ChangedLearningObject changedLearningObject) {
@@ -64,12 +71,9 @@ public class ChangedLearningObjectService {
 
     public LearningObject revertAllChanges(long id, User user) {
         LearningObject learningObject = learningObjectService.get(id, user);
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject does not exists.");
-        }
+        notNull(learningObject);
         List<ChangedLearningObject> changedLearningObjects = changedLearningObjectDao.getAllByLearningObject(id);
-
-        if (changedLearningObjects == null || changedLearningObjects.isEmpty()) {
+        if (CollectionUtils.isEmpty(changedLearningObjects)) {
             throw new RuntimeException("No changes for this learningObject");
         }
 

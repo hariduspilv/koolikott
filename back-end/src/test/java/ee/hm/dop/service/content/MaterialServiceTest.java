@@ -39,19 +39,14 @@ public class MaterialServiceTest {
 
     @TestSubject
     private MaterialService materialService = new MaterialService();
-
     @Mock
     private MaterialDao materialDao;
-
     @Mock
     private SolrEngineService solrEngineService;
-
     @Mock
     private PeerReviewService peerReviewService;
-
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
-
     @Mock
     private MaterialHelper materialHelper;
 
@@ -115,7 +110,7 @@ public class MaterialServiceTest {
     public void update() {
         DateTime startOfTest = now();
         DateTime added = new DateTime("2001-10-04T10:15:45.937");
-        Long views = 124l;
+        Long views = 124L;
 
         Material original = new Material();
         original.setViews(views);
