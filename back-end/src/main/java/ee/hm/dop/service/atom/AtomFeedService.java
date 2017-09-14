@@ -32,32 +32,23 @@ import org.slf4j.LoggerFactory;
 
 public class AtomFeedService {
 
-    private int maxFeedItems;
-
     @Inject
     private Configuration configuration;
-
     @Inject
     private MaterialDao materialDao;
-
     @Inject
     private PortfolioDao portfolioDao;
-
     @Inject
     private VersionDao versionDao;
-
     @Inject
     private TranslationDAO translationDAO;
-
     @Inject
     private LanguageDao languageDao;
 
     private static Logger logger = LoggerFactory.getLogger(AtomFeedService.class);
-
+    private int maxFeedItems;
     private Factory factory;
-
     private Feed feed;
-
     private String lang;
 
     public AtomFeedService() {

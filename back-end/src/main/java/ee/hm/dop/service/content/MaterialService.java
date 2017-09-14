@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.lang.String.format;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -374,7 +375,7 @@ public class MaterialService implements LearningObjectHandler {
 
     private void processChanges(Material material) {
         List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(material.getId());
-        if (CollectionUtils.isNotEmpty(changes)) {
+        if (isNotEmpty(changes)) {
             for (ChangedLearningObject change : changes) {
                 if (!changedLearningObjectService.learningObjectHasThis(material, change)) {
                     changedLearningObjectService.removeChangeById(change.getId());
@@ -405,7 +406,7 @@ public class MaterialService implements LearningObjectHandler {
         if (material.getSource() == null && material.getUploadedFile() != null) return false;
 
         List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
-        if (CollectionUtils.isNotEmpty(materialsWithGivenSource)) {
+        if (isNotEmpty(materialsWithGivenSource)) {
             if (!listContainsMaterial(materialsWithGivenSource, material)) {
                 return true;
             }
@@ -427,7 +428,7 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
 
-        if (originalMaterial.getRepository() != null && changer != null && !isUserAdminOrPublisher(changer)) {
+        if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isUserAdminOrModerator(changer)) {
             throw new IllegalArgumentException("Normal user can't update external repository material");
         }
     }
@@ -502,10 +503,6 @@ public class MaterialService implements LearningObjectHandler {
         return loggedInUser != null && loggedInUser.getPublisher() != null;
     }
 
-    private boolean isUserAdminOrPublisher(User loggedInUser) {
-        return UserUtil.isUserModerator(loggedInUser) || UserUtil.isUserAdmin(loggedInUser);
-    }
-
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
         if (material == null || material.getId() == null) {
             throw new RuntimeException("Material not found while adding broken material");
@@ -552,12 +549,12 @@ public class MaterialService implements LearningObjectHandler {
 
     public Boolean hasSetBroken(long materialId, User loggedInUser) {
         List<BrokenContent> brokenContents = brokenContentDao.findByMaterialAndUser(materialId, loggedInUser);
-        return brokenContents.size() != 0;
+        return isNotEmpty(brokenContents);
     }
 
     public Boolean isBroken(long materialId) {
         List<BrokenContent> brokenContents = brokenContentDao.findByMaterial(materialId);
-        return brokenContents.size() != 0;
+        return isNotEmpty(brokenContents);
     }
 
     public List<Language> getLanguagesUsedInMaterials() {
@@ -587,9 +584,7 @@ public class MaterialService implements LearningObjectHandler {
         if (!(learningObject instanceof Material)) {
             return false;
         }
-
         Material material = (Material) learningObject;
-
         return !material.isDeleted() || UserUtil.isUserAdmin(user);
     }
 
@@ -598,13 +593,10 @@ public class MaterialService implements LearningObjectHandler {
         if (!(learningObject instanceof Material)) {
             return false;
         }
-
         Material material = (Material) learningObject;
-
-        if (isUserAdminOrPublisher(user) || UserUtil.isUserCreator(material, user)) {
+        if (UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(material, user)) {
             return true;
         }
-
         return !material.isDeleted() || UserUtil.isUserAdmin(user);
     }
 

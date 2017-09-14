@@ -29,7 +29,7 @@ import static javax.persistence.FetchType.EAGER;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "LearningObject")
-public class ReducedLearningObject extends AbstractEntity implements Searchable {
+public abstract class ReducedLearningObject extends AbstractEntity implements Searchable {
 
     @Id
     private Long id;

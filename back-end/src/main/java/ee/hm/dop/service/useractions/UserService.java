@@ -134,13 +134,12 @@ public class UserService {
         existingUser.setRole(Role.valueOf(user.getRole().toString()));
 
         List<Taxon> newTaxons = user.getUserTaxons();
+//        todo wierd spot
         newTaxons.removeAll(Collections.singleton(null));
 
         if (newTaxons.size() > 0) {
-            taxons = user.getUserTaxons()
-                    .stream()
-                    .map(taxon -> taxonService.getTaxonById(taxon.getId()))
-                    .collect(Collectors.toList());
+            List<Long> ids = user.getUserTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+            taxons = taxonService.getTaxonById(ids);
         }
 
         existingUser.setUserTaxons(taxons);

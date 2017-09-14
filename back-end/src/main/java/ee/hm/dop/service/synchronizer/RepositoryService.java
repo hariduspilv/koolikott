@@ -22,6 +22,7 @@ import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +119,6 @@ public class RepositoryService {
 
         if (existentMaterial != null) {
             boolean isRepoMaterial = isRepoMaterial(repository, existentMaterial);
-
             updateMaterial(material, existentMaterial, audit, isRepoMaterial);
         } else if (!material.isDeleted()) {
             createMaterial(material);
@@ -130,21 +130,20 @@ public class RepositoryService {
         logger.info("Material handled, repository id: " + material.getRepositoryIdentifier());
     }
 
-    protected boolean isRepoMaterial(Repository repository, Material existentMaterial) {
+    boolean isRepoMaterial(Repository repository, Material existentMaterial) {
         boolean isRepoMaterial = false;
         String domainName = getDomainName(existentMaterial.getSource());
-        if (domainName != null && !domainName.isEmpty()) {
+        if (StringUtils.isNotBlank(domainName)) {
             for (RepositoryURL repositoryURL : repository.getRepositoryURLs()) {
                 if (getDomainName(repositoryURL.getBaseURL()).equals(domainName)) {
                     isRepoMaterial = true;
                 }
             }
         }
-
         return isRepoMaterial;
     }
 
-    protected String getDomainName(String url) {
+    String getDomainName(String url) {
         try {
             URI uri = new URI(url);
             if (uri.getScheme() == null) {
@@ -174,7 +173,7 @@ public class RepositoryService {
         }
     }
 
-    protected Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, boolean isRepoMaterial) {
+    Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, boolean isRepoMaterial) {
         Material updatedMaterial = null;
 
         if (newMaterial.isDeleted() && isRepoMaterial) {

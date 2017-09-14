@@ -12,6 +12,7 @@ import java.util.List;
 public class TaxonService {
 
     private static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
+    public static final List<String> TAXON_PREFIXES = Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_");
 
     @Inject
     private TranslationService translationService;
@@ -45,9 +46,7 @@ public class TaxonService {
     }
 
     private String getTaxonName(String translationKey) {
-        List<String> taxonPrefixes = Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_");
-
-        for (String prefix : taxonPrefixes) {
+        for (String prefix : TAXON_PREFIXES) {
             if (translationKey.startsWith(prefix)) {
                 return translationKey.replaceFirst("^" + prefix, "");
             }
@@ -58,7 +57,6 @@ public class TaxonService {
                 return context;
             }
         }
-
         return null;
     }
 }

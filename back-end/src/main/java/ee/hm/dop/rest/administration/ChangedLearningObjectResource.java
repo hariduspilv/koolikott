@@ -1,8 +1,9 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.ChangedLearningObjectService;
 
 import javax.annotation.security.RolesAllowed;

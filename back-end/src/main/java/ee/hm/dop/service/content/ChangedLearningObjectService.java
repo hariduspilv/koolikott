@@ -18,10 +18,8 @@ public class ChangedLearningObjectService {
 
     @Inject
     private ChangedLearningObjectDao changedLearningObjectDao;
-
     @Inject
     private LearningObjectDao learningObjectDao;
-
     @Inject
     private LearningObjectService learningObjectService;
 
