@@ -29,24 +29,18 @@ import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TaxonUtils;
+import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.http.util.TextUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -60,13 +54,7 @@ import static org.joda.time.DateTime.now;
 
 public class MaterialService implements LearningObjectHandler {
 
-    private static final String WWW_PREFIX = "www.";
     private static final String DEFAULT_PROTOCOL = "http://";
-    private static final String PDF_EXTENSION = ".pdf\"";
-    private static final String PDF_MIME_TYPE = "application/pdf";
-    public static final String CONTENT_DISPOSITION = "Content-Disposition";
-    public static final String CONTENT_TYPE = "Content-Type";
-    public static final Pattern VALID_URL_PATTERN = Pattern.compile("^(?:https?://)?(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?$");
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
@@ -113,7 +101,7 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Error creating Material, material already exists.");
         }
 
-        material.setSource(processURL(material.getSource()));
+        material.setSource(UrlUtil.processURL(material.getSource()));
 
         cleanPeerReviewUrls(material);
 
@@ -338,7 +326,7 @@ public class MaterialService implements LearningObjectHandler {
             throw new IllegalArgumentException("Material id parameter is mandatory");
         }
 
-        material.setSource(processURL(material.getSource()));
+        material.setSource(UrlUtil.processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {
             throw new IllegalArgumentException("Error updating Material: material with given source already exists");
@@ -396,7 +384,7 @@ public class MaterialService implements LearningObjectHandler {
         if (peerReviews != null) {
             for (PeerReview peerReview : peerReviews) {
                 if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
-                    peerReview.setUrl(processURL(peerReview.getUrl()));
+                    peerReview.setUrl(UrlUtil.processURL(peerReview.getUrl()));
                 }
             }
         }
@@ -606,7 +594,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public List<Material> getBySource(String materialSource, boolean deleted) {
-        materialSource = getURLWithoutProtocolAndWWW(processURL(materialSource));
+        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
         if (materialSource != null) {
             return materialDao.findBySource(materialSource, deleted);
         } else {
@@ -615,109 +603,11 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public Material getOneBySource(String materialSource, boolean deleted) {
-        materialSource = getURLWithoutProtocolAndWWW(processURL(materialSource));
+        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
         if (materialSource != null) {
             return materialDao.findOneBySource(materialSource, deleted);
         } else {
             throw new RuntimeException("No material source link provided");
         }
-    }
-
-    /**
-     * Removes protocol (http, https..) form url
-     * Removes 'www.' prefix from host
-     *
-     * @param materialSource url
-     * @return materialSource without schema and www
-     */
-    private String getURLWithoutProtocolAndWWW(String materialSource) {
-        if (TextUtils.isBlank(materialSource)) return null;
-
-        try {
-            URL url = new URL(materialSource);
-            String hostName = url.getHost();
-
-            if (hostName.startsWith(WWW_PREFIX) && isValidURL(hostName.substring(4))) {
-                hostName = hostName.substring(4);
-            }
-
-            return String.format("%s%s", hostName, url.getFile());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Source has no protocol");
-        }
-    }
-
-    /**
-     * Removes trailing slash
-     * Adds protocol if missing
-     *
-     * @param materialSource url
-     * @return url with protocol and without trailing slash
-     */
-    private String processURL(String materialSource) {
-        if (TextUtils.isBlank(materialSource)) return null;
-
-        try {
-            // Removes trailing slash
-            materialSource = materialSource.replaceAll("/$", "");
-
-            // Throws exception if protocol is not specified
-            return new URL(materialSource).toString();
-        } catch (MalformedURLException e) {
-            return DEFAULT_PROTOCOL + materialSource;
-        }
-    }
-
-    private boolean isValidURL(String url) {
-        return VALID_URL_PATTERN.matcher(url).matches();
-    }
-
-    public Response getProxyUrl(String url_param) throws IOException {
-        String contentDisposition;
-        HttpClient client = new HttpClient();
-        GetMethod get;
-
-        try {
-            get = new GetMethod(url_param);
-        } catch (IllegalArgumentException e) {
-            get = new GetMethod(URIUtil.encodePath(url_param));
-        }
-
-        try {
-            client.executeMethod(get);
-        } catch (UnknownHostException e) {
-            logger.info("Could not contact host, returning empty response");
-            return Response.noContent().build();
-        }
-
-
-        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals(CONTENT_DISPOSITION)) {
-            contentDisposition = get.getResponseHeaders(CONTENT_DISPOSITION)[0].getValue();
-            contentDisposition = contentDisposition.replace("attachment", "Inline");
-            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
-                    contentDisposition).build();
-        }
-        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals(CONTENT_TYPE)) {
-            // Content-Disposition is missing, try to extract the filename from url instead
-            String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
-            contentDisposition = format("Inline; filename=\"%s\"", fileName);
-            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
-                    contentDisposition).build();
-        }
-
-        return Response.noContent().build();
-    }
-
-    String attachmentLocation(GetMethod get, String extension, String mime_type) {
-        Header[] contentDisposition = get.getResponseHeaders(CONTENT_DISPOSITION);
-        Header[] contentType = get.getResponseHeaders(CONTENT_TYPE);
-        if (contentDisposition.length > 0 && contentDisposition[0].getValue().toLowerCase().endsWith(extension)) {
-            return CONTENT_DISPOSITION;
-        }
-        if (contentType.length > 0 && contentType[0].getValue().toLowerCase().endsWith(mime_type)) {
-            return CONTENT_TYPE;
-        }
-        return "Invalid";
     }
 }
