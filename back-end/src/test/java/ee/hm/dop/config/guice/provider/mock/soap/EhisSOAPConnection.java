@@ -21,14 +21,11 @@ public class EhisSOAPConnection implements SOAPConnectionMockI {
     }
 
     private SOAPMessage getSoapMessageFromFile(String fileName) {
-        SOAPMessage message = null;
         try (InputStream soapMessageIS = EhisSOAPConnection.class.getResourceAsStream(fileName)) {
             MessageFactory factory = MessageFactory.newInstance();
-            message = factory.createMessage(new MimeHeaders(), soapMessageIS);
+            return factory.createMessage(new MimeHeaders(), soapMessageIS);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        return message;
     }
 }
