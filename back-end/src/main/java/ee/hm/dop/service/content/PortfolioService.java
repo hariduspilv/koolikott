@@ -285,13 +285,11 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     public void restore(Portfolio portfolio, User loggedInUser) {
+        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
+
         Portfolio originalPortfolio = portfolioDao.findDeletedById(portfolio.getId());
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
-        }
-
-        if (!UserUtil.isUserAdminOrModerator(loggedInUser)) {
-            throw new RuntimeException("Logged in user must be an administrator.");
         }
 
         portfolioDao.restore(originalPortfolio);

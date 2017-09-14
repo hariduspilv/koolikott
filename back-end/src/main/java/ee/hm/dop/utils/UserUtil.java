@@ -23,7 +23,23 @@ public class UserUtil {
         return loggedInUser != null && loggedInUser.getRole() == Role.MODERATOR;
     }
 
+    public static boolean isUserPublisher(User loggedInUser) {
+        return loggedInUser != null && loggedInUser.getPublisher() != null;
+    }
+
     public static boolean isUserAdminOrModerator(User loggedInUser) {
         return isUserAdmin(loggedInUser) || isUserModerator(loggedInUser);
+    }
+
+    public static void mustBeModeratorOrAdmin(User loggedInUser) {
+        if (!isUserAdminOrModerator(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an admin or moderator.");
+        }
+    }
+
+    public static void mustBeAdmin(User loggedInUser) {
+        if (!isUserAdmin(loggedInUser)) {
+            throw new RuntimeException("Logged in user must be an admin.");
+        }
     }
 }

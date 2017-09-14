@@ -31,8 +31,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 public class UploadedFileService {
 
     private static final String EBOOK_EXTENSION = "epub";
-
-    private final String FILENAME_TOO_LONG_RESPONSE = "{\"cause\": \"filename too long\"}";
+    private static final String FILENAME_TOO_LONG_RESPONSE = "{\"cause\": \"filename too long\"}";
 
     @Inject
     private UploadedFileDao uploadedFileDao;
