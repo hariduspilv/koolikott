@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.MaterialProxy;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -36,6 +37,8 @@ public class MaterialResource extends BaseResource {
     private MaterialService materialService;
     @Inject
     private UserService userService;
+    @Inject
+    private MaterialProxy materialProxy;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -202,7 +205,6 @@ public class MaterialResource extends BaseResource {
         if (user != null) {
             return materialService.hasSetBroken(materialId, getLoggedInUser());
         }
-
         return false;
     }
 
@@ -210,6 +212,6 @@ public class MaterialResource extends BaseResource {
     @Path("externalMaterial/")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
-        return materialService.getProxyUrl(url_param);
+        return materialProxy.getProxyUrl(url_param);
     }
 }
