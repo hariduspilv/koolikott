@@ -14,9 +14,8 @@ import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
-public class PortfolioService implements LearningObjectHandler {
+public class PortfolioService implements PermissionItem {
 
     @Inject
     private PortfolioDao portfolioDao;
@@ -92,47 +91,6 @@ public class PortfolioService implements LearningObjectHandler {
         comment.setAdded(DateTime.now());
         originalPortfolio.getComments().add(comment);
         portfolioDao.createOrUpdate(originalPortfolio);
-    }
-
-    public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
-
-        UserLike like = new UserLike();
-        like.setLearningObject(originalPortfolio);
-        like.setCreator(loggedInUser);
-        like.setLiked(isLiked);
-        like.setAdded(DateTime.now());
-
-        return userLikeDao.update(like);
-    }
-
-    public void removeUserLike(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
-    }
-
-    public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        return userLikeDao.findPortfolioUserLike(originalPortfolio, loggedInUser);
     }
 
     private void validate(Portfolio portfolio) {
@@ -243,7 +201,7 @@ public class PortfolioService implements LearningObjectHandler {
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToUpdate(loggedInUser, originalPortfolio)) {
+        if (!canUpdate(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -286,7 +244,7 @@ public class PortfolioService implements LearningObjectHandler {
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToUpdate(loggedInUser, originalPortfolio)) {
+        if (!canUpdate(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or the user that is updating must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -318,7 +276,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     @Override
-    public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
+    public boolean canAccess(User user, LearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
         Portfolio portfolio = (Portfolio) learningObject;
 
@@ -326,7 +284,7 @@ public class PortfolioService implements LearningObjectHandler {
     }
 
     @Override
-    public boolean hasPermissionsToUpdate(User user, LearningObject learningObject) {
+    public boolean canUpdate(User user, LearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
         Portfolio portfolio = (Portfolio) learningObject;
 
