@@ -18,15 +18,7 @@ public class ImproperContentService {
     private LearningObjectService learningObjectService;
 
     public ImproperContent addImproper(ImproperContent improperContent, User creator) {
-        if (improperContent == null || improperContent.getLearningObject() == null) {
-            throw new RuntimeException("Invalid Improper object.");
-        }
-
-        LearningObject learningObject = learningObjectService.get(improperContent.getLearningObject().getId(), creator);
-
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject does not exists.");
-        }
+        LearningObject learningObject = findValid(improperContent, creator);
 
         ImproperContent improper = new ImproperContent();
         improper.setCreator(creator);
@@ -35,6 +27,17 @@ public class ImproperContentService {
         improper.setReason(improperContent.getReason());
 
         return improperContentDao.createOrUpdate(improper);
+    }
+
+    private LearningObject findValid(ImproperContent improperContent, User creator) {
+        if (improperContent == null || improperContent.getLearningObject() == null) {
+            throw new RuntimeException("Invalid Improper object.");
+        }
+        LearningObject learningObject = learningObjectService.get(improperContent.getLearningObject().getId(), creator);
+        if (learningObject == null) {
+            throw new RuntimeException("LearningObject does not exists.");
+        }
+        return learningObject;
     }
 
     /**

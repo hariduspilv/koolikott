@@ -11,9 +11,13 @@ import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.enums.LanguageC;
 
 public class TranslationService {
 
+    public static final String DOMAIN = "DOMAIN_";
+    public static final String SUBJECT = "SUBJECT";
+    public static final String HELPER = "HELPER_";
     @Inject
     private TranslationDAO translationDAO;
     @Inject
@@ -34,7 +38,7 @@ public class TranslationService {
             return null;
         }
 
-        if ("eng".equals(language.getCode()) || "rus".equals(language.getCode())) {
+        if (LanguageC.ENG.equals(language.getCode()) || LanguageC.RUS.equals(language.getCode())) {
             Map<String, String> map = getDomainsAndSubjectsInEstonian();
             if (map != null) {
                 map.putAll(translationGroupFor.getTranslations());
@@ -58,7 +62,7 @@ public class TranslationService {
      * @return
      */
     private Map<String, String> getDomainsAndSubjectsInEstonian() {
-        Language language = languageDao.findByCode("est");
+        Language language = languageDao.findByCode(LanguageC.EST);
         if (language == null) {
             return null;
         }
@@ -71,8 +75,8 @@ public class TranslationService {
         return translationGroupFor.getTranslations()
                 .entrySet()
                 .stream()
-                .filter(entry -> (entry.getKey().startsWith("DOMAIN_") || entry.getKey().startsWith("SUBJECT")))
-                .collect(Collectors.toMap(entry -> "HELPER_".concat(entry.getKey()), Map.Entry::getValue));
+                .filter(entry -> (entry.getKey().startsWith(DOMAIN) || entry.getKey().startsWith(SUBJECT)))
+                .collect(Collectors.toMap(entry -> HELPER.concat(entry.getKey()), Map.Entry::getValue));
     }
 
     public String getTranslationKeyByTranslation(String translation) {
