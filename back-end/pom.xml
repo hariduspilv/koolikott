@@ -111,7 +111,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>4.2.0</version>
+            <version>3.2.1</version>
         </dependency>
 
         <!-- Logging -->
