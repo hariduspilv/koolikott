@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,6 +11,7 @@ import static org.junit.Assert.fail;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.persistence.RollbackException;
@@ -257,23 +259,21 @@ public class MaterialDaoTest extends DatabaseTestBase {
         creator.setId(1L);
 
         List<LearningObject> materials = materialDao.findByCreator(creator, 0, Integer.MAX_VALUE);
+        List<Long> collect = materials.stream().map(Searchable::getId).collect(Collectors.toList());
+        assertTrue(collect.containsAll(asList(8L, 4L, 1L)));
 
-        // Should not return material 11 which is deleted
-        assertEquals(3, materials.size());
-        assertEquals(Long.valueOf(8), materials.get(0).getId());
-        assertEquals(Long.valueOf(4), materials.get(1).getId());
-        assertEquals(Long.valueOf(1), materials.get(2).getId());
-        assertMaterial1((Material) materials.get(2));
+        LearningObject material1 = materials.stream().filter(m -> m.getId() == 1).findAny().orElseThrow(RuntimeException::new);
+        assertMaterial1((Material) material1);
     }
 
     @Test
     public void update() {
         Material changedMaterial = new Material();
-        changedMaterial.setId(9l);
+        changedMaterial.setId(9L);
         changedMaterial.setSource("http://www.chaged.it.com");
         DateTime now = new DateTime();
         changedMaterial.setAdded(now);
-        Long views = 234l;
+        Long views = 234L;
         changedMaterial.setViews(views);
         changedMaterial.setUpdated(now);
 
@@ -289,7 +289,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         // Restore to original values
         material.setSource("http://www.chaging.it.com");
         material.setAdded(new DateTime("1911-09-01T00:00:01"));
-        material.setViews(0l);
+        material.setViews(0L);
         material.setUpdated(null);
 
         materialDao.createOrUpdate(changedMaterial);
