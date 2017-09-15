@@ -15,6 +15,9 @@ import ee.hm.dop.model.enums.LanguageC;
 
 public class TranslationService {
 
+    public static final String DOMAIN = "DOMAIN_";
+    public static final String SUBJECT = "SUBJECT";
+    public static final String HELPER = "HELPER_";
     @Inject
     private TranslationDAO translationDAO;
     @Inject
@@ -72,8 +75,8 @@ public class TranslationService {
         return translationGroupFor.getTranslations()
                 .entrySet()
                 .stream()
-                .filter(entry -> (entry.getKey().startsWith("DOMAIN_") || entry.getKey().startsWith("SUBJECT")))
-                .collect(Collectors.toMap(entry -> "HELPER_".concat(entry.getKey()), Map.Entry::getValue));
+                .filter(entry -> (entry.getKey().startsWith(DOMAIN) || entry.getKey().startsWith(SUBJECT)))
+                .collect(Collectors.toMap(entry -> HELPER.concat(entry.getKey()), Map.Entry::getValue));
     }
 
     public String getTranslationKeyByTranslation(String translation) {

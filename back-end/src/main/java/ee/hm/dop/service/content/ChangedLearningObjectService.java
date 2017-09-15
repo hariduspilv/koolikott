@@ -37,16 +37,19 @@ public class ChangedLearningObjectService {
     }
 
     ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
-        notNullnotNullId(changedLearningObject);
-        LearningObject learningObject = learningObjectService
-                .get(changedLearningObject.getLearningObject().getId(), changedLearningObject.getChanger());
-        notNull(learningObject);
+        findValid(changedLearningObject);
 
         if (!hasChange(changedLearningObject)) {
             return null;
         }
 
         return changedLearningObjectDao.createOrUpdate(changedLearningObject);
+    }
+
+    private void findValid(ChangedLearningObject changedLearningObject) {
+        notNullnotNullId(changedLearningObject);
+        LearningObject learningObject = learningObjectService.get(changedLearningObject.getLearningObject().getId(), changedLearningObject.getChanger());
+        notNull(learningObject);
     }
 
     private void notNullnotNullId(ChangedLearningObject changedLearningObject) {

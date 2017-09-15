@@ -5,6 +5,7 @@ import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.metadata.TagService;
+import ee.hm.dop.service.useractions.UserFavoriteService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -28,6 +29,8 @@ public class LearningObjectResource extends BaseResource {
     private LearningObjectService learningObjectService;
     @Inject
     private TagService tagService;
+    @Inject
+    private UserFavoriteService userFavoriteService;
 
     @PUT
     @Path("{learningObjectId}/tags")
@@ -35,7 +38,8 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
-        LearningObject learningObject = learningObjectService.get(learningObjectId, getLoggedInUser());
+        User loggedInUser = getLoggedInUser();
+        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
         if (learningObject == null) {
             throwNotFoundException("No such learning object");
         }
@@ -45,7 +49,7 @@ public class LearningObjectResource extends BaseResource {
             tag = newTag;
         }
 
-        return learningObjectService.addTag(learningObject, tag, getLoggedInUser());
+        return learningObjectService.addTag(learningObject, tag, loggedInUser);
     }
 
     @GET
@@ -61,7 +65,7 @@ public class LearningObjectResource extends BaseResource {
     @Path("favorite")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public UserFavorite hasSetFavorite(@QueryParam("id") Long id) {
-        return learningObjectService.hasFavorited(id, getLoggedInUser());
+        return userFavoriteService.hasFavorited(id, getLoggedInUser());
     }
 
     @GET
@@ -70,15 +74,16 @@ public class LearningObjectResource extends BaseResource {
     public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
         if (maxResults == 0) maxResults = 12;
 
-        List<Searchable> userFavorites = new ArrayList<>(learningObjectService.getUserFavorites(getLoggedInUser(), start, maxResults));
-        return new SearchResult(userFavorites, learningObjectService.getUserFavoritesSize(getLoggedInUser()), start);
+        User loggedInUser = getLoggedInUser();
+        List<Searchable> userFavorites = new ArrayList<>(userFavoriteService.getUserFavorites(loggedInUser, start, maxResults));
+        return new SearchResult(userFavorites, userFavoriteService.getUserFavoritesSize(loggedInUser), start);
     }
 
     @GET
     @Path("usersFavorite/count")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public Long getUsersFavoritesCount() {
-        return learningObjectService.getUserFavoritesSize(getLoggedInUser());
+        return userFavoriteService.getUserFavoritesSize(getLoggedInUser());
     }
 
     @POST
@@ -86,13 +91,13 @@ public class LearningObjectResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public UserFavorite favoriteLearningObject(LearningObject learningObject) {
-        return learningObjectService.addUserFavorite(learningObject, getLoggedInUser());
+        return userFavoriteService.addUserFavorite(learningObject, getLoggedInUser());
     }
 
     @DELETE
     @Path("favorite")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void removeUserFavorite(@QueryParam("id") long id) {
-        learningObjectService.removeUserFavorite(id, getLoggedInUser());
+        userFavoriteService.removeUserFavorite(id, getLoggedInUser());
     }
 }
