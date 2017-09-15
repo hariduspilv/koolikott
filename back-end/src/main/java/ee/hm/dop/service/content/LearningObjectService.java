@@ -3,24 +3,15 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.content.dto.TagDTO;
-import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.learningObject.LearningObjectHandler;
-import ee.hm.dop.service.learningObject.LearningObjectHandlerFactory;
-import ee.hm.dop.service.metadata.ResourceTypeService;
+import ee.hm.dop.service.learningObject.PermissionItem;
+import ee.hm.dop.service.learningObject.PermissionFactory;
 import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.metadata.TargetGroupService;
-import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.LearningObjectUtils;
-import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -52,8 +43,8 @@ public class LearningObjectService {
         if (learningObject == null) {
             return false;
         }
-        LearningObjectHandler learningObjectHandler = getLearningObjectHandler(learningObject);
-        return learningObjectHandler.hasPermissionsToAccess(user, learningObject);
+        PermissionItem permissionItem = getLearningObjectHandler(learningObject);
+        return permissionItem.canAccess(user, learningObject);
     }
 
     public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
@@ -128,8 +119,8 @@ public class LearningObjectService {
         return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDao()::findNewestLearningObjects);
     }
 
-    LearningObjectHandler getLearningObjectHandler(LearningObject learningObject) {
-        return LearningObjectHandlerFactory.get(learningObject.getClass());
+    PermissionItem getLearningObjectHandler(LearningObject learningObject) {
+        return PermissionFactory.get(learningObject.getClass());
     }
 
     LearningObjectDao getLearningObjectDao() {

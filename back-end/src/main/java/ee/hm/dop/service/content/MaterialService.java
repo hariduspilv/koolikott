@@ -10,7 +10,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
-import ee.hm.dop.service.learningObject.LearningObjectHandler;
+import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -35,7 +35,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
-public class MaterialService implements LearningObjectHandler {
+public class MaterialService implements PermissionItem {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -351,7 +351,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     @Override
-    public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
+    public boolean canAccess(User user, LearningObject learningObject) {
         if (!(learningObject instanceof Material)) {
             return false;
         }
@@ -360,7 +360,7 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     @Override
-    public boolean hasPermissionsToUpdate(User user, LearningObject learningObject) {
+    public boolean canUpdate(User user, LearningObject learningObject) {
         if (!(learningObject instanceof Material)) {
             return false;
         }

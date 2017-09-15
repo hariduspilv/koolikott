@@ -10,21 +10,20 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
 
-public class LearningObjectHandlerFactory {
+public class PermissionFactory {
 
-    private static Map<Class<? extends LearningObject>, Class<? extends LearningObjectHandler>> map = new HashMap<>();
+    private static Map<Class<? extends LearningObject>, Class<? extends PermissionItem>> map = new HashMap<>();
 
     static {
         register(MaterialService.class, Material.class);
         register(PortfolioService.class, Portfolio.class);
     }
 
-    private static void register(Class<? extends LearningObjectHandler> learningObjectHandlerClass,
-            Class<? extends LearningObject> learningObjectClass) {
+    private static void register(Class<? extends PermissionItem> learningObjectHandlerClass, Class<? extends LearningObject> learningObjectClass) {
         map.put(learningObjectClass, learningObjectHandlerClass);
     }
 
-    public static LearningObjectHandler get(Class<? extends LearningObject> clazz) {
+    public static PermissionItem get(Class<? extends LearningObject> clazz) {
         return GuiceInjector.getInjector().getInstance(map.get(clazz));
     }
 }
