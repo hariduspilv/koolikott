@@ -12,8 +12,7 @@ import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.service.content.ChangedLearningObjectService;
-import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
@@ -78,7 +77,7 @@ public class MaterialServiceTest {
 
         replayAll();
 
-        Material createdMaterial = materialService.createMaterial(material, creator, true);
+        Material createdMaterial = materialService.createMaterial(material, creator, SearchIndexStrategy.UPDATE_INDEX);
         material.setPeerReviews(peerReviews);
 
         verifyAll();
@@ -97,7 +96,7 @@ public class MaterialServiceTest {
         replay(materialDao);
 
         try {
-            materialService.createMaterial(material, null, false);
+            materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE);
             fail("Exception expected.");
         } catch (IllegalArgumentException e) {
             assertEquals("Error creating Material, material already exists.", e.getMessage());

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TaxonService {
 
-    private static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
+    public static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
     public static final List<String> TAXON_PREFIXES = Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_");
 
     @Inject

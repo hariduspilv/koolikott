@@ -65,12 +65,7 @@ public class ApplicationLauncher {
     }
 
     private static void addShutdownHook() {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                stopServer();
-            }
-        }, "shutdown-hook"));
+        Runtime.getRuntime().addShutdownHook(new Thread(ApplicationLauncher::stopServer, "shutdown-hook"));
     }
 
     private static void startServer() {

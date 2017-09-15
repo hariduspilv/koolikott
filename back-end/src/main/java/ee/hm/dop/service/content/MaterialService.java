@@ -9,6 +9,7 @@ import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.learningObject.LearningObjectHandler;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
@@ -78,23 +79,31 @@ public class MaterialService implements LearningObjectHandler {
         solrEngineService.updateIndex();
     }
 
-    public Material createMaterial(Material material, User creator, boolean updateSearchIndex) {
-        if (material.getId() != null || materialWithSameSourceExists(material)) {
-            throw new IllegalArgumentException("Error creating Material, material already exists.");
-        }
+    public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy){
+        return createMaterial(material, null, strategy);
+    }
+
+    public Material createMaterial(Material material, User creator, SearchIndexStrategy strategy) {
+        mustBeNewMaterial(material);
 
         material.setSource(UrlUtil.processURL(material.getSource()));
         cleanPeerReviewUrls(material);
         material.setCreator(creator);
-        if (creator != null && isUserPublisher(creator)) {
+        if (UserUtil.isUserPublisher(creator)) {
             material.setEmbeddable(true);
         }
         material.setRecommendation(null);
         Material createdMaterial = createOrUpdate(material);
-        if (updateSearchIndex) {
+        if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
         return createdMaterial;
+    }
+
+    private void mustBeNewMaterial(Material material) {
+        if (material.getId() != null || materialWithSameSourceExists(material)) {
+            throw new IllegalArgumentException("Error creating Material, material already exists.");
+        }
     }
 
     //todo admin functionality
@@ -135,20 +144,6 @@ public class MaterialService implements LearningObjectHandler {
         materialDao.createOrUpdate(originalMaterial);
     }
 
-    public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
-        Material originalMaterial = validateAndFind(material);
-
-        userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
-
-        UserLike like = new UserLike();
-        like.setLearningObject(originalMaterial);
-        like.setCreator(loggedInUser);
-        like.setLiked(isLiked);
-        like.setAdded(DateTime.now());
-
-        return userLikeDao.update(like);
-    }
-
     public Recommendation addRecommendation(Material material, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
 
@@ -166,7 +161,7 @@ public class MaterialService implements LearningObjectHandler {
         return originalMaterial.getRecommendation();
     }
 
-    private Material validateAndFind(Material material) {
+    public Material validateAndFind(Material material) {
         validateMaterialAndIdNotNull(material);
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
         validateMaterialNotNull(originalMaterial);
@@ -325,10 +320,6 @@ public class MaterialService implements LearningObjectHandler {
         }
 
         return material;
-    }
-
-    private boolean isUserPublisher(User loggedInUser) {
-        return loggedInUser != null && loggedInUser.getPublisher() != null;
     }
 
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
