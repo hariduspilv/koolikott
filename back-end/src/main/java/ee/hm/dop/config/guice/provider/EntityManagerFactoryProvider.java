@@ -3,7 +3,7 @@ package ee.hm.dop.config.guice.provider;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import ee.hm.dop.db.DatabaseMigrator;
+import ee.hm.dop.config.db.DatabaseMigrator;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
