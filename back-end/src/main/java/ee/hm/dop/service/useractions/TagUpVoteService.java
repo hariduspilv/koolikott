@@ -54,7 +54,6 @@ public class TagUpVoteService {
         if (!learningObjectService.hasPermissionsToAccess(user, learningObject)) {
             return null;
         }
-
         return tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, learningObject);
     }
 

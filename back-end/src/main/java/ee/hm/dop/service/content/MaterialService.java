@@ -19,6 +19,7 @@ import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -191,10 +192,12 @@ public class MaterialService implements LearningObjectHandler {
         materialDao.delete(material);
     }
 
-    public Material update(Material material, User changer, boolean updateSearchIndex) {
-        if (material == null || material.getId() == null) {
-            throw new IllegalArgumentException("Material id parameter is mandatory");
-        }
+    public Material updateBySystem(Material material, SearchIndexStrategy strategy){
+        return update(material, null, strategy);
+    }
+
+    public Material update(Material material, User changer, SearchIndexStrategy strategy){
+        validateMaterialAndIdNotNull(material);
         material.setSource(UrlUtil.processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {
@@ -216,7 +219,7 @@ public class MaterialService implements LearningObjectHandler {
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || UserUtil.isUserAdminOrModerator(changer) || UserUtil.isUserCreator(originalMaterial, changer)) {
             updatedMaterial = createOrUpdate(material);
-            if (updateSearchIndex) solrEngineService.updateIndex();
+            if (strategy.updateIndex()) solrEngineService.updateIndex();
         }
         processChanges(updatedMaterial);
         return updatedMaterial;
@@ -301,7 +304,7 @@ public class MaterialService implements LearningObjectHandler {
     private Material applyRestrictions(Material material) {
         boolean areKeyCompetencesAndCrossCurricularThemesAllowed = false;
 
-        if (material.getTaxons() != null && !material.getTaxons().isEmpty()) {
+        if (CollectionUtils.isNotEmpty(material.getTaxons())) {
             List<EducationalContext> educationalContexts = material.getTaxons().stream()
                     .map(TaxonUtils::getEducationalContext)
                     .filter(Objects::nonNull)
@@ -323,24 +326,16 @@ public class MaterialService implements LearningObjectHandler {
     }
 
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found while adding broken material");
-        }
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found while adding broken material");
-        }
+        Material originalMaterial = validateAndFind(material);
 
         BrokenContent brokenContent = new BrokenContent();
         brokenContent.setCreator(loggedInUser);
-        brokenContent.setMaterial(material);
-
+        brokenContent.setMaterial(originalMaterial);
         return brokenContentDao.update(brokenContent);
     }
 
     public Boolean hasSetBroken(long materialId, User loggedInUser) {
-        List<BrokenContent> brokenContents = brokenContentDao.findByMaterialAndUser(materialId, loggedInUser);
-        return isNotEmpty(brokenContents);
+        return isNotEmpty(brokenContentDao.findByMaterialAndUser(materialId, loggedInUser));
     }
 
     private void validateMaterialAndIdNotNull(Material material) {

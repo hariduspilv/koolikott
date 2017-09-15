@@ -157,7 +157,7 @@ public class RepositoryServiceTest {
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
         expect(material.isDeleted()).andReturn(false).anyTimes();
-        expect(materialService.update(material, null, false)).andReturn(material);
+        expect(materialService.updateBySystem(material, SearchIndexStrategy.SKIP_UPDATE)).andReturn(material);
 
         expectUpdateRepository(repository);
 
@@ -349,7 +349,7 @@ public class RepositoryServiceTest {
         newMaterial.setEmbeddable(null);
         newMaterial.setTitles(new ArrayList<>());
 
-        expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
+        expect(materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(existentMaterial);
 
         replayAll();
 
@@ -380,7 +380,7 @@ public class RepositoryServiceTest {
         newMaterial.setEmbeddable(true);
         newMaterial.setTitles(new ArrayList<>());
 
-        expect(materialService.update(newMaterial, null, false)).andReturn(newMaterial);
+        expect(materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(newMaterial);
 
         replayAll();
 
@@ -401,7 +401,7 @@ public class RepositoryServiceTest {
         existentMaterial.setPicture(new OriginalPicture());
         newMaterial.setPicture(null);
 
-        expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
+        expect(materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(existentMaterial);
 
         replayAll();
 
@@ -422,7 +422,7 @@ public class RepositoryServiceTest {
         existentMaterial.setPicture(picture);
         newMaterial.setPicture(null);
 
-        expect(materialService.update(newMaterial, null, false)).andReturn(newMaterial);
+        expect(materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(newMaterial);
 
         replayAll();
 
@@ -445,7 +445,7 @@ public class RepositoryServiceTest {
         existentMaterial.setPicture(picture1);
         newMaterial.setPicture(picture2);
 
-        expect(materialService.update(existentMaterial, null, false)).andReturn(existentMaterial);
+        expect(materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(existentMaterial);
         expect(pictureService.create(picture2)).andReturn(picture2);
 
         replayAll();

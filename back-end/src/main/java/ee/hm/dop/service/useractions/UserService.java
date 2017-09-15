@@ -66,7 +66,6 @@ public class UserService {
         if (user.getRole().equals(Role.USER)) {
             return setUserRole(user, Role.RESTRICTED);
         }
-
         return null;
     }
 
@@ -76,7 +75,6 @@ public class UserService {
         if (user.getRole().equals(Role.RESTRICTED)) {
             return setUserRole(user, Role.USER);
         }
-
         return null;
     }
 
@@ -101,7 +99,7 @@ public class UserService {
         return null;
     }
 
-    protected String generateUsername(String name, String surname) {
+    public String generateUsername(String name, String surname) {
         String username = name.trim().toLowerCase() + "." + surname.trim().toLowerCase();
         username = username.replaceAll("\\s+", ".");
 

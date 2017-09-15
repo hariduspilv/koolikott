@@ -177,7 +177,7 @@ public class MaterialResource extends BaseResource {
         if (material.getId() == null) {
             newMaterial = materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         } else if (getLoggedInUser() != null) {
-            newMaterial = materialService.update(material, getLoggedInUser(), true);
+            newMaterial = materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         } else {
             throwBadRequestException("Unable to add or update material - can extract get logged in user.");
         }

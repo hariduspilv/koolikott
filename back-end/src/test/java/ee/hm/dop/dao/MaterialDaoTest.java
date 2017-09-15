@@ -18,6 +18,7 @@ import javax.persistence.RollbackException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -57,10 +58,10 @@ public class MaterialDaoTest extends DatabaseTestBase {
     @Test
     public void materialLanguage() {
         Material material1 = materialDao.findByIdNotDeleted(2);
-        assertEquals("rus", material1.getLanguage().getCode());
+        assertEquals(LanguageC.RUS, material1.getLanguage().getCode());
 
         Material material2 = materialDao.findByIdNotDeleted(1);
-        assertEquals("est", material2.getLanguage().getCode());
+        assertEquals(LanguageC.EST, material2.getLanguage().getCode());
     }
 
     @Test
@@ -501,11 +502,11 @@ public class MaterialDaoTest extends DatabaseTestBase {
         assertEquals(2, material.getDescriptions().size());
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
-        assertEquals("est", descriptionLanguage.getCode());
+        assertEquals(LanguageC.EST, descriptionLanguage.getCode());
         assertEquals("Estonian", descriptionLanguage.getName());
         Language language = material.getLanguage();
         assertNotNull(language);
-        assertEquals("est", language.getCode());
+        assertEquals(LanguageC.EST, language.getCode());
         assertEquals("Estonian", language.getName());
         assertEquals("et", language.getCodes().get(0));
         assertNotNull(material.getPicture());

@@ -11,6 +11,7 @@ import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.enums.LanguageC;
 
 public class TranslationService {
 
@@ -34,7 +35,7 @@ public class TranslationService {
             return null;
         }
 
-        if ("eng".equals(language.getCode()) || "rus".equals(language.getCode())) {
+        if (LanguageC.ENG.equals(language.getCode()) || LanguageC.RUS.equals(language.getCode())) {
             Map<String, String> map = getDomainsAndSubjectsInEstonian();
             if (map != null) {
                 map.putAll(translationGroupFor.getTranslations());
@@ -58,7 +59,7 @@ public class TranslationService {
      * @return
      */
     private Map<String, String> getDomainsAndSubjectsInEstonian() {
-        Language language = languageDao.findByCode("est");
+        Language language = languageDao.findByCode(LanguageC.EST);
         if (language == null) {
             return null;
         }

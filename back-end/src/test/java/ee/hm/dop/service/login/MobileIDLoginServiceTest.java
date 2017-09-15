@@ -16,6 +16,7 @@ import javax.xml.soap.SOAPException;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import org.easymock.Capture;
@@ -45,7 +46,7 @@ public class MobileIDLoginServiceTest {
         String phoneNumber = "+37255501234";
         String idCode = "88881010888";
         Language language = new Language();
-        language.setCode("est");
+        language.setCode(LanguageC.EST);
 
         MobileAuthenticateResponse mobileAuthenticateResponse = new MobileAuthenticateResponse();
         mobileAuthenticateResponse.setSessionCode("789560251");
@@ -77,7 +78,7 @@ public class MobileIDLoginServiceTest {
         String phoneNumber = "5554321";
         String idCode = "11110000111";
         Language language = new Language();
-        language.setCode("est");
+        language.setCode(LanguageC.EST);
 
         MobileAuthenticateResponse mobileAuthenticateResponse = new MobileAuthenticateResponse();
         mobileAuthenticateResponse.setSessionCode("789560251");
@@ -110,7 +111,7 @@ public class MobileIDLoginServiceTest {
         String phoneNumber = "+33355501234";
         String idCode = "99991010888";
         Language language = new Language();
-        language.setCode("eng");
+        language.setCode(LanguageC.ENG);
 
         replayAll();
 

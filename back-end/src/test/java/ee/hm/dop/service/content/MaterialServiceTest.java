@@ -140,7 +140,7 @@ public class MaterialServiceTest {
 
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(EducationalContextC.BASICEDUCATION);
-        expect(material.getTaxons()).andReturn(Collections.singletonList(educationalContext)).times(3);
+        expect(material.getTaxons()).andReturn(Collections.singletonList(educationalContext)).times(2);
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1004L);
@@ -157,7 +157,7 @@ public class MaterialServiceTest {
 
         replay(materialDao, material, solrEngineService);
 
-        materialService.update(material, null, true);
+        materialService.updateBySystem(material, SearchIndexStrategy.UPDATE_INDEX);
 
         verify(materialDao, material, solrEngineService);
 
@@ -182,7 +182,7 @@ public class MaterialServiceTest {
         replay(materialDao, material);
 
         try {
-            materialService.update(material, null, true);
+            materialService.updateBySystem(material, SearchIndexStrategy.UPDATE_INDEX);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: material does not exist.", ex.getMessage());
@@ -239,7 +239,7 @@ public class MaterialServiceTest {
 
         replay(materialDao, material);
 
-        Material returned = materialService.update(material, null, true);
+        Material returned = materialService.updateBySystem(material, SearchIndexStrategy.UPDATE_INDEX);
 
         assertNotNull(returned);
         verify(materialDao, material);
@@ -362,10 +362,10 @@ public class MaterialServiceTest {
         replay(user);
 
         try {
-            materialService.update(null, user, true);
+            materialService.update(null, user, SearchIndexStrategy.UPDATE_INDEX);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Material id parameter is mandatory", ex.getMessage());
+        } catch (RuntimeException ex) {
+            assertEquals("Material not found", ex.getMessage());
         }
 
         verify(user);
@@ -388,7 +388,7 @@ public class MaterialServiceTest {
 
         replay(user, materialDao, solrEngineService, changedLearningObjectService);
 
-        Material returned = materialService.update(material, user, true);
+        Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 
         assertNotNull(returned);
         verify(user, materialDao, solrEngineService);
@@ -413,7 +413,7 @@ public class MaterialServiceTest {
 
         replay(user, materialDao, changedLearningObjectService);
 
-        Material returned = materialService.update(material, user, true);
+        Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 
         assertNotNull(returned);
         verify(user, materialDao);

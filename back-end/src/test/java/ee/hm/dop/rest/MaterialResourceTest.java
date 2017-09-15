@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -58,10 +59,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(2, descriptions.size());
         for (LanguageString languageString : descriptions) {
             if (languageString.getId() == 1) {
-                assertEquals("est", languageString.getLanguage().getCode());
+                assertEquals(LanguageC.EST, languageString.getLanguage().getCode());
                 assertEquals("Test description in estonian. (Russian available)", languageString.getText());
             } else if (languageString.getId() == 2) {
-                assertEquals("est", languageString.getLanguage().getCode());
+                assertEquals(LanguageC.EST, languageString.getLanguage().getCode());
                 assertEquals("Test description in russian, which is the only language available.",
                         languageString.getText());
 
@@ -489,12 +490,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(2, material.getDescriptions().size());
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
-        assertEquals("est", descriptionLanguage.getCode());
+        assertEquals(LanguageC.EST, descriptionLanguage.getCode());
         assertNotNull(descriptionLanguage.getName());
         assertNotNull(descriptionLanguage.getCodes());
         Language language = material.getLanguage();
         assertNotNull(language);
-        assertEquals("est", language.getCode());
+        assertEquals(LanguageC.EST, language.getCode());
         assertEquals("Estonian", language.getName());
         assertNotNull(language.getCodes());
         assertEquals(new Long(1), material.getPicture().getId());

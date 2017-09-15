@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response.Status;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Page;
+import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
 
 public class PageResourceTest extends ResourceIntegrationTestBase {
@@ -15,7 +16,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getAboutPageInEstonian() {
         String name = "About";
-        String languageCode = "est";
+        String languageCode = LanguageC.EST;
         Response response = doGet("page?name=" + name + "&language=" + languageCode);
         Page page = response.readEntity(Page.class);
 
@@ -29,7 +30,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getHelpPageInEnglish() {
         String name = "Help";
-        String languageCode = "eng";
+        String languageCode = LanguageC.ENG;
         Response response = doGet("page?name=" + name + "&language=" + languageCode);
         Page page = response.readEntity(Page.class);
 

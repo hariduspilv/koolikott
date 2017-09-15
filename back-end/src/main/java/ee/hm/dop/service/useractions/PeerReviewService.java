@@ -22,5 +22,4 @@ public class PeerReviewService {
         peerReview.setUrl(url);
         return peerReviewDao.createOrUpdate(peerReview);
     }
-
 }

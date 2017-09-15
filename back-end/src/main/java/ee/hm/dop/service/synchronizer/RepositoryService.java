@@ -185,7 +185,7 @@ public class RepositoryService {
             createPicture(newMaterial);
             mergeTwoObjects(newMaterial, existentMaterial);
 
-            updatedMaterial = materialService.update(existentMaterial, null, false);
+            updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
             audit.existingMaterialUpdated();
 
         } else {
@@ -193,7 +193,7 @@ public class RepositoryService {
             createPicture(newMaterial);
             mergeTwoObjects(existentMaterial, newMaterial);
 
-            updatedMaterial = materialService.update(newMaterial, null, false);
+            updatedMaterial = materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE);
             audit.existingMaterialUpdated();
         }
 

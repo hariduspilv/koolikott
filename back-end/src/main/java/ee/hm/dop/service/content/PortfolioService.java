@@ -94,47 +94,6 @@ public class PortfolioService implements LearningObjectHandler {
         portfolioDao.createOrUpdate(originalPortfolio);
     }
 
-    public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
-
-        UserLike like = new UserLike();
-        like.setLearningObject(originalPortfolio);
-        like.setCreator(loggedInUser);
-        like.setLiked(isLiked);
-        like.setAdded(DateTime.now());
-
-        return userLikeDao.update(like);
-    }
-
-    public void removeUserLike(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
-    }
-
-    public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
-
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-        }
-
-        return userLikeDao.findPortfolioUserLike(originalPortfolio, loggedInUser);
-    }
-
     private void validate(Portfolio portfolio) {
         if (portfolio == null || portfolio.getId() == null) {
             throw new RuntimeException("Portfolio not found");

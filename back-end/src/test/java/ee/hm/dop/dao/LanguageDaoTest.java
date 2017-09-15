@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
 
 public class LanguageDaoTest extends DatabaseTestBase {
@@ -22,11 +23,11 @@ public class LanguageDaoTest extends DatabaseTestBase {
 
     @Test
     public void findByCode() {
-        Language language1 = languageDao.findByCode("est");
+        Language language1 = languageDao.findByCode(LanguageC.EST);
 
         assertNotNull(language1);
         assertEquals(new Long(1), language1.getId());
-        assertEquals("est", language1.getCode());
+        assertEquals(LanguageC.EST, language1.getCode());
         assertEquals("Estonian", language1.getName());
         assertEquals(1, language1.getCodes().size());
         assertEquals("et", language1.getCodes().get(0));

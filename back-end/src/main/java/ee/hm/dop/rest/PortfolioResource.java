@@ -20,6 +20,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 
 @Path("portfolio")
@@ -31,6 +32,8 @@ public class PortfolioResource extends BaseResource {
     private UserService userService;
     @Inject
     private PortfolioCopier portfolioCopier;
+    @Inject
+    private UserLikeService userLikeService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -77,14 +80,14 @@ public class PortfolioResource extends BaseResource {
     @Path("like")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likePortfolio(Portfolio portfolio) {
-        portfolioService.addUserLike(portfolio, getLoggedInUser(), true);
+        userLikeService.addUserLike(portfolio, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikePortfolio(Portfolio portfolio) {
-        portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
+        userLikeService.addUserLike(portfolio, getLoggedInUser(), false);
     }
 
     @POST
@@ -104,13 +107,13 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("getUserLike")
     public UserLike getUserLike(Portfolio portfolio) {
-        return portfolioService.getUserLike(portfolio, getLoggedInUser());
+        return userLikeService.getUserLike(portfolio, getLoggedInUser());
     }
 
     @POST
     @Path("removeUserLike")
     public void removeUserLike(Portfolio portfolio) {
-        portfolioService.removeUserLike(portfolio, getLoggedInUser());
+        userLikeService.removeUserLike(portfolio, getLoggedInUser());
     }
 
     @POST

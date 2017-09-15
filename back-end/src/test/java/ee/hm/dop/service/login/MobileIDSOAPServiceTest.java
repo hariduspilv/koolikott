@@ -32,6 +32,7 @@ import javax.xml.soap.SOAPMessage;
 
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.metadata.LanguageService;
 import org.apache.commons.configuration.Configuration;
@@ -65,7 +66,7 @@ public class MobileIDSOAPServiceTest {
         String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
-        language.setCode("rus");
+        language.setCode(LanguageC.RUS);
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
 
@@ -129,8 +130,8 @@ public class MobileIDSOAPServiceTest {
         response.put("ChallengeID", "6723");
 
         Language languageEstonian = new Language();
-        languageEstonian.setCode("est");
-        expect(languageService.getLanguage("est")).andReturn(languageEstonian);
+        languageEstonian.setCode(LanguageC.EST);
+        expect(languageService.getLanguage(LanguageC.EST)).andReturn(languageEstonian);
 
         SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
 
@@ -178,8 +179,8 @@ public class MobileIDSOAPServiceTest {
         response.put("ChallengeID", "6723");
 
         Language languageEstonian = new Language();
-        languageEstonian.setCode("est");
-        expect(languageService.getLanguage("est")).andReturn(languageEstonian);
+        languageEstonian.setCode(LanguageC.EST);
+        expect(languageService.getLanguage(LanguageC.EST)).andReturn(languageEstonian);
 
         SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
 
@@ -212,7 +213,7 @@ public class MobileIDSOAPServiceTest {
         String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
-        language.setCode("rus");
+        language.setCode(LanguageC.RUS);
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
 
@@ -254,7 +255,7 @@ public class MobileIDSOAPServiceTest {
         String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
-        language.setCode("rus");
+        language.setCode(LanguageC.RUS);
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
 
@@ -292,7 +293,7 @@ public class MobileIDSOAPServiceTest {
         String phoneNumber = "+37255550000";
         String idCode = "55882128025";
         Language language = new Language();
-        language.setCode("rus");
+        language.setCode(LanguageC.RUS);
         String serviceName = "ServiceNameHere";
         String messageToDisplay = "Special message";
 

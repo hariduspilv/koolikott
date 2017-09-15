@@ -11,6 +11,7 @@ import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
@@ -240,7 +241,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "monday";
         SearchFilter searchFilter = new SearchFilter();
         Language language = new Language();
-        language.setCode("eng");
+        language.setCode(LanguageC.ENG);
         searchFilter.setLanguage(language);
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
