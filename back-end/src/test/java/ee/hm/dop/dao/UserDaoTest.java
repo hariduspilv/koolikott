@@ -135,7 +135,7 @@ public class UserDaoTest extends DatabaseTestBase {
     public void getRestrictedUsers() {
         List<User> restrictedUsers = userDao.getUsersByRole(Role.RESTRICTED);
 
-        assertEquals(2, restrictedUsers.size());
+        assertEquals(3, restrictedUsers.size());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class UserDaoTest extends DatabaseTestBase {
     @Test
     public void getAllUsers() {
         List<User> allUsers = userDao.findAll();
-        assertEquals(15, allUsers.size());
+        assertEquals(21, allUsers.size());
     }
 
     private User getUser() {
