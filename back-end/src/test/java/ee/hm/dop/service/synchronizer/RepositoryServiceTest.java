@@ -22,6 +22,7 @@ import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PictureService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
@@ -107,7 +108,7 @@ public class RepositoryServiceTest {
         expect(material1.getPicture()).andReturn(null);
         material1.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier1)).andReturn(null);
-        expect(materialService.createMaterial(material1, null, false)).andReturn(new Material());
+        expect(materialService.createMaterialBySystemUser(material1, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andThrow(new RuntimeException());
@@ -120,7 +121,7 @@ public class RepositoryServiceTest {
         expect(material2.getPicture()).andReturn(null);
         material2.setRepository(repository);
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier2)).andReturn(null);
-        expect(materialService.createMaterial(material2, null, false)).andReturn(new Material());
+        expect(materialService.createMaterialBySystemUser(material2, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expectUpdateRepository(repository);
 
@@ -219,7 +220,7 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material);
-        expect(materialService.createMaterial(material, null, false)).andReturn(new Material());
+        expect(materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
         expect(materialIterator.hasNext()).andReturn(false);
 
         String repositoryIdentifier = "123456Identifier";

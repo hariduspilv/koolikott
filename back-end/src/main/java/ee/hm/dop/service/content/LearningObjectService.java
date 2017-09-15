@@ -10,7 +10,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.dto.TagDTO;
+import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserFavorite;

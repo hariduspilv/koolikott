@@ -4,7 +4,6 @@ import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,6 +16,7 @@ import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.RepositoryURL;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PictureService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
@@ -163,7 +163,7 @@ public class RepositoryService {
     private void createMaterial(Material material) {
         logger.info("Creating material, with repo id: ", material.getRepositoryIdentifier());
         createPicture(material);
-        materialService.createMaterial(material, null, false);
+        materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE);
     }
 
     private void createPicture(Material material) {

@@ -28,6 +28,8 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.MaterialProxy;
 import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 
 @Path("material")
@@ -39,6 +41,8 @@ public class MaterialResource extends BaseResource {
     private UserService userService;
     @Inject
     private MaterialProxy materialProxy;
+    @Inject
+    private UserLikeService userLikeService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -83,14 +87,14 @@ public class MaterialResource extends BaseResource {
     @Path("like")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likeMaterial(Material material) {
-        materialService.addUserLike(material, getLoggedInUser(), true);
+        userLikeService.addUserLike(material, getLoggedInUser(), true);
     }
 
     @POST
     @Path("dislike")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikeMaterial(Material material) {
-        materialService.addUserLike(material, getLoggedInUser(), false);
+        userLikeService.addUserLike(material, getLoggedInUser(), false);
     }
 
     @POST
@@ -171,7 +175,7 @@ public class MaterialResource extends BaseResource {
         Material newMaterial = null;
 
         if (material.getId() == null) {
-            newMaterial = materialService.createMaterial(material, getLoggedInUser(), true);
+            newMaterial = materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         } else if (getLoggedInUser() != null) {
             newMaterial = materialService.update(material, getLoggedInUser(), true);
         } else {

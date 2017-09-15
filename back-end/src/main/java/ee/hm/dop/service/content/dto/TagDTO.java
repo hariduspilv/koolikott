@@ -1,4 +1,4 @@
-package ee.hm.dop.model.dto;
+package ee.hm.dop.service.content.dto;
 
 import ee.hm.dop.model.LearningObject;
 
