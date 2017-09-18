@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
@@ -46,7 +47,7 @@ import static javax.persistence.FetchType.EAGER;
         defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class LearningObject extends AbstractEntity implements Searchable {
+public abstract class LearningObject extends AbstractEntity implements Searchable, ILearningObject {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")

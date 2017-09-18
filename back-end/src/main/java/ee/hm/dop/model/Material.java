@@ -2,6 +2,7 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ee.hm.dop.model.interfaces.IMaterial;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -14,7 +15,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"repositoryIdentifier", "repository"})})
-public class Material extends LearningObject implements Searchable {
+public class Material extends LearningObject implements Searchable, IMaterial {
 
     @NotNull
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})

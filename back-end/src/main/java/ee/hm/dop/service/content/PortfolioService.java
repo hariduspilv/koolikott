@@ -14,6 +14,8 @@ import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.model.interfaces.ILearningObject;
+import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
@@ -57,7 +59,7 @@ public class PortfolioService implements PermissionItem {
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
         return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
-                .filter(p -> hasPermissionsToAccess(loggedInUser, p))
+                .filter(p -> canAccess(loggedInUser, p))
                 .collect(Collectors.toList());
     }
 
@@ -123,19 +125,6 @@ public class PortfolioService implements PermissionItem {
 
         portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
-    }
-
-    public Portfolio create(Portfolio portfolio, User creator) {
-        if (portfolio.getId() != null) {
-            throw new RuntimeException("Portfolio already exists.");
-        }
-
-        TextFieldUtil.cleanTextFields(portfolio);
-
-        Portfolio safePortfolio = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio);
-        saveNewObjectsInChapters(safePortfolio);
-
-        return doCreate(safePortfolio, creator, creator);
     }
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
@@ -213,6 +202,32 @@ public class PortfolioService implements PermissionItem {
         return portfolioDao.findDeletedPortfolios();
     }
 
+    public Portfolio create(Portfolio portfolio, User creator) {
+        if (portfolio.getId() != null) {
+            throw new RuntimeException("Portfolio already exists.");
+        }
+
+        TextFieldUtil.cleanTextFields(portfolio);
+
+        Portfolio safePortfolio = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio);
+        saveNewObjectsInChapters(safePortfolio);
+
+        return doCreate(safePortfolio, creator, creator);
+    }
+
+    Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {
+        portfolio.setViews(0L);
+        portfolio.setCreator(creator);
+        portfolio.setOriginalCreator(originalCreator);
+        portfolio.setVisibility(Visibility.PRIVATE);
+        portfolio.setAdded(now());
+
+        Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
+        solrEngineService.updateIndex();
+
+        return createdPortfolio;
+    }
+
     public Long getDeletedPortfoliosCount() {
         return portfolioDao.findDeletedPortfoliosCount();
     }
@@ -229,57 +244,29 @@ public class PortfolioService implements PermissionItem {
         return originalPortfolio;
     }
 
-    public Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {
-        portfolio.setViews(0L);
-        portfolio.setCreator(creator);
-        portfolio.setOriginalCreator(originalCreator);
-        portfolio.setVisibility(Visibility.PRIVATE);
-        portfolio.setAdded(now());
-
-        Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
-        solrEngineService.updateIndex();
-
-        return createdPortfolio;
-    }
-
     public boolean hasPermissionsToView(User loggedInUser, Portfolio portfolio) {
         return isPublic(portfolio) || isNotListed(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser);
     }
 
-    private boolean hasPermissionsToAccess(User user, ReducedLearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof ReducedPortfolio)) return false;
-        ReducedPortfolio portfolio = (ReducedPortfolio) learningObject;
-
-        return isPublic(portfolio) || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(portfolio, user);
+    @Override
+    public boolean canAccess(User user, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
+        return isPublic(learningObject) || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
     }
 
     @Override
-    public boolean canAccess(User user, LearningObject learningObject) {
+    public boolean canUpdate(User user, ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
-        Portfolio portfolio = (Portfolio) learningObject;
-
-        return isPublic(learningObject) || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(portfolio, user);
+        return UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
     }
 
     @Override
-    public boolean canUpdate(User user, LearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
-        Portfolio portfolio = (Portfolio) learningObject;
-
-        return UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(portfolio, user);
+    public boolean isPublic(ILearningObject learningObject) {
+        return ((IPortfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
     }
 
-    private boolean isPublic(ReducedPortfolio reducedPortfolio) {
-        return reducedPortfolio.getVisibility() == Visibility.PUBLIC && !reducedPortfolio.isDeleted();
-    }
-
-    @Override
-    public boolean isPublic(LearningObject learningObject) {
-        return ((Portfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
-    }
-
-    private boolean isNotListed(LearningObject learningObject) {
-        return ((Portfolio) learningObject).getVisibility() == Visibility.NOT_LISTED && !learningObject.isDeleted();
+    private boolean isNotListed(ILearningObject learningObject) {
+        return ((IPortfolio) learningObject).getVisibility() == Visibility.NOT_LISTED && !learningObject.isDeleted();
     }
 
     private void throwPermissionError() {
