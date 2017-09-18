@@ -22,6 +22,7 @@ import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.utils.DbUtils;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -474,25 +475,25 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void getMaterialsBySource1() {
-        List<Material> materials = materialDao.findBySource("en.wikipedia.org/wiki/Power_Architecture", false);
+        List<Material> materials = materialDao.findBySource("en.wikipedia.org/wiki/Power_Architecture", GetMaterialStrategy.ONLY_EXISTING);
         assertEquals(2, materials.size());
     }
 
     @Test
     public void getMaterialsBySource2() {
-        List<Material> materials = materialDao.findBySource("youtube.com/watch?v=gSWbx3CvVUk", false);
+        List<Material> materials = materialDao.findBySource("youtube.com/watch?v=gSWbx3CvVUk", GetMaterialStrategy.ONLY_EXISTING);
         assertEquals(1, materials.size());
     }
 
     @Test
     public void getMaterialsBySource3() {
-        List<Material> materials = materialDao.findBySource("www.youtube.com/watch?v=gSWbx3CvVUk", false);
+        List<Material> materials = materialDao.findBySource("www.youtube.com/watch?v=gSWbx3CvVUk", GetMaterialStrategy.ONLY_EXISTING);
         assertEquals(1, materials.size());
     }
 
     @Test
     public void getMaterialsBySource4() {
-        List<Material> materials = materialDao.findBySource("https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes", false);
+        List<Material> materials = materialDao.findBySource("https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes", GetMaterialStrategy.ONLY_EXISTING);
         assertEquals(1, materials.size());
     }
 

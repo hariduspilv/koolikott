@@ -12,6 +12,7 @@ import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -69,7 +70,7 @@ public class MaterialServiceTest {
         List<PeerReview> peerReviews = new ArrayList<>();
         peerReviews.add(peerReview);
         material.setRecommendation(new Recommendation());
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
@@ -152,7 +153,7 @@ public class MaterialServiceTest {
 
         expect(materialDao.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDao.createOrUpdate(material)).andReturn(material);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getId()).andReturn(1L);
 
         replay(materialDao, material, solrEngineService);
@@ -176,7 +177,7 @@ public class MaterialServiceTest {
         expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
 
         expect(materialDao.findByIdNotDeleted(materialId)).andReturn(null);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null);
 
         replay(materialDao, material);
@@ -221,7 +222,7 @@ public class MaterialServiceTest {
         expect(material.getTaxons()).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getSource()).andReturn("http://www.creatematerial.example.com").times(3);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
 
@@ -382,7 +383,7 @@ public class MaterialServiceTest {
         expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
 
@@ -408,7 +409,7 @@ public class MaterialServiceTest {
         expect(materialDao.createOrUpdate(material)).andReturn(material);
 //        expect(user.getUsername()).andReturn("username").anyTimes();
         expect(user.getId()).andReturn(1L).anyTimes();
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
 
         replay(user, materialDao, changedLearningObjectService);

@@ -11,6 +11,7 @@ import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
@@ -250,7 +251,7 @@ public class MaterialService implements PermissionItem {
     private boolean materialWithSameSourceExists(Material material) {
         if (material.getSource() == null && material.getUploadedFile() != null) return false;
 
-        List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
+        List<Material> materialsWithGivenSource = getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
         return isNotEmpty(materialsWithGivenSource) &&
                 materialsWithGivenSource.stream()
                         .noneMatch(m -> m.getId().equals(material.getId()));
@@ -359,16 +360,16 @@ public class MaterialService implements PermissionItem {
         return true;
     }
 
-    public List<Material> getBySource(String materialSource, boolean deleted) {
+    public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
         checkLink(materialSource);
-        return materialDao.findBySource(materialSource, deleted);
+        return materialDao.findBySource(materialSource, getMaterialStrategy);
     }
 
-    public Material getOneBySource(String materialSource, boolean deleted) {
+    public Material getOneBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
         checkLink(materialSource);
-        return materialDao.findOneBySource(materialSource, deleted);
+        return materialDao.findOneBySource(materialSource, getMaterialStrategy);
     }
 
     private void checkLink(String materialSource) {
