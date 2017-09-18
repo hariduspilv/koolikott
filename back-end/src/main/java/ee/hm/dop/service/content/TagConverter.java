@@ -1,23 +1,21 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.utils.LearningObjectUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
 
 public class TagConverter {
+    public static final String TAXON = "taxon";
+    public static final String RESOURCETYPE = "resourcetype";
+    public static final String TARGETGROUP = "targetgroup";
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
@@ -39,7 +37,7 @@ public class TagConverter {
         changedLearningObject.setChanger(user);
         changedLearningObject.setAdded(DateTime.now());
 
-        Taxon taxon = getTaxonByTranslation(tagName);
+        Taxon taxon = taxonService.findTaxonByTranslation(tagName);
         ResourceType resourceType = resourceTypeService.findResourceByTranslation(tagName);
         TargetGroup targetGroup = targetGroupService.getByTranslation(tagName);
 
@@ -47,17 +45,18 @@ public class TagConverter {
         if (taxon != null) {
             addTaxon(learningObject, taxon);
             changedLearningObject.setTaxon(taxon);
-            tagDTO.setTagTypeName("taxon");
+            tagDTO.setTagTypeName(TAXON);
             hasChanged = true;
         } else if (learningObject instanceof Material && resourceType != null) {
-            addResourceType((Material) learningObject, resourceType);
+            Material material = (Material) learningObject;
+            material.getResourceTypes().add(resourceType);
             changedLearningObject.setResourceType(resourceType);
-            tagDTO.setTagTypeName("resourcetype");
+            tagDTO.setTagTypeName(RESOURCETYPE);
             hasChanged = true;
         } else if (targetGroup != null) {
-            addTargetGroup(targetGroup, learningObject);
+            learningObject.getTargetGroups().add(targetGroup);
             changedLearningObject.setTargetGroup(targetGroup);
-            tagDTO.setTagTypeName("targetgroup");
+            tagDTO.setTagTypeName(TARGETGROUP);
             hasChanged = true;
         }
 
@@ -72,23 +71,11 @@ public class TagConverter {
         return tagDTO;
     }
 
-    private void addResourceType(Material learningObject, ResourceType resourceType) {
-        learningObject.getResourceTypes().add(resourceType);
-    }
-
-    private void addTargetGroup(TargetGroup targetGroup, LearningObject learningObject) {
-        learningObject.getTargetGroups().add(targetGroup);
-    }
-
     private void addTaxon(LearningObject learningObject, Taxon taxon) {
         List<Taxon> learningObjectTaxons = learningObject.getTaxons();
         if (learningObjectTaxons != null) {
             learningObjectTaxons.add(taxon);
         }
-    }
-
-    private Taxon getTaxonByTranslation(String tagName) {
-        return taxonService.findTaxonByTranslation(tagName);
     }
 
 }

@@ -131,8 +131,8 @@ public class ChangedLearningObjectService {
         }
     }
 
-    boolean removeChangeById(long id) {
-        return changedLearningObjectDao.removeById(id);
+    public void removeChangeById(long id) {
+        changedLearningObjectDao.removeById(id);
     }
 
     boolean learningObjectHasThis(LearningObject learningObject, ChangedLearningObject change) {

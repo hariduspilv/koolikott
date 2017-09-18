@@ -47,7 +47,7 @@ public class UserLikeService {
         validate(portfolio);
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
-        if (!portfolioService.hasPermissionsToView(loggedInUser, originalPortfolio)) {
+        if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -66,7 +66,7 @@ public class UserLikeService {
         validate(portfolio);
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
-        if (!portfolioService.hasPermissionsToView(loggedInUser, originalPortfolio)) {
+        if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 
@@ -77,7 +77,7 @@ public class UserLikeService {
         validate(portfolio);
         Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
 
-        if (!portfolioService.hasPermissionsToView(loggedInUser, originalPortfolio)) {
+        if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
         }
 

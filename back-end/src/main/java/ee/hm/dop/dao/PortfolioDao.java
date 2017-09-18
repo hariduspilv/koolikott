@@ -81,14 +81,14 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
     }
 
     public Long findDeletedPortfoliosCount() {
-        Query query = getEntityManager()
-                .createQuery("SELECT count(*) FROM Portfolio p WHERE p.deleted = true");
-        return (Long) query.getSingleResult();
+        return (Long) getEntityManager()
+                .createQuery("SELECT count(*) FROM Portfolio p " +
+                        "WHERE p.deleted = true").getSingleResult();
     }
 
     public List<Portfolio> findNewestPortfolios(int numberOfMaterials, int startPosition) {
         return getEntityManager()
-                .createQuery("FROM Portfolio port WHERE port.deleted = false ORDER BY added DESC, id DESC",entity())
+                .createQuery("FROM Portfolio port WHERE port.deleted = false ORDER BY added DESC, id DESC", entity())
                 .setFirstResult(startPosition)
                 .setMaxResults(numberOfMaterials)
                 .getResultList();
