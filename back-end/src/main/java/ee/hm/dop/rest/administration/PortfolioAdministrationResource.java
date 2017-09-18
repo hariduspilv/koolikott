@@ -1,8 +1,5 @@
 package ee.hm.dop.rest.administration;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -12,28 +9,26 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.content.PortfolioService;
-import ee.hm.dop.service.useractions.UserService;
+import ee.hm.dop.service.content.PortfolioAdministrationService;
 
 @Path("portfolio")
 public class PortfolioAdministrationResource extends BaseResource {
 
     @Inject
-    private PortfolioService portfolioService;
+    private PortfolioAdministrationService portfolioAdministrationService;
 
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void restore(Portfolio portfolio) {
-        portfolioService.restore(portfolio, getLoggedInUser());
+        portfolioAdministrationService.restore(portfolio, getLoggedInUser());
     }
 
     @GET
@@ -41,7 +36,7 @@ public class PortfolioAdministrationResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<Portfolio> getDeletedPortfolios() {
-        return portfolioService.getDeletedPortfolios();
+        return portfolioAdministrationService.getDeletedPortfolios();
     }
 
     @GET
@@ -49,6 +44,6 @@ public class PortfolioAdministrationResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response getDeletedPortfoliosCount() {
-        return Response.ok(portfolioService.getDeletedPortfoliosCount()).build();
+        return Response.ok(portfolioAdministrationService.getDeletedPortfoliosCount()).build();
     }
 }

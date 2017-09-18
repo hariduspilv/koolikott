@@ -94,7 +94,6 @@ public class LearningObjectService {
         return newTag;
     }
 
-
     private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,
                                                           BiFunction<Integer, Integer, List<LearningObject>> functionToGetLearningObjects) {
         List<LearningObject> returnableLearningObjects = new ArrayList<>();

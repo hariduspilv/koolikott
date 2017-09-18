@@ -7,11 +7,9 @@ import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterObject;
 import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.ReducedLearningObject;
-import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
@@ -48,13 +46,12 @@ public class PortfolioService implements PermissionItem {
     public Portfolio get(long portfolioId, User loggedInUser) {
         if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
             return portfolioDao.findById(portfolioId);
-        } else {
-            Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-            if (!hasPermissionsToView(loggedInUser, portfolio)) {
-                throwPermissionError();
-            }
-            return portfolio;
         }
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
+        if (!canView(loggedInUser, portfolio)) {
+            throwPermissionError();
+        }
+        return portfolio;
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
@@ -81,7 +78,7 @@ public class PortfolioService implements PermissionItem {
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
-        if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
+        if (!canView(loggedInUser, originalPortfolio)) {
             throwPermissionError();
         }
 
@@ -90,16 +87,8 @@ public class PortfolioService implements PermissionItem {
         portfolioDao.createOrUpdate(originalPortfolio);
     }
 
-    private void validate(Portfolio portfolio) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-    }
-
     public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        validateEntity(originalPortfolio);
+        Portfolio originalPortfolio = findValid(portfolio);
         UserUtil.mustBeAdmin(loggedInUser);
 
         Recommendation recommendation = new Recommendation();
@@ -115,10 +104,7 @@ public class PortfolioService implements PermissionItem {
     }
 
     public void removeRecommendation(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        validateEntity(originalPortfolio);
+        Portfolio originalPortfolio = findValid(portfolio);
         UserUtil.mustBeAdmin(loggedInUser);
 
         originalPortfolio.setRecommendation(null);
@@ -188,25 +174,10 @@ public class PortfolioService implements PermissionItem {
         solrEngineService.updateIndex();
     }
 
-    public void restore(Portfolio portfolio, User loggedInUser) {
-        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
-
-        Portfolio originalPortfolio = portfolioDao.findDeletedById(portfolio.getId());
-        validateEntity(originalPortfolio);
-
-        portfolioDao.restore(originalPortfolio);
-        solrEngineService.updateIndex();
-    }
-
-    public List<Portfolio> getDeletedPortfolios() {
-        return portfolioDao.findDeletedPortfolios();
-    }
-
     public Portfolio create(Portfolio portfolio, User creator) {
         if (portfolio.getId() != null) {
             throw new RuntimeException("Portfolio already exists.");
         }
-
         TextFieldUtil.cleanTextFields(portfolio);
 
         Portfolio safePortfolio = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio);
@@ -228,10 +199,6 @@ public class PortfolioService implements PermissionItem {
         return createdPortfolio;
     }
 
-    public Long getDeletedPortfoliosCount() {
-        return portfolioDao.findDeletedPortfoliosCount();
-    }
-
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
         throwIfExists(portfolio);
         if (isEmpty(portfolio.getTitle())) {
@@ -244,8 +211,8 @@ public class PortfolioService implements PermissionItem {
         return originalPortfolio;
     }
 
-    public boolean hasPermissionsToView(User loggedInUser, Portfolio portfolio) {
-        return isPublic(portfolio) || isNotListed(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser);
+    public boolean canView(User loggedInUser, Portfolio portfolio) {
+        return isNotPrivate(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser);
     }
 
     @Override
@@ -265,8 +232,8 @@ public class PortfolioService implements PermissionItem {
         return ((IPortfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
     }
 
-    private boolean isNotListed(ILearningObject learningObject) {
-        return ((IPortfolio) learningObject).getVisibility() == Visibility.NOT_LISTED && !learningObject.isDeleted();
+    private boolean isNotPrivate(ILearningObject learningObject) {
+        return ((IPortfolio) learningObject).getVisibility().isNotPrivate() && !learningObject.isDeleted();
     }
 
     private void throwPermissionError() {
@@ -283,5 +250,18 @@ public class PortfolioService implements PermissionItem {
         if (originalPortfolio == null) {
             throw new RuntimeException("Portfolio not found");
         }
+    }
+
+    private void validate(Portfolio portfolio) {
+        if (portfolio == null || portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
+    }
+
+    private Portfolio findValid(Portfolio portfolio) {
+        validate(portfolio);
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        validateEntity(originalPortfolio);
+        return originalPortfolio;
     }
 }
