@@ -3,7 +3,6 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.ChapterObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterObject;
@@ -34,8 +33,6 @@ public class PortfolioService implements PermissionItem {
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
-    private UserLikeDao userLikeDao;
-    @Inject
     private ChapterObjectDao chapterObjectDao;
     @Inject
     private SolrEngineService solrEngineService;
@@ -47,17 +44,15 @@ public class PortfolioService implements PermissionItem {
     private PortfolioConverter portfolioConverter;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
-        Portfolio portfolio;
         if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
-            portfolio = portfolioDao.findById(portfolioId);
+            return portfolioDao.findById(portfolioId);
         } else {
-            portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-
+            Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
             if (!hasPermissionsToView(loggedInUser, portfolio)) {
-                throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+                throwPermissionError();
             }
+            return portfolio;
         }
-        return portfolio;
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
@@ -85,7 +80,7 @@ public class PortfolioService implements PermissionItem {
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!hasPermissionsToView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throwPermissionError();
         }
 
         comment.setAdded(DateTime.now());
@@ -101,11 +96,9 @@ public class PortfolioService implements PermissionItem {
 
     public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {
         validate(portfolio);
-
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (originalPortfolio == null || !UserUtil.isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Portfolio not found or user is not admin");
-        }
+        validateEntity(originalPortfolio);
+        UserUtil.mustBeAdmin(loggedInUser);
 
         Recommendation recommendation = new Recommendation();
         recommendation.setCreator(loggedInUser);
@@ -123,9 +116,8 @@ public class PortfolioService implements PermissionItem {
         validate(portfolio);
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (originalPortfolio == null || !UserUtil.isUserAdmin(loggedInUser)) {
-            throw new RuntimeException("Portfolio not found or user is not admin");
-        }
+        validateEntity(originalPortfolio);
+        UserUtil.mustBeAdmin(loggedInUser);
 
         originalPortfolio.setRecommendation(null);
 
@@ -195,14 +187,12 @@ public class PortfolioService implements PermissionItem {
     }
 
     public void delete(Portfolio portfolio, User loggedInUser) {
-        if (portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio must already exist.");
-        }
+        throwIfExists(portfolio);
 
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!canUpdate(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throwPermissionError();
         }
 
         portfolioDao.delete(originalPortfolio);
@@ -219,12 +209,6 @@ public class PortfolioService implements PermissionItem {
         solrEngineService.updateIndex();
     }
 
-    private void validateEntity(Portfolio originalPortfolio) {
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-    }
-
     public List<Portfolio> getDeletedPortfolios() {
         return portfolioDao.findDeletedPortfolios();
     }
@@ -234,20 +218,14 @@ public class PortfolioService implements PermissionItem {
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
-        if (portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio must already exist.");
-        }
-
+        throwIfExists(portfolio);
         if (isEmpty(portfolio.getTitle())) {
             throw new RuntimeException("Required field title must be filled.");
         }
-
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
         if (!canUpdate(loggedInUser, originalPortfolio)) {
             throw new RuntimeException("Object does not exist or the user that is updating must be logged in user must be the creator, administrator or moderator.");
         }
-
         return originalPortfolio;
     }
 
@@ -302,5 +280,21 @@ public class PortfolioService implements PermissionItem {
 
     private boolean isNotListed(LearningObject learningObject) {
         return ((Portfolio) learningObject).getVisibility() == Visibility.NOT_LISTED && !learningObject.isDeleted();
+    }
+
+    private void throwPermissionError() {
+        throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+    }
+
+    private void throwIfExists(Portfolio portfolio) {
+        if (portfolio.getId() == null) {
+            throw new RuntimeException("Portfolio must already exist.");
+        }
+    }
+
+    private void validateEntity(Portfolio originalPortfolio) {
+        if (originalPortfolio == null) {
+            throw new RuntimeException("Portfolio not found");
+        }
     }
 }
