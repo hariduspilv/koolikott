@@ -31,16 +31,9 @@ public class UserLikeService {
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
         Material originalMaterial = materialService.validateAndFind(material);
-
         userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
 
-        UserLike like = new UserLike();
-        like.setLearningObject(originalMaterial);
-        like.setCreator(loggedInUser);
-        like.setLiked(isLiked);
-        like.setAdded(DateTime.now());
-
-        return userLikeDao.update(like);
+        return save(originalMaterial, loggedInUser, isLiked);
     }
 
     public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
@@ -53,12 +46,15 @@ public class UserLikeService {
 
         userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
 
+        return save(originalPortfolio, loggedInUser, isLiked);
+    }
+
+    private UserLike save(LearningObject learningObject, User loggedInUser, boolean isLiked) {
         UserLike like = new UserLike();
-        like.setLearningObject(originalPortfolio);
+        like.setLearningObject(learningObject);
         like.setCreator(loggedInUser);
         like.setLiked(isLiked);
         like.setAdded(DateTime.now());
-
         return userLikeDao.update(like);
     }
 

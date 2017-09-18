@@ -66,7 +66,8 @@ public class SolrService implements SolrEngineService {
     @Override
     public SearchResponse search(String query, long start, long limit, String sort) {
         return executeCommand(
-                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
+                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start,
+                        Math.min(limit, RESULTS_PER_PAGE)));
     }
 
     @Override
@@ -177,6 +178,7 @@ public class SolrService implements SolrEngineService {
     }
 
     private class SolrIndexThread extends Thread {
+        public static final int _1_SEC = 1000;
         private boolean updateIndex;
 
         private final Object lock = new Object();
@@ -201,7 +203,7 @@ public class SolrService implements SolrEngineService {
                         }
                     }
 
-                    sleep(1000);
+                    sleep(_1_SEC);
                 }
             } catch (InterruptedException e) {
                 logger.info("Solr indexing thread interrupted.");
@@ -210,7 +212,7 @@ public class SolrService implements SolrEngineService {
 
         private void waitForCommandToFinish() throws InterruptedException {
             while (isIndexingInProgress()) {
-                sleep(1000);
+                sleep(_1_SEC);
             }
         }
     }

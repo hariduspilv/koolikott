@@ -1,6 +1,5 @@
 package ee.hm.dop.service.learningObject;
 
-import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.interfaces.ILearningObject;
 

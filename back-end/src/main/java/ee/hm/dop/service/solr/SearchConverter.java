@@ -91,7 +91,7 @@ public class SearchConverter {
             List<String> result = excluded.stream().map(id -> "-id:" + id.toString()).collect(Collectors.toList());
             return SearchService.AND + StringUtils.join(result, SearchService.AND);
         }
-        return "";
+        return SearchService.EMPTY;
     }
 
     private static String getLanguageAsQuery(SearchFilter searchFilter) {
@@ -99,14 +99,14 @@ public class SearchConverter {
         if (language != null) {
             return format("(language:\"%s\" OR type:\"portfolio\")", language.getCode());
         }
-        return "";
+        return SearchService.EMPTY;
     }
 
     private static String isPaidAsQuery(SearchFilter searchFilter) {
         if (!searchFilter.isPaid()) {
             return "(paid:\"false\" OR type:\"portfolio\")";
         }
-        return "";
+        return SearchService.EMPTY;
     }
 
     private static  String getVisibilityAsQuery(SearchFilter searchFilter) {
