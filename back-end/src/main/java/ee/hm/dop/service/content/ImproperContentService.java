@@ -47,10 +47,13 @@ public class ImproperContentService {
      */
     public ImproperContent get(long improperContentId, User user) {
         ImproperContent improperContent = improperContentDao.findByIdValid(improperContentId);
-        if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
+        if (improperContent == null){
             return null;
         }
-        return improperContent;
+        if (learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
+            return improperContent;
+        }
+        return null;
     }
 
     /**

@@ -66,7 +66,8 @@ public class SolrService implements SolrEngineService {
     @Override
     public SearchResponse search(String query, long start, long limit, String sort) {
         return executeCommand(
-                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
+                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start,
+                        Math.min(limit, RESULTS_PER_PAGE)));
     }
 
     @Override
