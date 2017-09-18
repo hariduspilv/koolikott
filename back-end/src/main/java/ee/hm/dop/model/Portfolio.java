@@ -1,6 +1,7 @@
 package ee.hm.dop.model;
 
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.model.interfaces.IPortfolio;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -18,7 +19,7 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
-public class Portfolio extends LearningObject implements Searchable {
+public class Portfolio extends LearningObject implements Searchable, IPortfolio {
 
     @Column(nullable = false)
     private String title;

@@ -6,6 +6,8 @@ import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.interfaces.ILearningObject;
+import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
@@ -76,11 +78,10 @@ public class MaterialService implements PermissionItem {
     public void increaseViewCount(Material material) {
         material.setViews(material.getViews() + 1);
         createOrUpdate(material);
-
         solrEngineService.updateIndex();
     }
 
-    public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy){
+    public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
     }
 
@@ -110,7 +111,6 @@ public class MaterialService implements PermissionItem {
     //todo admin functionality
     public void delete(Long materialID, User loggedInUser) {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
-
 
         Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
         validateMaterialNotNull(originalMaterial);
@@ -192,11 +192,11 @@ public class MaterialService implements PermissionItem {
         materialDao.delete(material);
     }
 
-    public Material updateBySystem(Material material, SearchIndexStrategy strategy){
+    public Material updateBySystem(Material material, SearchIndexStrategy strategy) {
         return update(material, null, strategy);
     }
 
-    public Material update(Material material, User changer, SearchIndexStrategy strategy){
+    public Material update(Material material, User changer, SearchIndexStrategy strategy) {
         validateMaterialAndIdNotNull(material);
         material.setSource(UrlUtil.processURL(material.getSource()));
 
@@ -238,7 +238,7 @@ public class MaterialService implements PermissionItem {
 
     private void cleanPeerReviewUrls(Material material) {
         List<PeerReview> peerReviews = material.getPeerReviews();
-        if (peerReviews != null) {
+        if (isNotEmpty(peerReviews)) {
             for (PeerReview peerReview : peerReviews) {
                 if (!peerReview.getUrl().contains(configuration.getString(SERVER_ADDRESS))) {
                     peerReview.setUrl(UrlUtil.processURL(peerReview.getUrl()));
@@ -251,17 +251,9 @@ public class MaterialService implements PermissionItem {
         if (material.getSource() == null && material.getUploadedFile() != null) return false;
 
         List<Material> materialsWithGivenSource = getBySource(material.getSource(), true);
-        if (isNotEmpty(materialsWithGivenSource)) {
-            if (!listContainsMaterial(materialsWithGivenSource, material)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean listContainsMaterial(List<Material> list, Material material) {
-        return list.stream().anyMatch(m -> m.getId().equals(material.getId()));
+        return isNotEmpty(materialsWithGivenSource) &&
+                materialsWithGivenSource.stream()
+                        .noneMatch(m -> m.getId().equals(material.getId()));
     }
 
     private void validateMaterialUpdate(Material originalMaterial, User changer) {
@@ -351,28 +343,19 @@ public class MaterialService implements PermissionItem {
     }
 
     @Override
-    public boolean canAccess(User user, LearningObject learningObject) {
-        if (!(learningObject instanceof Material)) {
-            return false;
-        }
-        Material material = (Material) learningObject;
-        return !material.isDeleted() || UserUtil.isUserAdmin(user);
+    public boolean canAccess(User user, ILearningObject learningObject) {
+        if (!(learningObject instanceof IMaterial)) return false;
+        return !learningObject.isDeleted() || UserUtil.isUserAdmin(user);
     }
 
     @Override
-    public boolean canUpdate(User user, LearningObject learningObject) {
-        if (!(learningObject instanceof Material)) {
-            return false;
-        }
-        Material material = (Material) learningObject;
-        if (UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(material, user)) {
-            return true;
-        }
-        return !material.isDeleted() || UserUtil.isUserAdmin(user);
+    public boolean canUpdate(User user, ILearningObject learningObject) {
+        if (!(learningObject instanceof IMaterial)) return false;
+        return !learningObject.isDeleted() || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
     }
 
     @Override
-    public boolean isPublic(LearningObject learningObject) {
+    public boolean isPublic(ILearningObject learningObject) {
         return true;
     }
 
