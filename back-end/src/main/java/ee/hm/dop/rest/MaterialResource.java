@@ -28,6 +28,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.MaterialProxy;
 import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
@@ -56,7 +57,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getBySource(materialSource, false);
+        return materialService.getBySource(materialSource, GetMaterialStrategy.ONLY_EXISTING);
     }
 
     @GET
@@ -66,7 +67,7 @@ public class MaterialResource extends BaseResource {
     public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource)
             throws UnsupportedEncodingException {
         materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getOneBySource(materialSource, true);
+        return materialService.getOneBySource(materialSource, GetMaterialStrategy.INCLUDE_DELETED);
     }
 
     @POST
@@ -177,7 +178,7 @@ public class MaterialResource extends BaseResource {
         if (material.getId() == null) {
             newMaterial = materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         } else if (getLoggedInUser() != null) {
-            newMaterial = materialService.update(material, getLoggedInUser(), true);
+            newMaterial = materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         } else {
             throwBadRequestException("Unable to add or update material - can extract get logged in user.");
         }

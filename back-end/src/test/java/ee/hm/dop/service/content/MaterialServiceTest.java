@@ -12,6 +12,7 @@ import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -69,7 +70,7 @@ public class MaterialServiceTest {
         List<PeerReview> peerReviews = new ArrayList<>();
         peerReviews.add(peerReview);
         material.setRecommendation(new Recommendation());
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
@@ -140,7 +141,7 @@ public class MaterialServiceTest {
 
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setName(EducationalContextC.BASICEDUCATION);
-        expect(material.getTaxons()).andReturn(Collections.singletonList(educationalContext)).times(3);
+        expect(material.getTaxons()).andReturn(Collections.singletonList(educationalContext)).times(2);
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1004L);
@@ -152,12 +153,12 @@ public class MaterialServiceTest {
 
         expect(materialDao.findByIdNotDeleted(materialId)).andReturn(original);
         expect(materialDao.createOrUpdate(material)).andReturn(material);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getId()).andReturn(1L);
 
         replay(materialDao, material, solrEngineService);
 
-        materialService.update(material, null, true);
+        materialService.updateBySystem(material, SearchIndexStrategy.UPDATE_INDEX);
 
         verify(materialDao, material, solrEngineService);
 
@@ -176,13 +177,13 @@ public class MaterialServiceTest {
         expect(material.getSource()).andReturn("http://creatematerial.example.com").times(3);
 
         expect(materialDao.findByIdNotDeleted(materialId)).andReturn(null);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null);
 
         replay(materialDao, material);
 
         try {
-            materialService.update(material, null, true);
+            materialService.updateBySystem(material, SearchIndexStrategy.UPDATE_INDEX);
             fail("Exception expected.");
         } catch (IllegalArgumentException ex) {
             assertEquals("Error updating Material: material does not exist.", ex.getMessage());
@@ -221,7 +222,7 @@ public class MaterialServiceTest {
         expect(material.getTaxons()).andReturn(null);
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getSource()).andReturn("http://www.creatematerial.example.com").times(3);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
 
@@ -239,7 +240,7 @@ public class MaterialServiceTest {
 
         replay(materialDao, material);
 
-        Material returned = materialService.update(material, null, true);
+        Material returned = materialService.updateBySystem(material, SearchIndexStrategy.UPDATE_INDEX);
 
         assertNotNull(returned);
         verify(materialDao, material);
@@ -362,10 +363,10 @@ public class MaterialServiceTest {
         replay(user);
 
         try {
-            materialService.update(null, user, true);
+            materialService.update(null, user, SearchIndexStrategy.UPDATE_INDEX);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Material id parameter is mandatory", ex.getMessage());
+        } catch (RuntimeException ex) {
+            assertEquals("Material not found", ex.getMessage());
         }
 
         verify(user);
@@ -382,13 +383,13 @@ public class MaterialServiceTest {
         expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
 
         replay(user, materialDao, solrEngineService, changedLearningObjectService);
 
-        Material returned = materialService.update(material, user, true);
+        Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 
         assertNotNull(returned);
         verify(user, materialDao, solrEngineService);
@@ -408,12 +409,12 @@ public class MaterialServiceTest {
         expect(materialDao.createOrUpdate(material)).andReturn(material);
 //        expect(user.getUsername()).andReturn("username").anyTimes();
         expect(user.getId()).andReturn(1L).anyTimes();
-        expect(materialDao.findBySource("creatematerial.example.com", true)).andReturn(null);
+        expect(materialDao.findBySource("creatematerial.example.com", GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
 
         replay(user, materialDao, changedLearningObjectService);
 
-        Material returned = materialService.update(material, user, true);
+        Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 
         assertNotNull(returned);
         verify(user, materialDao);

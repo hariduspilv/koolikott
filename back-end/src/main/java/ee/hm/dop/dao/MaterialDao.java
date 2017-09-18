@@ -11,6 +11,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 
 public class MaterialDao extends AbstractDao<Material> {
     public static final String HTTP = "http://";
@@ -91,17 +92,17 @@ public class MaterialDao extends AbstractDao<Material> {
         return learningObjectDao.findByCreatorInner(creator, start, maxResults, queryString);
     }
 
-    public List<Material> findBySource(String materialSource, boolean deleted) {
-        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, deleted);
+    public List<Material> findBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
+        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, getMaterialStrategy);
         return materialTypedQuery.getResultList();
     }
 
-    public Material findOneBySource(String materialSource, boolean deleted) {
-        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, deleted);
+    public Material findOneBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
+        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, getMaterialStrategy);
         return getSingleResult(materialTypedQuery);
     }
 
-    private TypedQuery<Material> getMaterialTypedQuery(String materialSource, boolean deleted) {
+    private TypedQuery<Material> getMaterialTypedQuery(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         String ms1 = HTTP_WWW + materialSource;
         String ms2 = HTTPS_WWW + materialSource;
         String ms3 = HTTP + materialSource;
@@ -117,7 +118,7 @@ public class MaterialDao extends AbstractDao<Material> {
                 .setParameter("ms2", ms2)
                 .setParameter("ms3", ms3)
                 .setParameter("ms4", ms4)
-                .setParameter("deleted", deleted);
+                .setParameter("deleted", getMaterialStrategy.isDeleted());
     }
 
     public List<Language> findLanguagesUsedInMaterials() {
