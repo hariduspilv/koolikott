@@ -1,6 +1,8 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -144,6 +146,7 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     private List<Taxon> taxons;
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonBackReference
     private List<FirstReview> firstReviews;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")

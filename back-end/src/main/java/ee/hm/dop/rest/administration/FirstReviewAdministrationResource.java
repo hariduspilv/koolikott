@@ -17,14 +17,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("firstReview")
-public class FirstReviewResource extends BaseResource {
+@Path("admin/firstReview")
+public class FirstReviewAdministrationResource extends BaseResource {
 
     @Inject
     private FirstReviewService firstReviewService;
 
-
     @GET
+    @Path("/unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<FirstReview> getUnReviewed() {
@@ -32,7 +32,7 @@ public class FirstReviewResource extends BaseResource {
     }
 
     @GET
-    @Path("/count")
+    @Path("/unReviewed/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnReviewedCount() {
@@ -40,7 +40,7 @@ public class FirstReviewResource extends BaseResource {
     }
 
     @POST
-    @Path("setReviewed")
+    @Path("/setReviewed")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setReviewed(LearningObject learningObject) {
@@ -49,6 +49,4 @@ public class FirstReviewResource extends BaseResource {
             firstReviewService.setReviewed(learningObject, user);
         }
     }
-
-    // TODO Update - reviewed ja user pannakse külge - setNotBroken!!!! Vt testi ka!
 }

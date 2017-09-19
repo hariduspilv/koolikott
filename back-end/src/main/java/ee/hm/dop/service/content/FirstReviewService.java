@@ -9,8 +9,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
@@ -26,8 +26,8 @@ public class FirstReviewService {
         return firstReviewDao.findAllUnreviewed();
     }
 
-    public Long getUnReviewedCount() {
-        return (Long) firstReviewDao.getCountByField("reviewed", false);
+    public BigDecimal getUnReviewedCount() {
+        return firstReviewDao.findCountOfUnreviewed();
     }
 
     public FirstReview save(LearningObject learningObject) {
