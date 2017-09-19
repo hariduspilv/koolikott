@@ -55,13 +55,13 @@ public class LearningObjectService {
     }
 
     private void validateEntity(LearningObject learningObject) {
-        if (learningObject == null || learningObject.getId() == null) {
+        if (learningObject == null) {
             throw new RuntimeException("LearningObject not found");
         }
     }
 
     private void validateteId(LearningObject learningObject) {
-        if (learningObject == null) {
+        if (learningObject == null || learningObject.getId() == null) {
             throw new RuntimeException("LearningObject not found");
         }
     }

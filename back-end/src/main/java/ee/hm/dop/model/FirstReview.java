@@ -1,5 +1,7 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -18,6 +20,7 @@ public class FirstReview extends AbstractEntity{
 
     @ManyToOne
     @JoinColumn(name = "learningObject", nullable = false)
+//    @JsonBackReference
     private LearningObject learningObject;
 
     @Column(nullable = false)

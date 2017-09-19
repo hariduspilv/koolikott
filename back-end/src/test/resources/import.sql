@@ -560,3 +560,8 @@ insert into PeerReview(url) values ('http://google.com');
 
 insert into Material_PeerReview(material, peerReview) values (2, 1);
 insert into Material_PeerReview(material, peerReview) values (3, 2);
+
+-- FirstReview
+
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (1, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (2, 0, CURRENT_TIMESTAMP);
