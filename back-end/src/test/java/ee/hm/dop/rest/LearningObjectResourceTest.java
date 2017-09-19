@@ -24,7 +24,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addTag() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Long id = 108L;
         Tag tag = new Tag();
@@ -36,7 +36,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addTagNoLearningObject() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Long id = 99999L;
         Tag tag = new Tag();

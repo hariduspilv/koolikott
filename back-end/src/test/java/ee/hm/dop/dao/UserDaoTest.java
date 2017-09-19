@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
 import org.junit.Test;
@@ -19,16 +20,16 @@ public class UserDaoTest extends DatabaseTestBase {
 
     @Test
     public void findUserByIdCode() {
-        User user = userDao.findUserByIdCode("39011220011");
-        assertEquals("39011220011", user.getIdCode());
+        User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
+        assertEquals(ResourceIntegrationTestBase.USER_MATI, user.getIdCode());
         assertValidUser(user);
 
-        user = userDao.findUserByIdCode("39011220011");
-        assertEquals("39011220011", user.getIdCode());
+        user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
+        assertEquals(ResourceIntegrationTestBase.USER_MATI, user.getIdCode());
         assertValidUser(user);
 
-        user = userDao.findUserByIdCode("39011220011");
-        assertEquals("39011220011", user.getIdCode());
+        user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
+        assertEquals(ResourceIntegrationTestBase.USER_MATI, user.getIdCode());
         assertValidUser(user);
     }
 
@@ -39,14 +40,14 @@ public class UserDaoTest extends DatabaseTestBase {
         assertEquals("mati.maasikas", user.getUsername());
         assertEquals("Mati", user.getName());
         assertEquals("Maasikas", user.getSurname());
-        assertEquals("39011220011", user.getIdCode());
+        assertEquals(ResourceIntegrationTestBase.USER_MATI, user.getIdCode());
 
         user = userDao.findUserByUsername("peeter.paan");
         assertEquals(Long.valueOf(2), user.getId());
         assertEquals("peeter.paan", user.getUsername());
         assertEquals("Peeter", user.getName());
         assertEquals("Paan", user.getSurname());
-        assertEquals("38011550077", user.getIdCode());
+        assertEquals(ResourceIntegrationTestBase.USER_PEETER, user.getIdCode());
 
         user = userDao.findUserByUsername("voldemar.vapustav");
         assertEquals(Long.valueOf(3), user.getId());
@@ -60,12 +61,12 @@ public class UserDaoTest extends DatabaseTestBase {
         assertNotNull(user.getId());
 
         switch (user.getIdCode()) {
-            case "39011220011":
+            case ResourceIntegrationTestBase.USER_MATI:
                 assertEquals("mati.maasikas", user.getUsername());
                 assertEquals("Mati", user.getName());
                 assertEquals("Maasikas", user.getSurname());
                 break;
-            case "38011550077":
+            case ResourceIntegrationTestBase.USER_PEETER:
                 assertEquals("peeter.paan", user.getUsername());
                 assertEquals("Peeter", user.getName());
                 assertEquals("Paan", user.getSurname());

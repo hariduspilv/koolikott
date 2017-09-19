@@ -26,11 +26,10 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVote() {
-        String idCode = "89012378912";
-        login(idCode);
+        login(USER_SECOND);
 
         Material material = new Material();
-        material.setId(1l);
+        material.setId(1L);
 
         Tag tag = new Tag();
         String tagName = "matemaatika";
@@ -75,7 +74,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void report() {
-        login("39011220011");
+        login(USER_MATI);
 
         Response response = doGet("tagUpVotes/report?learningObject=1");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
@@ -117,7 +116,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeUpVote() {
-        login("89012378912");
+        login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(101l);
@@ -142,7 +141,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVoteGettingPrivatePortfolio() {
-        login("89012378912"); // Regular user
+        login(USER_SECOND); // Regular user
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(110L);

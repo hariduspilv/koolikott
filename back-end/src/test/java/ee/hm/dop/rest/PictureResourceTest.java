@@ -22,10 +22,8 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.collections.Buffer;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -126,7 +124,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     }
 
     private BufferedImage getThumbnail(String requestUrl) throws IOException {
-        login("39011220013");
+        login(USER_MAASIKAS_VAARIKAS);
 
         String imgName = prepareTestImage();
 
@@ -180,7 +178,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPicture() throws IOException {
-        login("39011220013");
+        login(USER_MAASIKAS_VAARIKAS);
 
         File f = DOPFileUtils.getFile(TEST_IMAGE_NAME);
         final StreamDataBodyPart filePart = new StreamDataBodyPart("picture", new ByteArrayInputStream(Base64.getEncoder().encode(Files.readAllBytes(f.toPath()))));

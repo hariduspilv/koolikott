@@ -16,10 +16,11 @@ import org.junit.Test;
  */
 public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
+    public static final String DEV_LOGIN = "dev/login";
+
     @Test
     public void logIn() {
-        Response response = doGet("dev/login/39011220011");
-        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
+        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + "/39011220011", new GenericType<AuthenticatedUser>() {
         });
         assertNotNull(authenticatedUser.getToken());
         assertEquals("Mati", authenticatedUser.getUser().getName());
@@ -30,7 +31,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void loginWrongId() {
-        Response response = doGet("dev/login/123");
+        Response response = doGet(DEV_LOGIN + "/123");
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 

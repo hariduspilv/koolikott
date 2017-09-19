@@ -17,11 +17,9 @@ import org.junit.Test;
 public class RoleResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getRoles() {
-        String adminIdCode = "89898989898";
-        login(adminIdCode);
+        login(USER_ADMIN);
 
-        Response response = doGet("role");
-        List<String> allUsers = response.readEntity(new GenericType<List<String>>() {
+        List<String> allUsers = doGet("role", new GenericType<List<String>>() {
         });
         assertEquals(4, allUsers.size());
     }

@@ -59,7 +59,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPrivatePortfolioAsCreator() {
-        login("38011550077");
+        login(USER_PEETER);
         Long id = 107L;
 
         Portfolio portfolio = getPortfolio(id);
@@ -79,7 +79,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPrivatePortfolioAsAdmin() {
-        login("89898989898");
+        login(USER_ADMIN);
         Long id = 107L;
 
         Portfolio portfolio = getPortfolio(id);
@@ -134,7 +134,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListedAsAdmin() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         String username = "my.testuser";
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
@@ -207,7 +207,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void create() {
-        login("39011220011");
+        login(USER_MATI);
         Long id = 1L;
 
         Portfolio createdPortfolio = createPortfolio();
@@ -220,7 +220,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateChanginMetadataNoChapters() {
-        login("39011220011");
+        login(USER_MATI);
 
         Portfolio portfolio = getPortfolio(105);
         String originalTitle = portfolio.getTitle();
@@ -235,7 +235,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateSomeoneElsesPortfolio() {
-        User user = login("38011550077");
+        login(USER_PEETER);
 
         Portfolio portfolio = getPortfolio(105);
         portfolio.setTitle("This is not my portfolio.");
@@ -251,7 +251,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateCreatingChapter() {
-        login("39011220011");
+        login(USER_MATI);
 
         List<Chapter> chapters = new ArrayList<>();
 
@@ -269,7 +269,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateCreatingChapterWithSubchapterNoMaterials() {
-        login("39011220011");
+        login(USER_MATI);
 
         List<Chapter> chapters = new ArrayList<>();
         List<Chapter> subchapters = new ArrayList<>();
@@ -295,7 +295,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateCreatingChapterWithExistingChapter() {
-        login("39011220011");
+        login(USER_MATI);
 
         List<Chapter> subchapters = new ArrayList<>();
 
@@ -321,7 +321,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updateChangingVisibility() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Portfolio portfolio = getPortfolio(106);
         portfolio.setVisibility(Visibility.NOT_LISTED);
@@ -333,7 +333,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void copyPortfolio() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(101L);
@@ -356,7 +356,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void copyPrivatePortfolioLoggedInAsNotCreator() {
-        login("39011220011");
+        login(USER_MATI);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(107L);
@@ -367,7 +367,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void copyPrivatePortfolioLoggedInAsCreator() {
-        login("38011550077");
+        login(USER_PEETER);
         Long userId = 2L;
 
         Portfolio portfolio = new Portfolio();
@@ -382,7 +382,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deletePortfolioAsCreator() {
-        login("89012378912");
+        login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(112L);
@@ -393,7 +393,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deletePortfolioAsAdmin() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(113L);
@@ -404,7 +404,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deletePortfolioAsNotCreator() {
-        login("89012378912");
+        login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(101L);
@@ -426,14 +426,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void recommendPortfolio() {
         long portfolioId = 103L;
 
-        login("38011550077");
+        login(USER_PEETER);
         Portfolio portfolio = getPortfolio(portfolioId);
         Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
         logout();
 
-        login("89898989898");
+        login(USER_ADMIN);
         Response responseAdmin = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.OK.getStatusCode(), responseAdmin.getStatus());
@@ -447,14 +447,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void removedPortfolioRecommendation() {
         long portfolioId = 103L;
 
-        login("38011550077");
+        login(USER_PEETER);
         Portfolio portfolio = getPortfolio(portfolioId);
         Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
         logout();
 
-        login("89898989898");
+        login(USER_ADMIN);
         Response responseAdmin = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.OK.getStatusCode(), responseAdmin.getStatus());
@@ -464,13 +464,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(portfolioAfterRecommend.getRecommendation());
         logout();
 
-        login("38011550077");
+        login(USER_PEETER);
         Response responseRemoveRecommendation = doPost(PORTFOLIO_REMOVE_RECOMMENDATION_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.FORBIDDEN.getStatusCode(), responseRemoveRecommendation.getStatus());
         logout();
 
-        login("89898989898");
+        login(USER_ADMIN);
         Response responseRemoveRecommendationAdmin = doPost(PORTFOLIO_REMOVE_RECOMMENDATION_URL,
                 Entity.entity(portfolio, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NO_CONTENT.getStatusCode(), responseRemoveRecommendationAdmin.getStatus());
@@ -481,7 +481,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void createWithContent() {
-        login("39011220011");
+        login(USER_MATI);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle("With chapters");

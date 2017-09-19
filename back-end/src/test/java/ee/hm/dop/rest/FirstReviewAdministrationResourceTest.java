@@ -27,7 +27,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
 
     @Test
     public void after_first_review_is_reviewed_it_is_not_returned_by_getUnreviewed() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         BigDecimal count = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
@@ -55,7 +55,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
 
     @Test
     public void getUnreviewed_returns_not_an_empty_list() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         assertTrue(CollectionUtils.isNotEmpty(firstReviews));
@@ -63,7 +63,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
 
     @Test
     public void private_portfolio_is_not_returned_as_part_of_the_unreviewed() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
 

@@ -19,7 +19,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioComment() {
-        login("39011220011");
+        login(USER_MATI);
 
         AddCommentForm addCommentForm = new AddCommentForm();
 
@@ -59,7 +59,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsCreator() {
-        login("38011550077");
+        login(USER_PEETER);
 
         AddCommentForm addCommentForm = new AddCommentForm();
 
@@ -81,7 +81,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
-        login("39011220011");
+        login(USER_MATI);
 
         AddCommentForm addCommentForm = new AddCommentForm();
 

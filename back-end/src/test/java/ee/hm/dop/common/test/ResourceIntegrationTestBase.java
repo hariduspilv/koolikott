@@ -38,6 +38,11 @@ import org.junit.After;
  */
 public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
+    public static final String USER_MATI = "39011220011";
+    public static final String USER_PEETER = "38011550077";
+    public static final String USER_ADMIN = "89898989898";
+    public static final String USER_SECOND = "89012378912";
+    public static final String USER_MAASIKAS_VAARIKAS = "39011220013";
     private static String RESOURCE_BASE_URL;
 
     @Inject
