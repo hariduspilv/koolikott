@@ -30,6 +30,7 @@ import static org.apache.commons.codec.binary.Base64.decodeBase64;
 @Path("picture")
 public class PictureResource extends BaseResource {
 
+    public static final String MAX_AGE_1_YEAR = "max-age=31536000";
     @Inject
     private PictureService pictureService;
     @Inject
@@ -78,7 +79,7 @@ public class PictureResource extends BaseResource {
     private Response getPictureResponseWithCache(Picture picture) {
         if (picture != null) {
             byte[] data = picture.getData();
-            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, "max-age=31536000").build();
+            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_1_YEAR).build();
         }
 
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();

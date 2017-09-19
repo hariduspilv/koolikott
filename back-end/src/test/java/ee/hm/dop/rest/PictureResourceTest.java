@@ -55,7 +55,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet(format(GET_PICTURE_URL, "picture1"), WILDCARD_TYPE);
 
         String cacheControl = (String) response.getHeaders().getFirst(HttpHeaders.CACHE_CONTROL);
-        assertEquals("max-age=31536000", cacheControl);
+        assertEquals(PictureResource.MAX_AGE_1_YEAR, cacheControl);
 
         byte[] data = response.readEntity(byte[].class);
         char[] encodeHex = Hex.encodeHex(data);
@@ -131,7 +131,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         Response thumbnailResponse = doGet(format(requestUrl, imgName), WILDCARD_TYPE);
 
         String cacheControl = (String) thumbnailResponse.getHeaders().getFirst(HttpHeaders.CACHE_CONTROL);
-        assertEquals("max-age=31536000", cacheControl);
+        assertEquals(PictureResource.MAX_AGE_1_YEAR, cacheControl);
 
         byte[] data = thumbnailResponse.readEntity(byte[].class);
 
