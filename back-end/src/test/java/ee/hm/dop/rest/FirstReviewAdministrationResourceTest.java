@@ -29,11 +29,8 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
     public void after_first_review_is_reviewed_it_is_not_returned_by_getUnreviewed() {
         login("89898989898");
 
-        Response initialResponse = doGet(GET_UNREVIEWED, MediaType.APPLICATION_JSON_TYPE);
-        List<FirstReview> firstReviews = initialResponse.readEntity(new GenericType<List<FirstReview>>() {
-        });
-        Response initialCount = doGet(GET_UNREVIEWED_COUNT, MediaType.APPLICATION_JSON_TYPE);
-        BigDecimal count = initialCount.readEntity(BigDecimal.class);
+        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
+        BigDecimal count = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
         assertEquals(firstReviews.size(), count.longValueExact());
 
         LearningObject learningObject = firstReviews.get(0).getLearningObject();
@@ -41,27 +38,26 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
         Response updateResponse = doPost(SET_REVIEWED, Entity.entity(learningObject, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
-
-        Response afterUpdateResponse = doGet(GET_UNREVIEWED, MediaType.APPLICATION_JSON_TYPE);
-        List<FirstReview> firstReviews2 = afterUpdateResponse.readEntity(new GenericType<List<FirstReview>>() {
-        });
+        List<FirstReview> firstReviews2 = doGet(GET_UNREVIEWED, listType());
 
         boolean noneMatchUpdatedOne = firstReviews2.stream().map(FirstReview::getLearningObject).map(LearningObject::getId)
                 .noneMatch(l -> l.equals(learningObjectId));
         assertTrue(noneMatchUpdatedOne);
 
-        Response afterUpdateCount = doGet(GET_UNREVIEWED_COUNT, MediaType.APPLICATION_JSON_TYPE);
-        BigDecimal count2 = afterUpdateCount.readEntity(BigDecimal.class);
+        BigDecimal count2 = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
         assertEquals(firstReviews2.size(), count2.longValueExact());
+    }
+
+    private GenericType<List<FirstReview>> listType() {
+        return new GenericType<List<FirstReview>>() {
+        };
     }
 
     @Test
     public void getUnreviewed_returns_not_an_empty_list() {
         login("89898989898");
 
-        Response response = doGet(GET_UNREVIEWED, MediaType.APPLICATION_JSON_TYPE);
-        List<FirstReview> firstReviews = response.readEntity(new GenericType<List<FirstReview>>() {
-        });
+        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         assertTrue(CollectionUtils.isNotEmpty(firstReviews));
     }
 
@@ -69,9 +65,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
     public void private_portfolio_is_not_returned_as_part_of_the_unreviewed() {
         login("89898989898");
 
-        Response response = doGet(GET_UNREVIEWED, MediaType.APPLICATION_JSON_TYPE);
-        List<FirstReview> firstReviews = response.readEntity(new GenericType<List<FirstReview>>() {
-        });
+        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
 
         boolean noneMatchUpdatedOne = firstReviews.stream().map(FirstReview::getLearningObject).map(LearningObject::getId)
                 .noneMatch(l -> l.equals(PRIVATE_PORTFOLIO));
