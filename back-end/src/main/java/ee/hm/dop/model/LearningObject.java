@@ -143,7 +143,7 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
 
-    @ManyToOne(fetch = LAZY)
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     private List<FirstReview> firstReviews;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
