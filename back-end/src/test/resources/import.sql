@@ -565,3 +565,4 @@ insert into Material_PeerReview(material, peerReview) values (3, 2);
 
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (1, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (2, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (107, 0, CURRENT_TIMESTAMP);

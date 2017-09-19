@@ -23,6 +23,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
     private static final String GET_UNREVIEWED = "admin/firstReview/unReviewed";
     private static final String GET_UNREVIEWED_COUNT = "admin/firstReview/unReviewed/count";
     private static final String SET_REVIEWED = "admin/firstReview/setReviewed";
+    public static final long PRIVATE_PORTFOLIO = 107L;
 
     @Test
     public void after_first_review_is_reviewed_it_is_not_returned_by_getUnreviewed() {
@@ -66,12 +67,15 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
 
     @Test
     public void private_portfolio_is_not_returned_as_part_of_the_unreviewed() {
-        //todo EgleRiin add test that matches the name
         login("89898989898");
 
         Response response = doGet(GET_UNREVIEWED, MediaType.APPLICATION_JSON_TYPE);
         List<FirstReview> firstReviews = response.readEntity(new GenericType<List<FirstReview>>() {
         });
+
+        boolean noneMatchUpdatedOne = firstReviews.stream().map(FirstReview::getLearningObject).map(LearningObject::getId)
+                .noneMatch(l -> l.equals(PRIVATE_PORTFOLIO));
+        assertTrue(noneMatchUpdatedOne);
         assertTrue(CollectionUtils.isNotEmpty(firstReviews));
     }
 }
