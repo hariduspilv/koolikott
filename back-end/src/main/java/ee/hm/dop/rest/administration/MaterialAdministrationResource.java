@@ -33,7 +33,7 @@ public class MaterialAdministrationResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBrokenMaterialCount() {
-        return Response.ok(materialAdministrationService.getBrokenMaterialCount()).build();
+        return ok(materialAdministrationService.getBrokenMaterialCount());
     }
 
     @GET
@@ -57,7 +57,7 @@ public class MaterialAdministrationResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response getDeletedMaterialsCount() {
-        return Response.ok(materialAdministrationService.getDeletedMaterialsCount()).build();
+        return ok(materialAdministrationService.getDeletedMaterialsCount());
     }
 
     @POST

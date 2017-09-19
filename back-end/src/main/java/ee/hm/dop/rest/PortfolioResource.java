@@ -67,7 +67,7 @@ public class PortfolioResource extends BaseResource {
         User creator = userService.getUserByUsername(username);
         if (creator == null) throwBadRequestException("User does not exist with this username parameter");
 
-        return Response.ok(portfolioService.getCountByCreator(creator)).build();
+        return ok(portfolioService.getCountByCreator(creator));
     }
 
     @POST
