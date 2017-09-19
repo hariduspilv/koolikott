@@ -64,8 +64,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         AddCommentForm addCommentForm = new AddCommentForm();
 
         Portfolio portfolio = new Portfolio();
-        long portfolioId = 107L;
-        portfolio.setId(portfolioId);
+        portfolio.setId(107L);
         addCommentForm.setPortfolio(portfolio);
 
         Comment comment = new Comment();
@@ -86,8 +85,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         AddCommentForm addCommentForm = new AddCommentForm();
 
         Portfolio portfolio = new Portfolio();
-        long portfolioId = 7L;
-        portfolio.setId(portfolioId);
+        portfolio.setId(7L);
         addCommentForm.setPortfolio(portfolio);
 
         Comment comment = new Comment();
