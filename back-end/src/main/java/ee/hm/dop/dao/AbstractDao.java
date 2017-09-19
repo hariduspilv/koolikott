@@ -124,7 +124,6 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public void setDeleted(List<Long> id) {
-//        isDeletable();
         getEntityManager()
                 .createQuery(UPDATE + name() + ALIAS + SET_DELETED_TRUE + WHERE + fieldInEquals(ID))
                 .setParameter(ID, id)
@@ -135,21 +134,27 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         getEntityManager().remove(entity);
     }
 
-    private String getDistinctSelect() {
-        return "select distinct o from " + name() + ALIAS;
+    public Object getCount(){
+        return getEntityManager().createQuery(countSelect()).getSingleResult();
     }
 
-    private String getCountSelect() {
-        return "select count(o) from " + name() + ALIAS;
+    public Object getCountByField(String field, Object value){
+        return getEntityManager()
+                .createQuery(countSelect() + WHERE + fieldEquals(field))
+                .setParameter(field, value)
+                .getSingleResult();
     }
 
     private TypedQuery<Entity> getFindByFieldInQuery(String field, List<? extends Serializable> value) {
-        return getEntityManager().createQuery(select() + WHERE + fieldInEquals(field), entity()).setParameter(field, value);
+        return getEntityManager()
+                .createQuery(select() + WHERE + fieldInEquals(field), entity())
+                .setParameter(field, value);
     }
 
     private TypedQuery<Entity> getFindByFieldQuery(String field, Object value, boolean useCase) {
         String fieldEquals = useCase ? fieldEqualsLower(field) : fieldEquals(field);
-        return getEntityManager().createQuery(select() + WHERE + fieldEquals, entity())
+        return getEntityManager()
+                .createQuery(select() + WHERE + fieldEquals, entity())
                 .setParameter(field, useCase ? value.toString().toLowerCase() : value);
     }
 
@@ -190,6 +195,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
 
     public String select() {
         return "select o from " + name() + ALIAS;
+    }
+
+    private String countSelect() {
+        return "select count(o) from " + name() + ALIAS;
     }
 
     private String fieldEquals(String field) {

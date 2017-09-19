@@ -33,7 +33,7 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
                 .getResultList();
     }
 
-    public long getCount() {
+    public long getBrokenCount() {
         String queryString = "SELECT Count(b.id) FROM BrokenContent b " +
                 "INNER JOIN LearningObject lo ON b.material=lo.id " +
                 "WHERE lo.deleted = FALSE AND b.deleted = FALSE";

@@ -50,7 +50,7 @@ public class MaterialAdministrationService {
     }
 
     public Long getBrokenMaterialCount() {
-        return brokenContentDao.getCount();
+        return brokenContentDao.getBrokenCount();
     }
 
     public Boolean isBroken(long materialId) {

@@ -49,6 +49,8 @@ public class MaterialServiceTest {
     private ChangedLearningObjectService changedLearningObjectService;
     @Mock
     private MaterialHelper materialHelper;
+    @Mock
+    private FirstReviewService firstReviewService;
 
     @Test
     public void create() {
@@ -74,6 +76,7 @@ public class MaterialServiceTest {
         expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
+        expect(firstReviewService.save(material)).andReturn(null);
         solrEngineService.updateIndex();
 
         replayAll();

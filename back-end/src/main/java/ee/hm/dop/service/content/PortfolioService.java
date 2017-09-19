@@ -42,6 +42,8 @@ public class PortfolioService implements PermissionItem {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private PortfolioConverter portfolioConverter;
+    @Inject
+    private FirstReviewService firstReviewService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
@@ -194,6 +196,7 @@ public class PortfolioService implements PermissionItem {
         portfolio.setAdded(now());
 
         Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
+        firstReviewService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
         return createdPortfolio;
