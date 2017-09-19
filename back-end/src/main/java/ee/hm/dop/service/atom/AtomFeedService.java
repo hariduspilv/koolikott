@@ -188,7 +188,6 @@ public class AtomFeedService {
 
     private String translateString(String toTranslate) {
         Long langCode = languageDao.findByCode(lang).getId();
-
         return translationDAO.getTranslationByKeyAndLangcode(toTranslate, langCode);
     }
 

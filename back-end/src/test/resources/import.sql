@@ -162,7 +162,7 @@ insert into Picture(id, name, data) values(5, 'picture5', '656b6f6f6c6967896215'
 
 -- Thumbnail
 
-insert into Thumbnail(id, name, data) values(1, 'thumbnail1', '65425284561965bf7474');
+insert into Thumbnail(id, name, data, size) values(1, 'thumbnail1', '65425284561965bf7474', 'SM');
 
 -- Materials
 
@@ -566,3 +566,6 @@ insert into Material_PeerReview(material, peerReview) values (3, 2);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (1, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (2, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (107, 0, CURRENT_TIMESTAMP);
+
+INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
+INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');
