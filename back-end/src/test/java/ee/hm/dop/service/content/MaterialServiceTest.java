@@ -48,8 +48,6 @@ public class MaterialServiceTest {
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
     @Mock
-    private MaterialHelper materialHelper;
-    @Mock
     private FirstReviewService firstReviewService;
 
     @Test

@@ -57,8 +57,6 @@ public class MaterialService implements PermissionItem {
     @Inject
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
-    private MaterialHelper materialHelper;
-    @Inject
     private AuthorService authorService;
     @Inject
     private PublisherService publisherService;

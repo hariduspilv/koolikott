@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Singleton
@@ -60,13 +59,14 @@ public class SolrService implements SolrEngineService {
 
     @Override
     public SearchResponse search(String query, long start, String sort) {
-        return search(query, start, RESULTS_PER_PAGE, sort);
+        return search(query, start, sort, RESULTS_PER_PAGE);
     }
 
     @Override
-    public SearchResponse search(String query, long start, long limit, String sort) {
+    public SearchResponse search(String query, long start, String sort, long limit) {
         return executeCommand(
-                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
+                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start,
+                        Math.min(limit, RESULTS_PER_PAGE)));
     }
 
     @Override

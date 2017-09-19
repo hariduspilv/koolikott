@@ -33,7 +33,7 @@ public class EhisParser {
                     .parse(new InputSource(new StringReader(input)));
             doc.getDocumentElement().normalize();
             person = parse(doc);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         return person;

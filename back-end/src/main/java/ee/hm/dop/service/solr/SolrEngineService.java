@@ -8,7 +8,7 @@ public interface SolrEngineService {
 
     SearchResponse search(String query, long start, String sort);
 
-    SearchResponse search(String query, long start, long limit, String sort);
+    SearchResponse search(String query, long start, String sort, long limit);
 
     List<String> suggest(String query, boolean suggestTags);
 
