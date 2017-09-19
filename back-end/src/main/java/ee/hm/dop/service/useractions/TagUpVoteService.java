@@ -51,7 +51,7 @@ public class TagUpVoteService {
     }
 
     public TagUpVote getTagUpVote(Tag tag, LearningObject learningObject, User user) {
-        if (!learningObjectService.hasPermissionsToAccess(user, learningObject)) {
+        if (!learningObjectService.canAcess(user, learningObject)) {
             return null;
         }
 
@@ -60,7 +60,7 @@ public class TagUpVoteService {
 
     private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {
         if (tagUpVote.getId() != null && !Objects.equals(user.getId(), tagUpVote.getUser().getId())
-                || !learningObjectService.hasPermissionsToAccess(user, tagUpVote.getLearningObject())) {
+                || !learningObjectService.canAcess(user, tagUpVote.getLearningObject())) {
             throw new RuntimeException("Access denied");
         }
     }

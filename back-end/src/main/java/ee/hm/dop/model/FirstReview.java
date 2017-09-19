@@ -7,23 +7,24 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class FirstReview extends AbstractEntity{
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "learningObject", nullable = false)
     private LearningObject learningObject;
 
     @Column(nullable = false)
     private boolean reviewed;
 
-    @Column
+    @ManyToOne
+    @JoinColumn(name = "reviewedBy")
     private User reviewedBy;
 
     @Column

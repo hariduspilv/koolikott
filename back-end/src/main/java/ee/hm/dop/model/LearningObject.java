@@ -39,6 +39,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.MINIMAL_CLASS,
@@ -142,6 +143,9 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
 
+    @ManyToOne(fetch = LAZY)
+    private List<FirstReview> firstReviews;
+
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
 
@@ -156,6 +160,9 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
 
     @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
     private int changed;
+
+    @Formula(value = "(SELECT COUNT(*) FROM FirstReview fr WHERE fr.learningObject = id AND fr.reviewed = 0)")
+    private int unReviewed;
 
     /**
      * Last time when something was done to this LearningObject. It includes
@@ -328,5 +335,21 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
 
     public void setTaxons(List<Taxon> taxons) {
         this.taxons = taxons;
+    }
+
+    public int getUnReviewed() {
+        return unReviewed;
+    }
+
+    public void setUnReviewed(int unReviewed) {
+        this.unReviewed = unReviewed;
+    }
+
+    public List<FirstReview> getFirstReviews() {
+        return firstReviews;
+    }
+
+    public void setFirstReviews(List<FirstReview> firstReviews) {
+        this.firstReviews = firstReviews;
     }
 }

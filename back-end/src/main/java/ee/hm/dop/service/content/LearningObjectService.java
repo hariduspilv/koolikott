@@ -4,6 +4,7 @@ import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.User;
@@ -36,19 +37,37 @@ public class LearningObjectService {
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
-        return hasPermissionsToAccess(user, learningObject) ? learningObject : null;
+        return canAcess(user, learningObject) ? learningObject : null;
     }
 
-    public boolean hasPermissionsToAccess(User user, LearningObject learningObject) {
+    public boolean canAcess(User user, LearningObject learningObject) {
         if (learningObject == null) {
             return false;
         }
-        PermissionItem permissionItem = getLearningObjectHandler(learningObject);
-        return permissionItem.canAccess(user, learningObject);
+        return getLearningObjectHandler(learningObject).canAccess(user, learningObject);
+    }
+
+    public LearningObject validateAndFind(LearningObject material) {
+        validateteId(material);
+        LearningObject originalMaterial = learningObjectDao.findByIdNotDeleted(material.getId());
+        validateEntity(originalMaterial);
+        return originalMaterial;
+    }
+
+    private void validateEntity(LearningObject learningObject) {
+        if (learningObject == null || learningObject.getId() == null) {
+            throw new RuntimeException("LearningObject not found");
+        }
+    }
+
+    private void validateteId(LearningObject learningObject) {
+        if (learningObject == null) {
+            throw new RuntimeException("LearningObject not found");
+        }
     }
 
     public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
-        if (!hasPermissionsToAccess(user, learningObject)) {
+        if (!canAcess(user, learningObject)) {
             throw new RuntimeException("Access denied");
         }
 

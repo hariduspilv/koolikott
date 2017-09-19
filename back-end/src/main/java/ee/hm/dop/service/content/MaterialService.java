@@ -66,6 +66,8 @@ public class MaterialService implements PermissionItem {
     private KeyCompetenceService keyCompetenceService;
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
+    @Inject
+    private FirstReviewService firstReviewService;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
@@ -275,11 +277,14 @@ public class MaterialService implements PermissionItem {
 
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
+        boolean isNew;
         if (materialId == null) {
             logger.info("Creating material");
             material.setAdded(now());
+            isNew = true;
         } else {
             logger.info("Updating material");
+            isNew = false;
         }
         TextFieldUtil.cleanTextFields(material);
         checkKeyCompetences(material);
@@ -289,7 +294,12 @@ public class MaterialService implements PermissionItem {
         setPeerReviews(material);
         material = applyRestrictions(material);
 
-        return materialDao.createOrUpdate(material);
+        Material updatedMaterial = materialDao.createOrUpdate(material);
+        if (isNew) {
+            firstReviewService.save(updatedMaterial);
+        }
+
+        return updatedMaterial;
     }
 
     private Material applyRestrictions(Material material) {

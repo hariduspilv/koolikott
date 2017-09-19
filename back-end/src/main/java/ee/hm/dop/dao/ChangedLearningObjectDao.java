@@ -23,7 +23,7 @@ public class ChangedLearningObjectDao extends AbstractDao<ChangedLearningObject>
                 .executeUpdate() > 0;
     }
 
-    public long getCount() {
+    public Long getCount() {
         return (long) getEntityManager().createQuery("SELECT COUNT(DISTINCT clo.learningObject) FROM ChangedLearningObject clo").getSingleResult();
     }
 }
