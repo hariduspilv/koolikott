@@ -34,7 +34,7 @@ public class SearchFilter {
     public boolean isEmptySearch() {
         return isEmpty(taxon) &&
                 paid &&
-                type.equals("all") &&
+                StringUtils.isNotBlank(type) && type.equals("all") &&
                 language == null &&
                 isEmpty(targetGroups) &&
                 resourceType == null &&

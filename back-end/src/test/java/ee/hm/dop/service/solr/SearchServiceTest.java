@@ -28,6 +28,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.service.metadata.TargetGroupService;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -991,6 +992,9 @@ public class SearchServiceTest {
             expect(solrEngineService.search(tokenizedQuery, start, expectedSort, limit)).andReturn(searchResponse);
         }
 
+        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()){
+            expect(learningObjectDao.findAllNotDeleted()).andReturn(totalResults);
+        }
         expect(reducedLearningObjectDao.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
             for (Long id : learningObjectIdentifiers) {
