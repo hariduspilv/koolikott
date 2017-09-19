@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("changed")
-public class ChangedLearningObjectResource extends BaseResource {
+public class ChangedLearningObjectAdministrationResource extends BaseResource {
 
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
