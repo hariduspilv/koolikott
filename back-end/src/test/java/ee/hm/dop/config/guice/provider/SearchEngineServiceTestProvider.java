@@ -217,7 +217,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
 
     @Override
-    public SearchResponse search(String query, long start, long limit, String sort) {
+    public SearchResponse search(String query, long start, String sort, long limit) {
         if (sort == null) {
             return searchWithoutSorting(query, start, limit);
         } else {
@@ -232,7 +232,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     @Override
     public SearchResponse search(String query, long start, String sort) {
-        return search(query, start, RESULTS_PER_PAGE, sort);
+        return search(query, start, sort, RESULTS_PER_PAGE);
     }
 
     private SearchResponse searchWithoutSorting(String query, long start, long limit) {

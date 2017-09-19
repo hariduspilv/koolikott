@@ -12,6 +12,7 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -46,22 +47,24 @@ public class SearchService {
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
         String queryString = SearchConverter.composeQueryString(query, searchFilter);
+        String sort = SearchConverter.getSort(searchFilter);
 
-        SearchResponse searchResponse = search(start, limit, searchFilter, queryString);
+        SearchResponse searchResponse = search(start, limit, queryString, sort);
 
-//        if (StringUtils.isBlank(query) && searchFilter.isEmpty()){
-//            Long count = learningObjectDAO.findAllNotDeleted();
-//            searchResponse.getResponse().setTotalResults(count);
-//        }
+        /*// empty query hits every solr index causing massive results
+        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()) {
+            searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
+        }*/
 
         return handleResult(limit, searchFilter, searchResponse);
     }
 
-    private SearchResponse search(long start, Long limit, SearchFilter searchFilter, String queryString) {
+
+    private SearchResponse search(long start, Long limit, String queryString, String sort) {
         if (limit == null || limit == 0) {
-            return solrEngineService.search(queryString, start, getSort(searchFilter));
+            return solrEngineService.search(queryString, start, sort);
         }
-        return solrEngineService.search(queryString, start, limit, getSort(searchFilter));
+        return solrEngineService.search(queryString, start, sort, limit);
     }
 
     private SearchResult handleResult(Long limit, SearchFilter searchFilter, SearchResponse searchResponse) {
@@ -89,7 +92,7 @@ public class SearchService {
             reducedLearningObjectDao.findAllById(learningObjectIds).forEach(searchable -> {
                 if (loggedInUser != null) {
                     UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
-                    searchable.setFavorite(userFavorite != null && userFavorite.getId() != null);
+                    searchable.setFavorite(userFavorite != null);
                 }
                 unsortedSearchable.add(searchable);
             });
@@ -97,12 +100,6 @@ public class SearchService {
         return unsortedSearchable;
     }
 
-    private String getSort(SearchFilter searchFilter) {
-        if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
-            return String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection().getValue());
-        }
-        return null;
-    }
 
     private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
         Map<Long, Searchable> idToSearchable = new HashMap<>();
