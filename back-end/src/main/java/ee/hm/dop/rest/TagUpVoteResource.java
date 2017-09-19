@@ -42,7 +42,6 @@ public class TagUpVoteResource extends BaseResource {
         if (tagUpVote.getId() != null) {
             throwBadRequestException("TagUpVote already exists.");
         }
-
         LearningObject learningObject = learningObjectService.get(tagUpVote.getLearningObject().getId(), getLoggedInUser());
         if (learningObject == null) {
             throwBadRequestException("No such learning object");
