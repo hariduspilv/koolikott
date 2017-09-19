@@ -76,8 +76,7 @@ public class ImproperContentResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public List<ImproperContent> getImproperMaterials() {
-        User loggedInUser = getLoggedInUser();
-        return improperContentService.getImproperMaterials(loggedInUser);
+        return improperContentService.getImproperMaterials(getLoggedInUser());
     }
 
     @GET
@@ -85,8 +84,7 @@ public class ImproperContentResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public List<ImproperContent> getImproperPortfolios() {
-        User loggedInUser = getLoggedInUser();
-        return improperContentService.getImproperPortfolios(loggedInUser);
+        return improperContentService.getImproperPortfolios(getLoggedInUser());
     }
 
     @GET
@@ -94,8 +92,7 @@ public class ImproperContentResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public Response getImproperMaterialsCount() {
-        User loggedInUser = getLoggedInUser();
-        return ok(improperContentService.getImproperMaterialSize(loggedInUser));
+        return ok(improperContentService.getImproperMaterialSize(getLoggedInUser()));
     }
 
     @GET
@@ -103,8 +100,7 @@ public class ImproperContentResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public Response getImproperPortfoliosCount() {
-        User loggedInUser = getLoggedInUser();
-        return ok(improperContentService.getImproperPortfolioSize(loggedInUser));
+        return ok(improperContentService.getImproperPortfolioSize(getLoggedInUser()));
     }
 
     @DELETE
