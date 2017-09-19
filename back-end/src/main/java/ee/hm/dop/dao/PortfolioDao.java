@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Visibility;
 
 public class PortfolioDao extends AbstractDao<Portfolio> {
 
