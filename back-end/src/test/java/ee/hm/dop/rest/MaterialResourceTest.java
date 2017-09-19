@@ -206,7 +206,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void create() {
-        login("89012378912");
+        login(USER_SECOND);
 
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.ru");
@@ -242,7 +242,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void createWithKeyCompetencesWhenNotAllowed() {
-        login("89012378912");
+        login(USER_SECOND);
 
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.com");
@@ -286,7 +286,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addRecommendation() {
-        String idCode = "89898989898";
+        String idCode = USER_ADMIN;
         User user = login(idCode);
 
         Material material = materialService.get(3L, user);
@@ -302,7 +302,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeRecommendation() {
-        String idCode = "89898989898";
+        String idCode = USER_ADMIN;
         User user = login(idCode);
 
         Material material = materialService.get(3L, user);
@@ -314,7 +314,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setBrokenMaterial() {
-        login("89012378912");
+        login(USER_SECOND);
         long materialId = 5;
 
         Material material = getMaterial(materialId);
@@ -325,7 +325,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setNotBroken() {
-        login("89012378912");
+        login(USER_SECOND);
         long materialId = 5;
 
         Material material = getMaterial(materialId);
@@ -333,7 +333,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(MATERIAL_SET_NOT_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
-        login("89898989898");
+        login(USER_ADMIN);
         Response responseAdmin = doPost(MATERIAL_SET_NOT_BROKEN,
                 Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
@@ -347,7 +347,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void hasSetBroken() {
-        login("89012378912");
+        login(USER_SECOND);
         long materialId = 5;
 
         Material material = getMaterial(materialId);
@@ -364,7 +364,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void isBroken() {
-        login("89012378912");
+        login(USER_SECOND);
         long materialId = 5;
 
         Material material = getMaterial(materialId);
@@ -376,7 +376,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
                 MediaType.APPLICATION_JSON_TYPE);
         assertEquals(Status.FORBIDDEN.getStatusCode(), isBrokenResponse.getStatus());
 
-        login("89898989898");
+        login(USER_ADMIN);
 
         Response isBrokenResponseAdmin = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
                 MediaType.APPLICATION_JSON_TYPE);
@@ -387,11 +387,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getBroken() {
-        login("89012378912");
+        login(USER_SECOND);
         Response getBrokenResponse = doGet(MATERIAL_GET_BROKEN, MediaType.APPLICATION_JSON_TYPE);
         assertEquals(Status.FORBIDDEN.getStatusCode(), getBrokenResponse.getStatus());
 
-        login("89898989898");
+        login(USER_ADMIN);
 
         long materialId = 5;
         Material material = getMaterial(materialId);
@@ -412,7 +412,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Response response = doGet("material/getBySource?source=");
 
@@ -422,7 +422,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void GetMaterialsByNonExistantSource() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Response response = doGet("material/getBySource?source=https://www.youtube.com/watch?v=5_Ar7VXXsro");
 
@@ -434,7 +434,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void GetMaterialsBySource() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Response response = doGet("material/getBySource?source=https://en.wikipedia.org/wiki/Power_Architecture");
 
@@ -446,7 +446,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deleteAndRestore() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         Long materialId = 13L;
 
@@ -462,7 +462,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Long materialId = 12L;
 
@@ -472,7 +472,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void userCanNotRestoreRepositoryMaterial() {
-        login("38011550077");
+        login(USER_PEETER);
 
         Long materialId = 14L;
 

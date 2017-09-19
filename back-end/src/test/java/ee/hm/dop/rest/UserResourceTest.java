@@ -22,6 +22,8 @@ import org.junit.Test;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
+    public static final String USER_BILLY = "38211120031";
+
     @Test
     public void get() {
         User user = getUser("mati.maasikas");
@@ -87,8 +89,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getRoleUser() {
-        String idCode = "89012378912";
-        login(idCode);
+        login(USER_SECOND);
 
         Response response = doGet("user/role", MediaType.TEXT_PLAIN_TYPE);
         String roleString = response.readEntity(String.class);
@@ -97,8 +98,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getRoleAdmin() {
-        String idCode = "89898989898";
-        login(idCode);
+        login(USER_ADMIN);
 
         Response response = doGet("user/role", MediaType.TEXT_PLAIN_TYPE);
         String roleString = response.readEntity(String.class);
@@ -107,8 +107,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void restrictUserWithModerator() {
-        String moderatorIdCode = "38211120031";
-        login(moderatorIdCode);
+        login(USER_BILLY);
         Response userResponse = doGet("user?username=user.to.be.banned1");
         User userToRestrict = userResponse.readEntity(new GenericType<User>() {
         });
@@ -122,8 +121,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void restrictUserWithAdmin() {
-        String adminIdCode = "89898989898";
-        login(adminIdCode);
+        login(USER_ADMIN);
 
         Response userResponse = doGet("user?username=user.to.be.banned2");
         User userToRestrict = userResponse.readEntity(new GenericType<User>() {
@@ -138,8 +136,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void restrictUserNotAllowed() {
-        String idCode = "39011220011";
-        login(idCode);
+        login(USER_MATI);
 
         Response userResponse = doGet("user?username=user.to.be.banned");
         User userToRestrict = userResponse.readEntity(new GenericType<User>() {
@@ -152,8 +149,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeRestrictionWithAdmin() {
-        String adminIdCode = "89898989898";
-        login(adminIdCode);
+        login(USER_ADMIN);
 
         Response userResponse = doGet("user?username=restricted.user2");
         User userToRemoveRestrictionFrom = userResponse.readEntity(new GenericType<User>() {
@@ -169,8 +165,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getAll() {
-        String adminIdCode = "89898989898";
-        login(adminIdCode);
+        login(USER_ADMIN);
 
         Response response = doGet("user/all");
         List<User> allUsers = response.readEntity(new GenericType<List<User>>() {

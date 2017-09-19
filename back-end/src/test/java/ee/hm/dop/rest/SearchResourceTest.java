@@ -225,7 +225,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void searchAsAdmin() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         String query = "super";
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);

@@ -26,7 +26,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setImproperNoData() {
-        login("89012378912");
+        login(USER_SECOND);
         ImproperContent improperContent = new ImproperContent();
 
         Response response = doPut(IMPROPERS, Entity.entity(improperContent, MediaType.APPLICATION_JSON_TYPE));
@@ -35,7 +35,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setImproperNotExistemLearningObject() {
-        login("89012378912");
+        login(USER_SECOND);
         ImproperContent improperContent = new ImproperContent();
         Material material = new Material();
         material.setId(34534534L);
@@ -47,7 +47,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setImproper() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         ImproperContent improperContent = new ImproperContent();
 
@@ -69,7 +69,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImpropers() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         Response response = doGet(IMPROPERS);
         List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
@@ -81,7 +81,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperMaterials() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         Response response = doGet(IMPROPER_MATERIALS);
         List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
@@ -93,7 +93,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperPortfolios() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         Response response = doGet(IMPROPER_PORTFOLIOS);
         List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
@@ -105,7 +105,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperByLearningObject() {
-        login("89012378912");
+        login(USER_SECOND);
 
         Response response = doGet(format("impropers?learningObject=%s", 103L));
         List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
@@ -118,7 +118,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeImproperByLearningObject() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         ImproperContent improperContent = new ImproperContent();
         Portfolio portfolio = new Portfolio();

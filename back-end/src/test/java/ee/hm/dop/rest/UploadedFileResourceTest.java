@@ -1,7 +1,6 @@
 package ee.hm.dop.rest;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.FILE_UPLOAD_DIRECTORY;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
@@ -15,8 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
@@ -66,7 +63,6 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void uploadFile() throws IOException {
-
         final String REGEX = "(\\d+)(?!.*\\d)";
         final String FILE_NAME = "testFileForPostUploadedFile";
         final String FILE_EXTENSION = ".dop";
@@ -74,7 +70,7 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
         final FileDataBodyPart filePart = new FileDataBodyPart("file", tempFile);
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
 
-        login("89012378912");
+        login(ResourceIntegrationTestBase.USER_SECOND);
 
         Response response = doPost("uploadedFile", Entity.entity(formDataMultiPart,
                 MediaType.MULTIPART_FORM_DATA), MediaType.APPLICATION_JSON_TYPE);
