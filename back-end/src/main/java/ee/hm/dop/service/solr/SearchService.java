@@ -51,10 +51,10 @@ public class SearchService {
 
         SearchResponse searchResponse = search(start, limit, queryString, sort);
 
-        /*// empty query hits every solr index causing massive results
+        // empty query hits every solr index causing massive results
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()) {
             searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
-        }*/
+        }
 
         return handleResult(limit, searchFilter, searchResponse);
     }
