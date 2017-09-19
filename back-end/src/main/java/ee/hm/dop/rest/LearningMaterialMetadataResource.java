@@ -30,7 +30,7 @@ import java.net.HttpURLConnection;
 import java.util.List;
 
 @Path("learningMaterialMetadata")
-public class LearningMaterialMetadataResource {
+public class LearningMaterialMetadataResource extends BaseResource{
 
     public static final String MAX_AGE_120 = "max-age=120";
     @Inject

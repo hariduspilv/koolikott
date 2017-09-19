@@ -42,7 +42,7 @@ public class ChangedLearningObjectResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response acceptAllChanges(@PathParam("id") long id) {
         changedLearningObjectService.acceptAllChanges(id);
-        return Response.ok().build();
+        return ok();
     }
 
     @GET
@@ -56,7 +56,7 @@ public class ChangedLearningObjectResource extends BaseResource {
     @Path("count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response getCount() {
-        return Response.ok(changedLearningObjectService.getCount()).build();
+        return ok(changedLearningObjectService.getCount());
     }
 
 }

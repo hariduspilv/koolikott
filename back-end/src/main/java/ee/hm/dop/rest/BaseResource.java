@@ -32,6 +32,14 @@ public class BaseResource {
         this.securityContext = securityContext;
     }
 
+    protected Response ok() {
+        return Response.ok().build();
+    }
+
+    protected Response ok(Object data) {
+        return Response.ok(data).build();
+    }
+
     protected User getLoggedInUser() {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
         return authenticatedUser != null ? authenticatedUser.getUser() : null;

@@ -36,7 +36,7 @@ public class FirstReviewAdministrationResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnReviewedCount() {
-        return Response.ok(firstReviewService.getUnReviewedCount()).build();
+        return ok(firstReviewService.getUnReviewedCount());
     }
 
     @POST
