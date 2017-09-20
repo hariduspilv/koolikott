@@ -26,10 +26,6 @@ public class LearningObjectService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private MaterialDao materialDao;
-    @Inject
-    private PortfolioDao portfolioDao;
-    @Inject
     private TagService tagService;
     @Inject
     private TagConverter tagConverter;
@@ -67,19 +63,8 @@ public class LearningObjectService {
         return updatedLearningObject;
     }
 
-    //todo this method doesn't make sense, as type information is lost in return value
-    private LearningObject getLearningObjectByType(Long learningObjectId, String type) {
-        if (LearningObjectUtils.isMaterial(type)) {
-            return materialDao.findById(learningObjectId);
-        }
-        if (LearningObjectUtils.isPortfolio(type)) {
-            return portfolioDao.findById(learningObjectId);
-        }
-        return null;
-    }
-
-    public TagDTO addSystemTag(Long learningObjectId, String type, String tagName, User user) {
-        LearningObject learningObject = getLearningObjectByType(learningObjectId, type);
+    public TagDTO addSystemTag(Long learningObjectId, String tagName, User user) {
+        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
         ValidatorUtil.mustHaveEntity(learningObject);
 
         LearningObject newLearningObject = addTag(learningObject, findOrMakeNewTag(tagName), user);
