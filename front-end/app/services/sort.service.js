@@ -76,7 +76,11 @@ function SortService(translationService, taxonService) {
                     case "byUpdatedAt": case "-byUpdatedAt":
                         return new Date(b.updated) - new Date(a.updated);
                     case "byAddedAt": case "-byAddedAt":
-                        return new Date(b.added) - new Date(a.added);
+                        return b.added && a.added
+                            ? new Date(b.added) - new Date(a.added)
+                            : b.learningObject && a.learningObject
+                                ? new Date(b.learningObject.added) - new Date(a.learningObject.added)
+                                : 0;
                     default:
                         return 0;
                 }
