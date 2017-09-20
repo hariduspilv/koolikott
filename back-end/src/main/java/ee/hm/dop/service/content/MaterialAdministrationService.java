@@ -16,25 +16,12 @@ public class MaterialAdministrationService {
     private MaterialDao materialDao;
     @Inject
     private BrokenContentDao brokenContentDao;
+    @Inject
+    private MaterialService materialService;
 
     public void setMaterialNotBroken(Material material) {
-        validId(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validEntity(originalMaterial);
-
+        Material originalMaterial = materialService.validateAndFindNotDeleted(material);
         brokenContentDao.deleteBrokenMaterials(originalMaterial.getId());
-    }
-
-    private void validEntity(Material originalMaterial) {
-        if (originalMaterial == null) {
-            throw new RuntimeException("Material not found while adding broken material");
-        }
-    }
-
-    private void validId(Material material) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found while adding broken material");
-        }
     }
 
     public List<Material> getDeletedMaterials() {

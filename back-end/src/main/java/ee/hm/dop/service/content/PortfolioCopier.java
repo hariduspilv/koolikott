@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ public class PortfolioCopier {
         Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
         if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throw ValidatorUtil.permissionError();
         }
 
         Portfolio copy = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);

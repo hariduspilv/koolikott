@@ -11,6 +11,7 @@ import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 public class UserLikeService {
@@ -19,8 +20,6 @@ public class UserLikeService {
     private UserLikeDao userLikeDao;
     @Inject
     private MaterialService materialService;
-    @Inject
-    private PortfolioDao portfolioDao;
     @Inject
     private PortfolioService portfolioService;
 
@@ -37,11 +36,10 @@ public class UserLikeService {
     }
 
     public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
         if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throw ValidatorUtil.permissionError();
         }
 
         userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
@@ -59,30 +57,22 @@ public class UserLikeService {
     }
 
     public void removeUserLike(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
         if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throw ValidatorUtil.permissionError();
         }
 
         userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
     }
 
     public UserLike getUserLike(Portfolio portfolio, User loggedInUser) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
+        Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
         if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throw ValidatorUtil.permissionError();
         }
 
         return userLikeDao.findPortfolioUserLike(originalPortfolio, loggedInUser);
-    }
-
-    private void validate(Portfolio portfolio) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
     }
 }

@@ -112,7 +112,7 @@ public class MaterialService implements PermissionItem {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
 
         Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
-        ValidatorUtil.validateEntity(originalMaterial);
+        ValidatorUtil.mustHaveEntity(originalMaterial);
 
         materialDao.delete(originalMaterial);
         solrEngineService.updateIndex();
@@ -183,7 +183,7 @@ public class MaterialService implements PermissionItem {
     }
 
     public UserLike getUserLike(Material material, User loggedInUser) {
-        ValidatorUtil.validateId(material);
+        ValidatorUtil.mustHaveId(material);
         return userLikeDao.findMaterialUserLike(material, loggedInUser);
     }
 
@@ -196,7 +196,7 @@ public class MaterialService implements PermissionItem {
     }
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
-        ValidatorUtil.validateId(material);
+        ValidatorUtil.mustHaveId(material);
         material.setSource(UrlUtil.processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {

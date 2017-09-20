@@ -131,16 +131,15 @@ public class RepositoryService {
     }
 
     boolean isRepoMaterial(Repository repository, Material existentMaterial) {
-        boolean isRepoMaterial = false;
         String domainName = getDomainName(existentMaterial.getSource());
         if (StringUtils.isNotBlank(domainName)) {
             for (RepositoryURL repositoryURL : repository.getRepositoryURLs()) {
                 if (getDomainName(repositoryURL.getBaseURL()).equals(domainName)) {
-                    isRepoMaterial = true;
+                    return true;
                 }
             }
         }
-        return isRepoMaterial;
+        return false;
     }
 
     String getDomainName(String url) {

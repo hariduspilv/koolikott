@@ -3,6 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.ImproperContentDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.utils.UserUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -34,9 +35,7 @@ public class ImproperContentService {
             throw new RuntimeException("Invalid Improper object.");
         }
         LearningObject learningObject = learningObjectService.get(improperContent.getLearningObject().getId(), creator);
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject does not exists.");
-        }
+        ValidatorUtil.mustHaveEntity(learningObject);
         return learningObject;
     }
 
