@@ -15,10 +15,9 @@ public class EntityManagerFactoryTestProvider extends EntityManagerFactoryProvid
         Map<String, String> properties = super.getDatabaseProperties();
         properties.put("hibernate.connection.driver_class", "org.h2.Driver");
         properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.show_sql", "false");
         properties.put("hibernate.hbm2ddl.auto", "create");
         properties.put("hibernate.connection.url", "jdbc:h2:mem:test;MODE=MySQL");
-
         return properties;
     }
 }

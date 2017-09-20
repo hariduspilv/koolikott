@@ -213,7 +213,7 @@ public class PortfolioService implements PermissionItem {
     }
 
     public boolean canView(User loggedInUser, Portfolio portfolio) {
-        return isNotPrivate(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser);
+        return portfolio != null && (isNotPrivate(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser));
     }
 
     @Override

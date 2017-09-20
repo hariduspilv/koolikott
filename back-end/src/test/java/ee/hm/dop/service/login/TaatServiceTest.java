@@ -24,8 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.service.login.LoginService;
-import ee.hm.dop.service.login.TaatService;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMock;
@@ -178,7 +176,7 @@ public class TaatServiceTest {
 
         String idCode = "11111111111";
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
-        expect(loginService.logIn(idCode, "TestTäisnimi", "TestPerenimi")).andReturn(authenticatedUser);
+        expect(loginService.login(idCode, "TestTäisnimi", "TestPerenimi")).andReturn(authenticatedUser);
 
         validator.validate(EasyMock.anyObject(Signature.class));
 

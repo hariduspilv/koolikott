@@ -18,8 +18,6 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.stuudium.StuudiumUser;
-import ee.hm.dop.service.login.LoginService;
-import ee.hm.dop.service.login.StuudiumService;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMockRunner;
@@ -79,7 +77,7 @@ public class StuudiumServiceTest {
 
         expect(response.readEntity(StuudiumUser.class)).andReturn(stuudiumUser);
 
-        expect(loginService.logIn(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
+        expect(loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
                 .andReturn(authenticatedUser);
 
         replayAll(response);

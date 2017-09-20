@@ -60,7 +60,7 @@ public class LoginResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser idCardLogin() {
         if (isAuthValid()) {
-            return loginService.logIn(getIdCodeFromRequest(), getNameFromRequest(), getSurnameFromRequest());
+            return loginService.login(getIdCodeFromRequest(), getNameFromRequest(), getSurnameFromRequest());
         }
         return null;
     }

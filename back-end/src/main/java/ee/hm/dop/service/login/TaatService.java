@@ -112,7 +112,7 @@ public class TaatService {
     }
 
     private AuthenticatedUser login(Map<String, String> dataMap) {
-        return loginService.logIn(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
+        return loginService.login(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
     }
 
     private void validateAuthenticationToken(String authenticationStateToken) {
