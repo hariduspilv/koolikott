@@ -18,36 +18,36 @@ public class ValidatorUtil {
     }
 
     public static Portfolio findValid(Portfolio entity, Function<Long, Portfolio> getFromDb){
-        mustHaveId(entity, Portfolio.class);
+        mustHaveId(entity);
         Portfolio dbEntity = getFromDb.apply(entity.getId());
-        mustHaveEntity(dbEntity, Portfolio.class);
+        mustHaveEntity(dbEntity);
         return dbEntity;
     }
 
     public static Material findValid(Material entity, Function<Long, Material> getFromDb){
-        mustHaveId(entity, Material.class);
+        mustHaveId(entity);
         Material dbEntity = getFromDb.apply(entity.getId());
-        mustHaveEntity(dbEntity, Material.class);
+        mustHaveEntity(dbEntity);
         return dbEntity;
     }
 
     public static LearningObject findValid(LearningObject entity, Function<Long, LearningObject> getFromDb){
-        mustHaveId(entity, Material.class);
+        mustHaveId(entity);
         LearningObject dbEntity = getFromDb.apply(entity.getId());
-        mustHaveEntity(dbEntity, Material.class);
+        mustHaveEntity(dbEntity);
         return dbEntity;
     }
 
-    public static void mustNotHaveId(Portfolio portfolio) {
-        mustNotHaveId(portfolio, Portfolio.class);
+    public static void mustNotHaveId(Portfolio entity) {
+        mustNotHaveId(entity, Portfolio.class);
     }
 
-    public static void mustNotHaveId(Material material) {
-        mustNotHaveId(material, Material.class);
+    public static void mustNotHaveId(Material entity) {
+        mustNotHaveId(entity, Material.class);
     }
 
-    public static void mustNotHaveId(LearningObject learningObject) {
-        mustNotHaveId(learningObject, LearningObject.class);
+    public static void mustNotHaveId(LearningObject entity) {
+        mustNotHaveId(entity, LearningObject.class);
     }
 
     public static void mustHaveEntity(Portfolio entity){
