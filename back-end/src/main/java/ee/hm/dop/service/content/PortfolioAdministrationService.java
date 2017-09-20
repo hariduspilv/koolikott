@@ -5,6 +5,7 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -28,15 +29,9 @@ public class PortfolioAdministrationService {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
 
         Portfolio originalPortfolio = portfolioDao.findDeletedById(portfolio.getId());
-        validateEntity(originalPortfolio);
+        ValidatorUtil.mustHaveEntity(originalPortfolio);
 
         portfolioDao.restore(originalPortfolio);
         solrEngineService.updateIndex();
-    }
-
-    private void validateEntity(Portfolio originalPortfolio) {
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
     }
 }

@@ -4,7 +4,6 @@ import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.User;
@@ -18,7 +17,6 @@ import ee.hm.dop.utils.ValidatorUtil;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 
 public class LearningObjectService {
@@ -49,10 +47,7 @@ public class LearningObjectService {
     }
 
     public LearningObject validateAndFind(LearningObject learningObject) {
-        ValidatorUtil.validateId(learningObject);
-        LearningObject originalLearningObject = learningObjectDao.findByIdNotDeleted(learningObject.getId());
-        ValidatorUtil.validateEntity(originalLearningObject);
-        return originalLearningObject;
+        return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdNotDeleted);
     }
 
     public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
@@ -72,6 +67,7 @@ public class LearningObjectService {
         return updatedLearningObject;
     }
 
+    //todo this method doesn't make sense, as type information is lost in return value
     private LearningObject getLearningObjectByType(Long learningObjectId, String type) {
         if (LearningObjectUtils.isMaterial(type)) {
             return materialDao.findById(learningObjectId);
@@ -84,9 +80,8 @@ public class LearningObjectService {
 
     public TagDTO addSystemTag(Long learningObjectId, String type, String tagName, User user) {
         LearningObject learningObject = getLearningObjectByType(learningObjectId, type);
-        if (learningObject == null) {
-            throw new NoSuchElementException();
-        }
+        ValidatorUtil.mustHaveEntity(learningObject);
+
         Tag tag = findOrMakeNewTag(tagName);
         LearningObject newLearningObject = addTag(learningObject, tag, user);
         return tagConverter.getTagDTO(tagName, newLearningObject, user);

@@ -43,7 +43,6 @@ public class UserService {
         user.setIdCode(idCode);
         user.setName(name);
         user.setSurname(surname);
-
         return create(user);
     }
 
@@ -79,24 +78,15 @@ public class UserService {
     }
 
     public List<User> getModerators(User loggedInUser) {
-        if (UserUtil.isUserAdmin(loggedInUser)) {
-            return userDao.getUsersByRole(Role.MODERATOR);
-        }
-        return null;
+        return UserUtil.isUserAdmin(loggedInUser) ? userDao.getUsersByRole(Role.MODERATOR) : null;
     }
 
     public List<User> getRestrictedUsers(User loggedInUser) {
-        if (UserUtil.isUserAdmin(loggedInUser)) {
-            return userDao.getUsersByRole(Role.RESTRICTED);
-        }
-        return null;
+        return UserUtil.isUserAdmin(loggedInUser) ? userDao.getUsersByRole(Role.RESTRICTED) : null;
     }
 
     public List<User> getAllUsers(User loggedInUser) {
-        if (UserUtil.isUserAdmin(loggedInUser)) {
-            return userDao.findAll();
-        }
-        return null;
+        return UserUtil.isUserAdmin(loggedInUser) ? userDao.findAll() : null;
     }
 
     public String generateUsername(String name, String surname) {

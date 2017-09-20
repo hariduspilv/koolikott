@@ -6,6 +6,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserFavorite;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ public class UserFavoriteService {
     private UserFavoriteDao userFavoriteDao;
 
     public UserFavorite addUserFavorite(LearningObject learningObject, User loggedInUser) {
-        validateLearningObjectAndIdNotNull(learningObject);
+        ValidatorUtil.mustHaveId(learningObject);
 
         UserFavorite userFavorite = new UserFavorite();
         userFavorite.setAdded(DateTime.now());
@@ -32,7 +33,7 @@ public class UserFavoriteService {
     public void removeUserFavorite(Long id, User loggedInUser) {
         LearningObject learningObject = learningObjectDao.findById(id);
 
-        validateLearningObjectAndIdNotNull(learningObject);
+        ValidatorUtil.mustHaveId(learningObject);
         userFavoriteDao.deleteByLearningObjectAndUser(learningObject, loggedInUser);
     }
 
@@ -47,11 +48,5 @@ public class UserFavoriteService {
 
     public long getUserFavoritesSize(User loggedInUser) {
         return userFavoriteDao.findUsersFavoritedLearningObjectsCount(loggedInUser);
-    }
-
-    private void validateLearningObjectAndIdNotNull(LearningObject learningObject) {
-        if (learningObject == null || learningObject.getId() == null) {
-            throw new RuntimeException("LearningObject not found");
-        }
     }
 }

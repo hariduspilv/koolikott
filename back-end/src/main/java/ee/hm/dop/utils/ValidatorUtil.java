@@ -9,60 +9,94 @@ import java.util.function.Function;
 
 public class ValidatorUtil {
 
+    public static final String PERMISSION_MSG = "Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.";
+    public static final String NOT_FOUND = " not found";
+    public static final String ALREADY_EXISTS = " already exists.";
+
+    public static RuntimeException permissionError() {
+        return new RuntimeException(PERMISSION_MSG);
+    }
+
     public static Portfolio findValid(Portfolio entity, Function<Long, Portfolio> getFromDb){
-        validateId(entity, Portfolio.class);
+        mustHaveId(entity, Portfolio.class);
         Portfolio dbEntity = getFromDb.apply(entity.getId());
-        validateEntity(dbEntity, Portfolio.class);
+        mustHaveEntity(dbEntity, Portfolio.class);
         return dbEntity;
     }
 
     public static Material findValid(Material entity, Function<Long, Material> getFromDb){
-        validateId(entity, Material.class);
+        mustHaveId(entity, Material.class);
         Material dbEntity = getFromDb.apply(entity.getId());
-        validateEntity(dbEntity, Material.class);
+        mustHaveEntity(dbEntity, Material.class);
         return dbEntity;
     }
 
     public static LearningObject findValid(LearningObject entity, Function<Long, LearningObject> getFromDb){
-        validateId(entity, Material.class);
+        mustHaveId(entity, Material.class);
         LearningObject dbEntity = getFromDb.apply(entity.getId());
-        validateEntity(dbEntity, Material.class);
+        mustHaveEntity(dbEntity, Material.class);
         return dbEntity;
     }
 
-    public static void validateEntity(Portfolio entity){
-        validateEntity(entity, Portfolio.class);
+    public static void mustNotHaveId(Portfolio portfolio) {
+        mustNotHaveId(portfolio, Portfolio.class);
     }
 
-    public static void validateId(Portfolio entity){
-        validateId(entity, Portfolio.class);
+    public static void mustNotHaveId(Material material) {
+        mustNotHaveId(material, Material.class);
     }
 
-    public static void validateEntity(Material entity){
-        validateEntity(entity, Material.class);
+    public static void mustNotHaveId(LearningObject learningObject) {
+        mustNotHaveId(learningObject, LearningObject.class);
     }
 
-    public static void validateId(Material entity){
-        validateId(entity, Material.class);
+    public static void mustHaveEntity(Portfolio entity){
+        mustHaveEntity(entity, Portfolio.class);
     }
 
-    public static void validateEntity(LearningObject entity){
-        validateEntity(entity, LearningObject.class);
+    public static void mustHaveId(Portfolio entity){
+        mustHaveId(entity, Portfolio.class);
     }
 
-    public static void validateId(LearningObject entity){
-        validateId(entity, LearningObject.class);
+    public static void mustHaveEntity(Material entity){
+        mustHaveEntity(entity, Material.class);
     }
 
-    private static void validateEntity(AbstractEntity entity, Class<? extends AbstractEntity> clazz){
+    public static void mustHaveId(Material entity){
+        mustHaveId(entity, Material.class);
+    }
+
+    public static void mustHaveEntity(LearningObject entity){
+        mustHaveEntity(entity, LearningObject.class);
+    }
+
+    public static void mustHaveId(LearningObject entity){
+        mustHaveId(entity, LearningObject.class);
+    }
+
+    private static void mustHaveEntity(AbstractEntity entity, Class<? extends AbstractEntity> clazz){
         if (entity == null){
-            throw new RuntimeException(clazz.getSimpleName() + " not found");
+            throw notFound(clazz);
         }
     }
 
-    private static void validateId(AbstractEntity entity, Class<? extends AbstractEntity> clazz){
+    private static void mustHaveId(AbstractEntity entity, Class<? extends AbstractEntity> clazz){
         if (entity == null || entity.getId() == null){
-            throw new RuntimeException(clazz.getSimpleName() + " not found");
+            throw notFound(clazz);
         }
+    }
+
+    private static RuntimeException notFound(Class<? extends AbstractEntity> clazz) {
+        return new RuntimeException(clazz.getSimpleName() + NOT_FOUND);
+    }
+
+    public static void mustNotHaveId(AbstractEntity entity, Class<? extends AbstractEntity> clazz) {
+        if (entity.getId() != null) {
+            throw alreadyExists(clazz);
+        }
+    }
+
+    private static RuntimeException alreadyExists(Class<? extends AbstractEntity> clazz) {
+        return new RuntimeException(clazz.getSimpleName() + ALREADY_EXISTS);
     }
 }
