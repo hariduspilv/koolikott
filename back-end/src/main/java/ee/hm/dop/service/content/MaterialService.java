@@ -18,10 +18,7 @@ import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
-import ee.hm.dop.utils.TaxonUtils;
-import ee.hm.dop.utils.TextFieldUtil;
-import ee.hm.dop.utils.UrlUtil;
-import ee.hm.dop.utils.UserUtil;
+import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
 import org.joda.time.DateTime;
@@ -114,7 +111,7 @@ public class MaterialService implements PermissionItem {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
 
         Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
-        validateMaterialNotNull(originalMaterial);
+        ValidatorUtil.validateEntity(originalMaterial);
 
         materialDao.delete(originalMaterial);
         solrEngineService.updateIndex();
@@ -125,7 +122,7 @@ public class MaterialService implements PermissionItem {
         UserUtil.mustBeAdmin(loggedInUser);
 
         Material originalMaterial = materialDao.findById(material.getId());
-        validateMaterialNotNull(originalMaterial);
+        ValidatorUtil.validateEntity(originalMaterial);
 
         materialDao.restore(originalMaterial);
         solrEngineService.updateIndex();
@@ -164,9 +161,9 @@ public class MaterialService implements PermissionItem {
     }
 
     public Material validateAndFind(Material material) {
-        validateMaterialAndIdNotNull(material);
+        ValidatorUtil.validateId(material);
         Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        validateMaterialNotNull(originalMaterial);
+        ValidatorUtil.validateEntity(originalMaterial);
         return originalMaterial;
     }
 
@@ -185,7 +182,7 @@ public class MaterialService implements PermissionItem {
     }
 
     public UserLike getUserLike(Material material, User loggedInUser) {
-        validateMaterialAndIdNotNull(material);
+        ValidatorUtil.validateId(material);
         return userLikeDao.findMaterialUserLike(material, loggedInUser);
     }
 
@@ -198,7 +195,7 @@ public class MaterialService implements PermissionItem {
     }
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
-        validateMaterialAndIdNotNull(material);
+        ValidatorUtil.validateId(material);
         material.setSource(UrlUtil.processURL(material.getSource()));
 
         if (materialWithSameSourceExists(material)) {
@@ -337,18 +334,6 @@ public class MaterialService implements PermissionItem {
 
     public Boolean hasSetBroken(long materialId, User loggedInUser) {
         return isNotEmpty(brokenContentDao.findByMaterialAndUser(materialId, loggedInUser));
-    }
-
-    private void validateMaterialAndIdNotNull(Material material) {
-        if (material == null || material.getId() == null) {
-            throw new RuntimeException("Material not found");
-        }
-    }
-
-    private void validateMaterialNotNull(Material material) {
-        if (material == null) {
-            throw new RuntimeException("Material not found");
-        }
     }
 
     @Override

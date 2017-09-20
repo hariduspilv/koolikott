@@ -18,6 +18,7 @@ import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
@@ -68,7 +69,7 @@ public class PortfolioService implements PermissionItem {
 
     public void incrementViewCount(Portfolio portfolio) {
         Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
-        validateEntity(originalPortfolio);
+        ValidatorUtil.validateEntity(originalPortfolio);
 
         portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
@@ -249,22 +250,10 @@ public class PortfolioService implements PermissionItem {
         }
     }
 
-    private void validateEntity(Portfolio originalPortfolio) {
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-    }
-
-    private void validate(Portfolio portfolio) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-    }
-
     private Portfolio findValid(Portfolio portfolio) {
-        validate(portfolio);
+        ValidatorUtil.validateId(portfolio);
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        validateEntity(originalPortfolio);
+        ValidatorUtil.validateEntity(originalPortfolio);
         return originalPortfolio;
     }
 }
