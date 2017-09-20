@@ -5,7 +5,6 @@ import ee.hm.dop.model.LearningObject;
 public class TagDTO {
 
     private LearningObject learningObject;
-
     private String tagTypeName;
 
     public TagDTO() {}
