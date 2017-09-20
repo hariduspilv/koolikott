@@ -3,6 +3,8 @@ package ee.hm.dop.rest;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
@@ -15,8 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTestBase {
 
@@ -31,9 +32,13 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         BigDecimal count = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
-        assertEquals(firstReviews.size(), count.longValueExact());
+        assertEquals("UnReviewed size, UnReviewed count", firstReviews.size(), count.longValueExact());
 
-        LearningObject learningObject = firstReviews.get(0).getLearningObject();
+        LearningObject learningObject = firstReviews.stream()
+                .map(FirstReview::getLearningObject)
+                .filter(l -> l.getId() == 1L)
+                .findAny()
+                .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
         Response updateResponse = doPost(SET_REVIEWED, Entity.entity(learningObject, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
@@ -45,12 +50,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
         assertTrue(noneMatchUpdatedOne);
 
         BigDecimal count2 = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
-        assertEquals(firstReviews2.size(), count2.longValueExact());
-    }
-
-    private GenericType<List<FirstReview>> listType() {
-        return new GenericType<List<FirstReview>>() {
-        };
+        assertEquals("UnReviewed size, UnReviewed count", firstReviews2.size(), count2.longValueExact());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
         login(USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
-        assertTrue(CollectionUtils.isNotEmpty(firstReviews));
+        assertTrue("UnReviewed list", CollectionUtils.isNotEmpty(firstReviews));
     }
 
     @Test
@@ -70,6 +70,49 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
         boolean noneMatchUpdatedOne = firstReviews.stream().map(FirstReview::getLearningObject).map(LearningObject::getId)
                 .noneMatch(l -> l.equals(PRIVATE_PORTFOLIO));
         assertTrue(noneMatchUpdatedOne);
-        assertTrue(CollectionUtils.isNotEmpty(firstReviews));
+        assertTrue("UnReviewed list", CollectionUtils.isNotEmpty(firstReviews));
+    }
+
+    @Test
+    public void getUnreviewed_returns_different_unReviewed_materials_based_on_user() {
+        login(USER_MODERATOR);
+        List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
+
+        login(USER_ADMIN);
+        List<FirstReview> firstReviewsAdmin = doGet(GET_UNREVIEWED, listType());
+
+        assertNotEquals("Admin UnReviewed list, Moderator UnReviewed list", firstReviewsAdmin, firstReviewsModerator);
+    }
+
+    @Test
+    public void unreviewed_learningObject_is_unreviewed() throws Exception {
+        login(USER_ADMIN);
+        Material material = getMaterial(2L);
+        assertEquals("Is reviewed", 1, material.getUnReviewed());
+    }
+
+    @Test
+    public void unreviewed_learningObject_after_being_set_reviewed_is_reviewed() throws Exception {
+        login(USER_ADMIN);
+        Material material = getMaterial(2L);
+        assertEquals("Is Reviewed",1, material.getUnReviewed());
+
+        Response updateResponse = doPost(SET_REVIEWED, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
+
+        Material materialAfter = getMaterial(2L);
+        assertEquals("Is Reviewed",0, materialAfter.getUnReviewed());
+    }
+
+    @Test
+    public void unAuthorized_user_can_not_view() throws Exception {
+        login(USER_MATI);
+        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
+        assertNull("UnReviewed list", firstReviews);
+    }
+
+    private GenericType<List<FirstReview>> listType() {
+        return new GenericType<List<FirstReview>>() {
+        };
     }
 }

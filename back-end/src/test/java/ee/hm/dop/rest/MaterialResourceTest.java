@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
-    private static final String GET_MATERIAL_URL = "material?materialId=%s";
+    public static final String GET_MATERIAL_URL = "material?materialId=%s";
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
@@ -516,9 +516,5 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertTrue(material.isSpecialEducation());
         assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
-    }
-
-    private Material getMaterial(long materialId) {
-        return doGet(format(GET_MATERIAL_URL, materialId), Material.class);
     }
 }

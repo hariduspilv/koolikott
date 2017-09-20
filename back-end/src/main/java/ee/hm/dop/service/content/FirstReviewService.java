@@ -22,12 +22,20 @@ public class FirstReviewService {
     @Inject
     private LearningObjectService learningObjectService;
 
-    public List<FirstReview> getUnReviewed() {
-        return firstReviewDao.findAllUnreviewed();
+    public List<FirstReview> getUnReviewed(User loggedInUser) {
+        if (UserUtil.isUserAdmin(loggedInUser)) {
+            return firstReviewDao.findAllUnreviewed();
+        } else {
+            return firstReviewDao.findAllUnreviewed(loggedInUser);
+        }
     }
 
-    public BigDecimal getUnReviewedCount() {
-        return firstReviewDao.findCountOfUnreviewed();
+    public BigDecimal getUnReviewedCount(User loggedInUser) {
+        if (UserUtil.isUserAdmin(loggedInUser)) {
+            return firstReviewDao.findCountOfUnreviewed();
+        } else {
+            return firstReviewDao.findCountOfUnreviewed(loggedInUser);
+        }
     }
 
     public FirstReview save(LearningObject learningObject) {
