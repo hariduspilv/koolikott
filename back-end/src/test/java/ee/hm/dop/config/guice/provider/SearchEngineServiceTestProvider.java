@@ -22,9 +22,11 @@ import ee.hm.dop.service.solr.SolrEngineService;
 @Singleton
 public class SearchEngineServiceTestProvider implements Provider<SolrEngineService> {
 
+    private SolrEngineServiceMock instance = new SolrEngineServiceMock();
+
     @Override
     public synchronized SolrEngineService get() {
-        return new SolrEngineServiceMock();
+        return instance;
     }
 }
 

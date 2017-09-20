@@ -5,6 +5,8 @@ import ee.hm.dop.config.db.DatabaseMigrator;
 import ee.hm.dop.config.db.FlywayDbMigrator;
 import ee.hm.dop.config.guice.GuiceInjector.Module;
 import ee.hm.dop.config.guice.provider.*;
+import ee.hm.dop.service.ehis.EhisSOAPService;
+import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.xml.signature.SignatureValidator;
@@ -26,6 +28,7 @@ public class ProviderModule extends AbstractModule {
         bind(SolrEngineService.class).toProvider(SearchEngineServiceProvider.class);
         bind(SOAPConnection.class).toProvider(SOAPConnectionProvider.class);
         bind(SignatureValidator.class).toProvider(SignatureValidatorProvider.class);
+        bind(IEhisSOAPService.class).toProvider(EhisSOAPServiceProvider.class);
         bind(DatabaseMigrator.class).to(FlywayDbMigrator.class);
     }
 }

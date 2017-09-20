@@ -16,6 +16,7 @@ import javax.xml.soap.SOAPException;
 
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
+import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
@@ -38,21 +39,16 @@ public class LoginServiceTest {
 
     @TestSubject
     private LoginService loginService = new LoginService();
-
     @Mock
     private UserService userService;
-
     @Mock
     private MobileIDLoginService mobileIDLoginService;
-
     @Mock
     private AuthenticatedUserDao authenticatedUserDao;
-
     @Mock
     private AuthenticationStateDao authenticationStateDao;
-
     @Mock
-    private EhisSOAPService ehisSOAPService;
+    private IEhisSOAPService ehisSOAPService;
 
     @Test
     public void logIn() throws NoSuchMethodException {
@@ -72,7 +68,7 @@ public class LoginServiceTest {
 
         replayAll(user, authenticatedUser);
 
-        loginService.logIn(idCode, null, null);
+        loginService.login(idCode, null, null);
 
         verifyAll(user, authenticatedUser);
     }
@@ -99,7 +95,7 @@ public class LoginServiceTest {
 
         replayAll(user, authenticatedUserMock, person);
 
-        AuthenticatedUser authenticatedUser = loginService.logIn(idCode, null, null);
+        AuthenticatedUser authenticatedUser = loginService.login(idCode, null, null);
 
         verifyAll(user, authenticatedUserMock, person);
 
@@ -122,7 +118,7 @@ public class LoginServiceTest {
         replayAll(user);
 
         try {
-            loginService.logIn(idCode, null, null);
+            loginService.login(idCode, null, null);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // Everything ok
@@ -151,7 +147,7 @@ public class LoginServiceTest {
 
         replayAll(user, authenticatedUser);
 
-        loginService.logIn(idCode, null, null);
+        loginService.login(idCode, null, null);
 
         verifyAll(user, authenticatedUser);
     }
@@ -162,7 +158,7 @@ public class LoginServiceTest {
 
         replayAll();
 
-        AuthenticatedUser returnedAuthenticatedUser = loginService.logIn(authenticationState);
+        AuthenticatedUser returnedAuthenticatedUser = loginService.login(authenticationState);
 
         verifyAll();
 
@@ -179,7 +175,7 @@ public class LoginServiceTest {
 
         replayAll();
 
-        AuthenticatedUser returnedAuthenticatedUser = loginService.logIn(authenticationState);
+        AuthenticatedUser returnedAuthenticatedUser = loginService.login(authenticationState);
 
         verifyAll();
 
