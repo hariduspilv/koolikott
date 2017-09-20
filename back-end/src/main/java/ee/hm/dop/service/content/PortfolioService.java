@@ -156,11 +156,11 @@ public class PortfolioService implements PermissionItem {
 
     private void processChanges(Portfolio portfolio) {
         List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
-        if (CollectionUtils.isEmpty(changes)) return;
-
-        for (ChangedLearningObject change : changes) {
-            if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
-                changedLearningObjectService.removeChangeById(change.getId());
+        if (CollectionUtils.isNotEmpty(changes)) {
+            for (ChangedLearningObject change : changes) {
+                if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
+                    changedLearningObjectService.removeChangeById(change.getId());
+                }
             }
         }
     }

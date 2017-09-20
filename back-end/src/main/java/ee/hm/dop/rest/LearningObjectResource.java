@@ -44,11 +44,12 @@ public class LearningObjectResource extends BaseResource {
             throwNotFoundException("No such learning object");
         }
 
+        return learningObjectService.addTag(learningObject, useDbTagOrMakeNewOne(newTag), loggedInUser);
+    }
+
+    private Tag useDbTagOrMakeNewOne(Tag newTag) {
         Tag tag = tagService.getTagByName(newTag.getName());
-        if (tag == null) {
-            tag = newTag;
-        }
-        return learningObjectService.addTag(learningObject, tag, loggedInUser);
+        return tag != null ? tag : newTag;
     }
 
     @GET

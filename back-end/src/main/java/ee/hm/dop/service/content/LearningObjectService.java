@@ -50,17 +50,17 @@ public class LearningObjectService {
         return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdNotDeleted);
     }
 
-    public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
+    public LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
         if (!canAcess(user, learningObject)) {
-            throw new RuntimeException("Access denied");
+            throw ValidatorUtil.permissionError();
         }
 
         List<Tag> tags = learningObject.getTags();
-        if (tags.contains(tag)) {
+        if (tags.contains(newTag)) {
             throw new RuntimeException("Learning Object already contains tag");
         }
 
-        tags.add(tag);
+        tags.add(newTag);
         LearningObject updatedLearningObject = getLearningObjectDao().createOrUpdate(learningObject);
         solrEngineService.updateIndex();
 
@@ -82,9 +82,8 @@ public class LearningObjectService {
         LearningObject learningObject = getLearningObjectByType(learningObjectId, type);
         ValidatorUtil.mustHaveEntity(learningObject);
 
-        Tag tag = findOrMakeNewTag(tagName);
-        LearningObject newLearningObject = addTag(learningObject, tag, user);
-        return tagConverter.getTagDTO(tagName, newLearningObject, user);
+        LearningObject newLearningObject = addTag(learningObject, findOrMakeNewTag(tagName), user);
+        return tagConverter.addChangeReturnTagDto(tagName, newLearningObject, user);
     }
 
     private Tag findOrMakeNewTag(String tagName) {

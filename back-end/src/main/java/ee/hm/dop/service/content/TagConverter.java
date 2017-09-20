@@ -29,7 +29,7 @@ public class TagConverter {
     @Inject
     private LearningObjectService learningObjectService;
 
-    public TagDTO getTagDTO(String tagName, LearningObject learningObject, User user) {
+    public TagDTO addChangeReturnTagDto(String tagName, LearningObject learningObject, User user) {
         TagDTO tagDTO = new TagDTO();
 
         ChangedLearningObject changedLearningObject = new ChangedLearningObject();
@@ -63,7 +63,7 @@ public class TagConverter {
         changedLearningObjectService.addChanged(changedLearningObject);
 
         LearningObject updatedLearningObject = learningObjectService.getLearningObjectDao().createOrUpdate(learningObject);
-        updatedLearningObject.setChanged(hasChanged ? (updatedLearningObject.getChanged() + 1) : updatedLearningObject.getChanged());
+        updatedLearningObject.setChanged(hasChanged ? updatedLearningObject.getChanged() + 1 : updatedLearningObject.getChanged());
         tagDTO.setLearningObject(updatedLearningObject);
 
         solrEngineService.updateIndex();
