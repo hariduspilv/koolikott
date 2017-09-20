@@ -13,6 +13,7 @@ import ee.hm.dop.service.learningObject.PermissionFactory;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.LearningObjectUtils;
+import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -47,23 +48,11 @@ public class LearningObjectService {
         return getLearningObjectHandler(learningObject).canAccess(user, learningObject);
     }
 
-    public LearningObject validateAndFind(LearningObject material) {
-        validateteId(material);
-        LearningObject originalMaterial = learningObjectDao.findByIdNotDeleted(material.getId());
-        validateEntity(originalMaterial);
-        return originalMaterial;
-    }
-
-    private void validateEntity(LearningObject learningObject) {
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject not found");
-        }
-    }
-
-    private void validateteId(LearningObject learningObject) {
-        if (learningObject == null || learningObject.getId() == null) {
-            throw new RuntimeException("LearningObject not found");
-        }
+    public LearningObject validateAndFind(LearningObject learningObject) {
+        ValidatorUtil.validateId(learningObject);
+        LearningObject originalLearningObject = learningObjectDao.findByIdNotDeleted(learningObject.getId());
+        ValidatorUtil.validateEntity(originalLearningObject);
+        return originalLearningObject;
     }
 
     public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
