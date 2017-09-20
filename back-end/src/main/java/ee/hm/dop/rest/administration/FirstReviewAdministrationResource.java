@@ -28,7 +28,7 @@ public class FirstReviewAdministrationResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<FirstReview> getUnReviewed() {
-        return firstReviewService.getUnReviewed();
+        return firstReviewService.getUnReviewed(getLoggedInUser());
     }
 
     @GET
@@ -36,7 +36,7 @@ public class FirstReviewAdministrationResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnReviewedCount() {
-        return ok(firstReviewService.getUnReviewedCount());
+        return ok(firstReviewService.getUnReviewedCount(getLoggedInUser()));
     }
 
     @POST
@@ -44,9 +44,6 @@ public class FirstReviewAdministrationResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setReviewed(LearningObject learningObject) {
-        User user = getLoggedInUser();
-        if (user != null) {
-            firstReviewService.setReviewed(learningObject, user);
-        }
+        firstReviewService.setReviewed(learningObject, getLoggedInUser());
     }
 }

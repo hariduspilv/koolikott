@@ -24,7 +24,11 @@ import javax.ws.rs.ext.Provider;
 
 import com.google.inject.Inject;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.rest.MaterialResourceTest;
+import ee.hm.dop.rest.PortfolioResourceTest;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
@@ -41,6 +45,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     public static final String USER_MATI = "39011220011";
     public static final String USER_PEETER = "38011550077";
     public static final String USER_ADMIN = "89898989898";
+    public static final String USER_MODERATOR = "38211120031";
     public static final String USER_SECOND = "89012378912";
     public static final String USER_MAASIKAS_VAARIKAS = "39011220013";
     private static String RESOURCE_BASE_URL;
@@ -75,9 +80,13 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         }
     }
 
-    /*
-     * GET
-     */
+    public Portfolio getPortfolio(long id) {
+        return doGet(format(PortfolioResourceTest.GET_PORTFOLIO_URL, id), Portfolio.class);
+    }
+
+    public Material getMaterial(long materialId) {
+        return doGet(format(MaterialResourceTest.GET_MATERIAL_URL, materialId), Material.class);
+    }
 
     protected static <T> T doGet(String url, Class<? extends T> clazz) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE, clazz);
