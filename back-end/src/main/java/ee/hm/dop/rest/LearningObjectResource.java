@@ -58,7 +58,7 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, @QueryParam("type") String type, @QueryParam("name") String tagName) {
-        return learningObjectService.addSystemTag(learningObjectId, type, tagName, getLoggedInUser());
+        return learningObjectService.addSystemTag(learningObjectId, tagName, getLoggedInUser());
     }
 
     @GET
