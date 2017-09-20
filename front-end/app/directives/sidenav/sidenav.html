@@ -82,6 +82,18 @@
 
           <ul class="sidenav__list" data-ng-show="dashboardOpen">
             <li class="sidenav__item" layout="column">
+              <a id="unReviewed" class="sidenav__header" md-ink-ripple layout="row"
+                 layout-align="space-between center"
+                 data-ng-class="{'is-active': isLocation('/dashboard/unReviewed')}"
+                 data-ng-href="/dashboard/unReviewed" data-ng-click=updateUnReviewedLearningObjectCount()>
+                <div layout="row" layout-align="center center">
+                  <md-icon class="material-icons sidenav__icon">new_releases</md-icon>
+                  <span data-translate="UNREVIEWED" class="sidenav__name"></span>
+                </div>
+                <span class="sidenav__count" data-ng-bind="unReviewedLearningObjectCount"></span>
+              </a>
+            </li>
+            <li class="sidenav__item" layout="column">
               <a id="improperMaterials" class="sidenav__header" md-ink-ripple layout="row"
                  layout-align="space-between center"
                  data-ng-class="{'is-active': isLocation('/dashboard/improperMaterials')}"

@@ -178,6 +178,12 @@ angular.module('koolikottApp')
                     }
                 };
 
+                $scope.updateUnReviewedLearningObjectCount = function () {
+                    userDataService.loadUnReviewedLearningObjectCount(function (data) {
+                        $scope.unReviewedLearningObjectCount = data;
+                    });
+                };
+
                 $scope.dashboardSearch = function () {
                     if ($scope.dashboardOpen === false) {
                         $location.url("/dashboard");

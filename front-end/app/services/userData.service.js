@@ -18,6 +18,7 @@ angular.module('koolikottApp')
         var moderatorsCountCallbacks = [];
         var restrictedUsersCountCallbacks = [];
         var changedLearningObjectCountCallbacks = [];
+        var unReviewedLearningObjectCountCallbacks = [];
 
         function getUsername() {
             if (authenticatedUserService.isAuthenticated()) return {'username': authenticatedUserService.getUser().username};
@@ -131,6 +132,14 @@ angular.module('koolikottApp')
 
         }
 
+        function getUnReviewedLearningObjectCountSuccess(data) {
+            unReviewedLearningObjectCountCallbacks.forEach(function (callback) {
+                callback(data);
+            });
+            unReviewedLearningObjectCountCallbacks = [];
+            localStorage.setItem("unReviewedLearningObject", data);
+        }
+
         instance = {
             loadBrokenMaterialsCount: function (callback) {
                 var data = localStorage.getItem("brokenMaterialsCount");
@@ -223,6 +232,14 @@ angular.module('koolikottApp')
                 }
                 changedLearningObjectCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/changed/count", {}, getChangedLearningObjectCountSuccess, getItemsFail);
+            },
+            loadUnReviewedLearningObjectCount: function (callback) {
+                var data = localStorage.getItem("unReviewedLearningObject");
+                if (data) {
+                    callback(data);
+                }
+                unReviewedLearningObjectCountCallbacks.push(callback);
+                serverCallService.makeGet("rest/admin/firstReview/unReviewed/count", {}, getUnReviewedLearningObjectCountSuccess, getItemsFail);
             }
         };
 
