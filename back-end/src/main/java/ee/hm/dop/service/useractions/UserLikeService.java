@@ -30,7 +30,7 @@ public class UserLikeService {
     }
 
     public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
-        Material originalMaterial = materialService.validateAndFind(material);
+        Material originalMaterial = materialService.validateAndFindNotDeleted(material);
         userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
 
         return save(originalMaterial, loggedInUser, isLiked);

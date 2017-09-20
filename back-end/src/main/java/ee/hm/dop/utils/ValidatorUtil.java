@@ -9,22 +9,25 @@ import java.util.function.Function;
 
 public class ValidatorUtil {
 
-    public static void findValid(Portfolio entity, Function<Long, Portfolio> getFromDb){
+    public static Portfolio findValid(Portfolio entity, Function<Long, Portfolio> getFromDb){
         validateId(entity, Portfolio.class);
         Portfolio dbEntity = getFromDb.apply(entity.getId());
         validateEntity(dbEntity, Portfolio.class);
+        return dbEntity;
     }
 
-    public static void findValid(Material entity, Function<Long, Material> getFromDb){
+    public static Material findValid(Material entity, Function<Long, Material> getFromDb){
         validateId(entity, Material.class);
         Material dbEntity = getFromDb.apply(entity.getId());
         validateEntity(dbEntity, Material.class);
+        return dbEntity;
     }
 
-    public static void findValid(LearningObject entity, Function<Long, LearningObject> getFromDb){
+    public static LearningObject findValid(LearningObject entity, Function<Long, LearningObject> getFromDb){
         validateId(entity, Material.class);
         LearningObject dbEntity = getFromDb.apply(entity.getId());
         validateEntity(dbEntity, Material.class);
+        return dbEntity;
     }
 
     public static void validateEntity(Portfolio entity){

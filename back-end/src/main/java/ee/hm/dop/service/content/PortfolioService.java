@@ -24,6 +24,7 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -165,9 +166,7 @@ public class PortfolioService implements PermissionItem {
     }
 
     public void delete(Portfolio portfolio, User loggedInUser) {
-        throwIfExists(portfolio);
-
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = findValid(portfolio);
 
         if (!canUpdate(loggedInUser, originalPortfolio)) {
             throwPermissionError();
@@ -204,15 +203,15 @@ public class PortfolioService implements PermissionItem {
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
-        throwIfExists(portfolio);
+        ValidatorUtil.validateId(portfolio);
         if (isEmpty(portfolio.getTitle())) {
             throw new RuntimeException("Required field title must be filled.");
         }
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (!canUpdate(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or the user that is updating must be logged in user must be the creator, administrator or moderator.");
+        if (canUpdate(loggedInUser, originalPortfolio)) {
+            return originalPortfolio;
         }
-        return originalPortfolio;
+        throw new RuntimeException("Object does not exist or the user that is updating must be logged in user must be the creator, administrator or moderator.");
     }
 
     public boolean canView(User loggedInUser, Portfolio portfolio) {
@@ -236,6 +235,10 @@ public class PortfolioService implements PermissionItem {
         return ((IPortfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
     }
 
+    public Portfolio findValid(Portfolio portfolio) {
+        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
     private boolean isNotPrivate(ILearningObject learningObject) {
         return ((IPortfolio) learningObject).getVisibility().isNotPrivate() && !learningObject.isDeleted();
     }
@@ -244,16 +247,9 @@ public class PortfolioService implements PermissionItem {
         throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
     }
 
-    private void throwIfExists(Portfolio portfolio) {
+    private void throwIfDoesntExists(Portfolio portfolio) {
         if (portfolio.getId() == null) {
             throw new RuntimeException("Portfolio must already exist.");
         }
-    }
-
-    private Portfolio findValid(Portfolio portfolio) {
-        ValidatorUtil.validateId(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        ValidatorUtil.validateEntity(originalPortfolio);
-        return originalPortfolio;
     }
 }

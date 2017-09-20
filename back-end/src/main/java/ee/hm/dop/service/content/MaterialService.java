@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
@@ -121,8 +122,7 @@ public class MaterialService implements PermissionItem {
     public void restore(Material material, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
 
-        Material originalMaterial = materialDao.findById(material.getId());
-        ValidatorUtil.validateEntity(originalMaterial);
+        Material originalMaterial = validateAndFindWithDeleted(material);
 
         materialDao.restore(originalMaterial);
         solrEngineService.updateIndex();
@@ -136,7 +136,7 @@ public class MaterialService implements PermissionItem {
         if (comment.getId() != null) {
             throw new RuntimeException("Comment already exists.");
         }
-        Material originalMaterial = validateAndFind(material);
+        Material originalMaterial = validateAndFindNotDeleted(material);
 
         comment.setAdded(DateTime.now());
         originalMaterial.getComments().add(comment);
@@ -146,7 +146,7 @@ public class MaterialService implements PermissionItem {
     public Recommendation addRecommendation(Material material, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
 
-        Material originalMaterial = validateAndFind(material);
+        Material originalMaterial = validateAndFindNotDeleted(material);
 
         Recommendation recommendation = new Recommendation();
         recommendation.setCreator(loggedInUser);
@@ -160,24 +160,25 @@ public class MaterialService implements PermissionItem {
         return originalMaterial.getRecommendation();
     }
 
-    public Material validateAndFind(Material material) {
-        ValidatorUtil.validateId(material);
-        Material originalMaterial = materialDao.findByIdNotDeleted(material.getId());
-        ValidatorUtil.validateEntity(originalMaterial);
-        return originalMaterial;
+    public Material validateAndFindNotDeleted(Material material) {
+        return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
+    }
+
+    public Material validateAndFindWithDeleted(Material material) {
+        return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
     }
 
     public void removeRecommendation(Material material, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
 
-        Material originalMaterial = validateAndFind(material);
+        Material originalMaterial = validateAndFindNotDeleted(material);
         originalMaterial.setRecommendation(null);
         materialDao.createOrUpdate(originalMaterial);
         solrEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
-        Material originalMaterial = validateAndFind(material);
+        Material originalMaterial = validateAndFindNotDeleted(material);
         userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
     }
 
@@ -324,7 +325,7 @@ public class MaterialService implements PermissionItem {
     }
 
     public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
-        Material originalMaterial = validateAndFind(material);
+        Material originalMaterial = validateAndFindNotDeleted(material);
 
         BrokenContent brokenContent = new BrokenContent();
         brokenContent.setCreator(loggedInUser);
