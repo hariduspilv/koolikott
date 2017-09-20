@@ -36,7 +36,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     private static final String CREATE_PORTFOLIO_URL = "portfolio/create";
     private static final String UPDATE_PORTFOLIO_URL = "portfolio/update";
-    private static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
+    public static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
@@ -523,10 +523,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         portfolio.setTitle("Tere");
 
         return doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
-    }
-
-    private Portfolio getPortfolio(long id) {
-        return doGet(format(GET_PORTFOLIO_URL, id), Portfolio.class);
     }
 
     private void assertPortfolio101(Portfolio portfolio) {
