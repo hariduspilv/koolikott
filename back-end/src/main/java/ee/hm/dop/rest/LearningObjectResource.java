@@ -3,9 +3,9 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
+import ee.hm.dop.utils.NumberUtils;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -19,14 +19,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
 
 @Path("learningObject")
 public class LearningObjectResource extends BaseResource {
 
-    @Inject
-    private LearningObjectService learningObjectService;
     @Inject
     private TagService tagService;
     @Inject
@@ -38,18 +34,7 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
-        User loggedInUser = getLoggedInUser();
-        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
-        if (learningObject == null) {
-            throwNotFoundException("No such learning object");
-        }
-
-        return learningObjectService.addTag(learningObject, useDbTagOrMakeNewOne(newTag), loggedInUser);
-    }
-
-    private Tag useDbTagOrMakeNewOne(Tag newTag) {
-        Tag tag = tagService.getTagByName(newTag.getName());
-        return tag != null ? tag : newTag;
+        return tagService.addRegularTag(learningObjectId, newTag.getName(), getLoggedInUser());
     }
 
     @GET
@@ -58,7 +43,7 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, @QueryParam("type") String type, @QueryParam("name") String tagName) {
-        return learningObjectService.addSystemTag(learningObjectId, tagName, getLoggedInUser());
+        return tagService.addSystemTag(learningObjectId, tagName, getLoggedInUser());
     }
 
     @GET
@@ -72,11 +57,7 @@ public class LearningObjectResource extends BaseResource {
     @Path("usersFavorite")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (maxResults == 0) maxResults = 12;
-
-        User loggedInUser = getLoggedInUser();
-        List<Searchable> userFavorites = new ArrayList<>(userFavoriteService.getUserFavorites(loggedInUser, start, maxResults));
-        return new SearchResult(userFavorites, userFavoriteService.getUserFavoritesSize(loggedInUser), start);
+        return userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12));
     }
 
     @GET
