@@ -49,7 +49,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public void cannot_add_a_tag_to_learning_object_what_does_not_exist() {
         login(USER_PEETER);
         Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTING_LEARNING_OBJECT_ID), Entity.entity(tag(TEST_TAG), MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test

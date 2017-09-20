@@ -23,12 +23,6 @@ public class LearningObjectService {
 
     @Inject
     private LearningObjectDao learningObjectDao;
-    @Inject
-    private SolrEngineService solrEngineService;
-    @Inject
-    private TagService tagService;
-    @Inject
-    private TagConverter tagConverter;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
@@ -44,41 +38,6 @@ public class LearningObjectService {
 
     public LearningObject validateAndFind(LearningObject learningObject) {
         return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdNotDeleted);
-    }
-
-    public LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
-        if (!canAcess(user, learningObject)) {
-            throw ValidatorUtil.permissionError();
-        }
-
-        List<Tag> tags = learningObject.getTags();
-        if (tags.contains(newTag)) {
-            throw new RuntimeException("Learning Object already contains tag");
-        }
-
-        tags.add(newTag);
-        LearningObject updatedLearningObject = getLearningObjectDao().createOrUpdate(learningObject);
-        solrEngineService.updateIndex();
-
-        return updatedLearningObject;
-    }
-
-    public TagDTO addSystemTag(Long learningObjectId, String tagName, User user) {
-        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
-        ValidatorUtil.mustHaveEntity(learningObject);
-
-        LearningObject newLearningObject = addTag(learningObject, findOrMakeNewTag(tagName), user);
-        return tagConverter.addChangeReturnTagDto(tagName, newLearningObject, user);
-    }
-
-    private Tag findOrMakeNewTag(String tagName) {
-        Tag tag = tagService.getTagByName(tagName);
-        if (tag != null) {
-            return tag;
-        }
-        Tag newTag = new Tag();
-        newTag.setName(tagName);
-        return newTag;
     }
 
     private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,
