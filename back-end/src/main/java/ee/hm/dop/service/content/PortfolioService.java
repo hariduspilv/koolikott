@@ -18,11 +18,13 @@ import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -51,7 +53,7 @@ public class PortfolioService implements PermissionItem {
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
         if (!canView(loggedInUser, portfolio)) {
-            throwPermissionError();
+            throw ValidatorUtil.permissionError();
         }
         return portfolio;
     }
@@ -68,7 +70,7 @@ public class PortfolioService implements PermissionItem {
 
     public void incrementViewCount(Portfolio portfolio) {
         Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
-        validateEntity(originalPortfolio);
+        ValidatorUtil.mustHaveEntity(originalPortfolio);
 
         portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
@@ -81,7 +83,7 @@ public class PortfolioService implements PermissionItem {
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
 
         if (!canView(loggedInUser, originalPortfolio)) {
-            throwPermissionError();
+            throw ValidatorUtil.permissionError();
         }
 
         comment.setAdded(DateTime.now());
@@ -154,22 +156,20 @@ public class PortfolioService implements PermissionItem {
 
     private void processChanges(Portfolio portfolio) {
         List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
-        if (CollectionUtils.isEmpty(changes)) return;
-
-        for (ChangedLearningObject change : changes) {
-            if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
-                changedLearningObjectService.removeChangeById(change.getId());
+        if (CollectionUtils.isNotEmpty(changes)) {
+            for (ChangedLearningObject change : changes) {
+                if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
+                    changedLearningObjectService.removeChangeById(change.getId());
+                }
             }
         }
     }
 
     public void delete(Portfolio portfolio, User loggedInUser) {
-        throwIfExists(portfolio);
-
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = findValid(portfolio);
 
         if (!canUpdate(loggedInUser, originalPortfolio)) {
-            throwPermissionError();
+            throw ValidatorUtil.permissionError();
         }
 
         portfolioDao.delete(originalPortfolio);
@@ -177,9 +177,7 @@ public class PortfolioService implements PermissionItem {
     }
 
     public Portfolio create(Portfolio portfolio, User creator) {
-        if (portfolio.getId() != null) {
-            throw new RuntimeException("Portfolio already exists.");
-        }
+        ValidatorUtil.mustNotHaveId(portfolio);
         TextFieldUtil.cleanTextFields(portfolio);
 
         Portfolio safePortfolio = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio);
@@ -203,15 +201,15 @@ public class PortfolioService implements PermissionItem {
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
-        throwIfExists(portfolio);
+        ValidatorUtil.mustHaveId(portfolio);
         if (isEmpty(portfolio.getTitle())) {
             throw new RuntimeException("Required field title must be filled.");
         }
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (!canUpdate(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or the user that is updating must be logged in user must be the creator, administrator or moderator.");
+        if (canUpdate(loggedInUser, originalPortfolio)) {
+            return originalPortfolio;
         }
-        return originalPortfolio;
+        throw ValidatorUtil.permissionError();
     }
 
     public boolean canView(User loggedInUser, Portfolio portfolio) {
@@ -235,36 +233,12 @@ public class PortfolioService implements PermissionItem {
         return ((IPortfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
     }
 
+    public Portfolio findValid(Portfolio portfolio) {
+        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
     private boolean isNotPrivate(ILearningObject learningObject) {
         return ((IPortfolio) learningObject).getVisibility().isNotPrivate() && !learningObject.isDeleted();
     }
 
-    private void throwPermissionError() {
-        throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
-    }
-
-    private void throwIfExists(Portfolio portfolio) {
-        if (portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio must already exist.");
-        }
-    }
-
-    private void validateEntity(Portfolio originalPortfolio) {
-        if (originalPortfolio == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-    }
-
-    private void validate(Portfolio portfolio) {
-        if (portfolio == null || portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-    }
-
-    private Portfolio findValid(Portfolio portfolio) {
-        validate(portfolio);
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        validateEntity(originalPortfolio);
-        return originalPortfolio;
-    }
 }

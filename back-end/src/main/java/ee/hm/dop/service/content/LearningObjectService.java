@@ -4,7 +4,6 @@ import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.User;
@@ -13,11 +12,11 @@ import ee.hm.dop.service.learningObject.PermissionFactory;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.LearningObjectUtils;
+import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 
 public class LearningObjectService {
@@ -26,10 +25,6 @@ public class LearningObjectService {
     private LearningObjectDao learningObjectDao;
     @Inject
     private SolrEngineService solrEngineService;
-    @Inject
-    private MaterialDao materialDao;
-    @Inject
-    private PortfolioDao portfolioDao;
     @Inject
     private TagService tagService;
     @Inject
@@ -47,60 +42,33 @@ public class LearningObjectService {
         return getLearningObjectHandler(learningObject).canAccess(user, learningObject);
     }
 
-    public LearningObject validateAndFind(LearningObject material) {
-        validateteId(material);
-        LearningObject originalMaterial = learningObjectDao.findByIdNotDeleted(material.getId());
-        validateEntity(originalMaterial);
-        return originalMaterial;
+    public LearningObject validateAndFind(LearningObject learningObject) {
+        return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdNotDeleted);
     }
 
-    private void validateEntity(LearningObject learningObject) {
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject not found");
-        }
-    }
-
-    private void validateteId(LearningObject learningObject) {
-        if (learningObject == null || learningObject.getId() == null) {
-            throw new RuntimeException("LearningObject not found");
-        }
-    }
-
-    public LearningObject addTag(LearningObject learningObject, Tag tag, User user) {
+    public LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
         if (!canAcess(user, learningObject)) {
-            throw new RuntimeException("Access denied");
+            throw ValidatorUtil.permissionError();
         }
 
         List<Tag> tags = learningObject.getTags();
-        if (tags.contains(tag)) {
+        if (tags.contains(newTag)) {
             throw new RuntimeException("Learning Object already contains tag");
         }
 
-        tags.add(tag);
+        tags.add(newTag);
         LearningObject updatedLearningObject = getLearningObjectDao().createOrUpdate(learningObject);
         solrEngineService.updateIndex();
 
         return updatedLearningObject;
     }
 
-    private LearningObject getLearningObjectByType(Long learningObjectId, String type) {
-        if (LearningObjectUtils.isMaterial(type)) {
-            return materialDao.findById(learningObjectId);
-        }
-        if (LearningObjectUtils.isPortfolio(type)) {
-            return portfolioDao.findById(learningObjectId);
-        }
-        return null;
-    }
+    public TagDTO addSystemTag(Long learningObjectId, String tagName, User user) {
+        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
+        ValidatorUtil.mustHaveEntity(learningObject);
 
-    public TagDTO addSystemTag(Long learningObjectId, String type, String tagName, User user) {
-        LearningObject learningObject = getLearningObjectByType(learningObjectId, type);
-        if (learningObject == null) {
-            throw new NoSuchElementException();
-        }
-        Tag tag = findOrMakeNewTag(tagName);
-        LearningObject newLearningObject = addTag(learningObject, tag, user);
-        return tagConverter.getTagDTO(tagName, newLearningObject, user);
+        LearningObject newLearningObject = addTag(learningObject, findOrMakeNewTag(tagName), user);
+        return tagConverter.addChangeReturnTagDto(tagName, newLearningObject, user);
     }
 
     private Tag findOrMakeNewTag(String tagName) {

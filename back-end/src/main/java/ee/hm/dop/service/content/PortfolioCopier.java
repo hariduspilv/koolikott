@@ -1,13 +1,16 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.PortfolioDao;
+import com.google.common.collect.Lists;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.utils.ValidatorUtil;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PortfolioCopier {
 
@@ -15,18 +18,12 @@ public class PortfolioCopier {
     private PortfolioService portfolioService;
     @Inject
     private PortfolioConverter portfolioConverter;
-    @Inject
-    private PortfolioDao portfolioDao;
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
-        if (portfolio.getId() == null) {
-            throw new RuntimeException("Portfolio not found");
-        }
-
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
         if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
-            throw new RuntimeException("Object does not exist or requesting user must be logged in user must be the creator, administrator or moderator.");
+            throw ValidatorUtil.permissionError();
         }
 
         Portfolio copy = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
@@ -36,20 +33,18 @@ public class PortfolioCopier {
     }
 
     private List<Chapter> copyChapters(List<Chapter> chapters) {
-        List<Chapter> copyChapters = new ArrayList<>();
-
-        if (chapters != null) {
-            for (Chapter chapter : chapters) {
-                Chapter copy = new Chapter();
-                copy.setTitle(chapter.getTitle());
-                copy.setText(chapter.getText());
-                copy.setContentRows(chapter.getContentRows());
-                copy.setSubchapters(copyChapters(chapter.getSubchapters()));
-
-                copyChapters.add(copy);
-            }
+        if (CollectionUtils.isEmpty(chapters)) {
+            return Lists.newArrayList();
         }
+        return chapters.stream().map(this::copy).collect(Collectors.toList());
+    }
 
-        return copyChapters;
+    private Chapter copy(Chapter chapter) {
+        Chapter copy = new Chapter();
+        copy.setTitle(chapter.getTitle());
+        copy.setText(chapter.getText());
+        copy.setContentRows(chapter.getContentRows());
+        copy.setSubchapters(copyChapters(chapter.getSubchapters()));
+        return copy;
     }
 }

@@ -44,12 +44,12 @@ public class LearningObjectResource extends BaseResource {
             throwNotFoundException("No such learning object");
         }
 
-        Tag tag = tagService.getTagByName(newTag.getName());
-        if (tag == null) {
-            tag = newTag;
-        }
+        return learningObjectService.addTag(learningObject, useDbTagOrMakeNewOne(newTag), loggedInUser);
+    }
 
-        return learningObjectService.addTag(learningObject, tag, loggedInUser);
+    private Tag useDbTagOrMakeNewOne(Tag newTag) {
+        Tag tag = tagService.getTagByName(newTag.getName());
+        return tag != null ? tag : newTag;
     }
 
     @GET
@@ -58,7 +58,7 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, @QueryParam("type") String type, @QueryParam("name") String tagName) {
-        return learningObjectService.addSystemTag(learningObjectId, type, tagName, getLoggedInUser());
+        return learningObjectService.addSystemTag(learningObjectId, tagName, getLoggedInUser());
     }
 
     @GET

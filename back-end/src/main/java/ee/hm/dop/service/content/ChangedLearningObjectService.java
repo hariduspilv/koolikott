@@ -9,6 +9,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
@@ -49,7 +50,7 @@ public class ChangedLearningObjectService {
     private void findValid(ChangedLearningObject changedLearningObject) {
         notNullnotNullId(changedLearningObject);
         LearningObject learningObject = learningObjectService.get(changedLearningObject.getLearningObject().getId(), changedLearningObject.getChanger());
-        notNull(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject);
     }
 
     private void notNullnotNullId(ChangedLearningObject changedLearningObject) {
