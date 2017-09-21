@@ -81,7 +81,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         login(USER_PEETER);
 
         LearningObject learningObject = getPortfolio(TEST_PORTFOLIO_ID);
-        Response response = doPost(SET_TO_FAVOURITE_URL, entity(learningObject));
+        Response response = doPost(SET_TO_FAVOURITE_URL, learningObject);
         assertEquals("Set to favourite", Status.OK.getStatusCode(), response.getStatus());
 
         UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, TEST_PORTFOLIO_ID), UserFavorite.class);
@@ -107,7 +107,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         LearningObject learningObject = getPortfolio(TEST_PORTFOLIO_ID);
 
-        doPost(SET_TO_FAVOURITE_URL, entity(learningObject));
+        doPost(SET_TO_FAVOURITE_URL, learningObject);
         doGet(format(GET_FAVOURITE_URL, TEST_PORTFOLIO_ID), UserFavorite.class);
         doDelete(format(DELETE_FAVOURITE_URL, TEST_PORTFOLIO_ID));
 
