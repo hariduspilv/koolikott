@@ -88,6 +88,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void getByCreatorCount_returns_same_portfolios_count_as_getByCreator_size() throws Exception {
+        List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, "mati.maasikas-vaarikas")).readEntity(SearchResult.class).getItems();
+        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, "mati.maasikas-vaarikas"), Long.class);
+        assertEquals("Portfolios by creator, Portfolios count by creator", portfolios.size(), count);
+    }
+
+    @Test
     public void getByCreatorWhenSomeArePrivateOrNotListed() {
         String username = "my.testuser";
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
