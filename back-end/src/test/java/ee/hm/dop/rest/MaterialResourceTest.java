@@ -31,10 +31,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
-    private static final String MATERIAL_GET_BROKEN = "material/getBroken";
-    private static final String MATERIAL_SET_NOT_BROKEN = "material/setNotBroken";
+    private static final String MATERIAL_GET_BROKEN = "admin/brokenContent/getBroken";
+    private static final String MATERIAL_SET_NOT_BROKEN = "admin/brokenContent/setNotBroken";
     private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
-    private static final String MATERIAL_IS_BROKEN = "material/isBroken";
+    private static final String MATERIAL_IS_BROKEN = "admin/brokenContent/isBroken";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
     private static final String RESTORE_MATERIAL = "material/restore";

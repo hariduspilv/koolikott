@@ -31,7 +31,7 @@ public class UserAdministrationResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User updateUser(User user) {
-        if (user == null) throwBadRequestException("No user received!");
+        mustHaveUser(user);
         return userService.update(user, getLoggedInUser());
     }
 
@@ -41,7 +41,7 @@ public class UserAdministrationResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User restrictUser(User user) {
-        if (user == null) throwBadRequestException("No user to restrict received!");
+        mustHaveUser(user);
         return userService.restrictUser(user);
     }
 
@@ -51,7 +51,7 @@ public class UserAdministrationResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public User removeRestriction(User user) {
-        if (user == null) throwBadRequestException("No user received!");
+        mustHaveUser(user);
         return userService.removeRestriction(user);
     }
 
@@ -87,4 +87,7 @@ public class UserAdministrationResource extends BaseResource {
         return userService.getRestrictedUsers(getLoggedInUser()).size();
     }
 
+    private void mustHaveUser(User user) {
+        if (user == null) throwBadRequestException("No user received!");
+    }
 }
