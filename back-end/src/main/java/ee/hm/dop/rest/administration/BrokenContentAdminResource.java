@@ -14,7 +14,7 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.MaterialAdministrationService;
 
 @Path("admin/brokenContent/")
-public class BrokenContentAdministrationResource extends BaseResource {
+public class BrokenContentAdminResource extends BaseResource {
 
     @Inject
     private MaterialAdministrationService materialAdministrationService;

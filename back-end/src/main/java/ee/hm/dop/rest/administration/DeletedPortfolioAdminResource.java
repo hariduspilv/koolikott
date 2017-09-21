@@ -18,7 +18,7 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.PortfolioAdministrationService;
 
 @Path("admin/deleted/portfolio")
-public class DeletedPortfolioAdministrationResource extends BaseResource {
+public class DeletedPortfolioAdminResource extends BaseResource {
 
     @Inject
     private PortfolioAdministrationService portfolioAdministrationService;

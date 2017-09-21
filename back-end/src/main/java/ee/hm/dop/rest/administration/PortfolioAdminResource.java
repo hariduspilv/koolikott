@@ -12,7 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 @Path("portfolio")
-public class PortfolioAdministrationResource extends BaseResource {
+public class PortfolioAdminResource extends BaseResource {
 
     @Inject
     private PortfolioAdministrationService portfolioAdministrationService;

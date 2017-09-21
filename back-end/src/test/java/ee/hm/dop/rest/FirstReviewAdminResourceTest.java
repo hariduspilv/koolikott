@@ -19,7 +19,7 @@ import java.util.List;
 import static java.lang.String.format;
 import static org.junit.Assert.*;
 
-public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTestBase {
+public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_UNREVIEWED = "admin/firstReview/unReviewed";
     private static final String GET_UNREVIEWED_COUNT = "admin/firstReview/unReviewed/count";

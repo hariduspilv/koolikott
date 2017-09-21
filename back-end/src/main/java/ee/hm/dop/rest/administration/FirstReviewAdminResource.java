@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("admin/firstReview/")
-public class FirstReviewAdministrationResource extends BaseResource {
+public class FirstReviewAdminResource extends BaseResource {
 
     @Inject
     private FirstReviewService firstReviewService;

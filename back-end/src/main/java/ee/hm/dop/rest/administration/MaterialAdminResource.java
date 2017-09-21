@@ -12,7 +12,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 @Path("material")
-public class MaterialAdministrationResource extends BaseResource {
+public class MaterialAdminResource extends BaseResource {
 
     @Inject
     private MaterialAdministrationService materialAdministrationService;

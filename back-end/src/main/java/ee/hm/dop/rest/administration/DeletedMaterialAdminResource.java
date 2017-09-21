@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("admin/deleted/material")
-public class DeletedMaterialAdministrationResource extends BaseResource {
+public class DeletedMaterialAdminResource extends BaseResource {
 
     @Inject
     private MaterialAdministrationService materialAdministrationService;
