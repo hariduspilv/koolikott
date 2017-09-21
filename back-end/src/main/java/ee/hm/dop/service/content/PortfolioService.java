@@ -91,32 +91,6 @@ public class PortfolioService implements PermissionItem {
         portfolioDao.createOrUpdate(originalPortfolio);
     }
 
-    public Recommendation addRecommendation(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = findValid(portfolio);
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Recommendation recommendation = new Recommendation();
-        recommendation.setCreator(loggedInUser);
-        recommendation.setAdded(DateTime.now());
-
-        originalPortfolio.setRecommendation(recommendation);
-
-        originalPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
-        solrEngineService.updateIndex();
-
-        return originalPortfolio.getRecommendation();
-    }
-
-    public void removeRecommendation(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = findValid(portfolio);
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        originalPortfolio.setRecommendation(null);
-
-        portfolioDao.createOrUpdate(originalPortfolio);
-        solrEngineService.updateIndex();
-    }
-
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 

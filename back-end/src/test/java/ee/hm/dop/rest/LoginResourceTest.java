@@ -65,10 +65,8 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
     @Context
     private HttpServletRequest request;
 
@@ -213,7 +211,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet("login/ekool/success?code=123456789");
         String url = response.getHeaderString("Location");
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
         assertEquals(true, hasToken);
@@ -230,7 +228,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
         assertEquals(true, hasToken);
@@ -246,7 +244,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
         assertEquals(false, hasToken);
@@ -276,7 +274,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
 

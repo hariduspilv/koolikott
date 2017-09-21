@@ -33,10 +33,8 @@ public class PortfolioServiceTest {
 
     @TestSubject
     private PortfolioService portfolioService = new PortfolioService();
-
     @Mock
     private PortfolioDao portfolioDao;
-
     @Mock
     private SolrEngineService solrEngineService;
 
@@ -89,87 +87,6 @@ public class PortfolioServiceTest {
         }
 
         verifyAll();
-    }
-
-    @Test
-    public void addRecommendation() {
-        Capture<Portfolio> capturedPortfolio = newCapture();
-
-        User user = new User();
-        user.setId(111L);
-        user.setRole(Role.USER);
-
-        User admin = new User();
-        admin.setId(222L);
-        admin.setRole(Role.ADMIN);
-
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
-        portfolio.setTitle("Super title");
-
-        Portfolio originalPortfolio = new Portfolio();
-        originalPortfolio.setId(1L);
-        originalPortfolio.setTitle("Super title");
-        originalPortfolio.setCreator(user);
-
-        expect(portfolioDao.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
-        expectPortfolioUpdate(capturedPortfolio);
-        solrEngineService.updateIndex();
-
-        replayAll();
-
-        Recommendation returnedRecommendation = portfolioService.addRecommendation(portfolio, admin);
-
-        verifyAll();
-
-        Recommendation recommendation = capturedPortfolio.getValue().getRecommendation();
-        assertNotNull(recommendation);
-        assertEquals(admin.getId(), recommendation.getCreator().getId());
-        assertEquals(recommendation, returnedRecommendation);
-    }
-
-    private void expectPortfolioUpdate(Capture<Portfolio> capturedPortfolio) {
-        expect(portfolioDao.createOrUpdate(EasyMock.capture(capturedPortfolio))).andAnswer(new IAnswer<Portfolio>() {
-            @Override
-            public Portfolio answer() throws Throwable {
-                return capturedPortfolio.getValue();
-            }
-        });
-    }
-
-    @Test
-    public void removeRecommendation() {
-        Capture<Portfolio> capturedPortfolio = newCapture();
-
-        User user = new User();
-        user.setId(111L);
-        user.setRole(Role.USER);
-
-        User admin = new User();
-        admin.setId(222L);
-        admin.setRole(Role.ADMIN);
-
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(1L);
-        portfolio.setTitle("Super title");
-
-        Portfolio originalPortfolio = new Portfolio();
-        originalPortfolio.setId(1L);
-        originalPortfolio.setTitle("Super title");
-        originalPortfolio.setCreator(user);
-
-        expect(portfolioDao.findByIdNotDeleted(1L)).andReturn(originalPortfolio);
-        expectPortfolioUpdate(capturedPortfolio);
-        solrEngineService.updateIndex();
-
-        replayAll();
-
-        portfolioService.removeRecommendation(portfolio, admin);
-
-        verifyAll();
-
-        Recommendation recommendation = capturedPortfolio.getValue().getRecommendation();
-        assertNull(recommendation);
     }
 
     private void replayAll(Object... mocks) {

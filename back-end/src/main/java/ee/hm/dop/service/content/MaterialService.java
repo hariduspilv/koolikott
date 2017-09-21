@@ -143,38 +143,12 @@ public class MaterialService implements PermissionItem {
         materialDao.createOrUpdate(originalMaterial);
     }
 
-    public Recommendation addRecommendation(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = validateAndFindNotDeleted(material);
-
-        Recommendation recommendation = new Recommendation();
-        recommendation.setCreator(loggedInUser);
-        recommendation.setAdded(DateTime.now());
-        originalMaterial.setRecommendation(recommendation);
-
-        originalMaterial = materialDao.createOrUpdate(originalMaterial);
-
-        solrEngineService.updateIndex();
-
-        return originalMaterial.getRecommendation();
-    }
-
     public Material validateAndFindNotDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
     }
 
     public Material validateAndFindWithDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
-    }
-
-    public void removeRecommendation(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = validateAndFindNotDeleted(material);
-        originalMaterial.setRecommendation(null);
-        materialDao.createOrUpdate(originalMaterial);
-        solrEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
@@ -218,7 +192,9 @@ public class MaterialService implements PermissionItem {
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || UserUtil.isUserAdminOrModerator(changer) || UserUtil.isUserCreator(originalMaterial, changer)) {
             updatedMaterial = createOrUpdate(material);
-            if (strategy.updateIndex()) solrEngineService.updateIndex();
+            if (strategy.updateIndex()) {
+                solrEngineService.updateIndex();
+            }
         }
         processChanges(updatedMaterial);
         return updatedMaterial;

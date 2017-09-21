@@ -59,12 +59,6 @@ public class ChangedLearningObjectService {
         }
     }
 
-    private void notNull(LearningObject learningObject) {
-        if (learningObject == null) {
-            throw new RuntimeException("LearningObject does not exists.");
-        }
-    }
-
     private boolean hasChange(ChangedLearningObject changedLearningObject) {
         return changedLearningObject.getTaxon() != null || changedLearningObject.getResourceType() != null || changedLearningObject.getTargetGroup() != null;
     }
@@ -75,7 +69,7 @@ public class ChangedLearningObjectService {
 
     public LearningObject revertAllChanges(long id, User user) {
         LearningObject learningObject = learningObjectService.get(id, user);
-        notNull(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject);
         List<ChangedLearningObject> changedLearningObjects = changedLearningObjectDao.getAllByLearningObject(id);
         if (CollectionUtils.isEmpty(changedLearningObjects)) {
             throw new RuntimeException("No changes for this learningObject");

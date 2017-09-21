@@ -33,6 +33,7 @@ import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
+import org.junit.Before;
 
 /**
  * Base class for all resource integration tests.
