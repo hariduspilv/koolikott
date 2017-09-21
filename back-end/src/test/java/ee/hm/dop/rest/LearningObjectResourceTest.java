@@ -85,10 +85,12 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Set to favourite", Status.OK.getStatusCode(), response.getStatus());
 
         UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, TEST_PORTFOLIO_ID), UserFavorite.class);
-        assertNotNull("Favourite", userFavorite);
+        assertNotNull("User favourite exist", userFavorite);
 
         long favouritesCount = doGet(GET_FAVOURITE_COUNT_URL, Long.class);
-        assertEquals("Favourite count", 1, favouritesCount);
+        assertEquals("User favourite count", 1, favouritesCount);
+
+        doDelete(format(DELETE_FAVOURITE_URL, TEST_PORTFOLIO_ID));
     }
 
     @Test
@@ -96,7 +98,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         login(USER_PEETER);
 
         UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, TEST_PORTFOLIO_ID), UserFavorite.class);
-        assertNull("Favourite", userFavorite);
+        assertNull("User favourite doesn't exist", userFavorite);
     }
 
     @Test
@@ -110,6 +112,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         doDelete(format(DELETE_FAVOURITE_URL, TEST_PORTFOLIO_ID));
 
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
-        assertTrue("Favourites", isEmpty(searchResult.getItems()));
+        assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));
     }
 }
