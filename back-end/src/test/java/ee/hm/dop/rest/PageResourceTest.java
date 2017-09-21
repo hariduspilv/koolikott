@@ -17,11 +17,10 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     public void getAboutPageInEstonian() {
         String name = "About";
         String languageCode = LanguageC.EST;
-        Response response = doGet("page?name=" + name + "&language=" + languageCode);
-        Page page = response.readEntity(Page.class);
+        Page page = doGet("page?name=" + name + "&language=" + languageCode, Page.class);
 
         assertNotNull(page);
-        assertEquals(new Long(1), page.getId());
+        assertEquals(new Long(1L), page.getId());
         assertEquals("About", page.getName());
         assertEquals("<h1>Meist</h1><p>Tekst siin</p>", page.getContent());
         assertEquals(languageCode, page.getLanguage().getCode());
@@ -31,8 +30,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
     public void getHelpPageInEnglish() {
         String name = "Help";
         String languageCode = LanguageC.ENG;
-        Response response = doGet("page?name=" + name + "&language=" + languageCode);
-        Page page = response.readEntity(Page.class);
+        Page page = doGet("page?name=" + name + "&language=" + languageCode, Page.class);
 
         assertNotNull(page);
         assertEquals(new Long(6), page.getId());

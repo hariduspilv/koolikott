@@ -1,52 +1,40 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.rest.TagUpVoteResource.TagUpVoteForm;
 import org.junit.Test;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
 public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     public static final String TAG_UP_VOTES = "tagUpVotes";
+    public static final String MATEMAATIKA = "matemaatika";
 
     @Test
     public void upVote() {
         login(USER_SECOND);
 
-        Material material = new Material();
-        material.setId(1L);
-
-        Tag tag = new Tag();
-        String tagName = "matemaatika";
-        tag.setName(tagName);
-
         TagUpVote tagUpVote = new TagUpVote();
-        tagUpVote.setTag(tag);
-        tagUpVote.setLearningObject(material);
+        tagUpVote.setTag(tag(MATEMAATIKA));
+        tagUpVote.setLearningObject(materialWithId(1L));
 
-        TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE),
-                TagUpVote.class);
+        TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, tagUpVote, TagUpVote.class);
 
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
         assertNull(returnedTagUpVote.getUser().getIdCode());
-        assertEquals(tagName, returnedTagUpVote.getTag().getName());
-        assertEquals(material.getId(), returnedTagUpVote.getLearningObject().getId());
+        assertEquals(MATEMAATIKA, returnedTagUpVote.getTag().getName());
+        assertEquals((Long) 1L, returnedTagUpVote.getLearningObject().getId());
 
         Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -54,9 +42,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void reportNotLoggedIn() {
-        Response response = doGet("tagUpVotes/report?learningObject=1");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
+        List<TagUpVoteForm> tagUpVoteForms  = doGet("tagUpVotes/report?learningObject=1", list());
 
         assertEquals(5, tagUpVoteForms.size());
 
@@ -77,8 +63,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         login(USER_MATI);
 
         Response response = doGet("tagUpVotes/report?learningObject=1");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
+        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(5, tagUpVoteForms.size());
 
@@ -99,8 +84,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void reportNoLearningObject() {
         Response response = doGet("tagUpVotes/report?learningObject=99");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
+        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(0, tagUpVoteForms.size());
     }
@@ -108,8 +92,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getTagUpVotesNoTags() {
         Response response = doGet("tagUpVotes/report?learningObject=3");
-        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(new GenericType<List<TagUpVoteForm>>() {
-        });
+        List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(0, tagUpVoteForms.size());
     }
@@ -119,18 +102,14 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(101l);
+        portfolio.setId(101L);
         portfolio.setVisibility(Visibility.PUBLIC);
 
-        Tag tag = new Tag();
-        tag.setName("matemaatika");
-
         TagUpVote tagUpVote = new TagUpVote();
-        tagUpVote.setTag(tag);
+        tagUpVote.setTag(tag(MATEMAATIKA));
         tagUpVote.setLearningObject(portfolio);
 
-        TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE),
-                TagUpVote.class);
+        TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, tagUpVote, TagUpVote.class);
 
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
@@ -141,19 +120,18 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVoteGettingPrivatePortfolio() {
-        login(USER_SECOND); // Regular user
-
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(110L);
-
-        Tag tag = new Tag();
-        tag.setName("matemaatika");
+        login(USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
-        tagUpVote.setTag(tag);
-        tagUpVote.setLearningObject(portfolio);
+        tagUpVote.setTag(tag(MATEMAATIKA));
+        tagUpVote.setLearningObject(portfolioWithId(110L));
 
         Response response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    private GenericType<List<TagUpVoteForm>> list() {
+        return new GenericType<List<TagUpVoteForm>>() {
+        };
     }
 }

@@ -75,9 +75,8 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getTaxon() {
-        Long id = 10L;
-        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, id), Taxon.class);
-        assertEquals(id, taxon.getId());
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, (Long) 10L), Taxon.class);
+        assertEquals((Long) 10L, taxon.getId());
         assertTrue((taxon.getName().equals("Mathematics")));
     }
 
