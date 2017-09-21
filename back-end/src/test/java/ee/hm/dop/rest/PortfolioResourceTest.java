@@ -1,22 +1,12 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ChapterObject;
-import ee.hm.dop.model.ContentRow;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.enums.Visibility;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.ArrayList;
@@ -33,11 +23,16 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String UPDATE_PORTFOLIO_URL = "portfolio/update";
     public static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
+    private static final String GET_BY_CREATOR_COUNT_URL = "portfolio/getByCreator/count?username=%s";
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
     private static final String PORTFOLIO_ADD_RECOMMENDATION_URL = "portfolio/recommend";
     private static final String PORTFOLIO_REMOVE_RECOMMENDATION_URL = "portfolio/removeRecommendation";
+    private static final String LIKE_URL = "portfolio/like";
+    private static final String DISLIKE_URL = "portfolio/dislike";
+    private static final String GET_USER_LIKE_URL = "portfolio/getUserLike";
+    private static final String REMOVE_USER_LIKE_URL = "portfolio/removeUserLike";
     private static final String CREATE_MATERIAL_URL = "material";
     public static final String NEW_SUBCHAPTER = "New subchapter";
     public static final String NEW_CHAPTER_1 = "New chapter 1";
@@ -404,6 +399,39 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(createdPortfolio.getId());
         assertEquals(((ChapterObject) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getText(), chapterObject.getText());
         assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(1)).getSource(), createdMaterial.getSource());
+    }
+
+    @Test
+    public void likePortfolio_sets_it_as_liked() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(103L);
+
+        doPost(LIKE_URL, portfolio);
+        UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNotNull("User like exist", userLike);
+        assertEquals("Portfolio is liked by user", true, userLike.isLiked());
+    }
+
+    @Test
+    public void dislikePortfolio_sets_it_as_not_liked() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(103L);
+
+        doPost(DISLIKE_URL, portfolio);
+        UserLike userDislike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNotNull("User dislike exist", userDislike);
+        assertEquals("Portfolio is disliked by user", false, userDislike.isLiked());
+    }
+
+    @Test
+    public void removeUserLike_removes_like_from_portfolio() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(103L);
+
+        doPost(LIKE_URL, portfolio);
+        doPost(REMOVE_USER_LIKE_URL, portfolio);
+        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNull("Removed user like does not exist", userRemoveLike);
     }
 
     private Portfolio createPortfolio() {
