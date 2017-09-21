@@ -1,23 +1,18 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
-import ee.hm.dop.service.content.dto.TagDTO;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
 import ee.hm.dop.utils.NumberUtils;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("learningObject")
@@ -53,20 +48,6 @@ public class LearningObjectResource extends BaseResource {
         return userFavoriteService.hasFavorited(id, getLoggedInUser());
     }
 
-    @GET
-    @Path("usersFavorite")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
-    public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        return userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12));
-    }
-
-    @GET
-    @Path("usersFavorite/count")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
-    public Long getUsersFavoritesCount() {
-        return userFavoriteService.getUserFavoritesSize(getLoggedInUser());
-    }
-
     @POST
     @Path("favorite")
     @Produces(MediaType.APPLICATION_JSON)
@@ -80,5 +61,19 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void removeUserFavorite(@QueryParam("id") long id) {
         userFavoriteService.removeUserFavorite(id, getLoggedInUser());
+    }
+
+    @GET
+    @Path("usersFavorite")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
+    public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
+        return userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12));
+    }
+
+    @GET
+    @Path("usersFavorite/count")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
+    public Long getUsersFavoritesCount() {
+        return userFavoriteService.getUserFavoritesSize(getLoggedInUser());
     }
 }
