@@ -80,6 +80,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         }
     }
 
+    public <T> Entity<T> entity(T entity){
+        return Entity.entity(entity, MediaType.APPLICATION_JSON_TYPE);
+    }
+
     public Portfolio getPortfolio(long id) {
         return doGet(format(PortfolioResourceTest.GET_PORTFOLIO_URL, id), Portfolio.class);
     }

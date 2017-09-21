@@ -338,6 +338,11 @@ public class MaterialService implements PermissionItem {
     }
 
     @Override
+    public boolean canView(User user, ILearningObject learningObject) {
+        return canAccess(user, learningObject);
+    }
+
+    @Override
     public boolean canAccess(User user, ILearningObject learningObject) {
         if (!(learningObject instanceof IMaterial)) return false;
         return !learningObject.isDeleted() || UserUtil.isUserAdmin(user);
