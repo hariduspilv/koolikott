@@ -212,8 +212,10 @@ public class PortfolioService implements PermissionItem {
         throw ValidatorUtil.permissionError();
     }
 
-    public boolean canView(User loggedInUser, Portfolio portfolio) {
-        return portfolio != null && (isNotPrivate(portfolio) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(portfolio, loggedInUser));
+    @Override
+    public boolean canView(User loggedInUser, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
+        return isNotPrivate(learningObject) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(learningObject, loggedInUser);
     }
 
     @Override
@@ -224,7 +226,7 @@ public class PortfolioService implements PermissionItem {
 
     @Override
     public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof Portfolio)) return false;
+        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
         return UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
     }
 
