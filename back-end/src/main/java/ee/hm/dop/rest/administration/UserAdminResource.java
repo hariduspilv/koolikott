@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Path("user")
-public class UserAdministrationResource extends BaseResource {
+public class UserAdminResource extends BaseResource {
 
     @Inject
     private UserService userService;
@@ -53,38 +53,6 @@ public class UserAdministrationResource extends BaseResource {
     public User removeRestriction(User user) {
         mustHaveUser(user);
         return userService.removeRestriction(user);
-    }
-
-    @GET
-    @Path("moderator")
-    @RolesAllowed(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getModerators() {
-        return userService.getModerators(getLoggedInUser());
-    }
-
-    @GET
-    @Path("restrictedUser")
-    @RolesAllowed(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getRestrictedUsers() {
-        return userService.getRestrictedUsers(getLoggedInUser());
-    }
-
-    @GET
-    @Path("moderator/count")
-    @RolesAllowed(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public int getModeratorsCount() {
-        return userService.getModerators(getLoggedInUser()).size();
-    }
-
-    @GET
-    @Path("restrictedUser/count")
-    @RolesAllowed(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public int getRestrictedUsersCount() {
-        return userService.getRestrictedUsers(getLoggedInUser()).size();
     }
 
     private void mustHaveUser(User user) {
