@@ -46,8 +46,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaterial() {
-        Material material = getMaterial(1);
-        assertMaterial1(material);
+        assertMaterial1(getMaterial(1));
     }
 
     @Test
@@ -70,74 +69,31 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getMaterialLicenseType() {
-        Material material = getMaterial(1);
-        assertEquals("CCBY", material.getLicenseType().getName());
-    }
-
-    @Test
-    public void getMaterialPublisher() {
-        Material material = getMaterial(1);
-        assertEquals("Koolibri", material.getPublishers().get(0).getName());
-    }
-
-    @Test
-    public void getMaterialAddedDate() {
-        Material material = getMaterial(1);
-        assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
-    }
-
-    @Test
     public void getMaterialUpdatedDate() {
         Material material = getMaterial(2);
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
     }
 
     @Test
-    public void getMaterialTags() {
-        Material material = getMaterial(1);
-
-        assertEquals(5, material.getTags().size());
-        assertEquals("matemaatika", material.getTags().get(0).getName());
-        assertEquals("põhikool", material.getTags().get(1).getName());
-        assertEquals("õpik", material.getTags().get(2).getName());
-        assertEquals("mathematics", material.getTags().get(3).getName());
-        assertEquals("book", material.getTags().get(4).getName());
-    }
-
-    @Test
     public void increaseViewCount() {
-        long materialId = 5;
+        Material materialBefore = getMaterial(5L);
 
-        Material materialBefore = getMaterial(materialId);
-
-        Material materialWithOnlyId = new Material();
-        materialWithOnlyId.setId(materialId);
-
-        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL,
-                Entity.entity(materialWithOnlyId, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, entity(materialWithId(5L)));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        Material materialAfter = getMaterial(materialId);
-
+        Material materialAfter = getMaterial(5L);
         assertEquals(Long.valueOf(materialBefore.getViews() + 1), materialAfter.getViews());
     }
 
     @Test
     public void increaseViewCountNotExistingMaterial() {
-        long materialId = 999;
-
-        Response response = doGet(format(GET_MATERIAL_URL, materialId));
+        Response response = doGet(format(GET_MATERIAL_URL, 999L));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        Material materialWithOnlyId = new Material();
-        materialWithOnlyId.setId(materialId);
-
-        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL,
-                Entity.entity(materialWithOnlyId, MediaType.APPLICATION_JSON_TYPE));
+        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(999L));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
-        response = doGet(format(GET_MATERIAL_URL, materialId));
+        response = doGet(format(GET_MATERIAL_URL, 999L));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
@@ -195,13 +151,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getByCreatorNoMaterials() {
         String username = "voldemar.vapustav";
-        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, username))
-                .readEntity(SearchResult.class);
+        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
 
         assertEquals(0, materials.getItems().size());
         assertEquals(0, materials.getTotalResults());
         assertEquals(0, materials.getStart());
-
     }
 
     @Test
@@ -214,14 +168,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Subject subject = (Subject) taxonDao.findById(22L);
         material.setTaxons(asList(subject));
 
-        KeyCompetence keyCompetence = new KeyCompetence();
-        keyCompetence.setId(1L);
-        keyCompetence.setName("Cultural_and_value_competence");
+        KeyCompetence keyCompetence = competence();
         material.setKeyCompetences(asList(keyCompetence));
 
-        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
-        crossCurricularTheme.setId(2L);
-        crossCurricularTheme.setName("Environment_and_sustainable_development");
+        CrossCurricularTheme crossCurricularTheme = theme();
         material.setCrossCurricularThemes(asList(crossCurricularTheme));
 
         Response response = createMaterial(material);
@@ -250,15 +200,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Subject subject = (Subject) taxonDao.findById(21L);
         material.setTaxons(asList(subject));
 
-        KeyCompetence keyCompetence = new KeyCompetence();
-        keyCompetence.setId(1L);
-        keyCompetence.setName("Cultural_and_value_competence");
-        material.setKeyCompetences(asList(keyCompetence));
+        material.setKeyCompetences(competenceList());
 
-        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
-        crossCurricularTheme.setId(2L);
-        crossCurricularTheme.setName("Environment_and_sustainable_development");
-        material.setCrossCurricularThemes(asList(crossCurricularTheme));
+        material.setCrossCurricularThemes(themeList());
 
         Response response = createMaterial(material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -269,13 +213,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNull(createdMaterial.getCrossCurricularThemes());
     }
 
-    private Response createMaterial(Material material) {
-        return doPut(CREATE_MATERIAL_URL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-    }
-
     @Test
     public void createOrUpdateAsRestrictedUser() {
-        login("89898989890");
+        login(USER_RESTRICTED);
 
         Material material = new Material();
         material.setSource("http://example.com/restricted");
@@ -286,100 +226,76 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addRecommendation() {
-        String idCode = USER_ADMIN;
-        User user = login(idCode);
-
+        User user = login(USER_ADMIN);
         Material material = materialService.get(3L, user);
 
-        Response response = doPost(MATERIAL_ADD_RECOMMENDATION,
-                Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Recommendation recommendation = response.readEntity(Recommendation.class);
+        Recommendation recommendation = doPost(MATERIAL_ADD_RECOMMENDATION, material, Recommendation.class);
         assertNotNull(recommendation);
         assertEquals(Long.valueOf(8), recommendation.getCreator().getId());
     }
 
     @Test
     public void removeRecommendation() {
-        String idCode = USER_ADMIN;
-        User user = login(idCode);
+        User user = login(USER_ADMIN);
 
         Material material = materialService.get(3L, user);
-
-        Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION,
-                Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION, material);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void setBrokenMaterial() {
         login(USER_SECOND);
-        long materialId = 5;
 
-        Material material = getMaterial(materialId);
-
-        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Material material = getMaterial(5L);
+        Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void setNotBroken() {
         login(USER_SECOND);
-        long materialId = 5;
 
-        Material material = getMaterial(materialId);
-
-        Response response = doPost(MATERIAL_SET_NOT_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Material material = getMaterial(5L);
+        Response response = doPost(MATERIAL_SET_NOT_BROKEN, material);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
         login(USER_ADMIN);
-        Response responseAdmin = doPost(MATERIAL_SET_NOT_BROKEN,
-                Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response responseAdmin = doPost(MATERIAL_SET_NOT_BROKEN, material);
         assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
 
-        Response hasBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
-                MediaType.APPLICATION_JSON_TYPE);
+        Response hasBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId());
         assertEquals(Status.OK.getStatusCode(), hasBrokenResponse.getStatus());
-
         assertEquals(hasBrokenResponse.readEntity(Boolean.class), false);
     }
 
     @Test
     public void hasSetBroken() {
         login(USER_SECOND);
-        long materialId = 5;
+        Material material = getMaterial(5L);
 
-        Material material = getMaterial(materialId);
-
-        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + material.getId(),
-                MediaType.APPLICATION_JSON_TYPE);
+        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + material.getId());
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
         assertEquals(hasBrokenResponse.readEntity(Boolean.class), true);
     }
 
     @Test
     public void isBroken() {
         login(USER_SECOND);
-        long materialId = 5;
+        Material material = getMaterial(5L);
 
-        Material material = getMaterial(materialId);
-
-        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        Response isBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
-                MediaType.APPLICATION_JSON_TYPE);
+        Response isBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId());
         assertEquals(Status.FORBIDDEN.getStatusCode(), isBrokenResponse.getStatus());
 
         login(USER_ADMIN);
 
-        Response isBrokenResponseAdmin = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId(),
-                MediaType.APPLICATION_JSON_TYPE);
+        Response isBrokenResponseAdmin = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId());
         assertEquals(Status.OK.getStatusCode(), isBrokenResponseAdmin.getStatus());
 
         assertEquals(isBrokenResponseAdmin.readEntity(Boolean.class), true);
@@ -388,14 +304,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getBroken() {
         login(USER_SECOND);
-        Response getBrokenResponse = doGet(MATERIAL_GET_BROKEN, MediaType.APPLICATION_JSON_TYPE);
+        Response getBrokenResponse = doGet(MATERIAL_GET_BROKEN);
         assertEquals(Status.FORBIDDEN.getStatusCode(), getBrokenResponse.getStatus());
 
         login(USER_ADMIN);
 
-        long materialId = 5;
-        Material material = getMaterial(materialId);
-        Response response = doPost(MATERIAL_SET_BROKEN, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Material material = getMaterial(5L);
+        Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Response getBrokenResponseAdmin = doGet(MATERIAL_GET_BROKEN, MediaType.APPLICATION_JSON_TYPE);
@@ -403,7 +318,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         });
         boolean containsMaterial = false;
         for (BrokenContent brokenContent : brokenMaterials) {
-            if (brokenContent.getMaterial().getId() == materialId) {
+            if (brokenContent.getMaterial().getId() == 5L) {
                 containsMaterial = true;
             }
         }
@@ -413,34 +328,20 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
         login(USER_PEETER);
-
-        Response response = doGet("material/getBySource?source=");
-
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
+        doGet("material/getBySource?source=", listOfMaterials());
     }
 
     @Test
     public void GetMaterialsByNonExistantSource() {
         login(USER_PEETER);
-
-        Response response = doGet("material/getBySource?source=https://www.youtube.com/watch?v=5_Ar7VXXsro");
-
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-
+        List<Material> materials = doGet("material/getBySource?source=https://www.youtube.com/watch?v=5_Ar7VXXsro", listOfMaterials());
         assertEquals(0, materials.size());
     }
 
     @Test
     public void GetMaterialsBySource() {
         login(USER_PEETER);
-
-        Response response = doGet("material/getBySource?source=https://en.wikipedia.org/wiki/Power_Architecture");
-
-        List<Material> materials = response.readEntity(new GenericType<List<Material>>() {
-        });
-
+        List<Material> materials = doGet("material/getBySource?source=https://en.wikipedia.org/wiki/Power_Architecture", listOfMaterials());
         assertEquals(2, materials.size());
     }
 
@@ -448,38 +349,24 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void deleteAndRestore() {
         login(USER_ADMIN);
 
-        Long materialId = 13L;
-
-        Material material = new Material();
-        material.setId(materialId);
-
-        Response response = doDelete("material/" + materialId);
+        Response response = doDelete("material/" + 13L);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doPost(RESTORE_MATERIAL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        Response response2 = doPost(RESTORE_MATERIAL, materialWithId(13L));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response2.getStatus());
     }
 
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
         login(USER_PEETER);
-
-        Long materialId = 12L;
-
-        Response response = doDelete("material/" + materialId);
+        Response response = doDelete("material/" + 12L);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void userCanNotRestoreRepositoryMaterial() {
         login(USER_PEETER);
-
-        Long materialId = 14L;
-
-        Material material = new Material();
-        material.setId(materialId);
-
-        Response response = doPost(RESTORE_MATERIAL, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPost(RESTORE_MATERIAL, materialWithId(14L));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -515,5 +402,47 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertTrue(material.isSpecialEducation());
         assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
         assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
+
+        assertEquals("CCBY", material.getLicenseType().getName());
+        assertEquals("Koolibri", material.getPublishers().get(0).getName());
+        assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
+
+        assertEquals(5, material.getTags().size());
+        assertEquals("matemaatika", material.getTags().get(0).getName());
+        assertEquals("põhikool", material.getTags().get(1).getName());
+        assertEquals("õpik", material.getTags().get(2).getName());
+        assertEquals("mathematics", material.getTags().get(3).getName());
+        assertEquals("book", material.getTags().get(4).getName());
+    }
+
+    private Response createMaterial(Material material) {
+        return doPut(CREATE_MATERIAL_URL, entity(material));
+    }
+
+    private List<CrossCurricularTheme> themeList() {
+        return asList(theme());
+    }
+
+    private List<KeyCompetence> competenceList() {
+        return asList(competence());
+    }
+
+    private CrossCurricularTheme theme() {
+        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
+        crossCurricularTheme.setId(2L);
+        crossCurricularTheme.setName("Environment_and_sustainable_development");
+        return crossCurricularTheme;
+    }
+
+    private KeyCompetence competence() {
+        KeyCompetence keyCompetence = new KeyCompetence();
+        keyCompetence.setId(1L);
+        keyCompetence.setName("Cultural_and_value_competence");
+        return keyCompetence;
+    }
+
+    private GenericType<List<Material>> listOfMaterials() {
+        return new GenericType<List<Material>>() {
+        };
     }
 }

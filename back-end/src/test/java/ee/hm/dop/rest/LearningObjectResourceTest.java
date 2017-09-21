@@ -114,10 +114,4 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
         assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));
     }
-
-    private Tag tag(String name) {
-        Tag tag = new Tag();
-        tag.setName(name);
-        return tag;
-    }
 }

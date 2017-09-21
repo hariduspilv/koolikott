@@ -40,7 +40,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
                 .findAny()
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
-        Response updateResponse = doPost(SET_REVIEWED, Entity.entity(learningObject, MediaType.APPLICATION_JSON_TYPE));
+        Response updateResponse = doPost(SET_REVIEWED, entity(learningObject));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
         List<FirstReview> firstReviews2 = doGet(GET_UNREVIEWED, listType());
@@ -97,7 +97,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
         Material material = getMaterial(2L);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
-        Response updateResponse = doPost(SET_REVIEWED, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response updateResponse = doPost(SET_REVIEWED, entity(material));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
         Material materialAfter = getMaterial(2L);

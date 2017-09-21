@@ -221,6 +221,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setIssuedFrom(2011);
         searchFilter.setCurriculumLiterature(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+        //todo missing assertions
     }
 
     @Test
