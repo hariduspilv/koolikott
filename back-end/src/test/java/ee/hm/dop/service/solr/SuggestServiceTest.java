@@ -8,8 +8,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.service.solr.SolrService;
-import ee.hm.dop.service.solr.SuggestService;
+import ee.hm.dop.service.SuggestionStrategy;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -32,16 +31,16 @@ public class SuggestServiceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void suggestEmpty() throws IOException, SolrServerException {
-        expect(solrService.suggest("", false)).andReturn(null);
+        expect(solrService.suggest("", SuggestionStrategy.SUGGEST_URL)).andReturn(null);
         replay(solrService);
-        assertEquals(suggestService.suggest("", false).getStatus(), 400);
+        assertEquals(suggestService.suggest("", SuggestionStrategy.SUGGEST_URL).getStatus(), 400);
     }
 
     @Test
     public void suggestTag() throws IOException, SolrServerException {
-        expect(solrService.suggest("matem", true)).andReturn(null);
+        expect(solrService.suggest("matem", SuggestionStrategy.SUGGEST_TAG)).andReturn(null);
         replay(solrService);
-        assertEquals(suggestService.suggest("matem", true).getStatus(), 200);
+        assertEquals(suggestService.suggest("matem", SuggestionStrategy.SUGGEST_TAG).getStatus(), 200);
     }
 
 }

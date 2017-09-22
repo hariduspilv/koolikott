@@ -115,7 +115,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
         if (maxResults == 0) maxResults = 12;
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
 
         User creator = userService.getUserByUsername(username);
         if (creator == null) {
@@ -131,7 +131,7 @@ public class MaterialResource extends BaseResource {
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Long getByCreatorCount(@QueryParam("username") String username) {
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         User creator = userService.getUserByUsername(username);
         if (creator == null) return null;
 

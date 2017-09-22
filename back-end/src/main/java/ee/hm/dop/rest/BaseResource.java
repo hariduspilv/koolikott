@@ -58,20 +58,12 @@ public class BaseResource {
         return response;
     }
 
-    protected void throwBadRequestException(String message) {
-        throw badRequest(message);
-    }
-
     public WebApplicationException badRequest(String message) {
         return new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
     }
 
-    protected void throwNotFoundException(String message) {
-        throw new WebApplicationException(Response.status(HTTP_NOT_FOUND).entity(message).build());
-    }
-
-    protected void throwNotFoundException() {
-        throw new WebApplicationException(Response.status(HTTP_NOT_FOUND).build());
+    public WebApplicationException notFound() {
+        return new WebApplicationException(Response.status(HTTP_NOT_FOUND).build());
     }
 
     protected String getServerAddress() {
