@@ -11,6 +11,8 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 
+import static org.joda.time.DateTime.now;
+
 public class PortfolioDao extends AbstractDao<Portfolio> {
 
     public Class<Portfolio> entity() {
@@ -105,5 +107,11 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
 
     public void restore(LearningObject learningObject) {
         learningObjectDao.restore(learningObject);
+    }
+
+    @Override
+    public Portfolio createOrUpdate(Portfolio entity) {
+        entity.setLastInteraction(now());
+        return super.createOrUpdate(entity);
     }
 }
