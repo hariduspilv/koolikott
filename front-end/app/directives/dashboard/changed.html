@@ -1,0 +1,24 @@
+<table md-table>
+  <thead md-head md-order="query.order" md-on-reorder="onReorder">
+    <tr md-row>
+      <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
+      <th md-column md-order-by="byChanger"><span data-translate="CHANGER"></span></th>
+      <th md-column md-order-by="byAddedAt"><span data-translate="UPDATED"></span></th>
+      <th md-column></th>
+    </tr>
+  </thead>
+  <tbody md-body>
+    <tr md-row data-ng-repeat="item in data" ng-click="openLearningObject(item.learningObject)">
+      <td md-cell><div class="ellipsis ellipsis--2" ng-bind="getLearningObjectTitle(item.learningObject)"></div></td>
+      <td md-cell ng-bind="item.changer.name+' '+item.changer.surname"></td>
+      <td md-cell ng-bind="formatDate(item.added)"></td>
+      <td md-cell>
+        <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
+          <md-button aria-label="Ava" class="md-icon-button">
+            <md-icon>keyboard_arrow_right</md-icon>
+          </md-button>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>

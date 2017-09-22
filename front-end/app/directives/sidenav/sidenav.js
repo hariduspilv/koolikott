@@ -175,6 +175,7 @@ angular.module('koolikottApp')
                         $scope.updateModeratorsCount();
                         $scope.updateRestrictedUsersCount();
                         $scope.updateChangedLearningObjectCount();
+                        $scope.updateUnReviewedLearningObjectCount();
                     }
                 };
 

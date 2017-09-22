@@ -29,7 +29,7 @@ angular.module('koolikottApp')
         }
 
         function getBrokenMaterialsCountSuccess(data) {
-            if (!isEmpty(data)) {
+            if (!_.isNil(data)) {
                 brokenMaterialsCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
@@ -39,7 +39,7 @@ angular.module('koolikottApp')
         }
 
         function getDeletedMaterialsCountSuccess(data) {
-            if (!isEmpty(data)) {
+            if (!_.isNil(data)) {
                 deletedMaterialsCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
@@ -49,7 +49,7 @@ angular.module('koolikottApp')
         }
 
         function getDeletedPortfoliosCountSuccess(data) {
-            if (!isEmpty(data)) {
+            if (!_.isNil(data)) {
                 deletedPortfoliosCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
@@ -147,7 +147,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 brokenMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/material/getBroken/count", {}, getBrokenMaterialsCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/brokenContent/getBroken/count", {}, getBrokenMaterialsCountSuccess, getItemsFail);
             },
             loadDeletedMaterialsCount: function (callback) {
                 var data = localStorage.getItem("deletedMaterialsCount");
@@ -155,7 +155,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 deletedMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/material/getDeleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/deleted/material/getDeleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
 
             },
             loadDeletedPortfoliosCount: function (callback) {
@@ -164,7 +164,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 deletedPortfoliosCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/deleted/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
             },
 
             loadImproperMaterialsCount: function (callback) {
@@ -215,7 +215,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 moderatorsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/user/moderator/count", {}, getModeratorsCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/moderator/count", {}, getModeratorsCountSuccess, getItemsFail);
             },
             loadRestrictedUsersCount: function (callback) {
                 var data = localStorage.getItem("restrictedUsersCount");
@@ -223,7 +223,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 restrictedUsersCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/user/restrictedUser/count", {}, getRestrictedUsersCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/restrictedUser/count", {}, getRestrictedUsersCountSuccess, getItemsFail);
             },
             loadChangedLearningObjectCount: function (callback) {
                 var data = localStorage.getItem("changedLearningObject");
@@ -231,7 +231,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 changedLearningObjectCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/changed/count", {}, getChangedLearningObjectCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/changed/count", {}, getChangedLearningObjectCountSuccess, getItemsFail);
             },
             loadUnReviewedLearningObjectCount: function (callback) {
                 var data = localStorage.getItem("unReviewedLearningObject");

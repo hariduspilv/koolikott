@@ -114,7 +114,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
   &:hover,
   &:focus {
-    background-color: rgba(158,158,158,0.2);
+    background-color: $hover-background-color;
     text-decoration: none;
 
     .sidenav__count {
@@ -172,7 +172,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
       background: transparent;
 
       &:hover {
-        background-color: rgba(158,158,158,0.2);
+        background-color: $hover-background-color;
       }
 
       .sidenav__icon--animate {
