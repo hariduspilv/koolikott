@@ -38,8 +38,7 @@ public class ImproperContentResource extends BaseResource {
         try {
             return improperContentService.addImproper(improperContent, getLoggedInUser());
         } catch (Exception e) {
-            throwBadRequestException(e.getMessage());
-            return null;
+            throw badRequest(e.getMessage());
         }
     }
 

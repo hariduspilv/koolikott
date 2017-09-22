@@ -188,16 +188,21 @@ public class MaterialService implements PermissionItem {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        Material updatedMaterial = null;
+        Material updatedMaterial = getUpdatedMaterial(material, changer, strategy, originalMaterial);
+        processChanges(updatedMaterial);
+        return updatedMaterial;
+    }
+
+    private Material getUpdatedMaterial(Material material, User changer, SearchIndexStrategy strategy, Material originalMaterial) {
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || UserUtil.isAdminOrModerator(changer) || UserUtil.isCreator(originalMaterial, changer)) {
-            updatedMaterial = createOrUpdate(material);
+            Material updatedMaterial = createOrUpdate(material);
             if (strategy.updateIndex()) {
                 solrEngineService.updateIndex();
             }
+            return updatedMaterial;
         }
-        processChanges(updatedMaterial);
-        return updatedMaterial;
+        throw ValidatorUtil.permissionError();
     }
 
     private void processChanges(Material material) {
