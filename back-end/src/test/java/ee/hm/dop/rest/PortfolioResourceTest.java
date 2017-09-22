@@ -91,7 +91,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getByCreatorCount_returns_same_portfolios_count_as_getByCreator_size() throws Exception {
         List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, "mati.maasikas-vaarikas")).readEntity(SearchResult.class).getItems();
         long count = doGet(format(GET_BY_CREATOR_COUNT_URL, "mati.maasikas-vaarikas"), Long.class);
-        assertEquals("Portfolios by creator, Portfolios count by creator", portfolios.size(), count);
+        assertEquals("Portfolios size by creator, Portfolios count by creator", portfolios.size(), count);
     }
 
     @Test
@@ -438,7 +438,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         doPost(LIKE_URL, portfolio);
         doPost(REMOVE_USER_LIKE_URL, portfolio);
         UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNull("Removed user like does not exist", userRemoveLike);
+        assertNull("User removed like does not exist", userRemoveLike);
     }
 
     private Portfolio createPortfolio() {

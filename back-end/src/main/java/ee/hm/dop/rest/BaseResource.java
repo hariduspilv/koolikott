@@ -59,7 +59,11 @@ public class BaseResource {
     }
 
     protected void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
+        throw badRequest(message);
+    }
+
+    public WebApplicationException badRequest(String message) {
+        return new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
     }
 
     protected void throwNotFoundException(String message) {
