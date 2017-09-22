@@ -2,19 +2,14 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.util.List;
-
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
@@ -32,7 +27,7 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public User get(@QueryParam("username") String username) {
         if (isBlank(username)) {
-            throwBadRequestException("Username parameter is mandatory.");
+            throw badRequest("Username parameter is mandatory.");
         }
         return userService.getUserByUsername(username);
     }

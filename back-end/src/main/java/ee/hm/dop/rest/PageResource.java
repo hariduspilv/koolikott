@@ -26,16 +26,16 @@ public class PageResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Page get(@QueryParam("name") String name, @QueryParam("language") String languageCode) {
         if (isBlank(name)) {
-            throwBadRequestException("name parameter is mandatory");
+            throw badRequest("name parameter is mandatory");
         }
 
         if (isBlank(languageCode)) {
-            throwBadRequestException("language parameter is mandatory");
+            throw badRequest("language parameter is mandatory");
         }
 
         Language language = languageService.getLanguage(languageCode);
         if (language == null) {
-            throwBadRequestException("language not supported");
+            throw badRequest("language not supported");
         }
 
         return pageService.getPage(name, language);

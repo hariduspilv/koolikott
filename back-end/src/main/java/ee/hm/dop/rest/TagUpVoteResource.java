@@ -1,6 +1,5 @@
 package ee.hm.dop.rest;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,15 +39,15 @@ public class TagUpVoteResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public TagUpVote upVote(TagUpVote tagUpVote) {
         if (tagUpVote.getId() != null) {
-            throwBadRequestException("TagUpVote already exists.");
+            throw badRequest("TagUpVote already exists.");
         }
         LearningObject learningObject = learningObjectService.get(tagUpVote.getLearningObject().getId(), getLoggedInUser());
         if (learningObject == null) {
-            throwBadRequestException("No such learning object");
+            throw badRequest("No such learning object");
         }
         Tag tag = tagService.getTagByName(tagUpVote.getTag().getName());
         if (tag == null) {
-            throwBadRequestException("No such tag");
+            throw badRequest("No such tag");
         }
 
         //todo what is the point of trustTagUpVote
@@ -66,7 +65,7 @@ public class TagUpVoteResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
-            throwBadRequestException("LearningObject query param is required");
+            throw badRequest("LearningObject query param is required");
         }
         User user = getLoggedInUser();
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
@@ -93,7 +92,7 @@ public class TagUpVoteResource extends BaseResource {
     public void removeUpVote(@PathParam("tagUpVoteId") long tagUpVoteId) {
         TagUpVote tagUpVote = tagUpVoteService.get(tagUpVoteId, getLoggedInUser());
         if (tagUpVote == null) {
-            throwNotFoundException();
+            throw notFound();
         }
 
         tagUpVoteService.delete(tagUpVote, getLoggedInUser());

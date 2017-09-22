@@ -42,10 +42,10 @@ public class PortfolioResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
 
         User creator = userService.getUserByUsername(username);
-        if (creator == null) throwBadRequestException("User does not exist with this username parameter");
+        if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         User loggedInUser = getLoggedInUser();
 
@@ -59,10 +59,10 @@ public class PortfolioResource extends BaseResource {
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByCreatorCount(@QueryParam("username") String username) {
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
 
         User creator = userService.getUserByUsername(username);
-        if (creator == null) throwBadRequestException("User does not exist with this username parameter");
+        if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         return ok(portfolioService.getCountByCreator(creator));
     }

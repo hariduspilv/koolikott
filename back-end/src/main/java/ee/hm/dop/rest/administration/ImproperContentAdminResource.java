@@ -28,11 +28,11 @@ public class ImproperContentAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN})
     public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
-            throwBadRequestException("learningObject query param is required.");
+            throw badRequest("learningObject query param is required.");
         }
         LearningObject learningObject = learningObjectService.get(learningObjectId, getLoggedInUser());
         if (learningObject == null) {
-            throwNotFoundException();
+            throw notFound();
         }
         List<ImproperContent> impropers = improperContentService.getByLearningObject(learningObject, getLoggedInUser());
         improperContentService.deleteAll(impropers, getLoggedInUser());
@@ -44,7 +44,7 @@ public class ImproperContentAdminResource extends BaseResource {
     public void removeImproper(@PathParam("improperContentId") long improperContentId) {
         ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
         if (improper == null) {
-            throwNotFoundException();
+            throw notFound();
         }
         improperContentService.deleteAll(Lists.newArrayList(improper), getLoggedInUser());
     }

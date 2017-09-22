@@ -14,6 +14,7 @@ import com.google.inject.Singleton;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.service.solr.SolrEngineService;
 
 /**
@@ -228,7 +229,7 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
-    public List<String> suggest(String query, boolean searchTags) {
+    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
         return null;
     }
 
