@@ -23,7 +23,7 @@ public class FirstReviewService {
     private LearningObjectService learningObjectService;
 
     public List<FirstReview> getUnReviewed(User loggedInUser) {
-        if (UserUtil.isUserAdmin(loggedInUser)) {
+        if (UserUtil.isAdmin(loggedInUser)) {
             return firstReviewDao.findAllUnreviewed();
         } else {
             return firstReviewDao.findAllUnreviewed(loggedInUser);
@@ -31,7 +31,7 @@ public class FirstReviewService {
     }
 
     public BigDecimal getUnReviewedCount(User loggedInUser) {
-        if (UserUtil.isUserAdmin(loggedInUser)) {
+        if (UserUtil.isAdmin(loggedInUser)) {
             return firstReviewDao.findCountOfUnreviewed();
         } else {
             return firstReviewDao.findCountOfUnreviewed(loggedInUser);

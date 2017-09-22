@@ -58,32 +58,23 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     private static AuthenticationFilter authenticationFilter;
 
     protected User login(String idCode) {
-        Response response = doGet("dev/login/" + idCode);
-        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + idCode, new GenericType<AuthenticatedUser>() {
         });
 
         assertNotNull("Login failed", authenticatedUser.getToken());
         assertNotNull("Login failed", authenticatedUser.getUser().getUsername());
 
         authenticationFilter = new AuthenticationFilter(authenticatedUser);
-
         return authenticatedUser.getUser();
     }
 
     @After
     public void logout() {
         if (authenticationFilter != null) {
-            Response response = getTarget("logout", authenticationFilter).request()
-                    .accept(MediaType.APPLICATION_JSON_TYPE).post(null);
-
+            Response response = doPost("logout");
             assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
             authenticationFilter = null;
         }
-    }
-
-    public <T> Entity<T> entity(T entity){
-        return Entity.entity(entity, MediaType.APPLICATION_JSON_TYPE);
     }
 
     public Portfolio getPortfolio(long id) {
@@ -124,23 +115,17 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().headers(headers).accept(mediaType).get(Response.class);
     }
 
-    protected static <T1, T2> T2 doPost(String url, T1 entity, Class<? extends T2> clazz) {
-        Entity<?> requestEntity = Entity.entity(entity, MediaType.APPLICATION_JSON_TYPE);
-        return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE, clazz);
-    }
-
-    protected static <T> T doPost(String url, Entity<?> requestEntity, MediaType mediaType, Class<? extends T> clazz) {
-        Response response = doPost(url, requestEntity, mediaType);
-        return response.readEntity(clazz);
-    }
-
-    protected static <T> T doPost(String url, Object json, MediaType mediaType, Class<? extends T> clazz) {
-        Response response = doPost(url, Entity.entity(json, MediaType.APPLICATION_JSON_TYPE), mediaType);
+    protected static <T> T doPost(String url, Object json, Class<? extends T> clazz) {
+        Response response = doPost(url, Entity.entity(json, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
         return response.readEntity(clazz);
     }
 
     protected static Response doPost(String url, Entity<?> requestEntity) {
         return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
+    }
+
+    protected static Response doPost(String url) {
+        return doPost(url, null);
     }
 
     protected static Response doPost(String url, Object json) {
@@ -151,40 +136,22 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
-    protected static Response doPost(String url, ClientRequestFilter clientRequestFilter, Entity<?> requestEntity,
-                                     MediaType mediaType) {
-        return getTarget(url, clientRequestFilter).request().accept(mediaType).post(requestEntity);
-    }
-
     protected static <T> T doPut(String url, Object json, Class<? extends T> clazz) {
         Response response = doPut(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
         return response.readEntity(clazz);
     }
 
-    protected static <T> T doPut(String url, Entity<?> requestEntity, Class<? extends T> clazz) {
-        Response response = doPut(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
-        return response.readEntity(clazz);
-    }
-
-    protected static Response doPut(String url, Entity<?> requestEntity) {
-        return doPut(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
+    protected static Response doPut(String url, Object json) {
+        return doPut(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
     }
 
     protected static Response doPut(String url, Entity<?> requestEntity, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
-    /*
-     * DELETE
-     */
-
     protected static Response doDelete(String url) {
         return getTarget(url).request().delete();
     }
-
-    /*
-     * Target
-     */
 
     protected static WebTarget getTarget(String url) {
         return getTarget(url, authenticationFilter);
@@ -213,10 +180,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     private static String getFullURL(String path) {
         if (RESOURCE_BASE_URL == null) {
-            String port = configuration.getString(SERVER_PORT);
-            RESOURCE_BASE_URL = format("http://localhost:%s/rest/", port);
+            RESOURCE_BASE_URL = format("http://localhost:%s/rest/", configuration.getString(SERVER_PORT));
         }
-
         return RESOURCE_BASE_URL + path;
     }
 
@@ -257,7 +222,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return portfolio;
     }
 
-    public User userWithId(Long id){
+    public User userWithId(Long id) {
         User user = new User();
         user.setId(id);
         return user;

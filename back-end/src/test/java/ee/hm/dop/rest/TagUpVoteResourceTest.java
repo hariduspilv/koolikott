@@ -126,7 +126,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         tagUpVote.setTag(tag(MATEMAATIKA));
         tagUpVote.setLearningObject(portfolioWithId(110L));
 
-        Response response = doPut(TAG_UP_VOTES, Entity.entity(tagUpVote, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPut(TAG_UP_VOTES, tagUpVote);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
