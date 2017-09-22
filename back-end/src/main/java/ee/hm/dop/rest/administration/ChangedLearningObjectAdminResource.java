@@ -16,8 +16,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("changed")
-public class ChangedLearningObjectAdministrationResource extends BaseResource {
+@Path("admin/changed/")
+public class ChangedLearningObjectAdminResource extends BaseResource {
 
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;

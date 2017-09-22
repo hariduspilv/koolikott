@@ -19,7 +19,7 @@ import java.util.List;
 import static java.lang.String.format;
 import static org.junit.Assert.*;
 
-public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTestBase {
+public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_UNREVIEWED = "admin/firstReview/unReviewed";
     private static final String GET_UNREVIEWED_COUNT = "admin/firstReview/unReviewed/count";
@@ -40,7 +40,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
                 .findAny()
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
-        Response updateResponse = doPost(SET_REVIEWED, Entity.entity(learningObject, MediaType.APPLICATION_JSON_TYPE));
+        Response updateResponse = doPost(SET_REVIEWED, learningObject);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
         List<FirstReview> firstReviews2 = doGet(GET_UNREVIEWED, listType());
@@ -74,7 +74,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
     }
 
     @Test
-    public void getUnreviewed_returns_different_unReviewed_materials_based_on_user() {
+    public void getUnreviewed_returns_different_unReviewed_materials_based_on_user_priviledge() {
         login(USER_MODERATOR);
         List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
 
@@ -97,7 +97,7 @@ public class FirstReviewAdministrationResourceTest extends ResourceIntegrationTe
         Material material = getMaterial(2L);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
-        Response updateResponse = doPost(SET_REVIEWED, Entity.entity(material, MediaType.APPLICATION_JSON_TYPE));
+        Response updateResponse = doPost(SET_REVIEWED, material);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
         Material materialAfter = getMaterial(2L);

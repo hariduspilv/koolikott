@@ -36,21 +36,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-public class EhisSOAPService {
+public class EhisSOAPService implements IEhisSOAPService {
 
     private static Logger logger = LoggerFactory.getLogger(EhisSOAPService.class);
-
     @Inject
     private EhisParser ehisParser;
-
     @Inject
     private Configuration configuration;
-
     @Inject
     private SOAPConnection connection;
 
+    @Override
     public Person getPersonInformation(String idCode) {
-        Person person = null;
         try {
             SOAPMessage message = createGetPersonInformationSOAPMessage(idCode);
 
@@ -66,12 +63,12 @@ public class EhisSOAPService {
 
             logger.info(format("Received response from EHIS: %s", xmlResponse));
 
-            person = ehisParser.parse(xmlResponse);
+            return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
             logger.error("Error getting User information from EHIS.", e);
+            return null;
         }
 
-        return person;
     }
 
     private SOAPMessage createGetPersonInformationSOAPMessage(String idCode) throws SOAPException {

@@ -91,20 +91,6 @@ public class PortfolioResource extends BaseResource {
     }
 
     @POST
-    @Path("recommend")
-    @RolesAllowed({RoleString.ADMIN})
-    public Recommendation recommendPortfolio(Portfolio portfolio) {
-        return portfolioService.addRecommendation(portfolio, getLoggedInUser());
-    }
-
-    @POST
-    @Path("removeRecommendation")
-    @RolesAllowed({RoleString.ADMIN})
-    public void removedPortfolioRecommendation(Portfolio portfolio) {
-        portfolioService.removeRecommendation(portfolio, getLoggedInUser());
-    }
-
-    @POST
     @Path("getUserLike")
     public UserLike getUserLike(Portfolio portfolio) {
         return userLikeService.getUserLike(portfolio, getLoggedInUser());

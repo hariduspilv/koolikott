@@ -2,15 +2,15 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.service.useractions.UserService;
-import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
-import ee.hm.dop.service.ehis.EhisSOAPService;
+import ee.hm.dop.service.ehis.IEhisSOAPService;
+import ee.hm.dop.service.useractions.UserService;
+import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
@@ -39,14 +39,14 @@ public class LoginService {
     @Inject
     private AuthenticationStateDao authenticationStateDao;
     @Inject
-    private EhisSOAPService ehisSOAPService;
+    private IEhisSOAPService ehisSOAPService;
     private SecureRandom random = new SecureRandom();
 
     /**
      * Try to log in with the given id code and if that fails, create a new user
      * and log in with that.
      */
-    public AuthenticatedUser logIn(String idCode, String name, String surname) {
+    public AuthenticatedUser login(String idCode, String name, String surname) {
         AuthenticatedUser authenticatedUser = login(idCode);
         if (authenticatedUser != null) {
             logger.info(format("User %s with id %s logged in.", authenticatedUser.getUser().getUsername(), idCode));
@@ -71,7 +71,7 @@ public class LoginService {
      * Log in (or create an user and log in) using data in an
      * authenticationState.
      */
-    public AuthenticatedUser logIn(AuthenticationState authenticationState) {
+    public AuthenticatedUser login(AuthenticationState authenticationState) {
         if (authenticationState == null) {
             return null;
         }
@@ -84,7 +84,7 @@ public class LoginService {
             return null;
         }
 
-        AuthenticatedUser authenticatedUser = logIn(authenticationState.getIdCode(), authenticationState.getName(),
+        AuthenticatedUser authenticatedUser = login(authenticationState.getIdCode(), authenticationState.getName(),
                 authenticationState.getSurname());
 
         authenticationStateDao.delete(authenticationState);
@@ -106,9 +106,6 @@ public class LoginService {
 
         //TODO: this should run in a separate thread
         Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        if (person != null) {
-            authenticatedUser.setPerson(person);
-        }
         authenticatedUser.setPerson(person);
 
         return createAuthenticatedUser(authenticatedUser);
@@ -143,6 +140,6 @@ public class LoginService {
             return null;
         }
         AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
-        return logIn(authenticationState);
+        return login(authenticationState);
     }
 }

@@ -40,7 +40,7 @@ public class EkoolService {
     public AuthenticatedUser authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
         Person person = getPerson(ekoolToken);
-        return loginService.logIn(person.getIdCode(), person.getFirstName(), person.getLastName());
+        return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
     }
 
     private Person getPerson(EkoolToken ekoolToken) {

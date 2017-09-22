@@ -31,22 +31,16 @@ import org.junit.Test;
 public class PictureResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_PICTURE_URL = "picture/%s";
-
     private static final String GET_SM_THUMBNAIL_URL = "picture/thumbnail/sm/%s";
     private static final String GET_SM_LARGE_THUMBNAIL_URL = "picture/thumbnail/sm_xs_xl/%s";
     private static final String GET_LG_THUMBNAIL_URL = "picture/thumbnail/lg/%s";
     private static final String GET_LG_LARGE_THUMBNAIL_URL = "picture/thumbnail/lg_xs/%s";
-
     private static final int SM_THUMBNAIL_WIDTH = 200;
     private static final int SM_THUMBNAIL_HEIGHT = 134;
-
     private static final int SM_LARGE_THUMBNAIL_WIDTH = 300;
     private static final int SM_LARGE_THUMBNAIL_HEIGHT = 200;
-
     private static final int LG_THUMBNAIL_WIDTH = (int) (300 * 1.1);
-
     private static final int LG_LARGE_THUMBNAIL_WIDTH = (int) (600  * 1.1);
-
     private static final String TEST_IMAGE_NAME = "bookCover.jpg";
     private static final double DELTA = 1e-15;
 

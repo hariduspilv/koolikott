@@ -421,62 +421,8 @@ public class MaterialServiceTest {
         verify(user, materialDao);
     }
 
-    @Test
-    public void addRecommendation() {
-        Capture<Material> capturedMaterial = newCapture();
-
-        User user = createMock(User.class);
-        Material material = new Material();
-        material.setId(1L);
-        material.setRepository(null);
-
-        expect(materialDao.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
-        expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
-        expectMaterialUpdate(capturedMaterial);
-        solrEngineService.updateIndex();
-
-        replayAll(user);
-
-        Recommendation returnedRecommendation = materialService.addRecommendation(material, user);
-
-        verifyAll(user);
-
-        Recommendation recommendation = capturedMaterial.getValue().getRecommendation();
-        assertNotNull(recommendation);
-        assertEquals(user, recommendation.getCreator());
-        assertEquals(recommendation, returnedRecommendation);
-    }
-
     private void expectMaterialUpdate(Capture<Material> capturedMaterial) {
         expect(materialDao.createOrUpdate(EasyMock.capture(capturedMaterial))).andAnswer(capturedMaterial::getValue);
-    }
-
-    @Test
-    public void removeRecommendation() {
-        Capture<Material> capturedMaterial = newCapture();
-
-        Recommendation recommendation = new Recommendation();
-        recommendation.setCreator(new User());
-        recommendation.setAdded(DateTime.now());
-
-        User user = createMock(User.class);
-        Material material = new Material();
-        material.setId(1L);
-        material.setRepository(null);
-        material.setRecommendation(recommendation);
-
-        expect(materialDao.findByIdNotDeleted(material.getId())).andReturn(material).anyTimes();
-        expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
-        expectMaterialUpdate(capturedMaterial);
-        solrEngineService.updateIndex();
-
-        replayAll(user);
-
-        materialService.removeRecommendation(material, user);
-
-        assertNull(capturedMaterial.getValue().getRecommendation());
-
-        verifyAll(user);
     }
 
     private void replayAll(Object... mocks) {

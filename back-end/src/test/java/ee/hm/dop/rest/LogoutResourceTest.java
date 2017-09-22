@@ -21,8 +21,7 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void testLogout() {
-        Response response = doGet("dev/login/39011220011");
-        AuthenticatedUser authenticatedUser = response.readEntity(new GenericType<AuthenticatedUser>() {
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI, new GenericType<AuthenticatedUser>() {
         });
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();

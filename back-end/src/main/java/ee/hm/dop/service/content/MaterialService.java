@@ -68,7 +68,7 @@ public class MaterialService implements PermissionItem {
     private FirstReviewService firstReviewService;
 
     public Material get(Long materialId, User loggedInUser) {
-        if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
+        if (UserUtil.isAdminOrModerator(loggedInUser)) {
             return materialDao.findById(materialId);
         }
         return materialDao.findByIdNotDeleted(materialId);
@@ -90,7 +90,7 @@ public class MaterialService implements PermissionItem {
         material.setSource(UrlUtil.processURL(material.getSource()));
         cleanPeerReviewUrls(material);
         material.setCreator(creator);
-        if (UserUtil.isUserPublisher(creator)) {
+        if (UserUtil.isPublisher(creator)) {
             material.setEmbeddable(true);
         }
         material.setRecommendation(null);
@@ -143,38 +143,12 @@ public class MaterialService implements PermissionItem {
         materialDao.createOrUpdate(originalMaterial);
     }
 
-    public Recommendation addRecommendation(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = validateAndFindNotDeleted(material);
-
-        Recommendation recommendation = new Recommendation();
-        recommendation.setCreator(loggedInUser);
-        recommendation.setAdded(DateTime.now());
-        originalMaterial.setRecommendation(recommendation);
-
-        originalMaterial = materialDao.createOrUpdate(originalMaterial);
-
-        solrEngineService.updateIndex();
-
-        return originalMaterial.getRecommendation();
-    }
-
     public Material validateAndFindNotDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
     }
 
     public Material validateAndFindWithDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
-    }
-
-    public void removeRecommendation(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = validateAndFindNotDeleted(material);
-        originalMaterial.setRecommendation(null);
-        materialDao.createOrUpdate(originalMaterial);
-        solrEngineService.updateIndex();
     }
 
     public void removeUserLike(Material material, User loggedInUser) {
@@ -206,7 +180,7 @@ public class MaterialService implements PermissionItem {
         cleanPeerReviewUrls(material);
         Material originalMaterial = get(material.getId(), changer);
         validateMaterialUpdate(originalMaterial, changer);
-        if (!UserUtil.isUserAdmin(changer)) {
+        if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
         material.setRepository(originalMaterial.getRepository());
@@ -216,9 +190,11 @@ public class MaterialService implements PermissionItem {
 
         Material updatedMaterial = null;
         //Null changer is the automated updating of materials during synchronization
-        if (changer == null || UserUtil.isUserAdminOrModerator(changer) || UserUtil.isUserCreator(originalMaterial, changer)) {
+        if (changer == null || UserUtil.isAdminOrModerator(changer) || UserUtil.isCreator(originalMaterial, changer)) {
             updatedMaterial = createOrUpdate(material);
-            if (strategy.updateIndex()) solrEngineService.updateIndex();
+            if (strategy.updateIndex()) {
+                solrEngineService.updateIndex();
+            }
         }
         processChanges(updatedMaterial);
         return updatedMaterial;
@@ -260,7 +236,7 @@ public class MaterialService implements PermissionItem {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
 
-        if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isUserAdminOrModerator(changer)) {
+        if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isAdminOrModerator(changer)) {
             throw new IllegalArgumentException("Normal user can't update external repository material");
         }
     }
@@ -338,15 +314,20 @@ public class MaterialService implements PermissionItem {
     }
 
     @Override
+    public boolean canView(User user, ILearningObject learningObject) {
+        return canAccess(user, learningObject);
+    }
+
+    @Override
     public boolean canAccess(User user, ILearningObject learningObject) {
         if (!(learningObject instanceof IMaterial)) return false;
-        return !learningObject.isDeleted() || UserUtil.isUserAdmin(user);
+        return !learningObject.isDeleted() || UserUtil.isAdmin(user);
     }
 
     @Override
     public boolean canUpdate(User user, ILearningObject learningObject) {
         if (!(learningObject instanceof IMaterial)) return false;
-        return !learningObject.isDeleted() || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
+        return !learningObject.isDeleted() || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 
     @Override

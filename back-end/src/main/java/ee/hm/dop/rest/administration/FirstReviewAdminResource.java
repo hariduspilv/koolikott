@@ -17,14 +17,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("admin/firstReview")
-public class FirstReviewAdministrationResource extends BaseResource {
+@Path("admin/firstReview/")
+public class FirstReviewAdminResource extends BaseResource {
 
     @Inject
     private FirstReviewService firstReviewService;
 
     @GET
-    @Path("/unReviewed")
+    @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<FirstReview> getUnReviewed() {
@@ -32,7 +32,7 @@ public class FirstReviewAdministrationResource extends BaseResource {
     }
 
     @GET
-    @Path("/unReviewed/count")
+    @Path("unReviewed/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUnReviewedCount() {
@@ -40,7 +40,7 @@ public class FirstReviewAdministrationResource extends BaseResource {
     }
 
     @POST
-    @Path("/setReviewed")
+    @Path("setReviewed")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setReviewed(LearningObject learningObject) {

@@ -13,8 +13,8 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.MaterialAdministrationService;
 
-@Path("material")
-public class MaterialAdministrationResource extends BaseResource {
+@Path("admin/brokenContent/")
+public class BrokenContentAdminResource extends BaseResource {
 
     @Inject
     private MaterialAdministrationService materialAdministrationService;
@@ -42,22 +42,6 @@ public class MaterialAdministrationResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Boolean isBroken(@QueryParam("materialId") long materialId) {
         return materialAdministrationService.isBroken(materialId);
-    }
-
-    @GET
-    @Path("getDeleted")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<Material> getDeletedMaterials() {
-        return materialAdministrationService.getDeletedMaterials();
-    }
-
-    @GET
-    @Path("getDeleted/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response getDeletedMaterialsCount() {
-        return ok(materialAdministrationService.getDeletedMaterialsCount());
     }
 
     @POST

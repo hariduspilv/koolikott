@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
 
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.enums.Role;
@@ -78,15 +77,15 @@ public class UserService {
     }
 
     public List<User> getModerators(User loggedInUser) {
-        return UserUtil.isUserAdmin(loggedInUser) ? userDao.getUsersByRole(Role.MODERATOR) : null;
+        return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersByRole(Role.MODERATOR) : null;
     }
 
     public List<User> getRestrictedUsers(User loggedInUser) {
-        return UserUtil.isUserAdmin(loggedInUser) ? userDao.getUsersByRole(Role.RESTRICTED) : null;
+        return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersByRole(Role.RESTRICTED) : null;
     }
 
     public List<User> getAllUsers(User loggedInUser) {
-        return UserUtil.isUserAdmin(loggedInUser) ? userDao.findAll() : null;
+        return UserUtil.isAdmin(loggedInUser) ? userDao.findAll() : null;
     }
 
     public String generateUsername(String name, String surname) {

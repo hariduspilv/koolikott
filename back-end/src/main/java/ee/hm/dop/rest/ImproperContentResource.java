@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.ImproperContentService;
 import ee.hm.dop.service.content.LearningObjectService;
@@ -53,7 +52,7 @@ public class ImproperContentResource extends BaseResource {
         if (learningObjectId != null) {
             LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
-            if (UserUtil.isUserAdmin(loggedInUser)) {
+            if (UserUtil.isAdmin(loggedInUser)) {
                 result.addAll(improperContentService.getByLearningObject(learningObject, loggedInUser));
             } else {
                 ImproperContent improper = improperContentService.getByLearningObjectAndCreator(learningObject,
@@ -102,33 +101,4 @@ public class ImproperContentResource extends BaseResource {
     public Response getImproperPortfoliosCount() {
         return ok(improperContentService.getImproperPortfolioSize(getLoggedInUser()));
     }
-
-    @DELETE
-    @RolesAllowed({RoleString.ADMIN})
-    public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
-        if (learningObjectId == null) {
-            throwBadRequestException("learningObject query param is required.");
-        }
-
-        LearningObject learningObject = learningObjectService.get(learningObjectId, getLoggedInUser());
-
-        if (learningObject == null) {
-            throwNotFoundException();
-        }
-
-        List<ImproperContent> impropers = improperContentService.getByLearningObject(learningObject, getLoggedInUser());
-        improperContentService.deleteAll(impropers, getLoggedInUser());
-    }
-
-    @DELETE
-    @Path("{improperContentId}")
-    @RolesAllowed({RoleString.ADMIN})
-    public void removeImproper(@PathParam("improperContentId") long improperContentId) {
-        ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
-        if (improper == null) {
-            throwNotFoundException();
-        }
-        improperContentService.deleteAll(Lists.newArrayList(improper), getLoggedInUser());
-    }
-
 }

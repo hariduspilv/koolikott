@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.stuudium.StuudiumUser;
-import ee.hm.dop.service.login.LoginService;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration.Configuration;
 
@@ -27,7 +26,7 @@ public class StuudiumService {
 
     public AuthenticatedUser authenticate(String token) {
         StuudiumUser stuudiumUser = getStuudiumUser(token);
-        return loginService.logIn(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
+        return loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
     }
 
     private StuudiumUser getStuudiumUser(String token) {
