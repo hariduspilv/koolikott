@@ -1,79 +1,56 @@
-<div layout="row" layout-sm="column" id="page-dashboard">
+<div data-layout="row" data-layout-sm="column" id="page-dashboard">
   <article class="md-padding" role="main" flex>
-    <div class="type-block">
-      <h1 data-translate="DASHBOARD"></h1>
+    <div>
+      <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
     </div>
-    <div data-ng-if="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
-      <md-card id="user-search">
-        <md-toolbar class="md-table-toolbar md-default">
-          <div layout-margin>
-            <h2 class="md-title" data-translate="SEARCH_USERS"></h2>
-          </div>
-          <div class="md-toolbar-tools">
-            <md-autocomplete flex
-                             md-min-length="0"
-                             md-input-name="autocompleteField"
-                             md-selected-item="selectedUser"
-                             md-search-text="searchText"
-                             md-items="user in querySearch(searchText)"
-                             md-item-text="user.username"
-                             placeholder="{{getUsernamePlaceholder()}}">
-              <md-item-template>
-                <span md-highlight-text="searchText">{{user.username}}</span>
-              </md-item-template>
-            </md-autocomplete>
-            <md-button aria-label="Ava kasutaja" class="md-raised md-default" data-ng-click="editUser(selectedUser)"
-                       data-translate="BUTTON_OPEN"></md-button>
-          </div>
-        </md-toolbar>
-      </md-card>
-      <md-divider></md-divider>
-    </div>
-
-    <md-card class="md-data-table" id="moderators-table">
-
-      <md-toolbar class="md-table-toolbar md-default" ng-if="!filter.show" data-ng-hide="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
-        <div class="md-toolbar-tools">
-          <h2 class="md-title">{{title}}</h2>
-          <div flex></div>
-          <md-button class="md-icon-button" ng-click="filter.show = true">
-            <md-icon>filter_list</md-icon>
-          </md-button>
-        </div>
-      </md-toolbar>
-
-      <md-toolbar class="md-table-toolbar md-default" ng-if="filter.show" data-ng-hide="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
+    <!-- BEGIN Progressbar while data loads -->
+    <md-progress-linear data-ng-if="!data"></md-progress-linear>
+    <!-- END Progressbar -->
+    <md-card class="md-data-table" id="moderators-table" data-ng-if="data">
+      <!-- BEGIN Search -->
+      <md-toolbar class="md-table-toolbar md-default">
         <div class="md-toolbar-tools">
           <md-icon>search</md-icon>
-          <form flex name="filter.form">
-            <input type="text" ng-model="query.filter" ng-model-options="filter.options" placeholder="search">
+          <form data-flex name="filter.form">
+            <input
+              type="text"
+              data-ng-model="query.filter"
+              data-ng-model-options="filter.options"
+              placeholder="{{'SEARCH' | translate}}"
+              id="search-items"
+            >
           </form>
-          <md-button class="md-icon-button" ng-click="removeFilter()">
+          <md-button class="md-icon-button md-ink-ripple" data-ng-click="clearFilter()" data-ng-if="query.filter">
             <md-icon>close</md-icon>
           </md-button>
         </div>
       </md-toolbar>
-
+      <!-- END Search -->
       <md-table-container class="table-container">
-        <md-card class="md-data-table" id="moderators-table">
-
-          <!--Directives for different views-->
-          <div data-ng-if="isView('/dashboard/moderators')" data-dop-moderators-table></div>
-          <div data-ng-if="isView('/dashboard/restrictedUsers')" data-dop-restricted-users-table></div>
-          <div data-ng-if="isView('/dashboard/deletedPortfolios')" data-dop-deleted-portfolio></div>
-          <div data-ng-if="isView('/dashboard/deletedMaterials')" data-dop-deleted-material></div>
-          <div data-ng-if="isView('/dashboard/improperMaterials')" data-dop-improper-material></div>
-          <div data-ng-if="isView('/dashboard/improperPortfolios')" data-dop-improper-portfolio></div>
-          <div data-ng-if="isView('/dashboard/brokenMaterials')" data-dop-broken-material></div>
-          <div data-ng-if="isView('/dashboard/changedLearningObjects')" data-dop-changed-learning-object></div>
-          <div data-ng-if="isView('/dashboard/unReviewed')" data-dop-un-reviewed></div>
-        </md-card>
+        <div data-ng-show="itemsCount" class="md-data-table" id="moderators-table">
+          <div data-ng-if="isView('/dashboard/unReviewed')" data-dop-unreviewed></div>
+          <div data-ng-if="isView('/dashboard/improperMaterials')" data-dop-improper></div>
+          <div data-ng-if="isView('/dashboard/improperPortfolios')" data-dop-improper></div>
+          <div data-ng-if="isView('/dashboard/changedLearningObjects')" data-dop-changed></div>
+          <div data-ng-if="isView('/dashboard/brokenMaterials')" data-dop-broken></div>
+          <div data-ng-if="isView('/dashboard/deletedPortfolios')" data-dop-deleted></div>
+          <div data-ng-if="isView('/dashboard/deletedMaterials')" data-dop-deleted></div>
+          <div data-ng-if="isView('/dashboard/moderators')" data-dop-users></div>
+          <div data-ng-if="isView('/dashboard/restrictedUsers')" data-dop-users></div>
+        </div>
+        <!-- BEGIN Not found message after data is loaded but contains 0 items -->
+        <div data-ng-show="data && !itemsCount" data-layout="row" data-layout-align="center center" data-layout-padding>
+          <h4 data-translate="ERROR_LEARNING_OBJECTS_NOT_FOUND"></h4>
+        </div>
+        <!-- END Not found message -->
       </md-table-container>
-      <md-table-pagination md-limit="query.limit"
-                           md-page="query.page"
-                           md-total="{{itemsCount}}"
-                           md-on-paginate="onPaginate"
-                           md-page-select>
+      <md-table-pagination
+        data-ng-if="itemsCount"
+        data-md-limit="query.limit"
+        data-md-page="query.page"
+        data-md-total="{{itemsCount}}"
+        data-md-on-paginate="onPaginate"
+        data-md-page-select>
       </md-table-pagination>
     </md-card>
   </article>

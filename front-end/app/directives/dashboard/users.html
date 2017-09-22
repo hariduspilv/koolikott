@@ -1,0 +1,31 @@
+<table md-table>
+  <thead md-head md-order="query.order" md-on-reorder="onReorder">
+    <tr md-row>
+      <th md-column md-order-by="byUsername"><span data-translate="USERNAME"></span></th>
+      <th md-column md-order-by="byFullName"><span data-translate="FULL_NAME"></span></th>
+      <th md-column md-order-by="byRole"><span data-translate="ROLE"></span></th>
+      <th data-ng-if="isView('/dashboard/moderators')" md-column md-order-by="byTaxons"><span data-translate="USER_TAXONS"></span></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody md-body>
+    <tr md-row ng-repeat="user in data" data-ng-click="editUser(user)" class="pointer">
+      <td md-cell data-ng-bind="user.username"></td>
+      <td md-cell data-ng-bind="user.name + ' ' + user.surname"></td>
+      <td md-cell>{{getTranslation(user.role)}}</td>
+      <td md-cell data-ng-if="isView('/dashboard/moderators')">
+        <span data-ng-repeat="taxon in user.userTaxons">
+          <span>{{getTaxonTranslation(taxon) | translate}}</span><span data-ng-if="$index < user.userTaxons.length - 1">, </span>
+        </span>
+      </td>
+      <td md-cell>
+        <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
+          <md-button aria-label="Ava" class="md-icon-button">
+            <md-icon>keyboard_arrow_right</md-icon>
+          </md-button>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
