@@ -40,7 +40,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
                 .findAny()
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
-        Response updateResponse = doPost(SET_REVIEWED, entity(learningObject));
+        Response updateResponse = doPost(SET_REVIEWED, learningObject);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
         List<FirstReview> firstReviews2 = doGet(GET_UNREVIEWED, listType());
@@ -74,7 +74,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getUnreviewed_returns_different_unReviewed_materials_based_on_user() {
+    public void getUnreviewed_returns_different_unReviewed_materials_based_on_user_priviledge() {
         login(USER_MODERATOR);
         List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
 
@@ -97,7 +97,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         Material material = getMaterial(2L);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
-        Response updateResponse = doPost(SET_REVIEWED, entity(material));
+        Response updateResponse = doPost(SET_REVIEWED, material);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
         Material materialAfter = getMaterial(2L);

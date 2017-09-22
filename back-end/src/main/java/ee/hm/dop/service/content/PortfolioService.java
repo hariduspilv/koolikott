@@ -8,7 +8,6 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterObject;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
@@ -48,7 +47,7 @@ public class PortfolioService implements PermissionItem {
     private FirstReviewService firstReviewService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
-        if (UserUtil.isUserAdminOrModerator(loggedInUser)) {
+        if (UserUtil.isAdminOrModerator(loggedInUser)) {
             return portfolioDao.findById(portfolioId);
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
@@ -189,23 +188,24 @@ public class PortfolioService implements PermissionItem {
     @Override
     public boolean canView(User loggedInUser, ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isNotPrivate(learningObject) || UserUtil.isUserAdminOrModerator(loggedInUser) || UserUtil.isUserCreator(learningObject, loggedInUser);
+        return isNotPrivate(learningObject) || UserUtil.isAdminOrModerator(loggedInUser) || UserUtil.isCreator(learningObject, loggedInUser);
     }
 
     @Override
     public boolean canAccess(User user, ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isPublic(learningObject) || UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
+        return isPublic(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 
     @Override
     public boolean canUpdate(User user, ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return UserUtil.isUserAdminOrModerator(user) || UserUtil.isUserCreator(learningObject, user);
+        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 
     @Override
     public boolean isPublic(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
         return ((IPortfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
     }
 

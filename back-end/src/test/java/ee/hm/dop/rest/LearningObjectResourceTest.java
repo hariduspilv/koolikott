@@ -34,7 +34,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(TEST_PORTFOLIO_ID);
         assertFalse("Tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG)));
 
-        Response response = doPut(format(ADD_TAG_URL, (Long) TEST_PORTFOLIO_ID), entity(tag(TEST_TAG)));
+        Response response = doPut(format(ADD_TAG_URL, (Long) TEST_PORTFOLIO_ID), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
 
         Portfolio portfolioAfter = getPortfolio(TEST_PORTFOLIO_ID);
@@ -44,7 +44,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void cannot_add_a_tag_to_learning_object_what_does_not_exist() {
         login(USER_PEETER);
-        Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTING_LEARNING_OBJECT_ID), entity(tag(TEST_TAG)));
+        Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTING_LEARNING_OBJECT_ID), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
@@ -69,10 +69,10 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(TEST_PORTFOLIO_ID);
         assertFalse("Tag  name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG_2)));
 
-        Response response = doPut(format(ADD_TAG_URL, (Long) TEST_PORTFOLIO_ID), entity(tag(TEST_TAG_2)));
+        Response response = doPut(format(ADD_TAG_URL, (Long) TEST_PORTFOLIO_ID), tag(TEST_TAG_2));
         assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
 
-        Response response2 = doPut(format(ADD_TAG_URL, (Long) TEST_PORTFOLIO_ID), entity(tag(TEST_TAG_2)));
+        Response response2 = doPut(format(ADD_TAG_URL, (Long) TEST_PORTFOLIO_ID), tag(TEST_TAG_2));
         assertEquals("Add tag with same name", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response2.getStatus());
     }
 

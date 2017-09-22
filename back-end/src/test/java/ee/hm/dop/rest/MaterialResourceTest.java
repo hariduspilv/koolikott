@@ -79,7 +79,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void increaseViewCount() {
         Material materialBefore = getMaterial(5L);
 
-        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, entity(materialWithId(5L)));
+        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(5L));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material materialAfter = getMaterial(5L);
@@ -417,7 +417,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     private Response createMaterial(Material material) {
-        return doPut(CREATE_MATERIAL_URL, entity(material));
+        return doPut(CREATE_MATERIAL_URL, material);
     }
 
     private List<CrossCurricularTheme> themeList() {

@@ -25,7 +25,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void setImproperNoData() {
         login(USER_SECOND);
 
-        Response response = doPut(IMPROPERS, entity(new ImproperContent()));
+        Response response = doPut(IMPROPERS, new ImproperContent());
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
@@ -33,7 +33,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void setImproperNotExistemLearningObject() {
         login(USER_SECOND);
 
-        Response response = doPut(IMPROPERS, entity(improperMaterialContent(34534534L)));
+        Response response = doPut(IMPROPERS, improperMaterialContent(34534534L));
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
@@ -96,7 +96,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void removeImproperByLearningObject() {
         login(USER_ADMIN);
 
-        doPut(IMPROPERS, entity(improperPortfolioContent(TEST_PORFOLIO_ID)), ImproperContent.class);
+        doPut(IMPROPERS, improperPortfolioContent(TEST_PORFOLIO_ID), ImproperContent.class);
 
         Response response = doDelete(format("impropers?learningObject=%s", TEST_PORFOLIO_ID));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
