@@ -6,12 +6,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
+
+import static org.joda.time.DateTime.now;
 
 public class MaterialDao extends AbstractDao<Material> {
     public static final String HTTP = "http://";
@@ -144,5 +142,11 @@ public class MaterialDao extends AbstractDao<Material> {
 
     public void incrementViewCount(LearningObject learningObject) {
         learningObjectDao.incrementViewCount(learningObject);
+    }
+
+    @Override
+    public Material createOrUpdate(Material entity) {
+        entity.setLastInteraction(now());
+        return super.createOrUpdate(entity);
     }
 }

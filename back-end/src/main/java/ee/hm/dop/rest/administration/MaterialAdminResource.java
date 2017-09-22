@@ -4,7 +4,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.content.MaterialAdministrationService;
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -14,20 +14,21 @@ import javax.ws.rs.Path;
 @Path("material")
 public class MaterialAdminResource extends BaseResource {
 
+
     @Inject
-    private MaterialAdministrationService materialAdministrationService;
+    private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @POST
     @Path("recommend")
     @RolesAllowed({RoleString.ADMIN})
     public Recommendation recommendMaterial(Material material) {
-        return materialAdministrationService.addRecommendation(material, getLoggedInUser());
+        return learningObjectAdministrationService.addRecommendation(material, getLoggedInUser());
     }
 
     @POST
     @Path("removeRecommendation")
     @RolesAllowed({RoleString.ADMIN})
     public void removedMaterialRecommendation(Material material) {
-        materialAdministrationService.removeRecommendation(material, getLoggedInUser());
+        learningObjectAdministrationService.removeRecommendation(material, getLoggedInUser());
     }
 }
