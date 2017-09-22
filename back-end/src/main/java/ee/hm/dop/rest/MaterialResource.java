@@ -159,17 +159,14 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
-        Material newMaterial = null;
-
+        User loggedInUser = getLoggedInUser();
         if (material.getId() == null) {
-            newMaterial = materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
-        } else if (getLoggedInUser() != null) {
-            newMaterial = materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
+            return materialService.createMaterial(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
+        } else if (loggedInUser != null) {
+            return materialService.update(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
         } else {
-            throwBadRequestException("Unable to add or update material - can extract get logged in user.");
+            throw badRequest("Unable to add or update material - can extract get logged in user.");
         }
-
-        return newMaterial;
     }
 
     @POST
@@ -192,7 +189,7 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("externalMaterial/")
+    @Path("externalMaterial")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
         return materialProxy.getProxyUrl(url_param);
