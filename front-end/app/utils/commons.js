@@ -472,11 +472,13 @@ function isSlideshareLink(url) {
 }
 
 function isVideoLink(url) {
+    if (!url) return;
     var extension = url.split('.').pop().toLowerCase();
-    return extension == "mp4" || extension == "ogg" || extension == "webm";
+    return extension == "mp4" || extension == "ogv" || extension == "webm";
 }
 
 function isAudioLink(url) {
+    if (!url) return;
     var extension = url.split('.').pop().toLowerCase();
     return extension == "mp3" || extension == "ogg" || extension == "wav";
 }
@@ -517,6 +519,47 @@ function matchType(type) {
     } else {
         return 'LINK';
     }
+}
+
+function isYoutubeVideo(url) {
+    // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+    var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return url && url.match(youtubeUrlRegex);
+}
+
+function isSlideshareLink(url) {
+    var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+    return url && url.match(slideshareUrlRegex);
+}
+
+function isVideoLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "mp4" || extension == "ogv" || extension == "webm";
+}
+
+function isAudioLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "mp3" || extension == "ogg" || extension == "wav";
+}
+
+function isPictureLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
+}
+
+function isEbookLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "epub";
+}
+
+function isPDFLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "pdf";
 }
 
 function isIE() {
