@@ -92,8 +92,8 @@ function embeddedMaterialController(translationService, iconService, embedServic
     });
 
     function getContentType() {
-        var baseUrl = document.location.origin;
-        var materialSource = getSource($scope.material);
+        const baseUrl = document.location.origin;
+        const materialSource = getSource($scope.material);
         // If the initial type is a LINK, try to ask the type from our proxy
         if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
             $scope.fallbackType = matchType(materialSource);
@@ -110,25 +110,21 @@ function embeddedMaterialController(translationService, iconService, embedServic
             $scope.sourceType = $scope.fallbackType;
             return;
         }
-        var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+        let filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
         $scope.sourceType = matchType(filename);
-        if ($scope.sourceType !== 'LINK') {
-            if ($scope.sourceType === 'PDF') $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
+        if ($scope.sourceType !== 'LINK' && $scope.sourceType === 'PDF') {
+            $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
         }
-    }
-
-    function probeContentFail() {
-        console.log("Content probing failed!");
     }
 
     $scope.removeMaterial = function ($event, material) {
         $event.preventDefault();
         $event.stopPropagation();
 
-        var removeMaterialFromChapter = function () {
-            var index = $scope.contentRow.learningObjects.indexOf(material);
+        function removeMaterialFromChapter() {
+            let index = $scope.contentRow.learningObjects.indexOf(material);
             $scope.contentRow.learningObjects.splice(index, 1);
-        };
+        }
 
         dialogService.showDeleteConfirmationDialog(
             'PORTFOLIO_DELETE_MATERIAL_CONFIRM_TITLE',
@@ -160,8 +156,6 @@ function embeddedMaterialController(translationService, iconService, embedServic
     $scope.navigateToMaterial = function (material, $event) {
         $event.preventDefault();
         storageService.setMaterial(material);
-
-
         $location.path('/material').search({
             id: material.id
         });
@@ -233,13 +227,16 @@ function embeddedMaterialController(translationService, iconService, embedServic
                 $scope.material.source += "?archive=true";
                 return;
             }
+            if (!$scope.material.uploadedFile && !$scope.material.uploadedFile.id) {
+                console.log("missing uploaded file id: " + $scope.material.id);
+            }
 
             $scope.sourceType = 'EBOOK';
             $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
 
             let ebookElement = '.embed-ebook-' + $scope.material.id;
             if ($(ebookElement).length !== 0) {
-                $(ebookElement).html('<iframe width="100%" height="500px" src="' + $scope.ebookLink + '"></iframe>');
+                $(ebookElement).html(iFrameLink($scope.ebookLink));
             } else {
                 $timeout(getSourceType, 100);
             }
@@ -249,7 +246,7 @@ function embeddedMaterialController(translationService, iconService, embedServic
 
             let pdfElement = '.embed-pdf-' + $scope.material.id;
             if ($(pdfElement).length !== 0) {
-                $(pdfElement).html('<iframe width="100%" height="500px" src="' + $scope.material.PDFLink + '"></iframe>');
+                $(pdfElement).html(iFrameLink($scope.material.PDFLink));
             } else {
                 $timeout(getSourceType, 100);
             }
@@ -258,26 +255,22 @@ function embeddedMaterialController(translationService, iconService, embedServic
         }
     }
 
-    function getType() {
-        return iconService.getMaterialIcon($scope.material.resourceTypes);
-    }
-
     function getCorrectLanguageString(languageStringList, materialLanguage) {
         if (languageStringList) {
             return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
         }
     }
 
-    function embedCallback(res) {
-        if (res && res.data.html) {
+    function embedCallback(result) {
+        if (result && result.data.html) {
             $scope.embeddedDataIframe = null;
             $scope.embeddedData = null;
             $scope.sourceType = 'NOEMBED';
 
-            if (res.data.html.contains("<iframe")) {
-                $scope.embeddedDataIframe = res.data.html.replace("http:", "");
+            if (result.data.html.contains("<iframe")) {
+                $scope.embeddedDataIframe = result.data.html.replace("http:", "");
             } else {
-                $scope.embeddedData = res.data.html.replace("http:", "");
+                $scope.embeddedData = result.data.html.replace("http:", "");
             }
         } else {
             if ($scope.material.source) {
@@ -286,7 +279,19 @@ function embeddedMaterialController(translationService, iconService, embedServic
         }
     }
 
+    function getType() {
+        return iconService.getMaterialIcon($scope.material.resourceTypes);
+    }
+
     function getMaterialFail() {
         console.log('Getting materials failed');
+    }
+
+    function iFrameLink(ebookLink) {
+        return '<iframe width="100%" height="500px" src="' + ebookLink + '"></iframe>';
+    }
+
+    function probeContentFail() {
+        console.log("Content probing failed!");
     }
 }

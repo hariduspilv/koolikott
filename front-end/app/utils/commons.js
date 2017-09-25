@@ -417,12 +417,7 @@ function getSource(material) {
     if (material.source) {
         return material.source;
     } else if (material.uploadedFile) {
-        /*
-         Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
-         with decodeURIComponent(escape()); then we again encode it in java to utf-8 (actually a mistake)
-         which results in another decodeURIComponent();
-         */
-        return decodeURIComponent(escape(decodeURIComponent(material.uploadedFile.url)));
+        return decodeUTF8(material.uploadedFile.url);
     }
 }
 
@@ -597,7 +592,13 @@ function countOccurrences(value, text) {
     return count;
 }
 
-function decodeUTF8(string){
+/**
+ *
+ * Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
+ * with decodeURIComponent(escape()); then we again encode it in java to utf-8 (actually a mistake)
+ * which results in another decodeURIComponent();
+ */
+function decodeUTF8(string) {
     return decodeURIComponent(escape(decodeURIComponent(string)));
 }
 
@@ -608,16 +609,16 @@ if (typeof localStorage === 'object') {
     } catch (e) {
         var tmp_storage = {};
         var p = '__unique__';  // Prefix all keys to avoid matching built-ins
-        Storage.prototype.setItem = function(k, v){
+        Storage.prototype.setItem = function (k, v) {
             tmp_storage[p + k] = v;
         };
-        Storage.prototype.getItem = function(k){
+        Storage.prototype.getItem = function (k) {
             return tmp_storage[p + k] === undefined ? null : tmp_storage[p + k];
         };
-        Storage.prototype.removeItem = function(k){
+        Storage.prototype.removeItem = function (k) {
             delete tmp_storage[p + k];
         };
-        Storage.prototype.clear = function(){
+        Storage.prototype.clear = function () {
             tmp_storage = {};
         };
         alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
