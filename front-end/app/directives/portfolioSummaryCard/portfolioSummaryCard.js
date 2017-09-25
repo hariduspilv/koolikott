@@ -155,6 +155,16 @@ angular.module('koolikottApp')
                     $scope.setNotImproper();
                 });
 
+                $scope.$on("markReviewed:portfolio", function () {
+                    if ($scope.isAdmin() && $scope.portfolio)
+                        serverCallService
+                            .makePost('rest/admin/firstReview/setReviewed', $scope.portfolio)
+                            .then(function () {
+                                $rootScope.learningObjectUnreviewed = false
+                                $rootScope.$broadcast('dashboard:adminCountsUpdated')
+                            })
+                })
+
                 function restoreSuccess() {
                     toastService.show('PORTFOLIO_RESTORED');
                     $scope.portfolio.deleted = false;
