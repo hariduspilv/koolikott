@@ -1,44 +1,5 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterOutputStream;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
@@ -60,6 +21,27 @@ import org.opensaml.xml.io.UnmarshallerFactory;
 import org.opensaml.xml.util.Base64;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.*;
+import javax.ws.rs.ext.Provider;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterOutputStream;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.*;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -193,6 +175,12 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void taatLogin_returns_found_status() throws Exception {
+        Response response = doGet("login/taat");
+        assertEquals(Response.Status.FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void taatAuthenticate() {
         MultivaluedMap<String, String> formParams = new MultivaluedStringMap();
         formParams.add("SAMLResponse", getSAMLResponse());
@@ -204,6 +192,12 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         tokens = tokens[0].split("\\/");
         assertEquals(307, response.getStatus());
         assertEquals("loginRedirect?token", tokens[4]);
+    }
+
+    @Test
+    public void ekoolAuthenticate_returns_temporary_redirect_status() throws Exception {
+        Response response = doGet("login/ekool");
+        assertEquals(Response.Status.TEMPORARY_REDIRECT.getStatusCode(), response.getStatus());
     }
 
     @Test
