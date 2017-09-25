@@ -11,7 +11,6 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,6 +27,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
     public static final String GET_MATERIAL_URL = "material?materialId=%s";
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
+    private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
     private static final String MATERIAL_GET_BROKEN = "admin/brokenContent/getBroken";
@@ -37,6 +37,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
     private static final String RESTORE_MATERIAL = "material/restore";
+    private static final String LIKE_URL = "material/like";
+    private static final String DISLIKE_URL = "material/dislike";
+    private static final String GET_USER_LIKE_URL = "material/getUserLike";
+    private static final String REMOVE_USER_LIKE_URL = "material/removeUserLike";
 
     @Inject
     private MaterialService materialService;
@@ -127,6 +131,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(collect.containsAll(asList(8L, 4L, 1L)));
+    }
+
+    @Test
+    public void getByCreatorCount_returns_same_materials_count_as_getByCreator_size() throws Exception {
+        List<Searchable> materials = doGet(format(GET_BY_CREATOR_URL, "mati.maasikas")).readEntity(SearchResult.class).getItems();
+        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, "mati.maasikas"), Long.class);
+        assertEquals("Materials size by creator, Materials count by creator", materials.size(), count);
     }
 
     @Test
@@ -222,6 +233,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         Response response = createMaterial(material);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void createOrUpdateMaterial_updates_existing_material() throws Exception {
+        login(USER_PEETER);
+
+        Material material = getMaterial(5L);
+        material.setSpecialEducation(true);
+
+        Material materialAfter = createMaterial(material).readEntity(Material.class);
+        assertEquals("Material isSpecialEducation", material.isSpecialEducation(), materialAfter.isSpecialEducation());
     }
 
     @Test
@@ -368,6 +390,39 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         login(USER_PEETER);
         Response response = doPost(RESTORE_MATERIAL, materialWithId(14L));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void likeMaterial_sets_it_as_liked() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(5L);
+
+        doPost(LIKE_URL, material);
+        UserLike userLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNotNull("User like exist", userLike);
+        assertEquals("Material is liked by user", true, userLike.isLiked());
+    }
+
+    @Test
+    public void dislikeMaterial_sets_it_as_not_liked() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(5L);
+
+        doPost(DISLIKE_URL, material);
+        UserLike userDislike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNotNull("User dislike exist", userDislike);
+        assertEquals("Material is disliked by user", false, userDislike.isLiked());
+    }
+
+    @Test
+    public void removeUserLike_removes_like_from_material() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(5L);
+
+        doPost(LIKE_URL, material);
+        doPost(REMOVE_USER_LIKE_URL, material);
+        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNull("User removed like does not exist", userRemoveLike);
     }
 
     private void assertMaterial1(Material material) {
