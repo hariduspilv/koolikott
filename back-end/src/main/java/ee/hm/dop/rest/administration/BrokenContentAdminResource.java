@@ -32,8 +32,8 @@ public class BrokenContentAdminResource extends BaseResource {
     @Path("getBroken/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBrokenMaterialCount() {
-        return ok(materialAdministrationService.getBrokenMaterialCount());
+    public Long getBrokenMaterialCount() {
+        return materialAdministrationService.getBrokenMaterialCount();
     }
 
     @GET

@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -41,5 +42,9 @@ public class UserDao extends AbstractDao<User> {
 
     public List<User> getUsersByRole(Role role) {
         return findByFieldList("role", role);
+    }
+
+    public BigDecimal getUsersCountByRole(Role role) {
+        return (BigDecimal) getCountByField("role", role);
     }
 }

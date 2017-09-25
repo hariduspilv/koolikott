@@ -8,7 +8,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("impropers")
@@ -52,8 +51,8 @@ public class ImproperContentResource extends BaseResource {
     @Path("materials/count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public Response getImproperMaterialsCount() {
-        return ok(improperContentService.getImproperMaterialSize(getLoggedInUser()));
+    public Long getImproperMaterialsCount() {
+        return improperContentService.getImproperMaterialSize(getLoggedInUser());
     }
 
     @GET
@@ -68,7 +67,7 @@ public class ImproperContentResource extends BaseResource {
     @Path("portfolios/count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public Response getImproperPortfoliosCount() {
-        return ok(improperContentService.getImproperPortfolioSize(getLoggedInUser()));
+    public Long getImproperPortfoliosCount() {
+        return improperContentService.getImproperPortfolioSize(getLoggedInUser());
     }
 }
