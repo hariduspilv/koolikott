@@ -38,36 +38,4 @@ public class ImproperContentResource extends BaseResource {
     public List<ImproperContent> getImproperById(@PathParam("learningObjectId") Long learningObjectId) {
         return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
     }
-
-    @GET
-    @Path("materials")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public List<ImproperContent> getImproperMaterials() {
-        return improperContentService.getImproperMaterials(getLoggedInUser());
-    }
-
-    @GET
-    @Path("materials/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public Long getImproperMaterialsCount() {
-        return improperContentService.getImproperMaterialSize(getLoggedInUser());
-    }
-
-    @GET
-    @Path("portfolios")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public List<ImproperContent> getImproperPortfolios() {
-        return improperContentService.getImproperPortfolios(getLoggedInUser());
-    }
-
-    @GET
-    @Path("portfolios/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public Long getImproperPortfoliosCount() {
-        return improperContentService.getImproperPortfolioSize(getLoggedInUser());
-    }
 }

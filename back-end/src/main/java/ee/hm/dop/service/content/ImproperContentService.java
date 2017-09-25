@@ -76,28 +76,6 @@ public class ImproperContentService {
         return impropers;
     }
 
-    public List<ImproperContent> getImproperMaterials(User user) {
-        return getAll(user).stream()
-                .filter(imp -> imp.getLearningObject() instanceof Material)
-                .collect(Collectors.toList());
-    }
-
-    public List<ImproperContent> getImproperPortfolios(User user) {
-        return getAll(user).stream()
-                .filter(imp -> imp.getLearningObject() instanceof Portfolio && !imp.getLearningObject().isDeleted())
-                .collect(Collectors.toList());
-    }
-
-    public long getImproperMaterialSize(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        return improperContentDao.getImproperMaterialCount();
-    }
-
-    public long getImproperPortfolioSize(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        return improperContentDao.getImproperPortfolioCount();
-    }
-
     /**
      * @param learningObject
      * @param creator        who created the ImproperContent
