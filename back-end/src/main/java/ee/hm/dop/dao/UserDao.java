@@ -44,7 +44,7 @@ public class UserDao extends AbstractDao<User> {
         return findByFieldList("role", role);
     }
 
-    public BigDecimal getUsersCountByRole(Role role) {
-        return (BigDecimal) getCountByField("role", role);
+    public Long getUsersCountByRole(Role role) {
+        return (Long) getCountByField("role", role);
     }
 }

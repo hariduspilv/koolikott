@@ -2,7 +2,6 @@ package ee.hm.dop.service.useractions;
 
 import static java.lang.String.format;
 
-import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,7 +82,7 @@ public class UserService {
         return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersByRole(Role.MODERATOR) : null;
     }
 
-    public BigDecimal getModeratorsCount(User loggedInUser) {
+    public Long getModeratorsCount(User loggedInUser) {
         return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersCountByRole(Role.MODERATOR) : null;
     }
 
@@ -91,7 +90,7 @@ public class UserService {
         return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersByRole(Role.RESTRICTED) : null;
     }
 
-    public BigDecimal getRestrictedUsersCount(User loggedInUser) {
+    public Long getRestrictedUsersCount(User loggedInUser) {
         return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersCountByRole(Role.RESTRICTED) : null;
     }
 
