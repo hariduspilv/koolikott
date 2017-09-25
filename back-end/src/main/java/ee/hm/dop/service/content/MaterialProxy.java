@@ -1,7 +1,10 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.slf4j.Logger;
@@ -22,15 +25,9 @@ public class MaterialProxy {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public Response getProxyUrl(String url_param) throws IOException {
-        String contentDisposition;
         HttpClient client = new HttpClient();
-        GetMethod get;
-
-        try {
-            get = new GetMethod(url_param);
-        } catch (IllegalArgumentException e) {
-            get = new GetMethod(URIUtil.encodePath(url_param));
-        }
+        client.setHostConfiguration(hostConfig(url_param));
+        GetMethod get = getMethod(url_param);
 
         try {
             client.executeMethod(get);
@@ -39,22 +36,45 @@ public class MaterialProxy {
             return Response.noContent().build();
         }
 
-
-        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals(CONTENT_DISPOSITION)) {
-            contentDisposition = get.getResponseHeaders(CONTENT_DISPOSITION)[0].getValue();
-            contentDisposition = contentDisposition.replace("attachment", "Inline");
-            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
-                    contentDisposition).build();
+        String attachmentLocation = attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE);
+        if (attachmentLocation.equals(CONTENT_DISPOSITION)) {
+            String contentDisposition = get.getResponseHeaders(CONTENT_DISPOSITION)[0].getValue().replace("attachment", "Inline");
+            return buildContentDispositionResponse(get.getResponseBody(), contentDisposition);
         }
-        if (attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE).equals(CONTENT_TYPE)) {
+        if (attachmentLocation.equals(CONTENT_TYPE)) {
             // Content-Disposition is missing, try to extract the filename from url instead
             String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
-            contentDisposition = format("Inline; filename=\"%s\"", fileName);
-            return Response.ok(get.getResponseBody(), PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
-                    contentDisposition).build();
+            String contentDisposition = format("Inline; filename=\"%s\"", fileName);
+            return buildContentTypeResponse(get.getResponseBody(), contentDisposition);
         }
-
         return Response.noContent().build();
+    }
+
+    private Response buildContentTypeResponse(byte[] responseBody, String contentDisposition) throws IOException {
+        return Response.ok(responseBody, PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
+                contentDisposition).build();
+    }
+
+    private Response buildContentDispositionResponse(byte[] responseBody, String contentDisposition) throws IOException {
+        return Response.ok(responseBody, PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
+                contentDisposition).build();
+    }
+
+    private HostConfiguration hostConfig(String url_param) {
+        HostConfiguration hostConfiguration = new HostConfiguration();
+        hostConfiguration.setHost(UrlUtil.getHost(url_param));
+        return hostConfiguration;
+    }
+
+    private GetMethod getMethod(String url_param) throws URIException {
+        GetMethod get;
+
+        try {
+            get = new GetMethod(url_param);
+        } catch (IllegalArgumentException e) {
+            get = new GetMethod(URIUtil.encodePath(url_param));
+        }
+        return get;
     }
 
     private String attachmentLocation(GetMethod get, String extension, String mime_type) {
