@@ -1,21 +1,10 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.metadata.CrossCurricularThemeService;
-import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
+import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
-import ee.hm.dop.service.metadata.TargetGroupService;
-import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
 import org.apache.commons.lang.BooleanUtils;
@@ -26,9 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("search")
 public class SearchResource extends BaseResource {

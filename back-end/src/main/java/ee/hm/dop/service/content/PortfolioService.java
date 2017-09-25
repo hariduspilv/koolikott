@@ -3,13 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.ChapterObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.model.ChangedLearningObject;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ChapterObject;
-import ee.hm.dop.model.Comment;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.ReducedLearningObject;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IPortfolio;
@@ -22,6 +16,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,6 +50,12 @@ public class PortfolioService implements PermissionItem {
             throw ValidatorUtil.permissionError();
         }
         return portfolio;
+    }
+
+    public SearchResult getByCreatorResult(User creator, User loggedInUser, int start, int maxResults) {
+        List<Searchable> searchables = new ArrayList<>(getByCreator(creator, loggedInUser, start, maxResults));
+        Long size = getCountByCreator(creator);
+        return new SearchResult(searchables, size, start);
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {

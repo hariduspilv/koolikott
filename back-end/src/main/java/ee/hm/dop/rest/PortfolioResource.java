@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserLikeService;
@@ -45,26 +46,18 @@ public class PortfolioResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
-
-        User creator = userService.getUserByUsername(username);
+        User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         User loggedInUser = getLoggedInUser();
-
-        List<Searchable> searchables = new ArrayList<>(portfolioService.getByCreator(creator, loggedInUser, start, maxResults));
-        Long size = portfolioService.getCountByCreator(creator);
-        return new SearchResult(searchables, size, start);
-
+        return portfolioService.getByCreatorResult(creator, loggedInUser, start, maxResults);
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByCreatorCount(@QueryParam("username") String username) {
-        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
-
-        User creator = userService.getUserByUsername(username);
+        User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         return ok(portfolioService.getCountByCreator(creator));
@@ -80,14 +73,14 @@ public class PortfolioResource extends BaseResource {
     @Path("like")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likePortfolio(Portfolio portfolio) {
-        userLikeService.addUserLike(portfolio, getLoggedInUser(), true);
+        userLikeService.addUserLike(portfolio, getLoggedInUser(), Like.LIKE);
     }
 
     @POST
     @Path("dislike")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikePortfolio(Portfolio portfolio) {
-        userLikeService.addUserLike(portfolio, getLoggedInUser(), false);
+        userLikeService.addUserLike(portfolio, getLoggedInUser(), Like.DISLIKE);
     }
 
     @POST
@@ -135,5 +128,10 @@ public class PortfolioResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
+    }
+
+    private User getValidCreator(@QueryParam("username") String username) {
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
+        return userService.getUserByUsername(username);
     }
 }
