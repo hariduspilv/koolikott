@@ -3,9 +3,14 @@
 angular.module('koolikottApp')
 .factory('iconService',
 function() {
-    var getMaterialIcon = function(resourceTypes) {
-        if (resourceTypes == undefined || resourceTypes == null) return '';
-        if (resourceTypes.length == 0) return 'description';
+
+    return {
+        getMaterialIcon: getMaterialIcon
+    };
+
+    function getMaterialIcon(resourceTypes) {
+        if (resourceTypes === undefined || resourceTypes === null) return '';
+        if (resourceTypes.length === 0) return 'description';
 
         for (var i = 0; i < resourceTypes.length; i++) {
             switch(resourceTypes[i].name.trim()) {
@@ -51,11 +56,7 @@ function() {
                     return 'web';
             }
         }
-
         return 'description';
-    };
+    }
 
-    return {
-        getMaterialIcon: getMaterialIcon
-    };
 });
