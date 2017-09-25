@@ -159,6 +159,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
+                $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
                 if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                     if ($scope.material.improper > 0) {
@@ -411,6 +412,13 @@ angular.module('koolikottApp')
             $scope.$on("markCorrect:learningObject", () => {
                 $scope.markMaterialCorrect();
             });
+
+            $scope.$on("markReviewed:learningObject", () => {
+                materialService.markReviewed($scope.material).then(function () {
+                    $rootScope.learningObjectUnreviewed = false
+                    $rootScope.$broadcast('dashboard:adminCountsUpdated')
+                })
+            })
 
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');

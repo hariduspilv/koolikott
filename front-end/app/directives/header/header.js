@@ -397,7 +397,7 @@ angular.module('koolikottApp').directive('dopHeader', [
                 };
 
                 $scope.isHeaderRed = function () {
-                    if ($scope.isAdminOrModerator() && ($scope.isViewAdminPanelPage || (($scope.learningObjectImproper || $scope.learningObjectBroken || $scope.learningObjectChanged) && ($scope.isViewMaterialOrPortfolioPage && !$rootScope.learningObjectDeleted)))) {
+                    if ($scope.isAdminOrModerator() && ($scope.isViewAdminPanelPage || (($scope.learningObjectImproper || $scope.learningObjectBroken || $scope.learningObjectChanged || $scope.learningObjectUnreviewed || $scope.learningObjectDeleted) && $scope.isViewMaterialOrPortfolioPage))) {
                         $rootScope.$broadcast('header:red');
                         return true;
                     } else {

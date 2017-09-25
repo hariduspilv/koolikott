@@ -71,6 +71,16 @@ function MaterialService(serverCallService, authenticatedUserService) {
             });
     }
 
+    function markReviewed(material) {
+        return !authenticatedUserService.isAdmin() || !material
+            ? Promise.reject()
+            : serverCallService
+                .makePost('rest/admin/firstReview/setReviewed', material)
+                .then(function (response) {
+                    return response.data
+                })
+    }
+
     return {
         getMaterialById: getMaterialById,
         increaseViewCount: increaseViewCount,
@@ -78,6 +88,7 @@ function MaterialService(serverCallService, authenticatedUserService) {
         deleteMaterial: deleteMaterial,
         setNotImproper: setNotImproper,
         restoreMaterial: restoreMaterial,
-        setMaterialCorrect: setMaterialCorrect
+        setMaterialCorrect: setMaterialCorrect,
+        markReviewed: markReviewed
     }
 }
