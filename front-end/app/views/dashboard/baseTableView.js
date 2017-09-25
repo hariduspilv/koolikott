@@ -156,7 +156,6 @@ angular.module('koolikottApp').controller('baseTableViewController', [
 
                 sortService.orderItems(data, $scope.query.order);
                 $scope.data = data.slice(0, $scope.query.limit);
-                console.log('$scope.data:', $scope.data);
             }
         };
 

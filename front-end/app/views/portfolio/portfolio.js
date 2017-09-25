@@ -78,6 +78,7 @@ angular.module('koolikottApp')
                         $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
                         $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
                         $rootScope.learningObjectChanged = $scope.portfolio.changed > 0;
+                        $rootScope.learningObjectUnreviewed = !!$scope.portfolio.unReviewed;
 
                         if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             if ($scope.portfolio.improper > 0) {
@@ -159,6 +160,10 @@ angular.module('koolikottApp')
                 $scope.$on("setNotImproper:learningObject", function () {
                     $scope.$broadcast("setNotImproper:portfolio");
                 });
+
+                $scope.$on("markReviewed:learningObject", function () {
+                    $scope.$broadcast("markReviewed:portfolio")
+                })
 
                 $scope.isAdmin = function () {
                     return authenticatedUserService.isAdmin();

@@ -1,20 +1,56 @@
-.error-message-container {
-  background-color: #2c2c2c;
-  color: #fff;
-  margin-bottom: 16px;
-  md-icon {
-    color:#fff;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-  p {
+.error-message .md-toolbar-tools {
+  max-height: none;
+  height: auto;
+  min-height: 64px;
+  align-items: flex-start;
+
+  > .material-icons {
     margin-top: 20px;
-    margin-bottom: 20px;
   }
-  .reason {
-    margin-left: 16px;
-    margin-top: 21px;
-    margin-bottom: 20px;
-    font-weight: 600;
+
+  > .md-icon-button {
+    margin-top: 12px;
   }
 }
+
+.error-message-body {
+  margin: 20px $layout-gutter-width / 2;
+
+  > h1, h2, h3 {
+    margin: 0;
+  }
+}
+
+/* .error-message-reasons-toggle {
+  margin: ($layout-gutter-width / 4) 0 0;
+  user-select: none;
+
+  [data-ng-click] {
+    cursor: pointer;
+  }
+
+  .material-icons {
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
+
+    &.flipped {
+      transform: rotate(180deg)
+    }
+  }
+} */
+
+.error-message-reasons {
+  font-size: $body-font-size-base;
+  overflow: auto;
+  transition: height $swift-ease-out-duration $swift-ease-out-timing-function;
+  margin-top: $layout-gutter-width / 4;
+
+  &.collapsed {
+    height: 0 !important;
+    overflow: hidden;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+

@@ -23,7 +23,7 @@
 
   <uib-accordion close-others="false">
     <!-- BEGIN Dashboard -->
-    <div uib-accordion-group class="panel-default" is-open="dashboardOpen">
+    <div uib-accordion-group class="panel-default" is-open="dashboardOpen" ng-if="isAdmin() || isModerator()">
       <uib-accordion-heading>
         <a
           id="dashboard"

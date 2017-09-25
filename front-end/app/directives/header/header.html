@@ -2,8 +2,7 @@
 <md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
             ng-class="{
             'md-accent': $root.isEditPortfolioMode,
-            'md-red': isHeaderRed(),
-            'md-gray': (isAdminOrModerator() && learningObjectDeleted && isViewMaterialOrPortfolioPage)
+            'md-red': isHeaderRed()
             }"
             data-click-outside="clickOutside()"
             outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown">
@@ -17,7 +16,7 @@
         </md-button>
         <md-button data-ng-if="isEditModeAndNotEditView" data-ng-click="$root.back(); closeDetailedSearch()" data-ng-class="{'md-icon-button': isMobileView}">
           <md-icon class="md-48">arrow_backward</md-icon>
-          <span class="vertical-center" hide-xs hide-sm data-translate="BACK"></span>
+          <span hide-xs hide-sm data-translate="BACK"></span>
         </md-button>
         <!-- logo -->
         <div class="navbar-logo-main" data-ng-if="!isEditModeAndNotEditView">
