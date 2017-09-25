@@ -12,14 +12,18 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.LearningObject;
 import org.junit.Test;
 
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     private static final String IMPROPERS = "impropers";
     public static final String IMPROPER_MATERIALS = "impropers/materials";
+    public static final String IMPROPER_MATERIALS_COUNT = "impropers/materials/count";
     public static final String IMPROPER_PORTFOLIOS = "impropers/portfolios";
+    public static final String IMPROPER_PORTFOLIOS_COUNT = "impropers/portfolios/count";
     public static final long TEST_PORFOLIO_ID = 101L;
+    public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
 
     @Test
     public void setImproperNoData() {
@@ -47,7 +51,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(newImproperContent.getId());
         assertEquals((Long) 1L, newImproperContent.getLearningObject().getId());
 
-        Response response = doDelete(format("impropers/%s", newImproperContent.getId()));
+        Response response = doDelete(format(GET_IMPROPERS_BY_ID, newImproperContent.getId()));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
@@ -68,7 +72,15 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         List<ImproperContent> improperContents = doGet(IMPROPER_MATERIALS, genericType());
 
         assertNotNull(improperContents.size());
+        long uniqueLearningObjIdsCount = improperContents.stream()
+                .map(ImproperContent::getLearningObject)
+                .map(LearningObject::getId)
+                .distinct()
+                .count();
         assertEquals(3, improperContents.size());
+
+        long materialsCount = doGet(IMPROPER_MATERIALS_COUNT, Long.class);
+        assertEquals(uniqueLearningObjIdsCount, materialsCount);
     }
 
     @Test
@@ -79,13 +91,16 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(improperContents.size());
         assertEquals(2, improperContents.size());
+
+        long portfoliosCount = doGet(IMPROPER_PORTFOLIOS_COUNT, Long.class);
+        assertEquals(improperContents.size(), portfoliosCount);
     }
 
     @Test
     public void getImproperByLearningObject() {
         login(USER_SECOND);
 
-        List<ImproperContent> improperContents = doGet(format("impropers?learningObject=%s", 103L), genericType());
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, 103L), genericType());
 
         assertNotNull(improperContents.size());
         assertEquals(1, improperContents.size());
@@ -101,7 +116,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         Response response = doDelete(format("impropers?learningObject=%s", TEST_PORFOLIO_ID));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        List<ImproperContent> improperContents = doGet(format("impropers?learningObject=%s", TEST_PORFOLIO_ID), genericType());
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TEST_PORFOLIO_ID), genericType());
 
         assertTrue(improperContents.isEmpty());
     }

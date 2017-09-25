@@ -55,8 +55,8 @@ public class ChangedLearningObjectAdminResource extends BaseResource {
     @GET
     @Path("count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response getCount() {
-        return ok(changedLearningObjectService.getCount());
+    public Long getCount() {
+        return changedLearningObjectService.getCount();
     }
 
 }

@@ -1,6 +1,7 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.utils.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.solr.client.solrj.SolrClient;
@@ -70,38 +71,34 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public List<String> suggest(String query, boolean suggestTags) {
-        if (query.isEmpty()) {
-            return null;
-        }
-        QueryResponse qr = null;
+    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
+        if (query.isEmpty()) return null;
         SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setRequestHandler(suggestTags ? SUGGEST_TAG_URL : SUGGEST_URL);
+        solrQuery.setRequestHandler(suggestionStrategy.suggestTag() ? SUGGEST_TAG_URL : SUGGEST_URL);
         solrQuery.setQuery(query);
 
+        QueryResponse qr;
         try {
             qr = solrClient.query(solrQuery, SolrRequest.METHOD.POST);
         } catch (SolrServerException | IOException e) {
             logger.error("The SolrServer encountered an error.");
+            return null;
         }
 
-        List<String> suggestions = new ArrayList<>();
-        if (qr != null && qr.getSuggesterResponse() != null) {
-            List<Suggestion> combinedSuggestions = new ArrayList<>();
-
-            if (suggestTags) {
-                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopTagSuggester"));
-            } else {
-                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
-                combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
-            }
-
-            for (Suggestion suggestion : combinedSuggestions) {
-                suggestions.add(suggestion.getTerm());
-            }
-            return suggestions.size() > SUGGEST_COUNT ? suggestions.subList(0, SUGGEST_COUNT - 1) : suggestions;
+        if (qr.getSuggesterResponse() == null) {
+            return null;
         }
-        return null;
+        List<Suggestion> combinedSuggestions = new ArrayList<>();
+
+        if (suggestionStrategy.suggestTag()) {
+            combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopTagSuggester"));
+        } else {
+            combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
+            combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
+        }
+
+        List<String> suggestions = combinedSuggestions.stream().map(Suggestion::getTerm).collect(Collectors.toList());
+        return suggestions.size() > SUGGEST_COUNT ? suggestions.subList(0, SUGGEST_COUNT - 1) : suggestions;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.ImproperContentDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.utils.UserUtil;
@@ -16,6 +17,16 @@ public class ImproperContentService {
     private ImproperContentDao improperContentDao;
     @Inject
     private LearningObjectService learningObjectService;
+
+    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser){
+        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
+
+        if (UserUtil.isAdmin(loggedInUser)) {
+            return getByLearningObject(learningObject, loggedInUser);
+        }
+        ImproperContent improper = getByLearningObjectAndCreator(learningObject, loggedInUser, loggedInUser);
+        return improper != null ? Lists.newArrayList(improper) : Lists.newArrayList();
+    }
 
     public ImproperContent addImproper(ImproperContent improperContent, User creator) {
         LearningObject learningObject = findValid(improperContent, creator);
@@ -59,29 +70,6 @@ public class ImproperContentService {
         List<ImproperContent> impropers = improperContentDao.findAllValid();
         removeIfHasNoAccess(user, impropers);
         return impropers;
-    }
-
-    public List<ImproperContent> getImproperMaterials(User user) {
-        List<ImproperContent> impropers = getAll(user);
-        return impropers.stream()
-                .filter(imp -> imp.getLearningObject() instanceof Material)
-                .collect(Collectors.toList());
-    }
-
-    public List<ImproperContent> getImproperPortfolios(User user) {
-        return getAll(user).stream()
-                .filter(imp -> imp.getLearningObject() instanceof Portfolio && !imp.getLearningObject().isDeleted())
-                .collect(Collectors.toList());
-    }
-
-    public long getImproperMaterialSize(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        return improperContentDao.getImproperMaterialCount();
-    }
-
-    public long getImproperPortfolioSize(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        return improperContentDao.getImproperPortfolioCount();
     }
 
     /**

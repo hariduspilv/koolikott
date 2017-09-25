@@ -1,22 +1,10 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.MaterialMetadataService;
-import ee.hm.dop.service.metadata.CrossCurricularThemeService;
-import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.LicenseTypeService;
-import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TargetGroupService;
-import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.metadata.*;
 import org.apache.http.HttpHeaders;
 
 import javax.inject.Inject;
@@ -56,6 +44,7 @@ public class LearningMaterialMetadataResource extends BaseResource{
     public Response getEducationalContext() {
         List<EducationalContext> taxons = taxonService.getAllEducationalContext();
         if (taxons != null) {
+//            todo why is here 2 min cache?
             return Response.ok(taxons).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_120).build();
         }
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();

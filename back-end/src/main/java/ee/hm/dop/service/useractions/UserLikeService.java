@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -28,14 +29,14 @@ public class UserLikeService {
         return userLikeDao.findMostLikedSince(now().minusYears(1), maxResults);
     }
 
-    public UserLike addUserLike(Material material, User loggedInUser, boolean isLiked) {
+    public UserLike addUserLike(Material material, User loggedInUser, Like like) {
         Material originalMaterial = materialService.validateAndFindNotDeleted(material);
         userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
 
-        return save(originalMaterial, loggedInUser, isLiked);
+        return save(originalMaterial, loggedInUser, like);
     }
 
-    public UserLike addUserLike(Portfolio portfolio, User loggedInUser, boolean isLiked) {
+    public UserLike addUserLike(Portfolio portfolio, User loggedInUser, Like like) {
         Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
         if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
@@ -44,16 +45,16 @@ public class UserLikeService {
 
         userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
 
-        return save(originalPortfolio, loggedInUser, isLiked);
+        return save(originalPortfolio, loggedInUser, like);
     }
 
-    private UserLike save(LearningObject learningObject, User loggedInUser, boolean isLiked) {
-        UserLike like = new UserLike();
-        like.setLearningObject(learningObject);
-        like.setCreator(loggedInUser);
-        like.setLiked(isLiked);
-        like.setAdded(DateTime.now());
-        return userLikeDao.update(like);
+    private UserLike save(LearningObject learningObject, User loggedInUser, Like like) {
+        UserLike userLike = new UserLike();
+        userLike.setLearningObject(learningObject);
+        userLike.setCreator(loggedInUser);
+        userLike.setLiked(like.isLiked());
+        userLike.setAdded(DateTime.now());
+        return userLikeDao.update(userLike);
     }
 
     public void removeUserLike(Portfolio portfolio, User loggedInUser) {

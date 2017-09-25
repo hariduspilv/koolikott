@@ -23,34 +23,6 @@ public class MaterialAdministrationService {
     private BrokenContentDao brokenContentDao;
     @Inject
     private MaterialService materialService;
-    @Inject
-    private SolrEngineService solrEngineService;
-
-    public Recommendation addRecommendation(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = materialService.validateAndFindNotDeleted(material);
-
-        Recommendation recommendation = new Recommendation();
-        recommendation.setCreator(loggedInUser);
-        recommendation.setAdded(DateTime.now());
-        originalMaterial.setRecommendation(recommendation);
-
-        originalMaterial = materialDao.createOrUpdate(originalMaterial);
-
-        solrEngineService.updateIndex();
-
-        return originalMaterial.getRecommendation();
-    }
-
-    public void removeRecommendation(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = materialService.validateAndFindNotDeleted(material);
-        originalMaterial.setRecommendation(null);
-        materialDao.createOrUpdate(originalMaterial);
-        solrEngineService.updateIndex();
-    }
 
     public void setMaterialNotBroken(Material material) {
         Material originalMaterial = materialService.validateAndFindNotDeleted(material);

@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -188,16 +189,21 @@ public class MaterialService implements PermissionItem {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        Material updatedMaterial = null;
+        Material updatedMaterial = getUpdatedMaterial(material, changer, strategy, originalMaterial);
+        processChanges(updatedMaterial);
+        return updatedMaterial;
+    }
+
+    private Material getUpdatedMaterial(Material material, User changer, SearchIndexStrategy strategy, Material originalMaterial) {
         //Null changer is the automated updating of materials during synchronization
         if (changer == null || UserUtil.isAdminOrModerator(changer) || UserUtil.isCreator(originalMaterial, changer)) {
-            updatedMaterial = createOrUpdate(material);
+            Material updatedMaterial = createOrUpdate(material);
             if (strategy.updateIndex()) {
                 solrEngineService.updateIndex();
             }
+            return updatedMaterial;
         }
-        processChanges(updatedMaterial);
-        return updatedMaterial;
+        throw ValidatorUtil.permissionError();
     }
 
     private void processChanges(Material material) {
@@ -239,6 +245,11 @@ public class MaterialService implements PermissionItem {
         if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isAdminOrModerator(changer)) {
             throw new IllegalArgumentException("Normal user can't update external repository material");
         }
+    }
+
+    public SearchResult getByCreatorResult(User creator, int start, int maxResults) {
+        List<Searchable> userFavorites = new ArrayList<>(getByCreator(creator, start, maxResults));
+        return new SearchResult(userFavorites, getByCreatorSize(creator), start);
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {

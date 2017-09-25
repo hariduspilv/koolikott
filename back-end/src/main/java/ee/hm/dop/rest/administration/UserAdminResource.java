@@ -56,6 +56,6 @@ public class UserAdminResource extends BaseResource {
     }
 
     private void mustHaveUser(User user) {
-        if (user == null) throwBadRequestException("No user received!");
+        if (user == null) throw badRequest("No user received!");
     }
 }
