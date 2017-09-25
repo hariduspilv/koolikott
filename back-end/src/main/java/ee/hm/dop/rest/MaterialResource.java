@@ -156,13 +156,13 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
         User loggedInUser = getLoggedInUser();
-        if (material.getId() == null) {
-            return materialService.createMaterial(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
-        } else if (loggedInUser != null) {
-            return materialService.update(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
-        } else {
+        if (loggedInUser == null) {
             throw badRequest("Unable to add or update material - can not find logged in user.");
         }
+        if (material.getId() == null) {
+            return materialService.createMaterial(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
+        }
+        return materialService.update(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
     }
 
     @POST
