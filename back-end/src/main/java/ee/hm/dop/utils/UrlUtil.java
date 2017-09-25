@@ -31,7 +31,17 @@ public class UrlUtil {
 
             return String.format("%s%s", hostName, url.getFile());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Source has no protocol");
+        }
+    }
+
+    public static String getHost(String materialSource) {
+        if (TextUtils.isBlank(materialSource)) return null;
+
+        try {
+            URL url = new URL(materialSource);
+            return url.getHost();
+        } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Source has no protocol");
         }
     }
