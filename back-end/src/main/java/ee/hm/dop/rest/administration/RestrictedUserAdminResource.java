@@ -31,7 +31,7 @@ public class RestrictedUserAdminResource extends BaseResource{
     @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Long getRestrictedUsersCount() {
-        return userService.getRestrictedUsersCount(getLoggedInUser()).longValue();
+        return userService.getRestrictedUsersCount(getLoggedInUser());
     }
 
 }

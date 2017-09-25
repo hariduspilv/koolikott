@@ -31,6 +31,6 @@ public class ModeratorAdminResource extends BaseResource {
     @RolesAllowed(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Long getModeratorsCount() {
-        return userService.getModeratorsCount(getLoggedInUser()).longValue();
+        return userService.getModeratorsCount(getLoggedInUser());
     }
 }
