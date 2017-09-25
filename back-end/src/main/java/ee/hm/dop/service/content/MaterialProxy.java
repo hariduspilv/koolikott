@@ -34,8 +34,8 @@ public class MaterialProxy {
 
         try {
             client.executeMethod(get);
-        } catch (UnknownHostException e) {
-            logger.info("Could not contact host, returning empty response");
+        } catch (UnknownHostException | IllegalArgumentException e) {
+            logger.info("Could not contact host, returning empty response: " + e.getMessage());
             return Response.noContent().build();
         }
 
