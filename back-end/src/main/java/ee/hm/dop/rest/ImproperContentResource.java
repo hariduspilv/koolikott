@@ -1,13 +1,8 @@
 package ee.hm.dop.rest;
 
-import com.google.common.collect.Lists;
 import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.ImproperContentService;
-import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.utils.UserUtil;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -21,8 +16,6 @@ public class ImproperContentResource extends BaseResource {
 
     @Inject
     private ImproperContentService improperContentService;
-    @Inject
-    private LearningObjectService learningObjectService;
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)

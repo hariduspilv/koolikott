@@ -26,16 +26,19 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.MaterialProxy;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
+import ee.hm.dop.utils.NumberUtils;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
 
+    public static final String UTF_8 = "UTF-8";
     @Inject
     private MaterialService materialService;
     @Inject
@@ -56,18 +59,19 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
-        materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getBySource(materialSource, GetMaterialStrategy.ONLY_EXISTING);
+        return materialService.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
     }
 
     @GET
     @Path("getOneBySource")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource)
-            throws UnsupportedEncodingException {
-        materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getOneBySource(materialSource, GetMaterialStrategy.INCLUDE_DELETED);
+    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return materialService.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
+    }
+
+    private String decode(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return URLDecoder.decode(materialSource, UTF_8);
     }
 
     @POST
@@ -88,14 +92,14 @@ public class MaterialResource extends BaseResource {
     @Path("like")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likeMaterial(Material material) {
-        userLikeService.addUserLike(material, getLoggedInUser(), true);
+        userLikeService.addUserLike(material, getLoggedInUser(), Like.LIKE);
     }
 
     @POST
     @Path("dislike")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikeMaterial(Material material) {
-        userLikeService.addUserLike(material, getLoggedInUser(), false);
+        userLikeService.addUserLike(material, getLoggedInUser(), Like.DISLIKE);
     }
 
     @POST
@@ -114,29 +118,21 @@ public class MaterialResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (maxResults == 0) maxResults = 12;
-        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            return null;
-        }
-
-        List<Searchable> userFavorites = new ArrayList<>(materialService.getByCreator(creator, start, maxResults));
-        return new SearchResult(userFavorites, materialService.getByCreatorSize(creator), start);
-
+        User creator = getValidCreator(username);
+        return (creator != null) ? materialService.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Long getByCreatorCount(@QueryParam("username") String username) {
+        User creator = getValidCreator(username);
+        return (creator != null) ? materialService.getByCreatorSize(creator) : null;
+    }
+
+    private User getValidCreator(@QueryParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) return null;
-
-        return materialService.getByCreatorSize(creator);
-
+        return userService.getUserByUsername(username);
     }
 
     @DELETE
@@ -165,7 +161,7 @@ public class MaterialResource extends BaseResource {
         } else if (loggedInUser != null) {
             return materialService.update(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
         } else {
-            throw badRequest("Unable to add or update material - can extract get logged in user.");
+            throw badRequest("Unable to add or update material - can not find logged in user.");
         }
     }
 
@@ -180,12 +176,9 @@ public class MaterialResource extends BaseResource {
     @GET
     @Path("hasSetBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
+    public boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
-        if (user != null) {
-            return materialService.hasSetBroken(materialId, getLoggedInUser());
-        }
-        return false;
+        return user != null ? materialService.hasSetBroken(materialId, getLoggedInUser()) : false;
     }
 
     @GET

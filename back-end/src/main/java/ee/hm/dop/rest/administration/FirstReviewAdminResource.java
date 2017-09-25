@@ -35,8 +35,8 @@ public class FirstReviewAdminResource extends BaseResource {
     @Path("unReviewed/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUnReviewedCount() {
-        return ok(firstReviewService.getUnReviewedCount(getLoggedInUser()));
+    public Long getUnReviewedCount() {
+        return firstReviewService.getUnReviewedCount(getLoggedInUser()).longValue();
     }
 
     @POST
