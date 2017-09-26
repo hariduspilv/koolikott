@@ -29,7 +29,8 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
     }
 
     public List<BrokenContent> getBrokenMaterials() {
-        return entityManager.createQuery("FROM BrokenContent b WHERE b.material IS NOT NULL AND b.deleted = false", entity())
+        return entityManager.createQuery("FROM BrokenContent b " +
+                "WHERE b.material IS NOT NULL AND b.deleted = false", entity())
                 .getResultList();
     }
 

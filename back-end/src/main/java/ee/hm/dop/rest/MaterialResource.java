@@ -33,6 +33,7 @@ import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -184,6 +185,9 @@ public class MaterialResource extends BaseResource {
     @Path("externalMaterial")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
+        if (StringUtils.isBlank(url_param)){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return materialProxy.getProxyUrl(url_param);
     }
 }

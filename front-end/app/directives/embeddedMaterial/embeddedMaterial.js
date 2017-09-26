@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 angular.module('koolikottApp')
     .directive('dopEmbeddedMaterial', function () {
@@ -26,8 +26,6 @@ function embeddedMaterialController(translationService, iconService, embedServic
                                     materialService, $route, $scope, $location) {
     init();
 
-    $scope.showMaterialContent = false;
-
     $rootScope.$on('fullscreenchange', () => {
         $scope.$apply(() => {
             $scope.showMaterialContent = !$scope.showMaterialContent;
@@ -40,6 +38,7 @@ function embeddedMaterialController(translationService, iconService, embedServic
     };
 
     function init() {
+        $scope.showMaterialContent = false;
         $scope.canPlayVideo = false;
         $scope.canPlayAudio = false;
         $scope.videoType = "";
@@ -50,11 +49,11 @@ function embeddedMaterialController(translationService, iconService, embedServic
 
         if ($scope.material) {
             $scope.material.source = getSource($scope.material);
-            $scope.materialType = getType();
-            canPlayAudioFormat();
-            canPlayVideoFormat();
-            getSourceType();
-            getContentType();
+            $scope.materialType = getMaterialIcon();
+            audioSetup();
+            videoSetup();
+            sourceTypeAndPdfSetup();
+            externalUrlProxyModification();
         } else {
             //try to get material from route param and init again
             getMaterialFromRouteParam();
@@ -84,36 +83,48 @@ function embeddedMaterialController(translationService, iconService, embedServic
     }, function () {
         if ($scope.material && $scope.material.id) {
             $scope.material.source = getSource($scope.material);
-            $scope.materialType = getType();
-            canPlayAudioFormat();
-            getSourceType();
-            getContentType();
+            $scope.materialType = getMaterialIcon();
+            audioSetup();
+            sourceTypeAndPdfSetup();
+            externalUrlProxyModification();
         }
     });
 
-    function getContentType() {
+    function externalUrlProxyModification() {
+        //todo baseUrl
+        $scope.proxyUrl = undefined;
         const baseUrl = document.location.origin;
+        //todo getSource
         const materialSource = getSource($scope.material);
         // If the initial type is a LINK, try to ask the type from our proxy
+        //todo matchtype
         if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
+            //todo matchtype
             $scope.fallbackType = matchType(materialSource);
+            if (!$scope.material.source) {
+                console.log("source is missing")
+            }
             $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
             serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
         }
         if (materialSource) {
+            //todo matchType
+            //todo getSource
             $scope.sourceType = matchType(getSource($scope.material));
         }
     }
 
     function probeContentSuccess(response) {
+        console.log("Content probing succeeded!");
         if (!response()['content-disposition']) {
             $scope.sourceType = $scope.fallbackType;
             return;
         }
         let filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+        //todo matchtype
         $scope.sourceType = matchType(filename);
         if ($scope.sourceType !== 'LINK' && $scope.sourceType === 'PDF') {
-            $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + encodeURIComponent($scope.proxyUrl);
+            $scope.material.PDFLink = pdfjsLink(encodeURIComponent($scope.proxyUrl));
         }
     }
 
@@ -165,7 +176,8 @@ function embeddedMaterialController(translationService, iconService, embedServic
         return $scope.isEditPortfolioMode || !$scope.sourceType || $scope.sourceType === 'LINK';
     };
 
-    function canPlayVideoFormat() {
+    function videoSetup() {
+        //todo getSource
         let extension = getSource($scope.material).split('.').pop();
         let v = document.createElement('video');
         /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
@@ -191,17 +203,17 @@ function embeddedMaterialController(translationService, iconService, embedServic
                 });
 
                 $(videoElement).html(video);
-                $(videoElement).on('error', canPlayVideoFormat, true);
+                $(videoElement).on('error', videoSetup, true);
                 video.load();
             } else {
-                $timeout(canPlayVideoFormat, 100);
+                $timeout(videoSetup, 100);
             }
         }
     }
 
-    function canPlayAudioFormat() {
+    function audioSetup() {
         if ($scope.canPlayVideo)return;
-
+        //todo getSource
         let extension = getSource($scope.material).split('.').pop();
         let v = document.createElement('audio');
         if (v.canPlayType && v.canPlayType('audio/' + extension)) {
@@ -210,7 +222,8 @@ function embeddedMaterialController(translationService, iconService, embedServic
         }
     }
 
-    function getSourceType() {
+    function sourceTypeAndPdfSetup() {
+        //todo set type and work on pdf in a different method
         if (isYoutubeVideo($scope.material.source)) {
             $scope.sourceType = 'YOUTUBE';
         } else if (isSlideshareLink($scope.material.source)) {
@@ -227,28 +240,27 @@ function embeddedMaterialController(translationService, iconService, embedServic
                 $scope.material.source += "?archive=true";
                 return;
             }
-            if (!$scope.material.uploadedFile && !$scope.material.uploadedFile.id) {
-                console.log("missing uploaded file id: " + $scope.material.id);
-            }
-
             $scope.sourceType = 'EBOOK';
-            $scope.ebookLink = "/utils/bibi/bib/i/?book=" + $scope.material.uploadedFile.id + "/" + $scope.material.uploadedFile.name;
+            $scope.ebookLink = bibiLink($scope.material.uploadedFile.id, $scope.material.uploadedFile.name);
 
             let ebookElement = '.embed-ebook-' + $scope.material.id;
             if ($(ebookElement).length !== 0) {
                 $(ebookElement).html(iFrameLink($scope.ebookLink));
             } else {
-                $timeout(getSourceType, 100);
+                $timeout(sourceTypeAndPdfSetup, 100);
             }
         } else if (isPDFLink($scope.material.source)) {
-            $scope.material.PDFLink = "/utils/pdfjs/web/viewer.html?file=" + $scope.material.source;
+            const baseUrl = document.location.origin;
+            if ($scope.material.source.startsWith(baseUrl) && !$scope.proxyUrl) {
+                $scope.material.PDFLink = pdfjsLink($scope.material.source);
+            }
             $scope.sourceType = 'PDF';
 
             let pdfElement = '.embed-pdf-' + $scope.material.id;
             if ($(pdfElement).length !== 0) {
                 $(pdfElement).html(iFrameLink($scope.material.PDFLink));
             } else {
-                $timeout(getSourceType, 100);
+                $timeout(sourceTypeAndPdfSetup, 100);
             }
         } else {
             embedService.getEmbed(getSource($scope.material), embedCallback);
@@ -279,16 +291,24 @@ function embeddedMaterialController(translationService, iconService, embedServic
         }
     }
 
-    function getType() {
+    function getMaterialIcon() {
         return iconService.getMaterialIcon($scope.material.resourceTypes);
-    }
-
-    function getMaterialFail() {
-        console.log('Getting materials failed');
     }
 
     function iFrameLink(ebookLink) {
         return '<iframe width="100%" height="500px" src="' + ebookLink + '"></iframe>';
+    }
+
+    function bibiLink(fileId, filename) {
+        return "/utils/bibi/bib/i/?book=" + fileId + "/" + filename;
+    }
+
+    function pdfjsLink(source) {
+        return "/utils/pdfjs/web/viewer.html?file=" + source;
+    }
+
+    function getMaterialFail() {
+        console.log('Getting materials failed');
     }
 
     function probeContentFail() {
