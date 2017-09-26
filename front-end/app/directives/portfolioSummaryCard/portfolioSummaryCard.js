@@ -156,7 +156,7 @@ angular.module('koolikottApp')
                 });
 
                 $scope.$on("markReviewed:portfolio", function () {
-                    if ($scope.isAdmin() && $scope.portfolio)
+                    if ($scope.portfolio && ($scope.isAdmin() || $scope.isModerator()))
                         serverCallService
                             .makePost('rest/admin/firstReview/setReviewed', $scope.portfolio)
                             .then(function () {
