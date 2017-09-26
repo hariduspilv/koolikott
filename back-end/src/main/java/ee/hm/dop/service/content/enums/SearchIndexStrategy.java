@@ -6,8 +6,4 @@ public enum SearchIndexStrategy {
     public boolean updateIndex(){
         return this == UPDATE_INDEX;
     }
-
-    public boolean skipIndex(){
-        return this == SKIP_UPDATE;
-    }
 }

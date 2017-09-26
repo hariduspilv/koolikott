@@ -16,6 +16,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String DISLIKE_URL = "material/dislike";
     private static final String GET_USER_LIKE_URL = "material/getUserLike";
     private static final String REMOVE_USER_LIKE_URL = "material/removeUserLike";
+    private static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
+    public static final String GET_MATERIAL_BY_SOURCE_URL = "material/getBySource?source=";
+    public static final String GET_ONE_MATERIAL_BY_SOURCE_URL = "material/getOneBySource?source=";
+    public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
+    public static final String SOURCE_NOT_EXISTING = "https://www.youtube.com/watch?v=5_Ar7VXXsro";
+    public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
 
     @Inject
     private MaterialService materialService;
@@ -248,6 +255,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void can_not_create_or_update_material_if_not_logged_in() throws Exception {
+        Response response = createMaterial(new Material());
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void addRecommendation() {
         User user = login(USER_ADMIN);
         Material material = materialService.get(3L, user);
@@ -306,6 +319,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
+        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + getMaterial(5L).getId(), Boolean.class);
+        assertFalse("Material hasSetBroken", response);
+    }
+
+    @Test
     public void isBroken() {
         login(USER_SECOND);
         Material material = getMaterial(5L);
@@ -351,21 +370,29 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
         login(USER_PEETER);
-        doGet("material/getBySource?source=", listOfMaterials());
+        doGet(GET_MATERIAL_BY_SOURCE_URL, listOfMaterials());
     }
 
     @Test
     public void GetMaterialsByNonExistantSource() {
         login(USER_PEETER);
-        List<Material> materials = doGet("material/getBySource?source=https://www.youtube.com/watch?v=5_Ar7VXXsro", listOfMaterials());
+        List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_NOT_EXISTING, listOfMaterials());
         assertEquals(0, materials.size());
     }
 
     @Test
     public void GetMaterialsBySource() {
         login(USER_PEETER);
-        List<Material> materials = doGet("material/getBySource?source=https://en.wikipedia.org/wiki/Power_Architecture", listOfMaterials());
+        List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_MULTIPLE_MATERIALS, listOfMaterials());
         assertEquals(2, materials.size());
+    }
+
+    @Test
+    public void getOneBySource_returns_one_material_by_source() throws Exception {
+        login(USER_PEETER);
+        Material materialBySource = doGet(GET_ONE_MATERIAL_BY_SOURCE_URL + SOURCE_ONE_MATERIAL, Material.class);
+        assertNotNull(materialBySource);
+        assertEquals("Material source", SOURCE_ONE_MATERIAL, materialBySource.getSource());
     }
 
     @Test
@@ -424,6 +451,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         doPost(REMOVE_USER_LIKE_URL, material);
         UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
         assertNull("User removed like does not exist", userRemoveLike);
+    }
+
+    @Test
+    public void getProxyUrl_returns_external_material_if_it_exists() throws Exception {
+        Response response = doGet(format(EXTERNAL_MATERIAL_URL, getMaterial(3L).getSource()), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        assertNotNull("Response input stream", response.readEntity(InputStream.class).read());
     }
 
     private void assertMaterial1(Material material) {
