@@ -72,7 +72,10 @@ function MaterialService(serverCallService, authenticatedUserService) {
     }
 
     function markReviewed(material) {
-        return !authenticatedUserService.isAdmin() || !material
+        return !material || (
+            !authenticatedUserService.isAdmin() &&
+            !authenticatedUserService.isModerator()
+            )
             ? Promise.reject()
             : serverCallService
                 .makePost('rest/admin/firstReview/setReviewed', material)
