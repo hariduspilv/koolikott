@@ -13,25 +13,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("impropers")
-//@Path("admin/improper/portfolio")
+@Path("admin/improper/portfolio")
 public class ImproperPortfolioAdminResource extends BaseResource{
 
     @Inject
     private ImproperContentAdminService improperContentAdminService;
 
     @GET
-    @Path("portfolios")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ImproperContent> getImproperPortfolios() {
         return improperContentAdminService.getImproperPortfolios(getLoggedInUser());
     }
 
     @GET
-    @Path("portfolios/count")
+    @Path("/count")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getImproperPortfoliosCount() {
         return improperContentAdminService.getImproperPortfolioSize(getLoggedInUser());
     }

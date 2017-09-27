@@ -14,15 +14,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("impropers")
-//@Path("admin/improper/material")
+@Path("admin/improper/material")
 public class ImproperMaterialAdminResource extends BaseResource {
 
     @Inject
     private ImproperContentAdminService improperContentAdminService;
 
     @GET
-    @Path("materials")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ImproperContent> getImproperMaterials() {
@@ -30,7 +28,7 @@ public class ImproperMaterialAdminResource extends BaseResource {
     }
 
     @GET
-    @Path("materials/count")
+    @Path("/count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getImproperMaterialsCount() {
