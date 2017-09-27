@@ -31,8 +31,8 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                         if (typeof cb === 'function')
                             cb()
                     }
-                    $scope.show = false
                     show('', '', [])
+                    $scope.show = false
 
                     $scope.isAdmin = authenticatedUserService.isAdmin()
                     $scope.isModerator = authenticatedUserService.isModerator()
