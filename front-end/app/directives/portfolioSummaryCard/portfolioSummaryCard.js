@@ -123,7 +123,7 @@ angular.module('koolikottApp')
                 }
 
                 $scope.restorePortfolio = () => {
-                    serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
+                    serverCallService.makePost('rest/admin/deleted/portfolio/restore', $scope.portfolio, restoreSuccess, restoreFail);
                 };
 
                 $scope.setNotImproper = () => {

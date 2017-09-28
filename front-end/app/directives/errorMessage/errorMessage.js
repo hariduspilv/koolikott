@@ -162,6 +162,10 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                         init()
                 })
                 $scope.$on('dashboard:adminCountsUpdated', init)
+                $rootScope.$watch('learningObjectChanged', function(newValue, oldValue) {
+                    if (newValue != oldValue)
+                        init()
+                })
 
                 function getReasons() {
                     if ($scope.data && $scope.data.id)
@@ -182,23 +186,22 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                         $scope.showReasons = false
                 }
 
-                $timeout(setChangedData);
+                /**
+                 * @todo
+                 */
+                /*$timeout(setChangedData);
 
                 $scope.$on("errorMessage:updateChanged", setChangedData);
-
-                $scope.$watch('showChanged', function(newValue, oldValue) {
-                    if (newValue != oldValue && newValue === true)
-                        setChangedData()
-                })
 
                 function setChangedData() {
                     if ($scope.showChanged)
                         changedLearningObjectService
                             .getChangedData(getCurrentLearningObjectId())
                             .then(function (response) {
-                                $scope.reasons = response
+                                console.log('changed:', response.map(res => JSON.stringify(res, null, 2)))
+                                // $scope.reasons = response
                             })
-                }
+                }*/
 
                 function getCurrentLearningObjectId() {
                     if ($scope.$parent.material) {
