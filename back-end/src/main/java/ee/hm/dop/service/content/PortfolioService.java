@@ -14,7 +14,6 @@ import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class PortfolioService implements PermissionItem {
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
         return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
-                .filter(p -> canAccess(loggedInUser, p))
+                .filter(p -> canInteract(loggedInUser, p))
                 .collect(Collectors.toList());
     }
 
@@ -176,14 +175,18 @@ public class PortfolioService implements PermissionItem {
         throw ValidatorUtil.permissionError();
     }
 
-    @Override
-    public boolean canView(User loggedInUser, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isNotPrivate(learningObject) || UserUtil.isAdminOrModerator(loggedInUser) || UserUtil.isCreator(learningObject, loggedInUser);
+    public Portfolio findValid(Portfolio portfolio) {
+        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
     }
 
     @Override
-    public boolean canAccess(User user, ILearningObject learningObject) {
+    public boolean canView(User user, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
+        return isNotPrivate(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
+    }
+
+    @Override
+    public boolean canInteract(User user, ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
         return isPublic(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
@@ -197,14 +200,12 @@ public class PortfolioService implements PermissionItem {
     @Override
     public boolean isPublic(ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return ((IPortfolio) learningObject).getVisibility() == Visibility.PUBLIC && !learningObject.isDeleted();
+        return ((IPortfolio) learningObject).getVisibility().isPublic() && !learningObject.isDeleted();
     }
 
-    public Portfolio findValid(Portfolio portfolio) {
-        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
-    }
-
-    private boolean isNotPrivate(ILearningObject learningObject) {
+    @Override
+    public boolean isNotPrivate(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
         return ((IPortfolio) learningObject).getVisibility().isNotPrivate() && !learningObject.isDeleted();
     }
 

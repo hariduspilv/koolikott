@@ -8,6 +8,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
+import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
@@ -324,29 +325,6 @@ public class MaterialService implements PermissionItem {
         return isNotEmpty(brokenContentDao.findByMaterialAndUser(materialId, loggedInUser));
     }
 
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        return canAccess(user, learningObject);
-    }
-
-    @Override
-    public boolean canAccess(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return !learningObject.isDeleted() || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return !learningObject.isDeleted() || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean isPublic(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return true;
-    }
-
     public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
         checkLink(materialSource);
@@ -449,4 +427,34 @@ public class MaterialService implements PermissionItem {
         }
         material.setPeerReviews(peerReviews);
     }
+
+    @Override
+    public boolean canView(User user, ILearningObject learningObject) {
+        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
+    }
+
+    @Override
+    public boolean canInteract(User user, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        return isPublic(learningObject) || UserUtil.isAdmin(user);
+    }
+
+    @Override
+    public boolean canUpdate(User user, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
+    }
+
+    @Override
+    public boolean isPublic(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        return true && !learningObject.isDeleted();
+    }
+
+    @Override
+    public boolean isNotPrivate(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        return true && !learningObject.isDeleted();
+    }
+
 }
