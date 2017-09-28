@@ -186,7 +186,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
         if (StringUtils.isBlank(url_param)){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.noContent().build();
         }
         return materialProxy.getProxyUrl(url_param);
     }
