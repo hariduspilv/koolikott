@@ -27,11 +27,11 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         function init() {
             serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
 
-            var _init = function (titleKey, restUri, sortBy) {
+            var _init = function (titleKey, restUri, sortBy, merge) {
                 $scope.titleTranslationKey = titleKey
                 serverCallService.makeGet(restUri, {}, function (data) {
                     if (data)
-                        $scope.getItemsSuccess(data, sortBy, true);
+                        $scope.getItemsSuccess(data, sortBy, merge);
                 })
             }
 
@@ -46,13 +46,15 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     return _init(
                         'DASHBOARD_IMRPOPER_MATERIALS',
                         'rest/admin/improper/material',
-                        'byReportCount'
+                        'byReportCount',
+                        true
                     )
                 case '/dashboard/improperPortfolios':
                     return _init(
                         'DASHBOARD_IMRPOPER_PORTFOLIOS',
                         'rest/admin/improper/portfolio',
-                        'byReportCount'
+                        'byReportCount',
+                        true
                     )
                 case '/dashboard/changedLearningObjects':
                     return _init(
@@ -64,7 +66,8 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     return _init(
                         'BROKEN_MATERIALS',
                         'rest/admin/brokenContent/getBroken',
-                        'byReportCount'
+                        'byReportCount',
+                        true
                     )
                 case '/dashboard/deletedPortfolios':
                     return _init(
