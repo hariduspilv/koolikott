@@ -4,12 +4,11 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.MaterialAdministrationService;
+import ee.hm.dop.service.content.MaterialService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -18,6 +17,16 @@ public class DeletedMaterialAdminResource extends BaseResource {
 
     @Inject
     private MaterialAdministrationService materialAdministrationService;
+    @Inject
+    private MaterialService materialService;
+
+    @POST
+    @Path("restore")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN})
+    public void restore(Material material) {
+        materialService.restore(material, getLoggedInUser());
+    }
 
     @GET
     @Path("getDeleted")

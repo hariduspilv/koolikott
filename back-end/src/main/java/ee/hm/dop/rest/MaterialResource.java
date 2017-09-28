@@ -142,14 +142,6 @@ public class MaterialResource extends BaseResource {
         materialService.delete(materialID, getLoggedInUser());
     }
 
-    @POST
-    @Path("restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN})
-    public void restore(Material material) {
-        materialService.restore(material, getLoggedInUser());
-    }
-
     @PUT
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
@@ -186,7 +178,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
         if (StringUtils.isBlank(url_param)){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.noContent().build();
         }
         return materialProxy.getProxyUrl(url_param);
     }
