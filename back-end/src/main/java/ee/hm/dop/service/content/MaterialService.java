@@ -45,8 +45,6 @@ public class MaterialService implements PermissionItem {
     @Inject
     private MaterialDao materialDao;
     @Inject
-    private UserLikeDao userLikeDao;
-    @Inject
     private SolrEngineService solrEngineService;
     @Inject
     private BrokenContentDao brokenContentDao;
@@ -136,16 +134,6 @@ public class MaterialService implements PermissionItem {
 
     public Material validateAndFindWithDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
-    }
-
-    public void removeUserLike(Material material, User loggedInUser) {
-        Material originalMaterial = validateAndFindNotDeleted(material);
-        userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
-    }
-
-    public UserLike getUserLike(Material material, User loggedInUser) {
-        ValidatorUtil.mustHaveId(material);
-        return userLikeDao.findMaterialUserLike(material, loggedInUser);
     }
 
     public void delete(Material material) {
@@ -422,12 +410,14 @@ public class MaterialService implements PermissionItem {
     @Override
     public boolean isPublic(ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        //todo true simulates that visibility is public, waiting for db change
         return true && !learningObject.isDeleted();
     }
 
     @Override
     public boolean isNotPrivate(ILearningObject learningObject) {
         if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        //todo true simulates that visibility is public, waiting for db change
         return true && !learningObject.isDeleted();
     }
 
