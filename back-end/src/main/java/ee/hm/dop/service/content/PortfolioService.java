@@ -40,10 +40,6 @@ public class PortfolioService implements PermissionItem {
     private PortfolioConverter portfolioConverter;
     @Inject
     private FirstReviewService firstReviewService;
-    @Inject
-    private LearningObjectService learningObjectService;
-    @Inject
-    private LearningObjectDao learningObjectDao;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {

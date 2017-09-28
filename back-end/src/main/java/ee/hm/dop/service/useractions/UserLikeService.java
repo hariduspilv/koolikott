@@ -24,6 +24,17 @@ public class UserLikeService {
     @Inject
     private PortfolioService portfolioService;
 
+    public void removeUserLike(Material material, User loggedInUser) {
+        Material originalMaterial = materialService.validateAndFindNotDeleted(material);
+        userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
+    }
+
+    public UserLike getUserLike(Material material, User loggedInUser) {
+        ValidatorUtil.mustHaveId(material);
+        return userLikeDao.findMaterialUserLike(material, loggedInUser);
+    }
+
+
     public List<Searchable> getMostLiked(int maxResults) {
         // TODO: return only objects that user is allowed to see ex if private portfolio then, don't return
         return userLikeDao.findMostLikedSince(now().minusYears(1), maxResults);

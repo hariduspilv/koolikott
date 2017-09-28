@@ -105,13 +105,13 @@ public class MaterialResource extends BaseResource {
     @POST
     @Path("getUserLike")
     public UserLike getUserLike(Material material) {
-        return materialService.getUserLike(material, getLoggedInUser());
+        return userLikeService.getUserLike(material, getLoggedInUser());
     }
 
     @POST
     @Path("removeUserLike")
     public void removeUserLike(Material material) {
-        materialService.removeUserLike(material, getLoggedInUser());
+        userLikeService.removeUserLike(material, getLoggedInUser());
     }
 
     @GET
