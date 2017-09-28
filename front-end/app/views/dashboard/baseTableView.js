@@ -46,14 +46,21 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     return _init(
                         'DASHBOARD_IMRPOPER_MATERIALS',
                         'rest/admin/improper/material',
-                        'byReportCount',
+                        '-byReportCount',
                         true
                     )
                 case '/dashboard/improperPortfolios':
                     return _init(
                         'DASHBOARD_IMRPOPER_PORTFOLIOS',
                         'rest/admin/improper/portfolio',
-                        'byReportCount',
+                        '-byReportCount',
+                        true
+                    )
+                case '/dashboard/brokenMaterials':
+                    return _init(
+                        'BROKEN_MATERIALS',
+                        'rest/admin/brokenContent/getBroken',
+                        '-byReportCount',
                         true
                     )
                 case '/dashboard/changedLearningObjects':
@@ -61,13 +68,6 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
                         'rest/admin/changed',
                         'byAddedAt'
-                    )
-                case '/dashboard/brokenMaterials':
-                    return _init(
-                        'BROKEN_MATERIALS',
-                        'rest/admin/brokenContent/getBroken',
-                        'byReportCount',
-                        true
                     )
                 case '/dashboard/deletedPortfolios':
                     return _init(
