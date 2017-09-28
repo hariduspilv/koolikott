@@ -367,7 +367,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(containsMaterial, true);
 
         long brokenMaterialsCount = doGet(MATERIAL_GET_BROKEN_COUNT, Long.class);
-        assertEquals("Broken materials count", 1, brokenMaterialsCount);
+        assertEquals("Broken materials count", brokenMaterials.size(), brokenMaterialsCount);
     }
 
     @Test(expected = RuntimeException.class)
