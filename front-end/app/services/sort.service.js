@@ -1,5 +1,4 @@
 function SortService(translationService, taxonService) {
-
     function orderBySubmittedBy(a, b) {
         let aName = a.creator ? a.creator.name + ' ' + a.creator.surname : translationService.instant('UNKNOWN');
         let bName = b.creator ? b.creator.name + ' ' + b.creator.surname : translationService.instant('UNKNOWN');
@@ -27,10 +26,14 @@ function SortService(translationService, taxonService) {
     }
 
     function orderByTitle(a, b) {
-        let aTitle = (a.learningObject.titles ? a.learningObject.titles[0].text : undefined) || a.learningObject.title;
-        let bTitle = (b.learningObject.titles ? b.learningObject.titles[0].text : undefined)  || b.learningObject.title;
+        const getTitle = (o) => Array.isArray(o.titles) && o.titles.length
+            ? o.titles[0].text || ''
+            : o.title || ''
 
-        return compareStrings(aTitle, bTitle);
+        return compareStrings(
+            getTitle(a.learningObject || a),
+            getTitle(b.learningObject || b)
+        )
     }
 
     function orderByTaxon(a, b) {
@@ -47,6 +50,18 @@ function SortService(translationService, taxonService) {
 
     function compareStrings(a, b) {
         return a.toLowerCase().localeCompare(b.toLowerCase(), translationService.getLanguageCode());
+    }
+
+    function orderByAddedBy(a, b) {
+        const getName = (o) =>
+            o.creator
+                ? o.creator.name + ' ' + o.creator.surname
+                : translationService.instant('UNKNOWN')
+
+        return compareStrings(
+            getName(a.learningObject || a),
+            getName(b.learningObject || b)
+        )
     }
 
     return {
@@ -81,6 +96,8 @@ function SortService(translationService, taxonService) {
                             : b.learningObject && a.learningObject
                                 ? new Date(b.learningObject.added) - new Date(a.learningObject.added)
                                 : 0;
+                    case "byAddedBy": case "-byAddedBy":
+                        return orderByAddedBy(a, b)
                     default:
                         return 0;
                 }
