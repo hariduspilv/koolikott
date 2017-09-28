@@ -23,7 +23,7 @@ angular.module('koolikottApp')
                     var url;
 
                     if ($scope.learningObject && $scope.learningObject.id) {
-                        url = "rest/impropers?learningObject=" + $scope.learningObject.id;
+                        url = "rest/admin/improper?learningObject=" + $scope.learningObject.id;
                         serverCallService.makeGet(url, {}, requestSuccessful, requestFailed);
                     }
                 }
@@ -54,7 +54,7 @@ angular.module('koolikottApp')
                             reason: $scope.learningObject.type.slice(1)
                         };
 
-                        serverCallService.makePut("rest/impropers", entity, setImproperSuccessful, setImproperFailed);
+                        serverCallService.makePut("rest/admin/improper", entity, setImproperSuccessful, setImproperFailed);
                     });
                 };
 

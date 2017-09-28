@@ -173,7 +173,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 improperMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/impropers/materials/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/improper/material/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
             },
 
             loadImproperPortfoliosCount: function (callback) {
@@ -182,7 +182,7 @@ angular.module('koolikottApp')
                     callback(data);
                 }
                 improperPortfoliosCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/impropers/portfolios/count", {}, getImproperPortfoliosCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/improper/portfolio/count", {}, getImproperPortfoliosCountSuccess, getItemsFail);
             },
 
             loadUserFavoritesCount: function (callback) {

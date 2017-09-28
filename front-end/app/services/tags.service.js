@@ -37,9 +37,9 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                 };
 
                 if (successCallback) {
-                    serverCallService.makePut("rest/impropers", entity, successCallback, failCallback);
+                    serverCallService.makePut("rest/admin/improper", entity, successCallback, failCallback);
                 } else {
-                    return serverCallService.makePut("rest/impropers", entity)
+                    return serverCallService.makePut("rest/admin/improper", entity)
                         .then(response => {
                             return response.data;
                         });
@@ -95,9 +95,9 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
 
         getImpropers(params, successCallback, failCallback) {
             if (successCallback) {
-                serverCallService.makeGet("rest/impropers", params, successCallback, failCallback);
+                serverCallService.makeGet("rest/admin/improper", params, successCallback, failCallback);
             } else {
-                return serverCallService.makeGet("rest/impropers", params)
+                return serverCallService.makeGet("rest/admin/improper", params)
                     .then(response => {
                         return response.data;
                     });

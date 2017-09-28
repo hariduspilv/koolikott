@@ -45,13 +45,13 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                 case '/dashboard/improperMaterials':
                     return _init(
                         'DASHBOARD_IMRPOPER_MATERIALS',
-                        'rest/impropers/materials',
+                        'rest/admin/improper/material',
                         'byReportCount'
                     )
                 case '/dashboard/improperPortfolios':
                     return _init(
                         'DASHBOARD_IMRPOPER_PORTFOLIOS',
-                        'rest/impropers/portfolios',
+                        'rest/admin/improper/portfolio',
                         'byReportCount'
                     )
                 case '/dashboard/changedLearningObjects':
