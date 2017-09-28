@@ -33,7 +33,7 @@ public class MaterialProxy {
             client.executeMethod(get);
         } catch (UnknownHostException | IllegalArgumentException e) {
             logger.info("Could not contact host, returning empty response: " + e.getMessage());
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.noContent().build();
         }
 
         String attachmentLocation = attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE);
@@ -47,7 +47,7 @@ public class MaterialProxy {
             String contentDisposition = format("Inline; filename=\"%s\"", fileName);
             return buildContentTypeResponse(get.getResponseBody(), contentDisposition);
         }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.noContent().build();
     }
 
     private Response buildContentTypeResponse(byte[] responseBody, String contentDisposition) throws IOException {
