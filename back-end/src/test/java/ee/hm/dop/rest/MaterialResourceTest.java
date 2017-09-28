@@ -33,6 +33,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
     private static final String MATERIAL_GET_BROKEN = "admin/brokenContent/getBroken";
+    private static final String MATERIAL_GET_BROKEN_COUNT = "admin/brokenContent/getBroken/count";
     private static final String MATERIAL_SET_NOT_BROKEN = "admin/brokenContent/setNotBroken";
     private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
     private static final String MATERIAL_IS_BROKEN = "admin/brokenContent/isBroken";
@@ -365,6 +366,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
             }
         }
         assertEquals(containsMaterial, true);
+
+        long brokenMaterialsCount = doGet(MATERIAL_GET_BROKEN_COUNT, Long.class);
+        assertEquals("Broken materials count", brokenMaterials.size(), brokenMaterialsCount);
     }
 
     @Test(expected = RuntimeException.class)
