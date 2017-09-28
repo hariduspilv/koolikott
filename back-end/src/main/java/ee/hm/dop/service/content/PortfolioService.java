@@ -1,6 +1,7 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.ChapterObjectDao;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
@@ -40,6 +41,10 @@ public class PortfolioService implements PermissionItem {
     private PortfolioConverter portfolioConverter;
     @Inject
     private FirstReviewService firstReviewService;
+    @Inject
+    private LearningObjectService learningObjectService;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -74,21 +79,6 @@ public class PortfolioService implements PermissionItem {
 
         portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
-    }
-
-    public void addComment(Comment comment, Portfolio portfolio, User loggedInUser) {
-        if (isEmpty(comment.getText()) || comment.getId() != null)
-            throw new RuntimeException("Comment is missing text or already exists.");
-
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-
-        if (!canView(loggedInUser, originalPortfolio)) {
-            throw ValidatorUtil.permissionError();
-        }
-
-        comment.setAdded(DateTime.now());
-        originalPortfolio.getComments().add(comment);
-        portfolioDao.createOrUpdate(originalPortfolio);
     }
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {

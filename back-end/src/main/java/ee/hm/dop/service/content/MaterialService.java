@@ -331,18 +331,19 @@ public class MaterialService implements PermissionItem {
 
     @Override
     public boolean canAccess(User user, ILearningObject learningObject) {
-        if (!(learningObject instanceof IMaterial)) return false;
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
         return !learningObject.isDeleted() || UserUtil.isAdmin(user);
     }
 
     @Override
     public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (!(learningObject instanceof IMaterial)) return false;
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
         return !learningObject.isDeleted() || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 
     @Override
     public boolean isPublic(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
         return true;
     }
 
