@@ -1,53 +1,42 @@
 'use strict';
 
-angular.module('koolikottApp')
-    .factory('changedLearningObjectService', ['$rootScope', 'serverCallService', 'storageService', changedLearningObjectService]);
+angular.module('koolikottApp').factory('changedLearningObjectService', [
+    '$rootScope',
+    'serverCallService',
+    'storageService', (
+        $rootScope,
+        serverCallService,
+        storageService
+    ) => ({
+        getChangedList() {
+            return serverCallService
+                .makeGet('rest/admin/changed', {})
+                .then(response => response.data)
+        },
+        getChangedData(learningObjectId) {
+            if (learningObjectId)
+                return serverCallService
+                    .makeGet('rest/admin/changed/'+learningObjectId, {})
+                    .then(response => response.data)
+        },
+        acceptChanges(learningObjectId) {
+            if (learningObjectId)
+                serverCallService
+                    .makeGet(`rest/admin/changed/${learningObjectId}/acceptAll`, {})
+                    .then(() => $rootScope.learningObjectChanged = false)
+        },
+        revertChanges(learningObjectId) {
+            if (learningObjectId)
+                serverCallService
+                    .makeGet(`rest/admin/changed/${learningObjectId}/revertAll`, {})
+                    .then(response => {
+                        if (isMaterial(response.data.type))
+                            storageService.setMaterial(response.data)
+                        else if (isPortfolio(response.data.type))
+                            storageService.setPortfolio(response.data)
 
-function changedLearningObjectService($rootScope, serverCallService, storageService) {
-
-    function updateLearningObject(learningObject) {
-        if (isMaterial(learningObject.type)) {
-            storageService.setMaterial(learningObject);
-        } else if (isPortfolio(learningObject.type)) {
-            storageService.setPortfolio(learningObject);
+                        $rootScope.learningObjectChanged = false
+                    })
         }
-    }
-
-    return {
-        getChangedList: function () {
-            return serverCallService.makeGet("rest/changed", {})
-                .then((response) => {
-                    return response.data;
-                });
-        },
-
-        getChangedData: function (learningObjectId) {
-            if (learningObjectId) {
-                let queryUrl = "rest/changed/" + learningObjectId;
-                return serverCallService.makeGet(queryUrl, {})
-                    .then((response) => {
-                        return response.data
-                    });
-            }
-        },
-
-        acceptChanges: function (learningObjectId) {
-            if (learningObjectId) {
-                serverCallService.makeGet("rest/changed/" + learningObjectId + "/acceptAll", {})
-                    .then((response) => {
-                        $rootScope.learningObjectChanged = false;
-                    });
-            }
-        },
-
-        revertChanges: function (learningObjectId) {
-            if (learningObjectId) {
-                serverCallService.makeGet("rest/changed/" + learningObjectId + "/revertAll", {})
-                    .then((response) => {
-                        updateLearningObject(response.data);
-                        $rootScope.learningObjectChanged = false;
-                    });
-            }
-        }
-    }
-}
+    })
+])

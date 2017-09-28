@@ -71,14 +71,14 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     )
                 case '/dashboard/deletedPortfolios':
                     return _init(
-                        'DASHBOARD_DELETED_MATERIALS',
-                        'rest/admin/deleted/material/getDeleted',
+                        'DASHBOARD_DELETED_PORTFOLIOS',
+                        'rest/admin/deleted/portfolio/getDeleted',
                         'byUpdatedAt'
                     )
                 case '/dashboard/deletedMaterials':
                     return _init(
-                        'DASHBOARD_DELETED_PORTFOLIOS',
-                        'rest/admin/deleted/portfolio/getDeleted',
+                        'DASHBOARD_DELETED_MATERIALS',
+                        'rest/admin/deleted/material/getDeleted',
                         'byUpdatedAt'
                     )
                 case '/dashboard/moderators':
