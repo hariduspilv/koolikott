@@ -23,7 +23,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "    JOIN LearningObject o ON f.learningObject = o.id\n" +
                         "    JOIN Material m ON m.id = o.id\n" +
                         "    WHERE f.reviewed = 0 " +
-                        ") f ORDER BY createdAt ASC, id ASC;", entity())
+                        ") f ORDER BY createdAt ASC, id ASC", entity())
                 .getResultList();
     }
 
@@ -49,7 +49,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "         JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "       WHERE f.reviewed = 0\n" +
                         "             AND ut.user = :user\n" +
-                        "     ) f ORDER BY createdAt ASC, id ASC;", entity())
+                        "     ) f ORDER BY createdAt ASC, id ASC", entity())
                 .setParameter("user", user.getId())
                 .getResultList();
     }

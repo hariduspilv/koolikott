@@ -30,10 +30,13 @@ public class LearningObjectService {
     }
 
     public boolean canAcess(User user, LearningObject learningObject) {
-        if (learningObject == null) {
-            return false;
-        }
+        if (learningObject == null) return false;
         return getLearningObjectHandler(learningObject).canAccess(user, learningObject);
+    }
+
+    public boolean canView(User user, LearningObject learningObject) {
+        if (learningObject == null) return false;
+        return getLearningObjectHandler(learningObject).canView(user, learningObject);
     }
 
     public LearningObject validateAndFind(LearningObject learningObject) {
