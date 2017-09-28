@@ -18,10 +18,10 @@ import org.junit.Test;
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     private static final String IMPROPERS = "impropers";
-    public static final String IMPROPER_MATERIALS = "impropers/materials";
-    public static final String IMPROPER_MATERIALS_COUNT = "impropers/materials/count";
-    public static final String IMPROPER_PORTFOLIOS = "impropers/portfolios";
-    public static final String IMPROPER_PORTFOLIOS_COUNT = "impropers/portfolios/count";
+    public static final String IMPROPER_MATERIALS = "admin/improper/material";
+    public static final String IMPROPER_MATERIALS_COUNT = "admin/improper/material/count";
+    public static final String IMPROPER_PORTFOLIOS = "admin/improper/portfolio";
+    public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
     public static final long TEST_PORFOLIO_ID = 101L;
     public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
 
