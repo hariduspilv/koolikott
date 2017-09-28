@@ -142,14 +142,6 @@ public class MaterialResource extends BaseResource {
         materialService.delete(materialID, getLoggedInUser());
     }
 
-    @POST
-    @Path("restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN})
-    public void restore(Material material) {
-        materialService.restore(material, getLoggedInUser());
-    }
-
     @PUT
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
