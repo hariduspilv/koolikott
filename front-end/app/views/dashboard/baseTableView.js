@@ -27,11 +27,11 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         function init() {
             serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
 
-            var _init = function (titleKey, restUri, sortBy) {
+            var _init = function (titleKey, restUri, sortBy, merge) {
                 $scope.titleTranslationKey = titleKey
                 serverCallService.makeGet(restUri, {}, function (data) {
                     if (data)
-                        $scope.getItemsSuccess(data, sortBy, true);
+                        $scope.getItemsSuccess(data, sortBy, merge);
                 })
             }
 
@@ -45,26 +45,29 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                 case '/dashboard/improperMaterials':
                     return _init(
                         'DASHBOARD_IMRPOPER_MATERIALS',
-                        'rest/impropers/materials',
-                        'byReportCount'
+                        'rest/admin/improper/material',
+                        '-byReportCount',
+                        true
                     )
                 case '/dashboard/improperPortfolios':
                     return _init(
                         'DASHBOARD_IMRPOPER_PORTFOLIOS',
-                        'rest/impropers/portfolios',
-                        'byReportCount'
+                        'rest/admin/improper/portfolio',
+                        '-byReportCount',
+                        true
+                    )
+                case '/dashboard/brokenMaterials':
+                    return _init(
+                        'BROKEN_MATERIALS',
+                        'rest/admin/brokenContent/getBroken',
+                        '-byReportCount',
+                        true
                     )
                 case '/dashboard/changedLearningObjects':
                     return _init(
                         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
                         'rest/admin/changed',
                         'byAddedAt'
-                    )
-                case '/dashboard/brokenMaterials':
-                    return _init(
-                        'BROKEN_MATERIALS',
-                        'rest/admin/brokenContent/getBroken',
-                        'byReportCount'
                     )
                 case '/dashboard/deletedPortfolios':
                     return _init(

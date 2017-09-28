@@ -165,7 +165,7 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
 
                 function getReasons() {
                     if ($scope.data && $scope.data.id)
-                        serverCallService.makeGet('rest/impropers/?learningObject='+$scope.data.id, {}, function (reports) {
+                        serverCallService.makeGet('rest/admin/improper/?learningObject='+$scope.data.id, {}, function (reports) {
                             $scope.reasons = reports.map(function (report) {
                                 return report.reason
                             })

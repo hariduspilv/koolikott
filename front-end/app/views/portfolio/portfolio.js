@@ -82,7 +82,7 @@ angular.module('koolikottApp')
 
                         if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
                             if ($scope.portfolio.improper > 0) {
-                                serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
+                                serverCallService.makeGet("rest/admin/improper", {}, sortImpropers, getItemsFail);
                             }
                         }
                     }
