@@ -14,7 +14,8 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "  SELECT f.*\n" +
                         "  FROM FirstReview f\n" +
                         "    JOIN LearningObject o ON f.learningObject = o.id\n" +
-                        "    JOIN Portfolio p ON p.id = o.id AND p.visibility = 'PUBLIC'\n" +
+                        "    JOIN Portfolio p ON p.id = o.id\n" +
+                        "       AND (p.visibility = 'PUBLIC' OR p.visibility = 'NOT_LISTED')\n" +
                         "    WHERE f.reviewed = 0 " +
                         "UNION ALL\n" +
                         "  SELECT f.*\n" +
@@ -22,7 +23,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "    JOIN LearningObject o ON f.learningObject = o.id\n" +
                         "    JOIN Material m ON m.id = o.id\n" +
                         "    WHERE f.reviewed = 0 " +
-                        ") f ORDER BY id ASC;", entity())
+                        ") f ORDER BY createdAt ASC, id ASC;", entity())
                 .getResultList();
     }
 
@@ -33,7 +34,8 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "       SELECT f.*\n" +
                         "       FROM FirstReview f\n" +
                         "         JOIN LearningObject o ON f.learningObject = o.id\n" +
-                        "         JOIN Portfolio p ON p.id = o.id AND p.visibility = 'PUBLIC'\n" +
+                        "         JOIN Portfolio p ON p.id = o.id\n" +
+                        "           AND (p.visibility = 'PUBLIC' OR p.visibility = 'NOT_LISTED')\n" +
                         "         JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
                         "         JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "       WHERE f.reviewed = 0\n" +
@@ -47,7 +49,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "         JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "       WHERE f.reviewed = 0\n" +
                         "             AND ut.user = :user\n" +
-                        "     ) f ORDER BY id ASC;", entity())
+                        "     ) f ORDER BY createdAt ASC, id ASC;", entity())
                 .setParameter("user", user.getId())
                 .getResultList();
     }
@@ -59,7 +61,9 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                  SELECT count(1) AS c\n" +
                         "                  FROM FirstReview f\n" +
                         "                    JOIN LearningObject o ON f.learningObject = o.id\n" +
-                        "                    JOIN Portfolio p ON p.id = o.id AND p.visibility = 'PUBLIC'\n" +
+                        "                    JOIN Portfolio p ON p.id = o.id\n" +
+                        "                       AND (p.visibility = 'PUBLIC'\n" +
+                        "                       OR p.visibility = 'NOT_LISTED')\n" +
                         "                  WHERE f.reviewed = 0\n" +
                         "                  UNION ALL\n" +
                         "                  SELECT count(1) AS c\n" +
@@ -78,7 +82,9 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                  SELECT count(1) AS c\n" +
                         "                  FROM FirstReview f\n" +
                         "                    JOIN LearningObject o ON f.learningObject = o.id\n" +
-                        "                    JOIN Portfolio p ON p.id = o.id AND p.visibility = 'PUBLIC'\n" +
+                        "                    JOIN Portfolio p ON p.id = o.id\n" +
+                        "                       AND (p.visibility = 'PUBLIC'\n" +
+                        "                       OR p.visibility = 'NOT_LISTED')\n" +
                         "                    JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
                         "                    JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "                  WHERE f.reviewed = 0\n" +
