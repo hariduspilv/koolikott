@@ -130,21 +130,6 @@ public class MaterialService implements PermissionItem {
         solrEngineService.updateIndex();
     }
 
-    public void addComment(Comment comment, Material material) {
-        if (isEmpty(comment.getText())) {
-            throw new RuntimeException("Comment is missing text.");
-        }
-
-        if (comment.getId() != null) {
-            throw new RuntimeException("Comment already exists.");
-        }
-        Material originalMaterial = validateAndFindNotDeleted(material);
-
-        comment.setAdded(DateTime.now());
-        originalMaterial.getComments().add(comment);
-        materialDao.createOrUpdate(originalMaterial);
-    }
-
     public Material validateAndFindNotDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
     }
@@ -426,17 +411,6 @@ public class MaterialService implements PermissionItem {
             }
         }
         material.setPeerReviews(peerReviews);
-    }
-
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return isPublic(learningObject) || UserUtil.isAdmin(user);
     }
 
     @Override
