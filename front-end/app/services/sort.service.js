@@ -1,4 +1,6 @@
 function SortService(translationService, taxonService) {
+    let language
+
     function orderBySubmittedBy(a, b) {
         let aName = a.creator ? a.creator.name + ' ' + a.creator.surname : translationService.instant('UNKNOWN');
         let bName = b.creator ? b.creator.name + ' ' + b.creator.surname : translationService.instant('UNKNOWN');
@@ -27,12 +29,12 @@ function SortService(translationService, taxonService) {
 
     function orderByTitle(a, b) {
         const getTitle = (o) => Array.isArray(o.titles) && o.titles.length
-            ? o.titles[0].text || ''
+            ? (o.titles.filter(t => t.language == language)[0] || o.titles[0]).text || ''
             : o.title || ''
 
         return compareStrings(
-            getTitle(a.learningObject || a),
-            getTitle(b.learningObject || b)
+            getTitle(a.learningObject || a.material || a.portfolio || a),
+            getTitle(b.learningObject || b.material || b.portfolio || b)
         )
     }
 
@@ -81,6 +83,8 @@ function SortService(translationService, taxonService) {
 
     return {
         orderItems(data, order) {
+            language = translationService.getLanguage()
+
             data = data.sort((a, b) => {
                 if (!a || !b) return
 
