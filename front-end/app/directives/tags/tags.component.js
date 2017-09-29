@@ -11,10 +11,10 @@ angular.module('koolikottApp')
     });
 
 TagsController.$inject = ['$translate', 'authenticatedUserService', '$rootScope',
-    '$mdDialog', 'storageService', 'suggestService', '$scope', 'tagsService'];
+    '$mdDialog', 'storageService', 'suggestService', '$scope', 'tagsService', 'toastService'];
 
 function TagsController($translate, authenticatedUserService, $rootScope,
-                        $mdDialog, storageService, suggestService, $scope, tagsService) {
+                        $mdDialog, storageService, suggestService, $scope, tagsService, toastService) {
 
     let vm = this;
 
@@ -79,7 +79,9 @@ function TagsController($translate, authenticatedUserService, $rootScope,
     };
 
     vm.reportTag = (tag) => {
-        tagsService.reportTag(tag, vm.learningObject, setImproperSuccessful);
+        tagsService.reportTag(tag, vm.learningObject, () => {
+            toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
+        })
     };
 
     vm.showMore = () => {
@@ -115,10 +117,6 @@ function TagsController($translate, authenticatedUserService, $rootScope,
             };
 
             tagsService.getTagUpVotes(reportParams, getTagUpVotesReportSuccess);
-        }
-
-        if (vm.isAllowed()) {
-            getHasReportedImproper();
         }
     }
 
@@ -218,30 +216,6 @@ function TagsController($translate, authenticatedUserService, $rootScope,
                 .ok('Ok')
                 .closeTo('#' + tagType + '-close')
         )
-    }
-
-    function setImproperSuccessful() {
-        $rootScope.isReportedByUser = true;
-    }
-
-    function getHasReportedImproper() {
-        if (vm.learningObject && vm.learningObject.id) {
-            let improperParams = {
-                learningObject: vm.learningObject.id
-            };
-
-            tagsService.getImpropers(improperParams, requestSuccessful, requestFailed);
-        }
-    }
-
-    function requestSuccessful(improper) {
-        if (!vm.isAdmin()) {
-            $rootScope.isReportedByUser = improper.length > 0;
-        }
-    }
-
-    function requestFailed() {
-        console.log("Failed checking if already reported the resource")
     }
 
     $rootScope.$on('materialEditModalClosed', function () {
