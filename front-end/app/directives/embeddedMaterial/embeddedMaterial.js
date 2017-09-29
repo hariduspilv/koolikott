@@ -250,10 +250,10 @@ function embeddedMaterialController(translationService, iconService, embedServic
                 $timeout(sourceTypeAndPdfSetup, 100);
             }
         } else if (isPDFLink($scope.material.source)) {
-            const baseUrl = document.location.origin;
-            if ($scope.material.source.startsWith(baseUrl) && !$scope.proxyUrl) {
+            // const baseUrl = document.location.origin;
+            // if ($scope.material.source.startsWith(baseUrl) && !$scope.proxyUrl) {
                 $scope.material.PDFLink = pdfjsLink($scope.material.source);
-            }
+            // }
             $scope.sourceType = 'PDF';
 
             let pdfElement = '.embed-pdf-' + $scope.material.id;
