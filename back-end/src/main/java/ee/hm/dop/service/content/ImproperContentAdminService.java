@@ -15,19 +15,15 @@ public class ImproperContentAdminService {
 
     @Inject
     private ImproperContentDao improperContentDao;
-    @Inject
-    private ImproperContentService improperContentService;
 
     public List<ImproperContent> getImproperMaterials(User user) {
-        return improperContentService.getAll(user).stream()
-                .filter(imp -> imp.getLearningObject() instanceof Material)
-                .collect(Collectors.toList());
+        UserUtil.mustBeModeratorOrAdmin(user);
+        return improperContentDao.findAllImproperContentMaterial();
     }
 
     public List<ImproperContent> getImproperPortfolios(User user) {
-        return improperContentService.getAll(user).stream()
-                .filter(imp -> imp.getLearningObject() instanceof Portfolio && !imp.getLearningObject().isDeleted())
-                .collect(Collectors.toList());
+        UserUtil.mustBeModeratorOrAdmin(user);
+        return improperContentDao.findAllImproperContentPortfolio();
     }
 
     public long getImproperMaterialSize(User user) {
