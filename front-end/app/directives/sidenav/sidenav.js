@@ -172,10 +172,12 @@ angular.module('koolikottApp')
                         $scope.updateDeletedPortfoliosCount();
                         $scope.updateImproperMaterialsCount();
                         $scope.updateImproperPortfoliosCount();
-                        $scope.updateModeratorsCount();
-                        $scope.updateRestrictedUsersCount();
                         $scope.updateChangedLearningObjectCount();
                         $scope.updateUnReviewedLearningObjectCount();
+                    }
+                    if ($scope.isAdmin()) {
+                        $scope.updateModeratorsCount();
+                        $scope.updateRestrictedUsersCount();
                     }
                 };
 
