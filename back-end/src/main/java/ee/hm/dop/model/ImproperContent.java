@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
  * Created by mart on 29.12.15.
  */
 @Entity
-public class ImproperContent {
+public class ImproperContent extends AbstractEntity {
 
     @Id
     @GeneratedValue

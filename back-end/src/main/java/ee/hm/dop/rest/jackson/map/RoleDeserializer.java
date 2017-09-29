@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
 
 /**
  * Created by mart on 30.11.16.

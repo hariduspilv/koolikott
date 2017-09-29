@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 
 import javax.ws.rs.core.UriInfo;
 
+import ee.hm.dop.model.enums.RoleString;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class DopSecurityContextTest {
     public void isUserInRoleNull() {
         DopSecurityContext securityContext = getDopSecurityContext(null, uriInfo);
 
-        boolean response = securityContext.isUserInRole("USER");
+        boolean response = securityContext.isUserInRole(RoleString.USER);
 
         assertFalse(response);
     }
@@ -38,11 +39,11 @@ public class DopSecurityContextTest {
     public void isUserInRole() {
         DopSecurityContext securityContext = getDopSecurityContext(dopPrincipal, uriInfo);
 
-        expect(dopPrincipal.isUserInRole("USER")).andReturn(true);
+        expect(dopPrincipal.isUserInRole(RoleString.USER)).andReturn(true);
 
         replay(dopPrincipal, uriInfo);
 
-        assertTrue(securityContext.isUserInRole("USER"));
+        assertTrue(securityContext.isUserInRole(RoleString.USER));
 
         verify(dopPrincipal, uriInfo);
 

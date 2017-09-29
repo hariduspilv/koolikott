@@ -15,7 +15,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
-public class BrokenContent {
+public class BrokenContent extends AbstractEntity {
 
     @Id
     @GeneratedValue

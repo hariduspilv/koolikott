@@ -10,7 +10,7 @@ import javax.persistence.Id;
  */
 
 @Entity
-public class UploadedFile {
+public class UploadedFile extends AbstractEntity {
 
     @Id
     @GeneratedValue

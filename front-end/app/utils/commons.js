@@ -293,7 +293,9 @@ function formatYear(year) {
 
 function formatDateToDayMonthYear(dateString) {
     var date = new Date(dateString);
-    return formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
+    return isNaN(date)
+        ? ''
+        : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
 }
 
 function arrayToInitials(array) {
@@ -417,12 +419,7 @@ function getSource(material) {
     if (material.source) {
         return material.source;
     } else if (material.uploadedFile) {
-        /*
-         Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
-         with decodeURIComponent(escape()); then we again encode it in java to utf-8 (actually a mistake)
-         which results in another decodeURIComponent();
-         */
-        return decodeURIComponent(escape(decodeURIComponent(material.uploadedFile.url)));
+        return decodeUTF8(material.uploadedFile.url);
     }
 }
 
@@ -472,11 +469,13 @@ function isSlideshareLink(url) {
 }
 
 function isVideoLink(url) {
+    if (!url) return;
     var extension = url.split('.').pop().toLowerCase();
-    return extension == "mp4" || extension == "ogg" || extension == "webm";
+    return extension == "mp4" || extension == "ogv" || extension == "webm";
 }
 
 function isAudioLink(url) {
+    if (!url) return;
     var extension = url.split('.').pop().toLowerCase();
     return extension == "mp3" || extension == "ogg" || extension == "wav";
 }
@@ -519,6 +518,47 @@ function matchType(type) {
     }
 }
 
+function isYoutubeVideo(url) {
+    // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+    var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    return url && url.match(youtubeUrlRegex);
+}
+
+function isSlideshareLink(url) {
+    var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+    return url && url.match(slideshareUrlRegex);
+}
+
+function isVideoLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "mp4" || extension == "ogv" || extension == "webm";
+}
+
+function isAudioLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "mp3" || extension == "ogg" || extension == "wav";
+}
+
+function isPictureLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
+}
+
+function isEbookLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "epub";
+}
+
+function isPDFLink(url) {
+    if (!url) return;
+    var extension = url.split('.').pop().toLowerCase();
+    return extension == "pdf";
+}
+
 function isIE() {
     return (navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
     navigator.userAgent.match(/rv 11/)));
@@ -554,7 +594,13 @@ function countOccurrences(value, text) {
     return count;
 }
 
-function decodeUTF8(string){
+/**
+ *
+ * Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
+ * with decodeURIComponent(escape()); then we again encode it in java to utf-8 (actually a mistake)
+ * which results in another decodeURIComponent();
+ */
+function decodeUTF8(string) {
     return decodeURIComponent(escape(decodeURIComponent(string)));
 }
 
@@ -565,16 +611,16 @@ if (typeof localStorage === 'object') {
     } catch (e) {
         var tmp_storage = {};
         var p = '__unique__';  // Prefix all keys to avoid matching built-ins
-        Storage.prototype.setItem = function(k, v){
+        Storage.prototype.setItem = function (k, v) {
             tmp_storage[p + k] = v;
         };
-        Storage.prototype.getItem = function(k){
+        Storage.prototype.getItem = function (k) {
             return tmp_storage[p + k] === undefined ? null : tmp_storage[p + k];
         };
-        Storage.prototype.removeItem = function(k){
+        Storage.prototype.removeItem = function (k) {
             delete tmp_storage[p + k];
         };
-        Storage.prototype.clear = function(){
+        Storage.prototype.clear = function () {
             tmp_storage = {};
         };
         alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');

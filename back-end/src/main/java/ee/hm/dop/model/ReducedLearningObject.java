@@ -2,6 +2,7 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
@@ -29,7 +30,7 @@ import static javax.persistence.FetchType.EAGER;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "LearningObject")
-public class ReducedLearningObject implements Searchable {
+public abstract class ReducedLearningObject extends AbstractEntity implements Searchable, ILearningObject {
 
     @Id
     private Long id;

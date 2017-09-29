@@ -123,18 +123,17 @@ angular.module('koolikottApp')
                 }
 
                 $scope.restorePortfolio = () => {
-                    serverCallService.makePost("rest/portfolio/restore", $scope.portfolio, restoreSuccess, restoreFail);
+                    serverCallService.makePost('rest/admin/deleted/portfolio/restore', $scope.portfolio, restoreSuccess, restoreFail);
                 };
 
                 $scope.setNotImproper = () => {
                     if ($scope.isAdmin() && $scope.portfolio) {
-                        var url = "rest/impropers?learningObject=" + $scope.portfolio.id;
+                        var url = "rest/admin/improper?learningObject=" + $scope.portfolio.id;
                         serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                     }
                 };
 
                 function setNotImproperSuccessful() {
-                    $scope.isReported = false;
                     $rootScope.learningObjectImproper = false;
                     $rootScope.$broadcast('dashboard:adminCountsUpdated');
                 }
@@ -154,6 +153,16 @@ angular.module('koolikottApp')
                 $scope.$on("setNotImproper:portfolio", () => {
                     $scope.setNotImproper();
                 });
+
+                $scope.$on("markReviewed:portfolio", function () {
+                    if ($scope.portfolio && ($scope.isAdmin() || $scope.isModerator()))
+                        serverCallService
+                            .makePost('rest/admin/firstReview/setReviewed', $scope.portfolio)
+                            .then(function () {
+                                $rootScope.learningObjectUnreviewed = false
+                                $rootScope.$broadcast('dashboard:adminCountsUpdated')
+                            })
+                })
 
                 function restoreSuccess() {
                     toastService.show('PORTFOLIO_RESTORED');

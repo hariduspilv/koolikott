@@ -1,7 +1,8 @@
 package ee.hm.dop.rest;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -16,24 +17,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.TagUpVote;
-import ee.hm.dop.model.User;
-import ee.hm.dop.service.LearningObjectService;
-import ee.hm.dop.service.TagService;
-import ee.hm.dop.service.TagUpVoteService;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.metadata.TagService;
+import ee.hm.dop.service.useractions.TagUpVoteService;
 
 @Path("tagUpVotes")
-@RolesAllowed({ "USER", "ADMIN", "MODERATOR" })
+@RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
 public class TagUpVoteResource extends BaseResource {
 
     @Inject
     private TagUpVoteService tagUpVoteService;
-
     @Inject
     private LearningObjectService learningObjectService;
-
     @Inject
     private TagService tagService;
 
@@ -42,20 +39,18 @@ public class TagUpVoteResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public TagUpVote upVote(TagUpVote tagUpVote) {
         if (tagUpVote.getId() != null) {
-            throwBadRequestException("TagUpVote already exists.");
+            throw badRequest("TagUpVote already exists.");
         }
-
-        LearningObject learningObject = learningObjectService.get(tagUpVote.getLearningObject().getId(),
-                getLoggedInUser());
+        LearningObject learningObject = learningObjectService.get(tagUpVote.getLearningObject().getId(), getLoggedInUser());
         if (learningObject == null) {
-            throwBadRequestException("No such learning object");
+            throw badRequest("No such learning object");
         }
-
         Tag tag = tagService.getTagByName(tagUpVote.getTag().getName());
         if (tag == null) {
-            throwBadRequestException("No such tag");
+            throw badRequest("No such tag");
         }
 
+        //todo what is the point of trustTagUpVote
         TagUpVote trustTagUpVote = new TagUpVote();
         trustTagUpVote.setLearningObject(learningObject);
         trustTagUpVote.setTag(tag);
@@ -70,28 +65,26 @@ public class TagUpVoteResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
-            throwBadRequestException("LearningObject query param is required");
+            throw badRequest("LearningObject query param is required");
         }
-
-        List<TagUpVoteForm> tagUpVotes = new ArrayList<>();
-
         User user = getLoggedInUser();
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
         if (learningObject != null) {
-            for (Tag tag : learningObject.getTags()) {
-                TagUpVoteForm form = new TagUpVoteForm();
-                form.tag = tag;
-                form.upVoteCount = tagUpVoteService.getUpVoteCountFor(tag, learningObject);
-
-                if (form.upVoteCount > 0) {
-                    form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
-                }
-
-                tagUpVotes.add(form);
-            }
+            return learningObject.getTags().stream()
+                    .map(tag -> convertForm(user, learningObject, tag))
+                    .collect(Collectors.toList());
         }
+        return Collections.emptyList();
+    }
 
-        return tagUpVotes;
+    private TagUpVoteForm convertForm(User user, LearningObject learningObject, Tag tag) {
+        TagUpVoteForm form = new TagUpVoteForm();
+        form.tag = tag;
+        form.upVoteCount = tagUpVoteService.getUpVoteCountFor(tag, learningObject);
+        if (form.upVoteCount > 0) {
+            form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
+        }
+        return form;
     }
 
     @DELETE
@@ -99,14 +92,13 @@ public class TagUpVoteResource extends BaseResource {
     public void removeUpVote(@PathParam("tagUpVoteId") long tagUpVoteId) {
         TagUpVote tagUpVote = tagUpVoteService.get(tagUpVoteId, getLoggedInUser());
         if (tagUpVote == null) {
-            throwNotFoundException();
+            throw notFound();
         }
 
         tagUpVoteService.delete(tagUpVote, getLoggedInUser());
     }
 
     public static class TagUpVoteForm {
-
         private Tag tag;
         private int upVoteCount;
         private TagUpVote tagUpVote;

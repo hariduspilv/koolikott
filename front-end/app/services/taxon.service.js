@@ -74,7 +74,7 @@ angular.module('koolikottApp').factory('taxonService', ['eventService',
         }
 
         function getFullTaxon(id) {
-            return taxonMap['t' + id];
+            return taxonMap && taxonMap['t' + id];
         }
 
         function setTaxons(educationalContexts) {

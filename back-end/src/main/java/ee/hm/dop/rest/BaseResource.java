@@ -21,13 +21,10 @@ public class BaseResource {
 
     @Context
     private HttpServletRequest request;
-
     @Context
     private HttpServletResponse response;
-
     @Inject
     private Configuration configuration;
-
     private SecurityContext securityContext;
 
     @Context
@@ -35,29 +32,22 @@ public class BaseResource {
         this.securityContext = securityContext;
     }
 
+    protected Response ok() {
+        return Response.ok().build();
+    }
+
+    protected Response ok(Object data) {
+        return Response.ok(data).build();
+    }
+
     protected User getLoggedInUser() {
-        User user = null;
-
-        if (isAuthenticated()) {
-            user = getAuthenticatedUser().getUser();
-        }
-
-        return user;
+        AuthenticatedUser authenticatedUser = getAuthenticatedUser();
+        return authenticatedUser != null ? authenticatedUser.getUser() : null;
     }
 
     protected AuthenticatedUser getAuthenticatedUser() {
         DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
-
-        AuthenticatedUser authenticatedUser = null;
-        if (dopPrincipal != null) {
-            authenticatedUser = dopPrincipal.getAuthenticatedUser();
-        }
-
-        return authenticatedUser;
-    }
-
-    protected boolean isAuthenticated() {
-        return getAuthenticatedUser() != null;
+        return dopPrincipal != null ? dopPrincipal.getAuthenticatedUser() : null;
     }
 
     protected HttpServletRequest getRequest() {
@@ -68,16 +58,12 @@ public class BaseResource {
         return response;
     }
 
-    protected void throwBadRequestException(String message) {
-        throw new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
+    public WebApplicationException badRequest(String message) {
+        return new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
     }
 
-    protected void throwNotFoundException(String message) {
-        throw new WebApplicationException(Response.status(HTTP_NOT_FOUND).entity(message).build());
-    }
-
-    protected void throwNotFoundException() {
-        throw new WebApplicationException(Response.status(HTTP_NOT_FOUND).build());
+    public WebApplicationException notFound() {
+        return new WebApplicationException(Response.status(HTTP_NOT_FOUND).build());
     }
 
     protected String getServerAddress() {

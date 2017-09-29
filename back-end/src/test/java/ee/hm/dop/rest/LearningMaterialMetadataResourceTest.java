@@ -1,18 +1,10 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.TargetGroupEnum;
-import ee.hm.dop.model.taxon.Domain;
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.model.taxon.Topic;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.TargetGroupEnum;
+import ee.hm.dop.model.taxon.*;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
@@ -29,6 +21,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_EDUCATIONAL_CONTEXT_URL = "learningMaterialMetadata/educationalContext";
     private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
     private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
+    private static final String GET_USED_LANGUAGES_URL = "learningMaterialMetadata/usedLanguages";
     private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
     private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
     private static final String GET_USED_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType/used";
@@ -47,7 +40,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         int domains = 0, subjects = 0;
 
         for (EducationalContext educationalContext : educationalContexts) {
-            if (educationalContext.getName().equals("PRESCHOOLEDUCATION")) {
+            if (educationalContext.getName().equals(EducationalContextC.PRESCHOOLEDUCATION)) {
                 for (Domain domain : educationalContext.getDomains()) {
                     domains++;
                     if (domain.getName().equals("Mathematics")) {
@@ -74,22 +67,21 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getTaxon() {
-        Long id = 10L;
-        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, id), Taxon.class);
-        assertEquals(id, taxon.getId());
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, (Long) 10L), Taxon.class);
+        assertEquals((Long) 10L, taxon.getId());
         assertTrue((taxon.getName().equals("Mathematics")));
     }
 
     @Test
     public void getAllLanguages() {
-        List<Language> languages = doGet(GET_LANGUAGES_URL, new GenericType<List<Language>>() {
-        });
-
-        assertEquals(6, languages.stream().distinct().count());
-
         List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese", "French");
-        List<String> actualNames = languages.stream().map(Language::getName).collect(Collectors.toList());
-        assertTrue(actualNames.containsAll(expectedNames));
+        verifyGetLanguages(expectedNames, GET_LANGUAGES_URL);
+    }
+
+    @Test
+    public void getUsedLanguages_returns_languages_used_in_materials() throws Exception {
+        List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese");
+        verifyGetLanguages(expectedNames, GET_USED_LANGUAGES_URL);
     }
 
     @Test
@@ -100,17 +92,6 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertEquals(12, result.size());
 
         checkIfAllTargetGroups(result);
-    }
-
-    private void checkIfAllTargetGroups(List<TargetGroup> targetGroups) {
-        if (targetGroups.size() != TargetGroupEnum.values().length) {
-            fail();
-        }
-
-        for (TargetGroup targetGroup : targetGroups) {
-            TargetGroupEnum.valueOf(targetGroup.getName());
-        }
-
     }
 
     @Test
@@ -169,6 +150,27 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         List<String> actual = result.stream().map(KeyCompetence::getName).collect(Collectors.toList());
 
         assertTrue(actual.containsAll(expected));
+    }
+
+    private void verifyGetLanguages(List<String> expectedNames, String getUsedLanguagesUrl) {
+        List<Language> languages = doGet(getUsedLanguagesUrl, new GenericType<List<Language>>() {
+        });
+
+        assertEquals(expectedNames.size(), languages.stream().distinct().count());
+
+        List<String> actualNames = languages.stream().map(Language::getName).collect(Collectors.toList());
+        assertTrue(actualNames.containsAll(expectedNames));
+    }
+
+    private void checkIfAllTargetGroups(List<TargetGroup> targetGroups) {
+        if (targetGroups.size() != TargetGroupEnum.values().length) {
+            fail();
+        }
+
+        for (TargetGroup targetGroup : targetGroups) {
+            TargetGroupEnum.valueOf(targetGroup.getName());
+        }
+
     }
 
     private void assertValidLicenseType(LicenseType licenseType) {

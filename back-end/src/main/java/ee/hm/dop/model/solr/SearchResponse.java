@@ -5,16 +5,13 @@ import java.util.Map;
 public class SearchResponse {
 
     private Response response;
-
     private ResponseHeader responseHeader;
-
     private String status;
+    private Map<String, String> statusMessages;
 
     public Response getResponse() {
         return response;
     }
-
-    public Map<String, String> statusMessages;
 
     public void setResponse(Response response) {
         this.response = response;

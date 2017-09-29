@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ChangedLearningObject {
+public class ChangedLearningObject extends AbstractEntity {
 
     @Id
     @GeneratedValue

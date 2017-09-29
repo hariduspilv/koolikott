@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -24,24 +23,30 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.BrokenContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.UserService;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.Like;
+import ee.hm.dop.service.content.MaterialProxy;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.useractions.UserLikeService;
+import ee.hm.dop.service.useractions.UserService;
+import ee.hm.dop.utils.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
 
+    public static final String UTF_8 = "UTF-8";
     @Inject
     private MaterialService materialService;
-
     @Inject
     private UserService userService;
+    @Inject
+    private MaterialProxy materialProxy;
+    @Inject
+    private UserLikeService userLikeService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,22 +56,22 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getBySource")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource)
-            throws UnsupportedEncodingException {
-        materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getBySource(materialSource, false);
+    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return materialService.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
     }
 
     @GET
     @Path("getOneBySource")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource)
-            throws UnsupportedEncodingException {
-        materialSource = URLDecoder.decode(materialSource, "UTF-8");
-        return materialService.getOneBySource(materialSource, true);
+    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return materialService.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
+    }
+
+    private String decode(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return URLDecoder.decode(materialSource, UTF_8);
     }
 
     @POST
@@ -85,104 +90,71 @@ public class MaterialResource extends BaseResource {
 
     @POST
     @Path("like")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likeMaterial(Material material) {
-        materialService.addUserLike(material, getLoggedInUser(), true);
+        userLikeService.addUserLike(material, getLoggedInUser(), Like.LIKE);
     }
 
     @POST
     @Path("dislike")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikeMaterial(Material material) {
-        materialService.addUserLike(material, getLoggedInUser(), false);
-    }
-
-    @POST
-    @Path("recommend")
-    @RolesAllowed({"ADMIN"})
-    public Recommendation recommendMaterial(Material material) {
-        return materialService.addRecommendation(material, getLoggedInUser());
-    }
-
-    @POST
-    @Path("removeRecommendation")
-    @RolesAllowed({"ADMIN"})
-    public void removedMaterialRecommendation(Material material) {
-        materialService.removeRecommendation(material, getLoggedInUser());
+        userLikeService.addUserLike(material, getLoggedInUser(), Like.DISLIKE);
     }
 
     @POST
     @Path("getUserLike")
     public UserLike getUserLike(Material material) {
-        return materialService.getUserLike(material, getLoggedInUser());
+        return userLikeService.getUserLike(material, getLoggedInUser());
     }
 
     @POST
     @Path("removeUserLike")
     public void removeUserLike(Material material) {
-        materialService.removeUserLike(material, getLoggedInUser());
+        userLikeService.removeUserLike(material, getLoggedInUser());
     }
 
     @GET
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (maxResults == 0) maxResults = 12;
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) {
-            return null;
-        }
-
-        List<Searchable> userFavorites = new ArrayList<>(materialService.getByCreator(creator, start, maxResults));
-        return new SearchResult(userFavorites, materialService.getByCreatorSize(creator), start);
-
+        User creator = getValidCreator(username);
+        return (creator != null) ? materialService.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Long getByCreatorCount(@QueryParam("username") String username) {
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) return null;
+        User creator = getValidCreator(username);
+        return (creator != null) ? materialService.getByCreatorSize(creator) : null;
+    }
 
-        return materialService.getByCreatorSize(creator);
-
+    private User getValidCreator(@QueryParam("username") String username) {
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
+        return userService.getUserByUsername(username);
     }
 
     @DELETE
     @Path("{materialID}")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(@PathParam("materialID") Long materialID) {
         materialService.delete(materialID, getLoggedInUser());
     }
 
-    @POST
-    @Path("restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
-    public void restore(Material material) {
-        materialService.restore(material, getLoggedInUser());
-    }
-
     @PUT
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
-        Material newMaterial = null;
-
-        if (material.getId() == null) {
-            newMaterial = materialService.createMaterial(material, getLoggedInUser(), true);
-        } else if (getLoggedInUser() != null) {
-            newMaterial = materialService.update(material, getLoggedInUser(), true);
-        } else {
-            throwBadRequestException("Unable to add or update material - can extract get logged in user.");
+        User loggedInUser = getLoggedInUser();
+        if (loggedInUser == null) {
+            throw badRequest("Unable to add or update material - can not find logged in user.");
         }
-
-        return newMaterial;
+        if (material.getId() == null) {
+            return materialService.createMaterial(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
+        }
+        return materialService.update(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
     }
 
     @POST
@@ -194,71 +166,20 @@ public class MaterialResource extends BaseResource {
     }
 
     @GET
-    @Path("getBroken")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<BrokenContent> getBrokenMaterial() {
-        return materialService.getBrokenMaterials();
-    }
-
-
-    @GET
-    @Path("getBroken/count")
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getBrokenMaterialCount() {
-        return Response.ok(materialService.getBrokenMaterialCount()).build();
-    }
-
-    @POST
-    @Path("setNotBroken")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN"})
-    public void setNotBroken(Material material) {
-        materialService.setMaterialNotBroken(material);
-    }
-
-    @GET
-    @Path("isBroken")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    public Boolean isBroken(@QueryParam("materialId") long materialId) {
-        return materialService.isBroken(materialId);
-    }
-
-    @GET
     @Path("hasSetBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    public Boolean hasSetBroken(@QueryParam("materialId") long materialId) {
+    public boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
-        if (user != null) {
-            return materialService.hasSetBroken(materialId, getLoggedInUser());
-        }
-
-        return false;
+        return user != null ? materialService.hasSetBroken(materialId, getLoggedInUser()) : false;
     }
 
     @GET
-    @Path("getDeleted")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    public List<Material> getDeletedMaterials() {
-        return materialService.getDeletedMaterials();
-    }
-
-    @GET
-    @Path("getDeleted/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    public Response getDeletedMaterialsCount() {
-        return Response.ok(materialService.getDeletedMaterialsCount()).build();
-
-    }
-
-    @GET
-    @Path("externalMaterial/")
+    @Path("externalMaterial")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
-        return materialService.getProxyUrl(url_param);
+        if (StringUtils.isBlank(url_param)){
+            return Response.noContent().build();
+        }
+        return materialProxy.getProxyUrl(url_param);
     }
 }

@@ -3,6 +3,7 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.rest.jackson.map.TargetGroupDeserializer;
 import ee.hm.dop.rest.jackson.map.TargetGroupSerializer;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @JsonDeserialize(using = TargetGroupDeserializer.class)
 @JsonSerialize(using = TargetGroupSerializer.class)
-public class TargetGroup {
+public class TargetGroup extends AbstractEntity {
 
     @Id
     @GeneratedValue

@@ -1,48 +1,50 @@
 package ee.hm.dop.model;
 
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 public class SearchFilter {
 
     private List<Taxon> taxon;
-
     private boolean paid = true;
-
     private String type;
-
     private Language language;
-
     private List<TargetGroup> targetGroups;
-
     private ResourceType resourceType;
-
     private boolean isSpecialEducation = false;
-
     private Integer issuedFrom;
-
     private List<CrossCurricularTheme> crossCurricularThemes;
-
     private List<KeyCompetence> keyCompetences;
-
     private List<Visibility> visibility;
-
     private Boolean isCurriculumLiterature;
-
     private String sort;
-
     private SortDirection sortDirection;
-
     private boolean myPrivates = false;
-
     private Long creator;
-
     private User requestingUser;
-
     private String searchType = "AND";
-
     private List<Long> excluded;
+
+    public boolean isEmptySearch() {
+        return isEmpty(taxon) &&
+                paid &&
+                StringUtils.isNotBlank(type) && type.equals("all") &&
+                language == null &&
+                isEmpty(targetGroups) &&
+                resourceType == null &&
+                !isSpecialEducation &&
+                issuedFrom == null &&
+                isEmpty(crossCurricularThemes) &&
+                isEmpty(keyCompetences) &&
+                isCurriculumLiterature == null &&
+                creator == null;
+    }
 
     public List<Long> getExcluded() {
         return excluded;

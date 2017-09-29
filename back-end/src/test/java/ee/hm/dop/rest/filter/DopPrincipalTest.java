@@ -5,7 +5,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.Role;
+import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
 import org.easymock.EasyMockRunner;
 import org.easymock.TestSubject;
@@ -32,7 +33,7 @@ public class DopPrincipalTest {
 
     @Test
     public void isUserInRole() {
-        assertTrue(dopPrincipal.isUserInRole("USER"));
+        assertTrue(dopPrincipal.isUserInRole(RoleString.USER));
     }
 
     private AuthenticatedUser getUser() {

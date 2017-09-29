@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('koolikottApp').controller('baseTableViewController', [
-    '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService', 'sortService',
-    function ($scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
+    '$rootScope', '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService', 'sortService',
+    function ($rootScope, $scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
         $scope.viewPath = $location.path();
         var collection = null;
         var filteredCollection = null;
@@ -25,8 +25,75 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         init();
 
         function init() {
-            $scope.filter.show = false;
             serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
+
+            var _init = function (titleKey, restUri, sortBy, merge) {
+                $scope.titleTranslationKey = titleKey
+                serverCallService.makeGet(restUri, {}, function (data) {
+                    if (data)
+                        $scope.getItemsSuccess(data, sortBy, merge);
+                })
+            }
+
+            switch ($scope.viewPath) {
+                case '/dashboard/unReviewed':
+                    return _init(
+                        'DASHBOARD_UNREVIEWED',
+                        'rest/admin/firstReview/unReviewed',
+                        'byAddedAt'
+                    )
+                case '/dashboard/improperMaterials':
+                    return _init(
+                        'DASHBOARD_IMRPOPER_MATERIALS',
+                        'rest/admin/improper/material',
+                        '-byReportCount',
+                        true
+                    )
+                case '/dashboard/improperPortfolios':
+                    return _init(
+                        'DASHBOARD_IMRPOPER_PORTFOLIOS',
+                        'rest/admin/improper/portfolio',
+                        '-byReportCount',
+                        true
+                    )
+                case '/dashboard/brokenMaterials':
+                    return _init(
+                        'BROKEN_MATERIALS',
+                        'rest/admin/brokenContent/getBroken',
+                        '-byReportCount',
+                        true
+                    )
+                case '/dashboard/changedLearningObjects':
+                    return _init(
+                        'DASHBOARD_CHANGED_LEARNING_OBJECTS',
+                        'rest/admin/changed',
+                        'byAddedAt'
+                    )
+                case '/dashboard/deletedPortfolios':
+                    return _init(
+                        'DASHBOARD_DELETED_PORTFOLIOS',
+                        'rest/admin/deleted/portfolio/getDeleted',
+                        'byUpdatedAt'
+                    )
+                case '/dashboard/deletedMaterials':
+                    return _init(
+                        'DASHBOARD_DELETED_MATERIALS',
+                        'rest/admin/deleted/material/getDeleted',
+                        'byUpdatedAt'
+                    )
+                case '/dashboard/moderators':
+                    return _init(
+                        'MODERATORS_TAB',
+                        'rest/admin/moderator',
+                        'byUsername'
+                    )
+                case '/dashboard/restrictedUsers':
+                    return _init(
+                        'RESTRICTED_USERS_TAB',
+                        'rest/admin/restrictedUser',
+                        'byUsername'
+                    )
+            }
         }
 
         function successUsersCall(data) {
@@ -120,32 +187,52 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             }
         };
 
+        $scope.openLearningObject = function (learningObject) {
+            $location.url(
+                $scope.getLearningObjectUrl(learningObject)
+            )
+        }
+
+        function isFilterMatch(str, query) {
+            return str.toLowerCase().indexOf(query) > -1
+        }
+
         function filterItems() {
             filteredCollection = collection.filter(function (data) {
                 if (!data) {
                     return;
                 }
 
-                var text;
+                var query = $scope.query.filter.toLowerCase()
 
-                if (data.learningObject && data.learningObject.type) {
-                    if (isMaterial(data.learningObject.type))
-                        text = $scope.getCorrectLanguageTitle(data.learningObject);
-                    if (isPortfolio(data.learningObject.type))
-                        text = data.learningObject.title;
-                }
+                if ($scope.isView('/dashboard/moderators') || $scope.isView('/dashboard/restrictedUsers')) {
+                    return (
+                        isFilterMatch(data.name+' '+data.surname, query) ||
+                        isFilterMatch(data.name, query) ||
+                        isFilterMatch(data.surname, query) ||
+                        isFilterMatch(data.username, query)
+                    )
+                } else {
+                    var text;
 
-                if (data.material)
-                    text = $scope.getCorrectLanguageTitle(data.material);
+                    if (data.learningObject && data.learningObject.type) {
+                        if (isMaterial(data.learningObject.type))
+                            text = $scope.getCorrectLanguageTitle(data.learningObject);
+                        if (isPortfolio(data.learningObject.type))
+                            text = data.learningObject.title;
+                    }
 
-                if (data.type === '.Material')
-                    text = $scope.getCorrectLanguageTitle(data);
+                    if (data.material)
+                        text = $scope.getCorrectLanguageTitle(data.material);
 
-                if (data.type === '.Portfolio')
-                    text = data.title;
+                    if (data.type === '.Material')
+                        text = $scope.getCorrectLanguageTitle(data);
 
-                if (text) {
-                    return text.toLowerCase().indexOf($scope.query.filter.toLowerCase()) !== -1;
+                    if (data.type === '.Portfolio')
+                        text = data.title;
+
+                    if (text)
+                        return isFilterMatch(text, query)
                 }
             });
 
@@ -154,15 +241,9 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         }
 
         $scope.getCorrectLanguageTitle = function (item) {
-            if (item.titles) {
-                var result = getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language);
-                if (!result) {
-                    return "";
-                }
-                return result;
-            } else {
-                return item.title
-            }
+            return item.titles
+                ? getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language) || ''
+                : item.title
         };
 
         $scope.onReorder = function (order) {
@@ -175,9 +256,15 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         };
 
         $scope.getTaxonTranslation = function (taxon) {
+            if (!taxon)
+                return
+
             if (taxon.level = ".TaxonDTO") {
                 taxon = taxonService.getFullTaxon(taxon.id);
             }
+
+            if (!taxon)
+                return
 
             if (taxon.level !== '.EducationalContext') {
                 return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
@@ -200,8 +287,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             $scope.data = paginate(page, limit);
         };
 
-        $scope.removeFilter = function () {
-            $scope.filter.show = false;
+        $scope.clearFilter = function () {
             $scope.query.filter = '';
             $scope.itemsCount = collection.length;
             filteredCollection = null;
@@ -274,4 +360,4 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             return id1 === id2;
         }
     }
-]);
+])

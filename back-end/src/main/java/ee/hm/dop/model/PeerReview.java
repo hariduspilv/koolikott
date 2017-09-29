@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
  */
 
 @Entity
-public class PeerReview {
+public class PeerReview extends AbstractEntity {
 
     @Id
     @GeneratedValue

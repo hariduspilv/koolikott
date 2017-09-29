@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.RoleDeserializer;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue

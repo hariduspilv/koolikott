@@ -1,6 +1,7 @@
 package ee.hm.dop.model;
 
 
+import ee.hm.dop.model.interfaces.IMaterial;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -18,7 +19,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "Material")
-public class ReducedMaterial extends ReducedLearningObject {
+public class ReducedMaterial extends ReducedLearningObject implements IMaterial{
 
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)

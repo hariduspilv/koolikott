@@ -49,7 +49,7 @@ function MaterialService(serverCallService, authenticatedUserService) {
 
     function setNotImproper(material) {
         if (authenticatedUserService.isAdmin() && material) {
-            let url = "rest/impropers?learningObject=" + material.id;
+            let url = "rest/admin/improper?learningObject=" + material.id;
             return serverCallService.makeDelete(url, {})
                 .then(response => {
                     return response.data;
@@ -58,17 +58,28 @@ function MaterialService(serverCallService, authenticatedUserService) {
     }
 
     function restoreMaterial(material) {
-        return serverCallService.makePost("rest/material/restore", material)
-            .then(response => {
-               return response.data;
-            });
+        return serverCallService
+            .makePost('rest/admin/deleted/material/restore', material)
+            .then(response => response.data)
     }
 
     function setMaterialCorrect(material) {
-        return serverCallService.makePost("rest/material/setNotBroken", material)
-            .then(response => {
-                return response.data;
-            });
+        return serverCallService
+            .makePost('rest/admin/brokenContent/setNotBroken', material)
+            .then(response => response.data)
+    }
+
+    function markReviewed(material) {
+        return !material || (
+            !authenticatedUserService.isAdmin() &&
+            !authenticatedUserService.isModerator()
+            )
+            ? Promise.reject()
+            : serverCallService
+                .makePost('rest/admin/firstReview/setReviewed', material)
+                .then(function (response) {
+                    return response.data
+                })
     }
 
     return {
@@ -78,6 +89,7 @@ function MaterialService(serverCallService, authenticatedUserService) {
         deleteMaterial: deleteMaterial,
         setNotImproper: setNotImproper,
         restoreMaterial: restoreMaterial,
-        setMaterialCorrect: setMaterialCorrect
+        setMaterialCorrect: setMaterialCorrect,
+        markReviewed: markReviewed
     }
 }

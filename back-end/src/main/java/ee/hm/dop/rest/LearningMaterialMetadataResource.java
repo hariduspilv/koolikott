@@ -1,21 +1,10 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LicenseType;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.KeyCompetenceService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.LicenseTypeService;
-import ee.hm.dop.service.MaterialService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.TargetGroupService;
-import ee.hm.dop.service.TaxonService;
+import ee.hm.dop.service.content.MaterialMetadataService;
+import ee.hm.dop.service.metadata.*;
 import org.apache.http.HttpHeaders;
 
 import javax.inject.Inject;
@@ -29,31 +18,25 @@ import java.net.HttpURLConnection;
 import java.util.List;
 
 @Path("learningMaterialMetadata")
-public class LearningMaterialMetadataResource {
+public class LearningMaterialMetadataResource extends BaseResource{
 
+    public static final String MAX_AGE_120 = "max-age=120";
     @Inject
     private TaxonService taxonService;
-
     @Inject
     private LanguageService languageService;
-
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private LicenseTypeService licenseTypeService;
-
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
-
     @Inject
     private KeyCompetenceService keyCompetenceService;
-
-    @Inject
-    private MaterialService materialservice;
-
     @Inject
     private TargetGroupService targetGroupService;
+    @Inject
+    private MaterialMetadataService materialMetadataService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,9 +44,9 @@ public class LearningMaterialMetadataResource {
     public Response getEducationalContext() {
         List<EducationalContext> taxons = taxonService.getAllEducationalContext();
         if (taxons != null) {
-            return Response.ok(taxons).header(HttpHeaders.CACHE_CONTROL, "max-age=120").build();
+//            todo why is here 2 min cache?
+            return Response.ok(taxons).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_120).build();
         }
-
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
@@ -127,7 +110,7 @@ public class LearningMaterialMetadataResource {
     @Path("usedLanguages")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Language> getUsedLanguages() {
-        return materialservice.getLanguagesUsedInMaterials();
+        return materialMetadataService.getLanguagesUsedInMaterials();
     }
 
 }

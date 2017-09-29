@@ -15,9 +15,7 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void downloadRussianTranslation() {
-        Response response = doGet("translation?lang=rus");
-        Map<String, String> translations = response.readEntity(new GenericType<Map<String, String>>() {
-        });
+        Map<String, String> translations = doGet("translation?lang=rus", map());
 
         assertEquals(3, translations.size());
         assertEquals("FOO сообщение", translations.get("FOO"));
@@ -27,9 +25,7 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void downloadEstonianTranslation() {
-        Response response = doGet("translation?lang=est");
-        Map<String, String> translations = response.readEntity(new GenericType<Map<String, String>>() {
-        });
+        Map<String, String> translations = doGet("translation?lang=est", map());
 
         assertEquals(3, translations.size());
         assertEquals("FOO sõnum", translations.get("FOO"));
@@ -47,5 +43,10 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
     public void downloadNotSupportedTranslation() {
         Response response = doGet("translation?lang=notSupported");
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    private GenericType<Map<String, String>> map() {
+        return new GenericType<Map<String, String>>() {
+        };
     }
 }

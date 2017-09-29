@@ -1,22 +1,13 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.CrossCurricularThemeService;
-import ee.hm.dop.service.KeyCompetenceService;
-import ee.hm.dop.service.LanguageService;
-import ee.hm.dop.service.ResourceTypeService;
-import ee.hm.dop.service.SearchService;
-import ee.hm.dop.service.TargetGroupService;
-import ee.hm.dop.service.TaxonService;
-import ee.hm.dop.service.UserLikeService;
+import ee.hm.dop.service.metadata.*;
+import ee.hm.dop.service.solr.SearchService;
+import ee.hm.dop.service.useractions.UserLikeService;
+import ee.hm.dop.utils.NumberUtils;
+import org.apache.commons.lang.BooleanUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -24,34 +15,25 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("search")
 public class SearchResource extends BaseResource {
 
     @Inject
     private SearchService searchService;
-
     @Inject
     private TaxonService taxonService;
-
     @Inject
     private LanguageService languageService;
-
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
-
     @Inject
     private KeyCompetenceService keyCompetenceService;
-
     @Inject
     private UserLikeService userLikeService;
-
     @Inject
     private TargetGroupService targetGroupService;
 
@@ -78,52 +60,17 @@ public class SearchResource extends BaseResource {
                                @QueryParam("isORSearch") Boolean isORSearch,
                                @QueryParam("excluded") List<Long> excluded) {
 
-        List<Taxon> taxons = taxonIds
-                .stream()
-                .map(taxonId -> taxonService.getTaxonById(taxonId))
-                .collect(Collectors.toList());
-
-        List<TargetGroup> targetGroups = targetGroupNames
-                .stream()
-                .map(name -> targetGroupService.getByName(name))
-                .collect(Collectors.toList());
-
-        Language language = languageService.getLanguage(languageCode);
-        ResourceType resourceType = resourceTypeService.getResourceTypeByName(resourceTypeName);
-
-        List<CrossCurricularTheme> themes = crossCurricularThemeIds
-                .stream()
-                .map(id -> crossCurricularThemeService.getCrossCurricularThemeById(id))
-                .collect(Collectors.toList());
-
-        List<KeyCompetence> competences = keyCompetenceIds
-                .stream()
-                .map(id -> keyCompetenceService.getKeyCompetenceById(id))
-                .collect(Collectors.toList());
-
-        if (paid == null) {
-            paid = true;
-        }
-
-        if (isORSearch == null) {
-            isORSearch = false;
-        }
-
-        if (start == null) {
-            start = 0L;
-        }
-
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setTaxons(taxons);
-        searchFilter.setPaid(paid);
+        searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
+        searchFilter.setPaid(paid == null ? true : paid);
         searchFilter.setType(type);
-        searchFilter.setLanguage(language);
-        searchFilter.setTargetGroups(targetGroups);
-        searchFilter.setResourceType(resourceType);
+        searchFilter.setLanguage(languageService.getLanguage(languageCode));
+        searchFilter.setTargetGroups(targetGroupService.getByName(targetGroupNames));
+        searchFilter.setResourceType(resourceTypeService.getResourceTypeByName(resourceTypeName));
         searchFilter.setSpecialEducation(isSpecialEducation);
         searchFilter.setIssuedFrom(issuedFrom);
-        searchFilter.setCrossCurricularThemes(themes);
-        searchFilter.setKeyCompetences(competences);
+        searchFilter.setCrossCurricularThemes(crossCurricularThemeService.getCrossCurricularThemeById(crossCurricularThemeIds));
+        searchFilter.setKeyCompetences(keyCompetenceService.getKeyCompetenceById(keyCompetenceIds));
         searchFilter.setCurriculumLiterature(isCurriculumLiterature);
         searchFilter.setSort(sort);
         searchFilter.setSortDirection(SearchFilter.SortDirection.getByValue(sortDirection));
@@ -131,9 +78,10 @@ public class SearchResource extends BaseResource {
         searchFilter.setRequestingUser(getLoggedInUser());
         searchFilter.setMyPrivates(myPrivates);
         searchFilter.setExcluded(excluded);
-        if (isORSearch) searchFilter.setSearchType("OR");
-
-        return searchService.search(query, start, limit, searchFilter);
+        if (BooleanUtils.isTrue(isORSearch)) {
+            searchFilter.setSearchType("OR");
+        }
+        return searchService.search(query, NumberUtils.nvl(start, 0L), limit, searchFilter);
     }
 
     @GET

@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.service.TranslationService;
+import ee.hm.dop.service.metadata.TranslationService;
 
 @Path("translation")
 public class TranslationResource {

@@ -10,6 +10,8 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
@@ -74,7 +76,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(1L);
-        educationalContext.setName("PRESCHOOLEDUCATION");
+        educationalContext.setName(EducationalContextC.PRESCHOOLEDUCATION);
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         SearchResult searchResult = doGet(buildQueryURL(null, 0, null, searchFilter), SearchResult.class);
 
@@ -213,18 +215,19 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         SearchFilter searchFilter = new SearchFilter();
         EducationalContext educationalContext = new EducationalContext();
         educationalContext.setId(2L);
-        educationalContext.setName("BASICEDUCATION");
+        educationalContext.setName(EducationalContextC.BASICEDUCATION);
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         searchFilter.setPaid(false);
         searchFilter.setType("portfolio");
         searchFilter.setIssuedFrom(2011);
         searchFilter.setCurriculumLiterature(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+        //todo missing assertions
     }
 
     @Test
     public void searchAsAdmin() {
-        login("89898989898");
+        login(USER_ADMIN);
 
         String query = "super";
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);
@@ -239,7 +242,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "monday";
         SearchFilter searchFilter = new SearchFilter();
         Language language = new Language();
-        language.setCode("eng");
+        language.setCode(LanguageC.ENG);
         searchFilter.setLanguage(language);
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);

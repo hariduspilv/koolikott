@@ -8,8 +8,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.service.SuggestService;
-import org.apache.solr.client.solrj.response.SpellCheckResponse;
+import ee.hm.dop.service.SuggestionStrategy;
+import ee.hm.dop.service.solr.SuggestService;
 
 /**
  * Created by joonas on 15.08.16.
@@ -19,18 +19,18 @@ import org.apache.solr.client.solrj.response.SpellCheckResponse;
 public class SuggestResource extends BaseResource {
 
     @Inject
-    SuggestService suggestService;
+    private SuggestService suggestService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response suggest(@QueryParam("q") String query){
-        return suggestService.suggest(query, false);
+        return suggestService.suggest(query, SuggestionStrategy.SUGGEST_URL);
     }
 
     @GET
     @Path("tag")
     @Produces(MediaType.APPLICATION_JSON)
     public Response suggestSystemTag(@QueryParam("q") String query){
-        return suggestService.suggest(query, true);
+        return suggestService.suggest(query, SuggestionStrategy.SUGGEST_TAG);
     }
 }

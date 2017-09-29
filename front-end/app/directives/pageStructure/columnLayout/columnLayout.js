@@ -6,7 +6,8 @@ function() {
     return {
         scope: true,
         templateUrl: 'directives/pageStructure/columnLayout/columnLayout.html',
-        controller: ['$scope', '$rootScope', '$mdSidenav', '$window', 'storageService', '$timeout', function($scope, $rootScope, $mdSidenav, $window, storageService, $timeout) {
+        controller: ['$scope', '$rootScope', '$mdSidenav', '$window', 'storageService', '$timeout', '$mdComponentRegistry',
+            function($scope, $rootScope, $mdSidenav, $window, storageService, $timeout, $mdComponentRegistry) {
             $scope.toggleSidenav = function() {
                 $mdSidenav('left').toggle();
             };

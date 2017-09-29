@@ -19,7 +19,7 @@ import org.joda.time.DateTime;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"creator", "learningObject"}))
-public class UserFavorite {
+public class UserFavorite extends AbstractEntity {
 
     @Id
     @GeneratedValue

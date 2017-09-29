@@ -16,28 +16,29 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.PortfolioService;
-import ee.hm.dop.service.UserService;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.Like;
+import ee.hm.dop.service.content.PortfolioCopier;
+import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.useractions.UserLikeService;
+import ee.hm.dop.service.useractions.UserService;
 
 @Path("portfolio")
 public class PortfolioResource extends BaseResource {
 
     @Inject
     private PortfolioService portfolioService;
-
     @Inject
     private UserService userService;
+    @Inject
+    private PortfolioCopier portfolioCopier;
+    @Inject
+    private UserLikeService userLikeService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
-
         return portfolioService.get(portfolioId, getLoggedInUser());
     }
 
@@ -45,29 +46,21 @@ public class PortfolioResource extends BaseResource {
     @Path("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
-
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) throwBadRequestException("User does not exist with this username parameter");
+        User creator = getValidCreator(username);
+        if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         User loggedInUser = getLoggedInUser();
-
-        List<Searchable> searchables = new ArrayList<>(portfolioService.getByCreator(creator, loggedInUser, start, maxResults));
-        Long size = portfolioService.getCountByCreator(creator);
-        return new SearchResult(searchables, size, start);
-
+        return portfolioService.getByCreatorResult(creator, loggedInUser, start, maxResults);
     }
 
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getByCreatorCount(@QueryParam("username") String username) {
-        if (isBlank(username)) throwBadRequestException("Username parameter is mandatory");
+        User creator = getValidCreator(username);
+        if (creator == null) throw badRequest("User does not exist with this username parameter");
 
-        User creator = userService.getUserByUsername(username);
-        if (creator == null) throwBadRequestException("User does not exist with this username parameter");
-
-        return Response.ok(portfolioService.getCountByCreator(creator)).build();
+        return ok(portfolioService.getCountByCreator(creator));
     }
 
     @POST
@@ -78,49 +71,35 @@ public class PortfolioResource extends BaseResource {
 
     @POST
     @Path("like")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void likePortfolio(Portfolio portfolio) {
-        portfolioService.addUserLike(portfolio, getLoggedInUser(), true);
+        userLikeService.addUserLike(portfolio, getLoggedInUser(), Like.LIKE);
     }
 
     @POST
     @Path("dislike")
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikePortfolio(Portfolio portfolio) {
-        portfolioService.addUserLike(portfolio, getLoggedInUser(), false);
-    }
-
-    @POST
-    @Path("recommend")
-    @RolesAllowed({"ADMIN"})
-    public Recommendation recommendPortfolio(Portfolio portfolio) {
-        return portfolioService.addRecommendation(portfolio, getLoggedInUser());
-    }
-
-    @POST
-    @Path("removeRecommendation")
-    @RolesAllowed({"ADMIN"})
-    public void removedPortfolioRecommendation(Portfolio portfolio) {
-        portfolioService.removeRecommendation(portfolio, getLoggedInUser());
+        userLikeService.addUserLike(portfolio, getLoggedInUser(), Like.DISLIKE);
     }
 
     @POST
     @Path("getUserLike")
     public UserLike getUserLike(Portfolio portfolio) {
-        return portfolioService.getUserLike(portfolio, getLoggedInUser());
+        return userLikeService.getUserLike(portfolio, getLoggedInUser());
     }
 
     @POST
     @Path("removeUserLike")
     public void removeUserLike(Portfolio portfolio) {
-        portfolioService.removeUserLike(portfolio, getLoggedInUser());
+        userLikeService.removeUserLike(portfolio, getLoggedInUser());
     }
 
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
@@ -129,7 +108,7 @@ public class PortfolioResource extends BaseResource {
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
@@ -138,40 +117,21 @@ public class PortfolioResource extends BaseResource {
     @Path("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(Portfolio portfolio) {
-        return portfolioService.copy(portfolio, getLoggedInUser());
+        return portfolioCopier.copy(portfolio, getLoggedInUser());
     }
 
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(Portfolio portfolio) {
         portfolioService.delete(portfolio, getLoggedInUser());
     }
 
-    @POST
-    @Path("restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    public void restore(Portfolio portfolio) {
-        portfolioService.restore(portfolio, getLoggedInUser());
-    }
-
-    @GET
-    @Path("getDeleted")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    public List<Portfolio> getDeletedPortfolios() {
-        return portfolioService.getDeletedPortfolios();
-    }
-
-    @GET
-    @Path("getDeleted/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "MODERATOR"})
-    public Response getDeletedPortfoliosCount() {
-        return Response.ok(portfolioService.getDeletedPortfoliosCount()).build();
+    private User getValidCreator(@QueryParam("username") String username) {
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
+        return userService.getUserByUsername(username);
     }
 }

@@ -1,4 +1,5 @@
 function SortService(translationService, taxonService) {
+    let language
 
     function orderBySubmittedBy(a, b) {
         let aName = a.creator ? a.creator.name + ' ' + a.creator.surname : translationService.instant('UNKNOWN');
@@ -27,10 +28,14 @@ function SortService(translationService, taxonService) {
     }
 
     function orderByTitle(a, b) {
-        let aTitle = (a.learningObject.titles ? a.learningObject.titles[0].text : undefined) || a.learningObject.title;
-        let bTitle = (b.learningObject.titles ? b.learningObject.titles[0].text : undefined)  || b.learningObject.title;
+        const getTitle = (o) => Array.isArray(o.titles) && o.titles.length
+            ? (o.titles.filter(t => t.language == language)[0] || o.titles[0]).text || ''
+            : o.title || ''
 
-        return compareStrings(aTitle, bTitle);
+        return compareStrings(
+            getTitle(a.learningObject || a.material || a.portfolio || a),
+            getTitle(b.learningObject || b.material || b.portfolio || b)
+        )
     }
 
     function orderByTaxon(a, b) {
@@ -45,45 +50,80 @@ function SortService(translationService, taxonService) {
         return compareStrings(aTaxon, bTaxon);
     }
 
+    function orderByAddedBy(a, b) {
+        const getName = (o) =>
+            o.creator
+                ? o.creator.name + ' ' + o.creator.surname
+                : translationService.instant('UNKNOWN')
+
+        return compareStrings(
+            getName(a.learningObject || a),
+            getName(b.learningObject || b)
+        )
+    }
+
+    function orderByAddedAt(a, b) {
+        return compareDates(
+            (a.learningObject || a).added,
+            (b.learningObject || b).added
+        )
+    }
+
     function compareStrings(a, b) {
         return a.toLowerCase().localeCompare(b.toLowerCase(), translationService.getLanguageCode());
     }
 
+    function compareDates(a, b) {
+        const getDate = (v) => {
+            const d = new Date(v)
+            return isNaN(d) ? 0 : d
+        }
+        return getDate(a) - getDate(b)
+    }
+
     return {
         orderItems(data, order) {
+            language = translationService.getLanguage()
+
             data = data.sort((a, b) => {
-                if (!a || !b) return;
+                if (!a || !b) return
 
-                switch (order) {
-                    case "byFullName": case "-byFullName":
-                        return orderByFullname(a, b);
-                    case "byUsername": case "-byUsername":
-                        return compareStrings(a.username, b.username);
-                    case "byRole": case "-byRole":
-                        return translationService.instant(a.role).localeCompare(translationService.instant(b.role));
-                    case "byTaxons": case "-byTaxons":
-                        return orderByTaxon(a, b);
-                    case "bySubmittedAt": case "-bySubmittedAt":
-                        return new Date(b.added) - new Date(a.added);
-                    case "byReportCount": case "-byReportCount":
-                        return b.reportCount - a.reportCount;
-                    case "bySubmittedBy": case "-bySubmittedBy":
-                        return orderBySubmittedBy(a, b);
-                    case "byTitle": case "-byTitle":
-                        return orderByTitle(a, b);
-                    case "byChanger": case "-byChanger":
-                        return orderByChanger(a, b);
-                    case "byUpdatedAt": case "-byUpdatedAt":
-                        return new Date(b.updated) - new Date(a.updated);
-                    case "byAddedAt": case "-byAddedAt":
-                        return new Date(b.added) - new Date(a.added);
+                switch (order.replace(/^-/, '')) {
+                    case "byFullName":
+                        return orderByFullname(a, b)
+                    case "byUsername":
+                        return compareStrings(a.username, b.username)
+                    case "byRole":
+                        return compareStrings(
+                            translationService.instant(a.role),
+                            translationService.instant(b.role)
+                        )
+                    case "byTaxons":
+                        return orderByTaxon(a, b)
+                    case "bySubmittedAt":
+                        compareDates(a.added, b.added)
+                    case "byReportCount":
+                        return a.reportCount - b.reportCount
+                    case "bySubmittedBy":
+                        return orderBySubmittedBy(a, b)
+                    case "byTitle":
+                        return orderByTitle(a, b)
+                    case "byChanger":
+                        return orderByChanger(a, b)
+                    case "byUpdatedAt":
+                        return compareDates(a.updated, b.updated)
+                    case "byAddedAt":
+                        return orderByAddedAt(a, b)
+                    case "byAddedBy":
+                        return orderByAddedBy(a, b)
                     default:
-                        return 0;
+                        return 0
                 }
-            });
+            })
 
+            // leading “minus” means descending
             if (order.slice(0, 1) === '-')
-                data.reverse();
+                data.reverse()
         }
     }
 }

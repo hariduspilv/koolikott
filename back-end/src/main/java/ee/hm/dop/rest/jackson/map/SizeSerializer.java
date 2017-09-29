@@ -3,7 +3,7 @@ package ee.hm.dop.rest.jackson.map;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import ee.hm.dop.model.Size;
+import ee.hm.dop.model.enums.Size;
 
 import java.io.IOException;
 

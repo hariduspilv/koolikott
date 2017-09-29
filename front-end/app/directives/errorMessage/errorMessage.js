@@ -1,42 +1,207 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopErrorMessage',
-[
-    '$location', 'serverCallService', 'userDataService', '$timeout', 'changedLearningObjectService', '$routeParams', 'taxonService',
-    function ($location, serverCallService, userDataService, $timeout, changedLearningObjectService, $routeParams, taxonService) {
+angular.module('koolikottApp').directive('dopErrorMessage', [
+    'serverCallService',
+    '$timeout',
+    'changedLearningObjectService',
+    '$routeParams',
+    'taxonService',
+    'authenticatedUserService',
+    function (
+        serverCallService,
+        $timeout,
+        changedLearningObjectService,
+        $routeParams,
+        taxonService,
+        authenticatedUserService
+    ) {
         return {
             scope: {
                 data: '='
             },
             templateUrl: 'directives/errorMessage/errorMessage.html',
             controller: ['$rootScope', '$scope', function ($rootScope, $scope) {
+                function init() {
+                    var show = function (icon, messageKey, buttons, cb) {
+                        $scope.show = true
+                        $scope.icon = icon
+                        $scope.messageKey = messageKey
+                        $scope.buttons = buttons
 
-                $timeout(function () {
-                    setChangedData();
-                });
-
-                $scope.$on("errorMessage:updateChanged", function() {
-                    setChangedData();
-                });
-
-                $scope.$watch($scope.showChanged, function(newValue, oldValue) {
-                    if (newValue != oldValue && newValue === true) {
-                        setChangedData();
+                        if (typeof cb === 'function')
+                            cb()
                     }
-                });
+                    show('', '', [])
+                    $scope.show = false
 
-                function getChangedData() {
-                    return changedLearningObjectService.getChangedData(getCurrentLearningObjectId());
+                    $scope.isAdmin = authenticatedUserService.isAdmin()
+                    $scope.isModerator = authenticatedUserService.isModerator()
+
+                    $scope.showDeleted =
+                        $rootScope.learningObjectDeleted
+                    $scope.showChanged =
+                        !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectImproper &&
+                        !$rootScope.learningObjectBroken &&
+                        !$rootScope.learningObjectUnreviewed &&
+                        $rootScope.learningObjectChanged
+                    $scope.showBroken =
+                        !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectImproper &&
+                        !$rootScope.learningObjectUnreviewed &&
+                        $rootScope.learningObjectBroken
+                    $scope.showImproper =
+                        !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectBroken &&
+                        !$rootScope.learningObjectUnreviewed &&
+                        $rootScope.learningObjectImproper
+                    $scope.showImproperAndBroken =
+                        !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectUnreviewed &&
+                        $rootScope.learningObjectImproper &&
+                        $rootScope.learningObjectBroken
+                    $scope.showUnreviewed =
+                        !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectBroken &&
+                        $rootScope.learningObjectUnreviewed
+                    /*$scope.showUnreviewedAndImproper =
+                        !$rootScope.learningObjectDeleted &&
+                        $rootScope.learningObjectUnreviewed &&
+                        $rootScope.learningObjectImproper &&
+                        !$rootScope.learningObjectBroken
+                    $scope.showUnreviewedAndBroken =
+                        !$rootScope.learningObjectDeleted &&
+                        $rootScope.learningObjectUnreviewed &&
+                        !$rootScope.learningObjectImproper &&
+                        $rootScope.learningObjectBroken
+                    $scope.showUnreviewedAndImproperAndBroken =
+                        !$rootScope.learningObjectDeleted &&
+                        $rootScope.learningObjectUnreviewed &&
+                        $rootScope.learningObjectImproper &&
+                        $rootScope.learningObjectBroken*/
+
+                    if ($scope.showDeleted)
+                        show('delete', 'ERROR_MSG_DELETED', [{
+                            icon: 'restore_page',
+                            label: 'BUTTON_RESTORE',
+                            onClick: restoreLearningObject,
+                            show: $scope.isAdmin,
+                        }])
+
+                    else if ($scope.showChanged)
+                        show('priority_high', 'MESSAGE_CHANGED_LEARNING_OBJECT', [{
+                            icon: 'undo',
+                            label: 'UNDO_CHANGES',
+                            onClick: revertChanges,
+                            show: $scope.isAdmin,
+                        }, {
+                            icon: 'done',
+                            label: 'ACCEPT_CHANGES',
+                            onClick: acceptChanges,
+                            show: $scope.isAdmin,
+                        }])
+
+                    else if ($scope.showBroken)
+                        show('report', 'ERROR_MSG_BROKEN', [{
+                            icon: 'delete',
+                            label: 'BUTTON_REMOVE',
+                            onClick: $scope.$parent.confirmMaterialDeletion,
+                            show: $scope.isAdmin || $scope.isModerator,
+                        }, {
+                            icon: 'done',
+                            label: 'REPORT_BROKEN_LINK_CORRECT',
+                            onClick: markCorrectMaterial,
+                            show: $scope.isAdmin,
+                        }])
+
+                    else if ($scope.showImproper)
+                        show('report', 'ERROR_MSG_IMPROPER', [{
+                            icon: 'delete',
+                            label: 'BUTTON_REMOVE',
+                            onClick: deleteLearningObject,
+                            show: $scope.isAdmin || $scope.isModerator,
+                        }, {
+                            icon: 'done',
+                            label: 'REPORT_NOT_IMPROPER',
+                            onClick: setNotImproperLearningObject,
+                            show: $scope.isAdmin,
+                        }], getReasons)
+
+                    else if ($scope.showImproperAndBroken)
+                        show('report', 'ERROR_MSG_IMPROPER_AND_BROKEN', [{
+                            icon: 'delete',
+                            label: 'BUTTON_REMOVE',
+                            onClick: deleteLearningObject,
+                            show: $scope.isAdmin || $scope.isModerator,
+                        }, {
+                            icon: 'done',
+                            label: 'REPORT_NOT_IMPROPER',
+                            onClick: function () {
+                                setNotImproperLearningObject()
+                                markCorrectMaterial()
+                            },
+                            show: $scope.isAdmin,
+                        }], getReasons)
+
+                    else if ($scope.showUnreviewed) {
+                        var messageKey = $scope.data && $scope.data.type == '.Portfolio'
+                            ? 'ERROR_MSG_UNREVIEWED_PORTFOLIO'
+                            : 'ERROR_MSG_UNREVIEWED'
+                        show('lightbulb_outline', messageKey, [{
+                            icon: 'done',
+                            label: 'BUTTON_REVIEW',
+                            onClick: markLearningObjectReviewed,
+                            show: $scope.isAdmin || $scope.isModerator,
+                        }])
+                    }
                 }
+
+                init()
+                $scope.$watch('data', function (newData, oldData) {
+                    if (newData && (!oldData || newData.id != oldData.id))
+                        init()
+                })
+                $scope.$on('dashboard:adminCountsUpdated', init)
+                $rootScope.$watch('learningObjectChanged', function(newValue, oldValue) {
+                    if (newValue != oldValue)
+                        init()
+                })
+
+                function getReasons() {
+                    if ($scope.data && $scope.data.id)
+                        serverCallService.makeGet('rest/admin/improper/?learningObject='+$scope.data.id, {}, function (reports) {
+                            $scope.reasons = reports.map(function (report) {
+                                return report.reason
+                            })
+                        })
+                }
+
+                $scope.toggleReasons = function (evt) {
+                    evt.preventDefault()
+                    if (!$scope.showReasons) {
+                        var reasons = document.querySelector('.error-message-reasons')
+                        reasons.style.height = reasons.scrollHeight+'px'
+                        $scope.showReasons = true
+                    } else
+                        $scope.showReasons = false
+                }
+
+                /**
+                 * @todo
+                 */
+                /*$timeout(setChangedData);
+
+                $scope.$on("errorMessage:updateChanged", setChangedData);
 
                 function setChangedData() {
-                    if ($scope.showChanged()) {
-                        getChangedData().then(function(response) {
-                            $scope.changes = response
-                        })
-                    }
-                }
+                    if ($scope.showChanged)
+                        changedLearningObjectService
+                            .getChangedData(getCurrentLearningObjectId())
+                            .then(function (response) {
+                                console.log('changed:', response.map(res => JSON.stringify(res, null, 2)))
+                                // $scope.reasons = response
+                            })
+                }*/
 
                 function getCurrentLearningObjectId() {
                     if ($scope.$parent.material) {
@@ -62,11 +227,11 @@ angular.module('koolikottApp')
                     else return "";
                 };
 
-                $scope.acceptChanges = function () {
+                function acceptChanges() {
                     changedLearningObjectService.acceptChanges(getCurrentLearningObjectId());
                 };
 
-                $scope.revertChanges = function () {
+                function revertChanges() {
                     changedLearningObjectService.revertChanges(getCurrentLearningObjectId());
                 };
 
@@ -74,50 +239,25 @@ angular.module('koolikottApp')
                     $scope.reason = reason;
                 };
 
-                $scope.showChanged = function () {
-                    return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectImproper == false
-                        && $rootScope.learningObjectBroken == false
-                        && $rootScope.learningObjectChanged == true;
-                };
-
-                $scope.showBroken = function () {
-                    return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectImproper == false
-                        && $rootScope.learningObjectBroken == true;
-                };
-
-                $scope.showImproper = function () {
-                    return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == false
-                        && $rootScope.learningObjectImproper == true;
-                };
-
-                $scope.showImproperAndBroken = function () {
-                    return $rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == true
-                        && $rootScope.learningObjectImproper == true;
-                };
-
-                $scope.showDeleted = function () {
-                    return $rootScope.learningObjectDeleted == true;
-                };
-
-                $scope.restoreLearningObject = function () {
+                function restoreLearningObject() {
                     $scope.$emit("restore:learningObject");
                 };
 
-                $scope.deleteLearningObject = function () {
+                function deleteLearningObject() {
                     $scope.$emit("delete:learningObject");
                 };
 
-                $scope.setNotImproperLearningObject = function () {
+                function setNotImproperLearningObject() {
                     $scope.$emit("setNotImproper:learningObject");
                 };
 
-                $scope.markCorrectMaterial = function () {
+                function markCorrectMaterial() {
                     $scope.$emit("markCorrect:learningObject");
                 };
+
+                function markLearningObjectReviewed() {
+                    $scope.$emit("markReviewed:learningObject");
+                }
             }]
         }
     }

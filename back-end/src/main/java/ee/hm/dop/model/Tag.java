@@ -20,7 +20,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Cacheable
 @JsonDeserialize(using = TagDeserializer.class)
 @JsonSerialize(using = TagSerializer.class)
-public class Tag {
+public class Tag extends AbstractEntity {
 
     @Id
     @GeneratedValue

@@ -1,10 +1,13 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
@@ -38,6 +41,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.MINIMAL_CLASS,
@@ -46,7 +50,7 @@ import static javax.persistence.FetchType.EAGER;
         defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class LearningObject implements Searchable {
+public abstract class LearningObject extends AbstractEntity implements Searchable, ILearningObject {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")
@@ -141,6 +145,10 @@ public abstract class LearningObject implements Searchable {
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
 
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonBackReference
+    private List<FirstReview> firstReviews;
+
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
 
@@ -155,6 +163,9 @@ public abstract class LearningObject implements Searchable {
 
     @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
     private int changed;
+
+    @Formula(value = "(SELECT COUNT(*) FROM FirstReview fr WHERE fr.learningObject = id AND fr.reviewed = 0)")
+    private int unReviewed;
 
     /**
      * Last time when something was done to this LearningObject. It includes
@@ -327,5 +338,21 @@ public abstract class LearningObject implements Searchable {
 
     public void setTaxons(List<Taxon> taxons) {
         this.taxons = taxons;
+    }
+
+    public int getUnReviewed() {
+        return unReviewed;
+    }
+
+    public void setUnReviewed(int unReviewed) {
+        this.unReviewed = unReviewed;
+    }
+
+    public List<FirstReview> getFirstReviews() {
+        return firstReviews;
+    }
+
+    public void setFirstReviews(List<FirstReview> firstReviews) {
+        this.firstReviews = firstReviews;
     }
 }

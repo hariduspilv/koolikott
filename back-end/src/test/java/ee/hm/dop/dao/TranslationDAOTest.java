@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
 
 public class TranslationDAOTest extends DatabaseTestBase {
@@ -21,7 +23,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
     public void getTranslationGroupForEstonian() {
         Language language = new Language();
         language.setId((long) 1);
-        language.setCode("est");
+        language.setCode(LanguageC.EST);
 
         TranslationGroup translationGroup = translationDAO.findTranslationGroupFor(language);
 
@@ -36,10 +38,38 @@ public class TranslationDAOTest extends DatabaseTestBase {
     }
 
     @Test
+    public void getTranslationKeyByTranslation() {
+        Language language = new Language();
+        language.setId((long) 1);
+        language.setCode(LanguageC.EST);
+
+        String translationKey = translationDAO.getTranslationKeyByTranslation("FOO sõnum");
+        assertNotNull(translationKey);
+        assertEquals("FOO", translationKey);
+        String translationKey2 = translationDAO.getTranslationKeyByTranslation("FOO");
+        assertNull(translationKey2);
+    }
+
+    @Test
+    public void getTranslationByKeyAndLangcode() {
+        Language language = new Language();
+        language.setId((long) 1);
+        language.setCode(LanguageC.EST);
+
+        String translation = translationDAO.getTranslationByKeyAndLangcode("FOO", 1L);
+        assertNotNull(translation);
+        assertEquals("FOO sõnum", translation);
+        String translation2 = translationDAO.getTranslationByKeyAndLangcode("P", 1L);
+        assertNull(translation2);
+    }
+
+
+
+    @Test
     public void getTranslationGroupForRussian() {
         Language language = new Language();
         language.setId((long) 2);
-        language.setCode("rus");
+        language.setCode(LanguageC.RUS);
 
         TranslationGroup translationGroup = translationDAO.findTranslationGroupFor(language);
 

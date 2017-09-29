@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import com.google.inject.Singleton;
-import ee.hm.dop.executor.SynchronizeMaterialsExecutor;
-import ee.hm.dop.guice.GuiceInjector;
-import ee.hm.dop.server.EmbeddedJetty;
+import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
+import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.config.EmbeddedJetty;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.xml.ConfigurationException;
@@ -65,12 +65,7 @@ public class ApplicationLauncher {
     }
 
     private static void addShutdownHook() {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                stopServer();
-            }
-        }, "shutdown-hook"));
+        Runtime.getRuntime().addShutdownHook(new Thread(ApplicationLauncher::stopServer, "shutdown-hook"));
     }
 
     private static void startServer() {

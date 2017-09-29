@@ -172,10 +172,19 @@ angular.module('koolikottApp')
                         $scope.updateDeletedPortfoliosCount();
                         $scope.updateImproperMaterialsCount();
                         $scope.updateImproperPortfoliosCount();
+                        $scope.updateChangedLearningObjectCount();
+                        $scope.updateUnReviewedLearningObjectCount();
+                    }
+                    if ($scope.isAdmin()) {
                         $scope.updateModeratorsCount();
                         $scope.updateRestrictedUsersCount();
-                        $scope.updateChangedLearningObjectCount();
                     }
+                };
+
+                $scope.updateUnReviewedLearningObjectCount = function () {
+                    userDataService.loadUnReviewedLearningObjectCount(function (data) {
+                        $scope.unReviewedLearningObjectCount = data;
+                    });
                 };
 
                 $scope.dashboardSearch = function () {

@@ -1,6 +1,6 @@
 package ee.hm.dop.rest.filter;
 
-import static ee.hm.dop.guice.GuiceInjector.getInjector;
+import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
 
 import java.io.IOException;
 
@@ -15,8 +15,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.AuthenticatedUserService;
-import ee.hm.dop.service.LogoutService;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import ee.hm.dop.service.login.LogoutService;
 import org.joda.time.DateTime;
 
 @Provider

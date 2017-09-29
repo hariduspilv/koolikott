@@ -18,8 +18,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.UploadedFile;
-import ee.hm.dop.service.UploadedFileService;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.UploadedFileService;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -29,12 +29,11 @@ public class UploadedFileResource extends BaseResource {
 
     @Inject
     private Configuration configuration;
-
     @Inject
     private UploadedFileService uploadedFileService;
 
     @POST
-    @RolesAllowed({"USER", "ADMIN", "MODERATOR"})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,

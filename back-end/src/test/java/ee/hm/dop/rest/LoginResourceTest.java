@@ -1,49 +1,11 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterOutputStream;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.dao.AuthenticationStateDAO;
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.NameValuePair;
@@ -61,14 +23,33 @@ import org.opensaml.xml.util.Base64;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.*;
+import javax.ws.rs.ext.Provider;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterOutputStream;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.*;
+
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Inject
     private Configuration configuration;
-
     @Inject
-    private AuthenticationStateDAO authenticationStateDAO;
-
+    private AuthenticationStateDao authenticationStateDao;
     @Context
     private HttpServletRequest request;
 
@@ -151,10 +132,10 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(signature);
         assertNotNull(signatureAlgorithm);
 
-        AuthenticationState authenticationState = authenticationStateDAO.findAuthenticationStateByToken(token);
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
         assertNotNull(authenticationState);
 
-        authenticationStateDAO.delete(authenticationState);
+        authenticationStateDao.delete(authenticationState);
     }
 
     @Test
@@ -195,6 +176,12 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void taatLogin_returns_found_status() throws Exception {
+        Response response = doGet("login/taat");
+        assertEquals(Response.Status.FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void taatAuthenticate() {
         MultivaluedMap<String, String> formParams = new MultivaluedStringMap();
         formParams.add("SAMLResponse", getSAMLResponse());
@@ -209,11 +196,17 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void ekoolAuthenticate_returns_temporary_redirect_status() throws Exception {
+        Response response = doGet("login/ekool");
+        assertEquals(Response.Status.TEMPORARY_REDIRECT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void ekoolAuthenticateSuccess() {
         Response response = doGet("login/ekool/success?code=123456789");
         String url = response.getHeaderString("Location");
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
         assertEquals(true, hasToken);
@@ -230,7 +223,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
         assertEquals(true, hasToken);
@@ -246,7 +239,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
         assertEquals(false, hasToken);
@@ -276,7 +269,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
 
         boolean hasToken = false;
-        if (url.indexOf("token") != -1) {
+        if (url.contains("token")) {
             hasToken = true;
         }
 
@@ -307,7 +300,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticate() {
         String phoneNumber = "+37255551234";
         String idCode = "22334455667";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         MobileIDSecurityCodes mobileIDSecurityCodes = response.readEntity(new GenericType<MobileIDSecurityCodes>() {
@@ -332,7 +325,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateNotValid() {
         String phoneNumber = "+37244441234";
         String idCode = "33445566778";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         MobileIDSecurityCodes mobileIDSecurityCodes = response.readEntity(new GenericType<MobileIDSecurityCodes>() {
@@ -349,7 +342,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateMissingResponseFields() {
         String phoneNumber = "+37233331234";
         String idCode = "44556677889";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         assertEquals(204, response.getStatus());
@@ -359,7 +352,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateInvalidPhoneNumber() {
         String phoneNumber = "+3721";
         String idCode = "55667788990";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         assertEquals(204, response.getStatus());
@@ -369,7 +362,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateNonEstonianPhoneNumber() {
         String phoneNumber = "+37077778888";
         String idCode = "66778899001";
-        String language = "eng";
+        String language = LanguageC.ENG;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         assertEquals(204, response.getStatus());

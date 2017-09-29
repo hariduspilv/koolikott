@@ -30,16 +30,13 @@ public abstract class IntegrationTestBase {
         if (!isApplicationStarted) {
             startApplication();
 
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        stopApplication();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    stopApplication();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
+            }));
         }
     }
 }

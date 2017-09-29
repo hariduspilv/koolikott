@@ -24,10 +24,18 @@
     outline: none;
   }
   table {
-    padding-bottom: 10px;
-
     & tr > td:last-child {
       text-align: right;
+    }
+
+    tr[ng-click],
+    tr[data-ng-click] {
+      cursor: pointer;
+      transition: background-color $swift-ease-out-duration $swift-ease-out-timing-function;
+
+      &:hover {
+        background-color: $hover-background-color;
+      }
     }
   }
 }

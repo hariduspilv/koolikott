@@ -7,73 +7,59 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.LearningObject;
 import org.junit.Test;
 
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     private static final String IMPROPERS = "impropers";
-    public static final String IMPROPER_MATERIALS = "impropers/materials";
-    public static final String IMPROPER_PORTFOLIOS = "impropers/portfolios";
+    public static final String IMPROPER_MATERIALS = "admin/improper/material";
+    public static final String IMPROPER_MATERIALS_COUNT = "admin/improper/material/count";
+    public static final String IMPROPER_PORTFOLIOS = "admin/improper/portfolio";
+    public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
+    public static final long TEST_PORFOLIO_ID = 101L;
+    public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
 
     @Test
     public void setImproperNoData() {
-        login("89012378912");
-        ImproperContent improperContent = new ImproperContent();
+        login(USER_SECOND);
 
-        Response response = doPut(IMPROPERS, Entity.entity(improperContent, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPut(IMPROPERS, new ImproperContent());
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void setImproperNotExistemLearningObject() {
-        login("89012378912");
-        ImproperContent improperContent = new ImproperContent();
-        Material material = new Material();
-        material.setId(34534534L);
-        improperContent.setLearningObject(material);
+        login(USER_SECOND);
 
-        Response response = doPut(IMPROPERS, Entity.entity(improperContent, MediaType.APPLICATION_JSON_TYPE));
+        Response response = doPut(IMPROPERS, improperMaterialContent(34534534L));
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void setImproper() {
-        login("89898989898");
+        login(USER_ADMIN);
 
-        ImproperContent improperContent = new ImproperContent();
-
-        Long materialId = 1L;
-        Material material = new Material();
-        material.setId(materialId);
-        improperContent.setLearningObject(material);
-
-        ImproperContent newImproperContent = doPut(IMPROPERS,
-                Entity.entity(improperContent, MediaType.APPLICATION_JSON_TYPE), ImproperContent.class);
+        ImproperContent newImproperContent = doPut(IMPROPERS, improperMaterialContent(1L), ImproperContent.class);
 
         assertNotNull(newImproperContent);
         assertNotNull(newImproperContent.getId());
-        assertEquals(materialId, newImproperContent.getLearningObject().getId());
+        assertEquals((Long) 1L, newImproperContent.getLearningObject().getId());
 
-        Response response = doDelete(format("impropers/%s", newImproperContent.getId()));
+        Response response = doDelete(format(GET_IMPROPERS_BY_ID, newImproperContent.getId()));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void getImpropers() {
-        login("89898989898");
+        login(USER_ADMIN);
 
-        Response response = doGet(IMPROPERS);
-        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> improperContents = doGet(IMPROPERS, genericType());
 
         assertNotNull(improperContents.size());
         assertEquals(5, improperContents.size());
@@ -81,35 +67,40 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperMaterials() {
-        login("89898989898");
+        login(USER_ADMIN);
 
-        Response response = doGet(IMPROPER_MATERIALS);
-        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> improperContents = doGet(IMPROPER_MATERIALS, genericType());
 
         assertNotNull(improperContents.size());
+        long uniqueLearningObjIdsCount = improperContents.stream()
+                .map(ImproperContent::getLearningObject)
+                .map(LearningObject::getId)
+                .distinct()
+                .count();
         assertEquals(3, improperContents.size());
+
+        long materialsCount = doGet(IMPROPER_MATERIALS_COUNT, Long.class);
+        assertEquals(uniqueLearningObjIdsCount, materialsCount);
     }
 
     @Test
     public void getImproperPortfolios() {
-        login("89898989898");
+        login(USER_ADMIN);
 
-        Response response = doGet(IMPROPER_PORTFOLIOS);
-        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> improperContents = doGet(IMPROPER_PORTFOLIOS, genericType());
 
         assertNotNull(improperContents.size());
         assertEquals(2, improperContents.size());
+
+        long portfoliosCount = doGet(IMPROPER_PORTFOLIOS_COUNT, Long.class);
+        assertEquals(improperContents.size(), portfoliosCount);
     }
 
     @Test
     public void getImproperByLearningObject() {
-        login("89012378912");
+        login(USER_SECOND);
 
-        Response response = doGet(format("impropers?learningObject=%s", 103L));
-        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, 103L), genericType());
 
         assertNotNull(improperContents.size());
         assertEquals(1, improperContents.size());
@@ -118,22 +109,32 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeImproperByLearningObject() {
-        login("89898989898");
+        login(USER_ADMIN);
 
-        ImproperContent improperContent = new ImproperContent();
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(101L);
-        improperContent.setLearningObject(portfolio);
+        doPut(IMPROPERS, improperPortfolioContent(TEST_PORFOLIO_ID), ImproperContent.class);
 
-        doPut(IMPROPERS, Entity.entity(improperContent, MediaType.APPLICATION_JSON_TYPE), ImproperContent.class);
-
-        Response response = doDelete(format("impropers?learningObject=%s", portfolio.getId()));
+        Response response = doDelete(format("impropers?learningObject=%s", TEST_PORFOLIO_ID));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doGet(format("impropers?learningObject=%s", portfolio.getId()));
-        List<ImproperContent> improperContents = response.readEntity(new GenericType<List<ImproperContent>>() {
-        });
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TEST_PORFOLIO_ID), genericType());
 
         assertTrue(improperContents.isEmpty());
+    }
+
+    private GenericType<List<ImproperContent>> genericType() {
+        return new GenericType<List<ImproperContent>>() {
+        };
+    }
+
+    private ImproperContent improperMaterialContent(long id) {
+        ImproperContent improperContent = new ImproperContent();
+        improperContent.setLearningObject(materialWithId(id));
+        return improperContent;
+    }
+
+    private ImproperContent improperPortfolioContent(long id) {
+        ImproperContent improperContent = new ImproperContent();
+        improperContent.setLearningObject(portfolioWithId(id));
+        return improperContent;
     }
 }

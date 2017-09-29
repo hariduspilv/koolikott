@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class CrossCurricularTheme {
+public class CrossCurricularTheme extends AbstractEntity {
 
     @Id
     @GeneratedValue
