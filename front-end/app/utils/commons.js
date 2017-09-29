@@ -293,7 +293,9 @@ function formatYear(year) {
 
 function formatDateToDayMonthYear(dateString) {
     var date = new Date(dateString);
-    return formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
+    return isNaN(date)
+        ? ''
+        : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear();
 }
 
 function arrayToInitials(array) {
