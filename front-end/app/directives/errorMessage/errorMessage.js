@@ -147,7 +147,7 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                         var messageKey = $scope.data && $scope.data.type == '.Portfolio'
                             ? 'ERROR_MSG_UNREVIEWED_PORTFOLIO'
                             : 'ERROR_MSG_UNREVIEWED'
-                        show('new_releases', messageKey, [{
+                        show('lightbulb_outline', messageKey, [{
                             icon: 'done',
                             label: 'BUTTON_REVIEW',
                             onClick: markLearningObjectReviewed,
