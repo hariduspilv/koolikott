@@ -24,6 +24,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "    JOIN Material m ON m.id = o.id\n" +
                         "    WHERE f.reviewed = 0 " +
                         ") f ORDER BY createdAt ASC, id ASC", entity())
+                .setMaxResults(300)
                 .getResultList();
     }
 
@@ -51,6 +52,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "             AND ut.user = :user\n" +
                         "     ) f ORDER BY createdAt ASC, id ASC", entity())
                 .setParameter("user", user.getId())
+                .setMaxResults(300)
                 .getResultList();
     }
 
