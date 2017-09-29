@@ -17,6 +17,24 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
         return findByField("learningObject", learningObject, "creator", creator, "deleted", false);
     }
 
+    public List<ImproperContent> findAllImproperContentPortfolio(){
+        return (List<ImproperContent>) getEntityManager().createNativeQuery("SELECT imp.* FROM ImproperContent imp " +
+                "INNER JOIN Portfolio p ON imp.learningObject=p.id " +
+                "INNER JOIN LearningObject lo ON lo.id=p.id " +
+                "WHERE imp.deleted = false " +
+                "AND lo.deleted=false", ImproperContent.class)
+                .getResultList();
+    }
+
+    public List<ImproperContent> findAllImproperContentMaterial(){
+        return (List<ImproperContent>) getEntityManager().createNativeQuery("SELECT imp.* FROM ImproperContent imp " +
+                "INNER JOIN Material m ON imp.learningObject=m.id " +
+                "INNER JOIN LearningObject lo ON lo.id=m.id " +
+                "WHERE imp.deleted = false " +
+                "AND lo.deleted=false", ImproperContent.class)
+                .getResultList();
+    }
+
     public List<ImproperContent> findByLearningObject(LearningObject learningObject) {
         return findByFieldList("learningObject", learningObject, "deleted", false);
     }

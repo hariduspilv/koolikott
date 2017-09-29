@@ -1,24 +1,26 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.useractions.CommentService;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.content.PortfolioService;
-
 @Path("comment")
 @RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
 public class CommentResource extends BaseResource {
 
     @Inject
-    private PortfolioService portfolioService;
-    @Inject
-    private MaterialService materialService;
+    private CommentService commentService;
 
     @POST
     @Path("portfolio")
@@ -28,7 +30,7 @@ public class CommentResource extends BaseResource {
         User loggedInUser = getLoggedInUser();
         comment.setCreator(loggedInUser);
 
-        portfolioService.addComment(comment, form.getPortfolio(), loggedInUser);
+        commentService.addComment(comment, form.getPortfolio(), loggedInUser);
     }
 
     @POST
@@ -36,9 +38,10 @@ public class CommentResource extends BaseResource {
     @Consumes("application/json")
     public void addMaterialComment(AddCommentForm form) {
         Comment comment = form.getComment();
-        comment.setCreator(getLoggedInUser());
+        User loggedInUser = getLoggedInUser();
+        comment.setCreator(loggedInUser);
 
-        materialService.addComment(comment, form.getMaterial());
+        commentService.addComment(comment, form.getMaterial(), loggedInUser);
     }
 
     public static class AddCommentForm {

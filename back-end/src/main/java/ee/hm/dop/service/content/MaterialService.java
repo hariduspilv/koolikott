@@ -8,6 +8,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
+import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
@@ -43,8 +44,6 @@ public class MaterialService implements PermissionItem {
 
     @Inject
     private MaterialDao materialDao;
-    @Inject
-    private UserLikeDao userLikeDao;
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
@@ -129,37 +128,12 @@ public class MaterialService implements PermissionItem {
         solrEngineService.updateIndex();
     }
 
-    public void addComment(Comment comment, Material material) {
-        if (isEmpty(comment.getText())) {
-            throw new RuntimeException("Comment is missing text.");
-        }
-
-        if (comment.getId() != null) {
-            throw new RuntimeException("Comment already exists.");
-        }
-        Material originalMaterial = validateAndFindNotDeleted(material);
-
-        comment.setAdded(DateTime.now());
-        originalMaterial.getComments().add(comment);
-        materialDao.createOrUpdate(originalMaterial);
-    }
-
     public Material validateAndFindNotDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
     }
 
     public Material validateAndFindWithDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
-    }
-
-    public void removeUserLike(Material material, User loggedInUser) {
-        Material originalMaterial = validateAndFindNotDeleted(material);
-        userLikeDao.deleteMaterialLike(originalMaterial, loggedInUser);
-    }
-
-    public UserLike getUserLike(Material material, User loggedInUser) {
-        ValidatorUtil.mustHaveId(material);
-        return userLikeDao.findMaterialUserLike(material, loggedInUser);
     }
 
     public void delete(Material material) {
@@ -324,28 +298,6 @@ public class MaterialService implements PermissionItem {
         return isNotEmpty(brokenContentDao.findByMaterialAndUser(materialId, loggedInUser));
     }
 
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        return canAccess(user, learningObject);
-    }
-
-    @Override
-    public boolean canAccess(User user, ILearningObject learningObject) {
-        if (!(learningObject instanceof IMaterial)) return false;
-        return !learningObject.isDeleted() || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (!(learningObject instanceof IMaterial)) return false;
-        return !learningObject.isDeleted() || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean isPublic(ILearningObject learningObject) {
-        return true;
-    }
-
     public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
         checkLink(materialSource);
@@ -448,4 +400,36 @@ public class MaterialService implements PermissionItem {
         }
         material.setPeerReviews(peerReviews);
     }
+
+    @Override
+    public boolean canView(User user, ILearningObject learningObject) {
+        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
+    }
+
+    @Override
+    public boolean canInteract(User user, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        return isPublic(learningObject) || UserUtil.isAdmin(user);
+    }
+
+    @Override
+    public boolean canUpdate(User user, ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
+    }
+
+    @Override
+    public boolean isPublic(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        //todo true simulates that visibility is public, waiting for db change
+        return true && !learningObject.isDeleted();
+    }
+
+    @Override
+    public boolean isNotPrivate(ILearningObject learningObject) {
+        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        //todo true simulates that visibility is public, waiting for db change
+        return true && !learningObject.isDeleted();
+    }
+
 }

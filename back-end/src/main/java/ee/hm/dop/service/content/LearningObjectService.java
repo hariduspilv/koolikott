@@ -1,17 +1,10 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.learningObject.PermissionFactory;
-import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.utils.LearningObjectUtils;
 import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
@@ -30,10 +23,13 @@ public class LearningObjectService {
     }
 
     public boolean canAcess(User user, LearningObject learningObject) {
-        if (learningObject == null) {
-            return false;
-        }
-        return getLearningObjectHandler(learningObject).canAccess(user, learningObject);
+        if (learningObject == null) return false;
+        return getLearningObjectHandler(learningObject).canInteract(user, learningObject);
+    }
+
+    public boolean canView(User user, LearningObject learningObject) {
+        if (learningObject == null) return false;
+        return getLearningObjectHandler(learningObject).canView(user, learningObject);
     }
 
     public LearningObject validateAndFind(LearningObject learningObject) {
