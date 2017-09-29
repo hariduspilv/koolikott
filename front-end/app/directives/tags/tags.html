@@ -5,7 +5,7 @@
   <md-chips ng-model="$ctrl.upVoteForms" readonly="true" md-removable="$ctrl.isEditPortfolioMode"
             md-on-remove="$ctrl.removeTag($chip.tag)">
     <md-chip-template>
-      <md-button data-ng-if="($ctrl.isAllowed() && !$root.isReportedByUser) && !$ctrl.isAdmin() && !$ctrl.isEditPortfolioMode"
+      <md-button data-ng-if="$ctrl.isAllowed() && !$ctrl.isAdmin() && !$ctrl.isEditPortfolioMode"
                  class="md-icon-button"
                  ng-click="$ctrl.reportTag($chip.tag)">
         <md-icon class="material-icons md-light md-48">error_outline</md-icon>
