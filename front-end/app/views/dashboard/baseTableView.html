@@ -40,10 +40,10 @@
         </div>
         <!-- BEGIN Not found message after data is loaded but contains 0 items -->
         <div data-ng-show="data && !itemsCount" data-layout="row" data-layout-align="center center" data-layout-padding>
-          <h4 data-translate="
+          <h4 data-translate="{{
             isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')
-              ? ERROR_USERS_NOT_FOUND
-              : ERROR_LEARNING_OBJECTS_NOT_FOUND"></h4>
+              ? 'ERROR_USERS_NOT_FOUND'
+              : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"></h4>
         </div>
         <!-- END Not found message -->
       </md-table-container>
