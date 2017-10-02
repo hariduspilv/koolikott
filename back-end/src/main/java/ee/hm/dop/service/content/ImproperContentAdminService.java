@@ -26,7 +26,10 @@ public class ImproperContentAdminService {
 
     public List<ImproperContent> getImproperPortfolios(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        return improperContentDao.findAllImproperContentPortfolio();
+        if (UserUtil.isAdmin(user)) {
+            return improperContentDao.findAllImproperContentPortfolio();
+        }
+        return improperContentDao.findAllImproperContentPortfolio(user);
     }
 
     public long getImproperMaterialSize(User user) {
@@ -39,6 +42,9 @@ public class ImproperContentAdminService {
 
     public long getImproperPortfolioSize(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        return improperContentDao.getImproperPortfolioCount();
+        if (UserUtil.isAdmin(user)) {
+            return improperContentDao.getImproperPortfolioCount();
+        }
+        return improperContentDao.getImproperPortfolioCount(user);
     }
 }

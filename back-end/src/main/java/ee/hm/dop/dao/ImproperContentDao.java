@@ -26,6 +26,20 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                 .getResultList();
     }
 
+    public List<ImproperContent> findAllImproperContentPortfolio(User user) {
+        return (List<ImproperContent>) getEntityManager().createNativeQuery(
+                "SELECT imp.* FROM ImproperContent imp " +
+                        "INNER JOIN LearningObject lo ON imp.learningObject=lo.id " +
+                        "INNER JOIN Portfolio p ON lo.id=p.id " +
+                        "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id " +
+                        "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon " +
+                        "WHERE ut.user = :userId " +
+                        "AND imp.deleted = 0 " +
+                        "AND lo.deleted=0", entity())
+                .setParameter("userId", user.getId())
+                .getResultList();
+    }
+
     public List<ImproperContent> findAllImproperContentMaterial() {
         return (List<ImproperContent>) getEntityManager().createNativeQuery("SELECT imp.* FROM ImproperContent imp " +
                 "INNER JOIN Material m ON imp.learningObject=m.id " +
@@ -65,6 +79,23 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "INNER JOIN LearningObject lo ON lo.id=p.id " +
                         "WHERE imp.deleted = FALSE " +
                         "AND lo.deleted=FALSE")
+                .getSingleResult())
+                .longValue();
+    }
+
+    public long getImproperPortfolioCount(User user) {
+        return ((BigInteger) getEntityManager()
+                .createNativeQuery("SELECT Count(DISTINCT lo.id) FROM ImproperContent ic \n" +
+                        "INNER JOIN LearningObject lo ON ic.learningObject=lo.id \n" +
+                        "INNER JOIN Portfolio p ON lo.id=p.id " +
+                        "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id \n" +
+                        "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon \n" +
+                        "WHERE " +
+                        "ut.user = :userId \n" +
+                        "AND " +
+                        "ic.deleted = 0 \n" +
+                        "AND lo.deleted=0")
+                .setParameter("userId", user.getId())
                 .getSingleResult())
                 .longValue();
     }
