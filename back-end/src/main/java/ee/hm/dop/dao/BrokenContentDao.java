@@ -32,6 +32,21 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
                 .getResultList();
     }
 
+    public List<BrokenContent> getBrokenMaterials(User user) {
+        return getEntityManager().createNativeQuery("SELECT b.* FROM (\n" +
+                "       SELECT b.*\n" +
+                "       FROM BrokenContent b\n" +
+                "         JOIN LearningObject o ON b.material = o.id\n" +
+                "         JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
+                "         JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
+                "       WHERE o.deleted = 0\n" +
+                "         AND b.deleted = 0" +
+                "         AND ut.user = :userId\n" +
+                "     ) b ORDER BY added ASC, id ASC", entity())
+                .setParameter("userId", user.getId())
+                .getResultList();
+    }
+
     public long getBrokenCount() {
         String queryString = "SELECT Count(b.id) FROM BrokenContent b " +
                 "INNER JOIN LearningObject lo ON b.material=lo.id " +
