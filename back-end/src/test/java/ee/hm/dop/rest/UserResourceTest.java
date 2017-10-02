@@ -1,28 +1,25 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.model.taxon.Taxon;
+import org.junit.Test;
 
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.Status;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.enums.Role;
-import ee.hm.dop.model.User;
-import org.junit.Test;
+import static java.lang.String.format;
+import static org.junit.Assert.*;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
     public static final String USER_BILLY = "38211120031";
+    private static final String USER_USERNAME = "my.testuser";
+    private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
+    private static final long TEST_TAXON_ID = 10L;
 
     @Test
     public void get() {
@@ -107,7 +104,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void restrictUserWithModerator() {
         login(USER_BILLY);
 
-        User userToRestrict = doGet("user?username=user.to.be.banned1", user());
+        User userToRestrict = doGet("user?username=user.to.be.banned1", User.class);
         User restrictedUser = doPost("user/restrictUser", userToRestrict, User.class);
         assertEquals(Role.RESTRICTED, restrictedUser.getRole());
     }
@@ -116,7 +113,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void restrictUserWithAdmin() {
         login(USER_ADMIN);
 
-        User userToRestrict = doGet("user?username=user.to.be.banned2", user());
+        User userToRestrict = doGet("user?username=user.to.be.banned2", User.class);
         User restrictedUser = doPost("user/restrictUser", userToRestrict, User.class);
         assertEquals(Role.RESTRICTED, restrictedUser.getRole());
     }
@@ -125,7 +122,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void restrictUserNotAllowed() {
         login(USER_MATI);
 
-        User userToRestrict = doGet("user?username=user.to.be.banned", user());
+        User userToRestrict = doGet("user?username=user.to.be.banned", User.class);
         Response response = doPost("user/restrictUser", userToRestrict);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
@@ -134,7 +131,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void removeRestrictionWithAdmin() {
         login(USER_ADMIN);
 
-        User userToRemoveRestrictionFrom = doGet("user?username=restricted.user2", user());
+        User userToRemoveRestrictionFrom = doGet("user?username=restricted.user2", User.class);
         User nonRestrictedUser = doPost("user/removeRestriction", userToRemoveRestrictionFrom, User.class);
         assertEquals(Role.USER, nonRestrictedUser.getRole());
     }
@@ -148,12 +145,21 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         assertTrue(allUsers.size() > 14);
     }
 
-    private User getUser(String username) {
-        return doGet("user?username=" + username, user());
+    @Test
+    public void updating_user_taxons_as_admin_updates_user() throws Exception {
+        login(USER_ADMIN);
+
+        List<Taxon> taxons = new ArrayList<>();
+        taxons.add(doGet(format(GET_TAXON_URL, TEST_TAXON_ID), Taxon.class));
+
+        User user = getUser(USER_USERNAME);
+        user.setUserTaxons(taxons);
+        User updatedUser = doPost("user", user, User.class);
+
+        assertEquals(updatedUser.getUserTaxons(), taxons);
     }
 
-    private GenericType<User> user() {
-        return new GenericType<User>() {
-        };
+    private User getUser(String username) {
+        return doGet("user?username=" + username, User.class);
     }
 }
