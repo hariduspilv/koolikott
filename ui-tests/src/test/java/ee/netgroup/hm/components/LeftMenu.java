@@ -3,8 +3,9 @@ package ee.netgroup.hm.components;
 import org.openqa.selenium.By;
 import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.BrokenMateriasPage;
-import ee.netgroup.hm.page.DeletedMateriasPage;
+import ee.netgroup.hm.page.DeletedMaterialsPage;
 import ee.netgroup.hm.page.DeletedPortfoliosPage;
+import ee.netgroup.hm.page.ImproperMaterialsPage;
 import ee.netgroup.hm.page.ImproperPortfoliosPage;
 import ee.netgroup.hm.page.MyFavoritesPage;
 import ee.netgroup.hm.page.MyMaterialsPage;
@@ -27,11 +28,13 @@ public class LeftMenu extends Component{
 	private By brokenMaterials = By.id("brokenMaterials");
 	private By preschoolEducationMaterialCount = By.xpath("//span[@data-ng-bind='materialCount']");
 	private By preschoolEducationMaterialCountSearchPage = By.xpath("//span[@data-ng-bind='getNumberOfResults()']");
-	
+	private By improperMaterials = By.id("improperMaterials");
 	
 	public static LeftMenu clickDashboard() {
+		Helpers.waitForSeconds(2000);
 		Helpers.waitForClickable(dashboardButton);
 		getDriver().findElement(dashboardButton).click();
+		Helpers.waitForSeconds(2000);
 		return new LeftMenu();
 	}
 
@@ -96,9 +99,9 @@ public class LeftMenu extends Component{
 		return new DeletedPortfoliosPage();
 	}
 
-	public DeletedMateriasPage clickDeletedMaterials() {
+	public DeletedMaterialsPage clickDeletedMaterials() {
 		getDriver().findElement(deletedMaterials).click();
-		return new DeletedMateriasPage();
+		return new DeletedMaterialsPage();
 	}
 
 	public BrokenMateriasPage clickBrokenMaterials() {
@@ -120,4 +123,10 @@ public class LeftMenu extends Component{
 		}
 	}
 
+	public ImproperMaterialsPage clickImproperMaterials() {
+		getDriver().findElement(improperMaterials).click();
+		return new ImproperMaterialsPage();
+	}
+
 }
+

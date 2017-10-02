@@ -25,9 +25,11 @@ public class MaterialPage extends Page{
 	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By showMoreButton = By.xpath("//button[@ng-click='$ctrl.showMore()']");
 	private By addedTag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
-	private By materialRedBanner = By.xpath("//div[@data='material']");
+	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
 	private By reportMaterial = By.xpath("//span[contains(text(), 'Teavita katkisest materjalist')]");
+	private By doneButton = By.xpath("//md-icon[contains(text(), 'done')]");
 	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
+	private By restoreBrokenMaterialButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -112,8 +114,8 @@ public class MaterialPage extends Page{
 	}
 
 	public boolean isUnreviewedBannerDisplayed() {
-		Helpers.waitForVisibility(materialRedBanner);
-		return getDriver().findElement(materialRedBanner).isDisplayed();
+		Helpers.waitForVisibility(errorBanner);
+		return getDriver().findElement(errorBanner).isDisplayed();
 	}
 
 	public ConfirmationPopup reportAsBroken() {
@@ -129,11 +131,31 @@ public class MaterialPage extends Page{
 	public MaterialPage restoreMaterial() {
 		Helpers.waitForClickable(restoreButton);
 		getDriver().findElement(restoreButton).click();
+		Helpers.waitForSeconds(3000);
+		return this;
+	}
+	
+	public MaterialPage restoreBrokenMaterial() {
+		Helpers.waitForClickable(restoreBrokenMaterialButton);
+		getDriver().findElement(restoreBrokenMaterialButton).click();
+		Helpers.waitForSeconds(3000);
 		return this;
 	}
 
 	public boolean isMaterialRestored() {
-		return getDriver().findElement(materialRedBanner).isDisplayed();
+		Helpers.waitForSeconds(1000);
+		return getDriver().findElements(errorBanner).size() < 1;
+	}
+
+	public MaterialPage markContentAsNotImproper() {
+		Helpers.waitForClickable(doneButton);
+		getDriver().findElement(doneButton).click();
+		return this;
+	}
+
+	public boolean isContentProper() {
+		Helpers.waitForSeconds(1000);
+		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 

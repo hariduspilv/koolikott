@@ -23,9 +23,12 @@ public class MaterialAdministrationService {
     private BrokenContentDao brokenContentDao;
     @Inject
     private MaterialService materialService;
+    @Inject
+    private FirstReviewService firstReviewService;
 
-    public void setMaterialNotBroken(Material material) {
+    public void setMaterialNotBroken(Material material, User loggedInUser) {
         Material originalMaterial = materialService.validateAndFindNotDeleted(material);
+        firstReviewService.setReviewed(originalMaterial, loggedInUser);
         brokenContentDao.deleteBrokenMaterials(originalMaterial.getId());
     }
 

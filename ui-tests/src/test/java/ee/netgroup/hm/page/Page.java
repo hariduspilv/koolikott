@@ -8,16 +8,18 @@ import ee.netgroup.hm.tests.SeleniumUser;
 public abstract class Page extends SeleniumUser{
 	
 	private By markAsReviewed = By.xpath("//button[@data-ng-click='button.onClick()']");
+	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
 	
 
 	public Page markContentIsReviewed() {
 		getDriver().findElement(markAsReviewed).click();
-		Helpers.waitForSeconds(1000);
 		return this;		
 	}
 
 	public boolean isContentReviewed() {
-        return getDriver().findElement(markAsReviewed).isDisplayed();
+		Helpers.waitForSeconds(1000);
+		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 }
+

@@ -32,11 +32,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
-    private static final String MATERIAL_GET_BROKEN = "admin/brokenContent/getBroken";
-    private static final String MATERIAL_GET_BROKEN_COUNT = "admin/brokenContent/getBroken/count";
-    private static final String MATERIAL_SET_NOT_BROKEN = "admin/brokenContent/setNotBroken";
     private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
-    private static final String MATERIAL_IS_BROKEN = "admin/brokenContent/isBroken";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
     private static final String RESTORE_MATERIAL = "admin/deleted/material/restore";
@@ -292,23 +288,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void setNotBroken() {
-        login(USER_SECOND);
-
-        Material material = getMaterial(5L);
-        Response response = doPost(MATERIAL_SET_NOT_BROKEN, material);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-
-        login(USER_ADMIN);
-        Response responseAdmin = doPost(MATERIAL_SET_NOT_BROKEN, material);
-        assertEquals(Status.NO_CONTENT.getStatusCode(), responseAdmin.getStatus());
-
-        Response hasBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId());
-        assertEquals(Status.OK.getStatusCode(), hasBrokenResponse.getStatus());
-        assertEquals(hasBrokenResponse.readEntity(Boolean.class), false);
-    }
-
-    @Test
     public void hasSetBroken() {
         login(USER_SECOND);
         Material material = getMaterial(5L);
@@ -325,52 +304,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
         Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + getMaterial(5L).getId(), Boolean.class);
         assertFalse("Material hasSetBroken", response);
-    }
-
-    @Test
-    public void isBroken() {
-        login(USER_SECOND);
-        Material material = getMaterial(5L);
-
-        Response response = doPost(MATERIAL_SET_BROKEN, material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Response isBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId());
-        assertEquals(Status.FORBIDDEN.getStatusCode(), isBrokenResponse.getStatus());
-
-        login(USER_ADMIN);
-
-        Response isBrokenResponseAdmin = doGet(MATERIAL_IS_BROKEN + "?materialId=" + material.getId());
-        assertEquals(Status.OK.getStatusCode(), isBrokenResponseAdmin.getStatus());
-
-        assertEquals(isBrokenResponseAdmin.readEntity(Boolean.class), true);
-    }
-
-    @Test
-    public void getBroken() {
-        login(USER_SECOND);
-        Response getBrokenResponse = doGet(MATERIAL_GET_BROKEN);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), getBrokenResponse.getStatus());
-
-        login(USER_ADMIN);
-
-        Material material = getMaterial(5L);
-        Response response = doPost(MATERIAL_SET_BROKEN, material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Response getBrokenResponseAdmin = doGet(MATERIAL_GET_BROKEN, MediaType.APPLICATION_JSON_TYPE);
-        List<BrokenContent> brokenMaterials = getBrokenResponseAdmin.readEntity(new GenericType<List<BrokenContent>>() {
-        });
-        boolean containsMaterial = false;
-        for (BrokenContent brokenContent : brokenMaterials) {
-            if (brokenContent.getMaterial().getId() == 5L) {
-                containsMaterial = true;
-            }
-        }
-        assertEquals(containsMaterial, true);
-
-        long brokenMaterialsCount = doGet(MATERIAL_GET_BROKEN_COUNT, Long.class);
-        assertEquals("Broken materials count", brokenMaterials.size(), brokenMaterialsCount);
     }
 
     @Test(expected = RuntimeException.class)

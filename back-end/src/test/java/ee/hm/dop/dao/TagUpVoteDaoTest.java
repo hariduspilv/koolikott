@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
@@ -62,7 +63,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
     public void getUpVoteForPortfolio() {
         User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
         Tag tag = tagDao.findByName("matemaatika");
-        Portfolio portfolio = portfolioDao.findById(101l);
+        Portfolio portfolio = portfolioDao.findById(TestConstants.PORTFOLIO_1);
 
         TagUpVote tagUpVote = tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, portfolio);
         assertNotNull(tagUpVote);
@@ -82,7 +83,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
     @Test
     public void getPortfolioTagUpVotes() {
         Tag tag = tagDao.findByName("matemaatika");
-        Portfolio portfolio = portfolioDao.findById(101l);
+        Portfolio portfolio = portfolioDao.findById(TestConstants.PORTFOLIO_1);
 
         List<TagUpVote> tagUpVotes = tagUpVoteDao.findByLearningObjectAndTag(portfolio, tag);
         assertNotNull(tagUpVotes);

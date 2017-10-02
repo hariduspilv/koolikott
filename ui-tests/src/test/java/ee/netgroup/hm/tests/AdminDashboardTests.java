@@ -16,9 +16,22 @@ public class AdminDashboardTests {
 				.clickImproperPortfolios()
 				.clickToOrderImproperPortfolios()
 				.clickOpenImproperPortfolio()
-				.setContentIsNotImproper()
-				.isContentNotImproper();//TODO: muuda nimetust
-		assertFalse(improperContentBannerIsHidden);
+				.markContentAsNotImproper()
+				.isContentProper();
+		assertTrue(improperContentBannerIsHidden);
+	}
+	
+	@Test
+	public void AdminDashboardTests_ImproperMaterial_MaterialIsMarkedAsProper() {
+
+		boolean improperContentBannerIsHidden = goToLandingPage()
+				.chooseUserType("Admin")
+				.clickDashboard()
+				.clickImproperMaterials()
+				.clickOpenImproperMaterial()
+				.markContentAsNotImproper()
+				.isContentProper();
+		assertTrue(improperContentBannerIsHidden);
 	}
 
 	@Test
@@ -69,7 +82,7 @@ public class AdminDashboardTests {
 				.clickBrokenMaterials()
 				.clickSortByReportedDate()
 				.clickOpenMaterial()
-				.restoreMaterial()
+				.restoreBrokenMaterial()
 				.isMaterialRestored();
 		assertTrue(brokenBannerIsHidden);
 	}

@@ -11,6 +11,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -37,7 +38,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
-    private static final Long[] portfolioIds = {101L, 102L, 103L, 104L};
+    private static final Long[] portfolioIds = {TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_2, TestConstants.PORTFOLIO_3, TestConstants.PORTFOLIO_4};
 
     private static final int RESULTS_PER_PAGE = 3;
 

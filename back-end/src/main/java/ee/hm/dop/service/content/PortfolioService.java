@@ -69,8 +69,7 @@ public class PortfolioService implements PermissionItem {
     }
 
     public void incrementViewCount(Portfolio portfolio) {
-        Portfolio originalPortfolio = portfolioDao.findById(portfolio.getId());
-        ValidatorUtil.mustHaveEntity(originalPortfolio);
+        Portfolio originalPortfolio = findValidIncludeDeleted(portfolio);
 
         portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
@@ -173,6 +172,10 @@ public class PortfolioService implements PermissionItem {
 
     public Portfolio findValid(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
+    public Portfolio findValidIncludeDeleted(Portfolio portfolio) {
+        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findById);
     }
 
     @Override
