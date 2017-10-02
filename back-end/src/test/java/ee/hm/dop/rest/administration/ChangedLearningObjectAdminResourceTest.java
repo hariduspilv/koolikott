@@ -56,18 +56,8 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
     }
 
-    private void countEqual(long changedLearnigObjectsCount, List<ChangedLearningObject> changedLearningObjects) {
-        assertEquals("Changed learningObject list size, changed learningObject count", changedLearningObjects.size(), changedLearnigObjectsCount);
-    }
-
-    private void idsEqual(List<ChangedLearningObject> changedLearningObjectsById, long materialId) {
-        assertTrue("Changed learningObject id", changedLearningObjectsById.stream()
-                .map(ChangedLearningObject::getLearningObject)
-                .allMatch(learningObject -> learningObject.getId().equals(materialId)));
-    }
-
     @Test
-    public void after_admin_changes_unReviewed_learningObject_getChanged_returns_Nothing() throws Exception {
+    public void after_admin_changes_unReviewed_learningObject_no_changes_are_registered() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
 
@@ -122,5 +112,15 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     private GenericType<List<ChangedLearningObject>> list() {
         return new GenericType<List<ChangedLearningObject>>() {
         };
+    }
+
+    private void countEqual(long changedLearnigObjectsCount, List<ChangedLearningObject> changedLearningObjects) {
+        assertEquals("Changed learningObject list size, changed learningObject count", changedLearningObjects.size(), changedLearnigObjectsCount);
+    }
+
+    private void idsEqual(List<ChangedLearningObject> changedLearningObjectsById, long materialId) {
+        assertTrue("Changed learningObject id", changedLearningObjectsById.stream()
+                .map(ChangedLearningObject::getLearningObject)
+                .allMatch(learningObject -> learningObject.getId().equals(materialId)));
     }
 }
