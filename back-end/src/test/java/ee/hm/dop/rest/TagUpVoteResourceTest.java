@@ -169,7 +169,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));
-        tagUpVote.setLearningObject(portfolioWithId(110L));
+        tagUpVote.setLearningObject(portfolioWithId(TestConstants.PORTFOLIO_10));
 
         Response response = doPut(TAG_UP_VOTES, tagUpVote);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());

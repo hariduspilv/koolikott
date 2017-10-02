@@ -90,7 +90,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(3, portfolios.size());
 
         List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
-        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_3, 114L);
+        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_3, TestConstants.PORTFOLIO_14);
         assertTrue(actualIds.containsAll(expectedIds));
     }
 
@@ -108,7 +108,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(1, portfolios.size());
-        assertEquals(Long.valueOf(109), portfolios.get(0).getId());
+        assertEquals(TestConstants.PORTFOLIO_9, portfolios.get(0).getId());
     }
 
     @Test
@@ -307,14 +307,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioAsCreator() {
         login(USER_SECOND);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(112L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_12));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void deletePortfolioAsAdmin() {
         login(USER_ADMIN);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(113L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_13));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
@@ -452,11 +452,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void restoring_deleted_portfolio_restores_it() throws Exception {
         login(USER_ADMIN);
 
-        doPost(DELETE_PORTFOLIO_URL, portfolioWithId(114L));
-        assertTrue("Portfolio is deleted", getPortfolio(114L).isDeleted());
+        doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_13));
+        assertTrue("Portfolio is deleted", getPortfolio(TestConstants.PORTFOLIO_13).isDeleted());
 
-        doPost(RESTORE_PORTFOLIO, portfolioWithId(114L));
-        assertFalse("Portfolio is not deleted", getPortfolio(114L).isDeleted());
+        doPost(RESTORE_PORTFOLIO, portfolioWithId(TestConstants.PORTFOLIO_13));
+        assertFalse("Portfolio is not deleted", getPortfolio(TestConstants.PORTFOLIO_13).isDeleted());
     }
 
     @Test
@@ -554,7 +554,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
+        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_9, TestConstants.PORTFOLIO_10, TestConstants.PORTFOLIO_11);
         List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }

@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -101,7 +102,7 @@ public class LearningObjectAdministrationServiceTest {
         Capture<Portfolio> capturedPortfolio = newCapture();
 
         User user = new User();
-        user.setId(111L);
+        user.setId(TestConstants.PORTFOLIO_11);
         user.setRole(Role.USER);
 
         User admin = new User();
@@ -138,7 +139,7 @@ public class LearningObjectAdministrationServiceTest {
         Capture<Portfolio> capturedPortfolio = newCapture();
 
         User user = new User();
-        user.setId(111L);
+        user.setId(TestConstants.PORTFOLIO_11);
         user.setRole(Role.USER);
 
         User admin = new User();
