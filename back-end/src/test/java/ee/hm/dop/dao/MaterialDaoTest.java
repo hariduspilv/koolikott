@@ -47,7 +47,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void authors() {
-        Material material = materialDao.findByIdNotDeleted(2);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_2);
         assertEquals(2, material.getAuthors().size());
         assertEquals("Isaac", material.getAuthors().get(0).getName());
         assertEquals("John Newton", material.getAuthors().get(0).getSurname());
@@ -57,7 +57,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void materialLanguage() {
-        Material material1 = materialDao.findByIdNotDeleted(2);
+        Material material1 = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_2);
         assertEquals(LanguageC.RUS, material1.getLanguage().getCode());
 
         Material material2 = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_1);
@@ -95,7 +95,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void materialViews() {
-        Material material = materialDao.findByIdNotDeleted(3);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_3);
         assertEquals(Long.valueOf(300), material.getViews());
     }
 
@@ -148,13 +148,13 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void materialUpdatedDate() {
-        Material material = materialDao.findByIdNotDeleted(2);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_2);
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
     }
 
     @Test
     public void materialTags() {
-        Material material = materialDao.findByIdNotDeleted(2);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_2);
 
         assertEquals(4, material.getTags().size());
         assertEquals("matemaatika", material.getTags().get(0).getName());
@@ -190,7 +190,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void findMaterialWith2Subjects() {
-        Material material = materialDao.findByIdNotDeleted(6);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_6);
         List<Taxon> taxons = material.getTaxons();
         assertNotNull(taxons);
         assertEquals(2, taxons.size());
@@ -204,7 +204,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void findMaterialWithNoTaxon() {
-        Material material = materialDao.findByIdNotDeleted(8);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_8);
         List<Taxon> taxons = material.getTaxons();
         assertNotNull(taxons);
         assertEquals(0, taxons.size());
@@ -261,7 +261,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
         List<LearningObject> materials = materialDao.findByCreator(creator, 0, Integer.MAX_VALUE);
         List<Long> collect = materials.stream().map(Searchable::getId).collect(Collectors.toList());
-        assertTrue(collect.containsAll(asList(8L, 4L, TestConstants.MATERIAL_1)));
+        assertTrue(collect.containsAll(asList(TestConstants.MATERIAL_8, TestConstants.MATERIAL_4, TestConstants.MATERIAL_1)));
 
         assertMaterial1((Material) materials.stream().filter(m -> m.getId().equals(TestConstants.MATERIAL_1)).findAny().orElseThrow(RuntimeException::new));
     }
@@ -269,7 +269,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
     @Test
     public void update() {
         Material changedMaterial = new Material();
-        changedMaterial.setId(9L);
+        changedMaterial.setId(TestConstants.MATERIAL_9);
         changedMaterial.setSource("http://www.chaged.it.com");
         DateTime now = new DateTime();
         changedMaterial.setAdded(now);
@@ -279,7 +279,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
         materialDao.createOrUpdate(changedMaterial);
 
-        Material material = materialDao.findByIdNotDeleted(9);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_9);
         assertEquals("http://www.chaged.it.com", changedMaterial.getSource());
         assertEquals(now, changedMaterial.getAdded());
         DateTime updated = changedMaterial.getUpdated();
@@ -421,10 +421,10 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void delete() {
-        Material material = materialDao.findByIdNotDeleted(10);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_10);
         materialDao.delete(material);
 
-        Material deletedMaterial = materialDao.findByIdNotDeleted(10);
+        Material deletedMaterial = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_10);
         assertNull(deletedMaterial);
     }
 
@@ -448,20 +448,20 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void isPaidFalse() {
-        Material material = materialDao.findByIdNotDeleted(9);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_9);
         assertFalse(material.isPaid());
 
     }
 
     @Test
     public void isEmbeddedWhenNoRepository() {
-        Material material = materialDao.findByIdNotDeleted(3);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_3);
         assertFalse(material.isEmbeddable());
     }
 
     @Test
     public void isEmbeddedWhenEstonianRepo() {
-        Material material = materialDao.findByIdNotDeleted(12);
+        Material material = materialDao.findByIdNotDeleted(TestConstants.MATERIAL_12);
         assertTrue(material.isEmbeddable());
     }
 
