@@ -34,7 +34,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
     public void addUpVote() {
         User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
         Tag tag = tagDao.findByName("matemaatika");
-        Material material = materialDao.findById(1l);
+        Material material = materialDao.findById(TestConstants.MATERIAL_1);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag);
@@ -52,7 +52,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
     public void getUpVoteForMaterial() {
         User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
         Tag tag = tagDao.findByName("matemaatika");
-        Material material = materialDao.findById(1l);
+        Material material = materialDao.findById(TestConstants.MATERIAL_1);
 
         TagUpVote tagUpVote = tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, material);
         assertNotNull(tagUpVote);
@@ -73,7 +73,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
     @Test
     public void getMaterialTagUpVotes() {
         Tag tag = tagDao.findByName("matemaatika");
-        Material material = materialDao.findById(1l);
+        Material material = materialDao.findById(TestConstants.MATERIAL_1);
 
         List<TagUpVote> tagUpVotes = tagUpVoteDao.findByLearningObjectAndTag(material, tag);
         assertNotNull(tagUpVotes);

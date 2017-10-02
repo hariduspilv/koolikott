@@ -69,10 +69,10 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
         assertFalse("Tag  name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG_2)));
 
-        Response response = doPut(format(ADD_TAG_URL, (Long) TestConstants.PORTFOLIO_8), tag(TEST_TAG_2));
+        Response response = doPut(format(ADD_TAG_URL, TestConstants.PORTFOLIO_8), tag(TEST_TAG_2));
         assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
 
-        Response response2 = doPut(format(ADD_TAG_URL, (Long) TestConstants.PORTFOLIO_8), tag(TEST_TAG_2));
+        Response response2 = doPut(format(ADD_TAG_URL, TestConstants.PORTFOLIO_8), tag(TEST_TAG_2));
         assertEquals("Add tag with same name", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response2.getStatus());
     }
 

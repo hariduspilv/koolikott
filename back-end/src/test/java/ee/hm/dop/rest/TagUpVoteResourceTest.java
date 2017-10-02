@@ -26,7 +26,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));
-        tagUpVote.setLearningObject(materialWithId(1L));
+        tagUpVote.setLearningObject(materialWithId(TestConstants.MATERIAL_1));
 
         TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, tagUpVote, TagUpVote.class);
 
@@ -34,7 +34,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(returnedTagUpVote.getId());
         assertNull(returnedTagUpVote.getUser().getIdCode());
         assertEquals(MATEMAATIKA, returnedTagUpVote.getTag().getName());
-        assertEquals((Long) 1L, returnedTagUpVote.getLearningObject().getId());
+        assertEquals(TestConstants.MATERIAL_1, returnedTagUpVote.getLearningObject().getId());
 
         Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());

@@ -29,7 +29,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioCommentNotLoggedIn() {
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(1L, NICE_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_5, NICE_COMMENT));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
