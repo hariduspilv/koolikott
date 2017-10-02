@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.dao.FirstReviewDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.dto.TagDTO;
@@ -60,7 +61,9 @@ public class TagConverter {
             hasChanged = true;
         }
 
-        changedLearningObjectService.addChanged(changedLearningObject);
+        if (learningObject.getUnReviewed() == 0) {
+            changedLearningObjectService.addChanged(changedLearningObject);
+        }
 
         LearningObject updatedLearningObject = learningObjectService.getLearningObjectDao().createOrUpdate(learningObject);
         updatedLearningObject.setChanged(hasChanged ? updatedLearningObject.getChanged() + 1 : updatedLearningObject.getChanged());
