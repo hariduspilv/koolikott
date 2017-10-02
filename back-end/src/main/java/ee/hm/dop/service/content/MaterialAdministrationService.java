@@ -40,16 +40,22 @@ public class MaterialAdministrationService {
         return materialDao.findDeletedMaterialsCount();
     }
 
-    public List<BrokenContent> getBrokenMaterials(User loggedInUser) {
-        if (UserUtil.isAdmin(loggedInUser)) {
+    public List<BrokenContent> getBrokenMaterials(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
             return brokenContentDao.getBrokenMaterials();
         } else {
-            return brokenContentDao.getBrokenMaterials(loggedInUser);
+            return brokenContentDao.getBrokenMaterials(user);
         }
     }
 
-    public Long getBrokenMaterialCount() {
-        return brokenContentDao.getBrokenCount();
+    public Long getBrokenMaterialCount(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
+            return brokenContentDao.getBrokenCount();
+        } else {
+            return brokenContentDao.getBrokenCount(user);
+        }
     }
 
     public Boolean isBroken(long materialId) {
