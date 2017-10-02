@@ -47,7 +47,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolio() {
-        assertPortfolio101(getPortfolio(101));
+        assertPortfolio(getPortfolio(TestConstants.PORTFOLIO_1));
     }
 
     @Test
@@ -481,7 +481,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         return doPost(CREATE_PORTFOLIO_URL, portfolioWithTitle("Tere"), Portfolio.class);
     }
 
-    private void assertPortfolio101(Portfolio portfolio) {
+    private void assertPortfolio(Portfolio portfolio) {
         assertNotNull(portfolio);
         assertEquals(TestConstants.PORTFOLIO_1, portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
