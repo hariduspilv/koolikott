@@ -135,6 +135,7 @@ angular.module('koolikottApp')
 
                 function setNotImproperSuccessful() {
                     $rootScope.learningObjectImproper = false;
+                    $rootScope.learningObjectUnreviewed = false;
                     $rootScope.$broadcast('dashboard:adminCountsUpdated');
                 }
 

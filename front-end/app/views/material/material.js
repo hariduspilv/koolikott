@@ -368,6 +368,7 @@ angular.module('koolikottApp')
 
             function setNotImproperSuccessful() {
                 $rootScope.learningObjectImproper = false;
+                $rootScope.learningObjectUnreviewed = false;
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
@@ -389,6 +390,7 @@ angular.module('koolikottApp')
                 $scope.isBroken = false;
                 $scope.isBrokenReportedByUser = false;
                 $rootScope.learningObjectBroken = false;
+                $rootScope.learningObjectUnreviewed = false;
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
