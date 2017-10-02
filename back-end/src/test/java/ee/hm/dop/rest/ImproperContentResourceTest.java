@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Portfolio;
 import org.junit.Test;
 
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
@@ -23,6 +24,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public static final String IMPROPER_PORTFOLIOS = "admin/improper/portfolio";
     public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
     public static final long TEST_PORFOLIO_ID = 101L;
+    public static final long TEST_UNREVIEWED_PORFOLIO_ID = 108L;
     public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
 
     @Test
@@ -108,7 +110,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void removeImproperByLearningObject() {
+    public void approving_improper_content_removes_it() {
         login(USER_ADMIN);
 
         doPut(IMPROPERS, improperPortfolioContent(TEST_PORFOLIO_ID), ImproperContent.class);
@@ -119,6 +121,23 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TEST_PORFOLIO_ID), genericType());
 
         assertTrue(improperContents.isEmpty());
+    }
+
+    @Test
+    public void approving_unreviewed_improper_content_removes_improper_content_and_sets_it_reviewed() {
+        login(USER_ADMIN);
+
+        doPut(IMPROPERS, improperPortfolioContent(TEST_UNREVIEWED_PORFOLIO_ID), ImproperContent.class);
+
+        Response response = doDelete(format("impropers?learningObject=%s", TEST_UNREVIEWED_PORFOLIO_ID));
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TEST_UNREVIEWED_PORFOLIO_ID), genericType());
+
+        assertTrue(improperContents.isEmpty());
+
+        Portfolio portfolio = getPortfolio(TEST_UNREVIEWED_PORFOLIO_ID);
+        assertTrue(portfolio.getUnReviewed() == 0);
     }
 
     private GenericType<List<ImproperContent>> genericType() {
