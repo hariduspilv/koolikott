@@ -1,18 +1,15 @@
 package ee.hm.dop.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
 import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
+
+import javax.inject.Inject;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 public class TranslationDAOTest extends DatabaseTestBase {
 
@@ -31,10 +28,11 @@ public class TranslationDAOTest extends DatabaseTestBase {
         assertEquals(language.getCode(), translationGroup.getLanguage().getCode());
         assertEquals(language.getId(), translationGroup.getLanguage().getId());
         Map<String, String> translations = translationGroup.getTranslations();
-        assertEquals(3, translations.size());
+        assertEquals(4, translations.size());
         assertEquals("FOO sõnum", translations.get("FOO"));
         assertEquals("Eesti keeles", translations.get("Estonian"));
         assertEquals("Vene keel", translations.get("Russian"));
+        assertEquals("Matemaatika", translations.get("TOPIC_MATHEMATICS"));
     }
 
     @Test
@@ -64,7 +62,6 @@ public class TranslationDAOTest extends DatabaseTestBase {
     }
 
 
-
     @Test
     public void getTranslationGroupForRussian() {
         Language language = new Language();
@@ -77,9 +74,10 @@ public class TranslationDAOTest extends DatabaseTestBase {
         assertEquals(language.getCode(), translationGroup.getLanguage().getCode());
         assertEquals(language.getId(), translationGroup.getLanguage().getId());
         Map<String, String> translations = translationGroup.getTranslations();
-        assertEquals(3, translations.size());
+        assertEquals(4, translations.size());
         assertEquals("FOO сообщение", translations.get("FOO"));
         assertEquals("Эстонский язык", translations.get("Estonian"));
         assertEquals("русский язык", translations.get("Russian"));
+        assertEquals("Mатематика", translations.get("TOPIC_MATHEMATICS"));
     }
 }

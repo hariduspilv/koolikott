@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.enums.Visibility;
@@ -101,7 +102,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(101L);
+        portfolio.setId(TestConstants.PORTFOLIO_1);
         portfolio.setVisibility(Visibility.PUBLIC);
 
         TagUpVote tagUpVote = new TagUpVote();
@@ -137,7 +138,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(NOT_EXISTING_TAG));
-        tagUpVote.setLearningObject(portfolioWithId(101L));
+        tagUpVote.setLearningObject(portfolioWithId(TestConstants.PORTFOLIO_1));
 
         Response response = doPut(TAG_UP_VOTES, tagUpVote);
         assertEquals("No tag", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -148,7 +149,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(101L);
+        portfolio.setId(TestConstants.PORTFOLIO_1);
         portfolio.setVisibility(Visibility.PUBLIC);
 
         TagUpVote tagUpVote = new TagUpVote();
@@ -168,7 +169,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));
-        tagUpVote.setLearningObject(portfolioWithId(110L));
+        tagUpVote.setLearningObject(portfolioWithId(TestConstants.PORTFOLIO_10));
 
         Response response = doPut(TAG_UP_VOTES, tagUpVote);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());

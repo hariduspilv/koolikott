@@ -47,6 +47,10 @@ public class FirstReviewService {
         return firstReviewDao.createOrUpdate(firstReview);
     }
 
+    public void setReviewed(List<LearningObject> learningObject, User loggedInUser){
+        learningObject.forEach(LO -> setReviewed(LO, loggedInUser));
+    }
+
     public void setReviewed(LearningObject learningObject, User loggedInUser) {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
         LearningObject object = learningObjectService.validateAndFind(learningObject);

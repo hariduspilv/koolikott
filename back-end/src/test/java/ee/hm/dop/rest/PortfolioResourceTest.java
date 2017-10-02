@@ -1,12 +1,14 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.enums.Visibility;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.ArrayList;
@@ -33,6 +35,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String DISLIKE_URL = "portfolio/dislike";
     private static final String GET_USER_LIKE_URL = "portfolio/getUserLike";
     private static final String REMOVE_USER_LIKE_URL = "portfolio/removeUserLike";
+
+    private static final String RESTORE_PORTFOLIO = "admin/deleted/portfolio/restore";
+    private static final String GET_DELETED_PORTFOLIOS = "admin/deleted/portfolio/getDeleted";
+    private static final String GET_DELETED_PORTFOLIOS_COUNT = "admin/deleted/portfolio/getDeleted/count";
+
     private static final String CREATE_MATERIAL_URL = "material";
     public static final String NEW_SUBCHAPTER = "New subchapter";
     public static final String NEW_CHAPTER_1 = "New chapter 1";
@@ -40,7 +47,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolio() {
-        assertPortfolio101(getPortfolio(101));
+        assertPortfolio(getPortfolio(TestConstants.PORTFOLIO_1));
     }
 
     @Test
@@ -53,8 +60,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPrivatePortfolioAsCreator() {
         login(USER_PEETER);
 
-        Portfolio portfolio = getPortfolio(107L);
-        assertEquals((Long) 107L, portfolio.getId());
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_7);
+        assertEquals((Long) TestConstants.PORTFOLIO_7, portfolio.getId());
         assertEquals("This portfolio is private. ", portfolio.getTitle());
     }
 
@@ -70,8 +77,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPrivatePortfolioAsAdmin() {
         login(USER_ADMIN);
 
-        Portfolio portfolio = getPortfolio(107L);
-        assertEquals((Long) 107L, portfolio.getId());
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_7);
+        assertEquals((Long) TestConstants.PORTFOLIO_7, portfolio.getId());
         assertEquals("This portfolio is private. ", portfolio.getTitle());
     }
 
@@ -83,7 +90,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(3, portfolios.size());
 
         List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
-        List<Long> expectedIds = Arrays.asList(101L, 103L, 114L);
+        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_3, TestConstants.PORTFOLIO_14);
         assertTrue(actualIds.containsAll(expectedIds));
     }
 
@@ -101,7 +108,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(1, portfolios.size());
-        assertEquals(Long.valueOf(109), portfolios.get(0).getId());
+        assertEquals(TestConstants.PORTFOLIO_9, portfolios.get(0).getId());
     }
 
     @Test
@@ -150,9 +157,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void increaseViewCount() {
-        Portfolio portfolioBefore = getPortfolio(103L);
-        doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL, portfolioWithId(103L));
-        Portfolio portfolioAfter = getPortfolio(103L);
+        Portfolio portfolioBefore = getPortfolio(TestConstants.PORTFOLIO_3);
+        doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL, portfolioWithId(TestConstants.PORTFOLIO_3));
+        Portfolio portfolioAfter = getPortfolio(TestConstants.PORTFOLIO_3);
         assertEquals(Long.valueOf(portfolioBefore.getViews() + 1), portfolioAfter.getViews());
     }
 
@@ -268,7 +275,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void copyPortfolio() {
         login(USER_PEETER);
 
-        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithId(101L), Portfolio.class);
+        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithId(TestConstants.PORTFOLIO_1), Portfolio.class);
         assertNotNull(copiedPortfolio);
         assertEquals(Long.valueOf(2), copiedPortfolio.getCreator().getId());
         assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
@@ -276,14 +283,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void copyPrivatePortfolioNotLoggedIn() {
-        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(107L));
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(TestConstants.PORTFOLIO_7));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void copyPrivatePortfolioLoggedInAsNotCreator() {
         login(USER_MATI);
-        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(107L));
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(TestConstants.PORTFOLIO_7));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
@@ -291,7 +298,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void copyPrivatePortfolioLoggedInAsCreator() {
         login(USER_PEETER);
 
-        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(107L));
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(TestConstants.PORTFOLIO_7));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         Portfolio copiedPortfolio = response.readEntity(Portfolio.class);
         assertEquals((Long) 2L, copiedPortfolio.getOriginalCreator().getId());
@@ -300,34 +307,34 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioAsCreator() {
         login(USER_SECOND);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(112L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_12));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void deletePortfolioAsAdmin() {
         login(USER_ADMIN);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(113L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_13));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void deletePortfolioAsNotCreator() {
         login(USER_SECOND);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(101L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_1));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void deletePortfolioNotLoggedIn() {
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(101L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_1));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void recommendPortfolio() {
         login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(103L);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_3);
         Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
@@ -338,14 +345,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.OK.getStatusCode(), responseAdmin.getStatus());
         assertNotNull(responseAdmin.readEntity(Recommendation.class));
 
-        Portfolio portfolioAfterRecommend = getPortfolio(103L);
+        Portfolio portfolioAfterRecommend = getPortfolio(TestConstants.PORTFOLIO_3);
         assertNotNull(portfolioAfterRecommend.getRecommendation());
     }
 
     @Test
     public void removedPortfolioRecommendation() {
         login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(103L);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_3);
         Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
@@ -355,7 +362,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Response responseAdmin = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
         assertEquals(Status.OK.getStatusCode(), responseAdmin.getStatus());
         assertNotNull(responseAdmin.readEntity(Recommendation.class));
-        Portfolio portfolioAfterRecommend = getPortfolio(103L);
+        Portfolio portfolioAfterRecommend = getPortfolio(TestConstants.PORTFOLIO_3);
         assertNotNull(portfolioAfterRecommend.getRecommendation());
 
         logout();
@@ -369,7 +376,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Response responseRemoveRecommendationAdmin = doPost(PORTFOLIO_REMOVE_RECOMMENDATION_URL, portfolio);
         assertEquals(Status.NO_CONTENT.getStatusCode(), responseRemoveRecommendationAdmin.getStatus());
 
-        Portfolio portfolioAfterRemoveRecommend = getPortfolio(103L);
+        Portfolio portfolioAfterRemoveRecommend = getPortfolio(TestConstants.PORTFOLIO_3);
         assertNull(portfolioAfterRemoveRecommend.getRecommendation());
     }
 
@@ -411,7 +418,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void likePortfolio_sets_it_as_liked() throws Exception {
         login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(103L);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_3);
 
         doPost(LIKE_URL, portfolio);
         UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
@@ -422,7 +429,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void dislikePortfolio_sets_it_as_not_liked() throws Exception {
         login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(103L);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_3);
 
         doPost(DISLIKE_URL, portfolio);
         UserLike userDislike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
@@ -433,7 +440,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void removeUserLike_removes_like_from_portfolio() throws Exception {
         login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(103L);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_3);
 
         doPost(LIKE_URL, portfolio);
         doPost(REMOVE_USER_LIKE_URL, portfolio);
@@ -441,13 +448,42 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNull("User removed like does not exist", userRemoveLike);
     }
 
+    @Test
+    public void restoring_deleted_portfolio_restores_it() throws Exception {
+        login(USER_ADMIN);
+
+        doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_13));
+        assertTrue("Portfolio is deleted", getPortfolio(TestConstants.PORTFOLIO_13).isDeleted());
+
+        doPost(RESTORE_PORTFOLIO, portfolioWithId(TestConstants.PORTFOLIO_13));
+        assertFalse("Portfolio is not deleted", getPortfolio(TestConstants.PORTFOLIO_13).isDeleted());
+    }
+
+    @Test
+    public void getDeleted_returns_deleted_portfolios_to_user_admin() throws Exception {
+        login(USER_ADMIN);
+        List<Portfolio> deletedPortfolios = doGet(GET_DELETED_PORTFOLIOS, new GenericType<List<Portfolio>>() {
+        });
+        long deletedPortfoliosCount = doGet(GET_DELETED_PORTFOLIOS_COUNT, Long.class);
+
+        assertTrue("Portfolios are deleted", deletedPortfolios.stream().allMatch(LearningObject::isDeleted));
+        assertEquals("Deleted portfolios list size, deleted portfolios count", deletedPortfolios.size(), deletedPortfoliosCount);
+    }
+
+    @Test
+    public void regular_user_do_not_have_access_to_get_deleted_portfolios() throws Exception {
+        login(USER_PEETER);
+        Response response = doGet(GET_DELETED_PORTFOLIOS);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
     private Portfolio createPortfolio() {
         return doPost(CREATE_PORTFOLIO_URL, portfolioWithTitle("Tere"), Portfolio.class);
     }
 
-    private void assertPortfolio101(Portfolio portfolio) {
+    private void assertPortfolio(Portfolio portfolio) {
         assertNotNull(portfolio);
-        assertEquals(Long.valueOf(101), portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_1, portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
@@ -518,7 +554,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
+        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_9, TestConstants.PORTFOLIO_10, TestConstants.PORTFOLIO_11);
         List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }

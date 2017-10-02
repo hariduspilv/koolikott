@@ -2,9 +2,6 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -14,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
@@ -56,11 +52,11 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCreatorCount(@QueryParam("username") String username) {
+    public Long getByCreatorCount(@QueryParam("username") String username) {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
-        return ok(portfolioService.getCountByCreator(creator));
+        return portfolioService.getCountByCreator(creator);
     }
 
     @POST
