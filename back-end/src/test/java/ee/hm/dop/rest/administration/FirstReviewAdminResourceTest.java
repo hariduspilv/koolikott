@@ -37,7 +37,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
         LearningObject learningObject = firstReviews.stream()
                 .map(FirstReview::getLearningObject)
-                .filter(l -> l.getId() == 1L)
+                .filter(l -> l.getId().equals(TestConstants.MATERIAL_1))
                 .findAny()
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();

@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
@@ -137,7 +138,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
 
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
-        assertTrue(collect.containsAll(asList(8L, 4L, 1L)));
+        assertTrue(collect.containsAll(asList(8L, 4L, TestConstants.MATERIAL_1)));
     }
 
     @Test

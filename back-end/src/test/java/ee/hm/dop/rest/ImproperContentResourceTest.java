@@ -48,11 +48,11 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void setImproper() {
         login(USER_ADMIN);
 
-        ImproperContent newImproperContent = doPut(IMPROPERS, improperMaterialContent(1L), ImproperContent.class);
+        ImproperContent newImproperContent = doPut(IMPROPERS, improperMaterialContent(TestConstants.MATERIAL_1), ImproperContent.class);
 
         assertNotNull(newImproperContent);
         assertNotNull(newImproperContent.getId());
-        assertEquals((Long) 1L, newImproperContent.getLearningObject().getId());
+        assertEquals(TestConstants.MATERIAL_1, newImproperContent.getLearningObject().getId());
 
         Response response = doDelete(format(GET_IMPROPERS_BY_ID, newImproperContent.getId()));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());

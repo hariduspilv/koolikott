@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import com.google.inject.Inject;
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.Material;
 import org.junit.Test;
@@ -21,9 +22,9 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         ChangedLearningObject change2 = new ChangedLearningObject();
 
         Material material = new Material();
-        material.setId(1L);
+        material.setId(TestConstants.MATERIAL_1);
 
-        change1.setId(1L);
+        change1.setId(TestConstants.MATERIAL_1);
         change2.setId(2L);
         change1.setLearningObject(material);
         change2.setLearningObject(material);
@@ -47,11 +48,11 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         ChangedLearningObject change3 = new ChangedLearningObject();
 
         Material material1 = new Material();
-        material1.setId(1L);
+        material1.setId(TestConstants.MATERIAL_1);
         Material material2 = new Material();
         material2.setId(2L);
 
-        change1.setId(1L);
+        change1.setId(TestConstants.MATERIAL_1);
         change2.setId(2L);
         change3.setId(3L);
         change1.setLearningObject(material1);

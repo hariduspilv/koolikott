@@ -61,7 +61,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login(USER_PEETER);
 
         Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_7);
-        assertEquals((Long) TestConstants.PORTFOLIO_7, portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_7, portfolio.getId());
         assertEquals("This portfolio is private. ", portfolio.getTitle());
     }
 
@@ -78,7 +78,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login(USER_ADMIN);
 
         Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_7);
-        assertEquals((Long) TestConstants.PORTFOLIO_7, portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_7, portfolio.getId());
         assertEquals("This portfolio is private. ", portfolio.getTitle());
     }
 
