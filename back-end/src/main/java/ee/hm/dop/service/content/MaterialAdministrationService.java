@@ -40,8 +40,12 @@ public class MaterialAdministrationService {
         return materialDao.findDeletedMaterialsCount();
     }
 
-    public List<BrokenContent> getBrokenMaterials() {
-        return brokenContentDao.getBrokenMaterials();
+    public List<BrokenContent> getBrokenMaterials(User loggedInUser) {
+        if (UserUtil.isAdmin(loggedInUser)) {
+            return brokenContentDao.getBrokenMaterials();
+        } else {
+            return brokenContentDao.getBrokenMaterials(loggedInUser);
+        }
     }
 
     public Long getBrokenMaterialCount() {
