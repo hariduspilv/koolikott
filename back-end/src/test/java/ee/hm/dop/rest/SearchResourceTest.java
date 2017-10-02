@@ -68,7 +68,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
-        assertMaterialIdentifiers(searchResult.getItems(), 2L, 3L);
+        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_3);
     }
 
     @Test

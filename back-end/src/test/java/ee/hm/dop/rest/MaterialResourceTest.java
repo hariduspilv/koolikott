@@ -48,6 +48,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
     public static final String SOURCE_NOT_EXISTING = "https://www.youtube.com/watch?v=5_Ar7VXXsro";
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
+    private static final long NOT_EXISTING_MATERIAL_ID = 999L;
 
     @Inject
     private MaterialService materialService;
@@ -57,12 +58,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaterial() {
-        assertMaterial1(getMaterial(1));
+        assertMaterial1(getMaterial(TestConstants.MATERIAL_1));
     }
 
     @Test
     public void getMaterialDescriptionAndLanguage() {
-        Material material = getMaterial(1);
+        Material material = getMaterial(TestConstants.MATERIAL_1);
 
         List<LanguageString> descriptions = material.getDescriptions();
         assertEquals(2, descriptions.size());
@@ -81,36 +82,35 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaterialUpdatedDate() {
-        Material material = getMaterial(2);
-        assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), material.getUpdated());
+        assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), getMaterial(TestConstants.MATERIAL_2).getUpdated());
     }
 
     @Test
     public void increaseViewCount() {
-        Material materialBefore = getMaterial(5L);
+        Material materialBefore = getMaterial(TestConstants.MATERIAL_5);
 
-        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(5L));
+        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(TestConstants.MATERIAL_5));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        Material materialAfter = getMaterial(5L);
+        Material materialAfter = getMaterial(TestConstants.MATERIAL_5);
         assertEquals(Long.valueOf(materialBefore.getViews() + 1), materialAfter.getViews());
     }
 
     @Test
     public void increaseViewCountNotExistingMaterial() {
-        Response response = doGet(format(GET_MATERIAL_URL, 999L));
+        Response response = doGet(format(GET_MATERIAL_URL, NOT_EXISTING_MATERIAL_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(999L));
+        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTING_MATERIAL_ID));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
-        response = doGet(format(GET_MATERIAL_URL, 999L));
+        response = doGet(format(GET_MATERIAL_URL, NOT_EXISTING_MATERIAL_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void getMaterialWithSubjects() {
-        Material material = getMaterial(6);
+        Material material = getMaterial(TestConstants.MATERIAL_6);
 
         List<Taxon> taxons = material.getTaxons();
         assertNotNull(taxons);
@@ -125,7 +125,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaterialWithNoTaxon() {
-        Material material = getMaterial(8);
+        Material material = getMaterial(TestConstants.MATERIAL_8);
         List<Taxon> taxons = material.getTaxons();
         assertNotNull(taxons);
         assertEquals(0, taxons.size());
@@ -137,7 +137,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
 
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
-        assertTrue(collect.containsAll(asList(8L, 4L, TestConstants.MATERIAL_1)));
+        assertTrue(collect.containsAll(asList(TestConstants.MATERIAL_8, TestConstants.MATERIAL_4, TestConstants.MATERIAL_1)));
     }
 
     @Test
@@ -246,7 +246,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void createOrUpdateMaterial_updates_existing_material() throws Exception {
         login(USER_PEETER);
 
-        Material material = getMaterial(5L);
+        Material material = getMaterial(TestConstants.MATERIAL_5);
         material.setSpecialEducation(true);
 
         Material materialAfter = createMaterial(material).readEntity(Material.class);
@@ -262,7 +262,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addRecommendation() {
         User user = login(USER_ADMIN);
-        Material material = materialService.get(3L, user);
+        Material material = materialService.get(TestConstants.MATERIAL_3, user);
 
         Recommendation recommendation = doPost(MATERIAL_ADD_RECOMMENDATION, material, Recommendation.class);
         assertNotNull(recommendation);
@@ -273,7 +273,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void removeRecommendation() {
         User user = login(USER_ADMIN);
 
-        Material material = materialService.get(3L, user);
+        Material material = materialService.get(TestConstants.MATERIAL_3, user);
         Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION, material);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
@@ -282,7 +282,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void setBrokenMaterial() {
         login(USER_SECOND);
 
-        Material material = getMaterial(5L);
+        Material material = getMaterial(TestConstants.MATERIAL_5);
         Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
@@ -290,7 +290,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void hasSetBroken() {
         login(USER_SECOND);
-        Material material = getMaterial(5L);
+        Material material = getMaterial(TestConstants.MATERIAL_5);
 
         Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -302,7 +302,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
-        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + getMaterial(5L).getId(), Boolean.class);
+        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + getMaterial(TestConstants.MATERIAL_5).getId(), Boolean.class);
         assertFalse("Material hasSetBroken", response);
     }
 
@@ -338,24 +338,24 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void deleteAndRestore() {
         login(USER_ADMIN);
 
-        Response response = doDelete("material/" + 13L);
+        Response response = doDelete("material/" + TestConstants.MATERIAL_13);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        Response response2 = doPost(RESTORE_MATERIAL, materialWithId(13L));
+        Response response2 = doPost(RESTORE_MATERIAL, materialWithId(TestConstants.MATERIAL_13));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response2.getStatus());
     }
 
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
         login(USER_PEETER);
-        Response response = doDelete("material/" + 12L);
+        Response response = doDelete("material/" + TestConstants.MATERIAL_12);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void userCanNotRestoreRepositoryMaterial() {
         login(USER_PEETER);
-        Response response = doPost(RESTORE_MATERIAL, materialWithId(14L));
+        Response response = doPost(RESTORE_MATERIAL, materialWithId(TestConstants.MATERIAL_14));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -380,7 +380,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void likeMaterial_sets_it_as_liked() throws Exception {
         login(USER_PEETER);
-        Material material = getMaterial(5L);
+        Material material = getMaterial(TestConstants.MATERIAL_5);
 
         doPost(LIKE_URL, material);
         UserLike userLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
@@ -391,7 +391,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void dislikeMaterial_sets_it_as_not_liked() throws Exception {
         login(USER_PEETER);
-        Material material = getMaterial(5L);
+        Material material = getMaterial(TestConstants.MATERIAL_5);
 
         doPost(DISLIKE_URL, material);
         UserLike userDislike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
@@ -402,7 +402,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void removeUserLike_removes_like_from_material() throws Exception {
         login(USER_PEETER);
-        Material material = getMaterial(5L);
+        Material material = getMaterial(TestConstants.MATERIAL_5);
 
         doPost(LIKE_URL, material);
         doPost(REMOVE_USER_LIKE_URL, material);
@@ -412,7 +412,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getProxyUrl_returns_external_material_if_it_exists() throws Exception {
-        Response response = doGet(format(EXTERNAL_MATERIAL_URL, getMaterial(3L).getSource()), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        Response response = doGet(format(EXTERNAL_MATERIAL_URL, getMaterial(TestConstants.MATERIAL_3).getSource()), MediaType.APPLICATION_OCTET_STREAM_TYPE);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         assertNotNull("Response input stream", response.readEntity(InputStream.class).read());
     }
