@@ -25,7 +25,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public static final String IMPROPER_PORTFOLIOS = "admin/improper/portfolio";
     public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
     public static final long TEST_PORFOLIO_ID = TestConstants.PORTFOLIO_1;
-    public static final long TEST_UNREVIEWED_PORFOLIO_ID = 108L;
+    public static final long TEST_UNREVIEWED_PORFOLIO_ID = TestConstants.PORTFOLIO_8;
     public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
 
     @Test
