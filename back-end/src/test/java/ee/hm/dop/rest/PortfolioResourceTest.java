@@ -7,6 +7,7 @@ import ee.hm.dop.model.enums.Visibility;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String DISLIKE_URL = "portfolio/dislike";
     private static final String GET_USER_LIKE_URL = "portfolio/getUserLike";
     private static final String REMOVE_USER_LIKE_URL = "portfolio/removeUserLike";
+
+    private static final String RESTORE_PORTFOLIO = "admin/deleted/portfolio/restore";
+    private static final String GET_DELETED_PORTFOLIOS = "admin/deleted/portfolio/getDeleted";
+    private static final String GET_DELETED_PORTFOLIOS_COUNT = "admin/deleted/portfolio/getDeleted/count";
+
     private static final String CREATE_MATERIAL_URL = "material";
     public static final String NEW_SUBCHAPTER = "New subchapter";
     public static final String NEW_CHAPTER_1 = "New chapter 1";
@@ -439,6 +445,35 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         doPost(REMOVE_USER_LIKE_URL, portfolio);
         UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
         assertNull("User removed like does not exist", userRemoveLike);
+    }
+
+    @Test
+    public void restoring_deleted_portfolio_restores_it() throws Exception {
+        login(USER_ADMIN);
+
+        doPost(DELETE_PORTFOLIO_URL, portfolioWithId(114L));
+        assertTrue("Portfolio is deleted", getPortfolio(114L).isDeleted());
+
+        doPost(RESTORE_PORTFOLIO, portfolioWithId(114L));
+        assertFalse("Portfolio is not deleted", getPortfolio(114L).isDeleted());
+    }
+
+    @Test
+    public void getDeleted_returns_deleted_portfolios_to_user_admin() throws Exception {
+        login(USER_ADMIN);
+        List<Portfolio> deletedPortfolios = doGet(GET_DELETED_PORTFOLIOS, new GenericType<List<Portfolio>>() {
+        });
+        long deletedPortfoliosCount = doGet(GET_DELETED_PORTFOLIOS_COUNT, Long.class);
+
+        assertTrue("Portfolios are deleted", deletedPortfolios.stream().allMatch(LearningObject::isDeleted));
+        assertEquals("Deleted portfolios list size, deleted portfolios count", deletedPortfolios.size(), deletedPortfoliosCount);
+    }
+
+    @Test
+    public void regular_user_do_not_have_access_to_get_deleted_portfolios() throws Exception {
+        login(USER_PEETER);
+        Response response = doGet(GET_DELETED_PORTFOLIOS);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     private Portfolio createPortfolio() {
