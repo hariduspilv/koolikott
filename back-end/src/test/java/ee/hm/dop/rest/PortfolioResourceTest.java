@@ -108,7 +108,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(1, portfolios.size());
-        assertEquals(Long.valueOf(109), portfolios.get(0).getId());
+        assertEquals(TestConstants.PORTFOLIO_9, portfolios.get(0).getId());
     }
 
     @Test
@@ -554,7 +554,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());
-        List<Long> expectedIds = Arrays.asList(109L, 110L, 111L);
+        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_9, TestConstants.PORTFOLIO_10, TestConstants.PORTFOLIO_11);
         List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(actualIds.containsAll(expectedIds));
     }
