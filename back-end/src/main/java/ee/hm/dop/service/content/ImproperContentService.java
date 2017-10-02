@@ -8,7 +8,7 @@ import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +18,8 @@ public class ImproperContentService {
     private ImproperContentDao improperContentDao;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private FirstReviewService firstReviewService;
 
     public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser){
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
@@ -57,13 +59,10 @@ public class ImproperContentService {
      */
     public ImproperContent get(long improperContentId, User user) {
         ImproperContent improperContent = improperContentDao.findByIdValid(improperContentId);
-        if (improperContent == null){
+        if (improperContent != null && !learningObjectService.canAcess(user, improperContent.getLearningObject())) {
             return null;
         }
-        if (learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
-            return improperContent;
-        }
-        return null;
+        return improperContent;
     }
 
     /**
@@ -85,7 +84,7 @@ public class ImproperContentService {
      */
     public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
         ImproperContent improperContent = improperContentDao.findByLearningObjectAndCreator(learningObject, creator);
-        if (improperContent != null && !learningObjectService.hasPermissionsToAccess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.canAcess(user, improperContent.getLearningObject())) {
             return null;
         }
         return improperContent;
@@ -108,10 +107,12 @@ public class ImproperContentService {
      */
     public void deleteAll(List<ImproperContent> impropers, User user) {
         removeIfHasNoAccess(user, impropers);
+        List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
+        firstReviewService.setReviewed(learningObjects, user);
         improperContentDao.deleteAll(impropers);
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
-        impropers.removeIf(improper -> !learningObjectService.hasPermissionsToAccess(user, improper.getLearningObject()));
+        impropers.removeIf(improper -> !learningObjectService.canAcess(user, improper.getLearningObject()));
     }
 }
