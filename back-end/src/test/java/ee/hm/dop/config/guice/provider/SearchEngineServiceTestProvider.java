@@ -38,7 +38,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
-    private static final Long[] portfolioIds = {TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_2, 103L, 104L};
+    private static final Long[] portfolioIds = {TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_2, TestConstants.PORTFOLIO_3, TestConstants.PORTFOLIO_4};
 
     private static final int RESULTS_PER_PAGE = 3;
 
