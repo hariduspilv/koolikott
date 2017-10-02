@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
@@ -62,7 +63,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
     @Test
     public void findAllById() {
         List<Long> idList = new ArrayList<>();
-        idList.add(101L);
+        idList.add(TestConstants.PORTFOLIO_1);
         idList.add(102L);
         idList.add(103L);
 
@@ -105,7 +106,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
         for (LearningObject portfolio : portfolios) {
             assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
-            if (portfolio.getId().equals(101L)) {
+            if (portfolio.getId().equals(TestConstants.PORTFOLIO_1)) {
                 assertPortfolio1((Portfolio) portfolio);
             }
 
@@ -119,7 +120,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
     private void assertPortfolio1(Portfolio portfolio) {
         assertNotNull(portfolio);
-        assertEquals(Long.valueOf(101), portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_1, portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());

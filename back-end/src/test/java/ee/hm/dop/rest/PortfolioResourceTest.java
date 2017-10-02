@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.enums.Visibility;
@@ -89,7 +90,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(3, portfolios.size());
 
         List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
-        List<Long> expectedIds = Arrays.asList(101L, 103L, 114L);
+        List<Long> expectedIds = Arrays.asList(TestConstants.PORTFOLIO_1, 103L, 114L);
         assertTrue(actualIds.containsAll(expectedIds));
     }
 
@@ -274,7 +275,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void copyPortfolio() {
         login(USER_PEETER);
 
-        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithId(101L), Portfolio.class);
+        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithId(TestConstants.PORTFOLIO_1), Portfolio.class);
         assertNotNull(copiedPortfolio);
         assertEquals(Long.valueOf(2), copiedPortfolio.getCreator().getId());
         assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
@@ -320,13 +321,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioAsNotCreator() {
         login(USER_SECOND);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(101L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_1));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void deletePortfolioNotLoggedIn() {
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(101L));
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(TestConstants.PORTFOLIO_1));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
@@ -482,7 +483,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     private void assertPortfolio101(Portfolio portfolio) {
         assertNotNull(portfolio);
-        assertEquals(Long.valueOf(101), portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_1, portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
