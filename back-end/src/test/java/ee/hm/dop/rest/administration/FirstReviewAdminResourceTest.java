@@ -25,7 +25,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_UNREVIEWED = "admin/firstReview/unReviewed";
     private static final String GET_UNREVIEWED_COUNT = "admin/firstReview/unReviewed/count";
     private static final String SET_REVIEWED = "admin/firstReview/setReviewed";
-    public static final long PRIVATE_PORTFOLIO = TestConstants.PORTFOLIO_7;
+    private static final long PRIVATE_PORTFOLIO = TestConstants.PORTFOLIO_7;
 
     @Test
     public void after_first_review_is_reviewed_it_is_not_returned_by_getUnreviewed() {
@@ -88,20 +88,20 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void unreviewed_learningObject_is_unreviewed() throws Exception {
         login(USER_ADMIN);
-        Material material = getMaterial(2L);
+        Material material = getMaterial(TestConstants.MATERIAL_2);
         assertEquals("Is reviewed", 1, material.getUnReviewed());
     }
 
     @Test
     public void unreviewed_learningObject_after_being_set_reviewed_is_reviewed() throws Exception {
         login(USER_ADMIN);
-        Material material = getMaterial(2L);
+        Material material = getMaterial(TestConstants.MATERIAL_2);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
         Response updateResponse = doPost(SET_REVIEWED, material);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
-        Material materialAfter = getMaterial(2L);
+        Material materialAfter = getMaterial(TestConstants.MATERIAL_2);
         assertEquals("Is Reviewed",0, materialAfter.getUnReviewed());
     }
 
