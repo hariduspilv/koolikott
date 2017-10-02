@@ -25,7 +25,7 @@ public class ImproperContentAdminResource extends BaseResource {
     private LearningObjectService learningObjectService;
 
     @DELETE
-    @RolesAllowed({RoleString.ADMIN})
+    @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
     public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("learningObject query param is required.");
@@ -40,7 +40,7 @@ public class ImproperContentAdminResource extends BaseResource {
 
     @DELETE
     @Path("{improperContentId}")
-    @RolesAllowed({RoleString.ADMIN})
+    @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
     public void removeImproper(@PathParam("improperContentId") long improperContentId) {
         ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
         if (improper == null) {
