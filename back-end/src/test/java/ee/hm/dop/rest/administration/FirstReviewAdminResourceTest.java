@@ -1,6 +1,7 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -24,7 +25,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_UNREVIEWED = "admin/firstReview/unReviewed";
     private static final String GET_UNREVIEWED_COUNT = "admin/firstReview/unReviewed/count";
     private static final String SET_REVIEWED = "admin/firstReview/setReviewed";
-    public static final long PRIVATE_PORTFOLIO = 107L;
+    public static final long PRIVATE_PORTFOLIO = TestConstants.PORTFOLIO_7;
 
     @Test
     public void after_first_review_is_reviewed_it_is_not_returned_by_getUnreviewed() {

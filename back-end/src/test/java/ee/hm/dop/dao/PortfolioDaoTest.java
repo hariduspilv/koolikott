@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
@@ -30,7 +31,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
     @Test
     public void findById() {
-        Portfolio portfolio = portfolioDao.findByIdNotDeleted(101);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(TestConstants.PORTFOLIO_1);
 
         assertPortfolio1(portfolio);
     }
@@ -43,11 +44,10 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
     @Test
     public void findByIdOnlyMandatoryFields() {
-        Long id = 102L;
-        Portfolio portfolio = portfolioDao.findByIdNotDeleted(id);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(TestConstants.PORTFOLIO_2);
 
         assertNotNull(portfolio);
-        assertEquals(id, portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_2, portfolio.getId());
         assertEquals("New ways how to do it", portfolio.getTitle());
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertTrue(portfolio.getTaxons().size() == 0);
@@ -62,9 +62,9 @@ public class PortfolioDaoTest extends DatabaseTestBase {
     @Test
     public void findAllById() {
         List<Long> idList = new ArrayList<>();
-        idList.add(101L);
-        idList.add(102L);
-        idList.add(103L);
+        idList.add(TestConstants.PORTFOLIO_1);
+        idList.add(TestConstants.PORTFOLIO_2);
+        idList.add(TestConstants.PORTFOLIO_3);
 
         List<LearningObject> result = portfolioDao.findAllById(idList);
 
@@ -105,7 +105,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
         for (LearningObject portfolio : portfolios) {
             assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
-            if (portfolio.getId().equals(101L)) {
+            if (portfolio.getId().equals(TestConstants.PORTFOLIO_1)) {
                 assertPortfolio1((Portfolio) portfolio);
             }
 
@@ -119,7 +119,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
     private void assertPortfolio1(Portfolio portfolio) {
         assertNotNull(portfolio);
-        assertEquals(Long.valueOf(101), portfolio.getId());
+        assertEquals(TestConstants.PORTFOLIO_1, portfolio.getId());
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
@@ -191,14 +191,14 @@ public class PortfolioDaoTest extends DatabaseTestBase {
 
     @Test
     public void increaseViewCount() {
-        Portfolio portfolio = portfolioDao.findByIdNotDeleted(102);
+        Portfolio portfolio = portfolioDao.findByIdNotDeleted(TestConstants.PORTFOLIO_2);
         long originalViews = portfolio.getViews();
         assertSame(14L, originalViews);
 
         portfolio.setViews(++originalViews);
         portfolioDao.incrementViewCount(portfolio);
 
-        Portfolio returnedPortfolio = portfolioDao.findByIdNotDeleted(102);
+        Portfolio returnedPortfolio = portfolioDao.findByIdNotDeleted(TestConstants.PORTFOLIO_2);
         assertSame(15L, returnedPortfolio.getViews());
 
         returnedPortfolio.setViews(14L);
@@ -238,7 +238,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
             }
         }
 
-        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(102L);
+        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(TestConstants.PORTFOLIO_2);
         assertSame(14L, newPortfolio.getViews());
 
         newPortfolio.setViews(14L);
@@ -257,7 +257,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         comment.setCreator(user);
         comment.setAdded(DateTime.now());
 
-        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(102L);
+        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(TestConstants.PORTFOLIO_2);
         newPortfolio.getComments().add(comment);
 
         portfolioDao.createOrUpdate(newPortfolio);

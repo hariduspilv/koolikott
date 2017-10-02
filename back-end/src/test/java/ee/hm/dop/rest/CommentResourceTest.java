@@ -1,17 +1,17 @@
 package ee.hm.dop.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.rest.CommentResource.AddCommentForm;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CommentResourceTest extends ResourceIntegrationTestBase {
 
@@ -23,7 +23,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addPortfolioComment() {
         login(USER_MATI);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(105L, NICE_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_5, NICE_COMMENT));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
@@ -36,14 +36,14 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsCreator() {
         login(USER_PEETER);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(107L, SUCH_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_7, SUCH_COMMENT));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
         login(USER_MATI);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(107L, SUCH_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_7, SUCH_COMMENT));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
