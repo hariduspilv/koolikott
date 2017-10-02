@@ -64,7 +64,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         List<Long> idList = new ArrayList<>();
         idList.add(TestConstants.PORTFOLIO_1);
         idList.add(TestConstants.PORTFOLIO_2);
-        idList.add(103L);
+        idList.add(TestConstants.PORTFOLIO_3);
 
         List<LearningObject> result = portfolioDao.findAllById(idList);
 

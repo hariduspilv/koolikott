@@ -103,7 +103,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void getImproperByLearningObject() {
         login(USER_SECOND);
 
-        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, 103L), genericType());
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TestConstants.PORTFOLIO_3), genericType());
 
         assertNotNull(improperContents.size());
         assertEquals(1, improperContents.size());
