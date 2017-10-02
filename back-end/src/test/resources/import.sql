@@ -384,16 +384,19 @@ insert into TranslationGroup(id, lang) values (3, 3);
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FOO', 'FOO sõnum');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'Estonian', 'Eesti keeles');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'Russian', 'Vene keel');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'TOPIC_MATHEMATICS', 'Matemaatika');
 
 -- Russian
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Estonian', 'Эстонский язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Russian', 'русский язык');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_MATHEMATICS', 'Mатематика');
 
 -- English
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Estonian', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Russian', 'Russian');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'TOPIC_MATHEMATICS', 'Mathematics');
 
 -- Page
 
@@ -566,6 +569,8 @@ insert into Material_PeerReview(material, peerReview) values (3, 2);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (1, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (2, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (3, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (5, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (6, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (107, 0, CURRENT_TIMESTAMP);
 
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');

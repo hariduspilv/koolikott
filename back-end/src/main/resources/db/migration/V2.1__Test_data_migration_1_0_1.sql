@@ -1,1 +1,0 @@
-UPDATE User SET publisher = 1 where id = 9;

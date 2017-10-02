@@ -37,48 +37,48 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                     $scope.isAdmin = authenticatedUserService.isAdmin()
                     $scope.isModerator = authenticatedUserService.isModerator()
 
+                    console.log('$rootScope:', $rootScope)
+
                     $scope.showDeleted =
                         $rootScope.learningObjectDeleted
+                    $scope.showBroken =
+                        !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectImproper &&
+                        $rootScope.learningObjectBroken
+                    $scope.showImproper =
+                        !$rootScope.learningObjectDeleted &&
+                        $rootScope.learningObjectImproper &&
+                        !$rootScope.learningObjectBroken
+                    $scope.showImproperAndBroken =
+                        !$rootScope.learningObjectDeleted &&
+                        $rootScope.learningObjectImproper &&
+                        $rootScope.learningObjectBroken
                     $scope.showChanged =
                         !$rootScope.learningObjectDeleted &&
                         !$rootScope.learningObjectImproper &&
                         !$rootScope.learningObjectBroken &&
-                        !$rootScope.learningObjectUnreviewed &&
                         $rootScope.learningObjectChanged
-                    $scope.showBroken =
-                        !$rootScope.learningObjectDeleted &&
-                        !$rootScope.learningObjectImproper &&
-                        !$rootScope.learningObjectUnreviewed &&
-                        $rootScope.learningObjectBroken
-                    $scope.showImproper =
-                        !$rootScope.learningObjectDeleted &&
-                        !$rootScope.learningObjectBroken &&
-                        !$rootScope.learningObjectUnreviewed &&
-                        $rootScope.learningObjectImproper
-                    $scope.showImproperAndBroken =
-                        !$rootScope.learningObjectDeleted &&
-                        !$rootScope.learningObjectUnreviewed &&
-                        $rootScope.learningObjectImproper &&
-                        $rootScope.learningObjectBroken
                     $scope.showUnreviewed =
                         !$rootScope.learningObjectDeleted &&
+                        !$rootScope.learningObjectImproper &&
                         !$rootScope.learningObjectBroken &&
+                        !$rootScope.learningObjectChanged &&
                         $rootScope.learningObjectUnreviewed
                     /*$scope.showUnreviewedAndImproper =
                         !$rootScope.learningObjectDeleted &&
-                        $rootScope.learningObjectUnreviewed &&
                         $rootScope.learningObjectImproper &&
-                        !$rootScope.learningObjectBroken
+                        !$rootScope.learningObjectBroken &&
+                        $rootScope.learningObjectUnreviewed
                     $scope.showUnreviewedAndBroken =
                         !$rootScope.learningObjectDeleted &&
-                        $rootScope.learningObjectUnreviewed &&
                         !$rootScope.learningObjectImproper &&
-                        $rootScope.learningObjectBroken
+                        $rootScope.learningObjectBroken &&
+                        $rootScope.learningObjectUnreviewed
                     $scope.showUnreviewedAndImproperAndBroken =
-                        !$rootScope.learningObjectDeleted &&
-                        $rootScope.learningObjectUnreviewed &&
+                        !$rootScope.learningObjectDeleted
                         $rootScope.learningObjectImproper &&
-                        $rootScope.learningObjectBroken*/
+                        $rootScope.learningObjectBroken &&
+                        $rootScope.learningObjectUnreviewed &&*/
 
                     if ($scope.showDeleted)
                         show('delete', 'ERROR_MSG_DELETED', [{
@@ -147,7 +147,7 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                         var messageKey = $scope.data && $scope.data.type == '.Portfolio'
                             ? 'ERROR_MSG_UNREVIEWED_PORTFOLIO'
                             : 'ERROR_MSG_UNREVIEWED'
-                        show('new_releases', messageKey, [{
+                        show('lightbulb_outline', messageKey, [{
                             icon: 'done',
                             label: 'BUTTON_REVIEW',
                             onClick: markLearningObjectReviewed,
