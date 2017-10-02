@@ -34,7 +34,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     private static final int FALSE = 0;
 
     @Test
-    public void getChanged_returns_changed_learningObjects() throws Exception {
+    public void after_admin_changes_learningObject_getChanged_returns_all_changed_objects() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_MATERIAL_ID);
 
@@ -42,27 +42,21 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         });
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT_URL, Long.class);
 
-        assertTrue("LearningObjects are changed", changedLearningObjects.stream()
-                .map(ChangedLearningObject::getLearningObject)
-                .map(LearningObject::getChanged)
-                .allMatch(integer -> integer > 0));
+        isChanged(changedLearningObjects);
         assertEquals("Changed learningObject list size, changed learningObject count", changedLearningObjects.size(), changedLearnigObjectsCount);
 
         doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
     }
 
     @Test
-    public void getChange_returns_changed_learningObjects_by_id() throws Exception {
+    public void after_admin_changes_learningObject_getChange_returns_changed_objects_by_id() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_MATERIAL_ID);
 
         List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGED_BY_ID_URL, TEST_MATERIAL_ID), new GenericType<List<ChangedLearningObject>>() {
         });
 
-        assertTrue("LearningObject changed", changedLearningObjectsById.stream()
-                .map(ChangedLearningObject::getLearningObject)
-                .map(LearningObject::getChanged)
-                .allMatch(integer -> integer > 0));
+        isChanged(changedLearningObjectsById);
         assertTrue("Changed learningObject id", changedLearningObjectsById.stream()
                 .map(ChangedLearningObject::getLearningObject)
                 .allMatch(learningObject -> learningObject.getId().equals(TEST_MATERIAL_ID)));
@@ -72,7 +66,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
 
     @Ignore
     @Test
-    public void revertAllChanges_removes_changes_from_learningObject() throws Exception {
+    public void admin_can_revert_all_changes() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_MATERIAL_ID);
 
@@ -81,7 +75,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     }
 
     @Test
-    public void acceptAllChanges_removes_learningObject_from_ChangedLearningObject() throws Exception {
+    public void admin_can_accept_all_changes() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_MATERIAL_ID);
 
@@ -93,6 +87,13 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         assertTrue(changedLearningObjectsById.isEmpty());
 
         doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
+    }
+
+    private void isChanged(List<ChangedLearningObject> changedLearningObjects) {
+        assertTrue("LearningObjects are changed", changedLearningObjects.stream()
+                .map(ChangedLearningObject::getLearningObject)
+                .map(LearningObject::getChanged)
+                .allMatch(integer -> integer > 0));
     }
 
     private void changeMaterial(Long materialId) {
