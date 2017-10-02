@@ -40,6 +40,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
     private static final String RESTORE_MATERIAL = "admin/deleted/material/restore";
+    private static final String GET_DELETED_MATERIALS = "admin/deleted/material/getDeleted";
+    private static final String GET_DELETED_MATERIALS_COUNT = "admin/deleted/material/getDeleted/count";
     private static final String LIKE_URL = "material/like";
     private static final String DISLIKE_URL = "material/dislike";
     private static final String GET_USER_LIKE_URL = "material/getUserLike";
@@ -421,6 +423,24 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void userCanNotRestoreRepositoryMaterial() {
         login(USER_PEETER);
         Response response = doPost(RESTORE_MATERIAL, materialWithId(14L));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getDeleted_returns_deleted_materials_to_user_admin() throws Exception {
+        login(USER_ADMIN);
+        List<Material> deletedMaterials = doGet(GET_DELETED_MATERIALS, new GenericType<List<Material>>() {
+        });
+        long deletedMaterialsCount = doGet(GET_DELETED_MATERIALS_COUNT, Long.class);
+
+        assertTrue("Materials are deleted", deletedMaterials.stream().allMatch(LearningObject::isDeleted));
+        assertEquals("Deleted materials list size, deleted materials count", deletedMaterials.size(), deletedMaterialsCount);
+    }
+
+    @Test
+    public void regular_user_do_not_have_access_to_get_deleted_materials() throws Exception {
+        login(USER_PEETER);
+        Response response = doGet(GET_DELETED_MATERIALS);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
