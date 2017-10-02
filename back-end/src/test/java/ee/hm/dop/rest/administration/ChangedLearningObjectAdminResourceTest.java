@@ -5,11 +5,13 @@ import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -18,9 +20,9 @@ import static org.junit.Assert.assertTrue;
 
 public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String GET_CHANGED_URL = "admin/changed/";
-    private static final String GET_CHANGED_BY_ID_URL = "admin/changed/%s";
-    private static final String GET_CHANGED_COUNT_URL = "admin/changed/count";
+    private static final String GET_ALL_CHANGES = "admin/changed/";
+    private static final String GET_CHANGES_BY_ID = "admin/changed/%s";
+    private static final String GET_CHANGED_COUNT = "admin/changed/count";
     private static final String ACCEPT_ALL_CHANGES_URL = "admin/changed/%s/acceptAll";
     private static final String REVERT_ALL_CHANGES_URL = "admin/changed/%s/revertAll";
 
@@ -30,38 +32,52 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     private static final String TYPE_MATERIAL = ".Material";
     private static final String TEST_SYSTEM_TAG = "mathematics";
     private static final long TEST_MATERIAL_ID = 5L;
-    private static final long TEST_TAXON_ID = 10L;
+    private static final long TEST_UNREVIEWED_MATERIAL_ID = 6L;
+    private static final long TEST_TAXON_ForeignLanguage = 11L;
     private static final int FALSE = 0;
 
     @Test
-    public void after_admin_changes_learningObject_getChanged_returns_all_changed_objects() throws Exception {
+    public void after_admin_changes_learningObject_they_can_find_it_by_asking_for_changes() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_MATERIAL_ID);
 
-        List<ChangedLearningObject> changedLearningObjects = doGet(GET_CHANGED_URL, new GenericType<List<ChangedLearningObject>>() {
-        });
-        long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT_URL, Long.class);
+        long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
 
+        List<ChangedLearningObject> changedLearningObjects = doGet(GET_ALL_CHANGES, list());
+        assertTrue(CollectionUtils.isNotEmpty(changedLearningObjects));
         isChanged(changedLearningObjects);
-        assertEquals("Changed learningObject list size, changed learningObject count", changedLearningObjects.size(), changedLearnigObjectsCount);
+        countEqual(changedLearnigObjectsCount, changedLearningObjects);
+
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_MATERIAL_ID), list());
+        assertTrue(CollectionUtils.isNotEmpty(changedLearningObjectsById));
+        isChanged(changedLearningObjectsById);
+        idsEqual(changedLearningObjectsById, TEST_MATERIAL_ID);
 
         doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
     }
 
-    @Test
-    public void after_admin_changes_learningObject_getChange_returns_changed_objects_by_id() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(TEST_MATERIAL_ID);
+    private void countEqual(long changedLearnigObjectsCount, List<ChangedLearningObject> changedLearningObjects) {
+        assertEquals("Changed learningObject list size, changed learningObject count", changedLearningObjects.size(), changedLearnigObjectsCount);
+    }
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGED_BY_ID_URL, TEST_MATERIAL_ID), new GenericType<List<ChangedLearningObject>>() {
-        });
-
-        isChanged(changedLearningObjectsById);
+    private void idsEqual(List<ChangedLearningObject> changedLearningObjectsById, long materialId) {
         assertTrue("Changed learningObject id", changedLearningObjectsById.stream()
                 .map(ChangedLearningObject::getLearningObject)
-                .allMatch(learningObject -> learningObject.getId().equals(TEST_MATERIAL_ID)));
+                .allMatch(learningObject -> learningObject.getId().equals(materialId)));
+    }
 
-        doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
+    @Test
+    public void after_admin_changes_unReviewed_learningObject_getChanged_returns_Nothing() throws Exception {
+        login(USER_ADMIN);
+        changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
+
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
+
+        assertTrue(CollectionUtils.isEmpty(changedLearningObjectsById));
+        isChanged(changedLearningObjectsById);
+        idsEqual(changedLearningObjectsById, TEST_UNREVIEWED_MATERIAL_ID);
+
+        doGet(format(REVERT_ALL_CHANGES_URL, TEST_UNREVIEWED_MATERIAL_ID));
     }
 
     @Ignore
@@ -78,12 +94,9 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     public void admin_can_accept_all_changes() throws Exception {
         login(USER_ADMIN);
         changeMaterial(TEST_MATERIAL_ID);
-
         doGet(format(ACCEPT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGED_BY_ID_URL, TEST_MATERIAL_ID), new GenericType<List<ChangedLearningObject>>() {
-        });
-
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_MATERIAL_ID), list());
         assertTrue(changedLearningObjectsById.isEmpty());
 
         doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
@@ -97,13 +110,17 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     }
 
     private void changeMaterial(Long materialId) {
-        List<Taxon> taxons = new ArrayList<>();
-        taxons.add(doGet(format(GET_TAXON_URL, TEST_TAXON_ID), Taxon.class));
+        List<Taxon> taxons = Arrays.asList(doGet(format(GET_TAXON_URL, TEST_TAXON_ForeignLanguage), Taxon.class));
 
         Material material = getMaterial(materialId);
         material.setTaxons(taxons);
         doPut(UPDATE_MATERIAL_URL, material);
 
         doGet(format(ADD_SYSTEM_TAG_URL, materialId, TYPE_MATERIAL, TEST_SYSTEM_TAG));
+    }
+
+    private GenericType<List<ChangedLearningObject>> list() {
+        return new GenericType<List<ChangedLearningObject>>() {
+        };
     }
 }
