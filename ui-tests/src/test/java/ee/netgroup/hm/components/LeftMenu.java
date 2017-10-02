@@ -129,3 +129,4 @@ public class LeftMenu extends Component{
 	}
 
 }
+
