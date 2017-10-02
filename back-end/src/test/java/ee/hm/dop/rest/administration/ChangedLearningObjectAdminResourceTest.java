@@ -32,7 +32,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     private static final String TYPE_MATERIAL = ".Material";
     private static final String TEST_SYSTEM_TAG = "mathematics";
     private static final long TEST_MATERIAL_ID = 5L;
-    private static final long TEST_UNREVIEWED_MATERIAL_ID = 6L;
+    private static final long TEST_UNREVIEWED_MATERIAL_ID = 8L;
     private static final long TEST_TAXON_ForeignLanguage = 11L;
     private static final int FALSE = 0;
 
