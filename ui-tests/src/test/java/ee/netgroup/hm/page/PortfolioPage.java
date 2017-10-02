@@ -16,8 +16,6 @@ public class PortfolioPage extends Page{
 	private By editPortfolio = By.xpath("//button[@data-ng-click='editPortfolio()']");
 	private By shareWithLinkIcon = By.xpath("//md-icon[text()='link']");
 	private By improperContent = By.xpath("//button[@data-ng-click='showConfirmationDialog()']");
-	private By notImproperContentButton = By.xpath("//button[@data-ng-click='setNotImproperLearningObject()']");
-	private By improperContentBanner = By.cssSelector("span.reason > span");
 	private By preTag = By.tagName("pre");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
@@ -27,8 +25,9 @@ public class PortfolioPage extends Page{
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
 	private By materialBox = By.cssSelector("div.pointer.layout-row");
+	private By doneButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
 	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
-	private By portfolioRedBanner = By.xpath("//div[@data='portfolio']");
+	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
 	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
@@ -72,14 +71,18 @@ public class PortfolioPage extends Page{
 		return getDriver().findElement(Constants.toastText).getText();
 	}
 
-	public PortfolioPage setContentIsNotImproper() {
-		Helpers.waitForClickable(notImproperContentButton);
-		getDriver().findElement(notImproperContentButton).click();
+	public PortfolioPage markContentAsNotImproper() {
+		//Helpers.waitForClickable(doneButton);
+		Helpers.moveToElement(doneButton);
+		getDriver().findElement(doneButton).sendKeys(Keys.ENTER);;
+		//getDriver().findElement(doneButton).click();
+		Helpers.waitForSeconds(5000);
 		return this;
 	}
 
-	public boolean isContentNotImproper() {
-        return getDriver().findElement(improperContentBanner).isDisplayed();
+	public boolean isContentProper() {
+		Helpers.waitForSeconds(1000);
+		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 	public boolean getPreFormattedTextTag() {
@@ -144,11 +147,14 @@ public class PortfolioPage extends Page{
 	public PortfolioPage restoreDeletedPortfolio() {
 		Helpers.waitForClickable(restoreButton);
 		getDriver().findElement(restoreButton).click();
+		Helpers.waitForSeconds(3000);
 		return this;
 	}
 
 	public boolean isPortfolioRestored() {
-		return getDriver().findElement(portfolioRedBanner).isDisplayed();
+		Helpers.waitForSeconds(1000);
+		return getDriver().findElements(errorBanner).size() < 1;
 	}
+
 
 }
