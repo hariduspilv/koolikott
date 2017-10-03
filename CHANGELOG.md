@@ -1,4 +1,9 @@
-## e-Koolikott 1.10.0 (29.09.2017)
+## e-Koolikott 1.10.1 (03.10.2017)
+
+### Parandatud
+* Rollide määramisel kasutajate listvaade ei avane #205 https://github.com/hariduspilv/koolikott/issues/205
+
+## e-Koolikott 1.10.0 (02.10.2017)
 
 ### Muutunud
 * Andmebaasimuudatused uute (üle vaatamata) õpiobjektide eristamiseks #184 https://github.com/hariduspilv/koolikott/issues/184

@@ -1,6 +1,6 @@
 {
   "name": "e-Koolikott",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "dependencies": {
     "angular": "1.6.1",
     "angular-animate": "1.5.9",
