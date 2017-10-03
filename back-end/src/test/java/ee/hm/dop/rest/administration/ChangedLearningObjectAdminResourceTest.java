@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -10,7 +11,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,15 +31,14 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     private static final String UPDATE_MATERIAL_URL = "material";
     private static final String TYPE_MATERIAL = ".Material";
     private static final String TEST_SYSTEM_TAG = "mathematics";
-    private static final long TEST_MATERIAL_ID = 5L;
-    private static final long TEST_UNREVIEWED_MATERIAL_ID = 9L;
+    private static final long TEST_UNREVIEWED_MATERIAL_ID = TestConstants.MATERIAL_9;
     private static final long TEST_TAXON_ForeignLanguage = 11L;
     private static final int FALSE = 0;
 
     @Test
     public void after_admin_changes_learningObject_they_can_find_it_by_asking_for_changes() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(TEST_MATERIAL_ID);
+        login(TestConstants.USER_ADMIN);
+        changeMaterial(TestConstants.MATERIAL_5);
 
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
 
@@ -48,17 +47,17 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         isChanged(changedLearningObjects);
         countEqual(changedLearnigObjectsCount, changedLearningObjects);
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_MATERIAL_ID), list());
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TestConstants.MATERIAL_5), list());
         assertTrue(CollectionUtils.isNotEmpty(changedLearningObjectsById));
         isChanged(changedLearningObjectsById);
-        idsEqual(changedLearningObjectsById, TEST_MATERIAL_ID);
+        idsEqual(changedLearningObjectsById, TestConstants.MATERIAL_5);
 
-        doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
+        doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
     }
 
     @Test
     public void after_admin_changes_unReviewed_learningObject_no_changes_are_registered() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
 
         List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
@@ -73,23 +72,23 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     @Ignore
     @Test
     public void admin_can_revert_all_changes() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(TEST_MATERIAL_ID);
+        login(TestConstants.USER_ADMIN);
+        changeMaterial(TestConstants.MATERIAL_5);
 
-        LearningObject revertedLearningObject = doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID), LearningObject.class);
+        LearningObject revertedLearningObject = doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5), LearningObject.class);
         assertEquals("LearningObject not changed", FALSE, revertedLearningObject.getChanged());
     }
 
     @Test
     public void admin_can_accept_all_changes() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(TEST_MATERIAL_ID);
-        doGet(format(ACCEPT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
+        login(TestConstants.USER_ADMIN);
+        changeMaterial(TestConstants.MATERIAL_5);
+        doGet(format(ACCEPT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_MATERIAL_ID), list());
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TestConstants.MATERIAL_5), list());
         assertTrue(changedLearningObjectsById.isEmpty());
 
-        doGet(format(REVERT_ALL_CHANGES_URL, TEST_MATERIAL_ID));
+        doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
     }
 
     private void isChanged(List<ChangedLearningObject> changedLearningObjects) {

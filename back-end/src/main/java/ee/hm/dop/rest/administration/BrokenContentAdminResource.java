@@ -24,16 +24,15 @@ public class BrokenContentAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<BrokenContent> getBrokenMaterial() {
-        return materialAdministrationService.getBrokenMaterials();
+        return materialAdministrationService.getBrokenMaterials(getLoggedInUser());
     }
-
 
     @GET
     @Path("getBroken/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Long getBrokenMaterialCount() {
-        return materialAdministrationService.getBrokenMaterialCount();
+        return materialAdministrationService.getBrokenMaterialCount(getLoggedInUser());
     }
 
     @GET

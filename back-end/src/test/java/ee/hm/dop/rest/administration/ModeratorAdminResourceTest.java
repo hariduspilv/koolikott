@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class ModeratorAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getModerators_returns_moderator_users_to_admin() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         List<User> moderators = doGet(GET_MODERATORS_URL, new GenericType<List<User>>() {
         });
         long moderatorsCount = doGet(GET_MODERATORS_COUNT_URL, Long.class);
