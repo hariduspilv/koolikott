@@ -11,7 +11,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
 
     @Test
     public void after_admin_changes_learningObject_they_can_find_it_by_asking_for_changes() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         changeMaterial(TestConstants.MATERIAL_5);
 
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
@@ -58,7 +57,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
 
     @Test
     public void after_admin_changes_unReviewed_learningObject_no_changes_are_registered() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
 
         List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
@@ -73,7 +72,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     @Ignore
     @Test
     public void admin_can_revert_all_changes() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         changeMaterial(TestConstants.MATERIAL_5);
 
         LearningObject revertedLearningObject = doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5), LearningObject.class);
@@ -82,7 +81,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
 
     @Test
     public void admin_can_accept_all_changes() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         changeMaterial(TestConstants.MATERIAL_5);
         doGet(format(ACCEPT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
 

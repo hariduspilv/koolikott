@@ -1,27 +1,5 @@
 package ee.hm.dop.common.test;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.Provider;
-
 import com.google.inject.Inject;
 import ee.hm.dop.model.*;
 import ee.hm.dop.rest.MaterialResourceTest;
@@ -33,29 +11,39 @@ import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
-import org.junit.Before;
+
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.Provider;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Base class for all resource integration tests.
  */
 public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
-    public static final String USER_VOLDERMAR2 = "15066990099";
-    public static final String USER_MATI = "39011220011";
-    public static final String USER_PEETER = "38011550077";
-    public static final String USER_ADMIN = "89898989898";
-    public static final String USER_MODERATOR = "38211120031";
-    public static final String USER_SECOND = "89012378912";
-    public static final String USER_MAASIKAS_VAARIKAS = "39011220013";
-    public static final String USER_RESTRICTED = "89898989890";
     public static final String DEV_LOGIN = "dev/login/";
-    public static final String USER_MYTESTUSER = "78912378912";
     private static String RESOURCE_BASE_URL;
 
     @Inject
     private static Configuration configuration;
 
     private static AuthenticationFilter authenticationFilter;
+
+    protected User login(TestUser testUser) {
+        return login(testUser.idCode);
+    }
 
     protected User login(String idCode) {
         AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + idCode, new GenericType<AuthenticatedUser>() {

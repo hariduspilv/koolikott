@@ -5,13 +5,10 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import java.math.BigDecimal;
@@ -29,7 +26,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void after_first_review_is_reviewed_it_is_not_returned_by_getUnreviewed() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         BigDecimal count = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
@@ -56,7 +53,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getUnreviewed_returns_not_an_empty_list() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         assertTrue("UnReviewed list", CollectionUtils.isNotEmpty(firstReviews));
@@ -64,7 +61,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void private_portfolio_is_not_returned_as_part_of_the_unreviewed() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
 
@@ -76,10 +73,10 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getUnreviewed_returns_different_unReviewed_materials_based_on_user_priviledge() {
-        login(USER_MODERATOR);
+        login(TestConstants.USER_MODERATOR);
         List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
 
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         List<FirstReview> firstReviewsAdmin = doGet(GET_UNREVIEWED, listType());
 
         assertNotEquals("Admin UnReviewed list, Moderator UnReviewed list", firstReviewsAdmin, firstReviewsModerator);
@@ -87,14 +84,14 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void unreviewed_learningObject_is_unreviewed() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         Material material = getMaterial(TestConstants.MATERIAL_2);
         assertEquals("Is reviewed", 1, material.getUnReviewed());
     }
 
     @Test
     public void unreviewed_learningObject_after_being_set_reviewed_is_reviewed() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         Material material = getMaterial(TestConstants.MATERIAL_2);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
@@ -107,7 +104,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void unAuthorized_user_can_not_view() throws Exception {
-        login(USER_MATI);
+        login(TestConstants.USER_MATI);
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
         assertNull("UnReviewed list", firstReviews);
     }

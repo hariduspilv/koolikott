@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.UploadedFile;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -70,7 +71,7 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
         final FileDataBodyPart filePart = new FileDataBodyPart("file", tempFile);
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
 
-        login(ResourceIntegrationTestBase.USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         Response response = doPost("uploadedFile", Entity.entity(formDataMultiPart,
                 MediaType.MULTIPART_FORM_DATA), MediaType.APPLICATION_JSON_TYPE);

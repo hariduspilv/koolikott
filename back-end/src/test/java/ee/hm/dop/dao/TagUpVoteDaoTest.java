@@ -8,7 +8,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -32,7 +31,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
 
     @Test
     public void addUpVote() {
-        User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
+        User user = userDao.findUserByIdCode(TestConstants.USER_MATI.idCode);
         Tag tag = tagDao.findByName("matemaatika");
         Material material = materialDao.findById(TestConstants.MATERIAL_1);
 
@@ -50,7 +49,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
 
     @Test
     public void getUpVoteForMaterial() {
-        User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
+        User user = userDao.findUserByIdCode(TestConstants.USER_MATI.idCode);
         Tag tag = tagDao.findByName("matemaatika");
         Material material = materialDao.findById(TestConstants.MATERIAL_1);
 
@@ -61,7 +60,7 @@ public class TagUpVoteDaoTest extends DatabaseTestBase {
 
     @Test
     public void getUpVoteForPortfolio() {
-        User user = userDao.findUserByIdCode(ResourceIntegrationTestBase.USER_MATI);
+        User user = userDao.findUserByIdCode(TestConstants.USER_MATI.idCode);
         Tag tag = tagDao.findByName("matemaatika");
         Portfolio portfolio = portfolioDao.findById(TestConstants.PORTFOLIO_1);
 

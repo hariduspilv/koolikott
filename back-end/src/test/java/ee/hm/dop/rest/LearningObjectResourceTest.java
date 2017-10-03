@@ -29,7 +29,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
         assertFalse("Tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG)));
@@ -43,14 +43,14 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void cannot_add_a_tag_to_learning_object_what_does_not_exist() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTING_LEARNING_OBJECT_ID), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void adding_system_tag_adds_a_tag() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
         assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
@@ -64,7 +64,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void adding_tag_with_same_name_throws_an_error() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
         assertFalse("Tag  name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG_2)));
@@ -78,7 +78,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addUserFavorite_adds_learningObject_to_user_favorites() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         LearningObject learningObject = getPortfolio(TestConstants.PORTFOLIO_8);
         Response response = doPost(SET_TO_FAVOURITE_URL, learningObject);
@@ -95,7 +95,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void cannot_find_user_favorite_when_it_is_not_set() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, TestConstants.PORTFOLIO_8), UserFavorite.class);
         assertNull("User favourite doesn't exist", userFavorite);
@@ -103,7 +103,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deleting_user_favorite_removes_it_from_user_favorites() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         LearningObject learningObject = getPortfolio(TestConstants.PORTFOLIO_8);
 

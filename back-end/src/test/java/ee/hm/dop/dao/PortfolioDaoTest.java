@@ -51,8 +51,8 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         assertEquals("New ways how to do it", portfolio.getTitle());
         assertEquals(new DateTime("2012-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertTrue(portfolio.getTaxons().size() == 0);
-        assertEquals(new Long(4), portfolio.getCreator().getId());
-        assertEquals("voldemar.vapustav2", portfolio.getCreator().getUsername());
+        assertEquals(TestConstants.USER_VOLDERMAR2.id, portfolio.getCreator().getId());
+        assertEquals(TestConstants.USER_VOLDERMAR2.username, portfolio.getCreator().getUsername());
         assertNull(portfolio.getSummary());
         assertEquals(new Long(14), portfolio.getViews());
         assertTrue(portfolio.getChapters().isEmpty());
