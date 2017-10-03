@@ -1,6 +1,6 @@
 ## e-Koolikott 1.10.0 (29.09.2017)
 
-### Parandatud
+### Muutunud
 * Andmebaasimuudatused uute (üle vaatamata) õpiobjektide eristamiseks #184 https://github.com/hariduspilv/koolikott/issues/184
 * Uute (üle vaatamata) õpiobjektide bänner  #185 https://github.com/hariduspilv/koolikott/issues/185
 * Üle vaatamata uute õpiobjektide jaoks eraldi listvaade #186 https://github.com/hariduspilv/koolikott/issues/186
