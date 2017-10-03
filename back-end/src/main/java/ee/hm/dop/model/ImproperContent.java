@@ -1,14 +1,10 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
@@ -36,10 +32,23 @@ public class ImproperContent extends AbstractEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private DateTime createdAt;
 
     @Column(nullable = false)
-    private boolean deleted = false;
+    private boolean reviewed = false;
+
+    @ManyToOne
+    @JoinColumn(name = "reviewedBy")
+    private User reviewedBy;
+
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime reviewedAt;
+
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
 
     @Column
     private String reason;
@@ -61,21 +70,45 @@ public class ImproperContent extends AbstractEntity {
     }
 
     @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getAdded() {
-        return added;
+    public DateTime getCreatedAt() {
+        return createdAt;
     }
 
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setAdded(DateTime added) {
-        this.added = added;
+    public void setCreatedAt(DateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isReviewed() {
+        return reviewed;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
+    }
+
+    public User getReviewedBy() {
+        return reviewedBy;
+    }
+
+    public void setReviewedBy(User reviewedBy) {
+        this.reviewedBy = reviewedBy;
+    }
+
+    public DateTime getReviewedAt() {
+        return reviewedAt;
+    }
+
+    public void setReviewedAt(DateTime reviewedAt) {
+        this.reviewedAt = reviewedAt;
+    }
+
+    public ReviewStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReviewStatus status) {
+        this.status = status;
     }
 
     public String getReason() {

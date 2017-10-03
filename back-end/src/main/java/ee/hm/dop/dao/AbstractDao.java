@@ -24,9 +24,8 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     public static final String AND = " and ";
     public static final String OR = " or ";
     public static final String ID = "id";
-    public static final String SET_DELETED_TRUE = " set o.deleted = true ";
+    public static final String SET_REVIEWED_TRUE = " set o.reviewed = true ";
     public static final String UPDATE = "update ";
-    public static final String DELETED = "deleted";
     public static final String NAME = "name";
     @Inject
     protected EntityManager entityManager;
@@ -49,10 +48,6 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return getEntityManager().find(entity(), id);
     }
 
-    public Entity findByIdValid(Long id) {
-        return findByField(ID, id, DELETED, false);
-    }
-
     public List<Entity> findById(List<Long> id) {
         if (CollectionUtils.isEmpty(id)){
             return Lists.newArrayList();
@@ -62,20 +57,6 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
 
     public List<Entity> findAll() {
         return getList(getEntityManager().createQuery(select(), entity()));
-    }
-
-    public List<Entity> findAllValid() {
-        return findByFieldList(DELETED, false);
-    }
-
-    private void isDeletable() {
-        if (!Deletable.class.isAssignableFrom(entity)) {
-            throw new RuntimeException(" Entity: " + entity + " does not implement Deletable");
-        }
-    }
-
-    public List<Entity> findAllDeleted() {
-        return findByFieldList(DELETED, true);
     }
 
     public Entity findByName(String value) {
@@ -123,9 +104,9 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return merged;
     }
 
-    public void setDeleted(List<Long> id) {
+    public void setReviewed(List<Long> id) {
         getEntityManager()
-                .createQuery(UPDATE + name() + ALIAS + SET_DELETED_TRUE + WHERE + fieldInEquals(ID))
+                .createQuery(UPDATE + name() + ALIAS + SET_REVIEWED_TRUE + WHERE + fieldInEquals(ID))
                 .setParameter(ID, id)
                 .executeUpdate();
     }

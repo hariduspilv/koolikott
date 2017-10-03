@@ -502,13 +502,13 @@ insert into LearningObject_Taxon(learningObject, taxon) values(103, 21);
 
 -- Improper content
 
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (1, 1, 102,'2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (2, 1,  2, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (3, 9, 2, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (4, 9, 3, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (5, 9, 103, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (6, 9, 104, '2014-06-01 00:00:01', true);
-insert into ImproperContent(id, creator, learningObject, added, deleted) values (7, 9, 4, '2014-06-01 00:00:01', true);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (1, 1, 102,'2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (2, 1,  2, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (3, 9, 2, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (4, 9, 3, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (5, 9, 103, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (6, 9, 104, '2014-06-01 00:00:01', true);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (7, 9, 4, '2014-06-01 00:00:01', true);
 
 
 -- TagUpVotes

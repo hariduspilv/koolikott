@@ -8,7 +8,6 @@ import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,7 @@ public class ImproperContentService {
 
         ImproperContent improper = new ImproperContent();
         improper.setCreator(creator);
-        improper.setAdded(DateTime.now());
+        improper.setCreatedAt(DateTime.now());
         improper.setLearningObject(learningObject);
         improper.setReason(improperContent.getReason());
 
@@ -58,7 +57,7 @@ public class ImproperContentService {
      * @return the ImproperContent if user has rights to access
      */
     public ImproperContent get(long improperContentId, User user) {
-        ImproperContent improperContent = improperContentDao.findByIdValid(improperContentId);
+        ImproperContent improperContent = improperContentDao.findByIdUnreviwed(improperContentId);
         if (improperContent != null && !learningObjectService.canAcess(user, improperContent.getLearningObject())) {
             return null;
         }
@@ -70,7 +69,7 @@ public class ImproperContentService {
      * @return a list of improperContent that user has rights to access
      */
     public List<ImproperContent> getAll(User user) {
-        List<ImproperContent> impropers = improperContentDao.findAllValid();
+        List<ImproperContent> impropers = improperContentDao.findAllUnreviwed();
         removeIfHasNoAccess(user, impropers);
         return impropers;
     }

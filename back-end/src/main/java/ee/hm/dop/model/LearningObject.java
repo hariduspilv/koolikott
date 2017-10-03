@@ -158,8 +158,13 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @Formula(value = "(SELECT COUNT(*) FROM BrokenContent br WHERE br.material = id AND br.deleted = 0)")
     private int broken;
 
-    @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.deleted = 0)")
+    @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.reviewed = 0)")
     private int improper;
+
+    @JsonIgnore
+    public boolean isImproper(){
+        return improper> 0;
+    }
 
     @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
     private int changed;

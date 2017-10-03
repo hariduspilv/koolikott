@@ -202,7 +202,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         assertSame(15L, returnedPortfolio.getViews());
 
         returnedPortfolio.setViews(14L);
-        Portfolio originalPortfolio = (Portfolio) portfolioDao.createOrUpdate(returnedPortfolio);
+        Portfolio originalPortfolio = portfolioDao.createOrUpdate(returnedPortfolio);
         assertSame(14L, originalPortfolio.getViews());
     }
 
