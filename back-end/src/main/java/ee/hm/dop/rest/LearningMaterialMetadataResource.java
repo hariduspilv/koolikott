@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.ReportingReason;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.MaterialMetadataService;
@@ -113,4 +114,10 @@ public class LearningMaterialMetadataResource extends BaseResource{
         return materialMetadataService.getLanguagesUsedInMaterials();
     }
 
+    @GET
+    @Path("reportingReasons")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ReportingReason[] getReportingReasons() {
+        return ReportingReason.values();
+    }
 }

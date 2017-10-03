@@ -5,15 +5,13 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.common.test.TestTaxon;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.ReportingReason;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.*;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -30,6 +28,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
     private static final String GET_CROSS_CURRICULAR_THEMES_URL = "learningMaterialMetadata/crossCurricularTheme";
     private static final String GET_KEY_COMPETENCES_URL = "learningMaterialMetadata/keyCompetence";
+    private static final String GET_REPORTING_REASONS_URL = "learningMaterialMetadata/reportingReasons";
     public static final String MATHEMATICS = "Mathematics";
     public static final String ALGEBRA = "Algebra";
     public static final String TRIGONOMETRIA = "Trigonometria";
@@ -154,6 +153,16 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         List<String> expected = Arrays.asList("Cultural_and_value_competence", "Social_and_citizenship_competence");
         List<String> actual = result.stream().map(KeyCompetence::getName).collect(Collectors.toList());
 
+        assertTrue(actual.containsAll(expected));
+    }
+
+    @Test
+    public void getAllReportingReasons() throws Exception {
+        List<ReportingReason> actual = doGet(GET_REPORTING_REASONS_URL, new GenericType<List<ReportingReason>>() {
+        });
+        List<ReportingReason> expected = new ArrayList<>(Arrays.asList(ReportingReason.values()));
+
+        assertTrue(expected.containsAll(actual));
         assertTrue(actual.containsAll(expected));
     }
 
