@@ -1,6 +1,8 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
@@ -23,26 +25,14 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void get() {
-        User user = getUser("mati.maasikas");
-        assertEquals(Long.valueOf(1), user.getId());
-        assertEquals("mati.maasikas", user.getUsername());
-        assertEquals("Mati", user.getName());
-        assertEquals("Maasikas", user.getSurname());
-        assertNull(user.getIdCode());
+        User user = getUser(TestConstants.USER_MATI.username);
+        validateUser(user, TestConstants.USER_MATI);
 
-        user = getUser("peeter.paan");
-        assertEquals(Long.valueOf(2), user.getId());
-        assertEquals("peeter.paan", user.getUsername());
-        assertEquals("Peeter", user.getName());
-        assertEquals("Paan", user.getSurname());
-        assertNull(user.getIdCode());
+        user = getUser(TestConstants.USER_PEETER.username);
+        validateUser(user, TestConstants.USER_PEETER);
 
-        user = getUser("voldemar.vapustav");
-        assertEquals(Long.valueOf(3), user.getId());
-        assertEquals("voldemar.vapustav", user.getUsername());
-        assertEquals("Voldemar", user.getName());
-        assertEquals("Vapustav", user.getSurname());
-        assertNull(user.getIdCode());
+        user = getUser(TestConstants.USER_VOLDERMAR.username);
+        validateUser(user, TestConstants.USER_VOLDERMAR);
     }
 
     @Test
@@ -86,7 +76,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getRoleUser() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         String roleString = doGet("user/role", MediaType.TEXT_PLAIN_TYPE, String.class);
         assertEquals(Role.USER.toString(), roleString);
@@ -94,7 +84,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getRoleAdmin() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         String roleString = doGet("user/role", MediaType.TEXT_PLAIN_TYPE, String.class);
         assertEquals(Role.ADMIN.toString(), roleString);
@@ -111,7 +101,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void restrictUserWithAdmin() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         User userToRestrict = doGet("user?username=user.to.be.banned2", User.class);
         User restrictedUser = doPost("user/restrictUser", userToRestrict, User.class);
@@ -120,7 +110,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void restrictUserNotAllowed() {
-        login(USER_MATI);
+        login(TestConstants.USER_MATI);
 
         User userToRestrict = doGet("user?username=user.to.be.banned", User.class);
         Response response = doPost("user/restrictUser", userToRestrict);
@@ -129,7 +119,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeRestrictionWithAdmin() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         User userToRemoveRestrictionFrom = doGet("user?username=restricted.user2", User.class);
         User nonRestrictedUser = doPost("user/removeRestriction", userToRemoveRestrictionFrom, User.class);
@@ -139,7 +129,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getAll() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         List<User> allUsers = doGet("user/all", new GenericType<List<User>>() {
         });
         assertTrue(allUsers.size() > 14);
@@ -147,7 +137,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void updating_user_taxons_as_admin_updates_user() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         List<Taxon> taxons = new ArrayList<>();
         taxons.add(doGet(format(GET_TAXON_URL, TEST_TAXON_ID), Taxon.class));
@@ -161,5 +151,13 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     private User getUser(String username) {
         return doGet("user?username=" + username, User.class);
+    }
+
+    private void validateUser(User user, TestUser testUser) {
+        assertEquals(testUser.id, user.getId());
+        assertEquals(testUser.username, user.getUsername());
+        assertEquals(testUser.firstName, user.getName());
+        assertEquals(testUser.lastName, user.getSurname());
+        assertNull(user.getIdCode());
     }
 }

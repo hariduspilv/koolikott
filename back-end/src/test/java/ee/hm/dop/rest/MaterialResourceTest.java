@@ -178,7 +178,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void create() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.ru");
@@ -210,7 +210,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void createWithKeyCompetencesWhenNotAllowed() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         Material material = new Material();
         material.setSource("http://www.whatisthis.example.com");
@@ -233,7 +233,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void createOrUpdateAsRestrictedUser() {
-        login(USER_RESTRICTED);
+        login(TestConstants.USER_RESTRICTED);
 
         Material material = new Material();
         material.setSource("http://example.com/restricted");
@@ -244,7 +244,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void createOrUpdateMaterial_updates_existing_material() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
 
         Material material = getMaterial(TestConstants.MATERIAL_5);
         material.setSpecialEducation(true);
@@ -261,7 +261,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addRecommendation() {
-        User user = login(USER_ADMIN);
+        User user = login(TestConstants.USER_ADMIN);
         Material material = materialService.get(TestConstants.MATERIAL_3, user);
 
         Recommendation recommendation = doPost(MATERIAL_ADD_RECOMMENDATION, material, Recommendation.class);
@@ -271,7 +271,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeRecommendation() {
-        User user = login(USER_ADMIN);
+        User user = login(TestConstants.USER_ADMIN);
 
         Material material = materialService.get(TestConstants.MATERIAL_3, user);
         Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION, material);
@@ -280,7 +280,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setBrokenMaterial() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         Material material = getMaterial(TestConstants.MATERIAL_5);
         Response response = doPost(MATERIAL_SET_BROKEN, material);
@@ -289,7 +289,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void hasSetBroken() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
         Material material = getMaterial(TestConstants.MATERIAL_5);
 
         Response response = doPost(MATERIAL_SET_BROKEN, material);
@@ -308,27 +308,27 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         doGet(GET_MATERIAL_BY_SOURCE_URL, listOfMaterials());
     }
 
     @Test
     public void GetMaterialsByNonExistantSource() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_NOT_EXISTING, listOfMaterials());
         assertEquals(0, materials.size());
     }
 
     @Test
     public void GetMaterialsBySource() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_MULTIPLE_MATERIALS, listOfMaterials());
         assertEquals(2, materials.size());
     }
 
     @Test
     public void getOneBySource_returns_one_material_by_source() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Material materialBySource = doGet(GET_ONE_MATERIAL_BY_SOURCE_URL + SOURCE_ONE_MATERIAL, Material.class);
         assertNotNull(materialBySource);
         assertEquals("Material source", SOURCE_ONE_MATERIAL, materialBySource.getSource());
@@ -336,7 +336,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deleteAndRestore() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         Response response = doDelete("material/" + TestConstants.MATERIAL_13);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -347,21 +347,21 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Response response = doDelete("material/" + TestConstants.MATERIAL_12);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void userCanNotRestoreRepositoryMaterial() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Response response = doPost(RESTORE_MATERIAL, materialWithId(TestConstants.MATERIAL_14));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void getDeleted_returns_deleted_materials_to_user_admin() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         List<Material> deletedMaterials = doGet(GET_DELETED_MATERIALS, new GenericType<List<Material>>() {
         });
         long deletedMaterialsCount = doGet(GET_DELETED_MATERIALS_COUNT, Long.class);
@@ -372,14 +372,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void regular_user_do_not_have_access_to_get_deleted_materials() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Response response = doGet(GET_DELETED_MATERIALS);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void likeMaterial_sets_it_as_liked() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Material material = getMaterial(TestConstants.MATERIAL_5);
 
         doPost(LIKE_URL, material);
@@ -390,7 +390,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void dislikeMaterial_sets_it_as_not_liked() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Material material = getMaterial(TestConstants.MATERIAL_5);
 
         doPost(DISLIKE_URL, material);
@@ -401,7 +401,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeUserLike_removes_like_from_material() throws Exception {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Material material = getMaterial(TestConstants.MATERIAL_5);
 
         doPost(LIKE_URL, material);

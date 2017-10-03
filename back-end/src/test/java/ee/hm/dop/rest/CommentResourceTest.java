@@ -22,7 +22,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioComment() {
-        login(USER_MATI);
+        login(TestConstants.USER_MATI);
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_5, NICE_COMMENT));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
@@ -35,21 +35,21 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsCreator() {
-        login(USER_PEETER);
+        login(TestConstants.USER_PEETER);
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_7, SUCH_COMMENT));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
-        login(USER_MATI);
+        login(TestConstants.USER_MATI);
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_7, SUCH_COMMENT));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addMaterialComment_adds_comment_to_material() throws Exception {
-        login(USER_MATI);
+        login(TestConstants.USER_MATI);
 
         Material materialBefore = getMaterial(TestConstants.MATERIAL_2);
         assertTrue("Material comments empty", materialBefore.getComments().isEmpty());

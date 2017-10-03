@@ -19,6 +19,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.codec.binary.Hex;
@@ -118,7 +119,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     }
 
     private BufferedImage getThumbnail(String requestUrl) throws IOException {
-        login(USER_MAASIKAS_VAARIKAS);
+        login(TestConstants.USER_MAASIKAS_VAARIKAS);
 
         String imgName = prepareTestImage();
 
@@ -172,7 +173,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPicture() throws IOException {
-        login(USER_MAASIKAS_VAARIKAS);
+        login(TestConstants.USER_MAASIKAS_VAARIKAS);
 
         File f = DOPFileUtils.getFile(TEST_IMAGE_NAME);
         final StreamDataBodyPart filePart = new StreamDataBodyPart("picture", new ByteArrayInputStream(Base64.getEncoder().encode(Files.readAllBytes(f.toPath()))));

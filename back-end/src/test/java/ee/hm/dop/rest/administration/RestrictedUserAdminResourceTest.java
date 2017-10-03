@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class RestrictedUserAdminResourceTest extends ResourceIntegrationTestBase
 
     @Test
     public void getRestrictedUsers_returns_restricted_users_to_admin() throws Exception {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
         List<User> restrictedUsers = doGet(GET_RESTRICTED_USERS_URL, new GenericType<List<User>>() {
         });
         long restrictedUsersCount = doGet(GET_RESTRICTED_USERS_COUNT_URL, Long.class);

@@ -22,7 +22,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVote() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));
@@ -60,7 +60,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void report() {
-        login(USER_MATI);
+        login(TestConstants.USER_MATI);
 
         Response response = doGet("tagUpVotes/report?learningObject=1");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
@@ -99,7 +99,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeUpVote() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(TestConstants.PORTFOLIO_1);
@@ -120,21 +120,21 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void can_not_remove_tagUpVote_that_does_not_exist() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
         Response response = doDelete(TAG_UP_VOTES + "/" + 100L);
         assertEquals("No tagUpVote", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_get_tagUpVote_without_learningObject_id() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
         Response response = doGet("tagUpVotes/report?learningObject=");
         assertEquals("LearningObject query param is required", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_insert_tagUpVote_to_tag_that_does_not_exist() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(NOT_EXISTING_TAG));
@@ -146,7 +146,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void can_not_insert_tagUpVote_that_already_exists() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
         portfolio.setId(TestConstants.PORTFOLIO_1);
@@ -165,7 +165,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVoteGettingPrivatePortfolio() {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));

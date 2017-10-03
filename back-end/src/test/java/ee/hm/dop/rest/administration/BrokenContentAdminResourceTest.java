@@ -25,25 +25,34 @@ public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase 
 
     @Test
     public void setNotBroken_sets_material_unbroken() {
-        login(USER_ADMIN);
-        setMaterialBroken();
-        assertTrue("Material is not broken", getMaterial(TestConstants.MATERIAL_5).getBroken() > 0);
+        login(TestConstants.USER_ADMIN);
+        setMaterialBroken(TestConstants.MATERIAL_5);
+        assertTrue("Material is broken", getMaterial(TestConstants.MATERIAL_5).getBroken() > 0);
+
+        doPost(MATERIAL_SET_NOT_BROKEN, getMaterial(TestConstants.MATERIAL_5));
+        assertTrue("Material is not broken", getMaterial(TestConstants.MATERIAL_5).getBroken() == 0);
     }
 
     @Test
     public void setNotBroken_sets_material_unbroken_and_material_is_reviewed() {
-        login(USER_ADMIN);
-        setMaterialBroken();
-        assertTrue("Material is not broken", getMaterial(TestConstants.MATERIAL_5).getBroken() > 0);
+        login(TestConstants.USER_ADMIN);
+        setMaterialBroken(TestConstants.MATERIAL_6);
+        assertTrue("Material is broken", getMaterial(TestConstants.MATERIAL_6).getBroken() > 0);
 
-        Material material = getMaterial(TestConstants.MATERIAL_5);
-        assertTrue(material.getUnReviewed() == 0);
+        Material materialBroken = getMaterial(TestConstants.MATERIAL_6);
+        assertTrue(materialBroken.getUnReviewed() > 0);
+
+        doPost(MATERIAL_SET_NOT_BROKEN, getMaterial(TestConstants.MATERIAL_6));
+        assertTrue("Material is not broken", getMaterial(TestConstants.MATERIAL_6).getBroken() == 0);
+
+        Material materialNotBroken = getMaterial(TestConstants.MATERIAL_6);
+        assertTrue(materialNotBroken.getUnReviewed() == 0);
     }
 
     @Test
     public void isBroken_returns_if_material_is_broken() {
-        login(USER_ADMIN);
-        setMaterialBroken();
+        login(TestConstants.USER_ADMIN);
+        setMaterialBroken(TestConstants.MATERIAL_5);
 
         Response isBrokenResponseAdmin = doGet(MATERIAL_IS_BROKEN + "?materialId=" + TestConstants.MATERIAL_5);
         assertEquals(Response.Status.OK.getStatusCode(), isBrokenResponseAdmin.getStatus());
@@ -52,7 +61,7 @@ public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase 
 
     @Test
     public void getBroken_returns_broken_materials_to_admin() {
-        login(USER_ADMIN);
+        login(TestConstants.USER_ADMIN);
 
         Material material = getMaterial(TestConstants.MATERIAL_5);
         Response response = doPost(MATERIAL_SET_BROKEN, material);
@@ -68,27 +77,27 @@ public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase 
 
     @Test
     public void regular_user_is_not_allowed_to_check_if_material_is_broken() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
         Response isBrokenResponse = doGet(MATERIAL_IS_BROKEN + "?materialId=" + TestConstants.MATERIAL_5);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), isBrokenResponse.getStatus());
     }
 
     @Test
     public void regular_user_is_not_allowed_to_set_material_not_broken() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
         Response response = doPost(MATERIAL_SET_NOT_BROKEN, getMaterial(TestConstants.MATERIAL_5));
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void regular_user_is_not_allowed_to_get_broken_materials() throws Exception {
-        login(USER_SECOND);
+        login(TestConstants.USER_SECOND);
         Response getBrokenResponse = doGet(MATERIAL_GET_BROKEN);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), getBrokenResponse.getStatus());
     }
 
-    private void setMaterialBroken() {
-        doPost(MATERIAL_SET_BROKEN, getMaterial(TestConstants.MATERIAL_5));
+    private void setMaterialBroken(Long materialId) {
+        doPost(MATERIAL_SET_BROKEN, getMaterial(materialId));
     }
 
     private GenericType<List<BrokenContent>> list() {

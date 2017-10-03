@@ -8,6 +8,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.AuthenticatedUser;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void logIn() {
-        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + USER_MATI, new GenericType<AuthenticatedUser>() {
+        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
         });
         assertNotNull(authenticatedUser.getToken());
         assertEquals("Mati", authenticatedUser.getUser().getName());

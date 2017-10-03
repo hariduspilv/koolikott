@@ -10,10 +10,10 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.AuthenticatedUser;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void testLogout() {
-        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI, new GenericType<AuthenticatedUser>() {
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
         });
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();
