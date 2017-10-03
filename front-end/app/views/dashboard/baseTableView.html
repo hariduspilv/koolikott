@@ -7,8 +7,8 @@
     <md-progress-linear data-ng-if="!data"></md-progress-linear>
     <!-- END Progressbar -->
     <md-card class="md-data-table" id="moderators-table" data-ng-if="data">
-      <!-- BEGIN Search -->
-      <md-toolbar class="md-table-toolbar md-default">
+      <!-- BEGIN Search learning objects -->
+      <md-toolbar class="md-table-toolbar md-default" data-ng-if="!isView('/dashboard/moderators') && !isView('/dashboard/restrictedUsers')" >
         <div class="md-toolbar-tools">
           <md-icon>search</md-icon>
           <form data-flex name="filter.form">
@@ -25,7 +25,36 @@
           </md-button>
         </div>
       </md-toolbar>
-      <!-- END Search -->
+      <!-- END Search learning objects -->
+      <!-- BEGIN Search users -->
+      <md-toolbar class="md-table-toolbar md-default" data-ng-if="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
+        <div layout-margin>
+          <h2 class="md-title" data-translate="SEARCH_USERS"></h2>
+        </div>
+        <div class="md-toolbar-tools">
+          <md-autocomplete
+            flex
+            md-min-length="0"
+            md-input-name="autocompleteField"
+            md-selected-item="selectedUser"
+            md-search-text="searchText"
+            md-items="user in querySearch(searchText)"
+            md-item-text="user.username"
+            placeholder="{{getUsernamePlaceholder()}}"
+            >
+            <md-item-template>
+              <span md-highlight-text="searchText">{{user.username}}</span>
+            </md-item-template>
+          </md-autocomplete>
+          <md-button
+            aria-label="Ava kasutaja"
+            class="md-raised md-default"
+            data-ng-click="editUser(selectedUser)"
+            data-translate="BUTTON_OPEN"
+          ></md-button>
+        </div>
+      </md-toolbar>
+      <!-- END Search users -->
       <md-table-container class="table-container">
         <div data-ng-show="itemsCount" class="md-data-table" id="moderators-table">
           <div data-ng-if="isView('/dashboard/unReviewed')" data-dop-unreviewed></div>
