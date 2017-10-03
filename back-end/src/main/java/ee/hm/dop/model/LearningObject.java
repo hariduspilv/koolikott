@@ -131,8 +131,12 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     private List<Taxon> taxons;
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
-    @JsonBackReference
+    @JsonBackReference("firstReview")
     private List<FirstReview> firstReviews;
+
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonBackReference("improperContent")
+    private List<ImproperContent> improperContents;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
@@ -339,5 +343,13 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
 
     public void setFirstReviews(List<FirstReview> firstReviews) {
         this.firstReviews = firstReviews;
+    }
+
+    public List<ImproperContent> getImproperContents() {
+        return improperContents;
+    }
+
+    public void setImproperContents(List<ImproperContent> improperContents) {
+        this.improperContents = improperContents;
     }
 }

@@ -25,6 +25,13 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         return getSingleResult(findByCode);
     }
 
+    public LearningObject findByIdDeleted(long objectId) {
+        TypedQuery<LearningObject> findByCode = getEntityManager()
+                .createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = true", entity()) //
+                .setParameter("id", objectId);
+        return getSingleResult(findByCode);
+    }
+
     public LearningObject findById(long objectId) {
         TypedQuery<LearningObject> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id", entity()) //

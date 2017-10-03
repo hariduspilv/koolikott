@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.PortfolioAdministrationService;
 
 @Path("admin/deleted/portfolio")
@@ -22,13 +23,15 @@ public class DeletedPortfolioAdminResource extends BaseResource {
 
     @Inject
     private PortfolioAdministrationService portfolioAdministrationService;
+    @Inject
+    private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void restore(Portfolio portfolio) {
-        portfolioAdministrationService.restore(portfolio, getLoggedInUser());
+        learningObjectAdministrationService.restore(portfolio, getLoggedInUser());
     }
 
     @GET

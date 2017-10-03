@@ -36,6 +36,14 @@ public class LearningObjectService {
         return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdNotDeleted);
     }
 
+    public LearningObject validateAndFindIncludeDeleted(LearningObject learningObject) {
+        return ValidatorUtil.findValid(learningObject, learningObjectDao::findById);
+    }
+
+    public LearningObject validateAndFindDeletedOnly(LearningObject learningObject) {
+        return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdDeleted);
+    }
+
     private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,
                                                           BiFunction<Integer, Integer, List<LearningObject>> functionToGetLearningObjects) {
         List<LearningObject> returnableLearningObjects = new ArrayList<>();

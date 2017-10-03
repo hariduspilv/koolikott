@@ -135,6 +135,12 @@ public class ImproperContentService {
         }
     }
 
+    public void deleteAll(LearningObject learningObject, User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        List<ImproperContent> improperContents = learningObject.getImproperContents();
+        improperContentDao.deleteAll(improperContents);
+    }
+
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
         impropers.removeIf(improper -> !learningObjectService.canAcess(user, improper.getLearningObject()));
     }
