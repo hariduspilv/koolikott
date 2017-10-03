@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReportingReason;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
@@ -51,7 +52,10 @@ public class ImproperContent extends AbstractEntity {
     private ReviewStatus status;
 
     @Column
-    private String reason;
+    private String reportingText;
+
+    @Column
+    private ReportingReason reportingReason;
 
     public Long getId() {
         return id;
@@ -111,12 +115,12 @@ public class ImproperContent extends AbstractEntity {
         this.status = status;
     }
 
-    public String getReason() {
-        return reason;
+    public String getReportingText() {
+        return reportingText;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setReportingText(String reportingText) {
+        this.reportingText = reportingText;
     }
 
     public LearningObject getLearningObject() {
@@ -125,5 +129,13 @@ public class ImproperContent extends AbstractEntity {
 
     public void setLearningObject(LearningObject learningObject) {
         this.learningObject = learningObject;
+    }
+
+    public ReportingReason getReportingReason() {
+        return reportingReason;
+    }
+
+    public void setReportingReason(ReportingReason reportingReason) {
+        this.reportingReason = reportingReason;
     }
 }

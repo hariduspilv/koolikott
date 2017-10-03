@@ -23,7 +23,7 @@ public class ImproperContentService {
     @Inject
     private FirstReviewService firstReviewService;
 
-    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser) {
+    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser){
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
         if (UserUtil.isAdmin(loggedInUser)) {
@@ -40,7 +40,8 @@ public class ImproperContentService {
         improper.setCreator(creator);
         improper.setCreatedAt(DateTime.now());
         improper.setLearningObject(learningObject);
-        improper.setReason(improperContent.getReason());
+        improper.setReportingText(improperContent.getReportingText());
+        improper.setReportingReason(improperContent.getReportingReason());
         improper.setReviewed(false);
 
         return improperContentDao.createOrUpdate(improper);
