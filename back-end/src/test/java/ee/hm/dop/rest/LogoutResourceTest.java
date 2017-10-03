@@ -27,7 +27,6 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
         String token = authenticatedUser.getToken();
 
         getTarget("logout", new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
-
     }
 
     @Provider

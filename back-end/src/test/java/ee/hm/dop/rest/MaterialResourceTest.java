@@ -33,7 +33,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
-    private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
+    private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken?materialId=";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
     private static final String RESTORE_MATERIAL = "admin/deleted/material/restore";
@@ -74,9 +74,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
                 assertEquals("Test description in estonian. (Russian available)", languageString.getText());
             } else if (languageString.getId() == 2) {
                 assertEquals(LanguageC.EST, languageString.getLanguage().getCode());
-                assertEquals("Test description in russian, which is the only language available.",
-                        languageString.getText());
-
+                assertEquals("Test description in russian, which is the only language available.", languageString.getText());
             }
         }
     }
@@ -134,8 +132,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreator() {
-        String username = "mati.maasikas";
-        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MATI.username), SearchResult.class);
 
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(collect.containsAll(asList(TestConstants.MATERIAL_8, TestConstants.MATERIAL_4, TestConstants.MATERIAL_1)));
@@ -143,8 +140,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorCount_returns_same_materials_count_as_getByCreator_size() throws Exception {
-        List<Searchable> materials = doGet(format(GET_BY_CREATOR_URL, "mati.maasikas")).readEntity(SearchResult.class).getItems();
-        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, "mati.maasikas"), Long.class);
+        List<Searchable> materials = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MATI.username)).readEntity(SearchResult.class).getItems();
+        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, TestConstants.USER_MATI.username), Long.class);
         assertEquals("Materials size by creator, Materials count by creator", materials.size(), count);
     }
 
@@ -169,8 +166,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorNoMaterials() {
-        String username = "voldemar.vapustav";
-        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_VOLDERMAR.username), SearchResult.class);
 
         assertEquals(0, materials.getItems().size());
         assertEquals(0, materials.getTotalResults());
@@ -296,14 +292,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + material.getId());
+        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + material.getId());
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         assertEquals(hasBrokenResponse.readEntity(Boolean.class), true);
     }
 
     @Test
     public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
-        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + getMaterial(TestConstants.MATERIAL_5).getId(), Boolean.class);
+        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + getMaterial(TestConstants.MATERIAL_5).getId(), Boolean.class);
         assertFalse("Material hasSetBroken", response);
     }
 

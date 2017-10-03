@@ -76,7 +76,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         return comment;
     }
 
-    private AddCommentForm commentForm(long portfolioId, String niceComment) {
+    private AddCommentForm commentForm(Long portfolioId, String niceComment) {
         AddCommentForm addCommentForm = new AddCommentForm();
         addCommentForm.setPortfolio(portfolioWithId(portfolioId));
         addCommentForm.setComment(makeComment(niceComment));

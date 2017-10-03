@@ -46,6 +46,7 @@ import static org.junit.Assert.*;
 
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
+    public static final String LOGIN_ID_CARD = "login/idCard";
     @Inject
     private Configuration configuration;
     @Inject
@@ -55,21 +56,21 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void login() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter1()).request()
+        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilter1()).request()
                 .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
     }
 
     @Test
     public void loginAuthenticationFailed() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilter2()).request()
+        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilter2()).request()
                 .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNull(authenticatedUser);
     }
 
     @Test
     public void loginSameNameWithAccent() {
-        AuthenticatedUser authenticatedUser = getTarget("login/idCard", new LoginFilterAccentInName()).request()
+        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilterAccentInName()).request()
                 .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
         assertEquals("peeter.paan2", authenticatedUser.getUser().getUsername());

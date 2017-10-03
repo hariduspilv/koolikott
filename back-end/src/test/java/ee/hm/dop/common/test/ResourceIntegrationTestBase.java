@@ -27,6 +27,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Base class for all resource integration tests.
@@ -220,5 +221,13 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         Tag tag = new Tag();
         tag.setName(name);
         return tag;
+    }
+
+    public void validateUser(User user, TestUser testUser) {
+        assertEquals(testUser.id, user.getId());
+        assertEquals(testUser.username, user.getUsername());
+        assertEquals(testUser.firstName, user.getName());
+        assertEquals(testUser.lastName, user.getSurname());
+        assertNull(user.getIdCode());
     }
 }

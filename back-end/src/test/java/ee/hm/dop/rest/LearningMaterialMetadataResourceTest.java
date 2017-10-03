@@ -1,6 +1,8 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestTaxon;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
@@ -28,6 +30,9 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
     private static final String GET_CROSS_CURRICULAR_THEMES_URL = "learningMaterialMetadata/crossCurricularTheme";
     private static final String GET_KEY_COMPETENCES_URL = "learningMaterialMetadata/keyCompetence";
+    public static final String MATHEMATICS = "Mathematics";
+    public static final String ALGEBRA = "Algebra";
+    public static final String TRIGONOMETRIA = "Trigonometria";
 
     @Test
     public void getEducationalContext() {
@@ -43,17 +48,17 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
             if (educationalContext.getName().equals(EducationalContextC.PRESCHOOLEDUCATION)) {
                 for (Domain domain : educationalContext.getDomains()) {
                     domains++;
-                    if (domain.getName().equals("Mathematics")) {
+                    if (domain.getName().equals(MATHEMATICS)) {
                         for (Subject subject : domain.getSubjects()) {
                             subjects++;
-                            if (subject.getName().equals("Mathematics")) {
+                            if (subject.getName().equals(MATHEMATICS)) {
                                 assertEquals(2, subject.getTopics().size());
                                 Topic[] topics = new Topic[2];
                                 subject.getTopics().toArray(topics);
-                                assertTrue(topics[0].getName().equals("Algebra")
-                                        || topics[0].getName().equals("Trigonometria"));
-                                assertTrue(topics[1].getName().equals("Algebra")
-                                        || topics[1].getName().equals("Trigonometria"));
+                                assertTrue(topics[0].getName().equals(ALGEBRA)
+                                        || topics[0].getName().equals(TRIGONOMETRIA));
+                                assertTrue(topics[1].getName().equals(ALGEBRA)
+                                        || topics[1].getName().equals(TRIGONOMETRIA));
                             }
                         }
                     }
@@ -67,9 +72,9 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getTaxon() {
-        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, (Long) 10L), Taxon.class);
-        assertEquals((Long) 10L, taxon.getId());
-        assertTrue((taxon.getName().equals("Mathematics")));
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TestConstants.TAXON_MATHEMATICS.id), Taxon.class);
+        assertEquals(TestConstants.TAXON_MATHEMATICS.id, taxon.getId());
+        assertEquals(TestConstants.TAXON_MATHEMATICS.name, taxon.getName());
     }
 
     @Test

@@ -19,7 +19,7 @@ public class AuthorDaoTest extends DatabaseTestBase {
 
     @Test
     public void findAuthorByFullName() {
-        Long id = (long) 3;
+        Long id = 3L;
         String name = "Leonardo";
         String surname = "Fibonacci";
 
@@ -38,9 +38,7 @@ public class AuthorDaoTest extends DatabaseTestBase {
         author.setSurname("Onomatöpöa");
 
         Author created = authorDao.createOrUpdate(author);
-
         Author newAuthor = authorDao.findAuthorByFullName(created.getName(), created.getSurname());
-
         assertEquals(created.getId(), newAuthor.getId());
         assertEquals(created.getName(), newAuthor.getName());
         assertEquals(created.getSurname(), newAuthor.getSurname());
