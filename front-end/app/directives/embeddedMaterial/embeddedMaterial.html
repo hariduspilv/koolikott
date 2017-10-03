@@ -45,15 +45,15 @@
       </md-toolbar>
     </div>
 
-    <a class="embed-link" href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank"
+    <a class="embed-link" data-ng-href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank"
        ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
-      <img src="{{material.source}}"/>
+      <img data-ng-src="{{material.source}}"/>
     </a>
 
     <div class="embed-responsive-container embed-audio"
          data-ng-if="sourceType === 'AUDIO' && canPlayAudio">
       <audio controls="true">
-        <source src="{{material.source}}" type="audio/{{audioType}}">
+        <source data-ng-src="{{material.source}}" type="audio/{{audioType}}">
       </audio>
     </div>
 
@@ -89,7 +89,7 @@
   <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType || sourceType === 'LINK' ">
     <div layout="row" layout-align="space-between center">
       <!--Link as backup - if iframe is internally not working-->
-      <a href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
+      <a data-ng-href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
          target="_blank" data-ng-if="((!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
                     || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK') && !embeddable">
         <span class="item-link" data-ng-bind="material.source"></span>
