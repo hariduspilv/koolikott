@@ -152,12 +152,4 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     private User getUser(String username) {
         return doGet("user?username=" + username, User.class);
     }
-
-    private void validateUser(User user, TestUser testUser) {
-        assertEquals(testUser.id, user.getId());
-        assertEquals(testUser.username, user.getUsername());
-        assertEquals(testUser.firstName, user.getName());
-        assertEquals(testUser.lastName, user.getSurname());
-        assertNull(user.getIdCode());
-    }
 }

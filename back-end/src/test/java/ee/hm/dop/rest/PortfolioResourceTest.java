@@ -69,8 +69,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getPrivatePortfolioAsNotCreator() {
         login(TestConstants.USER_VOLDERMAR2);
 
-        //todo why is material here
-        Response response = doGet(format(GET_PORTFOLIO_URL, (Long) 7L));
+        Response response = doGet(format(GET_PORTFOLIO_URL, TestConstants.PORTFOLIO_7));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
@@ -85,8 +84,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreator() {
-        String username = "mati.maasikas-vaarikas";
-        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username)).readEntity(SearchResult.class);
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MAASIKAS_VAARIKAS.username)).readEntity(SearchResult.class);
         List<Searchable> portfolios = result.getItems();
         assertEquals(3, portfolios.size());
 
@@ -97,16 +95,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorCount_returns_same_portfolios_count_as_getByCreator_size() throws Exception {
-        List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, "mati.maasikas-vaarikas")).readEntity(SearchResult.class).getItems();
-        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, "mati.maasikas-vaarikas"), Long.class);
+        List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MAASIKAS_VAARIKAS.username), SearchResult.class).getItems();
+        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, TestConstants.USER_MAASIKAS_VAARIKAS.username), Long.class);
         assertEquals("Portfolios size by creator, Portfolios count by creator", portfolios.size(), count);
     }
 
     @Test
     public void getByCreatorWhenSomeArePrivateOrNotListed() {
-        String username = "my.testuser";
-        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
-        List<Searchable> portfolios = result.getItems();
+        List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MYTESTUSER.username), SearchResult.class).getItems();
 
         assertEquals(1, portfolios.size());
         assertEquals(TestConstants.PORTFOLIO_9, portfolios.get(0).getId());
@@ -148,8 +144,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorNoMaterials() {
-        String username = "voldemar.vapustav";
-        SearchResult portfolios = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        SearchResult portfolios = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_VOLDERMAR.username), SearchResult.class);
 
         assertEquals(0, portfolios.getItems().size());
         assertEquals(0, portfolios.getStart());
@@ -184,7 +179,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void updateChanginMetadataNoChapters() {
         login(TestConstants.USER_MATI);
 
-        Portfolio portfolio = getPortfolio(105);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_5);
         String originalTitle = portfolio.getTitle();
         portfolio.setTitle("New mega nice title that I come with Yesterday night!");
 
@@ -192,7 +187,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         assertFalse(originalTitle.equals(updatedPortfolio.getTitle()));
         assertEquals("New mega nice title that I come with Yesterday night!", updatedPortfolio.getTitle());
-
     }
 
     @Test
@@ -202,8 +196,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(105);
         portfolio.setTitle("This is not my portfolio.");
 
-        // 2L is peeter id
-        portfolio.setCreator(userWithId(2L));
+        portfolio.setCreator(userWithId(TestConstants.USER_PEETER.id));
 
         Response response = doPost(UPDATE_PORTFOLIO_URL, portfolio);
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
@@ -215,7 +208,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         List<Chapter> chapters = chapters(NEW_CHAPTER_1);
 
-        Portfolio portfolio = getPortfolio(105);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_5);
         portfolio.setChapters(chapters);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -233,7 +226,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         chapters.add(newChapter);
 
-        Portfolio portfolio = getPortfolio(105);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_5);
         portfolio.setChapters(chapters);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -249,7 +242,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Chapter newChapter = chapter(NEW_CHAPTER_1);
         newChapter.setSubchapters(chapters(NEW_COOL_SUBCHAPTER));
 
-        Portfolio portfolio = getPortfolio(105);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_5);
         portfolio.getChapters().add(newChapter);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -264,7 +257,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void updateChangingVisibility() {
         login(TestConstants.USER_PEETER);
 
-        Portfolio portfolio = getPortfolio(106);
+        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_6);
         portfolio.setVisibility(Visibility.NOT_LISTED);
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -550,8 +543,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     private void assertGetByCreator() {
-        String username = "my.testuser";
-        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MYTESTUSER.username), SearchResult.class);
         List<Searchable> portfolios = result.getItems();
 
         assertEquals(3, portfolios.size());

@@ -4,6 +4,7 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -32,7 +33,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_SET_BROKEN = "material/setBroken";
-    private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken";
+    private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken?materialId=";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
     private static final String RESTORE_MATERIAL = "admin/deleted/material/restore";
@@ -69,13 +70,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(2, descriptions.size());
         for (LanguageString languageString : descriptions) {
             if (languageString.getId() == 1) {
-                assertEquals("est", languageString.getLanguage().getCode());
+                assertEquals(LanguageC.EST, languageString.getLanguage().getCode());
                 assertEquals("Test description in estonian. (Russian available)", languageString.getText());
             } else if (languageString.getId() == 2) {
-                assertEquals("est", languageString.getLanguage().getCode());
-                assertEquals("Test description in russian, which is the only language available.",
-                        languageString.getText());
-
+                assertEquals(LanguageC.EST, languageString.getLanguage().getCode());
+                assertEquals("Test description in russian, which is the only language available.", languageString.getText());
             }
         }
     }
@@ -133,8 +132,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreator() {
-        String username = "mati.maasikas";
-        SearchResult result = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MATI.username), SearchResult.class);
 
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(collect.containsAll(asList(TestConstants.MATERIAL_8, TestConstants.MATERIAL_4, TestConstants.MATERIAL_1)));
@@ -142,8 +140,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorCount_returns_same_materials_count_as_getByCreator_size() throws Exception {
-        List<Searchable> materials = doGet(format(GET_BY_CREATOR_URL, "mati.maasikas")).readEntity(SearchResult.class).getItems();
-        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, "mati.maasikas"), Long.class);
+        List<Searchable> materials = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_MATI.username)).readEntity(SearchResult.class).getItems();
+        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, TestConstants.USER_MATI.username), Long.class);
         assertEquals("Materials size by creator, Materials count by creator", materials.size(), count);
     }
 
@@ -168,8 +166,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getByCreatorNoMaterials() {
-        String username = "voldemar.vapustav";
-        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, username), SearchResult.class);
+        SearchResult materials = doGet(format(GET_BY_CREATOR_URL, TestConstants.USER_VOLDERMAR.username), SearchResult.class);
 
         assertEquals(0, materials.getItems().size());
         assertEquals(0, materials.getTotalResults());
@@ -295,14 +292,14 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(MATERIAL_SET_BROKEN, material);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + material.getId());
+        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + material.getId());
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         assertEquals(hasBrokenResponse.readEntity(Boolean.class), true);
     }
 
     @Test
     public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
-        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + "?materialId=" + getMaterial(TestConstants.MATERIAL_5).getId(), Boolean.class);
+        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + getMaterial(TestConstants.MATERIAL_5).getId(), Boolean.class);
         assertFalse("Material hasSetBroken", response);
     }
 
@@ -423,12 +420,12 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(2, material.getDescriptions().size());
         assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
         Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
-        assertEquals("est", descriptionLanguage.getCode());
+        assertEquals(LanguageC.EST, descriptionLanguage.getCode());
         assertNotNull(descriptionLanguage.getName());
         assertNotNull(descriptionLanguage.getCodes());
         Language language = material.getLanguage();
         assertNotNull(language);
-        assertEquals("est", language.getCode());
+        assertEquals(LanguageC.EST, language.getCode());
         assertEquals("Estonian", language.getName());
         assertNotNull(language.getCodes());
         assertEquals(new Long(1), material.getPicture().getId());

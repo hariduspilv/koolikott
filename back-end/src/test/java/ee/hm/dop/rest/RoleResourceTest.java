@@ -14,11 +14,14 @@ import org.junit.Test;
  * Created by mart on 30.11.16.
  */
 public class RoleResourceTest extends ResourceIntegrationTestBase {
+
+    public static final String GET_ROLES = "role";
+
     @Test
     public void getRoles() {
         login(TestConstants.USER_ADMIN);
 
-        List<String> allUsers = doGet("role", new GenericType<List<String>>() {
+        List<String> allUsers = doGet(GET_ROLES, new GenericType<List<String>>() {
         });
         assertEquals(4, allUsers.size());
     }

@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.User;
 import org.junit.Test;
 
 /**
@@ -20,14 +21,10 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
     public static final String NOT_EXISTING_USER = "123";
 
     @Test
-    public void logIn() {
-        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
-        });
+    public void login() {
+        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
-        assertEquals("Mati", authenticatedUser.getUser().getName());
-        assertEquals("Maasikas", authenticatedUser.getUser().getSurname());
-        assertEquals("mati.maasikas", authenticatedUser.getUser().getUsername());
-        assertNull(authenticatedUser.getUser().getIdCode());
+        validateUser(authenticatedUser.getUser(), TestConstants.USER_MATI);
     }
 
     @Test

@@ -25,7 +25,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String TEST_TAG_2 = "timshel2";
     public static final String TEST_SYSTEM_TAG = "matemaatika";
     public static final String TYPE_PORTFOLIO = ".Portfolio";
-    public static final long NOT_EXISTING_LEARNING_OBJECT_ID = 99999L;
+    public static final Long NOT_EXISTING_LEARNING_OBJECT_ID = 99999L;
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
