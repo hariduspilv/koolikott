@@ -105,7 +105,6 @@ public class ImproperContentService {
     }
 
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
-        UserUtil.mustBeModeratorOrAdmin(user);
         for (ImproperContent improperContent : learningObject.getImproperContents()) {
             setReviewed(user, reviewStatus, improperContent);
         }

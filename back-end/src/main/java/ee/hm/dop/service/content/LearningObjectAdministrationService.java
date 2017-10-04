@@ -84,7 +84,7 @@ public class LearningObjectAdministrationService {
 
     public void setEverythingReviewedRefreshLO(User user, LearningObject learningObject, ReviewStatus reviewStatus) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        LearningObject originalLearningObject = learningObjectService.validateAndFindDeletedOnly(learningObject);
+        LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
         setEverythingReviewed(user, originalLearningObject, reviewStatus);
     }
 

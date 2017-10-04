@@ -48,16 +48,12 @@ public class FirstReviewService {
     }
 
     public void setReviewed(LearningObject learningObject, User loggedInUser) {
-        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
-        LearningObject object = learningObjectService.validateAndFind(learningObject);
-        if (CollectionUtils.isNotEmpty(object.getFirstReviews())) {
-            for (FirstReview firstReview : object.getFirstReviews()) {
-                if (!firstReview.isReviewed()) {
-                    firstReview.setReviewedAt(DateTime.now());
-                    firstReview.setReviewedBy(loggedInUser);
-                    firstReview.setReviewed(true);
-                    firstReviewDao.createOrUpdate(firstReview);
-                }
+        for (FirstReview firstReview : learningObject.getFirstReviews()) {
+            if (!firstReview.isReviewed()) {
+                firstReview.setReviewedAt(DateTime.now());
+                firstReview.setReviewedBy(loggedInUser);
+                firstReview.setReviewed(true);
+                firstReviewDao.createOrUpdate(firstReview);
             }
         }
     }
