@@ -98,7 +98,7 @@ public class UserService {
         return UserUtil.isAdmin(loggedInUser) ? userDao.findAll() : null;
     }
 
-    protected String generateUsername(String name, String surname) {
+    public String generateUsername(String name, String surname) {
         String username = name.trim().toLowerCase() + "." + surname.trim().toLowerCase();
         username = username.replaceAll("\\s+", ".");
 

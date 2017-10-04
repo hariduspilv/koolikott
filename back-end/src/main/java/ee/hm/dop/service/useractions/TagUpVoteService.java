@@ -51,12 +51,11 @@ public class TagUpVoteService {
     }
 
     public TagUpVote getTagUpVote(Tag tag, LearningObject learningObject, User user) {
-        if (!learningObjectService.canAcess(user, learningObject)) {
+        if (learningObjectService.canAcess(user, learningObject)) {
+            return tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, learningObject);
+        }
             return null;
         }
-
-        return tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, learningObject);
-    }
 
     private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {
         if (tagUpVote.getId() != null && !Objects.equals(user.getId(), tagUpVote.getUser().getId())

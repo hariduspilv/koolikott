@@ -28,6 +28,7 @@ import javax.xml.soap.SOAPPart;
 
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.soap.GetMobileAuthenticateStatusResponse;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.metadata.LanguageService;
@@ -60,7 +61,7 @@ public class MobileIDSOAPService {
     public MobileAuthenticateResponse authenticate(String phoneNumber, String idCode, Language language)
             throws SOAPException {
         if (language == null || !supportedLanguages.contains(language.getCode())) {
-            language = languageService.getLanguage("est");
+            language = languageService.getLanguage(LanguageC.EST);
         }
 
         Map<String, String> childElements = new HashMap<>();

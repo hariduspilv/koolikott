@@ -21,6 +21,7 @@ import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Version;
+import ee.hm.dop.model.enums.LanguageC;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
@@ -174,7 +175,7 @@ public class AtomFeedService {
             return format(titleTranslation, translation.getText());
         }
 
-        LanguageString fallbackTranslation = filterByLanguage(titles, "est");
+        LanguageString fallbackTranslation = filterByLanguage(titles, LanguageC.EST);
         if (fallbackTranslation != null && fallbackTranslation.getText() != null) {
             return format(titleTranslation, fallbackTranslation.getText());
         }

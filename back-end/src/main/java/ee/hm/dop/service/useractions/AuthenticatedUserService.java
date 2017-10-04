@@ -33,18 +33,20 @@ public class AuthenticatedUserService {
     public String signUserData(AuthenticatedUser authenticatedUser) {
         UserData userData = new UserData(authenticatedUser.getPerson());
         ObjectMapper mapper = new ObjectMapper();
-
-        String userDataStr;
-        try {
-            userDataStr = mapper.writeValueAsString(userData);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        String userDataStr = tryToMap(userData, mapper);
 
         PrivateKey privateKey = KeyStoreUtils.getDOPSigningCredential(configuration).getPrivateKey();
         final byte[] cipherText = EncryptionUtils.encrypt(userDataStr, privateKey);
 
         return Base64.encodeBase64String(cipherText);
+    }
+
+    private String tryToMap(UserData userData, ObjectMapper mapper) {
+        try {
+            return mapper.writeValueAsString(userData);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SuppressWarnings("unused")
