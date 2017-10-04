@@ -2,7 +2,6 @@ package ee.hm.dop.dao;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.model.AbstractEntity;
-import ee.hm.dop.model.Deletable;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,6 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     public static final String AND = " and ";
     public static final String OR = " or ";
     public static final String ID = "id";
-    public static final String SET_REVIEWED_TRUE = " set o.reviewed = true ";
     public static final String UPDATE = "update ";
     public static final String NAME = "name";
     @Inject
@@ -49,7 +47,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public List<Entity> findById(List<Long> id) {
-        if (CollectionUtils.isEmpty(id)){
+        if (CollectionUtils.isEmpty(id)) {
             return Lists.newArrayList();
         }
         return getList(getFindByFieldInQuery(ID, id));
@@ -64,7 +62,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public List<Entity> findByName(List<String> value) {
-        if (CollectionUtils.isEmpty(value)){
+        if (CollectionUtils.isEmpty(value)) {
             return Lists.newArrayList();
         }
         return getList(getFindByFieldInQuery(NAME, value));
@@ -104,22 +102,15 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return merged;
     }
 
-    public void setReviewed(List<Long> id) {
-        getEntityManager()
-                .createQuery(UPDATE + name() + ALIAS + SET_REVIEWED_TRUE + WHERE + fieldInEquals(ID))
-                .setParameter(ID, id)
-                .executeUpdate();
-    }
-
     public void remove(Entity entity) {
         getEntityManager().remove(entity);
     }
 
-    public Object getCount(){
+    public Object getCount() {
         return getEntityManager().createQuery(countSelect()).getSingleResult();
     }
 
-    public Object getCountByField(String field, Object value){
+    public Object getCountByField(String field, Object value) {
         return getEntityManager()
                 .createQuery(countSelect() + WHERE + fieldEquals(field))
                 .setParameter(field, value)
@@ -146,7 +137,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 .setParameter(field2, value2);
     }
 
-    private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2, String field3, Object value3)  {
+    private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2, String field3, Object value3) {
         return getEntityManager()
                 .createQuery(select() + WHERE + fieldEquals(field1) + AND + fieldEquals(field2) + AND + fieldEquals(field3), entity())
                 .setParameter(field1, value1)
@@ -160,7 +151,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         } catch (NoResultException e) {
             logger.debug("Query had no results." + query.getParameters());
             return null;
-        } catch (NonUniqueResultException e){
+        } catch (NonUniqueResultException e) {
             logger.debug("Query had more than 1 results." + query.getParameters());
             return null;
         }

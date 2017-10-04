@@ -1,21 +1,18 @@
 package ee.hm.dop.rest;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import org.junit.Test;
+
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+
+import static java.lang.String.format;
+import static org.junit.Assert.*;
 
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
@@ -25,6 +22,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public static final String IMPROPER_PORTFOLIOS = "admin/improper/portfolio";
     public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
     public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
+    public static final String REVIEW_IMPROPERS_BY_ID = "impropers?learningObject=%s";
     public static final Long TEST_PORFOLIO_ID = TestConstants.PORTFOLIO_1;
     public static final Long TEST_UNREVIEWED_PORFOLIO_ID = TestConstants.PORTFOLIO_8;
 
@@ -54,7 +52,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(newImproperContent.getId());
         assertEquals(TestConstants.MATERIAL_1, newImproperContent.getLearningObject().getId());
 
-        Response response = doDelete(format(GET_IMPROPERS_BY_ID, newImproperContent.getId()));
+        Response response = doDelete(format(REVIEW_IMPROPERS_BY_ID, newImproperContent.getId()));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 

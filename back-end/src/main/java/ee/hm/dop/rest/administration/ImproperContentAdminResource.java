@@ -1,6 +1,5 @@
 package ee.hm.dop.rest.administration;
 
-import com.google.common.collect.Lists;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
@@ -12,7 +11,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import java.util.List;
 
@@ -35,17 +33,6 @@ public class ImproperContentAdminResource extends BaseResource {
             throw notFound();
         }
         List<ImproperContent> impropers = improperContentService.getByLearningObject(learningObject, getLoggedInUser());
-        improperContentService.deleteAll(impropers, getLoggedInUser());
-    }
-
-    @DELETE
-    @Path("{improperContentId}")
-    @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
-    public void removeImproper(@PathParam("improperContentId") long improperContentId) {
-        ImproperContent improper = improperContentService.get(improperContentId, getLoggedInUser());
-        if (improper == null) {
-            throw notFound();
-        }
-        improperContentService.deleteAll(Lists.newArrayList(improper), getLoggedInUser());
+        improperContentService.reviewAll(impropers, getLoggedInUser());
     }
 }

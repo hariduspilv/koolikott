@@ -4,12 +4,8 @@ import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ImproperContentDao extends AbstractDao<ImproperContent> {
 
@@ -17,11 +13,11 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
         return findByField("learningObject", learningObject, "creator", creator, "reviewed", false);
     }
 
-    public ImproperContent findByIdUnreviwed(Long id) {
+    public ImproperContent findByIdUnreviewed(Long id) {
         return findByField("id", id, "reviewed", false);
     }
 
-    public List<ImproperContent> findAllUnreviwed() {
+    public List<ImproperContent> findAllUnreviewed() {
         return findByFieldList("reviewed", false);
     }
 
@@ -73,11 +69,6 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
 
     public List<ImproperContent> findByLearningObject(LearningObject learningObject) {
         return findByFieldList("learningObject", learningObject, "reviewed", false);
-    }
-
-    public void deleteAll(List<ImproperContent> impropers) {
-        List<Long> ids = impropers.stream().map(ImproperContent::getId).collect(Collectors.toList());
-        setReviewed(ids);
     }
 
     public long getImproperPortfolioCount() {

@@ -2,7 +2,10 @@ package ee.hm.dop.service.content;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.ImproperContentDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
@@ -20,7 +23,7 @@ public class ImproperContentService {
     @Inject
     private FirstReviewService firstReviewService;
 
-    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser){
+    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser) {
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
         if (UserUtil.isAdmin(loggedInUser)) {
@@ -38,6 +41,7 @@ public class ImproperContentService {
         improper.setCreatedAt(DateTime.now());
         improper.setLearningObject(learningObject);
         improper.setReason(improperContent.getReason());
+        improper.setReviewed(false);
 
         return improperContentDao.createOrUpdate(improper);
     }
@@ -57,7 +61,7 @@ public class ImproperContentService {
      * @return the ImproperContent if user has rights to access
      */
     public ImproperContent get(long improperContentId, User user) {
-        ImproperContent improperContent = improperContentDao.findByIdUnreviwed(improperContentId);
+        ImproperContent improperContent = improperContentDao.findByIdUnreviewed(improperContentId);
         if (improperContent != null && !learningObjectService.canAcess(user, improperContent.getLearningObject())) {
             return null;
         }
@@ -69,7 +73,7 @@ public class ImproperContentService {
      * @return a list of improperContent that user has rights to access
      */
     public List<ImproperContent> getAll(User user) {
-        List<ImproperContent> impropers = improperContentDao.findAllUnreviwed();
+        List<ImproperContent> impropers = improperContentDao.findAllUnreviewed();
         removeIfHasNoAccess(user, impropers);
         return impropers;
     }
@@ -101,14 +105,20 @@ public class ImproperContentService {
     }
 
     /**
-     * @param impropers the list of ImproperContent to be deleted
-     * @param user      who wants to delete the improper
+     * @param impropers the list of ImproperContent to be reviewed
+     * @param user      who wants to review the improper content
      */
-    public void deleteAll(List<ImproperContent> impropers, User user) {
+    public void reviewAll(List<ImproperContent> impropers, User user) {
         removeIfHasNoAccess(user, impropers);
         List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
         firstReviewService.setReviewed(learningObjects, user);
-        improperContentDao.deleteAll(impropers);
+        for (ImproperContent improper : impropers) {
+            improper.setReviewed(true);
+            improper.setReviewedBy(user);
+            improper.setReviewedAt(DateTime.now());
+            improper.setStatus(ReviewStatus.ACCEPTED);
+            improperContentDao.createOrUpdate(improper);
+        }
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
