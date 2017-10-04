@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -57,9 +58,7 @@ public class LearningObjectServiceTest {
         Portfolio portfolio3 = new Portfolio();
         portfolio3.setVisibility(Visibility.PUBLIC);
 
-        // Needs to be modifiable
-        List<LearningObject> firstLearningObjects = new ArrayList<>(
-                Arrays.asList(portfolio1, portfolio2, material1, portfolio3));
+        List<LearningObject> firstLearningObjects = Lists.newArrayList(portfolio1, portfolio2, material1, portfolio3);
         expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
         expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
 
@@ -94,7 +93,6 @@ public class LearningObjectServiceTest {
 
         expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
         expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(new ArrayList<>());
-        List<LearningObject> expected = Arrays.asList();
 
         replayAll(learningObjectService);
 
@@ -102,8 +100,7 @@ public class LearningObjectServiceTest {
 
         verifyAll(learningObjectService);
 
-        assertEquals(expected.size(), result.size());
-        assertTrue(result.containsAll(expected));
+        assertTrue(result.isEmpty());
     }
 
     @Test
