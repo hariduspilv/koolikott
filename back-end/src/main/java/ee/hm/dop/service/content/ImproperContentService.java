@@ -121,6 +121,19 @@ public class ImproperContentService {
         }
     }
 
+    public void reviewAll(List<ImproperContent> impropers, User user, ReviewStatus reviewStatus) {
+        removeIfHasNoAccess(user, impropers);
+        List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
+        firstReviewService.setReviewed(learningObjects, user);
+        for (ImproperContent improper : impropers) {
+            improper.setReviewed(true);
+            improper.setReviewedBy(user);
+            improper.setReviewedAt(DateTime.now());
+            improper.setStatus(reviewStatus);
+            improperContentDao.createOrUpdate(improper);
+        }
+    }
+
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
         impropers.removeIf(improper -> !learningObjectService.canAcess(user, improper.getLearningObject()));
     }
