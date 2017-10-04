@@ -114,11 +114,7 @@ public class ImproperContentService {
         List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
         firstReviewService.setReviewed(learningObjects, user);
         for (ImproperContent improper : impropers) {
-            improper.setReviewed(true);
-            improper.setReviewedBy(user);
-            improper.setReviewedAt(DateTime.now());
-            improper.setStatus(ReviewStatus.ACCEPTED);
-            improperContentDao.createOrUpdate(improper);
+            setReviewed(user, ReviewStatus.ACCEPTED, improper);
         }
     }
 
@@ -127,18 +123,24 @@ public class ImproperContentService {
         List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
         firstReviewService.setReviewed(learningObjects, user);
         for (ImproperContent improper : impropers) {
-            improper.setReviewed(true);
-            improper.setReviewedBy(user);
-            improper.setReviewedAt(DateTime.now());
-            improper.setStatus(reviewStatus);
-            improperContentDao.createOrUpdate(improper);
+            setReviewed(user, reviewStatus, improper);
         }
     }
 
-    public void deleteAll(LearningObject learningObject, User user) {
+    private void setReviewed(User user, ReviewStatus reviewStatus, ImproperContent improper) {
+        improper.setReviewed(true);
+        improper.setReviewedBy(user);
+        improper.setReviewedAt(DateTime.now());
+        improper.setStatus(reviewStatus);
+        improperContentDao.createOrUpdate(improper);
+    }
+
+    public void reviewAll(LearningObject learningObject, User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         List<ImproperContent> improperContents = learningObject.getImproperContents();
-        improperContentDao.deleteAll(improperContents);
+        for (ImproperContent improperContent : improperContents) {
+            setReviewed(user, ReviewStatus.DELETED, improperContent);
+        }
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {

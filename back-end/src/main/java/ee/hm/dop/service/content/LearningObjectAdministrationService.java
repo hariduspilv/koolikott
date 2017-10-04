@@ -60,7 +60,7 @@ public class LearningObjectAdministrationService {
 
         learningObjectDao.restore(originalLearningObject);
         firstReviewService.setReviewed(originalLearningObject, user);
-        improperContentService.deleteAll(originalLearningObject, user);
+        improperContentService.reviewAll(originalLearningObject, user);
         if (originalLearningObject instanceof Material) {
             materialAdministrationService.setMaterialNotBroken((Material) originalLearningObject, user);
         }
