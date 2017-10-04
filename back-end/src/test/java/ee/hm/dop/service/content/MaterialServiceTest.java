@@ -258,7 +258,7 @@ public class MaterialServiceTest {
 
         verify(materialDao, material);
     }
-
+/*
     @Test
     public void deleteByAdmin() {
         Long materialID = 15L;
@@ -278,9 +278,9 @@ public class MaterialServiceTest {
         materialService.delete(materialID, user);
 
         verifyAll();
-    }
+    }*/
 
-    @Test
+/*    @Test
     public void userCanNotDeleteRepositoryMaterial() {
         Long materialID = 15L;
 
@@ -303,7 +303,7 @@ public class MaterialServiceTest {
         }
 
         verifyAll();
-    }
+    }*/
 
     @Test
     public void updateByUserNullMaterial() {

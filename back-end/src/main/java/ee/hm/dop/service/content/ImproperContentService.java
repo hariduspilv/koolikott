@@ -12,7 +12,6 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ImproperContentService {
 
@@ -63,7 +62,7 @@ public class ImproperContentService {
      */
     public ImproperContent get(long improperContentId, User user) {
         ImproperContent improperContent = improperContentDao.findByIdUnreviewed(improperContentId);
-        if (improperContent != null && !learningObjectService.canAcess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.canAccess(user, improperContent.getLearningObject())) {
             return null;
         }
         return improperContent;
@@ -88,7 +87,7 @@ public class ImproperContentService {
      */
     public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
         ImproperContent improperContent = improperContentDao.findByLearningObjectAndCreator(learningObject, creator);
-        if (improperContent != null && !learningObjectService.canAcess(user, improperContent.getLearningObject())) {
+        if (improperContent != null && !learningObjectService.canAccess(user, improperContent.getLearningObject())) {
             return null;
         }
         return improperContent;
@@ -105,25 +104,10 @@ public class ImproperContentService {
         return impropers;
     }
 
-    /**
-     * @param impropers the list of ImproperContent to be reviewed
-     * @param user      who wants to review the improper content
-     */
-    public void reviewAll(List<ImproperContent> impropers, User user) {
-        removeIfHasNoAccess(user, impropers);
-        List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
-        firstReviewService.setReviewed(learningObjects, user);
-        for (ImproperContent improper : impropers) {
-            setReviewed(user, ReviewStatus.ACCEPTED, improper);
-        }
-    }
-
-    public void reviewAll(List<ImproperContent> impropers, User user, ReviewStatus reviewStatus) {
-        removeIfHasNoAccess(user, impropers);
-        List<LearningObject> learningObjects = impropers.stream().map(ImproperContent::getLearningObject).distinct().collect(Collectors.toList());
-        firstReviewService.setReviewed(learningObjects, user);
-        for (ImproperContent improper : impropers) {
-            setReviewed(user, reviewStatus, improper);
+    public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        for (ImproperContent improperContent : learningObject.getImproperContents()) {
+            setReviewed(user, reviewStatus, improperContent);
         }
     }
 
@@ -135,15 +119,7 @@ public class ImproperContentService {
         improperContentDao.createOrUpdate(improper);
     }
 
-    public void reviewAll(LearningObject learningObject, User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        List<ImproperContent> improperContents = learningObject.getImproperContents();
-        for (ImproperContent improperContent : improperContents) {
-            setReviewed(user, ReviewStatus.DELETED, improperContent);
-        }
-    }
-
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
-        impropers.removeIf(improper -> !learningObjectService.canAcess(user, improper.getLearningObject()));
+        impropers.removeIf(improper -> !learningObjectService.canAccess(user, improper.getLearningObject()));
     }
 }

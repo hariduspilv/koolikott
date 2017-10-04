@@ -188,8 +188,8 @@ public class LearningObjectAdministrationServiceTest {
         learningObjectDao.restore(originalMaterial);
         solrEngineService.updateIndex();
 
-        improperContentService.reviewAll(material.getImproperContents(), user);
-        materialAdministrationService.setMaterialNotBroken(material, user);
+//        improperContentService.setReviewed(material.getImproperContents(), user);
+        materialAdministrationService.setMaterialNotBroken(material);
         expect(learningObjectService.validateAndFindDeletedOnly(material)).andReturn(originalMaterial);
 
         replayAll();

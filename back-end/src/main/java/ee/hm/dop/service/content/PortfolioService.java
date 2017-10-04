@@ -123,17 +123,6 @@ public class PortfolioService implements PermissionItem {
         }
     }
 
-    public void delete(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = findValid(portfolio);
-
-        if (!canUpdate(loggedInUser, originalPortfolio)) {
-            throw ValidatorUtil.permissionError();
-        }
-
-        portfolioDao.delete(originalPortfolio);
-        solrEngineService.updateIndex();
-    }
-
     public Portfolio create(Portfolio portfolio, User creator) {
         ValidatorUtil.mustNotHaveId(portfolio);
         TextFieldUtil.cleanTextFields(portfolio);

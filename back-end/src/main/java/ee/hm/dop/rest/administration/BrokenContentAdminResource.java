@@ -9,8 +9,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.MaterialAdministrationService;
 
 @Path("admin/brokenContent/")
@@ -18,6 +20,8 @@ public class BrokenContentAdminResource extends BaseResource {
 
     @Inject
     private MaterialAdministrationService materialAdministrationService;
+    @Inject
+    private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @GET
     @Path("getBroken")
@@ -48,6 +52,6 @@ public class BrokenContentAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN})
     public void setNotBroken(Material material) {
-        materialAdministrationService.setMaterialNotBroken(material, getLoggedInUser());
+        learningObjectAdministrationService.setEverythingReviewedRefreshLO(getLoggedInUser(), material, ReviewStatus.ACCEPTED);
     }
 }

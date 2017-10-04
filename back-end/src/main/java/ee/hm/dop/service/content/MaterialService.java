@@ -107,17 +107,6 @@ public class MaterialService implements PermissionItem {
         }
     }
 
-    //todo admin functionality
-    public void delete(Long materialID, User loggedInUser) {
-        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
-
-        Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
-        ValidatorUtil.mustHaveEntity(originalMaterial);
-
-        materialDao.delete(originalMaterial);
-        solrEngineService.updateIndex();
-    }
-
     public Material validateAndFindNotDeleted(Material material) {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
     }

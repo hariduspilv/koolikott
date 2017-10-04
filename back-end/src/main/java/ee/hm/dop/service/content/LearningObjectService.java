@@ -19,10 +19,10 @@ public class LearningObjectService {
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
-        return canAcess(user, learningObject) ? learningObject : null;
+        return canAccess(user, learningObject) ? learningObject : null;
     }
 
-    public boolean canAcess(User user, LearningObject learningObject) {
+    public boolean canAccess(User user, LearningObject learningObject) {
         if (learningObject == null) return false;
         return getLearningObjectHandler(learningObject).canInteract(user, learningObject);
     }
@@ -30,6 +30,11 @@ public class LearningObjectService {
     public boolean canView(User user, LearningObject learningObject) {
         if (learningObject == null) return false;
         return getLearningObjectHandler(learningObject).canView(user, learningObject);
+    }
+
+    public boolean canUpdate(User user, LearningObject learningObject) {
+        if (learningObject == null) return false;
+        return getLearningObjectHandler(learningObject).canUpdate(user, learningObject);
     }
 
     public LearningObject validateAndFind(LearningObject learningObject) {

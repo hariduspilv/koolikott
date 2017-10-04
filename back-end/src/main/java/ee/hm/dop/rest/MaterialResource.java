@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.MaterialProxy;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -47,6 +48,8 @@ public class MaterialResource extends BaseResource {
     private MaterialProxy materialProxy;
     @Inject
     private UserLikeService userLikeService;
+    @Inject
+    private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -139,7 +142,11 @@ public class MaterialResource extends BaseResource {
     @Path("{materialID}")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(@PathParam("materialID") Long materialID) {
-        materialService.delete(materialID, getLoggedInUser());
+        Material material = materialService.get(materialID, getLoggedInUser());
+        if (material == null) {
+            throw notFound();
+        }
+        learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 
     @PUT

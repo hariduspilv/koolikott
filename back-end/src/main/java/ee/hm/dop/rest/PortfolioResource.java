@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserLikeService;
@@ -31,6 +32,8 @@ public class PortfolioResource extends BaseResource {
     private PortfolioCopier portfolioCopier;
     @Inject
     private UserLikeService userLikeService;
+    @Inject
+    private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -123,7 +126,7 @@ public class PortfolioResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(Portfolio portfolio) {
-        portfolioService.delete(portfolio, getLoggedInUser());
+        learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
     }
 
     private User getValidCreator(@QueryParam("username") String username) {
