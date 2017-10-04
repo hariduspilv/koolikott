@@ -1,14 +1,11 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.BrokenContentDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
-import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
@@ -22,7 +19,6 @@ import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +31,6 @@ import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
 public class MaterialService implements PermissionItem {
@@ -46,8 +41,6 @@ public class MaterialService implements PermissionItem {
     private MaterialDao materialDao;
     @Inject
     private SolrEngineService solrEngineService;
-    @Inject
-    private BrokenContentDao brokenContentDao;
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
@@ -72,12 +65,6 @@ public class MaterialService implements PermissionItem {
             return materialDao.findById(materialId);
         }
         return materialDao.findByIdNotDeleted(materialId);
-    }
-
-    public void increaseViewCount(Material material) {
-        material.setViews(material.getViews() + 1);
-        createOrUpdate(material);
-        solrEngineService.updateIndex();
     }
 
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
@@ -258,19 +245,6 @@ public class MaterialService implements PermissionItem {
         }
 
         return material;
-    }
-
-    public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
-        Material originalMaterial = validateAndFindNotDeleted(material);
-
-        BrokenContent brokenContent = new BrokenContent();
-        brokenContent.setCreator(loggedInUser);
-        brokenContent.setMaterial(originalMaterial);
-        return brokenContentDao.update(brokenContent);
-    }
-
-    public Boolean hasSetBroken(long materialId, User loggedInUser) {
-        return isNotEmpty(brokenContentDao.findByMaterialAndUser(materialId, loggedInUser));
     }
 
     public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {

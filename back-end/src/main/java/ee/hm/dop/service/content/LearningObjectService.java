@@ -2,9 +2,12 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.learningObject.PermissionFactory;
+import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
@@ -16,10 +19,19 @@ public class LearningObjectService {
 
     @Inject
     private LearningObjectDao learningObjectDao;
+    @Inject
+    private SolrEngineService solrEngineService;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
         return canAccess(user, learningObject) ? learningObject : null;
+    }
+
+    public void incrementViewCount(LearningObject learningObject) {
+        LearningObject originalPortfolio = validateAndFindIncludeDeleted(learningObject);
+
+        learningObjectDao.incrementViewCount(originalPortfolio);
+        solrEngineService.updateIndex();
     }
 
     public boolean canAccess(User user, LearningObject learningObject) {

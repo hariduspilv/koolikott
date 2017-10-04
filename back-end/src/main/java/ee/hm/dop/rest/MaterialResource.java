@@ -26,9 +26,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
-import ee.hm.dop.service.content.LearningObjectAdministrationService;
-import ee.hm.dop.service.content.MaterialProxy;
-import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.useractions.UserLikeService;
@@ -50,6 +48,10 @@ public class MaterialResource extends BaseResource {
     private UserLikeService userLikeService;
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
+    @Inject
+    private BrokenContentService brokenContentService;
+    @Inject
+    private LearningObjectService learningObjectService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,10 +86,11 @@ public class MaterialResource extends BaseResource {
 
         Material originalMaterial = materialService.get(materialId, getLoggedInUser());
         if (originalMaterial == null) {
-            return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
+            throw notFound();
+//            Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
         }
 
-        materialService.increaseViewCount(originalMaterial);
+        learningObjectService.incrementViewCount(originalMaterial);
         return Response.status(HttpURLConnection.HTTP_OK).build();
     }
 
@@ -169,7 +172,7 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public BrokenContent setBrokenMaterial(Material material) {
-        return materialService.addBrokenMaterial(material, getLoggedInUser());
+        return brokenContentService.addBrokenMaterial(material, getLoggedInUser());
     }
 
     @GET
@@ -177,7 +180,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
-        return user != null ? materialService.hasSetBroken(materialId, getLoggedInUser()) : false;
+        return user != null ? brokenContentService.hasSetBroken(materialId, getLoggedInUser()) : false;
     }
 
     @GET

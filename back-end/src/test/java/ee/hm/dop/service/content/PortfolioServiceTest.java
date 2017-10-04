@@ -55,40 +55,6 @@ public class PortfolioServiceTest {
         assertSame(portfolio, result);
     }
 
-    @Test
-    public void incrementViewCount() {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(99L);
-        Portfolio originalPortfolio = createMock(Portfolio.class);
-        expect(portfolioDao.findById(portfolio.getId())).andReturn(originalPortfolio);
-        portfolioDao.incrementViewCount(originalPortfolio);
-        solrEngineService.updateIndex();
-
-        replayAll(originalPortfolio);
-
-        portfolioService.incrementViewCount(portfolio);
-
-        verifyAll(originalPortfolio);
-    }
-
-    @Test
-    public void incrementViewCountPortfolioNotFound() {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(99L);
-        expect(portfolioDao.findById(portfolio.getId())).andReturn(null);
-
-        replayAll();
-
-        try {
-            portfolioService.incrementViewCount(portfolio);
-            fail("Exception expected");
-        } catch (Exception e) {
-            // expected
-        }
-
-        verifyAll();
-    }
-
     private void replayAll(Object... mocks) {
         replay(portfolioDao, solrEngineService);
 

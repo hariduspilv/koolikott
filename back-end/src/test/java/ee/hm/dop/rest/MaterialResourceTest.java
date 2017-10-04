@@ -101,7 +101,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
         response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTING_MATERIAL_ID));
-        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
         response = doGet(format(GET_MATERIAL_URL, NOT_EXISTING_MATERIAL_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());

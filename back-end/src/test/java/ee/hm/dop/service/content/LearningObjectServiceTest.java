@@ -1,11 +1,9 @@
 package ee.hm.dop.service.content;
 
-import static org.easymock.EasyMock.createMockBuilder;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -134,6 +132,40 @@ public class LearningObjectServiceTest {
 
         assertEquals(expected.size(), result.size());
         assertTrue(result.containsAll(expected));
+    }
+
+    @Test
+    public void incrementViewCount() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(99L);
+        Portfolio originalPortfolio = createMock(Portfolio.class);
+        expect(learningObjectDao.findById(portfolio.getId())).andReturn(originalPortfolio);
+        learningObjectDao.incrementViewCount(originalPortfolio);
+        solrEngineService.updateIndex();
+
+        replayAll(originalPortfolio);
+
+        learningObjectService.incrementViewCount(portfolio);
+
+        verifyAll(originalPortfolio);
+    }
+
+    @Test
+    public void incrementViewCountPortfolioNotFound() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(99L);
+        expect(learningObjectDao.findById(portfolio.getId())).andReturn(null);
+
+        replayAll();
+
+        try {
+            learningObjectService.incrementViewCount(portfolio);
+            fail("Exception expected");
+        } catch (Exception e) {
+            // expected
+        }
+
+        verifyAll();
     }
 
     private void replayAll(Object... mocks) {

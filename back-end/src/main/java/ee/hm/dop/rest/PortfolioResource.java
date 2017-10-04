@@ -16,6 +16,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserLikeService;
@@ -34,6 +35,8 @@ public class PortfolioResource extends BaseResource {
     private UserLikeService userLikeService;
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
+    @Inject
+    private LearningObjectService learningObjectService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,7 +68,7 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("increaseViewCount")
     public void increaseViewCount(Portfolio portfolio) {
-        portfolioService.incrementViewCount(portfolio);
+        learningObjectService.incrementViewCount(portfolio);
     }
 
     @POST

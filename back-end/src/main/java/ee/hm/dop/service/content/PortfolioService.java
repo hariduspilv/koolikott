@@ -68,13 +68,6 @@ public class PortfolioService implements PermissionItem {
         return portfolioDao.findCountByCreator(creator);
     }
 
-    public void incrementViewCount(Portfolio portfolio) {
-        Portfolio originalPortfolio = findValidIncludeDeleted(portfolio);
-
-        portfolioDao.incrementViewCount(originalPortfolio);
-        solrEngineService.updateIndex();
-    }
-
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
 
