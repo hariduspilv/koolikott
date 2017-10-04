@@ -3,6 +3,7 @@ package ee.hm.dop.dao;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
 
 import javax.inject.Inject;
