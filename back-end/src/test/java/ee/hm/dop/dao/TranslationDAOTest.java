@@ -20,7 +20,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
     public void getTranslationGroupForEstonian() {
         Language language = new Language();
         language.setId((long) 1);
-        language.setCode("est");
+        language.setCode(LanguageC.EST);
 
         TranslationGroup translationGroup = translationDAO.findTranslationGroupFor(language);
 
@@ -66,7 +66,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
     public void getTranslationGroupForRussian() {
         Language language = new Language();
         language.setId((long) 2);
-        language.setCode("rus");
+        language.setCode(LanguageC.RUS);
 
         TranslationGroup translationGroup = translationDAO.findTranslationGroupFor(language);
 

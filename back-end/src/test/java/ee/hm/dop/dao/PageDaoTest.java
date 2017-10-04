@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Page;
+import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
 
 public class PageDaoTest extends DatabaseTestBase {
@@ -21,7 +22,7 @@ public class PageDaoTest extends DatabaseTestBase {
     @Test
     public void findByNameAndLang() {
         String pageName = "Help";
-        String pageLanguageCode = "eng";
+        String pageLanguageCode = LanguageC.ENG;
         Language pageLanguage = languageDao.findByCode(pageLanguageCode);
 
         Page page = pageDao.findByNameAndLanguage(pageName, pageLanguage);
@@ -36,7 +37,7 @@ public class PageDaoTest extends DatabaseTestBase {
     @Test
     public void findByNameAndLangPassingNull() {
         String pageName = null;
-        String pageLanguageCode = "eng";
+        String pageLanguageCode = LanguageC.ENG;
         Language pageLanguage = languageDao.findByCode(pageLanguageCode);
 
         assertNull(pageDao.findByNameAndLanguage(pageName, pageLanguage));
@@ -45,7 +46,7 @@ public class PageDaoTest extends DatabaseTestBase {
     @Test
     public void findByNameAndLangPassingNotExistingPage() {
         String pageName = "doesntExist";
-        String pageLanguageCode = "eng";
+        String pageLanguageCode = LanguageC.ENG;
         Language pageLanguage = languageDao.findByCode(pageLanguageCode);
 
         assertNull(pageDao.findByNameAndLanguage(pageName, pageLanguage));

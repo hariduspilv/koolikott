@@ -5,6 +5,7 @@ import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.NameValuePair;
@@ -300,7 +301,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticate() {
         String phoneNumber = "+37255551234";
         String idCode = "22334455667";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         MobileIDSecurityCodes mobileIDSecurityCodes = response.readEntity(new GenericType<MobileIDSecurityCodes>() {
@@ -325,7 +326,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateNotValid() {
         String phoneNumber = "+37244441234";
         String idCode = "33445566778";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         MobileIDSecurityCodes mobileIDSecurityCodes = response.readEntity(new GenericType<MobileIDSecurityCodes>() {
@@ -342,7 +343,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateMissingResponseFields() {
         String phoneNumber = "+37233331234";
         String idCode = "44556677889";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         assertEquals(204, response.getStatus());
@@ -352,7 +353,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateInvalidPhoneNumber() {
         String phoneNumber = "+3721";
         String idCode = "55667788990";
-        String language = "est";
+        String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         assertEquals(204, response.getStatus());
@@ -362,7 +363,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void mobileIDAuthenticateNonEstonianPhoneNumber() {
         String phoneNumber = "+37077778888";
         String idCode = "66778899001";
-        String language = "eng";
+        String language = LanguageC.ENG;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
         assertEquals(204, response.getStatus());

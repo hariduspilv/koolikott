@@ -74,6 +74,7 @@ public class MaterialServiceTest {
         expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
+        expect(firstReviewService.save(material)).andReturn(null);
         solrEngineService.updateIndex();
 
         replayAll();
