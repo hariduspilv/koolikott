@@ -1,28 +1,24 @@
-<section layout="column" layout-gt-sm="row" role="main">
-  <article flex-gt-xs="75">
+<div data-layout="column" data-layout-gt-sm="row">
+  <div flex-gt-xs="75">
     <md-card class="card-mb-20" data-ng-if="showFirstMessage">
       <md-toolbar>
         <p class="md-toolbar-text" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
       </md-toolbar>
     </md-card>
-
     <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
-
-    <div id="portfolio-chapters">
+    <div>
       <div data-ng-repeat="chapter in portfolio.chapters track by $index">
         <dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
       </div>
     </div>
-
     <md-card class="card-mb-20">
       <md-button aria-label="Lisa uus peatükk" data-ng-click="addNewChapter()">
         <md-icon class="material-icons">add</md-icon>
         <span data-translate="CHAPTER"></span>
       </md-button>
     </md-card>
-  </article>
-
+  </div>
   <aside flex-gt-sm="25">
     <div data-dop-aside data-learning-object="portfolio"></div>
   </aside>
-</section>
+</div>

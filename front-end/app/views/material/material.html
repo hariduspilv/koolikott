@@ -1,10 +1,8 @@
-<section layout="column" layout-gt-sm="row" role="main">
-  <article role="main" id="page-view-material" flex-gt-sm="75">
+<div data-layout="column" data-layout-gt-sm="row">
+  <div flex-gt-sm="75">
     <div ng-if="modUser()" dop-error-message data="material"></div>
-
     <!-- same as portfolioSummaryCard in directives -->
     <md-card class="card-lg card-mb-20" id="material-card">
-
       <!-- SECTION 1 -->
       <div layout-gt-xs="row">
         <!-- SECTION 1: Left -->
@@ -33,13 +31,11 @@
               <dop-share
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
-
               <md-menu>
                 <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
                 <md-menu-content width="4" class="material-menu-icon">
-
                   <md-menu-item
                     data-ng-if="isAdmin() || isUsersMaterial() || isModerator()">
                     <md-button data-ng-click="edit()">
@@ -47,33 +43,31 @@
                       <span data-translate="MATERIAL_EDIT"></span>
                     </md-button>
                   </md-menu-item>
-
                   <md-menu-item data-ng-if="isAdmin() && material.deleted && !isAdminButtonsShowing()">
                     <md-button data-ng-click="restoreMaterial()">
                       <md-icon md-menu-align-target>undo</md-icon>
                       <span data-translate="BUTTON_RESTORE"></span>
                     </md-button>
                   </md-menu-item>
-
                   <md-menu-item data-ng-if="isAdmin() && !material.deleted && !isAdminButtonsShowing()">
                     <md-button data-ng-click="confirmMaterialDeletion()">
                       <md-icon md-menu-align-target>delete</md-icon>
                       <span data-translate="MATERIAL_DELETE"></span>
                     </md-button>
                   </md-menu-item>
-
                   <md-menu-item dop-copy-permalink data-url="pageUrl"></md-menu-item>
                   <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
-                  <md-menu-item data-ng-if="isAdmin()" dop-recommend data-material="material"></md-menu-item>
-
+                  <md-menu-item
+                    dop-recommend
+                    data-material="material"
+                    data-on-change="setRecommendation(recommendation)"
+                    data-ng-if="isAdmin()"
+                  ></md-menu-item>
                   <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
-
                   <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
                                 data-learning-object="material"></md-menu-item>
-
                   <md-menu-item data-ng-if="!isAdmin()"
                                 dop-report-broken-link></md-menu-item>
-
                   <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
                                 data-learning-object="material">
                   </md-menu-item>
@@ -81,7 +75,6 @@
               </md-menu>
             </div>
           </div>
-
           <!-- Meta -->
           <div class="card-lg__container card-lg__container--padding-l-r" layout="row">
             <!-- Education -->
@@ -135,28 +128,23 @@
               </p>
             </div>
           </div>
-
           <md-divider class="md-default-theme"></md-divider>
           <!-- Description  -->
           <div class="card-lg__container card-lg__container--padding-l-r">
             <div class="md-body-1 description textangular-view"
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
-
             <!--Embedded Material-->
             <div data-embeddable="material.embeddable"
                  data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortforlioPage && !isEditPortfolioPage}"
                  data-dop-embedded-material data-material="material" data-flex></div>
           </div>
-
           <!-- Tags -->
           <dop-tags data-ng-if="material && material.id"
                     class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material"></dop-tags>
         </div>
-
         <!-- SECTION 1: Right  -->
         <div flex flex-gt-xs="25" class="card-lg__container--border-left">
-
           <!-- Image -->
           <div class="card-media" data-ng-class="{'active': material.selected}">
             <dop-pick-material data-learning-object="material"></dop-pick-material>
@@ -178,7 +166,6 @@
               <!-- Icon on pattern -->
               <md-icon class="icon-kind" data-ng-bind="getType()" data-ng-if="!material.picture"></md-icon>
             </div>
-
             <!-- Overlay / Info -->
             <div class="card-lg__overlay card-lg__container">
               <p class="md-body-2 no-margin">
@@ -189,7 +176,6 @@
               </p>
             </div>
           </div>
-
           <!-- Metadata 1 -->
           <md-content class="card-lg__container">
             <!-- Author(s) -->
@@ -228,11 +214,9 @@
               <span class="md-caption caption-light">
                 <span data-translate="CREATED"></span>:
               </span>
-
               <span data-ng-if="material.issueDate.year >= 100">
                 {{formatMaterialIssueDate(material.issueDate)}}
               </span>
-
               <span data-ng-if="material.issueDate.year > 0 && material.issueDate.year < 100">
                 {{formatMaterialIssueDate(material.issueDate)}} AD
               </span>
@@ -251,9 +235,7 @@
               {{formatMaterialUpdatedDate(material.added)}}
             </p>
           </md-content>
-
           <md-divider class="md-default-theme"></md-divider>
-
           <!-- Metadata 2 -->
           <md-content class="card-lg__container">
             <!-- Age -->
@@ -304,7 +286,6 @@
                     <span data-ng-bind="type.toUpperCase()"></span>
                   </md-tooltip>
                 </span>
-
                 <span data-ng-if="!getLicenseIconList().length" data-ng-switch data-on="material.licenseType.name">
                   <a data-ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms"
                      data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}" target="_blank"></a>
@@ -312,15 +293,11 @@
                 </span>
                 <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
               </span>
-
-
             </p>
           </md-content>
         </div>
       </div>
-
       <md-divider class="md-default-theme"></md-divider>
-
       <!-- SECTION 2: Actions -->
       <md-card-actions class="card-lg__actions" layout="column" layout-gt-xs="row">
         <div flex flex-gt-xs="75" class="card-lg__container" layout="row" layout-align="space-between center">
@@ -357,16 +334,16 @@
                       dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></dop-rating>
         </div>
       </md-card-actions>
-
       <!-- SECTION 3: Comments -->
-      <dop-comments-card comments="material.comments" comment="newComment"
-                         submit-click="addComment()" is-open="commentsOpen"></dop-comments-card>
-
-
+      <dop-comments-card
+        comments="material.comments"
+        comment="newComment"
+        submit-click="addComment()"
+        is-open="commentsOpen"
+      ></dop-comments-card>
     </md-card>
-  </article>
-
+  </div>
   <aside flex-gt-sm="25">
     <div data-dop-aside data-learning-object="material"></div>
   </aside>
-</section>
+</div>

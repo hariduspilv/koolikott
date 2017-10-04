@@ -437,5 +437,10 @@ angular.module('koolikottApp')
                     return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
             }
+
+            $scope.setRecommendation = (recommendation) => {
+                if ($scope.material)
+                    $scope.material.recommendation = recommendation
+            }
         }
     ]);

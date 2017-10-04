@@ -47,7 +47,12 @@
               <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
               <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
 
-              <md-menu-item data-ng-if="isAdmin()" dop-recommend data-portfolio="portfolio"></md-menu-item>
+              <md-menu-item
+                dop-recommend
+                data-portfolio="portfolio"
+                data-on-change="setRecommendation(recommendation)"
+                data-ng-if="isAdmin()"
+              ></md-menu-item>
 
               <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
               <md-menu-item data-ng-if="!isAdminOrModerator()" dop-report-improper

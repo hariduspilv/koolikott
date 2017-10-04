@@ -1,22 +1,21 @@
-<div id="page-profile" flex>
-  <article class="md-padding" role="main">
-    <h1>{{user.name}} {{user.surname}}</h1>
-    <h1 data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h1>
-
-    <div class="card-container">
-      <div data-ng-repeat="item in portfolios track by item.id" class="card-container__item">
-        <dop-card-sm learning-object="item"></dop-card-sm>
-      </div>
-      <div data-ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
-    </div>
-
-    <h1 class="type-block" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h1>
-
-    <div class="card-container">
-      <div data-ng-repeat="item in materials track by item.id" class="card-container__item">
-        <dop-card-sm learning-object="item"></dop-card-sm>
-      </div>
-      <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
-    </div>
-  </article>
+<div data-layout="row">
+  <h1 class="md-display-1" data-ng-bind="user.name+' '+user.surname"></h1>
+</div>
+<div data-layout="row">
+  <h2 class="md-headline" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h2>
+</div>
+<div class="card-container">
+  <div data-ng-repeat="item in portfolios track by item.id" class="card-container__item">
+    <dop-card-sm learning-object="item"></dop-card-sm>
+  </div>
+  <div data-ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
+</div>
+<div data-layout="row">
+  <h2 class="md-headline" data-translate="PROFILE_PAGE_TITLE_MATERIALS"></h2>
+</div>
+<div class="card-container">
+  <div data-ng-repeat="item in materials track by item.id" class="card-container__item">
+    <dop-card-sm learning-object="item"></dop-card-sm>
+  </div>
+  <div data-ng-repeat="i in [1,2,3,4,5,6]" class="card-container__item card-container__item--empty"><div><md-card class="card-sm"></md-card></div></div>
 </div>

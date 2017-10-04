@@ -626,3 +626,29 @@ if (typeof localStorage === 'object') {
         alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
     }
 }
+
+/**
+ * Base class for component/directive controllers.
+ * It auto-assigns all injected dependendcies as instace properties.
+ *
+ * Usage:
+ *      class MyController extends Controller {
+ *          $onInit() {
+ *              // this.$scope and this.$timeout are now available
+ *          }
+ *      }
+ *      MyController.$inject = ['$scope', '$timeout']
+ *
+ *      angular.module('myModule').component('myComponent', {
+ *          bindings: {},
+ *          templateUrl: '...',
+ *          controller: MyController
+ *      })
+ */
+class Controller {
+    constructor() {
+        this.constructor.$inject.forEach((name, idx) =>
+            this[name] = arguments[idx]
+        )
+    }
+}

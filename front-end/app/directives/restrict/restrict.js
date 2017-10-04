@@ -1,59 +1,53 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopRestrict',
-[
-    'translationService', 'authenticatedUserService', 'serverCallService', 'toastService',
-    function (translationService, authenticatedUserService, serverCallService, toastService) {
-        return {
-            scope: {
-                learningObject: '='
-            },
-            templateUrl: 'directives/restrict/restrict.html',
-            controller: ['$scope', function ($scope) {
-                if ($scope.learningObject && $scope.learningObject.creator) {
-                    $scope.isCreatorRestricted = isUserRestricted($scope.learningObject.creator);
-                }
+{
+class controller extends Controller {
+    $onInit() {
+        if (this.$scope.learningObject && this.$scope.learningObject.creator) {
+            if (this.authenticatedUserService.isAdmin() ||
+                this.authenticatedUserService.isModerator()
+            )
+                console.info('%c@todo: Creator of this material is admin or moderator. Should “Restrict material creator” button be hidden or disabled?', 'color: blue')
 
-                $scope.restrictCreator = function() {
-                    serverCallService.makePost("rest/user/restrictUser", $scope.learningObject.creator, restrictSuccess, restrictFail)
-                };
-
-                function restrictSuccess(user) {
-                    if (isUserRestricted(user)) {
-                        $scope.isCreatorRestricted = true;
-                        toastService.show('USER_RESTRICTED');
-                    } else {
-                        restrictFail();
-                    }
-                }
-
-                function restrictFail() {
-                    console.log("Setting creators role to 'RESTRICTED' failed");
-                }
-
-                $scope.removeCreatorsRestriction = function() {
-                    serverCallService.makePost("rest/user/removeRestriction", $scope.learningObject.creator, restrictRemoveSuccess, restrictRemoveFail)
-
-                };
-
-                function restrictRemoveSuccess(user) {
-                    if (user.role === "USER") {
-                        $scope.isCreatorRestricted = false;
-                        toastService.show('USER_RESTRICTION_REMOVED');
-                    } else {
-                        restrictRemoveFail();
-                    }
-                }
-
-                function restrictRemoveFail() {
-                    console.log("Removing creators 'RESTRICTED' role has failed");
-                }
-
-                function isUserRestricted(user) {
-                    return user.role === 'RESTRICTED';
-                }
-            }]
-        };
+            this.$scope.toggleRestrict = this.toggleRestrict.bind(this)
+            this.setState(this.$scope.learningObject.creator)
+        } else
+            this.$scope.noCreator = true
     }
-]);
+    setState(user) {
+        this.creator = user
+        this.$scope.labelTranslationKey = user.role === 'RESTRICTED'
+            ? 'BUTTON_REMOVE_CREATORS_RESTRICTION'
+            : 'BUTTON_RESTRICT_CREATOR'
+    }
+    toggleRestrict() {
+        const url = this.creator.role === 'RESTRICTED'
+            ? 'rest/user/removeRestriction'
+            : 'rest/user/restrictUser'
+
+        this.serverCallService.makePost(url, this.creator).then(({ data: user }) => {
+            if (user) {
+                this.setState(user)
+                toastService.show(
+                    user.role === 'RESTRICTED'
+                        ? 'USER_RESTRICTED'
+                        : 'USER_RESTRICTION_REMOVED'
+                )
+            }
+        })
+    }
+}
+controller.$inject = ['$scope', 'serverCallService', 'toastService', 'authenticatedUserService']
+
+/**
+ * Declaring this as a directive since we need to use it as an attribute on
+ * <md-menu-item> (component usage is restricted to element tagname only).
+ */
+angular.module('koolikottApp').directive('dopRestrict', () => ({
+    scope: {
+        learningObject: '<'
+    },
+    templateUrl: 'directives/restrict/restrict.html',
+    controller
+}))
+}
