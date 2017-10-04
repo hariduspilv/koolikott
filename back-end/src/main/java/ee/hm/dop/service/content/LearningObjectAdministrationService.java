@@ -52,11 +52,7 @@ public class LearningObjectAdministrationService {
     }
 
     public void restore(LearningObject learningObject, User user) {
-        if (learningObject instanceof Material) {
-            UserUtil.mustBeAdmin(user);
-        } else {
-            UserUtil.mustBeModeratorOrAdmin(user);
-        }
+        UserUtil.mustBeAdmin(user);
         LearningObject originalLearningObject = learningObjectService.validateAndFindDeletedOnly(learningObject);
 
         learningObjectDao.restore(originalLearningObject);
