@@ -306,58 +306,6 @@ public class MaterialServiceTest {
     }
 
     @Test
-    public void restore() {
-        Long materialID = 15L;
-
-        Material material = new Material();
-        material.setId(materialID);
-
-        Material originalMaterial = new Material();
-        originalMaterial.setId(15L);
-
-        User user = new User();
-        user.setRole(Role.ADMIN);
-
-        expect(materialDao.findById(materialID)).andReturn(originalMaterial);
-        materialDao.restore(originalMaterial);
-        solrEngineService.updateIndex();
-
-        replayAll();
-
-        materialService.restore(material, user);
-
-        verifyAll();
-    }
-
-    @Test
-    public void userCanNotRestoreRepositoryMaterial() {
-        Long materialID = 15L;
-
-        Material material = new Material();
-        material.setId(materialID);
-
-        Material originalMaterial = new Material();
-        originalMaterial.setId(materialID);
-        originalMaterial.setRepository(new Repository());
-        originalMaterial.setRepositoryIdentifier("asd");
-
-        User user = new User();
-        user.setRole(Role.USER);
-
-//        expect(materialDao.findById(materialID)).andReturn(originalMaterial);
-
-        replayAll();
-
-        try {
-            materialService.restore(material, user);
-        } catch (RuntimeException e) {
-            assertEquals(UserUtil.MUST_BE_ADMIN, e.getMessage());
-        }
-
-        verifyAll();
-    }
-
-    @Test
     public void updateByUserNullMaterial() {
         User user = createMock(User.class);
 
