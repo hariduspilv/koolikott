@@ -47,6 +47,8 @@ public class MaterialServiceTest {
     private PeerReviewService peerReviewService;
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
+    @Mock
+    private FirstReviewService firstReviewService;
 
     @Test
     public void create() {
