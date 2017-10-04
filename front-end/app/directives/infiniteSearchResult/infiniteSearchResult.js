@@ -1,137 +1,118 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopInfiniteSearchResult',
-[
-    'serverCallService',
-    function (serverCallService) {
-        return {
-            scope: {
-                params: '=',
-                url: '=?',
-                title: '=',
-                subtitle: '=',
-                filter: '=',
-                cache: '<?'
-            },
-            templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
-            controller: ['$scope', '$location', 'searchService', '$timeout', function ($scope, $location, searchService, $timeout) {
-                $scope.searching = false;
-                $scope.accessor = {};
-                var searchCount = 0;
+{
+class controller extends Controller {
+    $onInit() {
+        this.initialParams = { ...this.params }
+        this.searchCount = 0
+        this.maxResults = this.params
+            ? this.params.maxResults || this.params.limit
+            : null
+        this.expectedItemCount = this.maxResults
 
-                $scope.sortOptions = [{
-                    option: 'MOST_LIKED',
-                    field: 'like_score',
-                    direction: 'desc'
-                }, {
-                    option: 'ADDED_DATE_DESC',
-                    field: 'added',
-                    direction: 'desc'
-                }, {
-                    option: 'VIEW_COUNT_DESC',
-                    field: 'views',
-                    direction: 'desc'
-                }];
+        if (!this.url)
+            this.url = "rest/search"
+        
+        if (!this.params)
+            this.params = {}
 
-                // Pagination variables
-                let maxResults = $scope.params ? $scope.params.maxResults || $scope.params.limit : null;
-                let expectedItemCount = maxResults;
-                let initialParams = $scope.params;
+        this.$scope.title = this.title
+        this.$scope.subtitle = this.subtitle
+        this.$scope.filter = this.filter
+        this.$scope.items = []
+        this.$scope.searching = false
+        this.$scope.sortOptions = [{
+            option: 'MOST_LIKED',
+            field: 'like_score',
+            direction: 'desc'
+        }, {
+            option: 'ADDED_DATE_DESC',
+            field: 'added',
+            direction: 'desc'
+        }, {
+            option: 'VIEW_COUNT_DESC',
+            field: 'views',
+            direction: 'desc'
+        }]
 
-                $scope.items = [];
+        this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
+        this.$scope.allResultsLoaded = () => this.allResultsLoaded()
+        this.$scope.sort = (field, direction) => {
+            field
+                ? this.params.sort = field
+                : this.params.sort = this.initialParams.sort
 
-                function init() {
-                    if (isEmpty($scope.url)) $scope.url = "rest/search";
-                    if (!$scope.params) {
-                        $scope.params = {};
-                    }
+            direction
+                ? this.params.sortDirection = direction
+                : this.params.sortDirection = this.initialParams.sortDirection
 
-                    search();
-                }
+            this.searchCount = 0
+            this.expectedItemCount = this.maxResults
 
-                $scope.nextPage = function () {
-                    $timeout(function () {
-                        search()
-                    });
-                };
+            this.search(true)
+        }
 
-                $scope.allResultsLoaded = function () {
-                    return allResultsLoaded();
-                };
-
-                function allResultsLoaded() {
-                    return $scope.items.length >= $scope.totalResults;
-                }
-
-
-                function search(newSearch) {
-                    if ($scope.searching) return;
-                    if (allResultsLoaded() && !newSearch) return;
-                    $scope.searching = true;
-
-                    if (searchCount === 0) {
-                        $scope.start = 0;
-                    } else {
-                        $scope.start = searchCount * maxResults;
-                    }
-                    $scope.params.limit = maxResults;
-                    $scope.params.maxResults = maxResults;
-                    $scope.params.start = $scope.start;
-
-                    serverCallService.makeGet(
-                        $scope.url,
-                        $scope.params,
-                        searchSuccess,
-                        searchFail,
-                        {},
-                        false,
-                        $scope.cache === false ? $scope.cache : true
-                    );
-                }
-
-                function searchSuccess(data) {
-                    if (!data || !data.items) {
-                        searchFail();
-                        return;
-                    }
-                    if (data.start === 0) {
-                        $scope.items = data.items;
-                    } else {
-                        $scope.items.push.apply($scope.items, data.items);
-                    }
-                    $scope.totalResults = data.totalResults;
-
-                    $scope.searching = false;
-                    searchCount++;
-
-                    searchMoreIfNecessary();
-                }
-
-                function searchFail() {
-                    console.log('Search failed.');
-                    $scope.searching = false;
-                }
-
-                function searchMoreIfNecessary() {
-                    if ($scope.items.length < expectedItemCount && !allResultsLoaded()) {
-                        search();
-                    } else {
-                        expectedItemCount += maxResults;
-                    }
-                }
-
-                $scope.sort = function (field, direction) {
-                    field ? $scope.params.sort = field : $scope.params.sort = initialParams.sort;
-                    direction ? $scope.params.sortDirection = direction : $scope.params.sortDirection = initialParams.sortDirection;
-                    searchCount = 0;
-                    expectedItemCount = maxResults;
-
-                    search(true);
-                };
-
-                init();
-            }]
-        };
+        this.search()
     }
-]);
+    allResultsLoaded() {
+        return this.$scope.items.length >= this.totalResults
+    }
+    search(newSearch) {
+        if (this.$scope.searching || this.allResultsLoaded() && !newSearch)
+            return
+        
+        this.$scope.searching = true
+        this.$scope.start = this.searchCount * this.maxResults
+
+        this.params.limit = this.maxResults
+        this.params.maxResults = this.maxResults
+        this.params.start = this.$scope.start
+
+        this.serverCallService.makeGet(
+            this.url,
+            this.params,
+            this.searchSuccess.bind(this),
+            this.searchFail.bind(this),
+            {},
+            false,
+            !!this.cache
+        );
+    }
+    searchSuccess(data) {
+        if (!data || !data.items)
+            return this.searchFail()
+
+        data.start === 0
+            ? this.$scope.items = data.items
+            : this.$scope.items.push.apply(this.$scope.items, data.items)
+
+        this.totalResults = data.totalResults
+        this.searchCount++
+        this.$scope.searching = false
+
+        this.searchMoreIfNecessary()
+    }
+    searchFail() {
+        this.$scope.searching = false
+    }
+    searchMoreIfNecessary() {
+        this.$scope.items.length < this.expectedItemCount && !this.allResultsLoaded()
+            ? this.search()
+            : this.expectedItemCount += this.maxResults
+    }
+}
+controller.$inject = ['$scope', '$timeout', 'serverCallService']
+
+angular.module('koolikottApp').component('dopInfiniteSearchResult', {
+    bindings: {
+        params: '<',
+        url: '<?',
+        title: '<',
+        subtitle: '<',
+        filter: '<',
+        cache: '<?'
+    },
+    templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
+    controller
+})
+}

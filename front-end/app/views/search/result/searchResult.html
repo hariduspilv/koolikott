@@ -1,44 +1,39 @@
-<div id="page-search-result">
-  <div layout="row" layout-align="space-between center">
-    <h2 class="md-headline">
-      <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
-      <span data-ng-if="!searching">
-        <span data-ng-if="getNumberOfResults() < 1">
-          <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
-        </span>
-        <span data-ng-if="getNumberOfResults() === 1">
-          <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
-          <strong>
-            <span data-ng-bind="getNumberOfResults()"></span>
-          </strong>
-          <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
-        </span>
-        <span data-ng-if="getNumberOfResults() > 1">
-          <span data-translate="SEARCH_RESULT_PART_1"></span>
-          <strong>
-            <span data-ng-bind="getNumberOfResults()"></span>
-          </strong>
-          <span data-translate="SEARCH_RESULT_PART_2"></span>
-        </span>
+<div data-layout="row" data-layout-align="space-between center">
+  <h2 class="md-headline">
+    <span data-ng-if="searching" data-translate="SEARCH_RESULTS"></span>
+    <span data-ng-if="!searching">
+      <span data-ng-if="getNumberOfResults() < 1">
+        <span data-translate="SEARCH_RESULT_NO_RESULT"></span>
       </span>
-    </h2>
+      <span data-ng-if="getNumberOfResults() === 1">
+        <span data-translate="SEARCH_RESULT_1_RESULT_PART_1"></span>
+        <strong>
+          <span data-ng-bind="getNumberOfResults()"></span>
+        </strong>
+        <span data-translate="SEARCH_RESULT_1_RESULT_PART_2"></span>
+      </span>
+      <span data-ng-if="getNumberOfResults() > 1">
+        <span data-translate="SEARCH_RESULT_PART_1"></span>
+        <strong>
+          <span data-ng-bind="getNumberOfResults()"></span>
+        </strong>
+        <span data-translate="SEARCH_RESULT_PART_2"></span>
+      </span>
+    </span>
+  </h2>
+  <md-input-container flex-xs="60" flex-sm="30" flex-gt-sm="20">
+    <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
+      <md-option ng-click="sort('','')" data-translate="RESET_SORT"></md-option>
 
-    <md-input-container flex-xs="60" flex-sm="30" flex-gt-sm="20">
-      <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
-        <md-option ng-click="sort('','')" data-translate="RESET_SORT"></md-option>
-
-        <md-option ng-value="sortOption.option" ng-repeat="sortOption in sortOptions">{{ sortOption.option | translate }}</md-option>
-      </md-select>
-    </md-input-container>
+      <md-option ng-value="sortOption.option" ng-repeat="sortOption in sortOptions">{{ sortOption.option | translate }}</md-option>
+    </md-select>
+  </md-input-container>
+</div>
+<div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" class="card-container">
+  <div data-ng-repeat="item in items track by $index" class="card-container__item" flex-xs="grow">
+    <dop-card-sm learning-object="item"></dop-card-sm>
   </div>
-
-  <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" data-infinite-scroll-disabled="searching" class="card-container">
-    <div data-ng-repeat="item in items track by $index" class="card-container__item" flex-xs="grow">
-      <dop-card-sm learning-object="item"></dop-card-sm>
-    </div>
-  </div>
-
-  <div layout="row" layout-align="center center" flex data-ng-if="!allResultsLoaded() && (searching || loadingNextPage)">
-    <p class="md-body-2 md-button md-primary" data-translate="SEARCH_LOADING"></p>
-  </div>
+</div>
+<div data-layout="row" data-layout-align="center center" flex data-ng-if="!allResultsLoaded() && (searching || loadingNextPage)">
+  <p class="md-body-2 md-button md-primary" data-translate="SEARCH_LOADING"></p>
 </div>

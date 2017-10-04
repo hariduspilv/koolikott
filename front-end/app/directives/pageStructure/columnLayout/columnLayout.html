@@ -2,9 +2,12 @@
   <div class="nav-position" id="navmenu" data-dop-header></div>
   <dop-alert id="alert"></dop-alert>
   <aside data-dop-sidenav></aside>
-  <div id="scrollable-content" class="scrollable-content-container">
-    <div id="main-content" class="content-container" data-ng-view data-ng-class="{'nav-open': sidenavIsOpen()}" autoscroll="true"></div>
-  </div>
-
+  <div
+    id="main-content"
+    class="content-container"
+    data-ng-view data-ng-class="{'nav-open': sidenavIsOpen()}"
+    autoscroll="true"
+    role="main"
+  ></div>
   <dop-tour></dop-tour>
 </div>

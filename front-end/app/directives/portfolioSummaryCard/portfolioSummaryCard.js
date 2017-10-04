@@ -93,120 +93,125 @@ angular.module('koolikottApp')
                     'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
                     'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
                     deletePortfolio);
-                };
+            };
 
-                function getTaxonObject() {
-                    if ($scope.portfolio && $scope.portfolio.taxons) {
-                        $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.portfolio.taxons);
-                    }
+            function getTaxonObject() {
+                if ($scope.portfolio && $scope.portfolio.taxons) {
+                    $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.portfolio.taxons);
                 }
+            }
 
-                function getSubject(taxon) {
-                    return taxonService.getSubject(taxon)
+            function getSubject(taxon) {
+                return taxonService.getSubject(taxon)
+            }
+
+            function deletePortfolio() {
+                var url = "rest/portfolio/delete";
+                serverCallService.makePost(url, $scope.portfolio, deletePortfolioSuccess, deletePortfolioFailed);
+            }
+
+            function deletePortfolioSuccess() {
+                toastService.show('PORTFOLIO_DELETED');
+                $scope.portfolio.deleted = true;
+                $rootScope.learningObjectDeleted = true;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+                $location.path("/");
+            }
+
+            function deletePortfolioFailed() {
+                log('Deleting portfolio failed.');
+            }
+
+            $scope.restorePortfolio = () => {
+                serverCallService.makePost('rest/admin/deleted/portfolio/restore', $scope.portfolio, restoreSuccess, restoreFail);
+            };
+
+            $scope.setNotImproper = () => {
+                if ($scope.isAdmin() && $scope.portfolio) {
+                    var url = "rest/impropers?learningObject=" + $scope.portfolio.id;
+                    serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                 }
+            };
 
-                function deletePortfolio() {
-                    var url = "rest/portfolio/delete";
-                    serverCallService.makePost(url, $scope.portfolio, deletePortfolioSuccess, deletePortfolioFailed);
+            function setNotImproperSuccessful() {
+                $rootScope.learningObjectImproper = false;
+                $rootScope.learningObjectUnreviewed = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+            }
+
+            function setNotImproperFailed() {
+                console.log("Setting not improper failed.")
+            }
+
+            $scope.$on("restore:portfolio", () => {
+                $scope.restorePortfolio();
+            });
+
+            $scope.$on("delete:portfolio", () => {
+                deletePortfolio();
+            });
+
+            $scope.$on("setNotImproper:portfolio", () => {
+                $scope.setNotImproper();
+            });
+
+            $scope.$on("markReviewed:portfolio", function () {
+                if ($scope.portfolio && ($scope.isAdmin() || $scope.isModerator()))
+                    serverCallService
+                        .makePost('rest/admin/firstReview/setReviewed', $scope.portfolio)
+                        .then(function () {
+                            $rootScope.learningObjectUnreviewed = false
+                            $rootScope.$broadcast('dashboard:adminCountsUpdated')
+                        })
+            })
+
+            function restoreSuccess() {
+                toastService.show('PORTFOLIO_RESTORED');
+                $scope.portfolio.deleted = false;
+                $rootScope.learningObjectDeleted = false;
+                $rootScope.$broadcast('dashboard:adminCountsUpdated');
+            }
+
+            function restoreFail() {
+                log("Restoring portfolio failed");
+            }
+
+            if ($rootScope.openMetadataDialog) {
+                $scope.showEditMetadataDialog();
+                $rootScope.openMetadataDialog = null;
+            }
+
+            $scope.getTargetGroups = () => {
+                if ($scope.portfolio) {
+                    return targetGroupService.getConcentratedLabelByTargetGroups($scope.portfolio.targetGroups);
                 }
+            };
 
-                function deletePortfolioSuccess() {
-                    toastService.show('PORTFOLIO_DELETED');
-                    $scope.portfolio.deleted = true;
-                    $rootScope.learningObjectDeleted = true;
-                    $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                    $location.path("/");
+            $scope.isAdminButtonsShowing = () => {
+                return $scope.isAdmin() && (($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectImproper == false
+                    && $rootScope.learningObjectBroken == true)
+                    || ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectBroken == false
+                    && $rootScope.learningObjectImproper == true)
+                    || ($rootScope.learningObjectDeleted == false
+                    && $rootScope.learningObjectBroken == true
+                    && $rootScope.learningObjectImproper == true)
+                    || ($rootScope.learningObjectDeleted == true));
+            };
+
+            $scope.setRecommendation = (recommendation) => {
+                if ($scope.portfolio)
+                    $scope.portfolio.recommendation = recommendation
+            }
+
+            $scope.$watch('portfolio.taxon.id', (newValue, oldValue) => {
+                if (newValue !== oldValue && $scope.portfolio) {
+                    $scope.portfolioSubject = getSubject($scope.portfolio.taxon);
                 }
+            }, true);
 
-                function deletePortfolioFailed() {
-                    log('Deleting portfolio failed.');
-                }
-
-                $scope.restorePortfolio = () => {
-                    serverCallService.makePost('rest/admin/deleted/portfolio/restore', $scope.portfolio, restoreSuccess, restoreFail);
-                };
-
-                $scope.setNotImproper = () => {
-                    if ($scope.isAdmin() && $scope.portfolio) {
-                        var url = "rest/impropers?learningObject=" + $scope.portfolio.id;
-                        serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                    }
-                };
-
-                function setNotImproperSuccessful() {
-                    $rootScope.learningObjectImproper = false;
-                    $rootScope.learningObjectUnreviewed = false;
-                    $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                }
-
-                function setNotImproperFailed() {
-                    console.log("Setting not improper failed.")
-                }
-
-                $scope.$on("restore:portfolio", () => {
-                    $scope.restorePortfolio();
-                });
-
-                $scope.$on("delete:portfolio", () => {
-                    deletePortfolio();
-                });
-
-                $scope.$on("setNotImproper:portfolio", () => {
-                    $scope.setNotImproper();
-                });
-
-                $scope.$on("markReviewed:portfolio", function () {
-                    if ($scope.portfolio && ($scope.isAdmin() || $scope.isModerator()))
-                        serverCallService
-                            .makePost('rest/admin/firstReview/setReviewed', $scope.portfolio)
-                            .then(function () {
-                                $rootScope.learningObjectUnreviewed = false
-                                $rootScope.$broadcast('dashboard:adminCountsUpdated')
-                            })
-                })
-
-                function restoreSuccess() {
-                    toastService.show('PORTFOLIO_RESTORED');
-                    $scope.portfolio.deleted = false;
-                    $rootScope.learningObjectDeleted = false;
-                    $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                }
-
-                function restoreFail() {
-                    log("Restoring portfolio failed");
-                }
-
-                if ($rootScope.openMetadataDialog) {
-                    $scope.showEditMetadataDialog();
-                    $rootScope.openMetadataDialog = null;
-                }
-
-                $scope.getTargetGroups = () => {
-                    if ($scope.portfolio) {
-                        return targetGroupService.getConcentratedLabelByTargetGroups($scope.portfolio.targetGroups);
-                    }
-                };
-
-                $scope.isAdminButtonsShowing = () => {
-                    return $scope.isAdmin() && (($rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectImproper == false
-                        && $rootScope.learningObjectBroken == true)
-                        || ($rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == false
-                        && $rootScope.learningObjectImproper == true)
-                        || ($rootScope.learningObjectDeleted == false
-                        && $rootScope.learningObjectBroken == true
-                        && $rootScope.learningObjectImproper == true)
-                        || ($rootScope.learningObjectDeleted == true));
-                };
-
-                $scope.$watch('portfolio.taxon.id', (newValue, oldValue) => {
-                    if (newValue !== oldValue && $scope.portfolio) {
-                        $scope.portfolioSubject = getSubject($scope.portfolio.taxon);
-                    }
-                }, true);
-
-                init();
-            }]
+            init();
+        }]
         };
     });

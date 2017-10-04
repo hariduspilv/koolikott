@@ -1,9 +1,4 @@
-<md-button data-ng-if="!isCreatorRestricted" data-ng-click="restrictCreator()">
+<md-button data-ng-if="!noCreator" data-ng-click="toggleRestrict()">
   <md-icon md-menu-align-target>lock</md-icon>
-  <span data-translate="BUTTON_RESTRICT_CREATOR"></span>
-</md-button>
-
-<md-button data-ng-if="isCreatorRestricted" data-ng-click="removeCreatorsRestriction()">
-  <md-icon md-menu-align-target>lock</md-icon>
-  <span data-translate="BUTTON_REMOVE_CREATORS_RESTRICTION"></span>
+  <span data-translate="{{labelTranslationKey}}"></span>
 </md-button>
