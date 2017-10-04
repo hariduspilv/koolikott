@@ -2,12 +2,16 @@ package ee.hm.dop.service.content;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.ImproperContentDao;
+import ee.hm.dop.dao.ReportingReasonDao;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.ReportingReason;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -20,9 +24,9 @@ public class ImproperContentService {
     @Inject
     private LearningObjectService learningObjectService;
     @Inject
-    private FirstReviewService firstReviewService;
+    private ReportingReasonDao reportingReasonDao;
 
-    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser){
+    public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser) {
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
         if (UserUtil.isAdmin(loggedInUser)) {
@@ -40,10 +44,24 @@ public class ImproperContentService {
         improper.setCreatedAt(DateTime.now());
         improper.setLearningObject(learningObject);
         improper.setReportingText(improperContent.getReportingText());
-        improper.setReportingReason(improperContent.getReportingReason());
         improper.setReviewed(false);
 
-        return improperContentDao.createOrUpdate(improper);
+        ImproperContent create = improperContentDao.createOrUpdate(improper);
+        if (CollectionUtils.isNotEmpty(improperContent.getReportingReasonEnums())) {
+            for (ReportingReasonEnum reasonEnum : improperContent.getReportingReasonEnums()) {
+                createReason(improper, create, reasonEnum);
+            }
+            create.setReportingReasonEnums(improperContent.getReportingReasonEnums());
+        }
+        return create;
+    }
+
+    private void createReason(ImproperContent improper, ImproperContent create, ReportingReasonEnum reasonEnum) {
+        ReportingReason reason = new ReportingReason();
+        reason.setImproperContent(improper);
+        reason.setReason(reasonEnum);
+        reportingReasonDao.createOrUpdate(reason);
+        create.getReportingReasons().add(reason);
     }
 
     private LearningObject findValid(ImproperContent improperContent, User creator) {

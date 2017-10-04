@@ -1,19 +1,19 @@
 package ee.hm.dop.model;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewStatus;
-import ee.hm.dop.model.enums.ReportingReason;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-/**
- * Created by mart on 29.12.15.
- */
+import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 public class ImproperContent extends AbstractEntity {
 
@@ -48,14 +48,17 @@ public class ImproperContent extends AbstractEntity {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime reviewedAt;
 
-    @Enumerated(EnumType.STRING)
-    private ReviewStatus status;
-
     @Column
     private String reportingText;
 
-    @Column
-    private ReportingReason reportingReason;
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
+
+    @OneToMany(mappedBy = "improperContent", fetch = LAZY)
+    private List<ReportingReason> reportingReasons;
+
+    @Transient
+    private List<ReportingReasonEnum> reportingReasonEnums;
 
     public Long getId() {
         return id;
@@ -107,14 +110,6 @@ public class ImproperContent extends AbstractEntity {
         this.reviewedAt = reviewedAt;
     }
 
-    public ReviewStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReviewStatus status) {
-        this.status = status;
-    }
-
     public String getReportingText() {
         return reportingText;
     }
@@ -131,11 +126,27 @@ public class ImproperContent extends AbstractEntity {
         this.learningObject = learningObject;
     }
 
-    public ReportingReason getReportingReason() {
-        return reportingReason;
+    public List<ReportingReason> getReportingReasons() {
+        return reportingReasons;
     }
 
-    public void setReportingReason(ReportingReason reportingReason) {
-        this.reportingReason = reportingReason;
+    public void setReportingReasons(List<ReportingReason> reportingReasons) {
+        this.reportingReasons = reportingReasons;
+    }
+
+    public List<ReportingReasonEnum> getReportingReasonEnums() {
+        return reportingReasonEnums;
+    }
+
+    public void setReportingReasonEnums(List<ReportingReasonEnum> reportingReasonEnums) {
+        this.reportingReasonEnums = reportingReasonEnums;
+    }
+
+    public ReviewStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReviewStatus status) {
+        this.status = status;
     }
 }

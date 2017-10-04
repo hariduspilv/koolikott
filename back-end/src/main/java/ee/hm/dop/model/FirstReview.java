@@ -20,7 +20,6 @@ public class FirstReview extends AbstractEntity{
 
     @ManyToOne
     @JoinColumn(name = "learningObject", nullable = false)
-//    @JsonBackReference
     private LearningObject learningObject;
 
     @Column(nullable = false)

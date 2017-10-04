@@ -24,7 +24,7 @@ public class Institution {
     private String ehisId;
 
     @ElementCollection
-    @CollectionTable(name = "Institution_Roles", joinColumns = { @JoinColumn(name = "institution") })
+    @CollectionTable(name = "Institution_Roles", joinColumns = {@JoinColumn(name = "institution")})
     private List<Role> roles;
 
     public Long getId() {

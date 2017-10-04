@@ -124,7 +124,7 @@ angular.module('koolikottApp').directive('dopErrorMessage', [
                             icon: 'done',
                             label: 'REPORT_NOT_IMPROPER',
                             onClick: setNotImproperLearningObject,
-                            show: $scope.isAdmin,
+                            show: $scope.isAdmin || $scope.isModerator,
                         }], getReasons)
 
                     else if ($scope.showImproperAndBroken)

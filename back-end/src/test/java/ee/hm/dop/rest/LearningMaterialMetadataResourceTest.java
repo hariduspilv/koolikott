@@ -2,10 +2,9 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
-import ee.hm.dop.common.test.TestTaxon;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
-import ee.hm.dop.model.enums.ReportingReason;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.*;
 import org.junit.Test;
@@ -158,9 +157,9 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getAllReportingReasons() throws Exception {
-        List<ReportingReason> actual = doGet(GET_REPORTING_REASONS_URL, new GenericType<List<ReportingReason>>() {
+        List<ReportingReasonEnum> actual = doGet(GET_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
         });
-        List<ReportingReason> expected = new ArrayList<>(Arrays.asList(ReportingReason.values()));
+        List<ReportingReasonEnum> expected = new ArrayList<>(Arrays.asList(ReportingReasonEnum.values()));
 
         assertTrue(expected.containsAll(actual));
         assertTrue(actual.containsAll(expected));
