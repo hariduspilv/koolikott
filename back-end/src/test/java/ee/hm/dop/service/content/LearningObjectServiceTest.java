@@ -31,105 +31,11 @@ import org.junit.runner.RunWith;
 public class LearningObjectServiceTest {
 
     @TestSubject
-    private LearningObjectService learningObjectService;
-
+    private LearningObjectService learningObjectService = new LearningObjectService();
     @Mock
     private LearningObjectDao learningObjectDao;
-
     @Mock
     private SolrEngineService solrEngineService;
-
-    public LearningObjectServiceTest() throws NoSuchMethodException {
-        learningObjectService = getLearningObjectService();
-    }
-
-    @Test
-    public void getNewestLearningObjects() throws NoSuchMethodException {
-        int numberOfLearningObjects = 4;
-
-        Portfolio portfolio1 = new Portfolio();
-        portfolio1.setVisibility(Visibility.PUBLIC);
-
-        Portfolio portfolio2 = new Portfolio();
-        portfolio2.setVisibility(Visibility.PRIVATE);
-
-        Material material1 = new Material();
-
-        Portfolio portfolio3 = new Portfolio();
-        portfolio3.setVisibility(Visibility.PUBLIC);
-
-        List<LearningObject> firstLearningObjects = Lists.newArrayList(portfolio1, portfolio2, material1, portfolio3);
-        expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
-        expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
-
-        expect(learningObjectService.getLearningObjectHandler(portfolio1)).andReturn(new PortfolioService()).anyTimes();
-        expect(learningObjectService.getLearningObjectHandler(portfolio2)).andReturn(new PortfolioService()).anyTimes();
-        expect(learningObjectService.getLearningObjectHandler(portfolio3)).andReturn(new PortfolioService()).anyTimes();
-        expect(learningObjectService.getLearningObjectHandler(material1)).andReturn(new MaterialService()).anyTimes();
-
-        Portfolio portfolio4 = new Portfolio();
-        portfolio4.setVisibility(Visibility.PUBLIC);
-
-        List<LearningObject> secondLearningObjects = new ArrayList<>();
-        secondLearningObjects.add(portfolio4);
-        expect(learningObjectDao.findNewestLearningObjects(1, 4)).andReturn(secondLearningObjects);
-        expect(learningObjectService.getLearningObjectHandler(portfolio4)).andReturn(new PortfolioService()).anyTimes();
-
-        List<LearningObject> expected = Arrays.asList(portfolio1, material1, portfolio3, portfolio4);
-
-        replayAll(learningObjectService);
-
-        List<LearningObject> result = learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
-
-        verifyAll(learningObjectService);
-
-        assertEquals(expected.size(), result.size());
-        assertTrue(result.containsAll(expected));
-    }
-
-    @Test
-    public void getNewestLearningObjectsWhenNoResults() {
-        int numberOfLearningObjects = 4;
-
-        expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
-        expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(new ArrayList<>());
-
-        replayAll(learningObjectService);
-
-        List<LearningObject> result = learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
-
-        verifyAll(learningObjectService);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    public void getNewestLearningObjectsWhenNotEnoughResults() {
-        int numberOfLearningObjects = 4;
-
-        Portfolio portfolio1 = new Portfolio();
-        portfolio1.setVisibility(Visibility.PUBLIC);
-
-        List<LearningObject> firstLearningObjects = new ArrayList<>();
-        firstLearningObjects.add(portfolio1);
-
-        expect(learningObjectService.getLearningObjectDao()).andReturn(learningObjectDao).anyTimes();
-        expect(learningObjectDao.findNewestLearningObjects(numberOfLearningObjects, 0)).andReturn(firstLearningObjects);
-        expect(learningObjectService.getLearningObjectHandler(portfolio1)).andReturn(new PortfolioService()).anyTimes();
-
-        expect(learningObjectDao.findNewestLearningObjects(3, 4)).andReturn(new ArrayList<>());
-
-        List<LearningObject> expected = Collections.singletonList(portfolio1);
-
-        replayAll(learningObjectService);
-
-        List<LearningObject> result = learningObjectService.getNewestLearningObjects(numberOfLearningObjects);
-
-        verifyAll(learningObjectService);
-
-        assertEquals(expected.size(), result.size());
-        assertTrue(result.containsAll(expected));
-    }
 
     @Test
     public void incrementViewCount() {
@@ -183,12 +89,5 @@ public class LearningObjectServiceTest {
                 verify(object);
             }
         }
-    }
-
-    public LearningObjectService getLearningObjectService() throws NoSuchMethodException {
-        Method getLearningObjectHandler = LearningObjectService.class.getDeclaredMethod("getLearningObjectHandler", LearningObject.class);
-        Method getLearningObjectDAO = LearningObjectService.class.getDeclaredMethod("getLearningObjectDao");
-
-        return createMockBuilder(LearningObjectService.class).addMockedMethods(getLearningObjectHandler, getLearningObjectDAO).createMock();
     }
 }

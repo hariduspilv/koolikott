@@ -23,13 +23,12 @@ public class LearningObjectService {
     private SolrEngineService solrEngineService;
 
     public LearningObject get(long learningObjectId, User user) {
-        LearningObject learningObject = getLearningObjectDao().findById(learningObjectId);
+        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
         return canAccess(user, learningObject) ? learningObject : null;
     }
 
     public void incrementViewCount(LearningObject learningObject) {
         LearningObject originalPortfolio = validateAndFindIncludeDeleted(learningObject);
-
         learningObjectDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
     }
@@ -61,35 +60,7 @@ public class LearningObjectService {
         return ValidatorUtil.findValid(learningObject, learningObjectDao::findByIdDeleted);
     }
 
-    private List<LearningObject> getPublicLearningObjects(int numberOfLearningObjects,
-                                                          BiFunction<Integer, Integer, List<LearningObject>> functionToGetLearningObjects) {
-        List<LearningObject> returnableLearningObjects = new ArrayList<>();
-        int startPosition = 0;
-        int count = numberOfLearningObjects;
-        while (returnableLearningObjects.size() != numberOfLearningObjects) {
-            List<LearningObject> learningObjects = functionToGetLearningObjects.apply(count, startPosition);
-            if (learningObjects.size() == 0) {
-                break;
-            }
-
-            learningObjects.removeIf(learningObject -> !getLearningObjectHandler(learningObject).isPublic(learningObject));
-            returnableLearningObjects.addAll(learningObjects);
-            startPosition += count;
-            count = numberOfLearningObjects - returnableLearningObjects.size();
-        }
-
-        return returnableLearningObjects;
-    }
-
-    List<LearningObject> getNewestLearningObjects(int numberOfLearningObjects) {
-        return getPublicLearningObjects(numberOfLearningObjects, getLearningObjectDao()::findNewestLearningObjects);
-    }
-
-    PermissionItem getLearningObjectHandler(LearningObject learningObject) {
+    private PermissionItem getLearningObjectHandler(LearningObject learningObject) {
         return PermissionFactory.get(learningObject.getClass());
-    }
-
-    LearningObjectDao getLearningObjectDao() {
-        return learningObjectDao;
     }
 }
