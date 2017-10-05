@@ -1,7 +1,6 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
@@ -28,7 +27,9 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_LICENSE_TYPES_URL = BASE + "licenseType";
     private static final String GET_CROSS_CURRICULAR_THEMES_URL = BASE + "crossCurricularTheme";
     private static final String GET_KEY_COMPETENCES_URL = BASE + "keyCompetence";
-    private static final String GET_REPORTING_REASONS_URL = BASE + "reportingReasons";
+    private static final String GET_LO_REPORTING_REASONS_URL = BASE + "learningObjectReportingReasons";
+    private static final String GET_TAG_REPORTING_REASONS_URL = BASE + "commentReportingReasons";
+    private static final String GET_COMMENT_REPORTING_REASONS_URL = BASE + "tagReportingReasons";
     public static final String MATHEMATICS = "Mathematics";
     public static final String ALGEBRA = "Algebra";
     public static final String TRIGONOMETRIA = "Trigonometria";
@@ -157,11 +158,26 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     }
 
     @Test
-    public void getReportingReasons_returns_all_reasons() throws Exception {
-        List<ReportingReasonEnum> actual = doGet(GET_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
+    public void learningObject_reportingreasons_returns_LO_reasons() throws Exception {
+        List<ReportingReasonEnum> actual = doGet(GET_LO_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
         });
-        List<ReportingReasonEnum> expected = new ArrayList<>(Arrays.asList(ReportingReasonEnum.values()));
+        List<ReportingReasonEnum> expected = ReportingReasonEnum.learningObjectReportingReasonsModal();
+        assertEquals(expected, actual);
+    }
 
+    @Test
+    public void comment_reportingreasons_returns_comment_reasons() throws Exception {
+        List<ReportingReasonEnum> actual = doGet(GET_COMMENT_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
+        });
+        List<ReportingReasonEnum> expected = ReportingReasonEnum.commentReportingReasons();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void tag_reportingreasons_returns_tag_reasons() throws Exception {
+        List<ReportingReasonEnum> actual = doGet(GET_TAG_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
+        });
+        List<ReportingReasonEnum> expected = ReportingReasonEnum.tagReportingReasons();
         assertEquals(expected, actual);
     }
 
