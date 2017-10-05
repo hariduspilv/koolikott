@@ -1,3 +1,8 @@
+## e-Koolikott 1.10.1 (05.10.2017)
+
+### Parandatud
+* Aineeksperdi rollis ei saa ebasobivaks raporteeritud õppevara märkida uuesti sobivaks #207 https://github.com/hariduspilv/koolikott/issues/207
+
 ## e-Koolikott 1.10.1 (03.10.2017)
 
 ### Parandatud
