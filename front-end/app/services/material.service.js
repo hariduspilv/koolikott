@@ -48,7 +48,7 @@ function MaterialService(serverCallService, authenticatedUserService) {
     }
 
     function setNotImproper(material) {
-        if (authenticatedUserService.isAdmin() && material) {
+        if ((authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && material) {
             let url = "rest/impropers?learningObject=" + material.id;
             return serverCallService.makeDelete(url, {})
                 .then(response => {
