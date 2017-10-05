@@ -1,10 +1,8 @@
 package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,8 +23,6 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
     public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
     public static final String REVIEW_IMPROPERS_BY_ID = "impropers?learningObject=%s";
-    public static final Long TEST_PORFOLIO_ID = PORTFOLIO_1;
-    public static final Long TEST_UNREVIEWED_PORFOLIO_ID = PORTFOLIO_8;
 
     @Test
     public void setImproperNoData() {
@@ -111,37 +107,6 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(5), improperContents.get(0).getId());
     }
 
-    @Test
-    public void approving_improper_content_removes_it() {
-        login(USER_ADMIN);
-
-        doPut(IMPROPERS, improperPortfolioContent(TEST_PORFOLIO_ID), ImproperContent.class);
-
-        Response response = doDelete(format("impropers?learningObject=%s", TEST_PORFOLIO_ID));
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
-        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TEST_PORFOLIO_ID), genericType());
-
-        assertTrue(improperContents.isEmpty());
-    }
-
-    @Test
-    public void approving_unreviewed_improper_content_removes_improper_content_and_sets_it_reviewed() {
-        login(USER_ADMIN);
-
-        doPut(IMPROPERS, improperPortfolioContent(TEST_UNREVIEWED_PORFOLIO_ID), ImproperContent.class);
-
-        Response response = doDelete(format("impropers?learningObject=%s", TEST_UNREVIEWED_PORFOLIO_ID));
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
-        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TEST_UNREVIEWED_PORFOLIO_ID), genericType());
-
-        assertTrue(improperContents.isEmpty());
-
-        Portfolio portfolio = getPortfolio(TEST_UNREVIEWED_PORFOLIO_ID);
-        assertTrue(portfolio.getUnReviewed() == 0);
-    }
-
     private GenericType<List<ImproperContent>> genericType() {
         return new GenericType<List<ImproperContent>>() {
         };
@@ -150,12 +115,6 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     private ImproperContent improperMaterialContent(long id) {
         ImproperContent improperContent = new ImproperContent();
         improperContent.setLearningObject(materialWithId(id));
-        return improperContent;
-    }
-
-    private ImproperContent improperPortfolioContent(long id) {
-        ImproperContent improperContent = new ImproperContent();
-        improperContent.setLearningObject(portfolioWithId(id));
         return improperContent;
     }
 }
