@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.metadata;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,7 +22,7 @@ public class RoleResourceTest extends ResourceIntegrationTestBase {
     public static final String GET_ROLES = "role";
 
     @Test
-    public void getRoles() {
+    public void getRoles_returns_all_roles() {
         login(USER_ADMIN);
 
         List<Role> roles = doGet(GET_ROLES, new GenericType<List<Role>>() {

@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.metadata;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.*;

@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.useractions;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;

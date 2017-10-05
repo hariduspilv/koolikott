@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.login;
 
 import static org.junit.Assert.assertNotNull;
 

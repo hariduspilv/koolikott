@@ -1,7 +1,6 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.*;
 import org.junit.Test;
 
@@ -25,7 +24,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String TEST_TAG_2 = "timshel2";
     public static final String TEST_SYSTEM_TAG = "matemaatika";
     public static final String TYPE_PORTFOLIO = ".Portfolio";
-    public static final Long NOT_EXISTING_LEARNING_OBJECT_ID = 99999L;
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
@@ -44,7 +42,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void cannot_add_a_tag_to_learning_object_what_does_not_exist() {
         login(USER_PEETER);
-        Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTING_LEARNING_OBJECT_ID), tag(TEST_TAG));
+        Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTS_ID), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 

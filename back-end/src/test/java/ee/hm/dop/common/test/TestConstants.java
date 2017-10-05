@@ -1,6 +1,9 @@
 package ee.hm.dop.common.test;
 
 public class TestConstants {
+    public static final long NOT_EXISTS_ID = -1L;
+    public static final String NOT_EXISTS_STRING = "-1L";
+
     public static final Long MATERIAL_1 = 1L;
     public static final Long MATERIAL_2 = 2L;
     public static final Long MATERIAL_3 = 3L;

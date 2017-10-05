@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.metadata;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class TranslationResourceTest extends ResourceIntegrationTestBase {
 
     @Test
-    public void downloadRussianTranslation() {
+    public void russian_translations_are_supported() {
         Map<String, String> translations = doGet("translation?lang=rus", map());
 
         assertEquals(4, translations.size());
@@ -24,7 +24,7 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void downloadEstonianTranslation() {
+    public void estonian_translations_are_supported() {
         Map<String, String> translations = doGet("translation?lang=est", map());
 
         assertEquals(4, translations.size());
@@ -35,14 +35,25 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void downloadTranslationWithoutParam() {
+    public void english_translations_are_supported() {
+        Map<String, String> translations = doGet("translation?lang=eng", map());
+
+        assertEquals(4, translations.size());
+        assertEquals("FOO message", translations.get("FOO"));
+        assertEquals("Estonian", translations.get("Estonian"));
+        assertEquals("Russian", translations.get("Russian"));
+        assertEquals("Mathematics", translations.get("TOPIC_MATHEMATICS"));
+    }
+
+    @Test
+    public void language_must_be_specified() {
         Response response = doGet("translation");
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
-    public void downloadNotSupportedTranslation() {
-        Response response = doGet("translation?lang=notSupported");
+    public void unknown_language_is_unsupported() {
+        Response response = doGet("translation?lang=unSupported");
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 

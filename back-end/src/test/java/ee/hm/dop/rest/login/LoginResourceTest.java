@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.login;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.AuthenticationStateDao;
@@ -56,22 +56,19 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void login() {
-        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilter1()).request()
-                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = loginWithId(new LoginFilter1());
         assertNotNull(authenticatedUser.getToken());
     }
 
     @Test
     public void loginAuthenticationFailed() {
-        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilter2()).request()
-                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = loginWithId(new LoginFilter2());
         assertNull(authenticatedUser);
     }
 
     @Test
     public void loginSameNameWithAccent() {
-        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilterAccentInName()).request()
-                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser = loginWithId(new LoginFilterAccentInName());
         assertNotNull(authenticatedUser.getToken());
         assertEquals("peeter.paan2", authenticatedUser.getUser().getUsername());
     }
@@ -480,13 +477,15 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     private String encodeQuery(String query) {
-        String encodedQuery;
         try {
-            encodedQuery = URLEncoder.encode(query, UTF_8.name());
+            return URLEncoder.encode(query, UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return encodedQuery;
+    private AuthenticatedUser loginWithId(ClientRequestFilter filter) {
+        return getTarget(LOGIN_ID_CARD, filter).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
     }
 }

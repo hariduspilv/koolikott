@@ -1,7 +1,6 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.useractions;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.enums.Visibility;
@@ -19,6 +18,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     public static final String TAG_UP_VOTES = "tagUpVotes";
     public static final String MATEMAATIKA = "matemaatika";
     public static final String NOT_EXISTING_TAG = "keemia";
+    public static final String REPORT = "tagUpVotes/report?learningObject=";
 
     @Test
     public void upVote() {
@@ -42,7 +42,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void reportNotLoggedIn() {
-        List<TagUpVoteForm> tagUpVoteForms = doGet("tagUpVotes/report?learningObject=1", list());
+        List<TagUpVoteForm> tagUpVoteForms = doGet(REPORT + MATERIAL_1, list());
 
         assertEquals(5, tagUpVoteForms.size());
 
@@ -62,7 +62,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     public void report() {
         login(USER_MATI);
 
-        Response response = doGet("tagUpVotes/report?learningObject=1");
+        Response response = doGet(REPORT + MATERIAL_1);
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(5, tagUpVoteForms.size());
@@ -83,7 +83,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void reportNoLearningObject() {
-        Response response = doGet("tagUpVotes/report?learningObject=99");
+        Response response = doGet(REPORT + NOT_EXISTS_ID);
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(0, tagUpVoteForms.size());
@@ -91,7 +91,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getTagUpVotesNoTags() {
-        Response response = doGet("tagUpVotes/report?learningObject=3");
+        Response response = doGet(REPORT + MATERIAL_3);
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(0, tagUpVoteForms.size());
@@ -121,14 +121,14 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void can_not_remove_tagUpVote_that_does_not_exist() throws Exception {
         login(USER_SECOND);
-        Response response = doDelete(TAG_UP_VOTES + "/" + 100L);
+        Response response = doDelete(TAG_UP_VOTES + "/" + NOT_EXISTS_ID);
         assertEquals("No tagUpVote", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_get_tagUpVote_without_learningObject_id() throws Exception {
         login(USER_SECOND);
-        Response response = doGet("tagUpVotes/report?learningObject=");
+        Response response = doGet(REPORT);
         assertEquals("LearningObject query param is required", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 

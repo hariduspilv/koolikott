@@ -1,7 +1,6 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
@@ -49,7 +48,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
     public static final String SOURCE_NOT_EXISTING = "https://www.youtube.com/watch?v=5_Ar7VXXsro";
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
-    private static final long NOT_EXISTING_MATERIAL_ID = 999L;
 
     @Inject
     private MaterialService materialService;
@@ -97,13 +95,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void increaseViewCountNotExistingMaterial() {
-        Response response = doGet(format(GET_MATERIAL_URL, NOT_EXISTING_MATERIAL_ID));
+        Response response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
-        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTING_MATERIAL_ID));
+        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTS_ID));
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 
-        response = doGet(format(GET_MATERIAL_URL, NOT_EXISTING_MATERIAL_ID));
+        response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 

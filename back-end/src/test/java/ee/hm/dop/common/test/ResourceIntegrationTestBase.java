@@ -2,8 +2,8 @@ package ee.hm.dop.common.test;
 
 import com.google.inject.Inject;
 import ee.hm.dop.model.*;
-import ee.hm.dop.rest.MaterialResourceTest;
-import ee.hm.dop.rest.PortfolioResourceTest;
+import ee.hm.dop.rest.content.MaterialResourceTest;
+import ee.hm.dop.rest.content.PortfolioResourceTest;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;

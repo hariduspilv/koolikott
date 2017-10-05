@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.content;
 
 import static java.lang.String.format;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
@@ -21,11 +21,13 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Picture;
+import ee.hm.dop.rest.PictureResource;
 import ee.hm.dop.utils.DOPFileUtils;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -50,7 +52,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet(format(GET_PICTURE_URL, "picture1"), WILDCARD_TYPE);
 
         String cacheControl = (String) response.getHeaders().getFirst(HttpHeaders.CACHE_CONTROL);
-        assertEquals(PictureResource.MAX_AGE_1_YEAR, cacheControl);
+        Assert.assertEquals(PictureResource.MAX_AGE_1_YEAR, cacheControl);
 
         byte[] data = response.readEntity(byte[].class);
         char[] encodeHex = Hex.encodeHex(data);

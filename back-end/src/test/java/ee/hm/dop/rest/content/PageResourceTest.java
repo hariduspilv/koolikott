@@ -1,4 +1,4 @@
-package ee.hm.dop.rest;
+package ee.hm.dop.rest.content;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

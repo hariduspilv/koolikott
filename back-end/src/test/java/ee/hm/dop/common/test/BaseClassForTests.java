@@ -1,6 +1,7 @@
 package ee.hm.dop.common.test;
 
 public interface BaseClassForTests {
+    Long NOT_EXISTS_ID = TestConstants.NOT_EXISTS_ID;
 
     TestUser USER_MATI = TestConstants.USER_MATI;
     TestUser USER_PEETER = TestConstants.USER_PEETER;
