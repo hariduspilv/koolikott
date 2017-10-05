@@ -47,7 +47,7 @@ public class BrokenContentAdminResource extends BaseResource {
     @POST
     @Path("setNotBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setNotBroken(Material material) {
         materialAdministrationService.setMaterialNotBroken(material, getLoggedInUser());
     }
