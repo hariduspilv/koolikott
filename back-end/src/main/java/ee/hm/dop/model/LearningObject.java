@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -118,6 +119,10 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
 
     @Column(nullable = false)
     private Long views = (long) 0;
+
+    @Column()
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
 
     @ManyToMany(fetch = EAGER)
     @Fetch(FetchMode.SELECT)
@@ -351,5 +356,13 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
 
     public void setImproperContents(List<ImproperContent> improperContents) {
         this.improperContents = improperContents;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
     }
 }

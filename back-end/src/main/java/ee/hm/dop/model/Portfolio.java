@@ -33,10 +33,6 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @OrderColumn(name = "chapterOrder")
     private List<Chapter> chapters;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Visibility visibility;
-
     @ManyToOne
     @JoinColumn(name = "originalCreator", nullable = false)
     private User originalCreator;
@@ -64,14 +60,6 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
 
     public void setChapters(List<Chapter> chapters) {
         this.chapters = chapters;
-    }
-
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
     }
 
     public User getOriginalCreator() {

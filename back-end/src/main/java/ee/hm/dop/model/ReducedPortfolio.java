@@ -18,10 +18,6 @@ public class ReducedPortfolio extends ReducedLearningObject implements IPortfoli
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Visibility visibility;
-
     public String getTitle() {
         return title;
     }
@@ -30,11 +26,4 @@ public class ReducedPortfolio extends ReducedLearningObject implements IPortfoli
         this.title = title;
     }
 
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-    }
 }
