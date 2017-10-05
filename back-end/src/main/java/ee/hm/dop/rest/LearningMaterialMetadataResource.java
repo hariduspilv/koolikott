@@ -115,9 +115,23 @@ public class LearningMaterialMetadataResource extends BaseResource{
     }
 
     @GET
-    @Path("reportingReasons")
+    @Path("learningObjectReportingReasons")
     @Produces(MediaType.APPLICATION_JSON)
-    public ReportingReasonEnum[] getReportingReasons() {
-        return ReportingReasonEnum.values();
+    public List<ReportingReasonEnum> learningObjectReportingReasonsModal() {
+        return ReportingReasonEnum.learningObjectReportingReasonsModal();
+    }
+
+    @GET
+    @Path("commentReportingReasons")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ReportingReasonEnum> tagReportingReasons() {
+        return ReportingReasonEnum.tagReportingReasons();
+    }
+
+    @GET
+    @Path("tagReportingReasons")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ReportingReasonEnum> commentReportingReasons() {
+        return ReportingReasonEnum.commentReportingReasons();
     }
 }
