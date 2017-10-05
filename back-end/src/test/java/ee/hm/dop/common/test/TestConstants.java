@@ -18,6 +18,7 @@ public class TestConstants {
     public static final Long MATERIAL_12 = 12L;
     public static final Long MATERIAL_13 = 13L;
     public static final Long MATERIAL_14 = 14L;
+    public static final Long MATERIAL_15 = 15L;
 
     public static final Long PORTFOLIO_1 = 101L;
     public static final Long PORTFOLIO_2 = 102L;
@@ -38,15 +39,15 @@ public class TestConstants {
     public static final TestUser USER_PEETER = new TestUser(2L, "38011550077", "peeter.paan", "Peeter", "Paan");
     public static final TestUser USER_VOLDERMAR = new TestUser(3L, "37066990099", "voldemar.vapustav", "Voldemar", "Vapustav");
     public static final TestUser USER_VOLDERMAR2 = new TestUser(4L, "15066990099", "voldemar.vapustav2");
-    public static final TestUser USER_MAASIKAS_VAARIKAS = new TestUser(6L, "39011220013", "mati.maasikas-vaarikas" );
+    public static final TestUser USER_MAASIKAS_VAARIKAS = new TestUser(6L, "39011220013", "mati.maasikas-vaarikas");
     public static final TestUser USER_MYTESTUSER = new TestUser(7L, "78912378912", "my.testuser");
-    public static final TestUser USER_ADMIN = new TestUser(8L, "89898989898", "admin.admin" );
-    public static final TestUser USER_SECOND = new TestUser(9L, "89012378912", "second.testuser" );
-    public static final TestUser USER_RESTRICTED = new TestUser(11L, "89898989890", "restricted.user" );
-    public static final TestUser USER_MODERATOR = new TestUser(12L, "38211120031", "biffy.clyro" );
-    public static final TestUser USER_TO_BE_BANNED1 = new TestUser(13L, "38256133107", "user.to.be.banned1" );
-    public static final TestUser USER_TO_BE_BANNED2 = new TestUser(14L, "38256133108", "user.to.be.banned2" );
-    public static final TestUser USER_RESTRICTED2 = new TestUser(15L, "89898989892", "restricted.user2" );
+    public static final TestUser USER_ADMIN = new TestUser(8L, "89898989898", "admin.admin");
+    public static final TestUser USER_SECOND = new TestUser(9L, "89012378912", "second.testuser");
+    public static final TestUser USER_RESTRICTED = new TestUser(11L, "89898989890", "restricted.user");
+    public static final TestUser USER_MODERATOR = new TestUser(12L, "38211120031", "biffy.clyro");
+    public static final TestUser USER_TO_BE_BANNED1 = new TestUser(13L, "38256133107", "user.to.be.banned1");
+    public static final TestUser USER_TO_BE_BANNED2 = new TestUser(14L, "38256133108", "user.to.be.banned2");
+    public static final TestUser USER_RESTRICTED2 = new TestUser(15L, "89898989892", "restricted.user2");
 
     public static final TestTaxon TAXON_MATHEMATICS_DOMAIN = new TestTaxon(10L, "Mathematics", "DOMAIN");
 }
