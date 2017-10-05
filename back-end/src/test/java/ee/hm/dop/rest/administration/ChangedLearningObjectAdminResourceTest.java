@@ -31,14 +31,14 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     private static final String UPDATE_MATERIAL_URL = "material";
     private static final String TYPE_MATERIAL = ".Material";
     private static final String TEST_SYSTEM_TAG = "mathematics";
-    private static final long TEST_UNREVIEWED_MATERIAL_ID = TestConstants.MATERIAL_9;
+    private static final long TEST_UNREVIEWED_MATERIAL_ID = MATERIAL_9;
     private static final long TEST_TAXON_ForeignLanguage = 11L;
     private static final int FALSE = 0;
 
     @Test
     public void after_admin_changes_learningObject_they_can_find_it_by_asking_for_changes() throws Exception {
-        login(TestConstants.USER_ADMIN);
-        changeMaterial(TestConstants.MATERIAL_5);
+        login(USER_ADMIN);
+        changeMaterial(MATERIAL_5);
 
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
 
@@ -47,17 +47,17 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         isChanged(changedLearningObjects);
         countEqual(changedLearnigObjectsCount, changedLearningObjects);
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TestConstants.MATERIAL_5), list());
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
         assertTrue(CollectionUtils.isNotEmpty(changedLearningObjectsById));
         isChanged(changedLearningObjectsById);
-        idsEqual(changedLearningObjectsById, TestConstants.MATERIAL_5);
+        idsEqual(changedLearningObjectsById, MATERIAL_5);
 
-        doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
+        doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
     }
 
     @Test
     public void after_admin_changes_unReviewed_learningObject_no_changes_are_registered() throws Exception {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
         changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
 
         List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
@@ -72,23 +72,23 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
     @Ignore
     @Test
     public void admin_can_revert_all_changes() throws Exception {
-        login(TestConstants.USER_ADMIN);
-        changeMaterial(TestConstants.MATERIAL_5);
+        login(USER_ADMIN);
+        changeMaterial(MATERIAL_5);
 
-        LearningObject revertedLearningObject = doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5), LearningObject.class);
+        LearningObject revertedLearningObject = doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5), LearningObject.class);
         assertEquals("LearningObject not changed", FALSE, revertedLearningObject.getChanged());
     }
 
     @Test
     public void admin_can_accept_all_changes() throws Exception {
-        login(TestConstants.USER_ADMIN);
-        changeMaterial(TestConstants.MATERIAL_5);
-        doGet(format(ACCEPT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
+        login(USER_ADMIN);
+        changeMaterial(MATERIAL_5);
+        doGet(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_5));
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TestConstants.MATERIAL_5), list());
+        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
         assertTrue(changedLearningObjectsById.isEmpty());
 
-        doGet(format(REVERT_ALL_CHANGES_URL, TestConstants.MATERIAL_5));
+        doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
     }
 
     private void isChanged(List<ChangedLearningObject> changedLearningObjects) {

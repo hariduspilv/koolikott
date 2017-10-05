@@ -20,7 +20,7 @@ public class RestrictedUserAdminResourceTest extends ResourceIntegrationTestBase
 
     @Test
     public void getRestrictedUsers_returns_restricted_users_to_admin() throws Exception {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
         List<User> restrictedUsers = doGet(GET_RESTRICTED_USERS_URL, new GenericType<List<User>>() {
         });
         long restrictedUsersCount = doGet(GET_RESTRICTED_USERS_COUNT_URL, Long.class);

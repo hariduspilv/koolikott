@@ -29,87 +29,87 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
 
-        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_8);
         assertFalse("Tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG)));
 
-        Response response = doPut(format(ADD_TAG_URL, TestConstants.PORTFOLIO_8), tag(TEST_TAG));
+        Response response = doPut(format(ADD_TAG_URL, PORTFOLIO_8), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
 
-        Portfolio portfolioAfter = getPortfolio(TestConstants.PORTFOLIO_8);
+        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_8);
         assertTrue("Tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG)));
     }
 
     @Test
     public void cannot_add_a_tag_to_learning_object_what_does_not_exist() {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
         Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTING_LEARNING_OBJECT_ID), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void adding_system_tag_adds_a_tag() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
 
-        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_8);
         assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
 
-        String query = format(ADD_SYSTEM_TAG_URL, TestConstants.PORTFOLIO_8, TYPE_PORTFOLIO, TEST_SYSTEM_TAG);
+        String query = format(ADD_SYSTEM_TAG_URL, PORTFOLIO_8, TYPE_PORTFOLIO, TEST_SYSTEM_TAG);
         doGet(query);
 
-        Portfolio portfolioAfter = getPortfolio(TestConstants.PORTFOLIO_8);
+        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_8);
         assertTrue("System tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
     }
 
     @Test
     public void adding_tag_with_same_name_throws_an_error() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
 
-        Portfolio portfolio = getPortfolio(TestConstants.PORTFOLIO_8);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_8);
         assertFalse("Tag  name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG_2)));
 
-        Response response = doPut(format(ADD_TAG_URL, TestConstants.PORTFOLIO_8), tag(TEST_TAG_2));
+        Response response = doPut(format(ADD_TAG_URL, PORTFOLIO_8), tag(TEST_TAG_2));
         assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
 
-        Response response2 = doPut(format(ADD_TAG_URL, TestConstants.PORTFOLIO_8), tag(TEST_TAG_2));
+        Response response2 = doPut(format(ADD_TAG_URL, PORTFOLIO_8), tag(TEST_TAG_2));
         assertEquals("Add tag with same name", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response2.getStatus());
     }
 
     @Test
     public void addUserFavorite_adds_learningObject_to_user_favorites() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
 
-        LearningObject learningObject = getPortfolio(TestConstants.PORTFOLIO_8);
+        LearningObject learningObject = getPortfolio(PORTFOLIO_8);
         Response response = doPost(SET_TO_FAVOURITE_URL, learningObject);
         assertEquals("Set to favourite", Status.OK.getStatusCode(), response.getStatus());
 
-        UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, TestConstants.PORTFOLIO_8), UserFavorite.class);
+        UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
         assertNotNull("User favourite exist", userFavorite);
 
         long favouritesCount = doGet(GET_FAVOURITE_COUNT_URL, Long.class);
         assertEquals("User favourite count", 1, favouritesCount);
 
-        doDelete(format(DELETE_FAVOURITE_URL, TestConstants.PORTFOLIO_8));
+        doDelete(format(DELETE_FAVOURITE_URL, PORTFOLIO_8));
     }
 
     @Test
     public void cannot_find_user_favorite_when_it_is_not_set() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
 
-        UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, TestConstants.PORTFOLIO_8), UserFavorite.class);
+        UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
         assertNull("User favourite doesn't exist", userFavorite);
     }
 
     @Test
     public void deleting_user_favorite_removes_it_from_user_favorites() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
 
-        LearningObject learningObject = getPortfolio(TestConstants.PORTFOLIO_8);
+        LearningObject learningObject = getPortfolio(PORTFOLIO_8);
 
         doPost(SET_TO_FAVOURITE_URL, learningObject);
-        doGet(format(GET_FAVOURITE_URL, TestConstants.PORTFOLIO_8), UserFavorite.class);
-        doDelete(format(DELETE_FAVOURITE_URL, TestConstants.PORTFOLIO_8));
+        doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
+        doDelete(format(DELETE_FAVOURITE_URL, PORTFOLIO_8));
 
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
         assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));

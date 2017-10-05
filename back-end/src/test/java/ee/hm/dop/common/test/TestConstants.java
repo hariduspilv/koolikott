@@ -41,6 +41,9 @@ public class TestConstants {
     public static final TestUser USER_SECOND = new TestUser(9L, "89012378912", "second.testuser" );
     public static final TestUser USER_RESTRICTED = new TestUser(11L, "89898989890", "restricted.user" );
     public static final TestUser USER_MODERATOR = new TestUser(12L, "38211120031", "biffy.clyro" );
+    public static final TestUser USER_TO_BE_BANNED1 = new TestUser(13L, "38256133107", "user.to.be.banned1" );
+    public static final TestUser USER_TO_BE_BANNED2 = new TestUser(14L, "38256133108", "user.to.be.banned2" );
+    public static final TestUser USER_RESTRICTED2 = new TestUser(15L, "89898989892", "restricted.user2" );
 
-    public static final TestTaxon TAXON_MATHEMATICS = new TestTaxon(10L, "Mathematics");
+    public static final TestTaxon TAXON_MATHEMATICS_DOMAIN = new TestTaxon(10L, "Mathematics", "DOMAIN");
 }

@@ -22,51 +22,51 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPortfolioComment() {
-        login(TestConstants.USER_MATI);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_5, NICE_COMMENT));
+        login(USER_MATI);
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_5, NICE_COMMENT));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addPortfolioCommentNotLoggedIn() {
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_5, NICE_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_5, NICE_COMMENT));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsCreator() {
-        login(TestConstants.USER_PEETER);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_7, SUCH_COMMENT));
+        login(USER_PEETER);
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_7, SUCH_COMMENT));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
-        login(TestConstants.USER_MATI);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(TestConstants.PORTFOLIO_7, SUCH_COMMENT));
+        login(USER_MATI);
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_7, SUCH_COMMENT));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addMaterialComment_adds_comment_to_material() throws Exception {
-        login(TestConstants.USER_MATI);
+        login(USER_MATI);
 
-        Material materialBefore = getMaterial(TestConstants.MATERIAL_2);
+        Material materialBefore = getMaterial(MATERIAL_2);
         assertTrue("Material comments empty", materialBefore.getComments().isEmpty());
 
-        doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(TestConstants.MATERIAL_2, NICE_COMMENT));
+        doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(MATERIAL_2, NICE_COMMENT));
 
-        Material materialAfter = getMaterial(TestConstants.MATERIAL_2);
+        Material materialAfter = getMaterial(MATERIAL_2);
         assertEquals("Material comments size", 1, materialAfter.getComments().size());
         assertEquals("Material comment", NICE_COMMENT, materialAfter.getComments().get(0).getText());
     }
 
     @Test
     public void addMaterialComment_as_not_logged_in_user_does_not_add_comment_to_material() throws Exception {
-        Response response = doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(TestConstants.MATERIAL_3, NICE_COMMENT));
+        Response response = doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(MATERIAL_3, NICE_COMMENT));
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
 
-        Material material = getMaterial(TestConstants.MATERIAL_3);
+        Material material = getMaterial(MATERIAL_3);
         assertTrue("Material comments empty", material.getComments().isEmpty());
     }
 

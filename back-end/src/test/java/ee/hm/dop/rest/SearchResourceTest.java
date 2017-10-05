@@ -36,7 +36,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "المدرسية";
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1);
         assertEquals(1, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -69,7 +69,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_3);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_3);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setTaxons(Collections.singletonList(educationalContext));
         SearchResult searchResult = doGet(buildQueryURL(null, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2);
         assertEquals(1, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -97,7 +97,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String queryURL = buildQueryURL(query, 0, null, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_2);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_2);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -109,7 +109,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_3);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_3);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -121,7 +121,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_4);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_4);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -134,7 +134,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_2, TestConstants.MATERIAL_3);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_2, MATERIAL_3);
         assertEquals(3, searchResult.getTotalResults());
         assertEquals(start, searchResult.getStart());
     }
@@ -147,7 +147,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_5);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_5);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(start, searchResult.getStart());
     }
@@ -163,7 +163,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setPaid(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_6);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_6);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -180,7 +180,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String queryURL = buildQueryURL(query, 0, null, searchFilter);
         SearchResult searchResult = doGet(queryURL, SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_7);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_7);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -193,7 +193,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setType("material");
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_8);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_8);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -205,7 +205,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setIssuedFrom(2011);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_5);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_5);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -228,12 +228,12 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void searchAsAdmin() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
         String query = "super";
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, new SearchFilter()), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_4);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_4);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -248,7 +248,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_1);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_1);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(start, searchResult.getStart());
     }
@@ -262,7 +262,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_6);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_6);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(start, searchResult.getStart());
     }
@@ -274,7 +274,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setCurriculumLiterature(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_7);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_7);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -286,7 +286,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setCurriculumLiterature(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2, TestConstants.MATERIAL_8);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2, MATERIAL_8);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -298,7 +298,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setCurriculumLiterature(false);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, 1L, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_2);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_2);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }
@@ -313,7 +313,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setResourceType(resourceType);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, 10L, searchFilter), SearchResult.class);
 
-        assertMaterialIdentifiers(searchResult.getItems(), TestConstants.MATERIAL_1, TestConstants.MATERIAL_6);
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_6);
         assertEquals(2, searchResult.getTotalResults());
         assertEquals(0, searchResult.getStart());
     }

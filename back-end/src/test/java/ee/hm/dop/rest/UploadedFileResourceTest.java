@@ -71,7 +71,7 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
         final FileDataBodyPart filePart = new FileDataBodyPart("file", tempFile);
         FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
 
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         Response response = doPost("uploadedFile", Entity.entity(formDataMultiPart,
                 MediaType.MULTIPART_FORM_DATA), MediaType.APPLICATION_JSON_TYPE);

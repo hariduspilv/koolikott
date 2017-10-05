@@ -22,9 +22,9 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void login() {
-        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + USER_MATI.idCode, AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
-        validateUser(authenticatedUser.getUser(), TestConstants.USER_MATI);
+        validateUser(authenticatedUser.getUser(), USER_MATI);
     }
 
     @Test

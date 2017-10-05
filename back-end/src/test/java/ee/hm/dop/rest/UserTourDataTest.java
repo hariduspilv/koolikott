@@ -22,14 +22,14 @@ public class UserTourDataTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getUserTourData_creates_new_tour_data_for_new_user() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
         UserTourData userTourData = doGet(USER_TOUR_URL, UserTourData.class);
         assertNotNull("User tour data exists", userTourData);
     }
 
     @Test
     public void getUserTourData_return_user_tour_data() throws Exception {
-        login(TestConstants.USER_MATI);
+        login(USER_MATI);
         UserTourData userTourData = doGet(USER_TOUR_URL, UserTourData.class);
         assertNotNull("User tour data exists", userTourData);
     }
@@ -43,10 +43,10 @@ public class UserTourDataTest extends ResourceIntegrationTestBase {
 
     @Test
     public void user_can_not_addUserTourData_to_another_user() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
         UserTourData userTourData = doGet(USER_TOUR_URL, UserTourData.class);
         logout();
-        login(TestConstants.USER_MATI);
+        login(USER_MATI);
         Response response = doPut(USER_TOUR_URL, userTourData);
 
         assertEquals("Access denied", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
@@ -54,7 +54,7 @@ public class UserTourDataTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addUserTourData_updates_user_tour_data() throws Exception {
-        login(TestConstants.USER_PEETER);
+        login(USER_PEETER);
         UserTourData userTourData = doGet(USER_TOUR_URL, UserTourData.class);
         userTourData.setGeneralTour(true);
         UserTourData userTourDataAfter = doPut(USER_TOUR_URL, userTourData, UserTourData.class);

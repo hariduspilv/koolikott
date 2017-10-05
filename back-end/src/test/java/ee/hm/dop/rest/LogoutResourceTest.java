@@ -21,12 +21,12 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void testLogout() {
-        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
         });
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();
 
-        getTarget("logout", new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
+        getTarget(LOGOUT, new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
     }
 
     @Provider

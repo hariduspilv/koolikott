@@ -2,12 +2,16 @@ package ee.hm.dop.rest;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.core.GenericType;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
+import ee.hm.dop.model.enums.Role;
 import org.junit.Test;
 
 /**
@@ -19,10 +23,11 @@ public class RoleResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getRoles() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
-        List<String> allUsers = doGet(GET_ROLES, new GenericType<List<String>>() {
+        List<Role> roles = doGet(GET_ROLES, new GenericType<List<Role>>() {
         });
-        assertEquals(4, allUsers.size());
+        List<Role> expected = new ArrayList<>(Arrays.asList(Role.values()));
+        assertEquals(expected, roles);
     }
 }

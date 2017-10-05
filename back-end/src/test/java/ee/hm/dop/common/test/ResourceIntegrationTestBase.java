@@ -35,6 +35,7 @@ import static org.junit.Assert.assertNull;
 public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     public static final String DEV_LOGIN = "dev/login/";
+    public static final String LOGOUT = "logout";
     private static String RESOURCE_BASE_URL;
 
     @Inject
@@ -60,7 +61,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     @After
     public void logout() {
         if (authenticationFilter != null) {
-            Response response = doPost("logout");
+            Response response = doPost(LOGOUT);
             assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
             authenticationFilter = null;
         }
@@ -229,5 +230,9 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         assertEquals(testUser.firstName, user.getName());
         assertEquals(testUser.lastName, user.getSurname());
         assertNull(user.getIdCode());
+    }
+
+    public User getUser(TestUser testUser) {
+        return doGet("user?username=" + testUser.username, User.class);
     }
 }

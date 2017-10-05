@@ -119,7 +119,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     }
 
     private BufferedImage getThumbnail(String requestUrl) throws IOException {
-        login(TestConstants.USER_MAASIKAS_VAARIKAS);
+        login(USER_MAASIKAS_VAARIKAS);
 
         String imgName = prepareTestImage();
 
@@ -173,7 +173,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addPicture() throws IOException {
-        login(TestConstants.USER_MAASIKAS_VAARIKAS);
+        login(USER_MAASIKAS_VAARIKAS);
 
         File f = DOPFileUtils.getFile(TEST_IMAGE_NAME);
         final StreamDataBodyPart filePart = new StreamDataBodyPart("picture", new ByteArrayInputStream(Base64.getEncoder().encode(Files.readAllBytes(f.toPath()))));

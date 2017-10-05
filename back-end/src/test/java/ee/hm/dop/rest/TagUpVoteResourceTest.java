@@ -22,11 +22,11 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVote() {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));
-        tagUpVote.setLearningObject(materialWithId(TestConstants.MATERIAL_1));
+        tagUpVote.setLearningObject(materialWithId(MATERIAL_1));
 
         TagUpVote returnedTagUpVote = doPut(TAG_UP_VOTES, tagUpVote, TagUpVote.class);
 
@@ -34,7 +34,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(returnedTagUpVote.getId());
         assertNull(returnedTagUpVote.getUser().getIdCode());
         assertEquals(MATEMAATIKA, returnedTagUpVote.getTag().getName());
-        assertEquals(TestConstants.MATERIAL_1, returnedTagUpVote.getLearningObject().getId());
+        assertEquals(MATERIAL_1, returnedTagUpVote.getLearningObject().getId());
 
         Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -60,7 +60,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void report() {
-        login(TestConstants.USER_MATI);
+        login(USER_MATI);
 
         Response response = doGet("tagUpVotes/report?learningObject=1");
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
@@ -99,10 +99,10 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeUpVote() {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(TestConstants.PORTFOLIO_1);
+        portfolio.setId(PORTFOLIO_1);
         portfolio.setVisibility(Visibility.PUBLIC);
 
         TagUpVote tagUpVote = new TagUpVote();
@@ -120,25 +120,25 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void can_not_remove_tagUpVote_that_does_not_exist() throws Exception {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
         Response response = doDelete(TAG_UP_VOTES + "/" + 100L);
         assertEquals("No tagUpVote", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_get_tagUpVote_without_learningObject_id() throws Exception {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
         Response response = doGet("tagUpVotes/report?learningObject=");
         assertEquals("LearningObject query param is required", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_insert_tagUpVote_to_tag_that_does_not_exist() throws Exception {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(NOT_EXISTING_TAG));
-        tagUpVote.setLearningObject(portfolioWithId(TestConstants.PORTFOLIO_1));
+        tagUpVote.setLearningObject(portfolioWithId(PORTFOLIO_1));
 
         Response response = doPut(TAG_UP_VOTES, tagUpVote);
         assertEquals("No tag", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -146,10 +146,10 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void can_not_insert_tagUpVote_that_already_exists() throws Exception {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(TestConstants.PORTFOLIO_1);
+        portfolio.setId(PORTFOLIO_1);
         portfolio.setVisibility(Visibility.PUBLIC);
 
         TagUpVote tagUpVote = new TagUpVote();
@@ -165,11 +165,11 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void upVoteGettingPrivatePortfolio() {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         TagUpVote tagUpVote = new TagUpVote();
         tagUpVote.setTag(tag(MATEMAATIKA));
-        tagUpVote.setLearningObject(portfolioWithId(TestConstants.PORTFOLIO_10));
+        tagUpVote.setLearningObject(portfolioWithId(PORTFOLIO_10));
 
         Response response = doPut(TAG_UP_VOTES, tagUpVote);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());

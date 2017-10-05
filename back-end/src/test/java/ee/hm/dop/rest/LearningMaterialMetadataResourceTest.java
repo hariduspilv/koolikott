@@ -17,17 +17,18 @@ import static org.junit.Assert.*;
 
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String GET_EDUCATIONAL_CONTEXT_URL = "learningMaterialMetadata/educationalContext";
-    private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
-    private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
-    private static final String GET_USED_LANGUAGES_URL = "learningMaterialMetadata/usedLanguages";
-    private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
-    private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
-    private static final String GET_USED_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType/used";
-    private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
-    private static final String GET_CROSS_CURRICULAR_THEMES_URL = "learningMaterialMetadata/crossCurricularTheme";
-    private static final String GET_KEY_COMPETENCES_URL = "learningMaterialMetadata/keyCompetence";
-    private static final String GET_REPORTING_REASONS_URL = "learningMaterialMetadata/reportingReasons";
+    public static final String BASE = "learningMaterialMetadata/";
+    private static final String GET_EDUCATIONAL_CONTEXT_URL = BASE + "educationalContext";
+    private static final String GET_TAXON_URL = BASE + "taxon?taxonId=%s";
+    private static final String GET_LANGUAGES_URL = BASE + "language";
+    private static final String GET_USED_LANGUAGES_URL = BASE + "usedLanguages";
+    private static final String GET_TARGET_GROUPS_URL = BASE + "targetGroup";
+    private static final String GET_RESOURCE_TYPES_URL = BASE + "resourceType";
+    private static final String GET_USED_RESOURCE_TYPES_URL = BASE + "resourceType/used";
+    private static final String GET_LICENSE_TYPES_URL = BASE + "licenseType";
+    private static final String GET_CROSS_CURRICULAR_THEMES_URL = BASE + "crossCurricularTheme";
+    private static final String GET_KEY_COMPETENCES_URL = BASE + "keyCompetence";
+    private static final String GET_REPORTING_REASONS_URL = BASE + "reportingReasons";
     public static final String MATHEMATICS = "Mathematics";
     public static final String ALGEBRA = "Algebra";
     public static final String TRIGONOMETRIA = "Trigonometria";
@@ -70,9 +71,9 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getTaxon() {
-        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TestConstants.TAXON_MATHEMATICS.id), Taxon.class);
-        assertEquals(TestConstants.TAXON_MATHEMATICS.id, taxon.getId());
-        assertEquals(TestConstants.TAXON_MATHEMATICS.name, taxon.getName());
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_MATHEMATICS_DOMAIN.id), Taxon.class);
+        assertEquals(TAXON_MATHEMATICS_DOMAIN.id, taxon.getId());
+        assertEquals(TAXON_MATHEMATICS_DOMAIN.name, taxon.getName());
     }
 
     @Test
@@ -156,13 +157,12 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     }
 
     @Test
-    public void getAllReportingReasons() throws Exception {
+    public void getReportingReasons_returns_all_reasons() throws Exception {
         List<ReportingReasonEnum> actual = doGet(GET_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
         });
         List<ReportingReasonEnum> expected = new ArrayList<>(Arrays.asList(ReportingReasonEnum.values()));
 
-        assertTrue(expected.containsAll(actual));
-        assertTrue(actual.containsAll(expected));
+        assertEquals(expected, actual);
     }
 
     private void verifyGetLanguages(List<String> expectedNames, String getUsedLanguagesUrl) {

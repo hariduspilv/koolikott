@@ -25,12 +25,12 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public static final String IMPROPER_PORTFOLIOS_COUNT = "admin/improper/portfolio/count";
     public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
     public static final String REVIEW_IMPROPERS_BY_ID = "impropers?learningObject=%s";
-    public static final Long TEST_PORFOLIO_ID = TestConstants.PORTFOLIO_1;
-    public static final Long TEST_UNREVIEWED_PORFOLIO_ID = TestConstants.PORTFOLIO_8;
+    public static final Long TEST_PORFOLIO_ID = PORTFOLIO_1;
+    public static final Long TEST_UNREVIEWED_PORFOLIO_ID = PORTFOLIO_8;
 
     @Test
     public void setImproperNoData() {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         Response response = doPut(IMPROPERS, new ImproperContent());
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -38,7 +38,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void setImproperNotExistemLearningObject() {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
         Response response = doPut(IMPROPERS, improperMaterialContent(34534534L));
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -47,13 +47,13 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     @Ignore
     @Test
     public void setImproper() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
-        ImproperContent newImproperContent = doPut(IMPROPERS, improperMaterialContent(TestConstants.MATERIAL_1), ImproperContent.class);
+        ImproperContent newImproperContent = doPut(IMPROPERS, improperMaterialContent(MATERIAL_1), ImproperContent.class);
 
         assertNotNull(newImproperContent);
         assertNotNull(newImproperContent.getId());
-        assertEquals(TestConstants.MATERIAL_1, newImproperContent.getLearningObject().getId());
+        assertEquals(MATERIAL_1, newImproperContent.getLearningObject().getId());
 
         Response response = doDelete(format(REVIEW_IMPROPERS_BY_ID, newImproperContent.getId()));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -61,7 +61,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImpropers() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
         List<ImproperContent> improperContents = doGet(IMPROPERS, genericType());
 
@@ -71,7 +71,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperMaterials() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
         List<ImproperContent> improperContents = doGet(IMPROPER_MATERIALS, genericType());
 
@@ -89,7 +89,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperPortfolios() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
         List<ImproperContent> improperContents = doGet(IMPROPER_PORTFOLIOS, genericType());
 
@@ -102,9 +102,9 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getImproperByLearningObject() {
-        login(TestConstants.USER_SECOND);
+        login(USER_SECOND);
 
-        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, TestConstants.PORTFOLIO_3), genericType());
+        List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, PORTFOLIO_3), genericType());
 
         assertNotNull(improperContents.size());
         assertEquals(1, improperContents.size());
@@ -113,7 +113,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void approving_improper_content_removes_it() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
         doPut(IMPROPERS, improperPortfolioContent(TEST_PORFOLIO_ID), ImproperContent.class);
 
@@ -127,7 +127,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void approving_unreviewed_improper_content_removes_improper_content_and_sets_it_reviewed() {
-        login(TestConstants.USER_ADMIN);
+        login(USER_ADMIN);
 
         doPut(IMPROPERS, improperPortfolioContent(TEST_UNREVIEWED_PORFOLIO_ID), ImproperContent.class);
 

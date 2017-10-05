@@ -22,7 +22,7 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         ChangedLearningObject change2 = new ChangedLearningObject();
 
         Material material = new Material();
-        material.setId(TestConstants.MATERIAL_1);
+        material.setId(MATERIAL_1);
 
         change1.setId(1L);
         change2.setId(2L);
@@ -32,12 +32,12 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         changedLearningObjectDao.createOrUpdate(change1);
         changedLearningObjectDao.createOrUpdate(change2);
 
-        List<ChangedLearningObject> changes = changedLearningObjectDao.getAllByLearningObject(TestConstants.MATERIAL_1);
+        List<ChangedLearningObject> changes = changedLearningObjectDao.getAllByLearningObject(MATERIAL_1);
         assertTrue(changes.size() == 2);
 
-        changedLearningObjectDao.removeAllByLearningObject(TestConstants.MATERIAL_1);
+        changedLearningObjectDao.removeAllByLearningObject(MATERIAL_1);
 
-        List<ChangedLearningObject> changesAfter = changedLearningObjectDao.getAllByLearningObject(TestConstants.MATERIAL_1);
+        List<ChangedLearningObject> changesAfter = changedLearningObjectDao.getAllByLearningObject(MATERIAL_1);
         assertTrue(changesAfter.size() == 0);
     }
 
@@ -48,9 +48,9 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         ChangedLearningObject change3 = new ChangedLearningObject();
 
         Material material1 = new Material();
-        material1.setId(TestConstants.MATERIAL_1);
+        material1.setId(MATERIAL_1);
         Material material2 = new Material();
-        material2.setId(TestConstants.MATERIAL_2);
+        material2.setId(MATERIAL_2);
 
         change1.setId(1L);
         change2.setId(2L);
@@ -66,8 +66,8 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         List<ChangedLearningObject> changes = changedLearningObjectDao.findAll();
         assertTrue(changes.size() == 3);
 
-        changedLearningObjectDao.removeAllByLearningObject(TestConstants.MATERIAL_1);
-        changedLearningObjectDao.removeAllByLearningObject(TestConstants.MATERIAL_2);
+        changedLearningObjectDao.removeAllByLearningObject(MATERIAL_1);
+        changedLearningObjectDao.removeAllByLearningObject(MATERIAL_2);
 
         List<ChangedLearningObject> changesAfter = changedLearningObjectDao.findAll();
         assertTrue(changesAfter.size() == 0);

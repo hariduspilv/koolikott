@@ -22,31 +22,31 @@ public class UserDaoTest extends DatabaseTestBase {
 
     @Test
     public void findUserByIdCode() {
-        User user = findByIdCode(TestConstants.USER_MATI);
-        validateUser(user, TestConstants.USER_MATI);
+        User user = findByIdCode(USER_MATI);
+        validateUser(user, USER_MATI);
 
-        user = findByIdCode(TestConstants.USER_PEETER);
-        validateUser(user, TestConstants.USER_PEETER);
+        user = findByIdCode(USER_PEETER);
+        validateUser(user, USER_PEETER);
 
-        user = findByIdCode(TestConstants.USER_VOLDERMAR);
-        validateUser(user, TestConstants.USER_VOLDERMAR);
+        user = findByIdCode(USER_VOLDERMAR);
+        validateUser(user, USER_VOLDERMAR);
     }
 
     @Test
     public void findByUsername() {
-        User user = findByName(TestConstants.USER_MATI);
-        validateUser(user, TestConstants.USER_MATI);
+        User user = findByName(USER_MATI);
+        validateUser(user, USER_MATI);
 
-        user = findByName(TestConstants.USER_PEETER);
-        validateUser(user, TestConstants.USER_PEETER);
+        user = findByName(USER_PEETER);
+        validateUser(user, USER_PEETER);
 
-        user = findByName(TestConstants.USER_VOLDERMAR);
-        validateUser(user, TestConstants.USER_VOLDERMAR);
+        user = findByName(USER_VOLDERMAR);
+        validateUser(user, USER_VOLDERMAR);
     }
 
     @Test
     public void countUsersWithSameUsernameIgnoringAccents() {
-        assertEquals(Long.valueOf(2), userDao.countUsersWithSameUsername(TestConstants.USER_MATI.username));
+        assertEquals(Long.valueOf(2), userDao.countUsersWithSameUsername(USER_MATI.username));
     }
 
     @Test
