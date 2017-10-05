@@ -5,12 +5,11 @@ import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.UserUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
@@ -30,7 +29,7 @@ public class FirstReviewService {
         }
     }
 
-    public BigDecimal getUnReviewedCount(User loggedInUser) {
+    public BigInteger getUnReviewedCount(User loggedInUser) {
         if (UserUtil.isAdmin(loggedInUser)) {
             return firstReviewDao.findCountOfUnreviewed();
         } else {

@@ -187,7 +187,6 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
         @Override
         public void filter(ClientRequestContext requestContext) throws IOException {
-
             if (token != null && username != null) {
                 List<Object> tokenList = new ArrayList<>();
                 tokenList.add(token);

@@ -4,6 +4,7 @@ import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -214,6 +215,7 @@ public class MaterialService implements PermissionItem {
         setPublishers(material);
         setPeerReviews(material);
         material = applyRestrictions(material);
+        material.setVisibility(Visibility.PUBLIC);
 
         Material updatedMaterial = materialDao.createOrUpdate(material);
         if (isNew) {

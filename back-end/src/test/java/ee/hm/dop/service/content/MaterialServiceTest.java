@@ -11,6 +11,7 @@ import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
@@ -132,6 +133,7 @@ public class MaterialServiceTest {
         material.setRecommendation(null);
         material.setPeerReviews(null);
         material.setSource("http://creatematerial.example.com");
+        material.setVisibility(Visibility.PUBLIC);
         solrEngineService.updateIndex();
 
         material.setAdded(added);
@@ -229,6 +231,7 @@ public class MaterialServiceTest {
 
         material.setKeyCompetences(null);
         material.setCrossCurricularThemes(null);
+        material.setVisibility(Visibility.PUBLIC);
 
         KeyCompetence keyCompetence = new KeyCompetence();
         keyCompetence.setId(1004L);
@@ -258,52 +261,6 @@ public class MaterialServiceTest {
 
         verify(materialDao, material);
     }
-/*
-    @Test
-    public void deleteByAdmin() {
-        Long materialID = 15L;
-
-        Material originalMaterial = new Material();
-        originalMaterial.setId(15L);
-
-        User user = new User();
-        user.setRole(Role.ADMIN);
-
-        expect(materialDao.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
-        materialDao.delete(originalMaterial);
-        solrEngineService.updateIndex();
-
-        replayAll();
-
-        materialService.delete(materialID, user);
-
-        verifyAll();
-    }*/
-
-/*    @Test
-    public void userCanNotDeleteRepositoryMaterial() {
-        Long materialID = 15L;
-
-        Material originalMaterial = new Material();
-        originalMaterial.setId(materialID);
-        originalMaterial.setRepository(new Repository());
-        originalMaterial.setRepositoryIdentifier("asd");
-
-        User user = new User();
-        user.setRole(Role.USER);
-
-//        expect(materialDao.findByIdNotDeleted(materialID)).andReturn(originalMaterial);
-
-        replayAll();
-
-        try {
-            materialService.delete(materialID, user);
-        } catch (RuntimeException e) {
-            assertEquals(UserUtil.MUST_BE_ADMIN_OR_MODERATOR, e.getMessage());
-        }
-
-        verifyAll();
-    }*/
 
     @Test
     public void updateByUserNullMaterial() {
