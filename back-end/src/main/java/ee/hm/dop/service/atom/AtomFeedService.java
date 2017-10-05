@@ -22,6 +22,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Version;
 import ee.hm.dop.model.enums.LanguageC;
+import ee.hm.dop.utils.NumberUtils;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
@@ -33,6 +34,11 @@ import org.slf4j.LoggerFactory;
 
 public class AtomFeedService {
 
+    public static final String FEED_ID = "FEED_ID";
+    public static final String FEED_TITLE = "FEED_TITLE";
+    public static final String FEED_VERSION_TITLE = "FEED_VERSION_TITLE";
+    public static final String FEED_PORTFOLIO_TITLE = "FEED_PORTFOLIO_TITLE";
+    public static final String FEED_MATERIAL_TITLE = "FEED_MATERIAL_TITLE";
     @Inject
     private Configuration configuration;
     @Inject
@@ -62,8 +68,8 @@ public class AtomFeedService {
         this.lang = lang;
         maxFeedItems = configuration.getInt(MAX_FEED_ITEMS);
 
-        feed.setId(translateString("FEED_ID"));
-        feed.setTitle(translateString("FEED_TITLE"));
+        feed.setId(translateString(FEED_ID));
+        feed.setTitle(translateString(FEED_TITLE));
         feed.setIcon(format("%s/favicon.ico", configuration.getString(SERVER_ADDRESS)));
         feed.setLogo(format("%s/koolikott.png", configuration.getString(SERVER_ADDRESS)));
 
@@ -95,7 +101,7 @@ public class AtomFeedService {
 
         entryList.sort(Comparator.comparing(Entry::getUpdated).reversed());
 
-        for (Entry entry : entryList.subList(0, maxFeedItems)) {
+        for (Entry entry : entryList.subList(0, Math.min(maxFeedItems, entryList.size()))) {
             feed.addEntry(entry);
         }
 
@@ -127,7 +133,7 @@ public class AtomFeedService {
         Entry entry = factory.newEntry();
 
         entry.setId(format("portfolio:%d", portfolio.getId()));
-        entry.setTitle(format(translateString("FEED_PORTFOLIO_TITLE"), portfolio.getTitle()));
+        entry.setTitle(format(translateString(FEED_PORTFOLIO_TITLE), portfolio.getTitle()));
         entry.addAuthor(format("%s %s", portfolio.getOriginalCreator().getName(), portfolio.getOriginalCreator().getSurname()));
         entry.addLink(format("%s/portfolio?id=%s", configuration.getString(SERVER_ADDRESS), portfolio.getId()));
         entry.setUpdated(portfolio.getAdded().toDate());
@@ -139,7 +145,7 @@ public class AtomFeedService {
         Entry entry = factory.newEntry();
 
         entry.setId(format("version:%d", version.getId()));
-        entry.setTitle(format(translateString("FEED_VERSION_TITLE"), version.getVersion()));
+        entry.setTitle(format(translateString(FEED_VERSION_TITLE), version.getVersion()));
         entry.addLink("https://github.com/hariduspilv/koolikott/blob/master/CHANGELOG.md");
         entry.setUpdated(version.getReleased().toDate());
 
@@ -164,7 +170,7 @@ public class AtomFeedService {
     }
 
     private String translateMaterialTitle(List<LanguageString> titles) {
-        String titleTranslation = translateString("FEED_MATERIAL_TITLE");
+        String titleTranslation = translateString(FEED_MATERIAL_TITLE);
 
         if(titleTranslation == null){
             return null;

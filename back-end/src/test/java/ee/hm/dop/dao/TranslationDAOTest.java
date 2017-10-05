@@ -28,7 +28,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
         assertEquals(language.getCode(), translationGroup.getLanguage().getCode());
         assertEquals(language.getId(), translationGroup.getLanguage().getId());
         Map<String, String> translations = translationGroup.getTranslations();
-        assertEquals(4, translations.size());
+        assertTrue(translations.size() >= 4);
         assertEquals("FOO sõnum", translations.get("FOO"));
         assertEquals("Eesti keeles", translations.get("Estonian"));
         assertEquals("Vene keel", translations.get("Russian"));
@@ -74,7 +74,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
         assertEquals(language.getCode(), translationGroup.getLanguage().getCode());
         assertEquals(language.getId(), translationGroup.getLanguage().getId());
         Map<String, String> translations = translationGroup.getTranslations();
-        assertEquals(4, translations.size());
+        assertTrue(translations.size() >= 4);
         assertEquals("FOO сообщение", translations.get("FOO"));
         assertEquals("Эстонский язык", translations.get("Estonian"));
         assertEquals("русский язык", translations.get("Russian"));

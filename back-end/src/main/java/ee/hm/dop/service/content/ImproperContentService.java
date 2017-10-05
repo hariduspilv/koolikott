@@ -74,19 +74,6 @@ public class ImproperContentService {
     }
 
     /**
-     * @param improperContentId
-     * @param user              who wants access to the list
-     * @return the ImproperContent if user has rights to access
-     */
-    public ImproperContent get(long improperContentId, User user) {
-        ImproperContent improperContent = improperContentDao.findByIdUnreviewed(improperContentId);
-        if (improperContent != null && !learningObjectService.canAccess(user, improperContent.getLearningObject())) {
-            return null;
-        }
-        return improperContent;
-    }
-
-    /**
      * @param user who wants access to the list
      * @return a list of improperContent that user has rights to access
      */

@@ -387,18 +387,33 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'Estonian', 'Eesti keeles');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'Russian', 'Vene keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TOPIC_MATHEMATICS', 'Matemaatika');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_ID', 'e-Koolikott:et');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_TITLE', 'e-Koolikott - Uudised');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_VERSION_TITLE', 'Uus versioon "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_PORTFOLIO_TITLE', 'Uus portfoolio "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_MATERIAL_TITLE', 'Uus material "%s"');
 
 -- Russian
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Estonian', 'Эстонский язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Russian', 'русский язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_MATHEMATICS', 'Mатематика');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_ID', 'e-Koolikott:ru');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_TITLE', 'Новая версия "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_VERSION_TITLE', 'Feed version title rus');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_PORTFOLIO_TITLE', 'Новый портфель "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_MATERIAL_TITLE', 'Новый материал "%s"');
 
 -- English
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Estonian', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Russian', 'Russian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TOPIC_MATHEMATICS', 'Mathematics');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_ID', 'e-Koolikott:en');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_TITLE', 'e-Koolikott - News');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_VERSION_TITLE', 'New version "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_PORTFOLIO_TITLE', 'New portfolio "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_MATERIAL_TITLE', 'New material "%s"');
 
 -- Page
 

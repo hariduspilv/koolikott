@@ -8,7 +8,6 @@ import org.junit.Test;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -20,33 +19,7 @@ public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase 
     private static final String MATERIAL_GET_BROKEN = "admin/brokenContent/getBroken";
     private static final String MATERIAL_GET_BROKEN_COUNT = "admin/brokenContent/getBroken/count";
     private static final String MATERIAL_SET_NOT_BROKEN = "admin/brokenContent/setNotBroken";
-    public static final String MATERIAL_IS_BROKEN = "admin/brokenContent/isBroken?materialId=";
-
-    @Test
-    public void setNotBroken_sets_material_unbroken() {
-        login(USER_ADMIN);
-        setMaterialBroken(MATERIAL_5);
-        assertTrue("Material is broken", getMaterial(MATERIAL_5).getBroken() > 0);
-
-        doPost(MATERIAL_SET_NOT_BROKEN, getMaterial(MATERIAL_5));
-        assertTrue("Material is not broken", getMaterial(MATERIAL_5).getBroken() == 0);
-    }
-
-    @Test
-    public void setNotBroken_sets_material_unbroken_and_material_is_reviewed() {
-        login(USER_ADMIN);
-        setMaterialBroken(MATERIAL_6);
-        assertTrue("Material is broken", getMaterial(MATERIAL_6).getBroken() > 0);
-
-        Material materialBroken = getMaterial(MATERIAL_6);
-        assertTrue(materialBroken.getUnReviewed() > 0);
-
-        doPost(MATERIAL_SET_NOT_BROKEN, getMaterial(MATERIAL_6));
-        assertTrue("Material is not broken", getMaterial(MATERIAL_6).getBroken() == 0);
-
-        Material materialNotBroken = getMaterial(MATERIAL_6);
-        assertTrue(materialNotBroken.getUnReviewed() == 0);
-    }
+    private static final String MATERIAL_IS_BROKEN = "admin/brokenContent/isBroken?materialId=";
 
     @Test
     public void isBroken_returns_if_material_is_broken() {

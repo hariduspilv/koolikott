@@ -330,17 +330,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void deleteAndRestore() {
-        login(USER_ADMIN);
-
-        Response response = doDelete("material/" + MATERIAL_13);
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-
-        Response response2 = doPost(RESTORE_MATERIAL, materialWithId(MATERIAL_13));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response2.getStatus());
-    }
-
-    @Test
     public void userCanNotDeleteRepositoryMaterial() {
         login(USER_PEETER);
         Response response = doDelete("material/" + MATERIAL_12);
