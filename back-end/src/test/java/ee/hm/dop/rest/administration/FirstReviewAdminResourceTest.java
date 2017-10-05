@@ -75,6 +75,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     public void getUnreviewed_returns_different_unReviewed_materials_based_on_user_priviledge() {
         login(USER_MODERATOR);
         List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
+        logout();
 
         login(USER_ADMIN);
         List<FirstReview> firstReviewsAdmin = doGet(GET_UNREVIEWED, listType());

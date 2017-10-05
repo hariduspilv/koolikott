@@ -48,6 +48,9 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     protected User login(String idCode) {
+        if (authenticationFilter != null){
+            logout();
+        }
         AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + idCode, new GenericType<AuthenticatedUser>() {
         });
 
