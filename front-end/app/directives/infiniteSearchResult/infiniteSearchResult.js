@@ -3,7 +3,7 @@
 {
 class controller extends Controller {
     $onInit() {
-        // this.initialParams = { ...this.params }
+        this.initialParams = Object.assign({}, this.params)
         this.searchCount = 0
         this.maxResults = this.params
             ? this.params.maxResults || this.params.limit
