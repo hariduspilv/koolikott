@@ -194,6 +194,8 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(13, null, null, null, 'http://example.com/123', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null);
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, 'asd', false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
 
 -- Authors
 
@@ -509,7 +511,11 @@ insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) va
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (5, 9, 103, '2014-06-01 00:00:01', false);
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (6, 9, 104, '2014-06-01 00:00:01', true);
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (7, 9, 4, '2014-06-01 00:00:01', true);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (15, 9, 15, '2014-06-01 00:00:01', false);
 
+-- Broken content
+
+insert into BrokenContent(id, creator, material, added, deleted) values (15, 9, 15, '2014-06-01 00:00:01', false);
 
 -- TagUpVotes
 
@@ -569,11 +575,33 @@ insert into Material_PeerReview(material, peerReview) values (3, 2);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (1, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (2, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (3, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (4, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (5, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (6, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (7, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (8, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (9, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (10, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (11, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (12, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (13, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (14, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (15, 0, CURRENT_TIMESTAMP);
+
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (101, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (102, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (103, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (104, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (105, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (106, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (107, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (108, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (109, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (110, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (111, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (112, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (113, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (114, 1, CURRENT_TIMESTAMP);
 
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
 INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');
