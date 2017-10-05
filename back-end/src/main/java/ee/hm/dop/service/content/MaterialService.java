@@ -368,19 +368,4 @@ public class MaterialService implements PermissionItem {
         if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
         return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
-
-    @Override
-    public boolean isPublic(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        //todo true simulates that visibility is public, waiting for db change
-        return true && !learningObject.isDeleted();
-    }
-
-    @Override
-    public boolean isNotPrivate(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        //todo true simulates that visibility is public, waiting for db change
-        return true && !learningObject.isDeleted();
-    }
-
 }

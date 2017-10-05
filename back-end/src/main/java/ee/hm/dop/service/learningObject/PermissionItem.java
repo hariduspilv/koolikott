@@ -5,7 +5,9 @@ import ee.hm.dop.model.interfaces.ILearningObject;
 
 public interface PermissionItem {
 
-/*    *//**
+/*    */
+
+    /**
      * Something searchable. Public, not listed. For example, you can view a link if someone shares etc.
      *//*
      *
@@ -15,6 +17,7 @@ public interface PermissionItem {
     //todo unify logic
 
     boolean canView(User user, ILearningObject learningObject);
+
     boolean canInteract(User user, ILearningObject learningObject);
 
     /**
@@ -32,10 +35,14 @@ public interface PermissionItem {
     /**
      * Public. Deleted items are private.
      */
-    boolean isPublic(ILearningObject learningObject);
+    default boolean isPublic(ILearningObject learningObject) {
+        return learningObject != null && learningObject.getVisibility().isPublic() && !learningObject.isDeleted();
+    }
 
     /**
      * Public & not listed. Something not private. Deleted items are private.
      */
-    boolean isNotPrivate(ILearningObject learningObject);
+    default boolean isNotPrivate(ILearningObject learningObject) {
+        return learningObject != null && learningObject.getVisibility().isNotPrivate() && !learningObject.isDeleted();
+    }
 }
