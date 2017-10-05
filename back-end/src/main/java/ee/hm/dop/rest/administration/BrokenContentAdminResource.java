@@ -50,7 +50,7 @@ public class BrokenContentAdminResource extends BaseResource {
     @POST
     @Path("setNotBroken")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setNotBroken(Material material) {
         learningObjectAdministrationService.setEverythingReviewedRefreshLO(getLoggedInUser(), material, ReviewStatus.ACCEPTED);
     }
