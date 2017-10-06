@@ -243,6 +243,7 @@ function embeddedMaterialController(translationService, iconService, embedServic
 
     function probeContentSuccess(response) {
         console.log("Content probing succeeded!");
+        console.log("Content probing succeeded! twice is the charm");
         if (!response()['content-disposition']) {
             console.log("content is not dispositioned");
             $scope.sourceType = $scope.fallbackType;
