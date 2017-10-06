@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.FirstReviewDao;
 import ee.hm.dop.model.FirstReview;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.joda.time.DateTime.now;
 
-public class FirstReviewService {
+public class FirstReviewAdminService {
 
     @Inject
     private FirstReviewDao firstReviewDao;

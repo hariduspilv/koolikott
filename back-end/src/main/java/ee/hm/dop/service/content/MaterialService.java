@@ -15,6 +15,8 @@ import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
@@ -59,7 +61,7 @@ public class MaterialService implements PermissionItem {
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
-    private FirstReviewService firstReviewService;
+    private FirstReviewAdminService firstReviewAdminService;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -219,7 +221,7 @@ public class MaterialService implements PermissionItem {
 
         Material updatedMaterial = materialDao.createOrUpdate(material);
         if (isNew) {
-            firstReviewService.save(updatedMaterial);
+            firstReviewAdminService.save(updatedMaterial);
         }
 
         return updatedMaterial;

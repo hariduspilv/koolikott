@@ -4,6 +4,10 @@ import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.interfaces.IMaterial;
+import ee.hm.dop.service.reviewmanagement.BrokenContentService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -20,11 +24,7 @@ public class LearningObjectAdministrationService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private FirstReviewService firstReviewService;
-    @Inject
-    private ImproperContentService improperContentService;
-    @Inject
-    private MaterialAdministrationService materialAdministrationService;
+    private ReviewManager reviewManager;
 
     public Recommendation addRecommendation(LearningObject learningObject, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
@@ -56,7 +56,7 @@ public class LearningObjectAdministrationService {
         LearningObject originalLearningObject = learningObjectService.validateAndFindDeletedOnly(learningObject);
 
         learningObjectDao.restore(originalLearningObject);
-        setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED);
+        reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED);
         solrEngineService.updateIndex();
     }
 
@@ -73,22 +73,7 @@ public class LearningObjectAdministrationService {
         }
 
         learningObjectDao.delete(originalLearningObject);
-        setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED);
+        reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED);
         solrEngineService.updateIndex();
-    }
-
-
-    public void setEverythingReviewedRefreshLO(User user, LearningObject learningObject, ReviewStatus reviewStatus) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
-        setEverythingReviewed(user, originalLearningObject, reviewStatus);
-    }
-
-    private void setEverythingReviewed(User user, LearningObject originalLearningObject, ReviewStatus reviewStatus) {
-        firstReviewService.setReviewed(originalLearningObject, user, reviewStatus);
-        improperContentService.setReviewed(originalLearningObject, user, reviewStatus);
-        if (originalLearningObject instanceof Material) {
-            materialAdministrationService.setMaterialNotBroken((Material) originalLearningObject);
-        }
     }
 }

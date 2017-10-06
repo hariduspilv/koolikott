@@ -15,9 +15,10 @@ import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.utils.UserUtil;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -49,7 +50,7 @@ public class MaterialServiceTest {
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
     @Mock
-    private FirstReviewService firstReviewService;
+    private FirstReviewAdminService firstReviewAdminService;
 
     @Test
     public void create() {
@@ -75,7 +76,7 @@ public class MaterialServiceTest {
         expect(peerReviewService.createPeerReview(peerReview.getUrl())).andReturn(peerReview);
 
         expectMaterialUpdate(capturedMaterial);
-        expect(firstReviewService.save(material)).andReturn(null);
+        expect(firstReviewAdminService.save(material)).andReturn(null);
         solrEngineService.updateIndex();
 
         replayAll();

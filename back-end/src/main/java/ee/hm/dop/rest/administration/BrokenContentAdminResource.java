@@ -6,29 +6,29 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.reviewmanagement.BrokenContentService;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
-import ee.hm.dop.service.content.MaterialAdministrationService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 @Path("admin/brokenContent/")
 public class BrokenContentAdminResource extends BaseResource {
 
     @Inject
-    private MaterialAdministrationService materialAdministrationService;
+    private ReviewManager reviewManager;
     @Inject
-    private LearningObjectAdministrationService learningObjectAdministrationService;
+    private BrokenContentService brokenContentService;
 
     @GET
     @Path("getBroken")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<BrokenContent> getBrokenMaterial() {
-        return materialAdministrationService.getBrokenMaterials(getLoggedInUser());
+        return brokenContentService.getBrokenMaterials(getLoggedInUser());
     }
 
     @GET
@@ -36,7 +36,7 @@ public class BrokenContentAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Long getBrokenMaterialCount() {
-        return materialAdministrationService.getBrokenMaterialCount(getLoggedInUser());
+        return brokenContentService.getBrokenMaterialCount(getLoggedInUser());
     }
 
     @GET
@@ -44,7 +44,7 @@ public class BrokenContentAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Boolean isBroken(@QueryParam("materialId") long materialId) {
-        return materialAdministrationService.isBroken(materialId);
+        return brokenContentService.isBroken(materialId);
     }
 
     @POST
@@ -52,6 +52,6 @@ public class BrokenContentAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setNotBroken(Material material) {
-        learningObjectAdministrationService.setEverythingReviewedRefreshLO(getLoggedInUser(), material, ReviewStatus.ACCEPTED);
+        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), material, ReviewStatus.ACCEPTED);
     }
 }

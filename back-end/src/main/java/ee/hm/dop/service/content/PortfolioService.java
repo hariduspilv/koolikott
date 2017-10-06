@@ -1,7 +1,6 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.ChapterObjectDao;
-import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
@@ -9,6 +8,8 @@ import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.service.learningObject.PermissionItem;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
@@ -39,7 +40,7 @@ public class PortfolioService implements PermissionItem {
     @Inject
     private PortfolioConverter portfolioConverter;
     @Inject
-    private FirstReviewService firstReviewService;
+    private FirstReviewAdminService firstReviewAdminService;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -134,7 +135,7 @@ public class PortfolioService implements PermissionItem {
         portfolio.setAdded(now());
 
         Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
-        firstReviewService.save(createdPortfolio);
+        firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
         return createdPortfolio;

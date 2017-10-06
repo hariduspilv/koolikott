@@ -4,7 +4,7 @@ import ee.hm.dop.model.ChangedLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.content.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;

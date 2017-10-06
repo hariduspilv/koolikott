@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.reviewmanagement;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.ImproperContentDao;
@@ -9,6 +9,7 @@ import ee.hm.dop.model.ReportingReason;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -36,7 +37,7 @@ public class ImproperContentService {
         return improper != null ? Lists.newArrayList(improper) : Lists.newArrayList();
     }
 
-    public ImproperContent addImproper(ImproperContent improperContent, User creator) {
+    public ImproperContent save(ImproperContent improperContent, User creator) {
         LearningObject learningObject = findValid(improperContent, creator);
 
         ImproperContent improper = new ImproperContent();
@@ -90,7 +91,7 @@ public class ImproperContentService {
      * @return the ImproperContent which refers to learningObject, created by
      * creator and user has rights to access
      */
-    public ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
+    private ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
         ImproperContent improperContent = improperContentDao.findByLearningObjectAndCreator(learningObject, creator);
         if (improperContent != null && !learningObjectService.canAccess(user, improperContent.getLearningObject())) {
             return null;
@@ -107,22 +108,6 @@ public class ImproperContentService {
         List<ImproperContent> impropers = improperContentDao.findByLearningObject(learningObject);
         removeIfHasNoAccess(user, impropers);
         return impropers;
-    }
-
-    public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
-        for (ImproperContent improperContent : learningObject.getImproperContents()) {
-            if (!improperContent.isReviewed()) {
-                setReviewed(user, reviewStatus, improperContent);
-            }
-        }
-    }
-
-    private void setReviewed(User user, ReviewStatus reviewStatus, ImproperContent improper) {
-        improper.setReviewed(true);
-        improper.setReviewedBy(user);
-        improper.setReviewedAt(DateTime.now());
-        improper.setStatus(reviewStatus);
-        improperContentDao.createOrUpdate(improper);
     }
 
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {

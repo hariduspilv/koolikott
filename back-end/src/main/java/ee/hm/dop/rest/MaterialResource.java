@@ -29,6 +29,7 @@ import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.reviewmanagement.BrokenContentService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
@@ -172,7 +173,7 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public BrokenContent setBrokenMaterial(Material material) {
-        return brokenContentService.addBrokenMaterial(material, getLoggedInUser());
+        return brokenContentService.save(material, getLoggedInUser());
     }
 
     @GET

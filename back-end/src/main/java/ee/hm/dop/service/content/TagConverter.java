@@ -1,6 +1,5 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.FirstReviewDao;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
@@ -8,6 +7,8 @@ import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.ResourceTypeService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.joda.time.DateTime;
 
@@ -28,8 +29,6 @@ public class TagConverter {
     private ResourceTypeService resourceTypeService;
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
-    @Inject
-    private LearningObjectService learningObjectService;
     @Inject
     private LearningObjectDao learningObjectDao;
 

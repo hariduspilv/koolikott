@@ -1,15 +1,13 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ImproperContentDao;
-import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ImproperContentAdminService {
 
@@ -46,5 +44,21 @@ public class ImproperContentAdminService {
             return improperContentDao.getImproperPortfolioCount();
         }
         return improperContentDao.getImproperPortfolioCount(user);
+    }
+
+    public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
+        for (ImproperContent improperContent : learningObject.getImproperContents()) {
+            if (!improperContent.isReviewed()) {
+                setReviewed(user, reviewStatus, improperContent);
+            }
+        }
+    }
+
+    private void setReviewed(User user, ReviewStatus reviewStatus, ImproperContent improper) {
+        improper.setReviewed(true);
+        improper.setReviewedBy(user);
+        improper.setReviewedAt(DateTime.now());
+        improper.setStatus(reviewStatus);
+        improperContentDao.createOrUpdate(improper);
     }
 }

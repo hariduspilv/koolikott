@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ChangedLearningObjectDao;
 import ee.hm.dop.dao.LearningObjectDao;
@@ -9,6 +9,7 @@ import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -37,7 +38,7 @@ public class ChangedLearningObjectService {
         return changedLearningObjectDao.getAllByLearningObject(id);
     }
 
-    ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
+    public ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
         findValid(changedLearningObject);
 
         if (!changedLearningObject.hasChange(changedLearningObject)) {
@@ -126,7 +127,7 @@ public class ChangedLearningObjectService {
         changedLearningObjectDao.removeById(id);
     }
 
-    boolean learningObjectHasThis(LearningObject learningObject, ChangedLearningObject change) {
+    public boolean learningObjectHasThis(LearningObject learningObject, ChangedLearningObject change) {
         if (change.getTaxon() != null) {
             return learningObject.getTaxons() != null && learningObject.getTaxons().contains(change.getTaxon());
         }  else if (change.getTargetGroup() != null) {

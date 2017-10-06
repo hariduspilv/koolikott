@@ -4,6 +4,10 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.service.reviewmanagement.BrokenContentService;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ImproperContentService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.UserUtil;
@@ -33,13 +37,15 @@ public class LearningObjectAdministrationServiceTest {
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
     @Mock
-    private FirstReviewService firstReviewService;
+    private FirstReviewAdminService firstReviewAdminService;
     @Mock
     private LearningObjectService learningObjectService;
     @Mock
     private ImproperContentService improperContentService;
     @Mock
     private MaterialAdministrationService materialAdministrationService;
+    @Mock
+    private BrokenContentService brokenContentService;
 
     @Test
     public void addRecommendationMaterial() {
@@ -189,7 +195,7 @@ public class LearningObjectAdministrationServiceTest {
         solrEngineService.updateIndex();
 
 //        improperContentService.setReviewed(material.getImproperContents(), user);
-        materialAdministrationService.setMaterialNotBroken(material);
+        brokenContentService.setMaterialNotBroken(material);
         expect(learningObjectService.validateAndFindDeletedOnly(material)).andReturn(originalMaterial);
 
         replayAll();

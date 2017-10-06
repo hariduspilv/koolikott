@@ -6,10 +6,10 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.content.ImproperContentAdminService;
-import ee.hm.dop.service.content.ImproperContentService;
+import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ public class ImproperContentAdminResource extends BaseResource {
     @Inject
     private LearningObjectService learningObjectService;
     @Inject
-    private LearningObjectAdministrationService learningObjectAdministrationService;
+    private ReviewManager reviewManager;
 
     @GET
     @Path("material")
@@ -71,6 +71,6 @@ public class ImproperContentAdminResource extends BaseResource {
         if (learningObject == null) {
             throw notFound();
         }
-        learningObjectAdministrationService.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED);
+        reviewManager.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED);
     }
 }
