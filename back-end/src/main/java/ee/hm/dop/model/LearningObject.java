@@ -120,7 +120,7 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @Column(nullable = false)
     private Long views = (long) 0;
 
-    @Column()
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
 
