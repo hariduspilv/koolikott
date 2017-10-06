@@ -4,6 +4,7 @@ import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -214,6 +215,7 @@ public class MaterialService implements PermissionItem {
         setPublishers(material);
         setPeerReviews(material);
         material = applyRestrictions(material);
+        material.setVisibility(Visibility.PUBLIC);
 
         Material updatedMaterial = materialDao.createOrUpdate(material);
         if (isNew) {
@@ -366,19 +368,4 @@ public class MaterialService implements PermissionItem {
         if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
         return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
-
-    @Override
-    public boolean isPublic(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        //todo true simulates that visibility is public, waiting for db change
-        return true && !learningObject.isDeleted();
-    }
-
-    @Override
-    public boolean isNotPrivate(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        //todo true simulates that visibility is public, waiting for db change
-        return true && !learningObject.isDeleted();
-    }
-
 }

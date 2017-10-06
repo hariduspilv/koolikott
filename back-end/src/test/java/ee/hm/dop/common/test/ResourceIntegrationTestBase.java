@@ -47,7 +47,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return login(testUser.idCode);
     }
 
-    protected User login(String idCode) {
+    private User login(String idCode) {
         if (authenticationFilter != null){
             logout();
         }
@@ -190,7 +190,6 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
         @Override
         public void filter(ClientRequestContext requestContext) throws IOException {
-
             if (token != null && username != null) {
                 List<Object> tokenList = new ArrayList<>();
                 tokenList.add(token);

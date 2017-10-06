@@ -227,6 +227,48 @@ public class LearningObjectAdministrationServiceTest {
         verifyAll();
     }
 
+    @Test
+    public void deleteByAdmin() {
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        learningObjectDao.delete(originalMaterial);
+        expect(learningObjectService.validateAndFind(originalMaterial)).andReturn(originalMaterial);
+        solrEngineService.updateIndex();
+
+        replayAll();
+
+        learningObjectAdministrationService.delete(originalMaterial, user);
+
+        verifyAll();
+    }
+
+    @Test
+    public void userCanNotDeleteRepositoryMaterial() {
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+        originalMaterial.setRepository(new Repository());
+        originalMaterial.setRepositoryIdentifier("asd");
+
+        User user = new User();
+        user.setRole(Role.USER);
+
+        expect(learningObjectService.validateAndFind(originalMaterial)).andReturn(originalMaterial);
+        replayAll();
+
+        try {
+            learningObjectAdministrationService.delete(originalMaterial, user);
+        } catch (RuntimeException e) {
+            assertEquals(UserUtil.MUST_BE_ADMIN_OR_MODERATOR, e.getMessage());
+        }
+
+        verifyAll();
+    }
+
+
     private void expectPortfolioUpdate(Capture<Portfolio> capturedPortfolio) {
         expect(learningObjectDao.createOrUpdate(EasyMock.capture(capturedPortfolio))).andAnswer(capturedPortfolio::getValue);
     }

@@ -126,7 +126,7 @@ public class SearchConverter {
                 .collect(Collectors.toList());
 
         //Visible to user according to their role or is a material or is the creator
-        String query = "((" + StringUtils.join(filter, SearchService.OR) + ") OR type:\"material\")";
+        String query = "(" + StringUtils.join(filter, SearchService.OR) + ")";
         if (searchFilter.getRequestingUser() != null && searchFilter.getMyPrivates()) {
             query = query + " OR creator:" + searchFilter.getRequestingUser().getId();
         }

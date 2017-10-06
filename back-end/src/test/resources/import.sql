@@ -166,35 +166,35 @@ insert into Thumbnail(id, name, data, size) values(1, 'thumbnail1', '65425284561
 
 -- Materials
 
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, 1, 1, false, 1);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, 1, 1, false, 1, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', true, true, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(2, '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2, false, 2);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(2, '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2, false, 2, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 1, 'isssiidosa00dsa', true, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(3, '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(3, '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(4, '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null, 1, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(4, '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null, 1, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(5, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(5, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(7, '2001-07-01 00:00:01', null, 700, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(7, '2001-07-01 00:00:01', null, 700, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(8, '2014-06-01 00:00:01', null, 800, null, 1, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(8, '2014-06-01 00:00:01', null, 800, null, 1, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(9, '1911-09-01 00:00:01', null, 0, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(9, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(9, null, null, null, 'http://www.chaging.it.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(10, '1911-09-01 00:00:01', null, 0, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(10, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(10, null, null, null, 'http://www.boo.com', null, null, false, false, false); -- Do not use this material, it is deleted by tests
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(11, '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, 2, 1, true, 7);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(11, '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, 2, 1, true, 7, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', false, false, false); -- This material should be amoung the 8 latest materials
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(12, '1911-09-01 00:00:01', null, 0, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(12, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(12, null, null, null, 'http://estRepo.com', 2, null, false, false, true);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(13, '2005-09-02 00:00:31', null, 0, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(13, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(13, null, null, null, 'http://example.com/123', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, 'asd', false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
 
 -- Authors
@@ -431,34 +431,34 @@ insert into Page(id, name, content, language) VALUES (6, 'Help', '<h1>Help</h1><
 
 -- Portfolio
 
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, 3, 6, false, 3);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (101, 'The new stock market', 5, 'The changes after 2008.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (102, '2012-12-29 06:00:01', null, 14, null, 4, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (102, 'New ways how to do it', 4, null, 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, 4, 6, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (103, 'The newer stock market', 6, 'A marvellous summary.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (104, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (104, 'The even newer stock market', 1, 'Cool summary.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (105, '2003-10-10 07:00:11', null, 100, null, 1, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (105, 'Adding comment to a portfolio', 1, 'Cool summary.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (106, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', 2, 'Summary.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (107, '2003-10-10 07:00:11', null, 100, 5, 2, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (107, 'This portfolio is private. ', 2, 'Summary. Sum sum sum.', 'PRIVATE');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (108, 'This portfolio is public. ', 2, 'Summary. Wow.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (109, '2011-10-10 07:00:11', null, 100, null, 7, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (109, 'This portfolio2 is public. ', 7, 'Alpha.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (110, 'This portfolio2 is private. ', 7, 'Alpha.', 'PRIVATE');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (111, '2003-10-10 07:00:11', null, 100, null, 7, false, 6);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (111, 'This portfolio2 is not listed. ', 7, 'Alpha.', 'NOT_LISTED');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (112, '2003-10-10 07:00:11', null, 100, null, 9, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (112, 'This portfolio will be DELETED in tests.', 9, 'Alpha.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (113, '2003-12-10 06:21:10', null, 100, null, 9, false, null);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.', 'PUBLIC');
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4);
-insert into Portfolio(id, title, originalCreator, summary, visibility) VALUES (114, 'Uploading picture to it', 6, 'Beta.', 'PUBLIC');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, 3, 6, false, 3, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (101, 'The new stock market', 5, 'The changes after 2008.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (102, '2012-12-29 06:00:01', null, 14, null, 4, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (102, 'New ways how to do it', 4, null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, 4, 6, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (103, 'The newer stock market', 6, 'A marvellous summary.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (104, '2003-10-10 07:00:11', null, 100, null, 1, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (104, 'The even newer stock market', 1, 'Cool summary.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (105, '2003-10-10 07:00:11', null, 100, null, 1, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (105, 'Adding comment to a portfolio', 1, 'Cool summary.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (106, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', 2, 'Summary.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (107, '2003-10-10 07:00:11', null, 100, 5, 2, false, null, 'PRIVATE');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (107, 'This portfolio is private. ', 2, 'Summary. Sum sum sum.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (108, 'This portfolio is public. ', 2, 'Summary. Wow.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (109, '2011-10-10 07:00:11', null, 100, null, 7, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (109, 'This portfolio2 is public. ', 7, 'Alpha.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5, 'PRIVATE');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (110, 'This portfolio2 is private. ', 7, 'Alpha.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (111, '2003-10-10 07:00:11', null, 100, null, 7, false, 6, 'NOT_LISTED');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (111, 'This portfolio2 is not listed. ', 7, 'Alpha.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (112, '2003-10-10 07:00:11', null, 100, null, 9, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (112, 'This portfolio will be DELETED in tests.', 9, 'Alpha.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (113, '2003-12-10 06:21:10', null, 100, null, 9, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (114, 'Uploading picture to it', 6, 'Beta.');
 
 -- Chapter
 

@@ -177,17 +177,4 @@ public class PortfolioService implements PermissionItem {
         if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
         return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
-
-    @Override
-    public boolean isPublic(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return ((IPortfolio) learningObject).getVisibility().isPublic() && !learningObject.isDeleted();
-    }
-
-    @Override
-    public boolean isNotPrivate(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return ((IPortfolio) learningObject).getVisibility().isNotPrivate() && !learningObject.isDeleted();
-    }
-
 }

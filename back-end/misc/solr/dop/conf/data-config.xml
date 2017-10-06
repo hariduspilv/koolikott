@@ -31,7 +31,7 @@
         </entity>
 
         <entity name="LearningObject" pk="id"
-                query="select id, added, views, creator from LearningObject
+                query="select id, added, views, creator, visibility from LearningObject
                 WHERE deleted = false"
                 deltaImportQuery="select id, added, views, creator from LearningObject
                 where id = '${dih.delta.id}'"
@@ -467,7 +467,7 @@
             </entity>
 
             <entity name="Portfolio"
-                    query="select id, title, summary, visibility from Portfolio
+                    query="select id, title, summary from Portfolio
                     where id='${LearningObject.id}'">
 
                 <entity name="Type" query="select 'portfolio' as type"/>

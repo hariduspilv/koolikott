@@ -50,13 +50,12 @@ public class TagUpVoteResource extends BaseResource {
             throw badRequest("No such tag");
         }
 
-        //todo what is the point of trustTagUpVote
         TagUpVote trustTagUpVote = new TagUpVote();
         trustTagUpVote.setLearningObject(learningObject);
         trustTagUpVote.setTag(tag);
         trustTagUpVote.setUser(tagUpVote.getUser());
 
-        return tagUpVoteService.upVote(tagUpVote, getLoggedInUser());
+        return tagUpVoteService.upVote(trustTagUpVote, getLoggedInUser());
     }
 
     @GET
