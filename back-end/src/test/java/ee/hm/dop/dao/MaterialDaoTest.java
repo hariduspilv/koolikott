@@ -21,6 +21,7 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -276,6 +277,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         Long views = 234L;
         changedMaterial.setViews(views);
         changedMaterial.setUpdated(now);
+        changedMaterial.setVisibility(Visibility.PUBLIC);
 
         materialDao.createOrUpdate(changedMaterial);
 
