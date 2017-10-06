@@ -1,9 +1,9 @@
 package ee.hm.dop.utils.io;
 
+import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 
 /**
  * Created by mart on 20.09.16.
@@ -24,7 +24,7 @@ public class LimitedSizeInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        if (totalRead > (maxSize * MB_TO_B_MULTIPLIER)) {
+        if (totalRead >= (maxSize * MB_TO_B_MULTIPLIER)) {
             throw new MaxFileSizeExceededException();
         }
 
