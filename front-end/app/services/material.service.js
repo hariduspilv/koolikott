@@ -49,7 +49,7 @@ function MaterialService(serverCallService, authenticatedUserService) {
 
     function setNotImproper(material) {
         if (authenticatedUserService.isAdmin() && material) {
-            let url = "rest/impropers?learningObject=" + material.id;
+            let url = "rest/admin/improper/setProper?learningObject=" + material.id;
             return serverCallService.makeDelete(url, {})
                 .then(response => {
                     return response.data;

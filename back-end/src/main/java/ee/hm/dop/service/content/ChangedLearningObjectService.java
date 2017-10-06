@@ -40,7 +40,7 @@ public class ChangedLearningObjectService {
     ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
         findValid(changedLearningObject);
 
-        if (!hasChange(changedLearningObject)) {
+        if (!changedLearningObject.hasChange(changedLearningObject)) {
             return null;
         }
 
@@ -57,10 +57,6 @@ public class ChangedLearningObjectService {
         if (changedLearningObject == null || changedLearningObject.getLearningObject() == null) {
             throw new RuntimeException("Invalid changed learningObject");
         }
-    }
-
-    private boolean hasChange(ChangedLearningObject changedLearningObject) {
-        return changedLearningObject.getTaxon() != null || changedLearningObject.getResourceType() != null || changedLearningObject.getTargetGroup() != null;
     }
 
     public boolean acceptAllChanges(long id) {

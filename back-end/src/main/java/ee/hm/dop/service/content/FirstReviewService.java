@@ -19,8 +19,6 @@ public class FirstReviewService {
 
     @Inject
     private FirstReviewDao firstReviewDao;
-    @Inject
-    private LearningObjectService learningObjectService;
 
     public List<FirstReview> getUnReviewed(User loggedInUser) {
         if (UserUtil.isAdmin(loggedInUser)) {

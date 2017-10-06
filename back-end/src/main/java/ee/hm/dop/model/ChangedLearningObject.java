@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.taxon.Taxon;
@@ -48,6 +49,10 @@ public class ChangedLearningObject extends AbstractEntity {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;
 
+    @JsonIgnore
+    public boolean hasChange(ChangedLearningObject changedLearningObject) {
+        return changedLearningObject.getTaxon() != null || changedLearningObject.getResourceType() != null || changedLearningObject.getTargetGroup() != null;
+    }
 
     public Long getId() {
         return id;

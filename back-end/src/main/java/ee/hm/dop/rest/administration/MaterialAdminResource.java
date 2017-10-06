@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 @Path("material")
 public class MaterialAdminResource extends BaseResource {
 
-
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
 

@@ -127,15 +127,8 @@ public class UserService {
         User existingUser = getUserByUsername(user.getUsername());
         existingUser.setRole(Role.valueOf(user.getRole().toString()));
 
-        List<Taxon> newTaxons = user.getUserTaxons();
-//        todo wierd spot
-        newTaxons.removeAll(Collections.singleton(null));
-
-        List<Taxon> taxons = new ArrayList<>();
-        if (newTaxons.size() > 0) {
-            List<Long> ids = user.getUserTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
-            taxons = taxonService.getTaxonById(ids);
-        }
+        List<Long> ids = user.getUserTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+        List<Taxon> taxons = taxonService.getTaxonById(ids);
 
         existingUser.setUserTaxons(taxons);
         return userDao.createOrUpdate(existingUser);

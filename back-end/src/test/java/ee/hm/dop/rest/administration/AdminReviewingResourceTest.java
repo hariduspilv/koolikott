@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     private static final String MATERIAL_SET_NOT_BROKEN = "admin/brokenContent/setNotBroken";
-    private static final String MATERIAL_SET_NOT_IMPROPER = "impropers?learningObject=%s";
+    private static final String MATERIAL_SET_NOT_IMPROPER = "admin/improper/setProper?learningObject=%s";
     private static final String MATERIAL_DELETE = "material/";
     private static final String MATERIAL_RESTORE = "admin/deleted/material/restore";
 
