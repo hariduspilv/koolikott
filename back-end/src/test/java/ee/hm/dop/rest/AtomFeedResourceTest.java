@@ -16,7 +16,6 @@ public class AtomFeedResourceTest extends ResourceIntegrationTestBase {
 
     public static final String GET_FEED = "%1$s/feed?lang=%1$s";
 
-    @Ignore
     @Test
     public void anybody_can_ask_for_atom_feed_in_estonian() throws Exception {
         Response response = getFeed(LanguageC.EST);
@@ -25,7 +24,6 @@ public class AtomFeedResourceTest extends ResourceIntegrationTestBase {
         assertTrue(!result.isEmpty());
     }
 
-    @Ignore
     @Test
     public void anybody_can_ask_for_atom_feed_in_english() throws Exception {
         Response response = getFeed(LanguageC.ENG);
@@ -34,7 +32,6 @@ public class AtomFeedResourceTest extends ResourceIntegrationTestBase {
         assertTrue(!result.isEmpty());
     }
 
-    @Ignore
     @Test
     public void anybody_can_ask_for_atom_feed_in_russian() throws Exception {
         Response response = getFeed(LanguageC.RUS);

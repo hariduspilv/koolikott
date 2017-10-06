@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.enums.Visibility;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -43,6 +44,7 @@ public class ResourceTypeDaoTest extends DatabaseTestBase {
         material.setSource("asd");
         material.setAdded(new DateTime());
         material.setViews((long) 123);
+        material.setVisibility(Visibility.PUBLIC);
 
         resourceType.setId(1007L);
         resourceType.setName("COURSE");

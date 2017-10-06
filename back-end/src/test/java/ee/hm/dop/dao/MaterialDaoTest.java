@@ -171,6 +171,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         material.setSource("asd");
         material.setAdded(new DateTime());
         material.setViews((long) 123);
+        material.setVisibility(Visibility.PUBLIC);
 
         Picture picture = new OriginalPicture();
         picture.setId(1);
