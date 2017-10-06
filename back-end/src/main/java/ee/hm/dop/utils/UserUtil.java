@@ -1,5 +1,6 @@
 package ee.hm.dop.utils;
 
+import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.interfaces.ILearningObject;

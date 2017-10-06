@@ -47,4 +47,16 @@ public class TagUpVoteDao extends AbstractDao<TagUpVote> {
                 .setParameter("tag", tag) //
                 .getResultList();
     }
+
+
+    public Long findByLearningObjectAndTagCount(LearningObject learningObject, Tag tag) {
+        return (Long) getEntityManager().createQuery(
+                "SELECT count(t) FROM TagUpVote t " +
+                        "WHERE t.learningObject = :learningObject " +
+                        "AND t.tag = :tag " +
+                        "AND t.deleted = false") //
+                .setParameter("learningObject", learningObject) //
+                .setParameter("tag", tag) //
+                .getSingleResult();
+    }
 }

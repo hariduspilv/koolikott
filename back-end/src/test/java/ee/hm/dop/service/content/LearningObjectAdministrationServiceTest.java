@@ -4,10 +4,7 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
-import ee.hm.dop.service.reviewmanagement.BrokenContentService;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
-import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
-import ee.hm.dop.service.reviewmanagement.ImproperContentService;
+import ee.hm.dop.service.reviewmanagement.*;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.UserUtil;
@@ -46,6 +43,8 @@ public class LearningObjectAdministrationServiceTest {
     private MaterialAdministrationService materialAdministrationService;
     @Mock
     private BrokenContentService brokenContentService;
+    @Mock
+    private ReviewManager reviewManager;
 
     @Test
     public void addRecommendationMaterial() {

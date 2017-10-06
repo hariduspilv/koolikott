@@ -1,9 +1,9 @@
 package ee.hm.dop.service.useractions;
 
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.PeerReviewDao;
 import ee.hm.dop.model.PeerReview;
+
+import javax.inject.Inject;
 
 /**
  * Created by joonas on 28.09.16.

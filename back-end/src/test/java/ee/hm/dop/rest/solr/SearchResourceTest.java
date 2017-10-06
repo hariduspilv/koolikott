@@ -17,8 +17,10 @@ import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
+import javax.ws.rs.core.GenericType;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -30,6 +32,13 @@ import static org.junit.Assert.*;
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private static final int RESULTS_PER_PAGE = 3;
+
+    @Test
+    public void getMostLiked() throws Exception {
+        List<Searchable> results = doGet("search/mostLiked?maxResults=12", new GenericType<List<Searchable>>() {
+        });
+        assertTrue(CollectionUtils.isNotEmpty(results));
+    }
 
     @Test
     public void search() {

@@ -69,11 +69,25 @@ public class TagUpVoteResource extends BaseResource {
         User user = getLoggedInUser();
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
         if (learningObject != null) {
-            return learningObject.getTags().stream()
-                    .map(tag -> convertForm(user, learningObject, tag))
-                    .collect(Collectors.toList());
+            return convertForms(user, learningObject);
         }
         return Collections.emptyList();
+    }
+
+    @DELETE
+    @Path("{tagUpVoteId}")
+    public void removeUpVote(@PathParam("tagUpVoteId") long tagUpVoteId) {
+        TagUpVote tagUpVote = tagUpVoteService.get(tagUpVoteId, getLoggedInUser());
+        if (tagUpVote == null) {
+            throw notFound();
+        }
+        tagUpVoteService.delete(tagUpVote, getLoggedInUser());
+    }
+
+    private List<TagUpVoteForm> convertForms(User user, LearningObject learningObject) {
+        return learningObject.getTags().stream()
+                .map(tag -> convertForm(user, learningObject, tag))
+                .collect(Collectors.toList());
     }
 
     private TagUpVoteForm convertForm(User user, LearningObject learningObject, Tag tag) {
@@ -86,27 +100,16 @@ public class TagUpVoteResource extends BaseResource {
         return form;
     }
 
-    @DELETE
-    @Path("{tagUpVoteId}")
-    public void removeUpVote(@PathParam("tagUpVoteId") long tagUpVoteId) {
-        TagUpVote tagUpVote = tagUpVoteService.get(tagUpVoteId, getLoggedInUser());
-        if (tagUpVote == null) {
-            throw notFound();
-        }
-
-        tagUpVoteService.delete(tagUpVote, getLoggedInUser());
-    }
-
     public static class TagUpVoteForm {
         private Tag tag;
-        private int upVoteCount;
+        private long upVoteCount;
         private TagUpVote tagUpVote;
 
         public Tag getTag() {
             return tag;
         }
 
-        public int getUpVoteCount() {
+        public long getUpVoteCount() {
             return upVoteCount;
         }
 

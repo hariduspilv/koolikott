@@ -9,15 +9,7 @@ import java.util.stream.Collectors;
 
 public class UserLikeDao extends AbstractDao<UserLike> {
 
-    public UserLike findPortfolioUserLike(Portfolio portfolio, User user) {
-        return findByLearningObjectAndUser(portfolio, user);
-    }
-
-    public UserLike findMaterialUserLike(Material material, User user) {
-        return findByLearningObjectAndUser(material, user);
-    }
-
-    private UserLike findByLearningObjectAndUser(LearningObject learningObject, User user) {
+    public UserLike findByLearningObjectAndUser(LearningObject learningObject, User user) {
         TypedQuery<UserLike> findLike = getEntityManager().createQuery(
                 "SELECT ul FROM UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid", UserLike.class) //
                 .setParameter("loid", learningObject) //
@@ -34,7 +26,7 @@ public class UserLikeDao extends AbstractDao<UserLike> {
         deleteByLearningObjectAndUser(material, user);
     }
 
-    private void deleteByLearningObjectAndUser(LearningObject learningObject, User user) {
+    public void deleteByLearningObjectAndUser(LearningObject learningObject, User user) {
         getEntityManager()
                 .createQuery("DELETE UserLike ul WHERE ul.learningObject = :loid and ul.creator = :uid")
                 .setParameter("loid", learningObject)
@@ -50,12 +42,15 @@ public class UserLikeDao extends AbstractDao<UserLike> {
     }
 
     public List<Searchable> findMostLikedSince(DateTime date, int numberOfMaterials) {
-        List<Object[]> resultList = getEntityManager().createQuery("SELECT ul.learningObject, 2 * SUM(ul.isLiked) - COUNT(*) AS score" //
-                + " FROM UserLike ul" //
-                + " WHERE ul.added > :from AND ul.learningObject.deleted = false" //
-                + " GROUP BY ul.learningObject" //
-                + " HAVING (2 * SUM(ul.isLiked) - COUNT(*)) > 0" //
-                + " ORDER BY score DESC", Object[].class) //
+        List<Object[]> resultList = getEntityManager()
+                .createQuery(
+                        "SELECT ul.learningObject, 2 * SUM(ul.isLiked) - COUNT(*) AS score" +
+                        "  FROM UserLike ul" +
+                        "  WHERE ul.added > :from AND ul.learningObject.deleted = false" +
+                        "  AND (ul.learningObject.visibility = 'PUBLIC' OR ul.learningObject.visibility = 'NOT_LISTED') " +
+                        "  GROUP BY ul.learningObject" +
+                        "  HAVING (2 * SUM(ul.isLiked) - COUNT(*)) > 0" +
+                        "  ORDER BY score DESC", Object[].class) //
                 .setParameter("from", date) //
                 .setMaxResults(numberOfMaterials) //
                 .getResultList();
