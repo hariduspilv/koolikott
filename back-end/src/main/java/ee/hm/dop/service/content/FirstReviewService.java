@@ -4,6 +4,7 @@ import ee.hm.dop.dao.FirstReviewDao;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
 
@@ -46,12 +47,13 @@ public class FirstReviewService {
         return firstReviewDao.createOrUpdate(firstReview);
     }
 
-    public void setReviewed(LearningObject learningObject, User loggedInUser) {
+    public void setReviewed(LearningObject learningObject, User loggedInUser, ReviewStatus reviewStatus) {
         for (FirstReview firstReview : learningObject.getFirstReviews()) {
             if (!firstReview.isReviewed()) {
                 firstReview.setReviewedAt(DateTime.now());
                 firstReview.setReviewedBy(loggedInUser);
                 firstReview.setReviewed(true);
+                firstReview.setStatus(reviewStatus);
                 firstReviewDao.createOrUpdate(firstReview);
             }
         }
