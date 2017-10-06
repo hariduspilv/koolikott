@@ -47,7 +47,6 @@ import org.w3c.dom.NodeList;
 
 public abstract class MaterialParser {
 
-    public static final String TRUE = "TRUE";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
@@ -67,24 +66,19 @@ public abstract class MaterialParser {
 
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private PeerReviewService peerReviewService;
-
     @Inject
     private PublisherService publisherService;
-
     @Inject
     private AuthorService authorService;
-
     @Inject
     private TargetGroupService targetGroupService;
 
     public Material parse(Document doc) throws ParseException {
-        Material material;
 
         try {
-            material = new Material();
+            Material material = new Material();
             doc.getDocumentElement().normalize();
 
             setIdentifier(material, doc);
@@ -103,13 +97,13 @@ public abstract class MaterialParser {
             setTargetGroups(material, doc);
             setPicture(material, doc);
             removeDuplicateTaxons(material);
+            return material;
         } catch (RuntimeException e) {
             logger.error("Unexpected error while parsing document. Document may not"
                     + " match mapping or XML structure - " + e.getMessage(), e);
             throw new ParseException(e);
         }
 
-        return material;
     }
 
     protected void setContributorsData(Material material, Document doc) {
@@ -241,7 +235,7 @@ public abstract class MaterialParser {
         return tags;
     }
 
-    protected List<ResourceType> getResourceTypes(Document doc, String path) {
+    private List<ResourceType> getResourceTypes(Document doc, String path) {
         List<ResourceType> resourceTypes = new ArrayList<>();
 
         NodeList nl = getNodeList(doc, path);
@@ -259,7 +253,7 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
-    protected List<PeerReview> getPeerReviews(Document doc, String path){
+    private List<PeerReview> getPeerReviews(Document doc, String path) {
         List<PeerReview> peerReviews = new ArrayList<>();
 
         NodeList nl = getNodeList(doc, path);
@@ -277,7 +271,7 @@ public abstract class MaterialParser {
         return peerReviews;
     }
 
-    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
+    private void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
         NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
