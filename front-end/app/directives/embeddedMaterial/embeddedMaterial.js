@@ -215,7 +215,7 @@ function embeddedMaterialController(translationService, iconService, embedServic
             let baseUrl = document.location.origin;
             console.log("proxy source: " + $scope.isProxySource);
             console.log("proxy source url: " + $scope.proxyUrl);
-            if ($scope.material.source.startsWith(baseUrl) && !$scope.isProxySource) {
+            if ($scope.material.source.startsWith(baseUrl)) {
                 $scope.sourceType = 'PDF';
                 $scope.material.PDFLink = pdfjsLink($scope.material.source);
                 let pdfElement = '.embed-pdf-' + $scope.material.id;
@@ -226,14 +226,15 @@ function embeddedMaterialController(translationService, iconService, embedServic
                     $timeout(sourceTypeAndPdfSetup, 100);
                 }
             } else {
-                $scope.sourceType = 'PDF';
-                console.log("proxy tree");
-                $scope.fallbackType = 'LINK';
-                if (!$scope.isProxySource) {
-                    $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
-                }
                 $scope.isProxySource = true;
-                serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                $scope.sourceType = 'PDF';
+                $scope.fallbackType = 'LINK';
+                console.log("proxy tree");
+                if ($scope.isProxySource) {
+                    console.log("material source: " +$scope.material.source);
+                    $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                    serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                }
             }
         } else {
             embedService.getEmbed($scope.material.source, embedCallback);
@@ -251,9 +252,10 @@ function embeddedMaterialController(translationService, iconService, embedServic
         if (matchType(filename) === 'PDF') {
             console.log("it is pdf baby");
             $scope.material.PDFLink = pdfjsLink(encodeURIComponent($scope.proxyUrl));
+            console.log("proxy pdf link" + $scope.material.PDFLink);
             let pdfElement = '.embed-pdf-' + $scope.material.id;
             if ($(pdfElement).length !== 0) {
-                console.log("proxy pdf element setup" + $scope.material.PDFLink);
+                console.log("proxy pdf element setup");
                 $(pdfElement).html(iFrameLink($scope.material.PDFLink));
             } else {
                 $timeout(sourceTypeAndPdfSetup, 100);
