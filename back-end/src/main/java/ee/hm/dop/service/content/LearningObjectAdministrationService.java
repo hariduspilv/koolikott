@@ -85,7 +85,7 @@ public class LearningObjectAdministrationService {
     }
 
     private void setEverythingReviewed(User user, LearningObject originalLearningObject, ReviewStatus reviewStatus) {
-        firstReviewService.setReviewed(originalLearningObject, user);
+        firstReviewService.setReviewed(originalLearningObject, user, reviewStatus);
         improperContentService.setReviewed(originalLearningObject, user, reviewStatus);
         if (originalLearningObject instanceof Material) {
             materialAdministrationService.setMaterialNotBroken((Material) originalLearningObject);
