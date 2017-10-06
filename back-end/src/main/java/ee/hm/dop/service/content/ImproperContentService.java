@@ -111,7 +111,9 @@ public class ImproperContentService {
 
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
         for (ImproperContent improperContent : learningObject.getImproperContents()) {
-            setReviewed(user, reviewStatus, improperContent);
+            if (!improperContent.isReviewed()) {
+                setReviewed(user, reviewStatus, improperContent);
+            }
         }
     }
 
