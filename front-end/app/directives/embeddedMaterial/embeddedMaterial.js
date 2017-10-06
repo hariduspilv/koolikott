@@ -53,7 +53,7 @@ function embeddedMaterialController(translationService, iconService, embedServic
             audioSetup();
             videoSetup();
             sourceTypeAndPdfSetup();
-            externalUrlProxyModification();
+            // externalUrlProxyModification();
         } else {
             //try to get material from route param and init again
             getMaterialFromRouteParam();
@@ -86,47 +86,9 @@ function embeddedMaterialController(translationService, iconService, embedServic
             $scope.materialType = getMaterialIcon();
             audioSetup();
             sourceTypeAndPdfSetup();
-            externalUrlProxyModification();
+            // externalUrlProxyModification();
         }
     });
-
-    function externalUrlProxyModification() {
-        //todo baseUrl
-        $scope.proxyUrl = undefined;
-        const baseUrl = document.location.origin;
-        //todo getSource
-        const materialSource = getSource($scope.material);
-        // If the initial type is a LINK, try to ask the type from our proxy
-        //todo matchtype
-        if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
-            //todo matchtype
-            $scope.fallbackType = matchType(materialSource);
-            if (!$scope.material.source) {
-                console.log("source is missing")
-            }
-            $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
-            serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
-        }
-        if (materialSource) {
-            //todo matchType
-            //todo getSource
-            $scope.sourceType = matchType(getSource($scope.material));
-        }
-    }
-
-    function probeContentSuccess(response) {
-        console.log("Content probing succeeded!");
-        if (!response()['content-disposition']) {
-            $scope.sourceType = $scope.fallbackType;
-            return;
-        }
-        let filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
-        //todo matchtype
-        $scope.sourceType = matchType(filename);
-        if ($scope.sourceType !== 'LINK' && $scope.sourceType === 'PDF') {
-            $scope.material.PDFLink = pdfjsLink(encodeURIComponent($scope.proxyUrl));
-        }
-    }
 
     $scope.removeMaterial = function ($event, material) {
         $event.preventDefault();
@@ -250,20 +212,60 @@ function embeddedMaterialController(translationService, iconService, embedServic
                 $timeout(sourceTypeAndPdfSetup, 100);
             }
         } else if (isPDFLink($scope.material.source)) {
+            let baseUrl = document.location.origin;
+            if ($scope.material.source.startsWith(baseUrl) && !$scope.isProxySource) {
+                $scope.sourceType = 'PDF';
+                $scope.material.PDFLink = pdfjsLink($scope.material.source);
+                let pdfElement = '.embed-pdf-' + $scope.material.id;
+                if ($(pdfElement).length !== 0) {
+                    console.log("pdf element setup" + $scope.material.PDFLink);
+                    $(pdfElement).html(iFrameLink($scope.material.PDFLink));
+                } else {
+                    $timeout(sourceTypeAndPdfSetup, 100);
+                }
+            } else {
+                $scope.fallbackType = 'LINK';
+                $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                $scope.isProxySource = true;
+                serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+            }
+            // if välisurl, tee proxy päring
+
+
             // const baseUrl = document.location.origin;
             // if ($scope.material.source.startsWith(baseUrl) && !$scope.proxyUrl) {
-                $scope.material.PDFLink = pdfjsLink($scope.material.source);
+            // $scope.material.PDFLink = pdfjsLink($scope.material.source);
             // }
-            $scope.sourceType = 'PDF';
-
-            let pdfElement = '.embed-pdf-' + $scope.material.id;
-            if ($(pdfElement).length !== 0) {
-                $(pdfElement).html(iFrameLink($scope.material.PDFLink));
-            } else {
-                $timeout(sourceTypeAndPdfSetup, 100);
-            }
+            // $scope.sourceType = 'PDF';
+            //
+            // let pdfElement = '.embed-pdf-' + $scope.material.id;
+            // if ($(pdfElement).length !== 0) {
+            //     $(pdfElement).html(iFrameLink($scope.material.PDFLink));
+            // } else {
+            //     $timeout(sourceTypeAndPdfSetup, 100);
+            // }
         } else {
             embedService.getEmbed(getSource($scope.material), embedCallback);
+        }
+    }
+
+    function probeContentSuccess(response) {
+        console.log("Content probing succeeded!");
+        if (!response()['content-disposition']) {
+            $scope.sourceType = $scope.fallbackType;
+            return;
+        }
+        let filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+        $scope.sourceType = matchType(filename);
+        if ($scope.sourceType === 'PDF') {
+            $scope.material.PDFLink = pdfjsLink(encodeURIComponent($scope.proxyUrl));
+            let pdfElement = '.embed-pdf-' + $scope.material.id;
+            if ($(pdfElement).length !== 0) {
+                console.log("proxy pdf element setup"  + $scope.material.PDFLink);
+                $(pdfElement).html(iFrameLink($scope.material.PDFLink));
+            } else {
+                // $timeout(sourceTypeAndPdfSetup, 100);
+            }
         }
     }
 
