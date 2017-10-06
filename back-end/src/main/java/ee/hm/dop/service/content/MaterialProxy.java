@@ -45,14 +45,9 @@ public class MaterialProxy {
             // Content-Disposition is missing, try to extract the filename from url instead
             String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
             String contentDisposition = format("Inline; filename=\"%s\"", fileName);
-            return buildContentTypeResponse(get.getResponseBody(), contentDisposition);
+            return buildContentDispositionResponse(get.getResponseBody(), contentDisposition);
         }
         return Response.noContent().build();
-    }
-
-    private Response buildContentTypeResponse(byte[] responseBody, String contentDisposition) throws IOException {
-        return Response.ok(responseBody, PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
-                contentDisposition).build();
     }
 
     private Response buildContentDispositionResponse(byte[] responseBody, String contentDisposition) throws IOException {
@@ -67,14 +62,11 @@ public class MaterialProxy {
     }
 
     private GetMethod getMethod(String url_param) throws URIException {
-        GetMethod get;
-
         try {
-            get = new GetMethod(url_param);
+            return new GetMethod(url_param);
         } catch (IllegalArgumentException e) {
-            get = new GetMethod(URIUtil.encodePath(url_param));
+            return new GetMethod(URIUtil.encodePath(url_param));
         }
-        return get;
     }
 
     private String attachmentLocation(GetMethod get, String extension, String mime_type) {

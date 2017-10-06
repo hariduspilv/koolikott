@@ -38,7 +38,6 @@ import org.apache.commons.lang3.StringUtils;
 @Path("material")
 public class MaterialResource extends BaseResource {
 
-    public static final String UTF_8 = "UTF-8";
     @Inject
     private MaterialService materialService;
     @Inject
@@ -76,21 +75,13 @@ public class MaterialResource extends BaseResource {
         return materialService.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
     }
 
-    private String decode(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
-        return URLDecoder.decode(materialSource, UTF_8);
-    }
-
     @POST
     @Path("increaseViewCount")
     public Response increaseViewCount(Material material) {
-        Long materialId = material.getId();
-
-        Material originalMaterial = materialService.get(materialId, getLoggedInUser());
+        Material originalMaterial = materialService.get(material.getId(), getLoggedInUser());
         if (originalMaterial == null) {
             throw notFound();
-//            Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
         }
-
         learningObjectService.incrementViewCount(originalMaterial);
         return Response.status(HttpURLConnection.HTTP_OK).build();
     }

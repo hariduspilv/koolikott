@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.persistence.RollbackException;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
@@ -217,7 +216,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         Repository repository = new Repository();
         repository.setId(1L);
 
-        Material material = materialDao.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawej");
+        Material material = materialDao.findByRepository(repository, "isssiiaawej");
         assertMaterial1(material);
     }
 
@@ -226,7 +225,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         Repository repository = new Repository();
         repository.setId(10L);
 
-        Material material = materialDao.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawej");
+        Material material = materialDao.findByRepository(repository, "isssiiaawej");
         assertNull(material);
     }
 
@@ -235,7 +234,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         Repository repository = new Repository();
         repository.setId(1L);
 
-        Material material = materialDao.findByRepositoryAndRepositoryIdentifier(repository, "isssiiaawejdsada4564");
+        Material material = materialDao.findByRepository(repository, "isssiiaawejdsada4564");
         assertNotNull(material);
     }
 
@@ -244,7 +243,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         Repository repository = new Repository();
         repository.setId(1L);
 
-        Material material = materialDao.findByRepositoryAndRepositoryIdentifier(repository, "SomeRandomIdenetifier");
+        Material material = materialDao.findByRepository(repository, "SomeRandomIdenetifier");
         assertNull(material);
     }
 
@@ -252,7 +251,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
     public void findByRepositoryAndrepositoryIdentifierNullRepositoryIdAndNullRepositoryIdentifier() {
         Repository repository = new Repository();
 
-        Material material = materialDao.findByRepositoryAndRepositoryIdentifier(repository, null);
+        Material material = materialDao.findByRepository(repository, null);
         assertNull(material);
     }
 

@@ -15,5 +15,4 @@ public class LicenseTypeService {
     public List<LicenseType> getAllLicenseTypes() {
         return licenseTypeDao.findAll();
     }
-
 }

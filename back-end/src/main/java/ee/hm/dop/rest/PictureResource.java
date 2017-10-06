@@ -81,7 +81,6 @@ public class PictureResource extends BaseResource {
             byte[] data = picture.getData();
             return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_1_YEAR).build();
         }
-
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 

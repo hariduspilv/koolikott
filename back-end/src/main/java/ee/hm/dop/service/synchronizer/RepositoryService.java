@@ -29,8 +29,7 @@ import org.slf4j.LoggerFactory;
 
 public class RepositoryService {
 
-    private static final int MAX_IMPORT_BEFORE_EMPTY_CACHE = 50;
-
+    private static final int BATCH_SIZE = 50;
     private static final Logger logger = LoggerFactory.getLogger(RepositoryService.class);
 
     @Inject
@@ -101,7 +100,7 @@ public class RepositoryService {
     }
 
     private int getCount(int count) {
-        if (++count >= MAX_IMPORT_BEFORE_EMPTY_CACHE) {
+        if (++count >= BATCH_SIZE) {
             DbUtils.emptyCache();
             count = 0;
         }
@@ -109,8 +108,7 @@ public class RepositoryService {
     }
 
     private void handleMaterial(Repository repository, Material material, SynchronizationAudit audit) {
-        Material existentMaterial = materialDao.findByRepositoryAndRepositoryIdentifier(repository,
-                material.getRepositoryIdentifier());
+        Material existentMaterial = materialDao.findByRepository(repository, material.getRepositoryIdentifier());
 
         material.setRepository(repository);
         if (repository.isEstonianPublisher()) {
@@ -132,14 +130,11 @@ public class RepositoryService {
 
     boolean isRepoMaterial(Repository repository, Material existentMaterial) {
         String domainName = getDomainName(existentMaterial.getSource());
-        if (StringUtils.isNotBlank(domainName)) {
-            for (RepositoryURL repositoryURL : repository.getRepositoryURLs()) {
-                if (getDomainName(repositoryURL.getBaseURL()).equals(domainName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return StringUtils.isNotBlank(domainName) &&
+                repository.getRepositoryURLs().stream()
+                        .map(RepositoryURL::getBaseURL)
+                        .map(this::getDomainName)
+                        .anyMatch(r -> r.equals(domainName));
     }
 
     String getDomainName(String url) {
@@ -154,9 +149,8 @@ public class RepositoryService {
 
         } catch (Exception e) {
             logger.error("Could not get domain name from material during synchronization - updating all metafields of the material");
+            return null;
         }
-
-        return null;
     }
 
     private void createMaterial(Material material) {

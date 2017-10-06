@@ -27,10 +27,6 @@ public class ResourceTypeService {
 
     public ResourceType findResourceByTranslation(String name) {
         String translationKey = translationService.getTranslationKeyByTranslation(name);
-        if (translationKey == null) {
-            return null;
-        }
-
-        return resourceTypeDao.findByName(translationKey);
+        return translationKey != null ? resourceTypeDao.findByName(translationKey) : null;
     }
 }

@@ -107,7 +107,7 @@ public class RepositoryServiceTest {
         expect(material1.isDeleted()).andReturn(false).anyTimes();
         expect(material1.getPicture()).andReturn(null);
         material1.setRepository(repository);
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier1)).andReturn(null);
+        expect(materialDao.findByRepository(repository, repositoryIdentifier1)).andReturn(null);
         expect(materialService.createMaterialBySystemUser(material1, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expect(materialIterator.hasNext()).andReturn(true);
@@ -120,7 +120,7 @@ public class RepositoryServiceTest {
         expect(material2.isDeleted()).andReturn(false).anyTimes();
         expect(material2.getPicture()).andReturn(null);
         material2.setRepository(repository);
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier2)).andReturn(null);
+        expect(materialDao.findByRepository(repository, repositoryIdentifier2)).andReturn(null);
         expect(materialService.createMaterialBySystemUser(material2, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expectUpdateRepository(repository);
@@ -154,7 +154,7 @@ public class RepositoryServiceTest {
         Material originalMaterial = new Material();
         long originalMaterialId = 234l;
         originalMaterial.setId(originalMaterialId);
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
+        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(materialService.updateBySystem(material, SearchIndexStrategy.SKIP_UPDATE)).andReturn(material);
@@ -194,7 +194,7 @@ public class RepositoryServiceTest {
         long originalMaterialId = 234l;
         originalMaterial.setId(originalMaterialId);
         originalMaterial.setSource("http://www.xray24.ru");
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
+        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
         expect(material.isDeleted()).andReturn(true).anyTimes();
 
@@ -228,7 +228,7 @@ public class RepositoryServiceTest {
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
+        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(null);
 
         expectUpdateRepository(repository);
 
