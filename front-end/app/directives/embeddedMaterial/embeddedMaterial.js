@@ -241,11 +241,13 @@ function embeddedMaterialController(translationService, iconService, embedServic
     function probeContentSuccess(response) {
         console.log("Content probing succeeded!");
         if (!response()['content-disposition']) {
+            console.log("content is not dispositioned");
             $scope.sourceType = $scope.fallbackType;
             return;
         }
         let filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
         if (matchType(filename) === 'PDF') {
+            console.log("it is pdf baby");
             $scope.material.PDFLink = pdfjsLink(encodeURIComponent($scope.proxyUrl));
             let pdfElement = '.embed-pdf-' + $scope.material.id;
             if ($(pdfElement).length !== 0) {
