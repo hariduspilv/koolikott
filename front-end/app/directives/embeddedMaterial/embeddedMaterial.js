@@ -224,28 +224,17 @@ function embeddedMaterialController(translationService, iconService, embedServic
                     $timeout(sourceTypeAndPdfSetup, 100);
                 }
             } else {
-                $scope.fallbackType = 'LINK';
-                $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
-                $scope.isProxySource = true;
+                $scope.sourceType = 'PDF';
+                console.log("proxy tree");
+                if (!$scope.isProxySource) {
+                    $scope.fallbackType = 'LINK';
+                    $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                    $scope.isProxySource = true;
+                }
                 serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
             }
-            // if välisurl, tee proxy päring
-
-
-            // const baseUrl = document.location.origin;
-            // if ($scope.material.source.startsWith(baseUrl) && !$scope.proxyUrl) {
-            // $scope.material.PDFLink = pdfjsLink($scope.material.source);
-            // }
-            // $scope.sourceType = 'PDF';
-            //
-            // let pdfElement = '.embed-pdf-' + $scope.material.id;
-            // if ($(pdfElement).length !== 0) {
-            //     $(pdfElement).html(iFrameLink($scope.material.PDFLink));
-            // } else {
-            //     $timeout(sourceTypeAndPdfSetup, 100);
-            // }
         } else {
-            embedService.getEmbed(getSource($scope.material), embedCallback);
+            embedService.getEmbed($scope.material.source, embedCallback);
         }
     }
 
@@ -256,16 +245,18 @@ function embeddedMaterialController(translationService, iconService, embedServic
             return;
         }
         let filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
-        $scope.sourceType = matchType(filename);
-        if ($scope.sourceType === 'PDF') {
+        if (matchType(filename) === 'PDF') {
             $scope.material.PDFLink = pdfjsLink(encodeURIComponent($scope.proxyUrl));
             let pdfElement = '.embed-pdf-' + $scope.material.id;
             if ($(pdfElement).length !== 0) {
-                console.log("proxy pdf element setup"  + $scope.material.PDFLink);
+                console.log("proxy pdf element setup" + $scope.material.PDFLink);
                 $(pdfElement).html(iFrameLink($scope.material.PDFLink));
             } else {
-                // $timeout(sourceTypeAndPdfSetup, 100);
+                $timeout(sourceTypeAndPdfSetup, 100);
             }
+        } else {
+            console.log("everything is very sad");
+            $scope.sourceType = $scope.fallbackType;
         }
     }
 
