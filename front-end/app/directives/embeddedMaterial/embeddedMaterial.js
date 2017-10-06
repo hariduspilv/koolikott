@@ -213,6 +213,8 @@ function embeddedMaterialController(translationService, iconService, embedServic
             }
         } else if (isPDFLink($scope.material.source)) {
             let baseUrl = document.location.origin;
+            console.log("proxy source: " + $scope.isProxySource);
+            console.log("proxy source url: " + $scope.proxyUrl);
             if ($scope.material.source.startsWith(baseUrl) && !$scope.isProxySource) {
                 $scope.sourceType = 'PDF';
                 $scope.material.PDFLink = pdfjsLink($scope.material.source);
@@ -226,11 +228,11 @@ function embeddedMaterialController(translationService, iconService, embedServic
             } else {
                 $scope.sourceType = 'PDF';
                 console.log("proxy tree");
+                $scope.fallbackType = 'LINK';
                 if (!$scope.isProxySource) {
-                    $scope.fallbackType = 'LINK';
                     $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
-                    $scope.isProxySource = true;
                 }
+                $scope.isProxySource = true;
                 serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
             }
         } else {
