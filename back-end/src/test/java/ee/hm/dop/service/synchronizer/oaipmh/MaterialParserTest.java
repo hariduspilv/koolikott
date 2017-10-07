@@ -34,13 +34,10 @@ public class MaterialParserTest {
 
     @TestSubject
     private MaterialParser materialParser = new MaterialParserImpl();
-
     @Mock
     private LanguageService languageService;
-
     @Mock
     private Node node;
-
     @Mock
     private NodeList nodeList;
 

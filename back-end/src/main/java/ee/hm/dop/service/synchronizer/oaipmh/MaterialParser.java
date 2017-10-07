@@ -47,7 +47,6 @@ import org.w3c.dom.NodeList;
 
 public abstract class MaterialParser {
 
-    public static final String TRUE = "TRUE";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
