@@ -2,9 +2,7 @@ package ee.hm.dop.config.guice.provider.mock.rs.client;
 
 import java.util.Locale;
 
-import javax.ws.rs.client.AsyncInvoker;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.GenericType;
@@ -268,6 +266,16 @@ public class Builder implements javax.ws.rs.client.Invocation.Builder {
     @Override
     public Builder property(String name, Object value) {
 
+        return null;
+    }
+
+    @Override
+    public CompletionStageRxInvoker rx() {
+        return null;
+    }
+
+    @Override
+    public <T extends RxInvoker> T rx(Class<T> aClass) {
         return null;
     }
 

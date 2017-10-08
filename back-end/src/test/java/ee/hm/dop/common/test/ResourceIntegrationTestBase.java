@@ -7,8 +7,9 @@ import ee.hm.dop.rest.content.PortfolioResourceTest;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.filter.LoggingFilter;
+//import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
 
@@ -157,10 +158,13 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.FOLLOW_REDIRECTS, false);
         clientConfig.register(MultiPartFeature.class);
+        clientConfig.register(LoggingFeature.class);
 
-        Client client = ClientBuilder.newClient(clientConfig);
+        Client client = ClientBuilder.newClient(clientConfig)
+                .property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_ANY)
+                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "WARNING");
         client.register(JacksonFeature.class);
-        client.register(LoggingFilter.class);
+//        client.register(LoggingFilter.class);
         if (clientRequestFilter != null) {
             client.register(clientRequestFilter);
         }
