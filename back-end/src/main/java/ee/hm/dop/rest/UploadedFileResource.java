@@ -19,7 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.content.UploadedFileService;
+import ee.hm.dop.service.files.UploadedFileService;
+import ee.hm.dop.service.files.enums.FileDirectory;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -27,6 +28,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("uploadedFile")
 public class UploadedFileResource extends BaseResource {
 
+    public static final String REST_UPLOADED_FILE = "/rest/uploadedFile/";
     @Inject
     private Configuration configuration;
     @Inject
@@ -38,7 +40,7 @@ public class UploadedFileResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,
                                    @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
-        return uploadedFileService.uploadFile(fileInputStream, fileDetail, configuration.getString(FILE_UPLOAD_DIRECTORY), "/rest/uploadedFile/");
+        return uploadedFileService.uploadFile(fileInputStream, fileDetail, FileDirectory.UPDATE, REST_UPLOADED_FILE);
     }
 
     @GET
@@ -46,7 +48,7 @@ public class UploadedFileResource extends BaseResource {
     @Path("{id}/{filename:.*}")
     public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename, @QueryParam("archive") boolean archive) throws UnsupportedEncodingException {
         if (archive) return uploadedFileService.getArchivedFile(fileId);
-        return uploadedFileService.getFile(fileId, filename, false);
+        return uploadedFileService.getFile(fileId, filename, FileDirectory.UPDATE);
     }
 
     @GET

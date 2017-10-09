@@ -8,9 +8,6 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.UploadedFile;
 import org.junit.Test;
 
-/**
- * Created by mart on 8.08.16.
- */
 public class UploadedFileDaoTest extends DatabaseTestBase {
 
     @Inject
@@ -18,8 +15,7 @@ public class UploadedFileDaoTest extends DatabaseTestBase {
 
     @Test
     public void findUploadedFileById() {
-        long fileId = 1;
-        UploadedFile uploadedFile = uploadedFileDao.findById(fileId);
+        UploadedFile uploadedFile = uploadedFileDao.findById(1L);
         assertNotNull(uploadedFile);
         assertEquals("bookCover.jpg", uploadedFile.getName());
     }

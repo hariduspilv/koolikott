@@ -17,11 +17,6 @@ import java.net.UnknownHostException;
 import static java.lang.String.format;
 
 public class MaterialProxy {
-
-    private static final String PDF_EXTENSION = ".pdf\"";
-    private static final String PDF_MIME_TYPE = "application/pdf";
-    public static final String CONTENT_DISPOSITION = "Content-Disposition";
-    public static final String CONTENT_TYPE = "Content-Type";
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public Response getProxyUrl(String url_param) throws IOException {
@@ -36,12 +31,12 @@ public class MaterialProxy {
             return Response.noContent().build();
         }
 
-        String attachmentLocation = attachmentLocation(get, PDF_EXTENSION, PDF_MIME_TYPE);
-        if (attachmentLocation.equals(CONTENT_DISPOSITION)) {
-            String contentDisposition = get.getResponseHeaders(CONTENT_DISPOSITION)[0].getValue().replace("attachment", "Inline");
+        String attachmentLocation = attachmentLocation(get, DopConstants.PDF_EXTENSION, DopConstants.PDF_MIME_TYPE);
+        if (attachmentLocation.equals(DopConstants.CONTENT_DISPOSITION)) {
+            String contentDisposition = get.getResponseHeaders(DopConstants.CONTENT_DISPOSITION)[0].getValue().replace("attachment", "Inline");
             return buildContentDispositionResponse(get.getResponseBody(), contentDisposition);
         }
-        if (attachmentLocation.equals(CONTENT_TYPE)) {
+        if (attachmentLocation.equals(DopConstants.CONTENT_TYPE)) {
             // Content-Disposition is missing, try to extract the filename from url instead
             String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
             String contentDisposition = format("Inline; filename=\"%s\"", fileName);
@@ -51,7 +46,7 @@ public class MaterialProxy {
     }
 
     private Response buildContentDispositionResponse(byte[] responseBody, String contentDisposition) throws IOException {
-        return Response.ok(responseBody, PDF_MIME_TYPE).header(CONTENT_DISPOSITION,
+        return Response.ok(responseBody, DopConstants.PDF_MIME_TYPE).header(DopConstants.CONTENT_DISPOSITION,
                 contentDisposition).build();
     }
 
@@ -70,13 +65,13 @@ public class MaterialProxy {
     }
 
     private String attachmentLocation(GetMethod get, String extension, String mime_type) {
-        Header[] contentDisposition = get.getResponseHeaders(CONTENT_DISPOSITION);
-        Header[] contentType = get.getResponseHeaders(CONTENT_TYPE);
-        if (contentDisposition.length > 0 && contentDisposition[0].getValue().toLowerCase().endsWith(extension)) {
-            return CONTENT_DISPOSITION;
+        Header[] contentDisposition = get.getResponseHeaders(DopConstants.CONTENT_DISPOSITION);
+        Header[] contentType = get.getResponseHeaders(DopConstants.CONTENT_TYPE);
+        if (contentDisposition.length > 0 && contentDisposition[0].getValue().toLowerCase().endsWith(extension + "\"")) {
+            return DopConstants.CONTENT_DISPOSITION;
         }
         if (contentType.length > 0 && contentType[0].getValue().toLowerCase().endsWith(mime_type)) {
-            return CONTENT_TYPE;
+            return DopConstants.CONTENT_TYPE;
         }
         return "Invalid";
     }

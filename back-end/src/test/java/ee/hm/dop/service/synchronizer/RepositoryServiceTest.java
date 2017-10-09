@@ -21,7 +21,7 @@ import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.content.PictureService;
+import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;

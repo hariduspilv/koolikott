@@ -1,5 +1,6 @@
 package ee.hm.dop.utils.io;
 
+import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 
 import java.io.IOException;
@@ -9,8 +10,6 @@ import java.io.InputStream;
  * Created by mart on 20.09.16.
  */
 public class LimitedSizeInputStream extends InputStream {
-
-    private static final int MB_TO_B_MULTIPLIER = 1024 * 1024;
 
     private InputStream source;
     private long maxSize;
@@ -24,7 +23,7 @@ public class LimitedSizeInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        if (totalRead >= (maxSize * MB_TO_B_MULTIPLIER)) {
+        if (totalRead >= (maxSize * DOPFileUtils.MB_TO_B_MULTIPLIER)) {
             throw new MaxFileSizeExceededException();
         }
 

@@ -19,7 +19,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.rest.PictureResource;
 import ee.hm.dop.utils.DOPFileUtils;
@@ -44,7 +43,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     private static final int SM_LARGE_THUMBNAIL_HEIGHT = 200;
     private static final int LG_THUMBNAIL_WIDTH = (int) (300 * 1.1);
     private static final int LG_LARGE_THUMBNAIL_WIDTH = (int) (600  * 1.1);
-    private static final String TEST_IMAGE_NAME = "bookCover.jpg";
+    private static final String TEST_IMAGE_NAME = "uploads/1/bookCover.jpg";
     private static final double DELTA = 1e-15;
 
     @Test

@@ -10,8 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase {
 
@@ -45,6 +44,18 @@ public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase 
 
         long brokenMaterialsCount = doGet(MATERIAL_GET_BROKEN_COUNT, Long.class);
         assertEquals("Broken materials count", brokenMaterials.size(), brokenMaterialsCount);
+    }
+
+    @Test
+    public void getBroken_returns_different_broken_materials_based_on_user_privilege() {
+        login(USER_MODERATOR);
+        List<BrokenContent> brokenMaterialsModerator = doGet(MATERIAL_GET_BROKEN, list());
+        logout();
+
+        login(USER_ADMIN);
+        List<BrokenContent> brokenMaterialsAdmin = doGet(MATERIAL_GET_BROKEN, list());
+
+        assertNotEquals("Admin broken materials list, Moderator broken materials list", brokenMaterialsAdmin, brokenMaterialsModerator);
     }
 
     @Test

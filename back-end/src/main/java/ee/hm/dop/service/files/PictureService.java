@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.files;
 
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.ThumbnailDao;

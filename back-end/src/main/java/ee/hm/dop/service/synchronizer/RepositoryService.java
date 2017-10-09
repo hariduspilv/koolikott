@@ -15,7 +15,7 @@ import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.RepositoryURL;
 import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.content.PictureService;
+import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;

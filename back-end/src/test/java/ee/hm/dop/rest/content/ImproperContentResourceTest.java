@@ -107,6 +107,30 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(5), improperContents.get(0).getId());
     }
 
+    @Test
+    public void getImproperMaterials_returns_different_improper_materials_based_on_user_privilege() {
+        login(USER_MODERATOR);
+        List<ImproperContent> improperMaterialsModerator = doGet(IMPROPER_MATERIALS, genericType());
+        logout();
+
+        login(USER_ADMIN);
+        List<ImproperContent> improperMaterialsAdmin = doGet(IMPROPER_MATERIALS, genericType());
+
+        assertNotEquals("Admin improper materials list, Moderator improper materials list", improperMaterialsAdmin, improperMaterialsModerator);
+    }
+
+    @Test
+    public void getImproperPortfolios_returns_different_improper_portfolios_based_on_user_privilege() {
+        login(USER_MODERATOR);
+        List<ImproperContent> improperPortfoliosModerator = doGet(IMPROPER_PORTFOLIOS, genericType());
+        logout();
+
+        login(USER_ADMIN);
+        List<ImproperContent> improperPortfoliosAdmin = doGet(IMPROPER_PORTFOLIOS, genericType());
+
+        assertNotEquals("Admin improper portfolios list, Moderator improper portfolios list", improperPortfoliosAdmin, improperPortfoliosModerator);
+    }
+
     private GenericType<List<ImproperContent>> genericType() {
         return new GenericType<List<ImproperContent>>() {
         };

@@ -1,96 +1,77 @@
 package ee.hm.dop.rest.useractions;
 
-import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static java.net.HttpURLConnection.HTTP_CREATED;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.net.HttpURLConnection.HTTP_OK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.UploadedFile;
+import org.apache.commons.configuration.Configuration;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import org.junit.Test;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
 
-import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
-import ee.hm.dop.model.UploadedFile;
-import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
-import org.junit.Test;
+import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static org.junit.Assert.*;
 
-/**
- * Created by mart on 8.08.16.
- */
 public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
 
     @Inject
     private Configuration configuration;
+    public static final String TEST_FILE_NAME = "testFileForPostUploadedFile";
+    public static final String DOP_FILE_EXTENSION = ".dop";
 
     @Test
-    public void getFile() throws IOException {
-        Response response = doGet("uploadedFile/1", MediaType.APPLICATION_OCTET_STREAM_TYPE);
-
-        InputStream is = response.readEntity(InputStream.class);
-        File tempFile = File.createTempFile("testFileForGetUploadedFile", ".dop");
-
-        OutputStream outputStream = new FileOutputStream(tempFile);
-        int read;
-        byte[] bytes = new byte[10000];
-
-        while ((read = is.read(bytes)) != -1) {
-            outputStream.write(bytes, 0, read);
-        }
-        outputStream.close();
-
-        assertTrue(tempFile.exists());
-        assertTrue(tempFile.isFile());
-    }
-
-    @Test
-    public void getInvalidIdFile(){
-        Response response = doGet("uploadedFile/1000", MediaType.APPLICATION_OCTET_STREAM_TYPE);
-        assertEquals(HTTP_NOT_FOUND, response.getStatus());
+    public void getInvalidIdFile() {
+        Response response = doGet("uploadedFile/" + NOT_EXISTS_ID, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void uploadFile() throws IOException {
-        final String REGEX = "(\\d+)(?!.*\\d)";
-        final String FILE_NAME = "testFileForPostUploadedFile";
-        final String FILE_EXTENSION = ".dop";
-        final File tempFile = File.createTempFile(FILE_NAME, FILE_EXTENSION);
-        final FileDataBodyPart filePart = new FileDataBodyPart("file", tempFile);
-        FormDataMultiPart formDataMultiPart = (FormDataMultiPart) new FormDataMultiPart().bodyPart(filePart);
-
         login(USER_SECOND);
 
-        Response response = doPost("uploadedFile", Entity.entity(formDataMultiPart,
-                MediaType.MULTIPART_FORM_DATA), MediaType.APPLICATION_JSON_TYPE);
+        final File tempFile = File.createTempFile(TEST_FILE_NAME, DOP_FILE_EXTENSION);
+        Response response = doPost("uploadedFile", Entity.entity(multipart(tempFile), MediaType.MULTIPART_FORM_DATA));
 
         UploadedFile uploadedFile = response.readEntity(UploadedFile.class);
-        Long id = uploadedFile.getId();
-        assertNotNull(id);
-        String filename = uploadedFile.getPath().replaceAll(REGEX, "");
-        assertEquals(HTTP_CREATED, response.getStatus());
         assertNotNull(uploadedFile.getId());
-        assertEquals(configuration.getString(SERVER_ADDRESS) + "/rest/uploadedFile/" + id + "/" + uploadedFile.getName(), uploadedFile.getUrl());
-        assertEquals(filename, uploadedFile.getPath().replaceAll(REGEX, ""));
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        assertEquals(expectedUrl(uploadedFile), uploadedFile.getUrl());
+        assertEquals(tempFile.getName(), uploadedFile.getName());
+        assertTrue("located in test folder", uploadedFile.getPath().startsWith("src/test/resources/uploads/2"));
     }
 
     @Test
     public void maxSize() {
         Response response = doGet("uploadedFile/maxSize");
-        assertEquals(HTTP_OK, response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         assertEquals(Long.valueOf(configuration.getString(DOCUMENT_MAX_FILE_SIZE)), response.readEntity(Long.class));
-        System.out.println("Test");
+    }
+
+    @Test
+    public void everybody_can_ask_for_file_and_make_server_archive_it() throws Exception {
+        Response response = doGet("uploadedFile/1/bookCover.jpg?archive=true", MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void everybody_can_ask_for_file() throws Exception {
+        Response response = doGet("uploadedFile/1/bookCover.jpg", MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    private String expectedUrl(UploadedFile uploadedFile) {
+        return configuration.getString(SERVER_ADDRESS) + "/rest/uploadedFile/" + uploadedFile.getId() + "/" + uploadedFile.getName();
+    }
+
+    private MultiPart multipart(File tempFile) {
+        final FileDataBodyPart filePart = new FileDataBodyPart("file", tempFile);
+        return new FormDataMultiPart().bodyPart(filePart);
     }
 }

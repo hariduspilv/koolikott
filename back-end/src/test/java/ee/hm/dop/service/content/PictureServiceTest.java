@@ -12,7 +12,7 @@ import ee.hm.dop.dao.ThumbnailDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
-import ee.hm.dop.service.content.PictureService;
+import ee.hm.dop.service.files.PictureService;
 import org.easymock.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;

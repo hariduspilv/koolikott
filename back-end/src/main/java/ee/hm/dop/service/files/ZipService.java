@@ -1,23 +1,21 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.files;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import ee.hm.dop.service.content.DopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ZipService {
     // Increase this number to reduce ZIP read/write times
-    private int COMPRESSION_MEMORY = 1024;
-    public static final String ZIP_EXTENSION = ".zip";
+    public static final int COMPRESSION_MEMORY = 1024;
     private List<String> fileList = new ArrayList<>();
     private String sourceFolder;
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,16 +29,14 @@ public class ZipService {
 
     public String packArchive(String sourceFolder, String outputFolder) {
         this.sourceFolder = sourceFolder;
-        String outputFile = outputFolder + ZIP_EXTENSION;
+        String outputFile = outputFolder + DopConstants.ZIP_EXTENSION;
         generateFileList(new File(sourceFolder));
         zipIt(outputFile);
         return outputFile;
     }
 
     public void zipIt(String zipFile) {
-
         byte[] buffer = new byte[COMPRESSION_MEMORY];
-
         try {
             FileOutputStream fos = new FileOutputStream(zipFile);
             ZipOutputStream zos = new ZipOutputStream(fos);
@@ -103,33 +99,4 @@ public class ZipService {
         return file.substring(sourceFolder.length() + 1, file.length());
     }
 
-    public void unpackArchive(InputStream inputStream, String location) {
-        byte[] buffer = new byte[COMPRESSION_MEMORY];
-        ZipInputStream zis = new ZipInputStream(inputStream);
-        try {
-            ZipEntry ze = zis.getNextEntry();
-            while (ze != null) {
-
-                String fileName = ze.getName();
-                File newFile = new File(location + File.separator + fileName);
-
-                new File(newFile.getParent()).mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                ze = zis.getNextEntry();
-            }
-
-            zis.closeEntry();
-            zis.close();
-        } catch (IOException e) {
-            throw new RuntimeException("File is not a subtype of an ZIP archive");
-        }
-    }
 }
