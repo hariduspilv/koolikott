@@ -53,7 +53,9 @@ public class SolrService implements SolrEngineService {
     private SolrIndexThread indexThread;
 
     SolrService() {
-        solrClient = new HttpSolrClient("http://localhost:8983/solr/dop");
+        solrClient = new HttpSolrClient.Builder()
+                .withBaseSolrUrl("http://localhost:8983/solr/dop")
+                .build();
         indexThread = new SolrIndexThread();
         indexThread.start();
     }

@@ -8,7 +8,6 @@
 
     <properties>
         <slf4j.version>1.7.25</slf4j.version>
-        <log4j.version>2.8.2</log4j.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
         <jetty.version>9.4.6.v20170531</jetty.version>
         <jackson.version>2.9.1</jackson.version>
@@ -195,7 +194,7 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>6.1.0</version>
+            <version>7.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
