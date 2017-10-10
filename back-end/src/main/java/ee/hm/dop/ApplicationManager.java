@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 
@@ -38,7 +39,7 @@ public class ApplicationManager {
         BufferedWriter writer = null;
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
             write(STOP_COMMAND + "\n\r", writer);
             logger.info("Stop command sent to application");
             Thread.sleep(300);
@@ -59,7 +60,7 @@ public class ApplicationManager {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
             isRunning = true;
-        } catch (Exception ce) {
+        } catch (IOException ce) {
             logger.info("Application is not running.");
         }
 
@@ -115,7 +116,7 @@ public class ApplicationManager {
         @Override
         public void run() {
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
                 StringBuilder stringBuilder = new StringBuilder();
                 int data = 0;
                 while ((data = reader.read()) >= 0) {

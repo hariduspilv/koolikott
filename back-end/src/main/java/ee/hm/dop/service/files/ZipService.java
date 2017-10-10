@@ -49,15 +49,12 @@ public class ZipService {
                 ZipEntry ze = new ZipEntry(file);
                 zos.putNextEntry(ze);
 
-                FileInputStream in =
-                        new FileInputStream(sourceFolder.substring(0, sourceFolder.lastIndexOf("/")) + file);
-
-                int len;
-                while ((len = in.read(buffer)) > 0) {
-                    zos.write(buffer, 0, len);
+                try(FileInputStream in = new FileInputStream(sourceFolder.substring(0, sourceFolder.lastIndexOf("/")) + file)){
+                    int len;
+                    while ((len = in.read(buffer)) > 0) {
+                        zos.write(buffer, 0, len);
+                    }
                 }
-
-                in.close();
             }
 
             zos.closeEntry();
