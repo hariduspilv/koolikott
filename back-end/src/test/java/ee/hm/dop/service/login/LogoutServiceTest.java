@@ -19,7 +19,6 @@ public class LogoutServiceTest {
 
     @TestSubject
     private LogoutService logoutService = new LogoutService();
-
     @Mock
     private AuthenticatedUserDao authenticatedUserDao;
 

@@ -244,12 +244,7 @@ public class LoginServiceTest {
 
     private void expectCreateAuthenticatedUser(Capture<AuthenticatedUser> capturedAuthenticatedUser) {
         expect(authenticatedUserDao.createAuthenticatedUser(EasyMock.capture(capturedAuthenticatedUser))).andAnswer(
-                new IAnswer<AuthenticatedUser>() {
-                    @Override
-                    public AuthenticatedUser answer() throws Throwable {
-                        return capturedAuthenticatedUser.getValue();
-                    }
-                });
+                capturedAuthenticatedUser::getValue);
     }
 
     private void replayAll(Object... mocks) {
