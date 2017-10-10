@@ -22,7 +22,7 @@ public class DateUtils {
      * @return the {@link DateTime} object represented by {@code jsonDate}
      */
     public static DateTime fromJson(String jsonDate) {
-        DateTime date = null;
+        DateTime date;
 
         try {
             date = formatter.parseDateTime(jsonDate);
