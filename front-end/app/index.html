@@ -31,8 +31,8 @@
   <![endif]-->
   <img data-ng-if="!hasAppInitated" id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
 
-  <div data-ng-if="hasAppInitated" layout-fill data-dop-column-layout></div>
-  <div data-dop-main-fab-button></div>
+  <data-dop-column-layout data-ng-if="hasAppInitated" layout-fill></data-dop-column-layout>
+  <data-dop-main-fab-button></data-dop-main-fab-button>
 
   <!--preloader-->
   <script src="utils/preloader/preloader.js"></script>
@@ -144,42 +144,41 @@
   <!-- build:js js/directives.js -->
   <script src="directives/copyPermalink/copyPermalink.js"></script>
   <script src="directives/dashboard/dashboard.js"></script>
-  <script src="directives/detailedSearch/detailedSearch.js"></script>
   <script src="directives/embeddedMaterial/embeddedMaterial.js"></script>
   <script src="directives/errorMessage/errorMessage.js"></script>
   <script src="directives/header/header.js"></script>
-  <script src="directives/infiniteSearchResult/infiniteSearchResult.js"></script>
-  <script src="directives/mainFabButton/mainFabButton.js"></script>
-  <script src="directives/pageStructure/columnLayout/columnLayout.js"></script>
   <script src="directives/portfolioSummaryCard/portfolioSummaryCard.js"></script>
   <script src="directives/recommend/recommend.js"></script>
   <script src="directives/report/brokenLink/brokenLink.js"></script>
   <script src="directives/report/improper/improper.js"></script>
   <script src="directives/restrict/restrict.js"></script>
   <script src="directives/selectClose/selectClose.js"></script>
-  <script src="directives/aside/aside.js"></script>
   <script src="directives/sidenav/sidenav.js"></script>
   <script src="directives/sidenavTaxon/sidenavTaxon.js"></script>
-  <script src="directives/slideshare/slideshare.js"></script>
   <script src="directives/targetGroupSelector/targetGroupSelector.js"></script>
   <script src="directives/taxonSelector/taxonSelector.js"></script>
   <script src="directives/validate/validateUrl.js"></script>
   <script src="directives/input-value-control.js"></script>
-  <script src="directives/max-length.directive.js"></script>
   <!-- endbuild -->
 
   <!-- build:js js/components.js -->
   <script src="directives/alert/alert.component.js"></script>
+  <script src="directives/aside/aside.component.js"></script>
   <script src="directives/card/cardMedia/cardMedia.component.js"></script>
   <script src="directives/card/cardSM/cardSM.component.js"></script>
   <script src="directives/card/cardXS/cardXS.component.js"></script>
   <script src="directives/chapter/chapter.component.js"></script>
   <script src="directives/chapter/chapterToolbar/chapterToolbar.component.js"></script>
   <script src="directives/commentsCard/commentsCard.component.js"></script>
+  <script src="directives/detailedSearch/detailedSearch.component.js"></script>
   <script src="directives/favorite/favorite.component.js"></script>
+  <script src="directives/infiniteSearchResult/infiniteSearchResult.component.js"></script>
+  <script src="directives/mainFabButton/mainFabButton.component.js"></script>
+  <script src="directives/pageStructure/columnLayout/columnLayout.component.js"></script>
   <script src="directives/pickMaterial/pickMaterial.component.js"></script>
   <script src="directives/rating/rating.component.js"></script>
   <script src="directives/share/share.component.js"></script>
+  <script src="directives/slideshare/slideshare.component.js"></script>
   <script src="directives/tableOfContents/tableOfContents.component.js"></script>
   <script src="directives/tags/tags.component.js"></script>
   <script src="directives/toolbarAddMaterials/toolbarAddMaterials.component.js"></script>

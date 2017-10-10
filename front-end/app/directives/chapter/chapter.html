@@ -5,7 +5,7 @@
       <!--View-->
       <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
         <div flex>
-          <div layout="row" class="pointer" data-ng-click="$ctrl.ocChapter($ctrl.chapter)">
+          <div layout="row" class="pointer" data-ng-click="$ctrl.onClickChapter($ctrl.chapter)">
             <h2 data-ng-class="{'chapter-title': $ctrl.chapter.text.length == undefined || $ctrl.chapter.text.length == 0}">
               <span data-ng-if="$ctrl.chapter.title" data-ng-bind="$ctrl.chapter.title"></span>
               <span data-ng-if="!$ctrl.chapter.title" data-translate="PORTFOLIO_CHAPTER_TITLE_MISSING"></span>
@@ -29,7 +29,7 @@
       <!--Edit-->
       <md-card-content data-ng-if="$ctrl.isEditable">
         <div layout="row" layout-align="start center">
-          <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.isCollapsed}" data-ng-click="$ctrl.ocChapter(chapter)">
+          <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.isCollapsed}" data-ng-click="$ctrl.onClickChapter(chapter)">
             <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
             <md-tooltip md-direction="bottom">
               <span data-ng-if="$ctrl.isCollapsed" data-translate="TOOLTIP_OPEN_CHAPTER">Open chapter</span>
@@ -111,7 +111,7 @@
         <!--View-->
         <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
           <div flex>
-            <div layout="row" class="pointer" data-ng-click="$ctrl.ocSubChapter($index)">
+            <div layout="row" class="pointer" data-ng-click="$ctrl.onClickSubChapter($index)">
               <h3>
                 <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
                 <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
@@ -134,7 +134,7 @@
         <!--Edit-->
         <md-card-content data-ng-if="$ctrl.isEditable">
           <div layout="row" layout-align="start center">
-            <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[$index]}" data-ng-click="$ctrl.ocSubChapter($index)">
+            <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[$index]}" data-ng-click="$ctrl.onClickSubChapter($index)">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
               <md-tooltip md-direction="bottom">
                 <span data-ng-if="$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>

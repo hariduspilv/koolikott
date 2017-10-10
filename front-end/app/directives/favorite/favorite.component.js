@@ -1,100 +1,91 @@
 'use strict'
 
-angular.module('koolikottApp')
-    .component('dopFavorite', {
-        bindings: {
-            learningObject: '<',
-            hover: '<'
-        },
-        templateUrl: 'directives/favorite/favorite.html',
-        controller: dopFavoriteController
-    });
+{
+class controller extends Controller {
+    $onInit() {
+        this.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
+        this.isViewMaterialOrPortfolioPage = this.$rootScope.isViewMaterialOrPortfolioPage
 
-dopFavoriteController.$inject = ['$rootScope', 'serverCallService', 'authenticatedUserService', 'toastService', '$timeout', 'materialService', 'portfolioService'];
-
-function dopFavoriteController($rootScope, serverCallService, authenticatedUserService, toastService, $timeout, materialService, portfolioService) {
-    let vm = this;
-
-    vm.$onInit = () => {
-        vm.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-        vm.isViewMaterialOrPortfolioPage = $rootScope.isViewMaterialOrPortfolioPage;
-
-        getFavoriteData();
-    };
-
-    vm.$onChanges = (changes) => {
+        this.getFavoriteData()
+    }
+    $onChanges({ learningObject }) {
         // When asynchronous learningObject request finishes after component init
-        if (changes.learningObject && changes.learningObject.currentValue && !changes.learningObject.previousValue) {
-            getFavoriteData();
-        }
-    };
-
-    function getFavoriteData() {
-        if (vm.learningObject && isLoggedIn()) {
-            if (vm.learningObject.favorite) {
-                vm.hasFavorited = true;
-            } else if (vm.learningObject.favorite == null) {
-                serverCallService.makeGet("rest/learningObject/favorite", {'id': vm.learningObject.id}, getFavoriteSuccess, getFavoriteFail);
-            }
-        }
+        if (learningObject && learningObject.currentValue && !learningObject.previousValue)
+            this.getFavoriteData()
     }
-
-    function getFavoriteSuccess(data) {
-        if (data && data.id) {
-            vm.hasFavorited = true;
+    getFavoriteData() {
+        if (this.learningObject && this.authenticatedUserService.isAuthenticated()) {
+            if (this.learningObject.favorite)
+                this.hasFavorited = true
+            else if (this.learningObject.favorite == null)
+                this.serverCallService
+                    .makeGet('rest/learningObject/favorite', { 'id': this.learningObject.id })
+                    .then(({ data }) => {
+                        if (data && data.id)
+                            this.hasFavorited = true
+                    })
         }
     }
+    favorite($event) {
+        $event.preventDefault()
+        $event.stopPropagation()
 
-    function getFavoriteFail() {
-        console.log("Getting info if the user has favorited failed");
-    }
+        const makePost = (data) =>
+            this.serverCallService
+                .makePost('rest/learningObject/favorite', data)
+                .then(response => {
+                    if (200 <= status && status < 300) {
+                        this.toastService.show('ADDED_TO_FAVORITES')
+                        this.hasFavorited = true
+                    }
+                }, () =>
+                    this.hasFavorited = false
+                )
 
-    vm.favorite = ($event) => {
-        $event.preventDefault();
-        $event.stopPropagation();
+        if (this.authenticatedUserService.isAuthenticated()) {
+            this.isPortfolio(this.learningObject)
+                ? this.portfolioService.getPortfolioById(this.learningObject.id).then(makePost)
+                : this.isMaterial(this.learningObject)
+                    && this.materialService.getMaterialById(this.learningObject.id).then(makePost)
 
-        if (isLoggedIn()) {
-            if (isPortfolio(vm.learningObject.type)) {
-                portfolioService.getPortfolioById(vm.learningObject.id)
-                    .then(data => {
-                        serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
-                    });
-            } else if (isMaterial(vm.learningObject.type)) {
-                materialService.getMaterialById(vm.learningObject.id)
-                    .then(data => {
-                        serverCallService.makePost("rest/learningObject/favorite", data, addFavoriteSuccess, addFavoriteFail);
-                    });
-            }
-
-
-            vm.hasFavorited = true;
-        }
-    };
-
-    function addFavoriteSuccess(data) {
-        if (data && data.id) {
-            toastService.show("ADDED_TO_FAVORITES");
-            vm.hasFavorited = true;
+            this.hasFavorited = true
         }
     }
+    removeFavorite($event) {
+        $event.preventDefault()
+        $event.stopPropagation()
 
-    function addFavoriteFail() {
-        console.log("Adding as favorite failed");
-        vm.hasFavorited = false;
-    }
+        if (this.hasFavorited && this.authenticatedUserService.isAuthenticated()) {
+            this.serverCallService
+                .makeDelete('rest/learningObject/favorite', this.learningObject)
+                .then(({ status }) => {
+                    if (200 <= status && status < 300) {
+                        this.toastService.show('REMOVED_FROM_FAVORITES')
+                        this.hasFavorited = false
+                    }
+                }, () =>
+                    this.hasFavorited = true
+                )
 
-    vm.removeFavorite = ($event) => {
-        $event.preventDefault();
-        $event.stopPropagation();
-
-        if (isLoggedIn() && vm.hasFavorited) {
-            serverCallService.makeDelete("rest/learningObject/favorite", {'id': vm.learningObject.id});
-            vm.hasFavorited = false;
-            toastService.show("REMOVED_FROM_FAVORITES");
+            this.hasFavorited = false
         }
-    };
-
-    function isLoggedIn() {
-        return authenticatedUserService.isAuthenticated();
     }
+}
+controller.$inject = [
+    '$rootScope',
+    'serverCallService',
+    'authenticatedUserService',
+    'toastService',
+    'materialService',
+    'portfolioService'
+]
+
+angular.module('koolikottApp').component('dopFavorite', {
+    bindings: {
+        learningObject: '<',
+        hover: '<'
+    },
+    templateUrl: 'directives/favorite/favorite.html',
+    controller
+})
 }

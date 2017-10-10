@@ -1,19 +1,34 @@
-<md-card class="card-xs" data-ng-click="$ctrl.navigateTo($ctrl.learningObject, $event)" layout="row">
+<md-card class="card-xs" data-ng-click="$ctrl.navigateTo()" layout="row">
   <md-card-content flex="50">
-    <h6 class="ellipsis ellipsis--2 ellipsis--small no-margin" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" data-ng-bind="$ctrl.learningObject.title"></h6>
-    <h6 class="ellipsis ellipsis--2 ellipsis--small no-margin" data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"></h6>
+    <h6
+      data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"
+      class="ellipsis ellipsis--2 ellipsis--small no-margin"
+      data-ng-bind="$ctrl.learningObject.title"
+    ></h6>
+    <h6
+      data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
+      class="ellipsis ellipsis--2 ellipsis--small no-margin"
+      data-ng-bind="$ctrl.getCorrectLanguageTitle()"
+    ></h6>
     <p class="md-caption ellipsis">
-      <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="authors">
-        <span data-ng-bind="$ctrl.formatName($ctrl.learningObject.creator.name)"></span>
-        <span data-ng-bind="$ctrl.formatSurname($ctrl.learningObject.creator.surname)"></span>
+      <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)" class="authors">
+        <span data-ng-bind="$ctrl.formatNameToInitials($ctrl.learningObject.creator.name)"></span>
+        <span data-ng-bind="$ctrl.formatSurnameToInitialsButLast($ctrl.learningObject.creator.surname)"></span>
       </span>
-      <span data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" data-ng-repeat="author in $ctrl.learningObject.authors track by $index" class="authors">
-        <span data-ng-bind="$ctrl.formatName(author.name)"></span>
-        <span data-ng-bind="$ctrl.formatSurname(author.surname)"></span>
+      <span
+        data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
+        data-ng-repeat="author in $ctrl.learningObject.authors track by $index"
+        class="authors"
+        >
+        <span data-ng-bind="$ctrl.formatNameToInitials(author.name)"></span>
+        <span data-ng-bind="$ctrl.formatSurnameToInitialsButLast(author.surname)"></span>
         <span data-ng-bind="$index < $ctrl.learningObject.authors.length - 1 ? ', ' : ''"></span>
       </span>
     </p>
   </md-card-content>
-
-  <dop-card-media data-learning-object="$ctrl.learningObject" flex="50" data-disable-pick="true"></dop-card-media>
+  <dop-card-media
+    data-learning-object="$ctrl.learningObject"
+    flex="50"
+    data-disable-pick="true"
+  ></dop-card-media>
 </md-card>

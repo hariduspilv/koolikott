@@ -1,26 +1,25 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.component('dopAlert', {
-    bindings: {},
-    controller: dopAlertController
-});
+{
+class controller extends Controller {
+    $onInit() {
+        this.$scope.$watch(
+            () => this.alertService.getAlert(),
+            ({ message }) => {
+                if (message) {
+                    this.toastService.show(message)
+                    this.alertService.clearMessage()
 
-dopAlertController.$inject = ['$scope', '$timeout', 'translationService', 'alertService', 'toastService'];
+                    $timeout(() => this.alert = null, 5000)
+                }
+            },
+            true
+        )
+    }
+}
+controller.$inject = ['$scope', '$timeout', 'alertService', 'toastService']
 
-function dopAlertController ($scope, $timeout, translationService, alertService, toastService) {
-    let vm = this;
-
-    $scope.$watch(function() {
-        return alertService.getAlert();
-    }, function(newValue) {
-        if (newValue.message) {
-            toastService.show(newValue.message);
-            alertService.clearMessage();
-
-            $timeout(function() {
-                vm.alert = null;
-            }, 5000);
-        }
-    }, true);
+angular.module('koolikottApp').component('dopAlert', {
+    controller
+})
 }

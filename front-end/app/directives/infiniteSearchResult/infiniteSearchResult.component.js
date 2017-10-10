@@ -3,7 +3,7 @@
 {
 class controller extends Controller {
     $onInit() {
-        this.initialParams = { ...this.params }
+        this.initialParams = Object.assign({}, this.params)
         this.searchCount = 0
         this.maxResults = this.params
             ? this.params.maxResults || this.params.limit
@@ -12,7 +12,7 @@ class controller extends Controller {
 
         if (!this.url)
             this.url = "rest/search"
-        
+
         if (!this.params)
             this.params = {}
 
@@ -60,7 +60,7 @@ class controller extends Controller {
     search(newSearch) {
         if (this.$scope.searching || this.allResultsLoaded() && !newSearch)
             return
-        
+
         this.$scope.searching = true
         this.$scope.start = this.searchCount * this.maxResults
 

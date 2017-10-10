@@ -10,7 +10,7 @@
     </md-tooltip>
   </div>
 
-  <div class="ribbon" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)"></div>
+  <div class="ribbon" data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"></div>
 
   <a data-ng-href="{{'/' + $ctrl.learningObjectType + '?id=' + $ctrl.learningObject.id}}"
      class="card-cover"
@@ -23,10 +23,10 @@
       <div class="sheet low-left"></div>
     </div>
 
-    <md-icon data-ng-if="!$ctrl.learningObject.picture && $ctrl.isPortfolio($ctrl.learningObject.type)"
+    <md-icon data-ng-if="!$ctrl.learningObject.picture && $ctrl.isPortfolio($ctrl.learningObject)"
              class="icon-kind">book
     </md-icon>
-    <md-icon data-ng-if="!$ctrl.learningObject.picture && $ctrl.isMaterial($ctrl.learningObject.type)"
+    <md-icon data-ng-if="!$ctrl.learningObject.picture && $ctrl.isMaterial($ctrl.learningObject)"
              class="icon-kind">{{$ctrl.materialType}}
     </md-icon>
 
@@ -39,8 +39,8 @@
 
     <div class="card-hover {{$ctrl.learningObjectType}} {{$ctrl.materialType}}">
       <dop-pick-material data-learning-object="$ctrl.learningObject" data-disable="$ctrl.disablePick"></dop-pick-material>
-      <md-icon data-ng-if="$ctrl.isPortfolio($ctrl.learningObject.type)" class="icon-kind">book</md-icon>
-      <md-icon data-ng-if="$ctrl.isMaterial($ctrl.learningObject.type)" class="icon-kind">{{$ctrl.materialType}}
+      <md-icon data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)" class="icon-kind">book</md-icon>
+      <md-icon data-ng-if="$ctrl.isMaterial($ctrl.learningObject)" class="icon-kind">{{$ctrl.materialType}}
       </md-icon>
     </div>
   </a>

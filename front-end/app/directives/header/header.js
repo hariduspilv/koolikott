@@ -1,426 +1,361 @@
 'use strict'
 
-angular.module('koolikottApp').directive('dopHeader', [
-    '$window',
-    function ($window) {
-        return {
-            scope: true,
-            templateUrl: 'directives/header/header.html',
-            link: function () {
-                let scrollTimer,
-                    detailedSearch = document.getElementById('detailedSearch'),
-                    $detailedSearch = angular.element(detailedSearch),
-                    $header = document.getElementById('md-toolbar-header'),
-                    isSuggestVisible = false;
-
-                setTimeout(() => {
-                    let headerInput = document.getElementById('header-search-input');
-
-                    headerInput.addEventListener('focus', function() {
-                        if (headerInput.value != '') {
-                            isSuggestVisible = true;
-                        } else {
-                            isSuggestVisible = false;
-                        }
-                    });
-
-                    headerInput.addEventListener('blur', function() {
-                        isSuggestVisible = false;
-                    });
-                });
-
-                angular.element($window).on('scroll', function () {
-                    clearTimeout(scrollTimer);
-                    scrollTimer = setTimeout(function () {
-                        let $backdrop = document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop'),
-                            isDetailedSearchHidden = detailedSearch.getAttribute('aria-hidden');
-
-                        if ($backdrop.length === 0 && isDetailedSearchHidden && !isSuggestVisible) {
-                            if (this.pageYOffset >= $header.offsetHeight && $window.innerWidth >= BREAK_SM) {
-                                $detailedSearch.addClass('md-toolbar-filter--fixed');
-                            } else {
-                                $detailedSearch.removeClass('md-toolbar-filter--fixed');
-                            }
-                        }
-                    }, 200);
-                });
-            },
-            controller: ['$scope', '$location', '$rootScope', 'translationService', 'searchService', 'authenticationService', 'authenticatedUserService', '$timeout', '$mdDialog', 'suggestService', 'serverCallService', 'toastService', '$route', '$http', '$translate', 'storageService', 'dialogService',
-            function ($scope, $location, $rootScope, translationService, searchService, authenticationService, authenticatedUserService, $timeout, $mdDialog, suggestService, serverCallService, toastService, $route, $http, $translate, storageService, dialogService) {
-                $scope.detailedSearch = {};
-                $scope.detailedSearch.isVisible = false;
-                $scope.mobileSearch = {};
-                $scope.mobileSearch.isVisible = false;
-                $scope.showLanguageSelection = false;
-                $scope.selectedLanguage = translationService.getLanguage();
-                $scope.searchFields = {};
-                $scope.searchFields.searchQuery = searchService.getQuery();
-                $scope.detailedSearch = {};
-                $scope.suggest = {};
-                $scope.suggest.suggestions = null;
-                $scope.suggest.selectedItem = null;
-                $scope.canShowTour = false;
-                $scope.isMobileView = false;
-                var dontSearch = false;
-
-                const VISIBILITY_PUBLIC = "PUBLIC";
-                const VISIBILITY_PRIVATE = "PRIVATE";
-                const VISIBILITY_NOT_LISTED = "NOT_LISTED";
-
-                const SEARCH_DELAY = 1000;
-
-                function checkWindowWidth () {
-                    if (isMobile()) {
-                        $scope.isMobileView = true;
-                    }
-
-                    if ($window.innerWidth >= BREAK_SM) {
-                        $scope.canShowTour = true;
-                    }
-                }
-
-                checkWindowWidth();
-                angular.element($window).on('resize', () => checkWindowWidth());
-
-                $scope.detailedSearch.accessor = {
-                    clearSimpleSearch: function () {
-                        $scope.searchFields.searchQuery = '';
-                    }
-                };
-
-                $scope.setLanguage = function (language) {
-                    var prevLanguage = $scope.selectedLanguage;
-                    translationService.setLanguage(language);
-                    $scope.selectedLanguage = language;
-                    if (prevLanguage !== language) {
-                        $window.location.reload();
-                    }
-                };
-
-                $scope.logout = function () {
-                    authenticationService.logout();
-                    $rootScope.$broadcast('tour:close');
-                    $location.url('/');
-                };
-
-                $scope.showLogin = function (ev) {
-                    $mdDialog.show({
-                        templateUrl: 'views/loginDialog/loginDialog.html',
-                        controller: 'loginDialogController',
-                        targetEvent: ev
-                    });
-                };
-
-                $scope.search = function () {
-                    searchService.setSearch($scope.searchFields.searchQuery);
-                    searchService.clearFieldsNotInSimpleSearch();
-                    if ($rootScope.isEditPortfolioMode) {
-                        searchService.setType('material');
-                    } else {
-                        searchService.setType('all');
-                    }
-                    $location.url(searchService.getURL());
-                };
-
-                $scope.openDetailedSearch = () => {
-                    $scope.detailedSearch.isVisible = true;
-                    $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                    broadcastSearchOpen();
-                };
-
-                function broadcastSearchOpen() {
-                    $scope.$broadcast("detailedSearch:open");
-                }
-
-                $scope.closeDetailedSearch = () => {
-                    $timeout(function () {
-                        if (!$rootScope.isEditPortfolioMode) {
-                            $scope.clearTaxonSelector();
-                            $scope.detailedSearch.accessor.clear();
-                        }
-                    }, 500);
-                    dontSearch = true;
-                    $scope.detailedSearch.isVisible = false;
-                    $scope.detailedSearch.queryIn = "";
-                };
-
-                $scope.openMobileSearch = () => {
-                    $scope.mobileSearch.isVisible = true;
-
-                    $timeout(() => {
-                        document.getElementById('header-simple-search-input').focus();
-                    });
-                }
-
-                $scope.closeMobileSearch = (emptySearch) => {
-                    $scope.mobileSearch.isVisible = false;
-
-                    if (emptySearch) {
-                        $scope.detailedSearch.accessor.clearSimpleSearch();
-                    }
-                }
-
-                $scope.$on('detailedSearch:open', () => $scope.detailedSearch.isVisible = true);
-                $scope.$on('detailedSearch:close', () => $scope.detailedSearch.isVisible = false);
-                $scope.$on('detailedSearch:empty', () => $scope.closeDetailedSearch());
-                $scope.$on('mobileSearch:open', () => $scope.openMobileSearch());
-
-                $scope.suggest.doSuggest = function (query) {
-                    if (query == null) {
-                        return [];
-                    }
-
-                    $scope.suggest.suggestions = suggestService.suggest(query, suggestService.getSuggestURLbase());
-                    if ($scope.doInlineSuggestion) {
-                        suggestInline($scope.suggest.suggestions);
-                    }
-
-                    return $scope.suggest.suggestions;
-                };
-
-                function suggestInline(suggestions) {
-                    if (!suggestions) return;
-                    suggestions.then(function (data) {
-                        var firstSuggestion = data[0];
-                        if (!firstSuggestion) {
-                            $scope.clearInlineSuggestion();
-                            return;
-                        }
-                        var searchTextLength = $scope.searchFields.searchQuery.length;
-                        $scope.hiddenInline = firstSuggestion.substring(0, searchTextLength);
-                        $scope.inlineSuggestion = firstSuggestion.substring(searchTextLength);
-                    });
-                }
-
-                $scope.clearInlineSuggestion = function () {
-                    $scope.hiddenInline = "";
-                    $scope.inlineSuggestion = "";
-                };
-
-                $scope.keyPressed = function (event) {
-                    if (event.keyCode === 8) { // backspace
-                        if ($scope.inlineSuggestion) {
-                            event.preventDefault();
-                        }
-
-                        $scope.doInlineSuggestion = false;
-                    } else if (event.keyCode === 13) { // enter
-                        if (!isSearchResultPage()) {
-                            processSearchQuery($scope.searchFields.searchQuery);
-                        }
-
-                        angular.element(document.querySelector("#header-search-input")).controller('mdAutocomplete').hidden = true;
-                        document.getElementById("header-search-input").blur();
-                        $scope.doInlineSuggestion = false;
-                    } else {
-                        $scope.doInlineSuggestion = true;
-                    }
-
-                    $scope.clearInlineSuggestion();
-                };
-
-                function isSearchResultPage() {
-                    return $location.url().startsWith('/' + searchService.getSearchURLbase());
-                }
-
-                $scope.clickOutside = function () {
-                    if ($rootScope.dontCloseSearch) {
-                        $rootScope.dontCloseSearch = false;
-                    }
-                };
-
-                $scope.$watch('detailedSearch.mainField', function (newValue, oldValue) {
-                    if (newValue != oldValue) {
-                        $scope.searchFields.searchQuery = newValue || "";
-                    }
-                }, true);
-
-
-                $scope.$watch('searchFields.searchQuery', processSearchQuery, true);
-
-                function processSearchQuery(newValue, oldValue) {
-                    if (newValue != oldValue && !newValue) {
-                        $scope.clearInlineSuggestion();
-                    }
-
-                    $scope.searchFields.searchQuery = newValue || "";
-                    if (newValue !== oldValue && !$scope.detailedSearch.isVisible && (!dontSearch || newValue)) {
-
-                        $timeout(function () {
-                            $scope.search();
-                        }, SEARCH_DELAY);
-
-                    } else if ($scope.detailedSearch.isVisible) {
-                        $scope.detailedSearch.queryIn = $scope.searchFields.searchQuery;
-                    }
-
-                    if (dontSearch) dontSearch = false;
-                }
-
-                $scope.$watch(function () {
-                    return authenticatedUserService.getUser();
-                }, function (user) {
-                    $scope.user = user;
-                }, true);
-
-                $scope.$watch(function () {
-                    return searchService.getQuery();
-                }, function (query) {
-                    // Search query is not updated from search service while detailed search is open
-                    if (!query || !$scope.detailedSearch.isVisible) {
-                        $scope.searchFields.searchQuery = query;
-                    }
-                }, true);
-
-                $scope.$watch(function () {
-                    return translationService.getLanguage();
-                }, function (language) {
-                    $scope.setLanguage(language);
-                }, true);
-
-                $scope.isAdmin = function () {
-                    return authenticatedUserService.isAdmin();
-                };
-
-                $scope.isModerator = function () {
-                    return authenticatedUserService.isModerator();
-                };
-
-                $scope.isAdminOrModerator = function () {
-                    return $scope.isAdmin() || $scope.isModerator();
-                };
-
-                $scope.getShareUrl = buildShareUrl();
-
-                function buildShareUrl() {
-                    var protocol = $location.protocol();
-                    var host = $location.host();
-                    var path = '/portfolio';
-                    var params = $location.search();
-
-                    return protocol + '://' + host + path + '?id=' + params.id;
-                }
-
-                $scope.makePublic = function () {
-                    storageService.getPortfolio().visibility = VISIBILITY_PUBLIC;
-                    updatePortfolio();
-
-                    toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC');
-                };
-
-                $scope.makeNotListed = function () {
-                    storageService.getPortfolio().visibility = VISIBILITY_NOT_LISTED;
-                    updatePortfolio();
-                };
-
-                $scope.makePrivate = function () {
-                    storageService.getPortfolio().visibility = VISIBILITY_PRIVATE;
-                    updatePortfolio();
-                };
-
-                $scope.clearTaxonSelector = function () {
-                    $rootScope.$broadcast('taxonSelector:clear', null);
-                };
-
-                function updatePortfolio() {
-                    var url = "rest/portfolio/update";
-                    serverCallService.makePost(url, storageService.getPortfolio(), updatePortfolioSuccess, updatePortfolioFailed);
-                }
-
-                function updatePortfolioSuccess(portfolio) {
-                    if (isEmpty(portfolio)) {
-                        updatePortfolioFailed();
-                    } else {
-                        log('Portfolio updated.');
-                    }
-                }
-
-                $scope.saveAndExitPortfolio = function () {
-                    startSaving(storageService.getPortfolio());
-                };
-
-                function saveAndExitPortfolioSuccess(portfolio) {
-                    if (!isEmpty(portfolio)) {
-                        toastService.show('PORTFOLIO_SAVED');
-                        storageService.setPortfolio(null);
-                        $location.url('/portfolio?id=' + portfolio.id);
-                        dontSearch = true; // otherwise reload will trigger search if search has values
-                        $route.reload();
-                    }
-                }
-
-                function updatePortfolioFailed() {
-                    log('Updating portfolio failed.');
-                }
-
-                function saveAndExit() {
-                    var url = "rest/portfolio/update";
-                    serverCallService.makePost(url, storageService.getPortfolio(), saveAndExitPortfolioSuccess, updatePortfolioFailed);
-                }
-
-                function startSaving(portfolio) {
-                    if (portfolio.visibility === VISIBILITY_PUBLIC) saveAndExit();
-                    else showVisibilityChangeDialog();
-                }
-
-                function showVisibilityChangeDialog() {
-                    var makePublic = function () {
-                        storageService.getPortfolio().visibility = VISIBILITY_PUBLIC;
-                        saveAndExit();
-                    };
-
-                    dialogService.showConfirmationDialog(
-                        "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
-                        "{{'PORTFOLIO_WARNING' | translate}}",
-                        "{{'PORTFOLIO_YES' | translate}}",
-                        "{{'PORTFOLIO_NO' | translate}}",
-                        makePublic,
-                        saveAndExit);
-                }
-
-                $scope.$watch(function () {
-                    return $location.path()
-                }, function (params) {
-                    if (params.indexOf("/portfolio") !== -1 || params.indexOf("/material") !== -1) {
-                        $scope.detailedSearch.isVisible = false;
-                    }
-                });
-
-                $scope.$watch(function () {
-                    return [$location.url(), $rootScope.isEditPortfolioMode];
-                }, function () {
-                    $scope.isEditModeAndNotEditView = ($rootScope.isEditPortfolioMode && $location.url().indexOf('/portfolio/edit') !== 0);
-                }, true);
-
-                $scope.getTranslation = function (string) {
-                    return $translate.instant(string);
-                };
-
-                $scope.isHeaderRed = function () {
-                    if ($scope.isAdminOrModerator() && ($scope.isViewAdminPanelPage || (($scope.learningObjectImproper || $scope.learningObjectBroken || $scope.learningObjectChanged || $scope.learningObjectUnreviewed || $scope.learningObjectDeleted) && $scope.isViewMaterialOrPortfolioPage))) {
-                        $rootScope.$broadcast('header:red');
-                        return true;
-                    } else {
-                        $rootScope.$broadcast('header:default');
-                        return false;
-                    }
-                };
-
-                $scope.getPortfolioVisibility = function () {
-                    if (storageService.getPortfolio()) {
-                        return storageService.getPortfolio().visibility;
-                    }
-                };
-
-                $scope.openTour = (isEditPage = false) => {
-                    if (isEditPage) {
-                        $rootScope.$broadcast('tour:start:editPage');
-                    } else {
-                        $rootScope.$broadcast('tour:start');
-                    }
-                }
-
-            }]
-        };
+{
+const VISIBILITY_PUBLIC = 'PUBLIC'
+const VISIBILITY_PRIVATE = 'PRIVATE'
+const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
+const SEARCH_DELAY = 1000
+
+class controller extends Controller {
+    $onInit() {
+        this.dontSearch = false
+
+        this.$scope.detailedSearch = {}
+        this.$scope.detailedSearch.isVisible = false
+        this.$scope.mobileSearch = {}
+        this.$scope.mobileSearch.isVisible = false
+        this.$scope.showLanguageSelection = false
+        this.$scope.selectedLanguage = this.translationService.getLanguage()
+        this.$scope.searchFields = {}
+        this.$scope.searchFields.searchQuery = this.searchService.getQuery()
+        this.$scope.detailedSearch = {}
+        this.$scope.suggest = {}
+        this.$scope.suggest.suggestions = null
+        this.$scope.suggest.selectedItem = null
+        this.$scope.canShowTour = false
+        this.$scope.isMobileView = false
+        this.$scope.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
+
+        this.$scope.detailedSearch.accessor = {
+            clearSimpleSearch: () => this.$scope.searchFields.searchQuery = ''
+        }
+
+        this.$scope.setLanguage = this.setLanguage.bind(this)
+
+        this.$scope.logout = () => {
+            this.authenticationService.logout()
+            this.$rootScope.$broadcast('tour:close')
+            this.$location.url('/')
+        }
+
+        this.$scope.showLogin = (targetEvent) =>
+            this.$mdDialog.show({
+                templateUrl: 'views/loginDialog/loginDialog.html',
+                controller: 'loginDialogController',
+                targetEvent
+            })
+
+        this.search = this.search.bind(this)
+        this.$scope.search = this.search
+
+        this.$scope.openDetailedSearch = () => {
+            this.$scope.detailedSearch.isVisible = true
+            this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery
+            this.$scope.$broadcast("detailedSearch:open")
+        }
+
+        this.closeDetailedSearch = this.closeDetailedSearch.bind(this)
+        this.$scope.closeDetailedSearch = this.closeDetailedSearch
+
+        this.openMobileSearch = this.openMobileSearch.bind(this)
+        this.$scope.openMobileSearch = this.openMobileSearch
+
+        this.$scope.closeMobileSearch = (emptySearch) => {
+            this.$scope.mobileSearch.isVisible = false
+
+            if (emptySearch)
+                this.$scope.detailedSearch.accessor.clearSimpleSearch()
+        }
+
+        this.$scope.$on('detailedSearch:open', () => this.$scope.detailedSearch.isVisible = true)
+        this.$scope.$on('detailedSearch:close', () => this.$scope.detailedSearch.isVisible = false)
+        this.$scope.$on('detailedSearch:empty', this.closeDetailedSearch)
+        this.$scope.$on('mobileSearch:open', this.openMobileSearch)
+
+        this.$scope.suggest.doSuggest = (query) => {
+            if (query == null)
+                return []
+
+            this.$scope.suggest.suggestions = suggestService.suggest(query, suggestService.getSuggestURLbase())
+            
+            if (this.$scope.doInlineSuggestion && this.$scope.suggest.suggestions)
+                this.$scope.suggest.suggestions.then(data => {
+                    const firstSuggestion = data[0]
+
+                    if (!firstSuggestion)
+                        return this.clearInlineSuggestion()
+
+                    const searchTextLength = this.$scope.searchFields.searchQuery.length
+
+                    this.$scope.hiddenInline = firstSuggestion.substring(0, searchTextLength)
+                    this.$scope.inlineSuggestion = firstSuggestion.substring(searchTextLength)
+                })
+
+            return this.$scope.suggest.suggestions
+        }
+
+        this.$scope.clearInlineSuggestion = this.clearInlineSuggestion.bind(this)
+
+        this.$scope.keyPressed = (evt) => {
+            switch(evt.keyCode) {
+                case 8: // backspace
+                    if (this.$scope.inlineSuggestion)
+                        evt.preventDefault()
+
+                    this.$scope.doInlineSuggestion = false
+                    break
+                case 13: // enter
+                    if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase()))
+                        this.processSearchQuery(this.$scope.searchFields.searchQuery)
+
+                    angular.element(document.querySelector('#header-search-input')).controller('mdAutocomplete').hidden = true
+                    document.getElementById('header-search-input').blur()
+                    this.$scope.doInlineSuggestion = false
+                    break
+                default:
+                    this.$scope.doInlineSuggestion = true
+            }
+            this.clearInlineSuggestion()
+        }
+
+        this.$scope.clickOutside = () => {
+            if (this.$rootScope.dontCloseSearch)
+                this.$rootScope.dontCloseSearch = false
+        }
+
+        this.$scope.$watch('detailedSearch.mainField', (newValue, oldValue) => {
+            if (newValue != oldValue)
+                this.$scope.searchFields.searchQuery = newValue || ''
+        }, true)
+
+        this.$scope.$watch('searchFields.searchQuery', this.processSearchQuery.bind(this), true)
+
+        this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {
+            this.$scope.user = user
+        }, true)
+
+        this.$scope.$watch(() => this.searchService.getQuery(), (query) => {
+            // Search query is not updated from search service while detailed search is open
+            if (!query || !this.$scope.detailedSearch.isVisible)
+                this.$scope.searchFields.searchQuery = query
+        }, true)
+
+        this.$scope.$watch(() => this.translationService.getLanguage(), (language) => {
+            this.setLanguage(language)
+        }, true)
+
+        this.$scope.getShareUrl = this.$location.protocol()+'://'+this.$location.host()+'/portfolio?id='+this.$location.search().id
+
+        this.$scope.makePublic = () => {
+            this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
+            this.updatePortfolio()
+            this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
+        }
+
+        this.$scope.makeNotListed = () => {
+            this.storageService.getPortfolio().visibility = VISIBILITY_NOT_LISTED
+            this.updatePortfolio()
+        }
+
+        this.$scope.makePrivate = () => {
+            this.storageService.getPortfolio().visibility = VISIBILITY_PRIVATE
+            this.updatePortfolio()
+        }
+
+        this.$scope.clearTaxonSelector = () => {
+            this.$rootScope.$broadcast('taxonSelector:clear', null)
+        }
+
+        this.$scope.saveAndExitPortfolio = () => {
+            if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC)
+                return this.saveAndExit()
+
+            this.dialogService.showConfirmationDialog(
+                "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
+                "{{'PORTFOLIO_WARNING' | translate}}",
+                "{{'PORTFOLIO_YES' | translate}}",
+                "{{'PORTFOLIO_NO' | translate}}",
+                () => {
+                    this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
+                    this.saveAndExit()
+                },
+                this.saveAndExit.bind(this)
+            )
+        }
+
+        this.$scope.$watch(() => this.$location.path(), (params) => {
+            if (params.indexOf('/portfolio') > -1 || params.indexOf('/material') > -1)
+                this.$scope.detailedSearch.isVisible = false
+        })
+
+        this.$scope.$watch(() => [this.$location.url(), this.$rootScope.isEditPortfolioMode], () => {
+            this.$scope.isEditModeAndNotEditView = (
+                this.$rootScope.isEditPortfolioMode &&
+                this.$location.url().indexOf('/portfolio/edit') !== 0
+            )
+        }, true)
+
+        this.$rootScope.$watch('isEditPortfolioMode', (newValue) => {
+            this.$scope.isEditPortfolioMode = newValue
+        })
+
+        this.$scope.getTranslation = (string) => this.$translate.instant(string)
+
+        this.$scope.isHeaderRed = () => {
+            if ((this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()) && (
+                    this.$scope.isViewAdminPanelPage || (
+                        this.$scope.isViewMaterialOrPortfolioPage && (
+                            this.$scope.learningObjectImproper ||
+                            this.$scope.learningObjectBroken ||
+                            this.$scope.learningObjectChanged ||
+                            this.$scope.learningObjectUnreviewed ||
+                            this.$scope.learningObjectDeleted
+                        )
+                    )
+                )
+            ) {
+                this.$rootScope.$broadcast('header:red')
+                return true
+            } else {
+                this.$rootScope.$broadcast('header:default')
+                return false
+            }
+        }
+
+        this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
+
+        this.$scope.openTour = (isEditPage = false) =>
+            this.$rootScope.$broadcast(isEditPage ? 'tour:start:editPage' : 'tour:start')
     }
-]);
+    setLanguage(language) {
+        const shouldReload = this.$scope.selectedLanguage !== language
+
+        this.translationService.setLanguage(language)
+        this.$scope.selectedLanguage = language
+
+        if (shouldReload)
+            window.location.reload()
+    }
+    search() {
+        this.searchService.setSearch(this.$scope.searchFields.searchQuery)
+        this.searchService.clearFieldsNotInSimpleSearch()
+        this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
+        this.$location.url(this.searchService.getURL())
+    }
+    closeDetailedSearch() {
+        this.$timeout(() => {
+            if (!this.$rootScope.isEditPortfolioMode) {
+                this.$scope.clearTaxonSelector()
+                this.$scope.detailedSearch.accessor.clear()
+            }
+        }, 500)
+        this.dontSearch = true
+        this.$scope.detailedSearch.isVisible = false
+        this.$scope.detailedSearch.queryIn = ''
+    }
+    openMobileSearch() {
+        this.$scope.mobileSearch.isVisible = true
+        this.$timeout(() =>
+            document.getElementById('header-simple-search-input').focus()
+        )
+    }
+    clearInlineSuggestion() {
+        this.$scope.hiddenInline = ''
+        this.$scope.inlineSuggestion = ''
+    }
+    processSearchQuery(newValue, oldValue) {
+        if (newValue != oldValue && !newValue)
+            this.clearInlineSuggestion()
+
+        this.$scope.searchFields.searchQuery = newValue || ''
+
+        if (newValue !== oldValue && !this.$scope.detailedSearch.isVisible && (!this.dontSearch || newValue))
+            this.$timeout(this.search, SEARCH_DELAY)
+        else
+        if (this.$scope.detailedSearch.isVisible)
+            this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery
+
+        if (this.dontSearch)
+            this.dontSearch = false
+    }
+    updatePortfolio() {
+        this.serverCallService.makePost('rest/portfolio/update', this.storageService.getPortfolio())
+    }
+    saveAndExit() {
+        this.serverCallService
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+            .then(({ data: portfolio }) => {
+                if (portfolio) {
+                    this.toastService.show('PORTFOLIO_SAVED')
+                    this.storageService.setPortfolio(null)
+                    this.$location.url('/portfolio?id=' + portfolio.id)
+                    this.dontSearch = true // otherwise reload will trigger search if search has values
+                    this.$route.reload()
+                }
+            })
+    }
+}
+controller.$inject = [
+    '$scope',
+    '$location',
+    '$rootScope',
+    '$timeout',
+    '$mdDialog',
+    '$route',
+    '$translate',
+    'translationService',
+    'searchService',
+    'authenticationService',
+    'authenticatedUserService',
+    'suggestService',
+    'serverCallService',
+    'toastService',
+    'storageService',
+    'dialogService'
+]
+
+angular.module('koolikottApp').directive('dopHeader', () => ({
+    scope: true,
+    templateUrl: 'directives/header/header.html',
+    link($scope, $element, $attr, $ctrl) {
+        let scrollTimer,
+            detailedSearch = document.getElementById('detailedSearch'),
+            $detailedSearch = angular.element(detailedSearch),
+            $header = document.getElementById('md-toolbar-header'),
+            isSuggestVisible = false
+
+        const checkWindowWidth = () => {
+            if ($ctrl.isMobile())
+                $scope.isMobileView = true
+
+            if (window.innerWidth >= BREAK_SM)
+                $scope.canShowTour = true
+        }
+
+        checkWindowWidth()
+        window.addEventListener('resize', checkWindowWidth)
+
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimer)
+            scrollTimer = setTimeout(() => {
+                if (
+                    !document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop').length &&
+                    detailedSearch.getAttribute('aria-hidden') &&
+                    !isSuggestVisible
+                )
+                    window.pageYOffset >= $header.offsetHeight && window.innerWidth >= BREAK_SM
+                        ? $detailedSearch.addClass('md-toolbar-filter--fixed')
+                        : $detailedSearch.removeClass('md-toolbar-filter--fixed')
+            }, 200)
+        })
+
+        setTimeout(() => {
+            const headerInput = document.getElementById('header-search-input')
+
+            headerInput.addEventListener('focus', () => isSuggestVisible = headerInput.value != '')
+            headerInput.addEventListener('blur', () => isSuggestVisible = false)
+        })
+    },
+    controller
+}))
+}

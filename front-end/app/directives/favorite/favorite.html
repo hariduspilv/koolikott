@@ -4,8 +4,10 @@
     <span data-ng-if="$ctrl.hasFavorited" data-translate="REMOVE_FROM_FAVORITES"></span>
 	</md-tooltip>
 
-  <md-icon class="favorite__icon"
-           data-ng-if="!$ctrl.hasFavorited && ($ctrl.isEditPortfolioMode || $ctrl.isViewMaterialOrPortfolioPage || $ctrl.hover)"
-           data-ng-click="$ctrl.favorite($event)">star_outline</md-icon>
+  <md-icon
+    class="favorite__icon"
+    data-ng-if="!$ctrl.hasFavorited && ($ctrl.isEditPortfolioMode || $ctrl.isViewMaterialOrPortfolioPage || $ctrl.hover)"
+    data-ng-click="$ctrl.favorite($event)"
+  >star_outline</md-icon>
   <md-icon class="favorite__icon" data-ng-if="$ctrl.hasFavorited" data-ng-click="$ctrl.removeFavorite($event)">star</md-icon>
 </div>

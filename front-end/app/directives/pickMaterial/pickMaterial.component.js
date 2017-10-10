@@ -1,46 +1,46 @@
 'use strict'
 
-angular.module('koolikottApp')
-    .component('dopPickMaterial', {
-        bindings: {
-            learningObject: '<',
-            disable: '<'
-        },
-        templateUrl: 'directives/pickMaterial/pickMaterial.html',
-        controller: dopPickMaterialController
-    });
-
-dopPickMaterialController.$inject = ['$rootScope', 'authenticatedUserService'];
-
-function dopPickMaterialController($rootScope, authenticatedUserService) {
-    let vm = this;
-
-    function isVisible() {
-        return vm.learningObject && isMaterial(vm.learningObject.type) && authenticatedUserService.isAuthenticated() && !vm.disable;
+{
+class controller extends Controller {
+    isVisible() {
+        return (
+            this.learningObject &&
+            this.isMaterial(this.learningObject) &&
+            this.authenticatedUserService.isAuthenticated() &&
+            !this.disable
+        )
     }
+    pickMaterial($event) {
+        $event.preventDefault()
+        $event.stopPropagation()
 
-    function pickMaterial ($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
+        if (this.$rootScope.selectedMaterials) {
+            const idx = this.$rootScope.selectedMaterials.indexOf(this.learningObject)
 
-        if ($rootScope.selectedMaterials) {
-            let index = $rootScope.selectedMaterials.indexOf(vm.learningObject);
-            if (index == -1) {
-                $rootScope.selectedMaterials.push(vm.learningObject);
-                vm.learningObject.selected = true;
+            if (idx < 0) {
+                this.$rootScope.selectedMaterials.push(this.learningObject)
+                this.learningObject.selected = true
             } else {
-                $rootScope.selectedMaterials.splice(index, 1);
-                vm.learningObject.selected = false;
+                this.$rootScope.selectedMaterials.splice(idx, 1)
+                this.learningObject.selected = false
             }
         } else {
-            $rootScope.selectedMaterials = [];
-            $rootScope.selectedMaterials.push(vm.learningObject);
-            vm.learningObject.selected = true;
+            this.$rootScope.selectedMaterials = []
+            this.$rootScope.selectedMaterials.push(this.learningObject)
+            this.learningObject.selected = true
         }
 
-        $rootScope.$broadcast("detailedSearch:close");
+        this.$rootScope.$broadcast('detailedSearch:close')
     }
+}
+controller.$inject = ['$rootScope', 'authenticatedUserService']
 
-    vm.isVisible = isVisible;
-    vm.pickMaterial = pickMaterial;
+angular.module('koolikottApp').component('dopPickMaterial', {
+    bindings: {
+        learningObject: '<',
+        disable: '<'
+    },
+    templateUrl: 'directives/pickMaterial/pickMaterial.html',
+    controller
+})
 }

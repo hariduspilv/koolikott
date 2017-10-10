@@ -9,10 +9,6 @@ const BREAK_XS = 600;
 const BREAK_SM = 960;
 const BREAK_LG = 1280;
 
-function isMobile() {
-    return window.innerWidth < BREAK_XS;
-}
-
 function log() {
     if (console && console.log) {
         console.log.apply(console, arguments);
@@ -650,5 +646,66 @@ class Controller {
         this.constructor.$inject.forEach((name, idx) =>
             this[name] = arguments[idx]
         )
+    }
+    isMaterial({ type }) {
+        return type === '.Material' || type === '.ReducedMaterial'
+    }
+    isPortfolio({ type }) {
+        return type === '.Portfolio' || type === '.ReducedPortfolio'
+    }
+    getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
+        if (!values || values.length === 0)
+            return
+
+        if (values.length === 1)
+            return values[0].text
+
+        let languageStringValue = this.getLanguageString(values, userLanguage)
+        
+        if (!languageStringValue) {
+            languageStringValue = this.getLanguageString(values, materialLanguage)
+            
+            if (!languageStringValue)
+                languageStringValue = values[0].text
+        }
+
+        return languageStringValue
+    }
+    getLanguageString(values, language) {
+        if (!language)
+            return null
+
+        for (var i = 0; i < values.length; i++)
+            if (values[i].language === language)
+                return values[i].text
+    }
+    formatNameToInitials(name) {
+        if (name)
+            return this.arrayToInitials(name.split(' '))
+    }
+    formatSurnameToInitialsButLast(surname) {
+        if (!surname)
+            return
+
+        var array = surname.split(' ')
+        var last = array.length - 1
+        var res = ''
+
+        if (last > 0)
+            res = this.arrayToInitials(array.slice(0, last)) + ' '
+
+        res += array[last]
+        return res
+    }
+    arrayToInitials(array) {
+        var res = ''
+
+        for (var i = 0; i < array.length; i++)
+            res += array[i].charAt(0).toUpperCase() + '. '
+
+        return res.trim()
+    }
+    isMobile() {
+        return window.innerWidth < BREAK_XS
     }
 }

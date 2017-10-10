@@ -255,12 +255,12 @@
     <div class="lays-out-left" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
     <div class="filter-wrapper"
          id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
-      <div data-dop-detailed-search
-           data-is-visible="detailedSearch.isVisible"
-           data-query-in="detailedSearch.queryIn"
-           data-query-out="detailedSearch.queryOut"
-           data-main-field="detailedSearch.mainField"
-           data-accessor="detailedSearch.accessor"></div>
+      <data-dop-detailed-search
+        data-is-visible="detailedSearch.isVisible"
+        data-query-in="detailedSearch.queryIn"
+        data-main-field="detailedSearch.mainField"
+        data-accessor="detailedSearch.accessor"
+      ></data-dop-detailed-search>
     </div>
   </form>
 </div>

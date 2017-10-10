@@ -29,7 +29,7 @@
           <div layout="column" class="login-modal-container" data-ng-if="!mobileIdChallenge">
             <md-input-container class="md-block">
               <label></label>
-              <input id="login-personal-code" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-input-value-control maxlength="11">
+              <input id="login-personal-code" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-dop-input-value-control maxlength="11">
               <div ng-messages="mobileId.idCode.$error">
                 <div data-ng-if="validation.error.idCode === 'required'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_REQUIRED"></div>
                 <div data-ng-if="validation.error.idCode === 'invalid'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_INVALID"></div>
@@ -37,7 +37,7 @@
             </md-input-container>
             <md-input-container  class="md-block">
               <label></label>
-              <input id="login-phone-number" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-input-value-control>
+              <input id="login-phone-number" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-dop-input-value-control>
               <div data-ng-messages="mobileId.phoneNumber.$error">
                   <span data-ng-if="validation.error.phoneNumber === 'required'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_REQUIRED"></span>
                   <span data-ng-if="validation.error.phoneNumber === 'notEstonian'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN"></span>

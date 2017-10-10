@@ -1,30 +1,26 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.component('dopCardMedia', {
+{
+class controller extends Controller {
+    $onInit() {
+        if (this.isMaterial(this.learningObject)) {
+            this.learningObjectType = 'material'
+            this.materialType = this.iconService.getMaterialIcon(
+                this.learningObject.resourceTypes
+            )
+        } else if (this.isPortfolio(this.learningObject))
+            this.learningObjectType = 'portfolio'
+    }
+}
+controller.$inject = ['$rootScope', 'iconService']
+
+angular.module('koolikottApp').component('dopCardMedia', {
     bindings: {
         learningObject: '=',
         isAuthenticated: '<',
         disablePick: '<'
     },
     templateUrl: 'directives/card/cardMedia/cardMedia.html',
-    controller: dopCardMediaController
-});
-
-dopCardMediaController.$inject = ['$rootScope', 'iconService'];
-
-function dopCardMediaController ($rootScope, iconService) {
-    let vm = this;
-
-    vm.$onInit = () => {
-        if (isMaterial(vm.learningObject.type)) {
-            vm.learningObjectType = 'material';
-            vm.materialType = iconService.getMaterialIcon(vm.learningObject.resourceTypes);
-        } else if (isPortfolio(vm.learningObject.type)) {
-            vm.learningObjectType = 'portfolio';
-        }
-    }
-
-    vm.isMaterial = (type) => isMaterial(type);
-    vm.isPortfolio = (type) => isPortfolio(type);
+    controller
+})
 }

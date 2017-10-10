@@ -1,12 +1,11 @@
 <div data-layout="column" data-layout-gt-sm="row">
   <div flex-gt-sm="75">
     <div ng-if="modUser()" dop-error-message data="portfolio"></div>
-    <div
-      data-dop-portfolio-summary-card
+    <dop-portfolio-summary-card
       comment="newComment"
       submit-click="addComment()"
       data-portfolio="portfolio"
-    ></div>
+    ></dop-portfolio-summary-card>
     <div>
       <div data-ng-repeat="chapter in portfolio.chapters">
         <dop-chapter data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
@@ -14,6 +13,6 @@
     </div>
   </div>
   <aside flex-gt-sm="25">
-    <div data-dop-aside data-learning-object="portfolio"></div>
+    <data-dop-aside data-learning-object="portfolio"></data-dop-aside>
   </aside>
 </div>
