@@ -41,18 +41,14 @@ public class SolrServiceTest {
 
     private static final String SOLR_STATUS_IDLE = "idle";
 
-    @Mock
-    private Client client;
-
-    @Mock
-    private Configuration configuration;
-
     @TestSubject
     private SolrService solrService = new SolrService();
-
+    @Mock
+    private Client client;
+    @Mock
+    private Configuration configuration;
     @Mock
     private WebTarget target;
-
     @Mock
     private Builder builder;
 
