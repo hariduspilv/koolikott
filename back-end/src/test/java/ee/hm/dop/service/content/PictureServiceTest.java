@@ -1,21 +1,22 @@
 package ee.hm.dop.service.content;
 
-import static ee.hm.dop.utils.DOPFileUtils.getFileAsStream;
-import static ee.hm.dop.utils.DOPFileUtils.read;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.ThumbnailDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
-import ee.hm.dop.service.files.PictureService;
-import org.easymock.*;
+import ee.hm.dop.service.files.PictureSaver;
+import org.easymock.EasyMock;
+import org.easymock.EasyMockRunner;
+import org.easymock.Mock;
+import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static ee.hm.dop.utils.DOPFileUtils.getFileAsStream;
+import static ee.hm.dop.utils.DOPFileUtils.read;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class PictureServiceTest {
@@ -23,11 +24,9 @@ public class PictureServiceTest {
     private static final String IMAGE1_SHA1_HASH = "ce7870d17769da42406687d2ad72713ea3b4a6bd";
 
     @TestSubject
-    private PictureService pictureService = new PictureService();
-
+    private PictureSaver pictureSaver = new PictureSaver();
     @Mock
     private OriginalPictureDao originalPictureDao;
-
     @Mock
     private ThumbnailDao thumbnailDao;
 
@@ -48,7 +47,7 @@ public class PictureServiceTest {
         replay(thumbnailDao);
         replay(originalPictureDao);
 
-        Picture createdPicture = pictureService.create(picture);
+        Picture createdPicture = pictureSaver.create(picture);
 
         verify(originalPictureDao);
 
@@ -72,7 +71,7 @@ public class PictureServiceTest {
 
         replay(originalPictureDao);
 
-        Picture createdPicture = pictureService.create(picture);
+        Picture createdPicture = pictureSaver.create(picture);
 
         verify(originalPictureDao);
 

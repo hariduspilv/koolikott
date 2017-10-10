@@ -2,8 +2,9 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.Thumbnail;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.HttpHeaders;
@@ -11,13 +12,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
@@ -35,29 +30,28 @@ public class PictureResource extends BaseResource {
     private PictureService pictureService;
     @Inject
     private Configuration configuration;
+    @Inject
+    private PictureSaver pictureSaver;
 
     @GET
     @Path("/{name}")
     @Produces("image/png")
     public Response getPictureDataByName(@PathParam("name") String pictureName) {
-        Picture picture = pictureService.getByName(pictureName);
-        return getPictureResponseWithCache(picture);
+        return getPictureResponseWithCache(pictureService.getByName(pictureName));
     }
 
     @GET
     @Path("thumbnail/sm/{name}")
     @Produces("image/png")
     public Response getSMThumbnailDataByName(@PathParam("name") String pictureName) {
-        Thumbnail thumbnail = pictureService.getSMThumbnailByName(pictureName);
-        return getPictureResponseWithCache(thumbnail);
+        return getPictureResponseWithCache(pictureService.getSMThumbnailByName(pictureName));
     }
 
     @GET
     @Path("thumbnail/sm_xs_xl/{name}")
     @Produces("image/png")
     public Response getSMLargeThumbnailDataByName(@PathParam("name") String pictureName) {
-        Thumbnail thumbnail = pictureService.getSMLargeThumbnailByName(pictureName);
-        return getPictureResponseWithCache(thumbnail);
+        return getPictureResponseWithCache(pictureService.getSMLargeThumbnailByName(pictureName));
     }
 
     @GET
@@ -94,14 +88,14 @@ public class PictureResource extends BaseResource {
 
         Picture picture = new OriginalPicture();
         picture.setData(data);
-        return pictureService.create(picture);
+        return pictureSaver.create(picture);
     }
 
     @PUT
     @Path("/fromUrl")
     @Produces(MediaType.APPLICATION_JSON)
     public Picture uploadPictureFromURL(String url) {
-        return pictureService.createFromURL(url);
+        return pictureSaver.createFromURL(url);
     }
 
     @GET
