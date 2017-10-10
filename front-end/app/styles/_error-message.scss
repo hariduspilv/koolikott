@@ -1,56 +1,50 @@
-.error-message .md-toolbar-tools {
-  max-height: none;
-  height: auto;
-  min-height: 64px;
-  align-items: flex-start;
+dop-error-message {
+  display: block;
+  box-shadow: $card-box-shadow;
+  border-radius: $border-radius $border-radius 0 0;
+  overflow: hidden;
 
-  > .material-icons {
-    margin-top: 20px;
-  }
-
-  > .md-icon-button {
-    margin-top: 12px;
-  }
-}
-
-.error-message-body {
-  margin: 20px $layout-gutter-width / 2;
-
-  > h1, h2, h3 {
-    margin: 0;
-  }
-}
-
-/* .error-message-reasons-toggle {
-  margin: ($layout-gutter-width / 4) 0 0;
-  user-select: none;
-
-  [data-ng-click] {
-    cursor: pointer;
-  }
-
-  .material-icons {
-    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
-
-    &.flipped {
-      transform: rotate(180deg)
+  + dop-portfolio-summary-card,
+  + [data-dop-portfolio-summary-card] {
+    > md-card {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
   }
-} */
 
-.error-message-reasons {
-  font-size: $body-font-size-base;
+  .expandable {
+    cursor: pointer;
+    height: 100%;
+  }
+}
+
+.error-message-icon {
+  margin-right: $layout-gutter-width / 2;
+}
+
+.error-message-collapse-icon {
+  margin-left: $layout-gutter-width / 2;
+  transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
+
+  .expanded & {
+    transform: rotate(90deg);
+  }
+}
+
+.error-message-button:last-child {
+  margin-right: -8px;
+}
+
+.error-message-reports {
   overflow: auto;
   transition: height $swift-ease-out-duration $swift-ease-out-timing-function;
-  margin-top: $layout-gutter-width / 4;
 
   &.collapsed {
     height: 0 !important;
     overflow: hidden;
   }
 
-  p:last-child {
-    margin-bottom: 0;
+  md-list md-list-item.md-3-line .md-list-item-text h3 {
+    margin-bottom: .2em;
   }
 }
-

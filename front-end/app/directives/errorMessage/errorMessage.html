@@ -1,23 +1,71 @@
-<md-toolbar class="error-message" data-md-colors="{'background-color': 'grey-900'}" data-ng-if="show">
+<md-toolbar class="error-message" data-md-colors="{ 'background-color': 'grey-900' }" data-ng-if="show">
   <div class="md-toolbar-tools">
-    <md-icon data-ng-bind="icon"></md-icon>
-    <div data-flex class="error-message-body">
-      <h2 data-md-truncate data-translate="{{messageKey}}"></h2>
-      <div class="error-message-reasons" ng-if="reasons">
-        <strong data-translate="ERROR_MSG_REASON"></strong>: <span data-ng-repeat="reason in reasons track by $index"><span data-ng-bind="reason"></span><span ng-if="$index < reasons.length - 1">, </span></span>
-      </div>
-    </div>
-    <md-button
-      data-ng-repeat="button in buttons"
-      class="md-icon-button"
-      aria-label="{{button.label | translate}}"
-      data-ng-click="button.onClick()"
-      data-ng-if="button.show"
+    <div
+      data-layout="row"
+      data-flex-gt-xs="75"
+      data-layout-align="start center"
+      data-ng-class="{ expandable: reports, expanded: showReports }"
+      data-ng-click="reports && toggleReports()"
+      data-tooltip="Kuva kogu põhjuse tekst"
       >
-      <md-icon ng-bind="button.icon"></md-icon>
-      <md-tooltip>
-        <span data-translate="{{button.label}}"></span>
+      <md-icon data-ng-bind="icon" class="error-message-icon"></md-icon>
+      <div data-flex>
+        <h2 data-ng-if="message" data-md-truncate data-ng-bind="message"></h2>
+        <h2 data-ng-if="!message" data-md-truncate data-translate="{{messageKey}}"></h2>
+      </div>
+      <md-icon data-ng-if="reports" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
+      <md-tooltip data-ng-if="reports" md-direction="bottom">
+        <span data-translate="{{showReports ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
       </md-tooltip>
-    </md-button>
+    </div>
+    <div data-layout="row" data-flex-gt-xs="25" data-layout-align="end center">
+      <md-button
+        data-ng-repeat="button in buttons"
+        class="md-icon-button error-message-button"
+        aria-label="{{button.label | translate}}"
+        data-ng-click="button.onClick()"
+        data-ng-if="button.show"
+        >
+        <md-icon ng-bind="button.icon"></md-icon>
+        <md-tooltip>
+          <span data-translate="{{button.label}}"></span>
+        </md-tooltip>
+      </md-button>
+    </div>
   </div>
 </md-toolbar>
+<md-content data-flex data-ng-if="reports" class="error-message-reports" data-ng-class="{ collapsed: !showReports }">
+  <md-list>
+    <md-list-item class="md-3-line md-long-text" data-ng-repeat="report in reports track by $index">
+      <md-icon
+        class="md-avatar-icon"
+        data-ng-if="!report.creator"
+        >
+        person
+        <md-tooltip data-ng-if="reports" data-md-direction="bottom">
+          <span data-translate="UNKNOWN"></span>
+        </md-tooltip>
+      </md-icon>
+      <div
+        class="md-avatar"
+        data-ng-if="report.creator"
+        data-ng-bind="(report.creator.name[0]+' '+report.creator.surname[0]).toUpperCase()"
+        data-md-colors="{
+          color: 'grey-50',
+          'background-color':
+            report.creator && (report.creator.role == 'ADMIN' || report.creator.role == 'MODERATOR')
+              ? 'pink-800'
+              : 'light-blue-500'
+        }">
+        <md-tooltip data-ng-if="reports" md-direction="bottom">
+          <span data-translate="{{showReports ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
+        </md-tooltip>
+      </div>
+      <div class="md-list-item-text">
+        <h3><span data-ng-repeat="reason in report.reportingReasons"><span ng-if="$index > 0">, </span><span data-translate="{{reason.reason}}"></span></span></h3>
+        <p data-ng-if="report.reportingText" data-ng-bind="report.reportingText"></p>
+      </div>
+      <md-divider inset></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>
