@@ -1,67 +1,50 @@
 package ee.hm.dop.service.synchronizer;
 
-import static org.easymock.EasyMock.cmp;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.RepositoryDao;
+import ee.hm.dop.model.*;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.files.PictureSaver;
+import ee.hm.dop.service.files.PictureService;
+import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
+import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
+import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
+import org.easymock.*;
+import org.joda.time.DateTime;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.RepositoryDao;
-import ee.hm.dop.model.*;
-import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.files.PictureService;
-import ee.hm.dop.service.content.enums.SearchIndexStrategy;
-import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
-import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
-import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
-import org.easymock.EasyMock;
-import org.easymock.EasyMockRunner;
-import org.easymock.LogicalOperator;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
-import org.joda.time.DateTime;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class RepositoryServiceTest {
 
     @TestSubject
     private RepositoryService repositoryService = new RepositoryService();
-
     @Mock
     private RepositoryManager repositoryManager;
-
     @Mock
     private MaterialIterator materialIterator;
-
     @Mock
     private MaterialService materialService;
-
     @Mock
     private RepositoryDao repositoryDao;
-
     @Mock
     private MaterialDao materialDao;
-
     @Mock
     private SolrEngineService solrEngineService;
-
     @Mock
     private PictureService pictureService;
+    @Mock
+    private PictureSaver pictureSaver;
 
     @Test
     public void synchronizeErrorGettingMaterials() throws Exception {
@@ -162,7 +145,7 @@ public class RepositoryServiceTest {
         expectUpdateRepository(repository);
 
         expect(materialIterator.hasNext()).andReturn(false);
-        
+
         replayAll(material);
 
         repositoryService.synchronize(repository);
@@ -416,8 +399,7 @@ public class RepositoryServiceTest {
     public void updateNonRepoMaterialWithPicture() {
         Material existentMaterial = new Material();
         Material newMaterial = new Material();
-        Picture picture = new OriginalPicture();
-        picture.setId(1);
+        Picture picture = picture(1);
 
         existentMaterial.setPicture(picture);
         newMaterial.setPicture(null);
@@ -436,17 +418,14 @@ public class RepositoryServiceTest {
     @Test
     public void updateMaterialPicture() {
         Material existentMaterial = new Material();
-        Material newMaterial = new Material();
-        Picture picture1 = new OriginalPicture();
-        picture1.setId(1);
-        Picture picture2 = new OriginalPicture();
-        picture2.setId(2);
+        existentMaterial.setPicture(picture(1));
 
-        existentMaterial.setPicture(picture1);
+        Material newMaterial = new Material();
+        Picture picture2 = picture(2);
         newMaterial.setPicture(picture2);
 
         expect(materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(existentMaterial);
-        expect(pictureService.create(picture2)).andReturn(picture2);
+        expect(pictureSaver.create(picture2)).andReturn(picture2);
 
         replayAll();
 
@@ -455,6 +434,12 @@ public class RepositoryServiceTest {
         verifyAll();
 
         assertEquals(picture2.getId(), returnedMaterial.getPicture().getId());
+    }
+
+    private Picture picture(int id) {
+        Picture picture1 = new OriginalPicture();
+        picture1.setId(id);
+        return picture1;
     }
 
     private Repository getRepository() {
@@ -467,7 +452,7 @@ public class RepositoryServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService);
+        replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -477,7 +462,7 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService);
+        verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
 
         if (mocks != null) {
             for (Object object : mocks) {
