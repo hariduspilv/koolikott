@@ -48,30 +48,12 @@ public class ImproperContentService {
         improper.setReviewed(false);
 
         ImproperContent create = improperContentDao.createOrUpdate(improper);
-        if (CollectionUtils.isNotEmpty(improperContent.getReportingReasonEnums())) {
-            for (ReportingReasonEnum reasonEnum : improperContent.getReportingReasonEnums()) {
-                createReason(improper, create, reasonEnum);
+        for (ReportingReason reason : improperContent.getReportingReasons()) {
+            if (reason.getId() == null){
+                saveReason(improperContent, create, reason);
             }
-            create.setReportingReasonEnums(improperContent.getReportingReasonEnums());
         }
         return create;
-    }
-
-    private void createReason(ImproperContent improper, ImproperContent create, ReportingReasonEnum reasonEnum) {
-        ReportingReason reason = new ReportingReason();
-        reason.setImproperContent(improper);
-        reason.setReason(reasonEnum);
-        reportingReasonDao.createOrUpdate(reason);
-        create.getReportingReasons().add(reason);
-    }
-
-    private LearningObject findValid(ImproperContent improperContent, User creator) {
-        if (improperContent == null || improperContent.getLearningObject() == null) {
-            throw new RuntimeException("Invalid Improper object.");
-        }
-        LearningObject learningObject = learningObjectService.get(improperContent.getLearningObject().getId(), creator);
-        ValidatorUtil.mustHaveEntity(learningObject);
-        return learningObject;
     }
 
     /**
@@ -113,4 +95,22 @@ public class ImproperContentService {
     private void removeIfHasNoAccess(User user, List<ImproperContent> impropers) {
         impropers.removeIf(improper -> !learningObjectService.canAccess(user, improper.getLearningObject()));
     }
+
+    private void saveReason(ImproperContent improperContent, ImproperContent create, ReportingReason reason) {
+        ReportingReason reportingReason = new ReportingReason();
+        reportingReason.setImproperContent(improperContent);
+        reportingReason.setReason(reason.getReason());
+        reportingReasonDao.createOrUpdate(reason);
+        create.getReportingReasons().add(reason);
+    }
+
+    private LearningObject findValid(ImproperContent improperContent, User creator) {
+        if (improperContent == null || improperContent.getLearningObject() == null) {
+            throw new RuntimeException("Invalid Improper object.");
+        }
+        LearningObject learningObject = learningObjectService.get(improperContent.getLearningObject().getId(), creator);
+        ValidatorUtil.mustHaveEntity(learningObject);
+        return learningObject;
+    }
+
 }
