@@ -205,14 +205,6 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return tag;
     }
 
-    public void validateUser(User user, TestUser testUser) {
-        assertEquals(testUser.id, user.getId());
-        assertEquals(testUser.username, user.getUsername());
-        assertEquals(testUser.firstName, user.getName());
-        assertEquals(testUser.lastName, user.getSurname());
-        assertNull(user.getIdCode());
-    }
-
     public User getUser(TestUser testUser) {
         return doGet("user?username=" + testUser.username, User.class);
     }

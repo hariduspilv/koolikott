@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
     public void existing_user_can_use_dev_login() {
         AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + USER_MATI.idCode, AuthenticatedUser.class);
         assertNotNull(authenticatedUser.getToken());
-        validateUser(authenticatedUser.getUser(), USER_MATI);
+        validateUser(authenticatedUser.getUser(), USER_MATI, TestLayer.REST);
     }
 
     @Test

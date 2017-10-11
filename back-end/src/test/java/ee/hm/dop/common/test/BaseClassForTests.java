@@ -74,4 +74,8 @@ public interface BaseClassForTests {
     default void assertMaterial1(Material material, TestLayer testLayer){
         Material1Validation.assertMaterial1(material, testLayer);
     }
+
+    default void validateUser(User user, TestUser testUser, TestLayer testLayer){
+        UserValidation.assertUser(user, testUser, testLayer);
+    }
 }

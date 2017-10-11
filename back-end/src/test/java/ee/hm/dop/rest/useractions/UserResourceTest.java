@@ -2,6 +2,7 @@ package ee.hm.dop.rest.useractions;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
@@ -18,16 +19,16 @@ import static org.junit.Assert.*;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
+    public static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
     public static final String RESTRICT_USER = "user/restrictUser";
     public static final String USER_ROLE = "user/role";
     public static final String GET_SIGNED_USER_DATA = "user/getSignedUserData";
 
     @Test
     public void getUser_returns_user() {
-        validateUser(getUser(USER_MATI), USER_MATI);
-        validateUser(getUser(USER_PEETER), USER_PEETER);
-        validateUser(getUser(USER_VOLDERMAR), USER_VOLDERMAR);
+        validateUser(getUser(USER_MATI), USER_MATI, TestLayer.REST);
+        validateUser(getUser(USER_PEETER), USER_PEETER, TestLayer.REST);
+        validateUser(getUser(USER_VOLDERMAR), USER_VOLDERMAR, TestLayer.REST);
     }
 
     @Test
