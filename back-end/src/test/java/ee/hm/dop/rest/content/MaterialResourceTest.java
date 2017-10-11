@@ -9,6 +9,7 @@ import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -52,9 +53,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
 
     @Inject
-    private MaterialService materialService;
-    @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private MaterialGetter materialGetter;
 
     @Test
     public void getMaterial() {
@@ -256,7 +257,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addRecommendation() {
         User user = login(USER_ADMIN);
-        Material material = materialService.get(MATERIAL_3, user);
+        Material material = materialGetter.get(MATERIAL_3, user);
 
         Recommendation recommendation = doPost(MATERIAL_ADD_RECOMMENDATION, material, Recommendation.class);
         assertNotNull(recommendation);
@@ -267,7 +268,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void removeRecommendation() {
         User user = login(USER_ADMIN);
 
-        Material material = materialService.get(MATERIAL_3, user);
+        Material material = materialGetter.get(MATERIAL_3, user);
         Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION, material);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }

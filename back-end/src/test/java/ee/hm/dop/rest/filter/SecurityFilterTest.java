@@ -218,7 +218,7 @@ public class SecurityFilterTest {
         }
 
         @Override
-        protected AuthenticatedUserService newAuthenticatedUserService() {
+        protected AuthenticatedUserService authenticatedUserService() {
             return authenticatedUserService;
         }
 

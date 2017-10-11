@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.utils;
 
 public class DopConstants {
     public static final String CONTENT_DISPOSITION = "Content-Disposition";

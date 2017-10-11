@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
 public class PortfolioServiceTest {
 
     @TestSubject
-    private PortfolioService portfolioService = new PortfolioService();
+    private PortfolioGetter portfolioGetter = new PortfolioGetter();
     @Mock
     private PortfolioDao portfolioDao;
     @Mock
@@ -42,7 +42,7 @@ public class PortfolioServiceTest {
 
         replayAll(portfolio);
 
-        Portfolio result = portfolioService.get(portfolioId, null);
+        Portfolio result = portfolioGetter.get(portfolioId, null);
 
         verifyAll(portfolio);
 

@@ -17,12 +17,14 @@ public class PortfolioCopier {
     @Inject
     private PortfolioService portfolioService;
     @Inject
+    private PortfolioGetter portfolioGetter;
+    @Inject
     private PortfolioConverter portfolioConverter;
     @Inject
     private PortfolioPermission portfolioPermission;
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = portfolioService.findValid(portfolio);
+        Portfolio originalPortfolio = portfolioGetter.findValid(portfolio);
 
         if (!portfolioPermission.canView(loggedInUser, originalPortfolio)) {
             throw ValidatorUtil.permissionError();

@@ -39,12 +39,18 @@ public class SecurityFilter implements ContainerRequestFilter {
 
         if (token != null) {
             AuthenticatedUser authenticatedUser = getAuthenticatedUserByToken(token);
-            if (authenticatedUser != null && isCorrectUser(authenticatedUser)) {
-                if (isSessionValid(authenticatedUser)) {
-                    DopPrincipal principal = new DopPrincipal(authenticatedUser);
-                    DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
-                    requestContext.setSecurityContext(securityContext);
+            if (authenticatedUser != null) {
+                if (isCorrectUser(authenticatedUser)) {
+                    if (isSessionValid(authenticatedUser)) {
+                        DopPrincipal principal = new DopPrincipal(authenticatedUser);
+                        DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
+                        requestContext.setSecurityContext(securityContext);
+                    } else {
+                        newLogoutService().logout(authenticatedUser);
+                        abortWithAuthenticationTimeout(requestContext);
+                    }
                 } else {
+                    newLogoutService().logout(authenticatedUser);
                     abortWithAuthenticationTimeout(requestContext);
                 }
             } else {
@@ -54,9 +60,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     }
 
     private AuthenticatedUser getAuthenticatedUserByToken(String token) {
-        AuthenticatedUserService authenticatedUserService = newAuthenticatedUserService();
-        AuthenticatedUser authenticatedUser = authenticatedUserService.getAuthenticatedUserByToken(token);
-        return authenticatedUser;
+        return authenticatedUserService().getAuthenticatedUserByToken(token);
     }
 
     private void abortWithAuthenticationTimeout(ContainerRequestContext requestContext) {
@@ -68,7 +72,7 @@ public class SecurityFilter implements ContainerRequestFilter {
         return yesterday.isBefore(authenticatedUser.getLoginDate());
     }
 
-    protected AuthenticatedUserService newAuthenticatedUserService() {
+    protected AuthenticatedUserService authenticatedUserService() {
         return getInjector().getInstance(AuthenticatedUserService.class);
     }
 

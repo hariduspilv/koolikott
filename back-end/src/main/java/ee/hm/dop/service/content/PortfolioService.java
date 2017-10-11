@@ -34,40 +34,11 @@ public class PortfolioService {
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
-    private ReducedLearningObjectDao reducedLearningObjectDao;
-    @Inject
     private PortfolioConverter portfolioConverter;
     @Inject
     private FirstReviewAdminService firstReviewAdminService;
     @Inject
     private PortfolioPermission portfolioPermission;
-
-    public Portfolio get(long portfolioId, User loggedInUser) {
-        if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            return portfolioDao.findById(portfolioId);
-        }
-        Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-        if (!portfolioPermission.canView(loggedInUser, portfolio)) {
-            throw ValidatorUtil.permissionError();
-        }
-        return portfolio;
-    }
-
-    public SearchResult getByCreatorResult(User creator, User loggedInUser, int start, int maxResults) {
-        List<Searchable> searchables = new ArrayList<>(getByCreator(creator, loggedInUser, start, maxResults));
-        Long size = getCountByCreator(creator);
-        return new SearchResult(searchables, size, start);
-    }
-
-    public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
-                .filter(p -> portfolioPermission.canInteract(loggedInUser, p))
-                .collect(Collectors.toList());
-    }
-
-    public Long getCountByCreator(User creator) {
-        return portfolioDao.findCountByCreator(creator);
-    }
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
@@ -151,13 +122,5 @@ public class PortfolioService {
             return originalPortfolio;
         }
         throw ValidatorUtil.permissionError();
-    }
-
-    public Portfolio findValid(Portfolio portfolio) {
-        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
-    }
-
-    public Portfolio findValidIncludeDeleted(Portfolio portfolio) {
-        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findById);
     }
 }
