@@ -18,12 +18,15 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.login.LogoutService;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityFilter implements ContainerRequestFilter {
 
     private static final int HTTP_AUTHENTICATION_TIMEOUT = 419;
+    public Logger logger = LoggerFactory.getLogger(getClass());
 
     private UriInfo uriInfo;
     private HttpServletRequest request;
@@ -38,32 +41,39 @@ public class SecurityFilter implements ContainerRequestFilter {
         String token = request.getHeader("Authentication");
 
         if (token != null) {
-            AuthenticatedUser authenticatedUser = getAuthenticatedUserByToken(token);
-            if (authenticatedUser != null) {
-                if (isCorrectUser(authenticatedUser)) {
-                    if (isSessionValid(authenticatedUser)) {
-                        DopPrincipal principal = new DopPrincipal(authenticatedUser);
-                        DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
-                        requestContext.setSecurityContext(securityContext);
-                    } else {
-                        newLogoutService().logout(authenticatedUser);
-                        abortWithAuthenticationTimeout(requestContext);
-                    }
-                } else {
-                    newLogoutService().logout(authenticatedUser);
-                    abortWithAuthenticationTimeout(requestContext);
-                }
+            AuthenticatedUser authenticatedUser = authenticatedUserService().getAuthenticatedUserByToken(token);
+            if (authenticatedUser == null) {
+                userHasAlreadyLoggedOut(requestContext);
+                logger.error("user has already logged out");
+                return;
+            }
+            String username = authenticatedUser.getUser().getUsername();
+            if (!username.equals(request.getHeader("Username"))) {
+                requestHeaderAndUsernameDontMatch(requestContext, authenticatedUser);
+                logger.error("user request header and username do not match: " + username);
+                return;
+            }
+            if (!isSessionValid(authenticatedUser)) {
+                sessionExpired(requestContext, authenticatedUser);
+                logger.error("session has expired" + username);
             } else {
-                abortWithAuthenticationTimeout(requestContext);
+                DopPrincipal principal = new DopPrincipal(authenticatedUser);
+                DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
+                requestContext.setSecurityContext(securityContext);
             }
         }
     }
 
-    private AuthenticatedUser getAuthenticatedUserByToken(String token) {
-        return authenticatedUserService().getAuthenticatedUserByToken(token);
+    public void sessionExpired(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+//        newLogoutService().logout(authenticatedUser);
+        requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
     }
 
-    private void abortWithAuthenticationTimeout(ContainerRequestContext requestContext) {
+    public void requestHeaderAndUsernameDontMatch(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+        requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+    }
+
+    public void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
     }
 
@@ -74,10 +84,6 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     protected AuthenticatedUserService authenticatedUserService() {
         return getInjector().getInstance(AuthenticatedUserService.class);
-    }
-
-    private boolean isCorrectUser(AuthenticatedUser authenticatedUser) {
-        return authenticatedUser.getUser().getUsername().equals(request.getHeader("Username"));
     }
 
     protected LogoutService newLogoutService() {
