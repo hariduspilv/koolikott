@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('koolikottApp').controller('baseTableViewController', [
-    '$rootScope', '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService', 'sortService',
-    function ($rootScope, $scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
+    '$rootScope', '$scope', '$location', '$translate', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService', 'sortService',
+    function ($rootScope, $scope, $location, $translate, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
         $scope.viewPath = $location.path();
         var collection = null;
         var filteredCollection = null;
+        var unmergedData
 
         $scope.itemsCount = 0;
 
@@ -151,7 +152,8 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     $scope.query.order = order;
                 }
                 if (merge) {
-                    data = mergeReports(data);
+                    unmergedData = data.slice(0)
+                    data = mergeReports(data)
                 }
 
                 collection = data;
@@ -358,6 +360,32 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             }
 
             return id1 === id2;
+        }
+
+        $scope.getReportLabel = (item) => {
+            if (item.reportCount === 1)
+                return item.reportingReasons.length === 1
+                    ? $translate.instant(item.reportingReasons[0].reason)
+                    : item.reportingReasons.length > 1
+                        ? $translate.instant('MULTIPLE_REASONS')
+                        : ''
+
+            let reason = ''
+            const allReports = unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+
+            for (let i = 0; i < allReports.length; i++) {
+                if (allReports[i].reportingReasons.length > 1)
+                    return $translate.instant('MULTIPLE_REASONS')
+
+                if (allReports[i].reportingReasons.length === 1) {
+                    if (!reason)
+                        reason = $translate.instant(allReports[i].reportingReasons[0].reason)
+                    else if (reason != allReports[i].reportingReasons[0].reason)
+                        return $translate.instant('MULTIPLE_REASONS')
+                }
+            }
+
+            return reason
         }
     }
 ])

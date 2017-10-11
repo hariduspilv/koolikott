@@ -17,7 +17,7 @@
       <td md-cell data-ng-if="item.reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
       <td md-cell data-ng-if="item.reportCount === 1 && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
       <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
-      <td md-cell data-ng-bind="item.reason"></td>
+      <td md-cell data-ng-bind="$parent.getReportLabel(item)"></td>
       <td md-cell>
         <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
           <md-button aria-label="Ava" class="md-icon-button">
