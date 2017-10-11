@@ -1,9 +1,8 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.permission;
 
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IPortfolio;
-import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.utils.UserUtil;
 
 public class PortfolioPermission implements PermissionItem {

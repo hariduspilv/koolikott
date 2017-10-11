@@ -1,4 +1,4 @@
-package ee.hm.dop.service.learningObject;
+package ee.hm.dop.service.permission;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,10 +7,6 @@ import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.service.content.MaterialPermission;
-import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.content.PortfolioPermission;
-import ee.hm.dop.service.content.PortfolioService;
 
 public class PermissionFactory {
 

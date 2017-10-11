@@ -13,16 +13,9 @@ import static org.junit.Assert.fail;
 
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.enums.Role;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.solr.SolrEngineService;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
-import org.easymock.IAnswer;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
