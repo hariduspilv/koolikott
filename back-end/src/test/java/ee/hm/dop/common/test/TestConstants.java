@@ -1,5 +1,9 @@
 package ee.hm.dop.common.test;
 
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
+
 public class TestConstants {
     public static final long NOT_EXISTS_ID = -1L;
     public static final String NOT_EXISTS_STRING = "-1L";
@@ -50,4 +54,22 @@ public class TestConstants {
     public static final TestUser USER_RESTRICTED2 = new TestUser(15L, "89898989892", "restricted.user2");
 
     public static final TestTaxon TAXON_MATHEMATICS_DOMAIN = new TestTaxon(10L, "Mathematics", "DOMAIN");
+
+    public static Material materialWithId(Long id) {
+        Material material = new Material();
+        material.setId(id);
+        return material;
+    }
+
+    public static Portfolio portfolioWithId(Long id) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(id);
+        return portfolio;
+    }
+
+    public static User userWithId(Long id) {
+        User user = new User();
+        user.setId(id);
+        return user;
+    }
 }

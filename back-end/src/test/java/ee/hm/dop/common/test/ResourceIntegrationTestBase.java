@@ -25,9 +25,7 @@ import java.util.List;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Base class for all resource integration tests.
@@ -37,11 +35,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     public static final String DEV_LOGIN = "dev/login/";
     public static final String LOGOUT = "logout";
     private static String RESOURCE_BASE_URL;
+    private static AuthenticationFilter authenticationFilter;
 
     @Inject
     private static Configuration configuration;
-
-    private static AuthenticationFilter authenticationFilter;
 
     protected User login(TestUser testUser) {
         return login(testUser.idCode);
@@ -200,24 +197,6 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
                 requestContext.getHeaders().put("Username", usernameList);
             }
         }
-    }
-
-    public Material materialWithId(Long id) {
-        Material material = new Material();
-        material.setId(id);
-        return material;
-    }
-
-    public Portfolio portfolioWithId(Long id) {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(id);
-        return portfolio;
-    }
-
-    public User userWithId(Long id) {
-        User user = new User();
-        user.setId(id);
-        return user;
     }
 
     public Tag tag(String name) {

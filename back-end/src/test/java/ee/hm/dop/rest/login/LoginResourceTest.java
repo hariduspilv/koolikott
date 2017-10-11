@@ -232,7 +232,6 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void ekoolAuthenticateFail() {
-
         Response response = doGet("login/ekool/success?code=000000");
         String url = response.getHeaderString("Location");
 
