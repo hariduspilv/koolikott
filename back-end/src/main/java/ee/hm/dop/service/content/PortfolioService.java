@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
-public class PortfolioService implements PermissionItem {
+public class PortfolioService {
 
     @Inject
     private PortfolioDao portfolioDao;
@@ -41,13 +41,15 @@ public class PortfolioService implements PermissionItem {
     private PortfolioConverter portfolioConverter;
     @Inject
     private FirstReviewAdminService firstReviewAdminService;
+    @Inject
+    private PortfolioPermission portfolioPermission;
 
     public Portfolio get(long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
             return portfolioDao.findById(portfolioId);
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-        if (!canView(loggedInUser, portfolio)) {
+        if (!portfolioPermission.canView(loggedInUser, portfolio)) {
             throw ValidatorUtil.permissionError();
         }
         return portfolio;
@@ -61,7 +63,7 @@ public class PortfolioService implements PermissionItem {
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
         return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
-                .filter(p -> canInteract(loggedInUser, p))
+                .filter(p -> portfolioPermission.canInteract(loggedInUser, p))
                 .collect(Collectors.toList());
     }
 
@@ -147,7 +149,7 @@ public class PortfolioService implements PermissionItem {
             throw new RuntimeException("Required field title must be filled.");
         }
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (canUpdate(loggedInUser, originalPortfolio)) {
+        if (portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {
             return originalPortfolio;
         }
         throw ValidatorUtil.permissionError();
@@ -159,23 +161,5 @@ public class PortfolioService implements PermissionItem {
 
     public Portfolio findValidIncludeDeleted(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findById);
-    }
-
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isNotPrivate(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isPublic(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 }

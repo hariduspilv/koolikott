@@ -36,7 +36,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.joda.time.DateTime.now;
 
-public class MaterialService implements PermissionItem {
+public class MaterialService  {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -191,7 +191,7 @@ public class MaterialService implements PermissionItem {
         return new SearchResult(userFavorites, getByCreatorSize(creator), start);
     }
 
-    public List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
+    private List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
         return reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
     }
 
@@ -352,22 +352,5 @@ public class MaterialService implements PermissionItem {
             }
         }
         material.setPeerReviews(peerReviews);
-    }
-
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return isPublic(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 }

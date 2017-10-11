@@ -37,14 +37,15 @@ public class PortfolioServiceTest {
     private PortfolioDao portfolioDao;
     @Mock
     private SolrEngineService solrEngineService;
+    @Mock
+    private PortfolioPermission portfolioPermission;
 
     @Test
     public void get() {
         int portfolioId = 125;
         Portfolio portfolio = createMock(Portfolio.class);
         expect(portfolioDao.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
-        expect(portfolio.getVisibility()).andReturn(Visibility.PUBLIC);
-        expect(portfolio.isDeleted()).andReturn(false);
+        expect(portfolioPermission.canView(null, portfolio)).andReturn(true);
 
         replayAll(portfolio);
 
@@ -56,7 +57,7 @@ public class PortfolioServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(portfolioDao, solrEngineService);
+        replay(portfolioDao, solrEngineService, portfolioPermission);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -66,7 +67,7 @@ public class PortfolioServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(portfolioDao, solrEngineService);
+        verify(portfolioDao, solrEngineService, portfolioPermission);
 
         if (mocks != null) {
             for (Object object : mocks) {
