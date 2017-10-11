@@ -56,16 +56,16 @@ public class SecurityFilter implements ContainerRequestFilter {
             if (!isSessionValid(authenticatedUser)) {
                 sessionExpired(requestContext, authenticatedUser);
                 logger.error("session has expired" + username);
-            } else {
-                DopPrincipal principal = new DopPrincipal(authenticatedUser);
-                DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
-                requestContext.setSecurityContext(securityContext);
+                return;
             }
+
+            DopPrincipal principal = new DopPrincipal(authenticatedUser);
+            DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
+            requestContext.setSecurityContext(securityContext);
         }
     }
 
     public void sessionExpired(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
-//        newLogoutService().logout(authenticatedUser);
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
     }
 

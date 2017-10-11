@@ -20,12 +20,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Base class for all resource integration tests.
@@ -188,13 +188,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         @Override
         public void filter(ClientRequestContext requestContext) throws IOException {
             if (token != null && username != null) {
-                List<Object> tokenList = new ArrayList<>();
-                tokenList.add(token);
-                requestContext.getHeaders().put("Authentication", tokenList);
-
-                List<Object> usernameList = new ArrayList<>();
-                usernameList.add(username);
-                requestContext.getHeaders().put("Username", usernameList);
+                requestContext.getHeaders().put("Authentication", Arrays.asList(token));
+                requestContext.getHeaders().put("Username", Arrays.asList(username));
             }
         }
     }
