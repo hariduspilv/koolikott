@@ -267,7 +267,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void copyPrivatePortfolioNotLoggedIn() {
         Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -304,7 +304,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioNotLoggedIn() {
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test

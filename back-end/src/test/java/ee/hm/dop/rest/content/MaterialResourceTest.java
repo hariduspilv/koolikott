@@ -251,7 +251,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void can_not_create_or_update_material_if_not_logged_in() throws Exception {
         Response response = createMaterial(new Material());
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test

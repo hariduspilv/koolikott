@@ -32,6 +32,6 @@ public class RestrictedUserAdminResourceTest extends ResourceIntegrationTestBase
     @Test
     public void not_logged_in_user_is_not_allowed_to_getRestrictedUsers() throws Exception {
         Response response = doGet(GET_RESTRICTED_USERS_URL);
-        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 }

@@ -66,7 +66,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void user_must_be_logged_in_to_get_signedUserData() {
         Response response = doGet(GET_SIGNED_USER_DATA, MediaType.TEXT_PLAIN_TYPE);
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
