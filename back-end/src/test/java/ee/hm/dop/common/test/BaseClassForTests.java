@@ -56,6 +56,7 @@ public interface BaseClassForTests {
     Long PORTFOLIO_12 = TestConstants.PORTFOLIO_12;
     Long PORTFOLIO_13 = TestConstants.PORTFOLIO_13;
     Long PORTFOLIO_14 = TestConstants.PORTFOLIO_14;
+    Long PORTFOLIO_15 = TestConstants.PORTFOLIO_15;
 
     TestTaxon TAXON_MATHEMATICS_DOMAIN = TestConstants.TAXON_MATHEMATICS_DOMAIN;
 
@@ -71,11 +72,15 @@ public interface BaseClassForTests {
         return TestConstants.userWithId(id);
     }
 
-    default void assertMaterial1(Material material, TestLayer testLayer){
+    default void assertMaterial1(Material material, TestLayer testLayer) {
         Material1Validation.assertMaterial1(material, testLayer);
     }
 
-    default void validateUser(User user, TestUser testUser, TestLayer testLayer){
+    default void assertPortfolio1(Portfolio portfolio, TestLayer testLayer) {
+        Portfolio1Validator.assertPortfolio1(portfolio, testLayer);
+    }
+
+    default void validateUser(User user, TestUser testUser, TestLayer testLayer) {
         UserValidation.assertUser(user, testUser, testLayer);
     }
 }

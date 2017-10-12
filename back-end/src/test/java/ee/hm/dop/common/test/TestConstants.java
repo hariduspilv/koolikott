@@ -38,6 +38,7 @@ public class TestConstants {
     public static final Long PORTFOLIO_12 = 112L;
     public static final Long PORTFOLIO_13 = 113L;
     public static final Long PORTFOLIO_14 = 114L;
+    public static final Long PORTFOLIO_15 = 115L;
 
     public static final TestUser USER_MATI = new TestUser(1L, "39011220011", "mati.maasikas", "Mati", "Maasikas");
     public static final TestUser USER_PEETER = new TestUser(2L, "38011550077", "peeter.paan", "Peeter", "Paan");

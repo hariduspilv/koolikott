@@ -9,8 +9,17 @@ import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.Topic;
 
+/**
+ * Valid full taxonomy trees are:
+ * Educational context -> Domain -> Subject -> Topic -> Subtopic
+ * Educational context -> Domain -> Topic -> Subtopic
+ * Educational context -> Domain -> Specialization -> Module -> Topic -> Subtopic
+ */
 public class TaxonUtils {
 
+    /**
+     *  Educational context top parent
+     */
     public static EducationalContext getEducationalContext(Taxon taxon) {
         EducationalContext educationalContext = null;
 
