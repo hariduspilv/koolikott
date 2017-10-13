@@ -36,20 +36,21 @@ class controller extends Controller {
          */
         this.$rootScope.setReason = (reason) => this.$scope.reason = reason
 
-        this.$scope.toggleReports = () => {
-            if (!this.$scope.showReports) {
-                const reasons = document.querySelector('.error-message-reports')
-                reasons.style.height = Math.min(400, reasons.scrollHeight)+'px'
-                this.$scope.showReports = true
-            } else
-                this.$scope.showReports = false
-        }
+        this.$scope.toggleReports = this.toggleReports.bind(this)
+
+        this.onWindowResize = () => requestAnimationFrame(
+            this.toggleExpandableReports.bind(this)
+        )
 
         // this.$timeout(() => this.setChangedData())
         // this.$scope.$on('errorMessage:updateChanged', this.setChangedData.bind(this))
     }
+    $onDestroy() {
+        if (this.listeningResize)
+            window.removeEventListener('resize', this.onWindowResize)
+    }
     init() {
-        this.toggle(false, '', '', [])
+        this.setState('', '', [], false)
 
         const isAdmin = this.authenticatedUserService.isAdmin()
         const isModerator = this.authenticatedUserService.isModerator()
@@ -97,7 +98,7 @@ class controller extends Controller {
             this.$rootScope.learningObjectUnreviewed &&*/
 
         if (this.$scope.showDeleted)
-            this.toggle(true, 'delete', 'ERROR_MSG_DELETED', [{
+            this.setState('delete', 'ERROR_MSG_DELETED', [{
                 icon: 'restore_page',
                 label: 'BUTTON_RESTORE',
                 onClick: () => this.$scope.$emit('restore:learningObject'),
@@ -105,7 +106,7 @@ class controller extends Controller {
             }])
         else
         if (this.$scope.showChanged)
-            this.toggle(true, 'priority_high', 'MESSAGE_CHANGED_LEARNING_OBJECT', [{
+            this.setState('priority_high', 'MESSAGE_CHANGED_LEARNING_OBJECT', [{
                 icon: 'undo',
                 label: 'UNDO_CHANGES',
                 onClick: () => this.changedLearningObjectService.revertChanges(this.getCurrentLearningObjectId()),
@@ -118,7 +119,7 @@ class controller extends Controller {
             }])
         else
         if (this.$scope.showBroken)
-            this.toggle(true, 'report', 'ERROR_MSG_BROKEN', [{
+            this.setState('report', 'ERROR_MSG_BROKEN', [{
                 icon: 'delete',
                 label: 'BUTTON_REMOVE',
                 onClick: this.$scope.$parent.confirmMaterialDeletion,
@@ -131,7 +132,7 @@ class controller extends Controller {
             }])
         else
         if (this.$scope.showImproper) {
-            this.toggle(true, 'report', 'ERROR_MSG_IMPROPER', [{
+            this.setState('report', 'ERROR_MSG_IMPROPER', [{
                 icon: 'delete',
                 label: 'BUTTON_REMOVE',
                 onClick: () => this.$scope.$emit('delete:learningObject'),
@@ -144,7 +145,7 @@ class controller extends Controller {
             }], this.getReasons.bind(this))
         } else
         if (this.$scope.showImproperAndBroken)
-            this.toggle(true, 'report', 'ERROR_MSG_IMPROPER_AND_BROKEN', [{
+            this.setState('report', 'ERROR_MSG_IMPROPER_AND_BROKEN', [{
                 icon: 'delete',
                 label: 'BUTTON_REMOVE',
                 onClick: () => this.$scope.$emit('delete:learningObject'),
@@ -163,7 +164,7 @@ class controller extends Controller {
             var messageKey = this.data && this.data.type == '.Portfolio'
                 ? 'ERROR_MSG_UNREVIEWED_PORTFOLIO'
                 : 'ERROR_MSG_UNREVIEWED'
-            this.toggle(true, 'lightbulb_outline', messageKey, [{
+            this.setState('lightbulb_outline', messageKey, [{
                 icon: 'done',
                 label: 'BUTTON_REVIEW',
                 onClick: () => this.$scope.$emit('markReviewed:learningObject'),
@@ -171,12 +172,14 @@ class controller extends Controller {
             }])
         }
     }
-    toggle(show = true, icon, messageKey, buttons, cb) {
-        this.$scope.show = show
+    setState(icon, messageKey, buttons, cb) {
+        this.$scope.show = typeof cb === 'boolean' ? cb : true
         this.$scope.icon = icon
         this.$scope.messageKey = messageKey
         this.$scope.message = ''
         this.$scope.buttons = buttons
+        this.$scope.reports = null
+        this.$scope.showExpandableReports = false
 
         if (typeof cb === 'function')
             cb()
@@ -187,10 +190,19 @@ class controller extends Controller {
                 .makeGet('rest/impropers/'+this.data.id)
                 .then(({ data: reports }) => {
                     if (Array.isArray(reports) && reports.length) {
-                        const setMessage = (reasons = '') =>
+                        const setMessage = (reasons = '') => {
                             this.$scope.message = reports[0].reportingText
                                 ? reasons.join(', ')+': '+reports[0].reportingText
                                 : reasons.join(', ')
+
+                            if (!this.listeningResize) {
+                                this.listeningResize = true
+                                window.addEventListener('resize', this.onWindowResize)
+                            }
+                            setTimeout(() =>
+                                this.toggleExpandableReports()
+                            )
+                        }
 
                         !reports[0].reportingReasons
                             ? setMessage()
@@ -208,6 +220,21 @@ class controller extends Controller {
             : this.$scope.$parent.portfolio
                 ? this.$scope.$parent.portfolio.id
                 : this.$routeParams.id
+    }
+    toggleExpandableReports() {
+        if (this.$scope.reports.length > 1)
+            return this.$scope.showExpandableReports = true
+
+        const { offsetWidth, scrollWidth } = document.getElementById('error-message-heading')
+        this.$scope.showExpandableReports = scrollWidth > offsetWidth
+    }
+    toggleReports() {
+        if (!this.$scope.showReports) {
+            const reasons = document.querySelector('.error-message-reports')
+            reasons.style.height = Math.min(400, reasons.scrollHeight)+'px'
+            this.$scope.showReports = true
+        } else
+            this.$scope.showReports = false
     }
     /*setChangedData() {
         if (this.$scope.showChanged)
