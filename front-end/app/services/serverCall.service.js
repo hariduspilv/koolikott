@@ -43,10 +43,10 @@ angular.module('koolikottApp')
                     successCallback(response.data);
                 }
             }, function (response) {
-                if (response.status === '419') {
+                if (response.status == '419') {
                     authenticatedUserService.removeAuthenticatedUser();
                     makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
-                } else if (response.status === '401') {
+                } else if (response.status == '401') {
                     $location.url('/');
                 } else if (errorCallback) {
                     errorCallback(response.data, response.status);
