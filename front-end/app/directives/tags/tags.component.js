@@ -1,228 +1,188 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-    .component('dopTags', {
-        bindings: {
-            learningObject: '=',
-            isEditPortfolioMode: '<?'
-        },
-        templateUrl: 'directives/tags/tags.html',
-        controller: TagsController
-    });
+{
+class controller extends Controller {
+    $onInit() {
+        this.newTag = {}
+        this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
+        this.init()
+    }
+    init() {
+        this.showMoreTags = false
 
-TagsController.$inject = ['$translate', 'authenticatedUserService', '$rootScope',
-    '$mdDialog', 'storageService', 'suggestService', '$scope', 'tagsService', 'toastService'];
+        if (this.learningObject && this.learningObject.id)
+            this.getTagUpVotes()
+    }
+    getTagUpVotes() {
+        this.tagsService
+            .getTagUpVotes({
+                learningObject: this.learningObject.id
+            })
+            .then(tags => {
+                let sorted = this.sortTagsByUpVoteCount(tags)
 
-function TagsController($translate, authenticatedUserService, $rootScope,
-                        $mdDialog, storageService, suggestService, $scope, tagsService, toastService) {
-
-    let vm = this;
-
-    let allUpVoteForms;
-    vm.newTag = {};
-
-    vm.$onInit = () => {
-        init();
-    };
-
-    vm.isLoggedOutAndHasNoTags = () => {
-        return !authenticatedUserService.isAuthenticated()
-            && vm.learningObject
-            && vm.learningObject.tags
-            && vm.learningObject.tags.length === 0;
-    };
-
-    vm.upVote = (upVoteForm) => {
-        vm.beingUpVotedForm = upVoteForm;
-        let tagUpVote = {
-            learningObject: vm.learningObject,
-            tag: upVoteForm.tag,
-            user: authenticatedUserService.getUser()
-        };
-
-        tagsService.addUpVode(tagUpVote, upVoteSuccess, upVoteFail);
-    };
-
-    vm.isAllowed = () => {
-        return authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted();
-    };
-
-    vm.isAdmin = () => authenticatedUserService.isAdmin();
-
-    vm.isNullOrZeroLength = (arg) => !arg || !arg.length;
-
-    vm.removeUpVote = (upVoteForm) => {
-        tagsService.removeUpVote(upVoteForm, removeUpVoteSuccess, removeUpVoteFail);
-        vm.removedUpVoteForm = upVoteForm;
-    };
-
-    vm.getTagSearchURL = ($event, tag) => {
-        $event.preventDefault();
-        tagsService.searchByTag(tag);
-    };
-
-    vm.removeTag = (removedTag) => {
-        if (vm.learningObject && vm.learningObject.tags) {
-            vm.learningObject.tags.forEach(function (tag, index) {
-                if (tag === removedTag) {
-                    vm.learningObject.tags.splice(index, 1);
+                if (sorted.length > 10) {
+                    this.tags = sorted.slice(0, 10)
+                    this.showMoreTags = true
+                    this.allTags = sorted
+                } else
+                    this.tags = sorted
+            })
+    }
+    sortTagsByUpVoteCount(tags) {
+        return Array.isArray(tags)
+            ? tags.sort((a, b) => b.upVoteCount - a.upVoteCount)
+            : tags
+    }
+    isLoggedOutAndHasNoTags() {
+        return !this.authenticatedUserService.isAuthenticated()
+            && this.learningObject
+            && this.learningObject.tags
+            && this.learningObject.tags.length === 0
+    }
+    upVote(tag) {
+        this.upVotedTag = tag
+        this.tagsService
+            .addUpVote({
+                learningObject: this.learningObject,
+                tag: tag.tag,
+                user: this.authenticatedUserService.getUser()
+            })
+            .then(tagUpVote => {
+                this.upVotedTag.tagUpVote = tagUpVote
+                this.upVotedTag.upVoteCount++
+                this.tags = this.sortTagsByUpVoteCount(this.tags)
+            })
+    }
+    isAllowed() {
+        return this.authenticatedUserService.isAuthenticated()
+            && !this.authenticatedUserService.isRestricted()
+    }
+    removeUpVote(upVoteForm) {
+        this.removedTag = upVoteForm
+        this.tagsService
+            .removeUpVote(upVoteForm)
+            .then(() => {
+                if (this.removedTag) {
+                    this.removedTag.tagUpVote = null
+                    this.removedTag.upVoteCount--
+                    this.tags = this.sortTagsByUpVoteCount(this.tags)
+                    this.removedTag = null
                 }
-            });
-        }
-    };
-
-    vm.addTag = () => {
-        if (vm.learningObject && vm.learningObject.id) {
-            tagsService.addTag(vm.newTag, vm.learningObject, addTagSuccess, addTagFail);
-            vm.newTag.tagName = null;
-        }
-    };
-
-    vm.reportTag = (tag) => {
-        tagsService.reportTag(tag, vm.learningObject, () => {
-            toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
-        })
-    };
-
-    vm.showMore = () => {
-        vm.upVoteForms = allUpVoteForms;
-        vm.showMoreTags = false;
-    };
-
-    vm.showLess = () => {
-        vm.upVoteForms = allUpVoteForms.slice(0, 10);
-        vm.showMoreTags = true;
-    };
-
-    vm.doSuggest = (query) => suggestService.suggest(query, suggestService.getSuggestSystemTagURLbase());
-
-    vm.tagSelected = () => {
-        if (vm.newTag && vm.newTag.tagName) {
-            processSystemTag();
-        }
-    };
-
-    vm.limitTextLength = () => {
-        if (vm.newTag && vm.newTag.tagName && vm.newTag.tagName.length > 60) {
-            vm.newTag.tagName = vm.newTag.tagName.slice(0, -1);
-        }
-    };
-
-    function init() {
-        vm.showMoreTags = false;
-
-        if (vm.learningObject && vm.learningObject.id) {
-            let reportParams = {
-                learningObject: vm.learningObject.id
-            };
-
-            tagsService.getTagUpVotes(reportParams, getTagUpVotesReportSuccess);
+            }, () =>
+                this.removedTag = null
+            )
+    }
+    getTagSearchURL($event, tag) {
+        $event.preventDefault()
+        this.tagsService.searchByTag(tag)
+    }
+    removeTag(removedTag) {
+        if (this.learningObject && this.learningObject.tags)
+            this.learningObject.tags.forEach((tag, idx) => {
+                if (tag === removedTag)
+                    this.learningObject.tags.splice(idx, 1)
+            })
+    }
+    addTag() {
+        if (this.learningObject && this.learningObject.id) {
+            this.tagsService
+                .addTag(this.newTag, this.learningObject)
+                .then(this.addTagSuccess.bind(this))
+            this.newTag.tagName = null
         }
     }
+    addTagSuccess(learningObject) {
+        if (this.learningObject) {
+            learningObject.picture = this.learningObject.picture
+            this.learningObject = learningObject
+            
+            if (!this.learningObject.source && learningObject.uploadedFile)
+                this.learningObject.source = learningObject.uploadedFile.url
 
-    function getTagUpVotesReportSuccess(upVoteForms) {
-        let sortedForms = sortTags(upVoteForms);
-        if (sortedForms.length > 10) {
-            vm.upVoteForms = sortedForms.slice(0, 10);
-            vm.showMoreTags = true;
-            allUpVoteForms = sortedForms;
-        } else {
-            vm.upVoteForms = sortedForms;
+            this.isPortfolio(learningObject)
+                ? this.storageService.setPortfolio(learningObject)
+                : this.isMaterial(learningObject)
+                    && this.storageService.setMaterial(learningObject)
+
+            this.init()
         }
     }
-
-    function upVoteSuccess(tagUpVote) {
-        vm.beingUpVotedForm.tagUpVote = tagUpVote;
-        vm.beingUpVotedForm.upVoteCount++;
-        vm.upVoteForms = sortTags(vm.upVoteForms);
+    reportTag(tag) {
+        this.tagsService
+            .reportTag(tag, this.learningObject)
+            .then(() =>
+                this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
+            )
     }
-
-    function upVoteFail() {
-        log("Failed to up vote.");
+    showMore() {
+        this.tags = this.allTags
+        this.showMoreTags = false
     }
-
-    function removeUpVoteSuccess() {
-        if (vm.removedUpVoteForm) {
-            vm.removedUpVoteForm.tagUpVote = null;
-            vm.removedUpVoteForm.upVoteCount--;
-            vm.upVoteForms = sortTags(vm.upVoteForms);
-            vm.removedUpVoteForm = null;
-        }
+    showLess() {
+        this.tags = this.allTags.slice(0, 10)
+        this.showMoreTags = true
     }
-
-    function removeUpVoteFail() {
-        log("Failed to remove upVote.");
-        vm.removedUpVoteForm = null;
+    doSuggest(query) {
+        return this.suggestService.suggest(query, this.suggestService.getSuggestSystemTagURLbase())
     }
-
-
-    function addTagSuccess(learningObject) {
-        if (!learningObject) {
-            addTagFail();
-        } else {
-            learningObject.picture = vm.learningObject.picture;
-            vm.learningObject = learningObject;
-            if (!vm.learningObject.source && learningObject.uploadedFile) {
-                vm.learningObject.source = learningObject.uploadedFile.url;
-            }
-            if (isPortfolio(learningObject.type)) {
-                storageService.setPortfolio(learningObject);
-            } else if (isMaterial(learningObject.type)) {
-                storageService.setMaterial(learningObject);
-            }
-
-            init();
-        }
+    tagSelected() {
+        if (this.newTag && this.newTag.tagName)
+            this.tagsService
+                .addSystemTag(this.learningObject.id, {
+                    'name': this.newTag.tagName,
+                    'type': this.learningObject.type
+                })
+                .then(data => {
+                    this.addTagSuccess(data.learningObject)
+                    this.showSystemTagDialog(data.tagTypeName)
+                    this.$scope.$emit(
+                        this.isMaterial(learningObject)
+                            ? 'tags:updateMaterial'
+                            : 'tags:updatePortfolio',
+                        learningObject
+                    )
+                    this.newTag.tagName = null
+                    this.$rootScope.$broadcast('errorMessage:updateChanged')
+                }, () =>
+                    this.newTag.tagName = null
+                )
     }
-
-    function addTagFail() {
-        console.log("Adding tag failed")
+    limitTextLength() {
+        if (this.newTag && this.newTag.tagName && this.newTag.tagName.length > 60)
+            this.newTag.tagName = this.newTag.tagName.slice(0, -1)
     }
-
-    function processSystemTag() {
-        let params = {
-            'name': vm.newTag.tagName,
-            'type': vm.learningObject.type
-        };
-
-        tagsService.addSystemTag(vm.learningObject.id, params)
-            .then(function (response) {
-                addTagSuccess(response.learningObject);
-                showSystemTagDialog(response.tagTypeName);
-                updateLearningObject(response.learningObject);
-                vm.newTag.tagName = null;
-                $rootScope.$broadcast("errorMessage:updateChanged");
-            }).catch(function () {
-            vm.newTag.tagName = null;
-        });
+    showSystemTagDialog(tagType) {
+        if (tagType)
+            this.$mdDialog.show(
+                this.$mdDialog
+                    .alert()
+                    .clickOutsideToClose(true)
+                    .title(this.$translate.instant('SYSTEM_TAG_DIALOG_TITLE'))
+                    .textContent(this.$translate.instant('SYSTEM_TAG_DIALOG_CONTENT'))
+                    .ok('Ok')
+                    .closeTo(`#${tagType}-close`)
+            )
     }
+}
+controller.$inject = [
+    '$translate',
+    'authenticatedUserService',
+    '$rootScope',
+    '$mdDialog',
+    'storageService',
+    'suggestService',
+    '$scope',
+    'tagsService',
+    'toastService'
+]
 
-    function updateLearningObject(learningObject) {
-        if (isMaterial(learningObject.type)) {
-            $scope.$emit("tags:updateMaterial", learningObject);
-        } else if (isPortfolio(learningObject.type)) {
-            $scope.$emit("tags:updatePortfolio", learningObject)
-        }
-    }
-
-    function showSystemTagDialog(tagType) {
-        if (!tagType) return;
-
-        $mdDialog.show(
-            $mdDialog.alert()
-                .clickOutsideToClose(true)
-                .title($translate.instant('SYSTEM_TAG_DIALOG_TITLE'))
-                .textContent($translate.instant('SYSTEM_TAG_DIALOG_CONTENT'))
-                .ok('Ok')
-                .closeTo('#' + tagType + '-close')
-        )
-    }
-
-    $rootScope.$on('materialEditModalClosed', function () {
-        let reportParams = {
-            learningObject: vm.learningObject.id
-        };
-
-        tagsService.getTagUpVotes(reportParams, getTagUpVotesReportSuccess);
-    });
+angular.module('koolikottApp').component('dopTags', {
+    bindings: {
+        learningObject: '=',
+        isEditPortfolioMode: '<?'
+    },
+    templateUrl: 'directives/tags/tags.html',
+    controller
+})
 }

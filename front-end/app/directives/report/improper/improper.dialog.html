@@ -10,7 +10,13 @@
   </md-toolbar>
   <md-dialog-content>
     <div class="md-dialog-content">
-      <md-input-container class="md-block" data-ng-class="{ 'md-input-invalid': errors }">
+      <md-progress-linear data-ng-if="loading"></md-progress-linear>
+      <md-input-container
+        data-ng-if="!loading && reasons"
+        data-ng-hide="hideReasons"
+        class="md-block"
+        data-ng-class="{ 'md-input-invalid': errors }"
+        >
         <div data-layout="column" data-layout-gt-sm="row">
           <md-checkbox
             data-ng-repeat="reason in reasons"

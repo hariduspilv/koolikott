@@ -22,29 +22,48 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                     });
             }
         },
-
+    
         reportTag(tag, learningObject, successCallback, failCallback) {
-            let confirm = $mdDialog.confirm()
-                .title($translate.instant('REPORT_IMPROPER_TITLE'))
-                .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON_IMPROPER_TAG'))
-                .ok($translate.instant('BUTTON_NOTIFY'))
-                .cancel($translate.instant('BUTTON_CANCEL'));
+            return $mdDialog
+                .show({
+                    controller($scope, $mdDialog) {
+                        $scope.data = {
+                            reportingText: ''
+                        }
+                        $scope.cancel = () => $mdDialog.cancel()
+                        $scope.sendReport = () => $mdDialog.hide($scope)
+                        $scope.loading = true
 
-            $mdDialog.show(confirm).then(function () {
-                let entity = {
-                    learningObject: learningObject,
-                    reason: "Tag: " + tag
-                };
-
-                if (successCallback) {
-                    serverCallService.makePut("rest/impropers", entity, successCallback, failCallback);
-                } else {
-                    return serverCallService.makePut("rest/impropers", entity)
-                        .then(response => {
-                            return response.data;
-                        });
-                }
-            });
+                        serverCallService
+                            .makeGet('rest/learningMaterialMetadata/tagReportingReasons')
+                            .then(({ data: reasons }) => {
+                                if (Array.isArray(reasons)) {
+                                    $scope.hideReasons = reasons.length === 1
+                                    $scope.reasons = reasons.map(key => ({
+                                        key,
+                                        checked: reasons.length === 1
+                                    }))
+                                }
+                                $scope.loading = false
+                            })
+                    },
+                    templateUrl: 'directives/report/improper/improper.dialog.html',
+                    clickOutsideToClose:true
+                })
+                .then(({ data, reasons }) => {
+                    Object.assign(data, {
+                        learningObject,
+                        reportingReasons: reasons.reduce((reportingReasons, r) =>
+                            r.checked
+                                ? reportingReasons.concat({ reason: r.key })
+                                : reportingReasons,
+                            []
+                        )
+                    })
+                    return successCallback
+                        ? serverCallService.makePut('rest/impropers', data, successCallback, failCallback)
+                        : serverCallService.makePut('rest/impropers', data).then(response => response.data)
+                })
         },
 
         getTagUpVotes(params, successCallback, failCallback) {
@@ -58,7 +77,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             }
         },
 
-        addUpVode(params, successCallback, failCallback) {
+        addUpVote(params, successCallback, failCallback) {
             if (successCallback) {
                 serverCallService.makePut("rest/tagUpVotes", params, successCallback, failCallback);
             } else {

@@ -16,9 +16,10 @@ class controller extends Controller {
     showConfirmationDialog() {
         this.$mdDialog
             .show({
-                controller($scope, $mdDialog, data, reasons) {
+                controller($scope, $mdDialog, data, reasons, loading) {
                     $scope.data = data
                     $scope.reasons = reasons
+                    $scope.loading = loading
                     $scope.cancel = () => $mdDialog.cancel()
                     $scope.sendReport = () => {
                         data.reportingReasons.length
@@ -45,7 +46,8 @@ class controller extends Controller {
                 clickOutsideToClose:true,
                 locals: {
                     data: this.$scope.data,
-                    reasons: this.$scope.reasons
+                    reasons: this.$scope.reasons,
+                    loading: this.$scope.loading
                 }
             })
             .then(this.sendReport.bind(this))

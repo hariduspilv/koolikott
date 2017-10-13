@@ -600,4 +600,10 @@ class Controller {
             this[name] = arguments[idx]
         )
     }
+    isMaterial({ type }) {
+        return type === '.Material' || type === '.ReducedMaterial'
+    }
+    isPortfolio({ type }) {
+        return type === '.Portfolio' || type === '.ReducedPortfolio'
+    }
 }
