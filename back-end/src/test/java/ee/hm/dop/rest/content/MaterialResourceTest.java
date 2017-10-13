@@ -1,12 +1,15 @@
 package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -50,14 +53,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
 
     @Inject
-    private MaterialService materialService;
-
-    @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private MaterialGetter materialGetter;
 
     @Test
     public void getMaterial() {
-        assertMaterial1(getMaterial(MATERIAL_1));
+        assertMaterial1(getMaterial(MATERIAL_1), TestLayer.REST);
     }
 
     @Test
@@ -212,9 +214,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
         Subject subject = (Subject) taxonDao.findById(21L);
         material.setTaxons(asList(subject));
-
         material.setKeyCompetences(competenceList());
-
         material.setCrossCurricularThemes(themeList());
 
         Response response = createMaterial(material);
@@ -251,13 +251,13 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void can_not_create_or_update_material_if_not_logged_in() throws Exception {
         Response response = createMaterial(new Material());
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addRecommendation() {
         User user = login(USER_ADMIN);
-        Material material = materialService.get(MATERIAL_3, user);
+        Material material = materialGetter.get(MATERIAL_3, user);
 
         Recommendation recommendation = doPost(MATERIAL_ADD_RECOMMENDATION, material, Recommendation.class);
         assertNotNull(recommendation);
@@ -268,7 +268,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void removeRecommendation() {
         User user = login(USER_ADMIN);
 
-        Material material = materialService.get(MATERIAL_3, user);
+        Material material = materialGetter.get(MATERIAL_3, user);
         Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION, material);
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
@@ -398,52 +398,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void getProxyUrl_returns_external_material_if_it_exists() throws Exception {
         Response response = doGet(format(EXTERNAL_MATERIAL_URL, getMaterial(MATERIAL_3).getSource()), MediaType.APPLICATION_OCTET_STREAM_TYPE);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        assertNotNull("Response input stream", response.readEntity(InputStream.class).read());
-    }
-
-    private void assertMaterial1(Material material) {
-        assertEquals(2, material.getTitles().size());
-        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
-        assertEquals(2, material.getDescriptions().size());
-        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
-        Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
-        assertEquals(LanguageC.EST, descriptionLanguage.getCode());
-        assertNotNull(descriptionLanguage.getName());
-        assertNotNull(descriptionLanguage.getCodes());
-        Language language = material.getLanguage();
-        assertNotNull(language);
-        assertEquals(LanguageC.EST, language.getCode());
-        assertEquals("Estonian", language.getName());
-        assertNotNull(language.getCodes());
-        assertEquals(new Long(1), material.getPicture().getId());
-        assertEquals("picture1", material.getPicture().getName());
-        assertNull(material.getPicture().getData());
-        assertNotNull(material.getTaxons());
-        assertEquals(2, material.getTaxons().size());
-        assertEquals(new Long(2), material.getTaxons().get(0).getId());
-        assertEquals(new Long(20), material.getTaxons().get(1).getId());
-        assertNull(material.getRepository());
-        assertNotNull(material.getRepositoryIdentifier());
-        assertEquals(new Long(1), material.getCreator().getId());
-        assertFalse(material.isEmbeddable());
-
-        assertEquals(2, material.getTargetGroups().size());
-        assertTrue(TargetGroupEnum.containsTargetGroup(material.getTargetGroups(), TargetGroupEnum.ZERO_FIVE));
-        assertTrue(TargetGroupEnum.containsTargetGroup(material.getTargetGroups(), TargetGroupEnum.SIX_SEVEN));
-        assertTrue(material.isSpecialEducation());
-        assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
-        assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
-
-        assertEquals("CCBY", material.getLicenseType().getName());
-        assertEquals("Koolibri", material.getPublishers().get(0).getName());
-        assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
-
-        assertEquals(5, material.getTags().size());
-        assertEquals("matemaatika", material.getTags().get(0).getName());
-        assertEquals("põhikool", material.getTags().get(1).getName());
-        assertEquals("õpik", material.getTags().get(2).getName());
-        assertEquals("mathematics", material.getTags().get(3).getName());
-        assertEquals("book", material.getTags().get(4).getName());
+        int available = response.readEntity(InputStream.class).available();
+        assertTrue("Response input stream", available > 0);
     }
 
     private Response createMaterial(Material material) {

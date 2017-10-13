@@ -1,14 +1,11 @@
 package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.enums.Visibility;
-import org.joda.time.DateTime;
 import org.junit.Test;
 
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.ArrayList;
@@ -29,16 +26,10 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
-    private static final String PORTFOLIO_ADD_RECOMMENDATION_URL = "portfolio/recommend";
-    private static final String PORTFOLIO_REMOVE_RECOMMENDATION_URL = "portfolio/removeRecommendation";
     private static final String LIKE_URL = "portfolio/like";
     private static final String DISLIKE_URL = "portfolio/dislike";
     private static final String GET_USER_LIKE_URL = "portfolio/getUserLike";
     private static final String REMOVE_USER_LIKE_URL = "portfolio/removeUserLike";
-
-    private static final String RESTORE_PORTFOLIO = "admin/deleted/portfolio/restore";
-    private static final String GET_DELETED_PORTFOLIOS = "admin/deleted/portfolio/getDeleted";
-    private static final String GET_DELETED_PORTFOLIOS_COUNT = "admin/deleted/portfolio/getDeleted/count";
 
     private static final String CREATE_MATERIAL_URL = "material";
     public static final String NEW_SUBCHAPTER = "New subchapter";
@@ -47,7 +38,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getPortfolio() {
-        assertPortfolio(getPortfolio(PORTFOLIO_1));
+        assertPortfolio1(getPortfolio(PORTFOLIO_1), TestLayer.REST);
     }
 
     @Test
@@ -213,7 +204,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
         assertFalse(updatedPortfolio.getChapters().isEmpty());
-
     }
 
     @Test
@@ -250,7 +240,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertFalse(updatedPortfolio.getChapters().isEmpty());
         Chapter verify = updatedPortfolio.getChapters().get(updatedPortfolio.getChapters().size() - 1).getSubchapters().get(0);
         assertEquals(NEW_COOL_SUBCHAPTER, verify.getTitle());
-
     }
 
     @Test
@@ -278,7 +267,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void copyPrivatePortfolioNotLoggedIn() {
         Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -306,13 +295,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void deletePortfolioAsAdmin() {
-        login(USER_ADMIN);
-        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_13));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-    }
-
-    @Test
     public void deletePortfolioAsNotCreator() {
         login(USER_SECOND);
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
@@ -322,56 +304,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioNotLoggedIn() {
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void recommendPortfolio() {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-        Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-
-        logout();
-
-        login(USER_ADMIN);
-        Response responseAdmin = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
-        assertEquals(Status.OK.getStatusCode(), responseAdmin.getStatus());
-        assertNotNull(responseAdmin.readEntity(Recommendation.class));
-
-        Portfolio portfolioAfterRecommend = getPortfolio(PORTFOLIO_3);
-        assertNotNull(portfolioAfterRecommend.getRecommendation());
-    }
-
-    @Test
-    public void removedPortfolioRecommendation() {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-        Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-
-        logout();
-
-        login(USER_ADMIN);
-        Response responseAdmin = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, portfolio);
-        assertEquals(Status.OK.getStatusCode(), responseAdmin.getStatus());
-        assertNotNull(responseAdmin.readEntity(Recommendation.class));
-        Portfolio portfolioAfterRecommend = getPortfolio(PORTFOLIO_3);
-        assertNotNull(portfolioAfterRecommend.getRecommendation());
-
-        logout();
-
-        login(USER_PEETER);
-        Response responseRemoveRecommendation = doPost(PORTFOLIO_REMOVE_RECOMMENDATION_URL, portfolio);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), responseRemoveRecommendation.getStatus());
-        logout();
-
-        login(USER_ADMIN);
-        Response responseRemoveRecommendationAdmin = doPost(PORTFOLIO_REMOVE_RECOMMENDATION_URL, portfolio);
-        assertEquals(Status.NO_CONTENT.getStatusCode(), responseRemoveRecommendationAdmin.getStatus());
-
-        Portfolio portfolioAfterRemoveRecommend = getPortfolio(PORTFOLIO_3);
-        assertNull(portfolioAfterRemoveRecommend.getRecommendation());
     }
 
     @Test
@@ -442,104 +375,8 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNull("User removed like does not exist", userRemoveLike);
     }
 
-    @Test
-    public void restoring_deleted_portfolio_restores_it() throws Exception {
-        login(USER_ADMIN);
-
-        doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_13));
-        assertTrue("Portfolio is deleted", getPortfolio(PORTFOLIO_13).isDeleted());
-
-        doPost(RESTORE_PORTFOLIO, portfolioWithId(PORTFOLIO_13));
-        assertFalse("Portfolio is not deleted", getPortfolio(PORTFOLIO_13).isDeleted());
-    }
-
-    @Test
-    public void getDeleted_returns_deleted_portfolios_to_user_admin() throws Exception {
-        login(USER_ADMIN);
-        List<Portfolio> deletedPortfolios = doGet(GET_DELETED_PORTFOLIOS, new GenericType<List<Portfolio>>() {
-        });
-        long deletedPortfoliosCount = doGet(GET_DELETED_PORTFOLIOS_COUNT, Long.class);
-
-        assertTrue("Portfolios are deleted", deletedPortfolios.stream().allMatch(LearningObject::isDeleted));
-        assertEquals("Deleted portfolios list size, deleted portfolios count", deletedPortfolios.size(), deletedPortfoliosCount);
-    }
-
-    @Test
-    public void regular_user_do_not_have_access_to_get_deleted_portfolios() throws Exception {
-        login(USER_PEETER);
-        Response response = doGet(GET_DELETED_PORTFOLIOS);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-    }
-
     private Portfolio createPortfolio() {
         return doPost(CREATE_PORTFOLIO_URL, portfolioWithTitle("Tere"), Portfolio.class);
-    }
-
-    private void assertPortfolio(Portfolio portfolio) {
-        assertNotNull(portfolio);
-        assertEquals(PORTFOLIO_1, portfolio.getId());
-        assertEquals("The new stock market", portfolio.getTitle());
-        assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
-        assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());
-        assertEquals("Mathematics", portfolio.getTaxons().get(0).getName());
-        assertEquals(new Long(6), portfolio.getCreator().getId());
-        assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());
-        assertEquals(new Long(5), portfolio.getOriginalCreator().getId());
-        assertEquals("The changes after 2008.", portfolio.getSummary());
-        assertEquals(new Long(95455215), portfolio.getViews());
-        assertEquals(5, portfolio.getTags().size());
-
-        List<Chapter> chapters = portfolio.getChapters();
-        assertEquals(3, chapters.size());
-        Chapter chapter = chapters.get(0);
-        assertEquals(new Long(1), chapter.getId());
-        assertEquals("The crisis", chapter.getTitle());
-        assertNull(chapter.getText());
-        List<LearningObject> materials = chapter.getContentRows().get(0).getLearningObjects();
-        assertEquals(1, materials.size());
-        assertEquals(new Long(1), materials.get(0).getId());
-        assertEquals(2, chapter.getSubchapters().size());
-        Chapter subchapter1 = chapter.getSubchapters().get(0);
-        assertEquals(new Long(4), subchapter1.getId());
-        assertEquals("Subprime", subchapter1.getTitle());
-        assertNull(subchapter1.getText());
-        materials = subchapter1.getContentRows().get(0).getLearningObjects();
-        assertEquals(1, materials.size());
-        assertEquals(new Long(8), materials.get(0).getId());
-        Chapter subchapter2 = chapter.getSubchapters().get(1);
-        assertEquals(new Long(5), subchapter2.getId());
-        assertEquals("The big crash", subchapter2.getTitle());
-        assertEquals("Bla bla bla\nBla bla bla bla bla bla bla", subchapter2.getText());
-        materials = subchapter2.getContentRows().get(0).getLearningObjects();
-        assertEquals(1, materials.size());
-        assertEquals(new Long(3), materials.get(0).getId());
-
-        chapter = chapters.get(1);
-        assertEquals(new Long(3), chapter.getId());
-        assertEquals("Chapter 2", chapter.getTitle());
-        assertEquals("Paragraph 1\n\nParagraph 2\n\nParagraph 3\n\nParagraph 4", chapter.getText());
-        assertEquals(1, chapter.getContentRows().get(0).getLearningObjects().size());
-        assertEquals(0, chapter.getSubchapters().size());
-
-        chapter = chapters.get(2);
-        assertEquals(new Long(2), chapter.getId());
-        assertEquals("Chapter 3", chapter.getTitle());
-        assertEquals("This is some text that explains what is the Chapter 3 about.\nIt can have many lines\n\n\n"
-                + "And can also have    spaces   betwenn    the words on it", chapter.getText());
-        assertEquals(1, chapter.getContentRows().get(0).getLearningObjects().size());
-        assertEquals(0, chapter.getSubchapters().size());
-
-        assertEquals(2, portfolio.getTargetGroups().size());
-        assertTrue(TargetGroupEnum.containsTargetGroup(portfolio.getTargetGroups(), TargetGroupEnum.ZERO_FIVE));
-        assertTrue(TargetGroupEnum.containsTargetGroup(portfolio.getTargetGroups(), TargetGroupEnum.SIX_SEVEN));
-        assertEquals("Lifelong_learning_and_career_planning", portfolio.getCrossCurricularThemes().get(0).getName());
-        assertEquals("Cultural_and_value_competence", portfolio.getKeyCompetences().get(0).getName());
-        assertEquals(Visibility.PUBLIC, portfolio.getVisibility());
-        assertFalse(portfolio.isDeleted());
-
-        Recommendation recommendation = portfolio.getRecommendation();
-        assertNotNull(recommendation);
-        assertEquals(Long.valueOf(3), recommendation.getId());
     }
 
     private void assertGetByCreator() {

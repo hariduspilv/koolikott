@@ -24,7 +24,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
-@NamedQuery(name = "findAllEducationalContext", query = "FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'")
 public abstract class Taxon extends AbstractEntity {
 
     @Id

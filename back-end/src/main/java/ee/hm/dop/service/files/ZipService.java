@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import ee.hm.dop.service.content.DopConstants;
+import ee.hm.dop.utils.DopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.metadata;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.model.Language;

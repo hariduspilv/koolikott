@@ -23,8 +23,8 @@ public class TaxonDao extends AbstractDao<Taxon> {
     }
 
     public List<EducationalContext> findAllEducationalContext() {
-        return (List<EducationalContext>) (List<?>) getEntityManager()
-                .createNamedQuery("findAllEducationalContext", Taxon.class)
+        return getEntityManager()
+                .createQuery("SELECT e FROM EducationalContext e", EducationalContext.class)
                 .getResultList();
     }
 

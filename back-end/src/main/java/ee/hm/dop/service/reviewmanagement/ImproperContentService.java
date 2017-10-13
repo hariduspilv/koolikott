@@ -7,15 +7,13 @@ import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.ReportingReason;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.enums.ReportingReasonEnum;
-import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImproperContentService {
@@ -46,11 +44,12 @@ public class ImproperContentService {
         improper.setLearningObject(learningObject);
         improper.setReportingText(improperContent.getReportingText());
         improper.setReviewed(false);
+        improper.setReportingReasons(new ArrayList<>());
 
         ImproperContent create = improperContentDao.createOrUpdate(improper);
         for (ReportingReason reason : improperContent.getReportingReasons()) {
-            if (reason.getId() == null){
-                saveReason(improperContent, create, reason);
+            if (reason.getId() == null) {
+                saveReason(create, reason);
             }
         }
         return create;
@@ -96,12 +95,12 @@ public class ImproperContentService {
         impropers.removeIf(improper -> !learningObjectService.canAccess(user, improper.getLearningObject()));
     }
 
-    private void saveReason(ImproperContent improperContent, ImproperContent create, ReportingReason reason) {
-        ReportingReason reportingReason = new ReportingReason();
-        reportingReason.setImproperContent(improperContent);
-        reportingReason.setReason(reason.getReason());
-        reportingReasonDao.createOrUpdate(reason);
-        create.getReportingReasons().add(reason);
+    private void saveReason(ImproperContent improperContent, ReportingReason reasonDto) {
+        ReportingReason reasonDb = new ReportingReason();
+        reasonDb.setImproperContent(improperContent);
+        reasonDb.setReason(reasonDto.getReason());
+        ReportingReason saved = reportingReasonDao.createOrUpdate(reasonDb);
+        improperContent.getReportingReasons().add(saved);
     }
 
     private LearningObject findValid(ImproperContent improperContent, User creator) {

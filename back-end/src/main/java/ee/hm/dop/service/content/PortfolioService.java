@@ -5,9 +5,7 @@ import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.model.interfaces.ILearningObject;
-import ee.hm.dop.model.interfaces.IPortfolio;
-import ee.hm.dop.service.learningObject.PermissionItem;
+import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -25,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
-public class PortfolioService implements PermissionItem {
+public class PortfolioService {
 
     @Inject
     private PortfolioDao portfolioDao;
@@ -36,38 +34,11 @@ public class PortfolioService implements PermissionItem {
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
-    private ReducedLearningObjectDao reducedLearningObjectDao;
-    @Inject
     private PortfolioConverter portfolioConverter;
     @Inject
     private FirstReviewAdminService firstReviewAdminService;
-
-    public Portfolio get(long portfolioId, User loggedInUser) {
-        if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            return portfolioDao.findById(portfolioId);
-        }
-        Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-        if (!canView(loggedInUser, portfolio)) {
-            throw ValidatorUtil.permissionError();
-        }
-        return portfolio;
-    }
-
-    public SearchResult getByCreatorResult(User creator, User loggedInUser, int start, int maxResults) {
-        List<Searchable> searchables = new ArrayList<>(getByCreator(creator, loggedInUser, start, maxResults));
-        Long size = getCountByCreator(creator);
-        return new SearchResult(searchables, size, start);
-    }
-
-    public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
-                .filter(p -> canInteract(loggedInUser, p))
-                .collect(Collectors.toList());
-    }
-
-    public Long getCountByCreator(User creator) {
-        return portfolioDao.findCountByCreator(creator);
-    }
+    @Inject
+    private PortfolioPermission portfolioPermission;
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
@@ -147,35 +118,9 @@ public class PortfolioService implements PermissionItem {
             throw new RuntimeException("Required field title must be filled.");
         }
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (canUpdate(loggedInUser, originalPortfolio)) {
+        if (portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {
             return originalPortfolio;
         }
         throw ValidatorUtil.permissionError();
-    }
-
-    public Portfolio findValid(Portfolio portfolio) {
-        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
-    }
-
-    public Portfolio findValidIncludeDeleted(Portfolio portfolio) {
-        return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findById);
-    }
-
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isNotPrivate(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return isPublic(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IPortfolio)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 }

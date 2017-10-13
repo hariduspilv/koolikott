@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;

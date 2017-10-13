@@ -13,10 +13,11 @@ public class ReportingReason extends AbstractEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "improperContent")
+    @JoinColumn(name = "improperContent", nullable = false)
     @JsonBackReference("improperContent")
     private ImproperContent improperContent;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ReportingReasonEnum reason;
 

@@ -1,4 +1,4 @@
-package ee.hm.dop.service.learningObject;
+package ee.hm.dop.service.permission;
 
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.interfaces.ILearningObject;

@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.common.test.TestUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
@@ -23,25 +24,25 @@ public class UserDaoTest extends DatabaseTestBase {
     @Test
     public void findUserByIdCode() {
         User user = findByIdCode(USER_MATI);
-        validateUser(user, USER_MATI);
+        validateUser(user, USER_MATI, TestLayer.DAO);
 
         user = findByIdCode(USER_PEETER);
-        validateUser(user, USER_PEETER);
+        validateUser(user, USER_PEETER, TestLayer.DAO);
 
         user = findByIdCode(USER_VOLDERMAR);
-        validateUser(user, USER_VOLDERMAR);
+        validateUser(user, USER_VOLDERMAR, TestLayer.DAO);
     }
 
     @Test
     public void findByUsername() {
         User user = findByName(USER_MATI);
-        validateUser(user, USER_MATI);
+        validateUser(user, USER_MATI, TestLayer.DAO);
 
         user = findByName(USER_PEETER);
-        validateUser(user, USER_PEETER);
+        validateUser(user, USER_PEETER, TestLayer.DAO);
 
         user = findByName(USER_VOLDERMAR);
-        validateUser(user, USER_VOLDERMAR);
+        validateUser(user, USER_VOLDERMAR, TestLayer.DAO);
     }
 
     @Test
@@ -121,13 +122,5 @@ public class UserDaoTest extends DatabaseTestBase {
 
     private User findByName(TestUser testUser) {
         return userDao.findUserByUsername(testUser.username);
-    }
-
-    private void validateUser(User user, TestUser testUser) {
-        assertEquals(testUser.id, user.getId());
-        assertEquals(testUser.idCode, user.getIdCode());
-        assertEquals(testUser.username, user.getUsername());
-        assertEquals(testUser.firstName, user.getName());
-        assertEquals(testUser.lastName, user.getSurname());
     }
 }

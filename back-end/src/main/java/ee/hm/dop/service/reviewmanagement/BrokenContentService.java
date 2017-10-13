@@ -4,6 +4,7 @@ import ee.hm.dop.dao.BrokenContentDao;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.utils.UserUtil;
 
@@ -16,12 +17,12 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 public class BrokenContentService {
 
     @Inject
-    private MaterialService materialService;
+    private MaterialGetter materialGetter;
     @Inject
     private BrokenContentDao brokenContentDao;
 
     public BrokenContent save(Material material, User loggedInUser) {
-        Material originalMaterial = materialService.validateAndFindNotDeleted(material);
+        Material originalMaterial = materialGetter.validateAndFindNotDeleted(material);
         BrokenContent brokenContent = new BrokenContent();
         brokenContent.setCreator(loggedInUser);
         brokenContent.setMaterial(originalMaterial);

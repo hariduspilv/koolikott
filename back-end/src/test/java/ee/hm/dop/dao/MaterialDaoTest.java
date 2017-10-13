@@ -16,7 +16,10 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.persistence.RollbackException;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
@@ -36,7 +39,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
     @Test
     public void find() {
         Material material = materialDao.findByIdNotDeleted(MATERIAL_1);
-        assertMaterial1(material);
+        assertMaterial1(material, TestLayer.DAO);
     }
 
     @Test
@@ -101,33 +104,21 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void findAllById() {
-        List<Long> idList = new ArrayList<>();
-        idList.add((long) 5);
-        idList.add((long) 7);
-        idList.add((long) 3);
+        List<Long> expected = Lists.newArrayList(5L, 7L, 3L);
+        List<Long> unexpected = Lists.newArrayList(11L);
 
-        List<Long> expectedIdList = new ArrayList<>(idList);
-        idList.add((long) 11); // deleted, should not return
-
-        List<LearningObject> result = materialDao.findAllById(idList);
+        List<LearningObject> result = materialDao.findAllById(expected);
 
         assertNotNull(result);
         assertEquals(3, result.size());
 
-        for (LearningObject material : result) {
-            expectedIdList.remove(material.getId());
-        }
-
-        assertTrue(expectedIdList.isEmpty());
+        assertTrue(result.stream().noneMatch(m -> unexpected.contains(m.getId())));
     }
 
     @Test
     public void findAllByIdNoResult() {
-        List<Long> idList = new ArrayList<>();
-        idList.add((long) 1155);
-
+        List<Long> idList = Lists.newArrayList(1155L);
         List<LearningObject> result = materialDao.findAllById(idList);
-
         assertNotNull(result);
         assertEquals(0, result.size());
     }
@@ -135,7 +126,6 @@ public class MaterialDaoTest extends DatabaseTestBase {
     @Test
     public void findAllByIdEmptyList() {
         List<LearningObject> result = materialDao.findAllById(new ArrayList<>());
-
         assertNotNull(result);
         assertEquals(0, result.size());
     }
@@ -172,9 +162,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
         material.setViews((long) 123);
         material.setVisibility(Visibility.PUBLIC);
 
-        Picture picture = new OriginalPicture();
-        picture.setId(1);
-        material.setPicture(picture);
+        material.setPicture(picture());
 
         Material updated = materialDao.createOrUpdate(material);
 
@@ -213,58 +201,41 @@ public class MaterialDaoTest extends DatabaseTestBase {
 
     @Test
     public void findByRepositoryAndrepositoryIdentifier() {
-        Repository repository = new Repository();
-        repository.setId(1L);
-
-        Material material = materialDao.findByRepository(repository, "isssiiaawej");
-        assertMaterial1(material);
+        Material material = materialDao.findByRepository(repository(1L), "isssiiaawej");
+        assertMaterial1(material, TestLayer.DAO);
     }
 
     @Test
     public void findByRepositoryAndrepositoryIdentifierWhenRepositoryDoesNotExists() {
-        Repository repository = new Repository();
-        repository.setId(10L);
-
-        Material material = materialDao.findByRepository(repository, "isssiiaawej");
+        Material material = materialDao.findByRepository(repository(10L), "isssiiaawej");
         assertNull(material);
     }
 
     @Test
     public void findByRepositoryAndrepositoryIdentifierWhenMaterialIsDeleted() {
-        Repository repository = new Repository();
-        repository.setId(1L);
-
-        Material material = materialDao.findByRepository(repository, "isssiiaawejdsada4564");
+        Material material = materialDao.findByRepository(repository(1L), "isssiiaawejdsada4564");
         assertNotNull(material);
     }
 
     @Test
     public void findByRepositoryAndrepositoryIdentifierWhenRepositoryIdentifierDoesNotExist() {
-        Repository repository = new Repository();
-        repository.setId(1L);
-
-        Material material = materialDao.findByRepository(repository, "SomeRandomIdenetifier");
+        Material material = materialDao.findByRepository(repository(1L), "SomeRandomIdenetifier");
         assertNull(material);
     }
 
     @Test
     public void findByRepositoryAndrepositoryIdentifierNullRepositoryIdAndNullRepositoryIdentifier() {
-        Repository repository = new Repository();
-
-        Material material = materialDao.findByRepository(repository, null);
+        Material material = materialDao.findByRepository(new Repository(), null);
         assertNull(material);
     }
 
     @Test
     public void findByCreator() {
-        User creator = new User();
-        creator.setId(1L);
-
-        List<LearningObject> materials = materialDao.findByCreator(creator, 0, Integer.MAX_VALUE);
+        List<LearningObject> materials = materialDao.findByCreator(userWithId(1L), 0, Integer.MAX_VALUE);
         List<Long> collect = materials.stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(collect.containsAll(asList(MATERIAL_8, MATERIAL_4, MATERIAL_1)));
 
-        assertMaterial1((Material) materials.stream().filter(m -> m.getId().equals(MATERIAL_1)).findAny().orElseThrow(RuntimeException::new));
+        assertMaterial1((Material) materials.stream().filter(m -> m.getId().equals(MATERIAL_1)).findAny().orElseThrow(RuntimeException::new), TestLayer.DAO);
     }
 
     @Test
@@ -497,44 +468,16 @@ public class MaterialDaoTest extends DatabaseTestBase {
         assertEquals(1, materials.size());
     }
 
-    private void assertMaterial1(Material material) {
-        assertEquals(2, material.getTitles().size());
-        assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
-        assertEquals(2, material.getDescriptions().size());
-        assertEquals("Test description in estonian. (Russian available)", material.getDescriptions().get(0).getText());
-        Language descriptionLanguage = material.getDescriptions().get(0).getLanguage();
-        assertEquals(LanguageC.EST, descriptionLanguage.getCode());
-        assertEquals("Estonian", descriptionLanguage.getName());
-        Language language = material.getLanguage();
-        assertNotNull(language);
-        assertEquals(LanguageC.EST, language.getCode());
-        assertEquals("Estonian", language.getName());
-        assertEquals("et", language.getCodes().get(0));
-        assertNotNull(material.getPicture());
-        assertNotNull(material.getTaxons());
-        assertEquals(2, material.getTaxons().size());
-        assertEquals(new Long(2), material.getTaxons().get(0).getId());
-
-        Subject biology = (Subject) material.getTaxons().get(1);
-        assertEquals(new Long(20), biology.getId());
-        assertEquals(2, biology.getDomain().getSubjects().size());
-        assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
-
-        assertEquals(new Long(1), material.getRepository().getId());
-        assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
-        assertEquals("isssiiaawej", material.getRepositoryIdentifier());
-        assertEquals(new Long(1), material.getCreator().getId());
-        assertFalse(material.isEmbeddable());
-
-        assertEquals(2, material.getTargetGroups().size());
-        assertTrue(TargetGroupEnum.containsTargetGroup(material.getTargetGroups(), TargetGroupEnum.ZERO_FIVE));
-        assertTrue(TargetGroupEnum.containsTargetGroup(material.getTargetGroups(), TargetGroupEnum.SIX_SEVEN));
-        assertTrue(material.isSpecialEducation());
-        assertEquals("Lifelong_learning_and_career_planning", material.getCrossCurricularThemes().get(0).getName());
-        assertEquals("Cultural_and_value_competence", material.getKeyCompetences().get(0).getName());
-
-        Recommendation recommendation = material.getRecommendation();
-        assertNotNull(recommendation);
-        assertEquals(Long.valueOf(1L), recommendation.getId());
+    public Picture picture() {
+        Picture picture = new OriginalPicture();
+        picture.setId(1);
+        return picture;
     }
+
+    public Repository repository(long id) {
+        Repository repository = new Repository();
+        repository.setId(id);
+        return repository;
+    }
+
 }

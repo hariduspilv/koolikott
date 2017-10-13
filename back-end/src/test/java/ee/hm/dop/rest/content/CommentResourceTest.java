@@ -30,7 +30,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addPortfolioCommentNotLoggedIn() {
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_5, NICE_COMMENT));
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addMaterialComment_as_not_logged_in_user_does_not_add_comment_to_material() throws Exception {
         Response response = doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(MATERIAL_3, NICE_COMMENT));
-        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
         Material material = getMaterial(MATERIAL_3);
         assertTrue("Material comments empty", material.getComments().isEmpty());

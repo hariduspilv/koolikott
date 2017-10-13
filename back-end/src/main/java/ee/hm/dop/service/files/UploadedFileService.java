@@ -2,7 +2,7 @@ package ee.hm.dop.service.files;
 
 import ee.hm.dop.dao.UploadedFileDao;
 import ee.hm.dop.model.UploadedFile;
-import ee.hm.dop.service.content.DopConstants;
+import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.service.files.enums.FileDirectory;
 import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.io.LimitedSizeInputStream;
