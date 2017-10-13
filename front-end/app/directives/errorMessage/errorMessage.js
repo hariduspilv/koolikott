@@ -132,7 +132,7 @@ class controller extends Controller {
             }])
         else
         if (this.$scope.showImproper) {
-            this.setState('report', 'ERROR_MSG_IMPROPER', [{
+            this.setState('warning', 'ERROR_MSG_IMPROPER', [{
                 icon: 'delete',
                 label: 'BUTTON_REMOVE',
                 onClick: () => this.$scope.$emit('delete:learningObject'),
@@ -145,7 +145,7 @@ class controller extends Controller {
             }], this.getReasons.bind(this))
         } else
         if (this.$scope.showImproperAndBroken)
-            this.setState('report', 'ERROR_MSG_IMPROPER_AND_BROKEN', [{
+            this.setState('warning', 'ERROR_MSG_IMPROPER_AND_BROKEN', [{
                 icon: 'delete',
                 label: 'BUTTON_REMOVE',
                 onClick: () => this.$scope.$emit('delete:learningObject'),
