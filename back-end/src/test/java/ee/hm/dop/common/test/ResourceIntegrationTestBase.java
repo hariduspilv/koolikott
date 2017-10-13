@@ -72,8 +72,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return doGet(format(PortfolioResourceTest.GET_PORTFOLIO_URL, id), Portfolio.class);
     }
 
-    public Material getMaterial(long materialId) {
-        return doGet(format(MaterialResourceTest.GET_MATERIAL_URL, materialId), Material.class);
+    public Material getMaterial(long id) {
+        return doGet(format(MaterialResourceTest.GET_MATERIAL_URL, id), Material.class);
     }
 
     protected static <T> T doGet(String url, Class<? extends T> clazz) {

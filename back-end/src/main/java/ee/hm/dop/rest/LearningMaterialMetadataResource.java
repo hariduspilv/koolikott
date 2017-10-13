@@ -122,14 +122,14 @@ public class LearningMaterialMetadataResource extends BaseResource{
     }
 
     @GET
-    @Path("commentReportingReasons")
+    @Path("tagReportingReasons")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReportingReasonEnum> tagReportingReasons() {
         return ReportingReasonEnum.tagReportingReasons();
     }
 
     @GET
-    @Path("tagReportingReasons")
+    @Path("commentReportingReasons")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReportingReasonEnum> commentReportingReasons() {
         return ReportingReasonEnum.commentReportingReasons();
