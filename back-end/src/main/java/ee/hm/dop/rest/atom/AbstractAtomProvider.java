@@ -72,8 +72,7 @@ public abstract class AbstractAtomProvider<T extends Element> implements
     }
 
     protected Writer createWriter(String writerName) {
-        Writer w = ATOM_ENGINE.getWriterFactory().getWriter(writerName);
-        return w;
+        return ATOM_ENGINE.getWriterFactory().getWriter(writerName);
     }
 
     @Override
