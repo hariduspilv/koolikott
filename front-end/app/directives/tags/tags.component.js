@@ -111,9 +111,11 @@ class controller extends Controller {
     reportTag(tag) {
         this.tagsService
             .reportTag(tag, this.learningObject)
-            .then(() =>
+            .then(() => {
+                this.$rootScope.learningObjectImproper = true
+                this.$rootScope.$broadcast('errorMessage:reported')
                 this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
-            )
+            })
     }
     showMore() {
         this.tags = this.allTags
