@@ -1,0 +1,54 @@
+<md-dialog aria-label="Mango (Fruit)">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2 data-translate="REPORT_IMPROPER_TITLE"></h2>
+      <span data-flex></span>
+      <md-button class="md-icon-button" data-ng-click="cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <md-input-container class="md-block" data-ng-class="{ 'md-input-invalid': errors }">
+        <div data-layout="column" data-layout-gt-sm="row">
+          <md-checkbox
+            data-ng-repeat="reason in reasons"
+            name="{{ reason.key }}"
+            aria-label="{{ reason.key | translate }}"
+            data-ng-model="reason.checked"
+            >
+            <div data-translate="{{ reason.key }}" class="ellipsis"></div>
+          </md-checkbox>
+        </div>
+        <div data-ng-messages="errors" data-md-auto-hide="false">
+          <div
+            data-ng-message="reasonRequired"
+            data-translate="MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED"
+          ></div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label data-translate="IMPROPER_REPORT_DESCRIPTION"></label>
+        <textarea
+          data-ng-model="data.reportingText"
+          rows="1"
+          data-md-select-on-focus
+        ></textarea>
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions data-layout="row">
+    <md-button
+      data-translate="BUTTON_CANCEL"
+      aria-label="{{ 'BUTTON_CANCEL' | translate }}"
+      data-ng-click="cancel()"
+    ></md-button>
+    <md-button
+      class="md-primary"
+      data-translate="BUTTON_NOTIFY"
+      aria-label="{{ 'BUTTON_NOTIFY' | translate }}"
+      data-ng-click="sendReport()"
+    ></md-button>
+  </md-dialog-actions>
+</md-dialog>

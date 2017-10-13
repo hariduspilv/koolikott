@@ -1,20 +1,21 @@
 <md-toolbar class="error-message" data-md-colors="{ 'background-color': 'grey-900' }" data-ng-if="show">
-  <div class="md-toolbar-tools">
+  <div class="md-toolbar-tools" data-layout="row">
     <div
       data-layout="row"
+      data-flex
       data-flex-gt-xs="75"
       data-layout-align="start center"
-      data-ng-class="{ expandable: reports, expanded: showReports }"
-      data-ng-click="reports && toggleReports()"
+      data-ng-class="{ expandable: showExpandableReports, expanded: showReports }"
+      data-ng-click="showExpandableReports && toggleReports()"
       data-tooltip="Kuva kogu põhjuse tekst"
       >
       <md-icon data-ng-bind="icon" class="error-message-icon"></md-icon>
       <div data-flex>
-        <h2 data-ng-if="message" data-md-truncate data-ng-bind="message"></h2>
-        <h2 data-ng-if="!message" data-md-truncate data-translate="{{messageKey}}"></h2>
+        <h2 id="error-message-heading" data-ng-if="message" data-md-truncate data-ng-bind="message"></h2>
+        <h2 id="error-message-heading" data-ng-if="!message" data-md-truncate data-translate="{{messageKey}}"></h2>
       </div>
-      <md-icon data-ng-if="reports" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
-      <md-tooltip data-ng-if="reports" md-direction="bottom">
+      <md-icon data-ng-if="showExpandableReports" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
+      <md-tooltip data-ng-if="showExpandableReports" md-direction="bottom">
         <span data-translate="{{showReports ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
       </md-tooltip>
     </div>
@@ -34,7 +35,7 @@
     </div>
   </div>
 </md-toolbar>
-<md-content data-flex data-ng-if="reports" class="error-message-reports" data-ng-class="{ collapsed: !showReports }">
+<md-content data-flex data-ng-if="show && showExpandableReports" class="error-message-reports" data-ng-class="{ collapsed: !showReports }">
   <md-list>
     <md-list-item class="md-3-line md-long-text" data-ng-repeat="report in reports track by $index">
       <md-icon

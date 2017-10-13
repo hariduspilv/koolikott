@@ -362,30 +362,30 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             return id1 === id2;
         }
 
-        $scope.getReportLabel = (item) => {
+        $scope.getReportLabelKey = (item) => {
             if (item.reportCount === 1)
                 return item.reportingReasons.length === 1
-                    ? $translate.instant(item.reportingReasons[0].reason)
+                    ? item.reportingReasons[0].reason
                     : item.reportingReasons.length > 1
-                        ? $translate.instant('MULTIPLE_REASONS')
+                        ? 'MULTIPLE_REASONS'
                         : ''
 
-            let reason = ''
+            let reasonKey = ''
             const allReports = unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
 
             for (let i = 0; i < allReports.length; i++) {
                 if (allReports[i].reportingReasons.length > 1)
-                    return $translate.instant('MULTIPLE_REASONS')
+                    return 'MULTIPLE_REASONS'
 
                 if (allReports[i].reportingReasons.length === 1) {
-                    if (!reason)
-                        reason = $translate.instant(allReports[i].reportingReasons[0].reason)
-                    else if (reason != allReports[i].reportingReasons[0].reason)
-                        return $translate.instant('MULTIPLE_REASONS')
+                    if (!reasonKey)
+                        reasonKey = allReports[i].reportingReasons[0].reason
+                    else if (reasonKey != allReports[i].reportingReasons[0].reason)
+                        return 'MULTIPLE_REASONS'
                 }
             }
 
-            return reason
+            return reasonKey
         }
     }
 ])
