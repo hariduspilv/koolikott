@@ -46,13 +46,17 @@ public class ImproperContentService {
         improper.setReviewed(false);
         improper.setReportingReasons(new ArrayList<>());
 
-        ImproperContent create = improperContentDao.createOrUpdate(improper);
+        ImproperContent saved = improperContentDao.createOrUpdate(improper);
         for (ReportingReason reason : improperContent.getReportingReasons()) {
             if (reason.getId() == null) {
-                saveReason(create, reason);
+                saveReason(saved, reason);
             }
         }
-        return create;
+        if (saved.getReportingReasons().isEmpty()){
+            throw new RuntimeException("no reason specified");
+        }
+        improperContentDao.createOrUpdate(saved);
+        return saved;
     }
 
     /**
