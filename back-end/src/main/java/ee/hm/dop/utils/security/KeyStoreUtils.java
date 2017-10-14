@@ -30,7 +30,6 @@ public class KeyStoreUtils {
     private static KeyStore DOPkeyStore;
 
     public static KeyStore loadKeystore(String filename, String password) {
-        KeyStore keyStore = null;
         InputStream inputStream = null;
 
         try {
@@ -39,20 +38,17 @@ public class KeyStoreUtils {
                 throw new RuntimeException(format("Failed to load keystore in path: %s", filename));
             }
 
-            keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(inputStream, password.toCharArray());
+            return keyStore;
         } catch (Exception e) {
             throw new RuntimeException(format("Failed to load keystore in path: %s", filename), e);
         } finally {
             closeQuietly(inputStream);
         }
-
-        return keyStore;
     }
 
     public static Credential getSigningCredential(KeyStore keystore, String entityId, String entityPassword) {
-        X509Credential credential = null;
-
         try {
             Map<String, String> passwords = new HashMap<>();
             passwords.put(entityId, entityPassword);
@@ -61,12 +57,12 @@ public class KeyStoreUtils {
             Criteria criteria = new EntityIDCriteria(entityId);
             CriteriaSet criteriaSet = new CriteriaSet(criteria);
 
-            credential = (X509Credential) resolver.resolveSingle(criteriaSet);
+            return resolver.resolveSingle(criteriaSet);
         } catch (Exception e) {
             logger.error("Error while getting signing credential.");
+            return null;
         }
 
-        return credential;
     }
 
     public static void setKeyStore(KeyStore keyStore) {
@@ -79,7 +75,6 @@ public class KeyStoreUtils {
             String password = configuration.getString(KEYSTORE_PASSWORD);
             DOPkeyStore = KeyStoreUtils.loadKeystore(filename, password);
         }
-
         return DOPkeyStore;
     }
 

@@ -25,9 +25,7 @@ import org.slf4j.LoggerFactory;
 public class ApplicationManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationManager.class);
-
     private static final int DEFAULT_REMOTE_PORT = 9999;
-
     private static final String STOP_COMMAND = "stop";
 
     @Inject
@@ -55,16 +53,13 @@ public class ApplicationManager {
     }
 
     public static boolean isApplicationRunning() {
-        boolean isRunning = false;
-
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
-            isRunning = true;
-        } catch (IOException ce) {
+            return true;
+        } catch (IOException ignored) {
             logger.info("Application is not running.");
         }
-
-        return isRunning;
+        return false;
     }
 
     private static void write(String data, BufferedWriter writer) throws IOException {
@@ -96,8 +91,7 @@ public class ApplicationManager {
                     commandExecutor.setName("command-executor");
                     commandExecutor.setDaemon(true);
                     commandExecutor.start();
-                } catch (IOException e) {
-                    // ignore
+                } catch (IOException ignored) {
                 }
             }
         }
@@ -118,7 +112,7 @@ public class ApplicationManager {
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
                 StringBuilder stringBuilder = new StringBuilder();
-                int data = 0;
+                int data;
                 while ((data = reader.read()) >= 0) {
                     char character = (char) data;
                     if (character >= SPACE && character <= TILDE) {
@@ -128,8 +122,8 @@ public class ApplicationManager {
                         stringBuilder = new StringBuilder();
                     }
                 }
-            } catch (IOException e) {
-                // ignore
+            } catch (IOException ignored) {
+
             } finally {
                 IOUtils.closeQuietly(socket);
             }
