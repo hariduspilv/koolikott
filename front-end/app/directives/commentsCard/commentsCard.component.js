@@ -46,8 +46,7 @@ class controller extends Controller {
 
         return this.$mdDialog
             .show({
-                    controller: ['controller1', '$scope', '$mdDialog',
-                        function controller1($scope, $mdDialog){
+                    controller: ['$scope', '$mdDialog', function ($scope, $mdDialog){
                     $scope.data = {
                         learningObject,
                         reportingText: ''

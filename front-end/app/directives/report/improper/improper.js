@@ -16,8 +16,8 @@ class controller extends Controller {
     showConfirmationDialog() {
         this.$mdDialog
             .show({
-                controller: ['controller2', '$scope', '$mdDialog', 'data', 'reasons', 'loading',
-                    function controller2($scope, $mdDialog, data, reasons, loading) {
+                controller: ['$scope', '$mdDialog', 'data', 'reasons', 'loading',
+                    function ($scope, $mdDialog, data, reasons, loading) {
                     $scope.data = data
                     $scope.reasons = reasons
                     $scope.loading = loading
