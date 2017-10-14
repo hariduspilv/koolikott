@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import ee.hm.dop.model.*;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
+import ee.hm.dop.rest.filter.SecurityFilter;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
@@ -46,7 +47,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     private User login(String idCode) {
-        if (authenticationFilter != null){
+        if (authenticationFilter != null) {
             logout();
         }
         AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + idCode, new GenericType<AuthenticatedUser>() {
@@ -63,7 +64,12 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     public void logout() {
         if (authenticationFilter != null) {
             Response response = doPost(LOGOUT);
-            assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
+            if (SecurityFilter.HTTP_AUTHENTICATION_TIMEOUT == response.getStatus()) {
+                //ignored as test user has already logged out
+                //tests have same user logging in and out multiple times
+            } else {
+                assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
+            }
             authenticationFilter = null;
         }
     }
