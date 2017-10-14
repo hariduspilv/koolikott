@@ -8,6 +8,7 @@ class controller extends Controller {
     }
     $onInit() {
         this.$scope.$on('dashboard:adminCountsUpdated', () => this.init())
+        this.$scope.$on('errorMessage:reported', () => this.init())
         this.$rootScope.$watch('learningObjectChanged', (newValue, oldValue) => {
             if (newValue != oldValue)
                 this.init()

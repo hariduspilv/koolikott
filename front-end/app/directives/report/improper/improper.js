@@ -76,6 +76,8 @@ class controller extends Controller {
                 if (status == 200) {
                     this.$scope.data.reportingReasons = []
                     this.$scope.data.reportingText = ''
+                    this.$rootScope.learningObjectImproper = true
+                    this.$rootScope.$broadcast('errorMessage:reported')
                     this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
                 }
             })
@@ -83,6 +85,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$mdDialog',
     '$translate',
     '$timeout',

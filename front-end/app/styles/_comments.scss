@@ -20,3 +20,22 @@
 .comments__item {
   margin-bottom: $md-padding;
 }
+
+.comment__date {
+  overflow: visible !important;
+}
+
+md-button.comment__report-button,
+.md-button.comment__report-button {
+  margin: -8px -8px -8px -4px;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+
+  md-icon,
+  .md-icon {
+    font-size: 16px;
+    min-width: 16px;
+    min-height: 16px;
+  }
+}
