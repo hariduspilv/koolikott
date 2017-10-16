@@ -26,14 +26,18 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         init();
 
         function init() {
-            serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
-
             var _init = function (titleKey, restUri, sortBy, merge) {
                 $scope.titleTranslationKey = titleKey
                 serverCallService.makeGet(restUri, {}, function (data) {
                     if (data)
                         $scope.getItemsSuccess(data, sortBy, merge);
                 })
+
+                if (
+                    $scope.viewPath == '/dashboard/moderators' ||
+                    $scope.viewPath == '/dashboard/restrictedUsers'
+                )
+                    serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail)
             }
 
             switch ($scope.viewPath) {
