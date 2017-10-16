@@ -24,7 +24,7 @@ class controller extends Controller {
             .show({
                 controller: ['$scope', '$mdDialog', 'data', 'reasons', 'loading',
                     function ($scope, $mdDialog, data, reasons, loading) {
-                    $scope.title = this.$translate.instant('REPORT_IMPROPER_TITLE')
+                    $scope.title = title
                     $scope.data = data
                     $scope.reasons = reasons
                     $scope.loading = loading
@@ -58,6 +58,7 @@ class controller extends Controller {
                 templateUrl: 'directives/report/improper/improper.dialog.html',
                 clickOutsideToClose:true,
                 locals: {
+                    title: this.$translate.instant('REPORT_IMPROPER_TITLE'),
                     data: this.$scope.data,
                     reasons: this.$scope.reasons,
                     loading: this.$scope.loading
