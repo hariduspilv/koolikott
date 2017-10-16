@@ -1,1 +1,1 @@
-ALTER TABLE dop.UploadedFile ADD url VARCHAR(255) NULL;
+ALTER TABLE UploadedFile ADD url VARCHAR(255) NULL;
