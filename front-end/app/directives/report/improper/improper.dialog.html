@@ -55,6 +55,7 @@
       data-translate="BUTTON_NOTIFY"
       aria-label="{{ 'BUTTON_NOTIFY' | translate }}"
       data-ng-click="sendReport()"
+      data-ng-disabled="!submitEnabled"
     ></md-button>
   </md-dialog-actions>
 </md-dialog>

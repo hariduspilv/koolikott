@@ -29,9 +29,11 @@ class controller extends Controller {
                     $scope.loading = loading
                     $scope.cancel = () => $mdDialog.cancel()
                     $scope.sendReport = () => {
-                        data.reportingReasons.length
-                            ? $mdDialog.hide()
-                            : $scope.errors = { reasonRequired: true }
+                        if (data.reportingReasons.length)
+                            return $mdDialog.hide()
+                        
+                        $scope.errors = { reasonRequired: true }
+                        $scope.submitEnabled = false
                     }
                     $scope.$watch('reasons', (newValue) => {
                         if (Array.isArray(newValue)) {
@@ -46,7 +48,10 @@ class controller extends Controller {
 
                             if (anyChecked)
                                 $scope.errors = null
-                        }
+                            
+                            $scope.submitEnabled = anyChecked
+                        } else
+                            $scope.submitEnabled = false
                     }, true)
                 }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
@@ -74,8 +79,6 @@ class controller extends Controller {
     }
     sendReport() {
         const data = Object.assign({}, this.$scope.data)
-
-        console.log('rest/impropers:', data)
 
         this.serverCallService
             .makePut('rest/impropers', data)
