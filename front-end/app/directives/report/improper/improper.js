@@ -24,6 +24,7 @@ class controller extends Controller {
             .show({
                 controller: ['$scope', '$mdDialog', 'data', 'reasons', 'loading',
                     function ($scope, $mdDialog, data, reasons, loading) {
+                    $scope.title = this.$translate.instant('REPORT_IMPROPER_TITLE')
                     $scope.data = data
                     $scope.reasons = reasons
                     $scope.loading = loading

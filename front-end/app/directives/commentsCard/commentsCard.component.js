@@ -47,6 +47,7 @@ class controller extends Controller {
         return this.$mdDialog
             .show({
                     controller: ['$scope', '$mdDialog', function ($scope, $mdDialog){
+                    $scope.title = this.$translate.instant('TAG_TOOLTIP_REPORT_AS_IMPROPER')
                     $scope.data = {
                         learningObject,
                         reportingText: ''
@@ -102,6 +103,7 @@ controller.$inject = [
     '$scope',
     '$rootScope',
     '$mdDialog',
+    '$translate',
     'authenticatedUserService',
     'serverCallService',
     'toastService'

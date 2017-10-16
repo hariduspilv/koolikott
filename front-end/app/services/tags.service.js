@@ -27,6 +27,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             return $mdDialog
                 .show({
                     controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
+                        $scope.title = $translate.instant('TAG_TOOLTIP_REPORT_AS_IMPROPER')
                         $scope.data = {
                             reportingText: ''
                         }
