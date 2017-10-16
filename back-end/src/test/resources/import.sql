@@ -96,6 +96,8 @@ insert into Taxon(id, name, level) values (12, 'DomainWithTopics', 'DOMAIN');
 insert into Domain(id, educationalContext) values (12, 6);
 insert into Taxon(id, name, level) values (13, 'SecondaryDomain', 'DOMAIN');
 insert into Domain(id, educationalContext) values (13, 3);
+insert into Taxon(id, name, level) values (14, 'Computer_science', 'DOMAIN');
+insert into Domain(id, educationalContext) values (14, 5);
 
 -- Subject
 
@@ -105,6 +107,18 @@ insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
 insert into Subject(id, domain) values (21, 10);
 insert into Taxon(id, name, level) values (22, 'SecondarySubject', 'SUBJECT');
 insert into Subject(id, domain) values (22, 13);
+
+-- Specialization
+
+insert into Taxon(id, name, level) values (40, 'Computers_and_Networks', 'SPECIALIZATION');
+insert into Specialization(id, domain) values (40, 14);
+
+-- Module
+
+insert into Taxon(id, name, level) values (50, 'IT_õigus', 'MODULE');
+insert into Module(id, domain) values (50, 40);
+insert into Taxon(id, name, level) values (51, 'Kommunikatsioon', 'MODULE');
+insert into Module(id, domain) values (51, 40);
 
 -- Topics from Subjects
 
@@ -119,6 +133,23 @@ insert into Taxon(id, name, level) values (32, 'EstoniaAndTheWould', 'TOPIC');
 insert into Topic(id, domain) values (32, 12);
 insert into Taxon(id, name, level) values (33, 'VogaisTonicas', 'TOPIC');
 insert into Topic(id, domain) values (33, 12);
+
+-- Topics from Module
+
+insert into Taxon(id, name, level) values (34, 'Infoühiskonna_tehnoloogiad', 'TOPIC');
+insert into Topic(id, domain) values (34, 50);
+insert into Taxon(id, name, level) values (35, 'Arvuti_töövahendina', 'TOPIC');
+insert into Topic(id, domain) values (35, 51);
+
+-- Subtopic
+
+insert into Taxon(id, name, level) values (60, 'arvsõna', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (60, 30);
+insert into Taxon(id, name, level) values (61, 'konkurents', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (61, 32);
+insert into Taxon(id, name, level) values (62, 'tehnoloogia_ja_ühiskond', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (62, 34);
+
 
 -- EstCore taxon mapping
 
@@ -624,3 +655,10 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (115, 0, CUR
 
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
 INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');
+
+-- UserTaxon
+
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 1);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 10);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 21);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 31);
