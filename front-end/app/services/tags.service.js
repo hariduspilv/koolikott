@@ -27,6 +27,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             return $mdDialog
                 .show({
                     controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
+                        $scope.title = $translate.instant('TAG_TOOLTIP_REPORT_AS_IMPROPER')
                         $scope.data = {
                             reportingText: ''
                         }
@@ -46,6 +47,12 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                                 }
                                 $scope.loading = false
                             })
+
+                        $scope.characters = { used: 0, remaining: 255 }
+                        $scope.$watch('data.reportingText', (newValue) => {
+                            const used = newValue ? newValue.length : 0
+                            $scope.characters = { used, remaining: 255 - used }
+                        })
                     }],
                     templateUrl: 'directives/report/improper/improper.dialog.html',
                     clickOutsideToClose:true

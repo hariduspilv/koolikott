@@ -46,7 +46,8 @@ class controller extends Controller {
 
         return this.$mdDialog
             .show({
-                    controller: ['$scope', '$mdDialog', function ($scope, $mdDialog){
+                    controller: ['$scope', '$mdDialog', 'title', function ($scope, $mdDialog, title){
+                    $scope.title = title
                     $scope.data = {
                         learningObject,
                         reportingText: ''
@@ -68,9 +69,18 @@ class controller extends Controller {
                             console.log('commentReportingReasons:', reasons)
                             $scope.loading = false
                         })
+
+                    $scope.characters = { used: 0, remaining: 255 }
+                    $scope.$watch('data.reportingText', (newValue) => {
+                        const used = newValue ? newValue.length : 0
+                        $scope.characters = { used, remaining: 255 - used }
+                    })
                 }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
-                clickOutsideToClose: true
+                clickOutsideToClose: true,
+                locals: {
+                    title: this.$translate.instant('COMMENT_TOOLTIP_REPORT_AS_IMPROPER')
+                }
             })
             .then(({ data, reasons }) => {
                 Object.assign(data, {
@@ -102,6 +112,7 @@ controller.$inject = [
     '$scope',
     '$rootScope',
     '$mdDialog',
+    '$translate',
     'authenticatedUserService',
     'serverCallService',
     'toastService'

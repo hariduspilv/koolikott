@@ -1,7 +1,7 @@
 <md-dialog aria-label="Mango (Fruit)">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2 data-translate="REPORT_IMPROPER_TITLE"></h2>
+      <h2 data-ng-bind="title"></h2>
       <span data-flex></span>
       <md-button class="md-icon-button" data-ng-click="cancel()">
         <md-icon aria-label="Close dialog">close</md-icon>
@@ -39,8 +39,10 @@
         <textarea
           data-ng-model="data.reportingText"
           rows="1"
+          maxlength="255"
           data-md-select-on-focus
         ></textarea>
+        <div class="hint" data-ng-bind="characters.used+'/'+characters.remaining"></div>
       </md-input-container>
     </div>
   </md-dialog-content>
@@ -55,6 +57,7 @@
       data-translate="BUTTON_NOTIFY"
       aria-label="{{ 'BUTTON_NOTIFY' | translate }}"
       data-ng-click="sendReport()"
+      data-ng-disabled="!submitEnabled"
     ></md-button>
   </md-dialog-actions>
 </md-dialog>
