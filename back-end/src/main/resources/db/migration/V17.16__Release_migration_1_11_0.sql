@@ -1,7 +1,10 @@
 SET foreign_key_checks = 0;
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'TAG_TOOLTIP_REPORT_AS_IMPROPER', 'Teavita ebasobivast võtmesõnast');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'TAG_TOOLTIP_REPORT_AS_IMPROPER', 'Notify of an improper tag');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'TAG_TOOLTIP_REPORT_AS_IMPROPER', '');
+UPDATE Translation SET translation = 'Teavita ebasobivast võtmesõnast'
+WHERE translationKey = 'TAG_TOOLTIP_REPORT_AS_IMPROPER' and translationGroup = 1;
+UPDATE Translation SET translation = 'Notify of an improper tag'
+WHERE translationKey = 'TAG_TOOLTIP_REPORT_AS_IMPROPER' and translationGroup = 3;
+UPDATE Translation SET translation = ''
+WHERE translationKey = 'TAG_TOOLTIP_REPORT_AS_IMPROPER' and translationGroup = 2;
 
 SET foreign_key_checks = 1;
