@@ -69,6 +69,12 @@ class controller extends Controller {
                             console.log('commentReportingReasons:', reasons)
                             $scope.loading = false
                         })
+
+                    $scope.characters = { used: 0, remaining: 255 }
+                    $scope.$watch('data.reportingText', (newValue) => {
+                        const used = newValue ? newValue.length : 0
+                        $scope.characters = { used, remaining: 255 - used }
+                    })
                 }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
                 clickOutsideToClose: true,
