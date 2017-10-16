@@ -16,6 +16,12 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "  JOIN LearningObject o ON f.learningObject = o.id\n" +
                         "WHERE f.reviewed = 0\n" +
                         "  AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
+                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
+                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   AND ic.reviewed = 0)\n" +
+                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
+                        "                   WHERE bc.material = f.learningObject" +
+                        "                   AND bc.deleted = 0 )" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
                 .setMaxResults(300)
                 .getResultList();
@@ -31,6 +37,12 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "  JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "WHERE f.reviewed = 0\n" +
                         "  AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
+                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
+                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   AND ic.reviewed = 0)\n" +
+                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
+                        "                   WHERE bc.material = f.learningObject" +
+                        "                   AND bc.deleted = 0 )" +
                         "  AND ut.user = :user\n" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
                 .setParameter("user", user.getId())
@@ -44,7 +56,13 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "FROM FirstReview f\n" +
                         "   JOIN LearningObject o ON f.learningObject = o.id\n" +
                         "WHERE f.reviewed = 0\n" +
-                        "   AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n")
+                        "   AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
+                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
+                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   AND ic.reviewed = 0)\n" +
+                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
+                        "                   WHERE bc.material = f.learningObject" +
+                        "                   AND bc.deleted = 0 )")
                 .getSingleResult();
     }
 
@@ -57,7 +75,13 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "   JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "WHERE f.reviewed = 0\n" +
                         "   AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "   AND ut.user = :user\n")
+                        "   AND ut.user = :user\n" +
+                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
+                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   AND ic.reviewed = 0)\n" +
+                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
+                        "                   WHERE bc.material = f.learningObject" +
+                        "                   AND bc.deleted = 0 )")
                 .setParameter("user", user.getId())
                 .getSingleResult();
     }
