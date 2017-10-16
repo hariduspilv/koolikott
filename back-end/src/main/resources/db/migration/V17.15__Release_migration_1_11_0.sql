@@ -1,19 +1,19 @@
 SET foreign_key_checks = 0;
 
-UPDATE Translation WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 1 SET translation = 'Vali vähemalt üks põhjus');
-UPDATE Translation WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 2 SET translation = 'Please choose at least one reason');
-UPDATE Translation WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 3 SET translation = '');
+UPDATE Translation SET translation = 'Vali vähemalt üks põhjus' WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 1;
+UPDATE Translation SET translation = 'Please choose at least one reason' WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 3;
+UPDATE Translation SET translation = '' WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 2;
 
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'LO_CONTENT', 'Sobimatu sisu');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'LO_CONTENT', 'Improper content');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'LO_CONTENT', '');
+UPDATE Translation SET translation='Sobimatu sisu' WHERE translationKey = 'LO_CONTENT' and translationGroup = 1;
+UPDATE Translation SET translation='Improper content' WHERE translationKey = 'LO_CONTENT' and translationGroup = 3;
+UPDATE Translation SET translation='' WHERE translationKey = 'LO_CONTENT' and translationGroup = 2;
 
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'LO_FORM', 'Katkine vorm või viit');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'LO_FORM', 'Broken form or link');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'LO_FORM', '');
+UPDATE Translation SET translation='Katkine vorm või viit' WHERE translationKey = 'LO_FORM' and translationGroup = 1;
+UPDATE Translation SET translation='Broken form or link' WHERE translationKey = 'LO_FORM' and translationGroup = 3;
+UPDATE Translation SET translation='' WHERE translationKey = 'LO_FORM' and translationGroup = 2;
 
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'LO_METADATA', 'Puudus kirjeldavates andmetes');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'LO_METADATA', 'Invalid metadata');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'LO_METADATA', '');
+UPDATE Translation SET translation='Puudus kirjeldavates andmetes' WHERE translationKey = 'LO_METADATA' and translationGroup = 1;
+UPDATE Translation SET translation='Invalid metadata' WHERE translationKey = 'LO_METADATA' and translationGroup = 3;
+UPDATE Translation SET translation='' WHERE translationKey = 'LO_METADATA' and translationGroup = 2;
 
 SET foreign_key_checks = 1;
