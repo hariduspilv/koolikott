@@ -1,4 +1,4 @@
-CREATE TABLE dop.Version
+CREATE TABLE Version
 (
   id       BIGINT PRIMARY KEY AUTO_INCREMENT,
   version  VARCHAR(50),

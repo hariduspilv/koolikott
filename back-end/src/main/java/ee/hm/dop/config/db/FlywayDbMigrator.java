@@ -25,6 +25,7 @@ public class FlywayDbMigrator implements DatabaseMigrator {
         flyway.setDataSource(getUrl(), getUser(), getPassword());
         flyway.setBaselineOnMigrate(true);
         try {
+            flyway.repair();
             flyway.migrate();
         } catch (final Exception e) {
             logger.error("Flyway migration failed, doing a repair and retrying ...");

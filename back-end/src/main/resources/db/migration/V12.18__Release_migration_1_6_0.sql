@@ -9,8 +9,8 @@ CREATE TABLE ChapterObject (
     ON DELETE RESTRICT
 );
 
-ALTER TABLE dop.Chapter_Material
-  RENAME TO dop.Row_Material;
+ALTER TABLE Chapter_Material
+  RENAME TO Row_Material;
 
 ALTER TABLE Row_Material
   ADD id BIGINT NOT NULL AUTO_INCREMENT UNIQUE;
