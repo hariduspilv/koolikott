@@ -34,6 +34,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                         $scope.cancel = () => $mdDialog.cancel()
                         $scope.sendReport = () => $mdDialog.hide($scope)
                         $scope.loading = true
+                        $scope.submitEnabled = true
 
                         serverCallService
                             .makeGet('rest/learningMaterialMetadata/tagReportingReasons')
