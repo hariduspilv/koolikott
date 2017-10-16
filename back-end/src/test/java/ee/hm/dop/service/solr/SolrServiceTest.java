@@ -29,6 +29,7 @@ import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -51,6 +52,11 @@ public class SolrServiceTest {
     private WebTarget target;
     @Mock
     private Builder builder;
+
+    @Before
+    public void setUp() throws Exception {
+        solrService.postConstruct("http://localhost:8983/solr/dop/");
+    }
 
     @Test
     public void search() {

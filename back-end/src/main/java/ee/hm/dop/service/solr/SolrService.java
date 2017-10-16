@@ -52,9 +52,14 @@ public class SolrService implements SolrEngineService {
     private SolrClient solrClient;
     private SolrIndexThread indexThread;
 
-    SolrService() {
+    @Inject
+    public void postConstruct() {
+        postConstruct(configuration.getString(SEARCH_SERVER));
+    }
+
+    void postConstruct(String url) {
         solrClient = new HttpSolrClient.Builder()
-                .withBaseSolrUrl("http://localhost:8983/solr/dop")
+                .withBaseSolrUrl(url)
                 .build();
         indexThread = new SolrIndexThread();
         indexThread.start();
