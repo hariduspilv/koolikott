@@ -46,8 +46,8 @@ class controller extends Controller {
 
         return this.$mdDialog
             .show({
-                    controller: ['$scope', '$mdDialog', function ($scope, $mdDialog){
-                    $scope.title = this.$translate.instant('TAG_TOOLTIP_REPORT_AS_IMPROPER')
+                    controller: ['$scope', '$mdDialog', 'title', function ($scope, $mdDialog, title){
+                    $scope.title = title
                     $scope.data = {
                         learningObject,
                         reportingText: ''
@@ -71,7 +71,10 @@ class controller extends Controller {
                         })
                 }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
-                clickOutsideToClose: true
+                clickOutsideToClose: true,
+                locals: {
+                    title: this.$translate.instant('COMMENT_TOOLTIP_REPORT_AS_IMPROPER')
+                }
             })
             .then(({ data, reasons }) => {
                 Object.assign(data, {
