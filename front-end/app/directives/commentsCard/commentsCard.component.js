@@ -55,6 +55,7 @@ class controller extends Controller {
                     $scope.cancel = () => $mdDialog.cancel()
                     $scope.sendReport = () => $mdDialog.hide($scope)
                     $scope.loading = true
+                    $scope.submitEnabled = true
 
                     serverCallService
                         .makeGet('rest/learningMaterialMetadata/commentReportingReasons')

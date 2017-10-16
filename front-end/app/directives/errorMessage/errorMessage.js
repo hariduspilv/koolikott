@@ -143,7 +143,9 @@ class controller extends Controller {
                 label: 'REPORT_NOT_IMPROPER',
                 onClick: () => this.$scope.$emit('setNotImproper:learningObject'),
                 show: isAdmin || isModerator,
-            }], this.getReasons.bind(this))
+            }], () =>
+                this.getReasons()
+            )
         } else
         if (this.$scope.showImproperAndBroken)
             this.setState('warning', 'ERROR_MSG_IMPROPER_AND_BROKEN', [{
@@ -159,7 +161,10 @@ class controller extends Controller {
                     this.$scope.$emit('markCorrect:learningObject')
                 },
                 show: isAdmin || isModerator,
-            }], this.getReasons.bind(this))
+            }], () => {
+                this.forceCollapsible = true
+                this.getReasons(false)
+            })
         else
         if (this.$scope.showUnreviewed) {
             var messageKey = this.data && this.data.type == '.Portfolio'
@@ -185,16 +190,17 @@ class controller extends Controller {
         if (typeof cb === 'function')
             cb()
     }
-    getReasons() {
+    getReasons(setMessage = true) {
         if (this.data && this.data.id)
             this.serverCallService
                 .makeGet('rest/impropers/'+this.data.id)
                 .then(({ data: reports }) => {
                     if (Array.isArray(reports) && reports.length) {
-                        const setMessage = (reasons = '') => {
-                            this.$scope.message = reports[0].reportingText
-                                ? reasons.join(', ')+': '+reports[0].reportingText
-                                : reasons.join(', ')
+                        const done = (reasons = '') => {
+                            if (setMessage)
+                                this.$scope.message = reports[0].reportingText
+                                    ? reasons.join(', ')+': '+reports[0].reportingText
+                                    : reasons.join(', ')
 
                             if (!this.listeningResize) {
                                 this.listeningResize = true
@@ -206,10 +212,10 @@ class controller extends Controller {
                         }
 
                         !reports[0].reportingReasons
-                            ? setMessage()
+                            ? done()
                             : Promise
                                 .all(reports[0].reportingReasons.map(r => this.$translate(r.reason)))
-                                .then(setMessage)
+                                .then(done)
 
                         this.$scope.reports = reports
                     }
@@ -223,7 +229,7 @@ class controller extends Controller {
                 : this.$routeParams.id
     }
     toggleExpandableReports() {
-        if (this.$scope.reports.length > 1)
+        if (this.$scope.reports.length > 1 || this.forceCollapsible)
             return this.$scope.showExpandableReports = true
 
         const { offsetWidth, scrollWidth } = document.getElementById('error-message-heading')
