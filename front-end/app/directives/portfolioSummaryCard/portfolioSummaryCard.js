@@ -167,8 +167,16 @@ angular.module('koolikottApp')
 
             function restoreSuccess() {
                 toastService.show('PORTFOLIO_RESTORED');
-                $scope.portfolio.deleted = false;
-                $rootScope.learningObjectDeleted = false;
+                $scope.portfolio.deleted = false
+                $scope.portfolio.improper = false
+                $scope.portfolio.unReviewed = false
+                $scope.portfolio.broken = false
+                $scope.portfolio.changed = false
+                $rootScope.learningObjectDeleted = false
+                $rootScope.learningObjectImproper = false
+                $rootScope.learningObjectUnreviewed = false
+                $rootScope.learningObjectBroken = false
+                $rootScope.learningObjectChanged = false
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 

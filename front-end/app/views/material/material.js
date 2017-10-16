@@ -423,8 +423,16 @@ angular.module('koolikottApp')
 
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');
-                $scope.material.deleted = false;
-                $rootScope.learningObjectDeleted = false;
+                $scope.material.deleted = false
+                $scope.material.improper = false
+                $scope.material.unReviewed = false
+                $scope.material.broken = false
+                $scope.material.changed = false
+                $rootScope.learningObjectDeleted = false
+                $rootScope.learningObjectImproper = false
+                $rootScope.learningObjectUnreviewed = false
+                $rootScope.learningObjectBroken = false
+                $rootScope.learningObjectChanged = false
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 
