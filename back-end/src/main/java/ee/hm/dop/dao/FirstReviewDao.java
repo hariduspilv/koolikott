@@ -3,11 +3,15 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
 public class FirstReviewDao extends AbstractDao<FirstReview> {
+
+    @Inject
+    private TaxonDao taxonDao;
 
     public List<FirstReview> findAllUnreviewed() {
         return getEntityManager()
@@ -34,7 +38,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "FROM FirstReview f\n" +
                         "  JOIN LearningObject o ON f.learningObject = o.id\n" +
                         "  JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                        "  JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "WHERE f.reviewed = 0\n" +
                         "  AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
                         "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
@@ -43,9 +46,9 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
                         "                   AND bc.deleted = 0 )" +
-                        "  AND ut.user = :user\n" +
+                        "  AND lt.taxon IN (:taxonIds)\n" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
-                .setParameter("user", user.getId())
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .setMaxResults(300)
                 .getResultList();
     }
@@ -72,17 +75,16 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "FROM FirstReview f\n" +
                         "   JOIN LearningObject o ON f.learningObject = o.id\n" +
                         "   JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                        "   JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "WHERE f.reviewed = 0\n" +
                         "   AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "   AND ut.user = :user\n" +
                         "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
                         "                   WHERE ic.learningObject = f.learningObject " +
                         "                   AND ic.reviewed = 0)\n" +
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
-                        "                   AND bc.deleted = 0 )")
-                .setParameter("user", user.getId())
+                        "                   AND bc.deleted = 0 ) " +
+                        "  AND lt.taxon IN (:taxonIds)")
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult();
     }
 }
