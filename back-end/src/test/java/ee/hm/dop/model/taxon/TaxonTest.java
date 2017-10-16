@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import java.util.Set;
+
 public class TaxonTest {
 
     @Test
@@ -34,6 +36,11 @@ public class TaxonTest {
         Taxon taxon3 = new Taxon() {
             @Override
             public Taxon getParent() {
+                return null;
+            }
+
+            @Override
+            public Set<? extends Taxon> getChildren() {
                 return null;
             }
         };
@@ -70,6 +77,11 @@ public class TaxonTest {
             public Taxon getParent() {
                 return null;
             }
+
+            @Override
+            public Set<? extends Taxon> getChildren() {
+                return null;
+            }
         };
         assertNotEquals(taxon.hashCode(), taxon3.hashCode());
 
@@ -81,6 +93,12 @@ public class TaxonTest {
     private class TaxonImpl extends Taxon {
         @Override
         public Taxon getParent() {
+            return null;
+        }
+
+
+        @Override
+        public Set<? extends Taxon> getChildren() {
             return null;
         }
     }

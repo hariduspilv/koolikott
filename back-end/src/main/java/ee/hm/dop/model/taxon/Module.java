@@ -45,4 +45,10 @@ public class Module extends Taxon {
     public Taxon getParent() {
         return getSpecialization();
     }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return getTopics();
+    }
 }

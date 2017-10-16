@@ -74,4 +74,10 @@ public class Topic extends Taxon {
         if(module != null) return module;
         return null;
     }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return getSubtopics();
+    }
 }
