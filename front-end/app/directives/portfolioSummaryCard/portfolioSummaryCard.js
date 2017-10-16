@@ -127,7 +127,7 @@ angular.module('koolikottApp')
                 };
 
                 $scope.setNotImproper = () => {
-                    if ($scope.isAdmin() && $scope.portfolio) {
+                    if (($scope.isAdmin() || $scope.isModerator()) && $scope.portfolio) {
                         var url = "rest/impropers?learningObject=" + $scope.portfolio.id;
                         serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                     }
