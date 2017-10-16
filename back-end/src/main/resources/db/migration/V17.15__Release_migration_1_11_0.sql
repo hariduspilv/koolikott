@@ -1,8 +1,8 @@
 SET foreign_key_checks = 0;
 
-UPDATE Translation WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 1 SET translation = 'Vali vähemalt üks põhjus');
-UPDATE Translation WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 2 SET translation = 'Please choose at least one reason');
-UPDATE Translation WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 3 SET translation = '');
+UPDATE Translation SET translation = 'Vali vähemalt üks põhjus' WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 1;
+UPDATE Translation SET translation = 'Please choose at least one reason' WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 2 ;
+UPDATE Translation SET translation = '' WHERE translationKey = 'MESSAGE_ERROR_IMPROPER_REPORT_REASON_REQUIRED' AND translationGroup = 3;
 
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'LO_CONTENT', 'Sobimatu sisu');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'LO_CONTENT', 'Improper content');
