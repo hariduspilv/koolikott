@@ -2,6 +2,12 @@
 
 {
 class controller extends Controller {
+    $onChanges({ learningObject }) {
+        if (learningObject && learningObject.newValue)
+            this.$scope.data = Object.assign({}, this.$scope.data, {
+                learningObject: learningObject.newValue
+            })
+    }
     $onInit() {
         this.$scope.data = {
             reportingReasons: [],
@@ -68,6 +74,8 @@ class controller extends Controller {
     }
     sendReport() {
         const data = Object.assign({}, this.$scope.data)
+
+        console.log('rest/impropers:', data)
 
         this.serverCallService
             .makePut('rest/impropers', data)
