@@ -3,6 +3,7 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.Material;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
@@ -50,10 +51,12 @@ public class BrokenContentAdminResourceTest extends ResourceIntegrationTestBase 
     public void getBroken_returns_different_broken_materials_based_on_user_privilege() {
         login(USER_MODERATOR);
         List<BrokenContent> brokenMaterialsModerator = doGet(MATERIAL_GET_BROKEN, list());
+        assertTrue(CollectionUtils.isNotEmpty(brokenMaterialsModerator));
         logout();
 
         login(USER_ADMIN);
         List<BrokenContent> brokenMaterialsAdmin = doGet(MATERIAL_GET_BROKEN, list());
+        assertTrue(CollectionUtils.isNotEmpty(brokenMaterialsAdmin));
 
         assertNotEquals("Admin broken materials list, Moderator broken materials list", brokenMaterialsAdmin, brokenMaterialsModerator);
     }

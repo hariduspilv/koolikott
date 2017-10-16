@@ -1,7 +1,6 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -10,11 +9,9 @@ import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
-
 import java.math.BigDecimal;
 import java.util.List;
 
-import static java.lang.String.format;
 import static org.junit.Assert.*;
 
 public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
@@ -75,10 +72,12 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     public void getUnreviewed_returns_different_unReviewed_materials_based_on_user_priviledge() {
         login(USER_MODERATOR);
         List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
+        assertTrue(CollectionUtils.isNotEmpty(firstReviewsModerator));
         logout();
 
         login(USER_ADMIN);
         List<FirstReview> firstReviewsAdmin = doGet(GET_UNREVIEWED, listType());
+        assertTrue(CollectionUtils.isNotEmpty(firstReviewsAdmin));
 
         assertNotEquals("Admin UnReviewed list, Moderator UnReviewed list", firstReviewsAdmin, firstReviewsModerator);
     }
