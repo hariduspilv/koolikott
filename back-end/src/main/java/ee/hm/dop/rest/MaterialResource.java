@@ -2,10 +2,8 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URLDecoder;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -29,11 +27,11 @@ import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.proxy.MaterialProxy;
 import ee.hm.dop.service.reviewmanagement.BrokenContentService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
-import org.apache.commons.lang3.StringUtils;
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -175,15 +173,5 @@ public class MaterialResource extends BaseResource {
     public boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
         return user != null ? brokenContentService.hasSetBroken(materialId, getLoggedInUser()) : false;
-    }
-
-    @GET
-    @Path("externalMaterial")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getProxyUrl(@QueryParam("url") String url_param) throws IOException {
-        if (StringUtils.isBlank(url_param)){
-            return Response.noContent().build();
-        }
-        return materialProxy.getProxyUrl(url_param);
     }
 }

@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.proxy;
 
 import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.UrlUtil;
@@ -17,6 +17,12 @@ import java.net.UnknownHostException;
 
 import static java.lang.String.format;
 
+/**
+ * Sometimes material has a link to pdf from another site
+ * When we embedded, responsible browser expects the content to have the same origin as our origin
+ * (ekoolikott.ee)
+ * In case origins differ, we must create a substitute link
+ */
 public class MaterialProxy {
     private Logger logger = LoggerFactory.getLogger(getClass());
 

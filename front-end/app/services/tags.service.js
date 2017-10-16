@@ -22,11 +22,11 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                     });
             }
         },
-    
+
         reportTag(tag, learningObject, successCallback, failCallback) {
             return $mdDialog
                 .show({
-                    controller($scope, $mdDialog) {
+                    controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
                         $scope.data = {
                             reportingText: ''
                         }
@@ -46,7 +46,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                                 }
                                 $scope.loading = false
                             })
-                    },
+                    }],
                     templateUrl: 'directives/report/improper/improper.dialog.html',
                     clickOutsideToClose:true
                 })

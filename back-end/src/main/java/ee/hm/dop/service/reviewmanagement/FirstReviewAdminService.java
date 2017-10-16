@@ -20,19 +20,21 @@ public class FirstReviewAdminService {
     @Inject
     private FirstReviewDao firstReviewDao;
 
-    public List<FirstReview> getUnReviewed(User loggedInUser) {
-        if (UserUtil.isAdmin(loggedInUser)) {
+    public List<FirstReview> getUnReviewed(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findAllUnreviewed();
         } else {
-            return firstReviewDao.findAllUnreviewed(loggedInUser);
+            return firstReviewDao.findAllUnreviewed(user);
         }
     }
 
-    public BigInteger getUnReviewedCount(User loggedInUser) {
-        if (UserUtil.isAdmin(loggedInUser)) {
+    public BigInteger getUnReviewedCount(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed();
         } else {
-            return firstReviewDao.findCountOfUnreviewed(loggedInUser);
+            return firstReviewDao.findCountOfUnreviewed(user);
         }
     }
 

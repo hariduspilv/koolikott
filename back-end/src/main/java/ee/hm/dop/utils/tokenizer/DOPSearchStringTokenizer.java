@@ -84,11 +84,8 @@ public class DOPSearchStringTokenizer {
 
     private DOPToken parseTag() {
         String value = extractTokenValue(TAG_KEYWORD);
-        if (value == null) {
-            return null;
-        }
+        return value != null ? new TagToken(value) : null;
 
-        return new TagToken(value);
     }
 
     private DOPToken parseMustHave() {
@@ -116,29 +113,20 @@ public class DOPSearchStringTokenizer {
 
     private DOPToken parseAuthor() {
         String value = extractTokenValue(AUTHOR_KEYWORD);
-        if (value == null) {
-            return null;
-        }
+        return value != null ? new AuthorToken(value) : null;
 
-        return new AuthorToken(value);
     }
 
     private DOPToken parseDescription() {
         String value = extractTokenValue(DESCRIPTION_KEYWORD);
-        if (value == null) {
-            return null;
-        }
+        return value != null ? new DescriptionToken(value) : null;
 
-        return new DescriptionToken(value);
     }
 
     private DOPToken parsePublisher() {
         String value = extractTokenValue(PUBLISHER_KEYWORD);
-        if (value == null) {
-            return null;
-        }
+        return value != null ? new PublisherToken(value) : null;
 
-        return new PublisherToken(value);
     }
 
     private DOPToken parseRecommended() {
@@ -154,20 +142,14 @@ public class DOPSearchStringTokenizer {
 
     private DOPToken parseSummary() {
         String value = extractTokenValue(SUMMARY_KEYWORD);
-        if (value == null) {
-            return null;
-        }
+        return value != null ? new SummaryToken(value) : null;
 
-        return new SummaryToken(value);
     }
 
     private DOPToken parseTitle() {
         String value = extractTokenValue(TITLE_KEYWORD);
-        if (value == null) {
-            return null;
-        }
+        return value != null ? new TitleToken(value) : null;
 
-        return new TitleToken(value);
     }
 
     private String extractTokenValue(String keyword) {
@@ -178,7 +160,7 @@ public class DOPSearchStringTokenizer {
         }
 
         String value = null;
-        char c = source.charAt(position);
+        char c;
 
         if (startsWithKeyword(keyword, position)) {
             position += keyword.length();

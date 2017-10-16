@@ -10,6 +10,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -46,13 +47,17 @@ public class ImproperContentService {
         improper.setReviewed(false);
         improper.setReportingReasons(new ArrayList<>());
 
-        ImproperContent create = improperContentDao.createOrUpdate(improper);
+        ImproperContent saved = improperContentDao.createOrUpdate(improper);
         for (ReportingReason reason : improperContent.getReportingReasons()) {
             if (reason.getId() == null) {
-                saveReason(create, reason);
+                saveReason(saved, reason);
             }
         }
-        return create;
+        if (CollectionUtils.isEmpty(saved.getReportingReasons())){
+            throw new RuntimeException("no reason specified");
+        }
+        improperContentDao.createOrUpdate(saved);
+        return saved;
     }
 
     /**

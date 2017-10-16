@@ -46,7 +46,7 @@ class controller extends Controller {
 
         return this.$mdDialog
             .show({
-                controller($scope, $mdDialog) {
+                    controller: ['$scope', '$mdDialog', function ($scope, $mdDialog){
                     $scope.data = {
                         learningObject,
                         reportingText: ''
@@ -68,7 +68,7 @@ class controller extends Controller {
                             console.log('commentReportingReasons:', reasons)
                             $scope.loading = false
                         })
-                },
+                }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
                 clickOutsideToClose: true
             })
@@ -114,6 +114,6 @@ angular.module('koolikottApp').component('dopCommentsCard', {
         submitClick: '&'
     },
     templateUrl: 'directives/commentsCard/commentsCard.html',
-    controller
+    controller: controller
 })
 }

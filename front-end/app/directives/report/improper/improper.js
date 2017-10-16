@@ -16,7 +16,8 @@ class controller extends Controller {
     showConfirmationDialog() {
         this.$mdDialog
             .show({
-                controller($scope, $mdDialog, data, reasons, loading) {
+                controller: ['$scope', '$mdDialog', 'data', 'reasons', 'loading',
+                    function ($scope, $mdDialog, data, reasons, loading) {
                     $scope.data = data
                     $scope.reasons = reasons
                     $scope.loading = loading
@@ -41,7 +42,7 @@ class controller extends Controller {
                                 $scope.errors = null
                         }
                     }, true)
-                },
+                }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
                 clickOutsideToClose:true,
                 locals: {

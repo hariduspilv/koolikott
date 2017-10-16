@@ -14,23 +14,17 @@ public class TaxonDeserializer extends JsonDeserializer<Taxon> {
 
     @Override
     public Taxon deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        TaxonService taxonService = getTaxonService();
-
         Taxon taxon = parser.readValueAs(Taxon.class);
-        if(taxon != null) {
-            return taxonService.getTaxonById(taxon.getId());
-        }
+        return taxon != null ? getTaxonService().getTaxonById(taxon.getId()) : null;
 
-        return null;
     }
 
     @Override
-    public Taxon deserializeWithType(JsonParser jp, DeserializationContext context, TypeDeserializer typeDeserializer)
-            throws IOException {
+    public Taxon deserializeWithType(JsonParser jp, DeserializationContext context, TypeDeserializer typeDeserializer) throws IOException {
         return deserialize(jp, context);
     }
 
-    protected TaxonService getTaxonService() {
+    private TaxonService getTaxonService() {
         return GuiceInjector.getInjector().getInstance(TaxonService.class);
     }
 }

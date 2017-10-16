@@ -28,7 +28,6 @@ public class ApplicationLauncher {
 
     @Inject
     private static Configuration configuration;
-
     @Inject
     private static SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
 

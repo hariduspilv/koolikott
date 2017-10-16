@@ -14,11 +14,14 @@ import ee.hm.dop.model.taxon.Topic;
  * Educational context -> Domain -> Subject -> Topic -> Subtopic
  * Educational context -> Domain -> Topic -> Subtopic
  * Educational context -> Domain -> Specialization -> Module -> Topic -> Subtopic
+ *
+ * You can have shorter trees, for that you remove elements from the right.
+ * Tree always starts with Educational Context
  */
 public class TaxonUtils {
 
     /**
-     *  Educational context top parent
+     *  Educational context is top parent
      */
     public static EducationalContext getEducationalContext(Taxon taxon) {
         EducationalContext educationalContext = null;
