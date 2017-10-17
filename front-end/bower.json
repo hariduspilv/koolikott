@@ -31,7 +31,8 @@
     "angular-socialshare": "angularjs-socialshare#^2.3.4",
     "angular-messages": "1.6.1",
     "bluebird": "^3.4.7",
-    "jquery-truncate-html": "^0.0.1"
+    "jquery-truncate-html": "^0.0.1",
+    "core.js": "^2.5.1"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
