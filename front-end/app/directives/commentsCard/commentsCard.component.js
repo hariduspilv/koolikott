@@ -60,7 +60,10 @@ class controller extends Controller {
                         learningObject,
                         reportingText: ''
                     }
-                    $scope.cancel = () => $mdDialog.cancel()
+                    $scope.cancel = () => {
+                        $scope.data.reportingText = ''
+                        $mdDialog.cancel()
+                    }
                     $scope.sendReport = () => $mdDialog.hide($scope)
                     $scope.loading = true
                     $scope.submitEnabled = true

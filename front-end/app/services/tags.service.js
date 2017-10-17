@@ -31,7 +31,10 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                         $scope.data = {
                             reportingText: ''
                         }
-                        $scope.cancel = () => $mdDialog.cancel()
+                        $scope.cancel = () => {
+                            $cope.data.reportingText = ''
+                            $mdDialog.cancel()
+                        }
                         $scope.sendReport = () => $mdDialog.hide($scope)
                         $scope.loading = true
                         $scope.submitEnabled = true

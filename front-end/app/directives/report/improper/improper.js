@@ -28,7 +28,12 @@ class controller extends Controller {
                     $scope.data = data
                     $scope.reasons = reasons
                     $scope.loading = loading
-                    $scope.cancel = () => $mdDialog.cancel()
+                    $scope.cancel = () => {
+                        reasons.forEach(reason => reason.checked = false)
+                        data.reportingReasons = []
+                        data.reportingText = ''
+                        $mdDialog.cancel()
+                    }
                     $scope.sendReport = () => {
                         if (data.reportingReasons.length)
                             return $mdDialog.hide()
