@@ -4,9 +4,12 @@
 const COMMENTS_PER_PAGE = 5
 
 class controller extends Controller {
+    $onChanges({ learningObject }) {
+        if (learningObject && learningObject.currentValue)
+            this.$scope.comments = learningObject.currentValue.comments
+    }
     $onInit() {
         this.visibleCommentsCount = COMMENTS_PER_PAGE
-        this.$scope.comments = this.learningObject.comments
 
         // Commentbox hotfix
         setTimeout(() =>
@@ -126,6 +129,6 @@ angular.module('koolikottApp').component('dopCommentsCard', {
         submitClick: '&'
     },
     templateUrl: 'directives/commentsCard/commentsCard.html',
-    controller: controller
+    controller
 })
 }
