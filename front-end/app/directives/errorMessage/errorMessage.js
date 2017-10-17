@@ -186,14 +186,19 @@ class controller extends Controller {
             cb()
     }
     getReasons(setMessage = true) {
+        // cache this while reports are fetched
+        const { messageKey } = this.$scope
+        this.$scope.messageKey = ''
+
         if (this.data && this.data.id)
             this.serverCallService
                 .makeGet('rest/impropers/'+this.data.id)
                 .then(({ data: reports }) => {
                     if (Array.isArray(reports) && reports.length) {
                         const done = (reasons = '') => {
-                            if (setMessage)
-                                this.$scope.message = reports[0].reportingText
+                            !setMessage
+                                ? this.$scope.messageKey = messageKey
+                                : this.$scope.message = reports[0].reportingText
                                     ? reasons.join(', ')+': '+reports[0].reportingText
                                     : reasons.join(', ')
 
@@ -201,8 +206,8 @@ class controller extends Controller {
                                 this.listeningResize = true
                                 window.addEventListener('resize', this.onWindowResize)
                             }
-                            setTimeout(() =>
-                                this.toggleExpandableReports()
+                            this.$timeout(() =>
+                                setTimeout(() => this.toggleExpandableReports())
                             )
                         }
 
@@ -214,7 +219,9 @@ class controller extends Controller {
 
                         this.$scope.reports = reports
                     }
-                })
+                }, () =>
+                    this.$scope.messageKey = messageKey
+                )
     }
     getCurrentLearningObjectId() {
         return this.$scope.$parent.material
