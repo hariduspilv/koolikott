@@ -253,8 +253,8 @@ angular.module('koolikottApp')
                 console.log("Failed to get signed user data.")
             }
 
-            $scope.addComment = () => {
-                materialService.addComment($scope.newComment, $scope.material)
+            $scope.addComment = (newComment, material) => {
+                materialService.addComment(newComment, material)
                     .then(addCommentSuccess, addCommentFailed);
             };
 

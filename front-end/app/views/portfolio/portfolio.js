@@ -50,8 +50,8 @@ angular.module('koolikottApp')
                     }, 1000);
                 }
 
-                $scope.addComment = function () {
-                    portfolioService.addComment($scope.newComment, createPortfolio($scope.portfolio.id))
+                $scope.addComment = function (newComment, portfolio) {
+                    portfolioService.addComment(newComment, createPortfolio(portfolio.id))
                         .then(addCommentSuccess, addCommentFailed);
                 };
 

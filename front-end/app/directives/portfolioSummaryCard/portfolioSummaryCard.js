@@ -80,8 +80,8 @@ angular.module('koolikottApp')
                 });
             };
 
-            $scope.addComment = () => {
-                $scope.submitClick();
+            $scope.addComment = (newComment, portfolio) => {
+                $scope.submitClick({ newComment, portfolio });
             };
 
             $scope.toggleCommentSection = () => {

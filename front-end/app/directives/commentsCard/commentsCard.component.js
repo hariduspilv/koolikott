@@ -10,6 +10,7 @@ class controller extends Controller {
     }
     $onInit() {
         this.visibleCommentsCount = COMMENTS_PER_PAGE
+        this.$scope.newComment = { text: '' }
 
         // Commentbox hotfix
         setTimeout(() =>
@@ -42,7 +43,11 @@ class controller extends Controller {
         return this.getLeftCommentsCount() > 0
     }
     addComment() {
-        return this.submitClick()
+        if (this.$scope.newComment.text && typeof this.submitClick === 'function')
+            this.submitClick({
+                newComment: this.$scope.newComment, 
+                learningObject: this.learningObject
+            })
     }
     reportComment(comment) {
         const { serverCallService, learningObject } = this
