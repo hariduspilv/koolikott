@@ -16,6 +16,8 @@ public class Search extends Component{
 	private static By autocompleteSelecton = By.cssSelector("span.highlight");
 	private By languageSelection = By.xpath("//md-select[@data-ng-model='detailedSearch.language']");
 	private By russianLanguage = By.xpath("//md-option[@value='rus']");
+	private By educationalContext = By.id("taxonEducationalSelect");
+	private By allEducationalContexts = By.id("select_option_108");
 
 
 	public static SearchResultsPage insertSearchCriteriaAndSearch(String searchString) {
@@ -78,6 +80,13 @@ public class Search extends Component{
 		getDriver().findElement(searchField).sendKeys(Keys.ENTER);
 		Helpers.waitForVisibility(numberOfResultsText);
 		return new SearchResultsPage();
+	}
+
+	public Search selectAllEducationalContexts() {
+		getDriver().findElement(educationalContext).click();
+		getDriver().findElement(allEducationalContexts).click();
+		Helpers.waitForMilliseconds(1000);
+		return this;
 	}
 
 

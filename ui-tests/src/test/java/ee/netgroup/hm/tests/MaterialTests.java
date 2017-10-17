@@ -105,8 +105,10 @@ public class MaterialTests {
 				.setChapterTitle()
 				.clickAddMaterial()
 				.clickAddExistingMaterial()
+				.selectAllEducationalContexts()
 				.insertMaterialSearchCriteria()
-				.clickToSelectMaterial()
+				.closeDetailedSearch()
+				.clickToSelectMaterial2()
 				.clickAddMaterialToPortfolio()
 				.clickSaveAndExitConfirmationControl()
 				.isMaterialBoxDisplayed();
@@ -173,7 +175,7 @@ public class MaterialTests {
 	
 
 	@Test
-	public void MaterialTests_AddToFavorites_MaterialIsInFavourties(){
+	public void MaterialTests_AddToFavorites_MaterialIsInFavourtes(){
 		
 		boolean starIsSelected = goToLandingPage()
 				.chooseUserType("Moderator")
@@ -211,7 +213,7 @@ public class MaterialTests {
 	@Test
 	public void MaterialTests_CreateMaterial_MaterialIsUnreviewedBannerIsDisplayed() {
 
-		boolean unreviewedBannerIsDisplayed = goToLandingPage()
+		String unreviewedBannerText = goToLandingPage()
 				.chooseUserType("Admin")
 				.clickAddMaterial()
 				.setHyperLink()
@@ -225,8 +227,8 @@ public class MaterialTests {
 				.setAuthorFirstName()
 				.setAuthorSurName()
 				.clickCreateMaterial()
-				.isUnreviewedBannerDisplayed();
-		assertTrue(unreviewedBannerIsDisplayed);
+				.getUnreviewedBannerText();
+		Assert.assertEquals(Constants.unreviewedBannerText, unreviewedBannerText);
 	}
 	
 	@Test

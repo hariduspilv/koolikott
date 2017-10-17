@@ -53,7 +53,7 @@ public class MyPortfoliosPage extends Page{
 	}
 
 	public static boolean getAddPortfolioMessageText() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(addPortfolioMessage).getText().contains("Kogumiku lisamiseks");
 	}
 

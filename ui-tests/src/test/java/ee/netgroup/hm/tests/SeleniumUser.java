@@ -28,7 +28,7 @@ private static WebDriver driver;
 			options.addArguments("-disable-cache");
 			options.addArguments("--disable-popup-blocking");
 			driver = new ChromeDriver(options);
-			driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 
             Runtime.getRuntime().addShutdownHook(new Thread() {

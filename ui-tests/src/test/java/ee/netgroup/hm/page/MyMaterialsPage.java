@@ -35,7 +35,7 @@ public class MyMaterialsPage extends Page{
 	}
 
 	public static boolean getAddMaterialMessageText() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(addMaterialMessage).getText().contains("Materjali lisamiseks");
 	}
 

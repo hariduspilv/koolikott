@@ -20,7 +20,7 @@ public class ContentsTests {
 	}
 	
 	@Test
-	public void ContentsTests_menuMaterialCount() {
+	public void ContentsTests_MenuMaterialCount() {
 
 		boolean materialCount = goToLandingPage()
 				.chooseUserType("User")

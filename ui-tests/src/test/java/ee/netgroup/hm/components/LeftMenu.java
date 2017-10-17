@@ -31,10 +31,10 @@ public class LeftMenu extends Component{
 	private By improperMaterials = By.id("improperMaterials");
 	
 	public static LeftMenu clickDashboard() {
-		Helpers.waitForSeconds(2000);
+		Helpers.waitForMilliseconds(2000);
 		Helpers.waitForClickable(dashboardButton);
 		getDriver().findElement(dashboardButton).click();
-		Helpers.waitForSeconds(2000);
+		Helpers.waitForMilliseconds(2000);
 		return new LeftMenu();
 	}
 
@@ -45,17 +45,20 @@ public class LeftMenu extends Component{
 	}
 
 	public static LeftMenu clickToFilterPreschoolEducation() {
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(preschoolEducation).click();
 		return new LeftMenu();
 	}
 
 	public SearchResultsPage clickToFilterPreschoolEducationEstonianLanguage() {
-		Helpers.waitForClickable(estonianLanguageTaxon);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(estonianLanguageTaxon).click();
+		Helpers.waitForMilliseconds(1000);
 		return new SearchResultsPage();
 	}
 
 	public static MyMaterialsPage clickMyMaterials() {
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(myMaterials).click();
 		return new MyMaterialsPage();
 	}
@@ -110,7 +113,7 @@ public class LeftMenu extends Component{
 	}
 
 	public boolean getMaterialCount() {
-		Helpers.waitForSeconds(2000);
+		Helpers.waitForMilliseconds(2000);
 		String menuCount = getDriver().findElement(preschoolEducationMaterialCount).getText(); 
 		int result1 = Integer.parseInt(menuCount);
 		String searchCount = getDriver().findElement(preschoolEducationMaterialCountSearchPage).getText(); 
