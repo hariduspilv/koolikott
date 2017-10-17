@@ -83,7 +83,9 @@ angular.module('koolikottApp')
                     $mdDialog.show({
                         templateUrl: 'views/loginDialog/loginDialog.html',
                         controller: 'loginDialogController',
-                        targetEvent: e
+                        targetEvent: e,
+                        clickOutsideToClose: true,
+                        escapeToClose: true
                     });
                 }
 

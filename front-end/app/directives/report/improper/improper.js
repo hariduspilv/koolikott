@@ -1,6 +1,8 @@
 'use strict'
 
 {
+const SHOW_GENERAL_REPORT_MODAL_HASH = 'dialog-report-general'
+
 class controller extends Controller {
     $onInit() {
         this.$scope.data = {
@@ -14,22 +16,37 @@ class controller extends Controller {
                     learningObject: newValue
                 })
         })
-        this.$scope.loading = true
-        this.$scope.reasons = []
-        this.$scope.showConfirmationDialog = this.showConfirmationDialog.bind(this)
-        this.getReasons()
+        this.$scope.reasons = this.getReasons()
+        this.$scope.showDialog = (evt) => {
+            this.authenticatedUserService.isAuthenticated()
+                ? this.showReportDialog(evt)
+                : this.showLoginDialog(evt)
+        }
+
+        // auto-launch the report dialog if hash is found in location URL
+        if (
+            window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        )
+            this.showReportDialog()
+        
+        // remove hash from location URL upon navigating away
+        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
+            unSubscribe()
+            this.removeHash()
+        })
     }
-    showConfirmationDialog() {
+    showReportDialog(targetEvent) {
         this.$mdDialog
             .show({
-                controller: ['$scope', '$mdDialog', 'data', 'reasons', 'loading', 'title',
-                    function ($scope, $mdDialog, data, reasons, loading, title) {
+                controller: ['$scope', '$mdDialog', 'data', 'reasons', 'title',
+                    function ($scope, $mdDialog, data, reasons, title) {
                     $scope.title = title
                     $scope.data = data
-                    $scope.reasons = reasons
-                    $scope.loading = loading
+                    $scope.reasons = reasons.reasons
+                    $scope.loading = reasons.loading
                     $scope.cancel = () => {
-                        reasons.forEach(reason => reason.checked = false)
+                        reasons.reasons.forEach(reason => reason.checked = false)
                         data.reportingReasons = []
                         data.reportingText = ''
                         $mdDialog.cancel()
@@ -41,7 +58,7 @@ class controller extends Controller {
                         $scope.errors = { reasonRequired: true }
                         $scope.submitEnabled = false
                     }
-                    $scope.$watch('reasons', (newValue) => {
+                    $scope.$watch('reasons.reasons', (newValue) => {
                         if (Array.isArray(newValue)) {
                             let anyChecked = false
 
@@ -67,28 +84,51 @@ class controller extends Controller {
                     })
                 }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
-                clickOutsideToClose:true,
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                targetEvent,
                 locals: {
                     title: this.$translate.instant('REPORT_IMPROPER_TITLE'),
                     data: this.$scope.data,
-                    reasons: this.$scope.reasons,
-                    loading: this.$scope.loading
+                    reasons: this.$scope.reasons
                 }
             })
             .then(this.sendReport.bind(this))
     }
+    showLoginDialog(targetEvent) {
+        this.addHash()
+        this.$mdDialog.show({
+            templateUrl: 'views/loginDialog/loginDialog.html',
+            controller: 'loginDialogController',
+            bindToController: true,
+            locals: {
+                title: this.$translate.instant('LOGIN_MUST_LOG_IN_TO_REPORT_IMPROPER')
+            },
+            clickOutsideToClose: true,
+            escapeToClose: true,
+            targetEvent
+        })
+    }
+    addHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0] + '#' + SHOW_GENERAL_REPORT_MODAL_HASH
+        )
+    }
+    removeHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0]
+        )
+    }
     getReasons() {
-        this.serverCallService
+        return this.serverCallService
             .makeGet('rest/learningMaterialMetadata/learningObjectReportingReasons')
-            .then(({ data: reasons }) => {
-                if (Array.isArray(reasons))
-                    this.$scope.reasons = reasons.map(key => ({
-                        key,
-                        checked: false
-                    }))
-
-                this.$scope.loading = false
-            })
+            .then(({ data: reasons }) => ({
+                loading: false,
+                reasons: (reasons || []).map(key => ({
+                    key,
+                    checked: false
+                }))
+            }))
     }
     sendReport() {
         const data = Object.assign({}, this.$scope.data)
@@ -97,15 +137,15 @@ class controller extends Controller {
             .makePut('rest/impropers', data)
             .then(({ status }) => {
                 if (status == 200) {
-                    this.$scope.reasons.forEach(reason => reason.checked = false)
+                    this.$scope.reasons.then(reasons =>
+                        reasons.forEach(reason => reason.checked = false)
+                    )
                     this.$scope.data.reportingReasons = []
                     this.$scope.data.reportingText = ''
                     this.$rootScope.learningObjectImproper = true
                     this.$rootScope.$broadcast('errorMessage:reported')
                     this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
                 }
-            }, () => {
-                console.log('FAILED PUT rest/impropers', data)
             })
     }
 }
@@ -116,7 +156,8 @@ controller.$inject = [
     '$translate',
     '$timeout',
     'toastService',
-    'serverCallService'
+    'serverCallService',
+    'authenticatedUserService'
 ]
 
 /**
