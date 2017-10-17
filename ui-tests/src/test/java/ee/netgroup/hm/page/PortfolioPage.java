@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ee.netgroup.hm.components.AddPortfolioForm;
 import ee.netgroup.hm.components.ConfirmationPopup;
+import ee.netgroup.hm.components.ReportImproperPopUp;
 import ee.netgroup.hm.components.fabButton;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
@@ -51,7 +52,7 @@ public class PortfolioPage extends Page{
 	}
 
 	public EditPortfolioPage clickEditPortfolio() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForClickable(editPortfolio);
 		getDriver().findElement(editPortfolio).click();
 		return new EditPortfolioPage();
@@ -61,10 +62,10 @@ public class PortfolioPage extends Page{
         return getDriver().findElement(shareWithLinkIcon).isDisplayed();
 	}
 
-	public ConfirmationPopup clickNotifyImproperContent() {
+	public ReportImproperPopUp clickNotifyImproperContent() {
 		Helpers.waitForClickable(improperContent);
 		getDriver().findElement(improperContent).click();
-		return new ConfirmationPopup();
+		return new ReportImproperPopUp();
 	}
 	
 	public String isPortfolioReportedAsImproper() {
@@ -76,12 +77,12 @@ public class PortfolioPage extends Page{
 		Helpers.moveToElement(doneButton);
 		getDriver().findElement(doneButton).sendKeys(Keys.ENTER);;
 		//getDriver().findElement(doneButton).click();
-		Helpers.waitForSeconds(5000);
+		Helpers.waitForMilliseconds(5000);
 		return this;
 	}
 
 	public boolean isContentProper() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
@@ -92,9 +93,9 @@ public class PortfolioPage extends Page{
 	public PortfolioPage addNewTag() {
 		Helpers.waitForVisibility(insertTag);
 		getDriver().findElement(insertTag).sendKeys(newTag);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(insertTag ).sendKeys(Keys.ENTER);
-		Helpers.waitForSeconds(2000);
+		Helpers.waitForMilliseconds(2000);
 		return this;
 	}
 
@@ -105,24 +106,24 @@ public class PortfolioPage extends Page{
 	public PortfolioPage addToRecommendationsList() {
 		Helpers.waitForClickable(addToRecommendations);
 		getDriver().findElement(addToRecommendations).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public boolean isRemoveFromRecommendationsDisplayed() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(removeFromRecommendations).isDisplayed();
 	}
 
 	public PortfolioPage removeFromRecommendationsList() {
 		Helpers.waitForClickable(removeFromRecommendations);
 		getDriver().findElement(removeFromRecommendations).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public boolean isAddToRecommendationsDisplayed() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(addToRecommendations).isDisplayed();
 	}
 
@@ -147,12 +148,12 @@ public class PortfolioPage extends Page{
 	public PortfolioPage restoreDeletedPortfolio() {
 		Helpers.waitForClickable(restoreButton);
 		getDriver().findElement(restoreButton).click();
-		Helpers.waitForSeconds(3000);
+		Helpers.waitForMilliseconds(3000);
 		return this;
 	}
 
 	public boolean isPortfolioRestored() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
 

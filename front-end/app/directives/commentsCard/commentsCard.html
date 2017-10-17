@@ -31,7 +31,7 @@
           <span data-ng-bind="comment.added | date:'dd.MM.yyyy HH:mm'"></span>
           <md-button
             class="md-icon-button comment__report-button"
-            ng-click="$ctrl.reportComment(comment)"
+            ng-click="$ctrl.reportComment(comment, $event)"
             >
             <md-icon
               class="material-icons md-light md-48"

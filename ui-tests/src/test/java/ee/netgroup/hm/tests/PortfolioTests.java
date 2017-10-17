@@ -89,13 +89,14 @@ public class PortfolioTests {
 				.openPortfolio()
 				.clickActionsMenu()
 				.clickNotifyImproperContent()
+				.setReportingReason()
 				.clickNotify()
 				.isPortfolioReportedAsImproper();
 		Assert.assertEquals(Constants.reportedText, improperContentIsReported);
 	}
 	/*
 	@Test
-	public void PortfolioTests_editChapterDescription() {
+	public void PortfolioTests_editChapterDescription() { //TODO: fix this test after portfolio layout is changed
 
 		boolean preTag = goToLandingPage()
 				.chooseUserType("Publisher")

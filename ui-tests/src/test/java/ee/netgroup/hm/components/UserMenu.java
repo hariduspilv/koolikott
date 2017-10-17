@@ -17,7 +17,7 @@ public class UserMenu extends Component{
 	
 		if (!getDriver().findElement(loginButton).isDisplayed()){
 			getDriver().findElement(userMenuIcon).click();
-			Helpers.waitForSeconds(1000);
+			Helpers.waitForMilliseconds(1000);
 			getDriver().findElement(userMenuLogout).click();
 		}	
 		return new UserMenu();
@@ -37,7 +37,7 @@ public class UserMenu extends Component{
 	
 		Helpers.waitForVisibility(userMenuIcon);
 		getDriver().findElement(userMenuIcon).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return new UserMenu();
 	}
 

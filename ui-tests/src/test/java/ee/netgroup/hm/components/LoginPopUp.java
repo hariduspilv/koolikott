@@ -17,10 +17,10 @@ public class LoginPopUp extends Component{
 
     
 	public LoginPopUp insertMobileIDCode(String mobileIdCode) {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForVisibility(mobileIdCodeField);
     	getDriver().findElement(mobileIdCodeField).sendKeys(mobileIdCode);
-    	Helpers.waitForSeconds(1000);
+    	Helpers.waitForMilliseconds(1000);
         return this;
 	}
 	
@@ -37,13 +37,13 @@ public class LoginPopUp extends Component{
 	}
 
 	public EKoolPage clickLoginWithEKool() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
         getDriver().findElement(eKoolLoginButton).click();
         return new EKoolPage();
 	}
 
 	public StuudiumPage clickLoginWithStuudium() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
         getDriver().findElement(stuudiumButton).click();
         return new StuudiumPage();
 	}
