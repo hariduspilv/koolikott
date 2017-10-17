@@ -92,6 +92,7 @@ class controller extends Controller {
             .makePut('rest/impropers', data)
             .then(({ status }) => {
                 if (status == 200) {
+                    this.$scope.reasons.forEach(reason => reason.checked = false)
                     this.$scope.data.reportingReasons = []
                     this.$scope.data.reportingText = ''
                     this.$rootScope.learningObjectImproper = true
