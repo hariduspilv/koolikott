@@ -4,7 +4,7 @@
 const COMMENTS_PER_PAGE = 5
 
 class controller extends Controller {
-    $onChanges({ learningObject }) {
+    $onChanges({ learningObject } = {}) {
         if (learningObject && learningObject.currentValue)
             this.$scope.comments = learningObject.currentValue.comments
     }
