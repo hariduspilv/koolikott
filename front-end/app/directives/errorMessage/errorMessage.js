@@ -32,11 +32,6 @@ class controller extends Controller {
                         ? 'TARGET_GROUP_' + item.targetGroup
                         : ''
 
-        /**
-         * @todo This is not a good solution
-         */
-        this.$rootScope.setReason = (reason) => this.$scope.reason = reason
-
         this.$scope.toggleReports = this.toggleReports.bind(this)
 
         this.onWindowResize = () => requestAnimationFrame(

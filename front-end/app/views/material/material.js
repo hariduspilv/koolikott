@@ -161,29 +161,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
-                if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                    if ($scope.material.improper > 0) {
-                        serverCallService.makeGet("rest/admin/improper", {}, sortImpropers, getItemsFail);
-                    }
-                }
-
                 materialService.increaseViewCount($scope.material);
-            }
-
-            function getItemsFail() {
-                console.log("Failed to get data");
-            }
-
-            function sortImpropers(impropers) {
-                var improper;
-
-                for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.id === $scope.material.id) {
-                        improper = impropers[i];
-                    }
-                }
-
-                $rootScope.setReason(improper.reason);
             }
 
             $scope.getLicenseIconList = () => {
