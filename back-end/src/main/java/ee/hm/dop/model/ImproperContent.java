@@ -57,9 +57,6 @@ public class ImproperContent extends AbstractEntity {
     @OneToMany(mappedBy = "improperContent", fetch = LAZY)
     private List<ReportingReason> reportingReasons;
 
-    @Transient
-    private List<ReportingReasonEnum> reportingReasonEnums;
-
     public Long getId() {
         return id;
     }
@@ -132,14 +129,6 @@ public class ImproperContent extends AbstractEntity {
 
     public void setReportingReasons(List<ReportingReason> reportingReasons) {
         this.reportingReasons = reportingReasons;
-    }
-
-    public List<ReportingReasonEnum> getReportingReasonEnums() {
-        return reportingReasonEnums;
-    }
-
-    public void setReportingReasonEnums(List<ReportingReasonEnum> reportingReasonEnums) {
-        this.reportingReasonEnums = reportingReasonEnums;
     }
 
     public ReviewStatus getStatus() {

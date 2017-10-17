@@ -28,13 +28,9 @@ public class MetadataUtils {
 
     public static X509Credential getCredential(String credentialPath, String entityId) throws Exception {
         DocumentBuilder docBuilder = getDocumentBuilder();
-
         Element metadataRoot = getElement(credentialPath, docBuilder);
-
         MetadataCredentialResolver credentialResolver = getMetadataCredentialResolver(metadataRoot);
-
         CriteriaSet criteriaSet = getCriterias(entityId);
-
         return (X509Credential) credentialResolver.resolveSingle(criteriaSet);
     }
 
@@ -45,20 +41,17 @@ public class MetadataUtils {
         return criteriaSet;
     }
 
-    private static MetadataCredentialResolver getMetadataCredentialResolver(Element metadataRoot)
-            throws MetadataProviderException {
+    private static MetadataCredentialResolver getMetadataCredentialResolver(Element metadataRoot) throws MetadataProviderException {
         DOMMetadataProvider idpMetadataProvider = new DOMMetadataProvider(metadataRoot);
         idpMetadataProvider.setRequireValidMetadata(true);
         idpMetadataProvider.setParserPool(new BasicParserPool());
         idpMetadataProvider.initialize();
 
         MetadataCredentialResolverFactory credentialResolverFactory = MetadataCredentialResolverFactory.getFactory();
-
         return credentialResolverFactory.getInstance(idpMetadataProvider);
     }
 
     private static Element getElement(String credentialPath, DocumentBuilder docBuilder) throws Exception {
-        Element metadataRoot = null;
         InputStream inputStream = null;
         try {
             inputStream = DOPFileUtils.getFileAsStream(credentialPath);
@@ -67,12 +60,11 @@ public class MetadataUtils {
             }
 
             Document metaDataDocument = docBuilder.parse(inputStream);
-            metadataRoot = metaDataDocument.getDocumentElement();
+            return metaDataDocument.getDocumentElement();
         } finally {
             closeQuietly(inputStream);
         }
 
-        return metadataRoot;
     }
 
     private static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {

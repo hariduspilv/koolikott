@@ -28,4 +28,10 @@ public class EducationalContext extends Taxon {
     public Taxon getParent() {
         return null;
     }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return getDomains();
+    }
 }

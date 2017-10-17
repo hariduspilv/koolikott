@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
@@ -60,12 +59,12 @@ public class SecurityFilterTest {
         capturedResponse = newCapture();
 
         uriInfo = createMock(UriInfo.class);
-        filter = new SecurityFilterMock(uriInfo, request);
+        filter = new SecurityFilterMock();
     }
 
     @Test
     public void filterNoTokenInRequest() throws IOException {
-        expect(request.getHeader("Authentication")).andReturn(null);
+        expect(context.getHeaderString("Authentication")).andReturn(null);
 
         replay(uriInfo, request, session, context);
         filter.filter(context);
@@ -77,7 +76,8 @@ public class SecurityFilterTest {
     public void filterNoUserWithRecievedToken() throws IOException {
         String token = "token";
 
-        expect(request.getHeader("Authentication")).andReturn(token);
+        expect(context.getHeaderString("Authentication")).andReturn(token);
+//        expect(request.getHeader("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(null);
         context.abortWith(EasyMock.capture(capturedResponse));
 
@@ -95,7 +95,7 @@ public class SecurityFilterTest {
         User user = createMock(User.class);
         context.abortWith(EasyMock.capture(capturedResponse));
 
-        setExpects(token, authenticatedUser, user, "wrongUsername");
+        setExpects(token, authenticatedUser, user, "wrongUsername", false);
 
         replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
 
@@ -113,7 +113,7 @@ public class SecurityFilterTest {
         User user = createMock(User.class);
         context.setSecurityContext(EasyMock.capture(capturedSecurityContext));
 
-        setExpects(token, authenticatedUser, user, "realUsername");
+        setExpects(token, authenticatedUser, user, "realUsername", true);
 
         replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
 
@@ -130,7 +130,7 @@ public class SecurityFilterTest {
         User user = createMock(User.class);
         context.setSecurityContext(EasyMock.capture(capturedSecurityContext));
 
-        setExpects(token, authenticatedUser, user, "realUsername");
+        setExpects(token, authenticatedUser, user, "realUsername", true);
 
         expect(uriInfo.getRequestUri()).andReturn(new URI("http://www.boo.com/foo/duuu"));
 
@@ -150,8 +150,9 @@ public class SecurityFilterTest {
         User user = createMock(User.class);
         context.setSecurityContext(EasyMock.capture(capturedSecurityContext));
 
-        setExpects(token, authenticatedUser, user, "realUsername");
+        setExpects(token, authenticatedUser, user, "realUsername", true);
 
+//        expect(context.getUriInfo()).andReturn(uriInfo);
         expect(uriInfo.getRequestUri()).andReturn(new URI("https://www.boo.com/foo/duuu"));
 
         replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
@@ -169,7 +170,7 @@ public class SecurityFilterTest {
         User user = createMock(User.class);
         context.setSecurityContext(EasyMock.capture(capturedSecurityContext));
 
-        setExpects(token, authenticatedUser, user, "realUsername");
+        setExpects(token, authenticatedUser, user, "realUsername", true);
 
         replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
         filter.filter(context);
@@ -187,11 +188,11 @@ public class SecurityFilterTest {
         User user = createMock(User.class);
         context.abortWith(EasyMock.capture(capturedResponse));
 
-        expect(request.getHeader("Authentication")).andReturn(token);
+        expect(context.getHeaderString("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
         expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusDays(1).minusSeconds(1));
-        expect(request.getHeader("Username")).andReturn("realUsername");
+        expect(context.getHeaderString("Username")).andReturn("realUsername");
         expect(user.getUsername()).andReturn("realUsername");
 
         replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
@@ -202,29 +203,25 @@ public class SecurityFilterTest {
 
     }
 
-    private void setExpects(String token, AuthenticatedUser authenticatedUser, User user, String returnedUser) {
-        expect(request.getHeader("Authentication")).andReturn(token);
+    private void setExpects(String token, AuthenticatedUser authenticatedUser, User user, String returnedUser, boolean success) {
+        expect(context.getHeaderString("Authentication")).andReturn(token);
+//        expect(request.getHeader("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
         expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusHours(2)).times(0, 1);
-        expect(request.getHeader("Username")).andReturn(returnedUser);
+//        expect(request.getHeader("Username")).andReturn(returnedUser);
+        expect(context.getHeaderString("Username")).andReturn(returnedUser);
         expect(user.getUsername()).andReturn("realUsername");
+        if (success)
+            expect(context.getUriInfo()).andReturn(uriInfo);
     }
 
     class SecurityFilterMock extends SecurityFilter {
 
-        public SecurityFilterMock(@Context UriInfo uriInfo, @Context HttpServletRequest request) {
-            super(uriInfo, request);
-        }
-
         @Override
-        protected AuthenticatedUserService newAuthenticatedUserService() {
+        protected AuthenticatedUserService authenticatedUserService() {
             return authenticatedUserService;
         }
 
-        @Override
-        protected LogoutService newLogoutService() {
-            return logoutService;
-        }
     }
 }

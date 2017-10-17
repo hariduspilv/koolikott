@@ -459,6 +459,8 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Portfolio(id, title, originalCreator, summary) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4, 'PUBLIC');
 insert into Portfolio(id, title, originalCreator, summary) VALUES (114, 'Uploading picture to it', 6, 'Beta.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (115, '2003-10-10 07:00:09', null, 0, null, null, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (115, 'Broken portfolio', 6, 'Beta.');
 
 -- Chapter
 
@@ -527,6 +529,7 @@ insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) va
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (6, 9, 104, '2014-06-01 00:00:01', true);
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (7, 9, 4, '2014-06-01 00:00:01', true);
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (15, 9, 15, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (115, 9, 115, '2014-06-01 00:00:01', false);
 
 -- Broken content
 
@@ -617,6 +620,7 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (111, 1, CUR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (112, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (113, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (114, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (115, 0, CURRENT_TIMESTAMP);
 
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
 INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');

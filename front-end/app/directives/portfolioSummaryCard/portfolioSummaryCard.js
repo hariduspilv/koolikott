@@ -80,8 +80,8 @@ angular.module('koolikottApp')
                 });
             };
 
-            $scope.addComment = () => {
-                $scope.submitClick();
+            $scope.addComment = (newComment, portfolio) => {
+                $scope.submitClick({ newComment, portfolio });
             };
 
             $scope.toggleCommentSection = () => {
@@ -127,7 +127,7 @@ angular.module('koolikottApp')
             };
 
             $scope.setNotImproper = () => {
-                if ($scope.isAdmin() && $scope.portfolio) {
+                if (($scope.isAdmin() || $scope.isModerator()) && $scope.portfolio) {
                     var url = "rest/admin/improper/setProper?learningObject=" + $scope.portfolio.id;
                     serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
                 }
@@ -167,8 +167,16 @@ angular.module('koolikottApp')
 
             function restoreSuccess() {
                 toastService.show('PORTFOLIO_RESTORED');
-                $scope.portfolio.deleted = false;
-                $rootScope.learningObjectDeleted = false;
+                $scope.portfolio.deleted = false
+                $scope.portfolio.improper = false
+                $scope.portfolio.unReviewed = false
+                $scope.portfolio.broken = false
+                $scope.portfolio.changed = false
+                $rootScope.learningObjectDeleted = false
+                $rootScope.learningObjectImproper = false
+                $rootScope.learningObjectUnreviewed = false
+                $rootScope.learningObjectBroken = false
+                $rootScope.learningObjectChanged = false
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 

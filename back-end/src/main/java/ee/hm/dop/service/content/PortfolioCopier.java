@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,12 +17,16 @@ public class PortfolioCopier {
     @Inject
     private PortfolioService portfolioService;
     @Inject
+    private PortfolioGetter portfolioGetter;
+    @Inject
     private PortfolioConverter portfolioConverter;
+    @Inject
+    private PortfolioPermission portfolioPermission;
 
     public Portfolio copy(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = portfolioService.findValid(portfolio);
+        Portfolio originalPortfolio = portfolioGetter.findValid(portfolio);
 
-        if (!portfolioService.canView(loggedInUser, originalPortfolio)) {
+        if (!portfolioPermission.canView(loggedInUser, originalPortfolio)) {
             throw ValidatorUtil.permissionError();
         }
 

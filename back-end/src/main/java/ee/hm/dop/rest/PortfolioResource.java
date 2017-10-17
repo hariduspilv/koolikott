@@ -15,10 +15,7 @@ import javax.ws.rs.core.MediaType;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
-import ee.hm.dop.service.content.LearningObjectAdministrationService;
-import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.service.content.PortfolioCopier;
-import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.content.*;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -37,11 +34,13 @@ public class PortfolioResource extends BaseResource {
     private LearningObjectAdministrationService learningObjectAdministrationService;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private PortfolioGetter portfolioGetter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
-        return portfolioService.get(portfolioId, getLoggedInUser());
+        return portfolioGetter.get(portfolioId, getLoggedInUser());
     }
 
     @GET
@@ -52,7 +51,7 @@ public class PortfolioResource extends BaseResource {
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         User loggedInUser = getLoggedInUser();
-        return portfolioService.getByCreatorResult(creator, loggedInUser, start, maxResults);
+        return portfolioGetter.getByCreatorResult(creator, loggedInUser, start, maxResults);
     }
 
     @GET
@@ -62,7 +61,7 @@ public class PortfolioResource extends BaseResource {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
-        return portfolioService.getCountByCreator(creator);
+        return portfolioGetter.getCountByCreator(creator);
     }
 
     @POST

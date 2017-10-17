@@ -1,5 +1,14 @@
 package ee.hm.dop.common.test;
 
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
+
+/**
+ * Interface delegates TestConstants so you don't have to use static import all the time.
+ * It is interface instead of abstract class, because it has no state.
+ * It could be abstract, but why not. It's an experiment.
+ */
 public interface BaseClassForTests {
     Long NOT_EXISTS_ID = TestConstants.NOT_EXISTS_ID;
 
@@ -47,6 +56,31 @@ public interface BaseClassForTests {
     Long PORTFOLIO_12 = TestConstants.PORTFOLIO_12;
     Long PORTFOLIO_13 = TestConstants.PORTFOLIO_13;
     Long PORTFOLIO_14 = TestConstants.PORTFOLIO_14;
+    Long PORTFOLIO_15 = TestConstants.PORTFOLIO_15;
 
     TestTaxon TAXON_MATHEMATICS_DOMAIN = TestConstants.TAXON_MATHEMATICS_DOMAIN;
+
+    default Material materialWithId(Long id) {
+        return TestConstants.materialWithId(id);
+    }
+
+    default Portfolio portfolioWithId(Long id) {
+        return TestConstants.portfolioWithId(id);
+    }
+
+    default User userWithId(Long id) {
+        return TestConstants.userWithId(id);
+    }
+
+    default void assertMaterial1(Material material, TestLayer testLayer) {
+        Material1Validation.assertMaterial1(material, testLayer);
+    }
+
+    default void assertPortfolio1(Portfolio portfolio, TestLayer testLayer) {
+        Portfolio1Validator.assertPortfolio1(portfolio, testLayer);
+    }
+
+    default void validateUser(User user, TestUser testUser, TestLayer testLayer) {
+        UserValidation.assertUser(user, testUser, testLayer);
+    }
 }

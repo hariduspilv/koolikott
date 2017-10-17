@@ -31,19 +31,14 @@ public class StuudiumServiceTest {
 
     @TestSubject
     private StuudiumService stuudiumService = new StuudiumService();
-
     @Mock
     private Configuration configuration;
-
     @Mock
     private Client client;
-
     @Mock
     private LoginService loginService;
-
     @Mock
     private WebTarget target;
-
     @Mock
     private Builder builder;
 

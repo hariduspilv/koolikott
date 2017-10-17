@@ -242,5 +242,9 @@
   </md-card-actions>
 
   <!-- SECTION 3: Comments -->
-  <dop-comments-card comments="portfolio.comments" comment="comment" submit-click="addComment()" is-open="commentsOpen"></dop-comments-card>
+  <dop-comments-card
+    data-learning-object="portfolio"
+    data-submit-click="addComment(newComment, learningObject)"
+    data-is-open="commentsOpen"
+  ></dop-comments-card>
 </md-card>

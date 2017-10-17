@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.login;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -26,7 +28,8 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();
 
-        getTarget(LOGOUT, new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
+        Response response = getTarget(LOGOUT, new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Provider

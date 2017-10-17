@@ -51,16 +51,12 @@ public class TaatServiceTest {
 
     @TestSubject
     private TaatService taatService = new TaatService();
-
     @Mock
     private Configuration configuration;
-
     @Mock
     private AuthenticationStateDao authenticationStateDao;
-
     @Mock
     private LoginService loginService;
-
     @Mock
     private SignatureValidator validator;
 

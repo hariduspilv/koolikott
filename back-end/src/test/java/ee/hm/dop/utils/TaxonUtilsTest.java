@@ -1,60 +1,96 @@
 package ee.hm.dop.utils;
 
-import static org.junit.Assert.assertEquals;
-
-import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Subtopic;
-import ee.hm.dop.model.taxon.Topic;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import static ee.hm.dop.service.solr.SearchServiceTestUtil.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
 public class TaxonUtilsTest {
 
     @Test
-    public void getEducationalContextFromSubtopic() {
-        EducationalContext educationalContext = new EducationalContext();
-        educationalContext.setId(2L);
-        educationalContext.setName("PRESCHOOL");
-
-        Domain domain = new Domain();
-        domain.setId(3L);
-        domain.setName("COOL_DOMAIN");
-        domain.setEducationalContext(educationalContext);
-
-        Subject subject = new Subject();
-        subject.setId(4L);
-        subject.setName("COOL_SUBJECT");
-        subject.setDomain(domain);
-
-        Topic topic = new Topic();
-        topic.setId(5L);
-        topic.setName("COOL_TOPIC");
-        topic.setSubject(subject);
-
-        Subtopic subtopic = new Subtopic();
-        subtopic.setId(6L);
-        subtopic.setName("COOL_SUBTOPIC");
-        subtopic.setTopic(topic);
-
-        EducationalContext result = TaxonUtils.getEducationalContext(subtopic);
-        assertEquals(educationalContext.getName(), result.getName());
-        assertEquals(educationalContext.getId(), result.getId());
+    public void educ_cont() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(educationalContext);
+        validate(educationalContext, result);
     }
 
     @Test
-    public void getEducationalContextFromEducationalContext() {
-        EducationalContext educationalContext = new EducationalContext();
-        educationalContext.setId(2L);
-        educationalContext.setName("PRESCHOOL");
+    public void educ_cont_domain() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(domain(educationalContext));
+        validate(educationalContext, result);
+    }
 
-        EducationalContext result = TaxonUtils.getEducationalContext(educationalContext);
+    @Test
+    public void educ_cont_domain_subject() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(subject(domain(educationalContext)));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_subject_topic() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(topic(subject(domain(educationalContext))));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_subject_topic_subtopic() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(subTopic(topic(subject(domain(educationalContext)))));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_topic() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(topic(domain(educationalContext)));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_topic_subtopic() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(subTopic(topic(domain(educationalContext))));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_specialization() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(specialization(domain(educationalContext)));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_specialization_module() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(module(specialization(domain(educationalContext))));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_specialization_module_topic() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(topic(module(specialization(domain(educationalContext)))));
+        validate(educationalContext, result);
+    }
+
+    @Test
+    public void educ_cont_domain_specialization_module_topic_subtopic() throws Exception {
+        EducationalContext educationalContext = educationalContext();
+        EducationalContext result = TaxonUtils.getEducationalContext(subTopic(topic(module(specialization(domain(educationalContext))))));
+        validate(educationalContext, result);
+    }
+
+    private void validate(EducationalContext educationalContext, EducationalContext result) {
         assertEquals(educationalContext.getName(), result.getName());
         assertEquals(educationalContext.getId(), result.getId());
         assertEquals(educationalContext, result);
     }
-
 }

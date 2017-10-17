@@ -6,9 +6,7 @@ import java.util.List;
 public class SearchResult {
 
     private List<Searchable> items;
-
     private long totalResults;
-
     private long start;
 
     public SearchResult() {

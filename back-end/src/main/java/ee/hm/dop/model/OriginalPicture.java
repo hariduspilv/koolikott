@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Picture")
+@Table(name = "Picture")
 public class OriginalPicture extends Picture {
-    public OriginalPicture() {}
 }

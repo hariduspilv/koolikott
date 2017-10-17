@@ -13,16 +13,9 @@ import static org.junit.Assert.fail;
 
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.enums.Role;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.solr.SolrEngineService;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
-import org.easymock.IAnswer;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
@@ -32,23 +25,24 @@ import org.junit.runner.RunWith;
 public class PortfolioServiceTest {
 
     @TestSubject
-    private PortfolioService portfolioService = new PortfolioService();
+    private PortfolioGetter portfolioGetter = new PortfolioGetter();
     @Mock
     private PortfolioDao portfolioDao;
     @Mock
     private SolrEngineService solrEngineService;
+    @Mock
+    private PortfolioPermission portfolioPermission;
 
     @Test
     public void get() {
         int portfolioId = 125;
         Portfolio portfolio = createMock(Portfolio.class);
         expect(portfolioDao.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
-        expect(portfolio.getVisibility()).andReturn(Visibility.PUBLIC);
-        expect(portfolio.isDeleted()).andReturn(false);
+        expect(portfolioPermission.canView(null, portfolio)).andReturn(true);
 
         replayAll(portfolio);
 
-        Portfolio result = portfolioService.get(portfolioId, null);
+        Portfolio result = portfolioGetter.get(portfolioId, null);
 
         verifyAll(portfolio);
 
@@ -56,7 +50,7 @@ public class PortfolioServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(portfolioDao, solrEngineService);
+        replay(portfolioDao, solrEngineService, portfolioPermission);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -66,7 +60,7 @@ public class PortfolioServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(portfolioDao, solrEngineService);
+        verify(portfolioDao, solrEngineService, portfolioPermission);
 
         if (mocks != null) {
             for (Object object : mocks) {

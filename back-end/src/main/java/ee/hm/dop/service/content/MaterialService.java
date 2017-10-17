@@ -5,14 +5,11 @@ import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.model.interfaces.ILearningObject;
-import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
-import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
@@ -36,7 +33,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.joda.time.DateTime.now;
 
-public class MaterialService implements PermissionItem {
+public class MaterialService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -49,8 +46,6 @@ public class MaterialService implements PermissionItem {
     @Inject
     private Configuration configuration;
     @Inject
-    private ReducedLearningObjectDao reducedLearningObjectDao;
-    @Inject
     private AuthorService authorService;
     @Inject
     private PublisherService publisherService;
@@ -62,13 +57,8 @@ public class MaterialService implements PermissionItem {
     private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
     private FirstReviewAdminService firstReviewAdminService;
-
-    public Material get(Long materialId, User loggedInUser) {
-        if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            return materialDao.findById(materialId);
-        }
-        return materialDao.findByIdNotDeleted(materialId);
-    }
+    @Inject
+    private MaterialGetter materialGetter;
 
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
@@ -97,10 +87,6 @@ public class MaterialService implements PermissionItem {
         }
     }
 
-    public Material validateAndFindNotDeleted(Material material) {
-        return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
-    }
-
     public void delete(Material material) {
         materialDao.delete(material);
     }
@@ -118,7 +104,7 @@ public class MaterialService implements PermissionItem {
         }
 
         cleanPeerReviewUrls(material);
-        Material originalMaterial = get(material.getId(), changer);
+        Material originalMaterial = materialGetter.get(material.getId(), changer);
         validateMaterialUpdate(originalMaterial, changer);
         if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
@@ -169,8 +155,7 @@ public class MaterialService implements PermissionItem {
 
     private boolean materialWithSameSourceExists(Material material) {
         if (material.getSource() == null && material.getUploadedFile() != null) return false;
-
-        List<Material> materialsWithGivenSource = getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
+        List<Material> materialsWithGivenSource = materialGetter.getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
         return isNotEmpty(materialsWithGivenSource) &&
                 materialsWithGivenSource.stream()
                         .noneMatch(m -> m.getId().equals(material.getId()));
@@ -184,19 +169,6 @@ public class MaterialService implements PermissionItem {
         if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isAdminOrModerator(changer)) {
             throw new IllegalArgumentException("Normal user can't update external repository material");
         }
-    }
-
-    public SearchResult getByCreatorResult(User creator, int start, int maxResults) {
-        List<Searchable> userFavorites = new ArrayList<>(getByCreator(creator, start, maxResults));
-        return new SearchResult(userFavorites, getByCreatorSize(creator), start);
-    }
-
-    public List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
-        return reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
-    }
-
-    public long getByCreatorSize(User creator) {
-        return materialDao.findByCreatorSize(creator);
     }
 
     private Material createOrUpdate(Material material) {
@@ -228,48 +200,22 @@ public class MaterialService implements PermissionItem {
     }
 
     private Material applyRestrictions(Material material) {
-        boolean areKeyCompetencesAndCrossCurricularThemesAllowed = false;
-
-        if (CollectionUtils.isNotEmpty(material.getTaxons())) {
-            List<EducationalContext> educationalContexts = material.getTaxons().stream()
-                    .map(TaxonUtils::getEducationalContext)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
-            for (EducationalContext educationalContext : educationalContexts) {
-                if (EducationalContextC.BASIC_AND_SECONDARY.contains(educationalContext.getName())) {
-                    areKeyCompetencesAndCrossCurricularThemesAllowed = true;
-                }
-            }
-        }
-
-        if (!areKeyCompetencesAndCrossCurricularThemesAllowed) {
+        if (CollectionUtils.isEmpty(material.getTaxons()) || cantSet(material)) {
             material.setKeyCompetences(null);
             material.setCrossCurricularThemes(null);
         }
-
         return material;
     }
 
-    public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
-        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
-        checkLink(materialSource);
-        return materialDao.findBySource(materialSource, getMaterialStrategy);
+    private boolean cantSet(Material material) {
+        List<EducationalContext> educationalContexts = material.getTaxons().stream()
+                .map(TaxonUtils::getEducationalContext)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return CollectionUtils.isEmpty(educationalContexts) || educationalContexts.stream().noneMatch(e -> EducationalContextC.BASIC_AND_SECONDARY.contains(e.getName()));
     }
 
-    public Material getOneBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
-        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
-        checkLink(materialSource);
-        return materialDao.findOneBySource(materialSource, getMaterialStrategy);
-    }
-
-    private void checkLink(String materialSource) {
-        if (materialSource == null) {
-            throw new RuntimeException("No material source link provided");
-        }
-    }
-
-    public void checkKeyCompetences(Material material) {
+    private void checkKeyCompetences(Material material) {
         if (isNotEmpty(material.getKeyCompetences())) {
             for (int i = 0; i < material.getKeyCompetences().size(); i++) {
                 if (material.getKeyCompetences().get(i).getId() == null) {
@@ -283,7 +229,7 @@ public class MaterialService implements PermissionItem {
         }
     }
 
-    public void checkCrossCurricularThemes(Material material) {
+    private void checkCrossCurricularThemes(Material material) {
         if (isNotEmpty(material.getCrossCurricularThemes())) {
             for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
                 if (material.getCrossCurricularThemes().get(i).getId() == null) {
@@ -297,7 +243,7 @@ public class MaterialService implements PermissionItem {
         }
     }
 
-    public void setPublishers(Material material) {
+    private void setPublishers(Material material) {
         List<Publisher> publishers = material.getPublishers();
         if (publishers != null) {
             for (int i = 0; i < publishers.size(); i++) {
@@ -319,7 +265,7 @@ public class MaterialService implements PermissionItem {
         }
     }
 
-    public void setAuthors(Material material) {
+    private void setAuthors(Material material) {
         List<Author> authors = material.getAuthors();
         if (authors != null) {
             for (int i = 0; i < authors.size(); i++) {
@@ -340,7 +286,7 @@ public class MaterialService implements PermissionItem {
         }
     }
 
-    public void setPeerReviews(Material material) {
+    private void setPeerReviews(Material material) {
         List<PeerReview> peerReviews = material.getPeerReviews();
         if (peerReviews != null) {
             for (int i = 0; i < peerReviews.size(); i++) {
@@ -352,22 +298,5 @@ public class MaterialService implements PermissionItem {
             }
         }
         material.setPeerReviews(peerReviews);
-    }
-
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return isPublic(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 }

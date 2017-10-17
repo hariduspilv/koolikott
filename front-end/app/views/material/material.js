@@ -161,29 +161,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
-                if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                    if ($scope.material.improper > 0) {
-                        serverCallService.makeGet("rest/admin/improper", {}, sortImpropers, getItemsFail);
-                    }
-                }
-
                 materialService.increaseViewCount($scope.material);
-            }
-
-            function getItemsFail() {
-                console.log("Failed to get data");
-            }
-
-            function sortImpropers(impropers) {
-                var improper;
-
-                for (var i = 0; i < impropers.length; i++) {
-                    if (impropers[i].learningObject.id === $scope.material.id) {
-                        improper = impropers[i];
-                    }
-                }
-
-                $rootScope.setReason(improper.reason);
             }
 
             $scope.getLicenseIconList = () => {
@@ -275,8 +253,8 @@ angular.module('koolikottApp')
                 console.log("Failed to get signed user data.")
             }
 
-            $scope.addComment = () => {
-                materialService.addComment($scope.newComment, $scope.material)
+            $scope.addComment = (newComment, material) => {
+                materialService.addComment(newComment, material)
                     .then(addCommentSuccess, addCommentFailed);
             };
 
@@ -423,8 +401,16 @@ angular.module('koolikottApp')
 
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');
-                $scope.material.deleted = false;
-                $rootScope.learningObjectDeleted = false;
+                $scope.material.deleted = false
+                $scope.material.improper = false
+                $scope.material.unReviewed = false
+                $scope.material.broken = false
+                $scope.material.changed = false
+                $rootScope.learningObjectDeleted = false
+                $rootScope.learningObjectImproper = false
+                $rootScope.learningObjectUnreviewed = false
+                $rootScope.learningObjectBroken = false
+                $rootScope.learningObjectChanged = false
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }
 

@@ -48,9 +48,9 @@ import org.w3c.dom.NodeList;
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected static final String[] SCHEMES = {"http", "https"};
+    private static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
-    private static final String AUTHOR = "AUTHOR";
+    public static final String AUTHOR = "AUTHOR";
     private static final Map<String, String> taxonMap;
 
     static {
@@ -61,21 +61,17 @@ public abstract class MaterialParser {
         taxonMap.put("vocationalTaxon", "vocationalEducation");
     }
 
-    protected XPathFactory xPathfactory = XPathFactory.newInstance();
+    private XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private PeerReviewService peerReviewService;
-
     @Inject
     private PublisherService publisherService;
-
     @Inject
     private AuthorService authorService;
-
     @Inject
     private TargetGroupService targetGroupService;
 
@@ -256,17 +252,17 @@ public abstract class MaterialParser {
         return resourceTypes;
     }
 
-    protected List<PeerReview> getPeerReviews(Document doc, String path){
+    protected List<PeerReview> getPeerReviews(Document doc, String path) {
         List<PeerReview> peerReviews = new ArrayList<>();
 
         NodeList nl = getNodeList(doc, path);
 
-        for (int i = 0; i < nl.getLength(); i++){
+        for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
             String url = getElementValue(node);
 
             PeerReview peerReview = peerReviewService.getPeerReviewByURL(url);
-            if(!peerReviews.contains(peerReview) && peerReview != null){
+            if (!peerReviews.contains(peerReview) && peerReview != null) {
                 peerReviews.add(peerReview);
             }
         }
@@ -358,7 +354,7 @@ public abstract class MaterialParser {
         NodeList nodeList = getNodeList(doc, getPathToLocation());
         if (nodeList.getLength() != 1) {
             String message = "Material has more or less than one source, can't be mapped.";
-            logger.error(String.format(message, message));
+            logger.error(message);
             throw new ParseException(message);
         }
 
@@ -446,15 +442,12 @@ public abstract class MaterialParser {
     }
 
     protected String getRoleString(Node contributorNode) {
-        String role = null;
         try {
             Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
-            role = roleNode.getTextContent().trim().toUpperCase();
-        } catch (Exception e) {
-            //ignore
+            return roleNode.getTextContent().trim().toUpperCase();
+        } catch (Exception ignored) {
+            return null;
         }
-
-        return role;
     }
 
     protected String getVCard(Node contributorNode) {
@@ -520,10 +513,10 @@ public abstract class MaterialParser {
     }
 
     protected Taxon setEducationalContext(Node taxonPath) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']");
+        for (Map.Entry<String, String> tag : taxonMap.entrySet()) {
+            Node node = getNode(taxonPath, "./*[local-name()='" + tag.getKey() + "']");
             if (node != null) {
-                return getTaxon(taxonMap.get(tag), EducationalContext.class);
+                return getTaxon(tag.getValue(), EducationalContext.class);
             }
         }
         return null;
@@ -577,10 +570,12 @@ public abstract class MaterialParser {
                     topics = new ArrayList<>(((Subject) parent).getTopics());
                 }
 
-                String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
-                Taxon taxon = getTaxonByName(topics, systemName);
-                if (taxon != null)
-                    return taxon;
+                if (topics != null) {
+                    String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
+                    Taxon taxon = getTaxonByName(topics, systemName);
+                    if (taxon != null)
+                        return taxon;
+                }
             }
         }
 

@@ -17,20 +17,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
@@ -45,205 +41,121 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(EasyMockRunner.class)
-public class MobileIDSOAPServiceTest {
-
-    private static final String MOBILE_ID_ENDPOINT = "https://www.example.com:9876/Service";
+public class MobileIDSOAPServiceTest extends MobileSoapTestUtil {
 
     @TestSubject
     private MobileIDSOAPServicePartialMock mobileIDSOAPService = new MobileIDSOAPServicePartialMock();
-
     @Mock
     private LanguageService languageService;
-
     @Mock
     private Configuration configuration;
-
     @Mock
     private SOAPConnection connection;
 
     @Test
-    public void authenticate() throws Exception {
-        String phoneNumber = "+37255550000";
-        String idCode = "55882128025";
-        Language language = new Language();
-        language.setCode(LanguageC.RUS);
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "Special message";
-
+    public void user_can_authenticate() throws Exception {
         Capture<SOAPMessage> capturedRequest = newCapture();
+        Map<String, String> response = response(ID_CODE, OK);
+        SOAPMessage responseMessage = createMessage(authMessage2(response));
 
-        Map<String, String> response = new HashMap<>();
-        response.put("Sesscode", "1705273522");
-        response.put("Status", "OK");
-        response.put("UserIDCode", idCode);
-        response.put("UserGivenname", "Richard");
-        response.put("UserSurname", "Smith");
-        response.put("UserCountry", "EE");
-        response.put("UserCN", "RICHARD,SMITH,55882128025");
-        response.put("ChallengeID", "6723");
-
-        SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
-
-        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
+        expectConfiguration(SERVICE_NAME, MESSAGE, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(responseMessage);
 
         replayAll();
 
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
+        MobileAuthenticateResponse authResponse = authenticate(LANGUAGE_RUS);
 
         verifyAll();
 
-        validateMobileAuthenticateResponse(response, mobileAuthenticateResponse);
-
-        // Validate captured request message
-        Map<String, String> request = parseMessage(capturedRequest.getValue(), "MobileAuthenticate");
-        assertEquals(6, request.size());
-        assertEquals(idCode, request.get("IDCode"));
-        assertEquals(phoneNumber, request.get("PhoneNo"));
-        assertEquals(language.getCode().toUpperCase(), request.get("Language"));
-        assertEquals(serviceName, request.get("ServiceName"));
-        assertEquals(MOBILE_AUTHENTICATE_MESSAGING_MODE, request.get("MessagingMode"));
-        assertEquals(messageToDisplay, request.get("MessageToDisplay"));
+        validateMobileAuthenticateResponse(response, authResponse);
+        validateSuccess(capturedRequest, LANGUAGE_RUS);
     }
 
     @Test
     public void authenticateNotSupportedLanguageAndMessageEmpty() throws Exception {
-        String phoneNumber = "+37255550000";
-        String idCode = "55882128025";
-        Language language = new Language();
-        language.setCode("www");
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "";
-
         Capture<SOAPMessage> capturedRequest = newCapture();
+        Map<String, String> response = response(ID_CODE, OK);
+        expect(languageService.getLanguage(LanguageC.EST)).andReturn(LANGUAGE_EST);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("Sesscode", "1705273522");
-        response.put("Status", "OK");
-        response.put("UserIDCode", idCode);
-        response.put("UserGivenname", "Richard");
-        response.put("UserSurname", "Smith");
-        response.put("UserCountry", "EE");
-        response.put("UserCN", "RICHARD,SMITH,55882128025");
-        response.put("ChallengeID", "6723");
+        SOAPMessage responseMessage = createMessage(authMessage2(response));
 
-        Language languageEstonian = new Language();
-        languageEstonian.setCode(LanguageC.EST);
-        expect(languageService.getLanguage(LanguageC.EST)).andReturn(languageEstonian);
-
-        SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
-
-        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
+        expectConfiguration(SERVICE_NAME, EMPTY_MESSAGE, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(responseMessage);
 
         replayAll();
 
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
+        MobileAuthenticateResponse mobileAuthenticateResponse = authenticate(LANGUAGE_WWW);
 
         verifyAll();
 
         validateMobileAuthenticateResponse(response, mobileAuthenticateResponse);
-
-        // Validate captured request message
-        Map<String, String> request = parseMessage(capturedRequest.getValue(), "MobileAuthenticate");
-        assertEquals(5, request.size());
-        assertEquals(idCode, request.get("IDCode"));
-        assertEquals(phoneNumber, request.get("PhoneNo"));
-        assertEquals(languageEstonian.getCode().toUpperCase(), request.get("Language"));
-        assertEquals(serviceName, request.get("ServiceName"));
-        assertEquals(MOBILE_AUTHENTICATE_MESSAGING_MODE, request.get("MessagingMode"));
+        validateSuccessNoMessage(capturedRequest);
     }
 
     @Test
     public void authenticateNullLanguage() throws Exception {
-        String phoneNumber = "+37255550000";
-        String idCode = "55882128025";
-        Language language = null;
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "Special message";
-
         Capture<SOAPMessage> capturedRequest = newCapture();
 
-        Map<String, String> response = new HashMap<>();
-        response.put("Sesscode", "1705273522");
-        response.put("Status", "OK");
-        response.put("UserIDCode", idCode);
-        response.put("UserGivenname", "Richard");
-        response.put("UserSurname", "Smith");
-        response.put("UserCountry", "EE");
-        response.put("UserCN", "RICHARD,SMITH,55882128025");
-        response.put("ChallengeID", "6723");
-
-        Language languageEstonian = new Language();
-        languageEstonian.setCode(LanguageC.EST);
-        expect(languageService.getLanguage(LanguageC.EST)).andReturn(languageEstonian);
-
-        SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
-
-        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expect(languageService.getLanguage(LanguageC.EST)).andReturn(LANGUAGE_EST);
+        expectConfiguration(SERVICE_NAME, MESSAGE, MOBILE_ID_ENDPOINT);
         expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
+                createMessage(authMessage2(response(ID_CODE, OK))));
 
         replayAll();
 
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
+        MobileAuthenticateResponse mobileAuthenticateResponse = authenticate(null);
 
         verifyAll();
 
-        validateMobileAuthenticateResponse(response, mobileAuthenticateResponse);
-
-        // Validate captured request message
-        Map<String, String> request = parseMessage(capturedRequest.getValue(), "MobileAuthenticate");
-        assertEquals(6, request.size());
-        assertEquals(idCode, request.get("IDCode"));
-        assertEquals(phoneNumber, request.get("PhoneNo"));
-        assertEquals(languageEstonian.getCode().toUpperCase(), request.get("Language"));
-        assertEquals(serviceName, request.get("ServiceName"));
-        assertEquals(MOBILE_AUTHENTICATE_MESSAGING_MODE, request.get("MessagingMode"));
-        assertEquals(messageToDisplay, request.get("MessageToDisplay"));
+        validateMobileAuthenticateResponse(response(ID_CODE, OK), mobileAuthenticateResponse);
+        validateSuccess(capturedRequest, LANGUAGE_EST);
     }
 
     @Test
-    public void authenticateResponseMissingFields() throws Exception {
-        String phoneNumber = "+37255550000";
-        String idCode = "55882128025";
-        Language language = new Language();
-        language.setCode(LanguageC.RUS);
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "Special message";
-
+    public void authentication_fails_when_fields_are_missing() throws Exception {
         Capture<SOAPMessage> capturedRequest = newCapture();
 
-        Map<String, String> response = new HashMap<>();
-        response.put("Sesscode", "123");
-
-        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " //
-                + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " //
-                + "xmlns:dig=\"http://www.example.com/Service/Service.wsdl\" " //
-                + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " //
-                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" //
-                + "<SOAP-ENV:Header/>" //
-                + "<SOAP-ENV:Body SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" //
-                + "<dig:MobileAuthenticateResponse>" //
-                + "<Sesscode xsi:type=\"xsd:int\">" + response.get("Sesscode") + "</Sesscode>" //
-                + "</dig:MobileAuthenticateResponse>" //
-                + "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes());
-        SOAPMessage responseMessage = MessageFactory.newInstance().createMessage(null, is);
-
-        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
+        expectConfiguration(SERVICE_NAME, MESSAGE, MOBILE_ID_ENDPOINT);
         expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
+                createMessage(missingFields(map(SESSCODE, "123"))));
 
         replayAll();
 
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
+        MobileAuthenticateResponse response = authenticate(LANGUAGE_RUS);
+
+        verifyAll();
+
+        assertNull(response);
+    }
+
+    @Test
+    public void authentication_fails() throws Exception {
+        Capture<SOAPMessage> capturedRequest = newCapture();
+
+        expectConfiguration(SERVICE_NAME, MESSAGE, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                createMessage(faultMessage()));
+
+        replayAll();
+
+        MobileAuthenticateResponse response = authenticate(LANGUAGE_RUS);
+
+        verifyAll();
+
+        assertNull(response);
+    }
+
+    @Test
+    public void authentication_is_NOK() throws Exception {
+        Capture<SOAPMessage> capturedRequest = newCapture();
+
+        expectConfiguration(SERVICE_NAME, MESSAGE, MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                createMessage(authMessage2(response(ID_CODE, NOK))));
+
+        replayAll();
+
+        MobileAuthenticateResponse mobileAuthenticateResponse = authenticate(LANGUAGE_RUS);
 
         verifyAll();
 
@@ -251,228 +163,65 @@ public class MobileIDSOAPServiceTest {
     }
 
     @Test
-    public void authenticateFault() throws Exception {
-        String phoneNumber = "+37255550000";
-        String idCode = "55882128025";
-        Language language = new Language();
-        language.setCode(LanguageC.RUS);
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "Special message";
-
+    public void user_is_not_authenticated() throws Exception {
         Capture<SOAPMessage> capturedRequest = newCapture();
+        SOAPMessage responseMessage = createMessage(authMessage1(map("Status", "NOT_VALID")));
 
-        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">" //
-                + "<SOAP-ENV:Header/>" //
-                + "<SOAP-ENV:Body>" //
-                + "<SOAP-ENV:Fault>" //
-                + "<faultcode>SOAP-ENV:Client</faultcode>" //
-                + "<faultstring xml:lang=\"en\">301</faultstring>" //
-                + "<detail><message>User is not a Mobile-ID client</message></detail>" //
-                + "</SOAP-ENV:Fault>" //
-                + "</SOAP-ENV:Body>" //
-                + "</SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes());
-        SOAPMessage responseMessage = MessageFactory.newInstance().createMessage(null, is);
-
-        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
+        soapExpectations(capturedRequest, responseMessage);
 
         replayAll();
 
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
-
-        verifyAll();
-
-        assertNull(mobileAuthenticateResponse);
-    }
-
-    @Test
-    public void authenticateStatusNotOK() throws Exception {
-        String phoneNumber = "+37255550000";
-        String idCode = "55882128025";
-        Language language = new Language();
-        language.setCode(LanguageC.RUS);
-        String serviceName = "ServiceNameHere";
-        String messageToDisplay = "Special message";
-
-        Capture<SOAPMessage> capturedRequest = newCapture();
-
-        Map<String, String> response = new HashMap<>();
-        response.put("Sesscode", "1705273522");
-        response.put("Status", "SOMETHING_WENT_WRONG");
-        response.put("UserIDCode", idCode);
-        response.put("UserGivenname", "Richard");
-        response.put("UserSurname", "Smith");
-        response.put("UserCountry", "EE");
-        response.put("UserCN", "RICHARD,SMITH,55882128025");
-        response.put("ChallengeID", "6723");
-
-        SOAPMessage responseMessage = createMobileAuthenticateResponse(response);
-
-        expectConfiguration(serviceName, messageToDisplay, MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
-
-        replayAll();
-
-        MobileAuthenticateResponse mobileAuthenticateResponse = mobileIDSOAPService.authenticate(phoneNumber, idCode,
-                language);
-
-        verifyAll();
-
-        assertNull(mobileAuthenticateResponse);
-    }
-
-    @Test
-    public void isAuthenticatedNotValid() throws Exception {
-        String sessionCode = "testingSessionCode123";
-        AuthenticationState authenticationState = new AuthenticationState();
-        authenticationState.setSessionCode(sessionCode);
-
-        Capture<SOAPMessage> capturedRequest = newCapture();
-
-        Map<String, String> response = new HashMap<>();
-        response.put("Status", "NOT_VALID");
-
-        SOAPMessage responseMessage = createGetMobileAuthenticateStatusResponse(response);
-
-        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix");
-        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
-                .andReturn("http://www.example.com/Service/Service.wsdl");
-
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
-
-        replayAll();
-
-        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authenticationState);
+        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authentication());
 
         verifyAll();
 
         assertFalse(isAuthenticated);
-
-        // Validate captured request message
-        Map<String, String> request = parseMessage(capturedRequest.getValue(), "GetMobileAuthenticateStatus");
-        assertEquals(2, request.size());
-        assertEquals(sessionCode, request.get("Sesscode"));
-        assertEquals("FALSE", request.get("WaitSignature"));
+        validateIsAuthenticated(capturedRequest);
     }
 
     @Test
-    public void isAuthenticated() throws Exception {
-        String sessionCode = "testingSessionCode123";
-        AuthenticationState authenticationState = new AuthenticationState();
-        authenticationState.setSessionCode(sessionCode);
-
+    public void user_is_authenticated() throws Exception {
         Capture<SOAPMessage> capturedRequest = newCapture();
 
-        Map<String, String> firstResponse = new HashMap<>();
-        firstResponse.put("Status", AUTHENTICATION_IN_PROGRESS);
-        SOAPMessage firstResponseMessage = createGetMobileAuthenticateStatusResponse(firstResponse);
+        SOAPMessage firstResponseMessage = createMessage(authMessage1(map("Status", AUTHENTICATION_IN_PROGRESS)));
+        SOAPMessage secondResponseMessage = createMessage(authMessage1(map("Status", AUTHENTICATION_COMPLETE)));
 
-        Map<String, String> secondResponse = new HashMap<>();
-        secondResponse.put("Status", AUTHENTICATION_COMPLETE);
-        SOAPMessage secondResponseMessage = createGetMobileAuthenticateStatusResponse(secondResponse);
-
-        // Set SOAP expects for 2 SOAP requests
-        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix").times(2);
-        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
-                .andReturn("http://www.example.com/Service/Service.wsdl").times(2);
-
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT).times(2);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                firstResponseMessage);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                secondResponseMessage);
+        soapExpectations(capturedRequest, firstResponseMessage, secondResponseMessage);
 
         replayAll();
 
-        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authenticationState);
+        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authentication());
 
         verifyAll();
 
         assertTrue(isAuthenticated);
-
-        // Validate captured request message
-        Map<String, String> request = parseMessage(capturedRequest.getValue(), "GetMobileAuthenticateStatus");
-        assertEquals(2, request.size());
-        assertEquals(sessionCode, request.get("Sesscode"));
-        assertEquals("FALSE", request.get("WaitSignature"));
+        validateIsAuthenticated(capturedRequest);
     }
 
     @Test
-    public void isAuthenticatedResponseMissingFields() throws Exception {
-        String sessionCode = "testingSessionCode123";
-        AuthenticationState authenticationState = new AuthenticationState();
-        authenticationState.setSessionCode(sessionCode);
-
+    public void user_is_not_authenticated_if_fields_are_not_filled() throws Exception {
         Capture<SOAPMessage> capturedRequest = newCapture();
-
-        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " //
-                + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " //
-                + "xmlns:dig=\"http://www.example.com/Service/Service.wsdl\" " //
-                + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " //
-                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" //
-                + "<SOAP-ENV:Header/>" //
-                + "<SOAP-ENV:Body SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" //
-                + "<dig:MobileAuthenticateResponse>" //
-                + "</dig:MobileAuthenticateResponse>" //
-                + "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes());
-        SOAPMessage responseMessage = MessageFactory.newInstance().createMessage(null, is);
-
-        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix");
-        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
-                .andReturn("http://www.example.com/Service/Service.wsdl");
-
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
+        soapExpectations(capturedRequest, createMessage(message()));
 
         replayAll();
 
-        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authenticationState);
+        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authentication());
 
         verifyAll();
 
         assertFalse(isAuthenticated);
-
-        // Validate captured request message
-        Map<String, String> request = parseMessage(capturedRequest.getValue(), "GetMobileAuthenticateStatus");
-        assertEquals(2, request.size());
-        assertEquals(sessionCode, request.get("Sesscode"));
-        assertEquals("FALSE", request.get("WaitSignature"));
+        validateIsAuthenticated(capturedRequest);
     }
 
     @Test
-    public void isAuthenticatedInterrupt() throws Exception {
-        String sessionCode = "testingSessionCode123";
-        AuthenticationState authenticationState = new AuthenticationState();
-        authenticationState.setSessionCode(sessionCode);
-
+    public void user_is_not_authenticated_if_authentication_is_interrupted_while_authenticating() throws Exception {
         Capture<SOAPMessage> capturedRequest = newCapture();
-
-        Map<String, String> response = new HashMap<>();
-        response.put("Status", AUTHENTICATION_IN_PROGRESS);
-        SOAPMessage responseMessage = createGetMobileAuthenticateStatusResponse(response);
-
-        // Set SOAP expects
-        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix");
-        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
-                .andReturn("http://www.example.com/Service/Service.wsdl");
-
-        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
-        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
-                responseMessage);
-
+        soapExpectations(capturedRequest, createMessage(authMessage1(map("Status", AUTHENTICATION_IN_PROGRESS))));
         mobileIDSOAPService.setShouldThrowException(true);
 
         replayAll();
 
-        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authenticationState);
+        boolean isAuthenticated = mobileIDSOAPService.isAuthenticated(authentication());
 
         verifyAll();
 
@@ -495,8 +244,8 @@ public class MobileIDSOAPServiceTest {
     }
 
     private void validateMobileAuthenticateResponse(Map<String, String> expectedResponse,
-            MobileAuthenticateResponse mobileAuthenticateResponse) {
-        assertEquals(expectedResponse.get("Sesscode"), mobileAuthenticateResponse.getSessionCode());
+                                                    MobileAuthenticateResponse mobileAuthenticateResponse) {
+        assertEquals(expectedResponse.get(SESSCODE), mobileAuthenticateResponse.getSessionCode());
         assertEquals(expectedResponse.get("Status"), mobileAuthenticateResponse.getStatus());
         assertEquals(expectedResponse.get("UserIDCode"), mobileAuthenticateResponse.getIdCode());
         assertEquals(expectedResponse.get("UserGivenname"), mobileAuthenticateResponse.getName());
@@ -504,46 +253,6 @@ public class MobileIDSOAPServiceTest {
         assertEquals(expectedResponse.get("UserCountry"), mobileAuthenticateResponse.getCountry());
         assertEquals(expectedResponse.get("UserCN"), mobileAuthenticateResponse.getUserCommonName());
         assertEquals(expectedResponse.get("ChallengeID"), mobileAuthenticateResponse.getChallengeID());
-    }
-
-    private SOAPMessage createMobileAuthenticateResponse(Map<String, String> response) throws Exception {
-        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " //
-                + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " //
-                + "xmlns:dig=\"http://www.example.com/Service/Service.wsdl\" " //
-                + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " //
-                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" //
-                + "<SOAP-ENV:Header/>" //
-                + "<SOAP-ENV:Body SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" //
-                + "<dig:MobileAuthenticateResponse>" //
-                + "<Sesscode xsi:type=\"xsd:int\">" + response.get("Sesscode") + "</Sesscode>" //
-                + "<Status xsi:type=\"xsd:string\">" + response.get("Status") + "</Status>" //
-                + "<UserIDCode xsi:type=\"xsd:string\">" + response.get("UserIDCode") + "</UserIDCode>" //
-                + "<UserGivenname xsi:type=\"xsd:string\">" + response.get("UserGivenname") + "</UserGivenname>" //
-                + "<UserSurname xsi:type=\"xsd:string\">" + response.get("UserSurname") + "</UserSurname>" //
-                + "<UserCountry xsi:type=\"xsd:string\">" + response.get("UserCountry") + "</UserCountry>" //
-                + "<UserCN xsi:type=\"xsd:string\">" + response.get("UserCN") + "</UserCN>" //
-                + "<ChallengeID xsi:type=\"xsd:string\">" + response.get("ChallengeID") + "</ChallengeID>" //
-                + "</dig:MobileAuthenticateResponse>" //
-                + "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes());
-        return MessageFactory.newInstance().createMessage(null, is);
-    }
-
-    private SOAPMessage createGetMobileAuthenticateStatusResponse(Map<String, String> response) throws Exception {
-        String message = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " //
-                + "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " //
-                + "xmlns:dig=\"http://www.example.com/Service/Service.wsdl\" " //
-                + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " //
-                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" //
-                + "<SOAP-ENV:Header/>" //
-                + "<SOAP-ENV:Body SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" //
-                + "<dig:GetMobileAuthenticateStatusResponse>" //
-                + "<Status xsi:type=\"xsd:string\">" + response.get("Status") + "</Status>" //
-                + "<Signature xsi:type=\"xsd:string\"/>" //
-                + "</dig:GetMobileAuthenticateStatusResponse>" //
-                + "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes());
-        return MessageFactory.newInstance().createMessage(null, is);
     }
 
     private void expectConfiguration(String serviceName, String messageToDisplay, String endpoint) {
@@ -555,6 +264,18 @@ public class MobileIDSOAPServiceTest {
                 .andReturn("http://www.example.com/Service/Service.wsdl");
 
         expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(endpoint);
+    }
+
+    private void soapExpectations(Capture<SOAPMessage> capturedRequest, SOAPMessage firstResponseMessage, SOAPMessage secondResponseMessage) throws SOAPException {
+        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix").times(2);
+        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
+                .andReturn("http://www.example.com/Service/Service.wsdl").times(2);
+
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT).times(2);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                firstResponseMessage);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                secondResponseMessage);
     }
 
     private class MobileIDSOAPServicePartialMock extends MobileIDSOAPService {
@@ -594,4 +315,45 @@ public class MobileIDSOAPServiceTest {
         }
     }
 
+    private void validateSuccess(Capture<SOAPMessage> capturedRequest, Language languageRus) throws SOAPException {
+        Map<String, String> request = parseMessage(capturedRequest.getValue(), "MobileAuthenticate");
+        assertEquals(6, request.size());
+        assertEquals(ID_CODE, request.get("IDCode"));
+        assertEquals(PHONE_NUMBER, request.get("PhoneNo"));
+        assertEquals(languageRus.getCode().toUpperCase(), request.get("Language"));
+        assertEquals(SERVICE_NAME, request.get("ServiceName"));
+        assertEquals(MOBILE_AUTHENTICATE_MESSAGING_MODE, request.get("MessagingMode"));
+        assertEquals(MESSAGE, request.get("MessageToDisplay"));
+    }
+
+    private void validateSuccessNoMessage(Capture<SOAPMessage> capturedRequest) throws SOAPException {
+        Map<String, String> request = parseMessage(capturedRequest.getValue(), "MobileAuthenticate");
+        assertEquals(5, request.size());
+        assertEquals(ID_CODE, request.get("IDCode"));
+        assertEquals(PHONE_NUMBER, request.get("PhoneNo"));
+        assertEquals(LANGUAGE_EST.getCode().toUpperCase(), request.get("Language"));
+        assertEquals(SERVICE_NAME, request.get("ServiceName"));
+        assertEquals(MOBILE_AUTHENTICATE_MESSAGING_MODE, request.get("MessagingMode"));
+    }
+
+    private void soapExpectations(Capture<SOAPMessage> capturedRequest, SOAPMessage responseMessage) throws SOAPException {
+        expect(configuration.getString(MOBILEID_NAMESPACE_PREFIX)).andReturn("prefix");
+        expect(configuration.getString(MOBILEID_NAMESPACE_URI))
+                .andReturn("http://www.example.com/Service/Service.wsdl");
+
+        expect(configuration.getString(MOBILEID_ENDPOINT)).andReturn(MOBILE_ID_ENDPOINT);
+        expect(connection.call(EasyMock.capture(capturedRequest), EasyMock.eq(MOBILE_ID_ENDPOINT))).andReturn(
+                responseMessage);
+    }
+
+    private void validateIsAuthenticated(Capture<SOAPMessage> capturedRequest) throws SOAPException {
+        Map<String, String> request = parseMessage(capturedRequest.getValue(), "GetMobileAuthenticateStatus");
+        assertEquals(2, request.size());
+        assertEquals(SESSION_CODE, request.get(SESSCODE));
+        assertEquals("FALSE", request.get("WaitSignature"));
+    }
+
+    private MobileAuthenticateResponse authenticate(Language languageRus) throws SOAPException {
+        return mobileIDSOAPService.authenticate(PHONE_NUMBER, ID_CODE, languageRus);
+    }
 }

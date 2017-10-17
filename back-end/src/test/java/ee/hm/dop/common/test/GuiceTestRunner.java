@@ -1,10 +1,10 @@
 package ee.hm.dop.common.test;
 
-import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
-
 import ee.hm.dop.config.guice.GuiceInjector;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+
+import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
 
 /**
  * JUnit test runner that initialize Guice.
