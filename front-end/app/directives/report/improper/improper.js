@@ -2,18 +2,18 @@
 
 {
 class controller extends Controller {
-    $onChanges({ learningObject }) {
-        if (learningObject && learningObject.newValue)
-            this.$scope.data = Object.assign({}, this.$scope.data, {
-                learningObject: learningObject.newValue
-            })
-    }
     $onInit() {
         this.$scope.data = {
             reportingReasons: [],
             reportingText: '',
             learningObject: this.$scope.learningObject
         }
+        this.$scope.$watch('learningObject', (newValue) => {
+            if (newValue)
+                this.$scope.data = Object.assign({}, this.$scope.data, {
+                    learningObject: newValue
+                })
+        })
         this.$scope.loading = true
         this.$scope.reasons = []
         this.$scope.showConfirmationDialog = this.showConfirmationDialog.bind(this)
@@ -99,6 +99,8 @@ class controller extends Controller {
                     this.$rootScope.$broadcast('errorMessage:reported')
                     this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
                 }
+            }, () => {
+                console.log('FAILED PUT rest/impropers', data)
             })
     }
 }

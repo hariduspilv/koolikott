@@ -75,7 +75,6 @@ class controller extends Controller {
                                     checked: reasons.length === 1
                                 }))
                             }
-                            console.log('commentReportingReasons:', reasons)
                             $scope.loading = false
                         })
 
