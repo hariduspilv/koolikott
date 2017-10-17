@@ -17,7 +17,7 @@ public abstract class Page extends SeleniumUser{
 	}
 
 	public boolean isContentReviewed() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
 

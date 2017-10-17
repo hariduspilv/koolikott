@@ -16,7 +16,7 @@ import ee.netgroup.hm.tests.SeleniumUser;
 
 public class Helpers extends SeleniumUser{
 	
-	public static void waitForSeconds(long milliSeconds) {
+	public static void waitForMilliseconds(long milliSeconds) {
 
 		try {
 			Thread.sleep(milliSeconds);
@@ -44,7 +44,7 @@ public class Helpers extends SeleniumUser{
 	public static void uploadFile() {
 
 		try {
-			Helpers.waitForSeconds(1000);
+			Helpers.waitForMilliseconds(1000);
 			StringSelection s = new StringSelection("c:\\files\\cateyes.jpg");
 		    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(s, null);
 			

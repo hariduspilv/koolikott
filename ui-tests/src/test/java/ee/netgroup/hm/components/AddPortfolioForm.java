@@ -31,6 +31,7 @@ public class AddPortfolioForm extends Component{
 		Helpers.waitForVisibility(educationalContext);
 		getDriver().findElement(educationalContext).click();
 		getDriver().findElements(basicEducation).get(1).click();
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
@@ -67,15 +68,15 @@ public class AddPortfolioForm extends Component{
 
 	public AddPortfolioForm insertSpecificPortfolioTitle(String title) {
 		Helpers.waitForVisibility(portfolioTitle);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(portfolioTitle).sendKeys(title);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public EditPortfolioPage clickSavePortfolio() {
 		getDriver().findElement(savePortfolio).click();
-		Helpers.waitForSeconds(1500);
+		Helpers.waitForMilliseconds(1500);
 		return new EditPortfolioPage();
 	}
 	

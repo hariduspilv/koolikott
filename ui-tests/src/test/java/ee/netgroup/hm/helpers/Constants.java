@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 
 public class Constants {
 	
+
 	public static String landingPage = "https://oxygen.netgroupdigital.com/";
 	
 	
@@ -45,6 +46,9 @@ public class Constants {
     // Materials
     public static String deletedMaterial = "https://www.gfycat.com/gifs/search/pug/detail/RingedWarpedCrayfish";
     public static String existingMaterial= "https://test.ee";
+    
+    
+	public static String unreviewedBannerText = "See õppevara on üle vaatamata";
     
     
 }
