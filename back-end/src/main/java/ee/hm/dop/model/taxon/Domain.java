@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.collections.CollectionUtils;
 
 @Entity
 @DiscriminatorValue("DOMAIN")
@@ -66,5 +67,15 @@ public class Domain extends Taxon {
 
     public void setSpecializations(Set<Specialization> specializations) {
         this.specializations = specializations;
+    }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        Set<Subject> subjects = getSubjects();
+        if (CollectionUtils.isNotEmpty(subjects)) return subjects;
+        Set<Topic> topics = getTopics();
+        if (CollectionUtils.isNotEmpty(topics)) return topics;
+        return getSpecializations();
     }
 }

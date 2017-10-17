@@ -1,12 +1,12 @@
 SET foreign_key_checks = 0;
 
-CREATE TABLE dop.PeerReview
+CREATE TABLE PeerReview
 (
   id BIGINT(20) PRIMARY KEY,
   url VARCHAR(500) NOT NULL
 );
 
-CREATE TABLE dop.Material_PeerReview
+CREATE TABLE Material_PeerReview
 (
   id BIGINT(20) PRIMARY KEY,
   material BIGINT(20) NOT NULL,
@@ -15,9 +15,9 @@ CREATE TABLE dop.Material_PeerReview
   CONSTRAINT peerReview__fk FOREIGN KEY (peerReview) REFERENCES PeerReview (id)
 );
 
-ALTER TABLE dop.Material_PeerReview MODIFY id BIGINT(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE Material_PeerReview MODIFY id BIGINT(20) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE dop.PeerReview MODIFY id BIGINT(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE PeerReview MODIFY id BIGINT(20) NOT NULL AUTO_INCREMENT;
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1,'MATERIAL_PEER_REVIEW','Retsensioon');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3,'MATERIAL_PEER_REVIEW','Review');

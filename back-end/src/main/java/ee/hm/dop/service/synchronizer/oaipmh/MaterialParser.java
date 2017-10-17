@@ -50,7 +50,7 @@ public abstract class MaterialParser {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
-    private static final String AUTHOR = "AUTHOR";
+    public static final String AUTHOR = "AUTHOR";
     private static final Map<String, String> taxonMap;
 
     static {
@@ -61,21 +61,17 @@ public abstract class MaterialParser {
         taxonMap.put("vocationalTaxon", "vocationalEducation");
     }
 
-    protected XPathFactory xPathfactory = XPathFactory.newInstance();
+    private XPathFactory xPathfactory = XPathFactory.newInstance();
     protected XPath xpath = xPathfactory.newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
-
     @Inject
     private PeerReviewService peerReviewService;
-
     @Inject
     private PublisherService publisherService;
-
     @Inject
     private AuthorService authorService;
-
     @Inject
     private TargetGroupService targetGroupService;
 
@@ -446,15 +442,12 @@ public abstract class MaterialParser {
     }
 
     protected String getRoleString(Node contributorNode) {
-        String role = null;
         try {
             Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
-            role = roleNode.getTextContent().trim().toUpperCase();
-        } catch (Exception e) {
-            //ignore
+            return roleNode.getTextContent().trim().toUpperCase();
+        } catch (Exception ignored) {
+            return null;
         }
-
-        return role;
     }
 
     protected String getVCard(Node contributorNode) {

@@ -19,6 +19,9 @@ import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Cacheable
 @DiscriminatorColumn(name = "level")
@@ -78,6 +81,10 @@ public abstract class Taxon extends AbstractEntity {
 
     @JsonIgnore
     public abstract Taxon getParent();
+
+    @JsonIgnore
+    public abstract Set<? extends Taxon> getChildren();
+
 
     public boolean containsTaxon(Taxon taxon) {
         if (this.equals(taxon)) {

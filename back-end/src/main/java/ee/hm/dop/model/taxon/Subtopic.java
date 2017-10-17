@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Set;
+
 @Entity
 @DiscriminatorValue("SUBTOPIC")
 public class Subtopic extends Taxon {
@@ -30,5 +32,11 @@ public class Subtopic extends Taxon {
     @Override
     public Taxon getParent() {
         return getTopic();
+    }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return null;
     }
 }

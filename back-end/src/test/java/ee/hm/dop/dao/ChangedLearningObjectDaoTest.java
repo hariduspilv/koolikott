@@ -13,21 +13,15 @@ import static junit.framework.TestCase.assertTrue;
 
 public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
 
+    public static final Material MATERIAL1 = TestConstants.materialWithId(MATERIAL_1);
+    public static final Material MATERIAL2 = TestConstants.materialWithId(MATERIAL_2);
     @Inject
     private ChangedLearningObjectDao changedLearningObjectDao;
 
     @Test
     public void getAllByLearningObject() {
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
-
-        Material material = new Material();
-        material.setId(MATERIAL_1);
-
-        change1.setId(1L);
-        change2.setId(2L);
-        change1.setLearningObject(material);
-        change2.setLearningObject(material);
+        ChangedLearningObject change1 = change(MATERIAL1, 1L);
+        ChangedLearningObject change2 = change(MATERIAL1, 2L);
 
         changedLearningObjectDao.createOrUpdate(change1);
         changedLearningObjectDao.createOrUpdate(change2);
@@ -43,21 +37,9 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
 
     @Test
     public void findAll() {
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
-        ChangedLearningObject change3 = new ChangedLearningObject();
-
-        Material material1 = new Material();
-        material1.setId(MATERIAL_1);
-        Material material2 = new Material();
-        material2.setId(MATERIAL_2);
-
-        change1.setId(1L);
-        change2.setId(2L);
-        change3.setId(3L);
-        change1.setLearningObject(material1);
-        change2.setLearningObject(material1);
-        change3.setLearningObject(material2);
+        ChangedLearningObject change1 = change(MATERIAL1, 1L);
+        ChangedLearningObject change2 = change(MATERIAL1, 2L);
+        ChangedLearningObject change3 = change(MATERIAL2, 3L);
 
         changedLearningObjectDao.createOrUpdate(change1);
         changedLearningObjectDao.createOrUpdate(change2);
@@ -94,4 +76,11 @@ public class ChangedLearningObjectDaoTest extends DatabaseTestBase {
         assertTrue(changesAfter.size() == 0);
     }
 
+
+    public ChangedLearningObject change(Material material, long id) {
+        ChangedLearningObject change1 = new ChangedLearningObject();
+        change1.setId(id);
+        change1.setLearningObject(material);
+        return change1;
+    }
 }

@@ -5,7 +5,7 @@ CREATE TABLE ReportingReason (
   improperContent BIGINT       NOT NULL,
   reason VARCHAR(255) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (improperContent) REFERENCES dop.ImproperContent (id)
+  FOREIGN KEY (improperContent) REFERENCES ImproperContent (id)
 );
 
 ALTER TABLE ImproperContent
