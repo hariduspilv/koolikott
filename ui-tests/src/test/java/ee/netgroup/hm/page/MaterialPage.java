@@ -146,7 +146,7 @@ public class MaterialPage extends Page{
 		return this;
 	}
 
-	public boolean isMaterialRestored() {
+	public boolean isErrorBannerHidden() {
 		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
@@ -155,11 +155,6 @@ public class MaterialPage extends Page{
 		Helpers.waitForClickable(doneButton);
 		getDriver().findElement(doneButton).click();
 		return this;
-	}
-
-	public boolean isContentProper() {
-		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 	public MaterialPage addNewTag() {

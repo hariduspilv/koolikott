@@ -29,6 +29,11 @@ public class PortfolioPage extends Page{
 	private By doneButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
 	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
 	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
+	private By showCommentsButton = By.id("show-comments");
+	private By addCommentField = By.xpath("//textarea[@data-ng-model='newComment.text']");
+	private By addComment = By.xpath("//button[@data-ng-click='$ctrl.addComment()']");
+	private By comment = By.xpath("//p[@data-ng-bind='comment.text']");
+	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment(comment, $event)']");
 	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
@@ -68,22 +73,15 @@ public class PortfolioPage extends Page{
 		return new ReportImproperPopUp();
 	}
 	
-	public String getPortfolioIsReportedImproperText() {
+	public String getNotificationIsSentText() {
 		return getDriver().findElement(Constants.toastText).getText();
 	}
 
 	public PortfolioPage markContentAsNotImproper() {
-		//Helpers.waitForClickable(doneButton);
 		Helpers.moveToElement(doneButton);
 		getDriver().findElement(doneButton).sendKeys(Keys.ENTER);;
-		//getDriver().findElement(doneButton).click();
 		Helpers.waitForMilliseconds(5000);
 		return this;
-	}
-
-	public boolean isContentProper() {
-		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 	public boolean getPreFormattedTextTag() {
@@ -151,11 +149,33 @@ public class PortfolioPage extends Page{
 		Helpers.waitForMilliseconds(3000);
 		return this;
 	}
-
-	public boolean isPortfolioRestored() {
+	
+	public boolean isErrorBannerHidden() {
 		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
+
+	public PortfolioPage showComments() {
+		getDriver().findElement(showCommentsButton).click();
+		return this;
+	}
+	
+	public PortfolioPage addNewComment() {
+		Helpers.waitForVisibility(addCommentField);
+		getDriver().findElement(addCommentField).sendKeys(Constants.commentText);
+		getDriver().findElement(addComment).click();
+		return this;
+	}
+
+	public String getCommentText() {
+		return getDriver().findElement(comment).getText();
+	}
+
+	public ReportImproperPopUp reportImproperComment() {
+		getDriver().findElement(reportCommentButton).click();
+		return new ReportImproperPopUp();
+	}
+
 
 
 }

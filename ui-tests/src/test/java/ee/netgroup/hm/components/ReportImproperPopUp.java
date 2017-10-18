@@ -7,12 +7,11 @@ import ee.netgroup.hm.page.PortfolioPage;
 
 public class ReportImproperPopUp extends Component{
 	
-	//private static By reportContent = By.xpath("//div[@class='md-container md-ink-ripple']");
 	private By reportContent = By.name("LO_CONTENT");
 	private static By reportDescription = By.xpath("//textarea[@data-ng-model='data.reportingText']");
-	private static By notify = By.xpath("//button[@class='md-primary md-button md-ink-ripple']");
-	private static By notifyTag = By.xpath("//button[@data-ng-click='sendReport()']");
+	private static By notify = By.xpath("//button[@data-ng-click='sendReport()']");
 
+	
 	public ReportImproperPopUp setImproperReason() {
 		Helpers.waitForVisibility(reportContent);
 		getDriver().findElement(reportContent).click();
@@ -33,7 +32,7 @@ public class ReportImproperPopUp extends Component{
 	}
 
 	public MaterialPage clickNotifyMaterial() {
-		getDriver().findElement(notifyTag).click();
+		getDriver().findElement(notify).click();
 		return new MaterialPage();
 	}
 }
