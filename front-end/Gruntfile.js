@@ -73,11 +73,14 @@ module.exports = function (grunt) {
                 hostname: '0.0.0.0',
                 livereload: 3729
             },
-            proxies: [{
-                context: '/rest',
-                host: 'oxygen.netgroupdigital.com',
-                port: 8080
-            }],
+            proxies: [
+                //dev
+                {context: '/rest', host: 'oxygen.netgroupdigital.com', port: 8080},
+                //test
+                // {context: '/rest', host: 'test.oxygen.netgroupdigital.com', port: 8090},
+                //local
+                // {context: '/rest', host: 'localhost', port: 8080}
+            ],
             livereload: {
                 options: {
                     open: true,
@@ -442,9 +445,9 @@ module.exports = function (grunt) {
         strip_code: {
             options: {
                 blocks: [{
-                        start_block: "<!-- remove-html-for-live -->",
-                        end_block: "<!-- end-remove-html-for-live -->"
-                    }]
+                    start_block: "<!-- remove-html-for-live -->",
+                    end_block: "<!-- end-remove-html-for-live -->"
+                }]
             },
             your_target: {
                 src: '<%= yeoman.dist.app %>/index.html'
