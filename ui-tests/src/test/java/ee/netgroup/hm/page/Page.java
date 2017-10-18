@@ -16,10 +16,11 @@ public abstract class Page extends SeleniumUser{
 		return this;		
 	}
 
-	public boolean isContentReviewed() {
+	public boolean isErrorBannerHidden() {
 		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
+
 
 }
 

@@ -17,7 +17,8 @@ public class AdminDashboardTests {
 				.clickToOrderImproperPortfolios()
 				.clickOpenImproperPortfolio()
 				.markContentAsNotImproper()
-				.isContentProper();
+				//.isContentProper();
+				.isErrorBannerHidden();
 		assertTrue(improperContentBannerIsHidden);
 	}
 	
@@ -30,7 +31,7 @@ public class AdminDashboardTests {
 				.clickImproperMaterials()
 				.clickOpenImproperMaterial()
 				.markContentAsNotImproper()
-				.isContentProper();
+				.isErrorBannerHidden();
 		assertTrue(improperContentBannerIsHidden);
 	}
 
@@ -43,7 +44,7 @@ public class AdminDashboardTests {
 				.clickUnreviewedLearninObjects()
 				.clickOpenLearningObject()
 				.markContentIsReviewed()
-				.isContentReviewed();
+				.isErrorBannerHidden();
 		assertTrue(unreviwedBannerIsHidden);
 	}
 	
@@ -56,7 +57,7 @@ public class AdminDashboardTests {
 				.clickDeletedPortfolios()
 				.clickOpenPortfolio()
 				.restoreDeletedPortfolio()
-				.isPortfolioRestored();
+				.isErrorBannerHidden();
 		assertTrue(deletedBannerIsHidden);
 	}
 	
@@ -69,7 +70,7 @@ public class AdminDashboardTests {
 				.clickDeletedMaterials()
 				.clickOpenMaterial()
 				.restoreMaterial()
-				.isMaterialRestored();
+				.isErrorBannerHidden();
 		assertTrue(deletedBannerIsHidden);
 	}
 	
@@ -83,7 +84,7 @@ public class AdminDashboardTests {
 				.clickSortByReportedDate()
 				.clickOpenMaterial()
 				.restoreBrokenMaterial()
-				.isMaterialRestored();
+				.isErrorBannerHidden();
 		assertTrue(brokenBannerIsHidden);
 	}
 

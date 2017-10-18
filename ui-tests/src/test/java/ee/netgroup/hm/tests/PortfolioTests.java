@@ -89,9 +89,10 @@ public class PortfolioTests {
 				.openPortfolio()
 				.clickActionsMenu()
 				.clickNotifyImproperContent()
-				.setReportingReason()
+				.setImproperReason()
+				.setImproperDescription()
 				.clickNotify()
-				.isPortfolioReportedAsImproper();
+				.getNotificationIsSentText();
 		Assert.assertEquals(Constants.reportedText, improperContentIsReported);
 	}
 	/*
@@ -155,6 +156,34 @@ public class PortfolioTests {
 				.isAddToRecommendationsDisplayed();
 		assertTrue(removedFromRecommendations);
 	}
+	
+	@Test
+	public void PortfolioTests_AddComment_CommentIsAdded() {
+
+		String improperTagIsReported = goToLandingPage()
+				.chooseUserType("User")
+				.openPortfolio()
+				.showComments()
+				.addNewComment()
+				.getCommentText();
+		Assert.assertEquals(Constants.commentText, improperTagIsReported);
+	}
+	
+	@Test
+	public void PortfolioTests_ReportImproperComment_CommentIsReported() {
+
+		String improperCommentIsReported = goToLandingPage()
+				.chooseUserType("User")
+				.openPortfolio()
+				.showComments()
+				.addNewComment()
+				.reportImproperComment()
+				.setImproperDescription()
+				.clickNotify()
+				.getNotificationIsSentText();
+		Assert.assertEquals(Constants.reportedText, improperCommentIsReported);
+	}
+
 
 
 
