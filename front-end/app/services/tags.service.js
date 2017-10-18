@@ -23,7 +23,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             }
         },
 
-        reportTag(tag, learningObject, successCallback, failCallback) {
+        reportTag(learningObject, targetEvent) {
             return $mdDialog
                 .show({
                     controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
@@ -32,7 +32,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                             reportingText: ''
                         }
                         $scope.cancel = () => {
-                            $cope.data.reportingText = ''
+                            $scope.data.reportingText = ''
                             $mdDialog.cancel()
                         }
                         $scope.sendReport = () => $mdDialog.hide($scope)
@@ -59,22 +59,23 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                         })
                     }],
                     templateUrl: 'directives/report/improper/improper.dialog.html',
-                    clickOutsideToClose:true
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    targetEvent,
                 })
-                .then(({ data, reasons }) => {
-                    Object.assign(data, {
-                        learningObject,
-                        reportingReasons: reasons.reduce((reportingReasons, r) =>
-                            r.checked
-                                ? reportingReasons.concat({ reason: r.key })
-                                : reportingReasons,
-                            []
-                        )
-                    })
-                    return successCallback
-                        ? serverCallService.makePut('rest/impropers', data, successCallback, failCallback)
-                        : serverCallService.makePut('rest/impropers', data).then(response => response.data)
-                })
+                .then(({ data, reasons }) =>
+                    serverCallService
+                        .makePut('rest/impropers', Object.assign(data, {
+                            learningObject,
+                            reportingReasons: reasons.reduce((reportingReasons, r) =>
+                                r.checked
+                                    ? reportingReasons.concat({ reason: r.key })
+                                    : reportingReasons,
+                                []
+                            )
+                        }))
+                        .then(response => response.data)
+                )
         },
 
         getTagUpVotes(params, successCallback, failCallback) {

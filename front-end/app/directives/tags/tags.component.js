@@ -1,11 +1,26 @@
 'use strict'
 
 {
+const SHOW_TAG_REPORT_MODAL_HASH = 'dialog-report-tag'
+
 class controller extends Controller {
     $onInit() {
         this.newTag = {}
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.init()
+
+        // auto-launch the report dialog if hash is found in location URL
+        if (
+            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        )
+            this.reportTag()
+        
+        // remove hash from location URL upon navigating away
+        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
+            unSubscribe()
+            this.removeHash()
+        })
     }
     init() {
         this.showMoreTags = false
@@ -108,14 +123,40 @@ class controller extends Controller {
             this.init()
         }
     }
-    reportTag(tag) {
-        this.tagsService
-            .reportTag(tag, this.learningObject)
-            .then(() => {
-                this.$rootScope.learningObjectImproper = true
-                this.$rootScope.$broadcast('errorMessage:reported')
-                this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
-            })
+    reportTag(evt) {
+        !this.authenticatedUserService.isAuthenticated()
+            ? this.showLoginDialog(evt)
+            : this.tagsService
+                .reportTag(this.learningObject, evt)
+                .then(() => {
+                    this.$rootScope.learningObjectImproper = true
+                    this.$rootScope.$broadcast('errorMessage:reported')
+                    this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
+                })
+    }
+    showLoginDialog(targetEvent) {
+        this.addHash()
+        this.$mdDialog.show({
+            templateUrl: 'views/loginDialog/loginDialog.html',
+            controller: 'loginDialogController',
+            bindToController: true,
+            locals: {
+                title: this.$translate.instant('LOGIN_MUST_LOG_IN_TO_REPORT_IMPROPER')
+            },
+            clickOutsideToClose: true,
+            escapeToClose: true,
+            targetEvent
+        })
+    }
+    addHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0] + '#' + SHOW_TAG_REPORT_MODAL_HASH
+        )
+    }
+    removeHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0]
+        )
     }
     showMore() {
         this.tags = this.allTags

@@ -10,11 +10,11 @@
     <md-chip-template>
       <md-button
         data-ng-if="
-          $ctrl.isAllowed() &&
+          !$ctrl.authenticatedUserService.isRestricted() &&
           !$ctrl.authenticatedUserService.isAdmin() &&
           !$ctrl.isEditPortfolioMode"
         class="md-icon-button"
-        ng-click="$ctrl.reportTag($chip.tag)"
+        ng-click="$ctrl.reportTag($event)"
         >
         <md-icon
           class="material-icons md-light md-48"

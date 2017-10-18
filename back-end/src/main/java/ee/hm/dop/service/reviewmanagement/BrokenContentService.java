@@ -43,19 +43,19 @@ public class BrokenContentService {
 
     public List<BrokenContent> getBrokenMaterials(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
+//        if (UserUtil.isAdmin(user)) {
             return brokenContentDao.getBrokenMaterials();
-        } else {
-            return brokenContentDao.getBrokenMaterials(user);
-        }
+//        } else {
+//            return brokenContentDao.getBrokenMaterials(user);
+//        }
     }
 
     public Long getBrokenMaterialCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
+//        if (UserUtil.isAdmin(user)) {
             return brokenContentDao.getBrokenCount();
-        } else {
-            return brokenContentDao.getBrokenCount(user);
-        }
+//        } else {
+//            return brokenContentDao.getBrokenCount(user);
+//        }
     }
 }

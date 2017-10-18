@@ -19,7 +19,8 @@ angular.module('koolikottApp')
                 })
                 .when('/material', {
                     templateUrl: 'views/material/material.html',
-                    controller: 'materialController'
+                    controller: 'materialController',
+                    reloadOnSearch: false
                 })
                 .when('/help', {
                     templateUrl: 'views/static/abstractStaticPage.html',

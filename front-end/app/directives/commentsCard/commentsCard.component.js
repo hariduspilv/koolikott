@@ -2,6 +2,7 @@
 
 {
 const COMMENTS_PER_PAGE = 5
+const SHOW_COMMENT_REPORT_MODAL_HASH = 'dialog-report-comment'
 
 class controller extends Controller {
     $onChanges({ learningObject } = {}) {
@@ -20,6 +21,19 @@ class controller extends Controller {
                 .css('height', '112px'),
             1000
         )
+
+        // auto-launch the report dialog if hash is found in location URL
+        if (
+            window.location.hash.includes(SHOW_COMMENT_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        )
+            this.showReportDialog()
+        
+        // remove hash from location URL upon navigating away
+        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
+            unSubscribe()
+            this.removeHash()
+        })
     }
     isAuthorized() {
         return this.authenticatedUserService.isAuthenticated()
@@ -49,12 +63,17 @@ class controller extends Controller {
                 learningObject: this.learningObject
             })
     }
-    reportComment(comment) {
+    reportComment(comment, evt) {
+        this.authenticatedUserService.isAuthenticated()
+            ? this.showReportDialog(evt)
+            : this.showLoginDialog(evt)
+    }
+    showReportDialog(comment, targetEvent) {
         const { serverCallService, learningObject } = this
 
         return this.$mdDialog
             .show({
-                    controller: ['$scope', '$mdDialog', 'title', function ($scope, $mdDialog, title){
+                controller: ['$scope', '$mdDialog', 'title', function ($scope, $mdDialog, title){
                     $scope.title = title
                     $scope.data = {
                         learningObject,
@@ -89,6 +108,8 @@ class controller extends Controller {
                 }],
                 templateUrl: 'directives/report/improper/improper.dialog.html',
                 clickOutsideToClose: true,
+                escapeToClose: true,
+                targetEvent,
                 locals: {
                     title: this.$translate.instant('COMMENT_TOOLTIP_REPORT_AS_IMPROPER')
                 }
@@ -112,6 +133,30 @@ class controller extends Controller {
                         }
                     })
             })
+    }
+    showLoginDialog(targetEvent) {
+        this.addHash()
+        this.$mdDialog.show({
+            templateUrl: 'views/loginDialog/loginDialog.html',
+            controller: 'loginDialogController',
+            bindToController: true,
+            locals: {
+                title: this.$translate.instant('LOGIN_MUST_LOG_IN_TO_REPORT_IMPROPER')
+            },
+            clickOutsideToClose: true,
+            escapeToClose: true,
+            targetEvent
+        })
+    }
+    addHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0] + '#' + SHOW_COMMENT_REPORT_MODAL_HASH
+        )
+    }
+    removeHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0]
+        )
     }
     getLeftCommentsCount() {
         return Array.isArray(this.learningObject.comments)

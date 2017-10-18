@@ -107,7 +107,9 @@ angular.module('koolikottApp').directive('dopHeader', [
                     $mdDialog.show({
                         templateUrl: 'views/loginDialog/loginDialog.html',
                         controller: 'loginDialogController',
-                        targetEvent: ev
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        escapeToClose: true
                     });
                 };
 

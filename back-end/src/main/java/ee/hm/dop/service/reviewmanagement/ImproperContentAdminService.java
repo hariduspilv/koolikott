@@ -16,34 +16,34 @@ public class ImproperContentAdminService {
 
     public List<ImproperContent> getImproperMaterials(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
+//        if (UserUtil.isAdmin(user)) {
             return improperContentDao.findAllImproperContentMaterial();
-        }
-        return improperContentDao.findAllImproperContentMaterial(user);
+//        }
+//        return improperContentDao.findAllImproperContentMaterial(user);
     }
 
     public List<ImproperContent> getImproperPortfolios(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
+//        if (UserUtil.isAdmin(user)) {
             return improperContentDao.findAllImproperContentPortfolio();
-        }
-        return improperContentDao.findAllImproperContentPortfolio(user);
+//        }
+//        return improperContentDao.findAllImproperContentPortfolio(user);
     }
 
     public long getImproperMaterialSize(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
+//        if (UserUtil.isAdmin(user)) {
             return improperContentDao.getImproperMaterialCount();
-        }
-        return improperContentDao.getImproperMaterialCount(user);
+//        }
+//        return improperContentDao.getImproperMaterialCount(user);
     }
 
     public long getImproperPortfolioSize(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
+//        if (UserUtil.isAdmin(user)) {
             return improperContentDao.getImproperPortfolioCount();
-        }
-        return improperContentDao.getImproperPortfolioCount(user);
+//        }
+//        return improperContentDao.getImproperPortfolioCount(user);
     }
 
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {

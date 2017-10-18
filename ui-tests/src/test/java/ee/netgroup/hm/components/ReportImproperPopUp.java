@@ -1,7 +1,6 @@
 package ee.netgroup.hm.components;
 
 import org.openqa.selenium.By;
-
 import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.MaterialPage;
 import ee.netgroup.hm.page.PortfolioPage;
