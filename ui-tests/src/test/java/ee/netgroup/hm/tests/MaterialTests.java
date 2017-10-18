@@ -244,4 +244,19 @@ public class MaterialTests {
 				.isMaterialReportedAsBroken();
 		Assert.assertEquals(Constants.reportedText, brokenContentIsReported);
 	}
+	
+	@Test
+	public void MaterialTests_ReportImproperTag_TagIsReported() {
+
+		String improperTagIsReported = goToLandingPage()
+				.chooseUserType("User")
+				.clickMyMaterials()
+				.openMaterial()
+				.addNewTag()
+				.reportImproperTag()
+				.setImproperDescription()
+				.clickNotifyMaterial()
+				.getTagIsReportedImproperText();
+		Assert.assertEquals(Constants.reportedText, improperTagIsReported);
+	}
 }

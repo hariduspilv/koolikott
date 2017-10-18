@@ -49,6 +49,8 @@ public class Constants {
     
     
 	public static String unreviewedBannerText = "See õppevara on üle vaatamata";
+	
+	public static String commentText = "Automaattesti lisatud kommentaar";
     
     
 }
