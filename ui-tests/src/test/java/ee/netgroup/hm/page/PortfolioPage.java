@@ -16,7 +16,7 @@ public class PortfolioPage extends Page{
 	private By deletePortfolio = By.xpath("//button[@data-ng-click='confirmPortfolioDeletion()']");
 	private By editPortfolio = By.xpath("//button[@data-ng-click='editPortfolio()']");
 	private By shareWithLinkIcon = By.xpath("//md-icon[text()='link']");
-	private By improperContent = By.xpath("//button[@data-ng-click='showConfirmationDialog()']");
+	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
 	private By preTag = By.tagName("pre");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
@@ -68,7 +68,7 @@ public class PortfolioPage extends Page{
 		return new ReportImproperPopUp();
 	}
 	
-	public String isPortfolioReportedAsImproper() {
+	public String getPortfolioIsReportedImproperText() {
 		return getDriver().findElement(Constants.toastText).getText();
 	}
 
@@ -94,7 +94,7 @@ public class PortfolioPage extends Page{
 		Helpers.waitForVisibility(insertTag);
 		getDriver().findElement(insertTag).sendKeys(newTag);
 		Helpers.waitForMilliseconds(1000);
-		getDriver().findElement(insertTag ).sendKeys(Keys.ENTER);
+		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
 		Helpers.waitForMilliseconds(2000);
 		return this;
 	}

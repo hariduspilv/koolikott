@@ -89,9 +89,10 @@ public class PortfolioTests {
 				.openPortfolio()
 				.clickActionsMenu()
 				.clickNotifyImproperContent()
-				.setReportingReason()
+				.setImproperReason()
+				.setImproperDescription()
 				.clickNotify()
-				.isPortfolioReportedAsImproper();
+				.getPortfolioIsReportedImproperText();
 		Assert.assertEquals(Constants.reportedText, improperContentIsReported);
 	}
 	/*

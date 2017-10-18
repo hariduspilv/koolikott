@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ee.netgroup.hm.components.ConfirmationPopup;
 import ee.netgroup.hm.components.EditMaterialPopUp;
+import ee.netgroup.hm.components.ReportImproperPopUp;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
@@ -30,6 +31,9 @@ public class MaterialPage extends Page{
 	private By doneButton = By.xpath("//md-icon[contains(text(), 'done')]");
 	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
 	private By restoreBrokenMaterialButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
+	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
+	private String newTag = Helpers.generateNewTag();
+	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -156,6 +160,24 @@ public class MaterialPage extends Page{
 	public boolean isContentProper() {
 		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
+	}
+
+	public MaterialPage addNewTag() {
+		Helpers.waitForVisibility(insertTag);
+		getDriver().findElement(insertTag).sendKeys(newTag);
+		Helpers.waitForMilliseconds(1000);
+		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
+		Helpers.waitForMilliseconds(2000);
+		return this;
+	}
+
+	public ReportImproperPopUp reportImproperTag() {
+		getDriver().findElement(reportTagButton).click();
+		return new ReportImproperPopUp();
+	}
+
+	public String getTagIsReportedImproperText() {
+		return getDriver().findElement(Constants.toastText).getText();
 	}
 
 
