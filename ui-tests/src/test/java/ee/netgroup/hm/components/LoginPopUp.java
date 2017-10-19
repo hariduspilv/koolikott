@@ -9,12 +9,15 @@ import ee.netgroup.hm.page.EKoolPage;
 
 public class LoginPopUp extends Component{
 	
-	private By mobileIdCodeField = By.id("login-personal-code");
-    private By mobilePhoneNumberField = By.id("login-phone-number");
-    private By mobileLoginButton= By.cssSelector("button[id*='login-mobile-id-button']");
-    private By eKoolLoginButton = By.cssSelector("button[id*='login-ekool-button']");
-    private By stuudiumButton = By.cssSelector("button[id*='login-stuudium-button']");
-
+	private By mobileIdCodeField = By.name("idCode");
+    private By mobilePhoneNumberField = By.name("phoneNumber");
+   //private By mobileLoginButton= By.cssSelector("button[id*='login-mobile-id-button']");
+    //private By eKoolLoginButton = By.cssSelector("button[id*='login-ekool-button']");
+    //private By stuudiumButton = By.cssSelector("button[id*='login-stuudium-button']");
+    private By mobileLoginButton = By.xpath("//button[@class='md-raised login-button-mobiilid md-button md-ink-ripple flex']");
+    private By eKoolLoginButton = By.xpath("//button[@data-ng-click='ekoolAuth()()']");
+    private By stuudiumButton = By.xpath("//button[@data-ng-click='stuudiumAuth()']");
+    private static By logInText = By.xpath("//h2[@data-ng-bind='title']");
     
 	public LoginPopUp insertMobileIDCode(String mobileIdCode) {
 		Helpers.waitForMilliseconds(1000);
@@ -46,6 +49,14 @@ public class LoginPopUp extends Component{
 		Helpers.waitForMilliseconds(1000);
         getDriver().findElement(stuudiumButton).click();
         return new StuudiumPage();
+	}
+
+	public static String getLogginInIsRequiredText() {
+		return getDriver().findElement(logInText).getText();
+	}
+
+	public static LoginPopUp getLogInPopUp() {
+		return new LoginPopUp();
 	}
 
 	

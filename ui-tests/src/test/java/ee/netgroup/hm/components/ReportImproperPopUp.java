@@ -21,6 +21,7 @@ public class ReportImproperPopUp extends Component{
 	public ReportImproperPopUp setImproperDescription() {
 		Helpers.waitForVisibility(reportDescription);
 		getDriver().findElement(reportDescription).click();
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(reportDescription).sendKeys("Automaat test raporteeris selle ebasobivaks");
 		Helpers.waitForMilliseconds(3000);
 		return this;
@@ -35,4 +36,18 @@ public class ReportImproperPopUp extends Component{
 		getDriver().findElement(notify).click();
 		return new MaterialPage();
 	}
+
+	public String getLogginInIsRequiredText() {
+		return LoginPopUp.getLogginInIsRequiredText();
+	}
+
+	public LoginPopUp getLogInPopUp() {
+		return LoginPopUp.getLogInPopUp();
+	}
+
+	public static ReportImproperPopUp getReportImproperPopUp() {
+		return new ReportImproperPopUp();
+	}
+
+
 }

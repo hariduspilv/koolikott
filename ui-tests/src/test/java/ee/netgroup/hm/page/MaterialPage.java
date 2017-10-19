@@ -2,6 +2,8 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+
+import ee.netgroup.hm.components.Comments;
 import ee.netgroup.hm.components.ConfirmationPopup;
 import ee.netgroup.hm.components.EditMaterialPopUp;
 import ee.netgroup.hm.components.ReportImproperPopUp;
@@ -34,6 +36,8 @@ public class MaterialPage extends Page{
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
+	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
+	
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -121,14 +125,14 @@ public class MaterialPage extends Page{
 		return getDriver().findElement(errorBanner).getText();
 	}
 
-	public ConfirmationPopup reportAsBroken() {
+	public ConfirmationPopup clickReportBrokenMaterial() {
 		Helpers.waitForClickable(reportMaterial);
 		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(reportMaterial).click();
 		return new ConfirmationPopup();
 	}
 
-	public String isMaterialReportedAsBroken() {
+	public String getNotificationIsSentText() {
 		return getDriver().findElement(Constants.toastText).getText();
 	}
 
@@ -171,9 +175,20 @@ public class MaterialPage extends Page{
 		return new ReportImproperPopUp();
 	}
 
-	public String getTagIsReportedImproperText() {
-		return getDriver().findElement(Constants.toastText).getText();
+	public ReportImproperPopUp clickReportImproperContent() {
+		Helpers.waitForClickable(improperContent);
+		getDriver().findElement(improperContent).click();
+		return new ReportImproperPopUp();
 	}
+
+	public MaterialPage showMaterialComments() {
+		return Comments.showMaterialComments();
+	}
+
+	public ReportImproperPopUp reportImproperComment() {
+		return Comments.reportImproperComment();
+	}
+
 
 
 }
