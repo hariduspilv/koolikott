@@ -11,7 +11,7 @@ class controller extends Controller {
             ? this.title
             : this.$translate.instant('LOGIN_CHOOSE_LOGIN_METHOD')
 
-        this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
+        this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
         this.$scope.$watch(
             () => this.authenticatedUserService.isAuthenticated(),
             (newValue, oldValue) => newValue == true && this.$mdDialog.hide(),
@@ -21,6 +21,7 @@ class controller extends Controller {
         this.$scope.hideLogin = () => {
             this.$rootScope.sidenavLogin = null
             this.$mdDialog.hide()
+            this.$rootScope.$broadcast('login:cancel')
         }
         this.$scope.idCardAuth = () => {
             this.$scope.loginButtonFlag = true
@@ -51,6 +52,10 @@ class controller extends Controller {
                         this.$scope.mobileId.mobileIdChallenge = challenge
                 )
         }
+    }
+    $onDestroy() {
+        if (typeof this.unsubscribeRouteChangeSuccess === 'function')
+            this.unsubscribeRouteChangeSuccess()
     }
     bindValidators() {
         this.validatorsBound = true

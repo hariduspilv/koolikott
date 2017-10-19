@@ -23,83 +23,91 @@ class controller extends Controller {
                 : this.showLoginDialog(evt)
         }
 
-        // auto-launch the report dialog if hash is found in location URL
-        if (
-            window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH) &&
-            this.authenticatedUserService.isAuthenticated()
-        )
-            this.$timeout(() =>
-                this.showReportDialog()
-            )
-        
-        // remove hash from location URL upon navigating away
-        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
-            unSubscribe()
-            this.removeHash()
+        // auto-launch the report dialog upon login if hash is found in location URL
+        this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', () => {
+            if (
+                window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH) &&
+                this.authenticatedUserService.isAuthenticated()
+            ) {
+                this.removeHash()
+                !this.loginDialog
+                    ? this.showReportDialog()
+                    : this.loginDialog.then(() => {
+                        this.showReportDialog()
+                        delete this.loginDialog
+                    })
+            }
         })
+        this.unsubscribeLoginCancel = this.$rootScope.$on('login:cancel', this.removeHash)
+    }
+    $onDestroy() {
+        if (typeof this.unsubscribeLoginSuccess === 'function')
+            this.unsubscribeLoginSuccess()
+        if (typeof this.unsubscribeLoginCancel === 'function')
+            this.unsubscribeLoginCancel()
     }
     showReportDialog(targetEvent) {
-        this.$mdDialog
-            .show({
-                controller: ['$scope', '$mdDialog', 'data', 'reasons', 'title',
-                    function ($scope, $mdDialog, data, reasons, title) {
-                    $scope.title = title
-                    $scope.data = data
-                    $scope.reasons = reasons.reasons
-                    $scope.loading = reasons.loading
-                    $scope.cancel = () => {
-                        reasons.reasons.forEach(reason => reason.checked = false)
-                        data.reportingReasons = []
-                        data.reportingText = ''
-                        $mdDialog.cancel()
-                    }
-                    $scope.sendReport = () => {
-                        if (data.reportingReasons.length)
-                            return $mdDialog.hide()
-                        
-                        $scope.errors = { reasonRequired: true }
-                        $scope.submitEnabled = false
-                    }
-                    $scope.$watch('reasons', (newValue) => {
-                        if (Array.isArray(newValue)) {
-                            let anyChecked = false
-
-                            $scope.data.reportingReasons = newValue.reduce((reportingReasons, r) =>
-                                r.checked
-                                    ? (anyChecked = true) && reportingReasons.concat({ reason: r.key })
-                                    : reportingReasons,
-                                []
-                            )
-
-                            if (anyChecked)
-                                $scope.errors = null
+        this.$scope.reasons.then(reasons =>
+            this.$mdDialog
+                .show({
+                    controller: ['$scope', '$mdDialog', 'data', 'reasons', 'title', function ($scope, $mdDialog, data, reasons, title) {
+                        $scope.title = title
+                        $scope.data = data
+                        $scope.reasons = reasons
+                        $scope.cancel = () => {
+                            reasons.forEach(reason => reason.checked = false)
+                            data.reportingReasons = []
+                            data.reportingText = ''
+                            $mdDialog.cancel()
+                        }
+                        $scope.sendReport = () => {
+                            if (data.reportingReasons.length)
+                                return $mdDialog.hide()
                             
-                            $scope.submitEnabled = anyChecked
-                        } else
+                            $scope.errors = { reasonRequired: true }
                             $scope.submitEnabled = false
-                    }, true)
+                        }
+                        $scope.$watch('reasons', (newValue) => {
+                            if (Array.isArray(newValue)) {
+                                let anyChecked = false
 
-                    $scope.characters = { used: 0, remaining: 255 }
-                    $scope.$watch('data.reportingText', (newValue) => {
-                        const used = newValue ? newValue.length : 0
-                        $scope.characters = { used, remaining: 255 - used }
-                    })
-                }],
-                templateUrl: 'directives/report/improper/improper.dialog.html',
-                clickOutsideToClose: true,
-                escapeToClose: true,
-                targetEvent,
-                locals: {
-                    title: this.$translate.instant('REPORT_IMPROPER_TITLE'),
-                    data: this.$scope.data,
-                    reasons: this.$scope.reasons
-                }
-            })
-            .then(this.sendReport.bind(this))
+                                $scope.data.reportingReasons = newValue.reduce((reportingReasons, r) =>
+                                    r.checked
+                                        ? (anyChecked = true) && reportingReasons.concat({ reason: r.key })
+                                        : reportingReasons,
+                                    []
+                                )
+
+                                if (anyChecked)
+                                    $scope.errors = null
+                                
+                                $scope.submitEnabled = anyChecked
+                            } else
+                                $scope.submitEnabled = false
+                        }, true)
+
+                        $scope.characters = { used: 0, remaining: 255 }
+                        $scope.$watch('data.reportingText', (newValue) => {
+                            const used = newValue ? newValue.length : 0
+                            $scope.characters = { used, remaining: 255 - used }
+                        })
+                    }],
+                    templateUrl: 'directives/report/improper/improper.dialog.html',
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    targetEvent,
+                    locals: {
+                        title: this.$translate.instant('REPORT_IMPROPER_TITLE'),
+                        data: this.$scope.data,
+                        reasons
+                    }
+                })
+                .then(this.sendReport.bind(this))
+        )
     }
     showLoginDialog(targetEvent) {
         this.addHash()
-        this.$mdDialog.show({
+        this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
             controller: 'loginDialogController',
             bindToController: true,
@@ -124,13 +132,12 @@ class controller extends Controller {
     getReasons() {
         return this.serverCallService
             .makeGet('rest/learningMaterialMetadata/learningObjectReportingReasons')
-            .then(({ data: reasons }) => ({
-                loading: false,
-                reasons: (reasons || []).map(key => ({
+            .then(({ data: reasons }) =>
+                (reasons || []).map(key => ({
                     key,
                     checked: false
                 }))
-            }))
+            )
     }
     sendReport() {
         const data = Object.assign({}, this.$scope.data)

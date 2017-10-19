@@ -9,20 +9,28 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.init()
 
-        // auto-launch the report dialog if hash is found in location URL
-        if (
-            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
-            this.authenticatedUserService.isAuthenticated()
-        )
-            this.$timeout(() =>
-                this.reportTag()
-            )
-        
-        // remove hash from location URL upon navigating away
-        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
-            unSubscribe()
-            this.removeHash()
+        // auto-launch the report dialog upon login if hash is found in location URL
+        this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', () => {
+            if (
+                window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
+                this.authenticatedUserService.isAuthenticated()
+            ) {
+                this.removeHash()
+                !this.loginDialog
+                    ? this.reportTag()
+                    : this.loginDialog.then(() => {
+                        this.reportTag()
+                        delete this.loginDialog
+                    })
+            }
         })
+        this.unsubscribeLoginCancel = this.$rootScope.$on('login:cancel', this.removeHash)
+    }
+    $onDestroy() {
+        if (typeof this.unsubscribeLoginSuccess === 'function')
+            this.unsubscribeLoginSuccess()
+        if (typeof this.unsubscribeLoginCancel === 'function')
+            this.unsubscribeLoginCancel()
     }
     init() {
         this.showMoreTags = false
@@ -138,7 +146,7 @@ class controller extends Controller {
     }
     showLoginDialog(targetEvent) {
         this.addHash()
-        this.$mdDialog.show({
+        this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
             controller: 'loginDialogController',
             bindToController: true,

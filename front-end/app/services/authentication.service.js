@@ -20,6 +20,7 @@ angular.module('koolikottApp')
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 $rootScope.justLoggedIn = true;
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+                $rootScope.$broadcast('login:success')
             }
         }
 
@@ -130,9 +131,9 @@ angular.module('koolikottApp')
                     serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
                 },
 
-                loginWithTaat: function() {
+                /*loginWithTaat: function() {
                     loginWithOAuth("/rest/login/taat");
-                },
+                },*/
 
                 loginWithEkool : function() {
                     loginWithOAuth("/rest/login/ekool");
