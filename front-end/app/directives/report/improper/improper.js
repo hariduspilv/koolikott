@@ -135,8 +135,6 @@ class controller extends Controller {
     sendReport() {
         const data = Object.assign({}, this.$scope.data)
 
-        console.log('data:', data)
-
         this.serverCallService
             .makePut('rest/impropers', data)
             .then(({ status }) => {
