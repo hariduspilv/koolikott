@@ -25,6 +25,7 @@ class controller extends Controller {
 
         // auto-launch the report dialog upon login if hash is found in location URL
         this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', () => {
+            console.log('on login:success')
             if (
                 window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH) &&
                 this.authenticatedUserService.isAuthenticated()
