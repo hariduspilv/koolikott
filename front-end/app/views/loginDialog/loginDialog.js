@@ -40,15 +40,15 @@ class controller extends Controller {
                     this.$scope.mobileId.idCode,
                     this.translationService.getLanguage(),
                     () => {
-                        this.$scope.mobileId.mobileIdChallenge = null
+                        this.$scope.mobileIdChallenge = null
                         this.$scope.mobileId.idCode = null
                         this.$scope.mobileId.phoneNumber = null
                         this.$scope.hideLogin()
                     },
                     () =>
-                        this.$scope.mobileId.mobileIdChallenge = null,
+                        this.$scope.mobileIdChallenge = null,
                     (challenge) =>
-                        this.$scope.mobileId.mobileIdChallenge = challenge
+                        this.$scope.mobileIdChallenge = challenge
                 )
         }
     }
