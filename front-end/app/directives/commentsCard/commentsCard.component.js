@@ -27,7 +27,9 @@ class controller extends Controller {
             window.location.hash.includes(SHOW_COMMENT_REPORT_MODAL_HASH) &&
             this.authenticatedUserService.isAuthenticated()
         )
-            this.showReportDialog()
+            this.$timeout(() =>
+                this.showReportDialog()
+            )
         
         // remove hash from location URL upon navigating away
         const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
@@ -169,6 +171,7 @@ controller.$inject = [
     '$rootScope',
     '$mdDialog',
     '$translate',
+    '$timeout',
     'authenticatedUserService',
     'serverCallService',
     'toastService'

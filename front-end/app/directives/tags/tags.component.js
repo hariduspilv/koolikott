@@ -14,7 +14,9 @@ class controller extends Controller {
             window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
             this.authenticatedUserService.isAuthenticated()
         )
-            this.reportTag()
+            this.$timeout(() =>
+                this.reportTag()
+            )
         
         // remove hash from location URL upon navigating away
         const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
@@ -209,13 +211,14 @@ class controller extends Controller {
     }
 }
 controller.$inject = [
+    '$scope',
     '$translate',
-    'authenticatedUserService',
     '$rootScope',
     '$mdDialog',
+    '$timeout',
+    'authenticatedUserService',
     'storageService',
     'suggestService',
-    '$scope',
     'tagsService',
     'toastService'
 ]

@@ -29,7 +29,8 @@ public class ImproperContentService {
     public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser) {
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
 
-        if (UserUtil.isAdmin(loggedInUser)) {
+        if (UserUtil.isAdminOrModerator(loggedInUser)) {
+//        if (UserUtil.isAdmin(loggedInUser)) {
             return getByLearningObject(learningObject, loggedInUser);
         }
         ImproperContent improper = getByLearningObjectAndCreator(learningObject, loggedInUser, loggedInUser);
