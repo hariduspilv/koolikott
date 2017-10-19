@@ -24,6 +24,7 @@ class controller extends Controller {
         }
 
         // auto-launch the report dialog upon login if hash is found in location URL
+        console.log('start listening to login:success')
         this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', () => {
             console.log('on login:success')
             if (
