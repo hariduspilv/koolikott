@@ -58,7 +58,7 @@ class controller extends Controller {
                         $scope.errors = { reasonRequired: true }
                         $scope.submitEnabled = false
                     }
-                    $scope.$watch('reasons.reasons', (newValue) => {
+                    $scope.$watch('reasons', (newValue) => {
                         if (Array.isArray(newValue)) {
                             let anyChecked = false
 
