@@ -91,10 +91,11 @@ class controller extends Controller {
         return modelValue[10] == controlCode
     }
     validatePhoneNumber(modelValue, viewValue) {
-        return !!modelValue && !(
-            (modelValue.startsWith('+') && !modelValue.startsWith('+372')) ||
-            (modelValue.startsWith('00') && !modelValue.startsWith('00372'))
-        )
+        // no country code whatsoever is fine
+        if (!modelValue.startsWith('+') && !modelValue.startsWith('00'))
+            return true
+
+        return modelValue.startsWith('+372') || modelValue.startsWith('00372')
     }
 }
 controller.$inject = [
