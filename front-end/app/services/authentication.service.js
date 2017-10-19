@@ -20,7 +20,6 @@ angular.module('koolikottApp')
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 $rootScope.justLoggedIn = true;
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
-                $rootScope.$broadcast('login:success')
             }
         }
 
@@ -66,6 +65,7 @@ angular.module('koolikottApp')
             }
 
             $rootScope.justLoggedIn = true;
+            $rootScope.$broadcast('login:success')
         }
 
         function logoutSuccess(data) {
@@ -103,74 +103,74 @@ angular.module('koolikottApp')
             localStorage.removeItem(LOGIN_ORIGIN);
             localStorage.setItem(LOGIN_ORIGIN,
                 $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.$$url);
-                window.location = path;
-            }
-
-            function getRoleSuccess(data) {
-                if (isEmpty(data)) {
-                    loginFail();
-                } else {
-                    var authenticatedUser = authenticatedUserService.getAuthenticatedUser();
-                    authenticatedUser.user.role = data;
-                    finishLogin(authenticatedUser);
-                }
-            }
-
-            return {
-
-                logout: function() {
-                    serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
-                },
-
-                loginWithIdCard: function() {
-                    if (isAuthenticationInProgress) {
-                        return;
-                    }
-
-                    disableLogin();
-                    serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
-                },
-
-                /*loginWithTaat: function() {
-                    loginWithOAuth("/rest/login/taat");
-                },*/
-
-                loginWithEkool : function() {
-                    loginWithOAuth("/rest/login/ekool");
-                },
-
-                loginWithStuudium : function() {
-                    loginWithOAuth("/rest/login/stuudium");
-                },
-
-                authenticateUsingOAuth: function(token) {
-                    var params = {
-                        'token': token
-                    };
-
-                    serverCallService.makeGet("rest/login/getAuthenticatedUser", params, loginSuccess, loginFail);
-                    isOAuthAuthentication = true;
-                },
-
-                loginWithMobileId: function(phoneNumber, idCode, language, successCallback, failCallback, challengeReceivedCallback) {
-                    if (isAuthenticationInProgress) {
-                        return;
-                    }
-
-                    mobileIdLoginSuccessCallback = successCallback;
-                    mobileIdLoginFailCallback = failCallback;
-                    mobileIdChallengeReceivedCallback = challengeReceivedCallback;
-
-                    var params = {
-                        'phoneNumber': phoneNumber,
-                        'idCode': idCode,
-                        'language': language
-                    };
-
-                    disableLogin();
-                    serverCallService.makeGet("rest/login/mobileId", params, loginWithMobileIdSuccess, loginFail);
-                }
-
-            };
+            window.location = path;
         }
-    ]);
+
+        function getRoleSuccess(data) {
+            if (isEmpty(data)) {
+                loginFail();
+            } else {
+                var authenticatedUser = authenticatedUserService.getAuthenticatedUser();
+                authenticatedUser.user.role = data;
+                finishLogin(authenticatedUser);
+            }
+        }
+
+        return {
+
+            logout: function() {
+                serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
+            },
+
+            loginWithIdCard: function() {
+                if (isAuthenticationInProgress) {
+                    return;
+                }
+
+                disableLogin();
+                serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
+            },
+
+            /*loginWithTaat: function() {
+                loginWithOAuth("/rest/login/taat");
+            },*/
+
+            loginWithEkool : function() {
+                loginWithOAuth("/rest/login/ekool");
+            },
+
+            loginWithStuudium : function() {
+                loginWithOAuth("/rest/login/stuudium");
+            },
+
+            authenticateUsingOAuth: function(token) {
+                var params = {
+                    'token': token
+                };
+
+                serverCallService.makeGet("rest/login/getAuthenticatedUser", params, loginSuccess, loginFail);
+                isOAuthAuthentication = true;
+            },
+
+            loginWithMobileId: function(phoneNumber, idCode, language, successCallback, failCallback, challengeReceivedCallback) {
+                if (isAuthenticationInProgress) {
+                    return;
+                }
+
+                mobileIdLoginSuccessCallback = successCallback;
+                mobileIdLoginFailCallback = failCallback;
+                mobileIdChallengeReceivedCallback = challengeReceivedCallback;
+
+                var params = {
+                    'phoneNumber': phoneNumber,
+                    'idCode': idCode,
+                    'language': language
+                };
+
+                disableLogin();
+                serverCallService.makeGet("rest/login/mobileId", params, loginWithMobileIdSuccess, loginFail);
+            }
+
+        };
+    }
+]);
