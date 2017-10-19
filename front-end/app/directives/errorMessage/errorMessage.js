@@ -177,6 +177,7 @@ class controller extends Controller {
         this.$scope.show = typeof cb === 'boolean' ? cb : true
         this.$scope.icon = icon
         this.$scope.messageKey = messageKey
+        this.$scope.iconTooltipKey = messageKey
         this.$scope.message = ''
         this.$scope.buttons = buttons
         this.$scope.reports = null
