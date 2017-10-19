@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
-    function($location, $rootScope, serverCallService, authenticatedUserService, alertService, $mdDialog) {
+    '$location', '$rootScope', '$timeout', serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog) {
         var instance;
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
@@ -65,7 +65,9 @@ angular.module('koolikottApp')
             }
 
             $rootScope.justLoggedIn = true;
-            $rootScope.$broadcast('login:success')
+            $timeout(() =>
+                $rootScope.$broadcast('login:success')
+            )
         }
 
         function logoutSuccess(data) {
