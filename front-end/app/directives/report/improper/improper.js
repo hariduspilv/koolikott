@@ -23,30 +23,30 @@ class controller extends Controller {
                 : this.showLoginDialog(evt)
         }
 
-        // auto-launch the report dialog upon login if hash is found in location URL
-        console.log('start listening to login:success')
-        this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', () => {
-            console.log('on login:success')
-            if (
-                window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH) &&
-                this.authenticatedUserService.isAuthenticated()
-            ) {
-                this.removeHash()
-                !this.loginDialog
-                    ? this.showReportDialog()
-                    : this.loginDialog.then(() => {
-                        this.showReportDialog()
-                        delete this.loginDialog
-                    })
-            }
-        })
-        this.unsubscribeLoginCancel = this.$rootScope.$on('login:cancel', this.removeHash)
+        // auto-launch the report dialog upon login or page load if hash is found in location URL
+        this.$timeout(() =>
+            window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH)
+                ? this.onLoginSuccess()
+                : this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', this.onLoginSuccess.bind(this))
+        )
     }
     $onDestroy() {
         if (typeof this.unsubscribeLoginSuccess === 'function')
             this.unsubscribeLoginSuccess()
-        if (typeof this.unsubscribeLoginCancel === 'function')
-            this.unsubscribeLoginCancel()
+    }
+    onLoginSuccess() {
+        if (
+            window.location.hash.includes(SHOW_GENERAL_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        ) {
+            this.removeHash()
+            !this.loginDialog
+                ? this.showReportDialog()
+                : this.loginDialog.then(() => {
+                    this.showReportDialog()
+                    delete this.loginDialog
+                })
+        }
     }
     showReportDialog(targetEvent) {
         this.$scope.reasons.then(reasons =>
@@ -120,6 +120,7 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
+        .catch(this.removeHash)
     }
     addHash() {
         window.history.replaceState(null, null,

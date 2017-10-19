@@ -9,34 +9,36 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.init()
 
-        // auto-launch the report dialog upon login if hash is found in location URL
-        this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', () => {
-            if (
-                window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
-                this.authenticatedUserService.isAuthenticated()
-            ) {
-                this.removeHash()
-                !this.loginDialog
-                    ? this.reportTag()
-                    : this.loginDialog.then(() => {
-                        this.reportTag()
-                        delete this.loginDialog
-                    })
-            }
-        })
-        this.unsubscribeLoginCancel = this.$rootScope.$on('login:cancel', this.removeHash)
+        // auto-launch the report dialog upon login or page load if hash is found in location URL
+        this.$timeout(() =>
+            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH)
+                ? this.onLoginSuccess()
+                : this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', this.onLoginSuccess.bind(this))
+        )
     }
     $onDestroy() {
         if (typeof this.unsubscribeLoginSuccess === 'function')
             this.unsubscribeLoginSuccess()
-        if (typeof this.unsubscribeLoginCancel === 'function')
-            this.unsubscribeLoginCancel()
     }
     init() {
         this.showMoreTags = false
 
         if (this.learningObject && this.learningObject.id)
             this.getTagUpVotes()
+    }
+    onLoginSuccess() {
+        if (
+            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        ) {
+            this.removeHash()
+            !this.loginDialog
+                ? this.reportTag()
+                : this.loginDialog.then(() => {
+                    this.reportTag()
+                    delete this.loginDialog
+                })
+        }
     }
     getTagUpVotes() {
         this.tagsService
@@ -157,6 +159,7 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
+        .catch(this.removeHash)
     }
     addHash() {
         window.history.replaceState(null, null,

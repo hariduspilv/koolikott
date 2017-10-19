@@ -21,7 +21,6 @@ class controller extends Controller {
         this.$scope.hideLogin = () => {
             this.$rootScope.sidenavLogin = null
             this.$mdDialog.hide()
-            this.$rootScope.$broadcast('login:cancel')
         }
         this.$scope.idCardAuth = () => {
             this.$scope.loginButtonFlag = true
