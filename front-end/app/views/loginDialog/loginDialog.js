@@ -36,7 +36,7 @@ class controller extends Controller {
             }
             if (this.$scope.forms.mobileIdForm.$valid)
                 this.authenticationService.loginWithMobileId(
-                    this.$scope.mobileId.phoneNumber,
+                    this.$scope.mobileId.phoneNumber.trim().replace(/^372/, ''),
                     this.$scope.mobileId.idCode,
                     this.translationService.getLanguage(),
                     () => {
