@@ -1,10 +1,13 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.ImproperContent;
+<<<<<<< HEAD
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.ImproperContentService;
+=======
+import ee.hm.dop.service.reviewmanagement.ImproperContentService;
+>>>>>>> new-develop
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -21,7 +24,11 @@ public class ImproperContentResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ImproperContent setImproper(ImproperContent improperContent) {
         try {
+<<<<<<< HEAD
             return improperContentService.addImproper(improperContent, getLoggedInUser());
+=======
+            return improperContentService.save(improperContent, getLoggedInUser());
+>>>>>>> new-develop
         } catch (Exception e) {
             throw badRequest(e.getMessage());
         }

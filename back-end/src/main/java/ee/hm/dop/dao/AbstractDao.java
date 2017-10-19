@@ -2,7 +2,10 @@ package ee.hm.dop.dao;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.model.AbstractEntity;
+<<<<<<< HEAD
 import ee.hm.dop.model.Deletable;
+=======
+>>>>>>> new-develop
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +27,13 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     public static final String AND = " and ";
     public static final String OR = " or ";
     public static final String ID = "id";
+<<<<<<< HEAD
     public static final String SET_DELETED_TRUE = " set o.deleted = true ";
     public static final String UPDATE = "update ";
     public static final String DELETED = "deleted";
+=======
+    public static final String UPDATE = "update ";
+>>>>>>> new-develop
     public static final String NAME = "name";
     @Inject
     protected EntityManager entityManager;
@@ -49,12 +56,17 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return getEntityManager().find(entity(), id);
     }
 
+<<<<<<< HEAD
     public Entity findByIdValid(Long id) {
         return findByField(ID, id, DELETED, false);
     }
 
     public List<Entity> findById(List<Long> id) {
         if (CollectionUtils.isEmpty(id)){
+=======
+    public List<Entity> findById(List<Long> id) {
+        if (CollectionUtils.isEmpty(id)) {
+>>>>>>> new-develop
             return Lists.newArrayList();
         }
         return getList(getFindByFieldInQuery(ID, id));
@@ -64,6 +76,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return getList(getEntityManager().createQuery(select(), entity()));
     }
 
+<<<<<<< HEAD
     public List<Entity> findAllValid() {
         return findByFieldList(DELETED, false);
     }
@@ -78,12 +91,18 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return findByFieldList(DELETED, true);
     }
 
+=======
+>>>>>>> new-develop
     public Entity findByName(String value) {
         return getSingleResult(getFindByFieldQuery(NAME, value, false));
     }
 
     public List<Entity> findByName(List<String> value) {
+<<<<<<< HEAD
         if (CollectionUtils.isEmpty(value)){
+=======
+        if (CollectionUtils.isEmpty(value)) {
+>>>>>>> new-develop
             return Lists.newArrayList();
         }
         return getList(getFindByFieldInQuery(NAME, value));
@@ -123,6 +142,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return merged;
     }
 
+<<<<<<< HEAD
     public void setDeleted(List<Long> id) {
         getEntityManager()
                 .createQuery(UPDATE + name() + ALIAS + SET_DELETED_TRUE + WHERE + fieldInEquals(ID))
@@ -130,15 +150,25 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 .executeUpdate();
     }
 
+=======
+>>>>>>> new-develop
     public void remove(Entity entity) {
         getEntityManager().remove(entity);
     }
 
+<<<<<<< HEAD
     public Object getCount(){
         return getEntityManager().createQuery(countSelect()).getSingleResult();
     }
 
     public Object getCountByField(String field, Object value){
+=======
+    public Object getCount() {
+        return getEntityManager().createQuery(countSelect()).getSingleResult();
+    }
+
+    public Object getCountByField(String field, Object value) {
+>>>>>>> new-develop
         return getEntityManager()
                 .createQuery(countSelect() + WHERE + fieldEquals(field))
                 .setParameter(field, value)
@@ -165,7 +195,11 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 .setParameter(field2, value2);
     }
 
+<<<<<<< HEAD
     private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2, String field3, Object value3)  {
+=======
+    private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2, String field3, Object value3) {
+>>>>>>> new-develop
         return getEntityManager()
                 .createQuery(select() + WHERE + fieldEquals(field1) + AND + fieldEquals(field2) + AND + fieldEquals(field3), entity())
                 .setParameter(field1, value1)
@@ -179,7 +213,11 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         } catch (NoResultException e) {
             logger.debug("Query had no results." + query.getParameters());
             return null;
+<<<<<<< HEAD
         } catch (NonUniqueResultException e){
+=======
+        } catch (NonUniqueResultException e) {
+>>>>>>> new-develop
             logger.debug("Query had more than 1 results." + query.getParameters());
             return null;
         }

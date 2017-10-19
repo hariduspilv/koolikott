@@ -20,7 +20,11 @@ public class RestrictedUserAdminResourceTest extends ResourceIntegrationTestBase
 
     @Test
     public void getRestrictedUsers_returns_restricted_users_to_admin() throws Exception {
+<<<<<<< HEAD
         login(TestConstants.USER_ADMIN);
+=======
+        login(USER_ADMIN);
+>>>>>>> new-develop
         List<User> restrictedUsers = doGet(GET_RESTRICTED_USERS_URL, new GenericType<List<User>>() {
         });
         long restrictedUsersCount = doGet(GET_RESTRICTED_USERS_COUNT_URL, Long.class);
@@ -32,6 +36,10 @@ public class RestrictedUserAdminResourceTest extends ResourceIntegrationTestBase
     @Test
     public void not_logged_in_user_is_not_allowed_to_getRestrictedUsers() throws Exception {
         Response response = doGet(GET_RESTRICTED_USERS_URL);
+<<<<<<< HEAD
         assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+=======
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+>>>>>>> new-develop
     }
 }

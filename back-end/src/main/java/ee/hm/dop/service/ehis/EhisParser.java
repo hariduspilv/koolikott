@@ -1,10 +1,12 @@
 package ee.hm.dop.service.ehis;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -20,23 +22,26 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class EhisParser {
 
     private static XPath xpath = XPathFactory.newInstance().newXPath();
 
     public Person parse(String input) {
-        Person person = null;
-
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                     .parse(new InputSource(new StringReader(input)));
             doc.getDocumentElement().normalize();
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/ehis/EhisParser.java
             person = parse(doc);
         } catch (Exception ignored) {
+=======
+            return parse(doc);
+        } catch (ParserConfigurationException | SAXException | IOException ignored) {
+            return null;
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/ehis/EhisParser.java
         }
-
-        return person;
     }
 
     private Person parse(Document doc) {
@@ -63,7 +68,6 @@ public class EhisParser {
         Institution institution = new Institution();
         institution.setEhisId(getInstitutionId((Element) institutionNode));
         institution.setRoles(getRoles(institutionNode));
-
         return institution;
     }
 
@@ -83,7 +87,6 @@ public class EhisParser {
         role.setInstitutionalRole(getInstitutionalRole(roleElement));
         role.setSchoolYear(getSchoolYear(roleElement));
         role.setSchoolClass(getSchoolClass(roleElement));
-
         return role;
     }
 
@@ -93,25 +96,19 @@ public class EhisParser {
     }
 
     private String getSchoolYear(Element roleElement) {
-        String schoolYear = null;
-
         NodeList schoolYearNodeList = roleElement.getElementsByTagName("klass");
         if (schoolYearNodeList.getLength() > 0) {
-            schoolYear = schoolYearNodeList.item(0).getTextContent();
+            return schoolYearNodeList.item(0).getTextContent();
         }
-
-        return schoolYear;
+        return null;
     }
 
     private String getSchoolClass(Element roleElement) {
-        String schoolClass = null;
-
         NodeList schoolClassNodeList = roleElement.getElementsByTagName("paralleel");
         if (schoolClassNodeList.getLength() > 0) {
-            schoolClass = schoolClassNodeList.item(0).getTextContent();
+            return schoolClassNodeList.item(0).getTextContent();
         }
-
-        return schoolClass;
+        return null;
     }
 
     private String getInstitutionId(Element institutionElement) {

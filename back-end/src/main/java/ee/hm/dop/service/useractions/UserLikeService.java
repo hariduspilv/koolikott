@@ -10,6 +10,10 @@ import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.UserLikeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.Like;
+<<<<<<< HEAD
+=======
+import ee.hm.dop.service.content.LearningObjectService;
+>>>>>>> new-develop
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -20,6 +24,7 @@ public class UserLikeService {
     @Inject
     private UserLikeDao userLikeDao;
     @Inject
+<<<<<<< HEAD
     private MaterialService materialService;
     @Inject
     private PortfolioService portfolioService;
@@ -57,6 +62,31 @@ public class UserLikeService {
         userLikeDao.deletePortfolioLike(originalPortfolio, loggedInUser);
 
         return save(originalPortfolio, loggedInUser, like);
+=======
+    private LearningObjectService learningObjectService;
+
+    public List<Searchable> getMostLiked(int maxResults) {
+        return userLikeDao.findMostLikedSince(now().minusYears(1), maxResults);
+    }
+
+    public UserLike getUserLike(LearningObject portfolio, User loggedInUser) {
+        LearningObject originalPortfolio = learningObjectService.validateAndFind(portfolio);
+
+        if (!learningObjectService.canView(loggedInUser, originalPortfolio)) {
+            throw ValidatorUtil.permissionError();
+        }
+        return userLikeDao.findByLearningObjectAndUser(originalPortfolio, loggedInUser);
+    }
+
+    public UserLike addUserLike(LearningObject learningObject, User loggedInUser, Like like) {
+        LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
+        if (!learningObjectService.canView(loggedInUser, originalLearningObject)) {
+            throw ValidatorUtil.permissionError();
+        }
+        userLikeDao.deleteByLearningObjectAndUser(originalLearningObject, loggedInUser);
+
+        return save(originalLearningObject, loggedInUser, like);
+>>>>>>> new-develop
     }
 
     private UserLike save(LearningObject learningObject, User loggedInUser, Like like) {
@@ -68,6 +98,7 @@ public class UserLikeService {
         return userLikeDao.update(userLike);
     }
 
+<<<<<<< HEAD
     public void removeUserLike(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = portfolioService.findValid(portfolio);
 
@@ -86,5 +117,15 @@ public class UserLikeService {
         }
 
         return userLikeDao.findPortfolioUserLike(originalPortfolio, loggedInUser);
+=======
+    public void removeUserLike(LearningObject learningObject, User loggedInUser) {
+        LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
+
+        if (!learningObjectService.canView(loggedInUser, originalLearningObject)) {
+            throw ValidatorUtil.permissionError();
+        }
+
+        userLikeDao.deleteByLearningObjectAndUser(originalLearningObject, loggedInUser);
+>>>>>>> new-develop
     }
 }

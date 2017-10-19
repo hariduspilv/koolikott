@@ -6,8 +6,8 @@ CREATE TABLE UploadedFile(
   name VARCHAR(255) NOT NULL
 );
 
-ALTER TABLE dop.Material ADD uploadedFile BIGINT;
-ALTER TABLE dop.Material
+ALTER TABLE Material ADD uploadedFile BIGINT;
+ALTER TABLE Material
 ADD CONSTRAINT
 FOREIGN KEY (uploadedFile) REFERENCES UploadedFile (id);
 

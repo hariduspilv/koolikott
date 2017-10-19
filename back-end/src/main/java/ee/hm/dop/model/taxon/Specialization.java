@@ -2,6 +2,7 @@ package ee.hm.dop.model.taxon;
 
 import static javax.persistence.FetchType.LAZY;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
@@ -44,5 +45,11 @@ public class Specialization extends Taxon {
     @Override
     public Taxon getParent() {
         return getDomain();
+    }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return getModules();
     }
 }

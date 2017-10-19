@@ -5,7 +5,11 @@ import com.google.inject.AbstractModule;
 import ee.hm.dop.config.db.DatabaseMigrator;
 import ee.hm.dop.config.guice.GuiceInjector.Module;
 import ee.hm.dop.config.guice.provider.*;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/config/guice/module/ProviderTestModule.java
 import ee.hm.dop.db.InactiveDbMigrator;
+=======
+import ee.hm.dop.config.InactiveDbMigrator;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/config/guice/module/ProviderTestModule.java
 import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.apache.commons.configuration.Configuration;

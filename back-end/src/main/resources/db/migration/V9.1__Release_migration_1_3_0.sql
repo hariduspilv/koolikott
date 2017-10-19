@@ -1,1 +1,1 @@
-ALTER TABLE dop.Material_PeerReview ADD CONSTRAINT material_peerreview UNIQUE (material, peerReview);
+ALTER TABLE Material_PeerReview ADD CONSTRAINT material_peerreview UNIQUE (material, peerReview);

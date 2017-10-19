@@ -45,4 +45,10 @@ public class Subject extends Taxon {
     public Taxon getParent() {
         return getDomain();
     }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return getTopics();
+    }
 }

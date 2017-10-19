@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+<<<<<<< HEAD
 import ee.hm.dop.dao.BrokenContentDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.model.BrokenContent;
@@ -9,16 +10,24 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
+=======
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.model.Material;
+>>>>>>> new-develop
 
 import javax.inject.Inject;
 import java.util.List;
 
+<<<<<<< HEAD
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
+=======
+>>>>>>> new-develop
 public class MaterialAdministrationService {
 
     @Inject
     private MaterialDao materialDao;
+<<<<<<< HEAD
     @Inject
     private BrokenContentDao brokenContentDao;
     @Inject
@@ -31,6 +40,8 @@ public class MaterialAdministrationService {
         firstReviewService.setReviewed(originalMaterial, loggedInUser);
         brokenContentDao.deleteBrokenMaterials(originalMaterial.getId());
     }
+=======
+>>>>>>> new-develop
 
     public List<Material> getDeletedMaterials() {
         return materialDao.findDeletedMaterials();
@@ -39,6 +50,7 @@ public class MaterialAdministrationService {
     public Long getDeletedMaterialsCount() {
         return materialDao.findDeletedMaterialsCount();
     }
+<<<<<<< HEAD
 
     public List<BrokenContent> getBrokenMaterials(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -61,4 +73,6 @@ public class MaterialAdministrationService {
     public Boolean isBroken(long materialId) {
         return isNotEmpty(brokenContentDao.findByMaterial(materialId));
     }
+=======
+>>>>>>> new-develop
 }

@@ -1,14 +1,23 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.ChapterObjectDao;
+<<<<<<< HEAD
 import ee.hm.dop.dao.LearningObjectDao;
+=======
+>>>>>>> new-develop
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
+<<<<<<< HEAD
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.service.learningObject.PermissionItem;
+=======
+import ee.hm.dop.service.permission.PortfolioPermission;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+>>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.UserUtil;
@@ -24,7 +33,11 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
+<<<<<<< HEAD
 public class PortfolioService implements PermissionItem {
+=======
+public class PortfolioService {
+>>>>>>> new-develop
 
     @Inject
     private PortfolioDao portfolioDao;
@@ -35,6 +48,7 @@ public class PortfolioService implements PermissionItem {
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
+<<<<<<< HEAD
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private PortfolioConverter portfolioConverter;
@@ -74,6 +88,13 @@ public class PortfolioService implements PermissionItem {
         portfolioDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
     }
+=======
+    private PortfolioConverter portfolioConverter;
+    @Inject
+    private FirstReviewAdminService firstReviewAdminService;
+    @Inject
+    private PortfolioPermission portfolioPermission;
+>>>>>>> new-develop
 
     public Portfolio update(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
@@ -123,6 +144,7 @@ public class PortfolioService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     public void delete(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = findValid(portfolio);
 
@@ -134,6 +156,8 @@ public class PortfolioService implements PermissionItem {
         solrEngineService.updateIndex();
     }
 
+=======
+>>>>>>> new-develop
     public Portfolio create(Portfolio portfolio, User creator) {
         ValidatorUtil.mustNotHaveId(portfolio);
         TextFieldUtil.cleanTextFields(portfolio);
@@ -152,7 +176,11 @@ public class PortfolioService implements PermissionItem {
         portfolio.setAdded(now());
 
         Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
+<<<<<<< HEAD
         firstReviewService.save(createdPortfolio);
+=======
+        firstReviewAdminService.save(createdPortfolio);
+>>>>>>> new-develop
         solrEngineService.updateIndex();
 
         return createdPortfolio;
@@ -164,11 +192,16 @@ public class PortfolioService implements PermissionItem {
             throw new RuntimeException("Required field title must be filled.");
         }
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+<<<<<<< HEAD
         if (canUpdate(loggedInUser, originalPortfolio)) {
+=======
+        if (portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {
+>>>>>>> new-develop
             return originalPortfolio;
         }
         throw ValidatorUtil.permissionError();
     }
+<<<<<<< HEAD
 
     public Portfolio findValid(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
@@ -208,4 +241,6 @@ public class PortfolioService implements PermissionItem {
         return ((IPortfolio) learningObject).getVisibility().isNotPrivate() && !learningObject.isDeleted();
     }
 
+=======
+>>>>>>> new-develop
 }

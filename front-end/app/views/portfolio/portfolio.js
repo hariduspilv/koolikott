@@ -50,8 +50,8 @@ angular.module('koolikottApp')
                     }, 1000);
                 }
 
-                $scope.addComment = function () {
-                    portfolioService.addComment($scope.newComment, createPortfolio($scope.portfolio.id))
+                $scope.addComment = function (newComment, portfolio) {
+                    portfolioService.addComment(newComment, createPortfolio(portfolio.id))
                         .then(addCommentSuccess, addCommentFailed);
                 };
 
@@ -79,29 +79,7 @@ angular.module('koolikottApp')
                         $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
                         $rootScope.learningObjectChanged = $scope.portfolio.changed > 0;
                         $rootScope.learningObjectUnreviewed = !!$scope.portfolio.unReviewed;
-
-                        if (authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                            if ($scope.portfolio.improper > 0) {
-                                serverCallService.makeGet("rest/impropers", {}, sortImpropers, getItemsFail);
-                            }
-                        }
                     }
-                }
-
-                function getItemsFail() {
-                    console.log("Failed to get data");
-                }
-
-                function sortImpropers(impropers) {
-                    var improper;
-
-                    for (var i = 0; i < impropers.length; i++) {
-                        if ($scope.portfolio && impropers[i].learningObject.id === $scope.portfolio.id) {
-                            improper = impropers[i];
-                        }
-                    }
-
-                    $rootScope.setReason(improper.reason);
                 }
 
                 $scope.modUser = function () {

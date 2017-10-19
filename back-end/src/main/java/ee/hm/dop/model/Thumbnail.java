@@ -6,16 +6,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.rest.jackson.map.SizeSerializer;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="Thumbnail")
+@Table(name = "Thumbnail")
 public class Thumbnail extends Picture {
 
     @Enumerated(EnumType.STRING)
     private Size size;
-
-    public Thumbnail() {}
 
     @JsonProperty
     @JsonSerialize(using = SizeSerializer.class)

@@ -2,34 +2,16 @@
 
 {
 const COMMENTS_PER_PAGE = 5
+const SHOW_COMMENT_REPORT_MODAL_HASH = 'dialog-report-comment'
 
 class controller extends Controller {
+    $onChanges({ learningObject } = {}) {
+        if (learningObject && learningObject.currentValue)
+            this.$scope.comments = learningObject.currentValue.comments
+    }
     $onInit() {
         this.visibleCommentsCount = COMMENTS_PER_PAGE
-
-        this.isAuthenticated = () =>
-            this.authenticatedUserService.isAuthenticated()
-        
-        this.isAuthorized = () =>
-            this.authenticatedUserService.isAuthenticated() &&
-            !this.authenticatedUserService.isRestricted()
-
-        this.getLoadMoreCommentsLabel = () => {
-            let commentsLeft = this.getLeftCommentsCount()
-
-            return commentsLeft <= COMMENTS_PER_PAGE
-                ? `(${commentsLeft})`
-                : `(${COMMENTS_PER_PAGE}/${commentsLeft})`
-        }
-        this.showMoreComments = () => {
-            let commentsLeft = this.getLeftCommentsCount()
-
-            commentsLeft - COMMENTS_PER_PAGE >= 0
-                ? this.visibleCommentsCount += COMMENTS_PER_PAGE
-                : this.visibleCommentsCount = this.comments.length
-        }
-        this.showMoreCommentsButton = () => this.getLeftCommentsCount() > 0
-        this.addComment = this.submitClick
+        this.$scope.newComment = { text: '' }
 
         // Commentbox hotfix
         setTimeout(() =>
@@ -39,19 +21,165 @@ class controller extends Controller {
                 .css('height', '112px'),
             1000
         )
+
+        // auto-launch the report dialog if hash is found in location URL
+        if (
+            window.location.hash.includes(SHOW_COMMENT_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        )
+            this.$timeout(() =>
+                this.showReportDialog()
+            )
+        
+        // remove hash from location URL upon navigating away
+        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
+            unSubscribe()
+            this.removeHash()
+        })
+    }
+    isAuthorized() {
+        return this.authenticatedUserService.isAuthenticated()
+            && !this.authenticatedUserService.isRestricted()
+    }
+    getLoadMoreCommentsLabel() {
+        let commentsLeft = this.getLeftCommentsCount()
+
+        return commentsLeft <= COMMENTS_PER_PAGE
+            ? `(${commentsLeft})`
+            : `(${COMMENTS_PER_PAGE}/${commentsLeft})`
+    }
+    showMoreComments() {
+        let commentsLeft = this.getLeftCommentsCount()
+
+        commentsLeft - COMMENTS_PER_PAGE >= 0
+            ? this.visibleCommentsCount += COMMENTS_PER_PAGE
+            : this.visibleCommentsCount = this.learningObject.comments.length
+    }
+    showMoreCommentsButton() {
+        return this.getLeftCommentsCount() > 0
+    }
+    addComment() {
+        if (this.$scope.newComment.text && typeof this.submitClick === 'function')
+            this.submitClick({
+                newComment: this.$scope.newComment, 
+                learningObject: this.learningObject
+            })
+    }
+    reportComment(comment, evt) {
+        this.authenticatedUserService.isAuthenticated()
+            ? this.showReportDialog(evt)
+            : this.showLoginDialog(evt)
+    }
+    showReportDialog(comment, targetEvent) {
+        const { serverCallService, learningObject } = this
+
+        return this.$mdDialog
+            .show({
+                controller: ['$scope', '$mdDialog', 'title', function ($scope, $mdDialog, title){
+                    $scope.title = title
+                    $scope.data = {
+                        learningObject,
+                        reportingText: ''
+                    }
+                    $scope.cancel = () => {
+                        $scope.data.reportingText = ''
+                        $mdDialog.cancel()
+                    }
+                    $scope.sendReport = () => $mdDialog.hide($scope)
+                    $scope.loading = true
+                    $scope.submitEnabled = true
+
+                    serverCallService
+                        .makeGet('rest/learningMaterialMetadata/commentReportingReasons')
+                        .then(({ data: reasons }) => {
+                            if (Array.isArray(reasons)) {
+                                $scope.hideReasons = reasons.length === 1
+                                $scope.reasons = reasons.map(key => ({
+                                    key,
+                                    checked: reasons.length === 1
+                                }))
+                            }
+                            $scope.loading = false
+                        })
+
+                    $scope.characters = { used: 0, remaining: 255 }
+                    $scope.$watch('data.reportingText', (newValue) => {
+                        const used = newValue ? newValue.length : 0
+                        $scope.characters = { used, remaining: 255 - used }
+                    })
+                }],
+                templateUrl: 'directives/report/improper/improper.dialog.html',
+                clickOutsideToClose: true,
+                escapeToClose: true,
+                targetEvent,
+                locals: {
+                    title: this.$translate.instant('COMMENT_TOOLTIP_REPORT_AS_IMPROPER')
+                }
+            })
+            .then(({ data, reasons }) => {
+                Object.assign(data, {
+                    reportingReasons: reasons.reduce((reportingReasons, r) =>
+                        r.checked
+                            ? reportingReasons.concat({ reason: r.key })
+                            : reportingReasons,
+                        []
+                    )
+                })
+                return this.serverCallService
+                    .makePut('rest/impropers', data)
+                    .then(({ status, data }) => {
+                        if (status === 200) {
+                            this.$rootScope.learningObjectImproper = true
+                            this.$rootScope.$broadcast('errorMessage:reported')
+                            this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
+                        }
+                    })
+            })
+    }
+    showLoginDialog(targetEvent) {
+        this.addHash()
+        this.$mdDialog.show({
+            templateUrl: 'views/loginDialog/loginDialog.html',
+            controller: 'loginDialogController',
+            bindToController: true,
+            locals: {
+                title: this.$translate.instant('LOGIN_MUST_LOG_IN_TO_REPORT_IMPROPER')
+            },
+            clickOutsideToClose: true,
+            escapeToClose: true,
+            targetEvent
+        })
+    }
+    addHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0] + '#' + SHOW_COMMENT_REPORT_MODAL_HASH
+        )
+    }
+    removeHash() {
+        window.history.replaceState(null, null,
+            ('' + window.location).split('#')[0]
+        )
     }
     getLeftCommentsCount() {
-        return Array.isArray(this.comments)
-            ? this.comments.length - this.visibleCommentsCount
+        return Array.isArray(this.learningObject.comments)
+            ? this.learningObject.comments.length - this.visibleCommentsCount
             : 0
     }
 }
-controller.$inject = ['authenticatedUserService']
+controller.$inject = [
+    '$scope',
+    '$rootScope',
+    '$mdDialog',
+    '$translate',
+    '$timeout',
+    'authenticatedUserService',
+    'serverCallService',
+    'toastService'
+]
 
 angular.module('koolikottApp').component('dopCommentsCard', {
     bindings: {
-        comments: '<',
-        comment: '<',
+        learningObject: '<',
         isOpen: '<',
         submitClick: '&'
     },

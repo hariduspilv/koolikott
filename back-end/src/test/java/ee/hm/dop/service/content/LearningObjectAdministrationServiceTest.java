@@ -2,6 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.LearningObjectDao;
+<<<<<<< HEAD
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
@@ -9,6 +10,14 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
+=======
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.service.reviewmanagement.*;
+import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.useractions.PeerReviewService;
+import ee.hm.dop.utils.UserUtil;
+>>>>>>> new-develop
 import org.easymock.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -35,9 +44,23 @@ public class LearningObjectAdministrationServiceTest {
     @Mock
     private ChangedLearningObjectService changedLearningObjectService;
     @Mock
+<<<<<<< HEAD
     private FirstReviewService firstReviewService;
     @Mock
     private LearningObjectService learningObjectService;
+=======
+    private FirstReviewAdminService firstReviewAdminService;
+    @Mock
+    private LearningObjectService learningObjectService;
+    @Mock
+    private ImproperContentService improperContentService;
+    @Mock
+    private MaterialAdministrationService materialAdministrationService;
+    @Mock
+    private BrokenContentService brokenContentService;
+    @Mock
+    private ReviewManager reviewManager;
+>>>>>>> new-develop
 
     @Test
     public void addRecommendationMaterial() {
@@ -169,6 +192,107 @@ public class LearningObjectAdministrationServiceTest {
         assertNull(recommendation);
     }
 
+<<<<<<< HEAD
+=======
+
+    @Test
+    public void restore() {
+        Long materialID = 15L;
+
+        Material material = new Material();
+        material.setId(materialID);
+
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        learningObjectDao.restore(originalMaterial);
+        solrEngineService.updateIndex();
+
+//        improperContentService.setReviewed(material.getImproperContents(), user);
+        brokenContentService.setMaterialNotBroken(material);
+        expect(learningObjectService.validateAndFindDeletedOnly(material)).andReturn(originalMaterial);
+
+        replayAll();
+
+        learningObjectAdministrationService.restore(material, user);
+
+        verifyAll();
+    }
+
+    @Test
+    public void userCanNotRestoreRepositoryMaterial() {
+        Long materialID = 15L;
+
+        Material material = new Material();
+        material.setId(materialID);
+
+        Material originalMaterial = new Material();
+        originalMaterial.setId(materialID);
+        originalMaterial.setRepository(new Repository());
+        originalMaterial.setRepositoryIdentifier("asd");
+
+        User user = new User();
+        user.setRole(Role.USER);
+
+//        expect(materialDao.findById(materialID)).andReturn(originalMaterial);
+
+        replayAll();
+
+        try {
+            learningObjectAdministrationService.restore(material, user);
+        } catch (RuntimeException e) {
+            assertEquals(UserUtil.MUST_BE_ADMIN, e.getMessage());
+        }
+
+        verifyAll();
+    }
+
+    @Test
+    public void deleteByAdmin() {
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+
+        User user = new User();
+        user.setRole(Role.ADMIN);
+
+        learningObjectDao.delete(originalMaterial);
+        expect(learningObjectService.validateAndFind(originalMaterial)).andReturn(originalMaterial);
+        solrEngineService.updateIndex();
+
+        replayAll();
+
+        learningObjectAdministrationService.delete(originalMaterial, user);
+
+        verifyAll();
+    }
+
+    @Test
+    public void userCanNotDeleteRepositoryMaterial() {
+        Material originalMaterial = new Material();
+        originalMaterial.setId(15L);
+        originalMaterial.setRepository(new Repository());
+        originalMaterial.setRepositoryIdentifier("asd");
+
+        User user = new User();
+        user.setRole(Role.USER);
+
+        expect(learningObjectService.validateAndFind(originalMaterial)).andReturn(originalMaterial);
+        replayAll();
+
+        try {
+            learningObjectAdministrationService.delete(originalMaterial, user);
+        } catch (RuntimeException e) {
+            assertEquals(UserUtil.MUST_BE_ADMIN_OR_MODERATOR, e.getMessage());
+        }
+
+        verifyAll();
+    }
+
+
+>>>>>>> new-develop
     private void expectPortfolioUpdate(Capture<Portfolio> capturedPortfolio) {
         expect(learningObjectDao.createOrUpdate(EasyMock.capture(capturedPortfolio))).andAnswer(capturedPortfolio::getValue);
     }

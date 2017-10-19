@@ -9,7 +9,11 @@ import static org.junit.Assert.assertSame;
 import ee.hm.dop.dao.PageDao;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Page;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/PageServiceTest.java
 import ee.hm.dop.service.content.PageService;
+=======
+import ee.hm.dop.service.metadata.PageService;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/PageServiceTest.java
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

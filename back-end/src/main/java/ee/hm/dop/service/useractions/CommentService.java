@@ -21,8 +21,12 @@ public class CommentService {
     private LearningObjectDao learningObjectDao;
 
     public void addComment(Comment comment, LearningObject learningObject, User loggedInUser) {
+<<<<<<< HEAD
         if (isEmpty(comment.getText()) || comment.getId() != null)
             throw new RuntimeException("Comment is missing text or already exists.");
+=======
+        mustBeValidComment(comment);
+>>>>>>> new-develop
 
         LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
 
@@ -30,8 +34,20 @@ public class CommentService {
             throw ValidatorUtil.permissionError();
         }
 
+<<<<<<< HEAD
+=======
+        comment.setCreator(loggedInUser);
+>>>>>>> new-develop
         comment.setAdded(DateTime.now());
         originalLearningObject.getComments().add(comment);
         learningObjectDao.createOrUpdate(originalLearningObject);
     }
+<<<<<<< HEAD
+=======
+
+    private void mustBeValidComment(Comment comment) {
+        if (isEmpty(comment.getText()) || comment.getId() != null)
+            throw new RuntimeException("Comment is missing text or already exists.");
+    }
+>>>>>>> new-develop
 }

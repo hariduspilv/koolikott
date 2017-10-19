@@ -45,7 +45,7 @@
       </md-toolbar>
     </div>
 
-    <a class="embed-link" data-ng-href="{{material.source}}" ng-if="sourceType === 'PICTURE'" target="_blank"
+    <a class="embed-link" data-ng-href="{{material.source}}" data-ng-if="sourceType === 'PICTURE'" target="_blank"
        ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
       <img data-ng-src="{{material.source}}"/>
     </a>

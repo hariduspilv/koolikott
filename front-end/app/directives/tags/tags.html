@@ -2,53 +2,82 @@
   <span data-translate="DETAIL_VIEW_TAGS"></span>:
 </p>
 <div layout="row" layout-xs="column">
-  <md-chips ng-model="$ctrl.upVoteForms" readonly="true" md-removable="$ctrl.isEditPortfolioMode"
-            md-on-remove="$ctrl.removeTag($chip.tag)">
+  <md-chips
+    data-ng-model="$ctrl.tags"
+    readonly="true"
+    data-md-removable="$ctrl.isEditPortfolioMode"
+    data-md-on-remove="$ctrl.removeTag($chip.tag)">
     <md-chip-template>
-      <md-button data-ng-if="$ctrl.isAllowed() && !$ctrl.isAdmin() && !$ctrl.isEditPortfolioMode"
-                 class="md-icon-button"
-                 ng-click="$ctrl.reportTag($chip.tag)">
-        <md-icon class="material-icons md-light md-48">error_outline</md-icon>
+      <md-button
+        data-ng-if="
+          !$ctrl.authenticatedUserService.isRestricted() &&
+          !$ctrl.authenticatedUserService.isAdmin() &&
+          !$ctrl.isEditPortfolioMode"
+        class="md-icon-button"
+        ng-click="$ctrl.reportTag($event)"
+        >
+        <md-icon
+          class="material-icons md-light md-48"
+          data-md-colors="{ color: 'grey-400' }"
+          >
+          warning
+        </md-icon>
         <md-tooltip>
           <span data-translate="TAG_TOOLTIP_REPORT_AS_IMPROPER"></span>
         </md-tooltip>
       </md-button>
-
-      <a href="search/result?q=tag:'{{$chip.tag}}'" data-ng-click="$ctrl.getTagSearchURL($event, $chip.tag)">{{$chip.tag}}</a>
-
-      <md-button data-ng-if="!$chip.tagUpVote && $ctrl.isAllowed()" class="md-icon-button" ng-click="$ctrl.upVote($chip)">
-        <md-icon>plus_one</md-icon>
+      <a
+        href="search/result?q=tag:'{{$chip.tag}}'"
+        data-ng-click="$ctrl.getTagSearchURL($event, $chip.tag)"
+        >
+        {{$chip.tag}}
+      </a>
+      <md-button
+        data-ng-if="$ctrl.isAllowed() && !$chip.tagUpVote"
+        class="md-icon-button"
+        data-ng-click="$ctrl.upVote($chip)"
+        >
+        <md-icon data-md-colors="{ color: 'grey-500' }">plus_one</md-icon>
       </md-button>
-      <md-button data-ng-if="$chip.tagUpVote && $ctrl.isAllowed()" class="md-icon-button" ng-click="$ctrl.removeUpVote($chip)">
+      <md-button
+        data-ng-if="$ctrl.isAllowed() && $chip.tagUpVote"
+        class="md-icon-button"
+        data-ng-click="$ctrl.removeUpVote($chip)"
+        >
         <md-tooltip>
           <span data-translate="TAG_TOOLTIP_REMOVE_UPVOTE"></span>
         </md-tooltip>
-        <md-icon>undo</md-icon>
+        <md-icon data-md-colors="{ color: 'grey-500' }">undo</md-icon>
       </md-button>
     </md-chip-template>
   </md-chips>
-
-  <form name="addTagForm" id="addTagForm" data-ng-if="$ctrl.isAllowed()" ng-submit="$ctrl.addTag()">
-    <md-autocomplete class="tags"
-                     md-selected-item="$ctrl.newTag.selectedItem"
-                     md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
-                     md-item-text="tag"
-                     md-items="tag in $ctrl.doSuggest($ctrl.newTag.tagName)"
-                     md-search-text="$ctrl.newTag.tagName"
-                     md-search-text-change="$ctrl.limitTextLength()"
-                     md-input-maxlength="100"
-                     md-input-minlength="0"
-                     md-no-cache="true"
-                     md-menu-class="suggest-dropdown"
-                     md-selected-item-change="$ctrl.tagSelected(tag)"
-                     ng-model-options="{debounce: 100}">
+  <form
+    name="addTagForm"
+    id="addTagForm"
+    data-ng-if="$ctrl.isAllowed()"
+    data-ng-submit="$ctrl.addTag()"
+    >
+    <md-autocomplete
+      class="tags"
+      data-md-selected-item="$ctrl.newTag.selectedItem"
+      data-md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
+      data-md-item-text="tag"
+      data-md-items="tag in $ctrl.doSuggest($ctrl.newTag.tagName)"
+      data-md-search-text="$ctrl.newTag.tagName"
+      data-md-search-text-change="$ctrl.limitTextLength()"
+      data-md-input-maxlength="100"
+      data-md-input-minlength="0"
+      data-md-no-cache="true"
+      data-md-menu-class="suggest-dropdown"
+      data-md-selected-item-change="$ctrl.tagSelected(tag)"
+      data-ng-model-options="{debounce: 100}"
+      >
       <md-item-template>
         <span md-highlight-text="$ctrl.newTag.tagName">{{ tag }}</span>
       </md-item-template>
     </md-autocomplete>
   </form>
 </div>
-
 <div layout="row">
   <md-button data-ng-show="$ctrl.showMoreTags" ng-click="$ctrl.showMore()">
     <span data-translate="SHOW_MORE"></span>
@@ -56,8 +85,10 @@
       keyboard_arrow_right
     </md-icon>
   </md-button>
-
-  <md-button data-ng-show="!$ctrl.showMoreTags && $ctrl.upVoteForms.length > 10" ng-click="$ctrl.showLess()">
+  <md-button
+    data-ng-show="!$ctrl.showMoreTags && $ctrl.tags.length > 10"
+    data-ng-click="$ctrl.showLess()"
+    >
     <span data-translate="SHOW_LESS"></span>
     <md-icon class="md-primary">
       keyboard_arrow_right

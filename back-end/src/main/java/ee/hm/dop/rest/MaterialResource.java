@@ -2,10 +2,12 @@ package ee.hm.dop.rest;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+<<<<<<< HEAD
 import java.net.URLDecoder;
+=======
+>>>>>>> new-develop
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -26,6 +28,7 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
+<<<<<<< HEAD
 import ee.hm.dop.service.content.MaterialProxy;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -34,6 +37,16 @@ import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+=======
+import ee.hm.dop.service.content.*;
+import ee.hm.dop.service.content.enums.GetMaterialStrategy;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.proxy.MaterialProxy;
+import ee.hm.dop.service.reviewmanagement.BrokenContentService;
+import ee.hm.dop.service.useractions.UserLikeService;
+import ee.hm.dop.service.useractions.UserService;
+import ee.hm.dop.utils.NumberUtils;
+>>>>>>> new-develop
 
 @Path("material")
 public class MaterialResource extends BaseResource {
@@ -47,11 +60,22 @@ public class MaterialResource extends BaseResource {
     private MaterialProxy materialProxy;
     @Inject
     private UserLikeService userLikeService;
+<<<<<<< HEAD
+=======
+    @Inject
+    private LearningObjectAdministrationService learningObjectAdministrationService;
+    @Inject
+    private BrokenContentService brokenContentService;
+    @Inject
+    private LearningObjectService learningObjectService;
+    @Inject
+    private MaterialGetter materialGetter;
+>>>>>>> new-develop
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("materialId") long materialId) {
-        return materialService.get(materialId, getLoggedInUser());
+        return materialGetter.get(materialId, getLoggedInUser());
     }
 
     @GET
@@ -59,7 +83,11 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+<<<<<<< HEAD
         return materialService.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
+=======
+        return materialGetter.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
+>>>>>>> new-develop
     }
 
     @GET
@@ -67,24 +95,25 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+<<<<<<< HEAD
         return materialService.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
     }
 
     private String decode(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
         return URLDecoder.decode(materialSource, UTF_8);
+=======
+        return materialGetter.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
+>>>>>>> new-develop
     }
 
     @POST
     @Path("increaseViewCount")
     public Response increaseViewCount(Material material) {
-        Long materialId = material.getId();
-
-        Material originalMaterial = materialService.get(materialId, getLoggedInUser());
+        Material originalMaterial = materialGetter.get(material.getId(), getLoggedInUser());
         if (originalMaterial == null) {
-            return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Invalid material").build();
+            throw notFound();
         }
-
-        materialService.increaseViewCount(originalMaterial);
+        learningObjectService.incrementViewCount(originalMaterial);
         return Response.status(HttpURLConnection.HTTP_OK).build();
     }
 
@@ -119,7 +148,11 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
         User creator = getValidCreator(username);
+<<<<<<< HEAD
         return (creator != null) ? materialService.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
+=======
+        return (creator != null) ? materialGetter.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
+>>>>>>> new-develop
     }
 
     @GET
@@ -127,7 +160,11 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Long getByCreatorCount(@QueryParam("username") String username) {
         User creator = getValidCreator(username);
+<<<<<<< HEAD
         return (creator != null) ? materialService.getByCreatorSize(creator) : null;
+=======
+        return (creator != null) ? materialGetter.getByCreatorSize(creator) : null;
+>>>>>>> new-develop
     }
 
     private User getValidCreator(@QueryParam("username") String username) {
@@ -139,7 +176,15 @@ public class MaterialResource extends BaseResource {
     @Path("{materialID}")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void delete(@PathParam("materialID") Long materialID) {
+<<<<<<< HEAD
         materialService.delete(materialID, getLoggedInUser());
+=======
+        Material material = materialGetter.get(materialID, getLoggedInUser());
+        if (material == null) {
+            throw notFound();
+        }
+        learningObjectAdministrationService.delete(material, getLoggedInUser());
+>>>>>>> new-develop
     }
 
     @PUT
@@ -162,7 +207,11 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public BrokenContent setBrokenMaterial(Material material) {
+<<<<<<< HEAD
         return materialService.addBrokenMaterial(material, getLoggedInUser());
+=======
+        return brokenContentService.save(material, getLoggedInUser());
+>>>>>>> new-develop
     }
 
     @GET
@@ -170,6 +219,7 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean hasSetBroken(@QueryParam("materialId") long materialId) {
         User user = getLoggedInUser();
+<<<<<<< HEAD
         return user != null ? materialService.hasSetBroken(materialId, getLoggedInUser()) : false;
     }
 
@@ -181,5 +231,8 @@ public class MaterialResource extends BaseResource {
             return Response.noContent().build();
         }
         return materialProxy.getProxyUrl(url_param);
+=======
+        return user != null ? brokenContentService.hasSetBroken(materialId, getLoggedInUser()) : false;
+>>>>>>> new-develop
     }
 }

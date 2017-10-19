@@ -7,12 +7,17 @@ import ee.hm.dop.model.taxon.Taxon;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class TaxonService {
 
     public static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/metadata/TaxonService.java
     public static final List<String> TAXON_PREFIXES = Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_");
+=======
+    public static final List<String> TAXON_PREFIXES = Collections.unmodifiableList(Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_"));
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/metadata/TaxonService.java
 
     @Inject
     private TranslationService translationService;

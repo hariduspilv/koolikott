@@ -1,0 +1,7 @@
+md-checkbox.md-checked .md-icon {
+    background-color: rgba(3,169,244,0.87);
+    border-color: rgba(3,169,244,0.87);
+}
+md-checkbox.md-checked.md-focused .md-container:before {
+    background-color: rgba(3,169,244,0.26);
+}

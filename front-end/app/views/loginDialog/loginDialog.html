@@ -1,12 +1,14 @@
-<md-dialog aria-label="Sisselogimise modaalaken" flex="30">
-  <md-toolbar class="md-hue-2">
-    <div layout-align="center start" layout="row" layout-sm="column">
+<md-dialog aria-label="Sisselogimise modaalaken" class="login-dialog">
+  <md-toolbar>
+    <div data-layout-align="center start" data-layout="row" data-layout-sm="column">
       <div class="md-toolbar-tools">
         <h2 data-ng-show="$root.sidenavLogin === '/portfolios'" data-translate="SIGN_IN_TO_SEE_PORTFOLIOS" class="sidenav-login-title"></h2>
         <h2 data-ng-show="$root.sidenavLogin === '/materials'" data-translate="SIGN_IN_TO_SEE_MATERIALS" class="sidenav-login-title"></h2>
         <h2 data-ng-show="$root.sidenavLogin === '/favorites'" data-translate="SIGN_IN_TO_SEE_FAVORITES" class="sidenav-login-title"></h2>
-        <h2 data-ng-show="!$root.sidenavLogin || (['/portfolios','/materials','/favorites'].indexOf($root.sidenavLogin) === -1)"
-            data-translate="LOGIN_CHOOSE_LOGIN_METHOD"></h2>
+        <h2
+          data-ng-show="!$root.sidenavLogin || (['/portfolios','/materials','/favorites'].indexOf($root.sidenavLogin) === -1)"
+          data-ng-bind="title"
+        ></h2>
         <span flex></span>
         <md-button ng-click="hideLogin()" class="md-icon-button" aria-label="Sulge sisselogimise modaalaken">
           <md-icon>close</md-icon>
@@ -14,50 +16,85 @@
       </div>
     </div>
   </md-toolbar>
-  <form>
-    <div layout="row" layout-align="center start">
-      <div class="md-padding" flex>
-        <md-content>
-          <div layout="column" data-ng-if="mobileIdChallenge">
-              <p>
-                <span data-translate="LOGIN_MOBILEID_CODE"></span>: <strong data-ng-bind="mobileIdChallenge"></strong>
-              </p>
-
-              <p data-translate="LOGIN_SMS"></p>
-          </div>
-
-          <div layout="column" class="login-modal-container" data-ng-if="!mobileIdChallenge">
-            <md-input-container class="md-block">
+  <div data-layout="row" data-layout-align="center start">
+    <div class="md-padding" flex>
+      <md-content>
+        <div data-layout="column" data-ng-if="mobileIdChallenge">
+          <p><span data-translate="LOGIN_MOBILEID_CODE"></span>: <strong data-ng-bind="mobileIdChallenge"></strong></p>
+          <p data-translate="LOGIN_SMS"></p>
+        </div>
+        <div data-layout="column" class="login-modal-container" data-ng-if="!mobileIdChallenge">
+          <form name="forms.mobileIdForm" data-ng-submit="mobileIdAuth(forms.mobileIdForm)" novalidate data-layout="row">
+            <md-input-container flex class="md-block">
               <label></label>
-              <input id="login-personal-code" data-ng-model="mobileId.idCode" placeholder="{{'PERSONAL_CODE' | translate}}" data-input-pattern="[^0-9]+" data-dop-input-value-control maxlength="11">
-              <div ng-messages="mobileId.idCode.$error">
-                <div data-ng-if="validation.error.idCode === 'required'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_REQUIRED"></div>
-                <div data-ng-if="validation.error.idCode === 'invalid'" data-translate="MESSAGE_ERROR_PERSONAL_CODE_INVALID"></div>
+              <input
+                name="idCode"
+                placeholder="{{'PERSONAL_CODE' | translate}}"
+                data-ng-model="mobileId.idCode"
+              >
+              <div data-ng-messages="forms.mobileIdForm.idCode.$error">
+                <div
+                  data-ng-message="required"
+                  data-translate="MESSAGE_ERROR_PERSONAL_CODE_REQUIRED"
+                ></div>
+                <div
+                  data-ng-message="validEstonianIdCode"
+                  data-translate="MESSAGE_ERROR_PERSONAL_CODE_INVALID"
+                ></div>
               </div>
             </md-input-container>
-            <md-input-container  class="md-block">
+            <md-input-container flex class="md-block">
               <label></label>
-              <input id="login-phone-number" data-ng-model="mobileId.phoneNumber" placeholder="+372 XX XXX XXX" data-input-pattern="[^0-9+]+" data-dop-input-value-control>
-              <div data-ng-messages="mobileId.phoneNumber.$error">
-                  <span data-ng-if="validation.error.phoneNumber === 'required'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_REQUIRED"></span>
-                  <span data-ng-if="validation.error.phoneNumber === 'notEstonian'" data-translate="MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN"></span>
+              <input
+                name="phoneNumber"
+                placeholder="372 XX XXX XXX"
+                data-ng-model="mobileId.phoneNumber"
+              />
+              <div data-ng-messages="forms.mobileIdForm.phoneNumber.$error">
+                <div
+                  data-ng-message="required"
+                  data-translate="MESSAGE_ERROR_PHONE_NUMBER_REQUIRED"
+                ></div>
+                <div
+                  data-ng-message="validEstonianPhoneNumber"
+                  data-translate="MESSAGE_ERROR_PHONE_NUMBER_NOT_ESTONIAN"
+                ></div>
               </div>
             </md-input-container>
-            <md-button aria-label="Logi sisse kasutades Mobiil-ID" class="md-raised md-primary" id="login-mobile-id-button" data-ng-click="mobileIdAuth()" ng-disabled="loginButtonFlag">
-              <span data-translate="LOGIN_MOBILEID"></span>
-            </md-button>
-            <md-button aria-label="Logi sisse kasutades ID-kaarti" class="md-raised md-primary" id="login-id-card-button" data-ng-click="idCardAuth()" ng-disabled="loginButtonFlag">
-              <span data-translate="LOGIN_IDCARD"></span>
-            </md-button>
-            <md-button aria-label="Logi sisse kasutades Ekooli" class="md-raised md-primary" id="login-ekool-button" data-ng-click="ekoolAuth()" ng-disabled="loginButtonFlag">
-              <span data-translate="LOGIN_EKOOL"></span>
-            </md-button>
-            <md-button aria-label="Logi sisse kasutades Stuudiumi" class="md-raised md-primary" id="login-stuudium-button" data-ng-click="stuudiumAuth()" ng-disabled="loginButtonFlag">
-              <span data-translate="LOGIN_STUUDIUM"></span>
-            </md-button>
+            <md-button
+              flex
+              type="submit"
+              class="md-raised login-button-mobiilid"
+              aria-label="Logi sisse kasutades Mobiil-ID"
+              data-ng-disabled="loginButtonFlag"
+            ></md-button>
+          </form>
+          <md-divider></md-divider>
+          <div data-layout="row">
+            <md-button
+              flex
+              class="md-raised login-button-idkaart"
+              aria-label="Logi sisse kasutades ID-kaarti"
+              data-ng-click="idCardAuth()"
+              data-ng-disabled="loginButtonFlag"
+            ></md-button>
+            <md-button
+              flex
+              class="md-raised login-button-ekool"
+              aria-label="Logi sisse kasutades Ekooli"
+              data-ng-click="ekoolAuth()"
+              data-ng-disabled="loginButtonFlag"
+            ></md-button>
+            <md-button
+              flex
+              class="md-raised login-button-stuudium"
+              aria-label="Logi sisse kasutades Stuudiumi"
+              data-ng-click="stuudiumAuth()"
+              data-ng-disabled="loginButtonFlag"
+            ></md-button>
           </div>
-        </md-content>
-      </div>
+        </div>
+      </md-content>
     </div>
-  </form>
+  </div>
 </md-dialog>

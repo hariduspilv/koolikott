@@ -1,6 +1,6 @@
-<div data-layout="column" data-layout-gt-sm="row">
+<div data-layout="column" data-layout-gt-sm="row" data-ng-cloak>
   <div flex-gt-sm="75">
-    <div ng-if="modUser()" dop-error-message data="material"></div>
+    <dop-error-message ng-if="modUser()" data="material"></dop-error-message>
     <!-- same as portfolioSummaryCard in directives -->
     <md-card class="card-lg card-mb-20" id="material-card">
       <!-- SECTION 1 -->
@@ -336,10 +336,9 @@
       </md-card-actions>
       <!-- SECTION 3: Comments -->
       <dop-comments-card
-        comments="material.comments"
-        comment="newComment"
-        submit-click="addComment()"
-        is-open="commentsOpen"
+        data-learning-object="material"
+        data-submit-click="addComment(newComment, learningObject)"
+        data-is-open="commentsOpen"
       ></dop-comments-card>
     </md-card>
   </div>

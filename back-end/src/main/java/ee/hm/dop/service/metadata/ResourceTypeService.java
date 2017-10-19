@@ -27,10 +27,14 @@ public class ResourceTypeService {
 
     public ResourceType findResourceByTranslation(String name) {
         String translationKey = translationService.getTranslationKeyByTranslation(name);
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/metadata/ResourceTypeService.java
         if (translationKey == null) {
             return null;
         }
 
         return resourceTypeDao.findByName(translationKey);
+=======
+        return translationKey != null ? resourceTypeDao.findByName(translationKey) : null;
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/metadata/ResourceTypeService.java
     }
 }

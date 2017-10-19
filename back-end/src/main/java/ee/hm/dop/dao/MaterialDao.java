@@ -73,7 +73,11 @@ public class MaterialDao extends AbstractDao<Material> {
                 .getResultList();
     }
 
+<<<<<<< HEAD
     public Material findByRepositoryAndRepositoryIdentifier(Repository repository, String repositoryIdentifier) {
+=======
+    public Material findByRepository(Repository repository, String repositoryIdentifier) {
+>>>>>>> new-develop
         String select = "SELECT m FROM Material m WHERE m.repository.id = :repositoryId"
                 + " AND m.repositoryIdentifier = :repositoryIdentifier";
         TypedQuery<Material> query = getEntityManager()

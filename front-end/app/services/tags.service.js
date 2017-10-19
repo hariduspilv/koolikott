@@ -23,28 +23,59 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             }
         },
 
-        reportTag(tag, learningObject, successCallback, failCallback) {
-            let confirm = $mdDialog.confirm()
-                .title($translate.instant('REPORT_IMPROPER_TITLE'))
-                .content($translate.instant('REPORT_IMPROPER_CONTENT') + " " + $translate.instant('REASON_IMPROPER_TAG'))
-                .ok($translate.instant('BUTTON_NOTIFY'))
-                .cancel($translate.instant('BUTTON_CANCEL'));
+        reportTag(learningObject, targetEvent) {
+            return $mdDialog
+                .show({
+                    controller: ['$scope', '$mdDialog', function ($scope, $mdDialog) {
+                        $scope.title = $translate.instant('TAG_TOOLTIP_REPORT_AS_IMPROPER')
+                        $scope.data = {
+                            reportingText: ''
+                        }
+                        $scope.cancel = () => {
+                            $scope.data.reportingText = ''
+                            $mdDialog.cancel()
+                        }
+                        $scope.sendReport = () => $mdDialog.hide($scope)
+                        $scope.loading = true
+                        $scope.submitEnabled = true
 
-            $mdDialog.show(confirm).then(function () {
-                let entity = {
-                    learningObject: learningObject,
-                    reason: "Tag: " + tag
-                };
+                        serverCallService
+                            .makeGet('rest/learningMaterialMetadata/tagReportingReasons')
+                            .then(({ data: reasons }) => {
+                                if (Array.isArray(reasons)) {
+                                    $scope.hideReasons = reasons.length === 1
+                                    $scope.reasons = reasons.map(key => ({
+                                        key,
+                                        checked: reasons.length === 1
+                                    }))
+                                }
+                                $scope.loading = false
+                            })
 
-                if (successCallback) {
-                    serverCallService.makePut("rest/impropers", entity, successCallback, failCallback);
-                } else {
-                    return serverCallService.makePut("rest/impropers", entity)
-                        .then(response => {
-                            return response.data;
-                        });
-                }
-            });
+                        $scope.characters = { used: 0, remaining: 255 }
+                        $scope.$watch('data.reportingText', (newValue) => {
+                            const used = newValue ? newValue.length : 0
+                            $scope.characters = { used, remaining: 255 - used }
+                        })
+                    }],
+                    templateUrl: 'directives/report/improper/improper.dialog.html',
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    targetEvent,
+                })
+                .then(({ data, reasons }) =>
+                    serverCallService
+                        .makePut('rest/impropers', Object.assign(data, {
+                            learningObject,
+                            reportingReasons: reasons.reduce((reportingReasons, r) =>
+                                r.checked
+                                    ? reportingReasons.concat({ reason: r.key })
+                                    : reportingReasons,
+                                []
+                            )
+                        }))
+                        .then(response => response.data)
+                )
         },
 
         getTagUpVotes(params, successCallback, failCallback) {
@@ -58,7 +89,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             }
         },
 
-        addUpVode(params, successCallback, failCallback) {
+        addUpVote(params, successCallback, failCallback) {
             if (successCallback) {
                 serverCallService.makePut("rest/tagUpVotes", params, successCallback, failCallback);
             } else {

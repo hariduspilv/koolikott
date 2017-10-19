@@ -1,22 +1,19 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-/**
- * Created by mart on 29.12.15.
- */
+import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 public class ImproperContent extends AbstractEntity {
 
@@ -36,13 +33,29 @@ public class ImproperContent extends AbstractEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private DateTime createdAt;
 
     @Column(nullable = false)
-    private boolean deleted = false;
+    private boolean reviewed = false;
+
+    @ManyToOne
+    @JoinColumn(name = "reviewedBy")
+    private User reviewedBy;
 
     @Column
-    private String reason;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime reviewedAt;
+
+    @Column
+    private String reportingText;
+
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
+
+    @OneToMany(mappedBy = "improperContent", fetch = LAZY)
+    private List<ReportingReason> reportingReasons;
 
     public Long getId() {
         return id;
@@ -61,29 +74,45 @@ public class ImproperContent extends AbstractEntity {
     }
 
     @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getAdded() {
-        return added;
+    public DateTime getCreatedAt() {
+        return createdAt;
     }
 
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setAdded(DateTime added) {
-        this.added = added;
+    public void setCreatedAt(DateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean isReviewed() {
+        return reviewed;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
     }
 
-    public String getReason() {
-        return reason;
+    public User getReviewedBy() {
+        return reviewedBy;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setReviewedBy(User reviewedBy) {
+        this.reviewedBy = reviewedBy;
+    }
+
+    public DateTime getReviewedAt() {
+        return reviewedAt;
+    }
+
+    public void setReviewedAt(DateTime reviewedAt) {
+        this.reviewedAt = reviewedAt;
+    }
+
+    public String getReportingText() {
+        return reportingText;
+    }
+
+    public void setReportingText(String reportingText) {
+        this.reportingText = reportingText;
     }
 
     public LearningObject getLearningObject() {
@@ -92,5 +121,21 @@ public class ImproperContent extends AbstractEntity {
 
     public void setLearningObject(LearningObject learningObject) {
         this.learningObject = learningObject;
+    }
+
+    public List<ReportingReason> getReportingReasons() {
+        return reportingReasons;
+    }
+
+    public void setReportingReasons(List<ReportingReason> reportingReasons) {
+        this.reportingReasons = reportingReasons;
+    }
+
+    public ReviewStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReviewStatus status) {
+        this.status = status;
     }
 }

@@ -18,10 +18,10 @@ public class fabButton extends Component{
 	}
 	
 	public static AddPortfolioForm clickCopyPortfolio() {
-		Helpers.waitForSeconds(3000);
+		Helpers.waitForMilliseconds(3000);
 		Helpers.waitUntilNotVisible(Constants.toastText);
 		Helpers.moveToElement(addPortfolio);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(copyPortfolioButton).click();
 		return new AddPortfolioForm();
 	}

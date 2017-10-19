@@ -18,26 +18,21 @@ import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.metadata.TaxonService;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.collections.CollectionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class MaterialParserEstCore extends MaterialParser {
-
     private static final String YES = "YES";
-
     @Inject
     private LanguageService languageService;
-
     @Inject
     private TagService tagService;
-
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
-
     @Inject
     private KeyCompetenceService keyCompetenceService;
-
     @Inject
     private TaxonService taxonService;
 
@@ -59,40 +54,29 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
-        List<LanguageString> descriptions = null;
-
         try {
-            descriptions = getDescriptions(doc);
-        } catch (Exception e) {
-            // ignore
+            material.setDescriptions(getDescriptions(doc));
+        } catch (Exception ignored) {
         }
 
-        material.setDescriptions(descriptions);
     }
 
     @Override
     protected void setLanguage(Material material, Document doc) {
-        Language language = null;
-
         try {
-            language = getLanguage(doc);
-        } catch (Exception e) {
-            // ignore
+            material.setLanguage(getLanguage(doc));
+        } catch (Exception ignored) {
         }
 
-        material.setLanguage(language);
     }
 
     @Override
     protected void setTitles(Material material, Document doc) throws ParseException {
-        List<LanguageString> titles;
-
         try {
-            titles = getTitles(doc);
-            if (titles == null || titles.isEmpty()) {
+            List<LanguageString> titles = getTitles(doc);
+            if (CollectionUtils.isEmpty(titles)) {
                 throw new ParseException("No titles found.");
             }
-
             material.setTitles(titles);
         } catch (Exception e) {
             throw new ParseException("Error parsing and setting document titles, repository id: " + material.getRepositoryIdentifier());
@@ -116,14 +100,8 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setIsPaid(Material material, Document doc) {
-        Node isPaid = getNode(doc,
-                "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
-
-        if (isPaid != null && isPaid.getTextContent().trim().toUpperCase().equals(YES)) {
-            material.setIsPaid(true);
-        } else {
-            material.setIsPaid(false);
-        }
+        Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
+        material.setIsPaid(isPaid != null && isPaid.getTextContent().trim().toUpperCase().equals(YES));
     }
 
     @Override
@@ -154,8 +132,8 @@ public class MaterialParserEstCore extends MaterialParser {
                 picture.setData(bytes);
             }
         }
-
         material.setPicture(picture);
+
     }
 
     @Override
@@ -181,8 +159,7 @@ public class MaterialParserEstCore extends MaterialParser {
                 }
             }
 
-        } catch (XPathExpressionException e) {
-            // ignore
+        } catch (XPathExpressionException ignored) {
         }
 
         material.setCrossCurricularThemes(crossCurricularThemes);
@@ -211,8 +188,7 @@ public class MaterialParserEstCore extends MaterialParser {
                 }
             }
 
-        } catch (XPathExpressionException e) {
-            // ignore
+        } catch (XPathExpressionException ignored) {
         }
 
         material.setKeyCompetences(keyCompetences);
@@ -224,35 +200,24 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private Language getLanguage(Document doc) {
-        Language language;
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
-
         String[] tokens = node.getFirstChild().getTextContent().trim().split("-");
-        language = languageService.getLanguage(tokens[0]);
-
-        return language;
+        return languageService.getLanguage(tokens[0]);
     }
 
     private List<LanguageString> getTitles(Document doc) {
-        List<LanguageString> titles;
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='title']");
-        titles = getLanguageStrings(node, languageService);
-
-        return titles;
+        return getLanguageStrings(node, languageService);
     }
 
     private List<LanguageString> getDescriptions(Document doc) {
-        List<LanguageString> descriptions;
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='description']");
-        descriptions = getLanguageStrings(node, languageService);
-
-        return descriptions;
+        return getLanguageStrings(node, languageService);
     }
 
     private List<Tag> getTags(Document doc) {
         NodeList keywords = getNodeList(doc,
                 "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
-
         return getTagsFromKeywords(keywords, tagService);
     }
 }

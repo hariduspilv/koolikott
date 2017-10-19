@@ -145,7 +145,7 @@ class controller extends Controller {
             })
     }
     setNotImproper() {
-        if (this.authenticatedUserService.isAdmin() && this.$scope.portfolio)
+        if ((this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()) && this.$scope.portfolio)
             this.serverCallService
                 .makeDelete('rest/impropers?learningObject=' + this.$scope.portfolio.id)
                 .then(() => {

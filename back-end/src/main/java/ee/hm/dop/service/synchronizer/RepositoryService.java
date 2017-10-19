@@ -1,5 +1,6 @@
 package ee.hm.dop.service.synchronizer;
 
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
 import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +9,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+=======
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.Material;
@@ -15,8 +18,13 @@ import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.RepositoryURL;
 import ee.hm.dop.service.content.MaterialService;
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
 import ee.hm.dop.service.content.PictureService;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+=======
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.files.PictureSaver;
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
@@ -27,10 +35,16 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.util.List;
+
+import static java.lang.String.format;
+
 public class RepositoryService {
 
-    private static final int MAX_IMPORT_BEFORE_EMPTY_CACHE = 50;
-
+    private static final int BATCH_SIZE = 50;
     private static final Logger logger = LoggerFactory.getLogger(RepositoryService.class);
 
     @Inject
@@ -42,7 +56,7 @@ public class RepositoryService {
     @Inject
     private MaterialDao materialDao;
     @Inject
-    private PictureService pictureService;
+    private PictureSaver pictureSaver;
 
     public List<Repository> getAllRepositories() {
         return repositoryDao.findAll();
@@ -101,7 +115,7 @@ public class RepositoryService {
     }
 
     private int getCount(int count) {
-        if (++count >= MAX_IMPORT_BEFORE_EMPTY_CACHE) {
+        if (++count >= BATCH_SIZE) {
             DbUtils.emptyCache();
             count = 0;
         }
@@ -109,8 +123,12 @@ public class RepositoryService {
     }
 
     private void handleMaterial(Repository repository, Material material, SynchronizationAudit audit) {
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
         Material existentMaterial = materialDao.findByRepositoryAndRepositoryIdentifier(repository,
                 material.getRepositoryIdentifier());
+=======
+        Material existentMaterial = materialDao.findByRepository(repository, material.getRepositoryIdentifier());
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
 
         material.setRepository(repository);
         if (repository.isEstonianPublisher()) {
@@ -132,6 +150,7 @@ public class RepositoryService {
 
     boolean isRepoMaterial(Repository repository, Material existentMaterial) {
         String domainName = getDomainName(existentMaterial.getSource());
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
         if (StringUtils.isNotBlank(domainName)) {
             for (RepositoryURL repositoryURL : repository.getRepositoryURLs()) {
                 if (getDomainName(repositoryURL.getBaseURL()).equals(domainName)) {
@@ -140,6 +159,13 @@ public class RepositoryService {
             }
         }
         return false;
+=======
+        return StringUtils.isNotBlank(domainName) &&
+                repository.getRepositoryURLs().stream()
+                        .map(RepositoryURL::getBaseURL)
+                        .map(this::getDomainName)
+                        .anyMatch(r -> r.equals(domainName));
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
     }
 
     String getDomainName(String url) {
@@ -154,9 +180,8 @@ public class RepositoryService {
 
         } catch (Exception e) {
             logger.error("Could not get domain name from material during synchronization - updating all metafields of the material");
+            return null;
         }
-
-        return null;
     }
 
     private void createMaterial(Material material) {
@@ -167,7 +192,7 @@ public class RepositoryService {
 
     private void createPicture(Material material) {
         if (material.getPicture() != null) {
-            Picture picture = pictureService.create(material.getPicture());
+            Picture picture = pictureSaver.create(material.getPicture());
             material.setPicture(picture);
         }
     }
@@ -175,6 +200,7 @@ public class RepositoryService {
     Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, boolean isRepoMaterial) {
         Material updatedMaterial = null;
 
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
         if (newMaterial.isDeleted() && isRepoMaterial) {
             logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
             materialService.delete(existentMaterial);
@@ -187,6 +213,21 @@ public class RepositoryService {
             updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
             audit.existingMaterialUpdated();
 
+=======
+        if (isRepoMaterial) {
+            if (newMaterial.isDeleted()) {
+                logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
+                materialService.delete(existentMaterial);
+                audit.existingMaterialDeleted();
+            } else {
+                logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
+                createPicture(newMaterial);
+                mergeTwoObjects(newMaterial, existentMaterial);
+
+                updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
+                audit.existingMaterialUpdated();
+            }
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/synchronizer/RepositoryService.java
         } else {
             logger.info("Updating material with external link - updating all fields that are currently null in DB");
             createPicture(newMaterial);

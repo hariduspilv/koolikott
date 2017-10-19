@@ -31,9 +31,15 @@
         </entity>
 
         <entity name="LearningObject" pk="id"
+<<<<<<< HEAD
                 query="select id, added, views, creator from LearningObject
                 WHERE deleted = false"
                 deltaImportQuery="select id, added, views, creator from LearningObject
+=======
+                query="select id, added, views, creator, visibility from LearningObject
+                WHERE deleted = false"
+                deltaImportQuery="select id, added, views, creator, visibility from LearningObject
+>>>>>>> new-develop
                 where id = '${dih.delta.id}'"
                 deltaQuery="select id from LearningObject
                     where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}'
@@ -467,7 +473,11 @@
             </entity>
 
             <entity name="Portfolio"
+<<<<<<< HEAD
                     query="select id, title, summary, visibility from Portfolio
+=======
+                    query="select id, title, summary from Portfolio
+>>>>>>> new-develop
                     where id='${LearningObject.id}'">
 
                 <entity name="Type" query="select 'portfolio' as type"/>

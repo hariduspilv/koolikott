@@ -5,3 +5,42 @@ md-dialog md-dialog-actions {
     padding: 0 $md-padding;
   }
 }
+
+md-dialog.login-dialog {
+  max-height: 100%;
+  min-width: 18rem;
+
+  md-divider {
+    margin: 1.5rem 0;
+  }
+
+  md-content {
+    padding: 1rem;
+
+    md-input-container,
+    button {
+      align-self: center;
+      padding: 0;
+      margin: 1rem;
+    }
+
+    button {
+      align-self: center;
+      padding: 0;
+      min-width: 12rem !important;
+      height: 3rem;
+      background-size: auto 1.8rem;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      &.login-button-ekool { background-image: url('../images/login-ekool.png'); }
+      &.login-button-idkaart { background-image: url('../images/login-idkaart.png'); }
+      &.login-button-mobiilid { background-image: url('../images/login-mobiilid.png'); }
+      &.login-button-stuudium { background-image: url('../images/login-stuudium.png'); }
+    }
+  }
+
+  label.md-required {
+    display: none;
+  }
+}

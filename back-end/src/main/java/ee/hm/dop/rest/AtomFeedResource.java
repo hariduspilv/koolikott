@@ -14,7 +14,7 @@ import org.apache.abdera.model.Feed;
  */
 
 @Path("/")
-public class AtomFeedResource {
+public class AtomFeedResource extends BaseResource{
 
     @Inject
     private AtomFeedService atomFeedService;

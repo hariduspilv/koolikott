@@ -1,12 +1,21 @@
 package ee.hm.dop.service.content;
 
+<<<<<<< HEAD
 import ee.hm.dop.dao.FirstReviewDao;
+=======
+import ee.hm.dop.dao.LearningObjectDao;
+>>>>>>> new-develop
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.ResourceTypeService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
+<<<<<<< HEAD
+=======
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
+>>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.joda.time.DateTime;
 
@@ -28,7 +37,11 @@ public class TagConverter {
     @Inject
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
+<<<<<<< HEAD
     private LearningObjectService learningObjectService;
+=======
+    private LearningObjectDao learningObjectDao;
+>>>>>>> new-develop
 
     public TagDTO addChangeReturnTagDto(String tagName, LearningObject learningObject, User user) {
         TagDTO tagDTO = new TagDTO();
@@ -65,7 +78,11 @@ public class TagConverter {
             changedLearningObjectService.addChanged(changedLearningObject);
         }
 
+<<<<<<< HEAD
         LearningObject updatedLearningObject = learningObjectService.getLearningObjectDao().createOrUpdate(learningObject);
+=======
+        LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
+>>>>>>> new-develop
         updatedLearningObject.setChanged(hasChanged ? updatedLearningObject.getChanged() + 1 : updatedLearningObject.getChanged());
         tagDTO.setLearningObject(updatedLearningObject);
 

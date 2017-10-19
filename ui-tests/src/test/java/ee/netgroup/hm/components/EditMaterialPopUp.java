@@ -27,13 +27,13 @@ public class EditMaterialPopUp extends Page{
 	public EditMaterialPopUp insertTagAndEnter() {
 		getDriver().findElement(insertTag).sendKeys(Helpers.generateRegisterNumber(18));
 		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public MaterialPage clickUpdateMaterial() {
 		getDriver().findElement(updateMaterialButton).sendKeys(Keys.ENTER);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return new MaterialPage();
 	}
 

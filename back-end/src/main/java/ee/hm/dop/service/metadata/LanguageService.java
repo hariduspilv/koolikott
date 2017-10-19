@@ -19,5 +19,4 @@ public class LanguageService {
     public List<Language> getAll() {
         return languageDao.findAll();
     }
-
 }

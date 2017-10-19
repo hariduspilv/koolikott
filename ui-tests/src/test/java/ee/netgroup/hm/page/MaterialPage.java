@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ee.netgroup.hm.components.ConfirmationPopup;
 import ee.netgroup.hm.components.EditMaterialPopUp;
+import ee.netgroup.hm.components.ReportImproperPopUp;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
@@ -25,11 +26,14 @@ public class MaterialPage extends Page{
 	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By showMoreButton = By.xpath("//button[@ng-click='$ctrl.showMore()']");
 	private By addedTag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
-	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
+	private By errorBanner = By.id("error-message-heading");
 	private By reportMaterial = By.xpath("//span[contains(text(), 'Teavita katkisest materjalist')]");
 	private By doneButton = By.xpath("//md-icon[contains(text(), 'done')]");
 	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
 	private By restoreBrokenMaterialButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
+	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
+	private String newTag = Helpers.generateNewTag();
+	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -68,7 +72,7 @@ public class MaterialPage extends Page{
 	}
 
 	public boolean isMaterialDeletedBannerVisible() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(bannerRestoreButton).isDisplayed();
 	}
 
@@ -100,7 +104,7 @@ public class MaterialPage extends Page{
 		for (int i = 0; i < 13; i++) {
 			getDriver().findElement(tagRow).sendKeys(Helpers.randomElement(Arrays.tagsArray) + "");
 			getDriver().findElement(tagRow).sendKeys(Keys.ENTER);
-			Helpers.waitForSeconds(1000);
+			Helpers.waitForMilliseconds(1000);
 		}
 		return this;
 	}
@@ -113,13 +117,13 @@ public class MaterialPage extends Page{
 		return getDriver().findElements(addedTag).size();
 	}
 
-	public boolean isUnreviewedBannerDisplayed() {
-		Helpers.waitForVisibility(errorBanner);
-		return getDriver().findElement(errorBanner).isDisplayed();
+	public String getUnreviewedBannerText() {
+		return getDriver().findElement(errorBanner).getText();
 	}
 
 	public ConfirmationPopup reportAsBroken() {
 		Helpers.waitForClickable(reportMaterial);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(reportMaterial).click();
 		return new ConfirmationPopup();
 	}
@@ -131,19 +135,19 @@ public class MaterialPage extends Page{
 	public MaterialPage restoreMaterial() {
 		Helpers.waitForClickable(restoreButton);
 		getDriver().findElement(restoreButton).click();
-		Helpers.waitForSeconds(3000);
+		Helpers.waitForMilliseconds(3000);
 		return this;
 	}
 	
 	public MaterialPage restoreBrokenMaterial() {
 		Helpers.waitForClickable(restoreBrokenMaterialButton);
 		getDriver().findElement(restoreBrokenMaterialButton).click();
-		Helpers.waitForSeconds(3000);
+		Helpers.waitForMilliseconds(3000);
 		return this;
 	}
 
-	public boolean isMaterialRestored() {
-		Helpers.waitForSeconds(1000);
+	public boolean isErrorBannerHidden() {
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
@@ -153,9 +157,22 @@ public class MaterialPage extends Page{
 		return this;
 	}
 
-	public boolean isContentProper() {
-		Helpers.waitForSeconds(1000);
-		return getDriver().findElements(errorBanner).size() < 1;
+	public MaterialPage addNewTag() {
+		Helpers.waitForVisibility(insertTag);
+		getDriver().findElement(insertTag).sendKeys(newTag);
+		Helpers.waitForMilliseconds(1000);
+		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
+		Helpers.waitForMilliseconds(2000);
+		return this;
+	}
+
+	public ReportImproperPopUp reportImproperTag() {
+		getDriver().findElement(reportTagButton).click();
+		return new ReportImproperPopUp();
+	}
+
+	public String getTagIsReportedImproperText() {
+		return getDriver().findElement(Constants.toastText).getText();
 	}
 
 

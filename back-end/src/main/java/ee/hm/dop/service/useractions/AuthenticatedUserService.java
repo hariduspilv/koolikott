@@ -50,7 +50,7 @@ public class AuthenticatedUserService {
     }
 
     @SuppressWarnings("unused")
-    private final class UserData {
+    private static final class UserData {
 
         @JsonSerialize(using = DateTimeSerializer.class)
         private DateTime createdAt;

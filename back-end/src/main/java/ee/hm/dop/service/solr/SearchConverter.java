@@ -126,7 +126,11 @@ public class SearchConverter {
                 .collect(Collectors.toList());
 
         //Visible to user according to their role or is a material or is the creator
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/solr/SearchConverter.java
         String query = "((" + StringUtils.join(filter, SearchService.OR) + ") OR type:\"material\")";
+=======
+        String query = "(" + StringUtils.join(filter, SearchService.OR) + ")";
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/solr/SearchConverter.java
         if (searchFilter.getRequestingUser() != null && searchFilter.getMyPrivates()) {
             query = query + " OR creator:" + searchFilter.getRequestingUser().getId();
         }

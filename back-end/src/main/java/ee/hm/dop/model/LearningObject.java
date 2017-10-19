@@ -7,6 +7,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+<<<<<<< HEAD
+=======
+import ee.hm.dop.model.enums.Visibility;
+>>>>>>> new-develop
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -21,21 +25,7 @@ import org.joda.time.DateTime;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -134,6 +124,10 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @Column(nullable = false)
     private Long views = (long) 0;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
+
     @ManyToMany(fetch = EAGER)
     @Fetch(FetchMode.SELECT)
     @JoinTable(
@@ -146,9 +140,19 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     private List<Taxon> taxons;
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+<<<<<<< HEAD
     @JsonBackReference
     private List<FirstReview> firstReviews;
 
+=======
+    @JsonBackReference("firstReview")
+    private List<FirstReview> firstReviews;
+
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonBackReference("improperContent")
+    private List<ImproperContent> improperContents;
+
+>>>>>>> new-develop
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
 
@@ -158,7 +162,7 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @Formula(value = "(SELECT COUNT(*) FROM BrokenContent br WHERE br.material = id AND br.deleted = 0)")
     private int broken;
 
-    @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.deleted = 0)")
+    @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.reviewed = 0)")
     private int improper;
 
     @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
@@ -355,4 +359,23 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     public void setFirstReviews(List<FirstReview> firstReviews) {
         this.firstReviews = firstReviews;
     }
+<<<<<<< HEAD
+=======
+
+    public List<ImproperContent> getImproperContents() {
+        return improperContents;
+    }
+
+    public void setImproperContents(List<ImproperContent> improperContents) {
+        this.improperContents = improperContents;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
+>>>>>>> new-develop
 }

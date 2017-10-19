@@ -3,6 +3,10 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+<<<<<<< HEAD
+=======
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
+>>>>>>> new-develop
 import ee.hm.dop.service.content.MaterialAdministrationService;
 import ee.hm.dop.service.content.MaterialService;
 
@@ -18,14 +22,22 @@ public class DeletedMaterialAdminResource extends BaseResource {
     @Inject
     private MaterialAdministrationService materialAdministrationService;
     @Inject
+<<<<<<< HEAD
     private MaterialService materialService;
+=======
+    private LearningObjectAdministrationService learningObjectAdministrationService;
+>>>>>>> new-develop
 
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN})
     public void restore(Material material) {
+<<<<<<< HEAD
         materialService.restore(material, getLoggedInUser());
+=======
+        learningObjectAdministrationService.restore(material, getLoggedInUser());
+>>>>>>> new-develop
     }
 
     @GET

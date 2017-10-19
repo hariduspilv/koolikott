@@ -2,6 +2,10 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+<<<<<<< HEAD
+=======
+import ee.hm.dop.model.enums.Visibility;
+>>>>>>> new-develop
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
@@ -10,17 +14,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -42,6 +36,10 @@ public abstract class ReducedLearningObject extends AbstractEntity implements Se
     @ManyToOne
     @JoinColumn(name = "picture")
     private OriginalPicture picture;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Visibility visibility;
 
     @ManyToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
     @Fetch(FetchMode.SELECT)
@@ -165,5 +163,13 @@ public abstract class ReducedLearningObject extends AbstractEntity implements Se
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
     }
 }

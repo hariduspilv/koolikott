@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 
 @RunWith(GuiceTestRunner.class)
-public abstract class DatabaseTestBase {
+public abstract class DatabaseTestBase implements BaseClassForTests{
 
     @Before
     public void beginTransaction() {

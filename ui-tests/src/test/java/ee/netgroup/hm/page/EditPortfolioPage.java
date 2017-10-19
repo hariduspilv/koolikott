@@ -33,15 +33,15 @@ public class EditPortfolioPage extends Page{
 	}
 
 	public EditPortfolioPage clickSaveAndExit() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForClickable(saveAndExit);
 		getDriver().findElement(saveAndExit).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return new EditPortfolioPage();
 	}
 	
 	public PortfolioPage clickSaveAndExitConfirmationControl() {
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForClickable(saveAndExit);
 		getDriver().findElement(saveAndExit).click();
 		if (Helpers.elementExists(privacyPopUp) == true){ 	
@@ -61,13 +61,13 @@ public class EditPortfolioPage extends Page{
 	public EditPortfolioPage clickVisibilityButton() {
 		Helpers.waitForClickable(visibilityButton);
 		getDriver().findElement(visibilityButton).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public EditPortfolioPage selectShareWithLink() {
 		Helpers.waitForClickable(shareWithLink);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(shareWithLink).click();
 		return this;
 	}
@@ -88,27 +88,27 @@ public class EditPortfolioPage extends Page{
 	public EditPortfolioPage clickToSelectDescription() {
 		Helpers.waitForVisibility(descriptionField);
 		getDriver().findElement(descriptionField).sendKeys(Keys.CONTROL + "a");
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public EditPortfolioPage clickToSelectBold() {
 		Helpers.waitForVisibility(boldButton);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(boldButton).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 	
 	public EditPortfolioPage clickToSelectItalic() {
 		getDriver().findElement(italicButton).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 	
 	public EditPortfolioPage clickToSelectBulletedList() {
 		getDriver().findElement(bulletedList).click();
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 		
@@ -130,12 +130,14 @@ public class EditPortfolioPage extends Page{
 	}
 
 	public EditPortfolioPage clickAddMaterial() {
+		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForVisibility(addMaterialButton);
 		getDriver().findElement(addMaterialButton).click();
 		return this;
 	}
 	
 	public AddMaterialPopUp clickAddNewMaterial() {
+		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForVisibility(newMaterial);
 		getDriver().findElement(newMaterial).click();
 		return new AddMaterialPopUp();
@@ -143,6 +145,7 @@ public class EditPortfolioPage extends Page{
 
 	public Search clickAddExistingMaterial() {
 		Helpers.waitForVisibility(existingMaterial);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(existingMaterial).click();
 		return new Search();
 	}

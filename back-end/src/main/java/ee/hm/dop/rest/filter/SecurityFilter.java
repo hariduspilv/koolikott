@@ -1,65 +1,80 @@
 package ee.hm.dop.rest.filter;
 
+<<<<<<< HEAD
 import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
 
 import java.io.IOException;
+=======
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.login.LogoutService;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+>>>>>>> new-develop
 
 import javax.annotation.Priority;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
+import java.io.IOException;
 
+<<<<<<< HEAD
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.login.LogoutService;
 import org.joda.time.DateTime;
+=======
+import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
+>>>>>>> new-develop
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class SecurityFilter implements ContainerRequestFilter {
 
-    private static final int HTTP_AUTHENTICATION_TIMEOUT = 419;
-
-    private UriInfo uriInfo;
-    private HttpServletRequest request;
-
-    public SecurityFilter(@Context UriInfo uriInfo, @Context HttpServletRequest request) {
-        this.uriInfo = uriInfo;
-        this.request = request;
-    }
+    public static final int HTTP_AUTHENTICATION_TIMEOUT = 419;
+    public Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        String token = request.getHeader("Authentication");
+        String token = requestContext.getHeaderString("Authentication");
 
         if (token != null) {
-            AuthenticatedUser authenticatedUser = getAuthenticatedUserByToken(token);
-            if (authenticatedUser != null && isCorrectUser(authenticatedUser)) {
-                if (isSessionValid(authenticatedUser)) {
-                    DopPrincipal principal = new DopPrincipal(authenticatedUser);
-                    DopSecurityContext securityContext = new DopSecurityContext(principal, uriInfo);
-                    requestContext.setSecurityContext(securityContext);
-                } else {
-                    abortWithAuthenticationTimeout(requestContext);
-                }
-            } else {
-                abortWithAuthenticationTimeout(requestContext);
+            AuthenticatedUser authenticatedUser = authenticatedUserService().getAuthenticatedUserByToken(token);
+            if (authenticatedUser == null) {
+                userHasAlreadyLoggedOut(requestContext);
+                logger.error("user has already logged out");
+                return;
             }
+            String username = authenticatedUser.getUser().getUsername();
+            if (!username.equals(requestContext.getHeaderString("Username"))) {
+                requestHeaderAndUsernameDontMatch(requestContext, authenticatedUser);
+                logger.error("user request header and username do not match: " + username);
+                return;
+            }
+            if (!isSessionValid(authenticatedUser)) {
+                sessionExpired(requestContext, authenticatedUser);
+                logger.error("session has expired" + username);
+                return;
+            }
+
+            DopPrincipal principal = new DopPrincipal(authenticatedUser);
+            DopSecurityContext securityContext = new DopSecurityContext(principal, requestContext.getUriInfo());
+            requestContext.setSecurityContext(securityContext);
         }
     }
 
-    private AuthenticatedUser getAuthenticatedUserByToken(String token) {
-        AuthenticatedUserService authenticatedUserService = newAuthenticatedUserService();
-        AuthenticatedUser authenticatedUser = authenticatedUserService.getAuthenticatedUserByToken(token);
-        return authenticatedUser;
+    public void sessionExpired(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+        requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
     }
 
-    private void abortWithAuthenticationTimeout(ContainerRequestContext requestContext) {
+    public void requestHeaderAndUsernameDontMatch(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+        requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+    }
+
+    public void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
     }
 
@@ -68,15 +83,7 @@ public class SecurityFilter implements ContainerRequestFilter {
         return yesterday.isBefore(authenticatedUser.getLoginDate());
     }
 
-    protected AuthenticatedUserService newAuthenticatedUserService() {
+    protected AuthenticatedUserService authenticatedUserService() {
         return getInjector().getInstance(AuthenticatedUserService.class);
-    }
-
-    private boolean isCorrectUser(AuthenticatedUser authenticatedUser) {
-        return authenticatedUser.getUser().getUsername().equals(request.getHeader("Username"));
-    }
-
-    protected LogoutService newLogoutService() {
-        return getInjector().getInstance(LogoutService.class);
     }
 }

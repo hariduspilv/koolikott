@@ -11,8 +11,12 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/ChangedLearningObjectServiceTest.java
 import ee.hm.dop.service.content.ChangedLearningObjectService;
 import ee.hm.dop.service.content.LearningObjectService;
+=======
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/ChangedLearningObjectServiceTest.java
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

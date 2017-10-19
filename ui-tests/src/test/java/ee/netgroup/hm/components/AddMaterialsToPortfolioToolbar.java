@@ -12,9 +12,9 @@ public class AddMaterialsToPortfolioToolbar extends Component{
 	private static By uncheckedCircle = By.xpath("//div/md-icon[text()='check']");
 	private static By checkedCircle = By.xpath("//div/md-icon[text()='check_circle']");
 	private By selectPortfolioDropdown = By.xpath("//md-select[@aria-label='Vali kogumik']");
-	private By selectFirstPortfolio = By.xpath("/html/body/div[4]/md-select-menu/md-content/md-option[1]");
+	private By selectFirstPortfolio = By.xpath("/html/body/div[5]/md-select-menu/md-content/md-option[1]");
 	private By selectChapterDropdown = By.xpath("//md-select[@aria-label='Vali peatükk']");
-	private By selectFirstChapter = By.xpath("/html/body/div[5]/md-select-menu/md-content/md-option[1]");
+	private By selectFirstChapter = By.xpath("/html/body/div[6]/md-select-menu/md-content/md-option[1]");
 	private By doneButton = By.xpath("//md-icon[text()='done']");
 	
 	
@@ -24,6 +24,13 @@ public class AddMaterialsToPortfolioToolbar extends Component{
 		getDriver().findElement(checkedCircle).click();
 		return new AddMaterialsToPortfolioToolbar();
 	}
+	
+	public static AddMaterialsToPortfolioToolbar clickToSelectMaterial2() {
+		Helpers.moveToElement(materialBox);
+		Helpers.moveToElement(uncheckedCircle);
+		getDriver().findElement(uncheckedCircle).click();
+		return new AddMaterialsToPortfolioToolbar();
+	}	
 
 	public AddMaterialsToPortfolioToolbar selectPortfolio() {
 		Helpers.waitForVisibility(selectPortfolioDropdown);

@@ -1,11 +1,11 @@
-<div data-layout="column" data-layout-gt-sm="row">
+<div data-layout="column" data-layout-gt-sm="row" data-ng-cloak>
   <div flex-gt-sm="75">
-    <div ng-if="modUser()" dop-error-message data="portfolio"></div>
-    <dop-portfolio-summary-card
+    <dop-error-message ng-if="modUser()" data="portfolio"></dop-error-message>
+    <data-dop-portfolio-summary-card
       comment="newComment"
-      submit-click="addComment()"
+      submit-click="addComment(newComment, portfolio)"
       data-portfolio="portfolio"
-    ></dop-portfolio-summary-card>
+    ></data-dop-portfolio-summary-card>
     <div>
       <div data-ng-repeat="chapter in portfolio.chapters">
         <dop-chapter data-chapter="chapter" data-index="{{$index}}"></dop-chapter>

@@ -465,33 +465,23 @@ function isSlideshareLink(url) {
 }
 
 function isVideoLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "mp4" || extension == "ogv" || extension == "webm";
+    return url && ["mp4", "ogv", "webm"].includes(url.split('.').pop().toLowerCase());
 }
 
 function isAudioLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "mp3" || extension == "ogg" || extension == "wav";
+    return url && ["mp3", "ogg", "wav"].includes(url.split('.').pop().toLowerCase());
 }
 
 function isPictureLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
+    return url && ["jpg", "jpeg", "png", "gif"].includes(url.split('.').pop().toLowerCase());
 }
 
 function isEbookLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "epub";
+    return url && url.split('.').pop().toLowerCase() === "epub";
 }
 
 function isPDFLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "pdf";
+    return url && url.split('.').pop().toLowerCase() === "pdf";
 }
 
 function matchType(type) {

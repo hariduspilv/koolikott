@@ -10,6 +10,7 @@ import static java.lang.String.format;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -54,7 +55,7 @@ public class EhisSOAPService implements IEhisSOAPService {
             if (logger.isInfoEnabled()) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 message.writeTo(out);
-                String strMsg = new String(out.toByteArray());
+                String strMsg = new String(out.toByteArray(), StandardCharsets.UTF_8);
                 logger.info(format("Sending message to EHIS: %s", strMsg));
             }
 

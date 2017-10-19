@@ -56,7 +56,7 @@ public class TagUpVoteResource extends BaseResource {
         trustTagUpVote.setTag(tag);
         trustTagUpVote.setUser(tagUpVote.getUser());
 
-        return tagUpVoteService.upVote(tagUpVote, getLoggedInUser());
+        return tagUpVoteService.upVote(trustTagUpVote, getLoggedInUser());
     }
 
     @GET
@@ -70,6 +70,7 @@ public class TagUpVoteResource extends BaseResource {
         User user = getLoggedInUser();
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
         if (learningObject != null) {
+<<<<<<< HEAD
             return learningObject.getTags().stream()
                     .map(tag -> convertForm(user, learningObject, tag))
                     .collect(Collectors.toList());
@@ -85,6 +86,11 @@ public class TagUpVoteResource extends BaseResource {
             form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
         }
         return form;
+=======
+            return convertForms(user, learningObject);
+        }
+        return Collections.emptyList();
+>>>>>>> new-develop
     }
 
     @DELETE
@@ -94,20 +100,38 @@ public class TagUpVoteResource extends BaseResource {
         if (tagUpVote == null) {
             throw notFound();
         }
-
         tagUpVoteService.delete(tagUpVote, getLoggedInUser());
     }
 
+<<<<<<< HEAD
+=======
+    private List<TagUpVoteForm> convertForms(User user, LearningObject learningObject) {
+        return learningObject.getTags().stream()
+                .map(tag -> convertForm(user, learningObject, tag))
+                .collect(Collectors.toList());
+    }
+
+    private TagUpVoteForm convertForm(User user, LearningObject learningObject, Tag tag) {
+        TagUpVoteForm form = new TagUpVoteForm();
+        form.tag = tag;
+        form.upVoteCount = tagUpVoteService.getUpVoteCountFor(tag, learningObject);
+        if (form.upVoteCount > 0) {
+            form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
+        }
+        return form;
+    }
+
+>>>>>>> new-develop
     public static class TagUpVoteForm {
         private Tag tag;
-        private int upVoteCount;
+        private long upVoteCount;
         private TagUpVote tagUpVote;
 
         public Tag getTag() {
             return tag;
         }
 
-        public int getUpVoteCount() {
+        public long getUpVoteCount() {
             return upVoteCount;
         }
 

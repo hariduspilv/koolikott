@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+<<<<<<< HEAD
 import ee.hm.dop.dao.BrokenContentDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
@@ -9,20 +10,37 @@ import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.interfaces.IPortfolio;
+=======
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.EducationalContextC;
+import ee.hm.dop.model.enums.Visibility;
+>>>>>>> new-develop
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+<<<<<<< HEAD
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
+=======
+import ee.hm.dop.service.metadata.CrossCurricularThemeService;
+import ee.hm.dop.service.metadata.KeyCompetenceService;
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+>>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
+<<<<<<< HEAD
 import org.joda.time.DateTime;
+=======
+>>>>>>> new-develop
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +53,16 @@ import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+<<<<<<< HEAD
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
 public class MaterialService implements PermissionItem {
+=======
+import static org.joda.time.DateTime.now;
+
+public class MaterialService {
+>>>>>>> new-develop
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -47,14 +71,20 @@ public class MaterialService implements PermissionItem {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
+<<<<<<< HEAD
     private BrokenContentDao brokenContentDao;
     @Inject
+=======
+>>>>>>> new-develop
     private ChangedLearningObjectService changedLearningObjectService;
     @Inject
     private Configuration configuration;
     @Inject
+<<<<<<< HEAD
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
+=======
+>>>>>>> new-develop
     private AuthorService authorService;
     @Inject
     private PublisherService publisherService;
@@ -65,6 +95,7 @@ public class MaterialService implements PermissionItem {
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
+<<<<<<< HEAD
     private FirstReviewService firstReviewService;
 
     public Material get(Long materialId, User loggedInUser) {
@@ -79,6 +110,11 @@ public class MaterialService implements PermissionItem {
         createOrUpdate(material);
         solrEngineService.updateIndex();
     }
+=======
+    private FirstReviewAdminService firstReviewAdminService;
+    @Inject
+    private MaterialGetter materialGetter;
+>>>>>>> new-develop
 
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
@@ -107,6 +143,7 @@ public class MaterialService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     //todo admin functionality
     public void delete(Long materialID, User loggedInUser) {
         UserUtil.mustBeModeratorOrAdmin(loggedInUser);
@@ -136,6 +173,8 @@ public class MaterialService implements PermissionItem {
         return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
     }
 
+=======
+>>>>>>> new-develop
     public void delete(Material material) {
         materialDao.delete(material);
     }
@@ -153,7 +192,11 @@ public class MaterialService implements PermissionItem {
         }
 
         cleanPeerReviewUrls(material);
+<<<<<<< HEAD
         Material originalMaterial = get(material.getId(), changer);
+=======
+        Material originalMaterial = materialGetter.get(material.getId(), changer);
+>>>>>>> new-develop
         validateMaterialUpdate(originalMaterial, changer);
         if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
@@ -204,8 +247,12 @@ public class MaterialService implements PermissionItem {
 
     private boolean materialWithSameSourceExists(Material material) {
         if (material.getSource() == null && material.getUploadedFile() != null) return false;
+<<<<<<< HEAD
 
         List<Material> materialsWithGivenSource = getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
+=======
+        List<Material> materialsWithGivenSource = materialGetter.getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
+>>>>>>> new-develop
         return isNotEmpty(materialsWithGivenSource) &&
                 materialsWithGivenSource.stream()
                         .noneMatch(m -> m.getId().equals(material.getId()));
@@ -221,6 +268,7 @@ public class MaterialService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     public SearchResult getByCreatorResult(User creator, int start, int maxResults) {
         List<Searchable> userFavorites = new ArrayList<>(getByCreator(creator, start, maxResults));
         return new SearchResult(userFavorites, getByCreatorSize(creator), start);
@@ -234,6 +282,8 @@ public class MaterialService implements PermissionItem {
         return materialDao.findByCreatorSize(creator);
     }
 
+=======
+>>>>>>> new-develop
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
         boolean isNew;
@@ -252,16 +302,25 @@ public class MaterialService implements PermissionItem {
         setPublishers(material);
         setPeerReviews(material);
         material = applyRestrictions(material);
+<<<<<<< HEAD
 
         Material updatedMaterial = materialDao.createOrUpdate(material);
         if (isNew) {
             firstReviewService.save(updatedMaterial);
+=======
+        material.setVisibility(Visibility.PUBLIC);
+
+        Material updatedMaterial = materialDao.createOrUpdate(material);
+        if (isNew) {
+            firstReviewAdminService.save(updatedMaterial);
+>>>>>>> new-develop
         }
 
         return updatedMaterial;
     }
 
     private Material applyRestrictions(Material material) {
+<<<<<<< HEAD
         boolean areKeyCompetencesAndCrossCurricularThemesAllowed = false;
 
         if (CollectionUtils.isNotEmpty(material.getTaxons())) {
@@ -317,6 +376,24 @@ public class MaterialService implements PermissionItem {
     }
 
     public void checkKeyCompetences(Material material) {
+=======
+        if (CollectionUtils.isEmpty(material.getTaxons()) || cantSet(material)) {
+            material.setKeyCompetences(null);
+            material.setCrossCurricularThemes(null);
+        }
+        return material;
+    }
+
+    private boolean cantSet(Material material) {
+        List<EducationalContext> educationalContexts = material.getTaxons().stream()
+                .map(TaxonUtils::getEducationalContext)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return CollectionUtils.isEmpty(educationalContexts) || educationalContexts.stream().noneMatch(e -> EducationalContextC.BASIC_AND_SECONDARY.contains(e.getName()));
+    }
+
+    private void checkKeyCompetences(Material material) {
+>>>>>>> new-develop
         if (isNotEmpty(material.getKeyCompetences())) {
             for (int i = 0; i < material.getKeyCompetences().size(); i++) {
                 if (material.getKeyCompetences().get(i).getId() == null) {
@@ -330,7 +407,11 @@ public class MaterialService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     public void checkCrossCurricularThemes(Material material) {
+=======
+    private void checkCrossCurricularThemes(Material material) {
+>>>>>>> new-develop
         if (isNotEmpty(material.getCrossCurricularThemes())) {
             for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
                 if (material.getCrossCurricularThemes().get(i).getId() == null) {
@@ -344,7 +425,11 @@ public class MaterialService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     public void setPublishers(Material material) {
+=======
+    private void setPublishers(Material material) {
+>>>>>>> new-develop
         List<Publisher> publishers = material.getPublishers();
         if (publishers != null) {
             for (int i = 0; i < publishers.size(); i++) {
@@ -366,7 +451,11 @@ public class MaterialService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     public void setAuthors(Material material) {
+=======
+    private void setAuthors(Material material) {
+>>>>>>> new-develop
         List<Author> authors = material.getAuthors();
         if (authors != null) {
             for (int i = 0; i < authors.size(); i++) {
@@ -387,7 +476,11 @@ public class MaterialService implements PermissionItem {
         }
     }
 
+<<<<<<< HEAD
     public void setPeerReviews(Material material) {
+=======
+    private void setPeerReviews(Material material) {
+>>>>>>> new-develop
         List<PeerReview> peerReviews = material.getPeerReviews();
         if (peerReviews != null) {
             for (int i = 0; i < peerReviews.size(); i++) {
@@ -400,6 +493,7 @@ public class MaterialService implements PermissionItem {
         }
         material.setPeerReviews(peerReviews);
     }
+<<<<<<< HEAD
 
     @Override
     public boolean canView(User user, ILearningObject learningObject) {
@@ -432,4 +526,6 @@ public class MaterialService implements PermissionItem {
         return true && !learningObject.isDeleted();
     }
 
+=======
+>>>>>>> new-develop
 }

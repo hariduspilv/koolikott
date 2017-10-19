@@ -1,4 +1,5 @@
 package ee.hm.dop.service.solr;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/solr/SuggestServiceTest.java
 
 import static java.lang.String.format;
 import static org.easymock.EasyMock.expect;
@@ -6,6 +7,8 @@ import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+=======
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/solr/SuggestServiceTest.java
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.service.SuggestionStrategy;
@@ -16,6 +19,15 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/solr/SuggestServiceTest.java
+=======
+import java.io.IOException;
+
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
+
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/solr/SuggestServiceTest.java
 /**
  * Created by joonas on 1.09.16.
  */
@@ -25,7 +37,6 @@ public class SuggestServiceTest extends ResourceIntegrationTestBase {
 
     @TestSubject
     SuggestService suggestService = new SuggestService();
-
     @Mock
     SolrService solrService;
 

@@ -32,7 +32,6 @@ public class TranslationService {
         if (language == null) {
             return null;
         }
-
         TranslationGroup translationGroupFor = translationDAO.findTranslationGroupFor(language);
         if (translationGroupFor == null) {
             return null;
@@ -66,15 +65,18 @@ public class TranslationService {
         if (language == null) {
             return null;
         }
-
         TranslationGroup translationGroupFor = translationDAO.findTranslationGroupFor(language);
         if (translationGroupFor == null) {
             return null;
         }
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/metadata/TranslationService.java
 
         return translationGroupFor.getTranslations()
                 .entrySet()
                 .stream()
+=======
+        return translationGroupFor.getTranslations().entrySet().stream()
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/metadata/TranslationService.java
                 .filter(entry -> (entry.getKey().startsWith(DOMAIN) || entry.getKey().startsWith(SUBJECT)))
                 .collect(Collectors.toMap(entry -> HELPER.concat(entry.getKey()), Map.Entry::getValue));
     }
@@ -84,11 +86,9 @@ public class TranslationService {
     }
 
     public static LanguageString filterByLanguage(List<LanguageString> languageStringList, String lang) {
-        for (LanguageString languageString : languageStringList) {
-            if (languageString.getLanguage().getCode().equals(lang)) return languageString;
-        }
-        return null;
+        return languageStringList.stream()
+                .filter(languageString -> languageString.getLanguage().getCode().equals(lang))
+                .findAny()
+                .orElse(null);
     }
-
-
 }

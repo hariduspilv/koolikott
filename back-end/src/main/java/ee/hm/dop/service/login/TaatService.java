@@ -67,7 +67,11 @@ public class TaatService {
     private static final SecureRandom random = new SecureRandom();
 
     private AuthnRequest buildAuthnRequest() {
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/login/TaatService.java
         int assertionConsumerServiceIndex = Integer.valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
+=======
+        Integer assertionConsumerServiceIndex = Integer.valueOf(configuration.getString(TAAT_ASSERTION_CONSUMER_SERVICE_INDEX));
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/login/TaatService.java
 
         Issuer issuer = getIssuer(configuration.getString(TAAT_CONNECTION_ID));
         NameIDPolicy nameIdPolicy = getNameIdPolicy();

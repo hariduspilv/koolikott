@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
  * Base class for all integration tests.
  */
 @RunWith(GuiceTestRunner.class)
-public abstract class IntegrationTestBase {
+public abstract class IntegrationTestBase implements BaseClassForTests{
 
     private static final int STARTUP_DELAY = 3000;
 

@@ -24,6 +24,10 @@ public class ChangedLearningObjectDao extends AbstractDao<ChangedLearningObject>
     }
 
     public Long getCount() {
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/dao/ChangedLearningObjectDao.java
         return (long) getEntityManager().createQuery("SELECT COUNT(DISTINCT clo.learningObject) FROM ChangedLearningObject clo").getSingleResult();
+=======
+        return (Long) getEntityManager().createQuery("SELECT COUNT(DISTINCT clo.learningObject) FROM ChangedLearningObject clo").getSingleResult();
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/dao/ChangedLearningObjectDao.java
     }
 }

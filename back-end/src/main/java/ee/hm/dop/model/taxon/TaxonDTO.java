@@ -2,6 +2,8 @@ package ee.hm.dop.model.taxon;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Set;
+
 /**
  * Created by mart on 9.12.16.
  */
@@ -19,6 +21,12 @@ public class TaxonDTO extends Taxon {
     @Override
     public Taxon getParent() {
         return this;
+    }
+
+    @JsonIgnore
+    @Override
+    public Set<? extends Taxon> getChildren() {
+        return null;
     }
 
     @Override

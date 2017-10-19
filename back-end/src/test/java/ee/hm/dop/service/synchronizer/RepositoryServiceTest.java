@@ -1,5 +1,6 @@
 package ee.hm.dop.service.synchronizer;
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 import static org.easymock.EasyMock.cmp;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -11,12 +12,30 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+=======
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.RepositoryDao;
+import ee.hm.dop.model.*;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.files.PictureSaver;
+import ee.hm.dop.service.files.PictureService;
+import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
+import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
+import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
+import org.easymock.*;
+import org.joda.time.DateTime;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.*;
@@ -35,33 +54,39 @@ import org.easymock.TestSubject;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+=======
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
 @RunWith(EasyMockRunner.class)
 public class RepositoryServiceTest {
 
     @TestSubject
     private RepositoryService repositoryService = new RepositoryService();
-
     @Mock
     private RepositoryManager repositoryManager;
-
     @Mock
     private MaterialIterator materialIterator;
-
     @Mock
     private MaterialService materialService;
-
     @Mock
     private RepositoryDao repositoryDao;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
     @Mock
     private MaterialDao materialDao;
 
+=======
+    @Mock
+    private MaterialDao materialDao;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
     @Mock
     private SolrEngineService solrEngineService;
-
     @Mock
     private PictureService pictureService;
+    @Mock
+    private PictureSaver pictureSaver;
 
     @Test
     public void synchronizeErrorGettingMaterials() throws Exception {
@@ -107,7 +132,11 @@ public class RepositoryServiceTest {
         expect(material1.isDeleted()).andReturn(false).anyTimes();
         expect(material1.getPicture()).andReturn(null);
         material1.setRepository(repository);
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier1)).andReturn(null);
+=======
+        expect(materialDao.findByRepository(repository, repositoryIdentifier1)).andReturn(null);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(materialService.createMaterialBySystemUser(material1, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expect(materialIterator.hasNext()).andReturn(true);
@@ -120,7 +149,11 @@ public class RepositoryServiceTest {
         expect(material2.isDeleted()).andReturn(false).anyTimes();
         expect(material2.getPicture()).andReturn(null);
         material2.setRepository(repository);
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier2)).andReturn(null);
+=======
+        expect(materialDao.findByRepository(repository, repositoryIdentifier2)).andReturn(null);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(materialService.createMaterialBySystemUser(material2, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expectUpdateRepository(repository);
@@ -154,7 +187,7 @@ public class RepositoryServiceTest {
         Material originalMaterial = new Material();
         long originalMaterialId = 234l;
         originalMaterial.setId(originalMaterialId);
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
+        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(materialService.updateBySystem(material, SearchIndexStrategy.SKIP_UPDATE)).andReturn(material);
@@ -162,7 +195,7 @@ public class RepositoryServiceTest {
         expectUpdateRepository(repository);
 
         expect(materialIterator.hasNext()).andReturn(false);
-        
+
         replayAll(material);
 
         repositoryService.synchronize(repository);
@@ -194,7 +227,7 @@ public class RepositoryServiceTest {
         long originalMaterialId = 234l;
         originalMaterial.setId(originalMaterialId);
         originalMaterial.setSource("http://www.xray24.ru");
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(
+        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(
                 originalMaterial);
         expect(material.isDeleted()).andReturn(true).anyTimes();
 
@@ -228,7 +261,7 @@ public class RepositoryServiceTest {
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
-        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier)).andReturn(null);
+        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(null);
 
         expectUpdateRepository(repository);
 
@@ -416,8 +449,7 @@ public class RepositoryServiceTest {
     public void updateNonRepoMaterialWithPicture() {
         Material existentMaterial = new Material();
         Material newMaterial = new Material();
-        Picture picture = new OriginalPicture();
-        picture.setId(1);
+        Picture picture = picture(1);
 
         existentMaterial.setPicture(picture);
         newMaterial.setPicture(null);
@@ -436,17 +468,18 @@ public class RepositoryServiceTest {
     @Test
     public void updateMaterialPicture() {
         Material existentMaterial = new Material();
-        Material newMaterial = new Material();
-        Picture picture1 = new OriginalPicture();
-        picture1.setId(1);
-        Picture picture2 = new OriginalPicture();
-        picture2.setId(2);
+        existentMaterial.setPicture(picture(1));
 
-        existentMaterial.setPicture(picture1);
+        Material newMaterial = new Material();
+        Picture picture2 = picture(2);
         newMaterial.setPicture(picture2);
 
         expect(materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(existentMaterial);
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(pictureService.create(picture2)).andReturn(picture2);
+=======
+        expect(pictureSaver.create(picture2)).andReturn(picture2);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
         replayAll();
 
@@ -455,6 +488,12 @@ public class RepositoryServiceTest {
         verifyAll();
 
         assertEquals(picture2.getId(), returnedMaterial.getPicture().getId());
+    }
+
+    private Picture picture(int id) {
+        Picture picture1 = new OriginalPicture();
+        picture1.setId(id);
+        return picture1;
     }
 
     private Repository getRepository() {
@@ -467,7 +506,11 @@ public class RepositoryServiceTest {
     }
 
     private void replayAll(Object... mocks) {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService);
+=======
+        replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -477,7 +520,11 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService);
+=======
+        verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
         if (mocks != null) {
             for (Object object : mocks) {

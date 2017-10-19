@@ -1,6 +1,6 @@
 {
   "name": "e-Koolikott",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "dependencies": {
     "bower": "^1.6.3"
   },
@@ -47,6 +47,7 @@
     "jshint-stylish": "^1.0.0",
     "load-grunt-tasks": "^3.1.0",
     "mocha": "^2.3.4",
+    "request" :"2.81.0",
     "time-grunt": "^1.0.0",
     "webdrivercss": "^2.0.0-beta-rc1",
     "webdriverio": "^3.4.0"

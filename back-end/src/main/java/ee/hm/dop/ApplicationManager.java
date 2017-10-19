@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 
@@ -24,9 +25,7 @@ import org.slf4j.LoggerFactory;
 public class ApplicationManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationManager.class);
-
     private static final int DEFAULT_REMOTE_PORT = 9999;
-
     private static final String STOP_COMMAND = "stop";
 
     @Inject
@@ -38,7 +37,7 @@ public class ApplicationManager {
         BufferedWriter writer = null;
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
             write(STOP_COMMAND + "\n\r", writer);
             logger.info("Stop command sent to application");
             Thread.sleep(300);
@@ -54,16 +53,13 @@ public class ApplicationManager {
     }
 
     public static boolean isApplicationRunning() {
-        boolean isRunning = false;
-
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
-            isRunning = true;
-        } catch (Exception ce) {
+            return true;
+        } catch (IOException ignored) {
             logger.info("Application is not running.");
         }
-
-        return isRunning;
+        return false;
     }
 
     private static void write(String data, BufferedWriter writer) throws IOException {
@@ -95,8 +91,7 @@ public class ApplicationManager {
                     commandExecutor.setName("command-executor");
                     commandExecutor.setDaemon(true);
                     commandExecutor.start();
-                } catch (IOException e) {
-                    // ignore
+                } catch (IOException ignored) {
                 }
             }
         }
@@ -115,9 +110,9 @@ public class ApplicationManager {
         @Override
         public void run() {
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
                 StringBuilder stringBuilder = new StringBuilder();
-                int data = 0;
+                int data;
                 while ((data = reader.read()) >= 0) {
                     char character = (char) data;
                     if (character >= SPACE && character <= TILDE) {
@@ -127,8 +122,8 @@ public class ApplicationManager {
                         stringBuilder = new StringBuilder();
                     }
                 }
-            } catch (IOException e) {
-                // ignore
+            } catch (IOException ignored) {
+
             } finally {
                 IOUtils.closeQuietly(socket);
             }

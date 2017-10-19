@@ -1,3 +1,30 @@
+<<<<<<< HEAD
+=======
+## e-Koolikott 1.11.0 (20.10.2017)
+
+### Parandatud
+* PDF lingi akendamine ei toimi https://github.com/hariduspilv/koolikott/issues/182
+* Versiooniuuendusel vajalikud küpsised puhtaks https://github.com/hariduspilv/koolikott/issues/211
+
+### Muutunud
+* Ebasobivaks raporteeritud õpiobjekti kustutamisega/sobivaks märkimise andmebaasitööd https://github.com/hariduspilv/koolikott/issues/193
+* Ebasobivaks raporteeritud õpiobjekti sobivaks märkimise täiendused https://github.com/hariduspilv/koolikott/issues/194
+* Ebasobivaks raporteeritud õpiobjekti kustutatuks märkimise täiendused https://github.com/hariduspilv/koolikott/issues/195
+* Ebasobivaks raporteeritud õpiobjektide bänner https://github.com/hariduspilv/koolikott/issues/196
+* Ebasobivate õpiobjektide listvaadete „Põhjus“ veerg https://github.com/hariduspilv/koolikott/issues/198
+* Õpiobjekti kustutamisel seotud objektide kustutamine https://github.com/hariduspilv/koolikott/issues/199
+* Raporteerimist kinnitaval modaalil kuvada põhjuse valikuväli ning põhjuse täpsustamiseks tekstiväli https://github.com/hariduspilv/koolikott/issues/202
+* Kommentaari raporteerimise funktsionaalsuse lisamine https://github.com/hariduspilv/koolikott/issues/203
+* Raporteerimisel anonüümse kasutaja autentima suunamine https://github.com/hariduspilv/koolikott/issues/204
+* Arendus- ja testkeskkondade eraldamine https://github.com/hariduspilv/koolikott/issues/208
+* Solr otsingumootori ja seotud raamistike uuendus https://github.com/hariduspilv/koolikott/issues/209
+
+## e-Koolikott 1.10.2 (05.10.2017)
+
+### Parandatud
+* Aineeksperdi rollis ei saa ebasobivaks raporteeritud õppevara märkida uuesti sobivaks #207 https://github.com/hariduspilv/koolikott/issues/207
+
+>>>>>>> new-develop
 ## e-Koolikott 1.10.1 (03.10.2017)
 
 ### Parandatud

@@ -63,12 +63,14 @@ public class AddMaterialPopUp extends Component{
 		Helpers.waitForVisibility(educationalContext);
 		getDriver().findElement(educationalContext).click();
 		getDriver().findElements(basicEducation).get(1).click();
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public AddMaterialPopUp selectSubjectArea() {
 		getDriver().findElement(subjectArea).click();
 		getDriver().findElement(subject).click();
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
@@ -129,7 +131,7 @@ public class AddMaterialPopUp extends Component{
 	public AddMaterialPopUp insertTagAndEnter() {
 		getDriver().findElement(insertTag).sendKeys(Helpers.generateRegisterNumber(18));
 		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 

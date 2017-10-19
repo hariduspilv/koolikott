@@ -60,20 +60,28 @@ public class UserService {
 
     // Only users with role 'USER' can be restricted
     public User restrictUser(User user) {
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/useractions/UserService.java
         user = getUserByUsername(user.getUsername());
         if (user.getRole().equals(Role.USER)) {
             return setUserRole(user, Role.RESTRICTED);
         }
         return null;
+=======
+        return setRole(user, Role.USER, Role.RESTRICTED);
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/useractions/UserService.java
     }
 
     //Only users with role 'RESTRICTED' can be set to role 'USER'
     public User removeRestriction(User user) {
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/useractions/UserService.java
         user = getUserByUsername(user.getUsername());
         if (user.getRole().equals(Role.RESTRICTED)) {
             return setUserRole(user, Role.USER);
         }
         return null;
+=======
+        return setRole(user, Role.RESTRICTED, Role.USER);
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/useractions/UserService.java
     }
 
     public List<User> getModerators(User loggedInUser) {
@@ -108,7 +116,6 @@ public class UserService {
         if (count > 0) {
             username += String.valueOf(count + 1);
         }
-
         return username;
     }
 
@@ -121,6 +128,7 @@ public class UserService {
     public User update(User user, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
 
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/useractions/UserService.java
         //Currently allowed to update only role and taxons
         User existingUser = getUserByUsername(user.getUsername());
         existingUser.setRole(Role.valueOf(user.getRole().toString()));
@@ -137,5 +145,20 @@ public class UserService {
 
         existingUser.setUserTaxons(taxons);
         return userDao.createOrUpdate(existingUser);
+=======
+        User existingUser = getUserByUsername(user.getUsername());
+        existingUser.setRole(Role.valueOf(user.getRole().toString()));
+
+        List<Long> ids = user.getUserTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+        List<Taxon> taxons = taxonService.getTaxonById(ids);
+
+        existingUser.setUserTaxons(taxons);
+        return userDao.createOrUpdate(existingUser);
+    }
+
+    private User setRole(User user, Role from, Role to) {
+        user = getUserByUsername(user.getUsername());
+        return user.getRole().equals(from) ? setUserRole(user, to) : null;
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/useractions/UserService.java
     }
 }

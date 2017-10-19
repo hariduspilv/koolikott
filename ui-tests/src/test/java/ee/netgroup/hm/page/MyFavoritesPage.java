@@ -12,7 +12,7 @@ public class MyFavoritesPage extends Page{
 
 	public static boolean getAddFavoritesMessageText() {
 		Helpers.waitForVisibility(favoritesText);
-		Helpers.waitForSeconds(1000);
+		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(addFavoriteMessage).getText().contains("Sul ei ole veel lemmikuid");
 	}
 

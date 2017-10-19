@@ -12,12 +12,20 @@
   <tbody md-body>
     <tr md-row ng-repeat="item in data" ng-click="openLearningObject(item.learningObject)">
       <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="getLearningObjectTitle(item.learningObject)"></div></td>
+<<<<<<< HEAD
       <td md-cell data-ng-bind="formatDate(item.added)"></td>
+=======
+      <td md-cell data-ng-bind="formatDate(item.createdAt)"></td>
+>>>>>>> new-develop
       <td md-cell data-ng-bind="item.reportCount"></td>
       <td md-cell data-ng-if="item.reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
       <td md-cell data-ng-if="item.reportCount === 1 && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
       <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
+<<<<<<< HEAD
       <td md-cell data-ng-bind="item.reason"></td>
+=======
+      <td md-cell data-translate="{{$parent.getReportLabelKey(item)}}"></td>
+>>>>>>> new-develop
       <td md-cell>
         <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
           <md-button aria-label="Ava" class="md-icon-button">

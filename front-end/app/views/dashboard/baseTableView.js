@@ -6,6 +6,7 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         $scope.viewPath = $location.path();
         var collection = null;
         var filteredCollection = null;
+        var unmergedData
 
         $scope.itemsCount = 0;
 
@@ -25,14 +26,18 @@ angular.module('koolikottApp').controller('baseTableViewController', [
         init();
 
         function init() {
-            serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail);
-
             var _init = function (titleKey, restUri, sortBy, merge) {
                 $scope.titleTranslationKey = titleKey
                 serverCallService.makeGet(restUri, {}, function (data) {
                     if (data)
                         $scope.getItemsSuccess(data, sortBy, merge);
                 })
+
+                if (
+                    $scope.viewPath == '/dashboard/moderators' ||
+                    $scope.viewPath == '/dashboard/restrictedUsers'
+                )
+                    serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail)
             }
 
             switch ($scope.viewPath) {
@@ -151,7 +156,8 @@ angular.module('koolikottApp').controller('baseTableViewController', [
                     $scope.query.order = order;
                 }
                 if (merge) {
-                    data = mergeReports(data);
+                    unmergedData = data.slice(0)
+                    data = mergeReports(data)
                 }
 
                 collection = data;
@@ -358,6 +364,32 @@ angular.module('koolikottApp').controller('baseTableViewController', [
             }
 
             return id1 === id2;
+        }
+
+        $scope.getReportLabelKey = (item) => {
+            if (item.reportCount === 1)
+                return item.reportingReasons.length === 1
+                    ? item.reportingReasons[0].reason
+                    : item.reportingReasons.length > 1
+                        ? 'MULTIPLE_REASONS'
+                        : ''
+
+            let reasonKey = ''
+            const allReports = unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+
+            for (let i = 0; i < allReports.length; i++) {
+                if (allReports[i].reportingReasons.length > 1)
+                    return 'MULTIPLE_REASONS'
+
+                if (allReports[i].reportingReasons.length === 1) {
+                    if (!reasonKey)
+                        reasonKey = allReports[i].reportingReasons[0].reason
+                    else if (reasonKey != allReports[i].reportingReasons[0].reason)
+                        return 'MULTIPLE_REASONS'
+                }
+            }
+
+            return reasonKey
         }
     }
 ])
