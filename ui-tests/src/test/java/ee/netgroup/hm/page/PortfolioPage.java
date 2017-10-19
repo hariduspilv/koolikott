@@ -3,6 +3,7 @@ package ee.netgroup.hm.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ee.netgroup.hm.components.AddPortfolioForm;
+import ee.netgroup.hm.components.Comments;
 import ee.netgroup.hm.components.ConfirmationPopup;
 import ee.netgroup.hm.components.ReportImproperPopUp;
 import ee.netgroup.hm.components.fabButton;
@@ -29,11 +30,8 @@ public class PortfolioPage extends Page{
 	private By doneButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
 	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
 	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
-	private By showCommentsButton = By.id("show-comments");
-	private By addCommentField = By.xpath("//textarea[@data-ng-model='newComment.text']");
-	private By addComment = By.xpath("//button[@data-ng-click='$ctrl.addComment()']");
-	private By comment = By.xpath("//p[@data-ng-bind='comment.text']");
 	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment(comment, $event)']");
+	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
@@ -67,7 +65,7 @@ public class PortfolioPage extends Page{
         return getDriver().findElement(shareWithLinkIcon).isDisplayed();
 	}
 
-	public ReportImproperPopUp clickNotifyImproperContent() {
+	public ReportImproperPopUp clickReportImproperContent() {
 		Helpers.waitForClickable(improperContent);
 		getDriver().findElement(improperContent).click();
 		return new ReportImproperPopUp();
@@ -115,6 +113,7 @@ public class PortfolioPage extends Page{
 
 	public PortfolioPage removeFromRecommendationsList() {
 		Helpers.waitForClickable(removeFromRecommendations);
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(removeFromRecommendations).click();
 		Helpers.waitForMilliseconds(1000);
 		return this;
@@ -155,24 +154,25 @@ public class PortfolioPage extends Page{
 		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
-	public PortfolioPage showComments() {
-		getDriver().findElement(showCommentsButton).click();
-		return this;
+	public PortfolioPage showPortfolioComments() {
+		return Comments.showPortfolioComments();
 	}
 	
 	public PortfolioPage addNewComment() {
-		Helpers.waitForVisibility(addCommentField);
-		getDriver().findElement(addCommentField).sendKeys(Constants.commentText);
-		getDriver().findElement(addComment).click();
-		return this;
+		return Comments.addNewComment();
 	}
 
 	public String getCommentText() {
-		return getDriver().findElement(comment).getText();
+		return Comments.getCommentText();
 	}
 
 	public ReportImproperPopUp reportImproperComment() {
 		getDriver().findElement(reportCommentButton).click();
+		return new ReportImproperPopUp();
+	}
+
+	public ReportImproperPopUp reportImproperTag() {
+		getDriver().findElement(reportTagButton).click();
 		return new ReportImproperPopUp();
 	}
 

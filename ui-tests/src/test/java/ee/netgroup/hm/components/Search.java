@@ -29,11 +29,13 @@ public class Search extends Component{
 		
 		if(searchString == "recommended:false"){
 			getDriver().findElement(searchField).sendKeys("recommended:false");
+			Helpers.waitForMilliseconds(1000);
 			Helpers.waitForVisibility(numberOfResultsText);
 		}	
 		
 		if(searchString == "recommended:true"){
 			getDriver().findElement(searchField).sendKeys("recommended:true");
+			Helpers.waitForMilliseconds(1000);
 			Helpers.waitForVisibility(numberOfResultsText);
 		}	
 		
@@ -67,11 +69,13 @@ public class Search extends Component{
 	public Search selectMaterialLanguageRussian() {
 		getDriver().findElement(languageSelection).click();
 		getDriver().findElement(russianLanguage).click();
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public SearchResultsPage insertSearchCriteriaInRussian(String searchString) {
 		getDriver().findElement(searchField).sendKeys(searchString);
+		Helpers.waitForMilliseconds(3000);
 		return new SearchResultsPage();
 	}
 
@@ -89,8 +93,14 @@ public class Search extends Component{
 		return this;
 	}
 
+	public static SearchResultsPage searchTag(String tag) {
+		getDriver().findElement(searchField).sendKeys("tag:"+tag);
+		Helpers.waitForVisibility(numberOfResultsText);
+		return new SearchResultsPage();
+	}
 
 
-	
+
+
 
 }

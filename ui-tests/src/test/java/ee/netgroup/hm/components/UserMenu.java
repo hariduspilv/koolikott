@@ -2,6 +2,10 @@ package ee.netgroup.hm.components;
 
 import org.openqa.selenium.By;
 import ee.netgroup.hm.helpers.Helpers;
+import ee.netgroup.hm.page.LandingPage;
+import ee.netgroup.hm.page.MaterialPage;
+import ee.netgroup.hm.page.PortfolioPage;
+import ee.netgroup.hm.page.SearchResultsPage;
 
 public class UserMenu extends Component{
 	
@@ -47,6 +51,22 @@ public class UserMenu extends Component{
 
 	public LeftMenu clickMyThings() {
 		return LeftMenu.clickMyThings();
+	}
+
+	public PortfolioPage openPortfolio() {
+		return LandingPage.openPortfolio();
+	}
+
+	public MaterialPage openMaterialUrl() {
+		return LandingPage.openMaterialUrl();
+	}
+
+	public SearchResultsPage searchTag(String tag) {
+		return Search.searchTag(tag);
+	}
+
+	public MaterialPage openMaterial() {
+		return LandingPage.openMaterial();
 	}
 
 	

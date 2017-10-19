@@ -11,13 +11,12 @@ public class AdminDashboardTests {
 	public void AdminDashboardTests_ImproperPortfolio_PortfolioIsMarkedAsProper() {
 
 		boolean improperContentBannerIsHidden = goToLandingPage()
-				.chooseUserType("Admin")
+				.chooseUserType("Moderator")
 				.clickDashboard()
 				.clickImproperPortfolios()
 				.clickToOrderImproperPortfolios()
 				.clickOpenImproperPortfolio()
 				.markContentAsNotImproper()
-				//.isContentProper();
 				.isErrorBannerHidden();
 		assertTrue(improperContentBannerIsHidden);
 	}
@@ -78,7 +77,7 @@ public class AdminDashboardTests {
 	public void AdminDashboardTests_RestoreBrokenMaterial_MaterialIsRestored() {
 
 		boolean brokenBannerIsHidden = goToLandingPage()
-				.chooseUserType("Admin")
+				.chooseUserType("Moderator")
 				.clickDashboard()
 				.clickBrokenMaterials()
 				.clickSortByReportedDate()
