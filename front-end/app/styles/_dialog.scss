@@ -43,7 +43,11 @@ md-dialog.login-dialog {
   }
 }
 
-.login-modal-container {
+.login-dialog-mobile-id-challenge {
+  padding: 0 $md-toolbar-padding;
+}
+
+.login-dialog-content {
   padding: $md-toolbar-padding;
 
   > form,
@@ -92,7 +96,7 @@ md-dialog.login-dialog {
     }
   }
 
-  .login-modal-container {
+  .login-dialog-content {
     padding: $md-toolbar-padding * 2;
 
     > form,
