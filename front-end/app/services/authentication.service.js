@@ -66,6 +66,7 @@ angular.module('koolikottApp')
 
             $rootScope.justLoggedIn = true;
             $timeout(() =>
+                console.log('broadcast login:success') ||
                 $rootScope.$broadcast('login:success')
             )
         }
