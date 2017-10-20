@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class KeyCompetence extends AbstractEntity {
+public class KeyCompetence implements AbstractEntity {
 
     @Id
     @GeneratedValue

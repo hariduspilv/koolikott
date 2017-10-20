@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * Created by mart on 9.08.16.
  */
 @Entity
-public class RepositoryURL {
+public class RepositoryURL implements AbstractEntity {
 
     @Id
     @GeneratedValue

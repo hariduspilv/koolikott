@@ -2,7 +2,6 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
@@ -15,7 +14,7 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class ImproperContent extends AbstractEntity {
+public class ImproperContent implements AbstractEntity {
 
     @Id
     @GeneratedValue

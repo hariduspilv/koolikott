@@ -5,12 +5,7 @@ import ee.hm.dop.model.interfaces.IMaterial;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -19,7 +14,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "Material")
-public class ReducedMaterial extends ReducedLearningObject implements IMaterial{
+public class ReducedMaterial extends ReducedLearningObject implements IMaterial {
 
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)

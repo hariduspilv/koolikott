@@ -1,7 +1,5 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -13,7 +11,7 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 @Entity
-public class FirstReview extends AbstractEntity{
+public class FirstReview implements AbstractEntity {
 
     @Id
     @GeneratedValue

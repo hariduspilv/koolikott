@@ -36,7 +36,7 @@ import static javax.persistence.FetchType.LAZY;
         defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class LearningObject extends AbstractEntity implements Searchable, ILearningObject {
+public abstract class LearningObject implements Searchable, ILearningObject {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")

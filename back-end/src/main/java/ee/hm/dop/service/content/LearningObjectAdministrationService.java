@@ -3,6 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.service.reviewmanagement.BrokenContentService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;

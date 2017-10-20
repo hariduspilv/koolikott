@@ -21,7 +21,7 @@ import static javax.persistence.FetchType.EAGER;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "LearningObject")
-public abstract class ReducedLearningObject extends AbstractEntity implements Searchable, ILearningObject {
+public abstract class ReducedLearningObject implements Searchable, ILearningObject, AbstractEntity {
 
     @Id
     private Long id;

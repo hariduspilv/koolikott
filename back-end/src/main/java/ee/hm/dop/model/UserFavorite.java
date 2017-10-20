@@ -1,14 +1,5 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -17,9 +8,11 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import javax.persistence.*;
+
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"creator", "learningObject"}))
-public class UserFavorite extends AbstractEntity {
+public class UserFavorite implements AbstractEntity {
 
     @Id
     @GeneratedValue

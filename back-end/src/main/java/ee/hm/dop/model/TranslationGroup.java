@@ -1,22 +1,12 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.FetchType.EAGER;
-
+import javax.persistence.*;
 import java.util.Map;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.UniqueConstraint;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
-public class TranslationGroup {
+public class TranslationGroup implements AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -27,8 +17,8 @@ public class TranslationGroup {
     private Language language;
 
     @ElementCollection(fetch = EAGER)
-    @CollectionTable(name = "Translation", uniqueConstraints = @UniqueConstraint(columnNames = { "translationGroup",
-            "translationKey" }), joinColumns = @JoinColumn(name = "translationGroup"))
+    @CollectionTable(name = "Translation", uniqueConstraints = @UniqueConstraint(columnNames = {"translationGroup",
+            "translationKey"}), joinColumns = @JoinColumn(name = "translationGroup"))
     @MapKeyColumn(name = "translationKey", nullable = false)
     @Column(name = "translation", nullable = false, columnDefinition = "TEXT")
     private Map<String, String> translations;

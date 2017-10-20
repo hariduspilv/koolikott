@@ -11,7 +11,7 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
-public class Chapter {
+public class Chapter implements AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -28,9 +28,9 @@ public class Chapter {
     @OrderColumn(name = "rowOrder", nullable = false)
     @JoinTable(
             name = "Chapter_Row",
-            joinColumns = { @JoinColumn(name = "chapter") },
-            inverseJoinColumns = { @JoinColumn(name = "row") },
-            uniqueConstraints = @UniqueConstraint(columnNames = { "chapter", "row", "rowOrder" }))
+            joinColumns = {@JoinColumn(name = "chapter")},
+            inverseJoinColumns = {@JoinColumn(name = "row")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"chapter", "row", "rowOrder"}))
     private List<ContentRow> contentRows;
 
     @OneToMany(fetch = EAGER, cascade = ALL)

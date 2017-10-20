@@ -1,15 +1,15 @@
 package ee.hm.dop.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 @Entity
-public class IssueDate {
+public class IssueDate implements AbstractEntity {
 
     @Id
     @GeneratedValue

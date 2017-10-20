@@ -1,19 +1,5 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.FetchType.EAGER;
-import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-
-import java.util.List;
-
-import javax.persistence.Cacheable;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.LanguageDeserializer;
@@ -21,6 +7,12 @@ import ee.hm.dop.rest.jackson.map.LanguageSerializer;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 /**
  * This is a mapping for ISO 639. For more information @see <a
@@ -32,7 +24,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Cacheable
 @JsonSerialize(using = LanguageSerializer.class)
 @JsonDeserialize(using = LanguageDeserializer.class)
-public class Language extends AbstractEntity {
+public class Language implements AbstractEntity {
 
     @Id
     @GeneratedValue

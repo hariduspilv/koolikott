@@ -1,15 +1,15 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.FetchType.LAZY;
-
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import javax.persistence.*;
+
+import static javax.persistence.FetchType.LAZY;
+
 @MappedSuperclass
-@JsonDeserialize(as=OriginalPicture.class)
-public abstract class Picture extends AbstractEntity {
+@JsonDeserialize(as = OriginalPicture.class)
+public abstract class Picture implements AbstractEntity {
 
     @Id
     @GeneratedValue

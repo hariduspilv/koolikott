@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +18,6 @@ import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,7 +25,7 @@ import java.util.Set;
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
-public abstract class Taxon extends AbstractEntity {
+public abstract class Taxon implements AbstractEntity {
 
     @Id
     @GeneratedValue

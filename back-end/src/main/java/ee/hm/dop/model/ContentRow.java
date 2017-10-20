@@ -1,27 +1,18 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.EAGER;
-
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OrderColumn;
-import javax.persistence.UniqueConstraint;
-
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
+import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * Created by mart on 13.12.16.
  */
 @Entity
-public class ContentRow {
+public class ContentRow implements AbstractEntity {
     public ContentRow() {
     }
 
