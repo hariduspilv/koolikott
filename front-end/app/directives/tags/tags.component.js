@@ -9,26 +9,36 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.init()
 
-        // auto-launch the report dialog if hash is found in location URL
-        if (
-            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
-            this.authenticatedUserService.isAuthenticated()
+        // auto-launch the report dialog upon login or page load if hash is found in location URL
+        this.$timeout(() =>
+            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH)
+                ? this.onLoginSuccess()
+                : this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', this.onLoginSuccess.bind(this))
         )
-            this.$timeout(() =>
-                this.reportTag()
-            )
-        
-        // remove hash from location URL upon navigating away
-        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
-            unSubscribe()
-            this.removeHash()
-        })
+    }
+    $onDestroy() {
+        if (typeof this.unsubscribeLoginSuccess === 'function')
+            this.unsubscribeLoginSuccess()
     }
     init() {
         this.showMoreTags = false
 
         if (this.learningObject && this.learningObject.id)
             this.getTagUpVotes()
+    }
+    onLoginSuccess() {
+        if (
+            window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
+            this.authenticatedUserService.isAuthenticated()
+        ) {
+            this.removeHash()
+            !this.loginDialog
+                ? this.reportTag()
+                : this.loginDialog.then(() => {
+                    this.reportTag()
+                    delete this.loginDialog
+                })
+        }
     }
     getTagUpVotes() {
         this.tagsService
@@ -138,7 +148,7 @@ class controller extends Controller {
     }
     showLoginDialog(targetEvent) {
         this.addHash()
-        this.$mdDialog.show({
+        this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
             controller: 'loginDialogController',
             bindToController: true,
@@ -149,6 +159,7 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
+        .catch(this.removeHash)
     }
     addHash() {
         window.history.replaceState(null, null,

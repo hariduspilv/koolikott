@@ -1,5 +1,7 @@
 package ee.netgroup.hm.page;
 
+import ee.netgroup.hm.components.ReportImproperPopUp;
+import ee.netgroup.hm.components.Search;
 import ee.netgroup.hm.components.UserMenu;
 import ee.netgroup.hm.helpers.Constants;
 
@@ -31,7 +33,6 @@ public class LandingPage extends Page{
 	}
 
 	public String isPortfolioDeletedTextVisible() {
-		//return getDriver().findElement(deletedPortfolioText).getText();
 		return getDriver().findElement(Constants.toastText).getText();
 	}
 
@@ -53,6 +54,29 @@ public class LandingPage extends Page{
 
 	public boolean getAddFavoritesMessageText() {
 		return MyFavoritesPage.getAddFavoritesMessageText();
+	}
+
+	public static MaterialPage openMaterial() {
+		getDriver().findElement(Constants.firstMaterial).click();
+		return new MaterialPage();
+	}
+	
+	public static PortfolioPage openPortfolio() {
+		getDriver().findElement(Constants.firstPortfolio).click();
+		return new PortfolioPage();
+	}
+
+	public static MaterialPage openMaterialUrl() {
+		getDriver().get(Constants.materialPageUrl);
+		return new MaterialPage();
+	}
+
+	public SearchResultsPage searchTag(String tag) {
+		return Search.searchTag(tag);
+	}
+
+	public ReportImproperPopUp getReportImproperPopUp() {
+		return ReportImproperPopUp.getReportImproperPopUp();
 	}
 
 

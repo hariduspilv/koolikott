@@ -11,7 +11,7 @@ class controller extends Controller {
             ? this.title
             : this.$translate.instant('LOGIN_CHOOSE_LOGIN_METHOD')
 
-        this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
+        this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
         this.$scope.$watch(
             () => this.authenticatedUserService.isAuthenticated(),
             (newValue, oldValue) => newValue == true && this.$mdDialog.hide(),
@@ -36,21 +36,25 @@ class controller extends Controller {
             }
             if (this.$scope.forms.mobileIdForm.$valid)
                 this.authenticationService.loginWithMobileId(
-                    this.$scope.mobileId.phoneNumber,
+                    this.$scope.mobileId.phoneNumber.trim().replace(/^372/, ''),
                     this.$scope.mobileId.idCode,
                     this.translationService.getLanguage(),
                     () => {
-                        this.$scope.mobileId.mobileIdChallenge = null
+                        this.$scope.mobileIdChallenge = null
                         this.$scope.mobileId.idCode = null
                         this.$scope.mobileId.phoneNumber = null
                         this.$scope.hideLogin()
                     },
                     () =>
-                        this.$scope.mobileId.mobileIdChallenge = null,
+                        this.$scope.mobileIdChallenge = null,
                     (challenge) =>
-                        this.$scope.mobileId.mobileIdChallenge = challenge
+                        this.$scope.mobileIdChallenge = challenge
                 )
         }
+    }
+    $onDestroy() {
+        if (typeof this.unsubscribeRouteChangeSuccess === 'function')
+            this.unsubscribeRouteChangeSuccess()
     }
     bindValidators() {
         this.validatorsBound = true
@@ -87,10 +91,11 @@ class controller extends Controller {
         return modelValue[10] == controlCode
     }
     validatePhoneNumber(modelValue, viewValue) {
-        return !!modelValue && !(
-            (modelValue.startsWith('+') && !modelValue.startsWith('+372')) ||
-            (modelValue.startsWith('00') && !modelValue.startsWith('00372'))
-        )
+        // no country code whatsoever is fine
+        if (!modelValue.startsWith('+') && !modelValue.startsWith('00'))
+            return true
+
+        return modelValue.startsWith('+372') || modelValue.startsWith('00372')
     }
 }
 controller.$inject = [
@@ -102,6 +107,8 @@ controller.$inject = [
     'translationService',
     'authenticatedUserService'
 ]
+
+window.loginDialogController = controller
 
 angular.module('koolikottApp').controller('loginDialogController', controller)
 }

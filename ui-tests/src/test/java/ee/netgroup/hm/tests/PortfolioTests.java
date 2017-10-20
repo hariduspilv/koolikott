@@ -88,7 +88,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.openPortfolio()
 				.clickActionsMenu()
-				.clickNotifyImproperContent()
+				.clickReportImproperContent()
 				.setImproperReason()
 				.setImproperDescription()
 				.clickNotify()
@@ -160,13 +160,13 @@ public class PortfolioTests {
 	@Test
 	public void PortfolioTests_AddComment_CommentIsAdded() {
 
-		String improperTagIsReported = goToLandingPage()
+		String commentIsAdded = goToLandingPage()
 				.chooseUserType("User")
 				.openPortfolio()
-				.showComments()
+				.showPortfolioComments()
 				.addNewComment()
 				.getCommentText();
-		Assert.assertEquals(Constants.commentText, improperTagIsReported);
+		Assert.assertEquals(Constants.commentText, commentIsAdded);
 	}
 	
 	@Test
@@ -175,7 +175,7 @@ public class PortfolioTests {
 		String improperCommentIsReported = goToLandingPage()
 				.chooseUserType("User")
 				.openPortfolio()
-				.showComments()
+				.showPortfolioComments()
 				.addNewComment()
 				.reportImproperComment()
 				.setImproperDescription()

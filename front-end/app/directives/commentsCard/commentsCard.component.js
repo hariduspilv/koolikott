@@ -22,20 +22,30 @@ class controller extends Controller {
             1000
         )
 
-        // auto-launch the report dialog if hash is found in location URL
+        // auto-launch the report dialog upon login or page load if hash is found in location URL
+        this.$timeout(() =>
+            window.location.hash.includes(SHOW_COMMENT_REPORT_MODAL_HASH)
+                ? this.onLoginSuccess()
+                : this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', this.onLoginSuccess.bind(this))
+        )
+    }
+    $onDestroy() {
+        if (typeof this.unsubscribeLoginSuccess === 'function')
+            this.unsubscribeLoginSuccess()
+    }
+    onLoginSuccess() {
         if (
             window.location.hash.includes(SHOW_COMMENT_REPORT_MODAL_HASH) &&
             this.authenticatedUserService.isAuthenticated()
-        )
-            this.$timeout(() =>
-                this.showReportDialog()
-            )
-        
-        // remove hash from location URL upon navigating away
-        const unSubscribe = this.$rootScope.$on('$routeChangeSuccess', () => {
-            unSubscribe()
+        ) {
             this.removeHash()
-        })
+            !this.loginDialog
+                ? this.showReportDialog()
+                : this.loginDialog.then(() => {
+                    this.showReportDialog()
+                    delete this.loginDialog
+                })
+        }
     }
     isAuthorized() {
         return this.authenticatedUserService.isAuthenticated()
@@ -65,12 +75,12 @@ class controller extends Controller {
                 learningObject: this.learningObject
             })
     }
-    reportComment(comment, evt) {
+    reportComment(evt) {
         this.authenticatedUserService.isAuthenticated()
             ? this.showReportDialog(evt)
             : this.showLoginDialog(evt)
     }
-    showReportDialog(comment, targetEvent) {
+    showReportDialog(targetEvent) {
         const { serverCallService, learningObject } = this
 
         return this.$mdDialog
@@ -138,7 +148,7 @@ class controller extends Controller {
     }
     showLoginDialog(targetEvent) {
         this.addHash()
-        this.$mdDialog.show({
+        this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
             controller: 'loginDialogController',
             bindToController: true,
@@ -149,6 +159,7 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
+        .catch(this.removeHash)
     }
     addHash() {
         window.history.replaceState(null, null,

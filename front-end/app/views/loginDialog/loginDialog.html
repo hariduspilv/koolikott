@@ -17,15 +17,15 @@
     </div>
   </md-toolbar>
   <div data-layout="row" data-layout-align="center start">
-    <div class="md-padding" flex>
+    <div>
       <md-content>
-        <div data-layout="column" data-ng-if="mobileIdChallenge">
+        <div class="login-dialog-mobile-id-challenge" data-ng-if="mobileIdChallenge">
           <p><span data-translate="LOGIN_MOBILEID_CODE"></span>: <strong data-ng-bind="mobileIdChallenge"></strong></p>
           <p data-translate="LOGIN_SMS"></p>
         </div>
-        <div data-layout="column" class="login-modal-container" data-ng-if="!mobileIdChallenge">
-          <form name="forms.mobileIdForm" data-ng-submit="mobileIdAuth(forms.mobileIdForm)" novalidate data-layout="row">
-            <md-input-container flex class="md-block">
+        <div class="login-dialog-content" data-ng-if="!mobileIdChallenge">
+          <form name="forms.mobileIdForm" data-ng-submit="mobileIdAuth(forms.mobileIdForm)" novalidate>
+            <md-input-container class="md-block">
               <label></label>
               <input
                 name="idCode"
@@ -43,7 +43,7 @@
                 ></div>
               </div>
             </md-input-container>
-            <md-input-container flex class="md-block">
+            <md-input-container class="md-block">
               <label></label>
               <input
                 name="phoneNumber"
@@ -62,7 +62,6 @@
               </div>
             </md-input-container>
             <md-button
-              flex
               type="submit"
               class="md-raised login-button-mobiilid"
               aria-label="Logi sisse kasutades Mobiil-ID"
@@ -70,23 +69,20 @@
             ></md-button>
           </form>
           <md-divider></md-divider>
-          <div data-layout="row">
+          <div>
             <md-button
-              flex
               class="md-raised login-button-idkaart"
               aria-label="Logi sisse kasutades ID-kaarti"
               data-ng-click="idCardAuth()"
               data-ng-disabled="loginButtonFlag"
             ></md-button>
             <md-button
-              flex
               class="md-raised login-button-ekool"
               aria-label="Logi sisse kasutades Ekooli"
               data-ng-click="ekoolAuth()"
               data-ng-disabled="loginButtonFlag"
             ></md-button>
             <md-button
-              flex
               class="md-raised login-button-stuudium"
               aria-label="Logi sisse kasutades Stuudiumi"
               data-ng-click="stuudiumAuth()"

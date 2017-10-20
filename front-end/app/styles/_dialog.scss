@@ -9,25 +9,24 @@ md-dialog md-dialog-actions {
 md-dialog.login-dialog {
   max-height: 100%;
   min-width: 18rem;
+  overflow: hidden;
 
   md-divider {
     margin: 1.5rem 0;
   }
 
   md-content {
-    padding: 1rem;
+    button,
+    md-input-container {
+      width: 100%;
+      margin: 0;
 
-    md-input-container,
-    button {
-      align-self: center;
-      padding: 0;
-      margin: 1rem;
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
     }
 
     button {
-      align-self: center;
-      padding: 0;
-      min-width: 12rem !important;
       height: 3rem;
       background-size: auto 1.8rem;
       background-position: center;
@@ -42,5 +41,75 @@ md-dialog.login-dialog {
 
   label.md-required {
     display: none;
+  }
+}
+
+.login-dialog-mobile-id-challenge {
+  padding: 0 $md-toolbar-padding;
+}
+
+.login-dialog-content {
+  padding: $md-toolbar-padding;
+
+  > form,
+  > div {
+    width: 16rem;
+  }
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  /* md-dialog.login-dialog {
+    md-content {
+      padding: 1rem;
+
+      md-input-container,
+      button {
+        align-self: center;
+        padding: 0;
+        margin: 1rem;
+      }
+
+      button {
+        align-self: center;
+        padding: 0;
+        min-width: 12rem !important;
+        height: 3rem;
+        background-size: auto 1.8rem;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        &.login-button-ekool { background-image: url('../images/login-ekool.png'); }
+        &.login-button-idkaart { background-image: url('../images/login-idkaart.png'); }
+        &.login-button-mobiilid { background-image: url('../images/login-mobiilid.png'); }
+        &.login-button-stuudium { background-image: url('../images/login-stuudium.png'); }
+      }
+    }
+  } */
+
+  md-dialog.login-dialog {
+    md-content {
+      button,
+      md-input-container {
+        width: calc(33.33% - 1rem);
+        padding: 0;
+        margin: 0 .5rem !important;
+      }
+    }
+  }
+
+  .login-dialog-content {
+    padding: $md-toolbar-padding * 2;
+
+    > form,
+    > div {
+      white-space: nowrap;
+      width: 40rem;
+      margin: 0 0 0 -.5rem;
+    }
+
+    md-input-container,
+    button {
+      display: inline-block;
+    }
   }
 }

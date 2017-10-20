@@ -239,9 +239,9 @@ public class MaterialTests {
 				.clickMyMaterials()
 				.openMaterial()
 				.clickActionsMenu()
-				.reportAsBroken()
+				.clickReportBrokenMaterial()
 				.clickReportMaterial()
-				.isMaterialReportedAsBroken();
+				.getNotificationIsSentText();
 		Assert.assertEquals(Constants.reportedText, brokenContentIsReported);
 	}
 	
@@ -256,7 +256,7 @@ public class MaterialTests {
 				.reportImproperTag()
 				.setImproperDescription()
 				.clickNotifyMaterial()
-				.getTagIsReportedImproperText();
+				.getNotificationIsSentText();
 		Assert.assertEquals(Constants.reportedText, improperTagIsReported);
 	}
 }

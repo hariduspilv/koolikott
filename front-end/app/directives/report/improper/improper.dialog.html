@@ -10,9 +10,8 @@
   </md-toolbar>
   <md-dialog-content>
     <div class="md-dialog-content">
-      <md-progress-linear data-ng-if="loading"></md-progress-linear>
       <md-input-container
-        data-ng-if="!loading && reasons"
+        data-ng-if="reasons"
         data-ng-hide="hideReasons"
         class="md-block"
         data-ng-class="{ 'md-input-invalid': errors }"

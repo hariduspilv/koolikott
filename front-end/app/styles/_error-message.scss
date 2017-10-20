@@ -13,13 +13,20 @@ dop-error-message {
   }
 
   .expandable {
-    cursor: pointer;
     height: 100%;
+
+    > div {
+      cursor: pointer;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
 .error-message-icon {
   margin-right: $layout-gutter-width / 2;
+  cursor: help;
 }
 
 .error-message-collapse-icon {

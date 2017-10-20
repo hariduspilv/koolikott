@@ -54,7 +54,8 @@ class controller extends Controller {
             })
         }
 
-        this.$scope.addComment = this.submitClick
+        this.$scope.addComment = (newComment, portfolio) =>
+            this.submitClick({ newComment, portfolio })
 
         this.$scope.toggleCommentSection = () => this.$scope.commentsOpen = !this.$scope.commentsOpen
 
@@ -131,7 +132,6 @@ class controller extends Controller {
                 this.$scope.portfolio.deleted = true
                 this.$rootScope.learningObjectDeleted = true
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                this.$location.path("/")
             })
     }
     restorePortfolio() {

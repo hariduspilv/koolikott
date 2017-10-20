@@ -35,7 +35,7 @@ public class AddPortfolioForm extends Component{
 		return this;
 	}
 
-	public AddPortfolioForm selectSubjectArea() { // TODO: muuta nimetust? taxon domain?
+	public AddPortfolioForm selectSubjectArea() {
 		getDriver().findElement(subjectArea).click();
 		getDriver().findElement(subject).click();
 		return this;
