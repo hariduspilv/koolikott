@@ -109,9 +109,12 @@ class controller extends Controller {
     }
     showLoginDialog(targetEvent) {
         this.addHash()
+
+        loginDialogController.$inject.push('title')
+
         this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
-            controller: 'loginDialogController',
+            controller: loginDialogController,
             bindToController: true,
             locals: {
                 title: this.$translate.instant('LOGIN_MUST_LOG_IN_TO_REPORT_IMPROPER')
@@ -121,6 +124,12 @@ class controller extends Controller {
             targetEvent
         })
         .catch(this.removeHash)
+
+        setTimeout(() =>
+            setTimeout(() =>
+                loginDialogController.$inject.pop()
+            )
+        )
     }
     addHash() {
         window.history.replaceState(null, null,

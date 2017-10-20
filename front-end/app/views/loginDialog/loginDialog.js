@@ -108,5 +108,7 @@ controller.$inject = [
     'authenticatedUserService'
 ]
 
+window.loginDialogController = controller
+
 angular.module('koolikottApp').controller('loginDialogController', controller)
 }
