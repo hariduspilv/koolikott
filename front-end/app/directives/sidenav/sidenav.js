@@ -1,207 +1,140 @@
 'use strict'
 
-angular.module('koolikottApp')
-.directive('dopSidenav', [
-    'serverCallService', '$location', '$sce', 'searchService', 'authenticatedUserService', '$mdDialog', 'userDataService', 'metadataService', 'taxonService',
-    function (serverCallService, $location, $sce, searchService, authenticatedUserService, $mdDialog, userDataService, metadataService, taxonService) {
-        return {
-            scope: true,
-            templateUrl: 'directives/sidenav/sidenav.html',
-            controller: ['$rootScope', '$scope', '$location', '$timeout', function ($rootScope, $scope, $location, $timeout) {
-                $scope.isTaxonomyOpen = true;
-                $scope.dashboardOpen = $location.path().startsWith("/dashboard");
+{
+class controller extends Controller {
+    $onInit() {
+        this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
-                // List of taxon icons
-                $scope.taxonIcons = [
-                    'extension',
-                    'accessibility',
-                    'school',
-                    'build',
-                    'palette'
-                ];
+        this.$scope.isTaxonomyOpen = true
+        this.$scope.dashboardOpen = this.$location.path().startsWith("/dashboard")
 
+        // List of taxon icons
+        this.$scope.taxonIcons = [
+            'extension',
+            'accessibility',
+            'school',
+            'build',
+            'palette'
+        ]
 
-                $scope.$watch(function () {
-                   return taxonService.getSidenavTaxons();
-                }, function (newValue) {
-                    if (newValue) {
-                        $scope.taxon = newValue;
-                    }
-                });
+        this.$scope.checkUser = this.checkUser.bind(this)
+        this.$scope.updateCount = this.updateCount.bind(this)
+        this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
 
-                $scope.$watch(function () {
-                    return $location.url();
-                }, function () {
-                    $rootScope.isViewPortfolioAndEdit = $location.url().indexOf('/portfolio') != -1 || $location.url().indexOf('/search') != -1;
-                }, true);
+        this.$scope.$on('dashboard:adminCountsUpdated', this.updateAdminCounts.bind(this))
+        this.$scope.$watch(() => this.taxonService.getSidenavTaxons(), (newValue) => {
+            if (newValue)
+                this.$scope.taxon = newValue
+        })
+        this.$scope.$watch(() => this.$location.url(), () => {
+            this.$rootScope.isViewPortfolioAndEdit = (
+                this.$location.url().indexOf('/portfolio') != -1 ||
+                this.$location.url().indexOf('/search') != -1
+            )
+        }, true)
+        this.$scope.$watch(() => this.authenticatedUserService.getUser(), (user) => {
+            this.$scope.user = user
+            this.$scope.updateUserCounts()
+        }, true)
 
-                $scope.$watch(function () {
-                    return authenticatedUserService.getUser();
-                }, function (user) {
-                    $scope.user = user;
-                    $scope.updateUserCounts();
-                }, true);
+        this.$scope.$on('header:red', () => this.$scope.isHeaderRed = true)
+        this.$scope.$on('header:default', () => this.$scope.isHeaderRed = false)
+    }
+    checkUser(evt, redirectURL) {
+        if (this.$scope.user)
+            return this.$location.url('/' + this.$scope.user.username + redirectURL)
 
-                $scope.$on('dashboard:adminCountsUpdated', function () {
-                    $scope.updateAdminCounts();
-                });
+        this.$rootScope.afterAuthRedirectURL = redirectURL
+        this.$rootScope.sidenavLogin = redirectURL
+        this.$mdDialog.show({
+            templateUrl: 'views/loginDialog/loginDialog.html',
+            controller: 'loginDialogController',
+            targetEvent: evt,
+            clickOutsideToClose: true,
+            escapeToClose: true
+        })
+    }
+    isAdminOrModerator() {
+        return (
+            this.authenticatedUserService.isModerator() ||
+            this.authenticatedUserService.isAdmin()
+        )
+    }
+    /**
+     * @param {string} type - One of:
+     *  - unReviewedLearningObjects
+     *  - improperMaterials
+     *  - improperPortfolios
+     *  - changedLearningObject
+     *  - brokenMaterials
+     *  - deletedMaterials
+     *  - deletedPortfolios
+     *  - moderators
+     *  - restrictedUsers
+     *  - userPortfolios
+     *  - userMaterials
+     *  - userFavorites
+     */
+    updateCount(type) {
+        const isPersonal = type.startsWith('user')
 
-                $scope.isAdmin = function () {
-                    return authenticatedUserService.isAdmin();
-                };
+        if (!isPersonal || this.authenticatedUserService.isAuthenticated()) {
+            const methodName = `load${type[0].toUpperCase() + type.slice(1)}Count`
 
-                $scope.isModerator = function () {
-                    return authenticatedUserService.isModerator();
-                };
-
-                $scope.checkUser = function (e, redirectURL) {
-                    if ($scope.user) {
-                        $location.url('/' + $scope.user.username + redirectURL);
-                    } else {
-                        $rootScope.afterAuthRedirectURL = redirectURL;
-                        $rootScope.sidenavLogin = redirectURL;
-                        openLoginDialog(e);
-                    }
-                };
-
-                $scope.modUser = function () {
-                    return !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
-                };
-
-                //Checks the location
-                $scope.isLocation = function (location) {
-                    return location === $location.path();
-                };
-
-                if (window.innerWidth > BREAK_LG) {
-                    $rootScope.sideNavOpen = true;
-                }
-
-                $scope.status = true;
-
-                function openLoginDialog(e) {
-                    $mdDialog.show({
-                        templateUrl: 'views/loginDialog/loginDialog.html',
-                        controller: 'loginDialogController',
-                        targetEvent: e,
-                        clickOutsideToClose: true,
-                        escapeToClose: true
-                    });
-                }
-
-                $scope.updateBrokenMaterialsCount = function () {
-                    userDataService.loadBrokenMaterialsCount(function (data) {
-                        $scope.brokenMaterialsCount = data;
-                    });
-                };
-                $scope.updateDeletedMaterialsCount = function () {
-                    userDataService.loadDeletedMaterialsCount(function (data) {
-                        $scope.deletedMaterialsCount = data;
-                    });
-                };
-                $scope.updateDeletedPortfoliosCount = function () {
-                    userDataService.loadDeletedPortfoliosCount(function (data) {
-                        $scope.deletedPortfoliosCount = data;
-                    });
-                };
-
-                $scope.updateImproperMaterialsCount = function () {
-                    userDataService.loadImproperMaterialsCount(function (data) {
-                        $scope.improperMaterialsCount = data;
-                    });
-                };
-
-                $scope.updateImproperPortfoliosCount = function () {
-                    userDataService.loadImproperPortfoliosCount(function (data) {
-                        $scope.improperPortfoliosCount = data;
-                    });
-                };
-
-                $scope.updateUserMaterialsCount = function () {
-                    if (authenticatedUserService.isAuthenticated()) {
-                        userDataService.loadUserMaterialsCount(function (data) {
-                            if (data >= 0) $scope.materials = data;
-                        });
-                    }
-                };
-                $scope.updateUserPortfoliosCount = function () {
-                    if (authenticatedUserService.isAuthenticated()) {
-                        userDataService.loadUserPortfoliosCount(function (data) {
-                            if (data >= 0) $scope.portfolios = data;
-                        });
-                    }
-                };
-                $scope.updateUserFavoritesCount = function () {
-                    if (authenticatedUserService.isAuthenticated()) {
-                        userDataService.loadUserFavoritesCount(function (data) {
-                            if (data >= 0) $scope.favorites = data;
-                        });
-                    }
-                };
-                $scope.updateModeratorsCount = function () {
-                    userDataService.loadModeratorsCount(function (data) {
-                        $scope.moderatorsCount = data;
-                    });
-                };
-                $scope.updateRestrictedUsersCount = function () {
-                    userDataService.loadRestrictedUsersCount(function (data) {
-                        $scope.restrictedUsersCount = data;
-                    });
-                };
-                $scope.updateChangedLearningObjectCount = function () {
-                    userDataService.loadChangedLearningObjectCount(function (data) {
-                        $scope.changedLearningObjectCount = data;
-                    });
-                };
-                $scope.updateUserCounts = function () {
-                    if (authenticatedUserService.isAuthenticated()) {
-                        $scope.updateUserFavoritesCount();
-                        $scope.updateUserMaterialsCount();
-                        $scope.updateUserPortfoliosCount();
-
-                        $scope.updateAdminCounts();
-                    }
-                };
-
-                $scope.isAuthenticated = function () {
-                    return authenticatedUserService.isAuthenticated();
-                };
-
-                $scope.updateAdminCounts = function () {
-                    if ($scope.isAdmin() || $scope.isModerator()) {
-                        $scope.updateBrokenMaterialsCount();
-                        $scope.updateDeletedMaterialsCount();
-                        $scope.updateDeletedPortfoliosCount();
-                        $scope.updateImproperMaterialsCount();
-                        $scope.updateImproperPortfoliosCount();
-                        $scope.updateChangedLearningObjectCount();
-                        $scope.updateUnReviewedLearningObjectCount();
-                    }
-                    if ($scope.isAdmin()) {
-                        $scope.updateModeratorsCount();
-                        $scope.updateRestrictedUsersCount();
-                    }
-                };
-
-                $scope.updateUnReviewedLearningObjectCount = function () {
-                    userDataService.loadUnReviewedLearningObjectCount(function (data) {
-                        $scope.unReviewedLearningObjectCount = data;
-                    });
-                };
-
-                $scope.dashboardSearch = function () {
-                    if ($scope.dashboardOpen === false) {
-                        $location.url("/dashboard");
-                        $scope.dashboardOpen = true;
-                    } else {
-                        $scope.dashboardOpen = false;
-                    }
-                };
-
-                $scope.$on('header:red', () => $scope.isHeaderRed = true);
-                $scope.$on('header:default', () => $scope.isHeaderRed = false);
-
-            }]
+            if (typeof this.userDataService[methodName] === 'function')
+                this.userDataService[methodName](count => {
+                    if (!isPersonal || count >= 0)
+                        this.$scope[type+'Count'] = count
+                })
         }
     }
-]);
+    updateUserCounts() {
+        if (this.authenticatedUserService.isAuthenticated()) {
+            this.updateCount('userFavorites')
+            this.updateCount('userMaterials')
+            this.updateCount('userPortfolios')
+            this.updateAdminCounts()
+        }
+    }
+    updateAdminCounts() {
+        if (
+            this.authenticatedUserService.isAdmin() ||
+            this.authenticatedUserService.isModerator()
+        ) {
+            this.updateCount('brokenMaterials')
+            this.updateCount('deletedMaterials')
+            this.updateCount('deletedPortfolios')
+            this.updateCount('improperMaterials')
+            this.updateCount('improperPortfolios')
+            this.updateCount('changedLearningObject')
+            this.updateCount('unReviewedLearningObject')
+        }
+        if (this.authenticatedUserService.isAdmin()) {
+            this.updateCount('moderators')
+            this.updateCount('restrictedUsers')
+        }
+    }
+    dashboardSearch() {
+        if (this.$scope.dashboardOpen === false) {
+            this.$location.url("/dashboard")
+            this.$scope.dashboardOpen = true
+        } else {
+            this.$scope.dashboardOpen = false
+        }
+    }
+}
+controller.$inject = [
+    '$scope',
+    '$rootScope',
+    '$location',
+    '$mdDialog',
+    'authenticatedUserService',
+    'userDataService',
+    'taxonService'
+]
+
+angular.module('koolikottApp').component('dopSidenav', {
+    templateUrl: 'directives/sidenav/sidenav.html',
+    controller
+})
+}
