@@ -14,14 +14,16 @@
           <span data-translate="{{iconTooltipKey}}"></span>
         </md-tooltip>
       </md-icon>
-      <div data-flex>
-        <h2 id="error-message-heading" data-ng-if="message" data-md-truncate data-ng-bind="message"></h2>
-        <h2 id="error-message-heading" data-ng-if="!message" data-md-truncate data-translate="{{messageKey}}"></h2>
+      <div data-flex data-layout="row">
+        <div data-flex>
+          <h2 id="error-message-heading" data-ng-if="message" data-md-truncate data-ng-bind="message"></h2>
+          <h2 id="error-message-heading" data-ng-if="!message" data-md-truncate data-translate="{{messageKey}}"></h2>
+        </div>
+        <md-icon data-ng-if="showExpandableReports" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
+        <md-tooltip data-ng-if="showExpandableReports" md-direction="bottom">
+          <span data-translate="{{showReports ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
+        </md-tooltip>
       </div>
-      <md-icon data-ng-if="showExpandableReports" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
-      <md-tooltip data-ng-if="showExpandableReports" md-direction="bottom">
-        <span data-translate="{{showReports ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
-      </md-tooltip>
     </div>
     <div data-layout="row" data-flex-gt-xs="25" data-layout-align="end center">
       <md-button
