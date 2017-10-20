@@ -252,9 +252,9 @@
 
 <div class="md-toolbar-filter ng-hide" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
   <form layout="row">
-    <div class="lays-out-left" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
+    <div class="lays-out-left" data-ng-hide="isSideNavOpen" ng-cloak></div>
     <div class="filter-wrapper"
-         id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
+         id="detailed-search" data-ng-class="{'nav-open': isSideNavOpen}" ng-cloak>
       <data-dop-detailed-search
         data-is-visible="detailedSearch.isVisible"
         data-query-in="detailedSearch.queryIn"

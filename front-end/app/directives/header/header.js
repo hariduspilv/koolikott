@@ -26,6 +26,10 @@ class controller extends Controller {
         this.$scope.isMobileView = false
         this.$scope.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
 
+        this.$mdSidenav('left', true).then(left =>
+            this.$scope.isSideNavOpen = left.isOpen()
+        )
+
         this.$scope.detailedSearch.accessor = {
             clearSimpleSearch: () => this.$scope.searchFields.searchQuery = ''
         }
@@ -303,6 +307,7 @@ controller.$inject = [
     '$mdDialog',
     '$route',
     '$translate',
+    '$mdSidenav',
     'translationService',
     'searchService',
     'authenticationService',

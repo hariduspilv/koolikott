@@ -4,7 +4,9 @@
 class controller extends Controller {
     $onInit() {
         this.$scope.toggleSidenav = () => this.$mdSidenav('left').toggle()
-        this.$scope.sidenavIsOpen = () => this.$mdSidenav('left').isOpen()
+        this.$mdSidenav('left', true).then(left =>
+            this.$scope.isSideNavOpen = left.isOpen()
+        )
 
         this.$scope.portfolio = this.storageService.getPortfolio()
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio) => {
