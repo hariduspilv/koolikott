@@ -115,7 +115,6 @@ angular.module('koolikottApp')
                 $scope.portfolio.deleted = true;
                 $rootScope.learningObjectDeleted = true;
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
-                $location.path("/");
             }
 
             function deletePortfolioFailed() {
