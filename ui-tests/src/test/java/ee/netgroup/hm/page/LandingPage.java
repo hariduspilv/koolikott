@@ -6,7 +6,7 @@ import ee.netgroup.hm.components.UserMenu;
 import ee.netgroup.hm.helpers.Constants;
 
 public class LandingPage extends Page{
-	
+
 	public static LandingPage goToLandingPage() {
 		getDriver().get(Constants.landingPage);
 		return new LandingPage();
