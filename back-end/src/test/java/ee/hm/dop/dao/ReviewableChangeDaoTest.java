@@ -28,11 +28,6 @@ public class ReviewableChangeDaoTest extends DatabaseTestBase {
 
         List<ReviewableChange> changes = reviewableChangeDao.getAllByLearningObject(MATERIAL_1);
         assertTrue(changes.size() == 2);
-
-        reviewableChangeDao.removeAllByLearningObject(MATERIAL_1);
-
-        List<ReviewableChange> changesAfter = reviewableChangeDao.getAllByLearningObject(MATERIAL_1);
-        assertTrue(changesAfter.size() == 0);
     }
 
     @Test
@@ -47,35 +42,7 @@ public class ReviewableChangeDaoTest extends DatabaseTestBase {
 
         List<ReviewableChange> changes = reviewableChangeDao.findAll();
         assertTrue(changes.size() == 3);
-
-        reviewableChangeDao.removeAllByLearningObject(MATERIAL_1);
-        reviewableChangeDao.removeAllByLearningObject(MATERIAL_2);
-
-        List<ReviewableChange> changesAfter = reviewableChangeDao.findAll();
-        assertTrue(changesAfter.size() == 0);
     }
-
-    @Test
-    public void removeById() {
-        ReviewableChange change1 = new ReviewableChange();
-        ReviewableChange change2 = new ReviewableChange();
-        ReviewableChange change3 = new ReviewableChange();
-
-        ReviewableChange saved1 = reviewableChangeDao.createOrUpdate(change1);
-        ReviewableChange saved2 = reviewableChangeDao.createOrUpdate(change2);
-        ReviewableChange saved3 = reviewableChangeDao.createOrUpdate(change3);
-
-        List<ReviewableChange> changes = reviewableChangeDao.findAll();
-        assertTrue(changes.size() == 3);
-
-        assertTrue(reviewableChangeDao.removeById(saved1.getId()));
-        assertTrue(reviewableChangeDao.removeById(saved2.getId()));
-        assertTrue(reviewableChangeDao.removeById(saved3.getId()));
-
-        List<ReviewableChange> changesAfter = reviewableChangeDao.findAll();
-        assertTrue(changesAfter.size() == 0);
-    }
-
 
     public ReviewableChange change(Material material, long id) {
         ReviewableChange change1 = new ReviewableChange();

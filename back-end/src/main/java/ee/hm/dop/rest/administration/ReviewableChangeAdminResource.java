@@ -14,10 +14,7 @@ import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -56,7 +53,7 @@ public class ReviewableChangeAdminResource extends BaseResource {
         return reviewableChangeService.getAllByLearningObject(id);
     }
 
-    @GET
+    @POST
     @Path("{id}/acceptAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response acceptAllChanges(@PathParam("id") Long learningObjectId) {
@@ -72,11 +69,11 @@ public class ReviewableChangeAdminResource extends BaseResource {
         return ok();
     }
 
-    @GET
+    @POST
     @Path("{id}/revertAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject revertAllChanges(@PathParam("id") long id) {
-        return reviewableChangeService.revertAllChanges(id, getLoggedInUser());
+    public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId) {
+        return reviewableChangeService.revertAllChanges(learningObjectId, getLoggedInUser());
     }
 
 }

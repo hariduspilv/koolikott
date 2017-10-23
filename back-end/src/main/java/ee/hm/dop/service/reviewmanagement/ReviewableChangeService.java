@@ -3,6 +3,8 @@ package ee.hm.dop.service.reviewmanagement;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -21,6 +23,10 @@ public class ReviewableChangeService {
     private LearningObjectDao learningObjectDao;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private ReviewableChangeAdminService reviewableChangeAdminService;
+    @Inject
+    private ReviewManager reviewManager;
 
     public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
@@ -46,14 +52,17 @@ public class ReviewableChangeService {
         }
     }
 
-    public void processChanges(LearningObject learningObject) {
+    public void processChanges(LearningObject learningObject, User user) {
         //todo register logic
         List<ReviewableChange> changes = learningObject.getReviewableChanges();
         //todo remove isNotEmty check
         if (CollectionUtils.isNotEmpty(changes)) {
             for (ReviewableChange change : changes) {
-                if (!learningObjectHasThis(learningObject, change)) {
-                    removeChangeById(change.getId());
+                if (!change.isReviewed()) {
+                    if (!learningObjectHasThis(learningObject, change)) {
+                        //todo do something, but some u set reviewed, some u create a new
+//                        reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
+                    }
                 }
             }
         }
@@ -76,16 +85,10 @@ public class ReviewableChangeService {
         return reviewableChange.hasChange() ? reviewableChangeDao.createOrUpdate(reviewableChange) : null;
     }
 
-    @Deprecated
-    public boolean acceptAllChanges(long id) {
-        return reviewableChangeDao.removeAllByLearningObject(id);
-    }
-
-    @Deprecated
     public LearningObject revertAllChanges(long id, User user) {
         LearningObject learningObject = learningObjectService.get(id, user);
         ValidatorUtil.mustHaveEntity(learningObject);
-        List<ReviewableChange> reviewableChanges = reviewableChangeDao.getAllByLearningObject(id);
+        List<ReviewableChange> reviewableChanges = learningObject.getReviewableChanges();
         if (CollectionUtils.isEmpty(reviewableChanges)) {
             throw new RuntimeException("No changes for this learningObject");
         }
@@ -100,13 +103,8 @@ public class ReviewableChangeService {
             }
         }
 
-        boolean success = acceptAllChanges(id);
-        LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
-        if (success) {
-            updatedLearningObject.setChanged(0);
-        }
-
-        return updatedLearningObject;
+        reviewManager.setEverythingReviewed(user, learningObject, ReviewStatus.REJECTED, ReviewType.CHANGE);
+        return learningObjectDao.createOrUpdate(learningObject);
     }
 
     private void removeTargetGroupFromLearningObject(LearningObject learningObject, TargetGroup targetGroup) {
@@ -139,10 +137,5 @@ public class ReviewableChangeService {
                 iterator.remove();
             }
         }
-    }
-
-    @Deprecated
-    public void removeChangeById(long id) {
-        reviewableChangeDao.removeById(id);
     }
 }

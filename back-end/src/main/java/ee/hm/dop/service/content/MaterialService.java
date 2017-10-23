@@ -115,7 +115,7 @@ public class MaterialService {
             solrEngineService.updateIndex();
         }
         if (updatedMaterial.getUnReviewed() == 0) {
-            reviewableChangeService.processChanges(updatedMaterial);
+            reviewableChangeService.processChanges(updatedMaterial, changer);
         }
         return updatedMaterial;
     }

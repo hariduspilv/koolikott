@@ -19,25 +19,6 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                 .setParameter("id", learningObjectId).getResultList();
     }
 
-    @Deprecated
-    public boolean removeById(long id) {
-        return getEntityManager().createQuery("DELETE FROM ReviewableChange clo WHERE clo.id = :id")
-                .setParameter("id", id)
-                .executeUpdate() > 0;
-    }
-
-    @Deprecated
-    public boolean removeAllByLearningObject(long id) {
-        return getEntityManager().createQuery("DELETE FROM ReviewableChange clo WHERE clo.learningObject.id = :id")
-                .setParameter("id", id)
-                .executeUpdate() > 0;
-    }
-
-    @Deprecated
-    public Long getCount() {
-        return (Long) getEntityManager().createQuery("SELECT COUNT(DISTINCT clo.learningObject) FROM ReviewableChange clo").getSingleResult();
-    }
-
     public List<ReviewableChange> findAllUnreviewed() {
         return getEntityManager()
                 .createNativeQuery("SELECT f.*\n" +

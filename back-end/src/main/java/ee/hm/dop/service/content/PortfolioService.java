@@ -10,10 +10,8 @@ import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -35,8 +33,8 @@ public class PortfolioService {
     @Inject
     private PortfolioPermission portfolioPermission;
 
-    public Portfolio update(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
+    public Portfolio update(Portfolio portfolio, User user) {
+        Portfolio originalPortfolio = validateUpdate(portfolio, user);
 
         TextFieldUtil.cleanTextFields(portfolio);
 
@@ -48,7 +46,7 @@ public class PortfolioService {
         solrEngineService.updateIndex();
 
         if (updatedPortfolio.getUnReviewed() == 0) {
-            reviewableChangeService.processChanges(updatedPortfolio);
+            reviewableChangeService.processChanges(updatedPortfolio, user);
         }
 
         return updatedPortfolio;

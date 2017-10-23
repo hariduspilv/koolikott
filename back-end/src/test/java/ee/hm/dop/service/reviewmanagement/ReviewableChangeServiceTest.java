@@ -20,6 +20,7 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -39,6 +40,8 @@ public class ReviewableChangeServiceTest {
     private ReviewableChangeDao reviewableChangeDao;
     @Mock
     private LearningObjectDao learningObjectDao;
+    @Mock
+    private ReviewManager reviewManager;
 
     @Test
     public void addChanged() {
@@ -72,6 +75,7 @@ public class ReviewableChangeServiceTest {
         ReviewableChange change1 = new ReviewableChange();
         ReviewableChange change2 = new ReviewableChange();
         Material material = new Material();
+        material.setReviewableChanges(new ArrayList<>());
         ResourceType resourceType = new ResourceType();
         TargetGroup targetGroup = new TargetGroup();
         User user = new User();
@@ -86,14 +90,15 @@ public class ReviewableChangeServiceTest {
         change1.setLearningObject(material);
         change1.setResourceType(resourceType);
         change1.setCreatedBy(user);
+        material.getReviewableChanges().add(change1);
 
         change2.setLearningObject(material);
         change2.setTargetGroup(targetGroup);
         change2.setCreatedBy(user);
+        material.getReviewableChanges().add(change2);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
         expect(reviewableChangeDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
-        expect(reviewableChangeDao.removeAllByLearningObject(1L)).andReturn(true);
         expect(learningObjectDao.createOrUpdate(material)).andReturn(material);
         replay(learningObjectService);
         replay(reviewableChangeDao);

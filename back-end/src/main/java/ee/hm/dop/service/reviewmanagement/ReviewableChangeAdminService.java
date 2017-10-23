@@ -1,7 +1,6 @@
 package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ReviewableChangeDao;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.User;
@@ -38,12 +37,12 @@ public class ReviewableChangeAdminService {
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
         for (ReviewableChange reviewableChange : learningObject.getReviewableChanges()) {
             if (!reviewableChange.isReviewed()) {
-                setReviewed(user, reviewStatus, reviewableChange);
+                setReviewed(reviewableChange, user, reviewStatus);
             }
         }
     }
 
-    private void setReviewed(User user, ReviewStatus reviewStatus, ReviewableChange reviewableChange) {
+    public void setReviewed(ReviewableChange reviewableChange, User user, ReviewStatus reviewStatus) {
         reviewableChange.setReviewed(true);
         reviewableChange.setReviewedBy(user);
         reviewableChange.setReviewedAt(DateTime.now());
