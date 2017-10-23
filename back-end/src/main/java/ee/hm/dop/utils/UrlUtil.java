@@ -3,6 +3,8 @@ package ee.hm.dop.utils;
 import org.apache.http.util.TextUtils;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
@@ -33,6 +35,17 @@ public class UrlUtil {
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Source has no protocol");
         }
+    }
+
+
+    public static String getDomainName(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        if (uri.getScheme() == null) {
+            uri = new URI("http://" + url);
+        }
+
+        String domain = uri.getHost().trim();
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 
     public static String getHost(String materialSource) {

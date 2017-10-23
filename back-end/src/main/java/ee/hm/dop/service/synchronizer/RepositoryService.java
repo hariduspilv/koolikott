@@ -3,7 +3,6 @@ package ee.hm.dop.service.synchronizer;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.model.RepositoryURL;
 import ee.hm.dop.service.content.MaterialService;
@@ -13,6 +12,7 @@ import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
+import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -47,13 +46,11 @@ public class RepositoryService {
     }
 
     public void synchronize(Repository repository) {
-        logger.info(format("Updating materials for %s", repository));
-
-        SynchronizationAudit audit = new SynchronizationAudit();
+        logStart(repository);
 
         long start = System.currentTimeMillis();
-        DateTime startSyncDateTime;
 
+        DateTime startSyncDateTime;
         MaterialIterator materials;
         try {
             materials = repositoryManager.getMaterialsFrom(repository);
@@ -63,6 +60,16 @@ public class RepositoryService {
             return;
         }
 
+        SynchronizationAudit audit = synchronize(repository, materials);
+
+        repository.setLastSynchronization(startSyncDateTime);
+        updateRepositoryData(repository);
+
+        logEnd(audit, start);
+    }
+
+    private SynchronizationAudit synchronize(Repository repository, MaterialIterator materials) {
+        SynchronizationAudit audit = new SynchronizationAudit();
         int count = 0;
         while (materials.hasNext()) {
             try {
@@ -82,23 +89,24 @@ public class RepositoryService {
                 logger.error("An error occurred while getting the next material from repository.", e);
                 audit.failedToDownload();
             }
-
-            count = getCount(count);
+            count = incrementCountAndFlush(count);
         }
-
-        repository.setLastSynchronization(startSyncDateTime);
-        updateRepositoryData(repository);
-
-        long end = System.currentTimeMillis();
-        String message = "Updating materials took %s milliseconds. Successfully downloaded %s"
-                + " materials (of which %s are deleted materials) and %s materials failed to download of total %s";
-        logger.info(format(message, end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
-                audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
-        logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted",
-                audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
+        return audit;
     }
 
-    private int getCount(int count) {
+    private void logStart(Repository repository) {
+        logger.info(format("Updating materials for %s", repository));
+    }
+
+    private void logEnd(SynchronizationAudit audit, long start) {
+        long end = System.currentTimeMillis();
+        logger.info(format("Updating materials took %s milliseconds. Successfully downloaded %s"
+                + " materials (of which %s are deleted materials) and %s materials failed to download of total %s", end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
+                audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
+        logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted", audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
+    }
+
+    private int incrementCountAndFlush(int count) {
         if (++count >= BATCH_SIZE) {
             DbUtils.emptyCache();
             count = 0;
@@ -138,14 +146,7 @@ public class RepositoryService {
 
     String getDomainName(String url) {
         try {
-            URI uri = new URI(url);
-            if (uri.getScheme() == null) {
-                uri = new URI("http://" + url);
-            }
-
-            String domain = uri.getHost().trim();
-            return domain.startsWith("www.") ? domain.substring(4) : domain;
-
+            return UrlUtil.getDomainName(url);
         } catch (Exception e) {
             logger.error("Could not get domain name from material during synchronization - updating all metafields of the material");
             return null;
@@ -160,8 +161,7 @@ public class RepositoryService {
 
     private void createPicture(Material material) {
         if (material.getPicture() != null) {
-            Picture picture = pictureSaver.create(material.getPicture());
-            material.setPicture(picture);
+            material.setPicture(pictureSaver.create(material.getPicture()));
         }
     }
 

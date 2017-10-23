@@ -27,13 +27,14 @@ public class SynchronizeMaterialsExecutor {
 
     @Inject
     private SolrEngineService solrEngineService;
+    @Inject
+    private RepositoryService repositoryService;
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
     private static ScheduledFuture<?> synchronizeMaterialHandle;
 
     public synchronized void synchronizeMaterials() {
         try {
-            RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllRepositories();
 
             logger.info(format("Synchronizing %d repositories...", repositories.size()));
@@ -113,10 +114,6 @@ public class SynchronizeMaterialsExecutor {
      */
     void setSynchronizeMaterialHandle(ScheduledFuture<?> synchronizeMaterialHandle) {
         SynchronizeMaterialsExecutor.synchronizeMaterialHandle = synchronizeMaterialHandle;
-    }
-
-    protected RepositoryService newRepositoryService() {
-        return GuiceInjector.getInjector().getInstance(RepositoryService.class);
     }
 
     protected void closeTransaction() {

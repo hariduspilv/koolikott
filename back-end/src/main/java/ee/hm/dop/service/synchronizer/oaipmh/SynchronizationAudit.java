@@ -3,15 +3,10 @@ package ee.hm.dop.service.synchronizer.oaipmh;
 public class SynchronizationAudit {
 
     private long failedToDownload;
-
     private long successfullyDownloaded;
-
     private long deletedMaterialsDownloaded;
-
     private long existingMaterialsUpdated;
-
     private long existingMaterialsDeleted;
-
     private long newMaterialsCreated;
 
     public long getFailedToDownload() {
