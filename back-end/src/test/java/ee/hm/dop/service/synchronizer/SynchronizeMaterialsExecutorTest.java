@@ -32,10 +32,8 @@ public class SynchronizeMaterialsExecutorTest {
 
     @TestSubject
     private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor = new SynchronizeMaterialsExecutorMock();
-
     @Mock
     private RepositoryService repositoryService;
-
     @Mock
     private SolrEngineService solrEngineService;
 
@@ -201,11 +199,6 @@ public class SynchronizeMaterialsExecutorTest {
         public long getInitialDelay(int hourOfDayToExecute) {
             return 1;
         }
-
-        @Override
-        protected RepositoryService newRepositoryService() {
-            return repositoryService;
-        };
 
         @Override
         protected void beginTransaction() {
