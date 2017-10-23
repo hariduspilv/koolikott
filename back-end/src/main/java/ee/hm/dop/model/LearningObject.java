@@ -143,6 +143,10 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @JsonBackReference("improperContent")
     private List<ImproperContent> improperContents;
 
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonBackReference("reviewableChange")
+    private List<ReviewableChange> reviewableChanges;
+
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
 
@@ -364,5 +368,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
+    }
+
+    public List<ReviewableChange> getReviewableChanges() {
+        return reviewableChanges;
+    }
+
+    public void setReviewableChanges(List<ReviewableChange> reviewableChanges) {
+        this.reviewableChanges = reviewableChanges;
     }
 }

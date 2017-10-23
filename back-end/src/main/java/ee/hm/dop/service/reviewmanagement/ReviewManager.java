@@ -20,6 +20,8 @@ public class ReviewManager {
     private BrokenContentService brokenContentService;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private ReviewableChangeAdminService reviewableChangeAdminService;
 
     public void setEverythingReviewedRefreshLO(User user, LearningObject learningObject, ReviewStatus reviewStatus, ReviewType type) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -37,6 +39,8 @@ public class ReviewManager {
         if (type.canReviewBrokenContent() && originalLearningObject instanceof Material) {
             brokenContentService.setMaterialNotBroken((Material) originalLearningObject);
         }
-        //todo reviewableChange set changed
+        if (type.canReviewChange()){
+            reviewableChangeAdminService.setReviewed(originalLearningObject, user, reviewStatus);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.User;
 
@@ -50,6 +49,9 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
                         "                   AND bc.deleted = 0 )" +
+                        "  AND NOT exists(SELECT 1 FROM FirstReview bc " +
+                        "                   WHERE bc.learningObject = f.learningObject" +
+                        "                   AND bc.reviewed = 0 )" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
                 .setMaxResults(300)
                 .getResultList();
@@ -70,6 +72,9 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
                         "                   AND bc.deleted = 0 )" +
+                        "  AND NOT exists(SELECT 1 FROM FirstReview bc " +
+                        "                   WHERE bc.learningObject = f.learningObject" +
+                        "                   AND bc.reviewed = 0 )" +
                         "  AND lt.taxon IN (:taxonIds)\n" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
@@ -89,8 +94,11 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "                   AND ic.reviewed = 0)\n" +
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
-                        "                   AND bc.deleted = 0 )")
-                .getSingleResult()).longValue();
+                        "                   AND bc.deleted = 0 )\n" +
+                        " AND NOT exists(SELECT 1 FROM FirstReview ic " +
+                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   AND ic.reviewed = 0)")
+                                .getSingleResult()).longValue();
     }
 
     public long findCountOfUnreviewed(User user) {
@@ -107,6 +115,9 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
                         "                   AND bc.deleted = 0 ) " +
+                        " AND NOT exists(SELECT 1 FROM FirstReview ic " +
+                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   AND ic.reviewed = 0)" +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult()).longValue();

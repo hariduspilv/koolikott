@@ -62,7 +62,7 @@ public class ImproperContentAdminResource extends BaseResource {
     @DELETE
     @Path("setProper")
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
-    public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
+    public void setProper(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("learningObject query param is required.");
         }

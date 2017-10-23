@@ -2,8 +2,13 @@ package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 
@@ -24,6 +29,10 @@ public class ReviewableChangeAdminResource extends BaseResource {
     private ReviewableChangeService reviewableChangeService;
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
+    @Inject
+    private ReviewManager reviewManager;
+    @Inject
+    private LearningObjectService learningObjectService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -50,8 +59,16 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @GET
     @Path("{id}/acceptAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response acceptAllChanges(@PathParam("id") long id) {
-        reviewableChangeService.acceptAllChanges(id);
+    public Response acceptAllChanges(@PathParam("id") Long learningObjectId) {
+        if (learningObjectId == null) {
+            throw badRequest("learningObject query param is required.");
+        }
+        User loggedInUser = getLoggedInUser();
+        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
+        if (learningObject == null) {
+            throw notFound();
+        }
+        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED, ReviewType.CHANGE);
         return ok();
     }
 
