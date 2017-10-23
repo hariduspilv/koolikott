@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
@@ -29,7 +28,7 @@ public class FirstReviewAdminService {
         }
     }
 
-    public BigInteger getUnReviewedCount(User user) {
+    public long getUnReviewedCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed();

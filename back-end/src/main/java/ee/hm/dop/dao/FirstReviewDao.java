@@ -4,7 +4,6 @@ import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -53,8 +52,8 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                 .getResultList();
     }
 
-    public BigInteger findCountOfUnreviewed() {
-        return (BigInteger) getEntityManager()
+    public long findCountOfUnreviewed() {
+        return ((BigInteger) getEntityManager()
                 .createNativeQuery("SELECT count(1) AS c\n" +
                         "FROM FirstReview f\n" +
                         "   JOIN LearningObject o ON f.learningObject = o.id\n" +
@@ -66,11 +65,11 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
                         "                   WHERE bc.material = f.learningObject" +
                         "                   AND bc.deleted = 0 )")
-                .getSingleResult();
+                .getSingleResult()).longValue();
     }
 
-    public BigInteger findCountOfUnreviewed(User user) {
-        return (BigInteger) getEntityManager()
+    public long findCountOfUnreviewed(User user) {
+        return ((BigInteger) getEntityManager()
                 .createNativeQuery("SELECT count(1) AS c\n" +
                         "FROM FirstReview f\n" +
                         "   JOIN LearningObject o ON f.learningObject = o.id\n" +
@@ -85,6 +84,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                   AND bc.deleted = 0 ) " +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .getSingleResult();
+                .getSingleResult()).longValue();
     }
 }

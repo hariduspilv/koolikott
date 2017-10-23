@@ -4,6 +4,7 @@ import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 
 import javax.annotation.security.RolesAllowed;
@@ -21,12 +22,21 @@ public class ReviewableChangeAdminResource extends BaseResource {
 
     @Inject
     private ReviewableChangeService reviewableChangeService;
+    @Inject
+    private ReviewableChangeAdminService reviewableChangeAdminService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ReviewableChange> getChanged() {
-        return reviewableChangeService.findAll();
+        return reviewableChangeAdminService.getUnReviewed(getLoggedInUser());
+    }
+
+    @GET
+    @Path("count")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public Long getCount() {
+        return reviewableChangeAdminService.getUnReviewedCount(getLoggedInUser());
     }
 
     @GET
@@ -50,13 +60,6 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") long id) {
         return reviewableChangeService.revertAllChanges(id, getLoggedInUser());
-    }
-
-    @GET
-    @Path("count")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Long getCount() {
-        return reviewableChangeService.getCount();
     }
 
 }
