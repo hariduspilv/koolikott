@@ -11,6 +11,7 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -31,13 +32,10 @@ public class ReviewableChangeServiceTest {
 
     @TestSubject
     private ReviewableChangeService reviewableChangeService = new ReviewableChangeService();
-
     @Mock
     private LearningObjectService learningObjectService;
-
     @Mock
     private ReviewableChangeDao reviewableChangeDao;
-
     @Mock
     private LearningObjectDao learningObjectDao;
 
@@ -57,7 +55,7 @@ public class ReviewableChangeServiceTest {
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
         expect(reviewableChangeDao.createOrUpdate(reviewableChange)).andReturn(reviewableChange);
-        expect(reviewableChangeDao.findAll()).andReturn(Collections.singletonList(reviewableChange));
+        expect(reviewableChangeDao.findAllUnreviewed()).andReturn(Collections.singletonList(reviewableChange));
         replay(learningObjectService);
         replay(reviewableChangeDao);
 
@@ -65,7 +63,7 @@ public class ReviewableChangeServiceTest {
 
         assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());
-        assertTrue(reviewableChangeService.findAll().size() == 1);
+        assertTrue(reviewableChangeDao.findAllUnreviewed().size() == 1);
     }
 
     @Test

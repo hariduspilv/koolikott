@@ -15,6 +15,11 @@ import javax.persistence.*;
 @Entity
 public class ReviewableChange implements AbstractEntity {
 
+    public static final String TAXON = "taxon";
+    public static final String RESOURCETYPE = "resourcetype";
+    public static final String TARGETGROUP = "targetgroup";
+    public static final String MATERIALSOURCE = "url";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -61,9 +66,27 @@ public class ReviewableChange implements AbstractEntity {
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
 
+
+    @Column(columnDefinition = "TEXT")
+    private String materialSource;
+
     @JsonIgnore
-    public boolean hasChange(ReviewableChange reviewableChange) {
-        return reviewableChange.getTaxon() != null || reviewableChange.getResourceType() != null || reviewableChange.getTargetGroup() != null;
+    public String tagName() {
+        if (this.getTaxon() != null) {
+            return TAXON;
+        }
+        if (this.getResourceType() != null) {
+            return RESOURCETYPE;
+        }
+        if (this.getTargetGroup() != null) {
+            return TARGETGROUP;
+        }
+        return MATERIALSOURCE;
+    }
+
+    @JsonIgnore
+    public boolean hasChange() {
+        return this.getTaxon() != null || this.getResourceType() != null || this.getTargetGroup() != null;
     }
 
     public Long getId() {
@@ -144,5 +167,21 @@ public class ReviewableChange implements AbstractEntity {
 
     public void setStatus(ReviewStatus status) {
         this.status = status;
+    }
+
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
+    }
+
+    public String getMaterialSource() {
+        return materialSource;
+    }
+
+    public void setMaterialSource(String materialSource) {
+        this.materialSource = materialSource;
     }
 }

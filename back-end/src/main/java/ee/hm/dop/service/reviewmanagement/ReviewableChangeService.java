@@ -26,14 +26,6 @@ public class ReviewableChangeService {
     @Inject
     private LearningObjectService learningObjectService;
 
-    public long getCount() {
-        return reviewableChangeDao.getCount();
-    }
-
-    public List<ReviewableChange> findAll() {
-        return reviewableChangeDao.findAll();
-    }
-
     public List<ReviewableChange> getAllByLearningObject(long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
     }
@@ -41,7 +33,7 @@ public class ReviewableChangeService {
     public ReviewableChange addChanged(ReviewableChange reviewableChange) {
         findValid(reviewableChange);
 
-        if (!reviewableChange.hasChange(reviewableChange)) {
+        if (!reviewableChange.hasChange()) {
             return null;
         }
 
@@ -49,15 +41,12 @@ public class ReviewableChangeService {
     }
 
     private void findValid(ReviewableChange reviewableChange) {
-        notNullnotNullId(reviewableChange);
-        LearningObject learningObject = learningObjectService.get(reviewableChange.getLearningObject().getId(), reviewableChange.getCreatedBy());
-        ValidatorUtil.mustHaveEntity(learningObject);
-    }
-
-    private void notNullnotNullId(ReviewableChange reviewableChange) {
-        if (reviewableChange == null || reviewableChange.getLearningObject() == null) {
+        //todo clear it up
+        if (reviewableChange.getLearningObject() == null) {
             throw new RuntimeException("Invalid changed learningObject");
         }
+        LearningObject learningObject = learningObjectService.get(reviewableChange.getLearningObject().getId(), reviewableChange.getCreatedBy());
+        ValidatorUtil.mustHaveEntity(learningObject);
     }
 
     public boolean acceptAllChanges(long id) {

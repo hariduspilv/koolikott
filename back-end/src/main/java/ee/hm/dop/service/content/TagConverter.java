@@ -12,12 +12,8 @@ import ee.hm.dop.service.solr.SolrEngineService;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class TagConverter {
-    public static final String TAXON = "taxon";
-    public static final String RESOURCETYPE = "resourcetype";
-    public static final String TARGETGROUP = "targetgroup";
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
@@ -32,35 +28,38 @@ public class TagConverter {
     private LearningObjectDao learningObjectDao;
 
     public TagDTO addChangeReturnTagDto(String tagName, LearningObject learningObject, User user) {
-        TagDTO tagDTO = new TagDTO();
-
         ReviewableChange reviewableChange = new ReviewableChange();
         reviewableChange.setLearningObject(learningObject);
         reviewableChange.setCreatedBy(user);
         reviewableChange.setCreatedAt(DateTime.now());
+        reviewableChange.setReviewed(false);
 
         Taxon taxon = taxonService.findTaxonByTranslation(tagName);
         ResourceType resourceType = resourceTypeService.findResourceByTranslation(tagName);
         TargetGroup targetGroup = targetGroupService.getByTranslation(tagName);
 
-        boolean hasChanged = false;
         if (taxon != null) {
-            addTaxon(learningObject, taxon);
-            reviewableChange.setTaxon(taxon);
-            tagDTO.setTagTypeName(TAXON);
-            hasChanged = true;
-        } else if (learningObject instanceof Material && resourceType != null) {
-            Material material = (Material) learningObject;
-            material.getResourceTypes().add(resourceType);
-            reviewableChange.setResourceType(resourceType);
-            tagDTO.setTagTypeName(RESOURCETYPE);
-            hasChanged = true;
+            learningObject.getTaxons().add(taxon);
+        } else if (resourceType != null) {
+            if (learningObject instanceof Material) {
+                Material material = (Material) learningObject;
+                material.getResourceTypes().add(resourceType);
+            }
         } else if (targetGroup != null) {
             learningObject.getTargetGroups().add(targetGroup);
-            reviewableChange.setTargetGroup(targetGroup);
-            tagDTO.setTagTypeName(TARGETGROUP);
-            hasChanged = true;
         }
+
+        if (taxon != null) {
+            reviewableChange.setTaxon(taxon);
+        } else if (resourceType != null) {
+            if (learningObject instanceof Material) {
+                reviewableChange.setResourceType(resourceType);
+            }
+        } else if (targetGroup != null) {
+            reviewableChange.setTargetGroup(targetGroup);
+        }
+
+        boolean hasChanged = reviewableChange.hasChange();
 
         if (learningObject.getUnReviewed() == 0) {
             reviewableChangeService.addChanged(reviewableChange);
@@ -68,18 +67,17 @@ public class TagConverter {
 
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
         updatedLearningObject.setChanged(hasChanged ? updatedLearningObject.getChanged() + 1 : updatedLearningObject.getChanged());
-        tagDTO.setLearningObject(updatedLearningObject);
 
         solrEngineService.updateIndex();
 
-        return tagDTO;
+        return convertDto(updatedLearningObject, reviewableChange.tagName());
     }
 
-    private void addTaxon(LearningObject learningObject, Taxon taxon) {
-        List<Taxon> learningObjectTaxons = learningObject.getTaxons();
-        if (learningObjectTaxons != null) {
-            learningObjectTaxons.add(taxon);
-        }
+    private TagDTO convertDto(LearningObject updatedLearningObject, String tagTypeName) {
+        TagDTO tagDTO = new TagDTO();
+        tagDTO.setLearningObject(updatedLearningObject);
+        tagDTO.setTagTypeName(tagTypeName);
+        return tagDTO;
     }
 
 }
