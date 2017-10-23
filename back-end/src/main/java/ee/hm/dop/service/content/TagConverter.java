@@ -9,11 +9,15 @@ import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
 public class TagConverter {
+
+    public static final String TAXON = "taxon";
+    public static final String RESOURCETYPE = "resourcetype";
+    public static final String TARGETGROUP = "targetgroup";
+
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
@@ -28,16 +32,54 @@ public class TagConverter {
     private LearningObjectDao learningObjectDao;
 
     public TagDTO addChangeReturnTagDto(String tagName, LearningObject learningObject, User user) {
-        ReviewableChange reviewableChange = new ReviewableChange();
-        reviewableChange.setLearningObject(learningObject);
-        reviewableChange.setCreatedBy(user);
-        reviewableChange.setCreatedAt(DateTime.now());
-        reviewableChange.setReviewed(false);
-
         Taxon taxon = taxonService.findTaxonByTranslation(tagName);
         ResourceType resourceType = resourceTypeService.findResourceByTranslation(tagName);
         TargetGroup targetGroup = targetGroupService.getByTranslation(tagName);
 
+        boolean changed = hasChanged(learningObject, taxon, resourceType, targetGroup);
+        String tagTypeName = tagName(taxon, resourceType, targetGroup);
+        if (!changed) {
+            return convertDto(learningObject, tagTypeName);
+        }
+
+        updateLO(learningObject, taxon, resourceType, targetGroup);
+        if (learningObject.getUnReviewed() == 0) {
+            reviewableChangeService.registerChange(learningObject, user, taxon, resourceType, targetGroup);
+        }
+        LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
+        updatedLearningObject.setChanged(updatedLearningObject.getChanged() + 1);
+        solrEngineService.updateIndex();
+        return convertDto(updatedLearningObject, tagTypeName);
+    }
+
+    private boolean hasChanged(LearningObject learningObject, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
+        boolean changed = false;
+        if (taxon != null) {
+            changed = true;
+        } else if (resourceType != null) {
+            if (learningObject instanceof Material) {
+                changed = true;
+            }
+        } else if (targetGroup != null) {
+            changed = true;
+        }
+        return changed;
+    }
+
+    private String tagName(Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
+        if (taxon != null) {
+            return TAXON;
+        }
+        if (resourceType != null) {
+            return RESOURCETYPE;
+        }
+        if (targetGroup != null) {
+            return TARGETGROUP;
+        }
+        return null;
+    }
+
+    private void updateLO(LearningObject learningObject, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
         if (taxon != null) {
             learningObject.getTaxons().add(taxon);
         } else if (resourceType != null) {
@@ -48,29 +90,6 @@ public class TagConverter {
         } else if (targetGroup != null) {
             learningObject.getTargetGroups().add(targetGroup);
         }
-
-        if (taxon != null) {
-            reviewableChange.setTaxon(taxon);
-        } else if (resourceType != null) {
-            if (learningObject instanceof Material) {
-                reviewableChange.setResourceType(resourceType);
-            }
-        } else if (targetGroup != null) {
-            reviewableChange.setTargetGroup(targetGroup);
-        }
-
-        boolean hasChanged = reviewableChange.hasChange();
-
-        if (learningObject.getUnReviewed() == 0) {
-            reviewableChangeService.addChanged(reviewableChange);
-        }
-
-        LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
-        updatedLearningObject.setChanged(hasChanged ? updatedLearningObject.getChanged() + 1 : updatedLearningObject.getChanged());
-
-        solrEngineService.updateIndex();
-
-        return convertDto(updatedLearningObject, reviewableChange.tagName());
     }
 
     private TagDTO convertDto(LearningObject updatedLearningObject, String tagTypeName) {
@@ -79,5 +98,4 @@ public class TagConverter {
         tagDTO.setTagTypeName(tagTypeName);
         return tagDTO;
     }
-
 }

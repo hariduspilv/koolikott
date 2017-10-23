@@ -15,11 +15,6 @@ import javax.persistence.*;
 @Entity
 public class ReviewableChange implements AbstractEntity {
 
-    public static final String TAXON = "taxon";
-    public static final String RESOURCETYPE = "resourcetype";
-    public static final String TARGETGROUP = "targetgroup";
-    public static final String MATERIALSOURCE = "url";
-
     @Id
     @GeneratedValue
     private Long id;
@@ -69,20 +64,6 @@ public class ReviewableChange implements AbstractEntity {
 
     @Column(columnDefinition = "TEXT")
     private String materialSource;
-
-    @JsonIgnore
-    public String tagName() {
-        if (this.getTaxon() != null) {
-            return TAXON;
-        }
-        if (this.getResourceType() != null) {
-            return RESOURCETYPE;
-        }
-        if (this.getTargetGroup() != null) {
-            return TARGETGROUP;
-        }
-        return MATERIALSOURCE;
-    }
 
     @JsonIgnore
     public boolean hasChange() {

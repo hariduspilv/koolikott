@@ -12,6 +12,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.Iterator;
@@ -30,6 +31,27 @@ public class ReviewableChangeService {
         return reviewableChangeDao.getAllByLearningObject(id);
     }
 
+    public void registerChange(LearningObject learningObject, User user, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
+        ReviewableChange reviewableChange = new ReviewableChange();
+        reviewableChange.setLearningObject(learningObject);
+        reviewableChange.setCreatedBy(user);
+        reviewableChange.setCreatedAt(DateTime.now());
+        reviewableChange.setReviewed(false);
+        if (taxon != null) {
+            reviewableChange.setTaxon(taxon);
+        } else if (resourceType != null) {
+            if (learningObject instanceof Material) {
+                reviewableChange.setResourceType(resourceType);
+            }
+        } else if (targetGroup != null) {
+            reviewableChange.setTargetGroup(targetGroup);
+        }
+        if (reviewableChange.hasChange()) {
+            reviewableChangeDao.createOrUpdate(reviewableChange);
+        }
+    }
+
+    @Deprecated
     public ReviewableChange addChanged(ReviewableChange reviewableChange) {
         findValid(reviewableChange);
 
@@ -41,10 +63,6 @@ public class ReviewableChangeService {
     }
 
     private void findValid(ReviewableChange reviewableChange) {
-        //todo clear it up
-        if (reviewableChange.getLearningObject() == null) {
-            throw new RuntimeException("Invalid changed learningObject");
-        }
         LearningObject learningObject = learningObjectService.get(reviewableChange.getLearningObject().getId(), reviewableChange.getCreatedBy());
         ValidatorUtil.mustHaveEntity(learningObject);
     }
@@ -119,7 +137,7 @@ public class ReviewableChangeService {
     public boolean learningObjectHasThis(LearningObject learningObject, ReviewableChange change) {
         if (change.getTaxon() != null) {
             return learningObject.getTaxons() != null && learningObject.getTaxons().contains(change.getTaxon());
-        }  else if (change.getTargetGroup() != null) {
+        } else if (change.getTargetGroup() != null) {
             return learningObject.getTargetGroups() != null && learningObject.getTargetGroups().contains(change.getTargetGroup());
         } else if (change.getResourceType() != null && learningObject instanceof Material) {
             Material material = (Material) learningObject;
