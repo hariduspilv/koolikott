@@ -1,4 +1,4 @@
-package ee.hm.dop.service.content;
+package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.LearningObjectDao;
@@ -11,6 +11,7 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import org.easymock.EasyMockRunner;

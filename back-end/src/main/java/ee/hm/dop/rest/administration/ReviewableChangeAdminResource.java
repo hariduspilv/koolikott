@@ -52,7 +52,7 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChange(@PathParam("id") long id) {
+    public List<ReviewableChange> getChange(@PathParam("id") Long id) {
         return reviewableChangeService.getAllByLearningObject(id);
     }
 

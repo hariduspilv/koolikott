@@ -47,7 +47,9 @@ public class PortfolioService {
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
-        processChanges(portfolio);
+        if (updatedPortfolio.getUnReviewed() == 0) {
+            reviewableChangeService.processChanges(updatedPortfolio);
+        }
 
         return updatedPortfolio;
     }
@@ -70,17 +72,6 @@ public class PortfolioService {
                         return chapterObjectDao.update((ChapterObject) learningObject);
                     } else return learningObject;
                 }));
-    }
-
-    private void processChanges(Portfolio portfolio) {
-        List<ReviewableChange> changes = reviewableChangeService.getAllByLearningObject(portfolio.getId());
-        if (CollectionUtils.isNotEmpty(changes)) {
-            for (ReviewableChange change : changes) {
-                if (!reviewableChangeService.learningObjectHasThis(portfolio, change)) {
-                    reviewableChangeService.removeChangeById(change.getId());
-                }
-            }
-        }
     }
 
     public Portfolio create(Portfolio portfolio, User creator) {

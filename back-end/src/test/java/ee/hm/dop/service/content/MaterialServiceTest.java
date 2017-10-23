@@ -162,7 +162,9 @@ public class MaterialServiceTest {
         expect(materialGetter.get(materialId, null)).andReturn(original);
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(material.getId()).andReturn(1L);
+        expect(material.getUnReviewed()).andReturn(0);
+
+        reviewableChangeService.processChanges(material);
 
         replay(materialDao, material, solrEngineService, materialGetter);
 
@@ -180,12 +182,7 @@ public class MaterialServiceTest {
     public void updateWhenMaterialDoesNotExist() {
         long materialId = 1;
         Material material = createMock(Material.class);
-        material.setSource(SOURCE);
         expect(material.getId()).andReturn(materialId).times(2);
-        expect(material.getSource()).andReturn(SOURCE).times(3);
-
-        expect(material.getPeerReviews()).andReturn(null);
-        expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(materialId,null)).andReturn(null);
 
         replay(materialDao, material, materialGetter);
@@ -244,7 +241,8 @@ public class MaterialServiceTest {
 
         expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
-        expect(material.getId()).andReturn(1L);
+        expect(material.getUnReviewed()).andReturn(0);
+        reviewableChangeService.processChanges(material);
 
         replay(materialDao, material, materialGetter);
 
@@ -297,6 +295,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
+        reviewableChangeService.processChanges(material);
 
         replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
 
@@ -322,6 +321,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
+        reviewableChangeService.processChanges(material);
 
         replay(user, materialDao, reviewableChangeService, materialGetter);
 

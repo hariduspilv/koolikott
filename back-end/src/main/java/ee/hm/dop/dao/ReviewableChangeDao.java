@@ -12,8 +12,10 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     @Inject
     private TaxonDao taxonDao;
 
-    public List<ReviewableChange> getAllByLearningObject(long learningObjectId) {
-        return getEntityManager().createQuery("FROM ReviewableChange clo WHERE clo.learningObject.id = :id", entity()) //
+    public List<ReviewableChange> getAllByLearningObject(Long learningObjectId) {
+        return getEntityManager().createQuery("FROM ReviewableChange clo " +
+                "       WHERE clo.learningObject.id = :id" +
+                "       AND clo.reviewed = 0", entity()) //
                 .setParameter("id", learningObjectId).getResultList();
     }
 

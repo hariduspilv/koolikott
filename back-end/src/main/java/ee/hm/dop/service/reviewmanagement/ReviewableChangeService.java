@@ -1,13 +1,8 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.model.ReviewableChange;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.ReviewableChangeDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -27,7 +22,7 @@ public class ReviewableChangeService {
     @Inject
     private LearningObjectService learningObjectService;
 
-    public List<ReviewableChange> getAllByLearningObject(long id) {
+    public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
     }
 
@@ -51,26 +46,42 @@ public class ReviewableChangeService {
         }
     }
 
+    public void processChanges(LearningObject learningObject) {
+        //todo register logic
+        List<ReviewableChange> changes = learningObject.getReviewableChanges();
+        //todo remove isNotEmty check
+        if (CollectionUtils.isNotEmpty(changes)) {
+            for (ReviewableChange change : changes) {
+                if (!learningObjectHasThis(learningObject, change)) {
+                    removeChangeById(change.getId());
+                }
+            }
+        }
+    }
+
+    boolean learningObjectHasThis(LearningObject learningObject, ReviewableChange change) {
+        if (change.getTaxon() != null) {
+            return learningObject.getTaxons() != null && learningObject.getTaxons().contains(change.getTaxon());
+        } else if (change.getTargetGroup() != null) {
+            return learningObject.getTargetGroups() != null && learningObject.getTargetGroups().contains(change.getTargetGroup());
+        } else if (change.getResourceType() != null && learningObject instanceof Material) {
+            Material material = (Material) learningObject;
+            return material.getResourceTypes() != null && material.getResourceTypes().contains(change.getResourceType());
+        }
+        return false;
+    }
+
     @Deprecated
     public ReviewableChange addChanged(ReviewableChange reviewableChange) {
-        findValid(reviewableChange);
-
-        if (!reviewableChange.hasChange()) {
-            return null;
-        }
-
-        return reviewableChangeDao.createOrUpdate(reviewableChange);
+        return reviewableChange.hasChange() ? reviewableChangeDao.createOrUpdate(reviewableChange) : null;
     }
 
-    private void findValid(ReviewableChange reviewableChange) {
-        LearningObject learningObject = learningObjectService.get(reviewableChange.getLearningObject().getId(), reviewableChange.getCreatedBy());
-        ValidatorUtil.mustHaveEntity(learningObject);
-    }
-
+    @Deprecated
     public boolean acceptAllChanges(long id) {
         return reviewableChangeDao.removeAllByLearningObject(id);
     }
 
+    @Deprecated
     public LearningObject revertAllChanges(long id, User user) {
         LearningObject learningObject = learningObjectService.get(id, user);
         ValidatorUtil.mustHaveEntity(learningObject);
@@ -130,19 +141,8 @@ public class ReviewableChangeService {
         }
     }
 
+    @Deprecated
     public void removeChangeById(long id) {
         reviewableChangeDao.removeById(id);
-    }
-
-    public boolean learningObjectHasThis(LearningObject learningObject, ReviewableChange change) {
-        if (change.getTaxon() != null) {
-            return learningObject.getTaxons() != null && learningObject.getTaxons().contains(change.getTaxon());
-        } else if (change.getTargetGroup() != null) {
-            return learningObject.getTargetGroups() != null && learningObject.getTargetGroups().contains(change.getTargetGroup());
-        } else if (change.getResourceType() != null && learningObject instanceof Material) {
-            Material material = (Material) learningObject;
-            return material.getResourceTypes() != null && material.getResourceTypes().contains(change.getResourceType());
-        }
-        return false;
     }
 }

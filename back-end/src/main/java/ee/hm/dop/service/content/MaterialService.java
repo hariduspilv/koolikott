@@ -75,6 +75,7 @@ public class MaterialService {
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
+        firstReviewAdminService.save(createdMaterial);
         return createdMaterial;
     }
 
@@ -94,15 +95,13 @@ public class MaterialService {
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
         ValidatorUtil.mustHaveId(material);
+        Material originalMaterial = materialGetter.get(material.getId(), changer);
+        mustHavePermission(changer, originalMaterial);
+        mustBeValid(originalMaterial, changer);
         material.setSource(UrlUtil.processURL(material.getSource()));
-
-        if (materialWithSameSourceExists(material)) {
-            throw new IllegalArgumentException("Error updating Material: material with given source already exists");
-        }
+        mustHaveUniqueSource(material);
 
         cleanPeerReviewUrls(material);
-        Material originalMaterial = materialGetter.get(material.getId(), changer);
-        validateMaterialUpdate(originalMaterial, changer);
         if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
@@ -111,31 +110,25 @@ public class MaterialService {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        Material updatedMaterial = getUpdatedMaterial(material, changer, strategy, originalMaterial);
-        processChanges(updatedMaterial);
+        Material updatedMaterial = createOrUpdate(material);
+        if (strategy.updateIndex()) {
+            solrEngineService.updateIndex();
+        }
+        if (updatedMaterial.getUnReviewed() == 0) {
+            reviewableChangeService.processChanges(updatedMaterial);
+        }
         return updatedMaterial;
     }
 
-    private Material getUpdatedMaterial(Material material, User changer, SearchIndexStrategy strategy, Material originalMaterial) {
-        //Null changer is the automated updating of materials during synchronization
-        if (changer == null || UserUtil.isAdminOrModerator(changer) || UserUtil.isCreator(originalMaterial, changer)) {
-            Material updatedMaterial = createOrUpdate(material);
-            if (strategy.updateIndex()) {
-                solrEngineService.updateIndex();
-            }
-            return updatedMaterial;
+    private void mustHaveUniqueSource(Material material) {
+        if (materialWithSameSourceExists(material)) {
+            throw new IllegalArgumentException("Error updating Material: material with given source already exists");
         }
-        throw ValidatorUtil.permissionError();
     }
 
-    private void processChanges(Material material) {
-        List<ReviewableChange> changes = reviewableChangeService.getAllByLearningObject(material.getId());
-        if (isNotEmpty(changes)) {
-            for (ReviewableChange change : changes) {
-                if (!reviewableChangeService.learningObjectHasThis(material, change)) {
-                    reviewableChangeService.removeChangeById(change.getId());
-                }
-            }
+    private void mustHavePermission(User changer, Material originalMaterial) {
+        if (changer != null && !UserUtil.isAdminOrModerator(changer) && !UserUtil.isCreator(originalMaterial, changer)) {
+            throw ValidatorUtil.permissionError();
         }
     }
 
@@ -158,7 +151,7 @@ public class MaterialService {
                         .noneMatch(m -> m.getId().equals(material.getId()));
     }
 
-    private void validateMaterialUpdate(Material originalMaterial, User changer) {
+    private void mustBeValid(Material originalMaterial, User changer) {
         if (originalMaterial == null) {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
@@ -170,14 +163,13 @@ public class MaterialService {
 
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
-        boolean isNew;
-        if (materialId == null) {
+        boolean isNew = materialId == null;
+
+        if (isNew) {
             logger.info("Creating material");
             material.setAdded(now());
-            isNew = true;
         } else {
             logger.info("Updating material");
-            isNew = false;
         }
         TextFieldUtil.cleanTextFields(material);
         checkKeyCompetences(material);
@@ -188,12 +180,7 @@ public class MaterialService {
         material = applyRestrictions(material);
         material.setVisibility(Visibility.PUBLIC);
 
-        Material updatedMaterial = materialDao.createOrUpdate(material);
-        if (isNew) {
-            firstReviewAdminService.save(updatedMaterial);
-        }
-
-        return updatedMaterial;
+        return materialDao.createOrUpdate(material);
     }
 
     private Material applyRestrictions(Material material) {
