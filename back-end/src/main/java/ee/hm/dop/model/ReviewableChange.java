@@ -3,6 +3,7 @@ package ee.hm.dop.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
@@ -12,7 +13,7 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 @Entity
-public class ChangedLearningObject implements AbstractEntity {
+public class ReviewableChange implements AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -35,18 +36,34 @@ public class ChangedLearningObject implements AbstractEntity {
     private TargetGroup targetGroup;
 
     @ManyToOne
-    @JoinColumn(name = "changer")
-    private User changer;
+    @JoinColumn(name = "createdBy")
+    private User createdBy;
 
     @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private DateTime createdAt;
+
+    @Column(nullable = false)
+    private boolean reviewed = false;
+
+    @ManyToOne
+    @JoinColumn(name = "reviewedBy")
+    private User reviewedBy;
+
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime reviewedAt;
+
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
 
     @JsonIgnore
-    public boolean hasChange(ChangedLearningObject changedLearningObject) {
-        return changedLearningObject.getTaxon() != null || changedLearningObject.getResourceType() != null || changedLearningObject.getTargetGroup() != null;
+    public boolean hasChange(ReviewableChange reviewableChange) {
+        return reviewableChange.getTaxon() != null || reviewableChange.getResourceType() != null || reviewableChange.getTargetGroup() != null;
     }
 
     public Long getId() {
@@ -89,19 +106,43 @@ public class ChangedLearningObject implements AbstractEntity {
         this.targetGroup = targetGroup;
     }
 
-    public User getChanger() {
-        return changer;
+    public User getCreatedBy() {
+        return createdBy;
     }
 
-    public void setChanger(User changer) {
-        this.changer = changer;
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public DateTime getAdded() {
-        return added;
+    public DateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setAdded(DateTime added) {
-        this.added = added;
+    public void setCreatedAt(DateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public User getReviewedBy() {
+        return reviewedBy;
+    }
+
+    public void setReviewedBy(User reviewedBy) {
+        this.reviewedBy = reviewedBy;
+    }
+
+    public DateTime getReviewedAt() {
+        return reviewedAt;
+    }
+
+    public void setReviewedAt(DateTime reviewedAt) {
+        this.reviewedAt = reviewedAt;
+    }
+
+    public ReviewStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReviewStatus status) {
+        this.status = status;
     }
 }

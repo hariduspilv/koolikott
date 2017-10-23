@@ -1,8 +1,8 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.ChangedLearningObjectDao;
+import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.model.ChangedLearningObject;
+import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ResourceType;
@@ -17,62 +17,62 @@ import javax.inject.Inject;
 import java.util.Iterator;
 import java.util.List;
 
-public class ChangedLearningObjectService {
+public class ReviewableChangeService {
 
     @Inject
-    private ChangedLearningObjectDao changedLearningObjectDao;
+    private ReviewableChangeDao reviewableChangeDao;
     @Inject
     private LearningObjectDao learningObjectDao;
     @Inject
     private LearningObjectService learningObjectService;
 
     public long getCount() {
-        return changedLearningObjectDao.getCount();
+        return reviewableChangeDao.getCount();
     }
 
-    public List<ChangedLearningObject> findAll() {
-        return changedLearningObjectDao.findAll();
+    public List<ReviewableChange> findAll() {
+        return reviewableChangeDao.findAll();
     }
 
-    public List<ChangedLearningObject> getAllByLearningObject(long id) {
-        return changedLearningObjectDao.getAllByLearningObject(id);
+    public List<ReviewableChange> getAllByLearningObject(long id) {
+        return reviewableChangeDao.getAllByLearningObject(id);
     }
 
-    public ChangedLearningObject addChanged(ChangedLearningObject changedLearningObject) {
-        findValid(changedLearningObject);
+    public ReviewableChange addChanged(ReviewableChange reviewableChange) {
+        findValid(reviewableChange);
 
-        if (!changedLearningObject.hasChange(changedLearningObject)) {
+        if (!reviewableChange.hasChange(reviewableChange)) {
             return null;
         }
 
-        return changedLearningObjectDao.createOrUpdate(changedLearningObject);
+        return reviewableChangeDao.createOrUpdate(reviewableChange);
     }
 
-    private void findValid(ChangedLearningObject changedLearningObject) {
-        notNullnotNullId(changedLearningObject);
-        LearningObject learningObject = learningObjectService.get(changedLearningObject.getLearningObject().getId(), changedLearningObject.getChanger());
+    private void findValid(ReviewableChange reviewableChange) {
+        notNullnotNullId(reviewableChange);
+        LearningObject learningObject = learningObjectService.get(reviewableChange.getLearningObject().getId(), reviewableChange.getCreatedBy());
         ValidatorUtil.mustHaveEntity(learningObject);
     }
 
-    private void notNullnotNullId(ChangedLearningObject changedLearningObject) {
-        if (changedLearningObject == null || changedLearningObject.getLearningObject() == null) {
+    private void notNullnotNullId(ReviewableChange reviewableChange) {
+        if (reviewableChange == null || reviewableChange.getLearningObject() == null) {
             throw new RuntimeException("Invalid changed learningObject");
         }
     }
 
     public boolean acceptAllChanges(long id) {
-        return changedLearningObjectDao.removeAllByLearningObject(id);
+        return reviewableChangeDao.removeAllByLearningObject(id);
     }
 
     public LearningObject revertAllChanges(long id, User user) {
         LearningObject learningObject = learningObjectService.get(id, user);
         ValidatorUtil.mustHaveEntity(learningObject);
-        List<ChangedLearningObject> changedLearningObjects = changedLearningObjectDao.getAllByLearningObject(id);
-        if (CollectionUtils.isEmpty(changedLearningObjects)) {
+        List<ReviewableChange> reviewableChanges = reviewableChangeDao.getAllByLearningObject(id);
+        if (CollectionUtils.isEmpty(reviewableChanges)) {
             throw new RuntimeException("No changes for this learningObject");
         }
 
-        for (ChangedLearningObject change : changedLearningObjects) {
+        for (ReviewableChange change : reviewableChanges) {
             if (change.getTaxon() != null) {
                 removeTaxonFromLearningObject(learningObject, change.getTaxon());
             } else if (change.getResourceType() != null) {
@@ -124,10 +124,10 @@ public class ChangedLearningObjectService {
     }
 
     public void removeChangeById(long id) {
-        changedLearningObjectDao.removeById(id);
+        reviewableChangeDao.removeById(id);
     }
 
-    public boolean learningObjectHasThis(LearningObject learningObject, ChangedLearningObject change) {
+    public boolean learningObjectHasThis(LearningObject learningObject, ReviewableChange change) {
         if (change.getTaxon() != null) {
             return learningObject.getTaxons() != null && learningObject.getTaxons().contains(change.getTaxon());
         }  else if (change.getTargetGroup() != null) {

@@ -155,7 +155,7 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.reviewed = 0)")
     private int improper;
 
-    @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
+    @Formula(value = "(SELECT COUNT(*) FROM ReviewableChange rc WHERE rc.learningObject = id and rc.reviewed = 0)")
     private int changed;
 
     @Formula(value = "(SELECT COUNT(*) FROM FirstReview fr WHERE fr.learningObject = id AND fr.reviewed = 0)")

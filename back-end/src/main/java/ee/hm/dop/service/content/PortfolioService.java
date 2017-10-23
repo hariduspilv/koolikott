@@ -2,23 +2,18 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.ChapterObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
-import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -32,7 +27,7 @@ public class PortfolioService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Inject
     private PortfolioConverter portfolioConverter;
     @Inject
@@ -78,11 +73,11 @@ public class PortfolioService {
     }
 
     private void processChanges(Portfolio portfolio) {
-        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
+        List<ReviewableChange> changes = reviewableChangeService.getAllByLearningObject(portfolio.getId());
         if (CollectionUtils.isNotEmpty(changes)) {
-            for (ChangedLearningObject change : changes) {
-                if (!changedLearningObjectService.learningObjectHasThis(portfolio, change)) {
-                    changedLearningObjectService.removeChangeById(change.getId());
+            for (ReviewableChange change : changes) {
+                if (!reviewableChangeService.learningObjectHasThis(portfolio, change)) {
+                    reviewableChangeService.removeChangeById(change.getId());
                 }
             }
         }

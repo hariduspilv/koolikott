@@ -15,7 +15,7 @@ import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -50,7 +50,7 @@ public class MaterialServiceTest {
     @Mock
     private PeerReviewService peerReviewService;
     @Mock
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Mock
     private FirstReviewAdminService firstReviewAdminService;
     @Mock
@@ -295,10 +295,10 @@ public class MaterialServiceTest {
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
+        expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
 
-        replay(user, materialDao, solrEngineService, changedLearningObjectService, materialGetter);
+        replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
 
         Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 
@@ -321,9 +321,9 @@ public class MaterialServiceTest {
         expect(user.getId()).andReturn(1L).anyTimes();
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
-        expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
+        expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
 
-        replay(user, materialDao, changedLearningObjectService, materialGetter);
+        replay(user, materialDao, reviewableChangeService, materialGetter);
 
         Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 

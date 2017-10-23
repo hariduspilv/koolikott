@@ -32,7 +32,7 @@ public class LearningObjectAdministrationServiceTest {
     @Mock
     private PeerReviewService peerReviewService;
     @Mock
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Mock
     private FirstReviewAdminService firstReviewAdminService;
     @Mock

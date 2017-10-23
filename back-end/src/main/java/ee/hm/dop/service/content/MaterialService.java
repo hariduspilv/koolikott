@@ -1,7 +1,6 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -12,7 +11,7 @@ import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
@@ -23,10 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
@@ -42,7 +39,7 @@ public class MaterialService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Inject
     private Configuration configuration;
     @Inject
@@ -132,11 +129,11 @@ public class MaterialService {
     }
 
     private void processChanges(Material material) {
-        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(material.getId());
+        List<ReviewableChange> changes = reviewableChangeService.getAllByLearningObject(material.getId());
         if (isNotEmpty(changes)) {
-            for (ChangedLearningObject change : changes) {
-                if (!changedLearningObjectService.learningObjectHasThis(material, change)) {
-                    changedLearningObjectService.removeChangeById(change.getId());
+            for (ReviewableChange change : changes) {
+                if (!reviewableChangeService.learningObjectHasThis(material, change)) {
+                    reviewableChangeService.removeChangeById(change.getId());
                 }
             }
         }

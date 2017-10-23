@@ -1,8 +1,7 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
-import ee.hm.dop.model.ChangedLearningObject;
+import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.taxon.Taxon;
@@ -18,7 +17,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationTestBase {
+public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_ALL_CHANGES = "admin/changed/";
     private static final String GET_CHANGES_BY_ID = "admin/changed/%s";
@@ -42,12 +41,12 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
 
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
 
-        List<ChangedLearningObject> changedLearningObjects = doGet(GET_ALL_CHANGES, list());
-        assertTrue(CollectionUtils.isNotEmpty(changedLearningObjects));
-        isChanged(changedLearningObjects);
-        countEqual(changedLearnigObjectsCount, changedLearningObjects);
+        List<ReviewableChange> reviewableChanges = doGet(GET_ALL_CHANGES, list());
+        assertTrue(CollectionUtils.isNotEmpty(reviewableChanges));
+        isChanged(reviewableChanges);
+        countEqual(changedLearnigObjectsCount, reviewableChanges);
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
+        List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
         assertTrue(CollectionUtils.isNotEmpty(changedLearningObjectsById));
         isChanged(changedLearningObjectsById);
         idsEqual(changedLearningObjectsById, MATERIAL_5);
@@ -60,7 +59,7 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         login(USER_ADMIN);
         changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
+        List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
 
         assertTrue(CollectionUtils.isEmpty(changedLearningObjectsById));
         isChanged(changedLearningObjectsById);
@@ -85,15 +84,15 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         changeMaterial(MATERIAL_5);
         doGet(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_5));
 
-        List<ChangedLearningObject> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
+        List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
         assertTrue(changedLearningObjectsById.isEmpty());
 
         doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
     }
 
-    private void isChanged(List<ChangedLearningObject> changedLearningObjects) {
-        assertTrue("LearningObjects are changed", changedLearningObjects.stream()
-                .map(ChangedLearningObject::getLearningObject)
+    private void isChanged(List<ReviewableChange> reviewableChanges) {
+        assertTrue("LearningObjects are changed", reviewableChanges.stream()
+                .map(ReviewableChange::getLearningObject)
                 .map(LearningObject::getChanged)
                 .allMatch(integer -> integer > 0));
     }
@@ -108,18 +107,18 @@ public class ChangedLearningObjectAdminResourceTest extends ResourceIntegrationT
         doGet(format(ADD_SYSTEM_TAG_URL, materialId, TYPE_MATERIAL, TEST_SYSTEM_TAG));
     }
 
-    private GenericType<List<ChangedLearningObject>> list() {
-        return new GenericType<List<ChangedLearningObject>>() {
+    private GenericType<List<ReviewableChange>> list() {
+        return new GenericType<List<ReviewableChange>>() {
         };
     }
 
-    private void countEqual(long changedLearnigObjectsCount, List<ChangedLearningObject> changedLearningObjects) {
-        assertEquals("Changed learningObject list size, changed learningObject count", changedLearningObjects.size(), changedLearnigObjectsCount);
+    private void countEqual(long changedLearnigObjectsCount, List<ReviewableChange> reviewableChanges) {
+        assertEquals("Changed learningObject list size, changed learningObject count", reviewableChanges.size(), changedLearnigObjectsCount);
     }
 
-    private void idsEqual(List<ChangedLearningObject> changedLearningObjectsById, long materialId) {
+    private void idsEqual(List<ReviewableChange> changedLearningObjectsById, long materialId) {
         assertTrue("Changed learningObject id", changedLearningObjectsById.stream()
-                .map(ChangedLearningObject::getLearningObject)
+                .map(ReviewableChange::getLearningObject)
                 .allMatch(learningObject -> learningObject.getId().equals(materialId)));
     }
 }

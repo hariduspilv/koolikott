@@ -1,8 +1,8 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.ChangedLearningObjectDao;
+import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.model.ChangedLearningObject;
+import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -11,7 +11,7 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -27,23 +27,23 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
 @RunWith(EasyMockRunner.class)
-public class ChangedLearningObjectServiceTest {
+public class ReviewableChangeServiceTest {
 
     @TestSubject
-    private ChangedLearningObjectService changedLearningObjectService = new ChangedLearningObjectService();
+    private ReviewableChangeService reviewableChangeService = new ReviewableChangeService();
 
     @Mock
     private LearningObjectService learningObjectService;
 
     @Mock
-    private ChangedLearningObjectDao changedLearningObjectDao;
+    private ReviewableChangeDao reviewableChangeDao;
 
     @Mock
     private LearningObjectDao learningObjectDao;
 
     @Test
     public void addChanged() {
-        ChangedLearningObject changedLearningObject = new ChangedLearningObject();
+        ReviewableChange reviewableChange = new ReviewableChange();
         Material material = new Material();
         material.setId(1L);
         ResourceType resourceType = new ResourceType();
@@ -51,27 +51,27 @@ public class ChangedLearningObjectServiceTest {
         User user = new User();
         user.setId(1L);
 
-        changedLearningObject.setLearningObject(material);
-        changedLearningObject.setResourceType(resourceType);
-        changedLearningObject.setChanger(user);
+        reviewableChange.setLearningObject(material);
+        reviewableChange.setResourceType(resourceType);
+        reviewableChange.setCreatedBy(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(changedLearningObjectDao.createOrUpdate(changedLearningObject)).andReturn(changedLearningObject);
-        expect(changedLearningObjectDao.findAll()).andReturn(Collections.singletonList(changedLearningObject));
+        expect(reviewableChangeDao.createOrUpdate(reviewableChange)).andReturn(reviewableChange);
+        expect(reviewableChangeDao.findAll()).andReturn(Collections.singletonList(reviewableChange));
         replay(learningObjectService);
-        replay(changedLearningObjectDao);
+        replay(reviewableChangeDao);
 
-        ChangedLearningObject updated = changedLearningObjectService.addChanged(changedLearningObject);
+        ReviewableChange updated = reviewableChangeService.addChanged(reviewableChange);
 
-        assertEquals(changedLearningObject.getId(), updated.getId());
+        assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());
-        assertTrue(changedLearningObjectService.findAll().size() == 1);
+        assertTrue(reviewableChangeService.findAll().size() == 1);
     }
 
     @Test
     public void revertAllChanges() {
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
+        ReviewableChange change1 = new ReviewableChange();
+        ReviewableChange change2 = new ReviewableChange();
         Material material = new Material();
         ResourceType resourceType = new ResourceType();
         TargetGroup targetGroup = new TargetGroup();
@@ -86,21 +86,21 @@ public class ChangedLearningObjectServiceTest {
 
         change1.setLearningObject(material);
         change1.setResourceType(resourceType);
-        change1.setChanger(user);
+        change1.setCreatedBy(user);
 
         change2.setLearningObject(material);
         change2.setTargetGroup(targetGroup);
-        change2.setChanger(user);
+        change2.setCreatedBy(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(changedLearningObjectDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
-        expect(changedLearningObjectDao.removeAllByLearningObject(1L)).andReturn(true);
+        expect(reviewableChangeDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
+        expect(reviewableChangeDao.removeAllByLearningObject(1L)).andReturn(true);
         expect(learningObjectDao.createOrUpdate(material)).andReturn(material);
         replay(learningObjectService);
-        replay(changedLearningObjectDao);
+        replay(reviewableChangeDao);
         replay(learningObjectDao);
 
-        LearningObject updated = changedLearningObjectService.revertAllChanges(1L, user);
+        LearningObject updated = reviewableChangeService.revertAllChanges(1L, user);
 
         assertTrue(updated.getTargetGroups().size() == 0);
         assertTrue(((Material) updated).getResourceTypes().size() == 0);
@@ -110,9 +110,9 @@ public class ChangedLearningObjectServiceTest {
     public void materialHasThisTaxon() {
         Material material = new Material();
 
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
-        ChangedLearningObject change3 = new ChangedLearningObject();
+        ReviewableChange change1 = new ReviewableChange();
+        ReviewableChange change2 = new ReviewableChange();
+        ReviewableChange change3 = new ReviewableChange();
 
         Taxon subject = new Subject();
         TargetGroup targetGroup = new TargetGroup();
@@ -124,18 +124,18 @@ public class ChangedLearningObjectServiceTest {
 
         material.setTaxons(Collections.singletonList(subject));
 
-        assertTrue(changedLearningObjectService.learningObjectHasThis(material, change1));
-        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change2));
-        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change3));
+        assertTrue(reviewableChangeService.learningObjectHasThis(material, change1));
+        assertFalse(reviewableChangeService.learningObjectHasThis(material, change2));
+        assertFalse(reviewableChangeService.learningObjectHasThis(material, change3));
     }
 
     @Test
     public void materialHasThisResourceType() {
         Material material = new Material();
 
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
-        ChangedLearningObject change3 = new ChangedLearningObject();
+        ReviewableChange change1 = new ReviewableChange();
+        ReviewableChange change2 = new ReviewableChange();
+        ReviewableChange change3 = new ReviewableChange();
 
         Taxon subject = new Subject();
         TargetGroup targetGroup = new TargetGroup();
@@ -147,18 +147,18 @@ public class ChangedLearningObjectServiceTest {
 
         material.setResourceTypes(Collections.singletonList(resourceType));
 
-        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change1));
-        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change2));
-        assertTrue(changedLearningObjectService.learningObjectHasThis(material, change3));
+        assertFalse(reviewableChangeService.learningObjectHasThis(material, change1));
+        assertFalse(reviewableChangeService.learningObjectHasThis(material, change2));
+        assertTrue(reviewableChangeService.learningObjectHasThis(material, change3));
     }
 
     @Test
     public void materialHasThisTargetGroup() {
         Material material = new Material();
 
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
-        ChangedLearningObject change3 = new ChangedLearningObject();
+        ReviewableChange change1 = new ReviewableChange();
+        ReviewableChange change2 = new ReviewableChange();
+        ReviewableChange change3 = new ReviewableChange();
 
         Taxon subject = new Subject();
         TargetGroup targetGroup = new TargetGroup();
@@ -170,17 +170,17 @@ public class ChangedLearningObjectServiceTest {
 
         material.setTargetGroups(Collections.singletonList(targetGroup));
 
-        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change1));
-        assertTrue(changedLearningObjectService.learningObjectHasThis(material, change2));
-        assertFalse(changedLearningObjectService.learningObjectHasThis(material, change3));
+        assertFalse(reviewableChangeService.learningObjectHasThis(material, change1));
+        assertTrue(reviewableChangeService.learningObjectHasThis(material, change2));
+        assertFalse(reviewableChangeService.learningObjectHasThis(material, change3));
     }
 
     @Test
     public void portfolioHasThisTaxon() {
         Portfolio portfolio = new Portfolio();
 
-        ChangedLearningObject change1 = new ChangedLearningObject();
-        ChangedLearningObject change2 = new ChangedLearningObject();
+        ReviewableChange change1 = new ReviewableChange();
+        ReviewableChange change2 = new ReviewableChange();
 
         Taxon subject = new Subject();
         TargetGroup targetGroup = new TargetGroup();
@@ -190,7 +190,7 @@ public class ChangedLearningObjectServiceTest {
 
         portfolio.setTargetGroups(Collections.singletonList(targetGroup));
 
-        assertFalse(changedLearningObjectService.learningObjectHasThis(portfolio, change1));
-        assertTrue(changedLearningObjectService.learningObjectHasThis(portfolio, change2));
+        assertFalse(reviewableChangeService.learningObjectHasThis(portfolio, change1));
+        assertTrue(reviewableChangeService.learningObjectHasThis(portfolio, change2));
     }
 }

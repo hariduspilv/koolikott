@@ -7,8 +7,7 @@ import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.ResourceTypeService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
-import ee.hm.dop.service.reviewmanagement.ReviewManager;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.joda.time.DateTime;
 
@@ -28,17 +27,17 @@ public class TagConverter {
     @Inject
     private ResourceTypeService resourceTypeService;
     @Inject
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Inject
     private LearningObjectDao learningObjectDao;
 
     public TagDTO addChangeReturnTagDto(String tagName, LearningObject learningObject, User user) {
         TagDTO tagDTO = new TagDTO();
 
-        ChangedLearningObject changedLearningObject = new ChangedLearningObject();
-        changedLearningObject.setLearningObject(learningObject);
-        changedLearningObject.setChanger(user);
-        changedLearningObject.setAdded(DateTime.now());
+        ReviewableChange reviewableChange = new ReviewableChange();
+        reviewableChange.setLearningObject(learningObject);
+        reviewableChange.setCreatedBy(user);
+        reviewableChange.setCreatedAt(DateTime.now());
 
         Taxon taxon = taxonService.findTaxonByTranslation(tagName);
         ResourceType resourceType = resourceTypeService.findResourceByTranslation(tagName);
@@ -47,24 +46,24 @@ public class TagConverter {
         boolean hasChanged = false;
         if (taxon != null) {
             addTaxon(learningObject, taxon);
-            changedLearningObject.setTaxon(taxon);
+            reviewableChange.setTaxon(taxon);
             tagDTO.setTagTypeName(TAXON);
             hasChanged = true;
         } else if (learningObject instanceof Material && resourceType != null) {
             Material material = (Material) learningObject;
             material.getResourceTypes().add(resourceType);
-            changedLearningObject.setResourceType(resourceType);
+            reviewableChange.setResourceType(resourceType);
             tagDTO.setTagTypeName(RESOURCETYPE);
             hasChanged = true;
         } else if (targetGroup != null) {
             learningObject.getTargetGroups().add(targetGroup);
-            changedLearningObject.setTargetGroup(targetGroup);
+            reviewableChange.setTargetGroup(targetGroup);
             tagDTO.setTagTypeName(TARGETGROUP);
             hasChanged = true;
         }
 
         if (learningObject.getUnReviewed() == 0) {
-            changedLearningObjectService.addChanged(changedLearningObject);
+            reviewableChangeService.addChanged(reviewableChange);
         }
 
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
