@@ -3,10 +3,10 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
-import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 import javax.annotation.security.RolesAllowed;
@@ -47,6 +47,6 @@ public class FirstReviewAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setReviewed(LearningObject learningObject) {
-        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED);
+        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED, ReviewType.FIRST);
     }
 }
