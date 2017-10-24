@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.RoleDeserializer;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
@@ -100,7 +99,7 @@ public class User implements AbstractEntity {
         return role;
     }
 
-    @JsonDeserialize(contentUsing = RoleDeserializer.class)
+    @JsonIgnore
     public void setRole(Role role) {
         this.role = role;
     }

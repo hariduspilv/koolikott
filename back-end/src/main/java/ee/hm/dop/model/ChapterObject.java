@@ -3,10 +3,6 @@ package ee.hm.dop.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-/**
- * Created by mart on 12.12.16.
- */
-
 @Entity
 public class ChapterObject extends LearningObject implements Searchable {
 

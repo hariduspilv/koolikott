@@ -25,10 +25,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * Created by mart on 10.11.15.
- */
-
 @RunWith(EasyMockRunner.class)
 public class MaterialParserTest {
 

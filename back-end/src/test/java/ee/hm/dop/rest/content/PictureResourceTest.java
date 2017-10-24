@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Picture;
+import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.rest.PictureResource;
 import ee.hm.dop.utils.ConfigurationProperties;
 import ee.hm.dop.utils.DOPFileUtils;

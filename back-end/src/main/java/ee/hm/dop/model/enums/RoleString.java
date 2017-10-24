@@ -1,6 +1,6 @@
 package ee.hm.dop.model.enums;
 
-public class RoleString {
+public interface RoleString {
     public static final String USER = "USER";
     public static final String ADMIN = "ADMIN";
     public static final String MODERATOR = "MODERATOR";

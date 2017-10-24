@@ -9,9 +9,6 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Author;
 import org.junit.Test;
 
-/**
- * Created by mart on 28.10.15.
- */
 public class AuthorDaoTest extends DatabaseTestBase {
 
     @Inject

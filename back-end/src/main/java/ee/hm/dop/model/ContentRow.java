@@ -8,9 +8,6 @@ import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
 
-/**
- * Created by mart on 13.12.16.
- */
 @Entity
 public class ContentRow implements AbstractEntity {
     public ContentRow() {

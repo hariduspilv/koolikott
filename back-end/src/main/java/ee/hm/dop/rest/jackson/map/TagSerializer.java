@@ -10,15 +10,11 @@ import ee.hm.dop.model.Tag;
 
 /**
  * Converts Tag into JSON tag string.
- * 
- * @author Jordan Silva
- *
  */
 public class TagSerializer extends JsonSerializer<Tag> {
 
     @Override
-    public void serialize(Tag tag, JsonGenerator gen, SerializerProvider arg2) throws IOException,
-            JsonProcessingException {
+    public void serialize(Tag tag, JsonGenerator gen, SerializerProvider arg2) throws IOException {
         gen.writeString(tag.getName());
     }
 }

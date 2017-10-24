@@ -9,9 +9,6 @@ import javax.ws.rs.core.MediaType;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 
-/**
- * Created by mart on 30.11.16.
- */
 @Path("role")
 public class RoleResource extends BaseResource {
     @GET

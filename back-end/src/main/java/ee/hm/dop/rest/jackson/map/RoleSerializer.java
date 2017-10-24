@@ -7,9 +7,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import ee.hm.dop.model.enums.Role;
 
-/**
- * Created by mart on 18.07.16.
- */
 public class RoleSerializer extends JsonSerializer<Role> {
 
     @Override

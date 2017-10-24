@@ -14,10 +14,6 @@ import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by joonas on 6.10.16.
- */
-
 @Path("review")
 public class ReviewFileResource extends BaseResource {
 

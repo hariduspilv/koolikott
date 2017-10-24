@@ -5,9 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created by mart.laus on 22.06.2015.
- */
 @Entity
 public class LicenseType implements AbstractEntity {
 

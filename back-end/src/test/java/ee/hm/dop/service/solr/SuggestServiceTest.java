@@ -15,10 +15,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by joonas on 1.09.16.
- */
-
 @RunWith(EasyMockRunner.class)
 public class SuggestServiceTest extends ResourceIntegrationTestBase {
 

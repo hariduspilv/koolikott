@@ -1,18 +1,12 @@
 package ee.hm;
 
-/**
- * Created by joonas on 27.12.16.
- */
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.util.TokenFilterFactory;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 final class FilteredLink extends TokenFilter {
     private CharTermAttribute charTermAttr;

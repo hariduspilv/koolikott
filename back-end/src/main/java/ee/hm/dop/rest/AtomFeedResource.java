@@ -9,10 +9,6 @@ import javax.ws.rs.Produces;
 import ee.hm.dop.service.atom.AtomFeedService;
 import org.apache.abdera.model.Feed;
 
-/**
- * Created by joonas on 29.12.16.
- */
-
 @Path("/")
 public class AtomFeedResource extends BaseResource{
 

@@ -1,6 +1,6 @@
 package ee.hm.dop.model.taxon;
 
-public class TaxonLevel {
+public interface TaxonLevel {
     public static final String EDUCATIONAL_CONTEXT = "EDUCATIONAL_CONTEXT";
     public static final String DOMAIN = "DOMAIN";
     public static final String SUBJECT = "SUBJECT";

@@ -5,10 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created by joonas on 28.09.16.
- */
-
 @Entity
 public class PeerReview implements AbstractEntity {
 

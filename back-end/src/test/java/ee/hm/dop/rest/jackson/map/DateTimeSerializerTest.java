@@ -15,19 +15,13 @@ import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Created by mart.laus on 6.07.2015.
- */
-
 @RunWith(EasyMockRunner.class)
 public class DateTimeSerializerTest {
 
     @TestSubject
     private DateTimeSerializer serializer = new DateTimeSerializer();
-
     @Mock
     private JsonGenerator generator;
-
     @Mock
     private SerializerProvider serializerProvider;
 

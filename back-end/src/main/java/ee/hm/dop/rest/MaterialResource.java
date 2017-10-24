@@ -41,8 +41,6 @@ public class MaterialResource extends BaseResource {
     @Inject
     private UserService userService;
     @Inject
-    private MaterialProxy materialProxy;
-    @Inject
     private UserLikeService userLikeService;
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;

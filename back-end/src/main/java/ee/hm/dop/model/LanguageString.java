@@ -8,9 +8,6 @@ import javax.persistence.*;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
-/**
- * Created by mart.laus on 10.06.2015.
- */
 @Entity
 public class LanguageString implements AbstractEntity {
     @Id

@@ -5,9 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created by mart on 9.08.16.
- */
 @Entity
 public class RepositoryURL implements AbstractEntity {
 

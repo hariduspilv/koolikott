@@ -14,9 +14,6 @@ import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.Role;
 import org.junit.Test;
 
-/**
- * Created by mart on 30.11.16.
- */
 public class RoleResourceTest extends ResourceIntegrationTestBase {
 
     public static final String GET_ROLES = "role";

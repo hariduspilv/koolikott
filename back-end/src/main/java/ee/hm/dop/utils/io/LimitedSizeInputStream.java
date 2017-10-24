@@ -6,9 +6,6 @@ import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by mart on 20.09.16.
- */
 public class LimitedSizeInputStream extends InputStream {
 
     private InputStream source;

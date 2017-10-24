@@ -1,8 +1,9 @@
 package ee.hm.dop.config;
 
 import ee.hm.dop.config.db.DatabaseMigrator;
+import ee.hm.dop.config.db.FlywayDbMigrator;
 
-public class InactiveDbMigrator implements DatabaseMigrator {
+public class InactiveDbMigrator extends FlywayDbMigrator {
 
     @Override
     public void migrate() {

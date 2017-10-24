@@ -16,16 +16,11 @@ import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-/**
- * Created by mart.laus on 6.07.2015.
- */
-
 @RunWith(EasyMockRunner.class)
 public class DateTimeDeserializerTest {
 
     @TestSubject
     private DateTimeDeserializer deserializer = new DateTimeDeserializer();
-
     @Mock
     private JsonParser jp;
 

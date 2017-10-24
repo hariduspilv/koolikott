@@ -9,9 +9,6 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.TaxonDTO;
 
-/**
- * Created by mart on 9.12.16.
- */
 public class TaxonSerializer extends JsonSerializer<Taxon> {
 
     @Override

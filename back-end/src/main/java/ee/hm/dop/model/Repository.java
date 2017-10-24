@@ -20,9 +20,6 @@ import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
-/**
- * Created by mart.laus on 22.07.2015.
- */
 @Entity
 public class Repository implements AbstractEntity {
 
