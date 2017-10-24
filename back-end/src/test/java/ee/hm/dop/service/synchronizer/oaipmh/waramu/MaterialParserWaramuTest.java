@@ -1,5 +1,7 @@
 package ee.hm.dop.service.synchronizer.oaipmh.waramu;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
@@ -15,6 +17,7 @@ import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
+import ee.hm.dop.service.synchronizer.oaipmh.BaseParserTest;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.metadata.LanguageService;
@@ -37,36 +40,27 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
-public class MaterialParserWaramuTest {
+public class MaterialParserWaramuTest extends BaseParserTest {
 
     @TestSubject
     private MaterialParserWaramu materialParser = new MaterialParserWaramu();
-
     @Mock
     private LanguageService languageService;
-
     @Mock
     private TagService tagService;
-
     @Mock
     private ResourceTypeService resourceTypeService;
-
     @Mock
     private TaxonService taxonService;
-
     @Mock
     private AuthorService authorService;
-
     @Mock
     private TargetGroupService targetGroupService;
 
@@ -90,182 +84,54 @@ public class MaterialParserWaramuTest {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        Language french = new Language();
-        french.setId(1L);
-        french.setName("French");
-
-        Language estonian = new Language();
-        estonian.setId(2L);
-        estonian.setName("Estonian");
-
-        Tag tag = new Tag();
-        tag.setId(325L);
-        tag.setName("grammaire");
-
-        ResourceType resourceType1 = new ResourceType();
-        resourceType1.setId(444L);
-        resourceType1.setName("WEBSITE");
-
-        ResourceType resourceType2 = new ResourceType();
-        resourceType2.setId(555L);
-        resourceType2.setName("COURSE");
-
-        Author author = new Author();
-        author.setName("Andrew");
-        author.setSurname("Balaam");
-
-
-        EducationalContext educationalContext1 = new EducationalContext();
-        educationalContext1.setName("preschoolEducation");
-
-        EducationalContext educationalContext2 = new EducationalContext();
-        educationalContext2.setName("basicEducation");
-
-        EducationalContext educationalContext3 = new EducationalContext();
-        educationalContext3.setName("secondaryEducation");
-
-        EducationalContext educationalContext4 = new EducationalContext();
-        educationalContext4.setName("vocationalEducation");
-
-        Domain domain1 = new Domain();
-        domain1.setName("Foreign_language");
-        domain1.setEducationalContext(educationalContext2);
-        Set<Domain> domains = new HashSet<>();
-        domains.add(domain1);
-        educationalContext2.setDomains(domains);
-
-        Domain domain2 = new Domain();
-        domain2.setName("Me_and_the_environment");
-        domain2.setEducationalContext(educationalContext1);
-        domains = new HashSet<>();
-        domains.add(domain2);
-        educationalContext1.setDomains(domains);
-
-        Domain domain3 = new Domain();
-        domain3.setName("Computer_science");
-        domain3.setEducationalContext(educationalContext4);
-        domains = new HashSet<>();
-        domains.add(domain3);
-        educationalContext4.setDomains(domains);
-
-        Specialization specialization = new Specialization();
-        specialization.setName("Computers_and_Networks");
-        specialization.setDomain(domain3);
-        Set<Specialization> specializations = new HashSet<>();
-        specializations.add(specialization);
-        domain3.setSpecializations(specializations);
-
-        Domain domain4 = new Domain();
-        domain4.setName("Language_and_literature");
-        domain4.setEducationalContext(educationalContext3);
-        domains = new HashSet<>();
-        domains.add(domain4);
-        educationalContext3.setDomains(domains);
-
-        Domain domain5 = new Domain();
-        domain5.setName("Cross-curricular_themes");
-        domain5.setEducationalContext(educationalContext2);
-        domains = educationalContext2.getDomains();
-        domains.add(domain5);
-        educationalContext2.setDomains(domains);
-
-        Domain domain6 = new Domain();
-        domain6.setName("Key_competences");
-        domain6.setEducationalContext(educationalContext2);
-        domains = educationalContext2.getDomains();
-        domains.add(domain6);
-        educationalContext2.setDomains(domains);
-
-        Subject subject1 = new Subject();
-        subject1.setName("Estonian");
-        subject1.setDomain(domain4);
-        Set<Subject> subjects = new HashSet<>();
-        subjects.add(subject1);
-        domain4.setSubjects(subjects);
-
-        Subject subject2 = new Subject();
-        subject2.setName("English");
-        subject2.setDomain(domain1);
-        subjects = new HashSet<>();
-        subjects.add(subject2);
-        domain1.setSubjects(subjects);
-
-        Subject subject3 = new Subject();
-        subject3.setName("Lifelong_learning_and_career_planning");
-        subject3.setDomain(domain5);
-        subjects = new HashSet<>();
-        subjects.add(subject3);
-        domain5.setSubjects(subjects);
-
-        Subject subject4 = new Subject();
-        subject4.setName("Cultural_and_value_competence");
-        subject4.setDomain(domain5);
-        subjects = new HashSet<>();
-        subjects.add(subject4);
-        domain6.setSubjects(subjects);
-
-        Topic topic1 = new Topic();
-        topic1.setName("Basic_history");
-        topic1.setSubject(subject1);
-        Set<Topic> topics = new HashSet<>();
-        topics.add(topic1);
-        subject1.setTopics(topics);
-
-        Topic topic2 = new Topic();
-        topic2.setName("Estonian_history");
-        topic2.setSubject(subject2);
-        topics = new HashSet<>();
-        topics.add(topic2);
-        subject2.setTopics(topics);
-
-        Topic topic3 = new Topic();
-        topic3.setName("Preschool_Topic1");
-        topic3.setSubject(subject2);
-        topics = new HashSet<>();
-        topics.add(topic3);
-        domain2.setTopics(topics);
-
-        Module module = new Module();
-        module.setName("Majanduse_alused");
-        module.setSpecialization(specialization);
-        Set<Module> modules = new HashSet<>();
-        modules.add(module);
-        specialization.setModules(modules);
-
-        Topic topic4 = new Topic();
-        topic4.setName("Vocational_Education_Topic1");
-        topic4.setModule(module);
-        topics = new HashSet<>();
-        topics.add(topic4);
-        module.setTopics(topics);
-
-        Subtopic subtopic1 = new Subtopic();
-        subtopic1.setName("Subtopic_for_Preschool_Topic1");
-        subtopic1.setTopic(topic3);
-        Set<Subtopic> subtopics = new HashSet<>();
-        subtopics.add(subtopic1);
-        topic3.setSubtopics(subtopics);
-
-        Subtopic subtopic2 = new Subtopic();
-        subtopic2.setName("Ajaarvamine");
-        subtopic2.setTopic(topic1);
-        subtopics = new HashSet<>();
-        subtopics.add(subtopic2);
-        topic1.setSubtopics(subtopics);
-
-        Subtopic subtopic3 = new Subtopic();
-        subtopic3.setName("Subtopic_for_Vocational_Education");
-        subtopic3.setTopic(topic4);
-        subtopics = new HashSet<>();
-        subtopics.add(subtopic3);
-        topic4.setSubtopics(subtopics);
-
-        Subtopic subtopic4 = new Subtopic();
-        subtopic4.setName("Ajalooallikad");
-        subtopic4.setTopic(topic2);
-        subtopics = new HashSet<>();
-        subtopics.add(subtopic4);
-        topic2.setSubtopics(subtopics);
+        Language french = language(1L, "French");
+        Language estonian = language(2L, "Estonian");
+        Tag tag = tag(325L, "grammaire");
+        ResourceType resourceType1 = resourceType(444L, "WEBSITE");
+        ResourceType resourceType2 = resourceType(555L, "COURSE");
+        Author author = author("Andrew", "Balaam");
+        EducationalContext educationalContext1 = educationalContext("preschoolEducation");
+        EducationalContext educationalContext2 = educationalContext("basicEducation");
+        EducationalContext educationalContext3 = educationalContext("secondaryEducation");
+        EducationalContext educationalContext4 = educationalContext("vocationalEducation");
+        Domain domain1 = domain(educationalContext2, "Foreign_language");
+        Domain domain5 = domain(educationalContext2, "Cross-curricular_themes");
+        Domain domain6 = domain(educationalContext2, "Key_competences");
+        educationalContext2.setDomains(Sets.newHashSet(domain1, domain5, domain6));
+        Domain domain2 = domain(educationalContext1, "Me_and_the_environment");
+        educationalContext1.setDomains(Sets.newHashSet(domain2));
+        Domain domain3 = domain(educationalContext4, "Computer_science");
+        educationalContext4.setDomains(Sets.newHashSet(domain3));
+        Specialization specialization = specialization(domain3);
+        domain3.setSpecializations(Sets.newHashSet(specialization));
+        Domain domain4 = domain(educationalContext3, "Language_and_literature");
+        educationalContext3.setDomains(Sets.newHashSet(domain4));
+        Subject subject1 = subject(domain4, "Estonian");
+        domain4.setSubjects(Sets.newHashSet(subject1));
+        Subject subject2 = subject(domain1, "English");
+        domain1.setSubjects(Sets.newHashSet(subject2));
+        Subject subject3 = subject(domain5, "Lifelong_learning_and_career_planning");
+        domain5.setSubjects(Sets.newHashSet(subject3));
+        Subject subject4 = subject(domain5, "Cultural_and_value_competence");
+        domain6.setSubjects(Sets.newHashSet(subject4));
+        Topic topic1 = topic(subject1, "Basic_history");
+        subject1.setTopics(Sets.newHashSet(topic1));
+        Topic topic2 = topic(subject2, "Estonian_history");
+        subject2.setTopics(Sets.newHashSet(topic2));
+        Topic topic3 = topic(subject2, "Preschool_Topic1");
+        domain2.setTopics(Sets.newHashSet(topic3));
+        Module module = module(specialization);
+        specialization.setModules(Sets.newHashSet(module));
+        Topic topic4 = topic(module);
+        module.setTopics(Sets.newHashSet(topic4));
+        Subtopic subtopic1 = subTopic(topic3, "Subtopic_for_Preschool_Topic1");
+        topic3.setSubtopics(Sets.newHashSet(subtopic1));
+        Subtopic subtopic2 = subTopic(topic1, "Ajaarvamine");
+        topic1.setSubtopics(Sets.newHashSet(subtopic2));
+        Subtopic subtopic3 = subTopic(topic4, "Subtopic_for_Vocational_Education");
+        topic4.setSubtopics(Sets.newHashSet(subtopic3));
+        Subtopic subtopic4 = subTopic(topic2, "Ajalooallikad");
+        topic2.setSubtopics(Sets.newHashSet(subtopic4));
 
         expect(languageService.getLanguage("fr")).andReturn(french).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
@@ -277,16 +143,14 @@ public class MaterialParserWaramuTest {
 
 
         // first taxon
-        expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(
-                educationalContext1).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(educationalContext1).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond", Domain.class)).andReturn(domain2);
         expect(taxonService.getTaxonByEstCoreName("Preschool Topic1", Topic.class)).andReturn(topic3);
         expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class))
                 .andReturn(subtopic1);
 
         // second taxon
-        expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(
-                educationalContext3).anyTimes();
+        expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(educationalContext3).anyTimes();
         expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
         expect(taxonService.getTaxonByEstCoreName(subject1.getName(), Subject.class)).andReturn(subject1);
         expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
@@ -311,55 +175,18 @@ public class MaterialParserWaramuTest {
         expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
         expect(taxonService.getTaxonByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(subtopic4);
 
+        LanguageString title1 = languageString(french, "Subjonctif");
+        LanguageString title2 = languageString(estonian, "Les exercices du subjonctif.");
 
-        LanguageString title1 = new LanguageString();
-        title1.setLanguage(french);
-        title1.setText("Subjonctif");
+        List<LanguageString> titles = Lists.newArrayList(title1, title2);
+        LanguageString description1 = languageString(french, "Exercice a completer");
+        LanguageString description2 = languageString(estonian, "Veebipõhised harjutused kahtleva kõneviisi kohta.");
+        List<LanguageString> descriptions = Lists.newArrayList(description1, description2);
+        List<Tag> tags = Lists.newArrayList(tag);
+        List<ResourceType> resourceTypes = Lists.newArrayList(resourceType1, resourceType2);
+        List<Author> authors = Lists.newArrayList(author);
 
-        LanguageString title2 = new LanguageString();
-        title2.setLanguage(estonian);
-        title2.setText("Les exercices du subjonctif.");
-
-        List<LanguageString> titles = new ArrayList<>();
-        titles.add(title1);
-        titles.add(title2);
-
-        LanguageString description1 = new LanguageString();
-        description1.setLanguage(french);
-        description1.setText("Exercice a completer");
-
-        LanguageString description2 = new LanguageString();
-        description2.setLanguage(estonian);
-        description2.setText("Veebipõhised harjutused kahtleva kõneviisi kohta.");
-
-        List<LanguageString> descriptions = new ArrayList<>();
-        descriptions.add(description1);
-        descriptions.add(description2);
-
-        List<Tag> tags = new ArrayList<>();
-        tags.add(tag);
-
-        List<ResourceType> resourceTypes = new ArrayList<>();
-        resourceTypes.add(resourceType1);
-        resourceTypes.add(resourceType2);
-
-        List<Author> authors = new ArrayList<>();
-        authors.add(author);
-
-        TargetGroup targetGroupGrade6 = new TargetGroup();
-        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
-
-        TargetGroup targetGroupGrade7 = new TargetGroup();
-        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
-
-        TargetGroup targetGroupGrade8 = new TargetGroup();
-        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
-
-        TargetGroup targetGroupGrade9 = new TargetGroup();
-        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
-
-        expect(targetGroupService.getTargetGroupsByAge(13, 15))
-                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9)));
+        expect(targetGroupService.getTargetGroupsByAge(13, 15)).andReturn(targetGroup6to9());
 
 
         replay(languageService, tagService, resourceTypeService, taxonService, authorService, targetGroupService);
@@ -390,40 +217,18 @@ public class MaterialParserWaramuTest {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        Language french = new Language();
-        french.setId(1L);
-        french.setName("French");
-
-        Language estonian = new Language();
-        estonian.setId(2L);
-        estonian.setName("Estonian");
-
-        Author author = new Author();
-        author.setName("Author");
-        author.setSurname("Supernew");
+        Language french = language(1L, "French");
+        Language estonian = language(2L, "Estonian");
+        Author author = author("Author", "Supernew");
 
         expect(languageService.getLanguage("fr")).andReturn(french).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
         expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(null);
         expect(authorService.createAuthor(author.getName(), author.getSurname())).andReturn(author);
-        List<Author> authors = new ArrayList<>();
-        authors.add(author);
+        List<Author> authors = Lists.newArrayList(author);
 
-        TargetGroup targetGroupGrade6 = new TargetGroup();
-        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
-
-        TargetGroup targetGroupGrade7 = new TargetGroup();
-        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
-
-        TargetGroup targetGroupGrade8 = new TargetGroup();
-        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
-
-        TargetGroup targetGroupGrade9 = new TargetGroup();
-        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
-
-        expect(targetGroupService.getTargetGroupsByAge(13, 15))
-                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9)));
+        expect(targetGroupService.getTargetGroupsByAge(13, 15)).andReturn(targetGroup6to9());
 
         replay(languageService, authorService, targetGroupService);
 
@@ -446,32 +251,15 @@ public class MaterialParserWaramuTest {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-        Language french = new Language();
-        french.setId(1L);
-        french.setName("French");
-
-        Language estonian = new Language();
-        estonian.setId(2L);
-        estonian.setName("Estonian");
+        Language french = language(1L, "French");
+        Language estonian = language(2L, "Estonian");
 
         expect(languageService.getLanguage("fr")).andReturn(french).times(2);
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
 
-        TargetGroup targetGroupGrade6 = new TargetGroup();
-        targetGroupGrade6.setName(TargetGroupEnum.GRADE6.name());
-
-        TargetGroup targetGroupGrade7 = new TargetGroup();
-        targetGroupGrade7.setName(TargetGroupEnum.GRADE7.name());
-
-        TargetGroup targetGroupGrade8 = new TargetGroup();
-        targetGroupGrade8.setName(TargetGroupEnum.GRADE8.name());
-
-        TargetGroup targetGroupGrade9 = new TargetGroup();
-        targetGroupGrade9.setName(TargetGroupEnum.GRADE9.name());
-
         expect(targetGroupService.getTargetGroupsByAge(13, 15))
-                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9)));
+                .andReturn(targetGroup6to9());
 
 
         replay(languageService, authorService, targetGroupService);
@@ -542,8 +330,11 @@ public class MaterialParserWaramuTest {
         verify(languageService);
     }
 
-    private File getResourceAsFile(String resourcePath) throws URISyntaxException {
-        URI resource = getClass().getClassLoader().getResource(resourcePath).toURI();
-        return new File(resource);
+    private HashSet<TargetGroup> targetGroup6to9() {
+        TargetGroup targetGroupGrade6 = targetGroup(TargetGroupEnum.GRADE6);
+        TargetGroup targetGroupGrade7 = targetGroup(TargetGroupEnum.GRADE7);
+        TargetGroup targetGroupGrade8 = targetGroup(TargetGroupEnum.GRADE8);
+        TargetGroup targetGroupGrade9 = targetGroup(TargetGroupEnum.GRADE9);
+        return Sets.newHashSet(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9);
     }
 }

@@ -24,6 +24,7 @@ import ee.hm.dop.model.taxon.Specialization;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Subtopic;
 import ee.hm.dop.model.taxon.Topic;
+import ee.hm.dop.service.synchronizer.oaipmh.BaseParserTest;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
@@ -37,7 +38,7 @@ import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
 @RunWith(EasyMockRunner.class)
-public class MaterialParserEstCoreTest {
+public class MaterialParserEstCoreTest extends BaseParserTest{
 
     @TestSubject
     private MaterialParserEstCore materialParser = new MaterialParserEstCore();
@@ -205,11 +206,11 @@ public class MaterialParserEstCoreTest {
         TargetGroup targetGroupGymnasium = targetGroup(TargetGroupEnum.GYMNASIUM);
 
         expect(targetGroupService.getTargetGroupsByAge(6, 7))
-                .andReturn(new HashSet<>(Arrays.asList(targetGroupSixSeven, targetGroupGrade1)));
+                .andReturn(Sets.newHashSet(targetGroupSixSeven, targetGroupGrade1));
         expect(targetGroupService.getTargetGroupsByAge(10, 13))
-                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade3, targetGroupGrade4, targetGroupGrade5, targetGroupGrade6, targetGroupGrade7)));
+                .andReturn(Sets.newHashSet(targetGroupGrade3, targetGroupGrade4, targetGroupGrade5, targetGroupGrade6, targetGroupGrade7));
         expect(targetGroupService.getTargetGroupsByAge(14, 25))
-                .andReturn(new HashSet<>(Arrays.asList(targetGroupGrade7, targetGroupGrade8, targetGroupGrade9, targetGroupGymnasium)));
+                .andReturn(Sets.newHashSet(targetGroupGrade7, targetGroupGrade8, targetGroupGrade9, targetGroupGymnasium));
 
         LanguageString title1 = languageString(english, "first title");
         LanguageString title2 = languageString(estonian, "teine pealkiri");
@@ -247,129 +248,4 @@ public class MaterialParserEstCoreTest {
         assertEquals(peerReviews, material.getPeerReviews());
     }
 
-    private TargetGroup targetGroup(TargetGroupEnum sixSeven) {
-        TargetGroup targetGroupSixSeven = new TargetGroup();
-        targetGroupSixSeven.setName(sixSeven.name());
-        return targetGroupSixSeven;
-    }
-
-    private KeyCompetence keyCompetence() {
-        KeyCompetence keyCompetence = new KeyCompetence();
-        keyCompetence.setName("Cultural_and_value_competence");
-        return keyCompetence;
-    }
-
-    private CrossCurricularTheme crossCurricularTheme() {
-        CrossCurricularTheme crossCurricularTheme = new CrossCurricularTheme();
-        crossCurricularTheme.setName("Lifelong_learning_and_career_planning");
-        return crossCurricularTheme;
-    }
-
-    private Publisher publisher() {
-        Publisher publisher = new Publisher();
-        publisher.setName("BigPublisher");
-        publisher.setWebsite("https://www.google.com/");
-        return publisher;
-    }
-
-    private Specialization specialization(Domain domain3) {
-        Specialization specialization = new Specialization();
-        specialization.setName("Computers_and_Networks");
-        specialization.setDomain(domain3);
-        return specialization;
-    }
-
-    private PeerReview peerReview() {
-        PeerReview peerReview = new PeerReview();
-        peerReview.setUrl("http://www.facebook.com");
-        return peerReview;
-    }
-
-    private Subtopic subTopic(Topic topic3, String subtopic_for_preschool_topic1) {
-        Subtopic subtopic1 = new Subtopic();
-        subtopic1.setName(subtopic_for_preschool_topic1);
-        subtopic1.setTopic(topic3);
-        return subtopic1;
-    }
-
-    private Topic topic(Module module) {
-        Topic topic4 = new Topic();
-        topic4.setName("Vocational_Education_Topic1");
-        topic4.setModule(module);
-        return topic4;
-    }
-
-    private Module module(Specialization specialization) {
-        Module module = new Module();
-        module.setName("Majanduse_alused");
-        module.setSpecialization(specialization);
-        return module;
-    }
-
-    private Topic topic(Subject subject1, String basic_history) {
-        Topic topic1 = new Topic();
-        topic1.setName(basic_history);
-        topic1.setSubject(subject1);
-        return topic1;
-    }
-
-    private Subject subject(Domain domain4, String estonian) {
-        Subject subject1 = new Subject();
-        subject1.setName(estonian);
-        subject1.setDomain(domain4);
-        return subject1;
-    }
-
-    private Domain domain(EducationalContext educationalContext2, String foreign_language) {
-        Domain domain1 = new Domain();
-        domain1.setName(foreign_language);
-        domain1.setEducationalContext(educationalContext2);
-        return domain1;
-    }
-
-    private EducationalContext educationalContext(String preschoolEducation) {
-        EducationalContext educationalContext1 = new EducationalContext();
-        educationalContext1.setName(preschoolEducation);
-        return educationalContext1;
-    }
-
-    private ResourceType resourceType(long id, String audio) {
-        ResourceType resourceType1 = new ResourceType();
-        resourceType1.setId(id);
-        resourceType1.setName(audio);
-        return resourceType1;
-    }
-
-    private Tag tag(long id, String tag12) {
-        Tag tag1 = new Tag();
-        tag1.setId(id);
-        tag1.setName(tag12);
-        return tag1;
-    }
-
-    private LanguageString languageString(Language english, String text) {
-        LanguageString description1 = new LanguageString();
-        description1.setLanguage(english);
-        description1.setText(text);
-        return description1;
-    }
-
-    private Author author(String jonathan, String doe) {
-        Author author1 = new Author();
-        author1.setName(jonathan);
-        author1.setSurname(doe);
-        return author1;
-    }
-
-    private Language language(long id, String english2) {
-        Language english = new Language();
-        english.setId(id);
-        english.setName(english2);
-        return english;
-    }
-
-    private File getResourceAsFile(String resourcePath) throws URISyntaxException {
-        URI resource = getClass().getClassLoader().getResource(resourcePath).toURI();
-        return new File(resource);
-    }
 }
