@@ -35,6 +35,58 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     private static final long TEST_TAXON_ForeignLanguage = 11L;
     private static final int FALSE = 0;
 
+    @Test
+    public void changes_are_registered_on_adding_new_system_tag() throws Exception {
+
+    }
+
+    @Test
+    public void changes_are_registered_on_new_source() throws Exception {
+
+    }
+
+    @Test
+    public void changes_are_not_registered_when_LO_is_improper() throws Exception {
+        
+    }
+
+    @Test
+    public void changes_are_not_registered_when_LO_is_broken() throws Exception {
+
+    }
+
+    @Test
+    public void changes_are_not_registered_when_LO_is_unreviewed() throws Exception {
+
+    }
+
+    @Test
+    public void I_add_new_system_tag_then_update_material_not_to_have_it___change_is_removed() throws Exception {
+
+    }
+
+    @Test
+    public void I_add_new_system_tag_it_is_approved_then_I_update_material_not_to_have_it___change_is_reviewed_not_removed() throws Exception {
+
+    }
+
+    @Test
+    public void I_change_bieber_url_to_beyonce___material_has_beyonce_url_change_has_bieber() throws Exception {
+
+    }
+
+    @Test
+    public void I_change_bieber_url_to_beyonce_then_to_madonna___material_has_madonna_url_change_has_bieber() throws Exception {
+
+    }
+
+    @Test
+    public void I_change_bieber_url_to_beyonce_it_is_reviewed_then_I_change_it_to_madonna___material_has_madonna_url_1change_is_reviewed_with_beyonce_1change_unreviewed_with_madonna
+            () throws Exception {
+
+    }
+
+
     @Ignore("flaky test")
     @Test
     public void after_admin_changes_learningObject_they_can_find_it_by_asking_for_changes() throws Exception {
@@ -56,6 +108,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
     }
 
+//    todo check
     @Test
     public void after_admin_changes_unReviewed_learningObject_no_changes_are_registered() throws Exception {
         login(USER_ADMIN);
@@ -70,6 +123,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         doGet(format(REVERT_ALL_CHANGES_URL, TEST_UNREVIEWED_MATERIAL_ID));
     }
 
+//    todo check
     @Ignore
     @Test
     public void admin_can_revert_all_changes() throws Exception {
@@ -91,6 +145,14 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertTrue(changedLearningObjectsById.isEmpty());
 
         doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
+    }
+
+    @Test
+    public void admin_can_revert_one_change() throws Exception {
+    }
+
+    @Test
+    public void admin_can_accept_one_() throws Exception {
     }
 
     private void isChanged(List<ReviewableChange> reviewableChanges) {
