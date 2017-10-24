@@ -2,11 +2,14 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.ChapterObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterObject;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -46,7 +49,7 @@ public class PortfolioService {
         solrEngineService.updateIndex();
 
         if (updatedPortfolio.getUnReviewed() == 0 || updatedPortfolio.getImproper() == 0 || updatedPortfolio.getBroken() == 0) {
-            reviewableChangeService.processChanges(updatedPortfolio, user);
+            reviewableChangeService.processChanges(updatedPortfolio, user, null);
         }
 
         return updatedPortfolio;

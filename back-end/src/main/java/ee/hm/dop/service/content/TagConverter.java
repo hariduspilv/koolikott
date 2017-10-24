@@ -44,7 +44,7 @@ public class TagConverter {
 
         updateLO(learningObject, taxon, resourceType, targetGroup);
         if (learningObject.getUnReviewed() == 0) {
-            reviewableChangeService.registerChange(learningObject, user, taxon, resourceType, targetGroup);
+            reviewableChangeService.registerChange(learningObject, user, taxon, resourceType, targetGroup, null);
         }
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
         updatedLearningObject.setChanged(updatedLearningObject.getChanged() + 1);

@@ -12,8 +12,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeAdminService;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -58,56 +57,16 @@ public class ReviewableChangeServiceTest {
         reviewableChange.setCreatedBy(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(reviewableChangeDao.createOrUpdate(reviewableChange)).andReturn(reviewableChange);
+        expect(reviewableChangeDao.createOrUpdate(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
         expect(reviewableChangeDao.findAllUnreviewed()).andReturn(Collections.singletonList(reviewableChange));
         replay(learningObjectService);
         replay(reviewableChangeDao);
 
-        ReviewableChange updated = reviewableChangeService.addChanged(reviewableChange);
+        ReviewableChange updated = reviewableChangeService.registerChange(material, user, null, resourceType, null, null);
 
         assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());
         assertTrue(reviewableChangeDao.findAllUnreviewed().size() == 1);
-    }
-
-    @Test
-    public void revertAllChanges() {
-        ReviewableChange change1 = new ReviewableChange();
-        ReviewableChange change2 = new ReviewableChange();
-        Material material = new Material();
-        material.setReviewableChanges(new ArrayList<>());
-        ResourceType resourceType = new ResourceType();
-        TargetGroup targetGroup = new TargetGroup();
-        User user = new User();
-
-        material.setId(1L);
-        resourceType.setId(3L);
-        user.setId(1L);
-        targetGroup.setId(5L);
-        material.setTargetGroups(new LinkedList<>(Collections.singletonList(targetGroup)));
-        material.setResourceTypes(new LinkedList<>(Collections.singletonList(resourceType)));
-
-        change1.setLearningObject(material);
-        change1.setResourceType(resourceType);
-        change1.setCreatedBy(user);
-        material.getReviewableChanges().add(change1);
-
-        change2.setLearningObject(material);
-        change2.setTargetGroup(targetGroup);
-        change2.setCreatedBy(user);
-        material.getReviewableChanges().add(change2);
-
-        expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(reviewableChangeDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
-        expect(learningObjectDao.createOrUpdate(material)).andReturn(material);
-        replay(learningObjectService);
-        replay(reviewableChangeDao);
-        replay(learningObjectDao);
-
-        LearningObject updated = reviewableChangeService.revertAllChanges(1L, user);
-
-        assertTrue(updated.getTargetGroups().size() == 0);
-        assertTrue(((Material) updated).getResourceTypes().size() == 0);
     }
 
     @Test

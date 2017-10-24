@@ -164,7 +164,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getUnReviewed()).andReturn(0);
 
-        reviewableChangeService.processChanges(material, null);
+        reviewableChangeService.processChanges(material, null, null);
 
         replay(materialDao, material, solrEngineService, materialGetter);
 
@@ -242,7 +242,7 @@ public class MaterialServiceTest {
         expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
         expect(material.getUnReviewed()).andReturn(0);
-        reviewableChangeService.processChanges(material, null);
+        reviewableChangeService.processChanges(material, null, null);
 
         replay(materialDao, material, materialGetter);
 
@@ -295,7 +295,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
-        reviewableChangeService.processChanges(material, user);
+        reviewableChangeService.processChanges(material, user, material.getSource());
 
         replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
 
@@ -321,7 +321,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
-        reviewableChangeService.processChanges(material, user);
+        reviewableChangeService.processChanges(material, user, material.getSource());
 
         replay(user, materialDao, reviewableChangeService, materialGetter);
 

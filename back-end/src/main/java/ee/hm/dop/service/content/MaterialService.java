@@ -98,6 +98,7 @@ public class MaterialService {
         Material originalMaterial = materialGetter.get(material.getId(), changer);
         mustHavePermission(changer, originalMaterial);
         mustBeValid(originalMaterial, changer);
+        String sourceBefore = originalMaterial.getSource();
         material.setSource(UrlUtil.processURL(material.getSource()));
         mustHaveUniqueSource(material);
 
@@ -115,7 +116,7 @@ public class MaterialService {
             solrEngineService.updateIndex();
         }
         if (updatedMaterial.getUnReviewed() == 0 || updatedMaterial.getImproper() == 0 || updatedMaterial.getBroken() == 0) {
-            reviewableChangeService.processChanges(updatedMaterial, changer);
+            reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore);
         }
         return updatedMaterial;
     }

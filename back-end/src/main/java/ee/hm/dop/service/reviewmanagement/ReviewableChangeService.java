@@ -1,38 +1,27 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
-import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.utils.ValidatorUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class ReviewableChangeService {
 
     @Inject
     private ReviewableChangeDao reviewableChangeDao;
     @Inject
-    private LearningObjectDao learningObjectDao;
-    @Inject
-    private LearningObjectService learningObjectService;
-    @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
-    @Inject
-    private ReviewManager reviewManager;
 
     public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
     }
 
-    public void registerChange(LearningObject learningObject, User user, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
+    public ReviewableChange registerChange(LearningObject learningObject, User user, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup, String materialSource) {
         ReviewableChange reviewableChange = new ReviewableChange();
         reviewableChange.setLearningObject(learningObject);
         reviewableChange.setCreatedBy(user);
@@ -46,26 +35,39 @@ public class ReviewableChangeService {
             }
         } else if (targetGroup != null) {
             reviewableChange.setTargetGroup(targetGroup);
+        } else {
+            if (materialSource != null) {
+                reviewableChange.setMaterialSource(materialSource);
+            }
         }
         if (reviewableChange.hasChange()) {
-            reviewableChangeDao.createOrUpdate(reviewableChange);
+            return reviewableChangeDao.createOrUpdate(reviewableChange);
         }
+        return null;
     }
 
-    public void processChanges(LearningObject learningObject, User user) {
-        //todo register logic
-        List<ReviewableChange> changes = learningObject.getReviewableChanges();
-        //todo remove isNotEmty check
-        if (CollectionUtils.isNotEmpty(changes)) {
-            for (ReviewableChange change : changes) {
-                if (!change.isReviewed()) {
-                    if (!learningObjectHasThis(learningObject, change)) {
-                        //todo do something, but some u set reviewed, some u create a new
-//                        reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
-                    }
+    public void processChanges(LearningObject learningObject, User user, String sourceBefore) {
+        if (learningObject instanceof Material) {
+            Material material = (Material) learningObject;
+            if (!Objects.equals(material.getSource(), sourceBefore)) {
+                if (sourceChangeDoesntExist(material)) {
+                    registerChange(learningObject, user, null, null, null, sourceBefore);
                 }
             }
         }
+        for (ReviewableChange change : learningObject.getReviewableChanges()) {
+            if (!change.isReviewed() && change.getMaterialSource() == null) {
+                if (!learningObjectHasThis(learningObject, change)) {
+                    reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
+                }
+            }
+        }
+    }
+
+    private boolean sourceChangeDoesntExist(Material material) {
+        return material.getReviewableChanges().stream()
+                .filter(r -> !r.isReviewed())
+                .noneMatch(r -> r.getMaterialSource() != null);
     }
 
     boolean learningObjectHasThis(LearningObject learningObject, ReviewableChange change) {
@@ -78,61 +80,5 @@ public class ReviewableChangeService {
             return material.getResourceTypes() != null && material.getResourceTypes().contains(change.getResourceType());
         }
         return false;
-    }
-
-    @Deprecated
-    public ReviewableChange addChanged(ReviewableChange reviewableChange) {
-        return reviewableChange.hasChange() ? reviewableChangeDao.createOrUpdate(reviewableChange) : null;
-    }
-
-    public LearningObject revertAllChanges(Long learningObjectId, User user) {
-        LearningObject learningObject = learningObjectService.get(learningObjectId, user);
-        ValidatorUtil.mustHaveEntity(learningObject);
-        List<ReviewableChange> reviewableChanges = learningObject.getReviewableChanges();
-
-        for (ReviewableChange change : reviewableChanges) {
-            if (change.getTaxon() != null) {
-                removeTaxonFromLearningObject(learningObject, change.getTaxon());
-            } else if (change.getResourceType() != null) {
-                removeResourceTypeFromLearningObject(learningObject, change.getResourceType());
-            } else if (change.getTargetGroup() != null) {
-                removeTargetGroupFromLearningObject(learningObject, change.getTargetGroup());
-            }
-        }
-
-        reviewManager.setEverythingReviewed(user, learningObject, ReviewStatus.REJECTED, ReviewType.CHANGE);
-        return learningObjectDao.createOrUpdate(learningObject);
-    }
-
-    private void removeTargetGroupFromLearningObject(LearningObject learningObject, TargetGroup targetGroup) {
-        Iterator iterator = learningObject.getTargetGroups().iterator();
-        while (iterator.hasNext()) {
-            TargetGroup tg = (TargetGroup) iterator.next();
-            if (tg.getId().equals(targetGroup.getId())) {
-                iterator.remove();
-            }
-        }
-    }
-
-    private void removeResourceTypeFromLearningObject(LearningObject learningObject, ResourceType resourceType) {
-        if (learningObject instanceof Material) {
-            Iterator iterator = ((Material) learningObject).getResourceTypes().iterator();
-            while (iterator.hasNext()) {
-                ResourceType rt = (ResourceType) iterator.next();
-                if (rt.getId().equals(resourceType.getId())) {
-                    iterator.remove();
-                }
-            }
-        }
-    }
-
-    private void removeTaxonFromLearningObject(LearningObject learningObject, Taxon taxon) {
-        Iterator iterator = learningObject.getTaxons().iterator();
-        while (iterator.hasNext()) {
-            Taxon t = (Taxon) iterator.next();
-            if (t.getId().equals(taxon.getId())) {
-                iterator.remove();
-            }
-        }
     }
 }
