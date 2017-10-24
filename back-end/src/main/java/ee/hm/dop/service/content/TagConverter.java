@@ -7,6 +7,7 @@ import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.ResourceTypeService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 
@@ -43,7 +44,7 @@ public class TagConverter {
         }
 
         updateLO(learningObject, taxon, resourceType, targetGroup);
-        if (learningObject.getUnReviewed() == 0) {
+        if (ChangeProcessStrategy.processStrategy(learningObject).processNewChanges()) {
             reviewableChangeService.registerChange(learningObject, user, taxon, resourceType, targetGroup, null);
         }
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);

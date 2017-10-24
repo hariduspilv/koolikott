@@ -4,11 +4,14 @@ import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
+
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class ReviewableChangeService {
 
@@ -46,26 +49,38 @@ public class ReviewableChangeService {
         return null;
     }
 
-    public void processChanges(LearningObject learningObject, User user, String sourceBefore) {
-        if (learningObject instanceof Material) {
-            Material material = (Material) learningObject;
-            if (!Objects.equals(material.getSource(), sourceBefore)) {
-                if (sourceChangeDoesntExist(material)) {
-                    registerChange(learningObject, user, null, null, null, sourceBefore);
+    public void processChanges(Portfolio material, User user, ChangeProcessStrategy changeProcessStrategy) {
+        processChanges(material, user, null, changeProcessStrategy);
+    }
+
+    public void processChanges(Material material, User user, String sourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+        processChanges((LearningObject) material, user, sourceBefore, changeProcessStrategy);
+    }
+
+    public void processChanges(LearningObject learningObject, User user, String materialSourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+        if (changeProcessStrategy.processNewChanges()) {
+            if (learningObject instanceof Material) {
+                Material material = (Material) learningObject;
+                if (!Objects.equals(material.getSource(), materialSourceBefore)) {
+                    if (sourceChangeDoesntExist(material)) {
+                        registerChange(learningObject, user, null, null, null, materialSourceBefore);
+                    }
                 }
             }
         }
-        for (ReviewableChange change : learningObject.getReviewableChanges()) {
-            if (!change.isReviewed() && change.getMaterialSource() == null) {
-                if (!learningObjectHasThis(learningObject, change)) {
-                    reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
+        if (isNotEmpty(learningObject.getReviewableChanges())) {
+            for (ReviewableChange change : learningObject.getReviewableChanges()) {
+                if (!change.isReviewed() && change.getMaterialSource() == null) {
+                    if (!learningObjectHasThis(learningObject, change)) {
+                        reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
+                    }
                 }
             }
         }
     }
 
     private boolean sourceChangeDoesntExist(Material material) {
-        return material.getReviewableChanges().stream()
+        return isNotEmpty(material.getReviewableChanges()) && material.getReviewableChanges().stream()
                 .filter(r -> !r.isReviewed())
                 .noneMatch(r -> r.getMaterialSource() != null);
     }

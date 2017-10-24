@@ -67,7 +67,7 @@ public class ReviewableChange implements AbstractEntity {
 
     @JsonIgnore
     public boolean hasChange() {
-        return this.getTaxon() != null || this.getResourceType() != null || this.getTargetGroup() != null;
+        return this.getTaxon() != null || this.getResourceType() != null || this.getTargetGroup() != null || this.getMaterialSource() != null;
     }
 
     public Long getId() {

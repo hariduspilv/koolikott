@@ -15,6 +15,7 @@ import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.useractions.PeerReviewService;
@@ -163,8 +164,10 @@ public class MaterialServiceTest {
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getUnReviewed()).andReturn(0);
+        expect(material.getImproper()).andReturn(0);
+        expect(material.getBroken()).andReturn(0);
 
-        reviewableChangeService.processChanges(material, null, null);
+        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
 
         replay(materialDao, material, solrEngineService, materialGetter);
 
@@ -242,7 +245,10 @@ public class MaterialServiceTest {
         expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
         expect(material.getUnReviewed()).andReturn(0);
-        reviewableChangeService.processChanges(material, null, null);
+        expect(material.getImproper()).andReturn(0);
+        expect(material.getBroken()).andReturn(0);
+
+        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
 
         replay(materialDao, material, materialGetter);
 
@@ -295,7 +301,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
-        reviewableChangeService.processChanges(material, user, material.getSource());
+        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
 
         replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
 
@@ -321,7 +327,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
-        reviewableChangeService.processChanges(material, user, material.getSource());
+        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
 
         replay(user, materialDao, reviewableChangeService, materialGetter);
 

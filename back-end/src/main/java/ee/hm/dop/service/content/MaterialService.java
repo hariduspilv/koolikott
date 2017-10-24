@@ -11,6 +11,7 @@ import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
+import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -115,9 +116,7 @@ public class MaterialService {
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
-        if (updatedMaterial.getUnReviewed() == 0 || updatedMaterial.getImproper() == 0 || updatedMaterial.getBroken() == 0) {
-            reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore);
-        }
+        reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(updatedMaterial));
         return updatedMaterial;
     }
 
@@ -178,18 +177,13 @@ public class MaterialService {
         setAuthors(material);
         setPublishers(material);
         setPeerReviews(material);
-        material = applyRestrictions(material);
-        material.setVisibility(Visibility.PUBLIC);
-
-        return materialDao.createOrUpdate(material);
-    }
-
-    private Material applyRestrictions(Material material) {
         if (CollectionUtils.isEmpty(material.getTaxons()) || cantSet(material)) {
             material.setKeyCompetences(null);
             material.setCrossCurricularThemes(null);
         }
-        return material;
+        material.setVisibility(Visibility.PUBLIC);
+
+        return materialDao.createOrUpdate(material);
     }
 
     private boolean cantSet(Material material) {
