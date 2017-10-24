@@ -73,23 +73,14 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Path("{id}/revertAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId) {
-        return reviewableChangeService.revertAllChanges(learningObjectId, getLoggedInUser());
+        return reviewableChangeAdminService.revertAllChanges(learningObjectId, getLoggedInUser());
     }
 
     @POST
     @Path("{id}/acceptOne/{changeId}")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Response acceptAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
-        if (learningObjectId == null) {
-            throw badRequest("learningObject query param is required.");
-        }
-        User loggedInUser = getLoggedInUser();
-        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
-        if (learningObject == null) {
-            throw notFound();
-        }
-//        todo set one reviewed
-//        reviewableChangeAdminService.setReviewed();
+        reviewableChangeAdminService.acceptOneChange(learningObjectId, changeId, getLoggedInUser());
         return ok();
     }
 
@@ -97,7 +88,6 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Path("{id}/revertOne/{changeId}")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
-//        todo revert one
-        return reviewableChangeService.revertAllChanges(learningObjectId, getLoggedInUser());
+        return reviewableChangeAdminService.revertOneChange(learningObjectId, changeId, getLoggedInUser());
     }
 }

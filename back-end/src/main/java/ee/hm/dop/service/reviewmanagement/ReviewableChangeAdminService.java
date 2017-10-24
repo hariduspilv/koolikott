@@ -1,11 +1,16 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -15,6 +20,12 @@ public class ReviewableChangeAdminService {
 
     @Inject
     private ReviewableChangeDao reviewableChangeDao;
+    @Inject
+    private ReviewManager reviewManager;
+    @Inject
+    private LearningObjectService learningObjectService;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public List<ReviewableChange> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -48,5 +59,56 @@ public class ReviewableChangeAdminService {
         reviewableChange.setReviewedAt(DateTime.now());
         reviewableChange.setStatus(reviewStatus);
         reviewableChangeDao.createOrUpdate(reviewableChange);
+    }
+
+    public LearningObject revertAllChanges(Long learningObjectId, User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        LearningObject learningObject = learningObjectService.get(learningObjectId, user);
+        ValidatorUtil.mustHaveEntity(learningObject);
+
+        for (ReviewableChange change : learningObject.getReviewableChanges()) {
+            revertOneChange(learningObject, change);
+        }
+
+        reviewManager.setEverythingReviewed(user, learningObject, ReviewStatus.REJECTED, ReviewType.CHANGE);
+        return learningObjectDao.createOrUpdate(learningObject);
+    }
+
+    public LearningObject revertOneChange(Long learningObjectId, Long changeId, User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        LearningObject learningObject = learningObjectService.get(learningObjectId, user);
+        ValidatorUtil.mustHaveEntity(learningObject);
+
+        ReviewableChange change = reviewableChangeDao.findById(changeId);
+        revertOneChange(learningObject, change);
+        setReviewed(change, user, ReviewStatus.REJECTED);
+        return learningObjectDao.createOrUpdate(learningObject);
+    }
+
+    public void acceptOneChange(Long learningObjectId, Long changeId, User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        LearningObject learningObject = learningObjectService.get(learningObjectId, user);
+        ValidatorUtil.mustHaveEntity(learningObject);
+
+        ReviewableChange change = reviewableChangeDao.findById(changeId);
+        setReviewed(change, user, ReviewStatus.ACCEPTED);
+    }
+
+    private void revertOneChange(LearningObject learningObject, ReviewableChange change) {
+        if (!change.isReviewed()) {
+            if (change.getTaxon() != null) {
+                learningObject.getTaxons().removeIf(t -> t.getId().equals(change.getTaxon().getId()));
+            } else if (change.getResourceType() != null) {
+                if (learningObject instanceof Material) {
+                    ((Material) learningObject).getResourceTypes().removeIf(rt -> rt.getId().equals(change.getResourceType().getId()));
+                }
+            } else if (change.getTargetGroup() != null) {
+                learningObject.getTargetGroups().removeIf(tg -> tg.getId().equals(change.getTargetGroup().getId()));
+            } else if (change.getMaterialSource() != null) {
+                if (learningObject instanceof Material) {
+                    ((Material) learningObject).setSource(change.getMaterialSource());
+                }
+            }
+        }
     }
 }
