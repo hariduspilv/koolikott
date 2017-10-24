@@ -76,4 +76,28 @@ public class ReviewableChangeAdminResource extends BaseResource {
         return reviewableChangeService.revertAllChanges(learningObjectId, getLoggedInUser());
     }
 
+    @POST
+    @Path("{id}/acceptOne/{changeId}")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public Response acceptAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
+        if (learningObjectId == null) {
+            throw badRequest("learningObject query param is required.");
+        }
+        User loggedInUser = getLoggedInUser();
+        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
+        if (learningObject == null) {
+            throw notFound();
+        }
+//        todo set one reviewed
+//        reviewableChangeAdminService.setReviewed();
+        return ok();
+    }
+
+    @POST
+    @Path("{id}/revertOne/{changeId}")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
+//        todo revert one
+        return reviewableChangeService.revertAllChanges(learningObjectId, getLoggedInUser());
+    }
 }

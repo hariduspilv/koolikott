@@ -10,6 +10,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,7 +75,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         login(USER_ADMIN);
         changeMaterial(MATERIAL_5);
 
-        LearningObject revertedLearningObject = doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5), LearningObject.class);
+        Response response = doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
+        LearningObject revertedLearningObject = response.readEntity(LearningObject.class);
         assertEquals("LearningObject not changed", FALSE, revertedLearningObject.getChanged());
     }
 
@@ -82,12 +84,12 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void admin_can_accept_all_changes() throws Exception {
         login(USER_ADMIN);
         changeMaterial(MATERIAL_5);
-        doGet(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_5));
+        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_5));
 
         List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
         assertTrue(changedLearningObjectsById.isEmpty());
 
-        doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
+        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
     }
 
     private void isChanged(List<ReviewableChange> reviewableChanges) {

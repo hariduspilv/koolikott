@@ -85,13 +85,10 @@ public class ReviewableChangeService {
         return reviewableChange.hasChange() ? reviewableChangeDao.createOrUpdate(reviewableChange) : null;
     }
 
-    public LearningObject revertAllChanges(long id, User user) {
-        LearningObject learningObject = learningObjectService.get(id, user);
+    public LearningObject revertAllChanges(Long learningObjectId, User user) {
+        LearningObject learningObject = learningObjectService.get(learningObjectId, user);
         ValidatorUtil.mustHaveEntity(learningObject);
         List<ReviewableChange> reviewableChanges = learningObject.getReviewableChanges();
-        if (CollectionUtils.isEmpty(reviewableChanges)) {
-            throw new RuntimeException("No changes for this learningObject");
-        }
 
         for (ReviewableChange change : reviewableChanges) {
             if (change.getTaxon() != null) {
