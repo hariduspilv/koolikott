@@ -150,6 +150,12 @@ insert into Subtopic(id, topic) values (61, 32);
 insert into Taxon(id, name, level) values (62, 'tehnoloogia_ja_ühiskond', 'SUBTOPIC');
 insert into Subtopic(id, topic) values (62, 34);
 
+-- UserTaxon
+
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 1);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 10);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 21);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 31);
 
 -- EstCore taxon mapping
 
@@ -566,6 +572,11 @@ insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) va
 
 insert into BrokenContent(id, creator, material, added, deleted) values (15, 9, 15, '2014-06-01 00:00:01', false);
 
+-- Reviewable Change
+
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (15, 9, 15, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource, taxon) values (115, 9, 115, '2014-06-01 00:00:01', false, NULL , 1);
+
 -- TagUpVotes
 
 insert into TagUpVote(id, user, learningObject, tag, deleted) values (1, 1, 101, 1, false);
@@ -655,10 +666,3 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (115, 0, CUR
 
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
 INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');
-
--- UserTaxon
-
-INSERT INTO User_Taxon(user, taxon) VALUES (12, 1);
-INSERT INTO User_Taxon(user, taxon) VALUES (12, 10);
-INSERT INTO User_Taxon(user, taxon) VALUES (12, 21);
-INSERT INTO User_Taxon(user, taxon) VALUES (12, 31);

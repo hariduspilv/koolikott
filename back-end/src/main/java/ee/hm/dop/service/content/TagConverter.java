@@ -53,33 +53,6 @@ public class TagConverter {
         return convertDto(updatedLearningObject, tagTypeName);
     }
 
-    private boolean hasChanged(LearningObject learningObject, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
-        boolean changed = false;
-        if (taxon != null) {
-            changed = true;
-        } else if (resourceType != null) {
-            if (learningObject instanceof Material) {
-                changed = true;
-            }
-        } else if (targetGroup != null) {
-            changed = true;
-        }
-        return changed;
-    }
-
-    private String tagName(Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
-        if (taxon != null) {
-            return TAXON;
-        }
-        if (resourceType != null) {
-            return RESOURCETYPE;
-        }
-        if (targetGroup != null) {
-            return TARGETGROUP;
-        }
-        return null;
-    }
-
     private void updateLO(LearningObject learningObject, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
         if (taxon != null) {
             learningObject.getTaxons().add(taxon);
@@ -98,5 +71,25 @@ public class TagConverter {
         tagDTO.setLearningObject(updatedLearningObject);
         tagDTO.setTagTypeName(tagTypeName);
         return tagDTO;
+    }
+
+    private boolean hasChanged(LearningObject learningObject, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
+        if (resourceType != null) {
+            return learningObject instanceof Material;
+        }
+        return taxon != null || targetGroup != null;
+    }
+
+    private String tagName(Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
+        if (taxon != null) {
+            return TAXON;
+        }
+        if (resourceType != null) {
+            return RESOURCETYPE;
+        }
+        if (targetGroup != null) {
+            return TARGETGROUP;
+        }
+        return null;
     }
 }
