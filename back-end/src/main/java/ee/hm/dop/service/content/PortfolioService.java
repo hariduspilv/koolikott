@@ -45,7 +45,7 @@ public class PortfolioService {
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
-        if (updatedPortfolio.getUnReviewed() == 0) {
+        if (updatedPortfolio.getUnReviewed() == 0 || updatedPortfolio.getImproper() == 0 || updatedPortfolio.getBroken() == 0) {
             reviewableChangeService.processChanges(updatedPortfolio, user);
         }
 
@@ -68,7 +68,8 @@ public class PortfolioService {
                 chapterRow.getLearningObjects().replaceAll(learningObject -> {
                     if (learningObject instanceof ChapterObject) {
                         return chapterObjectDao.update((ChapterObject) learningObject);
-                    } else return learningObject;
+                    }
+                    return learningObject;
                 }));
     }
 
