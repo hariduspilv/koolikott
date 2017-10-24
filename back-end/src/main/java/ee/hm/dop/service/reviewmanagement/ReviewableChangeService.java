@@ -4,7 +4,6 @@ import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
-import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;

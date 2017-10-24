@@ -30,14 +30,14 @@ public class ReviewManager {
     }
 
     public void setEverythingReviewed(User user, LearningObject originalLearningObject, ReviewStatus reviewStatus, ReviewType type) {
-        if (type.canReviewFirstReview()) {
-            firstReviewAdminService.setReviewed(originalLearningObject, user, reviewStatus);
-        }
         if (type.canReviewImproperContent()) {
             improperContentAdminService.setReviewed(originalLearningObject, user, reviewStatus);
         }
         if (type.canReviewBrokenContent() && originalLearningObject instanceof Material) {
             brokenContentService.setMaterialNotBroken((Material) originalLearningObject);
+        }
+        if (type.canReviewFirstReview()) {
+            firstReviewAdminService.setReviewed(originalLearningObject, user, reviewStatus);
         }
         if (type.canReviewChange()){
             reviewableChangeAdminService.setReviewed(originalLearningObject, user, reviewStatus);
