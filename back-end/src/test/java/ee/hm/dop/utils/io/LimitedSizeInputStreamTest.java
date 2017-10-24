@@ -18,21 +18,55 @@ public class LimitedSizeInputStreamTest {
 
     @Test(expected = MaxFileSizeExceededException.class)
     public void can_not_read_from_zero_length_steam() throws Exception {
-        LimitedSizeInputStream limitedInputStream = new LimitedSizeInputStream(0, makeStream());
-        limitedInputStream.read();
+        try (
+                ByteArrayInputStream source = makeStream();
+                LimitedSizeInputStream limitedInputStream = new LimitedSizeInputStream(0, source)) {
+            limitedInputStream.read();
+        }
     }
 
     @Test
     public void can_read_from_steam() throws Exception {
-        LimitedSizeInputStream limitedInputStream = new LimitedSizeInputStream(1, makeStream());
-        String s = IOUtils.toString(limitedInputStream, Charsets.UTF_8);
-        assertEquals(TEST_STRING, s);
-        LimitedSizeInputStream limitedInputStream2 = new LimitedSizeInputStream(1, makeStream());
-        assertEquals("1", getChar(limitedInputStream2));
-        assertEquals("2", getChar(limitedInputStream2));
-        assertEquals("3", getChar(limitedInputStream2));
-        assertEquals("\uFFFF", getChar(limitedInputStream2));
-        assertEquals("\uFFFF", getChar(limitedInputStream2));
+        try (
+                ByteArrayInputStream source = makeStream();
+                LimitedSizeInputStream limitedInputStream = new LimitedSizeInputStream(1, source)) {
+            String s = IOUtils.toString(limitedInputStream, Charsets.UTF_8);
+            assertEquals(TEST_STRING, s);
+        }
+        try (
+                ByteArrayInputStream source = makeStream();
+                LimitedSizeInputStream limitedInputStream2 = new LimitedSizeInputStream(1, source)) {
+            assertEquals("1", getChar(limitedInputStream2));
+            assertEquals("2", getChar(limitedInputStream2));
+            assertEquals("3", getChar(limitedInputStream2));
+            assertEquals("\uFFFF", getChar(limitedInputStream2));
+            assertEquals("\uFFFF", getChar(limitedInputStream2));
+        }
+    }
+
+    @Test
+    public void can_read_from_steam_reset_and_read_again() throws Exception {
+        try (
+                ByteArrayInputStream source1 = makeStream();
+                LimitedSizeInputStream limitedInputStream = new LimitedSizeInputStream(1, source1)) {
+            String s = IOUtils.toString(limitedInputStream, Charsets.UTF_8);
+            assertEquals(TEST_STRING, s);
+        }
+        try (
+                ByteArrayInputStream source = makeStream();
+                LimitedSizeInputStream limitedInputStream2 = new LimitedSizeInputStream(1, source)) {
+            assertEquals("1", getChar(limitedInputStream2));
+            assertEquals("2", getChar(limitedInputStream2));
+            assertEquals("3", getChar(limitedInputStream2));
+            assertEquals("\uFFFF", getChar(limitedInputStream2));
+            assertEquals("\uFFFF", getChar(limitedInputStream2));
+            limitedInputStream2.reset();
+            assertEquals("1", getChar(limitedInputStream2));
+            assertEquals("2", getChar(limitedInputStream2));
+            assertEquals("3", getChar(limitedInputStream2));
+            assertEquals("\uFFFF", getChar(limitedInputStream2));
+            assertEquals("\uFFFF", getChar(limitedInputStream2));
+        }
     }
 
     private ByteArrayInputStream makeStream() throws UnsupportedEncodingException {

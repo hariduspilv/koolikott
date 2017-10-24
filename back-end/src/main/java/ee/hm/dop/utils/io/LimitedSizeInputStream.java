@@ -43,6 +43,5 @@ public class LimitedSizeInputStream extends InputStream {
     public synchronized void reset() throws IOException {
         source.reset();
         totalRead = 0;
-        super.reset();
     }
 }
