@@ -141,7 +141,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     private void restoreLearningObjectChanges(List<Long> learningObjectId) {
         DbUtils.getTransaction().begin();
-        testDao.restore(learningObjectId);
+        testDao.restoreAdminReviewingTest(learningObjectId);
         DbUtils.closeTransaction();
     }
 }

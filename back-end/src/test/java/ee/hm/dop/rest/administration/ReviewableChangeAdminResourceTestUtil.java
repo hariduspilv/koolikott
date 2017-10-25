@@ -1,0 +1,70 @@
+package ee.hm.dop.rest.administration;
+
+import com.google.common.collect.Lists;
+import ee.hm.dop.common.test.TestTaxon;
+import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.ReportingReason;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
+import ee.hm.dop.model.enums.ReviewType;
+import ee.hm.dop.model.taxon.Taxon;
+
+import static org.junit.Assert.*;
+
+public class ReviewableChangeAdminResourceTestUtil {
+
+    public static void assertDoesntHave(Material material, TestTaxon testTaxon) {
+        assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertTrue(material.getChanged() == 0);
+    }
+
+    public static void assertNotChanged(Material material, String source) {
+        assertEquals(source, material.getSource());
+        assertTrue(material.getChanged() == 0);
+    }
+
+    public static void assertChanged(Material material, String source) {
+        assertEquals(source, material.getSource());
+        assertFalse(material.getChanged() == 0);
+    }
+
+    public static void assertHas(Material material, TestTaxon testTaxon) {
+        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertTrue(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertFalse(material.getChanged() == 0);
+    }
+
+    public static void assertHasTaxonNotTag(Material material, TestTaxon testTaxon) {
+        assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertTrue(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertFalse(material.getChanged() == 0);
+    }
+
+    public static void assertHasTagNotTaxon(Material material, TestTaxon testTaxon) {
+        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertTrue(material.getChanged()+ "", material.getChanged() == 0);
+    }
+
+    public static void assertDoesntHave(Material material) {
+        assertTrue(material.getImproper() == 0);
+        assertTrue(material.getBroken() == 0);
+        assertTrue(material.getUnReviewed() == 0);
+        assertTrue(material.getChanged() == 0);
+    }
+
+    public static void assertHas(Material material, ReviewType reviewType) {
+        if (reviewType == ReviewType.IMPROPER) {
+            assertFalse(material.getImproper() == 0);
+        }
+        if (reviewType == ReviewType.BROKEN) {
+            assertFalse(material.getBroken() == 0);
+        }
+        if (reviewType == ReviewType.FIRST) {
+            assertFalse(material.getUnReviewed() == 0);
+        }
+        assertTrue(material.getChanged() == 0);
+    }
+}

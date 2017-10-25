@@ -8,7 +8,7 @@ public class TestDao {
     @Inject
     protected EntityManager entityManager;
 
-    public void restore(List<Long> learningObjectId) {
+    public void restoreAdminReviewingTest(List<Long> learningObjectId) {
         entityManager.createNativeQuery(
                 "UPDATE FirstReview SET " +
                         "reviewed = 0, " +
@@ -45,6 +45,58 @@ public class TestDao {
 
         entityManager.createNativeQuery(
                 "UPDATE LearningObject SET deleted = 0 WHERE id in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+    }
+
+    public void removeChanges(List<Long> learningObjectId) {
+        entityManager.createNativeQuery(
+                "DELETE FROM LearningObject_Taxon f WHERE f.learningObject in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "DELETE FROM LearningObject_Tag f WHERE f.learningObject in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "DELETE FROM FirstReview f WHERE f.learningObject in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "DELETE FROM ReviewableChange f WHERE f.learningObject in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "DELETE FROM ReportingReason r " +
+                        "WHERE r.improperContent in (" +
+                        "   SELECT f.id from ImproperContent f " +
+                        "   WHERE f.learningObject in (:id))")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "DELETE FROM ImproperContent f WHERE f.learningObject in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "DELETE FROM BrokenContent f WHERE f.material in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+
+        entityManager.createNativeQuery(
+                "UPDATE LearningObject SET deleted = 0 WHERE id in (:id)")
+                .setParameter("id", learningObjectId)
+                .executeUpdate();
+    }
+
+    public void setUnReviewed(List<Long> learningObjectId) {
+        entityManager.createNativeQuery(
+                "UPDATE FirstReview f set f.reviewed = 0 WHERE f.learningObject in (:id)")
                 .setParameter("id", learningObjectId)
                 .executeUpdate();
     }

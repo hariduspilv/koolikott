@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class ReviewableChangeService {
@@ -43,6 +44,7 @@ public class ReviewableChangeService {
             }
         }
         if (reviewableChange.hasChange()) {
+            learningObject.setChanged(learningObject.getChanged() + 1);
             return reviewableChangeDao.createOrUpdate(reviewableChange);
         }
         return null;
@@ -72,6 +74,7 @@ public class ReviewableChangeService {
                 if (!change.isReviewed() && change.getMaterialSource() == null) {
                     if (!learningObjectHasThis(learningObject, change)) {
                         reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
+                        learningObject.setChanged(learningObject.getChanged() - 1);
                     }
                 }
             }
@@ -79,7 +82,7 @@ public class ReviewableChangeService {
     }
 
     private boolean sourceChangeDoesntExist(Material material) {
-        return isNotEmpty(material.getReviewableChanges()) && material.getReviewableChanges().stream()
+        return isEmpty(material.getReviewableChanges()) || material.getReviewableChanges().stream()
                 .filter(r -> !r.isReviewed())
                 .noneMatch(r -> r.getMaterialSource() != null);
     }

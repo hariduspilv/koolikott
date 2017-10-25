@@ -429,6 +429,7 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_VERSION_TITLE', 'Uus versioon "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_PORTFOLIO_TITLE', 'Uus portfoolio "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_MATERIAL_TITLE', 'Uus material "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 
 -- Russian
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
@@ -440,6 +441,7 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_VERSION_TITLE', 'Feed version title rus');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_PORTFOLIO_TITLE', 'Новый портфель "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_MATERIAL_TITLE', 'Новый материал "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 
 -- English
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
@@ -451,6 +453,7 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_VERSION_TITLE', 'New version "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_PORTFOLIO_TITLE', 'New portfolio "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_MATERIAL_TITLE', 'New material "%s"');
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 
 -- Page
 
@@ -640,7 +643,7 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (5, 1, CURRE
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (6, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (7, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (8, 1, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (9, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (9, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (10, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (11, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (12, 1, CURRENT_TIMESTAMP);

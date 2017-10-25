@@ -2,6 +2,9 @@ package ee.hm.dop.common.test;
 
 import com.google.inject.Inject;
 import ee.hm.dop.model.*;
+import ee.hm.dop.rest.administration.AdminReviewingResourceTest;
+import ee.hm.dop.rest.administration.ReviewableChangeAdminResource;
+import ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.rest.filter.SecurityFilter;
@@ -80,6 +83,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     public Material getMaterial(long id) {
         return doGet(format(MaterialResourceTest.GET_MATERIAL_URL, id), Material.class);
+    }
+
+    public Material createOrUpdateMaterial(Material updatedMaterial) {
+        return doPut(ReviewableChangeAdminResourceTest.UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
     }
 
     protected static <T> T doGet(String url, Class<? extends T> clazz) {
