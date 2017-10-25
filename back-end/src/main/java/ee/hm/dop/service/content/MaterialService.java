@@ -112,11 +112,11 @@ public class MaterialService {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
+        reviewableChangeService.processChanges(material, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
         Material updatedMaterial = createOrUpdate(material);
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
-        reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(updatedMaterial));
         return updatedMaterial;
     }
 
