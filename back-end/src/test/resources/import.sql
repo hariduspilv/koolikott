@@ -560,7 +560,6 @@ insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (
 -- Portfolio taxons
 insert into LearningObject_Taxon(learningObject, taxon) values(101, 21);
 insert into LearningObject_Taxon(learningObject, taxon) values(103, 21);
-insert into LearningObject_Taxon(learningObject, taxon) values(8, 4);
 
 -- Improper content
 

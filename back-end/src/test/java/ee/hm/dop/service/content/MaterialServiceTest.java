@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expect;
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.*;
 
@@ -127,6 +128,10 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
 
+        material.setBrokenContents(null);
+        material.setFirstReviews(null);
+        material.setImproperContents(null);
+        material.setReviewableChanges(null);
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
@@ -222,6 +227,10 @@ public class MaterialServiceTest {
         material.setPeerReviews(null);
         material.setSource(SOURCE_WWW);
         material.setUpdated(EasyMock.anyObject(DateTime.class));
+        material.setBrokenContents(null);
+        material.setFirstReviews(null);
+        material.setImproperContents(null);
+        material.setReviewableChanges(null);
 
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
