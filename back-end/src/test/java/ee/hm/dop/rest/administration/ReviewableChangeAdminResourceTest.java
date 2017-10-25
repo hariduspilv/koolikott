@@ -3,9 +3,11 @@ package ee.hm.dop.rest.administration;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.TestDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.DbUtils;
@@ -20,35 +22,35 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.*;
 import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String GET_ALL_CHANGES = "admin/changed/";
-    private static final String GET_CHANGES_BY_ID = "admin/changed/%s";
-    private static final String GET_CHANGED_COUNT = "admin/changed/count";
-    private static final String ACCEPT_ALL_CHANGES_URL = "admin/changed/%s/acceptAll";
-    private static final String REVERT_ALL_CHANGES_URL = "admin/changed/%s/revertAll";
-
-    private static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
-    private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
-    public static final String UPDATE_MATERIAL_URL = "material";
-    private static final String TYPE_MATERIAL = ".Material";
-    private static final String TEST_SYSTEM_TAG = "mathematics";
-    private static final long TEST_UNREVIEWED_MATERIAL_ID = MATERIAL_16;
-    private static final long TEST_TAXON_ForeignLanguage = 11L;
-    private static final int FALSE = 0;
-    public static final String M_9_ORIGINAL_SOURCE = "http://www.chaging.it.com";
-    public static final String SET_IMPROPER = "impropers";
+    public static final String GET_ALL_CHANGES = "admin/changed/";
+    public static final String GET_CHANGES_BY_ID = "admin/changed/%s";
+    public static final String GET_CHANGED_COUNT = "admin/changed/count";
+    public static final String ACCEPT_ALL_CHANGES_URL = "admin/changed/%s/acceptAll";
+    public static final String ACCEPT_ONE_CHANGES_URL = "admin/changed/%s/acceptOne/%s";
+    public static final String REVERT_ALL_CHANGES_URL = "admin/changed/%s/revertAll";
+    public static final String REVERT_ONE_CHANGES_URL = "admin/changed/%s/revertOne/%s";
     public static final String SET_BROKEN = "material/setBroken";
+    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
+    public static final String UPDATE_MATERIAL_URL = "material";
+    public static final String SET_IMPROPER = "impropers";
+
+    public static final String BIEBER_M16_ORIGINAL = "http://www.bieber.com";
+    public static final String BEYONCE = "http://www.beyonce.com";
+    public static final String MADONNA = "http://www.madonna.com";
 
     @Inject
     private TestDao testDao;
+    @Inject
+    private ReviewableChangeDao reviewableChangeDao;
 
     @Before
     public void setUp() throws Exception {
@@ -84,21 +86,21 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     @Test
     public void changes_are_registered_on_new_source() throws Exception {
         Material material = getMaterial(MATERIAL_16);
-        assertNotChanged(material, M_9_ORIGINAL_SOURCE);
-        String newSource = "http://www.bujakaa.ee";
-        material.setSource(newSource);
+        assertNotChanged(material, BIEBER_M16_ORIGINAL);
+        material.setSource(BEYONCE);
         Material updateMaterial = createOrUpdateMaterial(material);
-        assertChanged(updateMaterial, newSource);
+        assertChanged(updateMaterial, BEYONCE);
+
+        revertUrl(updateMaterial);
     }
 
-    
     @Test
     public void changes_are_not_registered_on_adding_same_source() throws Exception {
         Material material = getMaterial(MATERIAL_16);
-        assertNotChanged(material, M_9_ORIGINAL_SOURCE);
-        material.setSource(M_9_ORIGINAL_SOURCE);
+        assertNotChanged(material, BIEBER_M16_ORIGINAL);
+        material.setSource(BIEBER_M16_ORIGINAL);
         Material updateMaterial = createOrUpdateMaterial(material);
-        assertNotChanged(updateMaterial, M_9_ORIGINAL_SOURCE);
+        assertNotChanged(updateMaterial, BIEBER_M16_ORIGINAL);
     }
 
     @Test
@@ -128,7 +130,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertHas(updatedMaterial, ReviewType.FIRST);
     }
 
-    @Ignore
     @Test
     public void I_add_new_system_tag_then_update_material_not_to_have_it___change_is_removed() throws Exception {
         Material material = getMaterial(MATERIAL_16);
@@ -144,127 +145,231 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
 
     @Test
     public void I_add_new_system_tag_it_is_approved_then_I_update_material_not_to_have_it___change_is_reviewed_not_removed() throws Exception {
+        Material material = getMaterial(MATERIAL_16);
+        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
+        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN);
 
+        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_16));
+        Material updatedMaterial2 = getMaterial(MATERIAL_16);
+
+        updatedMaterial2.setTaxons(new ArrayList<>());
+        Material updatedMaterial3 = createOrUpdateMaterial(updatedMaterial2);
+        assertHasTagNotTaxon(updatedMaterial3, TAXON_MATHEMATICS_DOMAIN);
+        ReviewableChange review = reviewableChangeDao.findByComboField("learningObject.id", MATERIAL_16);
+        assertIsReviewed(review, USER_ADMIN);
     }
 
     @Test
     public void I_change_bieber_url_to_beyonce___material_has_beyonce_url_change_has_bieber() throws Exception {
+        Material material = getMaterial(MATERIAL_16);
+        assertNotChanged(material, BIEBER_M16_ORIGINAL);
+        material.setSource(BEYONCE);
+        Material updateMaterial = createOrUpdateMaterial(material);
+        assertChanged(updateMaterial, BEYONCE);
+        ReviewableChange review = reviewableChangeDao.findByComboField("learningObject.id", MATERIAL_16);
+        assertEquals(BIEBER_M16_ORIGINAL, review.getMaterialSource());
 
+        revertUrl(updateMaterial);
     }
 
     @Test
     public void I_change_bieber_url_to_beyonce_then_to_madonna___material_has_madonna_url_change_has_bieber() throws Exception {
+        Material material1 = getMaterial(MATERIAL_16);
+        assertNotChanged(material1, BIEBER_M16_ORIGINAL);
 
+        material1.setSource(BEYONCE);
+        Material material2 = createOrUpdateMaterial(material1);
+        assertChanged(material2, BEYONCE);
+
+        material2.setSource(MADONNA);
+        Material material3 = createOrUpdateMaterial(material2);
+        assertChanged(material3, MADONNA);
+
+        ReviewableChange review = reviewableChangeDao.findByComboField("learningObject.id", MATERIAL_16);
+        assertEquals(BIEBER_M16_ORIGINAL, review.getMaterialSource());
+
+        revertUrl(material3);
     }
 
     @Test
     public void I_change_bieber_url_to_beyonce_it_is_reviewed_then_I_change_it_to_madonna___material_has_madonna_url_1change_is_reviewed_with_beyonce_1change_unreviewed_with_madonna
             () throws Exception {
+        Material material1 = getMaterial(MATERIAL_16);
+        assertNotChanged(material1, BIEBER_M16_ORIGINAL);
 
+        material1.setSource(BEYONCE);
+        Material material2 = createOrUpdateMaterial(material1);
+        assertChanged(material2, BEYONCE);
+
+        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_16));
+        Material material3 = getMaterial(MATERIAL_16);
+        assertTrue(material3.getChanged() == 0);
+
+        material3.setSource(MADONNA);
+        Material material4 = createOrUpdateMaterial(material3);
+        assertChanged(material4, MADONNA);
+
+        List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
+        Map<Boolean, List<ReviewableChange>> collect = review.stream().collect(Collectors.partitioningBy(ReviewableChange::isReviewed));
+        ReviewableChange reviewed = collect.get(true).get(0);
+        assertIsReviewed(reviewed, USER_ADMIN);
+        ReviewableChange unReviewed = collect.get(false).get(0);
+        assertEquals(BEYONCE, unReviewed.getMaterialSource());
+
+        revertUrl(material4);
     }
 
-    @Deprecated
-    @Ignore("flaky test")
     @Test
-    public void after_admin_changes_learningObject_they_can_find_it_by_asking_for_changes() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(MATERIAL_5);
-
+    public void moderator_sees_changes_made_in_their_taxon_tree_only() throws Exception {
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
-
         List<ReviewableChange> reviewableChanges = doGet(GET_ALL_CHANGES, list());
-        assertTrue(CollectionUtils.isNotEmpty(reviewableChanges));
-        isChanged(reviewableChanges);
-        countEqual(changedLearnigObjectsCount, reviewableChanges);
+        logout();
 
-        List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
-        assertTrue(CollectionUtils.isNotEmpty(changedLearningObjectsById));
-        isChanged(changedLearningObjectsById);
-        idsEqual(changedLearningObjectsById, MATERIAL_5);
+        login(USER_MODERATOR);
+        long changedLearnigObjectsCount2 = doGet(GET_CHANGED_COUNT, Long.class);
+        List<ReviewableChange> reviewableChanges2 = doGet(GET_ALL_CHANGES, list());
 
-        doGet(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
+        assertNotEquals(changedLearnigObjectsCount, changedLearnigObjectsCount2);
+        assertNotEquals(reviewableChanges, reviewableChanges2);
     }
 
-    @Deprecated
-    @Ignore
-    @Test
-    public void after_admin_changes_unReviewed_learningObject_no_changes_are_registered() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(TEST_UNREVIEWED_MATERIAL_ID);
-
-        List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, TEST_UNREVIEWED_MATERIAL_ID), list());
-
-        assertTrue(CollectionUtils.isEmpty(changedLearningObjectsById));
-        isChanged(changedLearningObjectsById);
-        idsEqual(changedLearningObjectsById, TEST_UNREVIEWED_MATERIAL_ID);
-
-        doGet(format(REVERT_ALL_CHANGES_URL, TEST_UNREVIEWED_MATERIAL_ID));
-    }
-
-    @Deprecated
-    @Ignore
-    @Test
-    public void admin_can_revert_all_changes() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(MATERIAL_5);
-
-        Response response = doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
-        LearningObject revertedLearningObject = response.readEntity(LearningObject.class);
-        assertEquals("LearningObject not changed", FALSE, revertedLearningObject.getChanged());
-    }
-
-    @Deprecated
-    @Ignore
     @Test
     public void admin_can_accept_all_changes() throws Exception {
-        login(USER_ADMIN);
-        changeMaterial(MATERIAL_5);
-        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_5));
+        Material material = getMaterial(MATERIAL_16);
+        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
+        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
-        List<ReviewableChange> changedLearningObjectsById = doGet(format(GET_CHANGES_BY_ID, MATERIAL_5), list());
-        assertTrue(changedLearningObjectsById.isEmpty());
+        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_16));
+        Material updatedMaterial1 = getMaterial(MATERIAL_16);
+        assertTrue(updatedMaterial1.getChanged() == 0);
+        List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
+        assertEquals(2, review.size());
+        for (ReviewableChange change : review) {
+            assertEquals(ReviewStatus.ACCEPTED, change.getStatus());
+        }
+    }
 
-        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_5));
+    @Test
+    public void admin_can_revert_all_changes() throws Exception {
+        Material material = getMaterial(MATERIAL_16);
+        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
+        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
+
+        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_16));
+        Material updatedMaterial1 = getMaterial(MATERIAL_16);
+        assertTrue(updatedMaterial1.getChanged() == 0);
+        List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
+        assertEquals(2, review.size());
+        for (ReviewableChange change : review) {
+            assertTrue(change.isReviewed());
+            assertEquals(ReviewStatus.REJECTED, change.getStatus());
+        }
+        Material updatedMaterial2 = getMaterial(MATERIAL_16);
+        assertTrue(updatedMaterial2.getTaxons().isEmpty());
+    }
+
+    @Test
+    public void admin_can_revert_all_changes_url_edition() throws Exception {
+        Material material = getMaterial(MATERIAL_16);
+        assertNotChanged(material, BIEBER_M16_ORIGINAL);
+        material.setSource(BEYONCE);
+        Material updateMaterial = createOrUpdateMaterial(material);
+        assertChanged(updateMaterial, BEYONCE);
+
+        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_16));
+        Material updatedMaterial1 = getMaterial(MATERIAL_16);
+        assertNotChanged(updatedMaterial1, BIEBER_M16_ORIGINAL);
+
+        DbUtils.getTransaction().begin();
+        reviewableChangeDao.flush();
+        DbUtils.closeTransaction();
+
+        List<ReviewableChange> review2 = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
+        assertEquals(1, review2.size());
+        for (ReviewableChange change : review2) {
+            assertTrue(change.isReviewed());
+            assertEquals(ReviewStatus.REJECTED, change.getStatus());
+        }
+        Material updatedMaterial2 = getMaterial(MATERIAL_16);
+        assertTrue(updatedMaterial2.getTaxons().isEmpty());
+    }
+
+    @Test
+    public void admin_can_accept_one_change() throws Exception {
+        Material material = getMaterial(MATERIAL_16);
+        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
+        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
+
+        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_16), list());
+        ReviewableChange oneChange = reviewableChanges.get(0);
+
+        doPost(format(ACCEPT_ONE_CHANGES_URL, MATERIAL_16, oneChange.getId()));
+        Material updatedMaterial1 = getMaterial(MATERIAL_16);
+        assertFalse(updatedMaterial1.getChanged() == 0);
+        List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
+        assertEquals(2, review.size());
+        for (ReviewableChange change : review) {
+            if (change.getId().equals(oneChange.getId())) {
+                assertTrue(change.isReviewed());
+                assertEquals(ReviewStatus.ACCEPTED, change.getStatus());
+            } else {
+                assertFalse(change.isReviewed());
+            }
+        }
+        Material updatedMaterial2 = getMaterial(MATERIAL_16);
+        assertEquals(2, updatedMaterial2.getTaxons().size());
     }
 
     @Test
     public void admin_can_revert_one_change() throws Exception {
-    }
+        Material material = getMaterial(MATERIAL_16);
+        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
+        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
-    @Test
-    public void admin_can_accept_one_() throws Exception {
-    }
+        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_16), list());
+        ReviewableChange oneChange = reviewableChanges.get(0);
 
-    private void isChanged(List<ReviewableChange> reviewableChanges) {
-        assertTrue("LearningObjects are changed", reviewableChanges.stream()
-                .map(ReviewableChange::getLearningObject)
-                .map(LearningObject::getChanged)
-                .allMatch(integer -> integer > 0));
-    }
+        doPost(format(REVERT_ONE_CHANGES_URL, MATERIAL_16, oneChange.getId()));
 
-    private void changeMaterial(Long materialId) {
-        List<Taxon> taxons = Arrays.asList(doGet(format(GET_TAXON_URL, TEST_TAXON_ForeignLanguage), Taxon.class));
-
-        Material material = getMaterial(materialId);
-        material.setTaxons(taxons);
-        createOrUpdateMaterial(material);
-
-        doPost(format(ADD_SYSTEM_TAG_URL, materialId, TYPE_MATERIAL, TEST_SYSTEM_TAG));
+        Material updatedMaterial1 = getMaterial(MATERIAL_16);
+        assertFalse(updatedMaterial1.getChanged() == 0);
+        List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
+        assertEquals(2, review.size());
+        for (ReviewableChange change : review) {
+            if (change.getId().equals(oneChange.getId())) {
+                assertTrue(change.isReviewed());
+                assertEquals(ReviewStatus.REJECTED, change.getStatus());
+            } else {
+                assertFalse(change.isReviewed());
+            }
+        }
+        Material updatedMaterial2 = getMaterial(MATERIAL_16);
+        if (oneChange.getTaxon().getId().equals(TAXON_FOREIGNLANGUAGE_DOMAIN.id)) {
+            assertHasChangesDontMatter(updatedMaterial2, TAXON_MATHEMATICS_DOMAIN);
+            assertHasTagNotTaxonChangesDontMatter(updatedMaterial2, TAXON_FOREIGNLANGUAGE_DOMAIN);
+        } else {
+            assertHasTagNotTaxonChangesDontMatter(updatedMaterial2, TAXON_MATHEMATICS_DOMAIN);
+            assertHasChangesDontMatter(updatedMaterial2, TAXON_FOREIGNLANGUAGE_DOMAIN);
+        }
     }
 
     private GenericType<List<ReviewableChange>> list() {
         return new GenericType<List<ReviewableChange>>() {
         };
-    }
-
-    private void countEqual(long changedLearnigObjectsCount, List<ReviewableChange> reviewableChanges) {
-        assertEquals("Changed learningObject list size, changed learningObject count", reviewableChanges.size(), changedLearnigObjectsCount);
-    }
-
-    private void idsEqual(List<ReviewableChange> changedLearningObjectsById, long materialId) {
-        assertTrue("Changed learningObject id", changedLearningObjectsById.stream()
-                .map(ReviewableChange::getLearningObject)
-                .allMatch(learningObject -> learningObject.getId().equals(materialId)));
     }
 
     private void restoreLearningObjectChanges(List<Long> learningObjectId) {
@@ -286,5 +391,10 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         json.setLearningObject(material);
         json.setReportingReasons(Lists.newArrayList(reason));
         return json;
+    }
+
+    private void revertUrl(Material material4) {
+        material4.setSource(BIEBER_M16_ORIGINAL);
+        createOrUpdateMaterial(material4);
     }
 }
