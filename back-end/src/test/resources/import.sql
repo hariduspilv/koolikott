@@ -233,6 +233,8 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, 'asd', false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, null, 'http://www.chaging.it.com', null, null, false, false, false);
 
 -- Authors
 

@@ -40,7 +40,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public static final String UPDATE_MATERIAL_URL = "material";
     private static final String TYPE_MATERIAL = ".Material";
     private static final String TEST_SYSTEM_TAG = "mathematics";
-    private static final long TEST_UNREVIEWED_MATERIAL_ID = MATERIAL_9;
+    private static final long TEST_UNREVIEWED_MATERIAL_ID = MATERIAL_16;
     private static final long TEST_TAXON_ForeignLanguage = 11L;
     private static final int FALSE = 0;
     public static final String M_9_ORIGINAL_SOURCE = "http://www.chaging.it.com";
@@ -57,36 +57,33 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
 
     @After
     public void tearDown() throws Exception {
-        restoreLearningObjectChanges(Arrays.asList(MATERIAL_9));
+        restoreLearningObjectChanges(Arrays.asList(MATERIAL_16));
     }
 
-    @Ignore
     @Test
     public void changes_are_registered_on_adding_new_system_tag() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_9), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_9);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN);
     }
 
-    @Ignore
     @Test
     public void changes_are_not_registered_on_removing_an_existing_system_tag() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material, TAXON_FOREIGNLANGUAGE_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_9), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_9);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, TAXON_FOREIGNLANGUAGE_DOMAIN);
         updatedMaterial.setTags(new ArrayList<>());
         Material updatedMaterial2 = createOrUpdateMaterial(updatedMaterial);
         assertHasTaxonNotTag(updatedMaterial2, TAXON_FOREIGNLANGUAGE_DOMAIN);
     }
 
-    @Ignore
     @Test
     public void changes_are_registered_on_new_source() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertNotChanged(material, M_9_ORIGINAL_SOURCE);
         String newSource = "http://www.bujakaa.ee";
         material.setSource(newSource);
@@ -94,53 +91,50 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertChanged(updateMaterial, newSource);
     }
 
-    @Ignore
+    
     @Test
     public void changes_are_not_registered_on_adding_same_source() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertNotChanged(material, M_9_ORIGINAL_SOURCE);
         material.setSource(M_9_ORIGINAL_SOURCE);
         Material updateMaterial = createOrUpdateMaterial(material);
         assertNotChanged(updateMaterial, M_9_ORIGINAL_SOURCE);
     }
 
-    @Ignore
     @Test
     public void changes_are_not_registered_when_LO_is_improper() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material);
         doPut(SET_IMPROPER, improper(material));
-        Material updatedMaterial = getMaterial(MATERIAL_9);
+        Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, ReviewType.IMPROPER);
     }
 
-    @Ignore
     @Test
     public void changes_are_not_registered_when_LO_is_broken() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material);
         doPost(SET_BROKEN, material);
-        Material updatedMaterial = getMaterial(MATERIAL_9);
+        Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, ReviewType.BROKEN);
     }
 
-    @Ignore
     @Test
     public void changes_are_not_registered_when_LO_is_unreviewed() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material);
-        setUnreviewed(Lists.newArrayList(MATERIAL_9));
-        Material updatedMaterial = getMaterial(MATERIAL_9);
+        setUnreviewed(Lists.newArrayList(MATERIAL_16));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, ReviewType.FIRST);
     }
 
     @Ignore
     @Test
     public void I_add_new_system_tag_then_update_material_not_to_have_it___change_is_removed() throws Exception {
-        Material material = getMaterial(MATERIAL_9);
+        Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_9), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_9);
+        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN);
 
         updatedMaterial.setTaxons(new ArrayList<>());

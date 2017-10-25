@@ -1,5 +1,8 @@
 package ee.hm.dop.dao;
 
+import ee.hm.dop.model.FirstReview;
+import org.joda.time.DateTime;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -95,9 +98,11 @@ public class TestDao {
     }
 
     public void setUnReviewed(List<Long> learningObjectId) {
-        entityManager.createNativeQuery(
-                "UPDATE FirstReview f set f.reviewed = 0 WHERE f.learningObject in (:id)")
-                .setParameter("id", learningObjectId)
-                .executeUpdate();
+        for (Long id : learningObjectId) {
+            entityManager.createNativeQuery(
+                    "INSERT INTO FirstReview(learningObject, reviewed, createdAt) VALUES (:id, 0, CURRENT_TIMESTAMP())")
+                    .setParameter("id", id)
+                    .executeUpdate();
+        }
     }
 }
