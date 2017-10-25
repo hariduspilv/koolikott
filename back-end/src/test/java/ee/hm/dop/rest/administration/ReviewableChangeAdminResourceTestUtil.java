@@ -2,10 +2,8 @@ package ee.hm.dop.rest.administration;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.TestTaxon;
-import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ReportingReason;
-import ee.hm.dop.model.Tag;
+import ee.hm.dop.common.test.TestUser;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.taxon.Taxon;
@@ -13,6 +11,13 @@ import ee.hm.dop.model.taxon.Taxon;
 import static org.junit.Assert.*;
 
 public class ReviewableChangeAdminResourceTestUtil {
+
+
+    public static void assertDoesntHave(Material material, TestTaxon... testTaxon) {
+        for (TestTaxon taxon : testTaxon) {
+            assertDoesntHave(material, taxon);
+        }
+    }
 
     public static void assertDoesntHave(Material material, TestTaxon testTaxon) {
         assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
@@ -30,10 +35,21 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertFalse(material.getChanged() == 0);
     }
 
+    public static void assertHas(Material material, TestTaxon... testTaxon) {
+        for (TestTaxon taxon : testTaxon) {
+            assertHas(material, taxon);
+        }
+    }
+
     public static void assertHas(Material material, TestTaxon testTaxon) {
         assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
         assertTrue(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
         assertFalse(material.getChanged() == 0);
+    }
+
+    public static void assertHasChangesDontMatter(Material material, TestTaxon testTaxon) {
+        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertTrue(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
     }
 
     public static void assertHasTaxonNotTag(Material material, TestTaxon testTaxon) {
@@ -45,7 +61,12 @@ public class ReviewableChangeAdminResourceTestUtil {
     public static void assertHasTagNotTaxon(Material material, TestTaxon testTaxon) {
         assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
         assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
-        assertTrue(material.getChanged()+ "", material.getChanged() == 0);
+        assertTrue(material.getChanged() == 0);
+    }
+
+    public static void assertHasTagNotTaxonChangesDontMatter(Material material, TestTaxon testTaxon) {
+        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
     }
 
     public static void assertDoesntHave(Material material) {
@@ -66,5 +87,11 @@ public class ReviewableChangeAdminResourceTestUtil {
             assertFalse(material.getUnReviewed() == 0);
         }
         assertTrue(material.getChanged() == 0);
+    }
+
+    public static void assertIsReviewed(ReviewableChange review, TestUser testUser) {
+        assertTrue(review.isReviewed());
+        assertNotNull(review.getReviewedAt());
+        assertEquals(testUser.id, review.getReviewedBy().getId());
     }
 }

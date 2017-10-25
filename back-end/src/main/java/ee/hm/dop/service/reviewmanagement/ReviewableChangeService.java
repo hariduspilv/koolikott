@@ -58,7 +58,7 @@ public class ReviewableChangeService {
         processChanges((LearningObject) material, user, sourceBefore, changeProcessStrategy);
     }
 
-    public void processChanges(LearningObject learningObject, User user, String materialSourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+    private void processChanges(LearningObject learningObject, User user, String materialSourceBefore, ChangeProcessStrategy changeProcessStrategy) {
         if (changeProcessStrategy.processNewChanges()) {
             if (learningObject instanceof Material) {
                 Material material = (Material) learningObject;

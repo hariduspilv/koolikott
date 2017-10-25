@@ -52,7 +52,7 @@ public class TestDao {
                 .executeUpdate();
     }
 
-    public void removeChanges(List<Long> learningObjectId) {
+    public synchronized void removeChanges(List<Long> learningObjectId) {
         entityManager.createNativeQuery(
                 "DELETE FROM LearningObject_Taxon f WHERE f.learningObject in (:id)")
                 .setParameter("id", learningObjectId)

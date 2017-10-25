@@ -49,8 +49,10 @@ public class ReviewableChangeAdminService {
         for (ReviewableChange reviewableChange : learningObject.getReviewableChanges()) {
             if (!reviewableChange.isReviewed()) {
                 setReviewed(reviewableChange, user, reviewStatus);
+                learningObject.setChanged(learningObject.getChanged() - 1);
             }
         }
+        learningObject.setReviewableChanges(learningObject.getReviewableChanges());
     }
 
     public void setReviewed(ReviewableChange reviewableChange, User user, ReviewStatus reviewStatus) {

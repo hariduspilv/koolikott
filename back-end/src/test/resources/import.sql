@@ -234,7 +234,7 @@ insert into Material(id, lang, issueDate, licenseType, source, repository, repos
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, null, 'http://www.chaging.it.com', null, null, false, false, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, null, 'http://www.bieber.com', null, null, false, false, false);
 
 -- Authors
 
@@ -560,6 +560,7 @@ insert into LearningObject_KeyCompetence(learningObject, keyCompetence) values (
 -- Portfolio taxons
 insert into LearningObject_Taxon(learningObject, taxon) values(101, 21);
 insert into LearningObject_Taxon(learningObject, taxon) values(103, 21);
+insert into LearningObject_Taxon(learningObject, taxon) values(8, 4);
 
 -- Improper content
 
@@ -580,6 +581,7 @@ insert into BrokenContent(id, creator, material, added, deleted) values (15, 9, 
 -- Reviewable Change
 
 insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (15, 9, 15, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (8, 9, 8, '2014-06-01 00:00:01', false, 'www.bieber.ee');
 insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource, taxon) values (115, 9, 115, '2014-06-01 00:00:01', false, NULL , 1);
 
 -- TagUpVotes

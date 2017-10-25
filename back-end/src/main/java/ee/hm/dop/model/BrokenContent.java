@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class BrokenContent implements AbstractEntity {
@@ -74,5 +75,4 @@ public class BrokenContent implements AbstractEntity {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
 }

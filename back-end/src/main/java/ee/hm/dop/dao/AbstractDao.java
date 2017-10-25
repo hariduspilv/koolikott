@@ -34,6 +34,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         entity = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
+    public void flush() {
+        entityManager.flush();
+    }
+
     public Class<Entity> entity() {
         return entity;
     }
@@ -58,26 +62,30 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public Entity findByName(String value) {
-        return getSingleResult(getFindByFieldQuery(NAME, value, false));
+        return findByField(NAME, value);
     }
 
     public List<Entity> findByName(List<String> value) {
         if (CollectionUtils.isEmpty(value)) {
             return Lists.newArrayList();
         }
-        return getList(getFindByFieldInQuery(NAME, value));
+        return findByFieldList(NAME, value);
     }
 
     public Entity findByField(String field, Object value) {
-        return getSingleResult(getFindByFieldQuery(field, value, false));
-    }
-
-    public Entity findByFieldLowerCase(String field, Object value) {
-        return getSingleResult(getFindByFieldQuery(field, value, true));
+        return getSingleResult(getFindByFieldQuery(field, value));
     }
 
     public List<Entity> findByFieldList(String field, Object value) {
-        return getList(getFindByFieldQuery(field, value, false));
+        return getList(getFindByFieldQuery(field, value));
+    }
+
+    public Entity findByComboField(String field, Object value) {
+        return getSingleResult(getFindByComboFieldQuery(field, value));
+    }
+
+    public List<Entity> findByComboFieldList(String field, Object value) {
+        return getList(getFindByComboFieldQuery(field, value));
     }
 
     public Entity findByField(String field1, Object value1, String field2, Object value2) {
@@ -123,11 +131,23 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
                 .setParameter(field, value);
     }
 
-    private TypedQuery<Entity> getFindByFieldQuery(String field, Object value, boolean useCase) {
-        String fieldEquals = useCase ? fieldEqualsLower(field) : fieldEquals(field);
+    private TypedQuery<Entity> getFindByFieldQuery(String field, Object value) {
         return getEntityManager()
-                .createQuery(select() + WHERE + fieldEquals, entity())
-                .setParameter(field, useCase ? value.toString().toLowerCase() : value);
+                .createQuery(select() + WHERE + fieldEquals(field), entity())
+                .setParameter(field, value);
+    }
+
+    /**
+     * @param field for example "learningObject.id", if you pass just "id"
+     */
+    private TypedQuery<Entity> getFindByComboFieldQuery(String field, Object value) {
+        String[] split = field.split("\\.");
+        if (split.length != 2) {
+            throw new UnsupportedOperationException("unknown field parameter, should be entity.property, instead: " + field);
+        }
+        return getEntityManager()
+                .createQuery(select() + WHERE + comboFieldEquals(split[0], split[1]), entity())
+                .setParameter(split[1], value);
     }
 
     private TypedQuery<Entity> getFindByFieldQuery(String field1, Object value1, String field2, Object value2) {
@@ -177,8 +197,8 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return "o." + field + " = :" + field;
     }
 
-    private String fieldEqualsLower(String field) {
-        return "lower(o." + field + ") = :" + field;
+    private String comboFieldEquals(String property, String alias) {
+        return "o." + property + "." + alias + " = :" + alias;
     }
 
     private String fieldInEquals(String field) {
