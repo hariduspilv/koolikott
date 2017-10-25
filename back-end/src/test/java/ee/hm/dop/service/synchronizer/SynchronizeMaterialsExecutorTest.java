@@ -211,6 +211,11 @@ public class SynchronizeMaterialsExecutorTest {
         };
 
         @Override
+        protected RepositoryService newRepositoryService() {
+            return repositoryService;
+        }
+
+        @Override
         protected void closeTransaction() {
             if (!transactionStarted) {
                 fail("Transaction not started");
