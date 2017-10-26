@@ -87,7 +87,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "                     FROM BrokenContent ic\n" +
                         "                     WHERE ic.material = lo\n" +
                         "                           AND ic.deleted = 0)" +
-                        "ORDER BY r.createdAt ASC, lo.id ASC", AdminLearningObject.class)
+                        "ORDER BY r.createdAt ASC, r.id ASC", AdminLearningObject.class)
                 .setMaxResults(300)
                 .getResultList();
     }
@@ -114,7 +114,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "                     WHERE ic.material = lo\n" +
                         "                           AND ic.deleted = 0)" +
                         "   AND lt.id in (:taxonIds)" +
-                        "ORDER BY r.createdAt ASC, lo.id ASC", AdminLearningObject.class)
+                        "ORDER BY r.createdAt ASC, r.id ASC", AdminLearningObject.class)
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .setMaxResults(300)
                 .getResultList();

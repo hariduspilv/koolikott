@@ -1,6 +1,7 @@
 package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.FirstReviewDao;
+import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
@@ -19,7 +20,16 @@ public class FirstReviewAdminService {
     @Inject
     private FirstReviewDao firstReviewDao;
 
-    public List<FirstReview> getUnReviewed(User user) {
+    public List<FirstReview> getUnReviewedOld(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
+            return firstReviewDao.findAllUnreviewedOld();
+        } else {
+            return firstReviewDao.findAllUnreviewedOld(user);
+        }
+    }
+
+    public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findAllUnreviewed();

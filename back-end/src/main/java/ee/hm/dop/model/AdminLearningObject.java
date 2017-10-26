@@ -5,10 +5,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,6 +36,12 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
 
+    @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime added;
+
     @ManyToMany(fetch = EAGER)
     @Fetch(FetchMode.SELECT)
     @JoinTable(
@@ -45,6 +55,12 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     private List<ReviewableChange> reviewableChanges;
+
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    private List<FirstReview> firstReviews;
+
+//    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+//    private List<ImproperContent> improperContents;
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -95,5 +111,21 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     public void setTaxons(List<Taxon> taxons) {
         this.taxons = taxons;
+    }
+
+    public List<FirstReview> getFirstReviews() {
+        return firstReviews;
+    }
+
+    public void setFirstReviews(List<FirstReview> firstReviews) {
+        this.firstReviews = firstReviews;
+    }
+
+    public DateTime getAdded() {
+        return added;
+    }
+
+    public void setAdded(DateTime added) {
+        this.added = added;
     }
 }
