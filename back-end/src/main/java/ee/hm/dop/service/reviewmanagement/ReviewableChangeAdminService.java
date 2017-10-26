@@ -25,21 +25,21 @@ public class ReviewableChangeAdminService {
     private LearningObjectDao learningObjectDao;
 
     @Deprecated
-    public List<ReviewableChange> getUnReviewed(User user) {
+    public List<ReviewableChange> getUnReviewedOld(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
+            return reviewableChangeDao.findAllUnreviewedOld();
+        } else {
+            return reviewableChangeDao.findAllUnreviewedOld(user);
+        }
+    }
+
+    public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return reviewableChangeDao.findAllUnreviewed();
         } else {
             return reviewableChangeDao.findAllUnreviewed(user);
-        }
-    }
-
-    public List<AdminLearningObject> getUnReviewedNew(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return reviewableChangeDao.findAllUnreviewed2();
-        } else {
-            return reviewableChangeDao.findAllUnreviewed2(user);
         }
     }
 

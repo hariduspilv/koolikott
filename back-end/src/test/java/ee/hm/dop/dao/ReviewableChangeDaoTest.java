@@ -54,9 +54,9 @@ public class ReviewableChangeDaoTest extends DatabaseTestBase {
 
     @Test
     public void query_doesnt_fail() throws Exception {
-        reviewableChangeDao.findAllUnreviewed2();
+        reviewableChangeDao.findAllUnreviewed();
         User moderator = userDao.findById(USER_MODERATOR.id);
-        reviewableChangeDao.findAllUnreviewed2(moderator);
+        reviewableChangeDao.findAllUnreviewed(moderator);
     }
 
     public ReviewableChange change(Material material) {

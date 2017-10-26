@@ -37,14 +37,14 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ReviewableChange> getChangedOld() {
-        return reviewableChangeAdminService.getUnReviewed(getLoggedInUser());
+        return reviewableChangeAdminService.getUnReviewedOld(getLoggedInUser());
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<AdminLearningObject> getChanged() {
-        return reviewableChangeAdminService.getUnReviewedNew(getLoggedInUser());
+        return reviewableChangeAdminService.getUnReviewed(getLoggedInUser());
     }
 
     @GET

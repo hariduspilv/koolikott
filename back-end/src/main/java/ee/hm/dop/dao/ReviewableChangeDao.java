@@ -21,7 +21,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     }
 
     @Deprecated
-    public List<ReviewableChange> findAllUnreviewed() {
+    public List<ReviewableChange> findAllUnreviewedOld() {
         return getEntityManager()
                 .createNativeQuery("SELECT f.*\n" +
                         "FROM ReviewableChange f\n" +
@@ -43,7 +43,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     }
 
     @Deprecated
-    public List<ReviewableChange> findAllUnreviewed(User user) {
+    public List<ReviewableChange> findAllUnreviewedOld(User user) {
         return getEntityManager()
                 .createNativeQuery("SELECT f.*\n" +
                         "FROM ReviewableChange f\n" +
@@ -68,7 +68,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     }
 
 
-    public List<AdminLearningObject> findAllUnreviewed2() {
+    public List<AdminLearningObject> findAllUnreviewed() {
         return getEntityManager()
                 .createQuery("SELECT DISTINCT lo\n" +
                         "FROM AdminLearningObject lo\n" +
@@ -93,7 +93,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     }
 
 
-    public List<AdminLearningObject> findAllUnreviewed2(User user) {
+    public List<AdminLearningObject> findAllUnreviewed(User user) {
         return getEntityManager()
                 .createQuery("SELECT DISTINCT lo\n" +
                         "FROM AdminLearningObject lo\n" +

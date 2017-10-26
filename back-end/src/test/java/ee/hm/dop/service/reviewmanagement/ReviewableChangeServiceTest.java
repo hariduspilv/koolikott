@@ -3,7 +3,6 @@ package ee.hm.dop.service.reviewmanagement;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.ReviewableChange;
-import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.ResourceType;
@@ -19,10 +18,7 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 
 import static junit.framework.TestCase.*;
 import static org.easymock.EasyMock.expect;
@@ -58,7 +54,7 @@ public class ReviewableChangeServiceTest {
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
         expect(reviewableChangeDao.createOrUpdate(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
-        expect(reviewableChangeDao.findAllUnreviewed()).andReturn(Collections.singletonList(reviewableChange));
+        expect(reviewableChangeDao.findAllUnreviewedOld()).andReturn(Collections.singletonList(reviewableChange));
         replay(learningObjectService);
         replay(reviewableChangeDao);
 
@@ -66,7 +62,7 @@ public class ReviewableChangeServiceTest {
 
         assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());
-        assertTrue(reviewableChangeDao.findAllUnreviewed().size() == 1);
+        assertTrue(reviewableChangeDao.findAllUnreviewedOld().size() == 1);
     }
 
     @Test
