@@ -105,13 +105,8 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void unAuthorized_user_can_not_view() throws Exception {
         login(USER_MATI);
-        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listTypeFirstReview());
+        List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
         assertNull("UnReviewed list", firstReviews);
-    }
-
-    private GenericType<List<FirstReview>> listTypeFirstReview() {
-        return new GenericType<List<FirstReview>>() {
-        };
     }
 
     private GenericType<List<AdminLearningObject>> listTypeAdminLO() {
