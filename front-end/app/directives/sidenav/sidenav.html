@@ -136,7 +136,7 @@
                 <span class="sidenav__count" data-ng-bind="brokenMaterialsCount"></span>
               </a>
             </li>
-            <li class="sidenav__item" layout="column" ng-if="isAdmin()">
+            <li class="sidenav__item" layout="column" ng-if="modUser()">
               <a id="changedLearningObjects" class="sidenav__header" md-ink-ripple layout="row"
                  layout-align="space-between center"
                  data-ng-class="{'is-active': isLocation('/dashboard/changedLearningObjects')}"

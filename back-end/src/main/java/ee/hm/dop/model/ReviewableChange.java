@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,6 +22,7 @@ public class ReviewableChange implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "learningObject")
+    @JsonBackReference("learningObject")
     private LearningObject learningObject;
 
     @ManyToOne

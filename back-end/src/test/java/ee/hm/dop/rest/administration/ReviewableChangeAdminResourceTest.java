@@ -9,16 +9,12 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
-import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.DbUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -224,12 +220,12 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     @Test
     public void moderator_sees_changes_made_in_their_taxon_tree_only() throws Exception {
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
-        List<ReviewableChange> reviewableChanges = doGet(GET_ALL_CHANGES, list());
+        List<AdminLearningObject> reviewableChanges = doGet(GET_ALL_CHANGES, listOfAdminLOs());
         logout();
 
         login(USER_MODERATOR);
         long changedLearnigObjectsCount2 = doGet(GET_CHANGED_COUNT, Long.class);
-        List<ReviewableChange> reviewableChanges2 = doGet(GET_ALL_CHANGES, list());
+        List<AdminLearningObject> reviewableChanges2 = doGet(GET_ALL_CHANGES, listOfAdminLOs());
 
         assertNotEquals(changedLearnigObjectsCount, changedLearnigObjectsCount2);
         assertNotEquals(reviewableChanges, reviewableChanges2);
@@ -311,7 +307,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
-        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_16), list());
+        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_16), listOfChanges());
         ReviewableChange oneChange = reviewableChanges.get(0);
 
         doPost(format(ACCEPT_ONE_CHANGES_URL, MATERIAL_16, oneChange.getId()));
@@ -340,7 +336,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         Material updatedMaterial = getMaterial(MATERIAL_16);
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
-        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_16), list());
+        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_16), listOfChanges());
         ReviewableChange oneChange = reviewableChanges.get(0);
 
         doPost(format(REVERT_ONE_CHANGES_URL, MATERIAL_16, oneChange.getId()));
@@ -367,8 +363,13 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         }
     }
 
-    private GenericType<List<ReviewableChange>> list() {
+    private GenericType<List<ReviewableChange>> listOfChanges() {
         return new GenericType<List<ReviewableChange>>() {
+        };
+    }
+
+    private GenericType<List<AdminLearningObject>> listOfAdminLOs() {
+        return new GenericType<List<AdminLearningObject>>() {
         };
     }
 

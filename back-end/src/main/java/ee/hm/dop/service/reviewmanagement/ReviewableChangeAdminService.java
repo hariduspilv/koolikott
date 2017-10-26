@@ -2,10 +2,7 @@ package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ReviewableChange;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.service.content.LearningObjectService;
@@ -27,12 +24,22 @@ public class ReviewableChangeAdminService {
     @Inject
     private LearningObjectDao learningObjectDao;
 
+    @Deprecated
     public List<ReviewableChange> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return reviewableChangeDao.findAllUnreviewed();
         } else {
             return reviewableChangeDao.findAllUnreviewed(user);
+        }
+    }
+
+    public List<AdminLearningObject> getUnReviewedNew(User user) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
+            return reviewableChangeDao.findAllUnreviewed2();
+        } else {
+            return reviewableChangeDao.findAllUnreviewed2(user);
         }
     }
 

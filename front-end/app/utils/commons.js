@@ -519,11 +519,11 @@ function focusInput(elementID) {
 }
 
 function isMaterial(type) {
-    return type === ".Material" || type === ".ReducedMaterial"
+    return [".Material", ".ReducedMaterial", ".AdminMaterial"].includes(type);
 }
 
 function isPortfolio(type) {
-    return type === ".Portfolio" || type === ".ReducedPortfolio"
+    return [".Portfolio", ".ReducedPortfolio", ".AdminPortfolio"].includes(type);
 }
 
 function stripHtml(htmlString) {
@@ -601,9 +601,9 @@ class Controller {
         )
     }
     isMaterial({ type }) {
-        return type === '.Material' || type === '.ReducedMaterial'
+        return isMaterial(type);
     }
     isPortfolio({ type }) {
-        return type === '.Portfolio' || type === '.ReducedPortfolio'
+        return isMaterial(type);
     }
 }

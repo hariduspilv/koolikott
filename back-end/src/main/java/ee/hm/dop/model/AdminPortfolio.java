@@ -1,6 +1,5 @@
 package ee.hm.dop.model;
 
-
 import ee.hm.dop.model.interfaces.IPortfolio;
 
 import javax.persistence.Column;
@@ -9,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Portfolio")
-public class ReducedPortfolio extends ReducedLearningObject implements IPortfolio {
+public class AdminPortfolio extends AdminLearningObject implements IPortfolio {
 
     @Column(nullable = false)
     private String title;
@@ -21,5 +20,4 @@ public class ReducedPortfolio extends ReducedLearningObject implements IPortfoli
     public void setTitle(String title) {
         this.title = title;
     }
-
 }

@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.administration;
 
+import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
@@ -32,10 +33,18 @@ public class ReviewableChangeAdminResource extends BaseResource {
     private LearningObjectService learningObjectService;
 
     @GET
+    @Path("old")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChanged() {
+    public List<ReviewableChange> getChangedOld() {
         return reviewableChangeAdminService.getUnReviewed(getLoggedInUser());
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public List<AdminLearningObject> getChanged() {
+        return reviewableChangeAdminService.getUnReviewedNew(getLoggedInUser());
     }
 
     @GET

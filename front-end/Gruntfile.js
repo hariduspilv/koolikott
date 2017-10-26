@@ -75,11 +75,11 @@ module.exports = function (grunt) {
             },
             proxies: [
                 //dev
-                {context: '/rest', host: 'oxygen.netgroupdigital.com', port: 8080},
+                // {context: '/rest', host: 'oxygen.netgroupdigital.com', port: 8080},
                 //test
                 // {context: '/rest', host: 'test.oxygen.netgroupdigital.com', port: 8090},
                 //local
-                // {context: '/rest', host: 'localhost', port: 8080}
+                {context: '/rest', host: 'localhost', port: 8080}
             ],
             livereload: {
                 options: {

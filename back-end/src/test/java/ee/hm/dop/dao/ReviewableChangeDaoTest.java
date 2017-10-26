@@ -5,6 +5,7 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.Material;
+import ee.hm.dop.model.User;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -20,6 +21,8 @@ public class ReviewableChangeDaoTest extends DatabaseTestBase {
     public static final Material MATERIAL3 = TestConstants.materialWithId(MATERIAL_3);
     @Inject
     private ReviewableChangeDao reviewableChangeDao;
+    @Inject
+    private UserDao userDao;
 
     @Test
     public void getAllByLearningObject() {
@@ -47,6 +50,13 @@ public class ReviewableChangeDaoTest extends DatabaseTestBase {
         assertTrue(changes.containsAll(Arrays.asList(change1Db, change2Db, change3Db)));
         List<Long> ids = changes.stream().map(ReviewableChange::getId).collect(Collectors.toList());
         assertTrue(ids.containsAll(Arrays.asList(change1Db.getId(), change2Db.getId(), change3Db.getId())));
+    }
+
+    @Test
+    public void query_doesnt_fail() throws Exception {
+        reviewableChangeDao.findAllUnreviewed2();
+        User moderator = userDao.findById(USER_MODERATOR.id);
+        reviewableChangeDao.findAllUnreviewed2(moderator);
     }
 
     public ReviewableChange change(Material material) {
