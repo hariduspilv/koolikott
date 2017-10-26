@@ -143,19 +143,20 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     public long findCountOfUnreviewed(User user) {
         return ((BigInteger) getEntityManager()
                 .createNativeQuery("SELECT count(DISTINCT o.id) AS c\n" +
-                        "FROM ReviewableChange f\n" +
-                        "   JOIN LearningObject o ON f.learningObject = o.id\n" +
+                        "FROM LearningObject o\n" +
                         "   JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                        "WHERE f.reviewed = 0\n" +
-                        "   AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
+                        "WHERE (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
+                        "  AND exists(SELECT 1 FROM ReviewableChange ic " +
+                        "                   WHERE ic.learningObject = o.id " +
+                        "                   AND ic.reviewed = 0)\n" +
                         "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "                   WHERE ic.learningObject = o.id " +
                         "                   AND ic.reviewed = 0)\n" +
                         "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = f.learningObject" +
+                        "                   WHERE bc.material = o.id" +
                         "                   AND bc.deleted = 0 ) " +
-                        " AND NOT exists(SELECT 1 FROM FirstReview ic " +
-                        "                   WHERE ic.learningObject = f.learningObject " +
+                        "  AND NOT exists(SELECT 1 FROM FirstReview ic " +
+                        "                   WHERE ic.learningObject = o.id " +
                         "                   AND ic.reviewed = 0)" +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))

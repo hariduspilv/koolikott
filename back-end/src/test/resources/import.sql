@@ -235,6 +235,9 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, null, 'http://www.bieber.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(17, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(17, null, null, null, 'http://www.bieber2.com', null, null, false, false, false);
+
 
 -- Authors
 
@@ -653,6 +656,8 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (12, 1, CURR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (13, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (14, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (15, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (16, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (17, 1, CURRENT_TIMESTAMP);
 
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (101, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (102, 1, CURRENT_TIMESTAMP);
