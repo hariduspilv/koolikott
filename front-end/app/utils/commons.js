@@ -601,9 +601,9 @@ class Controller {
         )
     }
     isMaterial({ type }) {
-        return isMaterial(type);
+        return [".Material", ".ReducedMaterial", ".AdminMaterial"].includes(type);
     }
     isPortfolio({ type }) {
-        return isMaterial(type);
+        return [".Portfolio", ".ReducedPortfolio", ".AdminPortfolio"].includes(type);
     }
 }
