@@ -15,17 +15,22 @@ class controller extends Controller {
         }
     }
     getCorrectLanguageTitle() {
-        if (this.learningObject)
+        const { titles, language } = this.learningObject || {}
+
+        if (titles)
             return this.getUserDefinedLanguageString(
-                this.learningObject.titles,
+                titles,
                 this.translationService.getLanguage(),
-                this.learningObject.language
+                language
             )
     }
 }
-controller.$inject = ['$location', 'translationService', 'storageService']
-
-angular.module('koolikottApp').component('dopCardXs', {
+controller.$inject = [
+    '$location',
+    'translationService',
+    'storageService'
+]
+component('dopCardXs', {
     bindings: {
         learningObject: '='
     },

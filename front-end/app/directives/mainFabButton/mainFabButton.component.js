@@ -57,7 +57,7 @@ class controller extends Controller {
             })
 
         this.$scope.copyPortfolio = () =>
-            serverCallService
+            this.serverCallService
                 .makePost('rest/portfolio/copy', createPortfolio(this.$route.current.params.id))
                 .then(({ portfolio }) => {
                     if (portfolio) {
@@ -75,8 +75,6 @@ class controller extends Controller {
             if (!('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch))
                 this.$scope.isOpen = state
         }
-
-        this.$scope.isViewPortforlioPage = this.$rootScope.isViewPortforlioPage
     }
 }
 controller.$inject = [
@@ -90,8 +88,7 @@ controller.$inject = [
     'storageService',
     'toastService'
 ]
-
-angular.module('koolikottApp').component('dopMainFabButton', {
+component('dopMainFabButton', {
     templateUrl: 'directives/mainFabButton/mainFabButton.html',
     controller
 })

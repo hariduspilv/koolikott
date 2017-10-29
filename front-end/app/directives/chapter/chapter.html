@@ -3,7 +3,7 @@
     <md-card class="card-lg chapter-card">
 
       <!--View-->
-      <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
+      <md-card-content data-ng-if="!$root.isEditPortfolioMode" layout="row">
         <div flex>
           <div layout="row" class="pointer" data-ng-click="$ctrl.onClickChapter($ctrl.chapter)">
             <h2 data-ng-class="{'chapter-title': $ctrl.chapter.text.length == undefined || $ctrl.chapter.text.length == 0}">
@@ -27,7 +27,7 @@
       </md-card-content>
 
       <!--Edit-->
-      <md-card-content data-ng-if="$ctrl.isEditable">
+      <md-card-content data-ng-if="$root.isEditPortfolioMode">
         <div layout="row" layout-align="start center">
           <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.isCollapsed}" data-ng-click="$ctrl.onClickChapter(chapter)">
             <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
@@ -68,7 +68,7 @@
         <!--LearningObjects in the row-->
         <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
             data-layout-gt-sm="row">
-          <li data-ng-if="!$ctrl.isEditable"
+          <li data-ng-if="!$root.isEditPortfolioMode"
               id="chapterMaterial-{{$ctrl.index}}-{{$index}}"
               data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
               data-dop-embedded-material
@@ -80,7 +80,7 @@
           </li>
 
           <!--Enable drag-n-drop with new ui-->
-          <li data-ng-if="$ctrl.isEditable"
+          <li data-ng-if="$root.isEditPortfolioMode"
               dnd-disable-if="true"
               data-dnd-draggable="learningObject"
               data-dnd-moved="contentRow.learningObjects.splice($index, 1)"
@@ -109,7 +109,7 @@
       <md-card class="card-lg chapter-card">
 
         <!--View-->
-        <md-card-content data-ng-if="!$ctrl.isEditable" layout="row">
+        <md-card-content data-ng-if="!$root.isEditPortfolioMode" layout="row">
           <div flex>
             <div layout="row" class="pointer" data-ng-click="$ctrl.onClickSubChapter($index)">
               <h3>
@@ -132,7 +132,7 @@
         </md-card-content>
 
         <!--Edit-->
-        <md-card-content data-ng-if="$ctrl.isEditable">
+        <md-card-content data-ng-if="$root.isEditPortfolioMode">
           <div layout="row" layout-align="start center">
             <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[$index]}" data-ng-click="$ctrl.onClickSubChapter($index)">
               <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
@@ -175,7 +175,7 @@
           <!--LearningObjects in the row-->
           <ul data-ng-if="contentRow.learningObjects.length" dnd-list="contentRow.learningObjects"
               data-layout-gt-sm="row">
-            <li data-ng-if="!$ctrl.isEditable"
+            <li data-ng-if="!$root.isEditPortfolioMode"
                 id="subChapterMaterial-{{$ctrl.index}}-{{$index}}"
                 data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
                 data-dop-embedded-material
@@ -187,7 +187,7 @@
             </li>
 
             <!--Enable drag-n-drop with new ui-->
-            <li data-ng-if="$ctrl.isEditable"
+            <li data-ng-if="$root.isEditPortfolioMode"
                 data-dnd-disable-if="true"
                 data-dnd-draggable="learningObject"
                 data-dnd-moved="contentRow.learningObjects.splice($index, 1)"

@@ -3,7 +3,6 @@
 {
 class controller extends Controller {
     $onInit() {
-        this.isEditable = this.$rootScope.isEditPortfolioMode
         this.isCollapsed = this.chapter.openCloseChapter
         this.subisCollapsed = {}
     }
@@ -26,8 +25,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = ['$rootScope', 'dialogService']
-
-angular.module('koolikottApp').component('dopChapter', {
+component('dopChapter', {
     bindings: {
         chapter: '=',
         index: '@',

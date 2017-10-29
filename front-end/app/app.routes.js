@@ -48,46 +48,55 @@ angular.module('koolikottApp')
                 .when('/dashboard/improperMaterials', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/improperPortfolios', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/brokenMaterials', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/deletedMaterials', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/deletedPortfolios', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/moderators', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
                 .when('/dashboard/restrictedUsers', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
                 .when('/dashboard/changedLearningObjects', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/unReviewed', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/loginRedirect', {

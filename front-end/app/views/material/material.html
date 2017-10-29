@@ -32,7 +32,7 @@
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
               <md-menu>
-                <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
                 <md-menu-content width="4" class="material-menu-icon">
@@ -135,7 +135,7 @@
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
             <!--Embedded Material-->
             <div data-embeddable="material.embeddable"
-                 data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortforlioPage && !isEditPortfolioPage}"
+                 data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortfolioPage && !$root.isEditPortfolioPage}"
                  data-dop-embedded-material data-material="material" data-flex></div>
           </div>
           <!-- Tags -->

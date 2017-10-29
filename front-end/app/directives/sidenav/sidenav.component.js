@@ -20,6 +20,7 @@ class controller extends Controller {
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
+        this.$scope.dashboardSearch = this.dashboardSearch.bind(this)
 
         this.$scope.$on('dashboard:adminCountsUpdated', this.updateAdminCounts.bind(this))
         this.$scope.$watch(() => this.taxonService.getSidenavTaxons(), (newValue) => {
@@ -83,7 +84,9 @@ class controller extends Controller {
 
             if (typeof this.userDataService[methodName] === 'function')
                 this.userDataService[methodName](count => {
-                    if (!isPersonal || count >= 0)
+                    count = parseFloat(count)
+
+                    if (!isPersonal || (!isNaN(count) && count >= 0))
                         this.$scope[type+'Count'] = count
                 })
         }
@@ -106,8 +109,8 @@ class controller extends Controller {
             this.updateCount('deletedPortfolios')
             this.updateCount('improperMaterials')
             this.updateCount('improperPortfolios')
-            this.updateCount('changedLearningObject')
-            this.updateCount('unReviewedLearningObject')
+            this.updateCount('changedLearningObjects')
+            this.updateCount('unReviewedLearningObjects')
         }
         if (this.authenticatedUserService.isAdmin()) {
             this.updateCount('moderators')
@@ -132,8 +135,7 @@ controller.$inject = [
     'userDataService',
     'taxonService'
 ]
-
-angular.module('koolikottApp').component('dopSidenav', {
+component('dopSidenav', {
     templateUrl: 'directives/sidenav/sidenav.html',
     controller
 })

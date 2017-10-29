@@ -127,8 +127,7 @@ controller.$inject = [
     'searchService',
     'authenticatedUserService'
 ]
-
-angular.module('koolikottApp').component('dopAside', {
+component('dopAside', {
     bindings: {
         learningObject: '<'
     },

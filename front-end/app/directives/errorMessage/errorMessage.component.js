@@ -267,8 +267,7 @@ controller.$inject = [
     'taxonService',
     'authenticatedUserService'
 ]
-
-angular.module('koolikottApp').component('dopErrorMessage', {
+component('dopErrorMessage', {
     bindings: {
         data: '<'
     },

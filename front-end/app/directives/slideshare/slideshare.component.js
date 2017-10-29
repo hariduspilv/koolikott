@@ -18,9 +18,11 @@ class controller extends Controller {
             })
     }
 }
-controller.$inject = ['$scope', 'serverCallService']
-
-angular.module('koolikottApp').component('dopSlideshare', {
+controller.$inject = [
+    '$scope',
+    'serverCallService'
+]
+component('dopSlideshare', {
     bindings: {
         source: '<',
         width: '<',

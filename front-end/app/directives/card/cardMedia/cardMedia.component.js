@@ -13,8 +13,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = ['$rootScope', 'iconService']
-
-angular.module('koolikottApp').component('dopCardMedia', {
+component('dopCardMedia', {
     bindings: {
         learningObject: '=',
         isAuthenticated: '<',

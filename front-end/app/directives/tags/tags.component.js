@@ -233,11 +233,9 @@ controller.$inject = [
     'tagsService',
     'toastService'
 ]
-
-angular.module('koolikottApp').component('dopTags', {
+component('dopTags', {
     bindings: {
-        learningObject: '=',
-        isEditPortfolioMode: '<?'
+        learningObject: '='
     },
     templateUrl: 'directives/tags/tags.html',
     controller

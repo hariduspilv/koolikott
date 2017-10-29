@@ -1,5 +1,5 @@
 <table md-table>
-  <thead md-head md-order="query.order" md-on-reorder="onReorder">
+  <thead md-head md-order="query.order" md-on-reorder="onSort">
     <tr md-row>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
       <th md-column md-order-by="byChanger"><span data-translate="CHANGER"></span></th>
@@ -8,12 +8,12 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row data-ng-repeat="item in data" ng-click="openLearningObject(item.learningObject)">
-      <td md-cell><div class="ellipsis ellipsis--2" ng-bind="getLearningObjectTitle(item.learningObject)"></div></td>
-      <td md-cell ng-bind="item.changer.name+' '+item.changer.surname"></td>
-      <td md-cell ng-bind="formatDate(item.added)"></td>
+    <tr md-row data-ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item.learningObject)">
+      <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item.learningObject)"></div></td>
+      <td md-cell ng-bind="item.createdBy.name+' '+item.createdBy.surname"></td>
+      <td md-cell ng-bind="$ctrl.formatDateToDayMonthYear(item.createdAt)"></td>
       <td md-cell>
-        <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
+        <a ng-href="{{$ctrl.getLearningObjectUrl(item.learningObject)}}">
           <md-button aria-label="Ava" class="md-icon-button">
             <md-icon>keyboard_arrow_right</md-icon>
           </md-button>

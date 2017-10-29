@@ -1,395 +1,302 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp').controller('baseTableViewController', [
-    '$rootScope', '$scope', '$location', 'translationService', 'serverCallService', '$filter', '$mdDialog', '$route', 'taxonService', 'sortService',
-    function ($rootScope, $scope, $location, translationService, serverCallService, $filter, $mdDialog, $route, taxonService, sortService) {
-        $scope.viewPath = $location.path();
-        var collection = null;
-        var filteredCollection = null;
-        var unmergedData
+{
+const VIEW_STATE_MAP = {
+    unReviewed: [
+        'DASHBOARD_UNREVIEWED', // title translation key
+        'firstReview/unReviewed', // rest URI (after 'rest/admin/')
+        'byAddedAt' // sort by
+    ],
+    improperMaterials: [
+        'DASHBOARD_IMRPOPER_MATERIALS',
+        'improper/material',
+        '-byReportCount',
+        true // do merge reports
+    ],
+    improperPortfolios: [
+        'DASHBOARD_IMRPOPER_PORTFOLIOS',
+        'improper/portfolio',
+        '-byReportCount',
+        true
+    ],
+    brokenMaterials: [
+        'BROKEN_MATERIALS',
+        'brokenContent/getBroken',
+        '-byReportCount',
+        true
+    ],
+    changedLearningObjects: [
+        'DASHBOARD_CHANGED_LEARNING_OBJECTS',
+        'changed',
+        'byAddedAt'
+    ],
+    deletedPortfolios: [
+        'DASHBOARD_DELETED_PORTFOLIOS',
+        'deleted/portfolio/getDeleted',
+        'byUpdatedAt'
+    ],
+    deletedMaterials: [
+        'DASHBOARD_DELETED_MATERIALS',
+        'deleted/material/getDeleted',
+        'byUpdatedAt'
+    ],
+    moderators: [
+        'MODERATORS_TAB',
+        'moderator',
+        'byUsername'
+    ],
+    restrictedUsers: [
+        'RESTRICTED_USERS_TAB',
+        'restrictedUser',
+        'byUsername'
+    ],
+}
 
-        $scope.itemsCount = 0;
+class controller extends Controller {
+    constructor(...args) {
+        super(...args)
 
-        $scope.filter = {
-            options: {
-                debounce: 500
-            }
-        };
+        this.collection = null
+        this.filteredCollection = null
+        this.unmergedData
 
-        $scope.query = {
+        this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
+        const [ titleTranslationKey, ...rest ] = VIEW_STATE_MAP[this.viewPath]
+
+        this.$scope.itemsCount = 0
+        this.$scope.filter = { options: { debounce: 500 } }
+        this.$scope.query = {
             filter: '',
             order: 'bySubmittedAt',
             limit: 10,
             page: 1
-        };
+        }
+        this.$scope.onPaginate = this.onPaginate.bind(this)
+        this.$scope.onSort = this.onSort.bind(this)
+        this.$scope.titleTranslationKey = titleTranslationKey
+        this.getData(...rest)
 
-        init();
+        // Get all users for the autocomplete
+        if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
+            this.serverCallService
+                .makeGet('rest/user/all')
+                .then(r => this.$scope.users = r.data)
 
-        function init() {
-            var _init = function (titleKey, restUri, sortBy, merge) {
-                $scope.titleTranslationKey = titleKey
-                serverCallService.makeGet(restUri, {}, function (data) {
-                    if (data)
-                        $scope.getItemsSuccess(data, sortBy, merge);
+        this.$scope.$watch('query.filter', (newValue, oldValue) => {
+            if (newValue !== oldValue)
+                this.filterItems()
+        })
+    }
+    getTranslation(key) {
+        return this.$filter('translate')(key)
+    }
+    editUser(user) {
+        if (user) {
+            const scope = this.$scope.$new(true)
+            scope.user = user
+
+            this.$mdDialog
+                .show({
+                    templateUrl: 'views/editUserDialog/editUser.html',
+                    controller: 'editUserController',
+                    scope
                 })
-
-                if (
-                    $scope.viewPath == '/dashboard/moderators' ||
-                    $scope.viewPath == '/dashboard/restrictedUsers'
-                )
-                    serverCallService.makeGet("rest/user/all", {}, successUsersCall, fail)
-            }
-
-            switch ($scope.viewPath) {
-                case '/dashboard/unReviewed':
-                    return _init(
-                        'DASHBOARD_UNREVIEWED',
-                        'rest/admin/firstReview/unReviewed',
-                        'byAddedAt'
-                    )
-                case '/dashboard/improperMaterials':
-                    return _init(
-                        'DASHBOARD_IMRPOPER_MATERIALS',
-                        'rest/admin/improper/material',
-                        '-byReportCount',
-                        true
-                    )
-                case '/dashboard/improperPortfolios':
-                    return _init(
-                        'DASHBOARD_IMRPOPER_PORTFOLIOS',
-                        'rest/admin/improper/portfolio',
-                        '-byReportCount',
-                        true
-                    )
-                case '/dashboard/brokenMaterials':
-                    return _init(
-                        'BROKEN_MATERIALS',
-                        'rest/admin/brokenContent/getBroken',
-                        '-byReportCount',
-                        true
-                    )
-                case '/dashboard/changedLearningObjects':
-                    return _init(
-                        'DASHBOARD_CHANGED_LEARNING_OBJECTS',
-                        'rest/admin/changed',
-                        'byAddedAt'
-                    )
-                case '/dashboard/deletedPortfolios':
-                    return _init(
-                        'DASHBOARD_DELETED_PORTFOLIOS',
-                        'rest/admin/deleted/portfolio/getDeleted',
-                        'byUpdatedAt'
-                    )
-                case '/dashboard/deletedMaterials':
-                    return _init(
-                        'DASHBOARD_DELETED_MATERIALS',
-                        'rest/admin/deleted/material/getDeleted',
-                        'byUpdatedAt'
-                    )
-                case '/dashboard/moderators':
-                    return _init(
-                        'MODERATORS_TAB',
-                        'rest/admin/moderator',
-                        'byUsername'
-                    )
-                case '/dashboard/restrictedUsers':
-                    return _init(
-                        'RESTRICTED_USERS_TAB',
-                        'rest/admin/restrictedUser',
-                        'byUsername'
-                    )
-            }
+                .then(() => this.$route.reload())
         }
+    }
+    filterUsers(query) {
+        return query
+            ? this.$scope.users.filter(u => u.username.indexOf(query.toLowerCase()) === 0)
+            : this.$scope.users
+    }
+    getUsernamePlaceholder() {
+        return this.$filter('translate')('USERNAME')
+    }
+    getData(restUri, sortBy, doMerge) {
+        this.serverCallService
+            .makeGet('rest/admin/'+restUri)
+            .then(({ data }) => {
+                if (data) {
+                    if (sortBy)
+                        this.$scope.query.order = sortBy
 
-        function successUsersCall(data) {
-            if (data) $scope.users = data;
-            else fail();
-        }
+                    if (doMerge) {
+                        this.unmergedData = data.slice(0)
+                        data = this.mergeReports(data)
+                    }
 
-        function fail() {
-            console.log("Failed to get users list");
-        }
+                    this.collection = data
+                    this.$scope.itemsCount = data.length
 
-        $scope.getTranslation = function (key) {
-            return $filter('translate')(key);
-        };
-
-        $scope.editUser = function (user) {
-            if (!user) return;
-            var editUserScope = $scope.$new(true);
-            editUserScope.user = user;
-
-            $mdDialog.show({
-                templateUrl: 'views/editUserDialog/editUser.html',
-                controller: 'editUserController',
-                scope: editUserScope
-            }).then(function () {
-                $route.reload();
-            });
-        };
-
-        $scope.querySearch = function (query) {
-            return query ? $scope.users.filter(createFilterFor(query)) : $scope.users;
-        };
-
-        $scope.getUsernamePlaceholder = function () {
-            return $filter('translate')('USERNAME');
-        };
-
-        $scope.isView = function (path) {
-            return $scope.viewPath === path
-        };
-
-        function createFilterFor(query) {
-            var lowercaseQuery = angular.lowercase(query);
-
-            return function filterFn(user) {
-                return (user.username.indexOf(lowercaseQuery) === 0);
-            };
-        }
-
-        $scope.getItemsSuccess = function (data, order, merge) {
-            if (isEmpty(data)) {
-                log('Getting data failed.');
-            } else {
-                if (order) {
-                    $scope.query.order = order;
+                    this.sortService.orderItems(data, this.$scope.query.order)
+                    this.$scope.data = data.slice(0, this.$scope.query.limit)
                 }
-                if (merge) {
-                    unmergedData = data.slice(0)
-                    data = mergeReports(data)
-                }
+            })
+    }
+    getCorrectLanguageTitle({ title, titles, language } = {}) {
+        return title || titles && this.getUserDefinedLanguageString(
+            titles,
+            this.translationService.getLanguage(),
+            language
+        )
+    }
+    openLearningObject(learningObject) {
+        this.$location.url(
+            this.getLearningObjectUrl(learningObject)
+        )
+    }
+    getLearningObjectUrl(learningObject) {
+        if (learningObject)
+            return this.isPortfolio(learningObject)
+                ? '/portfolio?id=' + learningObject.id
+                : '/material?id=' + learningObject.id
+    }
+    onSort(order) {
+        this.sortService.orderItems(
+            this.filteredCollection !== null
+                ? this.filteredCollection
+                : this.collection,
+            order
+        )
+        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+    }
+    getTaxonTranslation(taxon) {
+        if (!taxon)
+            return
 
-                collection = data;
-                $scope.itemsCount = data.length;
+        if (taxon.level = ".TaxonDTO")
+            taxon = this.taxonService.getFullTaxon(taxon.id)
 
-                sortService.orderItems(data, $scope.query.order);
-                $scope.data = data.slice(0, $scope.query.limit);
+        if (!taxon)
+            return
+
+        return taxon.level !== '.EducationalContext'
+            ? taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase()
+            : taxon.name.toUpperCase()
+    }
+    onPaginate(page, limit) {
+        this.$scope.data = this.paginate(page, limit)
+    }
+    clearFilter() {
+        this.$scope.query.filter = ''
+        this.$scope.itemsCount = this.collection.length
+        this.filteredCollection = null
+
+        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+
+        if (this.$scope.filter.form.$dirty)
+            this.$scope.filter.form.$setPristine()
+    }
+    getReportLabelKey(item) {
+        if (item.reportCount === 1)
+            return item.reportingReasons.length === 1
+                ? item.reportingReasons[0].reason
+                : item.reportingReasons.length > 1
+                    ? 'MULTIPLE_REASONS'
+                    : ''
+
+        let reasonKey = ''
+        const allReports = this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+
+        for (let i = 0; i < allReports.length; i++) {
+            if (allReports[i].reportingReasons.length > 1)
+                return 'MULTIPLE_REASONS'
+
+            if (allReports[i].reportingReasons.length === 1) {
+                if (!reasonKey)
+                    reasonKey = allReports[i].reportingReasons[0].reason
+                else if (reasonKey != allReports[i].reportingReasons[0].reason)
+                    return 'MULTIPLE_REASONS'
             }
-        };
-
-        $scope.formatMaterialUpdatedDate = function (updatedDate) {
-            return formatDateToDayMonthYear(updatedDate);
-        };
-
-        $scope.getLearningObjectTitle = function (learningObject) {
-            if (!learningObject) return;
-
-            if (learningObject.title) {
-                return learningObject.title;
-            }
-            else {
-                return $scope.getCorrectLanguageTitle(learningObject);
-            }
-        };
-
-        $scope.getLearningObjectUrl = function (learningObject) {
-            if (!learningObject) return;
-
-            if (isPortfolio(learningObject.type)) {
-                return "/portfolio?id=" + learningObject.id;
-            } else {
-                return "/material?id=" + learningObject.id;
-            }
-        };
-
-        $scope.openLearningObject = function (learningObject) {
-            $location.url(
-                $scope.getLearningObjectUrl(learningObject)
-            )
         }
 
-        function isFilterMatch(str, query) {
-            return str.toLowerCase().indexOf(query) > -1
-        }
+        return reasonKey
+    }
+    filterItems() {
+        const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1
 
-        function filterItems() {
-            filteredCollection = collection.filter(function (data) {
-                if (!data) {
-                    return;
-                }
+        this.filteredCollection = this.collection.filter(data => {
+            if (data) {
+                const query = this.$scope.query.filter.toLowerCase()
 
-                var query = $scope.query.filter.toLowerCase()
-
-                if ($scope.isView('/dashboard/moderators') || $scope.isView('/dashboard/restrictedUsers')) {
+                if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
                     return (
                         isFilterMatch(data.name+' '+data.surname, query) ||
                         isFilterMatch(data.name, query) ||
                         isFilterMatch(data.surname, query) ||
                         isFilterMatch(data.username, query)
                     )
-                } else {
-                    var text;
 
-                    if (data.learningObject && data.learningObject.type) {
-                        if (isMaterial(data.learningObject.type))
-                            text = $scope.getCorrectLanguageTitle(data.learningObject);
-                        if (isPortfolio(data.learningObject.type))
-                            text = data.learningObject.title;
-                    }
+                const text = data.learningObject
+                    ? (this.isMaterial(data.learningObject)
+                        ? this.getCorrectLanguageTitle(data.learningObject)
+                        : data.learningObject.title)
+                    : data.material
+                        ? this.getCorrectLanguageTitle(data.material)
+                        : this.isMaterial(data)
+                            ? this.getCorrectLanguageTitle(data)
+                            : data.title
 
-                    if (data.material)
-                        text = $scope.getCorrectLanguageTitle(data.material);
-
-                    if (data.type === '.Material')
-                        text = $scope.getCorrectLanguageTitle(data);
-
-                    if (data.type === '.Portfolio')
-                        text = data.title;
-
-                    if (text)
-                        return isFilterMatch(text, query)
-                }
-            });
-
-            $scope.itemsCount = filteredCollection.length;
-            $scope.data = paginate($scope.query.page, $scope.query.limit);
-        }
-
-        $scope.getCorrectLanguageTitle = function (item) {
-            return item.titles
-                ? getUserDefinedLanguageString(item.titles, translationService.getLanguage(), item.language) || ''
-                : item.title
-        };
-
-        $scope.onReorder = function (order) {
-            if (filteredCollection !== null)
-                sortService.orderItems(filteredCollection, order);
-            else
-                sortService.orderItems(collection, order);
-
-            $scope.data = paginate($scope.query.page, $scope.query.limit);
-        };
-
-        $scope.getTaxonTranslation = function (taxon) {
-            if (!taxon)
-                return
-
-            if (taxon.level = ".TaxonDTO") {
-                taxon = taxonService.getFullTaxon(taxon.id);
+                if (text)
+                    return isFilterMatch(text, query)
             }
+        })
 
-            if (!taxon)
-                return
-
-            if (taxon.level !== '.EducationalContext') {
-                return taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase();
-            } else {
-                return taxon.name.toUpperCase();
-            }
-        };
-
-        function paginate(page, limit) {
-            var skip = (page - 1) * limit;
-            var take = skip + limit;
-
-            if (filteredCollection !== null)
-                return filteredCollection.slice(skip, take);
-
-            return collection.slice(skip, take);
-        }
-
-        $scope.onPaginate = function (page, limit) {
-            $scope.data = paginate(page, limit);
-        };
-
-        $scope.clearFilter = function () {
-            $scope.query.filter = '';
-            $scope.itemsCount = collection.length;
-            filteredCollection = null;
-
-            $scope.data = paginate($scope.query.page, $scope.query.limit);
-
-            if ($scope.filter.form.$dirty) {
-                $scope.filter.form.$setPristine();
-            }
-        };
-
-        $scope.$watch('query.filter', function (newValue, oldValue) {
-            if (newValue === oldValue) return;
-            filterItems();
-        });
-
-        $scope.formatDate = function (date) {
-            return formatDateToDayMonthYear(date);
-        };
-
-        /**
-         *  Merge reports so that every learning object is represented by only 1 row in the table.
-         */
-        function mergeReports(items) {
-            var merged = [];
-
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                var isAlreadyReported = false;
-
-                for (var j = 0; j < merged.length; j++) {
-                    if (reportsContainSameLearningObject(merged[j], item)) {
-                        isAlreadyReported = true;
-
-                        merged[j].reportCount++;
-
-                        // show the newest date
-                        if (new Date(merged[j].added) < new Date(item.added)) {
-                            merged[j].added = item.added;
-                        }
-
-                        break;
-                    }
-                }
-
-                if (!isAlreadyReported) {
-                    item.reportCount = 1;
-                    merged.push(item);
-                }
-            }
-
-            return merged;
-        }
-
-        function reportsContainSameLearningObject(report1, report2) {
-            var id1, id2;
-
-            if (report1.learningObject) {
-                id1 = report1.learningObject.id;
-            } else if (report1.material) {
-                id1 = report1.material.id;
-            }
-
-            if (report2.learningObject) {
-                id2 = report2.learningObject.id;
-            } else if (report2.material) {
-                id2 = report2.material.id;
-            }
-
-            return id1 === id2;
-        }
-
-        $scope.getReportLabelKey = (item) => {
-            if (item.reportCount === 1)
-                return item.reportingReasons.length === 1
-                    ? item.reportingReasons[0].reason
-                    : item.reportingReasons.length > 1
-                        ? 'MULTIPLE_REASONS'
-                        : ''
-
-            let reasonKey = ''
-            const allReports = unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
-
-            for (let i = 0; i < allReports.length; i++) {
-                if (allReports[i].reportingReasons.length > 1)
-                    return 'MULTIPLE_REASONS'
-
-                if (allReports[i].reportingReasons.length === 1) {
-                    if (!reasonKey)
-                        reasonKey = allReports[i].reportingReasons[0].reason
-                    else if (reasonKey != allReports[i].reportingReasons[0].reason)
-                        return 'MULTIPLE_REASONS'
-                }
-            }
-
-            return reasonKey
-        }
+        this.$scope.itemsCount = this.filteredCollection.length
+        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
     }
-])
+    paginate(page, limit) {
+        const start = (page - 1) * limit
+        const end = start + limit
+
+        return this.filteredCollection !== null
+            ? this.filteredCollection.slice(start, end)
+            : this.collection.slice(start, end)
+    }
+    /**
+     *  Merge reports so that every learning object is represented by only 1 row in the table.
+     */
+    mergeReports(items) {
+        const merged = []
+        const isSame = (a, b) =>
+            (a.learningObject || a.material || {}).id ===
+            (b.learningObject || b.material || {}).id
+
+        for (let i = 0; i < items.length; i++) {
+            let isAlreadyReported = false
+
+            for (var j = 0; j < merged.length; j++)
+                if (isSame(merged[j], items[i])) {
+                    isAlreadyReported = true
+
+                    merged[j].reportCount++
+
+                    // show the newest date
+                    if (new Date(merged[j].added) < new Date(items[i].added))
+                        merged[j].added = items[i].added
+
+                    break
+                }
+
+            if (!isAlreadyReported) {
+                items[i].reportCount = 1
+                merged.push(items[i])
+            }
+        }
+
+        return merged
+    }
+}
+controller.$inject = [
+    '$scope',
+    '$location',
+    '$filter',
+    '$mdDialog',
+    '$route',
+    'serverCallService',
+    'sortService',
+    'taxonService',
+    'translationService'
+]
+_controller('baseTableViewController', controller)
+}

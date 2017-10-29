@@ -102,8 +102,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = ['$scope', '$timeout', 'serverCallService']
-
-angular.module('koolikottApp').component('dopInfiniteSearchResult', {
+component('dopInfiniteSearchResult', {
     bindings: {
         params: '<',
         url: '<?',

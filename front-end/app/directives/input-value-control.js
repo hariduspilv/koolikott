@@ -1,23 +1,22 @@
 'use strict'
 
-angular.module('koolikottApp').directive('dopInputValueControl', () => ({
+directive('dopInputValueControl', {
     require: '?ngModel',
     scope: {
         inputPattern: '@'
     },
     link($scope, $element, $attr, $ctrl) {
         if ($ctrl) {
-            $ctrl.$parsers.push(val => {
+            $ctrl.$parsers.push(value => {
                 if (typeof $scope.inputPattern === 'undefined')
-                    return val
+                    return value
 
-                var clean = val.replace(new RegExp($scope.inputPattern, 'g'), '')
+                const clean = value.replace(new RegExp($scope.inputPattern, 'g'), '')
                 
-                if (val !== clean) {
+                if (value !== clean) {
                     $ctrl.$setViewValue(clean)
                     $ctrl.$render()
                 }
-                
                 return clean
             })
             $element.bind('keypress', (evt) => {
@@ -26,4 +25,4 @@ angular.module('koolikottApp').directive('dopInputValueControl', () => ({
             })
         }
     }
-}))
+})

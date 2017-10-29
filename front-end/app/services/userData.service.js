@@ -225,7 +225,7 @@ angular.module('koolikottApp')
                 restrictedUsersCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/admin/restrictedUser/count", {}, getRestrictedUsersCountSuccess, getItemsFail);
             },
-            loadChangedLearningObjectCount: function (callback) {
+            loadChangedLearningObjectsCount: function (callback) {
                 var data = localStorage.getItem("changedLearningObject");
                 if (data) {
                     callback(data);
@@ -233,7 +233,7 @@ angular.module('koolikottApp')
                 changedLearningObjectCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/admin/changed/count", {}, getChangedLearningObjectCountSuccess, getItemsFail);
             },
-            loadUnReviewedLearningObjectCount: function (callback) {
+            loadUnReviewedLearningObjectsCount: function (callback) {
                 var data = localStorage.getItem("unReviewedLearningObject");
                 if (data) {
                     callback(data);

@@ -348,8 +348,7 @@ controller.$inject = [
     'storageService',
     'taxonService'
 ]
-
-angular.module('koolikottApp').component('dopDetailedSearch', {
+component('dopDetailedSearch', {
     bindings: {
         queryIn: '<',
         mainField: '=',

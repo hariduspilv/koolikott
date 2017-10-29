@@ -10,7 +10,7 @@ class controller extends Controller {
                     this.toastService.show(message)
                     this.alertService.clearMessage()
 
-                    $timeout(() => this.alert = null, 5000)
+                    this.$timeout(() => this.alert = null, 5000)
                 }
             },
             true
@@ -18,8 +18,5 @@ class controller extends Controller {
     }
 }
 controller.$inject = ['$scope', '$timeout', 'alertService', 'toastService']
-
-angular.module('koolikottApp').component('dopAlert', {
-    controller
-})
+component('dopAlert', { controller })
 }

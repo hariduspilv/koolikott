@@ -1,11 +1,11 @@
 <md-card class="md-whiteframe-2dp embed-card" ng-class="{'embed-link': fallbackToLink}" ng-cloak="fallbackToLink">
-  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage" data-ng-click="navigateToMaterial(material, $event)">
+  <md-card-header class="embed-header" data-ng-if="$root.isEditPortfolioPage || $root.isViewPortfolioPage" data-ng-click="navigateToMaterial(material, $event)">
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
     <md-card-header-text flex class="ellipsis embed-responsive-header-text">
       <a data-ng-href="{{'/material?id=' + material.id}}" class="md-title no-link ellipsis ellipsis--multiline"
-         data-ng-bind="getCorrectLanguageTitle(material)">
+         data-ng-bind="$ctrl.getCorrectLanguageTitle()">
       </a>
       <span class="md-subhead ellipsis">
         <span data-ng-repeat="author in material.authors">
@@ -14,7 +14,7 @@
         </span>
       </span>
     </md-card-header-text>
-    <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage">
+    <div data-ng-if="$root.isEditPortfolioMode && $root.isEditPortfolioPage">
       <md-button class="md-icon-button" data-ng-click="removeMaterial($event, material)">
         <md-icon>delete</md-icon>
         <md-tooltip md-direction="bottom">
@@ -46,7 +46,7 @@
     </div>
 
     <a class="embed-link" data-ng-href="{{material.source}}" data-ng-if="sourceType === 'PICTURE'" target="_blank"
-       ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
+       ng-class="{'embed-image-padded': $root.isEditPortfolioMode || $root.isViewPortfolioPage}">
       <img data-ng-src="{{material.source}}"/>
     </a>
 
@@ -65,12 +65,12 @@
 
     <div data-ng-if="sourceType === 'EBOOK'"
          class="embed-responsive-container embed-ebook-{{material.id}}">
-      <iframe width="100%" height="500px" src="{{ebookLink}}"></iframe>
+      <iframe width="100%" height="500px" data-ng-src="{{ebookLink}}"></iframe>
     </div>
 
     <div data-ng-if="sourceType === 'PDF'"
          class="embed-responsive-container embed-pdf-{{material.id}}">
-      <iframe width="100%" height="500px" src="{{material.PDFLink}}"></iframe>
+      <iframe width="100%" height="500px" data-ng-src="{{material.PDFLink}}"></iframe>
     </div>
 
     <!--Embed iframe-->
@@ -86,7 +86,7 @@
       </div>
     </div>
   </md-card-content>
-  <md-card-footer class="embeded-material-footer" data-ng-if="isEditPortfolioMode || !sourceType || sourceType === 'LINK' ">
+  <md-card-footer class="embeded-material-footer" data-ng-if="$root.isEditPortfolioMode || !sourceType || sourceType === 'LINK' ">
     <div layout="row" layout-align="space-between center">
       <!--Link as backup - if iframe is internally not working-->
       <a data-ng-href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
@@ -102,12 +102,12 @@
         </a>
 
         <div data-ng-if="showMaterialContent && embeddedDataIframe" data-ng-bind-html="embeddedDataIframe"></div>
-        <iframe ng-src="{{iframeSource}}" data-ng-if="showMaterialContent && !embeddedDataIframe" width="100%" height="100%"></iframe>
+        <iframe data-ng-src="{{iframeSource}}" data-ng-if="showMaterialContent && !embeddedDataIframe" width="100%" height="100%"></iframe>
       </div>
 
 
 <!--Up and down-->
-      <div data-ng-if="isEditPortfolioMode && isEditPortfolioPage" flex-xs="30" flex-sm="30" layout="row" layout-align="end end" class="align-right">
+      <div data-ng-if="$root.isEditPortfolioMode && $root.isEditPortfolioPage" flex-xs="30" flex-sm="30" layout="row" layout-align="end end" class="align-right">
         <md-button ng-disabled="rowIndex === 0" class="md-icon-button" aria-label="Liiguta materjali üles"
                    ng-click="listItemUp()">
           <md-icon class="material-icons">arrow_upward</md-icon>

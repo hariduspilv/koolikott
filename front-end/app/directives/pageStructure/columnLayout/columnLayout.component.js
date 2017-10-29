@@ -14,9 +14,12 @@ class controller extends Controller {
         })
     }
 }
-controller.$inject = ['$scope', '$mdSidenav', 'storageService']
-
-angular.module('koolikottApp').component('dopColumnLayout', {
+controller.$inject = [
+    '$scope',
+    '$mdSidenav',
+    'storageService'
+]
+component('dopColumnLayout', {
     templateUrl: 'directives/pageStructure/columnLayout/columnLayout.html',
     controller
 })

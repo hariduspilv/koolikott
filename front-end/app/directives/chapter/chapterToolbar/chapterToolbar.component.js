@@ -2,9 +2,6 @@
 
 {
 class controller extends Controller {
-    $onInit() {
-        this.isEditable = this.$rootScope.isEditPortfolioMode;
-    }
     addMaterial() {
         const scope = this.$scope.$new(true)
 
@@ -33,13 +30,11 @@ class controller extends Controller {
             title: '',
             materials: []
         })
-        this.$timeout(() =>
-            focusInput(`chapter-${this.index}-${subChapters.length - 1}`)
-        )
-    }
-    openMenu($mdOpenMenu, ev) {
-        if (typeof $mdOpenMenu === 'function')
-            $mdOpenMenu(ev)
+        this.$timeout(() => {
+            const el = document.getElementById(`chapter-${this.index}-${this.chapter.subchapters.length - 1}`)
+            if (el)
+                el.querySelector('input').focus()
+        })
     }
     openDetailedSearch() {
         this.$rootScope.savedIndexes = this.subIndex != null
@@ -52,20 +47,19 @@ class controller extends Controller {
                 : 'mobileSearch:open'
         )
 
-        if (this.isEditable)
+        if (this.$rootScope.isEditPortfolioMode)
             document.getElementById('header-search-input').focus()
     }
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$timeout',
     '$mdDialog',
-    '$rootScope',
     'storageService',
     '$window'
 ]
-
-angular.module('koolikottApp').component('dopChapterToolbar', {
+component('dopChapterToolbar', {
     bindings: {
         chapter: '=',
         isSub: '<',

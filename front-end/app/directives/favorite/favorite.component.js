@@ -3,9 +3,6 @@
 {
 class controller extends Controller {
     $onInit() {
-        this.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
-        this.isViewMaterialOrPortfolioPage = this.$rootScope.isViewMaterialOrPortfolioPage
-
         this.getFavoriteData()
     }
     $onChanges({ learningObject }) {
@@ -79,8 +76,7 @@ controller.$inject = [
     'materialService',
     'portfolioService'
 ]
-
-angular.module('koolikottApp').component('dopFavorite', {
+component('dopFavorite', {
     bindings: {
         learningObject: '<',
         hover: '<'

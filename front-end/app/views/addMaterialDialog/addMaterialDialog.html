@@ -78,7 +78,8 @@
                              name="source"
                              id="add-material-url-input"
                              type="text"
-                             required dop-validate-url
+                             required
+                             dop-validate-url
                              data-ng-click="sourceIsFocused()">
                       <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                         <div data-ng-show="isURLInvalid()" data-ng-message="url" class="invalid-url-message"
@@ -230,12 +231,12 @@
           <md-tab-body>
             <md-content class="md-padding">
               <div layout="row" data-ng-repeat="taxon in material.taxons track by $index">
-                <div data-dop-taxon-selector
-                     data-taxon="material.taxons[$index]"
-                     data-is-domain-required="{trigger: true}"
-                     data-mark-required="addMaterialForm.$submitted"
-                     data-flex>
-                </div>
+                <dop-taxon-selector
+                  data-taxon="material.taxons[$index]"
+                  data-is-domain-required="{trigger: true}"
+                  data-mark-required="addMaterialForm.$submitted"
+                  data-flex
+                ></dop-taxon-selector>
                 <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length"
                            data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(material.taxons[0])">
                   <md-icon>add_circle</md-icon>
@@ -256,14 +257,14 @@
               <div layout="row" flex layout-align="space-between center">
 
                 <!--Target groups-->
-                <div data-dop-target-group-selector
-                     data-target-groups="material.targetGroups"
-                     data-ng-show="educationalContextId !== 4"
-                     data-taxon="material.taxons[0]"
-                     data-mark-required="addMaterialForm.$submitted"
-                     data-is-required="{trigger: true}"
-                     data-flex="20">
-                </div>
+                <dop-target-group-selector
+                  data-target-groups="material.targetGroups"
+                  data-ng-show="educationalContextId !== 4"
+                  data-taxon="material.taxons[0]"
+                  data-mark-required="addMaterialForm.$submitted"
+                  data-is-required="{trigger: true}"
+                  data-flex="20"
+                ></dop-target-group-selector>
 
                 <!--Tags-->
                 <md-chips ng-model="material.tags"

@@ -24,7 +24,6 @@ class controller extends Controller {
         this.$scope.suggest.selectedItem = null
         this.$scope.canShowTour = false
         this.$scope.isMobileView = false
-        this.$scope.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
 
         this.$mdSidenav('left', true).then(left =>
             this.$scope.isSideNavOpen = left.isOpen()
@@ -80,7 +79,7 @@ class controller extends Controller {
             if (query == null)
                 return []
 
-            this.$scope.suggest.suggestions = suggestService.suggest(query, suggestService.getSuggestURLbase())
+            this.$scope.suggest.suggestions = this.suggestService.suggest(query, this.suggestService.getSuggestURLbase())
             
             if (this.$scope.doInlineSuggestion && this.$scope.suggest.suggestions)
                 this.$scope.suggest.suggestions.then(data => {
@@ -199,16 +198,12 @@ class controller extends Controller {
             )
         }, true)
 
-        this.$rootScope.$watch('isEditPortfolioMode', (newValue) => {
-            this.$scope.isEditPortfolioMode = newValue
-        })
-
         this.$scope.getTranslation = (string) => this.$translate.instant(string)
 
         this.$scope.isHeaderRed = () => {
             if ((this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()) && (
-                    this.$scope.isViewAdminPanelPage || (
-                        this.$scope.isViewMaterialOrPortfolioPage && (
+                    this.$rootScope.isViewAdminPanelPage || (
+                        this.$rootScope.isViewMaterialOrPortfolioPage && (
                             this.$scope.learningObjectImproper ||
                             this.$scope.learningObjectBroken ||
                             this.$scope.learningObjectChanged ||
@@ -318,8 +313,7 @@ controller.$inject = [
     'storageService',
     'dialogService'
 ]
-
-angular.module('koolikottApp').directive('dopHeader', () => ({
+directive('dopHeader', {
     scope: true,
     templateUrl: 'directives/header/header.html',
     link($scope, $element, $attr, $ctrl) {
@@ -362,5 +356,5 @@ angular.module('koolikottApp').directive('dopHeader', () => ({
         })
     },
     controller
-}))
+})
 }

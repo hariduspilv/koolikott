@@ -33,9 +33,11 @@ class controller extends Controller {
         this.$rootScope.$broadcast('detailedSearch:close')
     }
 }
-controller.$inject = ['$rootScope', 'authenticatedUserService']
-
-angular.module('koolikottApp').component('dopPickMaterial', {
+controller.$inject = [
+    '$rootScope',
+    'authenticatedUserService'
+]
+component('dopPickMaterial', {
     bindings: {
         learningObject: '<',
         disable: '<'

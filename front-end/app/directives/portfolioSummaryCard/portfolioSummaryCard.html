@@ -12,17 +12,17 @@
             data-object="portfolio"
           ></dop-share>
           <md-menu>
-            <md-button class="md-icon-button" ng-click="$mdOpenMenu()" id="material-menu">
+            <md-button class="md-icon-button" ng-click="$mdMenu.open($event)" id="material-menu">
               <md-icon md-menu-origin>more_vert</md-icon>
             </md-button>
             <md-menu-content width="4" id="material-actions">
-              <md-menu-item data-ng-if="!isEditPortfolioMode && canEdit()">
+              <md-menu-item data-ng-if="!$root.isEditPortfolioMode && canEdit()">
                 <md-button data-ng-click="editPortfolio()" id="material-edit">
                   <md-icon md-menu-align-target>edit</md-icon>
                   <span data-translate="EDIT_PORTFOLIO"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="isEditPortfolioMode">
+              <md-menu-item data-ng-if="$root.isEditPortfolioMode">
                 <md-button data-ng-click="showEditMetadataDialog()">
                   <md-icon md-menu-align-target>edit</md-icon>
                   <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
@@ -40,7 +40,7 @@
                   <span data-translate="BUTTON_RESTORE"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="isViewPortforlioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
+              <md-menu-item data-ng-if="$root.isViewPortfolioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
               <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
               <md-menu-item
                 dop-recommend
@@ -133,7 +133,7 @@
         data-ng-if="portfolio && portfolio.id"
         class="tags card-lg__container card-lg__container--padding-l-r-b"
         data-learning-object="portfolio"
-        data-is-edit-portfolio-mode="isEditPortfolioMode"
+        data-is-edit-portfolio-mode="$root.isEditPortfolioMode"
       ></dop-tags>
     </div>
     <!-- SECTION 1: Right  -->
@@ -221,7 +221,7 @@
   <md-divider class="md-default-theme"></md-divider>
   <!-- SECTION 2: Actions -->
   <md-card-actions
-    data-ng-if="!isEditPortfolioMode"
+    data-ng-if="!$root.isEditPortfolioMode"
     class="card-lg__actions"
     data-layout="column"
     data-layout-gt-xs="row"
@@ -260,7 +260,7 @@
       >
       <!-- Ratings area -->
       <dop-rating
-        data-ng-if="!isEditPortfolioMode && portfolio.type"
+        data-ng-if="!$root.isEditPortfolioMode && portfolio.type"
         data-portfolio="portfolio"
         data-like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
         data-dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"

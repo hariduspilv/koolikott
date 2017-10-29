@@ -103,7 +103,7 @@
               <a id="unReviewed" class="sidenav__header" md-ink-ripple layout="row"
                  layout-align="space-between center"
                  data-ng-class="{'is-active': $ctrl.$location.path() == '/dashboard/unReviewed'}"
-                 data-ng-href="/dashboard/unReviewed" data-ng-click=updateCount('unReviewedLearningObject')>
+                 data-ng-href="/dashboard/unReviewed" data-ng-click=updateCount('unReviewedLearningObjects')>
                 <div layout="row" layout-align="center center">
                   <md-icon class="material-icons sidenav__icon">lightbulb_outline</md-icon>
                   <span data-translate="UNREVIEWED" class="sidenav__name"></span>
@@ -156,7 +156,7 @@
                   <md-icon class="material-icons sidenav__icon">priority_high</md-icon>
                   <span data-translate="DASHBOARD_CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
                 </div>
-                <span class="sidenav__count" data-ng-bind="changedLearningObjectCount"></span>
+                <span class="sidenav__count" data-ng-bind="changedLearningObjectsCount"></span>
               </a>
             </li>
             <li class="sidenav__item" layout="column" ng-if="$ctrl.isAdminOrModerator()">
@@ -214,7 +214,7 @@
     <!-- END My Pofile -->
     <div
       uib-accordion-group class="panel-default"
-      data-ng-if="isViewPortforlioPage || isEditPortfolioMode"
+      data-ng-if="$root.isViewPortfolioPage || $root.isEditPortfolioMode"
       is-open="$root.isViewPortfolioAndEdit"
       >
       <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
@@ -223,7 +223,7 @@
       uib-accordion-group
       class="panel-default"
       is-open="isTaxonomyOpen"
-      data-ng-if="!isViewPortforlioPage && !isEditPortfolioMode"
+      data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode"
       >
       <uib-accordion-heading>
         <a
@@ -244,7 +244,12 @@
       <!-- Taxon subitems -->
       <ul class="sidenav__list">
         <li data-ng-repeat="(key, item) in taxon">
-          <div class="sidenav__item" layout="column" icon="taxonIcons[key]" dop-sidenav-taxon data-taxon="item"></div>
+          <dop-sidenav-taxon
+            class="sidenav__item"
+            layout="column"
+            icon="taxonIcons[key]"
+            data-taxon="item"
+          ></dop-sidenav-taxon>
         </li>
       </ul>
     </div>

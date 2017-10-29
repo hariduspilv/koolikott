@@ -31,8 +31,6 @@ class controller extends Controller {
         this.$scope.commentsOpen = false
         this.$scope.taxonObject = {}
         this.$scope.pageUrl = this.$location.absUrl()
-        this.$scope.isViewPortforlioPage = this.$rootScope.isViewPortforlioPage
-        this.$scope.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -219,8 +217,7 @@ controller.$inject = [
     'eventService',
     'portfolioService'
 ]
-
-angular.module('koolikottApp').component('dopPortfolioSummaryCard', {
+component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
         comment: '=',

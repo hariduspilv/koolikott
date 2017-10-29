@@ -3,15 +3,10 @@
 {
 class controller extends Controller {
     $onInit() {
-        console.log('dopTableOfContents')
-        /*console.log('this.storageService.getPortfolio()', this.storageService.getPortfolio())
         this.$scope.$watch(
             () => this.storageService.getPortfolio(),
-            (portfolio) => {
-                console.log('portfolio:', portfolio)
-                this.$scope.portfolio = portfolio
-            }
-        )*/
+            (portfolio) => this.$scope.portfolio = portfolio
+        )
 
         if (this.$location.hash()) {
             const unsubscribe = this.$scope.$watch(
@@ -47,13 +42,10 @@ controller.$inject = [
     '$mdSidenav',
     '$document',
     '$location',
-    '$timeout'
+    '$timeout',
+    'storageService'
 ]
-
-angular.module('koolikottApp').component('dopTableOfContents', {
-    bindings: {
-        portfolio: '='
-    },
+component('dopTableOfContents', {
     templateUrl: 'directives/tableOfContents/tableOfContents.html',
     controller
 })

@@ -504,47 +504,6 @@ function matchType(type) {
     }
 }
 
-function isYoutubeVideo(url) {
-    // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
-    var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    return url && url.match(youtubeUrlRegex);
-}
-
-function isSlideshareLink(url) {
-    var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
-    return url && url.match(slideshareUrlRegex);
-}
-
-function isVideoLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "mp4" || extension == "ogv" || extension == "webm";
-}
-
-function isAudioLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "mp3" || extension == "ogg" || extension == "wav";
-}
-
-function isPictureLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "jpg" || extension == "jpeg" || extension == "png" || extension == "gif";
-}
-
-function isEbookLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "epub";
-}
-
-function isPDFLink(url) {
-    if (!url) return;
-    var extension = url.split('.').pop().toLowerCase();
-    return extension == "pdf";
-}
-
 function isIE() {
     return (navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) ||
     navigator.userAgent.match(/rv 11/)));
@@ -561,23 +520,6 @@ function isMaterial(type) {
 
 function isPortfolio(type) {
     return type === ".Portfolio" || type === ".ReducedPortfolio"
-}
-
-function stripHtml(htmlString) {
-    let tmp = document.createElement("div");
-    tmp.innerHTML = htmlString;
-    return tmp.textContent || tmp.innerText || "";
-}
-
-function countOccurrences(value, text) {
-    let count = 0;
-    let index = text.indexOf(value);
-    while (index !== -1) {
-        count++;
-        index = text.indexOf(value, index + 1);
-    }
-
-    return count;
 }
 
 /**
@@ -698,4 +640,100 @@ class Controller {
     isMobile() {
         return window.innerWidth < BREAK_XS
     }
+    createPortfolio(id) {
+        return {
+            id,
+            type: '.Portfolio',
+            title: '',
+            summary: '',
+            taxon: null,
+            targetGroups: [],
+            tags: []
+        }
+    }
+    getSource(material) {
+        if (material) {
+            return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
+        }
+    }
+    isYoutubeVideo(url) {
+        // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+        const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
+        return url && url.match(youtubeUrlRegex)
+    }
+    isSlideshareLink(url) {
+        const slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
+        return url && url.match(slideshareUrlRegex)
+    }
+    isVideoLink(url) {
+        return url && ["mp4", "ogv", "webm"].includes(url.split('.').pop().toLowerCase())
+    }
+    isAudioLink(url) {
+        return url && ["mp3", "ogg", "wav"].includes(url.split('.').pop().toLowerCase())
+    }
+    isPictureLink(url) {
+        return url && ["jpg", "jpeg", "png", "gif"].includes(url.split('.').pop().toLowerCase())
+    }
+    isEbookLink(url) {
+        return url && url.split('.').pop().toLowerCase() === "epub"
+    }
+    isPDFLink(url) {
+        return url && url.split('.').pop().toLowerCase() === "pdf"
+    }
+    getEmbedType({ source }) {
+        if (!source)
+            return
+
+        switch (true) {
+            case isYoutubeVideo(source): return 'YOUTUBE'
+            case isSlideshareLink(source): return 'SLIDESHARE'
+            case isVideoLink(source): return 'VIDEO'
+            case isAudioLink(source): return 'AUDIO'
+            case isPictureLink(source): return 'PICTURE'
+            case isEbookLink(source): return 'EBOOK'
+            case isPDFLink(source): return 'PDF'
+        }
+    }
+    isIE() {
+        return (
+            navigator.appName == 'Microsoft Internet Explorer' ||
+            !!(navigator.userAgent.match(/Trident/) ||
+            navigator.userAgent.match(/rv 11/))
+        )
+    }
+    formatDateToDayMonthYear(dateString) {
+        const date = new Date(dateString)
+        
+        return isNaN(date)
+            ? ''
+            : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
+    }
+}
+
+/**
+ * Convenience methods for creating angular controllers, diectives, components,
+ * services, providers and factories.
+ */
+function _controller(name, controller) {
+    return angular.module('koolikottApp').controller(name, controller)
+}
+
+function directive(name, options) {
+    const factory = typeof options === 'function' || Array.isArray(options)
+        ? options
+        : () => options
+
+    return angular.module('koolikottApp').directive(name, factory)
+}
+
+function component(name, options) {
+    return angular.module('koolikottApp').component(name, options)
+}
+
+function factory(name, controller) {
+    const factoryFn = Array.isArray(controller.$inject)
+        ? controller.$inject.concat((...args) => new controller(...args))
+        : () => new controller()
+
+    return angular.module('koolikottApp').factory(name, factoryFn)
 }

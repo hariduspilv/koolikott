@@ -1,25 +1,22 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.controller('tourModalController', [
-    '$mdDialog', 'authenticatedUserService', '$rootScope',
-    function ($mdDialog, authenticatedUserService, $rootScope) {
-            let vm = this;
+{
+class controller extends Controller {
+    $onInit() {
+        angular.element('body').addClass('tour-modal-is-showing')
 
-            angular.element('body').addClass('tour-modal-is-showing');
-
-            vm.user = authenticatedUserService.getUser();
-
-            vm.cancel = () => {
-                $rootScope.$broadcast('tour:start:cancelled');
-                angular.element('body').removeClass('tour-modal-is-showing');
-                $mdDialog.hide();
-            }
-
-            vm.showTour = () => {
-                $rootScope.$broadcast('tour:start');
-                angular.element('body').removeClass('tour-modal-is-showing');
-                $mdDialog.hide();
-            }
+        this.cancel = () => {
+            this.$rootScope.$broadcast('tour:start:cancelled')
+            angular.element('body').removeClass('tour-modal-is-showing')
+            this.$mdDialog.hide()
         }
-    ]);
+        this.showTour = () => {
+            this.$rootScope.$broadcast('tour:start')
+            angular.element('body').removeClass('tour-modal-is-showing')
+            this.$mdDialog.hide()
+        }
+    }
+}
+controller.$inject = ['$rootScope', '$mdDialog']
+_controller('tourModalController', controller)
+}

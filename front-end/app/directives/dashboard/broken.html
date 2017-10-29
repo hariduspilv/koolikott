@@ -1,5 +1,5 @@
 <table md-table>
-  <thead md-head md-order="query.order" md-on-reorder="onReorder">
+  <thead md-head md-order="query.order" md-on-reorder="onSort">
     <tr md-row>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
       <th md-column md-order-by="bySubmittedAt"><span data-translate="SUBMITTED_AT"></span></th>
@@ -9,15 +9,15 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row ng-repeat="item in data" ng-click="openLearningObject(item.material)">
-      <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="getCorrectLanguageTitle(item.material)"></div></td>
-      <td md-cell data-ng-bind="formatDate(item.added)"></td>
+    <tr md-row ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item.material)">
+      <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item.material)"></div></td>
+      <td md-cell data-ng-bind="$ctrl.formatDateToDayMonthYear(item.added)"></td>
       <td md-cell data-ng-bind="item.reportCount"></td>
       <td md-cell data-ng-if="item.reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
       <td md-cell data-ng-if="item.reportCount === 1 && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
       <td md-cell data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
       <td md-cell>
-        <a ng-href="{{getLearningObjectUrl(item.material)}}">
+        <a ng-href="{{$ctrl.getLearningObjectUrl(item.material)}}">
           <md-button aria-label="Ava" class="md-icon-button">
             <md-icon>keyboard_arrow_right</md-icon>
           </md-button>

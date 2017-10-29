@@ -4,8 +4,6 @@
 class controller extends Controller {
     $onInit() {
         this.selected = false
-        this.isEditPortfolioPage = this.$rootScope.isEditPortfolioPage
-        this.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
         this.domains = []
         this.subjects = []
 
@@ -25,11 +23,13 @@ class controller extends Controller {
         }
     }
     getCorrectLanguageTitle() {
-        if (this.learningObject)
+        const { titles, language } = this.learningObject || {}
+
+        if (titles)
             return this.getUserDefinedLanguageString(
-                this.learningObject.titles,
+                titles,
                 this.translationService.getLanguage(),
-                this.learningObject.language
+                language
             )
     }
     formatName(name) {
@@ -67,8 +67,7 @@ controller.$inject = [
     'storageService',
     'taxonGroupingService'
 ]
-
-angular.module('koolikottApp').component('dopCardSm', {
+component('dopCardSm', {
     bindings: {
         learningObject: '=',
         chapter: '=?'
