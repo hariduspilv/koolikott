@@ -712,6 +712,13 @@ class Controller {
             ? ''
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
     }
+    sprintf(str, ...replacements) {
+        let idx = 0
+        return str.replace(/(%s|%d)/g, (match) => {
+            idx++
+            return replacements[idx - 1] || match
+        })
+    }
 }
 
 /**

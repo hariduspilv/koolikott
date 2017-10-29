@@ -28,7 +28,8 @@ const VIEW_STATE_MAP = {
     changedLearningObjects: [
         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
         'changed',
-        'byAddedAt'
+        'byAddedAt',
+        true
     ],
     deletedPortfolios: [
         'DASHBOARD_DELETED_PORTFOLIOS',
@@ -115,7 +116,7 @@ class controller extends Controller {
         this.serverCallService
             .makeGet('rest/admin/'+restUri)
             .then(({ data }) => {
-                console.log('data[0]', data[0])
+                console.log('data', data)
                 if (data) {
                     if (sortBy)
                         this.$scope.query.order = sortBy
@@ -187,8 +188,8 @@ class controller extends Controller {
         if (this.$scope.filter.form.$dirty)
             this.$scope.filter.form.$setPristine()
     }
-    getReportLabelKey(item) {
-        if (item.reportCount === 1)
+    getImproperReportLabelKey(item) {
+        if (item.__reportCount === 1)
             return item.reportingReasons.length === 1
                 ? item.reportingReasons[0].reason
                 : item.reportingReasons.length > 1
@@ -196,7 +197,7 @@ class controller extends Controller {
                     : ''
 
         let reasonKey = ''
-        const allReports = this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+        const allReports = this.getDuplicates(item)
 
         for (let i = 0; i < allReports.length; i++) {
             if (allReports[i].reportingReasons.length > 1)
@@ -211,6 +212,39 @@ class controller extends Controller {
         }
 
         return reasonKey
+    }
+    hasMultipleCreators(item) {
+        let id
+        return this
+            .getDuplicates(item)
+            .filter(c =>
+                !id ? id = (c.createdBy || c.creator).id
+                    : id != (c.createdBy || c.creator).id
+            )
+            .length > 1
+    }
+    getMultipleCreatorsLabel(item, translationKey) {
+        return this.sprintf(
+            this.$translate.instant(translationKey),
+            item.__reportCount
+        )
+    }
+    getMultipleCreators(item) {
+        const ids = []
+        return this.getDuplicates(item)
+            .filter(c => {
+                const { id } = c.createdBy || c.creator
+                return ids.includes(id)
+                    ? false
+                    : ids.push(id)
+            })
+            .reduce((str, c) => {
+                const { name, surname } = c.createdBy || c.creator
+                return `${str}${str ? ', ' : ''}${name} ${surname}`
+            }, '')
+    }
+    getDuplicates(item) {
+        return this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
     }
     filterItems() {
         const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1
@@ -269,17 +303,20 @@ class controller extends Controller {
                 if (isSame(merged[j], items[i])) {
                     isAlreadyReported = true
 
-                    merged[j].reportCount++
+                    merged[j].__reportCount++
 
-                    // show the newest date
-                    if (new Date(merged[j].added) < new Date(items[i].added))
-                        merged[j].added = items[i].added
+                    // include the newest
+                    const mergedDate = merged[j].createdAt || merged[j].added
+                    const itemDate = items[j].createdAt || items[j].added
+
+                    if (new Date(itemDate) > new Date(mergedDate))
+                        merged[j] = items[i]
 
                     break
                 }
 
             if (!isAlreadyReported) {
-                items[i].reportCount = 1
+                items[i].__reportCount = 1
                 merged.push(items[i])
             }
         }
