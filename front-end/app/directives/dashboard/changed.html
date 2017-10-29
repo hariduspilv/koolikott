@@ -9,11 +9,9 @@
   </thead>
   <tbody md-body>
     <tr md-row data-ng-repeat="item in data" ng-click="openLearningObject(item.learningObject)">
-      <td md-cell><div class="ellipsis ellipsis--2" ng-bind="getLearningObjectTitle(item)"></div></td>
-      <td md-cell>todo ips model changed (check sort too)</td>
-      <!--<td md-cell ng-bind="item.createdBy.name+' '+item.createdBy.surname">todo ips model changed</td>-->
-      <td md-cell>todo ips model changed (check sort too)</td>
-      <!--<td md-cell ng-bind="formatDate(item.added)">todo ips model changed</td>-->
+      <td md-cell><div class="ellipsis ellipsis--2" ng-bind="getLearningObjectTitle(item.learningObject)"></div></td>
+      <td md-cell ng-bind="item.createdBy.name+' '+item.createdBy.surname"></td>
+      <td md-cell ng-bind="formatDate(item.createdAt)"></td>
       <td md-cell>
         <a ng-href="{{getLearningObjectUrl(item)}}">
           <md-button aria-label="Ava" class="md-icon-button">

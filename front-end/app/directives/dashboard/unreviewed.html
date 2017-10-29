@@ -8,13 +8,13 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row ng-repeat="item in data" ng-click="openLearningObject(item)">
-      <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="getLearningObjectTitle(item)"></div></td>
-      <td md-cell data-ng-if="!item.creator" data-translate="UNKNOWN"></td>
-      <td md-cell data-ng-if="item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
-      <td md-cell data-ng-bind="formatDate(item.added)"></td>
+    <tr md-row ng-repeat="item in data" ng-click="openLearningObject(item.learningObject)">
+      <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="getLearningObjectTitle(item.learningObject)"></div></td>
+      <td md-cell data-ng-if="!item.learningObject.creator" data-translate="UNKNOWN"></td>
+      <td md-cell data-ng-if="item.learningObject.creator" data-ng-bind="item.learningObject.creator.name+' '+item.learningObject.creator.surname"></td>
+      <td md-cell data-ng-bind="formatDate(item.createdAt)"></td>
       <td md-cell>
-        <a ng-href="{{getLearningObjectUrl(item)}}">
+        <a ng-href="{{getLearningObjectUrl(item.learningObject)}}">
           <md-button aria-label="Ava" class="md-icon-button">
             <md-icon>keyboard_arrow_right</md-icon>
           </md-button>
