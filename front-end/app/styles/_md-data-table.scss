@@ -24,10 +24,6 @@
     outline: none;
   }
   table {
-    & tr > td:last-child {
-      text-align: right;
-    }
-
     tr[ng-click],
     tr[data-ng-click] {
       cursor: pointer;
@@ -40,6 +36,31 @@
   }
 }
 
+table.md-table:not(.md-row-select) td.md-cell:nth-child(n+2):nth-last-child(n+2),
+table.md-table:not(.md-row-select) th.md-column:nth-child(n+2):nth-last-child(n+2) {
+  padding-right: 24px;
+}
+
 .md-table-pagination .label {
   margin-bottom: 0;
+}
+
+table.md-table {
+  td.md-cell {
+    &.dashboard-cell--type-icon {
+      width: 1%;
+      text-align: center;
+    }
+    &.dashboard-cell--title {
+      min-width: 150px;
+    }
+    &.dashboard-cell--qty { // no. of reports/changes
+      text-align: center;
+    }
+    &.dashboard-cell--reason {
+      width: 40%;
+    }
+    // &.dashboard-cell--date {}
+    // &.dashboard-cell--user {}
+  }
 }

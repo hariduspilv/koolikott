@@ -2,9 +2,12 @@
   <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
 </div>
 <md-progress-linear data-ng-if="!data"></md-progress-linear>
-<md-card class="md-data-table" id="moderators-table" data-ng-if="data">
+<md-card class="md-data-table" data-ng-if="data">
   <!-- BEGIN Search learning objects -->
-  <md-toolbar class="md-table-toolbar md-default" data-ng-if="!isView('/dashboard/moderators') && !isView('/dashboard/restrictedUsers')" >
+  <md-toolbar
+    class="md-table-toolbar md-default"
+    data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
+    >
     <div class="md-toolbar-tools">
       <md-icon>search</md-icon>
       <form data-flex name="filter.form">
@@ -16,14 +19,21 @@
           id="search-items"
         >
       </form>
-      <md-button class="md-icon-button md-ink-ripple" data-ng-click="clearFilter()" data-ng-if="query.filter">
+      <md-button
+        class="md-icon-button md-ink-ripple"
+        data-ng-click="clearFilter()"
+        data-ng-if="query.filter"
+        >
         <md-icon>close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
   <!-- END Search learning objects -->
   <!-- BEGIN Search users -->
-  <md-toolbar class="md-table-toolbar md-default" data-ng-if="isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')">
+  <md-toolbar
+    class="md-table-toolbar md-default"
+    data-ng-if="$ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'"
+    >
     <div layout-margin>
       <h2 class="md-title" data-translate="SEARCH_USERS"></h2>
     </div>
@@ -33,47 +43,52 @@
         md-min-length="0"
         md-input-name="autocompleteField"
         md-selected-item="selectedUser"
-        md-search-text="searchText"
-        md-items="user in querySearch(searchText)"
+        md-search-text="filterUsersInput"
+        md-items="user in $ctrl.filterUsers(filterUsersInput)"
         md-item-text="user.username"
-        placeholder="{{getUsernamePlaceholder()}}"
+        placeholder="{{$ctrl.getUsernamePlaceholder()}}"
         >
         <md-item-template>
-          <span md-highlight-text="searchText">{{user.username}}</span>
+          <span md-highlight-text="filterUsersInput">{{user.username}}</span>
         </md-item-template>
       </md-autocomplete>
       <md-button
         aria-label="Ava kasutaja"
         class="md-raised md-default"
-        data-ng-click="editUser(selectedUser)"
+        data-ng-click="$ctrl.editUser(selectedUser)"
         data-translate="BUTTON_OPEN"
       ></md-button>
     </div>
   </md-toolbar>
   <!-- END Search users -->
   <md-table-container class="table-container">
-    <div data-ng-show="itemsCount" class="md-data-table" id="moderators-table">
-      <div data-ng-if="isView('/dashboard/unReviewed')" data-dop-unreviewed></div>
-      <div data-ng-if="isView('/dashboard/improperMaterials')" data-dop-improper></div>
-      <div data-ng-if="isView('/dashboard/improperPortfolios')" data-dop-improper></div>
-      <div data-ng-if="isView('/dashboard/changedLearningObjects')" data-dop-changed></div>
-      <div data-ng-if="isView('/dashboard/brokenMaterials')" data-dop-broken></div>
-      <div data-ng-if="isView('/dashboard/deletedPortfolios')" data-dop-deleted></div>
-      <div data-ng-if="isView('/dashboard/deletedMaterials')" data-dop-deleted></div>
-      <div data-ng-if="isView('/dashboard/moderators')" data-dop-users></div>
-      <div data-ng-if="isView('/dashboard/restrictedUsers')" data-dop-users></div>
+    <div data-ng-show="itemsCount" class="md-data-table">
+      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'unReviewed'"></dop-unreviewed>
+      <dop-improper data-ng-if="$ctrl.viewPath == 'improperMaterials'"></dop-improper>
+      <dop-improper data-ng-if="$ctrl.viewPath == 'improperPortfolios'"></dop-improper>
+      <dop-changed data-ng-if="$ctrl.viewPath == 'changedLearningObjects'"></dop-changed>
+      <dop-broken data-ng-if="$ctrl.viewPath == 'brokenMaterials'"></dop-broken>
+      <dop-deleted data-ng-if="$ctrl.viewPath == 'deletedPortfolios'"></dop-deleted>
+      <dop-deleted data-ng-if="$ctrl.viewPath == 'deletedMaterials'"></dop-deleted>
+      <dop-users data-ng-if="$ctrl.viewPath == 'moderators'"></dop-users>
+      <dop-users data-ng-if="$ctrl.viewPath == 'restrictedUsers'"></dop-users>
     </div>
     <!-- BEGIN Not found message after data is loaded but contains 0 items -->
-    <div data-ng-show="data && !itemsCount" data-layout="row" data-layout-align="center center" data-layout-padding>
+    <div
+      data-ng-show="data && !itemsCount"
+      data-layout="row"
+      data-layout-align="center center"
+      data-layout-padding
+      >
       <h4 data-translate="{{
-        isView('/dashboard/moderators') || isView('/dashboard/restrictedUsers')
+        $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
           ? 'ERROR_USERS_NOT_FOUND'
           : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"></h4>
     </div>
     <!-- END Not found message -->
   </md-table-container>
   <md-table-pagination
-    data-ng-if="itemsCount"
+    data-ng-if="itemsCount && itemsCount > query.limit"
     data-md-limit="query.limit"
     data-md-page="query.page"
     data-md-total="{{itemsCount}}"
