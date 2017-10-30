@@ -138,7 +138,6 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
         DbUtils.closeTransaction();
     }
 
-
     private void revertUrl(Material material) {
         material.setSource(BIEBER_M17_ORIGINAL);
         createOrUpdateMaterial(material);
