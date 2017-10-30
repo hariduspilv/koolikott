@@ -9,10 +9,6 @@ const BREAK_XS = 600;
 const BREAK_SM = 960;
 const BREAK_LG = 1280;
 
-function isMobile() {
-    return window.innerWidth < BREAK_XS;
-}
-
 function log() {
     if (console && console.log) {
         console.log.apply(console, arguments);
@@ -519,28 +515,15 @@ function focusInput(elementID) {
 }
 
 function isMaterial(type) {
-    return [".Material", ".ReducedMaterial", ".AdminMaterial"].includes(type);
+    return type === ".Material" || type === ".ReducedMaterial"
 }
 
 function isPortfolio(type) {
-    return [".Portfolio", ".ReducedPortfolio", ".AdminPortfolio"].includes(type);
+    return type === ".Portfolio" || type === ".ReducedPortfolio"
 }
 
-function stripHtml(htmlString) {
-    let tmp = document.createElement("div");
-    tmp.innerHTML = htmlString;
-    return tmp.textContent || tmp.innerText || "";
-}
-
-function countOccurrences(value, text) {
-    let count = 0;
-    let index = text.indexOf(value);
-    while (index !== -1) {
-        count++;
-        index = text.indexOf(value, index + 1);
-    }
-
-    return count;
+function isMobile() {
+    return window.innerWidth < BREAK_XS;
 }
 
 /**
@@ -601,9 +584,171 @@ class Controller {
         )
     }
     isMaterial({ type }) {
-        return [".Material", ".ReducedMaterial", ".AdminMaterial"].includes(type);
+        return type === '.Material' || type === '.ReducedMaterial'
     }
     isPortfolio({ type }) {
-        return [".Portfolio", ".ReducedPortfolio", ".AdminPortfolio"].includes(type);
+        return type === '.Portfolio' || type === '.ReducedPortfolio'
     }
+    getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
+        if (!values || values.length === 0)
+            return
+
+        if (values.length === 1)
+            return values[0].text
+
+        let languageStringValue = this.getLanguageString(values, userLanguage)
+        
+        if (!languageStringValue) {
+            languageStringValue = this.getLanguageString(values, materialLanguage)
+            
+            if (!languageStringValue)
+                languageStringValue = values[0].text
+        }
+
+        return languageStringValue
+    }
+    getLanguageString(values, language) {
+        if (!language)
+            return null
+
+        for (var i = 0; i < values.length; i++)
+            if (values[i].language === language)
+                return values[i].text
+    }
+    formatNameToInitials(name) {
+        if (name)
+            return this.arrayToInitials(name.split(' '))
+    }
+    formatSurnameToInitialsButLast(surname) {
+        if (!surname)
+            return
+
+        var array = surname.split(' ')
+        var last = array.length - 1
+        var res = ''
+
+        if (last > 0)
+            res = this.arrayToInitials(array.slice(0, last)) + ' '
+
+        res += array[last]
+        return res
+    }
+    arrayToInitials(array) {
+        var res = ''
+
+        for (var i = 0; i < array.length; i++)
+            res += array[i].charAt(0).toUpperCase() + '. '
+
+        return res.trim()
+    }
+    isMobile() {
+        return window.innerWidth < BREAK_XS
+    }
+    createPortfolio(id) {
+        return {
+            id,
+            type: '.Portfolio',
+            title: '',
+            summary: '',
+            taxon: null,
+            targetGroups: [],
+            tags: []
+        }
+    }
+    getSource(material) {
+        if (material) {
+            return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
+        }
+    }
+    isYoutubeVideo(url) {
+        // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
+        const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
+        return url && url.match(youtubeUrlRegex)
+    }
+    isSlideshareLink(url) {
+        const slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
+        return url && url.match(slideshareUrlRegex)
+    }
+    isVideoLink(url) {
+        return url && ["mp4", "ogv", "webm"].includes(url.split('.').pop().toLowerCase())
+    }
+    isAudioLink(url) {
+        return url && ["mp3", "ogg", "wav"].includes(url.split('.').pop().toLowerCase())
+    }
+    isPictureLink(url) {
+        return url && ["jpg", "jpeg", "png", "gif"].includes(url.split('.').pop().toLowerCase())
+    }
+    isEbookLink(url) {
+        return url && url.split('.').pop().toLowerCase() === "epub"
+    }
+    isPDFLink(url) {
+        return url && url.split('.').pop().toLowerCase() === "pdf"
+    }
+    getEmbedType({ source }) {
+        if (!source)
+            return
+
+        switch (true) {
+            case isYoutubeVideo(source): return 'YOUTUBE'
+            case isSlideshareLink(source): return 'SLIDESHARE'
+            case isVideoLink(source): return 'VIDEO'
+            case isAudioLink(source): return 'AUDIO'
+            case isPictureLink(source): return 'PICTURE'
+            case isEbookLink(source): return 'EBOOK'
+            case isPDFLink(source): return 'PDF'
+        }
+    }
+    isIE() {
+        return (
+            navigator.appName == 'Microsoft Internet Explorer' ||
+            !!(navigator.userAgent.match(/Trident/) ||
+            navigator.userAgent.match(/rv 11/))
+        )
+    }
+    formatDateToDayMonthYear(dateString) {
+        const date = new Date(dateString)
+        
+        return isNaN(date)
+            ? ''
+            : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
+    }
+    sprintf(str, ...replacements) {
+        let idx = 0
+        return str.replace(/(%s|%d)/g, (match) => {
+            idx++
+            return replacements[idx - 1] || match
+        })
+    }
+}
+
+/**
+ * Convenience methods for creating angular controllers, diectives, components,
+ * services, providers and factories.
+ */
+function _controller(name, controller) {
+    return angular.module('koolikottApp').controller(name, controller)
+}
+
+function directive(name, options) {
+    const factory = typeof options === 'function' || Array.isArray(options)
+        ? options
+        : () => options
+
+    return angular.module('koolikottApp').directive(name, factory)
+}
+
+function component(name, options) {
+    return angular.module('koolikottApp').component(name, options)
+}
+
+function service(name, controller) {
+    return angular.module('koolikottApp').service(name, controller)
+}
+
+function factory(name, controller) {
+    const factoryFn = Array.isArray(controller.$inject)
+        ? controller.$inject.concat((...args) => new controller(...args))
+        : () => new controller()
+
+    return angular.module('koolikottApp').factory(name, factoryFn)
 }

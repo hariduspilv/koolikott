@@ -22,13 +22,13 @@ angular.module('koolikottApp').factory('changedLearningObjectService', [
         acceptChanges(learningObjectId) {
             if (learningObjectId)
                 serverCallService
-                    .makeGet(`rest/admin/changed/${learningObjectId}/acceptAll`, {})
+                    .makePost(`rest/admin/changed/${learningObjectId}/acceptAll`)
                     .then(() => $rootScope.learningObjectChanged = false)
         },
         revertChanges(learningObjectId) {
             if (learningObjectId)
                 serverCallService
-                    .makeGet(`rest/admin/changed/${learningObjectId}/revertAll`, {})
+                    .makePost(`rest/admin/changed/${learningObjectId}/revertAll`)
                     .then(response => {
                         if (isMaterial(response.data.type))
                             storageService.setMaterial(response.data)
