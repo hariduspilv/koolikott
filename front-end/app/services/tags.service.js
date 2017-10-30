@@ -115,9 +115,9 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
 
         addSystemTag(learningObjectId, params, successCallback, failCallback) {
             if (successCallback) {
-                serverCallService.makeGet("rest/learningObject/" + learningObjectId + "/system_tags", params, successCallback, failCallback);
+                serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", params, successCallback, failCallback);
             } else {
-                return serverCallService.makeGet("rest/learningObject/" + learningObjectId + "/system_tags", params)
+                return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", params)
                     .then(response => {
                         return response.data;
                     });
