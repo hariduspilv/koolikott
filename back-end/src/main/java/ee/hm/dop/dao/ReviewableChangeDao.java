@@ -75,15 +75,15 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "JOIN FETCH lo.reviewableChanges r " +
                         "WHERE r.reviewed = 0 " +
                         "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
-                        "   AND NOT exists(SELECT 1\n" +
+                        "   AND lo.id NOT IN(SELECT ic.learningObject\n" +
                         "                     FROM FirstReview ic\n" +
                         "                     WHERE ic.learningObject = lo\n" +
                         "                           AND ic.reviewed = 0)\n" +
-                        "   AND NOT exists(SELECT 1\n" +
+                        "   AND lo.id NOT IN(SELECT ic.learningObject\n" +
                         "                     FROM ImproperContent ic\n" +
                         "                     WHERE ic.learningObject = lo\n" +
                         "                           AND ic.reviewed = 0)\n" +
-                        "   AND NOT exists(SELECT 1\n" +
+                        "   AND lo.id NOT IN(SELECT ic.material\n" +
                         "                     FROM BrokenContent ic\n" +
                         "                     WHERE ic.material = lo\n" +
                         "                           AND ic.deleted = 0)" +
@@ -101,15 +101,15 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "JOIN lo.taxons lt " +
                         "WHERE r.reviewed = 0 " +
                         "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
-                        "   AND NOT exists(SELECT 1\n" +
+                        "   AND lo.id NOT IN(SELECT ic.learningObject\n" +
                         "                     FROM FirstReview ic\n" +
                         "                     WHERE ic.learningObject = lo\n" +
                         "                           AND ic.reviewed = 0)\n" +
-                        "   AND NOT exists(SELECT 1\n" +
+                        "   AND lo.id NOT IN(SELECT ic.learningObject\n" +
                         "                     FROM ImproperContent ic\n" +
                         "                     WHERE ic.learningObject = lo\n" +
                         "                           AND ic.reviewed = 0)\n" +
-                        "   AND NOT exists(SELECT 1\n" +
+                        "   AND lo.id NOT IN(SELECT ic.material\n" +
                         "                     FROM BrokenContent ic\n" +
                         "                     WHERE ic.material = lo\n" +
                         "                           AND ic.deleted = 0)" +
@@ -123,40 +123,39 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
     public long findCountOfUnreviewed() {
         return ((BigInteger) getEntityManager()
                 .createNativeQuery("SELECT count(1) AS c\n" +
-                        "FROM LearningObject o\n" +
-                        "WHERE (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "  AND exists(SELECT 1 FROM ReviewableChange ic " +
-                        "                   WHERE ic.learningObject = o.id " +
+                        "FROM LearningObject lo\n" +
+                        "   JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
+                        "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "  AND r.reviewed = 0 \n" +
+                        "  AND lo.id NOT IN(SELECT ic.learningObject FROM ImproperContent ic " +
+                        "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = o.id " +
-                        "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = o.id" +
-                        "                   AND bc.deleted = 0 )\n" +
-                        "  AND NOT exists(SELECT 1 FROM FirstReview ic " +
-                        "                   WHERE ic.learningObject = o.id " +
-                        "                   AND ic.reviewed = 0)")
+                        "  AND lo.id NOT IN(SELECT ic.material FROM BrokenContent ic " +
+                        "                   WHERE ic.material = lo.id" +
+                        "                   AND ic.deleted = 0 ) " +
+                        "  AND lo.id NOT IN(SELECT ic.learningObject FROM FirstReview ic " +
+                        "                   WHERE ic.learningObject = lo.id " +
+                        "                   AND ic.reviewed = 0)"
+                )
                 .getSingleResult()).longValue();
     }
 
     public long findCountOfUnreviewed(User user) {
         return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT count(DISTINCT o.id) AS c\n" +
-                        "FROM LearningObject o\n" +
-                        "   JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                        "WHERE (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "  AND exists(SELECT 1 FROM ReviewableChange ic " +
-                        "                   WHERE ic.learningObject = o.id " +
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
+                        "FROM LearningObject lo\n" +
+                        "   JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
+                        "   JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
+                        "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "  AND r.reviewed = 0 \n" +
+                        "  AND lo.id NOT IN(SELECT ic.learningObject FROM ImproperContent ic " +
+                        "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = o.id " +
-                        "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = o.id" +
-                        "                   AND bc.deleted = 0 ) " +
-                        "  AND NOT exists(SELECT 1 FROM FirstReview ic " +
-                        "                   WHERE ic.learningObject = o.id " +
+                        "  AND lo.id NOT IN(SELECT ic.material FROM BrokenContent ic " +
+                        "                   WHERE ic.material = lo.id" +
+                        "                   AND ic.deleted = 0 ) " +
+                        "  AND lo.id NOT IN(SELECT ic.learningObject FROM FirstReview ic " +
+                        "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)" +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
