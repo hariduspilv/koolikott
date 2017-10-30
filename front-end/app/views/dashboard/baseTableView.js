@@ -124,6 +124,9 @@ class controller extends Controller {
                         data = this.merge(data)
                     }
 
+                    if (restUri == 'changed')
+                        data.forEach(o => o.__reportCount = o.reviewableChanges.filter(c => !c.reviewed).length)
+
                     this.collection = data
                     this.$scope.itemsCount = data.length
 
@@ -219,21 +222,24 @@ class controller extends Controller {
     }
     hasMultipleChangers({ reviewableChanges }) {
         let id
-        return reviewableChanges.filter(c =>
-            !id ? id = c.createdBy.id
-                : id != c.createdBy.id
-        )
-        .length > 1
+        return reviewableChanges
+            .filter(c => !c.reviewed)
+            .filter(c =>
+                !id ? id = c.createdBy.id
+                    : id != c.createdBy.id
+            )
+            .length > 1
     }
     getMultipleChangersLabel(item) {
         return this.sprintf(
             this.$translate.instant('NUM_CHANGERS'),
-            item.reviewableChanges.length
+            item.__reportCount
         )
     }
     getMultipleChangers({ reviewableChanges }) {
         const ids = []
         return reviewableChanges
+            .filter(c => !c.reviewed)
             .filter(c => {
                 const { id } = c.createdBy
                 return ids.includes(id)
@@ -363,12 +369,14 @@ class controller extends Controller {
         return reasonKey
     }
     getMostRecentChangeDate(item) {
-        const mostRecentDate = item.reviewableChanges.reduce((mostRecentDate, change) => {
-            const date = new Date(change.createdAt)
-            return !mostRecentDate || date > mostRecentDate
-                ? date
-                : mostRecentDate
-        }, null)
+        const mostRecentDate = item.reviewableChanges
+            .filter(c => !c.reviewed)
+            .reduce((mostRecentDate, change) => {
+                const date = new Date(change.createdAt)
+                return !mostRecentDate || date > mostRecentDate
+                    ? date
+                    : mostRecentDate
+            }, null)
 
         return this.formatDateToDayMonthYear(mostRecentDate.toISOString())
     }
