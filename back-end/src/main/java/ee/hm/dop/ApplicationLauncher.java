@@ -101,7 +101,6 @@ public class ApplicationLauncher {
         GuiceInjector.init();
         ApplicationManager.stopApplication();
         stopExecutors();
-        logger.info("Everything is stopped, exiting system");
     }
 
     private static void stopExecutors() {
@@ -114,6 +113,7 @@ public class ApplicationLauncher {
             startApplication();
         } else if ("stop".equalsIgnoreCase(args[0])) {
             stopApplication();
+            logger.info("Everything is stopped, exiting system");
             System.exit(1);
         } else {
             logger.warn("Command does not exist. Use: start, stop or no command (default is start).");
