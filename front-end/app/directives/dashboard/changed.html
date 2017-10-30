@@ -9,20 +9,20 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row data-ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item.learningObject)">
+    <tr md-row data-ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item)">
       <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-        <dop-dashboard-type-icon data-learning-object="item.learningObject"></dop-dashboard-type-icon>
+        <dop-dashboard-type-icon data-learning-object="item"></dop-dashboard-type-icon>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--title">
-        <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item.learningObject)"></div>
+        <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"></div>
       </td>
-      <td md-cell class="dashboard-cell dashboard-cell--date" ng-bind="$ctrl.formatDateToDayMonthYear(item.createdAt)"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reportCount"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount === 1 && !item.createdBy" data-translate="UNKNOWN"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.__reportCount === 1 || item.__reportCount > 1 && !$ctrl.hasMultipleCreators(item)) && item.createdBy" data-ng-bind="item.createdBy.name+' '+item.createdBy.surname"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount > 1 && $ctrl.hasMultipleCreators(item)" data-ng-bind="$ctrl.getMultipleCreatorsLabel(item, 'NUM_CHANGERS')">
+      <td md-cell class="dashboard-cell dashboard-cell--date" ng-bind="$ctrl.getMostRecentChangeDate(item)"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.reviewableChanges.length"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.reviewableChanges.length === 1 && !item.reviewableChanges[0].createdBy" data-translate="UNKNOWN"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.reviewableChanges.length === 1 || item.reviewableChanges.length > 1 && !$ctrl.hasMultipleChangers(item)) && item.reviewableChanges[0].createdBy" data-ng-bind="item.reviewableChanges[0].createdBy.name+' '+item.reviewableChanges[0].createdBy.surname"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.reviewableChanges.length > 1 && $ctrl.hasMultipleChangers(item)" data-ng-bind="$ctrl.getMultipleChangersLabel(item)">
         <md-tooltip>
-          <span data-ng-bind="$ctrl.getMultipleCreators(item)"></span>
+          <span data-ng-bind="$ctrl.getMultipleChangers(item)"></span>
         </md-tooltip>
       </td>
     </tr>

@@ -8,16 +8,16 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row data-ng-repeat="item in data" data-ng-click="$ctrl.openLearningObject(item.learningObject)">
+    <tr md-row data-ng-repeat="item in data" data-ng-click="$ctrl.openLearningObject(item)">
       <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-        <dop-dashboard-type-icon data-learning-object="item.learningObject"></dop-dashboard-type-icon>
+        <dop-dashboard-type-icon data-learning-object="item"></dop-dashboard-type-icon>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--title">
-        <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item.learningObject)"></div>
+        <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"></div>
       </td>
-      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.createdAt)"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="!item.learningObject.creator" data-translate="UNKNOWN"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.learningObject.creator" data-ng-bind="item.learningObject.creator.name+' '+item.learningObject.creator.surname"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.firstReviews[0].createdAt)"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="!item.creator" data-translate="UNKNOWN"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
     </tr>
   </tbody>
 </table>
