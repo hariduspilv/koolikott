@@ -158,19 +158,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     }
 
     @Test
-    public void I_change_bieber_url_to_beyonce___material_has_beyonce_url_change_has_bieber() throws Exception {
-        Material material = getMaterial(MATERIAL_16);
-        assertNotChanged(material, BIEBER_M16_ORIGINAL);
-        material.setSource(BEYONCE);
-        Material updateMaterial = createOrUpdateMaterial(material);
-        assertChanged(updateMaterial, BEYONCE);
-        ReviewableChange review = reviewableChangeDao.findByComboField("learningObject.id", MATERIAL_16);
-        assertEquals(BIEBER_M16_ORIGINAL, review.getMaterialSource());
-
-        revertUrl(updateMaterial);
-    }
-
-    @Test
     public void moderator_sees_changes_made_in_their_taxon_tree_only() throws Exception {
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
         List<AdminLearningObject> reviewableChanges = doGet(GET_ALL_CHANGES, listOfAdminLOs());
