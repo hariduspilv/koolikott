@@ -131,7 +131,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
 
     public long findCountOfUnreviewed() {
         return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT count(1) AS c\n" +
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
                         "FROM LearningObject lo\n" +
                         "   JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
                         "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
