@@ -6,6 +6,7 @@ import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.dao.TestDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ReviewableChange;
+import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -92,6 +93,31 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
         revertUrl(material4);
     }
 
+    @Test
+    public void admin_can_revert_all_changes_url_edition() throws Exception {
+        Material material = getMaterial(MATERIAL_17);
+        assertNotChanged(material, BIEBER_M17_ORIGINAL);
+        material.setSource(BEYONCE);
+        Material updateMaterial = createOrUpdateMaterial(material);
+        assertChanged(updateMaterial, BEYONCE);
+
+        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_17));
+        Material updatedMaterial1 = getMaterial(MATERIAL_17);
+        assertNotChanged(updatedMaterial1, BIEBER_M17_ORIGINAL);
+
+        DbUtils.getTransaction().begin();
+        reviewableChangeDao.flush();
+        DbUtils.closeTransaction();
+
+        List<ReviewableChange> review2 = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_17);
+        assertEquals(1, review2.size());
+        for (ReviewableChange change : review2) {
+            assertTrue(change.isReviewed());
+            assertEquals(ReviewStatus.REJECTED, change.getStatus());
+        }
+        Material updatedMaterial2 = getMaterial(MATERIAL_17);
+        assertTrue(updatedMaterial2.getTaxons().isEmpty());
+    }
 
     private void restoreLearningObjectChanges(List<Long> learningObjectId) {
         DbUtils.getTransaction().begin();

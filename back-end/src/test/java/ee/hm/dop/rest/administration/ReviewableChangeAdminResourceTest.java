@@ -226,32 +226,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     }
 
     @Test
-    public void admin_can_revert_all_changes_url_edition() throws Exception {
-        Material material = getMaterial(MATERIAL_16);
-        assertNotChanged(material, BIEBER_M16_ORIGINAL);
-        material.setSource(BEYONCE);
-        Material updateMaterial = createOrUpdateMaterial(material);
-        assertChanged(updateMaterial, BEYONCE);
-
-        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_16));
-        Material updatedMaterial1 = getMaterial(MATERIAL_16);
-        assertNotChanged(updatedMaterial1, BIEBER_M16_ORIGINAL);
-
-        DbUtils.getTransaction().begin();
-        reviewableChangeDao.flush();
-        DbUtils.closeTransaction();
-
-        List<ReviewableChange> review2 = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
-        assertEquals(1, review2.size());
-        for (ReviewableChange change : review2) {
-            assertTrue(change.isReviewed());
-            assertEquals(ReviewStatus.REJECTED, change.getStatus());
-        }
-        Material updatedMaterial2 = getMaterial(MATERIAL_16);
-        assertTrue(updatedMaterial2.getTaxons().isEmpty());
-    }
-
-    @Test
     public void admin_can_accept_one_change() throws Exception {
         Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
