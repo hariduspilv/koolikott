@@ -25,7 +25,7 @@ class controller extends Controller {
         )
         return this.compareStrings(
             getTypeLabel(a.learningObject || a),
-            getTypeLabel(b.learningObject || b),
+            getTypeLabel(b.learningObject || b)
         )
     }
     byTitle(a, b) {
