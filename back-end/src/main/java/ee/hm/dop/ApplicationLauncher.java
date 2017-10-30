@@ -91,6 +91,7 @@ public class ApplicationLauncher {
         logger.info("Stopping server...");
         try {
             EmbeddedJetty.instance().stop();
+            logger.info("Server successfully stopped");
         } catch (Exception e) {
             logger.info("Error stopping server!", e);
         }
@@ -104,6 +105,7 @@ public class ApplicationLauncher {
 
     private static void stopExecutors() {
         synchronizeMaterialsExecutor.stop();
+        logger.info("Executors have been stopped");
     }
 
     public static void main(String[] args) throws Exception {
@@ -111,6 +113,8 @@ public class ApplicationLauncher {
             startApplication();
         } else if ("stop".equalsIgnoreCase(args[0])) {
             stopApplication();
+            logger.info("Everything is stopped, exiting system");
+            System.exit(1);
         } else {
             logger.warn("Command does not exist. Use: start, stop or no command (default is start).");
         }
