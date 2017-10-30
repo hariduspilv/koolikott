@@ -91,6 +91,7 @@ public class ApplicationLauncher {
         logger.info("Stopping server...");
         try {
             EmbeddedJetty.instance().stop();
+            logger.info("Server successfully stopped");
         } catch (Exception e) {
             logger.info("Error stopping server!", e);
         }
@@ -100,10 +101,13 @@ public class ApplicationLauncher {
         GuiceInjector.init();
         ApplicationManager.stopApplication();
         stopExecutors();
+        logger.info("Everything is stopped, exiting system");
+        System.exit(1);
     }
 
     private static void stopExecutors() {
         synchronizeMaterialsExecutor.stop();
+        logger.info("Executors have been stopped");
     }
 
     public static void main(String[] args) throws Exception {
