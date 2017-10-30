@@ -7,11 +7,14 @@ import ee.hm.dop.model.User;
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
 
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private AdminLearningObjectDao adminLearningObjectDao;
 
     public List<ReviewableChange> getAllByLearningObject(Long learningObjectId) {
         return getEntityManager().createQuery("FROM ReviewableChange clo " +
@@ -69,27 +72,31 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
 
 
     public List<AdminLearningObject> findAllUnreviewed() {
-        return getEntityManager()
-                .createQuery("SELECT DISTINCT lo\n" +
-                        "FROM AdminLearningObject lo\n" +
-                        "JOIN FETCH lo.reviewableChanges r " +
-                        "WHERE r.reviewed = 0 " +
-                        "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
-                        "   AND lo.id NOT IN(SELECT ic.learningObject\n" +
-                        "                     FROM FirstReview ic\n" +
-                        "                     WHERE ic.learningObject = lo\n" +
-                        "                           AND ic.reviewed = 0)\n" +
-                        "   AND lo.id NOT IN(SELECT ic.learningObject\n" +
-                        "                     FROM ImproperContent ic\n" +
-                        "                     WHERE ic.learningObject = lo\n" +
-                        "                           AND ic.reviewed = 0)\n" +
-                        "   AND lo.id NOT IN(SELECT ic.material\n" +
-                        "                     FROM BrokenContent ic\n" +
-                        "                     WHERE ic.material = lo\n" +
-                        "                           AND ic.deleted = 0)" +
-                        "ORDER BY r.createdAt ASC, r.id ASC", AdminLearningObject.class)
+        List<BigInteger> resultList = getEntityManager()
+                .createNativeQuery("SELECT\n" +
+                        "  lo.id\n" +
+                        "FROM LearningObject lo\n" +
+                        "  JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
+                        "WHERE r.reviewed = 0\n" +
+                        "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM FirstReview ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "      AND lo.id NOT IN (SELECT ic.material\n" +
+                        "                        FROM BrokenContent ic\n" +
+                        "                        WHERE ic.material = lo.id\n" +
+                        "                              AND ic.deleted = 0)\n" +
+                        "GROUP BY lo.id\n" +
+                        "ORDER BY min(r.createdAt) asc")
                 .setMaxResults(300)
                 .getResultList();
+        List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+        return adminLearningObjectDao.findById(collect);
     }
 
 

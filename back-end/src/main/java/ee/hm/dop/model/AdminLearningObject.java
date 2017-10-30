@@ -1,7 +1,11 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.NoClass;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -20,9 +24,15 @@ import java.util.List;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.MINIMAL_CLASS,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "LearningObject")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public abstract class AdminLearningObject implements Searchable, ILearningObject, AbstractEntity {
 
     @Id

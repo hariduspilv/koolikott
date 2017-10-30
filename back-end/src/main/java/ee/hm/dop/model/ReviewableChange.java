@@ -22,7 +22,7 @@ public class ReviewableChange implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "learningObject")
-    @JsonBackReference("learningObject")
+    @JsonIgnore()
     private LearningObject learningObject;
 
     @ManyToOne
