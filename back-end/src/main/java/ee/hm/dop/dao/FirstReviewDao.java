@@ -7,11 +7,14 @@ import ee.hm.dop.model.User;
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FirstReviewDao extends AbstractDao<FirstReview> {
 
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private AdminLearningObjectDao adminLearningObjectDao;
 
     public List<FirstReview> findAllUnreviewedOld() {
         return getEntityManager()
@@ -27,7 +30,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                   WHERE bc.material = f.learningObject" +
                         "                   AND bc.deleted = 0 )" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
-                .setMaxResults(300)
+                .setMaxResults(200)
                 .getResultList();
     }
 
@@ -48,85 +51,96 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "  AND lt.taxon IN (:taxonIds)\n" +
                         "ORDER BY f.createdAt ASC, f.id ASC", entity())
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .setMaxResults(300)
+                .setMaxResults(200)
                 .getResultList();
     }
 
     public List<AdminLearningObject> findAllUnreviewed() {
-        return getEntityManager()
-                .createQuery("SELECT DISTINCT lo\n" +
-                        "FROM AdminLearningObject lo\n" +
-                        "JOIN FETCH lo.firstReviews r " +
-                        "WHERE r.reviewed = 0 " +
-                        "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
-                        "   AND NOT exists(SELECT 1\n" +
-                        "                     FROM ImproperContent ic\n" +
-                        "                     WHERE ic.learningObject = lo\n" +
-                        "                           AND ic.reviewed = 0)\n" +
-                        "   AND NOT exists(SELECT 1\n" +
-                        "                     FROM BrokenContent ic\n" +
-                        "                     WHERE ic.material = lo\n" +
-                        "                           AND ic.deleted = 0)" +
-                        "ORDER BY r.createdAt ASC, r.id ASC", AdminLearningObject.class)
-                .setMaxResults(300)
+        List<BigInteger> resultList = getEntityManager()
+                .createNativeQuery("SELECT\n" +
+                        "  lo.id\n" +
+                        "FROM LearningObject lo\n" +
+                        "  JOIN FirstReview r ON r.learningObject = lo.id\n" +
+                        "WHERE r.reviewed = 0\n" +
+                        "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "      AND lo.id NOT IN (SELECT ic.material\n" +
+                        "                        FROM BrokenContent ic\n" +
+                        "                        WHERE ic.material = lo.id\n" +
+                        "                              AND ic.deleted = 0)\n" +
+                        "GROUP BY lo.id\n" +
+                        "ORDER BY min(r.createdAt) asc")
+                .setMaxResults(200)
                 .getResultList();
+        List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+        return adminLearningObjectDao.findById(collect);
     }
 
-
     public List<AdminLearningObject> findAllUnreviewed(User user) {
-        return getEntityManager()
-                .createQuery("SELECT DISTINCT lo \n" +
-                        "FROM AdminLearningObject lo \n" +
-                        "JOIN FETCH lo.firstReviews r " +
-                        "JOIN lo.taxons lt " +
-                        "WHERE r.reviewed = 0 " +
-                        "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
-                        "   AND NOT exists(SELECT 1\n" +
-                        "                     FROM ImproperContent ic\n" +
-                        "                     WHERE ic.learningObject = lo\n" +
-                        "                           AND ic.reviewed = 0)\n" +
-                        "   AND NOT exists(SELECT 1\n" +
-                        "                     FROM BrokenContent ic\n" +
-                        "                     WHERE ic.material = lo\n" +
-                        "                           AND ic.deleted = 0)" +
-                        "   AND lt.id in (:taxonIds)" +
-                        "ORDER BY r.createdAt ASC, r.id ASC", AdminLearningObject.class)
+        List<BigInteger> resultList =  getEntityManager()
+                .createNativeQuery("SELECT\n" +
+                        "  lo.id\n" +
+                        "FROM LearningObject lo\n" +
+                        "  JOIN FirstReview r ON r.learningObject = lo.id\n" +
+                        "  JOIN LearningObject_Taxon lt on lt.learningObject = lo.id\n" +
+                        "WHERE r.reviewed = 0\n" +
+                        "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "      AND lo.id NOT IN (SELECT ic.material\n" +
+                        "                        FROM BrokenContent ic\n" +
+                        "                        WHERE ic.material = lo.id\n" +
+                        "                              AND ic.deleted = 0)\n" +
+                        "      AND lt.taxon in (:taxonIds)\n" +
+                        "GROUP BY lo.id\n" +
+                        "ORDER BY min(r.createdAt) asc")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .setMaxResults(300)
+                .setMaxResults(200)
                 .getResultList();
+        List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+        return adminLearningObjectDao.findById(collect);
     }
 
     public long findCountOfUnreviewed() {
         return ((BigInteger) getEntityManager()
                 .createNativeQuery("SELECT count(1) AS c\n" +
                         "FROM FirstReview f\n" +
-                        "   JOIN LearningObject o ON f.learningObject = o.id\n" +
+                        "   JOIN LearningObject lo ON f.learningObject = lo.id\n" +
                         "WHERE f.reviewed = 0\n" +
-                        "   AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = f.learningObject " +
-                        "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = f.learningObject" +
-                        "                   AND bc.deleted = 0 )")
+                        "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "   AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "   AND lo.id NOT IN (SELECT ic.material\n" +
+                        "                        FROM BrokenContent ic\n" +
+                        "                        WHERE ic.material = lo.id\n" +
+                        "                              AND ic.deleted = 0)"
+                )
                 .getSingleResult()).longValue();
     }
 
     public long findCountOfUnreviewed(User user) {
         return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT count(DISTINCT o.id) AS c\n" +
-                        "FROM LearningObject o\n" +
-                        "   JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                        "WHERE (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "  AND exists(SELECT 1 FROM FirstReview ic " +
-                        "                   WHERE ic.learningObject = o.id " +
-                        "                   AND ic.reviewed = 0)" +
-                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = o.id " +
-                        "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = o.id" +
-                        "                   AND bc.deleted = 0 ) " +
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
+                        "FROM LearningObject lo\n" +
+                        "   JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
+                        "   JOIN FirstReview r on r.learningObject = lo.id " +
+                        "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "  AND r.reviewed = 1 " +
+                        "  AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "  AND lo.id NOT IN (SELECT ic.material\n" +
+                        "                        FROM BrokenContent ic\n" +
+                        "                        WHERE ic.material = lo.id\n" +
+                        "                              AND ic.deleted = 0)" +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult()).longValue();

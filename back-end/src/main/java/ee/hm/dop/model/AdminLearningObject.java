@@ -1,28 +1,31 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.NoClass;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
-import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
-import ee.hm.dop.rest.jackson.map.TaxonSerializer;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.List;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.MINIMAL_CLASS,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "LearningObject")
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public abstract class AdminLearningObject implements Searchable, ILearningObject, AbstractEntity {
 
     @Id
@@ -41,17 +44,6 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;
-
-    @ManyToMany(fetch = EAGER)
-    @Fetch(FetchMode.SELECT)
-    @JoinTable(
-            name = "LearningObject_Taxon",
-            joinColumns = {@JoinColumn(name = "learningObject")},
-            inverseJoinColumns = {@JoinColumn(name = "taxon")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "taxon"}))
-    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
-    @JsonSerialize(contentUsing = TaxonSerializer.class)
-    private List<Taxon> taxons;
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     private List<ReviewableChange> reviewableChanges;
@@ -103,14 +95,6 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     public void setReviewableChanges(List<ReviewableChange> reviewableChanges) {
         this.reviewableChanges = reviewableChanges;
-    }
-
-    public List<Taxon> getTaxons() {
-        return taxons;
-    }
-
-    public void setTaxons(List<Taxon> taxons) {
-        this.taxons = taxons;
     }
 
     public List<FirstReview> getFirstReviews() {
