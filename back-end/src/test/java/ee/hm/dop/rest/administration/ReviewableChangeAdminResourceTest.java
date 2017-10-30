@@ -40,11 +40,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public static final String SET_IMPROPER = "impropers";
 
     public static final String BIEBER_M16_ORIGINAL = "http://www.bieber.com";
-    public static final String BIEBER_M17_ORIGINAL = "http://www.bieber2.com";
     public static final String BEYONCE = "http://www.beyonce.com";
-    public static final String BEYONCE17 = "http://www.beyonce2.com";
     public static final String MADONNA = "http://www.madonna.com";
-    public static final String MADONNA17 = "http://www.madonna2.com";
 
     @Inject
     private TestDao testDao;
@@ -58,7 +55,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
 
     @After
     public void tearDown() throws Exception {
-        restoreLearningObjectChanges(Arrays.asList(MATERIAL_16, MATERIAL_17));
+        restoreLearningObjectChanges(Arrays.asList(MATERIAL_16));
     }
 
     @Test
@@ -171,53 +168,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertEquals(BIEBER_M16_ORIGINAL, review.getMaterialSource());
 
         revertUrl(updateMaterial);
-    }
-
-    @Test
-    public void I_change_bieber_url_to_beyonce_then_to_madonna___material_has_madonna_url_change_has_bieber() throws Exception {
-        Material material1 = getMaterial(MATERIAL_17);
-        assertNotChanged(material1, BIEBER_M17_ORIGINAL);
-
-        material1.setSource(BEYONCE17);
-        Material material2 = createOrUpdateMaterial(material1);
-        assertChanged(material2, BEYONCE17);
-
-        material2.setSource(MADONNA17);
-        Material material3 = createOrUpdateMaterial(material2);
-        assertChanged(material3, MADONNA17);
-
-        ReviewableChange review = reviewableChangeDao.findByComboField("learningObject.id", MATERIAL_17);
-        assertEquals(BIEBER_M17_ORIGINAL, review.getMaterialSource());
-
-        revertUrl(material3);
-    }
-
-    @Test
-    public void I_change_bieber_url_to_beyonce_it_is_reviewed_then_I_change_it_to_madonna___material_has_madonna_url_1change_is_reviewed_with_beyonce_1change_unreviewed_with_madonna
-            () throws Exception {
-        Material material1 = getMaterial(MATERIAL_17);
-        assertNotChanged(material1, BIEBER_M17_ORIGINAL);
-
-        material1.setSource(BEYONCE17);
-        Material material2 = createOrUpdateMaterial(material1);
-        assertChanged(material2, BEYONCE17);
-
-        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_17));
-        Material material3 = getMaterial(MATERIAL_17);
-        assertTrue(material3.getChanged() == 0);
-
-        material3.setSource(MADONNA17);
-        Material material4 = createOrUpdateMaterial(material3);
-        assertChanged(material4, MADONNA17);
-
-        List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_17);
-        Map<Boolean, List<ReviewableChange>> collect = review.stream().collect(Collectors.partitioningBy(ReviewableChange::isReviewed));
-        ReviewableChange reviewed = collect.get(true).get(0);
-        assertIsReviewed(reviewed, USER_ADMIN);
-        ReviewableChange unReviewed = collect.get(false).get(0);
-        assertEquals(BEYONCE17, unReviewed.getMaterialSource());
-
-        revertUrl(material4);
     }
 
     @Test
@@ -398,11 +348,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     }
 
     private void revertUrl(Material material) {
-        if (material.getId().equals(MATERIAL_16)) {
-            material.setSource(BIEBER_M16_ORIGINAL);
-        } else {
-            material.setSource(BIEBER_M17_ORIGINAL);
-        }
+        material.setSource(BIEBER_M16_ORIGINAL);
         createOrUpdateMaterial(material);
     }
 }
