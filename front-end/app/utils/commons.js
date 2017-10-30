@@ -526,6 +526,23 @@ function isMobile() {
     return window.innerWidth < BREAK_XS;
 }
 
+function stripHtml(htmlString) {
+    let tmp = document.createElement("div");
+    tmp.innerHTML = htmlString;
+    return tmp.textContent || tmp.innerText || "";
+}
+
+function countOccurrences(value, text) {
+    let count = 0;
+    let index = text.indexOf(value);
+    while (index !== -1) {
+        count++;
+        index = text.indexOf(value, index + 1);
+    }
+
+    return count;
+}
+
 /**
  *
  * Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
@@ -584,10 +601,10 @@ class Controller {
         )
     }
     isMaterial({ type }) {
-        return type === '.Material' || type === '.ReducedMaterial'
+        return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
     }
     isPortfolio({ type }) {
-        return type === '.Portfolio' || type === '.ReducedPortfolio'
+        return type === '.Portfolio' || type === '.ReducedPortfolio' || type === '.AdminPortfolio'
     }
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
