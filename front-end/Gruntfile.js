@@ -10,7 +10,6 @@ module.exports = function (grunt) {
     require('es6-promise').polyfill();
 
     grunt.loadNpmTasks('grunt-postcss');
-    grunt.loadNpmTasks('grunt-webdriver');
     grunt.loadNpmTasks('grunt-selenium-standalone');
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-env');
@@ -374,42 +373,6 @@ module.exports = function (grunt) {
                 ]
             },
         },
-
-        webdriver: {
-            test1: {
-                configFile: './wdio.conf.js'
-            },
-            test2: {
-                configFile: './wdio.conf2.js'
-            }
-        },
-        'selenium_standalone': {
-            serverConfig: {
-                seleniumVersion: '2.50.1',
-                seleniumDownloadURL: 'http://selenium-release.storage.googleapis.com',
-                drivers: {
-                    chrome: {
-                        version: '2.20',
-                        arch: process.arch,
-                        baseURL: 'http://chromedriver.storage.googleapis.com'
-                    }
-                }
-            }
-        },
-        shell: {
-            xvfb: {
-                command: 'Xvfb :99 -ac -screen 0 1920x1080x24',
-                options: {
-                    async: true
-                }
-            }
-        },
-        env: {
-            xvfb: {
-                DISPLAY: ':99'
-            }
-        },
-
         ngconstant: {
             dist: {
                 options: {
@@ -521,15 +484,5 @@ module.exports = function (grunt) {
     grunt.registerTask('package-live', [
         'build-live',
         'compress:live'
-    ]);
-
-    grunt.registerTask('regression-test', 'Run visual regression tests.', [
-        'shell:xvfb',
-        'env:xvfb',
-        'selenium_standalone:serverConfig:install',
-        'selenium_standalone:serverConfig:start',
-        'webdriver:test1',
-        'webdriver:test2',
-        'selenium_standalone:serverConfig:stop'
     ]);
 };

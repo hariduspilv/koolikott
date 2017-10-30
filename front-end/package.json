@@ -36,7 +36,6 @@
     "grunt-postcss": "^0.8.0",
     "grunt-requirejs": "^0.4.2",
     "grunt-sass": "^1.2.1",
-    "grunt-selenium-standalone": "^0.1.2",
     "grunt-shell-spawn": "^0.3.10",
     "grunt-strip-code": "^1.0.4",
     "grunt-svgmin": "^2.0.0",
@@ -47,10 +46,8 @@
     "jshint-stylish": "^1.0.0",
     "load-grunt-tasks": "^3.1.0",
     "mocha": "^2.3.4",
-    "request" :"2.81.0",
-    "time-grunt": "^1.0.0",
-    "webdrivercss": "^2.0.0-beta-rc1",
-    "webdriverio": "^3.4.0"
+    "request": "2.81.0",
+    "time-grunt": "^1.0.0"
   },
   "engines": {
     "node": ">=0.10.0"
