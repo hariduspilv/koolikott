@@ -4,7 +4,7 @@
       <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
       <th md-column md-order-by="byUpdatedAt"><span data-translate="UPDATED"></span></th>
-      <th md-column md-order-by="byCreator"><span data-translate="CREATOR"></span></th>
+      <th md-column md-order-by="byCreatedBy"><span data-translate="CREATOR"></span></th>
     </tr>
   </thead>
   <tbody md-body>
@@ -16,7 +16,8 @@
         <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"></div>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.updated)"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="!item.creator" data-translate="UNKNOWN"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
     </tr>
   </tbody>
 </table>

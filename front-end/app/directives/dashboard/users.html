@@ -4,7 +4,9 @@
       <th md-column md-order-by="byUsername"><span data-translate="USERNAME"></span></th>
       <th md-column md-order-by="byFullName"><span data-translate="FULL_NAME"></span></th>
       <th md-column md-order-by="byRole"><span data-translate="ROLE"></span></th>
-      <th data-ng-if="isView('/dashboard/moderators')" md-column md-order-by="byTaxons"><span data-translate="USER_TAXONS"></span></th>
+      <th data-ng-if="$ctrl.viewPath == 'moderators'" md-column md-order-by="byTaxons">
+        <span data-translate="USER_TAXONS"></span>
+      </th>
     </tr>
   </thead>
   <tbody md-body>
@@ -12,9 +14,9 @@
       <td md-cell data-ng-bind="user.username"></td>
       <td md-cell data-ng-bind="user.name + ' ' + user.surname"></td>
       <td md-cell data-ng-bind="$ctrl.getTranslation(user.role)"></td>
-      <td md-cell data-ng-if="isView('/dashboard/moderators')">
+      <td md-cell data-ng-if="$ctrl.viewPath == 'moderators'">
         <span data-ng-repeat="taxon in user.userTaxons">
-          <span data-translate="getTaxonTranslation(taxon)"></span><span data-ng-if="$index < user.userTaxons.length - 1">, </span>
+          <span data-translate="{{$ctrl.getTaxonTranslation(taxon)}}"></span><span data-ng-if="$index < user.userTaxons.length - 1">, </span>
         </span>
       </td>
     </tr>

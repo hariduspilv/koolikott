@@ -3,8 +3,9 @@
     <tr md-row>
       <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
-      <th md-column md-order-by="bySubmittedAt"><span data-translate="SUBMITTED_AT"></span></th>
-      <th md-column md-order-by="bySubmittedBy"><span data-translate="SUBMITTED_BY"></span></th>
+      <th md-column md-order-by="byCreatedAt"><span data-translate="SUBMITTED_AT"></span></th>
+      <th md-column md-order-by="byReportCount"><span data-translate="REPORT_COUNT"></span></th>
+      <th md-column md-order-by="byCreatedBy"><span data-translate="SUBMITTED_BY"></span></th>
     </tr>
   </thead>
   <tbody md-body>
@@ -16,9 +17,14 @@
         <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item.material)"></div>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.added)"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.reportCount === 1 && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.reportCount > 1"><span data-translate="REPORTED_BY_MULTIPLE_USERS"></span></td>
+      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reportCount"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.__reportCount === 1 || item.__reportCount > 1 && !$ctrl.hasMultipleCreators(item)) && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount > 1 && $ctrl.hasMultipleCreators(item)" data-ng-bind="$ctrl.getMultipleCreatorsLabel(item, 'NUM_REPORTERS')">
+        <md-tooltip>
+          <span data-ng-bind="$ctrl.getMultipleCreators(item)"></span>
+        </md-tooltip>
+      </td>
     </tr>
   </tbody>
 </table>

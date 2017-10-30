@@ -5,7 +5,7 @@ const VIEW_STATE_MAP = {
     unReviewed: [
         'DASHBOARD_UNREVIEWED', // title translation key
         'firstReview/unReviewed', // rest URI (after 'rest/admin/')
-        'byAddedAt' // sort by
+        '-byCreatedAt' // default sort by (use leading minus for DESC)
     ],
     improperMaterials: [
         'DASHBOARD_IMRPOPER_MATERIALS',
@@ -28,7 +28,7 @@ const VIEW_STATE_MAP = {
     changedLearningObjects: [
         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
         'changed',
-        'byAddedAt',
+        '-byCreatedAt',
         true
     ],
     deletedPortfolios: [
@@ -116,7 +116,6 @@ class controller extends Controller {
         this.serverCallService
             .makeGet('rest/admin/'+restUri)
             .then(({ data }) => {
-                console.log('data', data)
                 if (data) {
                     if (sortBy)
                         this.$scope.query.order = sortBy
@@ -157,7 +156,8 @@ class controller extends Controller {
             this.filteredCollection !== null
                 ? this.filteredCollection
                 : this.collection,
-            order
+            order,
+            this.unmergedData
         )
         this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
     }
@@ -187,31 +187,6 @@ class controller extends Controller {
 
         if (this.$scope.filter.form.$dirty)
             this.$scope.filter.form.$setPristine()
-    }
-    getImproperReportLabelKey(item) {
-        if (item.__reportCount === 1)
-            return item.reportingReasons.length === 1
-                ? item.reportingReasons[0].reason
-                : item.reportingReasons.length > 1
-                    ? 'MULTIPLE_REASONS'
-                    : ''
-
-        let reasonKey = ''
-        const allReports = this.getDuplicates(item)
-
-        for (let i = 0; i < allReports.length; i++) {
-            if (allReports[i].reportingReasons.length > 1)
-                return 'MULTIPLE_REASONS'
-
-            if (allReports[i].reportingReasons.length === 1) {
-                if (!reasonKey)
-                    reasonKey = allReports[i].reportingReasons[0].reason
-                else if (reasonKey != allReports[i].reportingReasons[0].reason)
-                    return 'MULTIPLE_REASONS'
-            }
-        }
-
-        return reasonKey
     }
     hasMultipleCreators(item) {
         let id
@@ -302,8 +277,12 @@ class controller extends Controller {
             for (var j = 0; j < merged.length; j++)
                 if (isSame(merged[j], items[i])) {
                     isAlreadyReported = true
+                    const __reportLabelKey = this.getImproperReportLabelKey(items[i])
 
                     merged[j].__reportCount++
+                    merged[j].__reportLabelKey = __reportLabelKey
+                    items[i].__reportCount++
+                    items[i].__reportLabelKey = __reportLabelKey
 
                     // include the newest
                     const mergedDate = merged[j].createdAt || merged[j].added
@@ -317,11 +296,42 @@ class controller extends Controller {
 
             if (!isAlreadyReported) {
                 items[i].__reportCount = 1
+                items[i].__reportLabelKey = this.getImproperReportLabelKey(items[i])
                 merged.push(items[i])
             }
         }
 
         return merged
+    }
+    getImproperReportLabelKey(item) {
+        if (item.__reportCount === 1)
+            return !Array.isArray(item.reportingReasons)
+                ? ''
+                : item.reportingReasons.length === 1
+                    ? item.reportingReasons[0].reason
+                    : item.reportingReasons.length > 1
+                        ? 'MULTIPLE_REASONS'
+                        : ''
+
+        let reasonKey = ''
+        const allReports = this.getDuplicates(item)
+
+        for (let i = 0; i < allReports.length; i++) {
+            if (!Array.isArray(allReports[i].reportingReasons))
+                return ''
+
+            if (allReports[i].reportingReasons.length > 1)
+                return 'MULTIPLE_REASONS'
+
+            if (allReports[i].reportingReasons.length === 1) {
+                if (!reasonKey)
+                    reasonKey = allReports[i].reportingReasons[0].reason
+                else if (reasonKey != allReports[i].reportingReasons[0].reason)
+                    return 'MULTIPLE_REASONS'
+            }
+        }
+
+        return reasonKey
     }
 }
 controller.$inject = [

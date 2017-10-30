@@ -741,6 +741,10 @@ function component(name, options) {
     return angular.module('koolikottApp').component(name, options)
 }
 
+function service(name, controller) {
+    return angular.module('koolikottApp').service(name, controller)
+}
+
 function factory(name, controller) {
     const factoryFn = Array.isArray(controller.$inject)
         ? controller.$inject.concat((...args) => new controller(...args))

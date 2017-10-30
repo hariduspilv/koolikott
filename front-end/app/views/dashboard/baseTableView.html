@@ -9,23 +9,27 @@
     data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
     >
     <div class="md-toolbar-tools">
-      <md-icon>search</md-icon>
+      <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
       <form data-flex name="filter.form">
-        <input
-          type="text"
-          data-ng-model="query.filter"
-          data-ng-model-options="filter.options"
-          placeholder="{{'SEARCH' | translate}}"
-          id="search-items"
-        >
+        <md-input-container>
+          <label></label>
+          <md-icon data-md-colors="{ color: 'grey-400' }">search</md-icon>
+          <input
+            type="text"
+            data-ng-model="query.filter"
+            data-ng-model-options="filter.options"
+            placeholder="{{'SEARCH' | translate}}"
+            id="search-items"
+          >
+          <md-button
+            class="md-icon-button md-ink-ripple"
+            data-ng-click="$ctrl.clearFilter()"
+            data-ng-if="query.filter"
+            >
+            <md-icon data-md-colors="{ color: 'grey-400' }">close</md-icon>
+          </md-button>
+        </md-input-container>
       </form>
-      <md-button
-        class="md-icon-button md-ink-ripple"
-        data-ng-click="clearFilter()"
-        data-ng-if="query.filter"
-        >
-        <md-icon>close</md-icon>
-      </md-button>
     </div>
   </md-toolbar>
   <!-- END Search learning objects -->
@@ -83,7 +87,8 @@
       <h4 data-translate="{{
         $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
           ? 'ERROR_USERS_NOT_FOUND'
-          : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"></h4>
+          : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
+      ></h4>
     </div>
     <!-- END Not found message -->
   </md-table-container>
