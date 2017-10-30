@@ -35,7 +35,7 @@ class controller extends Controller {
 
             this.$scope.labelKey = isPortfolio
                 ? 'PORTFOLIO_RESOURCE'
-                : resourceTypes.length
+                : resourceTypes && resourceTypes.length
                     ? resourceTypes[0].name
                     : 'UNKNOWN'
         }

@@ -28,8 +28,7 @@ const VIEW_STATE_MAP = {
     changedLearningObjects: [
         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
         'changed',
-        '-byCreatedAt',
-        true
+        '-byCreatedAt'
     ],
     deletedPortfolios: [
         'DASHBOARD_DELETED_PORTFOLIOS',
@@ -58,7 +57,6 @@ class controller extends Controller {
 
         this.collection = null
         this.filteredCollection = null
-        this.unmergedData
 
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
         const [ titleTranslationKey, ...rest ] = VIEW_STATE_MAP[this.viewPath]
@@ -74,6 +72,7 @@ class controller extends Controller {
         this.$scope.onPaginate = this.onPaginate.bind(this)
         this.$scope.onSort = this.onSort.bind(this)
         this.$scope.titleTranslationKey = titleTranslationKey
+
         this.getData(...rest)
 
         // Get all users for the autocomplete
@@ -122,7 +121,7 @@ class controller extends Controller {
 
                     if (doMerge) {
                         this.unmergedData = data.slice(0)
-                        data = this.mergeReports(data)
+                        data = this.merge(data)
                     }
 
                     this.collection = data
@@ -218,8 +217,38 @@ class controller extends Controller {
                 return `${str}${str ? ', ' : ''}${name} ${surname}`
             }, '')
     }
+    hasMultipleChangers({ reviewableChanges }) {
+        let id
+        return reviewableChanges.filter(c =>
+            !id ? id = c.createdBy.id
+                : id != c.createdBy.id
+        )
+        .length > 1
+    }
+    getMultipleChangersLabel(item) {
+        return this.sprintf(
+            this.$translate.instant('NUM_CHANGERS'),
+            item.reviewableChanges.length
+        )
+    }
+    getMultipleChangers({ reviewableChanges }) {
+        const ids = []
+        return reviewableChanges
+            .filter(c => {
+                const { id } = c.createdBy
+                return ids.includes(id)
+                    ? false
+                    : ids.push(id)
+            })
+            .reduce((str, c) => {
+                const { name, surname } = c.createdBy
+                return `${str}${str ? ', ' : ''}${name} ${surname}`
+            }, '')
+    }
     getDuplicates(item) {
-        return this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+        return item.learningObject
+            ? this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+            : this.unmergedData.filter(r => r.id == item.id)
     }
     filterItems() {
         const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1
@@ -263,13 +292,13 @@ class controller extends Controller {
             : this.collection.slice(start, end)
     }
     /**
-     *  Merge reports so that every learning object is represented by only 1 row in the table.
+     *  Merge reports/changes so that every learning object is represented by only 1 row in the table.
      */
-    mergeReports(items) {
+    merge(items) {
         const merged = []
         const isSame = (a, b) =>
-            (a.learningObject || a.material || {}).id ===
-            (b.learningObject || b.material || {}).id
+            (a.learningObject || a.material || a).id ===
+            (b.learningObject || b.material || b).id
 
         for (let i = 0; i < items.length; i++) {
             let isAlreadyReported = false
@@ -304,7 +333,7 @@ class controller extends Controller {
         return merged
     }
     getImproperReportLabelKey(item) {
-        if (item.__reportCount === 1)
+        if (item.__reportCount && item.__reportCount === 1)
             return !Array.isArray(item.reportingReasons)
                 ? ''
                 : item.reportingReasons.length === 1
@@ -333,6 +362,16 @@ class controller extends Controller {
 
         return reasonKey
     }
+    getMostRecentChangeDate(item) {
+        const mostRecentDate = item.reviewableChanges.reduce((mostRecentDate, change) => {
+            const date = new Date(change.createdAt)
+            return !mostRecentDate || date > mostRecentDate
+                ? date
+                : mostRecentDate
+        }, null)
+
+        return this.formatDateToDayMonthYear(mostRecentDate.toISOString())
+    }
 }
 controller.$inject = [
     '$scope',
@@ -341,6 +380,7 @@ controller.$inject = [
     '$mdDialog',
     '$route',
     '$translate',
+    '$timeout',
     'serverCallService',
     'sortService',
     'taxonService',
