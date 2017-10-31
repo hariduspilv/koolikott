@@ -33,14 +33,6 @@ public class ReviewableChangeAdminResource extends BaseResource {
     private LearningObjectService learningObjectService;
 
     @GET
-    @Path("old")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChangedOld() {
-        return reviewableChangeAdminService.getUnReviewedOld(getLoggedInUser());
-    }
-
-    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<AdminLearningObject> getChanged() {

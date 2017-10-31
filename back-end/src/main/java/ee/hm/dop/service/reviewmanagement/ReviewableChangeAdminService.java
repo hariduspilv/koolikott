@@ -24,16 +24,6 @@ public class ReviewableChangeAdminService {
     @Inject
     private LearningObjectDao learningObjectDao;
 
-    @Deprecated
-    public List<ReviewableChange> getUnReviewedOld(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return reviewableChangeDao.findAllUnreviewedOld();
-        } else {
-            return reviewableChangeDao.findAllUnreviewedOld(user);
-        }
-    }
-
     public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {

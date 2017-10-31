@@ -12,6 +12,7 @@ import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
