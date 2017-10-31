@@ -268,6 +268,7 @@ class controller extends Controller {
                             : this.oldLink = change.materialSource // link was changed
                     )
                     this.changes = changes
+                    this.$rootScope.learningObjectChanges = changes
                     this.metadataService.loadEducationalContexts(() => {
                         this.$scope.messageKey = ''
                         this.$scope.htmlMessage = this.getChangedMessage()
