@@ -25,6 +25,7 @@ public class TestConstants {
     public static final Long MATERIAL_15 = 15L;
     public static final Long MATERIAL_16 = 16L;
     public static final Long MATERIAL_17 = 17L;
+    public static final Long MATERIAL_18 = 18L;
 
     public static final Long PORTFOLIO_1 = 101L;
     public static final Long PORTFOLIO_2 = 102L;
