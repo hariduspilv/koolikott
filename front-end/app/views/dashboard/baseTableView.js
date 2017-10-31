@@ -1,7 +1,7 @@
 'use strict'
 
 {
-const VIEW_STATE_MAP = {
+const DASHBOARD_VIEW_STATE_MAP = {
     unReviewed: [
         'DASHBOARD_UNREVIEWED', // title translation key
         'firstReview/unReviewed', // rest URI (after 'rest/admin/')
@@ -59,7 +59,7 @@ class controller extends Controller {
         this.filteredCollection = null
 
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
-        const [ titleTranslationKey, ...rest ] = VIEW_STATE_MAP[this.viewPath] || []
+        const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
 
         this.$scope.itemsCount = 0
         this.$scope.filter = { options: { debounce: 500 } }
@@ -75,7 +75,7 @@ class controller extends Controller {
 
         rest.length
             ? this.getData(...rest)
-            : console.error(new Error(`Could not find ${this.viewPath} in VIEW_STATE_MAP. See baseTableView.js`), VIEW_STATE_MAP)
+            : console.error(new Error(`Could not find ${this.viewPath} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`))
 
         // Get all users for the autocomplete
         if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
