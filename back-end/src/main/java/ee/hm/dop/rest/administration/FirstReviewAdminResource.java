@@ -28,21 +28,12 @@ public class FirstReviewAdminResource extends BaseResource {
     private ReviewManager reviewManager;
 
     @GET
-    @Path("unReviewed/old")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<FirstReview> getUnReviewedOld() {
-        return firstReviewAdminService.getUnReviewedOld(getLoggedInUser());
-    }
-
-    @GET
     @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<AdminLearningObject> getUnReviewed() {
         return firstReviewAdminService.getUnReviewed(getLoggedInUser());
     }
-
 
     @GET
     @Path("unReviewed/count")

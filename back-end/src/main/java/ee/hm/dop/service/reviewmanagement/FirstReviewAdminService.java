@@ -20,15 +20,6 @@ public class FirstReviewAdminService {
     @Inject
     private FirstReviewDao firstReviewDao;
 
-    public List<FirstReview> getUnReviewedOld(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findAllUnreviewedOld();
-        } else {
-            return firstReviewDao.findAllUnreviewedOld(user);
-        }
-    }
-
     public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {

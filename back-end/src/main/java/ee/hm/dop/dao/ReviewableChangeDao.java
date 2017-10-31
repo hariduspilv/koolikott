@@ -23,53 +23,6 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                 .setParameter("id", learningObjectId).getResultList();
     }
 
-    @Deprecated
-    public List<ReviewableChange> findAllUnreviewedOld() {
-        return getEntityManager()
-                .createNativeQuery("SELECT f.*\n" +
-                        "FROM ReviewableChange f\n" +
-                        "  JOIN LearningObject o ON f.learningObject = o.id\n" +
-                        "WHERE f.reviewed = 0\n" +
-                        "  AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = f.learningObject " +
-                        "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = f.learningObject" +
-                        "                   AND bc.deleted = 0 )" +
-                        "  AND NOT exists(SELECT 1 FROM FirstReview bc " +
-                        "                   WHERE bc.learningObject = f.learningObject" +
-                        "                   AND bc.reviewed = 0 )" +
-                        "ORDER BY f.createdAt ASC, f.id ASC", entity())
-                .getResultList();
-    }
-
-    @Deprecated
-    public List<ReviewableChange> findAllUnreviewedOld(User user) {
-        return getEntityManager()
-                .createNativeQuery("SELECT f.*\n" +
-                        "FROM ReviewableChange f\n" +
-                        "  JOIN LearningObject o ON f.learningObject = o.id\n" +
-                        "  JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                        "WHERE f.reviewed = 0\n" +
-                        "  AND (o.visibility = 'PUBLIC' OR o.visibility = 'NOT_LISTED')\n" +
-                        "  AND NOT exists(SELECT 1 FROM ImproperContent ic " +
-                        "                   WHERE ic.learningObject = f.learningObject " +
-                        "                   AND ic.reviewed = 0)\n" +
-                        "  AND NOT exists(SELECT 1 FROM BrokenContent bc " +
-                        "                   WHERE bc.material = f.learningObject" +
-                        "                   AND bc.deleted = 0 )" +
-                        "  AND NOT exists(SELECT 1 FROM FirstReview bc " +
-                        "                   WHERE bc.learningObject = f.learningObject" +
-                        "                   AND bc.reviewed = 0 )" +
-                        "  AND lt.taxon IN (:taxonIds)\n" +
-                        "ORDER BY f.createdAt ASC, f.id ASC", entity())
-                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .setMaxResults(200)
-                .getResultList();
-    }
-
-
     public List<AdminLearningObject> findAllUnreviewed() {
         List<BigInteger> resultList = getEntityManager()
                 .createNativeQuery("SELECT\n" +
