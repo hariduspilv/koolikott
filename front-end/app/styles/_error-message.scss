@@ -42,7 +42,7 @@ dop-error-message {
   margin-right: -8px;
 }
 
-.error-message-reports {
+.error-message-expandable {
   overflow: auto;
   transition: height $swift-ease-out-duration $swift-ease-out-timing-function;
 
@@ -54,4 +54,9 @@ dop-error-message {
   md-list md-list-item.md-3-line .md-list-item-text h3 {
     margin-bottom: .2em;
   }
+}
+
+.changed-new-taxon {
+  color: $white;
+  font-weight: 600;
 }
