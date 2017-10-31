@@ -27,17 +27,17 @@ class controller extends Controller {
     $onChanges({ learningObject: { currentValue } }) {
         if (currentValue) {
             const isPortfolio = this.isPortfolio(currentValue)
-            // const { resourceTypes } = currentValue
+            const { resourceTypes } = currentValue
 
             this.$scope.icon = isPortfolio
                 ? 'book'
-                : 'description'/*this.iconService.getMaterialIcon(resourceTypes)
+                : 'description' // this.iconService.getMaterialIcon(resourceTypes)
 
             this.$scope.labelKey = isPortfolio
                 ? 'PORTFOLIO_RESOURCE'
                 : resourceTypes && resourceTypes.length
                     ? resourceTypes[0].name
-                    : 'UNKNOWN'*/
+                    : 'UNKNOWN'
         }
     }
 }
