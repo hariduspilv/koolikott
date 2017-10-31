@@ -183,16 +183,11 @@ class controller extends Controller {
         return this.suggestService.suggest(query, this.suggestService.getSuggestSystemTagURLbase())
     }
     tagSelected() {
-        console.log('addSystemTag', this.learningObject.id, {
-            'name': this.newTag.tagName,
-            'type': this.learningObject.type
-        })
-        if (this.newTag && this.newTag.tagName)
+        if (this.newTag && this.newTag.tagName) {
             this.tagsService
                 .addSystemTag(this.learningObject.id, this.newTag)
                 .then(data => {
                     this.addTagSuccess(data.learningObject)
-                    console.log('AFTER this.addTagSuccess', data)
                     this.showSystemTagDialog(data.tagTypeName)
                     this.$scope.$emit(
                         this.isMaterial(learningObject)
@@ -200,11 +195,10 @@ class controller extends Controller {
                             : 'tags:updatePortfolio',
                         learningObject
                     )
-                    this.newTag.tagName = null
                     this.$rootScope.$broadcast('errorMessage:updateChanged')
-                }, () =>
-                    this.newTag.tagName = null
-                )
+                })
+            this.newTag.tagName = null
+        }
     }
     limitTextLength() {
         if (this.newTag && this.newTag.tagName && this.newTag.tagName.length > 60)

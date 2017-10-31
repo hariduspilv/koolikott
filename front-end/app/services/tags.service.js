@@ -113,18 +113,11 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             }
         },
 
-        addSystemTag(learningObjectId, tag, successCallback, failCallback) {
-            console.log(tag);
-            if (successCallback) {
-                serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", JSON.stringify(tag.tagName), successCallback, failCallback);
-            } else {
-                console.log(tag);
-                console.log('PUT rest/learningObject/' + learningObjectId + '/system_tags', JSON.stringify(tag.tagName))
-                return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", JSON.stringify(tag.tagName))
-                    .then(response => {
-                        return response.data;
-                    });
-            }
+        addSystemTag(learningObjectId, tag) {
+            return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", JSON.stringify(tag.tagName))
+                .then(response => {
+                    return response.data;
+                });
         },
 
         getImpropers(params, successCallback, failCallback) {
