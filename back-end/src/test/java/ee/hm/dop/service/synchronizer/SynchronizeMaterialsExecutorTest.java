@@ -1,20 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.joda.time.LocalDateTime.now;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.easymock.EasyMock;
@@ -26,6 +11,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+
+import static org.easymock.EasyMock.*;
+import static org.joda.time.LocalDateTime.now;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class SynchronizeMaterialsExecutorTest {
@@ -208,7 +202,7 @@ public class SynchronizeMaterialsExecutorTest {
 
             transactionStarted = true;
             transactionWasStarted = true;
-        };
+        }
 
         @Override
         protected RepositoryService newRepositoryService() {
@@ -222,6 +216,6 @@ public class SynchronizeMaterialsExecutorTest {
             }
 
             transactionStarted = false;
-        };
+        }
     }
 }
