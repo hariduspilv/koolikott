@@ -75,7 +75,7 @@ class controller extends Controller {
 
         rest.length
             ? this.getData(...rest)
-            : console.error(new Error(`Could not find ${this.viewPath} in VIEW_STATE_MAP. See baseTableView.js`))
+            : console.error(new Error(`Could not find ${this.viewPath} in VIEW_STATE_MAP. See baseTableView.js`), VIEW_STATE_MAP)
 
         // Get all users for the autocomplete
         if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
