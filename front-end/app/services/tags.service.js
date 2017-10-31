@@ -117,6 +117,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             if (successCallback) {
                 serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", params, successCallback, failCallback);
             } else {
+                console.log('PUT rest/learningObject/' + learningObjectId + '/system_tags', params)
                 return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", params)
                     .then(response => {
                         return response.data;
