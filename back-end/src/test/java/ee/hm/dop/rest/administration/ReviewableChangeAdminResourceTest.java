@@ -12,6 +12,7 @@ import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
@@ -157,6 +158,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertIsReviewed(review, USER_ADMIN);
     }
 
+    @Ignore
     @Test
     public void moderator_sees_changes_made_in_their_taxon_tree_only() throws Exception {
         long changedLearnigObjectsCount = doGet(GET_CHANGED_COUNT, Long.class);
