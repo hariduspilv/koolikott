@@ -9,6 +9,11 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.init()
 
+        this.unsubscribeTagsAdded = this.$rootScope.$watch('learningObjectChanges', () => {
+            if (Array.isArray(this.tags) && this.tags.length)
+                this.tags = this.filterTags(this.tags)
+        })
+
         // auto-launch the report dialog upon login or page load if hash is found in location URL
         this.$timeout(() =>
             window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH)
@@ -19,6 +24,8 @@ class controller extends Controller {
     $onDestroy() {
         if (typeof this.unsubscribeLoginSuccess === 'function')
             this.unsubscribeLoginSuccess()
+        if (typeof this.unsubscribeTagsAdded === 'function')
+            this.unsubscribeTagsAdded()
     }
     init() {
         this.showMoreTags = false
@@ -49,11 +56,11 @@ class controller extends Controller {
                 let sorted = this.sortTagsByUpVoteCount(tags)
 
                 if (sorted.length > 10) {
-                    this.tags = sorted.slice(0, 10)
+                    this.allTags = this.filterTags(sorted)
+                    this.tags = this.allTags.slice(0, 10)
                     this.showMoreTags = true
-                    this.allTags = sorted
                 } else
-                    this.tags = sorted
+                    this.tags = this.filterTags(sorted)
             })
     }
     sortTagsByUpVoteCount(tags) {
@@ -216,6 +223,15 @@ class controller extends Controller {
                     .closeTo(`#${tagType}-close`)
             )
     }
+    filterTags(tags) {
+        return Array.isArray(tags) && this.$rootScope.learningObjectChanges
+            ? tags.slice(0).map(t =>
+                Object.assign(t, {
+                    isNew: !!this.$rootScope.learningObjectChanges.find(c => c.taxon && c.taxon.name == t.tag)
+                })
+            )
+            : tags
+    }
 }
 controller.$inject = [
     '$scope',
@@ -229,13 +245,21 @@ controller.$inject = [
     'tagsService',
     'toastService'
 ]
-
-angular.module('koolikottApp').component('dopTags', {
+component('dopTags', {
     bindings: {
         learningObject: '=',
         isEditPortfolioMode: '<?'
     },
     templateUrl: 'directives/tags/tags.html',
     controller
+})
+/**
+ * @see: https://github.com/angular/material/issues/8692
+ */
+directive('dopTagCustomChip', {
+    link($scope, $elem) {
+        if ($scope.$chip.isNew)
+            $elem.parent().parent().addClass('new')
+    }
 })
 }

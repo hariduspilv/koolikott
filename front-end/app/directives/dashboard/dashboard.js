@@ -31,7 +31,7 @@ class controller extends Controller {
 
             this.$scope.icon = isPortfolio
                 ? 'book'
-                : this.iconService.getMaterialIcon(resourceTypes)
+                : 'description' // this.iconService.getMaterialIcon(resourceTypes)
 
             this.$scope.labelKey = isPortfolio
                 ? 'PORTFOLIO_RESOURCE'

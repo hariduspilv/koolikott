@@ -7,7 +7,7 @@
     readonly="true"
     data-md-removable="$ctrl.isEditPortfolioMode"
     data-md-on-remove="$ctrl.removeTag($chip.tag)">
-    <md-chip-template>
+    <md-chip-template dop-tag-custom-chip>
       <md-button
         data-ng-if="
           !$ctrl.authenticatedUserService.isRestricted() &&

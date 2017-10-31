@@ -5,8 +5,8 @@
       data-flex
       data-flex-gt-xs="75"
       data-layout-align="start center"
-      data-ng-class="{ expandable: showExpandableReports, expanded: showReports }"
-      data-ng-click="showExpandableReports && toggleReports()"
+      data-ng-class="{ expandable: showExpandableReports || showExpandableChanges, expanded: expanded }"
+      data-ng-click="(showExpandableReports || showExpandableChanges) && toggleExpandable()"
       data-tooltip="Kuva kogu põhjuse tekst"
       >
       <md-icon data-ng-bind="icon" class="error-message-icon">
@@ -17,11 +17,12 @@
       <div data-flex data-layout="row">
         <div data-flex>
           <h2 id="error-message-heading" data-ng-if="message" data-md-truncate data-ng-bind="message"></h2>
-          <h2 id="error-message-heading" data-ng-if="!message" data-md-truncate data-translate="{{messageKey}}"></h2>
+          <h2 id="error-message-heading" data-ng-if="htmlMessage" data-md-truncate data-ng-bind-html="htmlMessage"></h2>
+          <h2 id="error-message-heading" data-ng-if="!message && !htmlMessage" data-md-truncate data-translate="{{messageKey}}"></h2>
         </div>
-        <md-icon data-ng-if="showExpandableReports" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
+        <md-icon data-ng-if="showExpandableReports || showExpandableChanges" class="error-message-collapse-icon">keyboard_arrow_right</md-icon>
         <md-tooltip data-ng-if="showExpandableReports" md-direction="bottom">
-          <span data-translate="{{showReports ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
+          <span data-translate="{{expanded ? 'HIDE_ALL_REPORT_DETAILS' : 'SHOW_ALL_REPORT_DETAILS'}}"></span>
         </md-tooltip>
       </div>
     </div>
@@ -30,10 +31,10 @@
         data-ng-repeat="button in buttons"
         class="md-icon-button error-message-button"
         aria-label="{{button.label | translate}}"
-        data-ng-click="button.onClick()"
-        data-ng-if="button.show"
+        data-ng-click="button.onClick($ctrl)"
+        data-ng-if="button.show($ctrl)"
         >
-        <md-icon ng-bind="button.icon"></md-icon>
+        <md-icon ng-bind="button.icon($ctrl)"></md-icon>
         <md-tooltip>
           <span data-translate="{{button.label}}"></span>
         </md-tooltip>
@@ -41,7 +42,8 @@
     </div>
   </div>
 </md-toolbar>
-<md-content data-flex data-ng-if="show && showExpandableReports" class="error-message-reports" data-ng-class="{ collapsed: !showReports }">
+<!-- Improper reports -->
+<md-content data-flex data-ng-if="show && showExpandableReports" class="error-message-expandable" data-ng-class="{ collapsed: !expanded }">
   <md-list>
     <md-list-item class="md-3-line md-long-text" data-ng-repeat="report in reports track by $index">
       <md-icon
@@ -72,6 +74,44 @@
         <h3><span data-ng-repeat="reason in report.reportingReasons"><span ng-if="$index > 0">, </span><span data-translate="{{reason.reason}}"></span></span></h3>
         <p data-ng-if="report.reportingText" data-ng-bind="report.reportingText"></p>
       </div>
+      <md-divider inset></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>
+<!-- Changes -->
+<md-content data-flex data-ng-if="show && showExpandableChanges" class="error-message-expandable" data-ng-class="{ collapsed: !expanded }">
+  <md-list>
+    <md-list-item data-ng-repeat="change in $ctrl.changes track by $index">
+      <p data-ng-if="change.materialSource"><span data-translate="CHANGED_LINK_ROW"></span> <a
+        target="_blank"
+        data-ng-href="{{change.materialSource}}"
+        data-ng-bind="change.materialSource"
+        data-md-colors="{ 'color': 'grey-600' }"
+      ></a></p>
+      <p
+        data-ng-if="change.taxon"
+        data-ng-bind="$ctrl.getTaxonLabel(change.taxon)"
+      ></p>
+      <md-button
+        class="md-icon-button md-secondary error-message-button"
+        aria-label="{{'UNDO_CHANGE' | translate}}"
+        data-ng-click="$ctrl.administerChange('revert', change, 'onReverted')"
+        >
+        <md-icon>undo</md-icon>
+        <md-tooltip>
+          <span data-translate="UNDO_CHANGE"></span>
+        </md-tooltip>
+      </md-button>
+      <md-button
+        class="md-icon-button md-secondary error-message-button"
+        aria-label="{{'ACCEPT_CHANGE' | translate}}"
+        data-ng-click="$ctrl.administerChange('accept', change, 'init')"
+        >
+        <md-icon>done</md-icon>
+        <md-tooltip>
+          <span data-translate="ACCEPT_CHANGE"></span>
+        </md-tooltip>
+      </md-button>
       <md-divider inset></md-divider>
     </md-list-item>
   </md-list>
