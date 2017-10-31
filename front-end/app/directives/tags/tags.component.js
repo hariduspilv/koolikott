@@ -224,7 +224,7 @@ class controller extends Controller {
             )
     }
     filterTags(tags) {
-        return this.$rootScope.learningObjectChanges
+        return Array.isArray(tags) && this.$rootScope.learningObjectChanges
             ? tags.slice(0).map(t =>
                 Object.assign(t, {
                     isNew: !!this.$rootScope.learningObjectChanges.find(c => c.taxon && c.taxon.name == t.tag)
