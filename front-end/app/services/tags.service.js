@@ -10,8 +10,8 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             $location.url(searchService.getURL());
         },
 
-        addTag(tag, learningObject, successCallback, failCallback) {
-            let url = "rest/learningObject/" + learningObject.id + "/tags";
+        addTag(learningObjectId, tag, successCallback, failCallback) {
+            let url = "rest/learningObject/" + learningObjectId + "/tags";
 
             if (successCallback) {
                 serverCallService.makePut(url, JSON.stringify(tag.tagName), successCallback, failCallback);
@@ -113,12 +113,14 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             }
         },
 
-        addSystemTag(learningObjectId, params, successCallback, failCallback) {
+        addSystemTag(learningObjectId, tag, successCallback, failCallback) {
+            console.log(tag);
             if (successCallback) {
-                serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", params, successCallback, failCallback);
+                serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", JSON.stringify(tag.tagName), successCallback, failCallback);
             } else {
-                console.log('PUT rest/learningObject/' + learningObjectId + '/system_tags', params)
-                return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", params)
+                console.log(tag);
+                console.log('PUT rest/learningObject/' + learningObjectId + '/system_tags', JSON.stringify(tag.tagName))
+                return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", JSON.stringify(tag.tagName))
                     .then(response => {
                         return response.data;
                     });

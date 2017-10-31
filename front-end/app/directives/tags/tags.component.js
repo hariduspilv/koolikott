@@ -114,7 +114,7 @@ class controller extends Controller {
     addTag() {
         if (this.learningObject && this.learningObject.id) {
             this.tagsService
-                .addTag(this.newTag, this.learningObject)
+                .addTag(this.learningObject.id, this.newTag)
                 .then(this.addTagSuccess.bind(this))
             this.newTag.tagName = null
         }
@@ -123,7 +123,7 @@ class controller extends Controller {
         if (this.learningObject) {
             learningObject.picture = this.learningObject.picture
             this.learningObject = learningObject
-            
+
             if (!this.learningObject.source && learningObject.uploadedFile)
                 this.learningObject.source = learningObject.uploadedFile.url
 
@@ -189,9 +189,7 @@ class controller extends Controller {
         })
         if (this.newTag && this.newTag.tagName)
             this.tagsService
-                .addSystemTag(this.learningObject.id, {
-                    'name': this.newTag.tagName
-                })
+                .addSystemTag(this.learningObject.id, this.newTag)
                 .then(data => {
                     this.addTagSuccess(data.learningObject)
                     console.log('AFTER this.addTagSuccess', data)
