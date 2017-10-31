@@ -54,7 +54,6 @@ public class ReviewableChangeServiceTest {
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
         expect(reviewableChangeDao.createOrUpdate(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
-        expect(reviewableChangeDao.findAllUnreviewedOld()).andReturn(Collections.singletonList(reviewableChange));
         replay(learningObjectService);
         replay(reviewableChangeDao);
 
@@ -62,7 +61,6 @@ public class ReviewableChangeServiceTest {
 
         assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());
-        assertTrue(reviewableChangeDao.findAllUnreviewedOld().size() == 1);
     }
 
     @Test

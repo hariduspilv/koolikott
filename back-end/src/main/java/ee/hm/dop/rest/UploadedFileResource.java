@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.config.EmbeddedJetty;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.files.enums.FileDirectory;
@@ -20,7 +21,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 @Path("uploadedFile")
 public class UploadedFileResource extends BaseResource {
 
-    public static final String REST_UPLOADED_FILE = "/rest/uploadedFile/";
+    public static final String REST_UPLOADED_FILE = EmbeddedJetty.REST_PREFIX + "/uploadedFile/";
     @Inject
     private Configuration configuration;
     @Inject
