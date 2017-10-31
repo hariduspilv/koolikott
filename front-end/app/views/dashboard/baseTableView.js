@@ -59,7 +59,7 @@ class controller extends Controller {
         this.filteredCollection = null
 
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
-        const [ titleTranslationKey, ...rest ] = VIEW_STATE_MAP[this.viewPath]
+        const [ titleTranslationKey, ...rest ] = VIEW_STATE_MAP[this.viewPath] || []
 
         this.$scope.itemsCount = 0
         this.$scope.filter = { options: { debounce: 500 } }
@@ -73,7 +73,9 @@ class controller extends Controller {
         this.$scope.onSort = this.onSort.bind(this)
         this.$scope.titleTranslationKey = titleTranslationKey
 
-        this.getData(...rest)
+        rest.length
+            ? this.getData(...rest)
+            : console.error(new Error(`Could not find ${this.viewPath} in VIEW_STATE_MAP. See baseTableView.js`))
 
         // Get all users for the autocomplete
         if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
