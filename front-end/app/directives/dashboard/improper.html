@@ -15,7 +15,11 @@
         <dop-dashboard-type-icon data-learning-object="item.learningObject"></dop-dashboard-type-icon>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--title">
-        <div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item.learningObject)"></div>
+        <a
+          class="ellipsis ellipsis--2"
+          data-ng-href="{{$ctrl.getLearningObjectUrl(item.learningObject)}}"
+          data-ng-bind="$ctrl.getCorrectLanguageTitle(item.learningObject)"
+        ></a>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.createdAt)"></td>
       <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reportCount"></td>
