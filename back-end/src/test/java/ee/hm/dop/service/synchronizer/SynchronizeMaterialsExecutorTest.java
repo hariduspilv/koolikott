@@ -64,7 +64,7 @@ public class SynchronizeMaterialsExecutorTest {
 
         replay(repositoryService, repository1, repository2);
 
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.run();
 
         verify(repositoryService, repository1, repository2);
 
@@ -79,7 +79,7 @@ public class SynchronizeMaterialsExecutorTest {
 
         replay(repositoryService);
 
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.run();
 
         verify(repositoryService);
     }
