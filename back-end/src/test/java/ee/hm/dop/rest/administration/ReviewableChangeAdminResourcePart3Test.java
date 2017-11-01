@@ -80,7 +80,7 @@ public class ReviewableChangeAdminResourcePart3Test extends ResourceIntegrationT
         revertUrl(material4, BIEBER_M18_ORIGINAL);
     }
 
-    private synchronized void restoreLearningObjectChanges(List<Long> learningObjectId) {
+    private void restoreLearningObjectChanges(List<Long> learningObjectId) {
         DbUtils.getTransaction().begin();
         testDao.removeChanges(learningObjectId);
         DbUtils.closeTransaction();
