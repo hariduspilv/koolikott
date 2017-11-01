@@ -321,7 +321,7 @@ class controller extends Controller {
             : this.newTaxons.length === 1
                 ? `${translate(this.oldLink ? 'CHANGED_LINK_AND_ADDED_ONE_TAXON' : 'ADDED_ONE_TAXON')} ${taxons()}`
                 : `${this.sprintf(
-                        translate(this.oldLink ? 'CHANGED_LINK_AND_ADDED_MULTIPLE_TAXONS' : 'ADDED_MULTIPLE_TAXON'),
+                        translate(this.oldLink ? 'CHANGED_LINK_AND_ADDED_MULTIPLE_TAXONS' : 'ADDED_MULTIPLE_TAXONS'),
                         this.newTaxons.length
                     )} ${taxons()}`
 
