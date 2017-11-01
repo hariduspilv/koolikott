@@ -127,7 +127,10 @@ class controller extends Controller {
                     }
 
                     if (restUri == 'changed')
-                        data.forEach(o => o.__reportCount = o.reviewableChanges.filter(c => !c.reviewed).length)
+                        data.forEach(o => {
+                            o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
+                            o.__changers = this.getChangers(o)
+                        })
 
                     this.collection = data
                     this.$scope.itemsCount = data.length
@@ -192,23 +195,19 @@ class controller extends Controller {
         if (this.$scope.filter.form.$dirty)
             this.$scope.filter.form.$setPristine()
     }
-    hasMultipleCreators(item) {
-        let id
-        return this
-            .getDuplicates(item)
-            .filter(c =>
-                !id ? id = (c.createdBy || c.creator).id
-                    : id != (c.createdBy || c.creator).id
-            )
-            .length > 1
-    }
-    getMultipleCreatorsLabel(item, translationKey) {
+    getNumCreatorsLabel(item, translationKey) {
         return this.sprintf(
             this.$translate.instant(translationKey),
-            item.__reportCount
+            item.__creators.length
         )
     }
-    getMultipleCreators(item) {
+    getCommaSeparatedCreators(item) {
+        return item.__creators.reduce((str, c) => {
+            const { name, surname } = c.createdBy || c.creator
+            return `${str}${str ? ', ' : ''}${name} ${surname}`
+        }, '')
+    }
+    getCreators(item) {
         const ids = []
         return this.getDuplicates(item)
             .filter(c => {
@@ -217,28 +216,20 @@ class controller extends Controller {
                     ? false
                     : ids.push(id)
             })
-            .reduce((str, c) => {
-                const { name, surname } = c.createdBy || c.creator
-                return `${str}${str ? ', ' : ''}${name} ${surname}`
-            }, '')
     }
-    hasMultipleChangers({ reviewableChanges }) {
-        let id
-        return reviewableChanges
-            .filter(c => !c.reviewed)
-            .filter(c =>
-                !id ? id = c.createdBy.id
-                    : id != c.createdBy.id
-            )
-            .length > 1
-    }
-    getMultipleChangersLabel(item) {
+    getNumChangersLabel(item) {
         return this.sprintf(
             this.$translate.instant('NUM_CHANGERS'),
-            item.__reportCount
+            item.__changers.length
         )
     }
-    getMultipleChangers({ reviewableChanges }) {
+    getCommaSeparatedChangers(item) {
+        return item.__changers.reduce((str, c) => {
+            const { name, surname } = c.createdBy
+            return `${str}${str ? ', ' : ''}${name} ${surname}`
+        }, '')
+    }
+    getChangers({ reviewableChanges }) {
         const ids = []
         return reviewableChanges
             .filter(c => !c.reviewed)
@@ -248,10 +239,6 @@ class controller extends Controller {
                     ? false
                     : ids.push(id)
             })
-            .reduce((str, c) => {
-                const { name, surname } = c.createdBy
-                return `${str}${str ? ', ' : ''}${name} ${surname}`
-            }, '')
     }
     getDuplicates(item) {
         return item.learningObject
@@ -336,6 +323,8 @@ class controller extends Controller {
                 items[i].__reportLabelKey = this.getImproperReportLabelKey(items[i])
                 merged.push(items[i])
             }
+
+            items[i].__creators = this.getCreators(items[i])
         }
 
         return merged
