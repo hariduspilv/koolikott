@@ -75,8 +75,7 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
         Material material2 = createOrUpdateMaterial(material1);
         assertChanged(material2, BEYONCE17);
 
-        doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_17));
-        Material material3 = getMaterial(MATERIAL_17);
+        Material material3 = doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_17), null, Material.class);
         assertTrue(material3.getChanged() == 0);
 
         material3.setSource(MADONNA17);
@@ -101,8 +100,7 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
         Material updateMaterial = createOrUpdateMaterial(material);
         assertChanged(updateMaterial, BEYONCE);
 
-        doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_17));
-        Material updatedMaterial1 = getMaterial(MATERIAL_17);
+        Material updatedMaterial1 = doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_17), null, Material.class);
         assertNotChanged(updatedMaterial1, BIEBER_M17_ORIGINAL);
 
         DbUtils.getTransaction().begin();

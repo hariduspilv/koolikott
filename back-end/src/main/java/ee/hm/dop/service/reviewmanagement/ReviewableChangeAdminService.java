@@ -81,16 +81,19 @@ public class ReviewableChangeAdminService {
         ReviewableChange change = reviewableChangeDao.findById(changeId);
         revertOneChange(learningObject, change);
         setReviewed(change, user, ReviewStatus.REJECTED);
+        learningObject.setChanged(learningObject.getChanged()-1);
         return learningObjectDao.createOrUpdate(learningObject);
     }
 
-    public void acceptOneChange(Long learningObjectId, Long changeId, User user) {
+    public LearningObject acceptOneChange(Long learningObjectId, Long changeId, User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
         ValidatorUtil.mustHaveEntity(learningObject);
 
         ReviewableChange change = reviewableChangeDao.findById(changeId);
         setReviewed(change, user, ReviewStatus.ACCEPTED);
+        learningObject.setChanged(learningObject.getChanged()-1);
+        return learningObjectDao.createOrUpdate(learningObject);
     }
 
     private void revertOneChange(LearningObject learningObject, ReviewableChange change) {
