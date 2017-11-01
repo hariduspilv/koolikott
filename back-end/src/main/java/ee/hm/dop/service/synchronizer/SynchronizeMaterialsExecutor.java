@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 
 import static java.lang.String.format;
@@ -23,7 +24,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     private SolrEngineService solrEngineService;
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
-    private static ScheduledFuture<?> synchronizeMaterialHandle;
+    private static Future<?> synchronizeMaterialHandle;
 
     @Override
     public synchronized void run() {
@@ -45,8 +46,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
             logger.info("Synchronization repository service finished execution.");
         } catch (Exception e) {
-            logger.error("Unexpected error while synchronizing materials.");
-            e.printStackTrace();
+            logger.error("Unexpected error while synchronizing materials.", e);
         } finally {
             logger.info("Updating Solr index after synchronizing all materials");
             updateSolrIndex();

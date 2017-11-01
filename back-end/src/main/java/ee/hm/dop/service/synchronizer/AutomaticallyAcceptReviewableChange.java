@@ -6,7 +6,6 @@ import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
-import ee.hm.dop.service.solr.SolrEngineService;
 import org.apache.commons.configuration.Configuration;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -16,6 +15,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 
 import static ee.hm.dop.utils.ConfigurationProperties.AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES;
@@ -25,12 +25,10 @@ import static java.util.concurrent.TimeUnit.DAYS;
 public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
 
     @Inject
-    private SolrEngineService solrEngineService;
-    @Inject
     private Configuration configuration;
 
     private static final Logger logger = LoggerFactory.getLogger(AutomaticallyAcceptReviewableChange.class);
-    private static ScheduledFuture<?> acceptReviewableChangeHandle;
+    private static Future<?> acceptReviewableChangeHandle;
 
     @Override
     public synchronized void run() {
@@ -40,10 +38,10 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
 
             beginTransaction();
 
+            DateTime _10DaysBefore = DateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));
             for (AdminLearningObject learningObject : allUnreviewed) {
                 for (ReviewableChange reviewableChange : learningObject.getReviewableChanges()) {
-                    DateTime _10DaysBefore = DateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));
-                    if (reviewableChange.getCreatedAt().isBefore(_10DaysBefore)) {
+                    if (!reviewableChange.isReviewed() && reviewableChange.getCreatedAt().isBefore(_10DaysBefore)) {
                         reviewableChange.setReviewed(true);
                         reviewableChange.setReviewedAt(DateTime.now());
                         reviewableChange.setStatus(ReviewStatus.ACCEPTED_AUTOMATICALLY);
@@ -55,11 +53,7 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
             closeTransaction();
             logger.info("Automatically accepting ReviewableChange has finished execution");
         } catch (Exception e) {
-            logger.error("Unexpected error while automatically accepting ReviewableChange");
-            e.printStackTrace();
-        } finally {
-            logger.info("Updating Solr index after automatically accepting ReviewableChange");
-            solrEngineService.updateIndex();
+            logger.error("Unexpected error while automatically accepting ReviewableChange", e);
         }
     }
 
@@ -101,7 +95,14 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
         logger.info("Automatically accepting ReviewableChange canceled.");
     }
 
-    private ReviewableChangeDao newReviewableChangeDao() {
+    protected ReviewableChangeDao newReviewableChangeDao() {
         return GuiceInjector.getInjector().getInstance(ReviewableChangeDao.class);
+    }
+
+    /**
+     * For test
+     */
+    void setReviewableChangeHandle(ScheduledFuture<?> reviewableChangeHandle) {
+        AutomaticallyAcceptReviewableChange.acceptReviewableChangeHandle = reviewableChangeHandle;
     }
 }
