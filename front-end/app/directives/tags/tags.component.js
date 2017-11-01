@@ -10,9 +10,9 @@ class controller extends Controller {
         this.init()
 
         this.unsubscribeTagsAdded = this.$rootScope.$watch('learningObjectChanges', () => {
-            if (Array.isArray(this.tags) && this.tags.length)
-                this.tags = this.filterTags(this.tags)
-        })
+            if (Array.isArray(this.$scope.tags) && this.$scope.tags.length)
+                this.setNewTags()
+        }, true)
 
         // auto-launch the report dialog upon login or page load if hash is found in location URL
         this.$timeout(() =>
@@ -56,11 +56,13 @@ class controller extends Controller {
                 let sorted = this.sortTagsByUpVoteCount(tags)
 
                 if (sorted.length > 10) {
-                    this.allTags = this.filterTags(sorted)
-                    this.tags = this.allTags.slice(0, 10)
+                    this.allTags = sorted
+                    this.$scope.tags = this.allTags.slice(0, 10)
                     this.showMoreTags = true
                 } else
-                    this.tags = this.filterTags(sorted)
+                    this.$scope.tags = sorted
+                
+                this.setNewTags()
             })
     }
     sortTagsByUpVoteCount(tags) {
@@ -85,7 +87,7 @@ class controller extends Controller {
             .then(tagUpVote => {
                 this.upVotedTag.tagUpVote = tagUpVote
                 this.upVotedTag.upVoteCount++
-                this.tags = this.sortTagsByUpVoteCount(this.tags)
+                this.$scope.tags = this.sortTagsByUpVoteCount(this.$scope.tags)
             })
     }
     isAllowed() {
@@ -100,7 +102,7 @@ class controller extends Controller {
                 if (this.removedTag) {
                     this.removedTag.tagUpVote = null
                     this.removedTag.upVoteCount--
-                    this.tags = this.sortTagsByUpVoteCount(this.tags)
+                    this.$scope.tags = this.sortTagsByUpVoteCount(this.$scope.tags)
                     this.removedTag = null
                 }
             }, () =>
@@ -134,10 +136,8 @@ class controller extends Controller {
             if (!this.learningObject.source && learningObject.uploadedFile)
                 this.learningObject.source = learningObject.uploadedFile.url
 
-            this.isPortfolio(learningObject)
-                ? this.storageService.setPortfolio(learningObject)
-                : this.isMaterial(learningObject)
-                    && this.storageService.setMaterial(learningObject)
+            this.isPortfolio(learningObject) ? this.storageService.setPortfolio(learningObject) :
+            this.isMaterial(learningObject) && this.storageService.setMaterial(learningObject)
 
             this.init()
         }
@@ -179,11 +179,11 @@ class controller extends Controller {
         )
     }
     showMore() {
-        this.tags = this.allTags
+        this.$scope.tags = this.allTags
         this.showMoreTags = false
     }
     showLess() {
-        this.tags = this.allTags.slice(0, 10)
+        this.$scope.tags = this.allTags.slice(0, 10)
         this.showMoreTags = true
     }
     doSuggest(query) {
@@ -191,9 +191,9 @@ class controller extends Controller {
     }
     tagSelected() {
         if (this.newTag && this.newTag.tagName) {
-            this.tagsService
-                .addSystemTag(this.learningObject.id, this.newTag)
-                .then(data => {
+            this.serverCallService
+                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
+                .then(({ data }) => {
                     this.addTagSuccess(data.learningObject)
                     this.showSystemTagDialog(data.tagTypeName)
                     this.$scope.$emit(
@@ -223,16 +223,17 @@ class controller extends Controller {
                     .closeTo(`#${tagType}-close`)
             )
     }
-    filterTags(tags) {
-        return Array.isArray(tags) && this.$rootScope.learningObjectChanges
-            ? tags.slice(0).map(t =>
-                Object.assign(t, {
-                    isNew: !!this.$rootScope.learningObjectChanges.find(c =>
-                        c.taxon && c.taxon.name.replace(/_/g, ' ') == t.tag
-                    )
-                })
-            )
-            : tags
+    setNewTags() {
+        const setNew = (tags) => Array.isArray(tags) && tags.forEach(t =>
+            t.isNew = !this.$rootScope.learningObjectChanges
+                ? false
+                : !!this.$rootScope.learningObjectChanges.find(c =>
+                    c.taxon && c.taxon.name.toLowerCase().replace(/_/g, ' ') == t.tag
+                )
+        )
+
+        setNew(this.$scope.tags)
+        setNew(this.allTags)
     }
 }
 controller.$inject = [
@@ -261,8 +262,9 @@ component('dopTags', {
  */
 directive('dopTagCustomChip', {
     link($scope, $elem) {
-        if ($scope.$chip.isNew)
-            $elem.parent().parent().addClass('new')
+        $scope.$watch('$chip.isNew', (isNew) =>
+            $elem.parent().parent().toggleClass('new', isNew)
+        )
     }
 })
 }

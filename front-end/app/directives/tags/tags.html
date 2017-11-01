@@ -3,7 +3,7 @@
 </p>
 <div layout="row" layout-xs="column">
   <md-chips
-    data-ng-model="$ctrl.tags"
+    data-ng-model="tags"
     readonly="true"
     data-md-removable="$ctrl.isEditPortfolioMode"
     data-md-on-remove="$ctrl.removeTag($chip.tag)">
@@ -86,7 +86,7 @@
     </md-icon>
   </md-button>
   <md-button
-    data-ng-show="!$ctrl.showMoreTags && $ctrl.tags.length > 10"
+    data-ng-show="!$ctrl.showMoreTags && tags.length > 10"
     data-ng-click="$ctrl.showLess()"
     >
     <span data-translate="SHOW_LESS"></span>
