@@ -48,11 +48,11 @@ class controller extends Controller {
         }
     }
     getTagUpVotes() {
-        this.tagsService
-            .getTagUpVotes({
+        this.serverCallService
+            .makeGet('rest/tagUpVotes/report', {
                 learningObject: this.learningObject.id
             })
-            .then(tags => {
+            .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
 
                 if (sorted.length > 10) {
@@ -227,7 +227,9 @@ class controller extends Controller {
         return Array.isArray(tags) && this.$rootScope.learningObjectChanges
             ? tags.slice(0).map(t =>
                 Object.assign(t, {
-                    isNew: !!this.$rootScope.learningObjectChanges.find(c => c.taxon && c.taxon.name == t.tag)
+                    isNew: !!this.$rootScope.learningObjectChanges.find(c =>
+                        c.taxon && c.taxon.name.replace(/_/g, ' ') == t.tag
+                    )
                 })
             )
             : tags
@@ -243,7 +245,8 @@ controller.$inject = [
     'storageService',
     'suggestService',
     'tagsService',
-    'toastService'
+    'toastService',
+    'serverCallService'
 ]
 component('dopTags', {
     bindings: {
