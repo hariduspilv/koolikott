@@ -101,7 +101,7 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
         revertUrl(updateMaterial, BIEBER_M17_ORIGINAL);
     }
 
-    private void restoreLearningObjectChanges(List<Long> learningObjectId) {
+    private synchronized void restoreLearningObjectChanges(List<Long> learningObjectId) {
         DbUtils.getTransaction().begin();
         testDao.removeChanges(learningObjectId);
         DbUtils.closeTransaction();

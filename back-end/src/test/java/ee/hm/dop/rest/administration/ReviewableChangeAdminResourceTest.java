@@ -289,7 +289,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         DbUtils.closeTransaction();
     }
 
-    private void setUnreviewed(List<Long> learningObjectId) {
+    private synchronized void setUnreviewed(List<Long> learningObjectId) {
         DbUtils.getTransaction().begin();
         testDao.setUnReviewed(learningObjectId);
         DbUtils.closeTransaction();
