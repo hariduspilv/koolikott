@@ -9,6 +9,7 @@ import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
@@ -24,6 +25,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class ReviewableChangeAdminResourcePart3Test extends ResourceIntegrationTestBase {
 
     public static final String BIEBER_M18_ORIGINAL = "http://www.bieber3.com";
