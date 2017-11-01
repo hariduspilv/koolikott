@@ -254,6 +254,10 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
 
         Material updatedMaterial1 = doPost(format(REVERT_ONE_CHANGES_URL, MATERIAL_16, oneChange.getId()), null, Material.class);
         assertFalse(updatedMaterial1.getChanged() == 0);
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) {
+            transaction.begin();
+        }
         List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_16);
         assertEquals(2, review.size());
         for (ReviewableChange change : review) {
@@ -264,6 +268,7 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
                 assertFalse(change.isReviewed());
             }
         }
+        DbUtils.closeTransaction();
         Material updatedMaterial2 = getMaterial(MATERIAL_16);
         if (oneChange.getTaxon().getId().equals(TAXON_FOREIGNLANGUAGE_DOMAIN.id)) {
             assertHasChangesDontMatter(updatedMaterial2, TAXON_MATHEMATICS_DOMAIN);
