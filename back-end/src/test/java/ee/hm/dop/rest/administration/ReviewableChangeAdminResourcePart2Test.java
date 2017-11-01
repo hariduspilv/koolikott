@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.EntityTransaction;
 import java.util.Arrays;
 import java.util.List;
 
@@ -92,9 +93,9 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
     public void I_change_bieber_url_to_beyonce___material_has_beyonce_url_change_has_bieber() throws Exception {
         Material material = getMaterial(MATERIAL_17);
         assertNotChanged(material, BIEBER_M17_ORIGINAL);
-        material.setSource(BEYONCE);
+        material.setSource(BEYONCE17);
         Material updateMaterial = createOrUpdateMaterial(material);
-        assertChanged(updateMaterial, BEYONCE);
+        assertChanged(updateMaterial, BEYONCE17);
         ReviewableChange review = reviewableChangeDao.findByComboField("learningObject.id", MATERIAL_17);
         assertEquals(BIEBER_M17_ORIGINAL, review.getMaterialSource());
 
@@ -102,7 +103,10 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
     }
 
     private void restoreLearningObjectChanges(List<Long> learningObjectId) {
-        DbUtils.getTransaction().begin();
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) {
+            transaction.begin();
+        }
         testDao.removeChanges(learningObjectId);
         DbUtils.closeTransaction();
     }

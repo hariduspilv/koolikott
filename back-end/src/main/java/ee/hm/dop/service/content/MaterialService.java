@@ -111,10 +111,15 @@ public class MaterialService {
         material.setViews(originalMaterial.getViews());
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
+
         material.setBrokenContents(originalMaterial.getBrokenContents());
+        material.setBroken(originalMaterial.getBroken());
         material.setFirstReviews(originalMaterial.getFirstReviews());
+        material.setUnReviewed(originalMaterial.getUnReviewed());
         material.setImproperContents(originalMaterial.getImproperContents());
+        material.setImproper(originalMaterial.getUnReviewed());
         material.setReviewableChanges(originalMaterial.getReviewableChanges());
+        material.setChanged(originalMaterial.getChanged());
 
         reviewableChangeService.processChanges(material, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
         Material updatedMaterial = createOrUpdate(material);
