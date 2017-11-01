@@ -139,6 +139,10 @@ public class MaterialServiceTest {
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
+        material.setBroken(0);
+        material.setChanged(0);
+        material.setImproper(0);
+        material.setUnReviewed(0);
 
         material.setRepository(null);
         material.setRecommendation(null);
@@ -231,6 +235,10 @@ public class MaterialServiceTest {
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
+        material.setBroken(0);
+        material.setChanged(0);
+        material.setImproper(0);
+        material.setUnReviewed(0);
 
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
