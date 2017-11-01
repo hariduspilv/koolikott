@@ -24,10 +24,10 @@
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.createdAt)"></td>
       <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reportCount"></td>
       <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.__reportCount === 1 || item.__reportCount > 1 && !$ctrl.hasMultipleCreators(item)) && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount > 1 && $ctrl.hasMultipleCreators(item)" data-ng-bind="$ctrl.getMultipleCreatorsLabel(item, 'NUM_REPORTERS')">
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.__reportCount === 1 || item.__reportCount > 1 && item.__creators.length < 2) && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount > 1 && item.__creators.length > 1" data-ng-bind="$ctrl.getNumCreatorsLabel(item, 'NUM_REPORTERS')">
         <md-tooltip>
-          <span data-ng-bind="$ctrl.getMultipleCreators(item)"></span>
+          <span data-ng-bind="$ctrl.getCommaSeparatedCreators(item)"></span>
         </md-tooltip>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--reason" data-translate="{{item.__reportLabelKey}}"></td>
