@@ -15,6 +15,6 @@ public class TagSerializer extends JsonSerializer<Tag> {
 
     @Override
     public void serialize(Tag tag, JsonGenerator gen, SerializerProvider arg2) throws IOException {
-        gen.writeString(tag.getName());
+        gen.writeObject(tag);
     }
 }
