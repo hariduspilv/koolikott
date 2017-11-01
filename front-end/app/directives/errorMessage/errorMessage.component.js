@@ -19,7 +19,15 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'undo',
             label: 'UNDO_CHANGES',
-            onClick: ($ctrl) => $ctrl.revertAllChanges(),
+            onClick: ($ctrl) => $ctrl.administerAllChanges('revert', ({ status, data }) => {
+                if (200 <= status && status < 300 && data) {
+                    data.changed = 0 /** @todo: should not be doing this, response from backend should be correct */
+                    this.data = data
+                    this.isMaterial(data) ? this.storageService.setMaterial(data) :
+                    this.isPortfolio(data) && this.storageService.setPortfolio(data)
+                    return true
+                }
+            }),
             show: ($ctrl) => $ctrl.isAdmin
         }, {
             icon: ($ctrl) => {
@@ -29,7 +37,13 @@ const VIEW_STATE_MAP = {
                     : 'done'
             },
             label: 'ACCEPT_CHANGES',
-            onClick: ($ctrl) => $ctrl.acceptAllChanges(),
+            onClick: ($ctrl) => $ctrl.administerAllChanges('accept', ({ status }) => {
+                if (200 <= status && status < 300) {
+                    $ctrl.data.changed = 0 /** @todo: should not be doing this, response from backend should be correct */
+                    $ctrl.$rootScope.learningObjectChanged = false
+                    return true
+                }
+            }),
             show: ($ctrl) => $ctrl.isAdmin
         }],
         ($ctrl) => $ctrl.getChanges()
@@ -145,12 +159,19 @@ class controller extends Controller {
             if (newValue != oldValue)
                 this.init()
         })
+        this.onLearningObjectChange = this.onLearningObjectChange.bind(this)
+        this.$scope.$watch(() => this.storageService.getMaterial(), this.onLearningObjectChange, true)
+        this.$scope.$watch(() => this.storageService.getPortfolio(), this.onLearningObjectChange, true)
     }
     $onDestroy() {
         if (this.listeningResize) {
             window.removeEventListener('resize', this.onWindowResizeReports)
             window.removeEventListener('resize', this.onWindowResizeChanges)
         }
+    }
+    onLearningObjectChange(newLearningObject, oldLearningObject) {
+        if (newLearningObject && (!oldLearningObject || newLearningObject.changed != oldLearningObject.changed))
+            this.init()
     }
     init() {
         this.setState('', '', [], false) // reset
@@ -268,7 +289,11 @@ class controller extends Controller {
                             : this.oldLink = change.materialSource // link was changed
                     )
                     this.changes = changes
-                    this.$rootScope.learningObjectChanges = changes
+                    this.$rootScope.learningObjectChanges = this.changes
+                    
+                    if (this.$scope.expanded)
+                        this.setExpandableHeight()
+
                     this.metadataService.loadEducationalContexts(() => {
                         this.$scope.messageKey = ''
                         this.$scope.htmlMessage = this.getChangedMessage()
@@ -296,7 +321,7 @@ class controller extends Controller {
             : this.newTaxons.length === 1
                 ? `${translate(this.oldLink ? 'CHANGED_LINK_AND_ADDED_ONE_TAXON' : 'ADDED_ONE_TAXON')} ${taxons()}`
                 : `${this.sprintf(
-                        translate(this.oldLink ? 'CHANGED_LINK_AND_ADDED_MULTIPLE_TAXONS' : 'ADDED_MULTIPLE_TAXON'),
+                        translate(this.oldLink ? 'CHANGED_LINK_AND_ADDED_MULTIPLE_TAXONS' : 'ADDED_MULTIPLE_TAXONS'),
                         this.newTaxons.length
                     )} ${taxons()}`
 
@@ -307,37 +332,40 @@ class controller extends Controller {
             this.taxonService.getTaxonTranslationKey(taxon)
         )
     }
-    acceptAllChanges() {
+    administerAllChanges(action, cb) {
         const { id } = this.data || {}
 
-        if (id)
-            this.serverCallService
-                .makePost(`rest/admin/changed/${id}/acceptAll`)
-                .then(() => this.$rootScope.learningObjectChanged = false)
-    }
-    revertAllChanges() {
-        const { id } = this.data || {}
+        if (id) {
+            // making optimistic changes
+            const revertedOrAccepted = this.changes.splice(0, this.changes.length)
+            this.$rootScope.learningObjectChanged = false
 
-        if (id)
+            const undo = () => {
+                // the changes were too optimistic
+                ;[].splice.apply(this.changes, [0, 0].concat(revertedOrAccepted))
+                this.$rootScope.learningObjectChanged = true
+            }
+
             this.serverCallService
-                .makePost(`rest/admin/changed/${id}/revertAll`)
-                .then(({ data }) => {
-                    this.$rootScope.learningObjectChanged = false
-                    this.onReverted(data)
-                })
+                .makePost(`rest/admin/changed/${id}/${action}All`)
+                .then(
+                    response => cb(response) || undo(),
+                    undo
+                )
+        }
     }
     administerChange(action, change, cbName) {
         const { id } = this.data || {}
 
         if (id && change.id) {
             // making optimistic changes
-            const acceptedIdx = this.changes.findIndex(c => c.id === change.id)
-            const [acceptedChange] = this.changes.splice(acceptedIdx, 1)
+            const revertedOrAcceptedIdx = this.changes.findIndex(c => c.id === change.id)
+            const [revertedOrAcceptedChange] = this.changes.splice(revertedOrAcceptedIdx, 1)
             this.$rootScope.learningObjectChanged = !!this.changes.length
 
             const undo = () => {
                 // the changes were too optimistic
-                this.changes.splice(acceptedIdx, 0, acceptedChange)
+                this.changes.splice(revertedOrAcceptedIdx, 0, revertedOrAcceptedChange)
                 this.$rootScope.learningObjectChanged = true
             }
 
@@ -351,6 +379,7 @@ class controller extends Controller {
         }
     }
     onReverted(data) {
+        data.changed-- /** @todo: should not be doing this, response from backend should be correct */
         this.data = data || this.data
         this.setExpandableHeight()
         this.isMaterial(data) ? this.storageService.setMaterial(data) :

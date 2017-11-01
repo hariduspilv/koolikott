@@ -82,7 +82,7 @@
 <md-content data-flex data-ng-if="show && showExpandableChanges" class="error-message-expandable" data-ng-class="{ collapsed: !expanded }">
   <md-list>
     <md-list-item data-ng-repeat="change in $ctrl.changes track by $index">
-      <p data-ng-if="change.materialSource"><span data-translate="CHANGED_LINK_ROW"></span> <a
+      <p data-ng-if="change.materialSource" data-md-truncate><span data-translate="CHANGED_LINK_ROW"></span> <a
         target="_blank"
         data-ng-href="{{change.materialSource}}"
         data-ng-bind="change.materialSource"
@@ -91,6 +91,7 @@
       <p
         data-ng-if="change.taxon"
         data-ng-bind="$ctrl.getTaxonLabel(change.taxon)"
+        class="ellipsis"
       ></p>
       <md-button
         class="md-icon-button md-secondary error-message-button"

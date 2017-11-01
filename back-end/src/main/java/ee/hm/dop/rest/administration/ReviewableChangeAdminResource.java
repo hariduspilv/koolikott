@@ -17,7 +17,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("admin/changed/")
@@ -57,7 +56,7 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @POST
     @Path("{id}/acceptAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response acceptAllChanges(@PathParam("id") Long learningObjectId) {
+    public LearningObject acceptAllChanges(@PathParam("id") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("learningObject query param is required.");
         }
@@ -67,7 +66,7 @@ public class ReviewableChangeAdminResource extends BaseResource {
             throw notFound();
         }
         reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED, ReviewType.CHANGE);
-        return ok();
+        return learningObjectService.get(learningObjectId, loggedInUser);
     }
 
     @POST
@@ -80,9 +79,8 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @POST
     @Path("{id}/acceptOne/{changeId}")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response acceptAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
-        reviewableChangeAdminService.acceptOneChange(learningObjectId, changeId, getLoggedInUser());
-        return ok();
+    public LearningObject acceptAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
+        return reviewableChangeAdminService.acceptOneChange(learningObjectId, changeId, getLoggedInUser());
     }
 
     @POST
