@@ -273,41 +273,38 @@ class controller extends Controller {
     getChanges() {
         const { id } = this.data || {}
 
-        if (!id)
-            return
-
-        this.newTaxons = []
-        this.oldLink = ''
-
-        this.serverCallService
-            .makeGet('rest/admin/changed/'+id)
-            .then(({ data: changes }) => {
-                if (Array.isArray(changes) && changes.length) {
-                    changes.forEach(change =>
-                        change.taxon
-                            ? this.newTaxons.push(change.taxon) // taxon was added
-                            : this.oldLink = change.materialSource // link was changed
-                    )
-                    this.changes = changes
-                    this.$rootScope.learningObjectChanges = this.changes
-                    
-                    if (this.$scope.expanded)
-                        this.setExpandableHeight()
-
-                    this.metadataService.loadEducationalContexts(() => {
-                        this.$scope.messageKey = ''
-                        this.$scope.htmlMessage = this.getChangedMessage()
-
-                        if (!this.listeningResize) {
-                            this.listeningResize = true
-                            window.addEventListener('resize', this.onWindowResizeChanges)
-                        }
-                        this.$timeout(() =>
-                            setTimeout(() => this.toggleExpandableChanges())
+        if (id)
+            this.serverCallService
+                .makeGet('rest/admin/changed/'+id)
+                .then(({ data: changes }) => {
+                    if (Array.isArray(changes) && changes.length) {
+                        this.newTaxons = []
+                        this.oldLink = ''
+                        changes.forEach(change =>
+                            change.taxon
+                                ? this.newTaxons.push(change.taxon) // taxon was added
+                                : this.oldLink = change.materialSource // link was changed
                         )
-                    })
-                }
-            })
+                        this.changes = changes
+                        this.$rootScope.learningObjectChanges = this.changes
+                        
+                        if (this.$scope.expanded)
+                            this.setExpandableHeight()
+
+                        this.metadataService.loadEducationalContexts(() => {
+                            this.$scope.messageKey = ''
+                            this.$scope.htmlMessage = this.getChangedMessage()
+
+                            if (!this.listeningResize) {
+                                this.listeningResize = true
+                                window.addEventListener('resize', this.onWindowResizeChanges)
+                            }
+                            this.$timeout(() =>
+                                setTimeout(() => this.toggleExpandableChanges())
+                            )
+                        })
+                    }
+                })
     }
     getChangedMessage() {
         const translate = (key) => this.$translate.instant(key)

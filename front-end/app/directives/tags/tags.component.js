@@ -202,7 +202,6 @@ class controller extends Controller {
                             : 'tags:updatePortfolio',
                         learningObject
                     )
-                    this.$rootScope.$broadcast('errorMessage:updateChanged')
                 })
             this.newTag.tagName = null
         }
