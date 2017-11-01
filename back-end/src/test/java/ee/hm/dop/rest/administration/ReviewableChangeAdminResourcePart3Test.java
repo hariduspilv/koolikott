@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest.ACCEPT_ALL_CHANGES_URL;
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.*;
 import static java.lang.String.format;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -54,8 +54,7 @@ public class ReviewableChangeAdminResourcePart3Test extends ResourceIntegrationT
         Material material2 = createOrUpdateMaterial(material1);
         assertChanged(material2, BEYONCE18);
 
-        Response post = doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_18));
-        Material material3 = getMaterial(MATERIAL_18);
+        Material material3 = doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_18), null, Material.class);
         assertTrue(material3.getChanged() == 0);
 
         material3.setSource(MADONNA18);
@@ -64,12 +63,17 @@ public class ReviewableChangeAdminResourcePart3Test extends ResourceIntegrationT
 
         List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_18);
         Map<Boolean, List<ReviewableChange>> collect = review.stream().collect(Collectors.partitioningBy(ReviewableChange::isReviewed));
-        if (!collect.get(false).isEmpty()) {
-            ReviewableChange reviewed = collect.get(true).get(0);
+
+        List<ReviewableChange> reviewedChanges = collect.get(true);
+        assertTrue("reviewed changes are not empty", isNotEmpty(reviewedChanges));
+        if (isNotEmpty(reviewedChanges)) {
+            ReviewableChange reviewed = reviewedChanges.get(0);
             assertIsReviewed(reviewed, USER_ADMIN);
         }
-        if (!collect.get(false).isEmpty()) {
-            ReviewableChange unReviewed = collect.get(false).get(0);
+        List<ReviewableChange> unReviewedChanges = collect.get(false);
+        assertTrue("UNreviewed changes are not empty", isNotEmpty(unReviewedChanges));
+        if (isNotEmpty(unReviewedChanges)) {
+            ReviewableChange unReviewed = unReviewedChanges.get(0);
             assertEquals(BEYONCE18, unReviewed.getMaterialSource());
         }
 
