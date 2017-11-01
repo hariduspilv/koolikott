@@ -346,6 +346,14 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.unReviewed = unReviewed;
     }
 
+    public void setBroken(int broken) {
+        this.broken = broken;
+    }
+
+    public void setImproper(int improper) {
+        this.improper = improper;
+    }
+
     public List<FirstReview> getFirstReviews() {
         return firstReviews;
     }

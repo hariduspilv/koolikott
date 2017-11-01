@@ -25,15 +25,6 @@ public class AdminMaterial extends AdminLearningObject implements IMaterial {
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "title"}))
     private List<LanguageString> titles;
 
-    @ManyToMany(fetch = EAGER)
-    @Fetch(FetchMode.SELECT)
-    @JoinTable(
-            name = "Material_ResourceType",
-            joinColumns = {@JoinColumn(name = "material")},
-            inverseJoinColumns = {@JoinColumn(name = "resourceType")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"material", "resourceType"}))
-    private List<ResourceType> resourceTypes;
-
 //    @OneToMany(mappedBy = "material", fetch = LAZY)
 //    private List<BrokenContent> brokenContents;
 
@@ -45,11 +36,4 @@ public class AdminMaterial extends AdminLearningObject implements IMaterial {
         this.titles = titles;
     }
 
-    public List<ResourceType> getResourceTypes() {
-        return resourceTypes;
-    }
-
-    public void setResourceTypes(List<ResourceType> resourceTypes) {
-        this.resourceTypes = resourceTypes;
-    }
 }
