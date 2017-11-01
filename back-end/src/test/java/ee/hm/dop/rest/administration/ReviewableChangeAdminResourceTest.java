@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.persistence.EntityTransaction;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -284,13 +285,19 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     }
 
     private void restoreLearningObjectChanges(List<Long> learningObjectId) {
-        DbUtils.getTransaction().begin();
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) {
+            transaction.begin();
+        }
         testDao.removeChanges(learningObjectId);
         DbUtils.closeTransaction();
     }
 
     private void setUnreviewed(List<Long> learningObjectId) {
-        DbUtils.getTransaction().begin();
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) {
+            transaction.begin();
+        }
         testDao.setUnReviewed(learningObjectId);
         DbUtils.closeTransaction();
     }
