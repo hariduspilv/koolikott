@@ -69,7 +69,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         if (CollectionUtils.isEmpty(value)) {
             return Lists.newArrayList();
         }
-        return findByFieldList(NAME, value);
+        return getList(getFindByFieldInQuery(NAME, value));
     }
 
     public Entity findByField(String field, Object value) {
