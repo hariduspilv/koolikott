@@ -34,6 +34,9 @@ public abstract class Taxon implements AbstractEntity {
     @Column(nullable = false, insertable = false)
     protected String name;
 
+    @Column(nullable = false, name = "level")
+    private String taxonLevel;
+
     @Transient
     private Long parentId;
 
@@ -121,5 +124,13 @@ public abstract class Taxon implements AbstractEntity {
 
         return new EqualsBuilder().append(name, other.name) //
                 .isEquals();
+    }
+
+    public String getTaxonLevel() {
+        return taxonLevel;
+    }
+
+    public void setTaxonLevel(String taxonLevel) {
+        this.taxonLevel = taxonLevel;
     }
 }
