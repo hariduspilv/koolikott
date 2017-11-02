@@ -154,7 +154,6 @@ class controller extends Controller {
 
         this.$scope.$on('dashboard:adminCountsUpdated', () => this.init())
         this.$scope.$on('errorMessage:reported', () => this.init())
-        this.$scope.$on('errorMessage:updateChanged', () => this.getChanges())
         this.$rootScope.$watch('learningObjectChanged', (newValue, oldValue) => {
             if (newValue != oldValue)
                 this.init()
@@ -170,6 +169,7 @@ class controller extends Controller {
         }
     }
     onLearningObjectChange(newLearningObject, oldLearningObject) {
+        console.log('newLearningObject, oldLearningObject', newLearningObject, oldLearningObject)
         if (newLearningObject && (!oldLearningObject || newLearningObject.changed != oldLearningObject.changed))
             this.init()
     }
@@ -203,6 +203,7 @@ class controller extends Controller {
             this.$rootScope.learningObjectUnreviewed
                 && 'showUnreviewed'
 
+        console.log('this.bannerType', this.bannerType)
         if (this.bannerType)
             this.setState(...VIEW_STATE_MAP[this.bannerType])
     }
@@ -252,9 +253,7 @@ class controller extends Controller {
                                 this.listeningResize = true
                                 window.addEventListener('resize', this.onWindowResizeReports)
                             }
-                            this.$timeout(() =>
-                                setTimeout(() => this.toggleExpandableReports())
-                            )
+                            this.$timeout(this.onWindowResizeReports)
                         }
 
                         !reports[0].reportingReasons
@@ -277,9 +276,10 @@ class controller extends Controller {
             this.serverCallService
                 .makeGet('rest/admin/changed/'+id)
                 .then(({ data: changes }) => {
+                    console.log('changes', changes)
+                    this.newTaxons = []
+                    this.oldLink = ''
                     if (Array.isArray(changes) && changes.length) {
-                        this.newTaxons = []
-                        this.oldLink = ''
                         changes.forEach(change =>
                             change.taxon
                                 ? this.newTaxons.push(change.taxon) // taxon was added
@@ -299,9 +299,7 @@ class controller extends Controller {
                                 this.listeningResize = true
                                 window.addEventListener('resize', this.onWindowResizeChanges)
                             }
-                            this.$timeout(() =>
-                                setTimeout(() => this.toggleExpandableChanges())
-                            )
+                            this.$timeout(this.onWindowResizeChanges)
                         })
                     }
                 })
@@ -394,8 +392,12 @@ class controller extends Controller {
         if (this.newTaxons.length > 1 || this.oldLink && this.newTaxons.length === 1)
             return this.$scope.showExpandableChanges = true
 
-        const { offsetWidth, scrollWidth } = document.getElementById('error-message-heading') || {}
-        this.$scope.showExpandableChanges = scrollWidth && offsetWidth && scrollWidth > offsetWidth
+        const elem = document.getElementById('error-message-heading')
+        if (elem) {
+            this.$scope.showExpandableChanges =
+                elem.scrollWidth && elem.offsetWidth &&
+                elem.scrollWidth > elem.offsetWidth
+        }
     }
     toggleExpandable() {
         if (!this.$scope.expanded) {

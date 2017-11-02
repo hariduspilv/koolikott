@@ -116,15 +116,19 @@ class controller extends Controller {
     removeTag(removedTag) {
         if (this.learningObject && this.learningObject.tags)
             this.learningObject.tags.forEach((tag, idx) => {
-                if (tag === removedTag)
+                if (tag.id === removedTag.id)
                     this.learningObject.tags.splice(idx, 1)
             })
     }
     addTag() {
         if (this.learningObject && this.learningObject.id) {
-            this.tagsService
-                .addTag(this.learningObject.id, this.newTag)
-                .then(this.addTagSuccess.bind(this))
+            this.serverCallService
+                .makePut(`rest/learningObject/${this.learningObject.id}/tags`, {
+                    name: this.newTag.tagName
+                })
+                .then(({ data }) =>
+                    this.addTagSuccess(data)
+                )
             this.newTag.tagName = null
         }
     }
@@ -192,7 +196,9 @@ class controller extends Controller {
     tagSelected() {
         if (this.newTag && this.newTag.tagName) {
             this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
+                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, {
+                    name: this.newTag.tagName
+                })
                 .then(({ data }) => {
                     this.addTagSuccess(data.learningObject)
                     this.showSystemTagDialog(data.tagTypeName)
@@ -223,14 +229,19 @@ class controller extends Controller {
             )
     }
     setNewTags() {
+        if (this.$rootScope.learningObjectChanges)
+            console.log({
+                learningObjectChanges: this.$rootScope.learningObjectChanges,
+                tags: this.$scope.tags,
+                allTags: this.allTags
+            })
         const setNew = (tags) => Array.isArray(tags) && tags.forEach(t =>
             t.isNew = !this.$rootScope.learningObjectChanges
                 ? false
                 : !!this.$rootScope.learningObjectChanges.find(c =>
-                    c.taxon && c.taxon.name.toLowerCase().replace(/_/g, ' ') == t.tag
+                    c.taxon && c.taxon.translationKey && this.$translate(c.taxon.translationKey) == t.tag.name
                 )
         )
-
         setNew(this.$scope.tags)
         setNew(this.allTags)
     }

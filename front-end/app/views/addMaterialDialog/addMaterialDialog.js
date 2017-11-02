@@ -792,8 +792,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             if (!material) {
                 saveMaterialFail();
             } else {
-                // Tell errorMessage to update changes
-                $rootScope.$broadcast("errorMessage:updateChanged");
+                storageService.setMaterial(material)
 
                 //Pass saved material back to material view
                 material.source = getSource(material);

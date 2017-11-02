@@ -10,19 +10,6 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             $location.url(searchService.getURL());
         },
 
-        addTag(learningObjectId, tag, successCallback, failCallback) {
-            let url = "rest/learningObject/" + learningObjectId + "/tags";
-
-            if (successCallback) {
-                serverCallService.makePut(url, JSON.stringify(tag.tagName), successCallback, failCallback);
-            } else {
-                return serverCallService.makePut(url, JSON.stringify(tag.tagName))
-                    .then(response => {
-                        return response.data;
-                    });
-            }
-        },
-
         reportTag(learningObject, targetEvent) {
             return $mdDialog
                 .show({
@@ -111,13 +98,6 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                         return response.data;
                     });
             }
-        },
-
-        addSystemTag(learningObjectId, tag) {
-            return serverCallService.makePut("rest/learningObject/" + learningObjectId + "/system_tags", JSON.stringify(tag.tagName))
-                .then(response => {
-                    return response.data;
-                });
         },
 
         getImpropers(params, successCallback, failCallback) {
