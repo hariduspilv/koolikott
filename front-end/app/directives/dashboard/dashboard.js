@@ -25,26 +25,17 @@ Object.keys(lists).forEach(key =>
 {
 class controller extends Controller {
     $onChanges({ learningObject: { currentValue } }) {
-        if (currentValue) {
-            const isPortfolio = this.isPortfolio(currentValue)
-            const { resourceTypes } = currentValue
-
-            this.$scope.icon = isPortfolio
-                ? 'book'
-                : 'description' // this.iconService.getMaterialIcon(resourceTypes)
-
-            this.$scope.labelKey = isPortfolio
-                ? 'PORTFOLIO_RESOURCE'
-                : resourceTypes && resourceTypes.length
-                    ? resourceTypes[0].name
-                    : 'UNKNOWN'
-        }
+        if (currentValue)
+            if (this.isPortfolio(currentValue)) {
+                this.$scope.icon = 'book'
+                this.$scope.labelKey = 'PORTFOLIO_RESOURCE'
+            } else {
+                this.$scope.icon = 'description'
+                this.$scope.labelKey = 'MATERIAL'
+            }
     }
 }
-controller.$inject = [
-    '$scope',
-    'iconService'
-]
+controller.$inject = ['$scope']
 component('dopDashboardTypeIcon', {
     bindings: {
         learningObject: '<'
