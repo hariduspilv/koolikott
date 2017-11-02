@@ -62,7 +62,7 @@ public class LearningObjectAdministrationService {
     public void delete(LearningObject learningObject, User loggedInUser) {
         LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
 
-        if (learningObject instanceof IMaterial) {
+        if (originalLearningObject instanceof IMaterial) {
             UserUtil.mustBeModeratorOrAdmin(loggedInUser);
         } else {
             if (!learningObjectService.canUpdate(loggedInUser, originalLearningObject)) {
