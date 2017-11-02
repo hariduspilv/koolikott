@@ -118,7 +118,6 @@ class controller extends Controller {
             .makeGet('rest/admin/'+restUri)
             .then(({ data }) => {
                 if (data) {
-                    console.log('data:', data)
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
