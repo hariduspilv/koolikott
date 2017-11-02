@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
@@ -174,10 +175,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         clientConfig.register(LoggingFeature.class);
 
         Client client = ClientBuilder.newClient(clientConfig)
-                .property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_ANY)
-                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "WARNING");
+                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.FINE.getName());
         client.register(JacksonFeature.class);
-//        client.register(LoggingFilter.class);
         if (clientRequestFilter != null) {
             client.register(clientRequestFilter);
         }

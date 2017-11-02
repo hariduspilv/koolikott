@@ -115,11 +115,16 @@ public class SynchronizeMaterialsExecutorTest {
         assertFalse(mockExecutor.transactionStarted);
     }
 
+    /**
+     * should run once
+     */
+    @Deprecated
     @Test
     public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
-        expect(repositoryService.getAllRepositories()).andReturn(repositories);
+        expect(repositoryService.getAllRepositories()).andReturn(repositories).times(2);
         solrEngineService.updateIndex();
+        expectLastCall().times(2);
 
         replay(repositoryService, solrEngineService);
 

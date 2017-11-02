@@ -10,7 +10,6 @@ module.exports = function (grunt) {
     require('es6-promise').polyfill();
 
     grunt.loadNpmTasks('grunt-postcss');
-    grunt.loadNpmTasks('grunt-selenium-standalone');
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-env');
 
