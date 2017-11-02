@@ -40,7 +40,7 @@ public class FirstReviewAdminService {
 
     public FirstReview save(LearningObject learningObject) {
         FirstReview firstReview = new FirstReview();
-        firstReview.setLearningObject(learningObject);
+        firstReview.setLearningObject(learningObject.getId());
         firstReview.setReviewed(false);
         firstReview.setCreatedAt(now());
 
