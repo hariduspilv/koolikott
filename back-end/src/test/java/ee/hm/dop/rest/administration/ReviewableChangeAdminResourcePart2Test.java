@@ -10,6 +10,7 @@ import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
@@ -24,6 +25,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationTestBase {
 
     public static final String BIEBER_M17_ORIGINAL = "http://www.bieber2.com";

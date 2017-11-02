@@ -8,8 +8,7 @@ angular.module('koolikottApp')
             scope: true,
             templateUrl: 'directives/sidenav/sidenav.html',
             controller: ['$rootScope', '$scope', '$location', '$timeout', function ($rootScope, $scope, $location, $timeout) {
-                $scope.isTaxonomyOpen = true;
-                $scope.dashboardOpen = $location.path().startsWith("/dashboard");
+                $scope.isTaxonomyOpen = !authenticatedUserService.isAuthenticated();
 
                 // List of taxon icons
                 $scope.taxonIcons = [
@@ -19,6 +18,23 @@ angular.module('koolikottApp')
                     'build',
                     'palette'
                 ];
+
+                // List of sidenav adminLocations
+                const adminLocations = [
+                    '/dashboard/improperMaterials',
+                    '/dashboard/improperPortfolios',
+                    '/dashboard/unReviewed',
+                    '/dashboard/changedLearningObjects',
+                    '/dashboard/moderators',
+                    '/dashboard/restrictedUsers',
+                    '/dashboard/deletedMaterials',
+                    '/dashboard/deletedPortfolios',
+                    '/dashboard/brokenMaterials',
+                ];
+
+                function userLocations(username) {
+                    return ['/' + username + '/portfolios', '/' + username + '/materials', '/' + username + '/favorites'];
+                }
 
 
                 $scope.$watch(function () {
@@ -68,9 +84,25 @@ angular.module('koolikottApp')
                     return !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
                 };
 
+                $scope.adminUser = function () {
+                    return !!(authenticatedUserService.isAdmin());
+                };
+
                 //Checks the location
-                $scope.isLocation = function (location) {
-                    return location === $location.path();
+                $scope.isLocationActive = function (menuLocation) {
+                    if (!$scope.user){
+                        return false;
+                    }
+                    let currentLocation = $location.path();
+                    let isInMenu = adminLocations.includes(currentLocation) || userLocations($scope.user.username).includes(currentLocation);
+                    if (!(isInMenu)) {
+                        return $scope.previousLocation === menuLocation;
+                    }
+                    let match = menuLocation === currentLocation;
+                    if (match){
+                        $scope.previousLocation = menuLocation;
+                    }
+                    return match;
                 };
 
                 if (window.innerWidth > BREAK_LG) {
@@ -187,15 +219,6 @@ angular.module('koolikottApp')
                     userDataService.loadUnReviewedLearningObjectCount(function (data) {
                         $scope.unReviewedLearningObjectCount = data;
                     });
-                };
-
-                $scope.dashboardSearch = function () {
-                    if ($scope.dashboardOpen === false) {
-                        $location.url("/dashboard");
-                        $scope.dashboardOpen = true;
-                    } else {
-                        $scope.dashboardOpen = false;
-                    }
                 };
 
                 $scope.$on('header:red', () => $scope.isHeaderRed = true);
