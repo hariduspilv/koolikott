@@ -169,7 +169,6 @@ class controller extends Controller {
         }
     }
     onLearningObjectChange(newLearningObject, oldLearningObject) {
-        console.log('newLearningObject, oldLearningObject', newLearningObject, oldLearningObject)
         if (newLearningObject && (!oldLearningObject || newLearningObject.changed != oldLearningObject.changed))
             this.init()
     }
@@ -203,7 +202,6 @@ class controller extends Controller {
             this.$rootScope.learningObjectUnreviewed
                 && 'showUnreviewed'
 
-        console.log('this.bannerType', this.bannerType)
         if (this.bannerType)
             this.setState(...VIEW_STATE_MAP[this.bannerType])
     }
@@ -276,7 +274,6 @@ class controller extends Controller {
             this.serverCallService
                 .makeGet('rest/admin/changed/'+id)
                 .then(({ data: changes }) => {
-                    console.log('changes', changes)
                     this.newTaxons = []
                     this.oldLink = ''
                     if (Array.isArray(changes) && changes.length) {
