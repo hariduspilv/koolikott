@@ -61,7 +61,7 @@ class controller extends Controller {
                     this.showMoreTags = true
                 } else
                     this.$scope.tags = sorted
-                
+
                 this.setNewTags()
             })
     }
@@ -123,9 +123,7 @@ class controller extends Controller {
     addTag() {
         if (this.learningObject && this.learningObject.id) {
             this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/tags`, {
-                    name: this.newTag.tagName
-                })
+                .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
                 .then(({ data }) =>
                     this.addTagSuccess(data)
                 )
@@ -196,9 +194,7 @@ class controller extends Controller {
     tagSelected() {
         if (this.newTag && this.newTag.tagName) {
             this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, {
-                    name: this.newTag.tagName
-                })
+                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
                 .then(({ data }) => {
                     this.addTagSuccess(data.learningObject)
                     this.showSystemTagDialog(data.tagTypeName)

@@ -128,6 +128,7 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
 
+        material.setId(original.getId());
         material.setBrokenContents(null);
         material.setFirstReviews(null);
         material.setImproperContents(null);
@@ -226,6 +227,7 @@ public class MaterialServiceTest {
 
         expect(materialDao.createOrUpdate(material)).andReturn(material);
 
+        material.setId(original.getId());
         material.setViews(0L);
         material.setAdded(null);
         material.setPeerReviews(null);
