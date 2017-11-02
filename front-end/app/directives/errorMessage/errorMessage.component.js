@@ -253,7 +253,7 @@ class controller extends Controller {
                                 this.listeningResize = true
                                 window.addEventListener('resize', this.onWindowResizeReports)
                             }
-                            this.$timeout(this.onWindowResizeReports)
+                            this.onWindowResizeReports()
                         }
 
                         !reports[0].reportingReasons
@@ -298,7 +298,7 @@ class controller extends Controller {
                                 this.listeningResize = true
                                 window.addEventListener('resize', this.onWindowResizeChanges)
                             }
-                            this.$timeout(this.onWindowResizeChanges)
+                            this.onWindowResizeChanges()
                         })
                     }
                 })
@@ -385,18 +385,14 @@ class controller extends Controller {
             return this.$scope.showExpandableReports = true
 
         const { offsetWidth, scrollWidth } = document.getElementById('error-message-heading')
-        this.$scope.showExpandableReports = scrollWidth > offsetWidth
+        this.$scope.showExpandableReports = offsetWidth && scrollWidth && scrollWidth > offsetWidth
     }
     toggleExpandableChanges() {
         if (this.newTaxons.length > 1 || this.oldLink && this.newTaxons.length === 1)
             return this.$scope.showExpandableChanges = true
 
-        const elem = document.getElementById('error-message-heading')
-        if (elem) {
-            this.$scope.showExpandableChanges =
-                elem.scrollWidth && elem.offsetWidth &&
-                elem.scrollWidth > elem.offsetWidth
-        }
+        const { offsetWidth, scrollWidth } = document.getElementById('error-message-heading')
+        this.$scope.showExpandableChanges = offsetWidth && scrollWidth && scrollWidth > offsetWidth
     }
     toggleExpandable() {
         if (!this.$scope.expanded) {
