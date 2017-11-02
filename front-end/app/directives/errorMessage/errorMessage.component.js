@@ -104,7 +104,7 @@ const VIEW_STATE_MAP = {
         }
     ],
     showUnreviewed: [
-        'lightbulb_outline', 
+        'lightbulb_outline',
         ($ctrl) =>
             $ctrl.data && $ctrl.data.type == '.Portfolio'
                 ? 'ERROR_MSG_UNREVIEWED_PORTFOLIO'
@@ -176,8 +176,8 @@ class controller extends Controller {
     }
     init() {
         this.setState('', '', [], false) // reset
-
-        this.bannerType = 
+        this.bannerType = this.$rootScope.private ?
+            undefined :
             this.$rootScope.learningObjectDeleted
                 ? 'showDeleted' :
             !this.$rootScope.learningObjectDeleted &&
@@ -286,7 +286,7 @@ class controller extends Controller {
                         )
                         this.changes = changes
                         this.$rootScope.learningObjectChanges = this.changes
-                        
+
                         if (this.$scope.expanded)
                             this.setExpandableHeight()
 
@@ -428,7 +428,7 @@ class controller extends Controller {
 
         if (id && (this.isAdmin || this.isModerator)) {
             const isPortfolio = this.isPortfolio(this.data)
-            
+
             ;(isPortfolio
                 ? this.serverCallService.makePost('rest/portfolio/delete', { id, type })
                 : this.serverCallService.makeDelete('rest/material/'+id)
