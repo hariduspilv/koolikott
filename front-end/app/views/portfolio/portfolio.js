@@ -123,26 +123,6 @@ angular.module('koolikottApp')
                     }
                 });
 
-                /*
-                 * Admin dashboard listeners
-                 * Events are sent from errorMessage
-                 */
-                $scope.$on("restore:learningObject", function () {
-                    $scope.$broadcast("restore:portfolio");
-                });
-
-                $scope.$on("delete:learningObject", function () {
-                    $scope.$broadcast("delete:portfolio");
-                });
-
-                $scope.$on("setNotImproper:learningObject", function () {
-                    $scope.$broadcast("setNotImproper:portfolio");
-                });
-
-                $scope.$on("markReviewed:learningObject", function () {
-                    $scope.$broadcast("markReviewed:portfolio")
-                })
-
                 $scope.isAdmin = function () {
                     return authenticatedUserService.isAdmin();
                 };

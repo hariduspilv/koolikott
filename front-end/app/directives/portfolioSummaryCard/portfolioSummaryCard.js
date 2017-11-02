@@ -125,45 +125,6 @@ angular.module('koolikottApp')
                 serverCallService.makePost('rest/admin/deleted/portfolio/restore', $scope.portfolio, restoreSuccess, restoreFail);
             };
 
-            $scope.setNotImproper = () => {
-                if (($scope.isAdmin() || $scope.isModerator()) && $scope.portfolio) {
-                    var url = "rest/admin/improper/setProper?learningObject=" + $scope.portfolio.id;
-                    serverCallService.makeDelete(url, {}, setNotImproperSuccessful, setNotImproperFailed);
-                }
-            };
-
-            function setNotImproperSuccessful() {
-                $rootScope.learningObjectImproper = false;
-                $rootScope.learningObjectUnreviewed = false;
-                $rootScope.$broadcast('dashboard:adminCountsUpdated');
-            }
-
-            function setNotImproperFailed() {
-                console.log("Setting not improper failed.")
-            }
-
-            $scope.$on("restore:portfolio", () => {
-                $scope.restorePortfolio();
-            });
-
-            $scope.$on("delete:portfolio", () => {
-                deletePortfolio();
-            });
-
-            $scope.$on("setNotImproper:portfolio", () => {
-                $scope.setNotImproper();
-            });
-
-            $scope.$on("markReviewed:portfolio", function () {
-                if ($scope.portfolio && ($scope.isAdmin() || $scope.isModerator()))
-                    serverCallService
-                        .makePost('rest/admin/firstReview/setReviewed', $scope.portfolio)
-                        .then(function () {
-                            $rootScope.learningObjectUnreviewed = false
-                            $rootScope.$broadcast('dashboard:adminCountsUpdated')
-                        })
-            })
-
             function restoreSuccess() {
                 toastService.show('PORTFOLIO_RESTORED');
                 $scope.portfolio.deleted = false
