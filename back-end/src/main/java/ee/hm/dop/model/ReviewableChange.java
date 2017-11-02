@@ -8,6 +8,8 @@ import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -27,6 +29,8 @@ public class ReviewableChange implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "taxon")
+    @JsonDeserialize(using = TaxonDeserializer.class)
+    @JsonSerialize(using = TaxonSerializer.class)
     private Taxon taxon;
 
     @ManyToOne

@@ -14,13 +14,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest.BEYONCE;
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest.REVERT_ALL_CHANGES_URL;
-import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.assertChanged;
-import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.assertNotChanged;
+import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.*;
+import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.assertHasTagNotTaxon;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -64,6 +65,25 @@ public class ReviewableChangeAdminResourcePart2Test extends ResourceIntegrationT
         assertEquals(BIEBER_M17_ORIGINAL, review.getMaterialSource());
 
         revertUrl(material3, BIEBER_M17_ORIGINAL);
+    }
+
+    @Test
+    public void I_add_new_source_then_remove_it___change_is_removed() throws Exception {
+        Material material1 = getMaterial(MATERIAL_17);
+        assertNotChanged(material1, BIEBER_M17_ORIGINAL);
+        material1.setSource(BEYONCE17);
+        Material material2 = createOrUpdateMaterial(material1);
+        material2.setSource(BIEBER_M17_ORIGINAL);
+        assertChanged(material2, BIEBER_M17_ORIGINAL);
+        Material material3 = createOrUpdateMaterial(material2);
+        assertNotChanged(material3, BIEBER_M17_ORIGINAL);
+
+        List<ReviewableChange> review2 = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_17);
+        assertEquals(1, review2.size());
+        for (ReviewableChange change : review2) {
+            assertTrue(change.isReviewed());
+            assertEquals(ReviewStatus.OBSOLETE, change.getStatus());
+        }
     }
 
     @Test
