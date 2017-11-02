@@ -1,5 +1,6 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -9,6 +10,7 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -19,6 +21,8 @@ public class ReviewableChangeService {
     private ReviewableChangeDao reviewableChangeDao;
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
@@ -61,11 +65,14 @@ public class ReviewableChangeService {
     }
 
     private void processChanges(LearningObject learningObject, User user, String materialSourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+        boolean linkWasAddedBefore = true;
         if (changeProcessStrategy.processNewChanges()) {
             if (learningObject instanceof Material) {
                 Material material = (Material) learningObject;
-                if (!Objects.equals(material.getSource(), materialSourceBefore)) {
-                    if (sourceChangeDoesntExist(material)) {
+                if (urlHasChanged(materialSourceBefore, material)) {
+                    Optional<ReviewableChange> sourceChangeOp = getSourceChange(material);
+                    if (!sourceChangeOp.isPresent()) {
+                        linkWasAddedBefore = false;
                         registerChange(learningObject, user, null, null, null, materialSourceBefore);
                     }
                 }
@@ -73,8 +80,12 @@ public class ReviewableChangeService {
         }
         if (isNotEmpty(learningObject.getReviewableChanges())) {
             for (ReviewableChange change : learningObject.getReviewableChanges()) {
-                if (!change.isReviewed() && change.getMaterialSource() == null) {
-                    if (!learningObjectHasThis(learningObject, change)) {
+                if (!change.isReviewed()) {
+                    if (change.getMaterialSource() == null && !learningObjectHasThis(learningObject, change)) {
+                        reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
+                        learningObject.setChanged(learningObject.getChanged() - 1);
+                    }
+                    if (linkWasAddedBefore && change.getMaterialSource() != null && learningObject instanceof Material && change.getMaterialSource().equals(((Material) learningObject).getSource())) {
                         reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
                         learningObject.setChanged(learningObject.getChanged() - 1);
                     }
@@ -83,10 +94,18 @@ public class ReviewableChangeService {
         }
     }
 
-    private boolean sourceChangeDoesntExist(Material material) {
-        return isEmpty(material.getReviewableChanges()) || material.getReviewableChanges().stream()
+    private boolean urlHasChanged(String materialSourceBefore, Material material) {
+        return !Objects.equals(material.getSource(), materialSourceBefore);
+    }
+
+    private Optional<ReviewableChange> getSourceChange(Material material) {
+        if (isEmpty(material.getReviewableChanges())) {
+            return Optional.empty();
+        }
+        return material.getReviewableChanges().stream()
                 .filter(r -> !r.isReviewed())
-                .noneMatch(r -> r.getMaterialSource() != null);
+                .filter(r -> r.getMaterialSource() != null)
+                .findAny();
     }
 
     boolean learningObjectHasThis(LearningObject learningObject, ReviewableChange change) {
