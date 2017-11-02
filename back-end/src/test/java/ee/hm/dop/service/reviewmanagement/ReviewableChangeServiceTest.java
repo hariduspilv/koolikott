@@ -18,6 +18,7 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import static junit.framework.TestCase.*;
@@ -43,6 +44,7 @@ public class ReviewableChangeServiceTest {
         ReviewableChange reviewableChange = new ReviewableChange();
         Material material = new Material();
         material.setId(1L);
+        material.setReviewableChanges(new ArrayList<>());
         ResourceType resourceType = new ResourceType();
         resourceType.setId(3L);
         User user = new User();
