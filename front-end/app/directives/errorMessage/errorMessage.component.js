@@ -9,7 +9,7 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'restore_page', // button icon
             label: 'BUTTON_RESTORE', // button tooltip translation key
-            onClick: ($ctrl) => $ctrl.$scope.$emit('restore:learningObject'),
+            onClick: ($ctrl) => $ctrl.restoreLearningObject(),
             show: ($ctrl) => $ctrl.isAdmin // to show or not to show this button
         }]
     ],
@@ -22,9 +22,10 @@ const VIEW_STATE_MAP = {
             onClick: ($ctrl) => $ctrl.administerAllChanges('revert', ({ status, data }) => {
                 if (200 <= status && status < 300 && data) {
                     data.changed = 0 /** @todo: should not be doing this, response from backend should be correct */
-                    this.data = data
-                    this.isMaterial(data) ? this.storageService.setMaterial(data) :
-                    this.isPortfolio(data) && this.storageService.setPortfolio(data)
+                    $ctrl.data = data
+                    $ctrl.isMaterial(data) ? $ctrl.storageService.setMaterial(data) :
+                    $ctrl.isPortfolio(data) && $ctrl.storageService.setPortfolio(data)
+                    $ctrl.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                     return true
                 }
             }),
@@ -41,6 +42,7 @@ const VIEW_STATE_MAP = {
                 if (200 <= status && status < 300) {
                     $ctrl.data.changed = 0 /** @todo: should not be doing this, response from backend should be correct */
                     $ctrl.$rootScope.learningObjectChanged = false
+                    $ctrl.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                     return true
                 }
             }),
@@ -54,12 +56,12 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.$scope.$parent.confirmMaterialDeletion(),
+            onClick: ($ctrl) => $ctrl.deleteLearningObject(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }, {
             icon: () => 'done',
             label: 'REPORT_BROKEN_LINK_CORRECT',
-            onClick: ($ctrl) => $ctrl.$scope.$emit('markCorrect:learningObject'),
+            onClick: ($ctrl) => $ctrl.markCorrect(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }]
     ],
@@ -69,12 +71,12 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.$scope.$emit('delete:learningObject'),
+            onClick: ($ctrl) => $ctrl.deleteLearningObject(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator,
         }, {
             icon: () => 'done',
             label: 'REPORT_NOT_IMPROPER',
-            onClick: ($ctrl) => $ctrl.$scope.$emit('setNotImproper:learningObject'),
+            onClick: ($ctrl) => $ctrl.setNotImproper(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }],
         ($ctrl) => $ctrl.getReasons()
@@ -85,14 +87,14 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.$scope.$emit('delete:learningObject'),
+            onClick: ($ctrl) => $ctrl.deleteLearningObject(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }, {
             icon: () => 'done',
             label: 'REPORT_NOT_IMPROPER',
             onClick($ctrl) {
-                $ctrl.$scope.$emit('setNotImproper:learningObject')
-                $ctrl.$scope.$emit('markCorrect:learningObject')
+                $ctrl.markCorrect()
+                $ctrl.setNotImproper()
             },
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }],
@@ -110,7 +112,7 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'done',
             label: 'BUTTON_REVIEW',
-            onClick: ($ctrl) => $ctrl.$scope.$emit('markReviewed:learningObject'),
+            onClick: ($ctrl) => $ctrl.markReviewed(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }]
     ]
@@ -410,6 +412,101 @@ class controller extends Controller {
             expandable.style.height = Math.min(400, expandable.scrollHeight)+'px'
         }
     }
+    setNotImproper() {
+        const { id, type } = this.data
+
+        if (id && (this.isAdmin || this.isModerator))
+            this.serverCallService
+                .makeDelete('rest/admin/improper/setProper?learningObject='+id)
+                .then(({ status, data }) => {
+                    console.log('DELETE rest/admin/improper/setProper?learningObject='+id, status, data)
+                    this.$rootScope.learningObjectImproper = false
+                    this.$rootScope.learningObjectBroken = false
+                    this.$rootScope.learningObjectUnreviewed = false
+                    this.$rootScope.learningObjectChanged = false
+                    this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                })
+    }
+    deleteLearningObject() {
+        const { id, type } = this.data
+
+        if (id && (this.isAdmin || this.isModerator)) {
+            const isPortfolio = this.isPortfolio(this.data)
+            
+            ;(isPortfolio
+                ? this.serverCallService.makePost('rest/portfolio/delete', { id, type })
+                : this.serverCallService.makeDelete('rest/material/'+id)
+            ).then(({ status, data }) => {
+                console.log.apply(console,
+                    isPortfolio
+                        ? ['POST rest/portfolio/delete', { id, type }, status, data]
+                        : ['DELETE rest/material/'+id, status, data]
+                )
+                this.data.deleted = true
+                this.toastService.showOnRouteChange(isPortfolio ? 'PORTFOLIO_DELETED' : 'MATERIAL_DELETED')
+                this.$rootScope.learningObjectDeleted = true
+                this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+            })
+        }
+    }
+    markCorrect() {
+        const { id, type } = this.data
+
+        if (id)
+            this.serverCallService
+                .makePost('rest/admin/brokenContent/setNotBroken', { id, type })
+                .then(({ status, data }) => {
+                    console.log('POST rest/admin/brokenContent/setNotBroken', { id, type }, status, data)
+                    this.$rootScope.learningObjectBroken = false
+                    this.$rootScope.learningObjectUnreviewed = false
+                    this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                })
+    }
+    restoreLearningObject() {
+        const { id, type } = this.data
+
+        if (id && this.isAdmin) {
+            const isPortfolio = this.isPortfolio(this.data)
+            const url = isPortfolio
+                ? 'rest/admin/deleted/portfolio/restore'
+                : 'rest/admin/deleted/material/restore'
+
+            this.serverCallService.makePost(url, { id, type }).then(({ status, data }) => {
+                console.log(
+                    isPortfolio
+                        ? 'POST rest/admin/deleted/portfolio/restore'
+                        : 'POST rest/admin/deleted/material/restore',
+                    { id, type },
+                    status,
+                    data
+                )
+                this.data.deleted = false
+                this.data.improper = false
+                this.data.unReviewed = false
+                this.data.broken = false
+                this.data.changed = false
+                this.toastService.show(isPortfolio ? 'PORTFOLIO_RESTORED' : 'MATERIAL_RESTORED')
+                this.$rootScope.learningObjectDeleted = false
+                this.$rootScope.learningObjectImproper = false
+                this.$rootScope.learningObjectUnreviewed = false
+                this.$rootScope.learningObjectBroken = false
+                this.$rootScope.learningObjectChanged = false
+                this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+            })
+        }
+    }
+    markReviewed() {
+        const { id, type } = this.data
+
+        if (id && (this.isAdmin || this.isModerator))
+            this.serverCallService
+                .makePost('rest/admin/firstReview/setReviewed', { id, type })
+                .then(({ status, data }) => {
+                    console.log('POST rest/admin/firstReview/setReviewed', { id, type }, status, data)
+                    this.$rootScope.learningObjectUnreviewed = false
+                    this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                })
+    }
 }
 controller.$inject = [
     '$scope',
@@ -422,7 +519,8 @@ controller.$inject = [
     'storageService',
     'taxonService',
     'authenticatedUserService',
-    'metadataService'
+    'metadataService',
+    'toastService'
 ]
 component('dopErrorMessage', {
     bindings: {
