@@ -46,6 +46,9 @@ public abstract class Taxon implements AbstractEntity {
     @Transient
     private String level;
 
+    @Transient
+    private String translationKey;
+
     public Long getId() {
         return id;
     }
@@ -132,5 +135,13 @@ public abstract class Taxon implements AbstractEntity {
 
     public void setTaxonLevel(String taxonLevel) {
         this.taxonLevel = taxonLevel;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
+    }
+
+    public void setTranslationKey(String translationKey) {
+        this.translationKey = translationKey;
     }
 }
