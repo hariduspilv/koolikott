@@ -29,8 +29,8 @@ public class ReviewableChange implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "taxon")
-    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
-    @JsonSerialize(contentUsing = TaxonSerializer.class)
+    @JsonDeserialize(using = TaxonDeserializer.class)
+    @JsonSerialize(using = TaxonSerializer.class)
     private Taxon taxon;
 
     @ManyToOne

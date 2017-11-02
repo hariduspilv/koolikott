@@ -231,13 +231,21 @@ class controller extends Controller {
                 tags: this.$scope.tags,
                 allTags: this.allTags
             })
-        const setNew = (tags) => Array.isArray(tags) && tags.forEach(t =>
-            t.isNew = !this.$rootScope.learningObjectChanges
-                ? false
-                : !!this.$rootScope.learningObjectChanges.find(c =>
-                    c.taxon && c.taxon.translationKey && this.$translate(c.taxon.translationKey) == t.tag.name
-                )
-        )
+        const setNew = (tags) => Array.isArray(tags) && tags.forEach(t => {
+            t.isNew = !this.$rootScope.learningObjectChanges ? false : !!this.$rootScope.learningObjectChanges
+                .find(c => {
+                    if (c.taxon && c.taxon.translationKey) {
+                        return this.$translate.instant(c.taxon.translationKey).toLowerCase() === t.tag;
+                    }
+                    if (c.resourceType && c.resourceType.name) {
+                        return this.$translate.instant(c.resourceType.name).toLowerCase() === t.tag
+                    }
+                    if (c.targetGroup && c.targetGroup.name) {
+                        return this.$translate.instant(c.targetGroup.name).toLowerCase() === t.tag
+                    }
+                    return false;
+                });
+        });
         setNew(this.$scope.tags)
         setNew(this.allTags)
     }
