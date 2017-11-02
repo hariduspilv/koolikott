@@ -45,7 +45,9 @@ public class ReviewableChangeService {
         }
         if (reviewableChange.hasChange()) {
             learningObject.setChanged(learningObject.getChanged() + 1);
-            return reviewableChangeDao.createOrUpdate(reviewableChange);
+            ReviewableChange newChange = reviewableChangeDao.createOrUpdate(reviewableChange);
+            learningObject.getReviewableChanges().add(newChange);
+            return newChange;
         }
         return null;
     }

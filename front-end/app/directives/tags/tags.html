@@ -27,10 +27,10 @@
         </md-tooltip>
       </md-button>
       <a
-        href="search/result?q=tag:'{{$chip.tag.name}}'"
+        href="search/result?q=tag:'{{$chip.tag}}'"
         data-ng-click="$ctrl.getTagSearchURL($event, $chip.tag)"
         >
-        {{$chip.tag.name}}
+        {{$chip.tag}}
       </a>
       <md-button
         data-ng-if="$ctrl.isAllowed() && !$chip.tagUpVote"

@@ -107,6 +107,7 @@ public class MaterialService {
         if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
+        material.setId(originalMaterial.getId());
         material.setRepository(originalMaterial.getRepository());
         material.setViews(originalMaterial.getViews());
         material.setAdded(originalMaterial.getAdded());
@@ -121,8 +122,8 @@ public class MaterialService {
         material.setReviewableChanges(originalMaterial.getReviewableChanges());
         material.setChanged(originalMaterial.getChanged());
 
-        reviewableChangeService.processChanges(material, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
         Material updatedMaterial = createOrUpdate(material);
+        reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
