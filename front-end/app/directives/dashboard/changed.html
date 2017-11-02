@@ -3,9 +3,9 @@
     <tr md-row>
       <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
-      <th md-column md-order-by="byCreatedAt"><span data-translate="CHANGED_AT"></span></th>
-      <th md-column md-order-by="byReportCount"><span data-translate="CHANGE_COUNT"></span></th>
-      <th md-column md-order-by="byCreatedBy"><span data-translate="CHANGER"></span></th>
+      <th md-column md-order-by="byLastChangedAt"><span data-translate="CHANGED_AT"></span></th>
+      <th md-column md-order-by="byChangeCount"><span data-translate="CHANGE_COUNT"></span></th>
+      <th md-column md-order-by="byChangedBy"><span data-translate="CHANGER"></span></th>
     </tr>
   </thead>
   <tbody md-body>
@@ -22,10 +22,8 @@
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" ng-bind="$ctrl.getMostRecentChangeDate(item)"></td>
       <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__numChanges"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__numChanges === 1 && !item.reviewableChanges[0].createdBy" data-translate="UNKNOWN"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) && item.reviewableChanges[0].createdBy" data-ng-bind="item.reviewableChanges[0].createdBy.name+' '+item.reviewableChanges[0].createdBy.surname"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__numChanges > 1 && item.__changers.length > 1" data-ng-bind="$ctrl.getNumChangersLabel(item)">
-        <md-tooltip>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-bind="$ctrl.getChangedByLabel(item)">
+        <md-tooltip data-ng-if="item.__numChanges > 1 && item.__changers.length > 1">
           <span data-ng-bind="$ctrl.getCommaSeparatedChangers(item)"></span>
         </md-tooltip>
       </td>

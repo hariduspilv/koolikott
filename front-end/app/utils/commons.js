@@ -736,6 +736,52 @@ class Controller {
             return replacements[idx - 1] || match
         })
     }
+    getMostRecentChangeDate(item) {
+        const mostRecentDate = item.reviewableChanges
+            .filter(c => !c.reviewed)
+            .reduce((mostRecentDate, change) => {
+                const date = new Date(change.createdAt)
+                return !mostRecentDate || date > mostRecentDate
+                    ? date
+                    : mostRecentDate
+            }, null)
+
+        return this.formatDateToDayMonthYear(mostRecentDate.toISOString())
+    }
+    getChangedByLabel(item) {
+        // Unknown
+        if (item.__numChanges === 1 && !item.reviewableChanges[0].createdBy)
+            return this.dependencyExists('$translate')
+                ? this.$translate.instant('UNKNOWN')
+                : ''
+
+        // One name
+        if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
+            item.reviewableChanges[0].createdBy
+        )
+            return item.reviewableChanges[0].createdBy.name+' '+item.reviewableChanges[0].createdBy.surname
+
+        // # changers
+        return this.dependencyExists('$translate')
+            ? this.sprintf(
+                this.$translate.instant('NUM_CHANGERS'),
+                item.__changers.length
+            )
+            : ''
+    }
+    getCommaSeparatedChangers(item) {
+        return item.__changers.reduce((str, c) => {
+            const { name, surname } = c.createdBy
+            return `${str}${str ? ', ' : ''}${name} ${surname}`
+        }, '')
+    }
+    dependencyExists(depName) {
+        if (typeof this[depName] === 'undefined') {
+            throw new Error(`this.${depName} is undefined, please include '${depName}' in controller.$inject = [..., '${depName}'] if you wish to use controller.getChangedByLabel()`)
+            return false
+        }
+        return true
+    }
 }
 
 /**

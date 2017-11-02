@@ -118,6 +118,7 @@ class controller extends Controller {
             .makeGet('rest/admin/'+restUri)
             .then(({ data }) => {
                 if (data) {
+                    console.log('data:', data)
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
@@ -216,18 +217,6 @@ class controller extends Controller {
                     ? false
                     : ids.push(id)
             })
-    }
-    getNumChangersLabel(item) {
-        return this.sprintf(
-            this.$translate.instant('NUM_CHANGERS'),
-            item.__changers.length
-        )
-    }
-    getCommaSeparatedChangers(item) {
-        return item.__changers.reduce((str, c) => {
-            const { name, surname } = c.createdBy
-            return `${str}${str ? ', ' : ''}${name} ${surname}`
-        }, '')
     }
     getChangers({ reviewableChanges }) {
         const ids = []
@@ -358,18 +347,6 @@ class controller extends Controller {
         }
 
         return reasonKey
-    }
-    getMostRecentChangeDate(item) {
-        const mostRecentDate = item.reviewableChanges
-            .filter(c => !c.reviewed)
-            .reduce((mostRecentDate, change) => {
-                const date = new Date(change.createdAt)
-                return !mostRecentDate || date > mostRecentDate
-                    ? date
-                    : mostRecentDate
-            }, null)
-
-        return this.formatDateToDayMonthYear(mostRecentDate.toISOString())
     }
 }
 controller.$inject = [
