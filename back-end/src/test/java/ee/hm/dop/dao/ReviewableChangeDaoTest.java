@@ -61,7 +61,7 @@ public class ReviewableChangeDaoTest extends DatabaseTestBase {
 
     public ReviewableChange change(Material material) {
         ReviewableChange change1 = new ReviewableChange();
-        change1.setLearningObject(material.getId());
+        change1.setLearningObject(material);
         return change1;
     }
 }

@@ -52,12 +52,12 @@ public class ReviewableChangeAdminServiceTest {
         material.setTargetGroups(new LinkedList<>(Collections.singletonList(targetGroup)));
         material.setResourceTypes(new LinkedList<>(Collections.singletonList(resourceType)));
 
-        change1.setLearningObject(material.getId());
+        change1.setLearningObject(material);
         change1.setResourceType(resourceType);
         change1.setCreatedBy(user);
         material.getReviewableChanges().add(change1);
 
-        change2.setLearningObject(material.getId());
+        change2.setLearningObject(material);
         change2.setTargetGroup(targetGroup);
         change2.setCreatedBy(user);
         material.getReviewableChanges().add(change2);

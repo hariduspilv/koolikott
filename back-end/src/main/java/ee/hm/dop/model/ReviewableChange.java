@@ -22,8 +22,10 @@ public class ReviewableChange implements AbstractEntity {
     @GeneratedValue
     private Long id;
 
-    @JsonIgnore
-    private Long learningObject;
+    @ManyToOne
+    @JoinColumn(name = "learningObject")
+    @JsonIgnore()
+    private LearningObject learningObject;
 
     @ManyToOne
     @JoinColumn(name = "taxon")
@@ -82,11 +84,11 @@ public class ReviewableChange implements AbstractEntity {
         this.id = id;
     }
 
-    public Long getLearningObject() {
+    public LearningObject getLearningObject() {
         return learningObject;
     }
 
-    public void setLearningObject(Long learningObject) {
+    public void setLearningObject(LearningObject learningObject) {
         this.learningObject = learningObject;
     }
 
@@ -169,5 +171,4 @@ public class ReviewableChange implements AbstractEntity {
     public void setMaterialSource(String materialSource) {
         this.materialSource = materialSource;
     }
-
 }

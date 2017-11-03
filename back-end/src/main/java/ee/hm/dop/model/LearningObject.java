@@ -135,19 +135,16 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
 
-    @OneToMany(fetch = LAZY)
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     @JsonBackReference("firstReview")
-    @JoinColumn (name = "learningObject", insertable = false, updatable = false)
     private List<FirstReview> firstReviews;
 
-    @OneToMany(fetch = LAZY)
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     @JsonBackReference("improperContent")
-    @JoinColumn (name = "learningObject", insertable = false, updatable = false)
     private List<ImproperContent> improperContents;
 
-    @OneToMany(fetch = LAZY)
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     @JsonBackReference("reviewableChange")
-    @JoinColumn (name = "learningObject", insertable = false, updatable = false)
     private List<ReviewableChange> reviewableChanges;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")

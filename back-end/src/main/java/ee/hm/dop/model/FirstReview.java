@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -18,8 +19,10 @@ public class FirstReview implements AbstractEntity {
     @GeneratedValue
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "learningObject", nullable = false)
     @JsonIgnore
-    private Long learningObject;
+    private LearningObject learningObject;
 
     @Column(nullable = false)
     private boolean reviewed;
@@ -52,11 +55,11 @@ public class FirstReview implements AbstractEntity {
         this.id = id;
     }
 
-    public Long getLearningObject() {
+    public LearningObject getLearningObject() {
         return learningObject;
     }
 
-    public void setLearningObject(Long learningObject) {
+    public void setLearningObject(LearningObject learningObject) {
         this.learningObject = learningObject;
     }
 

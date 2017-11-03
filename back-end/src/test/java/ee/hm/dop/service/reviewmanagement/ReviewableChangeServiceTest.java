@@ -50,7 +50,7 @@ public class ReviewableChangeServiceTest {
         User user = new User();
         user.setId(1L);
 
-        reviewableChange.setLearningObject(material.getId());
+        reviewableChange.setLearningObject(material);
         reviewableChange.setResourceType(resourceType);
         reviewableChange.setCreatedBy(user);
 
@@ -59,7 +59,7 @@ public class ReviewableChangeServiceTest {
         replay(learningObjectService);
         replay(reviewableChangeDao);
 
-        ReviewableChange updated = reviewableChangeService.registerChange(material, user, null, resourceType, null, null, false);
+        ReviewableChange updated = reviewableChangeService.registerChange(material, user, null, resourceType, null, null);
 
         assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());

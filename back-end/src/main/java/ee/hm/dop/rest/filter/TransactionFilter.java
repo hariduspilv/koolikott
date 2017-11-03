@@ -2,7 +2,6 @@ package ee.hm.dop.rest.filter;
 
 import java.io.IOException;
 
-import javax.persistence.EntityExistsException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -30,9 +29,6 @@ public class TransactionFilter implements Filter {
 
         try {
             closeTransaction();
-        } catch (EntityExistsException e) {
-            logger.error("Error closing transaction", e);
-            throw new RuntimeException("Error closing transaction");
         } catch (Exception e) {
             logger.error("Error closing transaction", e);
             throw new RuntimeException("Error closing transaction");

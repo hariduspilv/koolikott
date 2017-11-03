@@ -57,7 +57,7 @@ public class ReviewableChangeAdminService {
         reviewableChange.setReviewedBy(user);
         reviewableChange.setReviewedAt(DateTime.now());
         reviewableChange.setStatus(reviewStatus);
-        reviewableChangeDao.persist(reviewableChange);
+        reviewableChangeDao.createOrUpdate(reviewableChange);
     }
 
     public LearningObject revertAllChanges(Long learningObjectId, User user) {
