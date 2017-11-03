@@ -3,7 +3,7 @@
 {
 const VIEW_STATE_MAP = {
     showDeleted: [
-        'delete', // icon
+        'delete_forever', // icon
         'ERROR_MSG_DELETED', // message translation key
         // array of buttons
         [{
@@ -14,7 +14,7 @@ const VIEW_STATE_MAP = {
         }]
     ],
     showChanged: [
-        'priority_high',
+        'autorenew',
         'MESSAGE_CHANGED_LEARNING_OBJECT',
         [{
             icon: () => 'undo',
@@ -35,7 +35,7 @@ const VIEW_STATE_MAP = {
         ($ctrl) => $ctrl.getChanges()
     ],
     showBroken: [
-        'report',
+        'content_cut',
         'ERROR_MSG_BROKEN',
         [{
             icon: () => 'delete',
