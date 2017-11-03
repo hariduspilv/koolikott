@@ -18,7 +18,7 @@ angular.module('koolikottApp')
 
             function init() {
                 $scope.pageUrl = $location.absUrl();
-                $scope.isViewPortforlioPage = $rootScope.isViewPortforlioPage;
+                $scope.isViewPortfolioPage = $rootScope.isViewPortfolioPage;
                 $scope.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
 
                 eventService.subscribe($scope, 'taxonService:mapInitialized', getTaxonObject);

@@ -230,17 +230,17 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             var isViewHomePage = isHomePage(path);
             var isViewMyProfile = isViewMyProfilePage($location, user);
 
-            $rootScope.isViewPortforlioPage = isViewPortfolioPage(path);
+            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
-            $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortforlioPage);
+            $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage);
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.justLoggedIn);
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn);
 
             if ($rootScope.justLoggedIn) {
                 $rootScope.$broadcast('tour:start:firstTime');
@@ -263,7 +263,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $rootScope.selectedMaterials = null;
             }
 
-            if (window.innerWidth > BREAK_LG && ($rootScope.isViewPortforlioPage || $rootScope.isEditPortfolioPage)) {
+            if (window.innerWidth > BREAK_LG && ($rootScope.isViewPortfolioPage || $rootScope.isEditPortfolioPage)) {
                 $rootScope.sideNavOpen = true;
             }
 

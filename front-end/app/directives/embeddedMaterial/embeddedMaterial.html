@@ -1,5 +1,5 @@
 <md-card class="md-whiteframe-2dp embed-card" ng-class="{'embed-link': fallbackToLink}" ng-cloak="fallbackToLink">
-  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortforlioPage" data-ng-click="navigateToMaterial(material, $event)">
+  <md-card-header class="embed-header" data-ng-if="isEditPortfolioPage || $root.isViewPortfolioPage" data-ng-click="navigateToMaterial(material, $event)">
     <md-card-avatar>
       <md-icon class="icon-kind embeddedMaterial" ng-class="materialType">{{materialType}}</md-icon>
     </md-card-avatar>
@@ -46,7 +46,7 @@
     </div>
 
     <a class="embed-link" data-ng-href="{{material.source}}" data-ng-if="sourceType === 'PICTURE'" target="_blank"
-       ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortforlioPage}">
+       ng-class="{'embed-image-padded': isEditPortfolioMode || $root.isViewPortfolioPage}">
       <img data-ng-src="{{material.source}}"/>
     </a>
 
