@@ -9,7 +9,7 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'restore_page', // button icon
             label: 'BUTTON_RESTORE', // button tooltip translation key
-            onClick: ($ctrl) => $ctrl.restoreLearningObject(),
+            onClick: ($ctrl) => $ctrl.setNotDeleted(),
             show: ($ctrl) => $ctrl.isAdmin // to show or not to show this button
         }]
     ],
@@ -19,16 +19,7 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'undo',
             label: 'UNDO_CHANGES',
-            onClick: ($ctrl) => $ctrl.administerAllChanges('revert', ({ status, data }) => {
-                if (200 <= status && status < 300 && data) {
-                    data.changed = 0 /** @todo: should not be doing this, response from backend should be correct */
-                    $ctrl.data = data
-                    $ctrl.isMaterial(data) ? $ctrl.storageService.setMaterial(data) :
-                    $ctrl.isPortfolio(data) && $ctrl.storageService.setPortfolio(data)
-                    $ctrl.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                    return true
-                }
-            }),
+            onClick: ($ctrl) => $ctrl.setAllChanges('revert'),
             show: ($ctrl) => $ctrl.isAdmin
         }, {
             icon: ($ctrl) => {
@@ -38,14 +29,7 @@ const VIEW_STATE_MAP = {
                     : 'done'
             },
             label: 'ACCEPT_CHANGES',
-            onClick: ($ctrl) => $ctrl.administerAllChanges('accept', ({ status }) => {
-                if (200 <= status && status < 300) {
-                    $ctrl.data.changed = 0 /** @todo: should not be doing this, response from backend should be correct */
-                    $ctrl.$rootScope.learningObjectChanged = false
-                    $ctrl.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                    return true
-                }
-            }),
+            onClick: ($ctrl) => $ctrl.setAllChanges('accept'),
             show: ($ctrl) => $ctrl.isAdmin
         }],
         ($ctrl) => $ctrl.getChanges()
@@ -56,12 +40,12 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.deleteLearningObject(),
+            onClick: ($ctrl) => $ctrl.setDeleted(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }, {
             icon: () => 'done',
             label: 'REPORT_BROKEN_LINK_CORRECT',
-            onClick: ($ctrl) => $ctrl.markCorrect(),
+            onClick: ($ctrl) => $ctrl.setNotBroken(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }]
     ],
@@ -71,7 +55,7 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.deleteLearningObject(),
+            onClick: ($ctrl) => $ctrl.setDeleted(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator,
         }, {
             icon: () => 'done',
@@ -87,13 +71,13 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.deleteLearningObject(),
+            onClick: ($ctrl) => $ctrl.setDeleted(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }, {
             icon: () => 'done',
             label: 'REPORT_NOT_IMPROPER',
             onClick($ctrl) {
-                $ctrl.markCorrect()
+                $ctrl.setNotBroken()
                 $ctrl.setNotImproper()
             },
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
@@ -112,7 +96,7 @@ const VIEW_STATE_MAP = {
         [{
             icon: () => 'done',
             label: 'BUTTON_REVIEW',
-            onClick: ($ctrl) => $ctrl.markReviewed(),
+            onClick: ($ctrl) => $ctrl.setReviewed(),
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }]
     ]
@@ -326,60 +310,6 @@ class controller extends Controller {
             this.taxonService.getTaxonTranslationKey(taxon)
         )
     }
-    administerAllChanges(action, cb) {
-        const { id } = this.data || {}
-
-        if (id) {
-            // making optimistic changes
-            const revertedOrAccepted = this.changes.splice(0, this.changes.length)
-            this.$rootScope.learningObjectChanged = false
-
-            const undo = () => {
-                // the changes were too optimistic
-                ;[].splice.apply(this.changes, [0, 0].concat(revertedOrAccepted))
-                this.$rootScope.learningObjectChanged = true
-            }
-
-            this.serverCallService
-                .makePost(`rest/admin/changed/${id}/${action}All`)
-                .then(
-                    response => cb(response) || undo(),
-                    undo
-                )
-        }
-    }
-    administerChange(action, change, cbName) {
-        const { id } = this.data || {}
-
-        if (id && change.id) {
-            // making optimistic changes
-            const revertedOrAcceptedIdx = this.changes.findIndex(c => c.id === change.id)
-            const [revertedOrAcceptedChange] = this.changes.splice(revertedOrAcceptedIdx, 1)
-            this.$rootScope.learningObjectChanged = !!this.changes.length
-
-            const undo = () => {
-                // the changes were too optimistic
-                this.changes.splice(revertedOrAcceptedIdx, 0, revertedOrAcceptedChange)
-                this.$rootScope.learningObjectChanged = true
-            }
-
-            this.serverCallService
-                .makePost(`rest/admin/changed/${id}/${action}One/${change.id}`)
-                .then(({ status, data }) => {
-                    200 <= status && status < 300
-                        ? this[cbName](data)
-                        : undo()
-                }, undo)
-        }
-    }
-    onReverted(data) {
-        data.changed-- /** @todo: should not be doing this, response from backend should be correct */
-        this.data = data || this.data
-        this.setExpandableHeight()
-        this.isMaterial(data) ? this.storageService.setMaterial(data) :
-        this.isPortfolio(data) && this.storageService.setPortfolio(data)
-        this.init()
-    }
     toggleExpandableReports() {
         if (this.$scope.reports.length > 1 || this.forceCollapsible)
             return this.$scope.showExpandableReports = true
@@ -423,7 +353,7 @@ class controller extends Controller {
                     this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 })
     }
-    deleteLearningObject() {
+    setDeleted() {
         const { id, type } = this.data
 
         if (id && (this.isAdmin || this.isModerator)) {
@@ -445,7 +375,7 @@ class controller extends Controller {
             })
         }
     }
-    markCorrect() {
+    setNotBroken() {
         const { id, type } = this.data
 
         if (id)
@@ -455,10 +385,11 @@ class controller extends Controller {
                     console.log('POST rest/admin/brokenContent/setNotBroken', { id, type }, status, data)
                     this.$rootScope.learningObjectBroken = false
                     this.$rootScope.learningObjectUnreviewed = false
+                    this.$rootScope.learningObjectImproper = false
                     this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 })
     }
-    restoreLearningObject() {
+    setNotDeleted() {
         const { id, type } = this.data
 
         if (id && this.isAdmin) {
@@ -491,7 +422,7 @@ class controller extends Controller {
             })
         }
     }
-    markReviewed() {
+    setReviewed() {
         const { id, type } = this.data
 
         if (id && (this.isAdmin || this.isModerator))
@@ -502,6 +433,61 @@ class controller extends Controller {
                     this.$rootScope.learningObjectUnreviewed = false
                     this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 })
+    }
+    setAllChanges(action, cb) {
+        const { id } = this.data || {}
+
+        if (id) {
+            // making optimistic changes
+            const revertedOrAccepted = this.changes.splice(0, this.changes.length)
+            this.$rootScope.learningObjectChanged = false
+
+            const undo = () => {
+                // the changes were too optimistic
+                ;[].splice.apply(this.changes, [0, 0].concat(revertedOrAccepted))
+                this.$rootScope.learningObjectChanged = true
+            }
+
+            this.serverCallService
+                .makePost(`rest/admin/changed/${id}/${action}All`)
+                .then(({ status, data }) => {
+                    console.log(`POST rest/admin/changed/${id}/${action}All`, status, data)
+                    200 <= status && status < 300
+                        ? this.setData(data)
+                        : undo()
+                }, undo)
+        }
+    }
+    setOneChange(action, change) {
+        const { id } = this.data || {}
+
+        if (id && change.id) {
+            // making optimistic changes
+            const revertedOrAcceptedIdx = this.changes.findIndex(c => c.id === change.id)
+            const [revertedOrAcceptedChange] = this.changes.splice(revertedOrAcceptedIdx, 1)
+            this.$rootScope.learningObjectChanged = !!this.changes.length
+
+            const undo = () => {
+                // the changes were too optimistic
+                this.changes.splice(revertedOrAcceptedIdx, 0, revertedOrAcceptedChange)
+                this.$rootScope.learningObjectChanged = true
+            }
+
+            this.serverCallService
+                .makePost(`rest/admin/changed/${id}/${action}One/${change.id}`)
+                .then(({ status, data }) => {
+                    console.log(`POST rest/admin/changed/${id}/${action}One/${change.id}`, status, data)
+                    200 <= status && status < 300
+                        ? this.setExpandableHeight() || this.setData(data)
+                        : undo()
+                }, undo)
+        }
+    }
+    setData(data) {
+        this.data = data || this.data
+        this.isMaterial(data) ? this.storageService.setMaterial(data) :
+        this.isPortfolio(data) && this.storageService.setPortfolio(data)
+        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
     }
 }
 controller.$inject = [
