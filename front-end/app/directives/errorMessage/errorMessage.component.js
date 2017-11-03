@@ -159,34 +159,23 @@ class controller extends Controller {
             this.init()
     }
     init() {
-        this.setState('', '', [], false) // reset
-        this.bannerType = this.$rootScope.private ?
+        this.setState('', '', [], false); // reset
+        this.bannerType =
+            this.$rootScope.private ?
             undefined :
             this.$rootScope.learningObjectDeleted
                 ? 'showDeleted' :
-            !this.$rootScope.learningObjectDeleted &&
-            !this.$rootScope.learningObjectImproper &&
-            this.$rootScope.learningObjectBroken
-                ? 'showBroken' :
-            !this.$rootScope.learningObjectDeleted &&
-            this.$rootScope.learningObjectImproper &&
-            !this.$rootScope.learningObjectBroken
-                ? 'showImproper' :
-            !this.$rootScope.learningObjectDeleted &&
-            this.$rootScope.learningObjectImproper &&
-            this.$rootScope.learningObjectBroken
+            this.$rootScope.learningObjectImproper && this.$rootScope.learningObjectBroken
                 ? 'showImproperAndBroken' :
-            !this.$rootScope.learningObjectDeleted &&
-            !this.$rootScope.learningObjectImproper &&
-            !this.$rootScope.learningObjectBroken &&
+            !this.$rootScope.learningObjectImproper && this.$rootScope.learningObjectBroken
+                ? 'showBroken' :
+            this.$rootScope.learningObjectImproper && !this.$rootScope.learningObjectBroken
+                ? 'showImproper' :
+            this.$rootScope.learningObjectUnreviewed
+                ? 'showUnreviewed' :
             this.$rootScope.learningObjectChanged
                 ? 'showChanged' :
-            !this.$rootScope.learningObjectDeleted &&
-            !this.$rootScope.learningObjectImproper &&
-            !this.$rootScope.learningObjectBroken &&
-            !this.$rootScope.learningObjectChanged &&
-            this.$rootScope.learningObjectUnreviewed
-                && 'showUnreviewed'
+                undefined;
 
         if (this.bannerType)
             this.setState(...VIEW_STATE_MAP[this.bannerType])

@@ -34,20 +34,20 @@ public class TagService {
         return tagDao.findByName(name);
     }
 
-    public LearningObject addRegularTag(Long learningObjectId, String tagName, User loggedInUser) {
+    public LearningObject addRegularTag(Long learningObjectId, Tag tag, User loggedInUser) {
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
         ValidatorUtil.mustHaveEntity(learningObject);
 
-        return addTag(learningObject, findOrMakeNewTag(tagName), loggedInUser);
+        return addTag(learningObject, tag, loggedInUser);
     }
 
-    public TagDTO addSystemTag(Long learningObjectId, String tagName, User user) {
+    public TagDTO addSystemTag(Long learningObjectId, Tag tag, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
         ValidatorUtil.mustHaveEntity(learningObject);
 
-        LearningObject newLearningObject = addTag(learningObject, findOrMakeNewTag(tagName), user);
+        LearningObject newLearningObject = addTag(learningObject, tag, user);
         //todo why does system tag return tag dto
-        return tagConverter.addChangeReturnTagDto(tagName, newLearningObject, user);
+        return tagConverter.addChangeReturnTagDto(tag.getName(), newLearningObject, user);
     }
 
     private LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
@@ -67,13 +67,4 @@ public class TagService {
         return updatedLearningObject;
     }
 
-    private Tag findOrMakeNewTag(String tagName) {
-        Tag tag = tagService.getTagByName(tagName);
-        if (tag != null) {
-            return tag;
-        }
-        Tag newTag = new Tag();
-        newTag.setName(tagName);
-        return newTag;
-    }
 }
