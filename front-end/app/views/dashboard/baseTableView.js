@@ -202,20 +202,22 @@ class controller extends Controller {
         )
     }
     getCommaSeparatedCreators(item) {
-        return item.__creators.reduce((str, c) => {
-            const { name, surname } = c.createdBy || c.creator
+        return item.__creators.reduce((str, creator) => {
+            const { name, surname } = creator
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')
     }
     getCreators(item) {
         const ids = []
-        return this.getDuplicates(item)
+        return this
+            .getDuplicates(item)
             .filter(c => {
-                const { id } = c.createdBy || c.creator
+                const { id } = c.createdBy || c.creator || { id: 'UNKNOWN' }
                 return ids.includes(id)
                     ? false
                     : ids.push(id)
             })
+            .map(c => c.createdBy || c.creator)
     }
     getChangers({ reviewableChanges }) {
         const ids = []
