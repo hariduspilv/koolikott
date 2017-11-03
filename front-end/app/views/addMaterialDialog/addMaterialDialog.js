@@ -250,7 +250,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             return $scope.material.targetGroups && $scope.material.targetGroups.length > 0;
         }
 
-        function isTaxonSet (index) {
+        function isTaxonSet(index) {
             return $scope.material.taxons && $scope.material.taxons[index] && $scope.material.taxons[index].level && $scope.material.taxons[index].level !== ".EducationalContext";
         }
 
@@ -563,7 +563,10 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
             $scope.material.tags = data.snippet.tags;
 
-            $scope.material.publishers.push({name: data.snippet.channelTitle});
+            let find = $scope.material.publishers.find(p => p.name === data.snippet.channelTitle);
+            if (!find) {
+                $scope.material.publishers.push({name: data.snippet.channelTitle});
+            }
 
             $scope.issueDate = new Date(data.snippet.publishedAt);
 
@@ -635,7 +638,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         function fileUploadFailed(response) {
             console.log("File upload failed");
-            if(response.data.cause == "filename too long"){
+            if (response.data.cause == "filename too long") {
                 $scope.addMaterialForm.source.$setValidity("filenameTooLong", false);
                 $scope.addMaterialForm.source.$setTouched();
             }
@@ -838,8 +841,8 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         function isMetadataStepValid() {
             return $scope.titleDescriptionGroups.filter(function (metadata) {
-                    return metadata.title && metadata.title.length !== 0;
-                }).length !== 0;
+                return metadata.title && metadata.title.length !== 0;
+            }).length !== 0;
         }
 
         function getMaxPictureSize() {

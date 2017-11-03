@@ -55,7 +55,7 @@ public class ReviewableChangeServiceTest {
         reviewableChange.setCreatedBy(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(reviewableChangeDao.persist(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
+        expect(reviewableChangeDao.createOrUpdate(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
         replay(learningObjectService);
         replay(reviewableChangeDao);
 

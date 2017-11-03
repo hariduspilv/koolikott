@@ -1,6 +1,5 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -21,8 +20,6 @@ public class ReviewableChangeService {
     private ReviewableChangeDao reviewableChangeDao;
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
-    @Inject
-    private LearningObjectDao learningObjectDao;
 
     public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
