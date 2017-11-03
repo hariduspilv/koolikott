@@ -16,7 +16,6 @@ public class TaxonDeserializer extends JsonDeserializer<Taxon> {
     public Taxon deserialize(JsonParser parser, DeserializationContext context) throws IOException {
         Taxon taxon = parser.readValueAs(Taxon.class);
         return taxon != null ? getTaxonService().getTaxonById(taxon.getId()) : null;
-
     }
 
     @Override

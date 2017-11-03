@@ -156,6 +156,7 @@ angular.module('koolikottApp')
 
                 eventService.notify('material:reloadTaxonObject');
 
+                $rootScope.private = ["PRIVATE"].includes($scope.material.visibility);;
                 $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);

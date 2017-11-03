@@ -110,6 +110,19 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return merged;
     }
 
+    public Entity persist(Entity entity) {
+        getEntityManager().persist(entity);
+        return entity;
+    }
+
+    public Entity getReference(Long id) {
+        return getEntityManager().getReference(entity(), id);
+    }
+
+    public void refresh(Entity entity) {
+        getEntityManager().refresh(entity);
+    }
+
     public void remove(Entity entity) {
         getEntityManager().remove(entity);
     }

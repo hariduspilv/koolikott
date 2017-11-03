@@ -28,9 +28,13 @@ public class ReviewableChangeService {
         return reviewableChangeDao.getAllByLearningObject(id);
     }
 
-    public ReviewableChange registerChange(LearningObject learningObject, User user, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup, String materialSource) {
+    public ReviewableChange registerChange(LearningObject learningObject, User user, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup, String materialSource, boolean refresh) {
         ReviewableChange reviewableChange = new ReviewableChange();
-        reviewableChange.setLearningObject(learningObject);
+        //i am sorry i tried very hard
+        if (refresh) {
+            learningObjectDao.refresh(learningObject);
+        }
+        reviewableChange.setLearningObject(learningObject.getId());
         reviewableChange.setCreatedBy(user);
         reviewableChange.setCreatedAt(DateTime.now());
         reviewableChange.setReviewed(false);
@@ -49,7 +53,7 @@ public class ReviewableChangeService {
         }
         if (reviewableChange.hasChange()) {
             learningObject.setChanged(learningObject.getChanged() + 1);
-            ReviewableChange newChange = reviewableChangeDao.createOrUpdate(reviewableChange);
+            ReviewableChange newChange = reviewableChangeDao.persist(reviewableChange);
             learningObject.getReviewableChanges().add(newChange);
             return newChange;
         }
@@ -73,7 +77,7 @@ public class ReviewableChangeService {
                     Optional<ReviewableChange> sourceChangeOp = getSourceChange(material);
                     if (!sourceChangeOp.isPresent()) {
                         linkWasAddedBefore = false;
-                        registerChange(learningObject, user, null, null, null, materialSourceBefore);
+                        registerChange(learningObject, user, null, null, null, materialSourceBefore, true);
                     }
                 }
             }

@@ -50,16 +50,16 @@ public class ReviewableChangeServiceTest {
         User user = new User();
         user.setId(1L);
 
-        reviewableChange.setLearningObject(material);
+        reviewableChange.setLearningObject(material.getId());
         reviewableChange.setResourceType(resourceType);
         reviewableChange.setCreatedBy(user);
 
         expect(learningObjectService.get(1L, user)).andReturn(material);
-        expect(reviewableChangeDao.createOrUpdate(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
+        expect(reviewableChangeDao.persist(EasyMock.anyObject(ReviewableChange.class))).andReturn(reviewableChange);
         replay(learningObjectService);
         replay(reviewableChangeDao);
 
-        ReviewableChange updated = reviewableChangeService.registerChange(material, user, null, resourceType, null, null);
+        ReviewableChange updated = reviewableChangeService.registerChange(material, user, null, resourceType, null, null, false);
 
         assertEquals(reviewableChange.getId(), updated.getId());
         assertNotNull(updated.getResourceType());
