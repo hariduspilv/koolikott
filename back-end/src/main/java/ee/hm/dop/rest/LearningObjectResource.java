@@ -29,7 +29,7 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
-        return tagService.addRegularTag(learningObjectId, newTag.getName(), getLoggedInUser());
+        return tagService.addRegularTag(learningObjectId, newTag, getLoggedInUser());
     }
 
     @PUT
@@ -38,7 +38,7 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId,  Tag newTag) {
-        return tagService.addSystemTag(learningObjectId, newTag.getName(), getLoggedInUser());
+        return tagService.addSystemTag(learningObjectId, newTag, getLoggedInUser());
     }
 
     @GET
