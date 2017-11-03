@@ -737,7 +737,7 @@ class Controller {
         })
     }
     getMostRecentChangeDate(item) {
-        const mostRecentDate = item.reviewableChanges
+        return item.reviewableChanges
             .filter(c => !c.reviewed)
             .reduce((mostRecentDate, change) => {
                 const date = new Date(change.createdAt)
@@ -745,8 +745,13 @@ class Controller {
                     ? date
                     : mostRecentDate
             }, null)
+    }
+    getMostRecentChangeDateFormatted(item) {
+        const date = this.getMostRecentChangeDate(item)
 
-        return this.formatDateToDayMonthYear(mostRecentDate.toISOString())
+        return isNaN(date)
+            ? ''
+            : this.formatDateToDayMonthYear(date.toISOString())
     }
     getChangedByLabel(item) {
         // Unknown
