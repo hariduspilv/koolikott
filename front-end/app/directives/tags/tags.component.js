@@ -225,12 +225,6 @@ class controller extends Controller {
             )
     }
     setNewTags() {
-        if (this.$rootScope.learningObjectChanges)
-            console.log({
-                learningObjectChanges: this.$rootScope.learningObjectChanges,
-                tags: this.$scope.tags,
-                allTags: this.allTags
-            })
         const setNew = (tags) => Array.isArray(tags) && tags.forEach(t => {
             t.isNew = !this.$rootScope.learningObjectChanges ? false : !!this.$rootScope.learningObjectChanges
                 .find(c => {

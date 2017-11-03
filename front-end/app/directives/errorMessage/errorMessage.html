@@ -96,7 +96,7 @@
       <md-button
         class="md-icon-button md-secondary error-message-button"
         aria-label="{{'UNDO_CHANGE' | translate}}"
-        data-ng-click="$ctrl.administerChange('revert', change, 'onReverted')"
+        data-ng-click="$ctrl.setOneChange('revert', change)"
         >
         <md-icon>undo</md-icon>
         <md-tooltip>
@@ -106,7 +106,7 @@
       <md-button
         class="md-icon-button md-secondary error-message-button"
         aria-label="{{'ACCEPT_CHANGE' | translate}}"
-        data-ng-click="$ctrl.administerChange('accept', change, 'init')"
+        data-ng-click="$ctrl.setOneChange('accept', change)"
         >
         <md-icon>done</md-icon>
         <md-tooltip>

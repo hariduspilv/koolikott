@@ -19,9 +19,7 @@ class controller extends Controller {
         const getTypeLabel = (o) => this.$translate.instant(
             this.isPortfolio(o)
                 ? 'PORTFOLIO_RESOURCE'
-                : o.resourceTypes.length
-                    ? o.resourceTypes[0].name
-                    : 'UNKNOWN'
+                : 'MATERIAL'
         )
         return this.compareStrings(
             getTypeLabel(a.learningObject || a),

@@ -5,12 +5,11 @@
       <md-option
         data-ng-click="sort()"
         data-translate="RESET_SORT"
-        data-ng-value="sortOption.option"
       ></md-option>
       <md-option
         data-ng-repeat="sortOption in sortOptions"
         data-ng-click="sort(sortOption.field, sortOption.direction)"
-        data-translate="sortOption.option"
+        data-translate="{{sortOption.option}}"
         data-ng-value="sortOption.option"
       ></md-option>
     </md-select>
