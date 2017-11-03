@@ -181,13 +181,13 @@
     </div>
     <!-- END My Pofile -->
 
-    <div uib-accordion-group class="panel-default" data-ng-if="isViewPortforlioPage || isEditPortfolioMode"
+    <div uib-accordion-group class="panel-default" data-ng-if="isViewPortfolioPage || isEditPortfolioMode"
          is-open="$root.isViewPortfolioAndEdit">
       <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
     </div>
 
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"
-         data-ng-if="!isViewPortforlioPage && !isEditPortfolioMode">
+         data-ng-if="!isViewPortfolioPage && !isEditPortfolioMode">
       <uib-accordion-heading>
         <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}"
