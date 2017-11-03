@@ -94,6 +94,10 @@ angular.module('koolikottApp')
                         return false;
                     }
                     let currentLocation = $location.path();
+                    if (currentLocation === "/"){
+                        $scope.previousLocation = undefined;
+                        return false;
+                    }
                     let isInMenu = adminLocations.includes(currentLocation) || userLocations($scope.user.username).includes(currentLocation);
                     if (!(isInMenu)) {
                         return $scope.previousLocation === menuLocation;
