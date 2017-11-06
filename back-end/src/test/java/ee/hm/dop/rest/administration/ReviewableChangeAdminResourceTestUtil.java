@@ -71,7 +71,6 @@ public class ReviewableChangeAdminResourceTestUtil {
 
     public static void assertDoesntHave(Material material) {
         assertTrue(material.getImproper() == 0);
-        assertTrue(material.getBroken() == 0);
         assertTrue(material.getUnReviewed() == 0);
         assertTrue(material.getChanged() == 0);
     }
@@ -79,9 +78,6 @@ public class ReviewableChangeAdminResourceTestUtil {
     public static void assertHas(Material material, ReviewType reviewType) {
         if (reviewType == ReviewType.IMPROPER) {
             assertFalse(material.getImproper() == 0);
-        }
-        if (reviewType == ReviewType.BROKEN) {
-            assertFalse(material.getBroken() == 0);
         }
         if (reviewType == ReviewType.FIRST) {
             assertFalse(material.getUnReviewed() == 0);

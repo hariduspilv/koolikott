@@ -153,9 +153,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 0)")
     private int dislikes;
 
-    @Formula(value = "(SELECT COUNT(*) FROM BrokenContent br WHERE br.material = id AND br.deleted = 0)")
-    private int broken;
-
     @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.reviewed = 0)")
     private int improper;
 
@@ -306,10 +303,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.lastInteraction = lastInteraction;
     }
 
-    public int getBroken() {
-        return broken;
-    }
-
     public int getImproper() {
         return improper;
     }
@@ -344,10 +337,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setUnReviewed(int unReviewed) {
         this.unReviewed = unReviewed;
-    }
-
-    public void setBroken(int broken) {
-        this.broken = broken;
     }
 
     public void setImproper(int improper) {

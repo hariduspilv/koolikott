@@ -39,10 +39,6 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "                        FROM ImproperContent ic\n" +
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
-                        "      AND lo.id NOT IN (SELECT ic.material\n" +
-                        "                        FROM BrokenContent ic\n" +
-                        "                        WHERE ic.material = lo.id\n" +
-                        "                              AND ic.deleted = 0)\n" +
                         "GROUP BY lo.id\n" +
                         "ORDER BY min(r.createdAt) asc")
                 .setMaxResults(200)
@@ -68,10 +64,6 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "                        FROM ImproperContent ic\n" +
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
-                        "      AND lo.id NOT IN (SELECT ic.material\n" +
-                        "                        FROM BrokenContent ic\n" +
-                        "                        WHERE ic.material = lo.id\n" +
-                        "                              AND ic.deleted = 0)\n" +
                         "      AND lt.taxon in (:taxonIds)\n" +
                         "GROUP BY lo.id\n" +
                         "ORDER BY min(r.createdAt) asc ")
@@ -92,9 +84,6 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "  AND lo.id NOT IN(SELECT ic.learningObject FROM ImproperContent ic " +
                         "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)\n" +
-                        "  AND lo.id NOT IN(SELECT ic.material FROM BrokenContent ic " +
-                        "                   WHERE ic.material = lo.id" +
-                        "                   AND ic.deleted = 0 ) " +
                         "  AND lo.id NOT IN(SELECT ic.learningObject FROM FirstReview ic " +
                         "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)"
@@ -113,9 +102,6 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "  AND lo.id NOT IN(SELECT ic.learningObject FROM ImproperContent ic " +
                         "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)\n" +
-                        "  AND lo.id NOT IN(SELECT ic.material FROM BrokenContent ic " +
-                        "                   WHERE ic.material = lo.id" +
-                        "                   AND ic.deleted = 0 ) " +
                         "  AND lo.id NOT IN(SELECT ic.learningObject FROM FirstReview ic " +
                         "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)" +

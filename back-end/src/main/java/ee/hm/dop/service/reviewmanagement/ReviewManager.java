@@ -17,8 +17,6 @@ public class ReviewManager {
     @Inject
     private ImproperContentAdminService improperContentAdminService;
     @Inject
-    private BrokenContentService brokenContentService;
-    @Inject
     private LearningObjectService learningObjectService;
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
@@ -32,9 +30,6 @@ public class ReviewManager {
     public void setEverythingReviewed(User user, LearningObject originalLearningObject, ReviewStatus reviewStatus, ReviewType type) {
         if (type.canReviewImproperContent()) {
             improperContentAdminService.setReviewed(originalLearningObject, user, reviewStatus);
-        }
-        if (type.canReviewBrokenContent() && originalLearningObject instanceof Material) {
-            brokenContentService.setMaterialNotBroken((Material) originalLearningObject);
         }
         if (type.canReviewFirstReview()) {
             firstReviewAdminService.setReviewed(originalLearningObject, user, reviewStatus);

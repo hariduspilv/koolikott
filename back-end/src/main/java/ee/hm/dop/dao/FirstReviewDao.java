@@ -28,10 +28,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                        FROM ImproperContent ic\n" +
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
-                        "      AND lo.id NOT IN (SELECT ic.material\n" +
-                        "                        FROM BrokenContent ic\n" +
-                        "                        WHERE ic.material = lo.id\n" +
-                        "                              AND ic.deleted = 0)\n" +
                         "GROUP BY lo.id\n" +
                         "ORDER BY min(r.createdAt) asc")
                 .setMaxResults(200)
@@ -53,10 +49,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                        FROM ImproperContent ic\n" +
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
-                        "      AND lo.id NOT IN (SELECT ic.material\n" +
-                        "                        FROM BrokenContent ic\n" +
-                        "                        WHERE ic.material = lo.id\n" +
-                        "                              AND ic.deleted = 0)\n" +
                         "      AND lt.taxon in (:taxonIds)\n" +
                         "GROUP BY lo.id\n" +
                         "ORDER BY min(r.createdAt) asc")
@@ -77,11 +69,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "   AND lo.id NOT IN (SELECT ic.learningObject\n" +
                         "                        FROM ImproperContent ic\n" +
                         "                        WHERE ic.learningObject = lo.id\n" +
-                        "                              AND ic.reviewed = 0)\n" +
-                        "   AND lo.id NOT IN (SELECT ic.material\n" +
-                        "                        FROM BrokenContent ic\n" +
-                        "                        WHERE ic.material = lo.id\n" +
-                        "                              AND ic.deleted = 0)"
+                        "                              AND ic.reviewed = 0)\n"
                 )
                 .getSingleResult()).longValue();
     }
@@ -98,10 +86,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                        FROM ImproperContent ic\n" +
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
-                        "  AND lo.id NOT IN (SELECT ic.material\n" +
-                        "                        FROM BrokenContent ic\n" +
-                        "                        WHERE ic.material = lo.id\n" +
-                        "                              AND ic.deleted = 0)" +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult()).longValue();

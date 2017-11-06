@@ -42,8 +42,6 @@ public class LearningObjectAdministrationServiceTest {
     @Mock
     private MaterialAdministrationService materialAdministrationService;
     @Mock
-    private BrokenContentService brokenContentService;
-    @Mock
     private ReviewManager reviewManager;
 
     @Test
@@ -194,7 +192,7 @@ public class LearningObjectAdministrationServiceTest {
         solrEngineService.updateIndex();
 
 //        improperContentService.setReviewed(material.getImproperContents(), user);
-        brokenContentService.setMaterialNotBroken(material);
+//        brokenContentService.setMaterialNotBroken(material);
         expect(learningObjectService.validateAndFindDeletedOnly(material)).andReturn(originalMaterial);
 
         replayAll();

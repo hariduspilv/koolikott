@@ -7,7 +7,7 @@ public enum ChangeProcessStrategy {
     DO_NOT_REGISTER_NEW_CHANGES;
 
     public static ChangeProcessStrategy processStrategy(LearningObject learningObject) {
-        if (learningObject.getUnReviewed() == 0 && learningObject.getImproper() == 0 && learningObject.getBroken() == 0) {
+        if (learningObject.getUnReviewed() == 0 && learningObject.getImproper() == 0) {
             return REGISTER_NEW_CHANGES;
         }
         return DO_NOT_REGISTER_NEW_CHANGES;

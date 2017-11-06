@@ -113,8 +113,6 @@ public class MaterialService {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        material.setBrokenContents(originalMaterial.getBrokenContents());
-        material.setBroken(originalMaterial.getBroken());
         material.setFirstReviews(originalMaterial.getFirstReviews());
         material.setUnReviewed(originalMaterial.getUnReviewed());
         material.setImproperContents(originalMaterial.getImproperContents());

@@ -578,10 +578,6 @@ insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) va
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (15, 9, 15, '2014-06-01 00:00:01', false);
 insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (115, 9, 115, '2014-06-01 00:00:01', false);
 
--- Broken content
-
-insert into BrokenContent(id, creator, material, added, deleted) values (15, 9, 15, '2014-06-01 00:00:01', false);
-
 -- Reviewable Change
 
 insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (15, 9, 15, '2014-06-01 00:00:01', false, 'www.bieber.ee');

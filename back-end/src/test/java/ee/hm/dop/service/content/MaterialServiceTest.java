@@ -129,7 +129,6 @@ public class MaterialServiceTest {
         Material material = createMock(Material.class);
 
         material.setId(original.getId());
-        material.setBrokenContents(null);
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
@@ -140,7 +139,6 @@ public class MaterialServiceTest {
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
-        material.setBroken(0);
         material.setChanged(0);
         material.setImproper(0);
         material.setUnReviewed(0);
@@ -175,7 +173,6 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
-        expect(material.getBroken()).andReturn(0);
 
         reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
 
@@ -233,11 +230,9 @@ public class MaterialServiceTest {
         material.setPeerReviews(null);
         material.setSource(SOURCE_WWW);
         material.setUpdated(EasyMock.anyObject(DateTime.class));
-        material.setBrokenContents(null);
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
-        material.setBroken(0);
         material.setChanged(0);
         material.setImproper(0);
         material.setUnReviewed(0);
@@ -265,7 +260,6 @@ public class MaterialServiceTest {
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
-        expect(material.getBroken()).andReturn(0);
 
         reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
 

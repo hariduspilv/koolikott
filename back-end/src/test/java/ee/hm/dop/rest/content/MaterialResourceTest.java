@@ -12,6 +12,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -273,6 +274,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void setBrokenMaterial() {
         login(USER_SECOND);
@@ -282,6 +284,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void hasSetBroken() {
         login(USER_SECOND);
@@ -295,6 +298,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(hasBrokenResponse.readEntity(Boolean.class), true);
     }
 
+    @Ignore
     @Test
     public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
         Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + getMaterial(MATERIAL_5).getId(), Boolean.class);
