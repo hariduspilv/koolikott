@@ -22,5 +22,4 @@ public class PortfolioAdministrationService {
     public Long getDeletedPortfoliosCount() {
         return portfolioDao.findDeletedPortfoliosCount();
     }
-
 }

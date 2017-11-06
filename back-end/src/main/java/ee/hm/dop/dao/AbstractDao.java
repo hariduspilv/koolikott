@@ -177,7 +177,7 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         }
     }
 
-    private List<Entity> getList(TypedQuery<Entity> query) {
+    public List<Entity> getList(TypedQuery<Entity> query) {
         return query.getResultList();
     }
 

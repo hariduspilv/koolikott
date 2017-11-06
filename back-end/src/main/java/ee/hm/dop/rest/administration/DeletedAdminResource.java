@@ -18,35 +18,40 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.PortfolioAdministrationService;
 
-@Path("admin/deleted/portfolio")
-public class DeletedPortfolioAdminResource extends BaseResource {
+@Path("admin/deleted")
+public class DeletedAdminResource extends BaseResource {
 
-    @Inject
-    private PortfolioAdministrationService portfolioAdministrationService;
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @POST
-    @Path("restore")
+    @Path("portfolio/restore")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void restore(Portfolio portfolio) {
         learningObjectAdministrationService.restore(portfolio, getLoggedInUser());
     }
 
-    @GET
-    @Path("getDeleted")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<Portfolio> getDeletedPortfolios() {
-        return portfolioAdministrationService.getDeletedPortfolios();
+    @POST
+    @Path("material/restore")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN})
+    public void restore(Material material) {
+        learningObjectAdministrationService.restore(material, getLoggedInUser());
     }
 
     @GET
-    @Path("getDeleted/count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response getDeletedPortfoliosCount() {
-        return ok(portfolioAdministrationService.getDeletedPortfoliosCount());
+    public List<AdminLearningObject> getDeletedPortfolios() {
+        return learningObjectAdministrationService.findByIdDeleted();
+    }
+
+    @GET
+    @Path("count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public Long getDeletedPortfoliosCount() {
+        return learningObjectAdministrationService.findCountByIdDeleted();
     }
 }

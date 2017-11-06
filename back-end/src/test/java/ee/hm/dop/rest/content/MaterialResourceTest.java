@@ -347,6 +347,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void getDeleted_returns_deleted_materials_to_user_admin() throws Exception {
         login(USER_ADMIN);
@@ -358,6 +359,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Deleted materials list size, deleted materials count", deletedMaterials.size(), deletedMaterialsCount);
     }
 
+    @Ignore
     @Test
     public void regular_user_do_not_have_access_to_get_deleted_materials() throws Exception {
         login(USER_PEETER);
