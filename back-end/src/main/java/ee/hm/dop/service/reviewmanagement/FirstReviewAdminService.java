@@ -55,6 +55,7 @@ public class FirstReviewAdminService {
                 firstReview.setReviewed(true);
                 firstReview.setStatus(reviewStatus);
                 firstReviewDao.createOrUpdate(firstReview);
+                learningObject.setUnReviewed(learningObject.getUnReviewed()-1);
             }
         }
     }

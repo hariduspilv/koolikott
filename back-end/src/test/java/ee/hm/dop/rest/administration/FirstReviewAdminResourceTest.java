@@ -36,7 +36,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
         Response updateResponse = doPost(SET_REVIEWED, materialWithId(MATERIAL_1));
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), updateResponse.getStatus());
 
         List<AdminLearningObject> firstReviews2 = doGet(GET_UNREVIEWED, listTypeAdminLO());
 
@@ -96,7 +96,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
         Response updateResponse = doPost(SET_REVIEWED, material);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), updateResponse.getStatus());
 
         Material materialAfter = getMaterial(MATERIAL_2);
         assertEquals("Is Reviewed",0, materialAfter.getUnReviewed());

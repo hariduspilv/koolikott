@@ -291,7 +291,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void deletePortfolioAsCreator() {
         login(USER_SECOND);
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_12));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test

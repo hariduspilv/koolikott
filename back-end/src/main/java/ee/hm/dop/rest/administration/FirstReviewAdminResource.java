@@ -1,7 +1,6 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
@@ -47,7 +46,7 @@ public class FirstReviewAdminResource extends BaseResource {
     @Path("setReviewed")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public void setReviewed(LearningObject learningObject) {
-        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED, ReviewType.FIRST);
+    public LearningObject setReviewed(LearningObject learningObject) {
+        return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED, ReviewType.FIRST);
     }
 }

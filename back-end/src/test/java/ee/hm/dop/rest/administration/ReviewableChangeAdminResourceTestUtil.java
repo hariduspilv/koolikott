@@ -1,10 +1,10 @@
 package ee.hm.dop.rest.administration;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.TestTaxon;
 import ee.hm.dop.common.test.TestUser;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.ReviewableChange;
-import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.taxon.Taxon;
 
@@ -89,5 +89,14 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertTrue(review.isReviewed());
         assertNotNull(review.getReviewedAt());
         assertEquals(testUser.id, review.getReviewedBy().getId());
+    }
+
+    public static ImproperContent improper(Material material) {
+        ImproperContent json = new ImproperContent();
+        ReportingReason reason = new ReportingReason();
+        reason.setReason(ReportingReasonEnum.LO_CONTENT);
+        json.setLearningObject(material);
+        json.setReportingReasons(Lists.newArrayList(reason));
+        return json;
     }
 }

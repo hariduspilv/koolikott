@@ -1,7 +1,6 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -45,8 +44,9 @@ public class ImproperContentAdminResource extends BaseResource {
 
     @DELETE
     @Path("setProper")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
-    public void setProper(@QueryParam("learningObject") Long learningObjectId) {
+    public LearningObject setProper(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("learningObject query param is required.");
         }
@@ -55,6 +55,6 @@ public class ImproperContentAdminResource extends BaseResource {
         if (learningObject == null) {
             throw notFound();
         }
-        reviewManager.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
+        return reviewManager.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
     }
 }

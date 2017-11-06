@@ -1,9 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
@@ -125,13 +122,14 @@ public class MaterialResource extends BaseResource {
 
     @DELETE
     @Path("{materialID}")
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public void delete(@PathParam("materialID") Long materialID) {
+    public LearningObject delete(@PathParam("materialID") Long materialID) {
         Material material = materialGetter.get(materialID, getLoggedInUser());
         if (material == null) {
             throw notFound();
         }
-        learningObjectAdministrationService.delete(material, getLoggedInUser());
+        return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 
     @PUT

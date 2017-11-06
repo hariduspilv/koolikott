@@ -309,15 +309,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         DbUtils.closeTransaction();
     }
 
-    public static ImproperContent improper(Material material) {
-        ImproperContent json = new ImproperContent();
-        ReportingReason reason = new ReportingReason();
-        reason.setReason(ReportingReasonEnum.LO_CONTENT);
-        json.setLearningObject(material);
-        json.setReportingReasons(Lists.newArrayList(reason));
-        return json;
-    }
-
     private void revertUrl(Material material) {
         material.setSource(BIEBER_M16_ORIGINAL);
         createOrUpdateMaterial(material);

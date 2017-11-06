@@ -34,6 +34,7 @@ public class ImproperContentAdminService {
         for (ImproperContent improperContent : learningObject.getImproperContents()) {
             if (!improperContent.isReviewed()) {
                 setReviewed(user, reviewStatus, improperContent);
+                learningObject.setImproper(learningObject.getImproper()-1);
             }
         }
     }

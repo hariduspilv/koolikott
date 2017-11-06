@@ -53,17 +53,17 @@ public class LearningObjectAdministrationService {
         solrEngineService.updateIndex();
     }
 
-    public void restore(LearningObject learningObject, User user) {
+    public LearningObject restore(LearningObject learningObject, User user) {
         UserUtil.mustBeAdmin(user);
         LearningObject originalLearningObject = learningObjectService.validateAndFindDeletedOnly(learningObject);
 
         learningObjectDao.restore(originalLearningObject);
         reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED, ReviewType.SYSTEM_RESTORE);
         solrEngineService.updateIndex();
+        return originalLearningObject;
     }
 
-
-    public void delete(LearningObject learningObject, User loggedInUser) {
+    public LearningObject delete(LearningObject learningObject, User loggedInUser) {
         LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
 
         if (originalLearningObject instanceof IMaterial) {
@@ -77,6 +77,7 @@ public class LearningObjectAdministrationService {
         learningObjectDao.delete(originalLearningObject);
         reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED, ReviewType.SYSTEM_DELETE);
         solrEngineService.updateIndex();
+        return originalLearningObject;
     }
 
     public List<AdminLearningObject> findByIdDeleted() {
