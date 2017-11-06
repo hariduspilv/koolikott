@@ -32,6 +32,12 @@ angular.module('koolikottApp')
                     '/dashboard/brokenMaterials',
                 ];
 
+                // List of not active sidenav locations
+                const notActiveLocations = [
+                    '/portfolio',
+                    '/material',
+                ];
+
                 function userLocations(username) {
                     return ['/' + username + '/portfolios', '/' + username + '/materials', '/' + username + '/favorites'];
                 }
@@ -95,18 +101,27 @@ angular.module('koolikottApp')
                     }
                     let currentLocation = $location.path();
                     if (currentLocation === "/"){
-                        $scope.previousLocation = undefined;
                         return false;
                     }
+                    if (!$scope.modUser()){
+                        return menuLocation === currentLocation;
+                    }
                     let isInMenu = adminLocations.includes(currentLocation) || userLocations($scope.user.username).includes(currentLocation);
-                    if (!(isInMenu)) {
-                        return $scope.previousLocation === menuLocation;
+                    if (isInMenu){
+                        return menuLocation === currentLocation;
+                    } else {
+                        return $rootScope.private ?
+                                false :
+                                $rootScope.learningObjectDeleted
+                                    ? menuLocation === '/dashboard/deletedPortfolios' :
+                                    $rootScope.learningObjectImproper
+                                        ? menuLocation === '/dashboard/improperPortfolios' :
+                                        $rootScope.learningObjectUnreviewed
+                                            ? menuLocation === '/dashboard/unReviewed' :
+                                            $rootScope.learningObjectChanged
+                                                ? menuLocation === '/dashboard/changedLearningObjects' :
+                                                false;
                     }
-                    let match = menuLocation === currentLocation;
-                    if (match){
-                        $scope.previousLocation = menuLocation;
-                    }
-                    return match;
                 };
 
                 if (window.innerWidth > BREAK_LG) {

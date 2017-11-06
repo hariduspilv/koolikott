@@ -165,11 +165,7 @@ class controller extends Controller {
             undefined :
             this.$rootScope.learningObjectDeleted
                 ? 'showDeleted' :
-            this.$rootScope.learningObjectImproper && this.$rootScope.learningObjectBroken
-                ? 'showImproperAndBroken' :
-            !this.$rootScope.learningObjectImproper && this.$rootScope.learningObjectBroken
-                ? 'showBroken' :
-            this.$rootScope.learningObjectImproper && !this.$rootScope.learningObjectBroken
+            this.$rootScope.learningObjectImproper
                 ? 'showImproper' :
             this.$rootScope.learningObjectUnreviewed
                 ? 'showUnreviewed' :
