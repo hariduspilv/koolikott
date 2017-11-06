@@ -28,7 +28,7 @@ const DASHBOARD_VIEW_STATE_MAP = {
     changedLearningObjects: [
         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
         'changed',
-        '-byCreatedAt'
+        'byLastChangedAt'
     ],
     deletedPortfolios: [
         'DASHBOARD_DELETED_PORTFOLIOS',
