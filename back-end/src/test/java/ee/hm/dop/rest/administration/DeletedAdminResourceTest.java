@@ -1,10 +1,8 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
@@ -72,4 +70,23 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
+
+    @Test
+    public void getDeleted_returns_deleted_materials_to_user_admin() throws Exception {
+        login(USER_ADMIN);
+        List<AdminLearningObject> deletedMaterials = doGet(GET_DELETED, new GenericType<List<AdminLearningObject>>() {
+        });
+        long deletedMaterialsCount = doGet(GET_DELETED_COUNT, Long.class);
+
+        assertTrue("Materials are deleted", deletedMaterials.stream().allMatch(AdminLearningObject::isDeleted));
+        assertEquals("Deleted materials list size, deleted materials count", deletedMaterials.size(), deletedMaterialsCount);
+    }
+
+    @Test
+    public void regular_user_do_not_have_access_to_get_deleted_materials() throws Exception {
+        login(USER_PEETER);
+        Response response = doGet(GET_DELETED);
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
 }

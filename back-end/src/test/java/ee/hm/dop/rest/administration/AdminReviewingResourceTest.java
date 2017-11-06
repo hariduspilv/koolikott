@@ -5,11 +5,9 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TestDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.ReviewType;
-import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
@@ -17,11 +15,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.String.format;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String MATERIAL_SET_NOT_BROKEN = "admin/brokenContent/setNotBroken";
     private static final String LO_SET_NOT_IMPROPER = "admin/improper/setProper?learningObject=%s";
     private static final String LO_SET_FIRST_REVIEWED = "admin/firstReview/setReviewed";
     private static final String LO_ACCEPT_CHANGES = "admin/changed/%s/acceptAll";
@@ -78,14 +76,6 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     public void approving_improper_content_approves_everything() throws Exception {
         assertHasWorkToDo(getMaterial(MATERIAL_15));
         doDelete(format(LO_SET_NOT_IMPROPER, MATERIAL_15));
-        assertWorkIsDone(getMaterial(MATERIAL_15), ReviewType.IMPROPER);
-    }
-
-    @Ignore
-    @Test
-    public void approving_broken_content_approves_everything() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        doPost(MATERIAL_SET_NOT_BROKEN, getMaterial(MATERIAL_15));
         assertWorkIsDone(getMaterial(MATERIAL_15), ReviewType.IMPROPER);
     }
 

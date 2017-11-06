@@ -6,6 +6,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -43,6 +44,13 @@ public class ImproperContentAdminResourceTest extends ResourceIntegrationTestBas
         assertTrue(CollectionUtils.isNotEmpty(improperMaterialsAdmin));
 
         assertNotEquals("Admin improper materials list, Moderator improper materials list", improperMaterialsAdmin, improperMaterialsModerator);
+    }
+
+    @Test
+    public void regular_user_is_not_allowed_to_get_improper_content() throws Exception {
+        login(USER_SECOND);
+        Response getBrokenResponse = doGet(IMPROPER);
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), getBrokenResponse.getStatus());
     }
 
     private GenericType<List<AdminLearningObject>> genericType() {
