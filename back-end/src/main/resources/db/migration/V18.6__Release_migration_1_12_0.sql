@@ -1,11 +1,11 @@
 SET foreign_key_checks = 0;
 
-UPDATE Translation SET translation = 'Muudetud õppevara' WHERE translationKey = 'SHOW_ALL_CHANGES' and translationGroup = 1;
-UPDATE Translation SET translation = 'Changed learning objects' WHERE translationKey = 'SHOW_ALL_CHANGES' and translationGroup = 3;
-UPDATE Translation SET translation = 'Muudetud õppevara' WHERE translationKey = 'SHOW_ALL_CHANGES' and translationGroup = 2;
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'SHOW_ALL_CHANGES', 'Kuva kõik muudatused');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'SHOW_ALL_CHANGES', 'Show all changes');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'SHOW_ALL_CHANGES', 'Kuva kõik muudatused');
 
-UPDATE Translation SET translation = 'Uus õppevara' WHERE translationKey = 'HIDE_ALL_CHANGES' and translationGroup = 1;
-UPDATE Translation SET translation = 'New learning objects' WHERE translationKey = 'HIDE_ALL_CHANGES' and translationGroup = 3;
-UPDATE Translation SET translation = 'Uus õppevara' WHERE translationKey = 'HIDE_ALL_CHANGES' and translationGroup = 2;
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'HIDE_ALL_CHANGES', 'Peida muudatused');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'HIDE_ALL_CHANGES', 'Hide changes');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'HIDE_ALL_CHANGES', 'Peida muudatused');
 
 SET foreign_key_checks = 1;
