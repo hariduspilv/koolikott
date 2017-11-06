@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
@@ -7,123 +8,82 @@ import ee.hm.dop.model.User;
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImproperContentDao extends AbstractDao<ImproperContent> {
 
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private AdminLearningObjectDao adminLearningObjectDao;
 
     public ImproperContent findByLearningObjectAndCreator(LearningObject learningObject, User creator) {
         return findByField("learningObject", learningObject, "creator", creator, "reviewed", false);
     }
 
-    public ImproperContent findByIdUnreviewed(Long id) {
-        return findByField("id", id, "reviewed", false);
+    public List<AdminLearningObject> findAllUnreviewed() {
+        List<BigInteger> resultList = getEntityManager()
+                .createNativeQuery("SELECT\n" +
+                        "  lo.id\n" +
+                        "FROM LearningObject lo\n" +
+                        "  JOIN ImproperContent r ON r.learningObject = lo.id\n" +
+                        "WHERE r.reviewed = 0\n" +
+                        "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "GROUP BY lo.id\n" +
+                        "ORDER BY min(r.createdAt) ASC")
+                .setMaxResults(200)
+                .getResultList();
+        List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+        return adminLearningObjectDao.findById(collect);
     }
 
-    public List<ImproperContent> findAllUnreviewed() {
+    public List<AdminLearningObject> findAllUnreviewed(User user) {
+        List<BigInteger> resultList = getEntityManager()
+                .createNativeQuery("SELECT\n" +
+                        "  lo.id\n" +
+                        "FROM LearningObject lo\n" +
+                        "  JOIN ImproperContent r ON r.learningObject = lo.id\n" +
+                        "  JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
+                        "WHERE r.reviewed = 0\n" +
+                        "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "      AND lt.taxon IN (:taxonIds)\n" +
+                        "GROUP BY lo.id\n" +
+                        "ORDER BY min(r.createdAt) ASC")
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
+                .setMaxResults(200)
+                .getResultList();
+        List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+        return adminLearningObjectDao.findById(collect);
+    }
+
+    public long findCountOfUnreviewed() {
+        return ((BigInteger) getEntityManager()
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
+                        "FROM ImproperContent f\n" +
+                        "   JOIN LearningObject lo ON f.learningObject = lo.id\n" +
+                        "WHERE f.reviewed = 0\n" +
+                        "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n")
+                .getSingleResult()).longValue();
+    }
+
+    public long findCountOfUnreviewed(User user) {
+        return ((BigInteger) getEntityManager()
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
+                        "FROM LearningObject lo\n" +
+                        "   JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
+                        "   JOIN ImproperContent r ON r.learningObject = lo.id " +
+                        "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "  AND r.reviewed = 1 " +
+                        "  AND lt.taxon IN (:taxonIds)")
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
+                .getSingleResult()).longValue();
+    }
+
+    public List<ImproperContent> findAllUnreviewedOld() {
         return findByFieldList("reviewed", false);
-    }
-
-    public List<ImproperContent> findAllImproperContentPortfolio() {
-        return (List<ImproperContent>) getEntityManager().createNativeQuery("SELECT imp.* FROM ImproperContent imp " +
-                "INNER JOIN Portfolio p ON imp.learningObject=p.id " +
-                "INNER JOIN LearningObject lo ON lo.id=p.id " +
-                "WHERE imp.reviewed = FALSE " +
-                "AND lo.deleted=FALSE", entity())
-                .getResultList();
-    }
-
-    public List<ImproperContent> findAllImproperContentPortfolio(User user) {
-        return (List<ImproperContent>) getEntityManager().createNativeQuery(
-                "SELECT imp.* FROM ImproperContent imp " +
-                        "INNER JOIN LearningObject lo ON imp.learningObject=lo.id " +
-                        "INNER JOIN Portfolio p ON lo.id=p.id " +
-                        "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id " +
-                        "WHERE lt.taxon IN (:taxonIds) " +
-                        "AND imp.reviewed = 0 " +
-                        "AND lo.deleted=0", entity())
-                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .getResultList();
-    }
-
-    public List<ImproperContent> findAllImproperContentMaterial() {
-        return (List<ImproperContent>) getEntityManager().createNativeQuery("SELECT imp.* FROM ImproperContent imp " +
-                "INNER JOIN Material m ON imp.learningObject=m.id " +
-                "INNER JOIN LearningObject lo ON lo.id=m.id " +
-                "WHERE imp.reviewed = FALSE " +
-                "AND lo.deleted=FALSE", entity())
-                .getResultList();
-    }
-
-    public List<ImproperContent> findAllImproperContentMaterial(User user) {
-        return (List<ImproperContent>) getEntityManager().createNativeQuery(
-                "SELECT imp.* FROM ImproperContent imp " +
-                        "INNER JOIN LearningObject lo ON imp.learningObject=lo.id " +
-                        "INNER JOIN Material m ON lo.id=m.id " +
-                        "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id " +
-                        "WHERE lt.taxon IN (:taxonIds) " +
-                        "AND imp.reviewed = 0 " +
-                        "AND lo.deleted=0", entity())
-                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .getResultList();
     }
 
     public List<ImproperContent> findByLearningObject(LearningObject learningObject) {
         return findByFieldList("learningObject", learningObject, "reviewed", false);
-    }
-
-    public long getImproperPortfolioCount() {
-        return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT Count(DISTINCT imp.learningObject) FROM ImproperContent imp " +
-                        "INNER JOIN Portfolio p ON imp.learningObject=p.id " +
-                        "INNER JOIN LearningObject lo ON lo.id=p.id " +
-                        "WHERE imp.reviewed = FALSE " +
-                        "AND lo.deleted=FALSE")
-                .getSingleResult())
-                .longValue();
-    }
-
-    public long getImproperPortfolioCount(User user) {
-        return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT Count(DISTINCT lo.id) FROM ImproperContent ic \n" +
-                        "INNER JOIN LearningObject lo ON ic.learningObject=lo.id \n" +
-                        "INNER JOIN Portfolio p ON lo.id=p.id " +
-                        "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id \n" +
-                        "WHERE " +
-                        "lt.taxon IN (:taxonIds) \n" +
-                        "AND " +
-                        "ic.reviewed = 0 \n" +
-                        "AND lo.deleted=0")
-                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .getSingleResult())
-                .longValue();
-    }
-
-    public long getImproperMaterialCount() {
-        return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT Count(DISTINCT imp.learningObject) FROM ImproperContent imp " +
-                        "INNER JOIN Material m ON imp.learningObject=m.id " +
-                        "INNER JOIN LearningObject lo ON lo.id=m.id " +
-                        "WHERE imp.reviewed = FALSE " +
-                        "AND lo.deleted=FALSE")
-                .getSingleResult())
-                .longValue();
-    }
-
-    public long getImproperMaterialCount(User user) {
-        return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT Count(DISTINCT lo.id) FROM ImproperContent ic \n" +
-                        "INNER JOIN LearningObject lo ON ic.learningObject=lo.id \n" +
-                        "INNER JOIN Material m ON lo.id=m.id " +
-                        "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id \n" +
-                        "WHERE " +
-                        "lt.taxon IN (:taxonIds) \n" +
-                        "AND " +
-                        "ic.reviewed = 0 \n" +
-                        "AND lo.deleted=0")
-                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
-                .getSingleResult())
-                .longValue();
     }
 }

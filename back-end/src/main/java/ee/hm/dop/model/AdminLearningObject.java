@@ -51,8 +51,8 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     private List<FirstReview> firstReviews;
 
-//    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
-//    private List<ImproperContent> improperContents;
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    private List<ImproperContent> improperContents;
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -111,5 +111,13 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     public void setAdded(DateTime added) {
         this.added = added;
+    }
+
+    public List<ImproperContent> getImproperContents() {
+        return improperContents;
+    }
+
+    public void setImproperContents(List<ImproperContent> improperContents) {
+        this.improperContents = improperContents;
     }
 }

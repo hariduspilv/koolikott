@@ -61,7 +61,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
 
     public long findCountOfUnreviewed() {
         return ((BigInteger) getEntityManager()
-                .createNativeQuery("SELECT count(1) AS c\n" +
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
                         "FROM FirstReview f\n" +
                         "   JOIN LearningObject lo ON f.learningObject = lo.id\n" +
                         "WHERE f.reviewed = 0\n" +

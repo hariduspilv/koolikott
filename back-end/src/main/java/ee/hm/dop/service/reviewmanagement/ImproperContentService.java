@@ -66,7 +66,7 @@ public class ImproperContentService {
      * @return a list of improperContent that user has rights to access
      */
     public List<ImproperContent> getAll(User user) {
-        List<ImproperContent> impropers = improperContentDao.findAllUnreviewed();
+        List<ImproperContent> impropers = improperContentDao.findAllUnreviewedOld();
         removeIfHasNoAccess(user, impropers);
         return impropers;
     }

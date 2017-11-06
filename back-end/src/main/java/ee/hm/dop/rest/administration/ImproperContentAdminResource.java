@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.administration;
 
+import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
@@ -28,35 +29,18 @@ public class ImproperContentAdminResource extends BaseResource {
     private ReviewManager reviewManager;
 
     @GET
-    @Path("material")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ImproperContent> getImproperMaterials() {
-        return improperContentAdminService.getImproperMaterials(getLoggedInUser());
+    public List<AdminLearningObject> getImproper() {
+        return improperContentAdminService.getImproper(getLoggedInUser());
     }
 
     @GET
-    @Path("material/count")
+    @Path("/count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Long getImproperMaterialsCount() {
-        return improperContentAdminService.getImproperMaterialSize(getLoggedInUser());
-    }
-
-    @GET
-    @Path("portfolio")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ImproperContent> getImproperPortfolios() {
-        return improperContentAdminService.getImproperPortfolios(getLoggedInUser());
-    }
-
-    @GET
-    @Path("portfolio/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Long getImproperPortfoliosCount() {
-        return improperContentAdminService.getImproperPortfolioSize(getLoggedInUser());
+    public Long getImproperCount() {
+        return improperContentAdminService.getImproperCount(getLoggedInUser());
     }
 
     @DELETE
