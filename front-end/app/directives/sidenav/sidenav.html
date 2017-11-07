@@ -201,7 +201,12 @@
       <!-- Taxon subitems -->
       <ul class="sidenav__list">
         <li data-ng-repeat="(key, item) in taxon">
-          <div class="sidenav__item" layout="column" icon="taxonIcons[key]" dop-sidenav-taxon data-taxon="item"></div>
+          <dop-sidenav-taxon
+            class="sidenav__item"
+            layout="column"
+            icon="taxonIcons[key]"
+            data-taxon="item"
+          ></dop-sidenav-taxon>
         </li>
       </ul>
     </div>
