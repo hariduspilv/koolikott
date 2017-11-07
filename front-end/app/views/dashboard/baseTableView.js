@@ -51,7 +51,7 @@ const DASHBOARD_VIEW_STATE_MAP = {
         'byUsername'
     ],
 }
-class controller extends Controller {
+class baseTableViewController extends Controller {
     constructor(...args) {
         super(...args)
 
@@ -350,7 +350,7 @@ class controller extends Controller {
         return reasonKey
     }
 }
-controller.$inject = [
+baseTableViewController.$inject = [
     '$scope',
     '$location',
     '$filter',
@@ -364,5 +364,5 @@ controller.$inject = [
     'iconService',
     'translationService'
 ]
-_controller('baseTableViewController', controller)
+_controller('baseTableViewController', baseTableViewController)
 }
