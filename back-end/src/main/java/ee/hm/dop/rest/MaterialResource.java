@@ -57,8 +57,6 @@ public class MaterialResource extends BaseResource {
     @Inject
     private UserService userService;
     @Inject
-    private MaterialProxy materialProxy;
-    @Inject
     private UserLikeService userLikeService;
 <<<<<<< HEAD
 =======
@@ -192,14 +190,10 @@ public class MaterialResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Material createOrUpdateMaterial(Material material) {
-        User loggedInUser = getLoggedInUser();
-        if (loggedInUser == null) {
-            throw badRequest("Unable to add or update material - can not find logged in user.");
-        }
         if (material.getId() == null) {
-            return materialService.createMaterial(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
+            return materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         }
-        return materialService.update(material, loggedInUser, SearchIndexStrategy.UPDATE_INDEX);
+        return materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
     }
 
     @POST

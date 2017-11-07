@@ -1,7 +1,5 @@
 package ee.hm.dop.rest.jackson.map;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -9,9 +7,11 @@ import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.metadata.TagService;
 
+import java.io.IOException;
+
 /**
  * Converts JSON tag string into Tag.
- * 
+ *
  * @author Jordan Silva
  *
  */

@@ -96,6 +96,8 @@ insert into Taxon(id, name, level) values (12, 'DomainWithTopics', 'DOMAIN');
 insert into Domain(id, educationalContext) values (12, 6);
 insert into Taxon(id, name, level) values (13, 'SecondaryDomain', 'DOMAIN');
 insert into Domain(id, educationalContext) values (13, 3);
+insert into Taxon(id, name, level) values (14, 'Computer_science', 'DOMAIN');
+insert into Domain(id, educationalContext) values (14, 5);
 
 -- Subject
 
@@ -105,6 +107,18 @@ insert into Taxon(id, name, level) values (21, 'Mathematics', 'SUBJECT');
 insert into Subject(id, domain) values (21, 10);
 insert into Taxon(id, name, level) values (22, 'SecondarySubject', 'SUBJECT');
 insert into Subject(id, domain) values (22, 13);
+
+-- Specialization
+
+insert into Taxon(id, name, level) values (40, 'Computers_and_Networks', 'SPECIALIZATION');
+insert into Specialization(id, domain) values (40, 14);
+
+-- Module
+
+insert into Taxon(id, name, level) values (50, 'IT_õigus', 'MODULE');
+insert into Module(id, domain) values (50, 40);
+insert into Taxon(id, name, level) values (51, 'Kommunikatsioon', 'MODULE');
+insert into Module(id, domain) values (51, 40);
 
 -- Topics from Subjects
 
@@ -119,6 +133,29 @@ insert into Taxon(id, name, level) values (32, 'EstoniaAndTheWould', 'TOPIC');
 insert into Topic(id, domain) values (32, 12);
 insert into Taxon(id, name, level) values (33, 'VogaisTonicas', 'TOPIC');
 insert into Topic(id, domain) values (33, 12);
+
+-- Topics from Module
+
+insert into Taxon(id, name, level) values (34, 'Infoühiskonna_tehnoloogiad', 'TOPIC');
+insert into Topic(id, domain) values (34, 50);
+insert into Taxon(id, name, level) values (35, 'Arvuti_töövahendina', 'TOPIC');
+insert into Topic(id, domain) values (35, 51);
+
+-- Subtopic
+
+insert into Taxon(id, name, level) values (60, 'arvsõna', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (60, 30);
+insert into Taxon(id, name, level) values (61, 'konkurents', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (61, 32);
+insert into Taxon(id, name, level) values (62, 'tehnoloogia_ja_ühiskond', 'SUBTOPIC');
+insert into Subtopic(id, topic) values (62, 34);
+
+-- UserTaxon
+
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 1);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 10);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 21);
+INSERT INTO User_Taxon(user, taxon) VALUES (12, 31);
 
 -- EstCore taxon mapping
 
@@ -196,6 +233,13 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, 'asd', false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, null, 'http://www.bieber.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(17, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(17, null, null, null, 'http://www.bieber2.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(18, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(18, null, null, null, 'http://www.bieber3.com', null, null, false, false, false);
+
 
 -- Authors
 
@@ -394,6 +438,10 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_VERSION_TITLE', 'Uus versioon "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_PORTFOLIO_TITLE', 'Uus portfoolio "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_MATERIAL_TITLE', 'Uus material "%s"');
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 >>>>>>> new-develop
 
 -- Russian
@@ -408,6 +456,10 @@ insert into Translation(translationGroup, translationKey, translation) values (2
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_VERSION_TITLE', 'Feed version title rus');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_PORTFOLIO_TITLE', 'Новый портфель "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_MATERIAL_TITLE', 'Новый материал "%s"');
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 >>>>>>> new-develop
 
 -- English
@@ -422,6 +474,10 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_VERSION_TITLE', 'New version "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_PORTFOLIO_TITLE', 'New portfolio "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_MATERIAL_TITLE', 'New material "%s"');
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 >>>>>>> new-develop
 
 -- Page
@@ -544,6 +600,12 @@ insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) va
 
 insert into BrokenContent(id, creator, material, added, deleted) values (15, 9, 15, '2014-06-01 00:00:01', false);
 
+-- Reviewable Change
+
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (15, 9, 15, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (8, 9, 8, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource, taxon) values (115, 9, 115, '2014-06-01 00:00:01', false, NULL , 1);
+
 -- TagUpVotes
 
 insert into TagUpVote(id, user, learningObject, tag, deleted) values (1, 1, 101, 1, false);
@@ -614,13 +676,16 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (5, 1, CURRE
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (6, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (7, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (8, 1, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (9, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (9, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (10, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (11, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (12, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (13, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (14, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (15, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (16, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (17, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (18, 1, CURRENT_TIMESTAMP);
 
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (101, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (102, 1, CURRENT_TIMESTAMP);

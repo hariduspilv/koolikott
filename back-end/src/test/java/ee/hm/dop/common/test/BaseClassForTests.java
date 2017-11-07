@@ -41,6 +41,9 @@ public interface BaseClassForTests {
     Long MATERIAL_13 = TestConstants.MATERIAL_13;
     Long MATERIAL_14 = TestConstants.MATERIAL_14;
     Long MATERIAL_15 = TestConstants.MATERIAL_15;
+    Long MATERIAL_16 = TestConstants.MATERIAL_16;
+    Long MATERIAL_17 = TestConstants.MATERIAL_17;
+    Long MATERIAL_18 = TestConstants.MATERIAL_18;
 
     Long PORTFOLIO_1 = TestConstants.PORTFOLIO_1;
     Long PORTFOLIO_2 = TestConstants.PORTFOLIO_2;
@@ -59,6 +62,7 @@ public interface BaseClassForTests {
     Long PORTFOLIO_15 = TestConstants.PORTFOLIO_15;
 
     TestTaxon TAXON_MATHEMATICS_DOMAIN = TestConstants.TAXON_MATHEMATICS_DOMAIN;
+    TestTaxon TAXON_FOREIGNLANGUAGE_DOMAIN = TestConstants.TAXON_FOREIGNLANGUAGE_DOMAIN;
 
     default Material materialWithId(Long id) {
         return TestConstants.materialWithId(id);

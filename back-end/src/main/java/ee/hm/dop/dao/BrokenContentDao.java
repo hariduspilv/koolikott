@@ -4,11 +4,15 @@ import ee.hm.dop.model.BrokenContent;
 import ee.hm.dop.model.User;
 import org.joda.time.DateTime;
 
+import javax.inject.Inject;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
 
 public class BrokenContentDao extends AbstractDao<BrokenContent> {
+
+    @Inject
+    private TaxonDao taxonDao;
 
     public BrokenContent update(BrokenContent brokenContent) {
         if (brokenContent.getId() == null) {
@@ -38,12 +42,11 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
                 "       FROM BrokenContent b\n" +
                 "         JOIN LearningObject o ON b.material = o.id\n" +
                 "         JOIN LearningObject_Taxon lt ON lt.learningObject = o.id\n" +
-                "         JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                 "       WHERE o.deleted = 0\n" +
                 "         AND b.deleted = 0" +
-                "         AND ut.user = :userId\n" +
+                "         AND lt.taxon IN (:taxonIds)\n" +
                 "     ) b ORDER BY added ASC, id ASC", entity())
-                .setParameter("userId", user.getId())
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getResultList();
     }
 
@@ -60,11 +63,10 @@ public class BrokenContentDao extends AbstractDao<BrokenContent> {
                 .createNativeQuery("SELECT Count(b.id) FROM BrokenContent b " +
                         "INNER JOIN LearningObject lo ON b.material=lo.id " +
                         "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
-                        "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon\n" +
                         "WHERE lo.deleted = 0 " +
                         "AND b.deleted = 0 " +
-                        "AND ut.user = :userId\n")
-                .setParameter("userId", user.getId());
+                        "AND lt.taxon IN (:taxonIds)\n")
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user));
         return ((BigInteger) query.getSingleResult()).longValue();
     }
 

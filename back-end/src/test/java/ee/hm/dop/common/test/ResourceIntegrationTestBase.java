@@ -3,6 +3,7 @@ package ee.hm.dop.common.test;
 import com.google.inject.Inject;
 import ee.hm.dop.model.*;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ee.hm.dop.rest.MaterialResourceTest;
 import ee.hm.dop.rest.PortfolioResourceTest;
 import org.apache.commons.configuration.Configuration;
@@ -13,6 +14,11 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
 =======
+=======
+import ee.hm.dop.rest.administration.AdminReviewingResourceTest;
+import ee.hm.dop.rest.administration.ReviewableChangeAdminResource;
+import ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest;
+>>>>>>> new-develop
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.rest.filter.SecurityFilter;
@@ -34,6 +40,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
@@ -132,6 +139,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 >>>>>>> new-develop
     }
 
+    public Material createOrUpdateMaterial(Material updatedMaterial) {
+        return doPut(ReviewableChangeAdminResourceTest.UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
+    }
+
     protected static <T> T doGet(String url, Class<? extends T> clazz) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE, clazz);
     }
@@ -217,10 +228,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         clientConfig.register(LoggingFeature.class);
 
         Client client = ClientBuilder.newClient(clientConfig)
-                .property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_ANY)
-                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, "WARNING");
+                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.FINE.getName());
         client.register(JacksonFeature.class);
-//        client.register(LoggingFilter.class);
         if (clientRequestFilter != null) {
             client.register(clientRequestFilter);
         }

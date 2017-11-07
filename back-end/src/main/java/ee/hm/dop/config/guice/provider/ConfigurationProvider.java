@@ -22,8 +22,6 @@ public class ConfigurationProvider implements Provider<Configuration> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static String DEFAULT_CONFIGURATION_FILE_NAME = "default.properties";
-
     private CompositeConfiguration configuration;
 
     @Override
@@ -84,7 +82,7 @@ public class ConfigurationProvider implements Provider<Configuration> {
     }
 
     private String getConfigurationFileName() {
-        return DEFAULT_CONFIGURATION_FILE_NAME;
+        return "default.properties";
     }
 
     protected String getCustonConfigurationFilePath() {

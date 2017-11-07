@@ -522,6 +522,27 @@ function isPortfolio(type) {
     return type === ".Portfolio" || type === ".ReducedPortfolio"
 }
 
+function isMobile() {
+    return window.innerWidth < BREAK_XS;
+}
+
+function stripHtml(htmlString) {
+    let tmp = document.createElement("div");
+    tmp.innerHTML = htmlString;
+    return tmp.textContent || tmp.innerText || "";
+}
+
+function countOccurrences(value, text) {
+    let count = 0;
+    let index = text.indexOf(value);
+    while (index !== -1) {
+        count++;
+        index = text.indexOf(value, index + 1);
+    }
+
+    return count;
+}
+
 /**
  *
  * Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
@@ -580,10 +601,81 @@ class Controller {
         )
     }
     isMaterial({ type }) {
-        return type === '.Material' || type === '.ReducedMaterial'
+        return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
     }
     isPortfolio({ type }) {
-        return type === '.Portfolio' || type === '.ReducedPortfolio'
+        return type === '.Portfolio' || type === '.ReducedPortfolio' || type === '.AdminPortfolio'
+    }
+    getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
+        if (!values || values.length === 0)
+            return
+
+        if (values.length === 1)
+            return values[0].text
+
+        let languageStringValue = this.getLanguageString(values, userLanguage)
+        
+        if (!languageStringValue) {
+            languageStringValue = this.getLanguageString(values, materialLanguage)
+            
+            if (!languageStringValue)
+                languageStringValue = values[0].text
+        }
+
+        return languageStringValue
+    }
+    getLanguageString(values, language) {
+        if (!language)
+            return null
+
+        for (var i = 0; i < values.length; i++)
+            if (values[i].language === language)
+                return values[i].text
+    }
+    formatNameToInitials(name) {
+        if (name)
+            return this.arrayToInitials(name.split(' '))
+    }
+    formatSurnameToInitialsButLast(surname) {
+        if (!surname)
+            return
+
+        var array = surname.split(' ')
+        var last = array.length - 1
+        var res = ''
+
+        if (last > 0)
+            res = this.arrayToInitials(array.slice(0, last)) + ' '
+
+        res += array[last]
+        return res
+    }
+    arrayToInitials(array) {
+        var res = ''
+
+        for (var i = 0; i < array.length; i++)
+            res += array[i].charAt(0).toUpperCase() + '. '
+
+        return res.trim()
+    }
+    isMobile() {
+        return window.innerWidth < BREAK_XS
+    }
+    createPortfolio(id) {
+        return {
+            id,
+            type: '.Portfolio',
+            title: '',
+            summary: '',
+            taxon: null,
+            targetGroups: [],
+            tags: []
+        }
+    }
+    getSource(material) {
+        if (material) {
+            return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
+        }
     }
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
@@ -708,6 +800,64 @@ class Controller {
             ? ''
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
     }
+    sprintf(str, ...replacements) {
+        let idx = 0
+        return str.replace(/(%s|%d)/g, (match) => {
+            idx++
+            return replacements[idx - 1] || match
+        })
+    }
+    getMostRecentChangeDate(item) {
+        return item.reviewableChanges
+            .filter(c => !c.reviewed)
+            .reduce((mostRecentDate, change) => {
+                const date = new Date(change.createdAt)
+                return !mostRecentDate || date > mostRecentDate
+                    ? date
+                    : mostRecentDate
+            }, null)
+    }
+    getMostRecentChangeDateFormatted(item) {
+        const date = this.getMostRecentChangeDate(item)
+
+        return isNaN(date)
+            ? ''
+            : this.formatDateToDayMonthYear(date.toISOString())
+    }
+    getChangedByLabel(item) {
+        // Unknown
+        if (item.__numChanges === 1 && !item.reviewableChanges[0].createdBy)
+            return this.dependencyExists('$translate')
+                ? this.$translate.instant('UNKNOWN')
+                : ''
+
+        // One name
+        if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
+            item.reviewableChanges[0].createdBy
+        )
+            return item.reviewableChanges[0].createdBy.name+' '+item.reviewableChanges[0].createdBy.surname
+
+        // # changers
+        return this.dependencyExists('$translate')
+            ? this.sprintf(
+                this.$translate.instant('NUM_CHANGERS'),
+                item.__changers.length
+            )
+            : ''
+    }
+    getCommaSeparatedChangers(item) {
+        return item.__changers.reduce((str, c) => {
+            const { name, surname } = c.createdBy
+            return `${str}${str ? ', ' : ''}${name} ${surname}`
+        }, '')
+    }
+    dependencyExists(depName) {
+        if (typeof this[depName] === 'undefined') {
+            throw new Error(`this.${depName} is undefined, please include '${depName}' in controller.$inject = [..., '${depName}'] if you wish to use controller.getChangedByLabel()`)
+            return false
+        }
+        return true
+    }
 }
 
 /**
@@ -728,6 +878,10 @@ function directive(name, options) {
 
 function component(name, options) {
     return angular.module('koolikottApp').component(name, options)
+}
+
+function service(name, controller) {
+    return angular.module('koolikottApp').service(name, controller)
 }
 
 function factory(name, controller) {

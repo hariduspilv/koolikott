@@ -8,7 +8,6 @@ import ee.hm.dop.model.User;
 import javax.persistence.Query;
 import java.util.List;
 
-
 public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject> {
 
     public List<ReducedLearningObject> findMaterialByCreator(User creator, int start, int maxResults) {

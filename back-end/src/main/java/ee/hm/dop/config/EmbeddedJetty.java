@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 public class EmbeddedJetty {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedJetty.class);
+    public static final String REST_PREFIX = "/rest";
 
     private Server server;
     private static EmbeddedJetty instance;
@@ -64,13 +65,13 @@ public class EmbeddedJetty {
     private void configureDynamicContentServlet(ServletContextHandler servletContextHandler) {
         ServletHolder servlet = new ServletHolder(new ServletContainer());
         servlet.setInitParameter("javax.ws.rs.Application", DOPApplication.class.getCanonicalName());
-        servletContextHandler.addServlet(servlet, "/rest/*");
+        servletContextHandler.addServlet(servlet, REST_PREFIX + "/*");
     }
 
     private void addFilters(ServletContextHandler servletContextHandler) {
         // Filter to inject object into other filters. Must be above all others.
         servletContextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
-        servletContextHandler.addFilter(TransactionFilter.class, "/rest/*", EnumSet.allOf(DispatcherType.class));
+        servletContextHandler.addFilter(TransactionFilter.class, REST_PREFIX + "/*", EnumSet.allOf(DispatcherType.class));
     }
 
     public void stop() throws Exception {

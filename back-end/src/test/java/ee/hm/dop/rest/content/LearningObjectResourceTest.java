@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     public static final String ADD_TAG_URL = "learningObject/%s/tags";
-    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags?type=%s&name=%s";
+    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
     public static final String GET_FAVOURITE_URL = "learningObject/favorite?id=%s";
     public static final String DELETE_FAVOURITE_URL = "learningObject/favorite?id=%s";
@@ -23,7 +23,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
     public static final String TEST_SYSTEM_TAG = "matemaatika";
-    public static final String TYPE_PORTFOLIO = ".Portfolio";
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
@@ -53,8 +52,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(PORTFOLIO_8);
         assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
 
-        String query = format(ADD_SYSTEM_TAG_URL, PORTFOLIO_8, TYPE_PORTFOLIO, TEST_SYSTEM_TAG);
-        doGet(query);
+        doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_8), tag(TEST_SYSTEM_TAG));
 
         Portfolio portfolioAfter = getPortfolio(PORTFOLIO_8);
         assertTrue("System tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));

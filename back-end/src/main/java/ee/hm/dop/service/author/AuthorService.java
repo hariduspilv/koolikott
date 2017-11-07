@@ -5,9 +5,6 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.AuthorDao;
 import ee.hm.dop.model.Author;
 
-/**
- * Created by mart on 28.10.15.
- */
 public class AuthorService {
 
     @Inject

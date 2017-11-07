@@ -10,19 +10,6 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
             $location.url(searchService.getURL());
         },
 
-        addTag(tag, learningObject, successCallback, failCallback) {
-            let url = "rest/learningObject/" + learningObject.id + "/tags";
-
-            if (successCallback) {
-                serverCallService.makePut(url, JSON.stringify(tag.tagName), successCallback, failCallback);
-            } else {
-                return serverCallService.makePut(url, JSON.stringify(tag.tagName))
-                    .then(response => {
-                        return response.data;
-                    });
-            }
-        },
-
         reportTag(learningObject, targetEvent) {
             return $mdDialog
                 .show({
@@ -107,17 +94,6 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                 serverCallService.makeDelete(removeUpVoteUrl, params, successCallback, failCallback);
             } else {
                 return serverCallService.makeDelete(removeUpVoteUrl, params)
-                    .then(response => {
-                        return response.data;
-                    });
-            }
-        },
-
-        addSystemTag(learningObjectId, params, successCallback, failCallback) {
-            if (successCallback) {
-                serverCallService.makeGet("rest/learningObject/" + learningObjectId + "/system_tags", params, successCallback, failCallback);
-            } else {
-                return serverCallService.makeGet("rest/learningObject/" + learningObjectId + "/system_tags", params)
                     .then(response => {
                         return response.data;
                     });

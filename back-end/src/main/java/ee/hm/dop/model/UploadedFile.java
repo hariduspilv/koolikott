@@ -5,12 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created by joonas on 20.07.16.
- */
-
 @Entity
-public class UploadedFile extends AbstractEntity {
+public class UploadedFile implements AbstractEntity {
 
     @Id
     @GeneratedValue

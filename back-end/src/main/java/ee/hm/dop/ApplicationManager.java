@@ -58,8 +58,8 @@ public class ApplicationManager {
             return true;
         } catch (IOException ignored) {
             logger.info("Application is not running.");
+            return false;
         }
-        return false;
     }
 
     private static void write(String data, BufferedWriter writer) throws IOException {

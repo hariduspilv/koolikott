@@ -1,7 +1,7 @@
 package ee.hm.dop.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 <<<<<<< HEAD
@@ -16,7 +16,7 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 
 @Entity
-public class FirstReview extends AbstractEntity{
+public class FirstReview implements AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -25,8 +25,12 @@ public class FirstReview extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "learningObject", nullable = false)
 <<<<<<< HEAD
+<<<<<<< HEAD
 //    @JsonBackReference
 =======
+>>>>>>> new-develop
+=======
+    @JsonIgnore
 >>>>>>> new-develop
     private LearningObject learningObject;
 

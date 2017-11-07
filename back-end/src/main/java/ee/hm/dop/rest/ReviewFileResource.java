@@ -1,11 +1,15 @@
 package ee.hm.dop.rest;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import static ee.hm.dop.utils.ConfigurationProperties.FILE_REVIEW_DIRECTORY;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 =======
+=======
+import ee.hm.dop.config.EmbeddedJetty;
+>>>>>>> new-develop
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.files.enums.FileDirectory;
@@ -30,18 +34,18 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 >>>>>>> new-develop
 
-/**
- * Created by joonas on 6.10.16.
- */
-
 @Path("review")
 public class ReviewFileResource extends BaseResource {
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     @Inject
     private Configuration configuration;
 =======
     public static final String REST_REVIEW = "/rest/review/";
+>>>>>>> new-develop
+=======
+    public static final String REST_REVIEW = EmbeddedJetty.REST_PREFIX + "/review/";
 >>>>>>> new-develop
     @Inject
     private UploadedFileService uploadedFileService;
@@ -51,7 +55,7 @@ public class ReviewFileResource extends BaseResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadReview(@FormDataParam("review") InputStream review,
-                                     @FormDataParam("review") FormDataContentDisposition reviewDetail) throws UnsupportedEncodingException {
+                                 @FormDataParam("review") FormDataContentDisposition reviewDetail) throws UnsupportedEncodingException {
         return uploadedFileService.uploadFile(review, reviewDetail, FileDirectory.REVIEW, REST_REVIEW);
     }
 

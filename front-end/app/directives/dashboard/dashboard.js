@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+ * DIRECTIVES: A template per each dashboard view
+ */
 {
 const lists = {
     dopUnreviewed: 'directives/dashboard/unreviewed.html',
@@ -14,4 +17,30 @@ Object.keys(lists).forEach(key =>
         templateUrl: lists[key]
     })
 )
+}
+
+/**
+ * COMPONENT: Learning Object type icon with tooltip for the list views
+ */
+{
+class controller extends Controller {
+    $onChanges({ learningObject: { currentValue } }) {
+        if (currentValue)
+            if (this.isPortfolio(currentValue)) {
+                this.$scope.icon = 'book'
+                this.$scope.labelKey = 'PORTFOLIO_RESOURCE'
+            } else {
+                this.$scope.icon = 'description'
+                this.$scope.labelKey = 'MATERIAL'
+            }
+    }
+}
+controller.$inject = ['$scope']
+component('dopDashboardTypeIcon', {
+    bindings: {
+        learningObject: '<'
+    },
+    templateUrl: 'directives/dashboard/typeIcon.html',
+    controller
+})
 }

@@ -1,132 +1,141 @@
-function SortService(translationService, taxonService) {
-    let language
+'use strict'
 
-    function orderBySubmittedBy(a, b) {
-        let aName = a.creator ? a.creator.name + ' ' + a.creator.surname : translationService.instant('UNKNOWN');
-        let bName = b.creator ? b.creator.name + ' ' + b.creator.surname : translationService.instant('UNKNOWN');
+{
+class controller extends Controller {
+    orderItems(data, sortBy) {
+        this.language = this.translationService.getLanguage()
+        
+        const isDescending = sortBy.startsWith('-')
+        const methodName = sortBy.replace(/^-/, '')
+        const canSort = typeof this[methodName] === 'function'
 
-        if (a.reportCount > 1)
-            aName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
-        if (b.reportCount > 1)
-            bName = translationService.instant('REPORTED_BY_MULTIPLE_USERS');
-
-        return compareStrings(aName, bName);
+        data = data.sort((a, b) =>
+            a && b && canSort
+                ? this[methodName].apply(this, isDescending ? [b, a] : [a, b])
+                : 0
+        )
     }
-
-    function orderByChanger(a, b) {
-        let aName = a.changer.name + ' ' + a.changer.surname;
-        let bName = b.changer.name + ' ' + b.changer.surname;
-
-        return compareStrings(aName, bName);
+    byType(a, b) {
+        const getTypeLabel = (o) => this.$translate.instant(
+            this.isPortfolio(o)
+                ? 'PORTFOLIO_RESOURCE'
+                : 'MATERIAL'
+        )
+        return this.compareStrings(
+            getTypeLabel(a.learningObject || a),
+            getTypeLabel(b.learningObject || b)
+        )
     }
-
-    function orderByFullname(a, b) {
-        let aName = `${a.name} ${a.surname}`;
-        let bName = `${b.name} ${b.surname}`;
-
-        return compareStrings(aName, bName);
-    }
-
-    function orderByTitle(a, b) {
+    byTitle(a, b) {
         const getTitle = (o) => Array.isArray(o.titles) && o.titles.length
-            ? (o.titles.filter(t => t.language == language)[0] || o.titles[0]).text || ''
+            ? (o.titles.filter(t => t.language == this.language)[0] || o.titles[0]).text || ''
             : o.title || ''
 
-        return compareStrings(
+        return this.compareStrings(
             getTitle(a.learningObject || a.material || a.portfolio || a),
             getTitle(b.learningObject || b.material || b.portfolio || b)
         )
     }
-
-    function orderByTaxon(a, b) {
-        let aTaxon = a.userTaxons.map((taxon) => {
-            return translationService.instant(taxonService.getTaxonTranslationKey(taxon))
-        }).join(", ");
-
-        let bTaxon = b.userTaxons.map((taxon) => {
-            return translationService.instant(taxonService.getTaxonTranslationKey(taxon))
-        }).join(", ");
-
-        return compareStrings(aTaxon, bTaxon);
-    }
-
-    function orderByAddedBy(a, b) {
-        const getName = (o) =>
-            o.creator
-                ? o.creator.name + ' ' + o.creator.surname
-                : translationService.instant('UNKNOWN')
-
-        return compareStrings(
-            getName(a.learningObject || a),
-            getName(b.learningObject || b)
+    byCreatedAt(a, b) {
+        return this.compareDates(
+            a.createdAt || a.added,
+            b.createdAt || b.added
         )
     }
-
-    function orderByAddedAt(a, b) {
-        return compareDates(
-            (a.learningObject || a).added,
-            (b.learningObject || b).added
+    // changedLearningObject
+    byLastChangedAt(a, b) {
+        return this.compareDates(
+            this.getMostRecentChangeDate(a),
+            this.getMostRecentChangeDate(b)
         )
     }
+    byCreatedBy(a, b) {
+        const getName = (o) => {
+            if (!o.createdBy && !o.creator)
+                return this.translationService.instant('UNKNOWN')
 
-    function compareStrings(a, b) {
-        return a.toLowerCase().localeCompare(b.toLowerCase(), translationService.getLanguageCode());
+            const { name, surname } = o.createdBy || o.creator
+            return name +' '+ surname
+        }
+        return this.compareStrings(
+            getName(a),
+            getName(b)
+        )
     }
+    byChangedBy(a, b) {
+        const getLabel = (o) =>
+            o.__changers.length > 1
+                ? this.getCommaSeparatedChangers(o)
+                : this.getChangedByLabel(o)
 
-    function compareDates(a, b) {
+        return this.compareStrings(
+            getLabel(a),
+            getLabel(b)
+        )
+    }
+    byUpdatedAt(a, b) {
+        return this.compareDates(
+            a.updatedAt || a.updated,
+            b.updatedAt || b.updated
+        )
+    }
+    byReportCount(a, b) {
+        return a.__reportCount - b.__reportCount
+    }
+    byChangeCount(a, b) {
+        return a.__numChanges - b.__numChanges
+    }
+    byReason(a, b) {
+        return this.compareStrings(
+            this.$translate.instant(a.__reportLabelKey),
+            this.$translate.instant(b.__reportLabelKey)
+        )
+    }
+    byUsername(a, b) {
+        return this.compareStrings(a.username, b.username)
+    }
+    byFullName(a, b) {
+        return this.compareStrings(
+            `${a.name} ${a.surname}`,
+            `${b.name} ${b.surname}`
+        )
+    }
+    byRole(a, b) {
+        return this.compareStrings(
+            this.$translate.instant(a.role),
+            this.$translate.instant(b.role)
+        )
+    }
+    byTaxons(a, b) {
+        const getTaxonStr = (o) =>
+            o.userTaxons.reduce(
+                (str, taxon) => `${str}${str ? ', ' : ''}${
+                    this.$translate.instant(
+                        this.taxonService.getTaxonTranslationKey(taxon)
+                    )
+                }`,
+                ''
+            )
+        return this.compareStrings(
+            getTaxonStr(a),
+            getTaxonStr(b)
+        )
+    }
+    compareStrings(a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase(), this.translationService.getLanguageCode())
+    }
+    compareDates(a, b) {
         const getDate = (v) => {
             const d = new Date(v)
             return isNaN(d) ? 0 : d
         }
         return getDate(a) - getDate(b)
     }
-
-    return {
-        orderItems(data, order) {
-            language = translationService.getLanguage()
-
-            data = data.sort((a, b) => {
-                if (!a || !b) return
-
-                switch (order.replace(/^-/, '')) {
-                    case "byFullName":
-                        return orderByFullname(a, b)
-                    case "byUsername":
-                        return compareStrings(a.username, b.username)
-                    case "byRole":
-                        return compareStrings(
-                            translationService.instant(a.role),
-                            translationService.instant(b.role)
-                        )
-                    case "byTaxons":
-                        return orderByTaxon(a, b)
-                    case "bySubmittedAt":
-                        compareDates(a.added, b.added)
-                    case "byReportCount":
-                        return a.reportCount - b.reportCount
-                    case "bySubmittedBy":
-                        return orderBySubmittedBy(a, b)
-                    case "byTitle":
-                        return orderByTitle(a, b)
-                    case "byChanger":
-                        return orderByChanger(a, b)
-                    case "byUpdatedAt":
-                        return compareDates(a.updated, b.updated)
-                    case "byAddedAt":
-                        return orderByAddedAt(a, b)
-                    case "byAddedBy":
-                        return orderByAddedBy(a, b)
-                    default:
-                        return 0
-                }
-            })
-
-            // leading “minus” means descending
-            if (order.slice(0, 1) === '-')
-                data.reverse()
-        }
-    }
 }
-
-angular.module('koolikottApp')
-    .service('sortService', ['translationService', 'taxonService', SortService]);
+controller.$inject = [
+    '$translate',
+    'translationService',
+    'taxonService'
+]
+service('sortService', controller)
+}

@@ -98,8 +98,7 @@ public abstract class MaterialParser {
             removeDuplicateTaxons(material);
             return material;
         } catch (RuntimeException e) {
-            logger.error("Unexpected error while parsing document. Document may not"
-                    + " match mapping or XML structure - " + e.getMessage(), e);
+            logFail(e);
             throw new ParseException(e);
         }
 
@@ -316,7 +315,6 @@ public abstract class MaterialParser {
         //Set contexts that are specified separately, not inside the taxon
         setEducationalContexts(doc, taxons, getPathToContext(), material);
 
-
         taxons.removeAll(Collections.singleton(null));
         material.setTaxons(new ArrayList<>(taxons));
     }
@@ -377,7 +375,6 @@ public abstract class MaterialParser {
 
     protected void setTargetGroups(Material material, Document doc) {
         Set<TargetGroup> targetGroups = new HashSet<>();
-
         NodeList ageRanges = getNodeList(doc, getPathToTargetGroups());
 
         for (int i = 0; i < ageRanges.getLength(); i++) {
@@ -390,8 +387,6 @@ public abstract class MaterialParser {
                 targetGroups.addAll(targetGroupService.getTargetGroupsByAge(from, to));
             }
         }
-
-
         material.setTargetGroups(new ArrayList<>(targetGroups));
     }
 
@@ -509,7 +504,6 @@ public abstract class MaterialParser {
         } catch (XPathExpressionException ignored) {
             return new ArrayList<>();
         }
-
     }
 
     protected Taxon setEducationalContext(Node taxonPath) {
@@ -611,7 +605,6 @@ public abstract class MaterialParser {
                     return taxon;
             }
         }
-
         return parent;
     }
 
@@ -627,10 +620,8 @@ public abstract class MaterialParser {
                     return taxon;
             }
         }
-
         return parent;
     }
-
 
     private Taxon getTaxonByName(List<Taxon> topics, String systemName) {
         return topics.stream().filter(taxon -> taxon.getName().equals(systemName)).findAny().orElse(null);
@@ -672,5 +663,10 @@ public abstract class MaterialParser {
 
     private String taxonPath(String tag, String domain) {
         return "./*[local-name()='" + tag + "']/*[local-name()='" + domain + "']";
+    }
+
+    private void logFail(RuntimeException e) {
+        logger.error("Unexpected error while parsing document. Document may not"
+                + " match mapping or XML structure - " + e.getMessage(), e);
     }
 }

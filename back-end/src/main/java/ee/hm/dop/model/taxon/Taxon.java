@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +18,6 @@ import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,10 +26,14 @@ import java.util.Set;
 @Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
 <<<<<<< HEAD
+<<<<<<< HEAD
 @NamedQuery(name = "findAllEducationalContext", query = "FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'")
 =======
 >>>>>>> new-develop
 public abstract class Taxon extends AbstractEntity {
+=======
+public abstract class Taxon implements AbstractEntity {
+>>>>>>> new-develop
 
     @Id
     @GeneratedValue
@@ -39,6 +41,9 @@ public abstract class Taxon extends AbstractEntity {
 
     @Column(nullable = false, insertable = false)
     protected String name;
+
+    @Column(nullable = false, name = "level")
+    private String taxonLevel;
 
     @Transient
     private Long parentId;
@@ -48,6 +53,9 @@ public abstract class Taxon extends AbstractEntity {
 
     @Transient
     private String level;
+
+    @Transient
+    private String translationKey;
 
     public Long getId() {
         return id;
@@ -127,5 +135,21 @@ public abstract class Taxon extends AbstractEntity {
 
         return new EqualsBuilder().append(name, other.name) //
                 .isEquals();
+    }
+
+    public String getTaxonLevel() {
+        return taxonLevel;
+    }
+
+    public void setTaxonLevel(String taxonLevel) {
+        this.taxonLevel = taxonLevel;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
+    }
+
+    public void setTranslationKey(String translationKey) {
+        this.translationKey = translationKey;
     }
 }

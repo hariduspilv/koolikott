@@ -1,24 +1,27 @@
 <table md-table>
   <thead md-head md-order="query.order" md-on-reorder="onSort">
     <tr md-row>
+      <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
-      <th md-column md-order-by="bySubmittedBy"><span data-translate="CREATOR"></span></th>
       <th md-column md-order-by="byUpdatedAt"><span data-translate="UPDATED"></span></th>
-      <th md-column></th>
+      <th md-column md-order-by="byCreatedBy"><span data-translate="CREATOR"></span></th>
     </tr>
   </thead>
   <tbody md-body>
     <tr md-row ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item)">
-      <td md-cell><div class="ellipsis ellipsis--2" data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"></div></td>
-      <td md-cell data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
-      <td md-cell data-ng-bind="$ctrl.formatDateToDayMonthYear(item.updated)"></td>
-      <td md-cell>
-        <a ng-href="{{$ctrl.getLearningObjectUrl(item)}}">
-          <md-button aria-label="Ava" class="md-icon-button">
-            <md-icon>keyboard_arrow_right</md-icon>
-          </md-button>
-        </a>
+      <td md-cell class="dashboard-cell dashboard-cell--type-icon">
+        <dop-dashboard-type-icon data-learning-object="item"></dop-dashboard-type-icon>
       </td>
+      <td md-cell class="dashboard-cell dashboard-cell--title">
+        <a
+          class="ellipsis ellipsis--2"
+          data-ng-href="{{$ctrl.getLearningObjectUrl(item)}}"
+          data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"
+        ></a>
+      </td>
+      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.updated)"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="!item.creator" data-translate="UNKNOWN"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
     </tr>
   </tbody>
 </table>

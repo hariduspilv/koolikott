@@ -9,8 +9,6 @@ import ee.hm.dop.model.Language;
 
 /**
  * Converts Language into JSON where the only field is the language code.
- *
- * @author Jordan Silva
  */
 public class LanguageSerializer extends JsonSerializer<Language> {
 

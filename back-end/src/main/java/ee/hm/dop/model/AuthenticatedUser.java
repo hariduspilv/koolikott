@@ -17,7 +17,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
-public class AuthenticatedUser extends AbstractEntity{
+public class AuthenticatedUser implements AbstractEntity {
 
     @Id
     @GeneratedValue

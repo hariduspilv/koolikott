@@ -5,11 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created by mart.laus on 22.06.2015.
- */
 @Entity
-public class Publisher extends AbstractEntity {
+public class Publisher implements AbstractEntity {
 
     @Id
     @GeneratedValue

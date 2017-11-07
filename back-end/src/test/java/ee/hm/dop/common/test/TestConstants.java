@@ -29,6 +29,12 @@ public class TestConstants {
 <<<<<<< HEAD
 =======
     public static final Long MATERIAL_15 = 15L;
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+    public static final Long MATERIAL_16 = 16L;
+    public static final Long MATERIAL_17 = 17L;
+    public static final Long MATERIAL_18 = 18L;
 >>>>>>> new-develop
 
     public static final Long PORTFOLIO_1 = 101L;
@@ -75,6 +81,7 @@ public class TestConstants {
     public static final TestUser USER_RESTRICTED2 = new TestUser(15L, "89898989892", "restricted.user2");
 
     public static final TestTaxon TAXON_MATHEMATICS_DOMAIN = new TestTaxon(10L, "Mathematics", "DOMAIN");
+    public static final TestTaxon TAXON_FOREIGNLANGUAGE_DOMAIN = new TestTaxon(11L, "ForeignLanguage", "DOMAIN");
 
     public static Material materialWithId(Long id) {
         Material material = new Material();

@@ -9,6 +9,7 @@ import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 import java.io.IOException;
 import java.io.InputStream;
 
+<<<<<<< HEAD
 <<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/utils/io/LimitedSizeInputStream.java
 import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 
@@ -17,6 +18,8 @@ import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
 /**
  * Created by mart on 20.09.16.
  */
+=======
+>>>>>>> new-develop
 public class LimitedSizeInputStream extends InputStream {
 
     private InputStream source;
@@ -54,6 +57,5 @@ public class LimitedSizeInputStream extends InputStream {
     public synchronized void reset() throws IOException {
         source.reset();
         totalRead = 0;
-        super.reset();
     }
 }

@@ -9,6 +9,11 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.init()
 
+        this.unsubscribeTagsAdded = this.$rootScope.$watch('learningObjectChanges', () => {
+            if (Array.isArray(this.$scope.tags) && this.$scope.tags.length)
+                this.setNewTags()
+        }, true)
+
         // auto-launch the report dialog upon login or page load if hash is found in location URL
         this.$timeout(() =>
             window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH)
@@ -19,6 +24,8 @@ class controller extends Controller {
     $onDestroy() {
         if (typeof this.unsubscribeLoginSuccess === 'function')
             this.unsubscribeLoginSuccess()
+        if (typeof this.unsubscribeTagsAdded === 'function')
+            this.unsubscribeTagsAdded()
     }
     init() {
         this.showMoreTags = false
@@ -41,19 +48,21 @@ class controller extends Controller {
         }
     }
     getTagUpVotes() {
-        this.tagsService
-            .getTagUpVotes({
+        this.serverCallService
+            .makeGet('rest/tagUpVotes/report', {
                 learningObject: this.learningObject.id
             })
-            .then(tags => {
+            .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
 
                 if (sorted.length > 10) {
-                    this.tags = sorted.slice(0, 10)
-                    this.showMoreTags = true
                     this.allTags = sorted
+                    this.$scope.tags = this.allTags.slice(0, 10)
+                    this.showMoreTags = true
                 } else
-                    this.tags = sorted
+                    this.$scope.tags = sorted
+
+                this.setNewTags()
             })
     }
     sortTagsByUpVoteCount(tags) {
@@ -78,7 +87,7 @@ class controller extends Controller {
             .then(tagUpVote => {
                 this.upVotedTag.tagUpVote = tagUpVote
                 this.upVotedTag.upVoteCount++
-                this.tags = this.sortTagsByUpVoteCount(this.tags)
+                this.$scope.tags = this.sortTagsByUpVoteCount(this.$scope.tags)
             })
     }
     isAllowed() {
@@ -93,7 +102,7 @@ class controller extends Controller {
                 if (this.removedTag) {
                     this.removedTag.tagUpVote = null
                     this.removedTag.upVoteCount--
-                    this.tags = this.sortTagsByUpVoteCount(this.tags)
+                    this.$scope.tags = this.sortTagsByUpVoteCount(this.$scope.tags)
                     this.removedTag = null
                 }
             }, () =>
@@ -107,15 +116,17 @@ class controller extends Controller {
     removeTag(removedTag) {
         if (this.learningObject && this.learningObject.tags)
             this.learningObject.tags.forEach((tag, idx) => {
-                if (tag === removedTag)
+                if (tag.id === removedTag.id)
                     this.learningObject.tags.splice(idx, 1)
             })
     }
     addTag() {
         if (this.learningObject && this.learningObject.id) {
-            this.tagsService
-                .addTag(this.newTag, this.learningObject)
-                .then(this.addTagSuccess.bind(this))
+            this.serverCallService
+                .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
+                .then(({ data }) =>
+                    this.addTagSuccess(data)
+                )
             this.newTag.tagName = null
         }
     }
@@ -123,14 +134,12 @@ class controller extends Controller {
         if (this.learningObject) {
             learningObject.picture = this.learningObject.picture
             this.learningObject = learningObject
-            
+
             if (!this.learningObject.source && learningObject.uploadedFile)
                 this.learningObject.source = learningObject.uploadedFile.url
 
-            this.isPortfolio(learningObject)
-                ? this.storageService.setPortfolio(learningObject)
-                : this.isMaterial(learningObject)
-                    && this.storageService.setMaterial(learningObject)
+            this.isPortfolio(learningObject) ? this.storageService.setPortfolio(learningObject) :
+            this.isMaterial(learningObject) && this.storageService.setMaterial(learningObject)
 
             this.init()
         }
@@ -172,24 +181,21 @@ class controller extends Controller {
         )
     }
     showMore() {
-        this.tags = this.allTags
+        this.$scope.tags = this.allTags
         this.showMoreTags = false
     }
     showLess() {
-        this.tags = this.allTags.slice(0, 10)
+        this.$scope.tags = this.allTags.slice(0, 10)
         this.showMoreTags = true
     }
     doSuggest(query) {
         return this.suggestService.suggest(query, this.suggestService.getSuggestSystemTagURLbase())
     }
     tagSelected() {
-        if (this.newTag && this.newTag.tagName)
-            this.tagsService
-                .addSystemTag(this.learningObject.id, {
-                    'name': this.newTag.tagName,
-                    'type': this.learningObject.type
-                })
-                .then(data => {
+        if (this.newTag && this.newTag.tagName) {
+            this.serverCallService
+                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
+                .then(({ data }) => {
                     this.addTagSuccess(data.learningObject)
                     this.showSystemTagDialog(data.tagTypeName)
                     this.$scope.$emit(
@@ -198,11 +204,9 @@ class controller extends Controller {
                             : 'tags:updatePortfolio',
                         learningObject
                     )
-                    this.newTag.tagName = null
-                    this.$rootScope.$broadcast('errorMessage:updateChanged')
-                }, () =>
-                    this.newTag.tagName = null
-                )
+                })
+            this.newTag.tagName = null
+        }
     }
     limitTextLength() {
         if (this.newTag && this.newTag.tagName && this.newTag.tagName.length > 60)
@@ -220,6 +224,25 @@ class controller extends Controller {
                     .closeTo(`#${tagType}-close`)
             )
     }
+    setNewTags() {
+        const setNew = (tags) => Array.isArray(tags) && tags.forEach(t => {
+            t.isNew = !this.$rootScope.learningObjectChanges ? false : !!this.$rootScope.learningObjectChanges
+                .find(c => {
+                    if (c.taxon && c.taxon.translationKey) {
+                        return this.$translate.instant(c.taxon.translationKey).toLowerCase() === t.tag;
+                    }
+                    if (c.resourceType && c.resourceType.name) {
+                        return this.$translate.instant(c.resourceType.name).toLowerCase() === t.tag
+                    }
+                    if (c.targetGroup && c.targetGroup.name) {
+                        return this.$translate.instant(c.targetGroup.name).toLowerCase() === t.tag
+                    }
+                    return false;
+                });
+        });
+        setNew(this.$scope.tags)
+        setNew(this.allTags)
+    }
 }
 controller.$inject = [
     '$scope',
@@ -231,7 +254,8 @@ controller.$inject = [
     'storageService',
     'suggestService',
     'tagsService',
-    'toastService'
+    'toastService',
+    'serverCallService'
 ]
 component('dopTags', {
     bindings: {
@@ -239,5 +263,15 @@ component('dopTags', {
     },
     templateUrl: 'directives/tags/tags.html',
     controller
+})
+/**
+ * @see: https://github.com/angular/material/issues/8692
+ */
+directive('dopTagCustomChip', {
+    link($scope, $elem) {
+        $scope.$watch('$chip.isNew', (isNew) =>
+            $elem.parent().parent().toggleClass('new', isNew)
+        )
+    }
 })
 }

@@ -4,16 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Cacheable
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ResourceType extends AbstractEntity {
+public class ResourceType implements AbstractEntity {
 
     @Id
     @GeneratedValue

@@ -1,20 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.joda.time.LocalDateTime.now;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
 import org.easymock.EasyMock;
@@ -27,15 +12,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+
+import static org.easymock.EasyMock.*;
+import static org.joda.time.LocalDateTime.now;
+import static org.junit.Assert.*;
+
 @RunWith(EasyMockRunner.class)
 public class SynchronizeMaterialsExecutorTest {
 
     @TestSubject
     private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor = new SynchronizeMaterialsExecutorMock();
-
     @Mock
     private RepositoryService repositoryService;
-
     @Mock
     private SolrEngineService solrEngineService;
 
@@ -66,7 +58,7 @@ public class SynchronizeMaterialsExecutorTest {
 
         replay(repositoryService, repository1, repository2);
 
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.run();
 
         verify(repositoryService, repository1, repository2);
 
@@ -81,7 +73,7 @@ public class SynchronizeMaterialsExecutorTest {
 
         replay(repositoryService);
 
-        synchronizeMaterialsExecutor.synchronizeMaterials();
+        synchronizeMaterialsExecutor.run();
 
         verify(repositoryService);
     }
@@ -123,11 +115,16 @@ public class SynchronizeMaterialsExecutorTest {
         assertFalse(mockExecutor.transactionStarted);
     }
 
+    /**
+     * should run once
+     */
+    @Deprecated
     @Test
     public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
-        expect(repositoryService.getAllRepositories()).andReturn(repositories);
+        expect(repositoryService.getAllRepositories()).andReturn(repositories).times(2);
         solrEngineService.updateIndex();
+        expectLastCall().times(2);
 
         replay(repositoryService, solrEngineService);
 
@@ -203,11 +200,6 @@ public class SynchronizeMaterialsExecutorTest {
         }
 
         @Override
-        protected RepositoryService newRepositoryService() {
-            return repositoryService;
-        };
-
-        @Override
         protected void beginTransaction() {
             if (transactionStarted) {
                 fail("Transaction already started");
@@ -215,7 +207,12 @@ public class SynchronizeMaterialsExecutorTest {
 
             transactionStarted = true;
             transactionWasStarted = true;
-        };
+        }
+
+        @Override
+        protected RepositoryService newRepositoryService() {
+            return repositoryService;
+        }
 
         @Override
         protected void closeTransaction() {
@@ -224,6 +221,6 @@ public class SynchronizeMaterialsExecutorTest {
             }
 
             transactionStarted = false;
-        };
+        }
     }
 }

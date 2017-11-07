@@ -5,8 +5,12 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+=======
+import javax.inject.Inject;
+>>>>>>> new-develop
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +21,9 @@ import java.util.List;
 >>>>>>> new-develop
 
 public class ImproperContentDao extends AbstractDao<ImproperContent> {
+
+    @Inject
+    private TaxonDao taxonDao;
 
     public ImproperContent findByLearningObjectAndCreator(LearningObject learningObject, User creator) {
 <<<<<<< HEAD
@@ -53,15 +60,19 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "INNER JOIN LearningObject lo ON imp.learningObject=lo.id " +
                         "INNER JOIN Portfolio p ON lo.id=p.id " +
                         "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id " +
+<<<<<<< HEAD
                         "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon " +
                         "WHERE ut.user = :userId " +
 <<<<<<< HEAD
                         "AND imp.deleted = 0 " +
 =======
+=======
+                        "WHERE lt.taxon IN (:taxonIds) " +
+>>>>>>> new-develop
                         "AND imp.reviewed = 0 " +
 >>>>>>> new-develop
                         "AND lo.deleted=0", entity())
-                .setParameter("userId", user.getId())
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getResultList();
     }
 
@@ -84,15 +95,19 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "INNER JOIN LearningObject lo ON imp.learningObject=lo.id " +
                         "INNER JOIN Material m ON lo.id=m.id " +
                         "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id " +
+<<<<<<< HEAD
                         "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon " +
                         "WHERE ut.user = :userId " +
 <<<<<<< HEAD
                         "AND imp.deleted = 0 " +
 =======
+=======
+                        "WHERE lt.taxon IN (:taxonIds) " +
+>>>>>>> new-develop
                         "AND imp.reviewed = 0 " +
 >>>>>>> new-develop
                         "AND lo.deleted=0", entity())
-                .setParameter("userId", user.getId())
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getResultList();
     }
 
@@ -130,9 +145,8 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "INNER JOIN LearningObject lo ON ic.learningObject=lo.id \n" +
                         "INNER JOIN Portfolio p ON lo.id=p.id " +
                         "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id \n" +
-                        "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon \n" +
                         "WHERE " +
-                        "ut.user = :userId \n" +
+                        "lt.taxon IN (:taxonIds) \n" +
                         "AND " +
 <<<<<<< HEAD
                         "ic.deleted = 0 \n" +
@@ -140,7 +154,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "ic.reviewed = 0 \n" +
 >>>>>>> new-develop
                         "AND lo.deleted=0")
-                .setParameter("userId", user.getId())
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult())
                 .longValue();
     }
@@ -166,9 +180,8 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "INNER JOIN LearningObject lo ON ic.learningObject=lo.id \n" +
                         "INNER JOIN Material m ON lo.id=m.id " +
                         "INNER JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id \n" +
-                        "INNER JOIN User_Taxon ut ON ut.taxon = lt.taxon \n" +
                         "WHERE " +
-                        "ut.user = :userId \n" +
+                        "lt.taxon IN (:taxonIds) \n" +
                         "AND " +
 <<<<<<< HEAD
                         "ic.deleted = 0 \n" +
@@ -176,7 +189,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "ic.reviewed = 0 \n" +
 >>>>>>> new-develop
                         "AND lo.deleted=0")
-                .setParameter("userId", user.getId())
+                .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult())
                 .longValue();
     }

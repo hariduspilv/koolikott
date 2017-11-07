@@ -31,10 +31,10 @@ import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
-import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
@@ -90,7 +90,7 @@ public class ImproperContentAdminResource extends BaseResource {
     @Path("setProper")
 >>>>>>> new-develop
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
-    public void removeImpropers(@QueryParam("learningObject") Long learningObjectId) {
+    public void setProper(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("learningObject query param is required.");
         }
@@ -118,7 +118,11 @@ public class ImproperContentAdminResource extends BaseResource {
         if (learningObject == null) {
             throw notFound();
         }
+<<<<<<< HEAD
         reviewManager.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED);
+>>>>>>> new-develop
+=======
+        reviewManager.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
 >>>>>>> new-develop
     }
 }

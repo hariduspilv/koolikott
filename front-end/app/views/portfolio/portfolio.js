@@ -8,7 +8,7 @@ angular.module('koolikottApp')
                 var increaseViewCountPromise;
 
                 function init() {
-                    if (storageService.getPortfolio() && storageService.getPortfolio().type !== ".ReducedPortfolio") {
+                    if (storageService.getPortfolio() && storageService.getPortfolio().type !== ".ReducedPortfolio" && storageService.getPortfolio().type !== ".AdminPortfolio") {
                         setPortfolio(storageService.getPortfolio());
                         increaseViewCount();
                     } else {
@@ -74,6 +74,7 @@ angular.module('koolikottApp')
                     storageService.setPortfolio(portfolio);
 
                     if ($scope.portfolio) {
+                        $rootScope.private = ["PRIVATE"].includes($scope.portfolio.visibility);
                         $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
                         $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
                         $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
@@ -122,26 +123,6 @@ angular.module('koolikottApp')
                         setPortfolio(value);
                     }
                 });
-
-                /*
-                 * Admin dashboard listeners
-                 * Events are sent from errorMessage
-                 */
-                $scope.$on("restore:learningObject", function () {
-                    $scope.$broadcast("restore:portfolio");
-                });
-
-                $scope.$on("delete:learningObject", function () {
-                    $scope.$broadcast("delete:portfolio");
-                });
-
-                $scope.$on("setNotImproper:learningObject", function () {
-                    $scope.$broadcast("setNotImproper:portfolio");
-                });
-
-                $scope.$on("markReviewed:learningObject", function () {
-                    $scope.$broadcast("markReviewed:portfolio")
-                })
 
                 $scope.isAdmin = function () {
                     return authenticatedUserService.isAdmin();

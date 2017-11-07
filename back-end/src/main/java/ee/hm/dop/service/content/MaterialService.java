@@ -12,7 +12,6 @@ import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.model.interfaces.IPortfolio;
 =======
 import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -29,7 +28,8 @@ import ee.hm.dop.service.metadata.KeyCompetenceService;
 =======
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 >>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -45,10 +45,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
@@ -72,11 +70,15 @@ public class MaterialService {
     private SolrEngineService solrEngineService;
     @Inject
 <<<<<<< HEAD
+<<<<<<< HEAD
     private BrokenContentDao brokenContentDao;
     @Inject
 =======
 >>>>>>> new-develop
     private ChangedLearningObjectService changedLearningObjectService;
+=======
+    private ReviewableChangeService reviewableChangeService;
+>>>>>>> new-develop
     @Inject
     private Configuration configuration;
     @Inject
@@ -134,6 +136,7 @@ public class MaterialService {
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
+        firstReviewAdminService.save(createdMaterial);
         return createdMaterial;
     }
 
@@ -185,52 +188,58 @@ public class MaterialService {
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
         ValidatorUtil.mustHaveId(material);
+        Material originalMaterial = materialGetter.get(material.getId(), changer);
+        mustHavePermission(changer, originalMaterial);
+        mustBeValid(originalMaterial, changer);
+        String sourceBefore = originalMaterial.getSource();
         material.setSource(UrlUtil.processURL(material.getSource()));
-
-        if (materialWithSameSourceExists(material)) {
-            throw new IllegalArgumentException("Error updating Material: material with given source already exists");
-        }
+        mustHaveUniqueSource(material);
 
         cleanPeerReviewUrls(material);
+<<<<<<< HEAD
 <<<<<<< HEAD
         Material originalMaterial = get(material.getId(), changer);
 =======
         Material originalMaterial = materialGetter.get(material.getId(), changer);
 >>>>>>> new-develop
         validateMaterialUpdate(originalMaterial, changer);
+=======
+>>>>>>> new-develop
         if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
+        material.setId(originalMaterial.getId());
         material.setRepository(originalMaterial.getRepository());
         material.setViews(originalMaterial.getViews());
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        Material updatedMaterial = getUpdatedMaterial(material, changer, strategy, originalMaterial);
-        processChanges(updatedMaterial);
+        material.setBrokenContents(originalMaterial.getBrokenContents());
+        material.setBroken(originalMaterial.getBroken());
+        material.setFirstReviews(originalMaterial.getFirstReviews());
+        material.setUnReviewed(originalMaterial.getUnReviewed());
+        material.setImproperContents(originalMaterial.getImproperContents());
+        material.setImproper(originalMaterial.getUnReviewed());
+        material.setReviewableChanges(originalMaterial.getReviewableChanges());
+        material.setChanged(originalMaterial.getChanged());
+
+        Material updatedMaterial = createOrUpdate(material);
+        reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
+        if (strategy.updateIndex()) {
+            solrEngineService.updateIndex();
+        }
         return updatedMaterial;
     }
 
-    private Material getUpdatedMaterial(Material material, User changer, SearchIndexStrategy strategy, Material originalMaterial) {
-        //Null changer is the automated updating of materials during synchronization
-        if (changer == null || UserUtil.isAdminOrModerator(changer) || UserUtil.isCreator(originalMaterial, changer)) {
-            Material updatedMaterial = createOrUpdate(material);
-            if (strategy.updateIndex()) {
-                solrEngineService.updateIndex();
-            }
-            return updatedMaterial;
+    private void mustHaveUniqueSource(Material material) {
+        if (materialWithSameSourceExists(material)) {
+            throw new IllegalArgumentException("Error updating Material: material with given source already exists");
         }
-        throw ValidatorUtil.permissionError();
     }
 
-    private void processChanges(Material material) {
-        List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(material.getId());
-        if (isNotEmpty(changes)) {
-            for (ChangedLearningObject change : changes) {
-                if (!changedLearningObjectService.learningObjectHasThis(material, change)) {
-                    changedLearningObjectService.removeChangeById(change.getId());
-                }
-            }
+    private void mustHavePermission(User changer, Material originalMaterial) {
+        if (changer != null && !UserUtil.isAdminOrModerator(changer) && !UserUtil.isCreator(originalMaterial, changer)) {
+            throw ValidatorUtil.permissionError();
         }
     }
 
@@ -258,7 +267,7 @@ public class MaterialService {
                         .noneMatch(m -> m.getId().equals(material.getId()));
     }
 
-    private void validateMaterialUpdate(Material originalMaterial, User changer) {
+    private void mustBeValid(Material originalMaterial, User changer) {
         if (originalMaterial == null) {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
@@ -286,14 +295,13 @@ public class MaterialService {
 >>>>>>> new-develop
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
-        boolean isNew;
-        if (materialId == null) {
+        boolean isNew = materialId == null;
+
+        if (isNew) {
             logger.info("Creating material");
             material.setAdded(now());
-            isNew = true;
         } else {
             logger.info("Updating material");
-            isNew = false;
         }
         TextFieldUtil.cleanTextFields(material);
         checkKeyCompetences(material);
@@ -301,6 +309,7 @@ public class MaterialService {
         setAuthors(material);
         setPublishers(material);
         setPeerReviews(material);
+<<<<<<< HEAD
         material = applyRestrictions(material);
 <<<<<<< HEAD
 
@@ -377,11 +386,15 @@ public class MaterialService {
 
     public void checkKeyCompetences(Material material) {
 =======
+=======
+>>>>>>> new-develop
         if (CollectionUtils.isEmpty(material.getTaxons()) || cantSet(material)) {
             material.setKeyCompetences(null);
             material.setCrossCurricularThemes(null);
         }
-        return material;
+        material.setVisibility(Visibility.PUBLIC);
+
+        return materialDao.createOrUpdate(material);
     }
 
     private boolean cantSet(Material material) {

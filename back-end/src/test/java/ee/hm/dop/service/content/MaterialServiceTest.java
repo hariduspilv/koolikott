@@ -15,12 +15,17 @@ import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+<<<<<<< HEAD
 <<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 =======
 import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+=======
+import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
+>>>>>>> new-develop
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.service.solr.SolrEngineService;
@@ -39,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.expect;
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.*;
 
@@ -56,7 +62,7 @@ public class MaterialServiceTest {
     @Mock
     private PeerReviewService peerReviewService;
     @Mock
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Mock
 <<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
     private FirstReviewService firstReviewService;
@@ -144,6 +150,11 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
 
+        material.setId(original.getId());
+        material.setBrokenContents(null);
+        material.setFirstReviews(null);
+        material.setImproperContents(null);
+        material.setReviewableChanges(null);
         expect(material.getId()).andReturn(materialId).times(3);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
@@ -151,6 +162,10 @@ public class MaterialServiceTest {
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
+        material.setBroken(0);
+        material.setChanged(0);
+        material.setImproper(0);
+        material.setUnReviewed(0);
 
         material.setRepository(null);
         material.setRecommendation(null);
@@ -192,7 +207,11 @@ public class MaterialServiceTest {
         expect(materialGetter.get(materialId, null)).andReturn(original);
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(material.getId()).andReturn(1L);
+        expect(material.getUnReviewed()).andReturn(0);
+        expect(material.getImproper()).andReturn(0);
+        expect(material.getBroken()).andReturn(0);
+
+        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
 
         replay(materialDao, material, solrEngineService, materialGetter);
 
@@ -211,8 +230,8 @@ public class MaterialServiceTest {
     public void updateWhenMaterialDoesNotExist() {
         long materialId = 1;
         Material material = createMock(Material.class);
-        material.setSource(SOURCE);
         expect(material.getId()).andReturn(materialId).times(2);
+<<<<<<< HEAD
         expect(material.getSource()).andReturn(SOURCE).times(3);
 
 <<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
@@ -222,6 +241,8 @@ public class MaterialServiceTest {
 >>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
         expect(material.getPeerReviews()).andReturn(null);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
+=======
+>>>>>>> new-develop
         expect(materialGetter.get(materialId,null)).andReturn(null);
 
 <<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
@@ -266,11 +287,20 @@ public class MaterialServiceTest {
 
         expect(materialDao.createOrUpdate(material)).andReturn(material);
 
+        material.setId(original.getId());
         material.setViews(0L);
         material.setAdded(null);
         material.setPeerReviews(null);
         material.setSource(SOURCE_WWW);
         material.setUpdated(EasyMock.anyObject(DateTime.class));
+        material.setBrokenContents(null);
+        material.setFirstReviews(null);
+        material.setImproperContents(null);
+        material.setReviewableChanges(null);
+        material.setBroken(0);
+        material.setChanged(0);
+        material.setImproper(0);
+        material.setUnReviewed(0);
 
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
@@ -298,7 +328,11 @@ public class MaterialServiceTest {
 
         expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
-        expect(material.getId()).andReturn(1L);
+        expect(material.getUnReviewed()).andReturn(0);
+        expect(material.getImproper()).andReturn(0);
+        expect(material.getBroken()).andReturn(0);
+
+        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
 
 <<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
         replay(materialDao, material);
@@ -468,11 +502,16 @@ public class MaterialServiceTest {
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
+        expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
+        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
 
+<<<<<<< HEAD
         replay(user, materialDao, solrEngineService, changedLearningObjectService, materialGetter);
 >>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
+=======
+        replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
+>>>>>>> new-develop
 
         Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 
@@ -507,10 +546,15 @@ public class MaterialServiceTest {
         expect(user.getId()).andReturn(1L).anyTimes();
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
-        expect(changedLearningObjectService.getAllByLearningObject(material.getId())).andReturn(null);
+        expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
+        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
 
+<<<<<<< HEAD
         replay(user, materialDao, changedLearningObjectService, materialGetter);
 >>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/MaterialServiceTest.java
+=======
+        replay(user, materialDao, reviewableChangeService, materialGetter);
+>>>>>>> new-develop
 
         Material returned = materialService.update(material, user, SearchIndexStrategy.UPDATE_INDEX);
 

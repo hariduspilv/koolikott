@@ -1,7 +1,7 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
@@ -10,11 +10,9 @@ import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
-
 import java.math.BigDecimal;
 import java.util.List;
 
-import static java.lang.String.format;
 import static org.junit.Assert.*;
 
 public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
@@ -36,26 +34,30 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         login(USER_ADMIN);
 >>>>>>> new-develop
 
-        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
+        List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
         BigDecimal count = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
         assertEquals("UnReviewed size, UnReviewed count", firstReviews.size(), count.longValueExact());
 
+<<<<<<< HEAD
         LearningObject learningObject = firstReviews.stream()
                 .map(FirstReview::getLearningObject)
 <<<<<<< HEAD
                 .filter(l -> l.getId().equals(TestConstants.MATERIAL_1))
 =======
+=======
+        AdminLearningObject learningObject = firstReviews.stream()
+>>>>>>> new-develop
                 .filter(l -> l.getId().equals(MATERIAL_1))
 >>>>>>> new-develop
                 .findAny()
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
-        Response updateResponse = doPost(SET_REVIEWED, learningObject);
+        Response updateResponse = doPost(SET_REVIEWED, materialWithId(MATERIAL_1));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), updateResponse.getStatus());
 
-        List<FirstReview> firstReviews2 = doGet(GET_UNREVIEWED, listType());
+        List<AdminLearningObject> firstReviews2 = doGet(GET_UNREVIEWED, listTypeAdminLO());
 
-        boolean noneMatchUpdatedOne = firstReviews2.stream().map(FirstReview::getLearningObject).map(LearningObject::getId)
+        boolean noneMatchUpdatedOne = firstReviews2.stream().map(AdminLearningObject::getId)
                 .noneMatch(l -> l.equals(learningObjectId));
         assertTrue(noneMatchUpdatedOne);
 
@@ -71,7 +73,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         login(USER_ADMIN);
 >>>>>>> new-develop
 
-        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
+        List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
         assertTrue("UnReviewed list", CollectionUtils.isNotEmpty(firstReviews));
     }
 
@@ -83,9 +85,9 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         login(USER_ADMIN);
 >>>>>>> new-develop
 
-        List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
+        List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
 
-        boolean noneMatchUpdatedOne = firstReviews.stream().map(FirstReview::getLearningObject).map(LearningObject::getId)
+        boolean noneMatchUpdatedOne = firstReviews.stream().map(AdminLearningObject::getId)
                 .noneMatch(l -> l.equals(PRIVATE_PORTFOLIO));
         assertTrue(noneMatchUpdatedOne);
         assertTrue("UnReviewed list", CollectionUtils.isNotEmpty(firstReviews));
@@ -100,12 +102,18 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         login(TestConstants.USER_ADMIN);
 =======
         login(USER_MODERATOR);
-        List<FirstReview> firstReviewsModerator = doGet(GET_UNREVIEWED, listType());
+        List<AdminLearningObject> firstReviewsModerator = doGet(GET_UNREVIEWED, listTypeAdminLO());
+        assertTrue(CollectionUtils.isNotEmpty(firstReviewsModerator));
         logout();
 
         login(USER_ADMIN);
+<<<<<<< HEAD
 >>>>>>> new-develop
         List<FirstReview> firstReviewsAdmin = doGet(GET_UNREVIEWED, listType());
+=======
+        List<AdminLearningObject> firstReviewsAdmin = doGet(GET_UNREVIEWED, listTypeAdminLO());
+        assertTrue(CollectionUtils.isNotEmpty(firstReviewsAdmin));
+>>>>>>> new-develop
 
         assertNotEquals("Admin UnReviewed list, Moderator UnReviewed list", firstReviewsAdmin, firstReviewsModerator);
     }
@@ -150,13 +158,18 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         login(TestConstants.USER_MATI);
 =======
         login(USER_MATI);
+<<<<<<< HEAD
 >>>>>>> new-develop
         List<FirstReview> firstReviews = doGet(GET_UNREVIEWED, listType());
+=======
+        List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
+>>>>>>> new-develop
         assertNull("UnReviewed list", firstReviews);
     }
 
-    private GenericType<List<FirstReview>> listType() {
-        return new GenericType<List<FirstReview>>() {
+    private GenericType<List<AdminLearningObject>> listTypeAdminLO() {
+        return new GenericType<List<AdminLearningObject>>() {
         };
     }
+
 }

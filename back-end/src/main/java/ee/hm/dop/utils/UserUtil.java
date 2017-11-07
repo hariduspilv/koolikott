@@ -7,6 +7,7 @@ import ee.hm.dop.model.interfaces.ILearningObject;
 public class UserUtil {
 
     public static final String MUST_BE_ADMIN = "Logged in user must be admin.";
+    public static final String MUST_BE_MODERATOR = "Logged in user must be moderator.";
     public static final String MUST_BE_ADMIN_OR_MODERATOR = "Logged in user must be admin or moderator.";
 
     public static boolean isCreator(ILearningObject learningObject, User loggedInUser) {
@@ -38,6 +39,12 @@ public class UserUtil {
     public static void mustBeAdmin(User loggedInUser) {
         if (!isAdmin(loggedInUser)) {
             throw new RuntimeException(MUST_BE_ADMIN);
+        }
+    }
+
+    public static void mustBeModerator(User loggedInUser) {
+        if (!isModerator(loggedInUser)) {
+            throw new RuntimeException(MUST_BE_MODERATOR);
         }
     }
 }

@@ -9,9 +9,6 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.Tag;
 import org.junit.Test;
 
-/**
- * Created by mart.laus on 24.07.2015.
- */
 public class TagDaoTest extends DatabaseTestBase {
 
     @Inject
@@ -19,7 +16,7 @@ public class TagDaoTest extends DatabaseTestBase {
 
     @Test
     public void findTagByName() {
-        Long id = new Long(1);
+        Long id = 1L;
         String name = "matemaatika";
 
         Tag returnedTag = tagDao.findByName(name);

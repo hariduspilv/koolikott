@@ -1,10 +1,9 @@
 package ee.hm.dop.config.guice.provider;
 
-import com.google.inject.Provider;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
 
-public class EhisSOAPServiceTestProvider implements Provider<IEhisSOAPService> {
+public class EhisSOAPServiceTestProvider extends EhisSOAPServiceProvider {
 
     private IEhisSOAPService instance = new EhisSOAPServiceMock();
 

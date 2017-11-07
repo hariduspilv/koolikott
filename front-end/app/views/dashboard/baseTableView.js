@@ -1,11 +1,11 @@
 'use strict'
 
 {
-const VIEW_STATE_MAP = {
+const DASHBOARD_VIEW_STATE_MAP = {
     unReviewed: [
         'DASHBOARD_UNREVIEWED', // title translation key
         'firstReview/unReviewed', // rest URI (after 'rest/admin/')
-        'byAddedAt' // sort by
+        '-byCreatedAt' // default sort by (use leading minus for DESC)
     ],
     improperMaterials: [
         'DASHBOARD_IMRPOPER_MATERIALS',
@@ -28,7 +28,7 @@ const VIEW_STATE_MAP = {
     changedLearningObjects: [
         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
         'changed',
-        'byAddedAt'
+        'byLastChangedAt'
     ],
     deletedPortfolios: [
         'DASHBOARD_DELETED_PORTFOLIOS',
@@ -51,17 +51,15 @@ const VIEW_STATE_MAP = {
         'byUsername'
     ],
 }
-
 class controller extends Controller {
     constructor(...args) {
         super(...args)
 
         this.collection = null
         this.filteredCollection = null
-        this.unmergedData
 
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
-        const [ titleTranslationKey, ...rest ] = VIEW_STATE_MAP[this.viewPath]
+        const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
 
         this.$scope.itemsCount = 0
         this.$scope.filter = { options: { debounce: 500 } }
@@ -74,7 +72,10 @@ class controller extends Controller {
         this.$scope.onPaginate = this.onPaginate.bind(this)
         this.$scope.onSort = this.onSort.bind(this)
         this.$scope.titleTranslationKey = titleTranslationKey
-        this.getData(...rest)
+
+        rest.length
+            ? this.getData(...rest)
+            : console.error(new Error(`Could not find ${this.viewPath} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`))
 
         // Get all users for the autocomplete
         if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
@@ -122,8 +123,14 @@ class controller extends Controller {
 
                     if (doMerge) {
                         this.unmergedData = data.slice(0)
-                        data = this.mergeReports(data)
+                        data = this.merge(data)
                     }
+
+                    if (restUri == 'changed')
+                        data.forEach(o => {
+                            o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
+                            o.__changers = this.getChangers(o)
+                        })
 
                     this.collection = data
                     this.$scope.itemsCount = data.length
@@ -156,7 +163,8 @@ class controller extends Controller {
             this.filteredCollection !== null
                 ? this.filteredCollection
                 : this.collection,
-            order
+            order,
+            this.unmergedData
         )
         this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
     }
@@ -187,30 +195,45 @@ class controller extends Controller {
         if (this.$scope.filter.form.$dirty)
             this.$scope.filter.form.$setPristine()
     }
-    getReportLabelKey(item) {
-        if (item.reportCount === 1)
-            return item.reportingReasons.length === 1
-                ? item.reportingReasons[0].reason
-                : item.reportingReasons.length > 1
-                    ? 'MULTIPLE_REASONS'
-                    : ''
-
-        let reasonKey = ''
-        const allReports = this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
-
-        for (let i = 0; i < allReports.length; i++) {
-            if (allReports[i].reportingReasons.length > 1)
-                return 'MULTIPLE_REASONS'
-
-            if (allReports[i].reportingReasons.length === 1) {
-                if (!reasonKey)
-                    reasonKey = allReports[i].reportingReasons[0].reason
-                else if (reasonKey != allReports[i].reportingReasons[0].reason)
-                    return 'MULTIPLE_REASONS'
-            }
-        }
-
-        return reasonKey
+    getNumCreatorsLabel(item, translationKey) {
+        return this.sprintf(
+            this.$translate.instant(translationKey),
+            item.__creators.length
+        )
+    }
+    getCommaSeparatedCreators(item) {
+        return item.__creators.reduce((str, creator) => {
+            const { name, surname } = creator
+            return `${str}${str ? ', ' : ''}${name} ${surname}`
+        }, '')
+    }
+    getCreators(item) {
+        const ids = []
+        return this
+            .getDuplicates(item)
+            .filter(c => {
+                const { id } = c.createdBy || c.creator || { id: 'UNKNOWN' }
+                return ids.includes(id)
+                    ? false
+                    : ids.push(id)
+            })
+            .map(c => c.createdBy || c.creator)
+    }
+    getChangers({ reviewableChanges }) {
+        const ids = []
+        return reviewableChanges
+            .filter(c => !c.reviewed)
+            .filter(c => {
+                const { id } = c.createdBy
+                return ids.includes(id)
+                    ? false
+                    : ids.push(id)
+            })
+    }
+    getDuplicates(item) {
+        return item.learningObject
+            ? this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
+            : this.unmergedData.filter(r => r.id == item.id)
     }
     filterItems() {
         const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1
@@ -254,13 +277,13 @@ class controller extends Controller {
             : this.collection.slice(start, end)
     }
     /**
-     *  Merge reports so that every learning object is represented by only 1 row in the table.
+     *  Merge reports/changes so that every learning object is represented by only 1 row in the table.
      */
-    mergeReports(items) {
+    merge(items) {
         const merged = []
         const isSame = (a, b) =>
-            (a.learningObject || a.material || {}).id ===
-            (b.learningObject || b.material || {}).id
+            (a.learningObject || a.material || a).id ===
+            (b.learningObject || b.material || b).id
 
         for (let i = 0; i < items.length; i++) {
             let isAlreadyReported = false
@@ -268,23 +291,63 @@ class controller extends Controller {
             for (var j = 0; j < merged.length; j++)
                 if (isSame(merged[j], items[i])) {
                     isAlreadyReported = true
+                    const __reportLabelKey = this.getImproperReportLabelKey(items[i])
 
-                    merged[j].reportCount++
+                    merged[j].__reportCount++
+                    merged[j].__reportLabelKey = __reportLabelKey
+                    items[i].__reportCount++
+                    items[i].__reportLabelKey = __reportLabelKey
 
-                    // show the newest date
-                    if (new Date(merged[j].added) < new Date(items[i].added))
-                        merged[j].added = items[i].added
+                    // include the newest
+                    const mergedDate = merged[j].createdAt || merged[j].added
+                    const itemDate = items[j].createdAt || items[j].added
+
+                    if (new Date(itemDate) > new Date(mergedDate))
+                        merged[j] = items[i]
 
                     break
                 }
 
             if (!isAlreadyReported) {
-                items[i].reportCount = 1
+                items[i].__reportCount = 1
+                items[i].__reportLabelKey = this.getImproperReportLabelKey(items[i])
                 merged.push(items[i])
             }
+
+            items[i].__creators = this.getCreators(items[i])
         }
 
         return merged
+    }
+    getImproperReportLabelKey(item) {
+        if (item.__reportCount && item.__reportCount === 1)
+            return !Array.isArray(item.reportingReasons)
+                ? ''
+                : item.reportingReasons.length === 1
+                    ? item.reportingReasons[0].reason
+                    : item.reportingReasons.length > 1
+                        ? 'MULTIPLE_REASONS'
+                        : ''
+
+        let reasonKey = ''
+        const allReports = this.getDuplicates(item)
+
+        for (let i = 0; i < allReports.length; i++) {
+            if (!Array.isArray(allReports[i].reportingReasons))
+                return ''
+
+            if (allReports[i].reportingReasons.length > 1)
+                return 'MULTIPLE_REASONS'
+
+            if (allReports[i].reportingReasons.length === 1) {
+                if (!reasonKey)
+                    reasonKey = allReports[i].reportingReasons[0].reason
+                else if (reasonKey != allReports[i].reportingReasons[0].reason)
+                    return 'MULTIPLE_REASONS'
+            }
+        }
+
+        return reasonKey
     }
 }
 controller.$inject = [
@@ -293,9 +356,12 @@ controller.$inject = [
     '$filter',
     '$mdDialog',
     '$route',
+    '$translate',
+    '$timeout',
     'serverCallService',
     'sortService',
     'taxonService',
+    'iconService',
     'translationService'
 ]
 _controller('baseTableViewController', controller)

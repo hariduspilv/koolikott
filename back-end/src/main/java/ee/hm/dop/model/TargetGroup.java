@@ -10,12 +10,15 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.EnumUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @JsonDeserialize(using = TargetGroupDeserializer.class)
 @JsonSerialize(using = TargetGroupSerializer.class)
-public class TargetGroup extends AbstractEntity {
+public class TargetGroup implements AbstractEntity {
 
     @Id
     @GeneratedValue

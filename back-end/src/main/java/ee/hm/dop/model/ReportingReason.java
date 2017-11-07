@@ -6,7 +6,7 @@ import ee.hm.dop.model.enums.ReportingReasonEnum;
 import javax.persistence.*;
 
 @Entity
-public class ReportingReason extends AbstractEntity {
+public class ReportingReason implements AbstractEntity {
 
     @Id
     @GeneratedValue

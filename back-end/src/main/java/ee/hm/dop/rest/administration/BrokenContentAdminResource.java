@@ -17,10 +17,10 @@ import ee.hm.dop.service.content.MaterialAdministrationService;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.BrokenContentService;
-import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 >>>>>>> new-develop
 
@@ -82,7 +82,11 @@ public class BrokenContentAdminResource extends BaseResource {
 =======
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setNotBroken(Material material) {
+<<<<<<< HEAD
         reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), material, ReviewStatus.ACCEPTED);
+>>>>>>> new-develop
+=======
+        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), material, ReviewStatus.ACCEPTED, ReviewType.BROKEN);
 >>>>>>> new-develop
     }
 }

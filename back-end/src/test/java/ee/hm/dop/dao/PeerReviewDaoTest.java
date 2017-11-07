@@ -9,9 +9,6 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.PeerReview;
 import org.junit.Test;
 
-/**
- * Created by joonas on 5.10.16.
- */
 public class PeerReviewDaoTest extends DatabaseTestBase {
 
     @Inject

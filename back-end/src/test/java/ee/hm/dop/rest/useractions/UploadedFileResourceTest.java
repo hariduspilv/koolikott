@@ -44,7 +44,7 @@ public class UploadedFileResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         assertEquals(expectedUrl(uploadedFile), uploadedFile.getUrl());
         assertEquals(tempFile.getName(), uploadedFile.getName());
-        assertTrue("located in test folder", uploadedFile.getPath().startsWith("src/test/resources/uploads/2"));
+        assertTrue("located in test folder", uploadedFile.getPath().startsWith("src/test/resources/uploads/"));
     }
 
     @Test

@@ -5,8 +5,8 @@ class controller extends Controller {
     $onInit() {
         this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
-        this.$scope.isTaxonomyOpen = true
-        this.$scope.dashboardOpen = this.$location.path().startsWith("/dashboard")
+        this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
+        this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
 
         // List of taxon icons
         this.$scope.taxonIcons = [
@@ -16,11 +16,23 @@ class controller extends Controller {
             'build',
             'palette'
         ]
+        // List of sidenav adminLocations
+        this.adminLocations = [
+            '/dashboard/improperMaterials',
+            '/dashboard/improperPortfolios',
+            '/dashboard/unReviewed',
+            '/dashboard/changedLearningObjects',
+            '/dashboard/moderators',
+            '/dashboard/restrictedUsers',
+            '/dashboard/deletedMaterials',
+            '/dashboard/deletedPortfolios',
+            '/dashboard/brokenMaterials',
+        ]
 
+        this.$scope.isLocationActive = this.isLocationActive.bind(this)
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
-        this.$scope.dashboardSearch = this.dashboardSearch.bind(this)
 
         this.$scope.$on('dashboard:adminCountsUpdated', this.updateAdminCounts.bind(this))
         this.$scope.$watch(() => this.taxonService.getSidenavTaxons(), (newValue) => {
@@ -40,6 +52,43 @@ class controller extends Controller {
 
         this.$scope.$on('header:red', () => this.$scope.isHeaderRed = true)
         this.$scope.$on('header:default', () => this.$scope.isHeaderRed = false)
+    }
+    isLocationActive(menuLocation) {
+        if (!this.$scope.user)
+            return false
+
+        const currentLocation = $location.path()
+
+        if (currentLocation === "/")
+            return false
+
+        if (!this.$scope.modUser())
+            return menuLocation === currentLocation
+
+        const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation)
+        
+        return isInMenu
+            ? menuLocation === currentLocation
+            : $rootScope.private
+                ? false
+                : $rootScope.learningObjectDeleted
+                    ? menuLocation === '/dashboard/deletedPortfolios'
+                    : $rootScope.learningObjectImproper
+                        ? menuLocation === '/dashboard/improperPortfolios'
+                        : $rootScope.learningObjectUnreviewed
+                            ? menuLocation === '/dashboard/unReviewed'
+                            : $rootScope.learningObjectChanged
+                                ? menuLocation === '/dashboard/changedLearningObjects'
+                                : false
+    }
+    isUserLocation(location) {
+        const { username } = this.$scope.user
+        const userLocations = [
+            `/${username}/portfolios`,
+            `/${username}/materials`,
+            `/${username}/favorites`
+        ]
+        return userLocations.includes(location)
     }
     checkUser(evt, redirectURL) {
         if (this.$scope.user)
@@ -115,14 +164,6 @@ class controller extends Controller {
         if (this.authenticatedUserService.isAdmin()) {
             this.updateCount('moderators')
             this.updateCount('restrictedUsers')
-        }
-    }
-    dashboardSearch() {
-        if (this.$scope.dashboardOpen === false) {
-            this.$location.url("/dashboard")
-            this.$scope.dashboardOpen = true
-        } else {
-            this.$scope.dashboardOpen = false
         }
     }
 }

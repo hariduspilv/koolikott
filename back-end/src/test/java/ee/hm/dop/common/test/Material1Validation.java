@@ -97,5 +97,17 @@ public class Material1Validation {
         Recommendation recommendation = material.getRecommendation();
         assertNotNull(recommendation);
         assertEquals(Long.valueOf(1L), recommendation.getId());
+
+        assertEquals("BASICEDUCATION", material.getTaxons().get(0).getName());
+        assertEquals("Biology", material.getTaxons().get(1).getName());
+
+        assertEquals("CCBY", material.getLicenseType().getName());
+
+        assertEquals("Koolibri", material.getPublishers().get(0).getName());
+        assertEquals("http://www.pegasus.ee", material.getPublishers().get(1).getWebsite());
+
+        assertEquals("TEXTBOOK1", material.getResourceTypes().get(0).getName());
+        assertEquals("EXPERIMENT1", material.getResourceTypes().get(1).getName());
+        assertEquals(new DateTime("1999-01-01T02:00:01.000+02:00"), material.getAdded());
     }
 }

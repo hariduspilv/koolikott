@@ -11,10 +11,8 @@ import ee.hm.dop.utils.UserUtil;
 =======
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.interfaces.IMaterial;
-import ee.hm.dop.service.reviewmanagement.BrokenContentService;
-import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
-import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
@@ -70,7 +68,7 @@ public class LearningObjectAdministrationService {
         LearningObject originalLearningObject = learningObjectService.validateAndFindDeletedOnly(learningObject);
 
         learningObjectDao.restore(originalLearningObject);
-        reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED);
+        reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED, ReviewType.SYSTEM_RESTORE);
         solrEngineService.updateIndex();
     }
 
@@ -78,7 +76,7 @@ public class LearningObjectAdministrationService {
     public void delete(LearningObject learningObject, User loggedInUser) {
         LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
 
-        if (learningObject instanceof IMaterial) {
+        if (originalLearningObject instanceof IMaterial) {
             UserUtil.mustBeModeratorOrAdmin(loggedInUser);
         } else {
             if (!learningObjectService.canUpdate(loggedInUser, originalLearningObject)) {
@@ -87,7 +85,7 @@ public class LearningObjectAdministrationService {
         }
 
         learningObjectDao.delete(originalLearningObject);
-        reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED);
+        reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED, ReviewType.SYSTEM_DELETE);
         solrEngineService.updateIndex();
     }
 >>>>>>> new-develop

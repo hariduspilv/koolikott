@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-/**
- * Created by mart on 5.02.16.
- */
 public class TagTokenTest {
 
     private static final String DOUBLE_QUOTE = "\"";

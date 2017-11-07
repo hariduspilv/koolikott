@@ -64,4 +64,6 @@ public interface ConfigurationProperties {
     String FILE_REVIEW_DIRECTORY = "file.review.directory";
 
     String MAX_FEED_ITEMS = "feed.items.max";
+
+    String AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES = "automatically.accept.reviewableChanges.days";
 }

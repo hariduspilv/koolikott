@@ -11,10 +11,6 @@ import javax.ws.rs.core.Response;
 import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.service.solr.SuggestService;
 
-/**
- * Created by joonas on 15.08.16.
- */
-
 @Path("suggest")
 public class SuggestResource extends BaseResource {
 

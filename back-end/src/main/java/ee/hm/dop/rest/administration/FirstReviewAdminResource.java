@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.administration;
 
+import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 <<<<<<< HEAD
@@ -9,10 +10,10 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.FirstReviewService;
 =======
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
-import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 >>>>>>> new-develop
 
@@ -45,10 +46,14 @@ public class FirstReviewAdminResource extends BaseResource {
     @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
+<<<<<<< HEAD
     public List<FirstReview> getUnReviewed() {
 <<<<<<< HEAD
         return firstReviewService.getUnReviewed(getLoggedInUser());
 =======
+=======
+    public List<AdminLearningObject> getUnReviewed() {
+>>>>>>> new-develop
         return firstReviewAdminService.getUnReviewed(getLoggedInUser());
 >>>>>>> new-develop
     }
@@ -59,9 +64,13 @@ public class FirstReviewAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Long getUnReviewedCount() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         return firstReviewService.getUnReviewedCount(getLoggedInUser()).longValue();
 =======
         return firstReviewAdminService.getUnReviewedCount(getLoggedInUser()).longValue();
+>>>>>>> new-develop
+=======
+        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser());
 >>>>>>> new-develop
     }
 
@@ -71,9 +80,13 @@ public class FirstReviewAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public void setReviewed(LearningObject learningObject) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         firstReviewService.setReviewed(learningObject, getLoggedInUser());
 =======
         reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED);
+>>>>>>> new-develop
+=======
+        reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject, ReviewStatus.ACCEPTED, ReviewType.FIRST);
 >>>>>>> new-develop
     }
 }

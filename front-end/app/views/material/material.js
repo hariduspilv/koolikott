@@ -25,7 +25,7 @@ angular.module('koolikottApp')
                 'CCBYNCND': ['by', 'nc', 'nd']
             };
 
-            if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial") {
+            if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial" && storageService.getMaterial().type !== ".AdminMaterial") {
                 $scope.material = storageService.getMaterial();
 
                 if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
@@ -156,6 +156,7 @@ angular.module('koolikottApp')
 
                 eventService.notify('material:reloadTaxonObject');
 
+                $rootScope.private = ["PRIVATE"].includes($scope.material.visibility);;
                 $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
@@ -315,19 +316,14 @@ angular.module('koolikottApp')
             };
 
             function deleteMaterial() {
-                materialService.deleteMaterial($scope.material)
-                    .then(deleteMaterialSuccess, deleteMaterialFailed);
-            }
-
-            function deleteMaterialSuccess() {
-                toastService.showOnRouteChange('MATERIAL_DELETED');
-                $scope.material.deleted = true;
-                $rootScope.learningObjectDeleted = true;
-                $rootScope.$broadcast('dashboard:adminCountsUpdated');
-            }
-
-            function deleteMaterialFailed() {
-                log('Deleting material failed.');
+                this.serverCallService
+                    .makeDelete('rest/material/'+material.id)
+                    .then(() => {
+                        this-toastService.showOnRouteChange('MATERIAL_DELETED')
+                        this.$scope.material.deleted = true
+                        this.$rootScope.learningObjectDeleted = true
+                        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                    })
             }
 
             $scope.isUsersMaterial = () => {
@@ -339,65 +335,10 @@ angular.module('koolikottApp')
                 }
             };
 
-            $scope.setNotImproper = () => {
-                materialService.setNotImproper($scope.material)
-                    .then(setNotImproperSuccessful, setNotImproperFailed);
-            };
-
-            function setNotImproperSuccessful() {
-                $rootScope.learningObjectImproper = false;
-                $rootScope.learningObjectUnreviewed = false;
-                $rootScope.$broadcast('dashboard:adminCountsUpdated');
-            }
-
-            function setNotImproperFailed() {
-                console.log("Setting not improper failed.")
-            }
-
             $scope.restoreMaterial = () => {
                 materialService.restoreMaterial($scope.material)
                     .then(restoreSuccess, restoreFail);
             };
-
-            $scope.markMaterialCorrect = () => {
-                materialService.setMaterialCorrect($scope.material)
-                    .then(markCorrectSuccess, queryFailed);
-            };
-
-            function markCorrectSuccess() {
-                $scope.isBroken = false;
-                $scope.isBrokenReportedByUser = false;
-                $rootScope.learningObjectBroken = false;
-                $rootScope.learningObjectUnreviewed = false;
-                $rootScope.$broadcast('dashboard:adminCountsUpdated');
-            }
-
-            function queryFailed() {
-                log("Request failed");
-            }
-
-            $scope.$on("restore:learningObject", () => {
-                $scope.restoreMaterial();
-            });
-
-            $scope.$on("delete:learningObject", () => {
-                deleteMaterial();
-            });
-
-            $scope.$on("setNotImproper:learningObject", () => {
-                $scope.setNotImproper();
-            });
-
-            $scope.$on("markCorrect:learningObject", () => {
-                $scope.markMaterialCorrect();
-            });
-
-            $scope.$on("markReviewed:learningObject", () => {
-                materialService.markReviewed($scope.material).then(function () {
-                    $rootScope.learningObjectUnreviewed = false
-                    $rootScope.$broadcast('dashboard:adminCountsUpdated')
-                })
-            })
 
             function restoreSuccess() {
                 toastService.show('MATERIAL_RESTORED');

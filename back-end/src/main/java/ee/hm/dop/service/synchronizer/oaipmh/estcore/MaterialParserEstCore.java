@@ -48,8 +48,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setTags(Material material, Document doc) {
-        List<Tag> tags = getTags(doc);
-        material.setTags(tags);
+        material.setTags(getTags(doc));
     }
 
     @Override
@@ -58,7 +57,6 @@ public class MaterialParserEstCore extends MaterialParser {
             material.setDescriptions(getDescriptions(doc));
         } catch (Exception ignored) {
         }
-
     }
 
     @Override
@@ -122,27 +120,22 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setPicture(Material material, Document doc) {
         Picture picture = null;
-
         Node imageNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='imgSrc']");
         if (imageNode != null) {
             byte[] bytes = Base64.decodeBase64(imageNode.getTextContent());
-
             if (bytes.length > 0) {
                 picture = new OriginalPicture();
                 picture.setData(bytes);
             }
         }
         material.setPicture(picture);
-
     }
 
     @Override
     protected void setCrossCurricularThemes(Material material, Document doc) {
-
         List<CrossCurricularTheme> crossCurricularThemes = new ArrayList<>();
         try {
             NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
-
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
 
@@ -158,7 +151,6 @@ public class MaterialParserEstCore extends MaterialParser {
                     }
                 }
             }
-
         } catch (XPathExpressionException ignored) {
         }
 
@@ -167,11 +159,9 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setKeyCompetences(Material material, Document doc) {
-
         List<KeyCompetence> keyCompetences = new ArrayList<>();
         try {
             NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
-
             for (int i = 0; i < classifications.getLength(); i++) {
                 Node classification = classifications.item(i);
 

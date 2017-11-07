@@ -17,9 +17,6 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import org.junit.Test;
 
-/**
- * Created by mart on 18.08.15.
- */
 public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     public static final String NOT_EXISTING_USER = "123";

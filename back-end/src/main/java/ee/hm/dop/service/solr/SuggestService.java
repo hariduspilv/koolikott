@@ -7,9 +7,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by joonas on 16.08.16.
- */
 public class SuggestService {
 
     @Inject

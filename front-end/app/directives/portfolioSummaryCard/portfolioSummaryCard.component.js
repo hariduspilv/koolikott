@@ -6,16 +6,11 @@ class controller extends Controller {
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.getTaxonObject = this.getTaxonObject.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
-        this.setNotImproper = this.setNotImproper.bind(this)
 
         this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', this.getTaxonObject)
         this.eventService.subscribe(this.$scope, 'portfolio:reloadTaxonObject', this.getTaxonObject)
         this.eventService.notify('portfolio:reloadTaxonObject')
 
-        this.$scope.$on('restore:portfolio', this.restorePortfolio)
-        this.$scope.$on('delete:portfolio', this.deletePortfolio)
-        this.$scope.$on('setNotImproper:portfolio', this.setNotImproper)
-        this.$scope.$on('markReviewed:portfolio', this.markReviewed.bind(this))
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
@@ -46,7 +41,6 @@ class controller extends Controller {
         this.$scope.getTargetGroups = this.getTargetGroups.bind(this)
         this.$scope.isAdminButtonsShowing = this.isAdminButtonsShowing.bind(this)
         this.$scope.setRecommendation = this.setRecommendation.bind(this)
-        this.$scope.setNotImproper = this.setNotImproper
         this.$scope.restorePortfolio = this.restorePortfolio
 
         if (this.$rootScope.openMetadataDialog) {
@@ -148,16 +142,6 @@ class controller extends Controller {
                 this.$rootScope.learningObjectDeleted = false
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
             })
-    }
-    setNotImproper() {
-        if ((this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()) && this.portfolio)
-            this.serverCallService
-                .makeDelete('rest/impropers?learningObject=' + this.portfolio.id)
-                .then(() => {
-                    this.$rootScope.learningObjectImproper = false
-                    this.$rootScope.learningObjectUnreviewed = false
-                    this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                })
     }
     markReviewed() {
         if (this.portfolio && (

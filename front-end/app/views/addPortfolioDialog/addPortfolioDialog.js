@@ -94,7 +94,6 @@ angular.module('koolikottApp')
                     if (isEmpty(portfolio)) {
                         createPortfolioFailed();
                     } else {
-                        $rootScope.$broadcast("errorMessage:updateChanged");
                         eventService.notify("portfolio:reloadTaxonObject");
 
                         if (!portfolio.chapters || portfolio.chapters.length === 0) {

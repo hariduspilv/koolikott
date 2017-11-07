@@ -1,7 +1,5 @@
 package ee.hm.dop.model;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,16 +7,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.RoleDeserializer;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User extends AbstractEntity {
+public class User implements AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -101,7 +99,7 @@ public class User extends AbstractEntity {
         return role;
     }
 
-    @JsonDeserialize(contentUsing = RoleDeserializer.class)
+    @JsonIgnore
     public void setRole(Role role) {
         this.role = role;
     }

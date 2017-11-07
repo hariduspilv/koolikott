@@ -240,7 +240,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.justLoggedIn);
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn);
 
             if ($rootScope.justLoggedIn) {
                 $rootScope.$broadcast('tour:start:firstTime');

@@ -27,11 +27,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 
+<<<<<<< HEAD
 >>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/solr/SuggestServiceTest.java
 /**
  * Created by joonas on 1.09.16.
  */
 
+=======
+>>>>>>> new-develop
 @RunWith(EasyMockRunner.class)
 public class SuggestServiceTest extends ResourceIntegrationTestBase {
 

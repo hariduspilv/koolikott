@@ -40,7 +40,7 @@ import static javax.persistence.FetchType.LAZY;
         defaultImpl = NoClass.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class LearningObject extends AbstractEntity implements Searchable, ILearningObject {
+public abstract class LearningObject implements Searchable, ILearningObject {
 
     static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")
@@ -152,6 +152,13 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @JsonBackReference("improperContent")
     private List<ImproperContent> improperContents;
 
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonBackReference("reviewableChange")
+    private List<ReviewableChange> reviewableChanges;
+
 >>>>>>> new-develop
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
@@ -165,7 +172,7 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
     @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.reviewed = 0)")
     private int improper;
 
-    @Formula(value = "(SELECT COUNT(*) FROM ChangedLearningObject clo WHERE clo.learningObject = id)")
+    @Formula(value = "(SELECT COUNT(*) FROM ReviewableChange rc WHERE rc.learningObject = id and rc.reviewed = 0)")
     private int changed;
 
     @Formula(value = "(SELECT COUNT(*) FROM FirstReview fr WHERE fr.learningObject = id AND fr.reviewed = 0)")
@@ -352,6 +359,14 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
         this.unReviewed = unReviewed;
     }
 
+    public void setBroken(int broken) {
+        this.broken = broken;
+    }
+
+    public void setImproper(int improper) {
+        this.improper = improper;
+    }
+
     public List<FirstReview> getFirstReviews() {
         return firstReviews;
     }
@@ -376,6 +391,17 @@ public abstract class LearningObject extends AbstractEntity implements Searchabl
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
+    }
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+
+    public List<ReviewableChange> getReviewableChanges() {
+        return reviewableChanges;
+    }
+
+    public void setReviewableChanges(List<ReviewableChange> reviewableChanges) {
+        this.reviewableChanges = reviewableChanges;
     }
 >>>>>>> new-develop
 }

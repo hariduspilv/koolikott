@@ -11,9 +11,6 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.LearningObject;
 import org.junit.Test;
 
-/**
- * Created by mart on 10.03.16.
- */
 public class LearningObjectDaoTest extends DatabaseTestBase {
 
     @Inject

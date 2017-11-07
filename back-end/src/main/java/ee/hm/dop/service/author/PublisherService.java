@@ -5,9 +5,6 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.PublisherDao;
 import ee.hm.dop.model.Publisher;
 
-/**
- * Created by mart on 2.12.15.
- */
 public class PublisherService {
 
     @Inject

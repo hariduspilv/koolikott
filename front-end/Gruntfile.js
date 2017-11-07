@@ -10,8 +10,6 @@ module.exports = function (grunt) {
     require('es6-promise').polyfill();
 
     grunt.loadNpmTasks('grunt-postcss');
-    grunt.loadNpmTasks('grunt-webdriver');
-    grunt.loadNpmTasks('grunt-selenium-standalone');
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-env');
 
@@ -74,10 +72,12 @@ module.exports = function (grunt) {
                 livereload: 3729
             },
             proxies: [
-                //dev
+                // dev
                 {context: '/rest', host: 'oxygen.netgroupdigital.com', port: 8080},
                 //test
                 // {context: '/rest', host: 'test.oxygen.netgroupdigital.com', port: 8090},
+                //clienttest
+                // {context: '/rest', host: 'dop.hm.ee', port: 8080},
                 //local
                 // {context: '/rest', host: 'localhost', port: 8080}
             ],
@@ -374,42 +374,6 @@ module.exports = function (grunt) {
                 ]
             },
         },
-
-        webdriver: {
-            test1: {
-                configFile: './wdio.conf.js'
-            },
-            test2: {
-                configFile: './wdio.conf2.js'
-            }
-        },
-        'selenium_standalone': {
-            serverConfig: {
-                seleniumVersion: '2.50.1',
-                seleniumDownloadURL: 'http://selenium-release.storage.googleapis.com',
-                drivers: {
-                    chrome: {
-                        version: '2.20',
-                        arch: process.arch,
-                        baseURL: 'http://chromedriver.storage.googleapis.com'
-                    }
-                }
-            }
-        },
-        shell: {
-            xvfb: {
-                command: 'Xvfb :99 -ac -screen 0 1920x1080x24',
-                options: {
-                    async: true
-                }
-            }
-        },
-        env: {
-            xvfb: {
-                DISPLAY: ':99'
-            }
-        },
-
         ngconstant: {
             dist: {
                 options: {
@@ -421,6 +385,21 @@ module.exports = function (grunt) {
                     FB_APP_ID: '225966171178748',
                     YOUTUBE_API_KEY: 'AIzaSyDj2NUAQo5prRJOYzjtdmUzhoQcdtytizE',
                     GOOGLE_SHARE_CLIENT_ID: '1016780519485-6qksf3e0kggsrq983c47lb6h9schut9p.apps.googleusercontent.com'
+                }
+            }
+        },
+
+        // add ?ver=#.##.# to <script src="constants.js"></script> in index.html
+        'string-replace': {
+            constants: {
+                files: [{
+                    '<%= yeoman.dist.app %>/index.html': '<%= yeoman.dist.app %>/index.html'
+                }],
+                options: {
+                    replacements: [{
+                        pattern: '<script src="constants.js"></script>',
+                        replacement: '<script src="constants.js?ver='+grunt.file.readJSON('package.json').version+'"></script>'
+                    }]
                 }
             }
         },
@@ -480,6 +459,7 @@ module.exports = function (grunt) {
         'ngAnnotate',
         'copy:dist',
         'ngconstant:dist',
+        'string-replace:constants',
         'cdnify',
         'cssmin',
         'uglify',
@@ -500,6 +480,7 @@ module.exports = function (grunt) {
         'copy:dist',
         'strip_code',
         'ngconstant:dist',
+        'string-replace:constants',
         'cdnify',
         'cssmin',
         'uglify',
@@ -521,15 +502,5 @@ module.exports = function (grunt) {
     grunt.registerTask('package-live', [
         'build-live',
         'compress:live'
-    ]);
-
-    grunt.registerTask('regression-test', 'Run visual regression tests.', [
-        'shell:xvfb',
-        'env:xvfb',
-        'selenium_standalone:serverConfig:install',
-        'selenium_standalone:serverConfig:start',
-        'webdriver:test1',
-        'webdriver:test2',
-        'selenium_standalone:serverConfig:stop'
     ]);
 };

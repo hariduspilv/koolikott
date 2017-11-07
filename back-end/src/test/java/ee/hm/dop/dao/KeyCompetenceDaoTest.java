@@ -10,9 +10,6 @@ import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.KeyCompetence;
 import org.junit.Test;
 
-/**
- * Created by mart on 21.12.15.
- */
 public class KeyCompetenceDaoTest extends DatabaseTestBase {
 
     @Inject

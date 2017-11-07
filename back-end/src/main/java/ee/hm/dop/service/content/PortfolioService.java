@@ -6,8 +6,10 @@ import ee.hm.dop.dao.LearningObjectDao;
 =======
 >>>>>>> new-develop
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterObject;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 <<<<<<< HEAD
 import ee.hm.dop.model.interfaces.ILearningObject;
@@ -15,20 +17,18 @@ import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.service.learningObject.PermissionItem;
 =======
 import ee.hm.dop.service.permission.PortfolioPermission;
-import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+<<<<<<< HEAD
+>>>>>>> new-develop
+=======
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 >>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
-import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -46,7 +46,7 @@ public class PortfolioService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private ChangedLearningObjectService changedLearningObjectService;
+    private ReviewableChangeService reviewableChangeService;
     @Inject
 <<<<<<< HEAD
     private ReducedLearningObjectDao reducedLearningObjectDao;
@@ -96,8 +96,8 @@ public class PortfolioService {
     private PortfolioPermission portfolioPermission;
 >>>>>>> new-develop
 
-    public Portfolio update(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = validateUpdate(portfolio, loggedInUser);
+    public Portfolio update(Portfolio portfolio, User user) {
+        Portfolio originalPortfolio = validateUpdate(portfolio, user);
 
         TextFieldUtil.cleanTextFields(portfolio);
 
@@ -108,8 +108,7 @@ public class PortfolioService {
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
-        processChanges(portfolio);
-
+        reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
         return updatedPortfolio;
     }
 
@@ -129,10 +128,12 @@ public class PortfolioService {
                 chapterRow.getLearningObjects().replaceAll(learningObject -> {
                     if (learningObject instanceof ChapterObject) {
                         return chapterObjectDao.update((ChapterObject) learningObject);
-                    } else return learningObject;
+                    }
+                    return learningObject;
                 }));
     }
 
+<<<<<<< HEAD
     private void processChanges(Portfolio portfolio) {
         List<ChangedLearningObject> changes = changedLearningObjectService.getAllByLearningObject(portfolio.getId());
         if (CollectionUtils.isNotEmpty(changes)) {
@@ -156,6 +157,8 @@ public class PortfolioService {
         solrEngineService.updateIndex();
     }
 
+=======
+>>>>>>> new-develop
 =======
 >>>>>>> new-develop
     public Portfolio create(Portfolio portfolio, User creator) {

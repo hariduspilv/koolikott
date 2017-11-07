@@ -10,9 +10,6 @@ import ee.hm.dop.model.PeerReview;
 
 import javax.inject.Inject;
 
-/**
- * Created by joonas on 28.09.16.
- */
 public class PeerReviewService {
 
     @Inject

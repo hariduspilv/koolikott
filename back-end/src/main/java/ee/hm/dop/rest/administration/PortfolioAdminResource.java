@@ -2,6 +2,7 @@ package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;

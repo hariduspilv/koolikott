@@ -4,6 +4,7 @@ import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ee.hm.dop.service.learningObject.PermissionItem;
 import ee.hm.dop.service.learningObject.PermissionFactory;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 =======
+=======
+import ee.hm.dop.model.interfaces.ILearningObject;
+>>>>>>> new-develop
 import ee.hm.dop.service.permission.PermissionItem;
 import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.solr.SolrEngineService;

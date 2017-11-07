@@ -1,6 +1,6 @@
 package ee.hm.dop.utils;
 
-public class DopConstants {
+public interface DopConstants {
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String PDF_EXTENSION = ".pdf";

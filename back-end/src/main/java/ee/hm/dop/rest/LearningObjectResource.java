@@ -29,16 +29,16 @@ public class LearningObjectResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
-        return tagService.addRegularTag(learningObjectId, newTag.getName(), getLoggedInUser());
+        return tagService.addRegularTag(learningObjectId, newTag, getLoggedInUser());
     }
 
-    @GET
+    @PUT
     @Path("{learningObjectId}/system_tags")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, @QueryParam("type") String type, @QueryParam("name") String tagName) {
-        return tagService.addSystemTag(learningObjectId, tagName, getLoggedInUser());
+    public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId,  Tag newTag) {
+        return tagService.addSystemTag(learningObjectId, newTag, getLoggedInUser());
     }
 
     @GET

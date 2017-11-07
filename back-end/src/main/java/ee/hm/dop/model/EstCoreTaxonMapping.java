@@ -1,18 +1,12 @@
 package ee.hm.dop.model;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
 import ee.hm.dop.model.taxon.Taxon;
+
+import javax.persistence.*;
 
 @Entity
 @Cacheable
-public class EstCoreTaxonMapping {
+public class EstCoreTaxonMapping implements AbstractEntity {
 
     @Id
     @GeneratedValue

@@ -13,8 +13,6 @@ import ee.hm.dop.service.metadata.LanguageService;
 
 /**
  * Converts JSON language code to Language object
- *
- * @author Jordan Silva
  */
 public class LanguageDeserializer extends JsonDeserializer<Language> {
 

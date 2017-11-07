@@ -1,9 +1,7 @@
 package ee.hm.dop.utils;
 
-import ee.hm.dop.model.AbstractEntity;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.interfaces.ILearningObject;
 
 import java.util.function.Function;
 
@@ -70,7 +68,7 @@ public class ValidatorUtil {
         mustHaveEntity(entity, LearningObject.class);
     }
 
-    public static void mustHaveId(LearningObject entity){
+    public static void mustHaveId(ILearningObject entity){
         mustHaveId(entity, LearningObject.class);
     }
 

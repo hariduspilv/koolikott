@@ -1,37 +1,33 @@
 package ee.hm.dop.service.synchronizer;
 
-import static java.lang.String.format;
-import static java.util.concurrent.TimeUnit.DAYS;
-import static org.joda.time.LocalDateTime.now;
-
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-
-import javax.inject.Inject;
-
 import com.google.inject.Singleton;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.utils.DbUtils;
-import ee.hm.dop.utils.ExecutorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+
+import static java.lang.String.format;
+import static java.util.concurrent.TimeUnit.DAYS;
+
 @Singleton
-public class SynchronizeMaterialsExecutor {
+public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
     @Inject
     private SolrEngineService solrEngineService;
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
-    private static ScheduledFuture<?> synchronizeMaterialHandle;
+    private static Future<?> synchronizeMaterialHandle;
 
-    public synchronized void synchronizeMaterials() {
+    @Override
+    public synchronized void run() {
         try {
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllRepositories();
@@ -50,8 +46,7 @@ public class SynchronizeMaterialsExecutor {
 
             logger.info("Synchronization repository service finished execution.");
         } catch (Exception e) {
-            logger.error("Unexpected error while synchronizing materials.");
-            e.printStackTrace();
+            logger.error("Unexpected error while synchronizing materials.", e);
         } finally {
             logger.info("Updating Solr index after synchronizing all materials");
             updateSolrIndex();
@@ -63,13 +58,17 @@ public class SynchronizeMaterialsExecutor {
         solrEngineService.updateIndex();
     }
 
-    public void scheduleExecution(int hourOfDayToExecute){
+    /**
+     * Can be started twice. Please refactor, meanwhile use with care
+     */
+    @Deprecated
+    public void scheduleExecution(int hourOfDayToExecute) {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 try {
                     logger.info("Starting new material synchronization process.");
-                    synchronizeMaterials();
+                    SynchronizeMaterialsExecutor.this.run();
                 } catch (Exception e) {
                     logger.error("Unexpected error while scheduling sync.", e);
                 }
@@ -85,6 +84,7 @@ public class SynchronizeMaterialsExecutor {
         timer.scheduleAtFixedRate(timerTask, initialDelay, period);
     }
 
+    @Override
     public synchronized void stop() {
         if (synchronizeMaterialHandle == null) {
             logger.info("Synchronization repository service not scheduled for running.");
@@ -104,10 +104,6 @@ public class SynchronizeMaterialsExecutor {
         logger.info("Synchronization repository service canceled.");
     }
 
-    long getInitialDelay(int hourOfDayToExecute) {
-        return ExecutorUtil.getInitialDelay(hourOfDayToExecute);
-    }
-
     /**
      * Test only
      */
@@ -118,13 +114,4 @@ public class SynchronizeMaterialsExecutor {
     protected RepositoryService newRepositoryService() {
         return GuiceInjector.getInjector().getInstance(RepositoryService.class);
     }
-
-    protected void closeTransaction() {
-        DbUtils.closeTransaction();
-    }
-
-    protected void beginTransaction() {
-        DbUtils.getTransaction().begin();
-    }
-
 }

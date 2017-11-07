@@ -3,11 +3,11 @@
 </p>
 <div layout="row" layout-xs="column">
   <md-chips
-    data-ng-model="$ctrl.tags"
+    data-ng-model="tags"
     readonly="true"
     data-md-removable="$root.isEditPortfolioMode"
     data-md-on-remove="$ctrl.removeTag($chip.tag)">
-    <md-chip-template>
+    <md-chip-template dop-tag-custom-chip>
       <md-button
         data-ng-if="
           !$ctrl.authenticatedUserService.isRestricted() &&
@@ -27,7 +27,7 @@
         </md-tooltip>
       </md-button>
       <a
-        href="search/result?q=tag:'{{$chip.tag}}'"
+        href='search/result?q=tag:"{{$chip.tag}}"'
         data-ng-click="$ctrl.getTagSearchURL($event, $chip.tag)"
         >
         {{$chip.tag}}
@@ -86,7 +86,7 @@
     </md-icon>
   </md-button>
   <md-button
-    data-ng-show="!$ctrl.showMoreTags && $ctrl.tags.length > 10"
+    data-ng-show="!$ctrl.showMoreTags && tags.length > 10"
     data-ng-click="$ctrl.showLess()"
     >
     <span data-translate="SHOW_LESS"></span>

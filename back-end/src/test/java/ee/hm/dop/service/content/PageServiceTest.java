@@ -25,7 +25,6 @@ public class PageServiceTest {
 
     @TestSubject
     private PageService pageService = new PageService();
-
     @Mock
     private PageDao pageDao;
 
