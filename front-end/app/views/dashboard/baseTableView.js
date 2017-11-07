@@ -51,7 +51,7 @@ const DASHBOARD_VIEW_STATE_MAP = {
         'byUsername'
     ],
 }
-class baseTableViewController extends Controller {
+class controller extends Controller {
     constructor(...args) {
         super(...args)
 
@@ -350,7 +350,7 @@ class baseTableViewController extends Controller {
         return reasonKey
     }
 }
-baseTableViewController.$inject = [
+controller.$inject = [
     '$scope',
     '$location',
     '$filter',
@@ -364,5 +364,5 @@ baseTableViewController.$inject = [
     'iconService',
     'translationService'
 ]
-_controller('baseTableViewController', baseTableViewController)
+angular.module('koolikottApp').controller('baseTableViewController', controller)
 }
