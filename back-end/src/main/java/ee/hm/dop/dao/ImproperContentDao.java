@@ -18,7 +18,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
     private AdminLearningObjectDao adminLearningObjectDao;
 
     public ImproperContent findByLearningObjectAndCreator(LearningObject learningObject, User creator) {
-        return findByField("learningObject", learningObject, "creator", creator, "reviewed", false);
+        return findByField("learningObject", learningObject, "createdBy", creator, "reviewed", false);
     }
 
     public List<AdminLearningObject> findAllUnreviewed() {

@@ -202,23 +202,17 @@ class controller extends Controller {
             .map(c => c.createdBy || c.creator)
     }
     getChangers({ reviewableChanges }) {
-        const ids = []
-        return reviewableChanges
+        return this.getCreatedBy(reviewableChanges);
+    }
+    getReporters({ improperContents }) {
+        return this.getCreatedBy(improperContents);
+    }
+    getCreatedBy(items){
+        const ids = [];
+        return items
             .filter(c => !c.reviewed)
             .filter(c => {
                 const { id } = c.createdBy
-                return ids.includes(id)
-                    ? false
-                    : ids.push(id)
-            })
-    }
-    getReporters({ improperContents }) {
-        const ids = []
-        return improperContents
-            .filter(c => !c.reviewed)
-            .filter(c => {
-                //todo creator is sad, should use same as reviewable change (backend change)
-                const { id } = c.creator
                 return ids.includes(id)
                     ? false
                     : ids.push(id)

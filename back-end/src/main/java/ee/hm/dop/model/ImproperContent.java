@@ -21,8 +21,8 @@ public class ImproperContent implements AbstractEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "creator")
-    private User creator;
+    @JoinColumn(name = "createdBy")
+    private User createdBy;
 
     @ManyToOne
     @JoinColumn(name = "learningObject")
@@ -64,12 +64,12 @@ public class ImproperContent implements AbstractEntity {
         this.id = id;
     }
 
-    public User getCreator() {
-        return creator;
+    public User getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @JsonSerialize(using = DateTimeSerializer.class)

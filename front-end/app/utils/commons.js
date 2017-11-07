@@ -854,18 +854,17 @@ class Controller {
     }
     getReportedByLabel(item) {
         // Unknown
-        if (item.__numChanges === 1 && !item.improperContents[0].creator)
+        //todo merge with getChangedByLabel
+        if (item.__numChanges === 1 && !item.improperContents[0].createdBy)
             return this.dependencyExists('$translate')
                 ? this.$translate.instant('UNKNOWN')
                 : ''
 
         // One name
         if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
-            //todo backend creator
-            item.improperContents[0].creator
+            item.improperContents[0].createdBy
         )
-            //todo backend creator
-            return item.improperContents[0].creator.name+' '+item.improperContents[0].creator.surname;
+            return item.improperContents[0].createdBy.name+' '+item.improperContents[0].createdBy.surname;
 
         // # changers
         return this.dependencyExists('$translate')
@@ -876,15 +875,15 @@ class Controller {
             : ''
     }
     getCommaSeparatedChangers(item) {
-        return item.__changers.reduce((str, c) => {
-            const { name, surname } = c.createdBy
-            return `${str}${str ? ', ' : ''}${name} ${surname}`
-        }, '')
+        return getCreatedByToString(item.__changers);
     }
     getCommaSeparatedReporters(item) {
-        return item.__reporters.reduce((str, c) => {
-            //todo backend creator
-            const { name, surname } = c.creator
+        return getCreatedByToString(item.__reporters);
+    }
+    getCreatedByToString(items){
+        return items.reduce((str, c) => {
+            //todo merge w changers
+            const { name, surname } = c.createdBy
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')
     }
