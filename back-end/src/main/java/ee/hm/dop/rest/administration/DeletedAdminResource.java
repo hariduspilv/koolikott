@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 
@@ -23,21 +24,12 @@ public class DeletedAdminResource extends BaseResource {
     private LearningObjectAdministrationService learningObjectAdministrationService;
 
     @POST
-    @Path("portfolio/restore")
+    @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject restore(Portfolio portfolio) {
-       return learningObjectAdministrationService.restore(portfolio, getLoggedInUser());
-    }
-
-    @POST
-    @Path("material/restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN})
-    public LearningObject restore(Material material) {
-        return learningObjectAdministrationService.restore(material, getLoggedInUser());
+    public LearningObject restore(LearningObjectMiniDto loDto) {
+       return learningObjectAdministrationService.restore(loDto.convert(), getLoggedInUser());
     }
 
     @GET

@@ -27,9 +27,9 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     private static final String LO_ACCEPT_CHANGES = "admin/changed/%s/acceptAll";
     private static final String LO_REJECT_CHANGES = "admin/changed/%s/revertAll";
     private static final String MATERIAL_DELETE = "material/";
-    private static final String MATERIAL_RESTORE = "admin/deleted/material/restore";
+    private static final String MATERIAL_RESTORE = "admin/deleted/restore";
     private static final String PORTFOLIO_DELETE = "portfolio/delete";
-    private static final String PORTFOLIO_RESTORE = "admin/deleted/portfolio/restore";
+    private static final String PORTFOLIO_RESTORE = "admin/deleted/restore";
 
     @Inject
     private TestDao testDao;
