@@ -1,9 +1,5 @@
 package ee.hm.dop.model;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,12 +17,12 @@ public class LearningObjectMiniDto {
     private String type;
 
     public LearningObject convert() {
-        if (PORTFOLIOS.contains(type)){
+        if (PORTFOLIOS.contains(type)) {
             Portfolio portfolio = new Portfolio();
             portfolio.setId(id);
             return portfolio;
         }
-        if (MATERIALS.contains(type)){
+        if (MATERIALS.contains(type)) {
             Material material = new Material();
             material.setId(id);
             return material;

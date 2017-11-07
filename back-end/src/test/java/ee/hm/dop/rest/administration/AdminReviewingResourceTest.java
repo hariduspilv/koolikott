@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TestDao;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.enums.ReviewType;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String LO_SET_NOT_IMPROPER = "admin/improper/setProper?learningObject=%s";
+    private static final String LO_SET_NOT_IMPROPER = "admin/improper/setProper";
     private static final String LO_SET_FIRST_REVIEWED = "admin/firstReview/setReviewed";
     private static final String LO_ACCEPT_CHANGES = "admin/changed/%s/acceptAll";
     private static final String LO_REJECT_CHANGES = "admin/changed/%s/revertAll";
@@ -47,7 +48,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void restoring_material_approves_everything() throws Exception {
         assertHasWorkToDo(getMaterial(MATERIAL_15));
-        doDelete(MATERIAL_DELETE + MATERIAL_15);
+        doPost(MATERIAL_DELETE + MATERIAL_15, materialWithId(MATERIAL_15));
         Material restored = doPost(MATERIAL_RESTORE, materialWithId(MATERIAL_15), Material.class);
         assertWorkIsDone(restored, ReviewType.SYSTEM_RESTORE);
     }
@@ -63,7 +64,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deleting_material_approves_everything() throws Exception {
         assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material material = doDelete(MATERIAL_DELETE + MATERIAL_15, Material.class);
+        Material material = doPost(MATERIAL_DELETE + MATERIAL_15, materialWithId(MATERIAL_15), Material.class);
         assertWorkIsDone(material, ReviewType.SYSTEM_DELETE);
     }
 
@@ -77,7 +78,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void approving_improper_content_approves_everything() throws Exception {
         assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material proper = doDelete(format(LO_SET_NOT_IMPROPER, MATERIAL_15), Material.class);
+        Material proper = doPost(LO_SET_NOT_IMPROPER, materialWithId(MATERIAL_15), Material.class);
         assertWorkIsDone(proper, ReviewType.IMPROPER);
     }
 

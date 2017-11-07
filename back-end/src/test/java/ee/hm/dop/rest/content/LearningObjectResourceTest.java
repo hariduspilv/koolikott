@@ -17,7 +17,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
     public static final String GET_FAVOURITE_URL = "learningObject/favorite?id=%s";
-    public static final String DELETE_FAVOURITE_URL = "learningObject/favorite?id=%s";
+    public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
     public static final String USERS_FAVOURITE_URL = "learningObject/usersFavorite?start=0";
     public static final String GET_FAVOURITE_COUNT_URL = "learningObject/usersFavorite/count";
     public static final String TEST_TAG = "timshel";
@@ -86,7 +86,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         long favouritesCount = doGet(GET_FAVOURITE_COUNT_URL, Long.class);
         assertEquals("User favourite count", 1, favouritesCount);
 
-        doDelete(format(DELETE_FAVOURITE_URL, PORTFOLIO_8));
+        doPost(DELETE_FAVOURITE_URL, portfolioWithId(PORTFOLIO_8));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         doPost(SET_TO_FAVOURITE_URL, learningObject);
         doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
-        doDelete(format(DELETE_FAVOURITE_URL, PORTFOLIO_8));
+        doPost(DELETE_FAVOURITE_URL, portfolioWithId(PORTFOLIO_8));
 
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
         assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));

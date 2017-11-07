@@ -2,6 +2,7 @@ package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
@@ -42,16 +43,17 @@ public class ImproperContentAdminResource extends BaseResource {
         return improperContentAdminService.getImproperCount(getLoggedInUser());
     }
 
-    @DELETE
+    @POST
     @Path("setProper")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
-    public LearningObject setProper(@QueryParam("learningObject") Long learningObjectId) {
-        if (learningObjectId == null) {
+    public LearningObject setProper2(LearningObjectMiniDto loDto) {
+        if (loDto.getId() == null) {
             throw badRequest("learningObject query param is required.");
         }
         User loggedInUser = getLoggedInUser();
-        LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
+        LearningObject learningObject = learningObjectService.get(loDto.getId(), loggedInUser);
         if (learningObject == null) {
             throw notFound();
         }

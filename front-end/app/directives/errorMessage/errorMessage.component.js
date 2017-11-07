@@ -291,9 +291,9 @@ class controller extends Controller {
 
         if (id && (this.isAdmin || this.isModerator))
             this.serverCallService
-                .makeDelete('rest/admin/improper/setProper?learningObject='+id)
+                .makePost('rest/admin/improper/setProper', {id, type})
                 .then(({ status, data }) => {
-                    console.log('DELETE rest/admin/improper/setProper?learningObject='+id, status, data)
+                    console.log('POST rest/admin/improper/setProper', { id, type }, status, data)
                     this.$rootScope.learningObjectImproper = false
                     this.$rootScope.learningObjectBroken = false
                     this.$rootScope.learningObjectUnreviewed = false

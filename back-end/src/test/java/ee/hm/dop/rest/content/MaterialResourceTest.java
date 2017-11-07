@@ -301,7 +301,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
         login(USER_PEETER);
-        Response response = doDelete("material/" + MATERIAL_12);
+        Response response = doPost("material/" + MATERIAL_12, materialWithId(MATERIAL_12));
+//        Response response = doDelete("material/" + MATERIAL_12);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 

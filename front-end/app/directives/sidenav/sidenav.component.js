@@ -20,16 +20,13 @@ class controller extends Controller {
         ]
         // List of sidenav adminLocations
         this.adminLocations = [
-            '/dashboard/improperMaterials',
-            '/dashboard/improperPortfolios',
+            '/dashboard/improper',
             '/dashboard/unReviewed',
-            '/dashboard/changedLearningObjects',
+            '/dashboard/changes',
             '/dashboard/moderators',
             '/dashboard/restrictedUsers',
-            '/dashboard/deletedMaterials',
-            '/dashboard/deletedPortfolios',
-            '/dashboard/brokenMaterials',
-        ]
+            '/dashboard/deleted',
+        ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
         this.$scope.checkUser = this.checkUser.bind(this)
@@ -68,19 +65,19 @@ class controller extends Controller {
             return menuLocation === currentLocation
 
         const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation)
-        
+
         return isInMenu
             ? menuLocation === currentLocation
             : this.$rootScope.private
                 ? false
                 : this.$rootScope.learningObjectDeleted
-                    ? menuLocation === '/dashboard/deletedPortfolios'
+                    ? menuLocation === '/dashboard/deleted'
                     : this.$rootScope.learningObjectImproper
-                        ? menuLocation === '/dashboard/improperPortfolios'
+                        ? menuLocation === '/dashboard/improper'
                         : this.$rootScope.learningObjectUnreviewed
                             ? menuLocation === '/dashboard/unReviewed'
                             : this.$rootScope.learningObjectChanged
-                                ? menuLocation === '/dashboard/changedLearningObjects'
+                                ? menuLocation === '/dashboard/changes'
                                 : false
     }
     isUserLocation(location) {
@@ -115,12 +112,9 @@ class controller extends Controller {
     /**
      * @param {string} type - One of:
      *  - unReviewedLearningObjects
-     *  - improperMaterials
-     *  - improperPortfolios
+     *  - improper
      *  - changedLearningObject
-     *  - brokenMaterials
-     *  - deletedMaterials
-     *  - deletedPortfolios
+     *  - deleted
      *  - moderators
      *  - restrictedUsers
      *  - userPortfolios
@@ -155,12 +149,9 @@ class controller extends Controller {
             this.authenticatedUserService.isAdmin() ||
             this.authenticatedUserService.isModerator()
         ) {
-            this.updateCount('brokenMaterials')
-            this.updateCount('deletedMaterials')
-            this.updateCount('deletedPortfolios')
-            this.updateCount('improperMaterials')
-            this.updateCount('improperPortfolios')
-            this.updateCount('changedLearningObjects')
+            this.updateCount('deleted')
+            this.updateCount('improper')
+            this.updateCount('changes')
             this.updateCount('unReviewedLearningObjects')
         }
         if (this.authenticatedUserService.isAdmin()) {

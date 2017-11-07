@@ -3,22 +3,22 @@
 {
 const DASHBOARD_VIEW_STATE_MAP = {
     unReviewed: [
-        'DASHBOARD_UNREVIEWED', // title translation key
+        'UNREVIEWED', // title translation key
         'firstReview/unReviewed', // rest URI (after 'rest/admin/')
         '-byCreatedAt' // default sort by (use leading minus for DESC)
     ],
-    improperMaterials: [
-        'DASHBOARD_IMRPOPER_MATERIALS',
+    improper: [
+        'IMPROPER',
         'improper',
         '-byReportCount',
     ],
-    changedLearningObjects: [
-        'DASHBOARD_CHANGED_LEARNING_OBJECTS',
+    changes: [
+        'CHANGED_LEARNING_OBJECTS',
         'changed',
         'byLastChangedAt'
     ],
-    deletedMaterials: [
-        'DASHBOARD_DELETED_MATERIALS',
+    deleted: [
+        'DELETED',
         'deleted',
         'byUpdatedAt'
     ],

@@ -132,6 +132,19 @@ public class MaterialResource extends BaseResource {
         return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 
+    @POST
+    @Path("{materialID}")
+//    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject delete2(LearningObjectMiniDto loDto) {
+        Material material = materialGetter.get(loDto.getId(), getLoggedInUser());
+        if (material == null) {
+            throw notFound();
+        }
+        return learningObjectAdministrationService.delete(material, getLoggedInUser());
+    }
+
     @PUT
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)

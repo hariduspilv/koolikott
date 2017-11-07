@@ -7,8 +7,8 @@ angular.module('koolikottApp')
     function (serverCallService, authenticatedUserService) {
         var instance;
 
-        var deletedMaterialsCountCallbacks = [];
-        var improperMaterialsCountCallbacks = [];
+        var deletedCountCallbacks = [];
+        var improperCountCallbacks = [];
         var userFavoritesCountCallbacks = [];
         var userMaterialsCountCallbacks = [];
         var userPortfoliosCountCallbacks = [];
@@ -25,23 +25,23 @@ angular.module('koolikottApp')
             console.log("Failed to get data");
         }
 
-        function getDeletedMaterialsCountSuccess(data) {
+        function getDeletedCountSuccess(data) {
             if (!_.isNil(data)) {
-                deletedMaterialsCountCallbacks.forEach(function (callback) {
+                deletedCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
-                deletedMaterialsCountCallbacks = [];
-                localStorage.setItem("deletedMaterialsCount", data);
+                deletedCountCallbacks = [];
+                localStorage.setItem("deletedCount", data);
             }
         }
 
-        function getImproperMaterialsCountSuccess(data) {
+        function getImproperCountSuccess(data) {
             if (!_.isNil(data)) {
-                improperMaterialsCountCallbacks.forEach(function (callback) {
+                improperCountCallbacks.forEach(function (callback) {
                     callback(data);
                 });
-                improperMaterialsCountCallbacks = [];
-                localStorage.setItem("improperMaterialsCount", data);
+                improperCountCallbacks = [];
+                localStorage.setItem("improperCount", data);
             }
         }
 
@@ -108,22 +108,22 @@ angular.module('koolikottApp')
         }
 
         instance = {
-            loadDeletedMaterialsCount: function (callback) {
-                var data = localStorage.getItem("deletedMaterialsCount");
+            loadDeletedCount: function (callback) {
+                var data = localStorage.getItem("deletedCount");
                 if (data) {
                     callback(data);
                 }
-                deletedMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/deleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
+                deletedCountCallbacks.push(callback);
+                serverCallService.makeGet("rest/admin/deleted/count", {}, getDeletedCountSuccess, getItemsFail);
 
             },
-            loadImproperMaterialsCount: function (callback) {
-                var data = localStorage.getItem("improperMaterialsCount");
+            loadImproperCount: function (callback) {
+                var data = localStorage.getItem("improperCount");
                 if (data) {
                     callback(data);
                 }
-                improperMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/improper/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
+                improperCountCallbacks.push(callback);
+                serverCallService.makeGet("rest/admin/improper/count", {}, getImproperCountSuccess, getItemsFail);
             },
             loadUserFavoritesCount: function (callback) {
                 var data = localStorage.getItem("userFavoritesCount");
@@ -165,7 +165,7 @@ angular.module('koolikottApp')
                 restrictedUsersCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/admin/restrictedUser/count", {}, getRestrictedUsersCountSuccess, getItemsFail);
             },
-            loadChangedLearningObjectsCount: function (callback) {
+            loadChangesCount: function (callback) {
                 var data = localStorage.getItem("changedLearningObject");
                 if (data) {
                     callback(data);
