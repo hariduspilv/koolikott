@@ -141,50 +141,23 @@ angular.module('koolikottApp')
         }
 
         instance = {
-            loadBrokenMaterialsCount: function (callback) {
-                var data = localStorage.getItem("brokenMaterialsCount");
-                if (data) {
-                    callback(data);
-                }
-                brokenMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/brokenContent/getBroken/count", {}, getBrokenMaterialsCountSuccess, getItemsFail);
-            },
             loadDeletedMaterialsCount: function (callback) {
                 var data = localStorage.getItem("deletedMaterialsCount");
                 if (data) {
                     callback(data);
                 }
                 deletedMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/deleted/material/getDeleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/deleted/count", {}, getDeletedMaterialsCountSuccess, getItemsFail);
 
             },
-            loadDeletedPortfoliosCount: function (callback) {
-                var data = localStorage.getItem("deletedPortfoliosCount");
-                if (data) {
-                    callback(data);
-                }
-                deletedPortfoliosCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/deleted/portfolio/getDeleted/count", {}, getDeletedPortfoliosCountSuccess, getItemsFail);
-            },
-
             loadImproperMaterialsCount: function (callback) {
                 var data = localStorage.getItem("improperMaterialsCount");
                 if (data) {
                     callback(data);
                 }
                 improperMaterialsCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/improper/material/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
+                serverCallService.makeGet("rest/admin/improper/count", {}, getImproperMaterialsCountSuccess, getItemsFail);
             },
-
-            loadImproperPortfoliosCount: function (callback) {
-                var data = localStorage.getItem("improperPortfoliosCount");
-                if (data) {
-                    callback(data);
-                }
-                improperPortfoliosCountCallbacks.push(callback);
-                serverCallService.makeGet("rest/admin/improper/portfolio/count", {}, getImproperPortfoliosCountSuccess, getItemsFail);
-            },
-
             loadUserFavoritesCount: function (callback) {
                 var data = localStorage.getItem("userFavoritesCount");
                 if (data) {
