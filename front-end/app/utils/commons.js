@@ -882,7 +882,6 @@ class Controller {
     }
     getCreatedByToString(items){
         return items.reduce((str, c) => {
-            //todo merge w changers
             const { name, surname } = c.createdBy
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')
