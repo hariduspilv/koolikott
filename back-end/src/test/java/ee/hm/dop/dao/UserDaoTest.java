@@ -2,10 +2,7 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.common.test.TestConstants;
-<<<<<<< HEAD
-=======
 import ee.hm.dop.common.test.TestLayer;
->>>>>>> new-develop
 import ee.hm.dop.common.test.TestUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
@@ -26,16 +23,6 @@ public class UserDaoTest extends DatabaseTestBase {
 
     @Test
     public void findUserByIdCode() {
-<<<<<<< HEAD
-        User user = findByIdCode(TestConstants.USER_MATI);
-        validateUser(user, TestConstants.USER_MATI);
-
-        user = findByIdCode(TestConstants.USER_PEETER);
-        validateUser(user, TestConstants.USER_PEETER);
-
-        user = findByIdCode(TestConstants.USER_VOLDERMAR);
-        validateUser(user, TestConstants.USER_VOLDERMAR);
-=======
         User user = findByIdCode(USER_MATI);
         validateUser(user, USER_MATI, TestLayer.DAO);
 
@@ -44,21 +31,10 @@ public class UserDaoTest extends DatabaseTestBase {
 
         user = findByIdCode(USER_VOLDERMAR);
         validateUser(user, USER_VOLDERMAR, TestLayer.DAO);
->>>>>>> new-develop
     }
 
     @Test
     public void findByUsername() {
-<<<<<<< HEAD
-        User user = findByName(TestConstants.USER_MATI);
-        validateUser(user, TestConstants.USER_MATI);
-
-        user = findByName(TestConstants.USER_PEETER);
-        validateUser(user, TestConstants.USER_PEETER);
-
-        user = findByName(TestConstants.USER_VOLDERMAR);
-        validateUser(user, TestConstants.USER_VOLDERMAR);
-=======
         User user = findByName(USER_MATI);
         validateUser(user, USER_MATI, TestLayer.DAO);
 
@@ -67,16 +43,11 @@ public class UserDaoTest extends DatabaseTestBase {
 
         user = findByName(USER_VOLDERMAR);
         validateUser(user, USER_VOLDERMAR, TestLayer.DAO);
->>>>>>> new-develop
     }
 
     @Test
     public void countUsersWithSameUsernameIgnoringAccents() {
-<<<<<<< HEAD
-        assertEquals(Long.valueOf(2), userDao.countUsersWithSameUsername(TestConstants.USER_MATI.username));
-=======
         assertEquals(Long.valueOf(2), userDao.countUsersWithSameUsername(USER_MATI.username));
->>>>>>> new-develop
     }
 
     @Test
@@ -152,15 +123,4 @@ public class UserDaoTest extends DatabaseTestBase {
     private User findByName(TestUser testUser) {
         return userDao.findUserByUsername(testUser.username);
     }
-<<<<<<< HEAD
-
-    private void validateUser(User user, TestUser testUser) {
-        assertEquals(testUser.id, user.getId());
-        assertEquals(testUser.idCode, user.getIdCode());
-        assertEquals(testUser.username, user.getUsername());
-        assertEquals(testUser.firstName, user.getName());
-        assertEquals(testUser.lastName, user.getSurname());
-    }
-=======
->>>>>>> new-develop
 }

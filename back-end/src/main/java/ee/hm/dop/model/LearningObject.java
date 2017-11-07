@@ -2,15 +2,11 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
-<<<<<<< HEAD
-=======
 import ee.hm.dop.model.enums.Visibility;
->>>>>>> new-develop
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -140,11 +136,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     private List<Taxon> taxons;
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
-<<<<<<< HEAD
-    @JsonBackReference
-    private List<FirstReview> firstReviews;
-
-=======
     @JsonBackReference("firstReview")
     private List<FirstReview> firstReviews;
 
@@ -152,14 +143,10 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @JsonBackReference("improperContent")
     private List<ImproperContent> improperContents;
 
-<<<<<<< HEAD
->>>>>>> new-develop
-=======
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     @JsonBackReference("reviewableChange")
     private List<ReviewableChange> reviewableChanges;
 
->>>>>>> new-develop
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
 
@@ -363,8 +350,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     public void setFirstReviews(List<FirstReview> firstReviews) {
         this.firstReviews = firstReviews;
     }
-<<<<<<< HEAD
-=======
 
     public List<ImproperContent> getImproperContents() {
         return improperContents;
@@ -381,9 +366,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
-<<<<<<< HEAD
->>>>>>> new-develop
-=======
 
     public List<ReviewableChange> getReviewableChanges() {
         return reviewableChanges;
@@ -392,5 +374,4 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     public void setReviewableChanges(List<ReviewableChange> reviewableChanges) {
         this.reviewableChanges = reviewableChanges;
     }
->>>>>>> new-develop
 }

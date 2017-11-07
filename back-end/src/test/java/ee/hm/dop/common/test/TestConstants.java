@@ -1,8 +1,5 @@
 package ee.hm.dop.common.test;
 
-<<<<<<< HEAD
-public class TestConstants {
-=======
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
@@ -11,7 +8,6 @@ public class TestConstants {
     public static final long NOT_EXISTS_ID = -1L;
     public static final String NOT_EXISTS_STRING = "-1L";
 
->>>>>>> new-develop
     public static final Long MATERIAL_1 = 1L;
     public static final Long MATERIAL_2 = 2L;
     public static final Long MATERIAL_3 = 3L;
@@ -26,16 +22,10 @@ public class TestConstants {
     public static final Long MATERIAL_12 = 12L;
     public static final Long MATERIAL_13 = 13L;
     public static final Long MATERIAL_14 = 14L;
-<<<<<<< HEAD
-=======
     public static final Long MATERIAL_15 = 15L;
-<<<<<<< HEAD
->>>>>>> new-develop
-=======
     public static final Long MATERIAL_16 = 16L;
     public static final Long MATERIAL_17 = 17L;
     public static final Long MATERIAL_18 = 18L;
->>>>>>> new-develop
 
     public static final Long PORTFOLIO_1 = 101L;
     public static final Long PORTFOLIO_2 = 102L;
@@ -51,25 +41,12 @@ public class TestConstants {
     public static final Long PORTFOLIO_12 = 112L;
     public static final Long PORTFOLIO_13 = 113L;
     public static final Long PORTFOLIO_14 = 114L;
-<<<<<<< HEAD
-=======
     public static final Long PORTFOLIO_15 = 115L;
->>>>>>> new-develop
 
     public static final TestUser USER_MATI = new TestUser(1L, "39011220011", "mati.maasikas", "Mati", "Maasikas");
     public static final TestUser USER_PEETER = new TestUser(2L, "38011550077", "peeter.paan", "Peeter", "Paan");
     public static final TestUser USER_VOLDERMAR = new TestUser(3L, "37066990099", "voldemar.vapustav", "Voldemar", "Vapustav");
     public static final TestUser USER_VOLDERMAR2 = new TestUser(4L, "15066990099", "voldemar.vapustav2");
-<<<<<<< HEAD
-    public static final TestUser USER_MAASIKAS_VAARIKAS = new TestUser(6L, "39011220013", "mati.maasikas-vaarikas" );
-    public static final TestUser USER_MYTESTUSER = new TestUser(7L, "78912378912", "my.testuser");
-    public static final TestUser USER_ADMIN = new TestUser(8L, "89898989898", "admin.admin" );
-    public static final TestUser USER_SECOND = new TestUser(9L, "89012378912", "second.testuser" );
-    public static final TestUser USER_RESTRICTED = new TestUser(11L, "89898989890", "restricted.user" );
-    public static final TestUser USER_MODERATOR = new TestUser(12L, "38211120031", "biffy.clyro" );
-
-    public static final TestTaxon TAXON_MATHEMATICS = new TestTaxon(10L, "Mathematics");
-=======
     public static final TestUser USER_MAASIKAS_VAARIKAS = new TestUser(6L, "39011220013", "mati.maasikas-vaarikas");
     public static final TestUser USER_MYTESTUSER = new TestUser(7L, "78912378912", "my.testuser");
     public static final TestUser USER_ADMIN = new TestUser(8L, "89898989898", "admin.admin");
@@ -100,5 +77,4 @@ public class TestConstants {
         user.setId(id);
         return user;
     }
->>>>>>> new-develop
 }

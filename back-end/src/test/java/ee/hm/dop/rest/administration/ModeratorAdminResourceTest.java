@@ -20,11 +20,7 @@ public class ModeratorAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getModerators_returns_moderator_users_to_admin() throws Exception {
-<<<<<<< HEAD
-        login(TestConstants.USER_ADMIN);
-=======
         login(USER_ADMIN);
->>>>>>> new-develop
         List<User> moderators = doGet(GET_MODERATORS_URL, new GenericType<List<User>>() {
         });
         long moderatorsCount = doGet(GET_MODERATORS_COUNT_URL, Long.class);
@@ -36,10 +32,6 @@ public class ModeratorAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void not_logged_in_user_is_not_allowed_to_getModerators() throws Exception {
         Response response = doGet(GET_MODERATORS_URL);
-<<<<<<< HEAD
-        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-=======
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
->>>>>>> new-develop
     }
 }

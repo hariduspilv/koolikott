@@ -50,7 +50,6 @@ public class TagUpVoteResource extends BaseResource {
             throw badRequest("No such tag");
         }
 
-        //todo what is the point of trustTagUpVote
         TagUpVote trustTagUpVote = new TagUpVote();
         trustTagUpVote.setLearningObject(learningObject);
         trustTagUpVote.setTag(tag);
@@ -70,27 +69,9 @@ public class TagUpVoteResource extends BaseResource {
         User user = getLoggedInUser();
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
         if (learningObject != null) {
-<<<<<<< HEAD
-            return learningObject.getTags().stream()
-                    .map(tag -> convertForm(user, learningObject, tag))
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
-    }
-
-    private TagUpVoteForm convertForm(User user, LearningObject learningObject, Tag tag) {
-        TagUpVoteForm form = new TagUpVoteForm();
-        form.tag = tag;
-        form.upVoteCount = tagUpVoteService.getUpVoteCountFor(tag, learningObject);
-        if (form.upVoteCount > 0) {
-            form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
-        }
-        return form;
-=======
             return convertForms(user, learningObject);
         }
         return Collections.emptyList();
->>>>>>> new-develop
     }
 
     @DELETE
@@ -103,8 +84,6 @@ public class TagUpVoteResource extends BaseResource {
         tagUpVoteService.delete(tagUpVote, getLoggedInUser());
     }
 
-<<<<<<< HEAD
-=======
     private List<TagUpVoteForm> convertForms(User user, LearningObject learningObject) {
         return learningObject.getTags().stream()
                 .map(tag -> convertForm(user, learningObject, tag))
@@ -121,7 +100,6 @@ public class TagUpVoteResource extends BaseResource {
         return form;
     }
 
->>>>>>> new-develop
     public static class TagUpVoteForm {
         private Tag tag;
         private long upVoteCount;

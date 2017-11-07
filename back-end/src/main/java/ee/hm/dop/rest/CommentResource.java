@@ -27,14 +27,7 @@ public class CommentResource extends BaseResource {
     @Consumes("application/json")
     public void addPortfolioComment(AddCommentForm form) {
         Comment comment = form.getComment();
-<<<<<<< HEAD
-        User loggedInUser = getLoggedInUser();
-        comment.setCreator(loggedInUser);
-
-        commentService.addComment(comment, form.getPortfolio(), loggedInUser);
-=======
         commentService.addComment(comment, form.getPortfolio(), getLoggedInUser());
->>>>>>> new-develop
     }
 
     @POST
@@ -42,14 +35,7 @@ public class CommentResource extends BaseResource {
     @Consumes("application/json")
     public void addMaterialComment(AddCommentForm form) {
         Comment comment = form.getComment();
-<<<<<<< HEAD
-        User loggedInUser = getLoggedInUser();
-        comment.setCreator(loggedInUser);
-
-        commentService.addComment(comment, form.getMaterial(), loggedInUser);
-=======
         commentService.addComment(comment, form.getMaterial(), getLoggedInUser());
->>>>>>> new-develop
     }
 
     public static class AddCommentForm {
