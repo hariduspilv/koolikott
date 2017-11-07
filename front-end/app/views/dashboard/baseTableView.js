@@ -364,5 +364,5 @@ controller.$inject = [
     'iconService',
     'translationService'
 ]
-_controller('baseTableViewController', controller)
+angular.module('koolikottApp').controller('baseTableViewController', controller)
 }
