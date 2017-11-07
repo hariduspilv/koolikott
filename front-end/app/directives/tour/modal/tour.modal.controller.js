@@ -18,5 +18,5 @@ class controller extends Controller {
     }
 }
 controller.$inject = ['$rootScope', '$mdDialog']
-_controller('tourModalController', controller)
+angular.module('koolikottApp').controller('tourModalController', controller)
 }

@@ -52,5 +52,5 @@ controller.$inject = [
     'serverCallService',
     'toastService'
 ]
-_controller('shareModalController', controller)
+angular.module('koolikottApp').controller('shareModalController', controller)
 }

@@ -69,5 +69,5 @@ controller.$inject = [
     '$location',
     'searchService'
 ]
-_controller('searchResultController', controller)
+angular.module('koolikottApp').controller('searchResultController', controller)
 }
