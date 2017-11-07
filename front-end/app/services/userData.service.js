@@ -7,11 +7,8 @@ angular.module('koolikottApp')
     function (serverCallService, authenticatedUserService) {
         var instance;
 
-        var brokenMaterialsCountCallbacks = [];
         var deletedMaterialsCountCallbacks = [];
-        var deletedPortfoliosCountCallbacks = [];
         var improperMaterialsCountCallbacks = [];
-        var improperPortfoliosCountCallbacks = [];
         var userFavoritesCountCallbacks = [];
         var userMaterialsCountCallbacks = [];
         var userPortfoliosCountCallbacks = [];
@@ -28,16 +25,6 @@ angular.module('koolikottApp')
             console.log("Failed to get data");
         }
 
-        function getBrokenMaterialsCountSuccess(data) {
-            if (!_.isNil(data)) {
-                brokenMaterialsCountCallbacks.forEach(function (callback) {
-                    callback(data);
-                });
-                brokenMaterialsCountCallbacks = [];
-                localStorage.setItem("brokenMaterialsCount", data);
-            }
-        }
-
         function getDeletedMaterialsCountSuccess(data) {
             if (!_.isNil(data)) {
                 deletedMaterialsCountCallbacks.forEach(function (callback) {
@@ -48,16 +35,6 @@ angular.module('koolikottApp')
             }
         }
 
-        function getDeletedPortfoliosCountSuccess(data) {
-            if (!_.isNil(data)) {
-                deletedPortfoliosCountCallbacks.forEach(function (callback) {
-                    callback(data);
-                });
-                deletedPortfoliosCountCallbacks = [];
-                localStorage.setItem("deletedPortfoliosCount", data);
-            }
-        }
-
         function getImproperMaterialsCountSuccess(data) {
             if (!_.isNil(data)) {
                 improperMaterialsCountCallbacks.forEach(function (callback) {
@@ -65,16 +42,6 @@ angular.module('koolikottApp')
                 });
                 improperMaterialsCountCallbacks = [];
                 localStorage.setItem("improperMaterialsCount", data);
-            }
-        }
-
-        function getImproperPortfoliosCountSuccess(data) {
-            if (!_.isNil(data)) {
-                improperPortfoliosCountCallbacks.forEach(function (callback) {
-                    callback(data);
-                });
-                improperPortfoliosCountCallbacks = [];
-                localStorage.setItem("improperPortfoliosCount", data);
             }
         }
 
