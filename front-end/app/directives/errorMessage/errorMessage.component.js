@@ -34,21 +34,6 @@ const VIEW_STATE_MAP = {
         }],
         ($ctrl) => $ctrl.getChanges()
     ],
-    showBroken: [
-        'content_cut',
-        'ERROR_MSG_BROKEN',
-        [{
-            icon: () => 'delete',
-            label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.setDeleted(),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
-        }, {
-            icon: () => 'done',
-            label: 'REPORT_BROKEN_LINK_CORRECT',
-            onClick: ($ctrl) => $ctrl.setNotBroken(),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
-        }]
-    ],
     showImproper: [
         'warning',
         'ERROR_MSG_IMPROPER',
@@ -64,28 +49,6 @@ const VIEW_STATE_MAP = {
             show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }],
         ($ctrl) => $ctrl.getReasons()
-    ],
-    showImproperAndBroken: [
-        'warning',
-        'ERROR_MSG_IMPROPER_AND_BROKEN',
-        [{
-            icon: () => 'delete',
-            label: 'BUTTON_REMOVE',
-            onClick: ($ctrl) => $ctrl.setDeleted(),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
-        }, {
-            icon: () => 'done',
-            label: 'REPORT_NOT_IMPROPER',
-            onClick($ctrl) {
-                $ctrl.setNotBroken()
-                $ctrl.setNotImproper()
-            },
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
-        }],
-        ($ctrl) => {
-            $ctrl.forceCollapsible = true
-            $ctrl.getReasons(false)
-        }
     ],
     showUnreviewed: [
         'lightbulb_outline',
@@ -344,6 +307,7 @@ class controller extends Controller {
         if (id && (this.isAdmin || this.isModerator)) {
             const isPortfolio = this.isPortfolio(this.data)
 
+                //todo ask backend for unified delete
             ;(isPortfolio
                 ? this.serverCallService.makePost('rest/portfolio/delete', { id, type })
                 : this.serverCallService.makeDelete('rest/material/'+id)
@@ -360,34 +324,15 @@ class controller extends Controller {
             })
         }
     }
-    setNotBroken() {
-        const { id, type } = this.data
-
-        if (id)
-            this.serverCallService
-                .makePost('rest/admin/brokenContent/setNotBroken', { id, type })
-                .then(({ status, data }) => {
-                    console.log('POST rest/admin/brokenContent/setNotBroken', { id, type }, status, data)
-                    this.$rootScope.learningObjectBroken = false
-                    this.$rootScope.learningObjectUnreviewed = false
-                    this.$rootScope.learningObjectImproper = false
-                    this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                })
-    }
     setNotDeleted() {
         const { id, type } = this.data
 
         if (id && this.isAdmin) {
             const isPortfolio = this.isPortfolio(this.data)
-            const url = isPortfolio
-                ? 'rest/admin/deleted/portfolio/restore'
-                : 'rest/admin/deleted/material/restore'
+            const url = 'rest/admin/deleted/restore';
 
             this.serverCallService.makePost(url, { id, type }).then(({ status, data }) => {
-                console.log(
-                    isPortfolio
-                        ? 'POST rest/admin/deleted/portfolio/restore'
-                        : 'POST rest/admin/deleted/material/restore',
+                console.log('POST rest/admin/deleted/restore',
                     { id, type },
                     status,
                     data

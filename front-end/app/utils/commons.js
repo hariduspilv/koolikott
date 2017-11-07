@@ -614,10 +614,10 @@ class Controller {
             return values[0].text
 
         let languageStringValue = this.getLanguageString(values, userLanguage)
-        
+
         if (!languageStringValue) {
             languageStringValue = this.getLanguageString(values, materialLanguage)
-            
+
             if (!languageStringValue)
                 languageStringValue = values[0].text
         }
@@ -685,10 +685,10 @@ class Controller {
             return values[0].text
 
         let languageStringValue = this.getLanguageString(values, userLanguage)
-        
+
         if (!languageStringValue) {
             languageStringValue = this.getLanguageString(values, materialLanguage)
-            
+
             if (!languageStringValue)
                 languageStringValue = values[0].text
         }
@@ -795,7 +795,7 @@ class Controller {
     }
     formatDateToDayMonthYear(dateString) {
         const date = new Date(dateString)
-        
+
         return isNaN(date)
             ? ''
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
@@ -808,7 +808,13 @@ class Controller {
         })
     }
     getMostRecentChangeDate(item) {
-        return item.reviewableChanges
+        return this.getMostRecentChangeFromReviewList(item.reviewableChanges)
+    }
+    getMostRecentImproperDate(item) {
+        return this.getMostRecentChangeFromReviewList(item.improperContents)
+    }
+    getMostRecentChangeFromReviewList(reviews) {
+        return reviews
             .filter(c => !c.reviewed)
             .reduce((mostRecentDate, change) => {
                 const date = new Date(change.createdAt)
@@ -819,10 +825,11 @@ class Controller {
     }
     getMostRecentChangeDateFormatted(item) {
         const date = this.getMostRecentChangeDate(item)
-
-        return isNaN(date)
-            ? ''
-            : this.formatDateToDayMonthYear(date.toISOString())
+        return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
+    }
+    getMostRecentImproperDateFormatted(item) {
+        const date = this.getMostRecentImproperDate(item)
+        return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
     }
     getChangedByLabel(item) {
         // Unknown
@@ -845,9 +852,39 @@ class Controller {
             )
             : ''
     }
+    getReportedByLabel(item) {
+        // Unknown
+        if (item.__numChanges === 1 && !item.improperContents[0].creator)
+            return this.dependencyExists('$translate')
+                ? this.$translate.instant('UNKNOWN')
+                : ''
+
+        // One name
+        if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
+            //todo backend creator
+            item.improperContents[0].creator
+        )
+            //todo backend creator
+            return item.improperContents[0].creator.name+' '+item.improperContents[0].creator.surname;
+
+        // # changers
+        return this.dependencyExists('$translate')
+            ? this.sprintf(
+                this.$translate.instant('NUM_CHANGERS'),
+                item.__changers.length
+            )
+            : ''
+    }
     getCommaSeparatedChangers(item) {
         return item.__changers.reduce((str, c) => {
             const { name, surname } = c.createdBy
+            return `${str}${str ? ', ' : ''}${name} ${surname}`
+        }, '')
+    }
+    getCommaSeparatedReporters(item) {
+        return item.__reporters.reduce((str, c) => {
+            //todo backend creator
+            const { name, surname } = c.creator
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')
     }

@@ -9,35 +9,17 @@ const DASHBOARD_VIEW_STATE_MAP = {
     ],
     improperMaterials: [
         'DASHBOARD_IMRPOPER_MATERIALS',
-        'improper/material',
+        'improper',
         '-byReportCount',
-        true // do merge reports
-    ],
-    improperPortfolios: [
-        'DASHBOARD_IMRPOPER_PORTFOLIOS',
-        'improper/portfolio',
-        '-byReportCount',
-        true
-    ],
-    brokenMaterials: [
-        'BROKEN_MATERIALS',
-        'brokenContent/getBroken',
-        '-byReportCount',
-        true
     ],
     changedLearningObjects: [
         'DASHBOARD_CHANGED_LEARNING_OBJECTS',
         'changed',
         'byLastChangedAt'
     ],
-    deletedPortfolios: [
-        'DASHBOARD_DELETED_PORTFOLIOS',
-        'deleted/portfolio/getDeleted',
-        'byUpdatedAt'
-    ],
     deletedMaterials: [
         'DASHBOARD_DELETED_MATERIALS',
-        'deleted/material/getDeleted',
+        'deleted',
         'byUpdatedAt'
     ],
     moderators: [
@@ -113,7 +95,7 @@ class controller extends Controller {
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
-    getData(restUri, sortBy, doMerge) {
+    getData(restUri, sortBy) {
         this.serverCallService
             .makeGet('rest/admin/'+restUri)
             .then(({ data }) => {
@@ -121,15 +103,15 @@ class controller extends Controller {
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
-                    if (doMerge) {
-                        this.unmergedData = data.slice(0)
-                        data = this.merge(data)
-                    }
-
                     if (restUri == 'changed')
                         data.forEach(o => {
                             o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
                             o.__changers = this.getChangers(o)
+                        })
+                    if (restUri == 'improper')
+                        data.forEach(o => {
+                            o.__numChanges = o.improperContents.filter(c => !c.reviewed).length
+                            o.__changers = this.getReporters(o)
                         })
 
                     this.collection = data
@@ -230,6 +212,18 @@ class controller extends Controller {
                     : ids.push(id)
             })
     }
+    getReporters({ improperContents }) {
+        const ids = []
+        return improperContents
+            .filter(c => !c.reviewed)
+            .filter(c => {
+                //todo creator is sad, should use same as reviewable change (backend change)
+                const { id } = c.creator
+                return ids.includes(id)
+                    ? false
+                    : ids.push(id)
+            })
+    }
     getDuplicates(item) {
         return item.learningObject
             ? this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
@@ -278,6 +272,7 @@ class controller extends Controller {
     }
     /**
      *  Merge reports/changes so that every learning object is represented by only 1 row in the table.
+     *  //todo should remove merge
      */
     merge(items) {
         const merged = []
