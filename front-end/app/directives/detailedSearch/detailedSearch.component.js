@@ -114,7 +114,7 @@ class controller extends Controller {
                 this.clear()
         }, true)
     }
-    $onChanges({ queryIn }) {
+    $onChanges({ queryIn } = {}) {
         if (queryIn &&
             queryIn.currentValue !== queryIn.previousValue &&
             this.isVisible
