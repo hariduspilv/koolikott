@@ -1,11 +1,25 @@
 package ee.hm.dop.utils.io;
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/utils/io/LimitedSizeInputStream.java
+=======
 
 import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/utils/io/LimitedSizeInputStream.java
 
 import java.io.IOException;
 import java.io.InputStream;
 
+<<<<<<< HEAD
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/utils/io/LimitedSizeInputStream.java
+import ee.hm.dop.utils.exceptions.MaxFileSizeExceededException;
+
+=======
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/utils/io/LimitedSizeInputStream.java
+/**
+ * Created by mart on 20.09.16.
+ */
+=======
+>>>>>>> new-develop
 public class LimitedSizeInputStream extends InputStream {
 
     private InputStream source;

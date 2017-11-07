@@ -677,6 +677,77 @@ class Controller {
             return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
         }
     }
+    getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
+        if (!values || values.length === 0)
+            return
+
+        if (values.length === 1)
+            return values[0].text
+
+        let languageStringValue = this.getLanguageString(values, userLanguage)
+        
+        if (!languageStringValue) {
+            languageStringValue = this.getLanguageString(values, materialLanguage)
+            
+            if (!languageStringValue)
+                languageStringValue = values[0].text
+        }
+
+        return languageStringValue
+    }
+    getLanguageString(values, language) {
+        if (!language)
+            return null
+
+        for (var i = 0; i < values.length; i++)
+            if (values[i].language === language)
+                return values[i].text
+    }
+    formatNameToInitials(name) {
+        if (name)
+            return this.arrayToInitials(name.split(' '))
+    }
+    formatSurnameToInitialsButLast(surname) {
+        if (!surname)
+            return
+
+        var array = surname.split(' ')
+        var last = array.length - 1
+        var res = ''
+
+        if (last > 0)
+            res = this.arrayToInitials(array.slice(0, last)) + ' '
+
+        res += array[last]
+        return res
+    }
+    arrayToInitials(array) {
+        var res = ''
+
+        for (var i = 0; i < array.length; i++)
+            res += array[i].charAt(0).toUpperCase() + '. '
+
+        return res.trim()
+    }
+    isMobile() {
+        return window.innerWidth < BREAK_XS
+    }
+    createPortfolio(id) {
+        return {
+            id,
+            type: '.Portfolio',
+            title: '',
+            summary: '',
+            taxon: null,
+            targetGroups: [],
+            tags: []
+        }
+    }
+    getSource(material) {
+        if (material) {
+            return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
+        }
+    }
     isYoutubeVideo(url) {
         // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
         const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/

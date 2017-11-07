@@ -12,7 +12,10 @@ public class ChapterObjectDao extends AbstractDao<ChapterObject> {
         chapterObject.setLastInteraction(now());
         chapterObject.setUpdated(now());
         chapterObject.setAdded(now());
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/dao/ChapterObjectDao.java
+=======
         chapterObject.setVisibility(Visibility.PUBLIC);
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/dao/ChapterObjectDao.java
         return createOrUpdate(chapterObject);
     }
 }

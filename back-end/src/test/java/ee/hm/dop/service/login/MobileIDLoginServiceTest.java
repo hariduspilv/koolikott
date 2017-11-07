@@ -52,7 +52,24 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void authenticate() throws Exception {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        String phoneNumber = "+37255501234";
+        String idCode = "88881010888";
+        Language language = new Language();
+        language.setCode(LanguageC.EST);
+
+        MobileAuthenticateResponse mobileAuthenticateResponse = new MobileAuthenticateResponse();
+        mobileAuthenticateResponse.setSessionCode("789560251");
+        mobileAuthenticateResponse.setStatus("OK");
+        mobileAuthenticateResponse.setIdCode(idCode);
+        mobileAuthenticateResponse.setName("Jaan");
+        mobileAuthenticateResponse.setSurname("Sepp");
+        mobileAuthenticateResponse.setCountry("EE");
+        mobileAuthenticateResponse.setUserCommonName("JAAN,SEPP,88881010888");
+        mobileAuthenticateResponse.setChallengeID("4321");
+=======
         MobileAuthenticateResponse mobileAuthenticateResponse = response(ID_CODE, "JAAN,SEPP,88881010888");
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
 
         expect(mobileIDSOAPService.authenticate(PHONE_NUMBER, ID_CODE, LANGUAGE_EST)).andReturn(mobileAuthenticateResponse);
 
@@ -71,7 +88,14 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void authenticateWithoutCallingCode() throws Exception {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        String phoneNumber = "5554321";
+        String idCode = "11110000111";
+        Language language = new Language();
+        language.setCode(LanguageC.EST);
+=======
         MobileAuthenticateResponse mobileAuthenticateResponse = response(ID_CODE1, "JAAN,SEPP,11110000111");
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
 
         expect(mobileIDSOAPService.authenticate(ESTONIAN_CALLING_CODE + PHONE_NUMBER1, ID_CODE1, LANGUAGE_EST)).andReturn(
                 mobileAuthenticateResponse);
@@ -91,6 +115,14 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void authenticateNonEstonianPhoneNumber() throws Exception {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        String phoneNumber = "+33355501234";
+        String idCode = "99991010888";
+        Language language = new Language();
+        language.setCode(LanguageC.ENG);
+
+=======
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
         replayAll();
         MobileIDSecurityCodes mobileIDSecurityCodes = mobileIDLoginService.authenticate(PHONE_NUMBER2, ID_CODE2, LANGUAGE_ENG);
         verifyAll();
@@ -99,8 +131,18 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void isAuthenticated() throws SOAPException {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        String token = "someTOKEN";
+
+        AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setSessionCode("2835728357835");
+        authenticationState.setToken(token);
+
+        expect(authenticationStateDao.findAuthenticationStateByToken(token)).andReturn(authenticationState);
+=======
         AuthenticationState authenticationState = authenticationState();
         expect(authenticationStateDao.findAuthenticationStateByToken(SOME_TOKEN)).andReturn(authenticationState);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
         expect(mobileIDSOAPService.isAuthenticated(authenticationState)).andReturn(true);
         replayAll();
         boolean isAuthenticated = mobileIDLoginService.isAuthenticated(SOME_TOKEN);
@@ -110,8 +152,18 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void isAuthenticatedFalse() throws SOAPException {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        String token = "someTOKEN";
+
+        AuthenticationState authenticationState = new AuthenticationState();
+        authenticationState.setSessionCode("2835728357835");
+        authenticationState.setToken(token);
+
+        expect(authenticationStateDao.findAuthenticationStateByToken(token)).andReturn(authenticationState);
+=======
         AuthenticationState authenticationState = authenticationState();
         expect(authenticationStateDao.findAuthenticationStateByToken(SOME_TOKEN)).andReturn(authenticationState);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
         expect(mobileIDSOAPService.isAuthenticated(authenticationState)).andReturn(false);
         replayAll();
         boolean isAuthenticated = mobileIDLoginService.isAuthenticated(SOME_TOKEN);
@@ -121,7 +173,14 @@ public class MobileIDLoginServiceTest {
 
     @Test
     public void isAuthenticatedInvalidToken() throws SOAPException {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        String token = "invalidTOKEN";
+
+        expect(authenticationStateDao.findAuthenticationStateByToken(token)).andReturn(null);
+
+=======
         expect(authenticationStateDao.findAuthenticationStateByToken(INVALID_TOKEN)).andReturn(null);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
         replayAll();
         boolean isAuthenticated = mobileIDLoginService.isAuthenticated(INVALID_TOKEN);
         verifyAll();
@@ -129,6 +188,17 @@ public class MobileIDLoginServiceTest {
     }
 
     private void expectCreateAuthenticationState(Capture<AuthenticationState> capturedAuthenticationState) {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
+        // Using .andReturn(capturedAuthenticationState.getValue()) would give
+        // error saying "Nothing captured yet"
+        expect(authenticationStateDao.createAuthenticationState(EasyMock.capture(capturedAuthenticationState)))
+                .andAnswer(new IAnswer<AuthenticationState>() {
+                    @Override
+                    public AuthenticationState answer() throws Throwable {
+                        return capturedAuthenticationState.getValue();
+                    }
+                });
+=======
         expect(authenticationStateDao.createAuthenticationState(EasyMock.capture(capturedAuthenticationState)))
                 .andAnswer(capturedAuthenticationState::getValue);
     }
@@ -144,6 +214,7 @@ public class MobileIDLoginServiceTest {
         Language language = new Language();
         language.setCode(eng);
         return language;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/MobileIDLoginServiceTest.java
     }
 
     private void validateAuthenticationState(Capture<AuthenticationState> capturedAuthenticationState,

@@ -1,172 +1,161 @@
 'use strict'
 
-angular.module('koolikottApp')
-.component('dopShare', {
+{
+class controller extends Controller {
+    $onInit() {
+        this.isOpen = false
+        this.pageUrl = this.$location.absUrl()
+        this.pictureName = ''
+        this.shareMediaPlaces = [
+            { provider: 'email', icon: 'icon-mail-squared' },
+            { provider: 'google', icon: 'icon-gplus-squared' },
+            { provider: 'twitter', icon: 'icon-twitter-squared' },
+            { provider: 'facebook', icon: 'icon-facebook-squared' }
+        ]
+
+        this.$timeout(() => {
+            if (this.object && this.object.picture)
+                this.pictureName = this.object.picture.name
+
+            this.initGoogleButton()
+        })
+    }
+    initGoogleButton() {
+        if (!gapi) {
+            throw new Error('Expecting Google+ Javascript API is to be in global namespace as `gapi` but none found!')
+            return
+        }
+        gapi.interactivepost.render('shareGoogleFakeButton', {
+            contenturl: this.pageUrl,
+            clientid: this.GOOGLE_SHARE_CLIENT_ID,
+            cookiepolicy: this.$location.$$protocol + '://' + this.$location.$$host,
+            prefilltext: this.title,
+            calltoactionurl: this.pageUrl
+        })
+    }
+    isVisible() {
+        if (this.object && this.object.deleted || this.$rootScope.isEditPortfolioPage)
+            return false
+
+        if (this.$rootScope.isViewMaterialPage)
+            return true
+
+        if (this.object) {
+            if (this.isPublic() ||
+                this.isNotListed() ||
+                this.isOwner() ||
+                this.authenticatedUserService.isAdmin() ||
+                this.authenticatedUserService.isModerator()
+            )
+                return true
+            else if (this.isPrivate())
+                return false
+        }
+
+        return false
+    }
+    isPublic() {
+        return this.object.visibility === 'PUBLIC'
+    }
+    isPrivate() {
+        console.log()
+        return this.object.visibility === 'PRIVATE'
+    }
+    isNotListed() {
+        return this.object.visibility === 'NOT_LISTED'
+    }
+    isOwner () {
+        if (!this.authenticatedUserService.isAuthenticated())
+            return false
+
+        if (this.object && this.object.creator)
+            return this.object.creator.id === this.authenticatedUserService.getUser().id
+    }
+    share($event, item) {
+        if (this.isMaterial(this.object))
+            this.setShareParams(item)
+        else
+        if (this.isPortfolio(this.object)) {
+            if (
+                (!this.isOwner() && !this.isPublic()) ||
+                (this.isOwner() && this.isPrivate())
+            ) {
+                $event.preventDefault()
+                this.showWarningDialog($event, item)
+            } else
+                this.setShareParams(item)
+        }
+    }
+    showWarningDialog(targetEvent, item) {
+        this.$mdDialog.show({
+            templateUrl: 'directives/share/modal/share.modal.html',
+            controller: 'shareModalController',
+            controllerAs: '$ctrl',
+            targetEvent,
+            locals: {
+                item,
+                portfolio: this.object,
+                setShareParams: this.setShareParams.bind(this),
+                isOwner: this.isOwner.bind(this),
+                isPrivate: this.isPrivate.bind(this)
+            }
+        })
+    }
+    setShareParams({ provider } = {}) {
+        switch (provider) {
+            case 'facebook':
+                this.Socialshare.share({
+                    provider,
+                    attrs: {
+                        socialshareUrl: this.pageUrl,
+                        socialshareTitle: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title,
+                        socialshareMedia: this.$location.$$protocol + '://' + this.$location.$$host + '/rest/picture/thumbnail/lg/' + this.pictureName,
+                        socialshareType: 'share',
+                        socialshareVia: this.FB_APP_ID
+                    }
+                })
+                break
+            case 'twitter':
+                this.Socialshare.share({
+                    provider,
+                    attrs: {
+                        socialshareUrl: this.pageUrl,
+                        socialshareText: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title
+                    }
+                })
+                break
+            case 'email':
+                this.Socialshare.share({
+                    provider,
+                    attrs: {
+                        socialshareSubject: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title,
+                        socialshareBody: this.$translate.instant('WELCOME_READ_HERE') + ': ' + this.pageUrl
+                    }
+                })
+                break
+            case 'google':
+                angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click')
+        }
+    }
+}
+controller.$inject = [
+    '$rootScope',
+    '$location',
+    '$mdDialog',
+    '$timeout',
+    '$translate',
+    'authenticatedUserService',
+    'Socialshare',
+    'FB_APP_ID',
+    'GOOGLE_SHARE_CLIENT_ID'
+]
+
+component('dopShare', {
     bindings: {
         title: '<',
         object: '<'
     },
     templateUrl: 'directives/share/share.html',
-    controller: dopShareController
-});
-
-dopShareController.$inject = ['$scope', '$rootScope', '$location', '$window', 'translationService', '$translate', 'authenticatedUserService', '$mdDialog', 'serverCallService', 'toastService', 'Socialshare', 'FB_APP_ID', 'GOOGLE_SHARE_CLIENT_ID', '$timeout'];
-
-function dopShareController($scope, $rootScope, $location, $window, translationService, $translate, authenticatedUserService, $mdDialog, serverCallService, toastService, Socialshare, FB_APP_ID, GOOGLE_SHARE_CLIENT_ID, $timeout) {
-    let vm = this;
-
-    vm.$onInit = () => {
-        vm.isOpen = false;
-        vm.pageUrl = $location.absUrl();
-        vm.pictureName = '';
-
-        vm.shareMediaPlaces = [
-            {
-                'provider': 'email',
-                'icon': 'icon-mail-squared'
-            }, {
-                'provider': 'google',
-                'icon': 'icon-gplus-squared'
-            }, {
-                'provider': 'twitter',
-                'icon': 'icon-twitter-squared'
-            }, {
-                'provider': 'facebook',
-                'icon': 'icon-facebook-squared'
-            }
-        ];
-
-        $timeout(() => {
-            if (vm.object && vm.object.picture) {
-                vm.pictureName = vm.object.picture.name;
-            }
-
-            initGoogleButton();
-        });
-    };
-
-    function initGoogleButton () {
-        let options = {
-            contenturl: vm.pageUrl,
-            clientid: GOOGLE_SHARE_CLIENT_ID,
-            cookiepolicy: $location.$$protocol + '://' + $location.$$host,
-            prefilltext: vm.title,
-            calltoactionurl: vm.pageUrl
-        };
-
-        gapi.interactivepost.render('shareGoogleFakeButton', options);
-    }
-
-    vm.isVisible = () => {
-        if (vm.object && vm.object.deleted || $rootScope.isEditPortfolioPage) {
-            return false;
-        }
-
-        if ($rootScope.isViewMaterialPage) {
-            return true;
-        }
-
-        if (vm.object) {
-            if (isPublic() || isNotListed() || isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) {
-                return true;
-            } else if (isPrivate()) {
-                return false;
-            }
-        }
-
-        return false;
-    };
-
-    function isPublic() {
-        return vm.object.visibility === 'PUBLIC';
-    }
-
-    function isPrivate() {
-        return vm.object.visibility === 'PRIVATE';
-    }
-
-    function isNotListed() {
-        return vm.object.visibility === 'NOT_LISTED';
-    }
-
-    function isOwner () {
-        if (!authenticatedUserService.isAuthenticated()) {
-            return false;
-        }
-
-        if (vm.object && vm.object.creator) {
-            let creatorId = vm.object.creator.id;
-            let userId = authenticatedUserService.getUser().id;
-            return creatorId === userId;
-        }
-    }
-
-    vm.share = ($event, item) => {
-        if (isMaterial(vm.object.type)) {
-            setShareParams(item);
-        } else if (isPortfolio(vm.object.type)) {
-            if ((!isOwner() && !isPublic()) || (isOwner() && isPrivate())) {
-                $event.preventDefault();
-                showWarningDialog($event, item);
-            } else {
-                setShareParams(item);
-            }
-        }
-    };
-
-    function showWarningDialog (ev, item) {
-        $mdDialog.show({
-            templateUrl: 'directives/share/modal/share.modal.html',
-            controller: 'shareModalController',
-            controllerAs: '$ctrl',
-            targetEvent: ev,
-            locals: {
-                item: item,
-                portfolio: vm.object,
-                setShareParams: setShareParams,
-                isOwner: isOwner,
-                isPrivate: isPrivate
-            }
-        });
-    }
-
-    function setShareParams(item) {
-        if (!item) return;
-
-        switch (item.provider) {
-            case 'facebook':
-                Socialshare.share({
-                    'provider': item.provider,
-                    'attrs': {
-                        'socialshareUrl': vm.pageUrl,
-                        'socialshareTitle': $translate.instant('READING_RECOMMENDATION') + ': ' + vm.title,
-                        'socialshareMedia': $location.$$protocol + '://' + $location.$$host + '/rest/picture/thumbnail/lg/' + vm.pictureName,
-                        'socialshareType': 'share',
-                        'socialshareVia': FB_APP_ID
-                    }
-                });
-            break;
-            case 'twitter':
-                Socialshare.share({
-                    'provider': item.provider,
-                    'attrs': {
-                        'socialshareUrl': vm.pageUrl,
-                        'socialshareText': $translate.instant('READING_RECOMMENDATION') + ': ' + vm.title
-                    }
-                });
-            break;
-            case 'email':
-                Socialshare.share({
-                    'provider': item.provider,
-                    'attrs': {
-                        'socialshareSubject': $translate.instant('READING_RECOMMENDATION') + ': ' + vm.title,
-                        'socialshareBody': $translate.instant('WELCOME_READ_HERE') + ': ' + vm.pageUrl
-                    }
-                });
-            break;
-            case 'google':
-                angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click');
-            break;
-        }
-    }
+    controller
+})
 }

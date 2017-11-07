@@ -2,10 +2,15 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.Thumbnail;
+<<<<<<< HEAD
+import ee.hm.dop.service.content.PictureService;
+=======
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
+>>>>>>> new-develop
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataParam;

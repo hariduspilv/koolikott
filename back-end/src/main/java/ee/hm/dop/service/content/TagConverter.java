@@ -1,14 +1,26 @@
 package ee.hm.dop.service.content;
 
+<<<<<<< HEAD
+import ee.hm.dop.dao.FirstReviewDao;
+=======
 import ee.hm.dop.dao.LearningObjectDao;
+>>>>>>> new-develop
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.ResourceTypeService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ee.hm.dop.service.metadata.TaxonService;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import ee.hm.dop.service.reviewmanagement.ChangedLearningObjectService;
+import ee.hm.dop.service.reviewmanagement.ReviewManager;
+>>>>>>> new-develop
+=======
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
+>>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
 
 import javax.inject.Inject;
@@ -30,7 +42,11 @@ public class TagConverter {
     @Inject
     private ReviewableChangeService reviewableChangeService;
     @Inject
+<<<<<<< HEAD
+    private LearningObjectService learningObjectService;
+=======
     private LearningObjectDao learningObjectDao;
+>>>>>>> new-develop
 
     public TagDTO addChangeReturnTagDto(String tagName, LearningObject learningObject, User user) {
         Taxon taxon = taxonService.findTaxonByTranslation(tagName);
@@ -48,7 +64,19 @@ public class TagConverter {
             reviewableChangeService.registerChange(learningObject, user, taxon, resourceType, targetGroup, null);
             learningObject.setChanged(learningObject.getChanged() + 1);
         }
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+        LearningObject updatedLearningObject = learningObjectService.getLearningObjectDao().createOrUpdate(learningObject);
+=======
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
+>>>>>>> new-develop
+        updatedLearningObject.setChanged(hasChanged ? updatedLearningObject.getChanged() + 1 : updatedLearningObject.getChanged());
+        tagDTO.setLearningObject(updatedLearningObject);
+
+=======
+        LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
+>>>>>>> new-develop
         solrEngineService.updateIndex();
         return convertDto(updatedLearningObject, tagTypeName);
     }

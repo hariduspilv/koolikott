@@ -28,13 +28,17 @@ class controller extends Controller {
         this.$rootScope.$broadcast('recommendations:updated')
     }
 }
-controller.$inject = ['$scope', 'serverCallService', 'authenticatedUserService', '$rootScope']
-
+controller.$inject = [
+    '$scope',
+    'serverCallService',
+    'authenticatedUserService',
+    '$rootScope'
+]
 /**
  * Declaring this as a directive since we need to use it as an attribute on
  * <md-menu-item> (component usage is restricted to element tagname only).
  */
-angular.module('koolikottApp').directive('dopRecommend', () => ({
+directive('dopRecommend', {
     scope: {
         material: '<',
         portfolio: '<',
@@ -42,5 +46,5 @@ angular.module('koolikottApp').directive('dopRecommend', () => ({
     },
     templateUrl: 'directives/recommend/recommend.html',
     controller
-}))
+})
 }

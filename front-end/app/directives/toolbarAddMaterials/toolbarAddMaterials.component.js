@@ -1,239 +1,163 @@
 'use strict'
 
-angular.module('koolikottApp')
-    .component('dopToolbarAddMaterials', {
-        bindings: {},
-        templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
-        controller: dopToolbarAddMaterialsController
-    });
+{
+class controller extends Controller {
+    $onInit() {
+        if (this.$rootScope.isEditPortfolioMode) {
+            this.isPortfolioEdit = true
+            this.portfolio = this.storageService.getPortfolio()
 
-dopToolbarAddMaterialsController.$inject = ['$rootScope', '$translate', 'authenticatedUserService', 'serverCallService', 'toastService', 'storageService', 'materialService', '$mdDialog', 'portfolioService'];
-
-function dopToolbarAddMaterialsController($rootScope, $translate, authenticatedUserService, serverCallService, toastService, storageService, materialService, $mdDialog, portfolioService) {
-    let vm = this;
-
-    vm.$onInit = () => {
-        if ($rootScope.isEditPortfolioMode) {
-            vm.isPortfolioEdit = true;
-            vm.portfolio = storageService.getPortfolio();
-
-            if ($rootScope.savedIndexes) {
-                vm.chapter = $rootScope.savedIndexes;
-            }
-        } else {
-            loadUserPortfolios();
-        }
+            if (this.$rootScope.savedIndexes)
+                this.chapter = this.$rootScope.savedIndexes
+        } else
+            this.loadUserPortfolios()
     }
-
-    function getPortfolioSelectLabel() {
-        if (vm.portfolio != null) {
-            if (vm.portfolio.title) {
-                return vm.portfolio.title;
-            } else if (vm.portfolio === '-1') {
-                return $translate.instant('ADD_TO_NEW_PORTFOLIO');
-            }
-        } else {
-            return $translate.instant('CHOOSE_PORTFOLIO');
-        }
+    getPortfolioSelectLabel() {
+        return !this.portfolio
+            ? this.$translate.instant('CHOOSE_PORTFOLIO')
+            : this.portfolio === '-1'
+                ? this.$translate.instant('ADD_TO_NEW_PORTFOLIO')
+                : this.portfolio.title || ''
     }
+    getChapterSelectLabel() {
+        if (!this.chapter)
+            return this.$translate.instant('CHOOSE_PORTFOLIO_CHAPTER')
 
-    function getChapterSelectLabel() {
-        if (vm.chapter != null) {
+        const indexes = this.chapter.split('_').map(item => parseInt(item, 10))
 
-            let indexes = vm.chapter.split('_').map((item) => { return parseInt(item) });
-
-            if (indexes.length > 1) {
-                if (vm.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title === '') {
-                    return $translate.instant('PORTFOLIO_SUBCHAPTER_TITLE_MISSING');
-                }
-                return vm.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title;
-            } else if (indexes[0] === -1) {
-                return $translate.instant('ADD_TO_NEW_CHAPTER');
-            } else {
-                if (vm.portfolio.chapters[indexes[0]].title === '') {
-                    return $translate.instant('PORTFOLIO_CHAPTER_TITLE_MISSING');
-                }
-                return vm.portfolio.chapters[indexes[0]].title;
-            }
-        } else {
-            return $translate.instant('CHOOSE_PORTFOLIO_CHAPTER');
-        }
+        return !indexes.length
+            ? ''
+            : indexes[0] === -1
+                ? this.$translate.instant('ADD_TO_NEW_CHAPTER')
+                : indexes.length > 1
+                    ? this.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title || this.$translate.instant('PORTFOLIO_SUBCHAPTER_TITLE_MISSING')
+                    : this.portfolio.chapters[indexes[0]].title || this.$translate.instant('PORTFOLIO_CHAPTER_TITLE_MISSING')
     }
-
-    function upgradeMaterials(materials) {
-        return new Promise(function(resolve) {
-            let list = [];
-            let count = 0;
-            materials.forEach(function(item, index, array) {
-                materialService.getMaterialById(item.id)
-                    .then((data) => {
-                        list.push({learningObjects: [data]});
-                        count++;
-
-                        if (count === array.length) {
-                            resolve(list);
-                        }
-                    })
-            })
-        })
+    upgradeMaterials(materials) {
+        return Promise.all(
+            materials.map(m =>
+                this.materialService.getMaterialById(m.id).then(data => ({
+                    learningObjects: [data]
+                }))
+            )
+        )
     }
-
-    function addMaterialsToChapter(chapter, portfolio) {
+    addMaterialsToChapter(chapter, portfolio) {
         // Start spinner
-        vm.isSaving = true;
+        this.isSaving = true
 
-        let tempPortfolio = createPortfolio();
-        let indexes = chapter.split('_').map((item) => { return parseInt(item) });
+        const tempPortfolio = portfolio !== '-1' ? portfolio : this.createPortfolio()
+        const indexes = chapter.split('_').map(item => parseInt(item, 10))
+
+        if (!Array.isArray(tempPortfolio.chapters))
+            tempPortfolio.chapters = []
 
         // Indexes in arrays
-        let chapterIndex = indexes[0];
-        let subchapterIndex = indexes[1];
+        const chapterIndex = indexes[0] !== -1
+            ? indexes[0]
+            : tempPortfolio.chapters.length
+        const subchapterIndex = indexes[1]
 
-        if (portfolio !== '-1') {
-            tempPortfolio = portfolio;
-        }
-
-        if (indexes[0] === -1) {
-            if (!tempPortfolio.chapters || tempPortfolio.chapters.length === 0) {
-                tempPortfolio.chapters = [];
-                chapterIndex = 0;
-            } else {
-                chapterIndex = tempPortfolio.chapters.length;
-            }
-        }
-
-        upgradeMaterials($rootScope.selectedMaterials).then(function(data) {
-
+        this.upgradeMaterials(this.$rootScope.selectedMaterials).then(data => {
             if (subchapterIndex == null) {
-                if (indexes[0] === -1) {
-                    tempPortfolio.chapters[chapterIndex] = {
-                        title: ''
-                    };
-                }
+                if (indexes[0] === -1)
+                    tempPortfolio.chapters[chapterIndex] = { title: '' }
 
-                if (!tempPortfolio.chapters[chapterIndex].contentRows) {
+                if (!tempPortfolio.chapters[chapterIndex].contentRows)
                     tempPortfolio.chapters[chapterIndex].contentRows = []
-                }
 
-                data.forEach((contentRow) => {
-                    tempPortfolio.chapters[chapterIndex].contentRows.push(contentRow);
-                });
+                ;[].push.apply(tempPortfolio.chapters[chapterIndex].contentRows, data)
             } else {
-                if(!tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows) {
-                    tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows = [];
-                }
+                if(!tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows)
+                    tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows = []
 
-                data.forEach((contentRow) => {
-                    tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows.push(contentRow);
-                });
+                ;[].push.apply(tempPortfolio.chapters[chapterIndex].subchapters[subchapterIndex].contentRows, data)
             }
 
             if (portfolio === '-1') {
-                toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS');
-
-                storageService.setPortfolio(tempPortfolio);
-
-                $mdDialog.show({
+                this.toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS')
+                this.storageService.setPortfolio(tempPortfolio)
+                this.$mdDialog.show({
                     templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                     controller: 'addPortfolioDialogController'
-                });
-
-                removeSelection();
+                })
+                this.removeSelection()
             } else {
                 // When adding to an existing portfolio
-                serverCallService.makePost("rest/portfolio/update", tempPortfolio, addMaterialsToChapterSuccess, addMaterialsToChapterFailed);
-                $rootScope.$broadcast('detailedSearch:empty');
+                const fail = () => {
+                    this.isSaving = false
+                    this.toastService.show('PORTFOLIO_ADD_MATERIAL_FAIL')
+                }
+                this.$rootScope.$broadcast('detailedSearch:empty')
+                this.serverCallService
+                    .makePost('rest/portfolio/update', tempPortfolio)
+                    .then(({ data: portfolio }) => {
+                        if (!portfolio)
+                            fail()
+                        else {
+                            this.removeSelection()
+                            this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
+
+                            if (this.$rootScope.isEditPortfolioMode) {
+                                this.$rootScope.back()
+                                this.$rootScope.savedIndexes = null
+                            }
+                        }
+                    }, fail)
             }
-        });
+        })
     }
-
-    /*
-     * Callbacks for serverCallService
-     */
-
-    function getUsersPortfoliosSuccess(data) {
-        if (isEmpty(data)) {
-            getUsersPortfoliosFail();
-        } else {
-            vm.usersPortfolios = data.items;
+    loadUserPortfolios() {
+        const fail = () => {
+            this.toastService.show('LOADING_PORTFOLIOS_FAIL')
+            this.removeSelection()
         }
+        this.serverCallService
+            .makeGet('rest/portfolio/getByCreator', {
+                'username': this.authenticatedUserService.getUser().username
+            })
+            .then(
+                data => !data ? fail() : this.usersPortfolios = data.items,
+                fail
+            )
     }
-
-    function getUsersPortfoliosFail() {
-        toastService.show('LOADING_PORTFOLIOS_FAIL');
-        removeSelection();
+    removeSelection() {
+        this.$rootScope.selectedMaterials = []
     }
-
-    function addMaterialsToChapterSuccess(portfolio) {
-        if (isEmpty(portfolio)) {
-            addMaterialsToChapterFailed();
-        } else {
-            removeSelection();
-            toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS');
-
-            if ($rootScope.isEditPortfolioMode) {
-                $rootScope.back();
-                $rootScope.savedIndexes = null;
-            }
-        }
+    portfolioSelectChange() {
+        this.chapter = null
+        this.portfolio === '-1'
+            ? this.chapter = '-1'
+            : this.loadPortfolioChapters()
     }
-
-    function addMaterialsToChapterFailed() {
-        console.log('Failed to update portfolio.');
-        vm.isSaving = false;
-        toastService.show('PORTFOLIO_ADD_MATERIAL_FAIL');
-    }
-
-    /*
-     * End of callbacks
-     */
-
-    function removeSelection() {
-        for (let i = 0; i < $rootScope.selectedMaterials.length; i++) {
-            $rootScope.selectedMaterials[i].selected = false;
-        }
-
-        $rootScope.selectedMaterials = [];
-    }
-
-    function loadUserPortfolios() {
-        let user = authenticatedUserService.getUser();
-        let params = {
-            'username': user.username
-        };
-        let url = "rest/portfolio/getByCreator";
-        serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
-    }
-
-    function portfolioSelectChange() {
-        vm.chapter = null;
-
-        if(vm.portfolio !== '-1') {
-            loadPortfolioChapters(vm.portfolio);
-        } else {
-            vm.chapter = '-1';
-        }
-    }
-
-    function loadPortfolioChapters(portfolio) {
-        vm.loadingChapters = true;
-        vm.loadingChaptersFailed = false;
-        portfolioService.getPortfolioById(portfolio.id)
-            .then((data) => {
-                vm.portfolio = data;
-                vm.loadingChapters = false;
+    loadPortfolioChapters() {
+        this.loadingChapters = true
+        this.loadingChaptersFailed = false
+        this.portfolioService
+            .getPortfolioById(this.portfolio.id)
+            .then(data => {
+                this.portfolio = data
+                this.loadingChapters = false
             }, () => {
-                vm.loadingChapters = false;
-                vm.loadingChaptersFailed = true;
-                toastService.show('LOADING_PORTFOLIOS_FAIL');
-            });
+                this.loadingChapters = false
+                this.loadingChaptersFailed = true
+                this.toastService.show('LOADING_PORTFOLIOS_FAIL')
+            })
     }
-
-    // Exports
-    vm.loadPortfolioChapters = loadPortfolioChapters;
-    vm.portfolioSelectChange = portfolioSelectChange;
-    vm.removeSelection = removeSelection;
-    vm.addMaterialsToChapter = addMaterialsToChapter;
-    vm.getPortfolioSelectLabel = getPortfolioSelectLabel;
-    vm.getChapterSelectLabel = getChapterSelectLabel;
+}
+controller.$inject = [
+    '$rootScope',
+    '$translate',
+    '$mdDialog',
+    'authenticatedUserService',
+    'serverCallService',
+    'toastService',
+    'storageService',
+    'materialService',
+    'portfolioService'
+]
+component('dopToolbarAddMaterials', {
+    templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
+    controller
+})
 }

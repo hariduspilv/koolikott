@@ -1,9 +1,16 @@
 package ee.hm.dop.rest.metadata;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LearningMaterialMetadataResourceTest.java
+import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestTaxon;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.EducationalContextC;
+=======
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/metadata/LearningMaterialMetadataResourceTest.java
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.*;
 import org.junit.Test;
@@ -16,6 +23,18 @@ import static org.junit.Assert.*;
 
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LearningMaterialMetadataResourceTest.java
+    private static final String GET_EDUCATIONAL_CONTEXT_URL = "learningMaterialMetadata/educationalContext";
+    private static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
+    private static final String GET_LANGUAGES_URL = "learningMaterialMetadata/language";
+    private static final String GET_USED_LANGUAGES_URL = "learningMaterialMetadata/usedLanguages";
+    private static final String GET_TARGET_GROUPS_URL = "learningMaterialMetadata/targetGroup";
+    private static final String GET_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType";
+    private static final String GET_USED_RESOURCE_TYPES_URL = "learningMaterialMetadata/resourceType/used";
+    private static final String GET_LICENSE_TYPES_URL = "learningMaterialMetadata/licenseType";
+    private static final String GET_CROSS_CURRICULAR_THEMES_URL = "learningMaterialMetadata/crossCurricularTheme";
+    private static final String GET_KEY_COMPETENCES_URL = "learningMaterialMetadata/keyCompetence";
+=======
     public static final String BASE = "learningMaterialMetadata/";
     private static final String GET_EDUCATIONAL_CONTEXT_URL = BASE + "educationalContext";
     private static final String GET_TAXON_URL = BASE + "taxon?taxonId=%s";
@@ -30,6 +49,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_LO_REPORTING_REASONS_URL = BASE + "learningObjectReportingReasons";
     private static final String GET_TAG_REPORTING_REASONS_URL = BASE + "tagReportingReasons";
     private static final String GET_COMMENT_REPORTING_REASONS_URL = BASE + "commentReportingReasons";
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/metadata/LearningMaterialMetadataResourceTest.java
     public static final String MATHEMATICS = "Mathematics";
     public static final String ALGEBRA = "Algebra";
     public static final String TRIGONOMETRIA = "Trigonometria";
@@ -72,9 +92,15 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
     @Test
     public void getTaxon() {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LearningMaterialMetadataResourceTest.java
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TestConstants.TAXON_MATHEMATICS.id), Taxon.class);
+        assertEquals(TestConstants.TAXON_MATHEMATICS.id, taxon.getId());
+        assertEquals(TestConstants.TAXON_MATHEMATICS.name, taxon.getName());
+=======
         Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_MATHEMATICS_DOMAIN.id), Taxon.class);
         assertEquals(TAXON_MATHEMATICS_DOMAIN.id, taxon.getId());
         assertEquals(TAXON_MATHEMATICS_DOMAIN.name, taxon.getName());
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/metadata/LearningMaterialMetadataResourceTest.java
     }
 
     @Test
@@ -157,6 +183,8 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertTrue(actual.containsAll(expected));
     }
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LearningMaterialMetadataResourceTest.java
+=======
     @Test
     public void learningObject_reportingreasons_returns_LO_reasons() throws Exception {
         List<ReportingReasonEnum> actual = doGet(GET_LO_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
@@ -181,6 +209,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         assertEquals(expected, actual);
     }
 
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/metadata/LearningMaterialMetadataResourceTest.java
     private void verifyGetLanguages(List<String> expectedNames, String getUsedLanguagesUrl) {
         List<Language> languages = doGet(getUsedLanguagesUrl, new GenericType<List<Language>>() {
         });

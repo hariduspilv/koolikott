@@ -2,12 +2,22 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.dao.LearningObjectDao;
+<<<<<<< HEAD
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.useractions.PeerReviewService;
+=======
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.service.reviewmanagement.*;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.UserUtil;
+>>>>>>> new-develop
 import org.easymock.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -34,6 +44,11 @@ public class LearningObjectAdministrationServiceTest {
     @Mock
     private ReviewableChangeService reviewableChangeService;
     @Mock
+<<<<<<< HEAD
+    private FirstReviewService firstReviewService;
+    @Mock
+    private LearningObjectService learningObjectService;
+=======
     private FirstReviewAdminService firstReviewAdminService;
     @Mock
     private LearningObjectService learningObjectService;
@@ -43,6 +58,7 @@ public class LearningObjectAdministrationServiceTest {
     private MaterialAdministrationService materialAdministrationService;
     @Mock
     private ReviewManager reviewManager;
+>>>>>>> new-develop
 
     @Test
     public void addRecommendationMaterial() {
@@ -174,6 +190,8 @@ public class LearningObjectAdministrationServiceTest {
         assertNull(recommendation);
     }
 
+<<<<<<< HEAD
+=======
 
     @Test
     public void restore() {
@@ -272,6 +290,7 @@ public class LearningObjectAdministrationServiceTest {
     }
 
 
+>>>>>>> new-develop
     private void expectPortfolioUpdate(Capture<Portfolio> capturedPortfolio) {
         expect(learningObjectDao.createOrUpdate(EasyMock.capture(capturedPortfolio))).andAnswer(capturedPortfolio::getValue);
     }

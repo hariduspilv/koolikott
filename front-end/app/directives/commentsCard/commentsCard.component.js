@@ -187,8 +187,7 @@ controller.$inject = [
     'serverCallService',
     'toastService'
 ]
-
-angular.module('koolikottApp').component('dopCommentsCard', {
+component('dopCommentsCard', {
     bindings: {
         learningObject: '<',
         isOpen: '<',

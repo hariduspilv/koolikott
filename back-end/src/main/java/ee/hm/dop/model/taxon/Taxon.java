@@ -25,7 +25,15 @@ import java.util.Set;
 @DiscriminatorColumn(name = "level")
 @Inheritance(strategy = JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS, include = JsonTypeInfo.As.PROPERTY, property = "level", defaultImpl = NoClass.class)
+<<<<<<< HEAD
+<<<<<<< HEAD
+@NamedQuery(name = "findAllEducationalContext", query = "FROM Taxon t WHERE level = 'EDUCATIONAL_CONTEXT'")
+=======
+>>>>>>> new-develop
+public abstract class Taxon extends AbstractEntity {
+=======
 public abstract class Taxon implements AbstractEntity {
+>>>>>>> new-develop
 
     @Id
     @GeneratedValue

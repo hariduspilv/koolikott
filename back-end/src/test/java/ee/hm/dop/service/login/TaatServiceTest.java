@@ -55,6 +55,10 @@ public class TaatServiceTest {
     private Configuration configuration;
     @Mock
     private AuthenticationStateDao authenticationStateDao;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/login/TaatServiceTest.java
+
+=======
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/login/TaatServiceTest.java
     @Mock
     private LoginService loginService;
     @Mock

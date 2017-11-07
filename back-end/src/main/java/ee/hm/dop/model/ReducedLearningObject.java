@@ -2,7 +2,10 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+<<<<<<< HEAD
+=======
 import ee.hm.dop.model.enums.Visibility;
+>>>>>>> new-develop
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;

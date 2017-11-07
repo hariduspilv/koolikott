@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+<<<<<<< HEAD
+=======
 import ee.hm.dop.model.enums.ReviewStatus;
+>>>>>>> new-develop
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
@@ -21,7 +24,14 @@ public class FirstReview implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "learningObject", nullable = false)
+<<<<<<< HEAD
+<<<<<<< HEAD
+//    @JsonBackReference
+=======
+>>>>>>> new-develop
+=======
     @JsonIgnore
+>>>>>>> new-develop
     private LearningObject learningObject;
 
     @Column(nullable = false)
@@ -43,9 +53,12 @@ public class FirstReview implements AbstractEntity {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime createdAt;
 
+<<<<<<< HEAD
+=======
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
 
+>>>>>>> new-develop
     @Override
     public Long getId() {
         return id;
@@ -94,6 +107,8 @@ public class FirstReview implements AbstractEntity {
     public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     }
+<<<<<<< HEAD
+=======
 
     public ReviewStatus getStatus() {
         return status;
@@ -102,4 +117,5 @@ public class FirstReview implements AbstractEntity {
     public void setStatus(ReviewStatus status) {
         this.status = status;
     }
+>>>>>>> new-develop
 }

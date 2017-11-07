@@ -1,4 +1,8 @@
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LoginResourceTest.java
+package ee.hm.dop.rest;
+=======
 package ee.hm.dop.rest.login;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/login/LoginResourceTest.java
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.AuthenticationStateDao;
@@ -56,19 +60,34 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void login() {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LoginResourceTest.java
+        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilter1()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+=======
         AuthenticatedUser authenticatedUser = loginWithId(new LoginFilter1());
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/login/LoginResourceTest.java
         assertNotNull(authenticatedUser.getToken());
     }
 
     @Test
     public void loginAuthenticationFailed() {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LoginResourceTest.java
+        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilter2()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+=======
         AuthenticatedUser authenticatedUser = loginWithId(new LoginFilter2());
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/login/LoginResourceTest.java
         assertNull(authenticatedUser);
     }
 
     @Test
     public void loginSameNameWithAccent() {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LoginResourceTest.java
+        AuthenticatedUser authenticatedUser = getTarget(LOGIN_ID_CARD, new LoginFilterAccentInName()).request()
+                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+=======
         AuthenticatedUser authenticatedUser = loginWithId(new LoginFilterAccentInName());
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/login/LoginResourceTest.java
         assertNotNull(authenticatedUser.getToken());
         assertEquals("peeter.paan2", authenticatedUser.getUser().getUsername());
     }

@@ -1,12 +1,11 @@
 <dop-toolbar-add-materials data-ng-if="selectedMaterials.length > 0"></dop-toolbar-add-materials>
-<md-toolbar id="md-toolbar-header" class="navbar md-whiteframe-1dp md-primary"
-            ng-class="{
-            'md-accent': $root.isEditPortfolioMode,
-            'md-red': isHeaderRed(),
-            'md-gray': (isAdminOrModerator() && learningObjectDeleted && isViewMaterialOrPortfolioPage)
-            }"
-            data-click-outside="clickOutside()"
-            outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown">
+<md-toolbar
+  id="md-toolbar-header"
+  class="navbar md-whiteframe-1dp md-primary"
+  ng-class="{ 'md-accent': $root.isEditPortfolioMode, 'md-red': isHeaderRed() }"
+  data-click-outside="clickOutside()"
+  outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown"
+  >
   <div class="md-toolbar-tools" layout="row" layout-align="start center">
     <!-- logo and menu button -->
     <div class="navbar-logo-area" data-ng-if="!mobileSearch.isVisible">
@@ -57,7 +56,7 @@
                            id="header-simple-search-input"
                            md-menu-class="suggest-dropdown"
                            ng-model-options="{ debounce: 200 }"
-                           placeholder="{{isEditPortfolioPage ? getTranslation('HEADER_SEARCH_PLACEHOLDER') : ''}}">
+                           placeholder="{{$root.isEditPortfolioPage ? getTranslation('HEADER_SEARCH_PLACEHOLDER') : ''}}">
             <md-item-template>
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
             </md-item-template>
@@ -95,11 +94,11 @@
           <md-icon>search</md-icon>
         </md-button>
       </div>
-      <div class="button-container" data-ng-if="!isEditPortfolioMode || isViewPortfolioPage">
+      <div class="button-container" data-ng-if="!$root.isEditPortfolioMode || $root.isViewPortfolioPage">
         <!-- change language menu -->
         <md-menu>
           <md-button aria-label="Ava keelevaliku menüü" class="md-icon-button language-icon" id="header-language-icon"
-                     ng-click="$mdOpenMenu($event)">
+                     ng-click="$mdMenu.open($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_SELECT_LANGUAGE"></span></md-tooltip>
             <span data-ng-if="selectedLanguage === 'est'">ET</span>
             <span data-ng-if="selectedLanguage === 'rus'">RU</span>
@@ -129,7 +128,7 @@
         <!-- info menu -->
         <md-menu id="menu-help">
           <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
-                     ng-click="$mdOpenMenu($event)">
+                     ng-click="$mdMenu.open($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_HELP"></span></md-tooltip>
             <md-icon>help</md-icon>
           </md-button>
@@ -164,7 +163,7 @@
         <!-- logged in user menu -->
         <md-menu data-ng-show="user">
           <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon"
-                     ng-click="$mdOpenMenu($event)">
+                     ng-click="$mdMenu.open($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
             <!--<md-icon>account_circle</md-icon>-->
             <div class="account__circle">{{user.name[0]}}</div>
@@ -185,14 +184,14 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div class="button-container" data-ng-if="isEditPortfolioMode">
+      <div class="button-container" data-ng-if="$root.isEditPortfolioMode">
         <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
                     data-ng-click="openTour(true)">
             <md-tooltip><span data-translate="HEADER_EDIT_TOOLTIP_HELP"></span></md-tooltip>
             <md-icon>help</md-icon>
          </md-button>
         <md-menu>
-          <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button" ng-click="$mdMenu.open($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
             <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
             <md-icon data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'">link</md-icon>
@@ -250,18 +249,17 @@
     </div>
   </div>
 </md-toolbar>
-
 <div class="md-toolbar-filter ng-hide" id="detailedSearch" data-ng-show="detailedSearch.isVisible" ng-cloak>
   <form layout="row">
-    <div class="lays-out-left" data-ng-hide="sidenavIsOpen()" ng-cloak></div>
+    <div class="lays-out-left" data-ng-hide="isSideNavOpen" ng-cloak></div>
     <div class="filter-wrapper"
-         id="detailed-search" data-ng-class="{'nav-open': sidenavIsOpen()}" ng-cloak>
-      <div data-dop-detailed-search
-           data-is-visible="detailedSearch.isVisible"
-           data-query-in="detailedSearch.queryIn"
-           data-query-out="detailedSearch.queryOut"
-           data-main-field="detailedSearch.mainField"
-           data-accessor="detailedSearch.accessor"></div>
+         id="detailed-search" data-ng-class="{'nav-open': isSideNavOpen}" ng-cloak>
+      <data-dop-detailed-search
+        data-is-visible="detailedSearch.isVisible"
+        data-query-in="detailedSearch.queryIn"
+        data-main-field="detailedSearch.mainField"
+        data-accessor="detailedSearch.accessor"
+      ></data-dop-detailed-search>
     </div>
   </form>
 </div>

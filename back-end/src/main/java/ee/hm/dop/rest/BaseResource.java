@@ -54,10 +54,13 @@ public class BaseResource {
     protected AuthenticatedUser getAuthenticatedUser() {
         DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
         return dopPrincipal != null ? dopPrincipal.getAuthenticatedUser() : null;
+<<<<<<< HEAD
+=======
     }
 
     public static String decode(String string) throws UnsupportedEncodingException {
         return URLDecoder.decode(string, UTF_8);
+>>>>>>> new-develop
     }
 
     protected HttpServletRequest getRequest() {

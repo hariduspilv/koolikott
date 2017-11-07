@@ -1,11 +1,17 @@
 package ee.hm.dop.rest.filter;
 
+<<<<<<< HEAD
+import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
+
+import java.io.IOException;
+=======
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.login.LogoutService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+>>>>>>> new-develop
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -15,7 +21,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
+<<<<<<< HEAD
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import ee.hm.dop.service.login.LogoutService;
+import org.joda.time.DateTime;
+=======
 import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
+>>>>>>> new-develop
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)

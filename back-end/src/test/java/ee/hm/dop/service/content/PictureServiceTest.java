@@ -1,15 +1,30 @@
 package ee.hm.dop.service.content;
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/PictureServiceTest.java
+import static ee.hm.dop.utils.DOPFileUtils.getFileAsStream;
+import static ee.hm.dop.utils.DOPFileUtils.read;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+=======
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/PictureServiceTest.java
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.ThumbnailDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/PictureServiceTest.java
+import ee.hm.dop.service.content.PictureService;
+import org.easymock.*;
+=======
 import ee.hm.dop.service.files.PictureSaver;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/PictureServiceTest.java
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +42,10 @@ public class PictureServiceTest {
     private PictureSaver pictureSaver = new PictureSaver();
     @Mock
     private OriginalPictureDao originalPictureDao;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/content/PictureServiceTest.java
+
+=======
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/content/PictureServiceTest.java
     @Mock
     private ThumbnailDao thumbnailDao;
 

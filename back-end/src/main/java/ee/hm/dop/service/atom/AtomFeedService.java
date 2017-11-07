@@ -22,7 +22,10 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Version;
 import ee.hm.dop.model.enums.LanguageC;
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/atom/AtomFeedService.java
+=======
 import ee.hm.dop.utils.NumberUtils;
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/atom/AtomFeedService.java
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
@@ -34,11 +37,14 @@ import org.slf4j.LoggerFactory;
 
 public class AtomFeedService {
 
+<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/atom/AtomFeedService.java
+=======
     public static final String FEED_ID = "FEED_ID";
     public static final String FEED_TITLE = "FEED_TITLE";
     public static final String FEED_VERSION_TITLE = "FEED_VERSION_TITLE";
     public static final String FEED_PORTFOLIO_TITLE = "FEED_PORTFOLIO_TITLE";
     public static final String FEED_MATERIAL_TITLE = "FEED_MATERIAL_TITLE";
+>>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/atom/AtomFeedService.java
     @Inject
     private Configuration configuration;
     @Inject

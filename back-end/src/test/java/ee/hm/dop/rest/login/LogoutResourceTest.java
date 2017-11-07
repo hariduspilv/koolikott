@@ -11,7 +11,6 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
@@ -23,13 +22,21 @@ public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void testLogout() {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LogoutResourceTest.java
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + TestConstants.USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
+=======
         AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/login/LogoutResourceTest.java
         });
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/rest/LogoutResourceTest.java
+        getTarget("logout", new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
+=======
         Response response = getTarget(LOGOUT, new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/rest/login/LogoutResourceTest.java
     }
 
     @Provider

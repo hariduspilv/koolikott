@@ -1,43 +1,28 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.directive('inputValueControl', function() {
-    return {
-        require: '?ngModel',
-        scope: {
-            "inputPattern": '@'
-        },
-        link: function(scope, element, attrs, ngModelCtrl) {
+directive('dopInputValueControl', {
+    require: '?ngModel',
+    scope: {
+        inputPattern: '@'
+    },
+    link($scope, $element, $attr, $ctrl) {
+        if ($ctrl) {
+            $ctrl.$parsers.push(value => {
+                if (typeof $scope.inputPattern === 'undefined')
+                    return value
 
-            var regexp = null;
-
-            if (scope.inputPattern !== undefined) {
-                regexp = new RegExp(scope.inputPattern, "g");
-            }
-
-            if (!ngModelCtrl) {
-                return;
-            }
-
-            ngModelCtrl.$parsers.push(function(val) {
-                if (regexp) {
-                    var clean = val.replace(regexp, '');
-                    if (val !== clean) {
-                        ngModelCtrl.$setViewValue(clean);
-                        ngModelCtrl.$render();
-                    }
-                    return clean;
-                } else {
-                    return val;
+                const clean = value.replace(new RegExp($scope.inputPattern, 'g'), '')
+                
+                if (value !== clean) {
+                    $ctrl.$setViewValue(clean)
+                    $ctrl.$render()
                 }
-
-            });
-
-            element.bind('keypress', function(event) {
-                if (event.keyCode === 32 || event.charCode === 32) {
-                    return false;
-                }
-            });
+                return clean
+            })
+            $element.bind('keypress', (evt) => {
+                if (evt.keyCode === 32 || evt.charCode === 32)
+                    evt.preventDefault()
+            })
         }
     }
-});
+})

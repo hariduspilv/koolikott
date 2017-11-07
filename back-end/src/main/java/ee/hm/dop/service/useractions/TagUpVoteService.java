@@ -9,8 +9,6 @@ import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.utils.UserUtil;
-import ee.hm.dop.utils.ValidatorUtil;
 
 import java.util.Objects;
 
@@ -26,13 +24,13 @@ public class TagUpVoteService {
     public TagUpVote get(long id, User user) {
         TagUpVote tagUpVote = tagUpVoteDao.findById(id);
         if (tagUpVote != null) {
-            mustHaveAccess(tagUpVote, user);
+            validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
         }
         return tagUpVote;
     }
 
     public TagUpVote upVote(TagUpVote tagUpVote, User user) {
-        mustHaveAccess(tagUpVote, user);
+        validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
 
         tagUpVote.setUser(user);
 
@@ -43,26 +41,26 @@ public class TagUpVoteService {
     }
 
     public void delete(TagUpVote tagUpVote, User user) {
-        mustHaveAccess(tagUpVote, user);
+        validateIfUserHasAccessAndThrowExceptionIfNot(tagUpVote, user);
         tagUpVoteDao.setDeleted(tagUpVote);
         solrEngineService.updateIndex();
     }
 
-    public Long getUpVoteCountFor(Tag tag, LearningObject learningObject) {
-        return tagUpVoteDao.findByLearningObjectAndTagCount(learningObject, tag);
+    public int getUpVoteCountFor(Tag tag, LearningObject learningObject) {
+        return tagUpVoteDao.findByLearningObjectAndTag(learningObject, tag).size();
     }
 
     public TagUpVote getTagUpVote(Tag tag, LearningObject learningObject, User user) {
-        if (learningObjectService.canAccess(user, learningObject)) {
+        if (learningObjectService.canAcess(user, learningObject)) {
             return tagUpVoteDao.findByTagAndUserAndLearningObject(tag, user, learningObject);
         }
         return null;
     }
 
-    private void mustHaveAccess(TagUpVote tagUpVote, User user) {
+    private void validateIfUserHasAccessAndThrowExceptionIfNot(TagUpVote tagUpVote, User user) {
         if (tagUpVote.getId() != null && !Objects.equals(user.getId(), tagUpVote.getUser().getId())
-                || !learningObjectService.canAccess(user, tagUpVote.getLearningObject())) {
-            throw ValidatorUtil.permissionError();
+                || !learningObjectService.canAcess(user, tagUpVote.getLearningObject())) {
+            throw new RuntimeException("Access denied");
         }
     }
 }

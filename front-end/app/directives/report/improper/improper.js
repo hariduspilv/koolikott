@@ -181,16 +181,15 @@ controller.$inject = [
     'serverCallService',
     'authenticatedUserService'
 ]
-
 /**
  * Declaring this as a directive since we need to use it as an attribute on
  * <md-menu-item> (component usage is restricted to element tagname only).
  */
-angular.module('koolikottApp').directive('dopReportImproper', () => ({
+directive('dopReportImproper', {
     scope: {
         learningObject: '<'
     },
     templateUrl: 'directives/report/improper/improper.html',
     controller
-}))
+})
 }

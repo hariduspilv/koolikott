@@ -1,5 +1,18 @@
 package ee.hm.dop.service.synchronizer;
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+import static org.easymock.EasyMock.cmp;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+=======
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.*;
@@ -15,14 +28,36 @@ import org.easymock.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.RepositoryDao;
+import ee.hm.dop.model.*;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.PictureService;
+import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
+import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
+import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
+import org.easymock.EasyMock;
+import org.easymock.EasyMockRunner;
+import org.easymock.LogicalOperator;
+import org.easymock.Mock;
+import org.easymock.TestSubject;
+import org.joda.time.DateTime;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+=======
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
 @RunWith(EasyMockRunner.class)
 public class RepositoryServiceTest {
@@ -37,8 +72,15 @@ public class RepositoryServiceTest {
     private MaterialService materialService;
     @Mock
     private RepositoryDao repositoryDao;
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+
     @Mock
     private MaterialDao materialDao;
+
+=======
+    @Mock
+    private MaterialDao materialDao;
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
     @Mock
     private SolrEngineService solrEngineService;
     @Mock
@@ -90,7 +132,11 @@ public class RepositoryServiceTest {
         expect(material1.isDeleted()).andReturn(false).anyTimes();
         expect(material1.getPicture()).andReturn(null);
         material1.setRepository(repository);
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier1)).andReturn(null);
+=======
         expect(materialDao.findByRepository(repository, repositoryIdentifier1)).andReturn(null);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(materialService.createMaterialBySystemUser(material1, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expect(materialIterator.hasNext()).andReturn(true);
@@ -103,7 +149,11 @@ public class RepositoryServiceTest {
         expect(material2.isDeleted()).andReturn(false).anyTimes();
         expect(material2.getPicture()).andReturn(null);
         material2.setRepository(repository);
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+        expect(materialDao.findByRepositoryAndRepositoryIdentifier(repository, repositoryIdentifier2)).andReturn(null);
+=======
         expect(materialDao.findByRepository(repository, repositoryIdentifier2)).andReturn(null);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
         expect(materialService.createMaterialBySystemUser(material2, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expectUpdateRepository(repository);
@@ -425,7 +475,11 @@ public class RepositoryServiceTest {
         newMaterial.setPicture(picture2);
 
         expect(materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE)).andReturn(existentMaterial);
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+        expect(pictureService.create(picture2)).andReturn(picture2);
+=======
         expect(pictureSaver.create(picture2)).andReturn(picture2);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
         replayAll();
 
@@ -452,7 +506,11 @@ public class RepositoryServiceTest {
     }
 
     private void replayAll(Object... mocks) {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+        replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService);
+=======
         replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -462,7 +520,11 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
+<<<<<<< HEAD:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
+        verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService);
+=======
         verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
+>>>>>>> new-develop:back-end/src/test/java/ee/hm/dop/service/synchronizer/RepositoryServiceTest.java
 
         if (mocks != null) {
             for (Object object : mocks) {

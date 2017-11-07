@@ -5,14 +5,14 @@
   <md-chips
     data-ng-model="tags"
     readonly="true"
-    data-md-removable="$ctrl.isEditPortfolioMode"
+    data-md-removable="$root.isEditPortfolioMode"
     data-md-on-remove="$ctrl.removeTag($chip.tag)">
     <md-chip-template dop-tag-custom-chip>
       <md-button
         data-ng-if="
           !$ctrl.authenticatedUserService.isRestricted() &&
           !$ctrl.authenticatedUserService.isAdmin() &&
-          !$ctrl.isEditPortfolioMode"
+          !$root.isEditPortfolioMode"
         class="md-icon-button"
         ng-click="$ctrl.reportTag($event)"
         >

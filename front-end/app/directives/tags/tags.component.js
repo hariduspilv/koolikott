@@ -259,8 +259,7 @@ controller.$inject = [
 ]
 component('dopTags', {
     bindings: {
-        learningObject: '=',
-        isEditPortfolioMode: '<?'
+        learningObject: '='
     },
     templateUrl: 'directives/tags/tags.html',
     controller
