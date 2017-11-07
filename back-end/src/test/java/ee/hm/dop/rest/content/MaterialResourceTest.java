@@ -37,7 +37,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String CREATE_MATERIAL_URL = "material";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
-    private static final String RESTORE_MATERIAL = "admin/deleted/material/restore";
+    private static final String RESTORE_MATERIAL = "admin/deleted/restore";
     private static final String LIKE_URL = "material/like";
     private static final String DISLIKE_URL = "material/dislike";
     private static final String GET_USER_LIKE_URL = "material/getUserLike";
