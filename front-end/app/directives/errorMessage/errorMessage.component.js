@@ -20,7 +20,7 @@ const VIEW_STATE_MAP = {
             icon: () => 'undo',
             label: 'UNDO_CHANGES',
             onClick: ($ctrl) => $ctrl.setAllChanges('revert'),
-            show: ($ctrl) => $ctrl.isAdmin
+            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }, {
             icon: ($ctrl) => {
                 const numNewTaxons = $ctrl.newTaxons ? $ctrl.newTaxons.length : 0
@@ -30,7 +30,7 @@ const VIEW_STATE_MAP = {
             },
             label: 'ACCEPT_CHANGES',
             onClick: ($ctrl) => $ctrl.setAllChanges('accept'),
-            show: ($ctrl) => $ctrl.isAdmin
+            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
         }],
         ($ctrl) => $ctrl.getChanges()
     ],
@@ -165,11 +165,7 @@ class controller extends Controller {
             undefined :
             this.$rootScope.learningObjectDeleted
                 ? 'showDeleted' :
-            this.$rootScope.learningObjectImproper && this.$rootScope.learningObjectBroken
-                ? 'showImproperAndBroken' :
-            !this.$rootScope.learningObjectImproper && this.$rootScope.learningObjectBroken
-                ? 'showBroken' :
-            this.$rootScope.learningObjectImproper && !this.$rootScope.learningObjectBroken
+            this.$rootScope.learningObjectImproper
                 ? 'showImproper' :
             this.$rootScope.learningObjectUnreviewed
                 ? 'showUnreviewed' :

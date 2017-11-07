@@ -1,18 +1,11 @@
 SET foreign_key_checks = 0;
 
-ALTER TABLE ImproperContent ADD needs_rr BOOLEAN DEFAULT 0;
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'SHOW_ALL_CHANGES', 'Kuva kõik muudatused');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'SHOW_ALL_CHANGES', 'Show all changes');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'SHOW_ALL_CHANGES', 'Kuva kõik muudatused');
 
-INSERT INTO ImproperContent (creator, learningObject, createdAt, reviewed, reviewedAt, status, needs_rr)
-  SELECT bc.creator, bc.material, bc.added,
-    CASE WHEN bc.deleted=1 THEN 1 ELSE 0 END,
-    CASE WHEN bc.deleted=1 THEN CURRENT_TIMESTAMP ELSE NULL END,
-    CASE WHEN bc.deleted=1 THEN 'ACCEPTED' ELSE NULL END,
-    1
-  FROM BrokenContent bc;
-
-INSERT INTO ReportingReason (improperContent, reason)
-  SELECT ic.id, 'LO_FORM'
-  FROM ImproperContent ic
-  WHERE ic.needs_rr = 1;
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'HIDE_ALL_CHANGES', 'Peida muudatused');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'HIDE_ALL_CHANGES', 'Hide changes');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'HIDE_ALL_CHANGES', 'Peida muudatused');
 
 SET foreign_key_checks = 1;

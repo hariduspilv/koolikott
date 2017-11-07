@@ -389,6 +389,21 @@ module.exports = function (grunt) {
             }
         },
 
+        // add ?ver=#.##.# to <script src="constants.js"></script> in index.html
+        'string-replace': {
+            constants: {
+                files: [{
+                    '<%= yeoman.dist.app %>/index.html': '<%= yeoman.dist.app %>/index.html'
+                }],
+                options: {
+                    replacements: [{
+                        pattern: '<script src="constants.js"></script>',
+                        replacement: '<script src="constants.js?ver='+grunt.file.readJSON('package.json').version+'"></script>'
+                    }]
+                }
+            }
+        },
+
         // ES6 syntax
         babel: {
             options: {
@@ -444,6 +459,7 @@ module.exports = function (grunt) {
         'ngAnnotate',
         'copy:dist',
         'ngconstant:dist',
+        'string-replace:constants',
         'cdnify',
         'cssmin',
         'uglify',
@@ -464,6 +480,7 @@ module.exports = function (grunt) {
         'copy:dist',
         'strip_code',
         'ngconstant:dist',
+        'string-replace:constants',
         'cdnify',
         'cssmin',
         'uglify',
