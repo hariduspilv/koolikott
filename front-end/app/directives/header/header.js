@@ -24,6 +24,8 @@ class controller extends Controller {
         this.$scope.suggest.selectedItem = null
         this.$scope.canShowTour = false
         this.$scope.isMobileView = false
+        this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
+        this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
         this.$mdSidenav('left', true).then(left =>
             this.$scope.isSideNavOpen = left.isOpen()
@@ -201,14 +203,14 @@ class controller extends Controller {
         this.$scope.getTranslation = (string) => this.$translate.instant(string)
 
         this.$scope.isHeaderRed = () => {
-            if ((this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()) && (
+            if ((this.$scope.isAdmin || this.$scope.isModerator) && (
                     this.$rootScope.isViewAdminPanelPage || (
                         this.$rootScope.isViewMaterialOrPortfolioPage && (
-                            this.$scope.learningObjectImproper ||
-                            this.$scope.learningObjectBroken ||
-                            this.$scope.learningObjectChanged ||
-                            this.$scope.learningObjectUnreviewed ||
-                            this.$scope.learningObjectDeleted
+                            this.$rootScope.learningObjectImproper ||
+                            this.$rootScope.learningObjectBroken ||
+                            this.$rootScope.learningObjectChanged ||
+                            this.$rootScope.learningObjectUnreviewed ||
+                            this.$rootScope.learningObjectDeleted
                         )
                     )
                 )
