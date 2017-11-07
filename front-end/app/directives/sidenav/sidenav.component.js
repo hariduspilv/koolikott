@@ -5,8 +5,10 @@ class controller extends Controller {
     $onInit() {
         this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
-        this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
+        this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated()
+        this.$scope.isTaxonomyOpen = !this.$scope.isAuthenticated
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
+        this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
         // List of taxon icons
         this.$scope.taxonIcons = [
@@ -57,27 +59,27 @@ class controller extends Controller {
         if (!this.$scope.user)
             return false
 
-        const currentLocation = $location.path()
+        const currentLocation = this.$location.path()
 
         if (currentLocation === "/")
             return false
 
-        if (!this.$scope.modUser())
+        if (!this.$scope.isAdmin && !this.$scope.isModerator)
             return menuLocation === currentLocation
 
         const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation)
         
         return isInMenu
             ? menuLocation === currentLocation
-            : $rootScope.private
+            : this.$rootScope.private
                 ? false
-                : $rootScope.learningObjectDeleted
+                : this.$rootScope.learningObjectDeleted
                     ? menuLocation === '/dashboard/deletedPortfolios'
-                    : $rootScope.learningObjectImproper
+                    : this.$rootScope.learningObjectImproper
                         ? menuLocation === '/dashboard/improperPortfolios'
-                        : $rootScope.learningObjectUnreviewed
+                        : this.$rootScope.learningObjectUnreviewed
                             ? menuLocation === '/dashboard/unReviewed'
-                            : $rootScope.learningObjectChanged
+                            : this.$rootScope.learningObjectChanged
                                 ? menuLocation === '/dashboard/changedLearningObjects'
                                 : false
     }

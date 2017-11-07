@@ -39,42 +39,42 @@
         <li class="sidenav__item" layout="column">
           <a id="myPortfolios" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/' + user.username + '/portfolios')}"
-             data-ng-click="checkUser($event, '/portfolios'); updateUserPortfoliosCount()">
+             data-ng-click="checkUser($event, '/portfolios'); updateCount('userPortfolios')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">book</md-icon>
               <span data-translate="MY_PORTFOLIOS" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated()" data-ng-bind="portfolios"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="userPortfoliosCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column">
           <a id="myMaterials" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/' + user.username + '/materials')}"
-             data-ng-click="checkUser($event, '/materials'); updateUserMaterialsCount()">
+             data-ng-click="checkUser($event, '/materials'); updateCount('userMaterials')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">description</md-icon>
               <span data-translate="MY_MATERIALS" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated()" data-ng-bind="materials"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="userMaterialsCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column">
           <a id="myFavorites" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/' + user.username + '/favorites')}"
-             data-ng-click="checkUser($event, '/favorites'); updateUserFavoritesCount()">
+             data-ng-click="checkUser($event, '/favorites'); updateCount('userFavorites')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">star</md-icon>
               <span data-translate="MY_FAVORITES" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated()" data-ng-bind="favorites"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="userFavoritesCount"></span>
           </a>
         </li>
 
-        <li class="sidenav__item" layout="column" data-ng-show="modUser()">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
           <a id="improperMaterials" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/improperMaterials')}"
-             data-ng-href="/dashboard/improperMaterials" data-ng-click=updateImproperMaterialsCount()>
+             data-ng-href="/dashboard/improperMaterials" data-ng-click=updateCount('improperMaterials')>
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">warning</md-icon>
               <span data-translate="IMPROPER_MATERIALS" class="sidenav__name"></span>
@@ -82,11 +82,11 @@
             <span class="sidenav__count" data-ng-bind="improperMaterialsCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="modUser()">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
           <a id="improperPortfolios" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/improperPortfolios')}"
-             data-ng-href="/dashboard/improperPortfolios" data-ng-click="updateImproperPortfoliosCount()">
+             data-ng-href="/dashboard/improperPortfolios" data-ng-click="updateCount('improperPortfolios')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">warning</md-icon>
               <span data-translate="IMPROPER_PORTFOLIOS" class="sidenav__name"></span>
@@ -94,34 +94,34 @@
             <span class="sidenav__count" data-ng-bind="improperPortfoliosCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="modUser()">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
           <a id="unReviewed" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/unReviewed')}"
-             data-ng-href="/dashboard/unReviewed" data-ng-click=updateUnReviewedLearningObjectCount()>
+             data-ng-href="/dashboard/unReviewed" data-ng-click=updateCount('unReviewedLearningObjects')>
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">lightbulb_outline</md-icon>
               <span data-translate="UNREVIEWED" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="unReviewedLearningObjectCount"></span>
+            <span class="sidenav__count" data-ng-bind="unReviewedLearningObjectsCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="modUser()">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
           <a id="changedLearningObjects" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/changedLearningObjects')}"
-             data-ng-href="/dashboard/changedLearningObjects" data-ng-click="updateChangedLearningObjectCount()">
+             data-ng-href="/dashboard/changedLearningObjects" data-ng-click="updateCount('changedLearningObjects')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">autorenew</md-icon>
               <span data-translate="DASHBOARD_CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="changedLearningObjectCount"></span>
+            <span class="sidenav__count" data-ng-bind="changedLearningObjectsCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdmin">
           <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}" data-ng-href="/dashboard/moderators"
-             data-ng-click="updateModeratorsCount()">
+             data-ng-click="updateCount('moderators')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">face</md-icon>
               <span data-translate="MODERATORS_TAB" class="sidenav__name"></span>
@@ -133,7 +133,7 @@
           <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/restrictedUsers')}"
-             data-ng-href="/dashboard/restrictedUsers" data-ng-click="updateRestrictedUsersCount()">
+             data-ng-href="/dashboard/restrictedUsers" data-ng-click="updateCount('restrictedUsers')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">block</md-icon>
               <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
@@ -145,7 +145,7 @@
           <a id="deletedMaterials" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/deletedMaterials')}"
-             data-ng-href="/dashboard/deletedMaterials" data-ng-click="updateDeletedMaterialsCount()">
+             data-ng-href="/dashboard/deletedMaterials" data-ng-click="updateCount('deletedMaterials')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">delete_forever</md-icon>
               <span data-translate="DELETED_MATERIALS" class="sidenav__name"></span>
@@ -157,7 +157,7 @@
           <a id="deletedPortfolios" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/deletedPortfolios')}"
-             data-ng-href="/dashboard/deletedPortfolios" data-ng-click="updateDeletedPortfoliosCount()">
+             data-ng-href="/dashboard/deletedPortfolios" data-ng-click="updateCount('deletedPortfolios')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">delete_forever</md-icon>
               <span data-translate="DELETED_PORTFOLIOS" class="sidenav__name"></span>
@@ -165,11 +165,11 @@
             <span class="sidenav__count" data-ng-bind="deletedPortfoliosCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" ng-if="modUser()">
+        <li class="sidenav__item" layout="column" ng-if="isAdmin || isModerator">
           <a id="brokenMaterials" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/brokenMaterials')}"
-             data-ng-href="/dashboard/brokenMaterials" data-ng-click="updateBrokenMaterialsCount()">
+             data-ng-href="/dashboard/brokenMaterials" data-ng-click="updateCount('brokenMaterials')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">content_cut</md-icon>
               <span data-translate="BROKEN_MATERIALS" class="sidenav__name"></span>
@@ -181,13 +181,13 @@
     </div>
     <!-- END My Pofile -->
 
-    <div uib-accordion-group class="panel-default" data-ng-if="isViewPortfolioPage || isEditPortfolioMode"
+    <div uib-accordion-group class="panel-default" data-ng-if="$root.isViewPortfolioPage || $root.isEditPortfolioMode"
          is-open="$root.isViewPortfolioAndEdit">
       <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
     </div>
 
     <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"
-         data-ng-if="!isViewPortfolioPage && !isEditPortfolioMode">
+         data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode">
       <uib-accordion-heading>
         <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}"

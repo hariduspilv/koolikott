@@ -2,23 +2,27 @@
 
 {
 class controller extends Controller {
+    $onChanges({ title, subtitle, filter, params }) {
+        if (title && title.currentValue != title.previousValue)
+            this.setTitle()
+
+        if (subtitle && subtitle.currentValue !== subtitle.previousValue)
+            this.$scope.subtitle = subtitle.currentValue
+
+        if (filter && filter.currentValue !== filter.previousValue)
+            this.$scope.filter = filter.currentValue
+
+        if (params && !params.isFirstChange() && this.params) {
+            this.setParams()
+            this.search(true)
+        }
+    }
     $onInit() {
-        this.initialParams = Object.assign({}, this.params)
-        this.searchCount = 0
-        this.maxResults = this.params
-            ? this.params.maxResults || this.params.limit
-            : null
-        this.expectedItemCount = this.maxResults
-
         if (!this.url)
-            this.url = "rest/search"
+            this.url = 'rest/search'
 
-        if (!this.params)
-            this.params = {}
+        this.setParams()
 
-        this.$scope.title = this.title
-        this.$scope.subtitle = this.subtitle
-        this.$scope.filter = this.filter
         this.$scope.items = []
         this.$scope.searching = false
         this.$scope.sortOptions = [{
@@ -37,28 +41,53 @@ class controller extends Controller {
 
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
         this.$scope.allResultsLoaded = () => this.allResultsLoaded()
-        this.$scope.sort = (field, direction) => {
-            field
-                ? this.params.sort = field
-                : this.params.sort = this.initialParams.sort
-
-            direction
-                ? this.params.sortDirection = direction
-                : this.params.sortDirection = this.initialParams.sortDirection
-
-            this.searchCount = 0
-            this.expectedItemCount = this.maxResults
-
-            this.search(true)
-        }
+        this.$scope.sort = this.sort.bind(this)
 
         this.search()
     }
+    setParams() {
+        if (!this.params)
+            this.params = {}
+
+        this.initialParams = Object.assign({}, this.params)
+        this.searchCount = 0
+        this.maxResults = this.params.maxResults || this.params.limit || 20
+        this.expectedItemCount = this.maxResults
+    }
+    setTitle() {
+        const t = (key) => this.$translate.instant(key)
+
+        this.$translate.onReady().then(() =>
+            this.$scope.title = this.title
+                ? t(this.title)
+                : this.$scope.searching
+                    ? t('SEARCH_RESULTS')
+                    : !this.totalResults
+                        ? t('SEARCH_RESULT_NO_RESULT')
+                        : this.totalResults == 1
+                            ? `${t('SEARCH_RESULT_1_RESULT_PART_1')} <strong>${this.totalResults}</strong> ${t('SEARCH_RESULT_1_RESULT_PART_2')}`
+                            : this.totalResults > 1
+                                ? `${t('SEARCH_RESULT_PART_1')} <strong>${this.totalResults}</strong> ${t('SEARCH_RESULT_PART_2')}`
+                                : ''
+        )
+    }
+    sort(field, direction) {
+        field
+            ? this.params.sort = field
+            : this.params.sort = this.initialParams.sort
+
+        direction
+            ? this.params.sortDirection = direction
+            : this.params.sortDirection = this.initialParams.sortDirection
+
+        this.setParams()
+        this.search(true)
+    }
     allResultsLoaded() {
-        return this.$scope.items.length >= this.totalResults
+        return (this.$scope.items || []).length >= this.totalResults
     }
     search(newSearch) {
-        if (this.$scope.searching || this.allResultsLoaded() && !newSearch)
+        if (this.$scope.searching || !newSearch && this.allResultsLoaded())
             return
 
         this.$scope.searching = true
@@ -90,10 +119,12 @@ class controller extends Controller {
         this.searchCount++
         this.$scope.searching = false
 
+        this.setTitle()
         this.searchMoreIfNecessary()
     }
     searchFail() {
         this.$scope.searching = false
+        this.setTitle()
     }
     searchMoreIfNecessary() {
         this.$scope.items.length < this.expectedItemCount && !this.allResultsLoaded()
@@ -101,7 +132,12 @@ class controller extends Controller {
             : this.expectedItemCount += this.maxResults
     }
 }
-controller.$inject = ['$scope', '$timeout', 'serverCallService']
+controller.$inject = [
+    '$scope',
+    '$timeout',
+    '$translate',
+    'serverCallService'
+]
 component('dopInfiniteSearchResult', {
     bindings: {
         params: '<',
