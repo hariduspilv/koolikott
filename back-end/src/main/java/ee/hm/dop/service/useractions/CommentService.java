@@ -30,7 +30,7 @@ public class CommentService {
 
         comment.setCreator(loggedInUser);
         comment.setAdded(DateTime.now());
-        originalLearningObject.getComments().add(comment);
+        originalLearningObject.getComments().add(0, comment);
         learningObjectDao.createOrUpdate(originalLearningObject);
         return originalLearningObject;
     }

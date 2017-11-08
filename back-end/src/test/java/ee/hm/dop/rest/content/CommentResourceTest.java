@@ -25,7 +25,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     public void addPortfolioComment() {
         login(USER_MATI);
         Portfolio response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(NICE_COMMENT, portfolioWithId(PORTFOLIO_5)), Portfolio.class);
-        assertTrue(response.getComments().stream().anyMatch(c -> c.getText().equals(NICE_COMMENT)));
+        assertTrue(response.getComments().get(0).getText().equals(NICE_COMMENT));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     public void addPortfolioCommentToPrivatePortfolioAsCreator() {
         login(USER_PEETER);
         Portfolio response =  doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(SUCH_COMMENT, portfolioWithId(PORTFOLIO_7)), Portfolio.class);
-        assertTrue(response.getComments().stream().anyMatch(c -> c.getText().equals(SUCH_COMMENT)));
+        assertTrue(response.getComments().get(0).getText().equals(SUCH_COMMENT));
     }
 
     @Test
