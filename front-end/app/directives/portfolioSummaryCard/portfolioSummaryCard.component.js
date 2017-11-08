@@ -39,7 +39,9 @@ class controller extends Controller {
         this.$scope.getTargetGroups = this.getTargetGroups.bind(this)
         this.$scope.isAdminButtonsShowing = this.isAdminButtonsShowing.bind(this)
         this.$scope.setRecommendation = this.setRecommendation.bind(this)
+        this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
+
 
         if (this.$rootScope.openMetadataDialog) {
             this.showEditMetadataDialog()
