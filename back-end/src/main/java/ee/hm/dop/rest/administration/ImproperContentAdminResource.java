@@ -48,7 +48,7 @@ public class ImproperContentAdminResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
-    public LearningObject setProper2(LearningObjectMiniDto loDto) {
+    public LearningObject setProper(LearningObjectMiniDto loDto) {
         if (loDto.getId() == null) {
             throw badRequest("learningObject query param is required.");
         }

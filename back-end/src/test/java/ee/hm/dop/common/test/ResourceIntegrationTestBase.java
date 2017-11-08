@@ -154,24 +154,6 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
-    protected static <T> T doDelete(String url, Object json, Class<? extends T> clazz) {
-        Response delete = doDelete(url);
-        return delete.readEntity(clazz);
-    }
-
-    private static Response doDelete(String url, Entity<?> requestEntity, MediaType mediaType) {
-        return getTarget(url).request().accept(mediaType).delete();
-    }
-
-    protected static <T> T doDelete(String url,  Class<? extends T> clazz) {
-        Response delete = getTarget(url).request().delete();
-        return delete.readEntity(clazz);
-    }
-
-    protected static Response doDelete(String url) {
-        return getTarget(url).request().delete();
-    }
-
     protected static WebTarget getTarget(String url) {
         return getTarget(url, authenticationFilter);
     }

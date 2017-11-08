@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.dao.TestDao;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.enums.ReviewType;
@@ -27,7 +26,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     private static final String LO_SET_FIRST_REVIEWED = "admin/firstReview/setReviewed";
     private static final String LO_ACCEPT_CHANGES = "admin/changed/%s/acceptAll";
     private static final String LO_REJECT_CHANGES = "admin/changed/%s/revertAll";
-    private static final String MATERIAL_DELETE = "material/";
+    private static final String MATERIAL_DELETE = "material/delete";
     private static final String MATERIAL_RESTORE = "admin/deleted/restore";
     private static final String PORTFOLIO_DELETE = "portfolio/delete";
     private static final String PORTFOLIO_RESTORE = "admin/deleted/restore";
@@ -48,7 +47,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void restoring_material_approves_everything() throws Exception {
         assertHasWorkToDo(getMaterial(MATERIAL_15));
-        doPost(MATERIAL_DELETE + MATERIAL_15, materialWithId(MATERIAL_15));
+        doPost(MATERIAL_DELETE, materialWithId(MATERIAL_15));
         Material restored = doPost(MATERIAL_RESTORE, materialWithId(MATERIAL_15), Material.class);
         assertWorkIsDone(restored, ReviewType.SYSTEM_RESTORE);
     }
@@ -64,7 +63,7 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deleting_material_approves_everything() throws Exception {
         assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material material = doPost(MATERIAL_DELETE + MATERIAL_15, materialWithId(MATERIAL_15), Material.class);
+        Material material = doPost(MATERIAL_DELETE, materialWithId(MATERIAL_15), Material.class);
         assertWorkIsDone(material, ReviewType.SYSTEM_DELETE);
     }
 

@@ -303,19 +303,18 @@ class controller extends Controller {
     }
     setDeleted() {
         const { id, type } = this.data
-
+        // TODO ips creator can delete their portfolio
         if (id && (this.isAdmin || this.isModerator)) {
-            const isPortfolio = this.isPortfolio(this.data)
+            const isPortfolio = this.isPortfolio(this.data);
 
-                //todo ask backend for unified delete
-            ;(isPortfolio
+            (isPortfolio
                 ? this.serverCallService.makePost('rest/portfolio/delete', { id, type })
-                : this.serverCallService.makeDelete('rest/material/'+id)
+                : this.serverCallService.makePost('rest/material/delete', { id, type })
             ).then(({ status, data }) => {
                 console.log.apply(console,
                     isPortfolio
                         ? ['POST rest/portfolio/delete', { id, type }, status, data]
-                        : ['DELETE rest/material/'+id, status, data]
+                        : ['POST rest/material/delete', {id, type }, status, data]
                 )
                 this.data.deleted = true
                 this.toastService.showOnRouteChange(isPortfolio ? 'PORTFOLIO_DELETED' : 'MATERIAL_DELETED')

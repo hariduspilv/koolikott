@@ -48,6 +48,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
     public static final String SOURCE_NOT_EXISTING = "https://www.youtube.com/watch?v=5_Ar7VXXsro";
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
+    public static final String MATERIAL_DELETE = "material/delete";
 
     @Inject
     private TaxonDao taxonDao;
@@ -301,8 +302,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
         login(USER_PEETER);
-        Response response = doPost("material/" + MATERIAL_12, materialWithId(MATERIAL_12));
-//        Response response = doDelete("material/" + MATERIAL_12);
+        Response response = doPost(MATERIAL_DELETE, materialWithId(MATERIAL_12));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
