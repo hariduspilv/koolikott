@@ -51,11 +51,17 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     private List<FirstReview> firstReviews;
 
-//    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
-//    private List<ImproperContent> improperContents;
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    private List<ImproperContent> improperContents;
 
     @Column(nullable = false)
     private boolean deleted = false;
+
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime updated;
 
     public Long getId() {
         return id;
@@ -111,5 +117,21 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     public void setAdded(DateTime added) {
         this.added = added;
+    }
+
+    public List<ImproperContent> getImproperContents() {
+        return improperContents;
+    }
+
+    public void setImproperContents(List<ImproperContent> improperContents) {
+        this.improperContents = improperContents;
+    }
+
+    public DateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(DateTime updated) {
+        this.updated = updated;
     }
 }

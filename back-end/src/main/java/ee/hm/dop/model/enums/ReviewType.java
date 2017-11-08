@@ -6,28 +6,23 @@ import java.util.List;
 public enum ReviewType {
     SYSTEM_RESTORE,
     SYSTEM_DELETE,
-    BROKEN,
     IMPROPER,
     FIRST,
     CHANGE;
 
     private List<ReviewType> improperAndBrokenReviewList() {
-        return Arrays.asList(SYSTEM_RESTORE, SYSTEM_DELETE, BROKEN, IMPROPER);
+        return Arrays.asList(SYSTEM_RESTORE, SYSTEM_DELETE, IMPROPER);
     }
 
     private List<ReviewType> firstReviewList() {
-        return Arrays.asList(SYSTEM_RESTORE, SYSTEM_DELETE, BROKEN, IMPROPER, FIRST);
+        return Arrays.asList(SYSTEM_RESTORE, SYSTEM_DELETE, IMPROPER, FIRST);
     }
 
     private List<ReviewType> changeReviewList() {
-        return Arrays.asList(SYSTEM_RESTORE, SYSTEM_DELETE, BROKEN, IMPROPER, FIRST, CHANGE);
+        return Arrays.asList(SYSTEM_RESTORE, SYSTEM_DELETE, IMPROPER, FIRST, CHANGE);
     }
 
     public boolean canReviewImproperContent(){
-        return improperAndBrokenReviewList().contains(this);
-    }
-
-    public boolean canReviewBrokenContent(){
         return improperAndBrokenReviewList().contains(this);
     }
 

@@ -41,7 +41,7 @@ public class ImproperContentService {
         LearningObject learningObject = findValid(improperContent, creator);
 
         ImproperContent improper = new ImproperContent();
-        improper.setCreator(creator);
+        improper.setCreatedBy(creator);
         improper.setCreatedAt(DateTime.now());
         improper.setLearningObject(learningObject);
         improper.setReportingText(improperContent.getReportingText());
@@ -66,7 +66,7 @@ public class ImproperContentService {
      * @return a list of improperContent that user has rights to access
      */
     public List<ImproperContent> getAll(User user) {
-        List<ImproperContent> impropers = improperContentDao.findAllUnreviewed();
+        List<ImproperContent> impropers = improperContentDao.findAllUnreviewedOld();
         removeIfHasNoAccess(user, impropers);
         return impropers;
     }
@@ -78,6 +78,10 @@ public class ImproperContentService {
      * @return the ImproperContent which refers to learningObject, created by
      * creator and user has rights to access
      */
+    /**
+     * wierd functionality check
+     */
+    @Deprecated
     private ImproperContent getByLearningObjectAndCreator(LearningObject learningObject, User creator, User user) {
         ImproperContent improperContent = improperContentDao.findByLearningObjectAndCreator(learningObject, creator);
         if (improperContent != null && !learningObjectService.canAccess(user, improperContent.getLearningObject())) {

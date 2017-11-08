@@ -19,7 +19,9 @@ class controller extends Controller {
             this.entity &&
             this.entity.type
         )
+        if (!this.entity.deleted){
             this.getUserLike()
+        }
     }
     like() {
         if (this.allowRequests) {

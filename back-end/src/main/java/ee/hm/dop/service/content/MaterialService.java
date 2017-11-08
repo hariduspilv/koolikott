@@ -1,46 +1,24 @@
 package ee.hm.dop.service.content;
 
-<<<<<<< HEAD
-import ee.hm.dop.dao.BrokenContentDao;
-import ee.hm.dop.dao.MaterialDao;
-import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.dao.UserLikeDao;
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.EducationalContextC;
-import ee.hm.dop.model.interfaces.ILearningObject;
-import ee.hm.dop.model.interfaces.IMaterial;
-import ee.hm.dop.model.interfaces.IPortfolio;
-=======
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
->>>>>>> new-develop
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
-<<<<<<< HEAD
-import ee.hm.dop.service.learningObject.PermissionItem;
-import ee.hm.dop.service.metadata.CrossCurricularThemeService;
-import ee.hm.dop.service.metadata.KeyCompetenceService;
-=======
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
->>>>>>> new-develop
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.Configuration;
-<<<<<<< HEAD
-import org.joda.time.DateTime;
-=======
->>>>>>> new-develop
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,16 +29,9 @@ import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-<<<<<<< HEAD
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
-
-public class MaterialService implements PermissionItem {
-=======
 import static org.joda.time.DateTime.now;
 
 public class MaterialService {
->>>>>>> new-develop
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -69,24 +40,10 @@ public class MaterialService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-<<<<<<< HEAD
-<<<<<<< HEAD
-    private BrokenContentDao brokenContentDao;
-    @Inject
-=======
->>>>>>> new-develop
-    private ChangedLearningObjectService changedLearningObjectService;
-=======
     private ReviewableChangeService reviewableChangeService;
->>>>>>> new-develop
     @Inject
     private Configuration configuration;
     @Inject
-<<<<<<< HEAD
-    private ReducedLearningObjectDao reducedLearningObjectDao;
-    @Inject
-=======
->>>>>>> new-develop
     private AuthorService authorService;
     @Inject
     private PublisherService publisherService;
@@ -97,26 +54,9 @@ public class MaterialService {
     @Inject
     private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
-<<<<<<< HEAD
-    private FirstReviewService firstReviewService;
-
-    public Material get(Long materialId, User loggedInUser) {
-        if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            return materialDao.findById(materialId);
-        }
-        return materialDao.findByIdNotDeleted(materialId);
-    }
-
-    public void increaseViewCount(Material material) {
-        material.setViews(material.getViews() + 1);
-        createOrUpdate(material);
-        solrEngineService.updateIndex();
-    }
-=======
     private FirstReviewAdminService firstReviewAdminService;
     @Inject
     private MaterialGetter materialGetter;
->>>>>>> new-develop
 
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
@@ -146,38 +86,6 @@ public class MaterialService {
         }
     }
 
-<<<<<<< HEAD
-    //todo admin functionality
-    public void delete(Long materialID, User loggedInUser) {
-        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
-
-        Material originalMaterial = materialDao.findByIdNotDeleted(materialID);
-        ValidatorUtil.mustHaveEntity(originalMaterial);
-
-        materialDao.delete(originalMaterial);
-        solrEngineService.updateIndex();
-    }
-
-    //todo admin functionality
-    public void restore(Material material, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
-
-        Material originalMaterial = validateAndFindWithDeleted(material);
-
-        materialDao.restore(originalMaterial);
-        solrEngineService.updateIndex();
-    }
-
-    public Material validateAndFindNotDeleted(Material material) {
-        return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
-    }
-
-    public Material validateAndFindWithDeleted(Material material) {
-        return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findById);
-    }
-
-=======
->>>>>>> new-develop
     public void delete(Material material) {
         materialDao.delete(material);
     }
@@ -196,15 +104,6 @@ public class MaterialService {
         mustHaveUniqueSource(material);
 
         cleanPeerReviewUrls(material);
-<<<<<<< HEAD
-<<<<<<< HEAD
-        Material originalMaterial = get(material.getId(), changer);
-=======
-        Material originalMaterial = materialGetter.get(material.getId(), changer);
->>>>>>> new-develop
-        validateMaterialUpdate(originalMaterial, changer);
-=======
->>>>>>> new-develop
         if (!UserUtil.isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
@@ -214,8 +113,6 @@ public class MaterialService {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        material.setBrokenContents(originalMaterial.getBrokenContents());
-        material.setBroken(originalMaterial.getBroken());
         material.setFirstReviews(originalMaterial.getFirstReviews());
         material.setUnReviewed(originalMaterial.getUnReviewed());
         material.setImproperContents(originalMaterial.getImproperContents());
@@ -256,12 +153,7 @@ public class MaterialService {
 
     private boolean materialWithSameSourceExists(Material material) {
         if (material.getSource() == null && material.getUploadedFile() != null) return false;
-<<<<<<< HEAD
-
-        List<Material> materialsWithGivenSource = getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
-=======
         List<Material> materialsWithGivenSource = materialGetter.getBySource(material.getSource(), GetMaterialStrategy.INCLUDE_DELETED);
->>>>>>> new-develop
         return isNotEmpty(materialsWithGivenSource) &&
                 materialsWithGivenSource.stream()
                         .noneMatch(m -> m.getId().equals(material.getId()));
@@ -277,22 +169,6 @@ public class MaterialService {
         }
     }
 
-<<<<<<< HEAD
-    public SearchResult getByCreatorResult(User creator, int start, int maxResults) {
-        List<Searchable> userFavorites = new ArrayList<>(getByCreator(creator, start, maxResults));
-        return new SearchResult(userFavorites, getByCreatorSize(creator), start);
-    }
-
-    public List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
-        return reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
-    }
-
-    public long getByCreatorSize(User creator) {
-        return materialDao.findByCreatorSize(creator);
-    }
-
-=======
->>>>>>> new-develop
     private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
         boolean isNew = materialId == null;
@@ -309,85 +185,6 @@ public class MaterialService {
         setAuthors(material);
         setPublishers(material);
         setPeerReviews(material);
-<<<<<<< HEAD
-        material = applyRestrictions(material);
-<<<<<<< HEAD
-
-        Material updatedMaterial = materialDao.createOrUpdate(material);
-        if (isNew) {
-            firstReviewService.save(updatedMaterial);
-=======
-        material.setVisibility(Visibility.PUBLIC);
-
-        Material updatedMaterial = materialDao.createOrUpdate(material);
-        if (isNew) {
-            firstReviewAdminService.save(updatedMaterial);
->>>>>>> new-develop
-        }
-
-        return updatedMaterial;
-    }
-
-    private Material applyRestrictions(Material material) {
-<<<<<<< HEAD
-        boolean areKeyCompetencesAndCrossCurricularThemesAllowed = false;
-
-        if (CollectionUtils.isNotEmpty(material.getTaxons())) {
-            List<EducationalContext> educationalContexts = material.getTaxons().stream()
-                    .map(TaxonUtils::getEducationalContext)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
-            for (EducationalContext educationalContext : educationalContexts) {
-                if (EducationalContextC.BASIC_AND_SECONDARY.contains(educationalContext.getName())) {
-                    areKeyCompetencesAndCrossCurricularThemesAllowed = true;
-                }
-            }
-        }
-
-        if (!areKeyCompetencesAndCrossCurricularThemesAllowed) {
-            material.setKeyCompetences(null);
-            material.setCrossCurricularThemes(null);
-        }
-
-        return material;
-    }
-
-    public BrokenContent addBrokenMaterial(Material material, User loggedInUser) {
-        Material originalMaterial = validateAndFindNotDeleted(material);
-
-        BrokenContent brokenContent = new BrokenContent();
-        brokenContent.setCreator(loggedInUser);
-        brokenContent.setMaterial(originalMaterial);
-        return brokenContentDao.update(brokenContent);
-    }
-
-    public Boolean hasSetBroken(long materialId, User loggedInUser) {
-        return isNotEmpty(brokenContentDao.findByMaterialAndUser(materialId, loggedInUser));
-    }
-
-    public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
-        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
-        checkLink(materialSource);
-        return materialDao.findBySource(materialSource, getMaterialStrategy);
-    }
-
-    public Material getOneBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
-        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
-        checkLink(materialSource);
-        return materialDao.findOneBySource(materialSource, getMaterialStrategy);
-    }
-
-    private void checkLink(String materialSource) {
-        if (materialSource == null) {
-            throw new RuntimeException("No material source link provided");
-        }
-    }
-
-    public void checkKeyCompetences(Material material) {
-=======
-=======
->>>>>>> new-develop
         if (CollectionUtils.isEmpty(material.getTaxons()) || cantSet(material)) {
             material.setKeyCompetences(null);
             material.setCrossCurricularThemes(null);
@@ -406,7 +203,6 @@ public class MaterialService {
     }
 
     private void checkKeyCompetences(Material material) {
->>>>>>> new-develop
         if (isNotEmpty(material.getKeyCompetences())) {
             for (int i = 0; i < material.getKeyCompetences().size(); i++) {
                 if (material.getKeyCompetences().get(i).getId() == null) {
@@ -420,11 +216,7 @@ public class MaterialService {
         }
     }
 
-<<<<<<< HEAD
-    public void checkCrossCurricularThemes(Material material) {
-=======
     private void checkCrossCurricularThemes(Material material) {
->>>>>>> new-develop
         if (isNotEmpty(material.getCrossCurricularThemes())) {
             for (int i = 0; i < material.getCrossCurricularThemes().size(); i++) {
                 if (material.getCrossCurricularThemes().get(i).getId() == null) {
@@ -438,11 +230,7 @@ public class MaterialService {
         }
     }
 
-<<<<<<< HEAD
-    public void setPublishers(Material material) {
-=======
     private void setPublishers(Material material) {
->>>>>>> new-develop
         List<Publisher> publishers = material.getPublishers();
         if (publishers != null) {
             for (int i = 0; i < publishers.size(); i++) {
@@ -464,11 +252,7 @@ public class MaterialService {
         }
     }
 
-<<<<<<< HEAD
-    public void setAuthors(Material material) {
-=======
     private void setAuthors(Material material) {
->>>>>>> new-develop
         List<Author> authors = material.getAuthors();
         if (authors != null) {
             for (int i = 0; i < authors.size(); i++) {
@@ -489,11 +273,7 @@ public class MaterialService {
         }
     }
 
-<<<<<<< HEAD
-    public void setPeerReviews(Material material) {
-=======
     private void setPeerReviews(Material material) {
->>>>>>> new-develop
         List<PeerReview> peerReviews = material.getPeerReviews();
         if (peerReviews != null) {
             for (int i = 0; i < peerReviews.size(); i++) {
@@ -506,39 +286,4 @@ public class MaterialService {
         }
         material.setPeerReviews(peerReviews);
     }
-<<<<<<< HEAD
-
-    @Override
-    public boolean canView(User user, ILearningObject learningObject) {
-        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return isPublic(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
-
-    @Override
-    public boolean isPublic(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        //todo true simulates that visibility is public, waiting for db change
-        return true && !learningObject.isDeleted();
-    }
-
-    @Override
-    public boolean isNotPrivate(ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        //todo true simulates that visibility is public, waiting for db change
-        return true && !learningObject.isDeleted();
-    }
-
-=======
->>>>>>> new-develop
 }

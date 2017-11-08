@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     public static final String TAG_UP_VOTES = "tagUpVotes";
+    public static final String DELETE_TAG_UP_VOTES = "tagUpVotes/delete";
     public static final String MATEMAATIKA = "matemaatika";
     public static final String NOT_EXISTING_TAG = "keemia";
     public static final String REPORT = "tagUpVotes/report?learningObject=";
@@ -36,7 +37,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertEquals(MATEMAATIKA, returnedTagUpVote.getTag().getName());
         assertEquals(MATERIAL_1, returnedTagUpVote.getLearningObject().getId());
 
-        Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
+        Response response = doPost(DELETE_TAG_UP_VOTES, returnedTagUpVote);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
@@ -114,14 +115,14 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(returnedTagUpVote);
         assertNotNull(returnedTagUpVote.getId());
 
-        Response response = doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
+        Response response = doPost(DELETE_TAG_UP_VOTES, returnedTagUpVote);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_remove_tagUpVote_that_does_not_exist() throws Exception {
         login(USER_SECOND);
-        Response response = doDelete(TAG_UP_VOTES + "/" + NOT_EXISTS_ID);
+        Response response = doPost(DELETE_TAG_UP_VOTES, null);
         assertEquals("No tagUpVote", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
@@ -160,7 +161,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         Response response = doPut(TAG_UP_VOTES, returnedTagUpVote);
         assertEquals("TagUpVote already exists", Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
-        doDelete(TAG_UP_VOTES + "/" + returnedTagUpVote.getId());
+        doPost(DELETE_TAG_UP_VOTES, returnedTagUpVote);
     }
 
     @Test

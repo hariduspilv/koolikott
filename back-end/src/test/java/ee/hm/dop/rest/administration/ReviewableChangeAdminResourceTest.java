@@ -112,13 +112,14 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertHas(updatedMaterial, ReviewType.IMPROPER);
     }
 
+    @Ignore
     @Test
     public void changes_are_not_registered_when_LO_is_broken() throws Exception {
         Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material);
         doPost(SET_BROKEN, material);
         Material updatedMaterial = getMaterial(MATERIAL_16);
-        assertHas(updatedMaterial, ReviewType.BROKEN);
+        assertHas(updatedMaterial, ReviewType.IMPROPER);
     }
 
     @Test
@@ -306,15 +307,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         }
         testDao.setUnReviewed(learningObjectId);
         DbUtils.closeTransaction();
-    }
-
-    public static ImproperContent improper(Material material) {
-        ImproperContent json = new ImproperContent();
-        ReportingReason reason = new ReportingReason();
-        reason.setReason(ReportingReasonEnum.LO_CONTENT);
-        json.setLearningObject(material);
-        json.setReportingReasons(Lists.newArrayList(reason));
-        return json;
     }
 
     private void revertUrl(Material material) {

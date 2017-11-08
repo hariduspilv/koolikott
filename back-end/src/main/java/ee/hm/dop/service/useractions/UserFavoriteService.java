@@ -30,10 +30,6 @@ public class UserFavoriteService {
 
     public void removeUserFavorite(Long id, User loggedInUser) {
         LearningObject learningObject = learningObjectDao.findById(id);
-<<<<<<< HEAD
-
-=======
->>>>>>> new-develop
         ValidatorUtil.mustHaveId(learningObject);
         userFavoriteDao.deleteByLearningObjectAndUser(learningObject, loggedInUser);
     }
@@ -48,11 +44,7 @@ public class UserFavoriteService {
         return new SearchResult(userFavorites, getUserFavoritesSize(loggedInUser), start);
     }
 
-<<<<<<< HEAD
-    public List<ReducedLearningObject> getUserFavorites(User loggedInUser, int start, int maxResult) {
-=======
     private List<ReducedLearningObject> getUserFavorites(User loggedInUser, int start, int maxResult) {
->>>>>>> new-develop
         return userFavoriteDao.findUsersFavoritedLearningObjects(loggedInUser, start, maxResult);
     }
 

@@ -14,11 +14,6 @@ public class PortfolioAdministrationService {
 
     @Inject
     private PortfolioDao portfolioDao;
-<<<<<<< HEAD
-    @Inject
-    private SolrEngineService solrEngineService;
-=======
->>>>>>> new-develop
 
     public List<Portfolio> getDeletedPortfolios() {
         return portfolioDao.findDeletedPortfolios();
@@ -27,17 +22,4 @@ public class PortfolioAdministrationService {
     public Long getDeletedPortfoliosCount() {
         return portfolioDao.findDeletedPortfoliosCount();
     }
-
-<<<<<<< HEAD
-    public void restore(Portfolio portfolio, User loggedInUser) {
-        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
-
-        Portfolio originalPortfolio = portfolioDao.findDeletedById(portfolio.getId());
-        ValidatorUtil.mustHaveEntity(originalPortfolio);
-
-        portfolioDao.restore(originalPortfolio);
-        solrEngineService.updateIndex();
-    }
-=======
->>>>>>> new-develop
 }

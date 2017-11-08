@@ -14,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "Material")
+@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
 public class AdminMaterial extends AdminLearningObject implements IMaterial {
 
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
@@ -24,9 +25,6 @@ public class AdminMaterial extends AdminLearningObject implements IMaterial {
             inverseJoinColumns = {@JoinColumn(name = "title")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "title"}))
     private List<LanguageString> titles;
-
-//    @OneToMany(mappedBy = "material", fetch = LAZY)
-//    private List<BrokenContent> brokenContents;
 
     public List<LanguageString> getTitles() {
         return titles;

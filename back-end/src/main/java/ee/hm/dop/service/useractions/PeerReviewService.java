@@ -1,10 +1,5 @@
 package ee.hm.dop.service.useractions;
 
-<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/useractions/PeerReviewService.java
-import javax.inject.Inject;
-
-=======
->>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/useractions/PeerReviewService.java
 import ee.hm.dop.dao.PeerReviewDao;
 import ee.hm.dop.model.PeerReview;
 
@@ -24,4 +19,5 @@ public class PeerReviewService {
         peerReview.setUrl(url);
         return peerReviewDao.createOrUpdate(peerReview);
     }
+
 }

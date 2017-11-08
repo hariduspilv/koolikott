@@ -69,14 +69,7 @@ public class TranslationService {
         if (translationGroupFor == null) {
             return null;
         }
-<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/metadata/TranslationService.java
-
-        return translationGroupFor.getTranslations()
-                .entrySet()
-                .stream()
-=======
         return translationGroupFor.getTranslations().entrySet().stream()
->>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/metadata/TranslationService.java
                 .filter(entry -> (entry.getKey().startsWith(DOMAIN) || entry.getKey().startsWith(SUBJECT)))
                 .collect(Collectors.toMap(entry -> HELPER.concat(entry.getKey()), Map.Entry::getValue));
     }

@@ -1,9 +1,8 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Recommendation;
+import ee.hm.dop.model.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
@@ -12,21 +11,21 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class PortfolioAdminResourceTest extends ResourceIntegrationTestBase {
+public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
 
-    private static final String GET_DELETED_PORTFOLIOS = "admin/deleted/portfolio/getDeleted";
-    private static final String GET_DELETED_PORTFOLIOS_COUNT = "admin/deleted/portfolio/getDeleted/count";
+    private static final String GET_DELETED = "admin/deleted/";
+    private static final String GET_DELETED_COUNT = "admin/deleted/count";
     private static final String PORTFOLIO_ADD_RECOMMENDATION_URL = "portfolio/recommend";
     private static final String PORTFOLIO_REMOVE_RECOMMENDATION_URL = "portfolio/removeRecommendation";
 
     @Test
     public void admin_can_get_deleted_portfolios() throws Exception {
         login(USER_ADMIN);
-        List<Portfolio> deletedPortfolios = doGet(GET_DELETED_PORTFOLIOS, new GenericType<List<Portfolio>>() {
+        List<AdminLearningObject> deletedPortfolios = doGet(GET_DELETED, new GenericType<List<AdminLearningObject>>() {
         });
-        long deletedPortfoliosCount = doGet(GET_DELETED_PORTFOLIOS_COUNT, Long.class);
+        long deletedPortfoliosCount = doGet(GET_DELETED_COUNT, Long.class);
 
-        assertTrue("Portfolios are deleted", deletedPortfolios.stream().allMatch(LearningObject::isDeleted));
+        assertTrue("Portfolios are deleted", deletedPortfolios.stream().allMatch(AdminLearningObject::isDeleted));
         assertEquals("Deleted portfolios list size, deleted portfolios count", deletedPortfolios.size(), deletedPortfoliosCount);
     }
 
@@ -54,7 +53,7 @@ public class PortfolioAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void regular_user_do_not_have_access_to_get_deleted_portfolios() throws Exception {
         login(USER_PEETER);
-        Response response = doGet(GET_DELETED_PORTFOLIOS);
+        Response response = doGet(GET_DELETED);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -71,4 +70,23 @@ public class PortfolioAdminResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
+
+    @Test
+    public void getDeleted_returns_deleted_materials_to_user_admin() throws Exception {
+        login(USER_ADMIN);
+        List<AdminLearningObject> deletedMaterials = doGet(GET_DELETED, new GenericType<List<AdminLearningObject>>() {
+        });
+        long deletedMaterialsCount = doGet(GET_DELETED_COUNT, Long.class);
+
+        assertTrue("Materials are deleted", deletedMaterials.stream().allMatch(AdminLearningObject::isDeleted));
+        assertEquals("Deleted materials list size, deleted materials count", deletedMaterials.size(), deletedMaterialsCount);
+    }
+
+    @Test
+    public void regular_user_do_not_have_access_to_get_deleted_materials() throws Exception {
+        login(USER_PEETER);
+        Response response = doGet(GET_DELETED);
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
 }
