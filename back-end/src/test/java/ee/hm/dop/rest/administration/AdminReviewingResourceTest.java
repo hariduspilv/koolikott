@@ -10,6 +10,7 @@ import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
@@ -20,6 +21,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     private static final String LO_SET_NOT_IMPROPER = "admin/improper/setProper";
