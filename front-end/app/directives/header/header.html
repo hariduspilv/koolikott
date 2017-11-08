@@ -4,8 +4,8 @@
   class="navbar md-whiteframe-1dp md-primary"
   ng-class="{
     'md-accent': $root.isEditPortfolioMode,
-    'md-red': isHeaderRed(),
-    'md-gray': ((isAdmin || isModerator) && $root.learningObjectDeleted && $root.isViewMaterialOrPortfolioPage)
+    'md-red': isHeaderRed,
+    'md-gray': isHeaderGray
   }"
   data-click-outside="clickOutside()"
   outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown"
