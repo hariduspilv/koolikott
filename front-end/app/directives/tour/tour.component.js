@@ -35,10 +35,14 @@ class controller extends Controller {
         const methodName = isEditPage ? 'setEditTourSeen' : 'setGeneralTourSeen'
 
         if (this.authenticatedUserService.isAuthenticated() && !isPageSwitch)
-            this.tourService[methodName](this.userTourData)
-                .then(data =>
-                    this.userTourData = data
-                )
+            {
+                let promise = this.tourService[methodName](this.userTourData);
+                if (promise){
+                    promise.then(data =>
+                        this.userTourData = data
+                    )
+                }
+            }
     }
     startGeneralTour() {
         if (window.innerWidth >= BREAK_SM &&
