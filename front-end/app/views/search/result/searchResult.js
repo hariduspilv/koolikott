@@ -25,8 +25,7 @@ class controller extends Controller {
         : q = this.searchService.getQuery()
 
         this.$scope.params = { q, start: 0 }
-        
-        Object.keys({
+        const params = {
             taxon: this.searchService.getTaxon(),
             paid: this.searchService.isPaid(),
             type: this.searchService.getType(),
@@ -40,28 +39,31 @@ class controller extends Controller {
             keyCompetence: this.searchService.getKeyCompetence(),
             sort: this.searchService.getSort(),
             sortDirection: this.searchService.getSortDirection(),
-        })
-        .forEach((param, idx, params) => {
+        }
+
+        Object.keys(params).forEach((param) => {
             const value = params[param]
 
-            switch(param) {
-                case 'taxon':
-                    if (!value || !value[0])
-                        return
-                case 'paid':
-                    if (value !== false)
-                        return
-                case 'type':
-                    if (!value || !this.searchService.isValidType(value))
-                        return
-                case 'specialEducation':
-                    if (value !== true)
-                        return
-                default:
-                    if (typeof value !== 'undefined')
-                        this.$scope[param] = value
+            if (param == 'taxon' && (!value || !value[0])) {
+                return;
             }
-        })
+
+            if (param == 'paid' && value !== false) {
+                return;
+            }
+
+            if (param == 'type' && (!value || !this.searchService.isValidType(value))) {
+                return;
+            }
+
+            if (param == 'specialEducation' && value !== true) {
+                return;
+            }
+
+            if (typeof value !== 'undefined' && value !== '')
+                this.$scope.params[param] = value
+            }
+        )
     }
 }
 controller.$inject = [

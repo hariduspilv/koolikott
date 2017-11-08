@@ -18,6 +18,7 @@ module.exports = function (grunt) {
         app: require('./bower.json').appPath || 'app',
         dist: {
             app: 'dist/dop',
+            dist: 'dist/dop/dist',
             folder: 'dist'
         }
     };
@@ -69,7 +70,8 @@ module.exports = function (grunt) {
                 port: 3001,
                 // Change this to '0.0.0.0' to access the server from outside.
                 hostname: '0.0.0.0',
-                livereload: 3729
+                livereload: 3729,
+                livereloaddist: 3730
             },
             proxies: [
                 // dev
@@ -104,6 +106,29 @@ module.exports = function (grunt) {
                     }
                 }
             },
+            livereloaddist: {
+                options: {
+                    open: true,
+                    middleware: function (connect) {
+                        // Setup the proxy
+                        var middlewares = [require('grunt-connect-proxy/lib/utils').proxyRequest];
+
+                        middlewares.push(require('connect-modrewrite')(['!(\\..+)$ / [L]']));
+
+                        middlewares.push(connect.static('.tmp'));
+
+                        middlewares.push(connect().use(
+                            '/app/styles',
+                            connect.static('./app/styles')
+                        ));
+
+                        // Make directory browse-able.
+                        middlewares.push(connect.static(appConfig.dist.app));
+
+                        return middlewares;
+                    }
+                }
+            },
             dist: {
                 options: {
                     open: true,
@@ -118,6 +143,25 @@ module.exports = function (grunt) {
 
                         // Make directory browse-able.
                         middlewares.unshift(connect.static(appConfig.dist.app));
+
+                        return middlewares;
+                    }
+                }
+            },
+            distdist: {
+                options: {
+                    open: true,
+                    middleware: function (connect, options, middlewares) {
+                        // Setup the proxy
+                        var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                        middlewares.push(proxy);
+
+                        // gzip
+                        var compression = require('compression');
+                        middlewares.unshift(compression({level: 9}));
+
+                        // Make directory browse-able.
+                        middlewares.unshift(connect.static(appConfig.dist.dist));
 
                         return middlewares;
                     }
@@ -398,7 +442,7 @@ module.exports = function (grunt) {
                 options: {
                     replacements: [{
                         pattern: '<script src="constants.js"></script>',
-                        replacement: '<script src="constants.js?ver='+grunt.file.readJSON('package.json').version+'"></script>'
+                        replacement: '<script src="constants.js?ver=' + grunt.file.readJSON('package.json').version + '"></script>'
                     }]
                 }
             }
@@ -445,8 +489,48 @@ module.exports = function (grunt) {
             'postcss:dist',
             'configureProxies:server',
             'connect:livereload',
-            'watch'
+            'watch:app'
         ]);
+    });
+
+    grunt.registerTask('watch:dist', function () {
+        // Configuration for watch:test tasks.
+        var config = {
+            js: {
+                files: [
+                    '<%= yeoman.app %>/directives/**/**/*.js',
+                    '<%= yeoman.app %>/services/**/**/*.js',
+                    '<%= yeoman.app %>/views/**/**/*.js',
+                    '<%= yeoman.app %>/utils/**/**/*.js'
+                ],
+                tasks: ['build'],
+                options: {
+                    livereload: '<%= connect.options.livereloaddist %>'
+                }
+            },
+            sass: {
+                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+                tasks: ['sass:server', 'postcss:dist']
+            },
+            gruntfile: {
+                files: ['Gruntfile.js']
+            },
+            livereload: {
+                options: {
+                    livereload: '<%= connect.options.livereloaddist %>'
+                },
+                files: [
+                    '<%= yeoman.app %>/views/**/**/*.html',
+                    '<%= yeoman.app %>/directives/**/**/*.html',
+                    '<%= yeoman.app %>/utils/**/**/*.html',
+                    '.tmp/styles/{,*/}*.css',
+                    '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                ]
+            }
+        };
+
+        grunt.config('watch', config);
+        grunt.task.run('watch');
     });
 
     grunt.registerTask('build', [
@@ -467,6 +551,15 @@ module.exports = function (grunt) {
         'usemin',
         'htmlmin'
     ]);
+
+    grunt.registerTask('servemin', 'Compile, minify and then start a connect web server', function (target) {
+        grunt.task.run([
+            'build',
+            'configureProxies:server',
+            'connect:livereloaddist',
+            'watch:dist'
+        ]);
+    });
 
     // difference is strip_code
     grunt.registerTask('build-live', [
@@ -503,4 +596,6 @@ module.exports = function (grunt) {
         'build-live',
         'compress:live'
     ]);
+
+
 };
