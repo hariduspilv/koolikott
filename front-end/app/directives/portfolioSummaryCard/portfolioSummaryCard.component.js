@@ -158,20 +158,7 @@ class controller extends Controller {
     }
     isAdminButtonsShowing() {
         return this.authenticatedUserService.isAdmin() && (
-            (
-                this.$rootScope.learningObjectDeleted == false &&
-                this.$rootScope.learningObjectBroken == true &&
-                this.$rootScope.learningObjectImproper == false
-            ) || (
-                this.$rootScope.learningObjectDeleted == false &&
-                this.$rootScope.learningObjectBroken == false &&
-                this.$rootScope.learningObjectImproper == true
-            ) || (
-                this.$rootScope.learningObjectDeleted == false &&
-                this.$rootScope.learningObjectBroken == true &&
-                this.$rootScope.learningObjectImproper == true
-            ) ||
-                this.$rootScope.learningObjectDeleted == true
+            this.$rootScope.learningObjectDeleted === true || this.$rootScope.learningObjectImproper === true
         )
     }
     setRecommendation(recommendation) {

@@ -82,7 +82,7 @@ class controller extends Controller {
                 return []
 
             this.$scope.suggest.suggestions = this.suggestService.suggest(query, this.suggestService.getSuggestURLbase())
-            
+
             if (this.$scope.doInlineSuggestion && this.$scope.suggest.suggestions)
                 this.$scope.suggest.suggestions.then(data => {
                     const firstSuggestion = data[0]
@@ -207,7 +207,6 @@ class controller extends Controller {
                     this.$rootScope.isViewAdminPanelPage || (
                         this.$rootScope.isViewMaterialOrPortfolioPage && (
                             this.$rootScope.learningObjectImproper ||
-                            this.$rootScope.learningObjectBroken ||
                             this.$rootScope.learningObjectChanged ||
                             this.$rootScope.learningObjectUnreviewed ||
                             this.$rootScope.learningObjectDeleted
