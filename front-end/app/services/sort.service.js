@@ -42,7 +42,6 @@ class controller extends Controller {
             b.createdAt || b.added
         )
     }
-    // changedLearningObject
     byLastChangedAt(a, b) {
         return this.compareDates(
             this.getMostRecentChangeDate(a),
@@ -60,6 +59,17 @@ class controller extends Controller {
         return this.compareStrings(
             getName(a),
             getName(b)
+        )
+    }
+    byReportedBy(a, b) {
+        const getLabel = (o) =>
+            o.__reporters.length > 1
+                ? this.getCommaSeparatedReporters(o)
+                : this.getReportedByLabel(o)
+
+        return this.compareStrings(
+            getLabel(a),
+            getLabel(b)
         )
     }
     byChangedBy(a, b) {
@@ -80,7 +90,7 @@ class controller extends Controller {
         )
     }
     byReportCount(a, b) {
-        return a.__reportCount - b.__reportCount
+        return a.__reports.length - b.__reports.length
     }
     byChangeCount(a, b) {
         return a.__numChanges - b.__numChanges

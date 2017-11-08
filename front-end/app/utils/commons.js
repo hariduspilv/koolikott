@@ -831,46 +831,41 @@ class Controller {
         const date = this.getMostRecentImproperDate(item)
         return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
     }
-    getChangedByLabel(item) {
+    getChangedByLabel({ __changers }) {
         // Unknown
-        if (item.__numChanges === 1 && !item.reviewableChanges[0].createdBy)
+        if (__changers.length === 1 && __changers[0] === 'UNKNOWN')
             return this.dependencyExists('$translate')
                 ? this.$translate.instant('UNKNOWN')
                 : ''
 
         // One name
-        if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
-            item.reviewableChanges[0].createdBy
-        )
-            return item.reviewableChanges[0].createdBy.name+' '+item.reviewableChanges[0].createdBy.surname
+        if (__changers.length === 1)
+            return __changers[0].name+' '+__changers[0].surname
 
         // # changers
         return this.dependencyExists('$translate')
             ? this.sprintf(
                 this.$translate.instant('NUM_CHANGERS'),
-                item.__changers.length
+                __changers.length
             )
             : ''
     }
-    getReportedByLabel(item) {
+    getReportedByLabel({ __reporters }) {
         // Unknown
-        //todo merge with getChangedByLabel
-        if (item.__numChanges === 1 && !item.improperContents[0].createdBy)
+        if (__reporters.length === 1 && __reporters[0] === 'UNKNOWN')
             return this.dependencyExists('$translate')
                 ? this.$translate.instant('UNKNOWN')
                 : ''
 
         // One name
-        if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
-            item.improperContents[0].createdBy
-        )
-            return item.improperContents[0].createdBy.name+' '+item.improperContents[0].createdBy.surname;
+        if (__reporters.length === 1)
+            return __reporters[0].name+' '+__reporters[0].surname
 
         // # changers
         return this.dependencyExists('$translate')
             ? this.sprintf(
-                this.$translate.instant('NUM_CHANGERS'),
-                item.__changers.length
+                this.$translate.instant('NUM_REPORTERS'),
+                __reporters.length
             )
             : ''
     }
@@ -881,14 +876,19 @@ class Controller {
         return this.getCreatedByToString(item.__reporters);
     }
     getCreatedByToString(items){
-        return items.reduce((str, c) => {
-            const { name, surname } = c.createdBy
+        return items.reduce((str, createdBy) => {
+            if (!createdBy)
+                return this.dependencyExists('$translate')
+                    ? this.$translate.instant('UNKNOWN')
+                    : ''
+            
+            const { name, surname } = createdBy
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')
     }
     dependencyExists(depName) {
         if (typeof this[depName] === 'undefined') {
-            throw new Error(`this.${depName} is undefined, please include '${depName}' in controller.$inject = [..., '${depName}'] if you wish to use controller.getChangedByLabel()`)
+            throw new Error(`this.${depName} is undefined, please include '${depName}' in controller.$inject = [..., '${depName}']`)
             return false
         }
         return true

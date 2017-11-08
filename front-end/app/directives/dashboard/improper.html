@@ -5,7 +5,7 @@
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
       <th md-column md-order-by="byCreatedAt"><span data-translate="SUBMITTED_AT"></span></th>
       <th md-column md-order-by="byReportCount"><span data-translate="REPORT_COUNT"></span></th>
-      <th md-column md-order-by="byCreatedBy"><span data-translate="SUBMITTED_BY"></span></th>
+      <th md-column md-order-by="byReportedBy"><span data-translate="SUBMITTED_BY"></span></th>
       <th md-column md-order-by="byReason"><span data-translate="REASON"></span></th>
     </tr>
   </thead>
@@ -22,14 +22,13 @@
         ></a>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.getMostRecentImproperDateFormatted(item)"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__numChanges"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reports.length"></td>
       <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-bind="$ctrl.getReportedByLabel(item)">
-        <md-tooltip data-ng-if="item.__numChanges > 1 && item.__changers.length > 1">
-          <span data-ng-bind="$ctrl.getCommaSeparatedChangers(item)"></span>
+        <md-tooltip data-ng-if="item.__reports.length > 1 && item.__reporters.length > 1">
+          <span data-ng-bind="$ctrl.getCommaSeparatedReporters(item)"></span>
         </md-tooltip>
       </td>
-      <td md-cell class="dashboard-cell dashboard-cell--reason"> todo ips, model changed to item.improperContents (list), delete old merge</td>
-      <!--<td md-cell class="dashboard-cell dashboard-cell&#45;&#45;reason" data-translate="{{item.__reportLabelKey}}"></td>-->
+      <td md-cell class="dashboard-cell dashboard-cell--reason" data-translate="{{item.__reportLabelKey}}"></td>
     </tr>
   </tbody>
 </table>
