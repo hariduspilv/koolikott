@@ -116,6 +116,10 @@ class controller extends Controller {
             window.removeEventListener('resize', this.onWindowResizeReports)
             window.removeEventListener('resize', this.onWindowResizeChanges)
         }
+        this.$rootScope.learningObjectDeleted = undefined
+        this.$rootScope.learningObjectImproper = undefined
+        this.$rootScope.learningObjectUnreviewed = undefined
+        this.$rootScope.learningObjectChanged = undefined
     }
     onLearningObjectChange(newLearningObject, oldLearningObject) {
         if (newLearningObject && (!oldLearningObject || newLearningObject.changed != oldLearningObject.changed))

@@ -202,31 +202,48 @@ class controller extends Controller {
 
         this.$scope.getTranslation = (string) => this.$translate.instant(string)
 
-        this.$scope.isHeaderRed = () => {
-            if ((this.$scope.isAdmin || this.$scope.isModerator) && (
-                    this.$rootScope.isViewAdminPanelPage || (
-                        this.$rootScope.isViewMaterialOrPortfolioPage && (
-                            this.$rootScope.learningObjectImproper ||
-                            this.$rootScope.learningObjectBroken ||
-                            this.$rootScope.learningObjectChanged ||
-                            this.$rootScope.learningObjectUnreviewed ||
-                            this.$rootScope.learningObjectDeleted
-                        )
-                    )
-                )
-            ) {
-                this.$rootScope.$broadcast('header:red')
-                return true
-            } else {
-                this.$rootScope.$broadcast('header:default')
-                return false
-            }
-        }
+        this.$timeout(this.setHeaderColor.bind(this))
 
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.openTour = (isEditPage = false) =>
             this.$rootScope.$broadcast(isEditPage ? 'tour:start:editPage' : 'tour:start')
+    }
+    $doCheck() {
+        this.setHeaderColor()
+    }
+    setHeaderColor() {
+        const path = this.$location.path()
+        const isDashboard = path.includes('/dashboard')
+        const isMaterial = path.startsWith('/material')
+        const isPortfolio = path.startsWith('/portfolio')
+        const { deleted, improper, broken, changed, unReviewed } = (
+            isMaterial
+                ? this.storageService.getMaterial()
+                : this.storageService.getPortfolio()
+        ) || {}
+
+        if ((!this.$scope.isAdmin && !this.$scope.isModerator) || (!isMaterial && !isPortfolio && !isDashboard))
+            return this.$rootScope.$broadcast('header:default')
+
+        this.$scope.isHeaderGray = !!deleted
+
+        if (this.$scope.isHeaderGray)
+            return this.$rootScope.$broadcast('header:red')
+
+        this.$scope.isHeaderRed = isDashboard || !!(
+            (isMaterial || isPortfolio) && (
+                !!improper ||
+                !!broken ||
+                !!changed ||
+                !!unReviewed
+            )
+        )
+        this.$rootScope.$broadcast(
+            this.$scope.isHeaderRed
+                ? 'header:red'
+                : 'header:default'
+        )
     }
     setLanguage(language) {
         const shouldReload = this.$scope.selectedLanguage !== language
