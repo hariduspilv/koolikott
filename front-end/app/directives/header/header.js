@@ -213,23 +213,36 @@ class controller extends Controller {
         this.setHeaderColor()
     }
     setHeaderColor() {
+        const setDefault = () => {
+            this.$rootScope.$broadcast('header:default')
+            this.$scope.isHeaderGray = false
+            this.$scope.isHeaderRed = false
+        }
+
+        if (!this.$scope.isAdmin && !this.$scope.isModerator)
+            return setDefault()
+
         const path = this.$location.path()
-        const isDashboard = path.includes('/dashboard')
+        const isDashboard = path.startsWith('/dashboard')
         const isMaterial = path.startsWith('/material')
         const isPortfolio = path.startsWith('/portfolio')
+
+        if (!isMaterial && !isPortfolio && !isDashboard)
+            return setDefault()
+        
         const { deleted, improper, broken, changed, unReviewed } = (
             isMaterial
                 ? this.storageService.getMaterial()
                 : this.storageService.getPortfolio()
         ) || {}
-
-        if ((!this.$scope.isAdmin && !this.$scope.isModerator) || (!isMaterial && !isPortfolio && !isDashboard))
-            return this.$rootScope.$broadcast('header:default')
-
         this.$scope.isHeaderGray = !!deleted
 
-        if (this.$scope.isHeaderGray)
+        // even tho the header'll be gray we still want to tell the sidenav
+        // to use red to highlight it's links
+        if (this.$scope.isHeaderGray) {
+            this.$scope.isHeaderRed = false
             return this.$rootScope.$broadcast('header:red')
+        }
 
         this.$scope.isHeaderRed = isDashboard || !!(
             (isMaterial || isPortfolio) && (
