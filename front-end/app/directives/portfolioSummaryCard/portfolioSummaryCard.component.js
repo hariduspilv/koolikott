@@ -33,7 +33,6 @@ class controller extends Controller {
         this.$scope.isLoggedIn = this.isLoggedIn.bind(this)
         this.$scope.isRestricted = this.isRestricted.bind(this)
         this.$scope.editPortfolio = this.editPortfolio.bind(this)
-        this.$scope.addComment = this.addComment.bind(this)
         this.$scope.toggleCommentSection = this.toggleCommentSection.bind(this)
         this.$scope.getPortfolioEducationalContexts = this.getPortfolioEducationalContexts.bind(this)
         this.$scope.showEditMetadataDialog = this.showEditMetadataDialog.bind(this)
@@ -83,9 +82,6 @@ class controller extends Controller {
     }
     editPortfolio() {
         this.$location.url('/portfolio/edit?id=' + this.$route.current.params.id)
-    }
-    addComment(newComment, portfolio) {
-        this.submitClick({ newComment, portfolio })
     }
     toggleCommentSection() {
         this.$scope.commentsOpen = !this.$scope.commentsOpen
@@ -205,7 +201,7 @@ component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
         comment: '=',
-        submitClick: '&'
+        onAddComment: '&'
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

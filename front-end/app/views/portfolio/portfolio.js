@@ -50,25 +50,6 @@ angular.module('koolikottApp')
                     }, 1000);
                 }
 
-                $scope.addComment = function (newComment, portfolio) {
-                    portfolioService.addComment(newComment, createPortfolio(portfolio.id))
-                        .then(addCommentSuccess, addCommentFailed);
-                };
-
-                function addCommentSuccess() {
-                    $scope.newComment.text = "";
-
-                    getPortfolio(function (portfolio) {
-                        $scope.portfolio = portfolio;
-                    }, function () {
-                        log("Comment success, but failed to reload portfolio.");
-                    });
-                }
-
-                function addCommentFailed() {
-                    log('Adding comment failed.');
-                }
-
                 function setPortfolio(portfolio) {
                     $scope.portfolio = portfolio;
                     storageService.setPortfolio(portfolio);

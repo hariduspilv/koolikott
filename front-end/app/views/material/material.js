@@ -254,11 +254,6 @@ angular.module('koolikottApp')
                 console.log("Failed to get signed user data.")
             }
 
-            $scope.addComment = (newComment, material) => {
-                materialService.addComment(newComment, material)
-                    .then(addCommentSuccess, addCommentFailed);
-            };
-
             $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = $scope.material;
@@ -275,20 +270,6 @@ angular.module('koolikottApp')
                     }
                 });
             };
-
-            function addCommentSuccess() {
-                $scope.newComment.text = "";
-
-                getMaterial((material) => {
-                    $scope.material = material;
-                }, () => {
-                    log("Comment success, but failed to reload material.");
-                });
-            }
-
-            function addCommentFailed() {
-                log('Adding comment failed.');
-            }
 
             $scope.getType = () => {
                 if ($scope.material === undefined || $scope.material === null) return '';
