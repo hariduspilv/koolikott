@@ -1,10 +1,11 @@
 package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.Comment;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
-import ee.hm.dop.rest.CommentResource.AddCommentForm;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.rest.CommentResource.AddComment;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -15,35 +16,35 @@ import static org.junit.Assert.assertTrue;
 
 public class CommentResourceTest extends ResourceIntegrationTestBase {
 
-    public static final String POST_COMMENT_PORTFOLIO_URL = "comment/portfolio";
-    public static final String POST_COMMENT_MATERIAL_URL = "comment/material";
+    public static final String POST_COMMENT_PORTFOLIO_URL = "comment";
+    public static final String POST_COMMENT_MATERIAL_URL = "comment";
     public static final String NICE_COMMENT = "This is my comment. Very nice one! :)";
     public static final String SUCH_COMMENT = "Such comment.";
 
     @Test
     public void addPortfolioComment() {
         login(USER_MATI);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_5, NICE_COMMENT));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        Portfolio response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(NICE_COMMENT, portfolioWithId(PORTFOLIO_5)), Portfolio.class);
+        assertTrue(response.getComments().stream().anyMatch(c -> c.getText().equals(NICE_COMMENT)));
     }
 
     @Test
     public void addPortfolioCommentNotLoggedIn() {
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_5, NICE_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(NICE_COMMENT, portfolioWithId(PORTFOLIO_5)));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsCreator() {
         login(USER_PEETER);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_7, SUCH_COMMENT));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        Portfolio response =  doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(SUCH_COMMENT, portfolioWithId(PORTFOLIO_7)), Portfolio.class);
+        assertTrue(response.getComments().stream().anyMatch(c -> c.getText().equals(SUCH_COMMENT)));
     }
 
     @Test
     public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
         login(USER_MATI);
-        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(PORTFOLIO_7, SUCH_COMMENT));
+        Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(SUCH_COMMENT, portfolioWithId(PORTFOLIO_7)));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
@@ -54,16 +55,15 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         Material materialBefore = getMaterial(MATERIAL_2);
         assertTrue("Material comments empty", materialBefore.getComments().isEmpty());
 
-        doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(MATERIAL_2, NICE_COMMENT));
+        Material materialAfter = doPost(POST_COMMENT_MATERIAL_URL, commentForm(NICE_COMMENT, materialWithId(MATERIAL_2)), Material.class);
 
-        Material materialAfter = getMaterial(MATERIAL_2);
         assertEquals("Material comments size", 1, materialAfter.getComments().size());
         assertEquals("Material comment", NICE_COMMENT, materialAfter.getComments().get(0).getText());
     }
 
     @Test
     public void addMaterialComment_as_not_logged_in_user_does_not_add_comment_to_material() throws Exception {
-        Response response = doPost(POST_COMMENT_MATERIAL_URL, commentMaterialForm(MATERIAL_3, NICE_COMMENT));
+        Response response = doPost(POST_COMMENT_MATERIAL_URL, commentForm(NICE_COMMENT, materialWithId(MATERIAL_3)));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
         Material material = getMaterial(MATERIAL_3);
@@ -76,17 +76,10 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
         return comment;
     }
 
-    private AddCommentForm commentForm(Long portfolioId, String niceComment) {
-        AddCommentForm addCommentForm = new AddCommentForm();
-        addCommentForm.setPortfolio(portfolioWithId(portfolioId));
+    private AddComment commentForm(String niceComment, LearningObject learningObject) {
+        AddComment addCommentForm = new AddComment();
+        addCommentForm.setLearningObject(learningObject);
         addCommentForm.setComment(makeComment(niceComment));
-        return addCommentForm;
-    }
-
-    private AddCommentForm commentMaterialForm(Long materialId, String comment) {
-        AddCommentForm addCommentForm = new AddCommentForm();
-        addCommentForm.setMaterial(materialWithId(materialId));
-        addCommentForm.setComment(makeComment(comment));
         return addCommentForm;
     }
 }
