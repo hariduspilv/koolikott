@@ -21,7 +21,7 @@ class controller extends Controller {
             if (newValue !== oldValue)
                 $scope.portfolioSubject = this.taxonService.getSubject(this.portfolio.taxon)
         }, true)
-        
+
         this.$scope.portfolio = this.portfolio
         this.$scope.commentsOpen = false
         this.$scope.taxonObject = {}
@@ -91,10 +91,10 @@ class controller extends Controller {
             return
 
         const educationalContexts = []
-        
+
         this.portfolio.taxons.forEach(taxon => {
             const edCtx = this.taxonService.getEducationalContext(taxon)
-            
+
             if (edCtx && !educationalContexts.includes(edCtx))
                 educationalContexts.push(edCtx)
         })
@@ -153,7 +153,7 @@ class controller extends Controller {
                 })
     }
     getTargetGroups() {
-        this.portfolio
+        return this.portfolio
             ? this.targetGroupService.getConcentratedLabelByTargetGroups(this.portfolio.targetGroups)
             : undefined
     }
