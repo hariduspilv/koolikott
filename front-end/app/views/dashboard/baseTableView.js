@@ -212,7 +212,7 @@ class controller extends Controller {
         return items
             .filter(c => !c.reviewed)
             .filter(c => {
-                const { id } = c.createdBy
+                const { id } = c.createdBy || { id: 'UNKNOWN' }
                 return ids.includes(id)
                     ? false
                     : ids.push(id)
