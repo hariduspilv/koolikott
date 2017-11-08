@@ -2,6 +2,7 @@ package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -45,6 +46,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void adding_system_tag_adds_a_tag() throws Exception {
         login(USER_PEETER);
