@@ -24,7 +24,6 @@ class controller extends Controller {
 
         this.$scope.portfolio = this.portfolio
         this.$scope.commentsOpen = false
-        this.$scope.taxonObject = {}
         this.$scope.pageUrl = this.$location.absUrl()
 
         this.$scope.canEdit = this.canEdit.bind(this)
