@@ -130,7 +130,7 @@ class controller extends Controller {
     }
     restorePortfolio() {
         this.serverCallService
-            .makePost('rest/admin/deleted/portfolio/restore', this.portfolio)
+            .makePost('rest/admin/deleted/restore', this.portfolio)
             .then(() => {
                 this.toastService.show('PORTFOLIO_RESTORED')
                 this.portfolio.deleted = false
@@ -161,6 +161,9 @@ class controller extends Controller {
             this.$rootScope.learningObjectDeleted === true || this.$rootScope.learningObjectImproper === true
         )
     }
+    dotsAreShowing () {
+        return this.$rootScope.learningObjectDeleted === false || this.authenticatedUserService.isAdmin();
+    };
     setRecommendation(recommendation) {
         if (this.portfolio)
             this.portfolio.recommendation = recommendation

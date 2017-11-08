@@ -218,12 +218,12 @@ angular.module('koolikottApp')
                 updateMaterial(value, $scope.material);
             });
 
-            $scope.isAdminButtonsShowing = () => {
+            $scope.isAdminButtonsShowing = function(){
                 return $rootScope.learningObjectDeleted === true || $rootScope.learningObjectImproper === true;
             };
 
-            $scope.dotsAreShowing = () => {
-                return true;
+            $scope.dotsAreShowing = function () {
+                return $rootScope.learningObjectDeleted === false || $scope.isAdmin();
             };
 
             function getTaxonObject() {
