@@ -1,9 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.UserFavorite;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.TagService;
@@ -61,6 +58,13 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void removeUserFavorite(@QueryParam("id") long id) {
         userFavoriteService.removeUserFavorite(id, getLoggedInUser());
+    }
+
+    @POST
+    @Path("favorite/delete")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public void removeUserFavorite2(LearningObjectMiniDto loDto) {
+        userFavoriteService.removeUserFavorite(loDto.getId(), getLoggedInUser());
     }
 
     @GET

@@ -10,53 +10,40 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.rest.BaseResource;
-<<<<<<< HEAD
-=======
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
->>>>>>> new-develop
-import ee.hm.dop.service.content.PortfolioAdministrationService;
 
-@Path("admin/deleted/portfolio")
-public class DeletedPortfolioAdminResource extends BaseResource {
+@Path("admin/deleted")
+public class DeletedAdminResource extends BaseResource {
 
-    @Inject
-    private PortfolioAdministrationService portfolioAdministrationService;
-<<<<<<< HEAD
-=======
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
->>>>>>> new-develop
 
     @POST
     @Path("restore")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public void restore(Portfolio portfolio) {
-<<<<<<< HEAD
-        portfolioAdministrationService.restore(portfolio, getLoggedInUser());
-=======
-        learningObjectAdministrationService.restore(portfolio, getLoggedInUser());
->>>>>>> new-develop
+    public LearningObject restore(LearningObjectMiniDto loDto) {
+       return learningObjectAdministrationService.restore(loDto.convert(), getLoggedInUser());
     }
 
     @GET
-    @Path("getDeleted")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<Portfolio> getDeletedPortfolios() {
-        return portfolioAdministrationService.getDeletedPortfolios();
+    public List<AdminLearningObject> getDeletedPortfolios() {
+        return learningObjectAdministrationService.findByIdDeleted();
     }
 
     @GET
-    @Path("getDeleted/count")
+    @Path("count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Response getDeletedPortfoliosCount() {
-        return ok(portfolioAdministrationService.getDeletedPortfoliosCount());
+    public Long getDeletedPortfoliosCount() {
+        return learningObjectAdministrationService.findCountByIdDeleted();
     }
 }

@@ -33,14 +33,9 @@ public class EhisParser {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                     .parse(new InputSource(new StringReader(input)));
             doc.getDocumentElement().normalize();
-<<<<<<< HEAD:back-end/src/main/java/ee/hm/dop/service/ehis/EhisParser.java
-            person = parse(doc);
-        } catch (Exception ignored) {
-=======
             return parse(doc);
         } catch (ParserConfigurationException | SAXException | IOException ignored) {
             return null;
->>>>>>> new-develop:back-end/src/main/java/ee/hm/dop/service/ehis/EhisParser.java
         }
     }
 

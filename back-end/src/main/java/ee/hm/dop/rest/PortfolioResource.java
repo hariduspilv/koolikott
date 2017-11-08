@@ -15,12 +15,7 @@ import javax.ws.rs.core.MediaType;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
-<<<<<<< HEAD
-import ee.hm.dop.service.content.PortfolioCopier;
-import ee.hm.dop.service.content.PortfolioService;
-=======
 import ee.hm.dop.service.content.*;
->>>>>>> new-develop
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -35,24 +30,17 @@ public class PortfolioResource extends BaseResource {
     private PortfolioCopier portfolioCopier;
     @Inject
     private UserLikeService userLikeService;
-<<<<<<< HEAD
-=======
     @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
     @Inject
     private LearningObjectService learningObjectService;
     @Inject
     private PortfolioGetter portfolioGetter;
->>>>>>> new-develop
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@QueryParam("id") long portfolioId) {
-<<<<<<< HEAD
-        return portfolioService.get(portfolioId, getLoggedInUser());
-=======
         return portfolioGetter.get(portfolioId, getLoggedInUser());
->>>>>>> new-develop
     }
 
     @GET
@@ -63,11 +51,7 @@ public class PortfolioResource extends BaseResource {
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         User loggedInUser = getLoggedInUser();
-<<<<<<< HEAD
-        return portfolioService.getByCreatorResult(creator, loggedInUser, start, maxResults);
-=======
         return portfolioGetter.getByCreatorResult(creator, loggedInUser, start, maxResults);
->>>>>>> new-develop
     }
 
     @GET
@@ -77,11 +61,7 @@ public class PortfolioResource extends BaseResource {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
-<<<<<<< HEAD
-        return portfolioService.getCountByCreator(creator);
-=======
         return portfolioGetter.getCountByCreator(creator);
->>>>>>> new-develop
     }
 
     @POST
@@ -146,13 +126,10 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void delete(Portfolio portfolio) {
-<<<<<<< HEAD
-        portfolioService.delete(portfolio, getLoggedInUser());
-=======
-        learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
->>>>>>> new-develop
+    public LearningObject delete(Portfolio portfolio) {
+        return learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
     }
 
     private User getValidCreator(@QueryParam("username") String username) {

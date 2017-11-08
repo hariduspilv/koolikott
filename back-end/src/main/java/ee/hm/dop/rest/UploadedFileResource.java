@@ -16,15 +16,7 @@ import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-<<<<<<< HEAD
-import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.content.UploadedFileService;
-import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-=======
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
->>>>>>> new-develop
 
 @Path("uploadedFile")
 public class UploadedFileResource extends BaseResource {

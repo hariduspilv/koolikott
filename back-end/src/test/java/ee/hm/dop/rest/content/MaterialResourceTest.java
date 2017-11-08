@@ -12,6 +12,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -34,13 +35,9 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
     private static final String CREATE_MATERIAL_URL = "material";
-    private static final String MATERIAL_SET_BROKEN = "material/setBroken";
-    private static final String MATERIAL_HAS_SET_BROKEN = "material/hasSetBroken?materialId=";
     private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
     private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
-    private static final String RESTORE_MATERIAL = "admin/deleted/material/restore";
-    private static final String GET_DELETED_MATERIALS = "admin/deleted/material/getDeleted";
-    private static final String GET_DELETED_MATERIALS_COUNT = "admin/deleted/material/getDeleted/count";
+    private static final String RESTORE_MATERIAL = "admin/deleted/restore";
     private static final String LIKE_URL = "material/like";
     private static final String DISLIKE_URL = "material/dislike";
     private static final String GET_USER_LIKE_URL = "material/getUserLike";
@@ -51,6 +48,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
     public static final String SOURCE_NOT_EXISTING = "https://www.youtube.com/watch?v=5_Ar7VXXsro";
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
+    public static final String MATERIAL_DELETE = "material/delete";
 
     @Inject
     private TaxonDao taxonDao;
@@ -273,34 +271,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
-    @Test
-    public void setBrokenMaterial() {
-        login(USER_SECOND);
-
-        Material material = getMaterial(MATERIAL_5);
-        Response response = doPost(MATERIAL_SET_BROKEN, material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void hasSetBroken() {
-        login(USER_SECOND);
-        Material material = getMaterial(MATERIAL_5);
-
-        Response response = doPost(MATERIAL_SET_BROKEN, material);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-
-        Response hasBrokenResponse = doGet(MATERIAL_HAS_SET_BROKEN + material.getId());
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        assertEquals(hasBrokenResponse.readEntity(Boolean.class), true);
-    }
-
-    @Test
-    public void hasSetBroken_returns_false_if_user_is_not_logged_in() throws Exception {
-        Boolean response = doGet(MATERIAL_HAS_SET_BROKEN + getMaterial(MATERIAL_5).getId(), Boolean.class);
-        assertFalse("Material hasSetBroken", response);
-    }
-
     @Test(expected = RuntimeException.class)
     public void GetMaterialsByNullSource() {
         login(USER_PEETER);
@@ -332,7 +302,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void userCanNotDeleteRepositoryMaterial() {
         login(USER_PEETER);
-        Response response = doDelete("material/" + MATERIAL_12);
+        Response response = doPost(MATERIAL_DELETE, materialWithId(MATERIAL_12));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -340,24 +310,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void userCanNotRestoreRepositoryMaterial() {
         login(USER_PEETER);
         Response response = doPost(RESTORE_MATERIAL, materialWithId(MATERIAL_14));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void getDeleted_returns_deleted_materials_to_user_admin() throws Exception {
-        login(USER_ADMIN);
-        List<Material> deletedMaterials = doGet(GET_DELETED_MATERIALS, new GenericType<List<Material>>() {
-        });
-        long deletedMaterialsCount = doGet(GET_DELETED_MATERIALS_COUNT, Long.class);
-
-        assertTrue("Materials are deleted", deletedMaterials.stream().allMatch(LearningObject::isDeleted));
-        assertEquals("Deleted materials list size, deleted materials count", deletedMaterials.size(), deletedMaterialsCount);
-    }
-
-    @Test
-    public void regular_user_do_not_have_access_to_get_deleted_materials() throws Exception {
-        login(USER_PEETER);
-        Response response = doGet(GET_DELETED_MATERIALS);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 

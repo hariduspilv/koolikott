@@ -88,12 +88,10 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
         },
 
         removeUpVote(params, successCallback, failCallback) {
-            let removeUpVoteUrl = "rest/tagUpVotes/" + params.tagUpVote.id;
-
             if (successCallback) {
-                serverCallService.makeDelete(removeUpVoteUrl, params, successCallback, failCallback);
+                serverCallService.makePost('rest/tagUpVotes/delete', params.tagUpVote, successCallback, failCallback);
             } else {
-                return serverCallService.makeDelete(removeUpVoteUrl, params)
+                return serverCallService.makePost('rest/tagUpVotes/delete', params.tagUpVote)
                     .then(response => {
                         return response.data;
                     });

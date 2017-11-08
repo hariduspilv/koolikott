@@ -25,8 +25,6 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         return getSingleResult(findByCode);
     }
 
-<<<<<<< HEAD
-=======
     public LearningObject findByIdDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = true", entity()) //
@@ -34,7 +32,6 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         return getSingleResult(findByCode);
     }
 
->>>>>>> new-develop
     public LearningObject findById(long objectId) {
         TypedQuery<LearningObject> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id", entity()) //

@@ -115,10 +115,6 @@ public class Material extends LearningObject implements Searchable, IMaterial {
     @Column(nullable = false)
     private boolean isSpecialEducation = false;
 
-    @OneToMany(mappedBy = "material", fetch = LAZY)
-    @JsonBackReference("brokenContent")
-    private List<BrokenContent> brokenContents;
-
     public List<LanguageString> getTitles() {
         return titles;
     }
@@ -275,13 +271,5 @@ public class Material extends LearningObject implements Searchable, IMaterial {
         }
 
         return descriptions;
-    }
-
-    public List<BrokenContent> getBrokenContents() {
-        return brokenContents;
-    }
-
-    public void setBrokenContents(List<BrokenContent> brokenContents) {
-        this.brokenContents = brokenContents;
     }
 }

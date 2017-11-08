@@ -1,16 +1,10 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.*;
-<<<<<<< HEAD
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.content.MaterialMetadataService;
-=======
 import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.metadata.MaterialMetadataService;
->>>>>>> new-develop
 import ee.hm.dop.service.metadata.*;
 import org.apache.http.HttpHeaders;
 

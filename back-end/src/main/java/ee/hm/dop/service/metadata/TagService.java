@@ -51,11 +51,7 @@ public class TagService {
     }
 
     private LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
-<<<<<<< HEAD
-        if (!learningObjectService.canAcess(user, learningObject)) {
-=======
         if (!learningObjectService.canAccess(user, learningObject)) {
->>>>>>> new-develop
             throw ValidatorUtil.permissionError();
         }
 

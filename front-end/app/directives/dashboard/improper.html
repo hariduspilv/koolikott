@@ -10,27 +10,26 @@
     </tr>
   </thead>
   <tbody md-body>
-    <tr md-row ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item.learningObject)">
+    <tr md-row ng-repeat="item in data" ng-click="$ctrl.openLearningObject(item)">
       <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-        <dop-dashboard-type-icon data-learning-object="item.learningObject"></dop-dashboard-type-icon>
+        <dop-dashboard-type-icon data-learning-object="item"></dop-dashboard-type-icon>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--title">
         <a
           class="ellipsis ellipsis--2"
-          data-ng-href="{{$ctrl.getLearningObjectUrl(item.learningObject)}}"
-          data-ng-bind="$ctrl.getCorrectLanguageTitle(item.learningObject)"
+          data-ng-href="{{$ctrl.getLearningObjectUrl(item)}}"
+          data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"
         ></a>
       </td>
-      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.createdAt)"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reportCount"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount === 1 && !item.creator" data-translate="UNKNOWN"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="(item.__reportCount === 1 || item.__reportCount > 1 && item.__creators.length < 2) && item.creator" data-ng-bind="item.creator.name+' '+item.creator.surname"></td>
-      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="item.__reportCount > 1 && item.__creators.length > 1" data-ng-bind="$ctrl.getNumCreatorsLabel(item, 'NUM_REPORTERS')">
-        <md-tooltip>
-          <span data-ng-bind="$ctrl.getCommaSeparatedCreators(item)"></span>
+      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.getMostRecentImproperDateFormatted(item)"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__numChanges"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-bind="$ctrl.getReportedByLabel(item)">
+        <md-tooltip data-ng-if="item.__numChanges > 1 && item.__changers.length > 1">
+          <span data-ng-bind="$ctrl.getCommaSeparatedChangers(item)"></span>
         </md-tooltip>
       </td>
-      <td md-cell class="dashboard-cell dashboard-cell--reason" data-translate="{{item.__reportLabelKey}}"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--reason"> todo ips, model changed to item.improperContents (list), delete old merge</td>
+      <!--<td md-cell class="dashboard-cell dashboard-cell&#45;&#45;reason" data-translate="{{item.__reportLabelKey}}"></td>-->
     </tr>
   </tbody>
 </table>

@@ -116,9 +116,9 @@ insert into Specialization(id, domain) values (40, 14);
 -- Module
 
 insert into Taxon(id, name, level) values (50, 'IT_õigus', 'MODULE');
-insert into Module(id, domain) values (50, 40);
+insert into Module(id, specialization) values (50, 40);
 insert into Taxon(id, name, level) values (51, 'Kommunikatsioon', 'MODULE');
-insert into Module(id, domain) values (51, 40);
+insert into Module(id, specialization) values (51, 40);
 
 -- Topics from Subjects
 
@@ -137,9 +137,9 @@ insert into Topic(id, domain) values (33, 12);
 -- Topics from Module
 
 insert into Taxon(id, name, level) values (34, 'Infoühiskonna_tehnoloogiad', 'TOPIC');
-insert into Topic(id, domain) values (34, 50);
+insert into Topic(id, module) values (34, 50);
 insert into Taxon(id, name, level) values (35, 'Arvuti_töövahendina', 'TOPIC');
-insert into Topic(id, domain) values (35, 51);
+insert into Topic(id, module) values (35, 51);
 
 -- Subtopic
 
@@ -230,7 +230,7 @@ insert into Material(id, lang, issueDate, licenseType, source, repository, repos
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(13, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(13, null, null, null, 'http://example.com/123', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, 'asd', false, false);
+insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, true, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
 insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
@@ -431,54 +431,36 @@ insert into Translation(translationGroup, translationKey, translation) values (1
 insert into Translation(translationGroup, translationKey, translation) values (1, 'Estonian', 'Eesti keeles');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'Russian', 'Vene keel');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'TOPIC_MATHEMATICS', 'Matemaatika');
-<<<<<<< HEAD
-=======
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_ID', 'e-Koolikott:et');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_TITLE', 'e-Koolikott - Uudised');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_VERSION_TITLE', 'Uus versioon "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_PORTFOLIO_TITLE', 'Uus portfoolio "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (1, 'FEED_MATERIAL_TITLE', 'Uus material "%s"');
-<<<<<<< HEAD
->>>>>>> new-develop
-=======
 insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
->>>>>>> new-develop
 
 -- Russian
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FOO', 'FOO сообщение');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Estonian', 'Эстонский язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'Russian', 'русский язык');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'TOPIC_MATHEMATICS', 'Mатематика');
-<<<<<<< HEAD
-=======
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_ID', 'e-Koolikott:ru');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_TITLE', 'Новая версия "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_VERSION_TITLE', 'Feed version title rus');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_PORTFOLIO_TITLE', 'Новый портфель "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (2, 'FEED_MATERIAL_TITLE', 'Новый материал "%s"');
-<<<<<<< HEAD
->>>>>>> new-develop
-=======
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
->>>>>>> new-develop
+insert into Translation(translationGroup, translationKey, translation) values (2, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 
 -- English
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FOO', 'FOO message');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Estonian', 'Estonian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'Russian', 'Russian');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'TOPIC_MATHEMATICS', 'Mathematics');
-<<<<<<< HEAD
-=======
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_ID', 'e-Koolikott:en');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_TITLE', 'e-Koolikott - News');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_VERSION_TITLE', 'New version "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_PORTFOLIO_TITLE', 'New portfolio "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_MATERIAL_TITLE', 'New material "%s"');
-<<<<<<< HEAD
->>>>>>> new-develop
-=======
-insert into Translation(translationGroup, translationKey, translation) values (1, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
->>>>>>> new-develop
+insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 
 -- Page
 
@@ -586,19 +568,15 @@ insert into LearningObject_Taxon(learningObject, taxon) values(103, 21);
 
 -- Improper content
 
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (1, 1, 102,'2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (2, 1,  2, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (3, 9, 2, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (4, 9, 3, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (5, 9, 103, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (6, 9, 104, '2014-06-01 00:00:01', true);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (7, 9, 4, '2014-06-01 00:00:01', true);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (15, 9, 15, '2014-06-01 00:00:01', false);
-insert into ImproperContent(id, creator, learningObject, createdAt, reviewed) values (115, 9, 115, '2014-06-01 00:00:01', false);
-
--- Broken content
-
-insert into BrokenContent(id, creator, material, added, deleted) values (15, 9, 15, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (1, 1, 102,'2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (2, 1,  2, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (3, 9, 2, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (4, 9, 3, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (5, 9, 103, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (6, 9, 104, '2014-06-01 00:00:01', true);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (7, 9, 4, '2014-06-01 00:00:01', true);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (15, 9, 15, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (115, 9, 115, '2014-06-01 00:00:01', false);
 
 -- Reviewable Change
 
@@ -636,9 +614,9 @@ insert into UserLike(id, creator, learningObject, isLiked, added) values (17, 2,
 
 
 -- In the far past, should not count when looking for the most liked ones
-insert into UserLike(id, creator, learningObject, isLiked, added) values (14, 2, 3, 0, '2014-06-01 00:00:01');
-insert into UserLike(id, creator, learningObject, isLiked, added) values (15, 4, 103, 0, '2014-06-01 00:00:01');
-insert into UserLike(id, creator, learningObject, isLiked, added) values (16, 6, 103, 0, '2015-01-11 00:00:01');
+insert into UserLike(id, creator, learningObject, isLiked, added) values (18, 2, 3, 0, '2014-06-01 00:00:01');
+insert into UserLike(id, creator, learningObject, isLiked, added) values (19, 4, 103, 0, '2014-06-01 00:00:01');
+insert into UserLike(id, creator, learningObject, isLiked, added) values (20, 6, 103, 0, '2015-01-11 00:00:01');
 
 -- Uploaded files
 
@@ -664,13 +642,6 @@ insert into Material_PeerReview(material, peerReview) values (3, 2);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (1, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (2, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (3, 0, CURRENT_TIMESTAMP);
-<<<<<<< HEAD
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (5, 1, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (6, 0, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (9, 0, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (107, 0, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (108, 0, CURRENT_TIMESTAMP);
-=======
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (4, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (5, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (6, 0, CURRENT_TIMESTAMP);
@@ -702,7 +673,6 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (112, 1, CUR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (113, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (114, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (115, 0, CURRENT_TIMESTAMP);
->>>>>>> new-develop
 
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
 INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');
