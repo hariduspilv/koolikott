@@ -489,7 +489,7 @@ module.exports = function (grunt) {
             'postcss:dist',
             'configureProxies:server',
             'connect:livereload',
-            'watch:app'
+            'watch'
         ]);
     });
 
