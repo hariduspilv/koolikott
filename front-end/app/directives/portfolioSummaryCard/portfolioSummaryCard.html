@@ -11,7 +11,7 @@
             data-title="portfolio.title"
             data-object="portfolio"
           ></dop-share>
-          <md-menu>
+          <md-menu ng-if="dotsAreShowing()">
             <md-button class="md-icon-button" ng-click="$mdMenu.open($event)" id="material-menu">
               <md-icon md-menu-origin>more_vert</md-icon>
             </md-button>

@@ -875,10 +875,10 @@ class Controller {
             : ''
     }
     getCommaSeparatedChangers(item) {
-        return getCreatedByToString(item.__changers);
+        return this.getCreatedByToString(item.__changers);
     }
     getCommaSeparatedReporters(item) {
-        return getCreatedByToString(item.__reporters);
+        return this.getCreatedByToString(item.__reporters);
     }
     getCreatedByToString(items){
         return items.reduce((str, c) => {

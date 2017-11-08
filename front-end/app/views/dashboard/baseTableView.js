@@ -212,7 +212,7 @@ class controller extends Controller {
         return items
             .filter(c => !c.reviewed)
             .filter(c => {
-                const { id } = c.createdBy
+                const { id } = c.createdBy || { id: 'UNKNOWN' }
                 return ids.includes(id)
                     ? false
                     : ids.push(id)
@@ -266,7 +266,7 @@ class controller extends Controller {
     }
     /**
      *  Merge reports/changes so that every learning object is represented by only 1 row in the table.
-     *  //todo should remove merge
+     *  //todo ips should remove merge
      */
     merge(items) {
         const merged = []

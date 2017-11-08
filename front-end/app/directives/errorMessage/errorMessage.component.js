@@ -299,7 +299,6 @@ class controller extends Controller {
                 .then(({ status, data }) => {
                     console.log('POST rest/admin/improper/setProper', { id, type }, status, data)
                     this.$rootScope.learningObjectImproper = false
-                    this.$rootScope.learningObjectBroken = false
                     this.$rootScope.learningObjectUnreviewed = false
                     this.$rootScope.learningObjectChanged = false
                     this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
@@ -349,7 +348,6 @@ class controller extends Controller {
                 this.$rootScope.learningObjectDeleted = false
                 this.$rootScope.learningObjectImproper = false
                 this.$rootScope.learningObjectUnreviewed = false
-                this.$rootScope.learningObjectBroken = false
                 this.$rootScope.learningObjectChanged = false
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
             })

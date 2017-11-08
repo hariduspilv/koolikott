@@ -21,10 +21,9 @@ class controller extends Controller {
             if (newValue !== oldValue)
                 $scope.portfolioSubject = this.taxonService.getSubject(this.portfolio.taxon)
         }, true)
-        
+
         this.$scope.portfolio = this.portfolio
         this.$scope.commentsOpen = false
-        this.$scope.taxonObject = {}
         this.$scope.pageUrl = this.$location.absUrl()
 
         this.$scope.canEdit = this.canEdit.bind(this)
@@ -91,10 +90,10 @@ class controller extends Controller {
             return
 
         const educationalContexts = []
-        
+
         this.portfolio.taxons.forEach(taxon => {
             const edCtx = this.taxonService.getEducationalContext(taxon)
-            
+
             if (edCtx && !educationalContexts.includes(edCtx))
                 educationalContexts.push(edCtx)
         })
@@ -131,7 +130,7 @@ class controller extends Controller {
     }
     restorePortfolio() {
         this.serverCallService
-            .makePost('rest/admin/deleted/portfolio/restore', this.portfolio)
+            .makePost('rest/admin/deleted/restore', this.portfolio)
             .then(() => {
                 this.toastService.show('PORTFOLIO_RESTORED')
                 this.portfolio.deleted = false
@@ -153,28 +152,18 @@ class controller extends Controller {
                 })
     }
     getTargetGroups() {
-        this.portfolio
+        return this.portfolio
             ? this.targetGroupService.getConcentratedLabelByTargetGroups(this.portfolio.targetGroups)
             : undefined
     }
     isAdminButtonsShowing() {
         return this.authenticatedUserService.isAdmin() && (
-            (
-                this.$rootScope.learningObjectDeleted == false &&
-                this.$rootScope.learningObjectBroken == true &&
-                this.$rootScope.learningObjectImproper == false
-            ) || (
-                this.$rootScope.learningObjectDeleted == false &&
-                this.$rootScope.learningObjectBroken == false &&
-                this.$rootScope.learningObjectImproper == true
-            ) || (
-                this.$rootScope.learningObjectDeleted == false &&
-                this.$rootScope.learningObjectBroken == true &&
-                this.$rootScope.learningObjectImproper == true
-            ) ||
-                this.$rootScope.learningObjectDeleted == true
+            this.$rootScope.learningObjectDeleted === true || this.$rootScope.learningObjectImproper === true
         )
     }
+    dotsAreShowing () {
+        return this.$rootScope.learningObjectDeleted === false || this.authenticatedUserService.isAdmin();
+    };
     setRecommendation(recommendation) {
         if (this.portfolio)
             this.portfolio.recommendation = recommendation

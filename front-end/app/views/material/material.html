@@ -31,7 +31,7 @@
               <dop-share
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
-              <md-menu>
+              <md-menu ng-show="dotsAreShowing()">
                 <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
@@ -66,8 +66,6 @@
                   <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
                   <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
                                 data-learning-object="material"></md-menu-item>
-                  <md-menu-item data-ng-if="!isAdmin()"
-                                dop-report-broken-link></md-menu-item>
                   <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
                                 data-learning-object="material">
                   </md-menu-item>

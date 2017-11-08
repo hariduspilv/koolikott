@@ -157,9 +157,8 @@ angular.module('koolikottApp')
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.private = ["PRIVATE"].includes($scope.material.visibility);;
-                $rootScope.learningObjectBroken = ($scope.material.broken > 0);
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
-                $rootScope.learningObjectDeleted = ($scope.material.deleted == true);
+                $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
                 materialService.increaseViewCount($scope.material);
@@ -219,17 +218,12 @@ angular.module('koolikottApp')
                 updateMaterial(value, $scope.material);
             });
 
-            $scope.isAdminButtonsShowing = () => {
-                return ($rootScope.learningObjectDeleted == false
-                    && $rootScope.learningObjectImproper == false
-                    && $rootScope.learningObjectBroken == true)
-                    || ($rootScope.learningObjectDeleted == false
-                    && $rootScope.learningObjectBroken == false
-                    && $rootScope.learningObjectImproper == true)
-                    || ($rootScope.learningObjectDeleted == false
-                    && $rootScope.learningObjectBroken == true
-                    && $rootScope.learningObjectImproper == true)
-                    || ($rootScope.learningObjectDeleted == true);
+            $scope.isAdminButtonsShowing = function(){
+                return $rootScope.learningObjectDeleted === true || $rootScope.learningObjectImproper === true;
+            };
+
+            $scope.dotsAreShowing = function () {
+                return $rootScope.learningObjectDeleted === false || $scope.isAdmin();
             };
 
             function getTaxonObject() {
@@ -326,12 +320,10 @@ angular.module('koolikottApp')
                 $scope.material.deleted = false
                 $scope.material.improper = false
                 $scope.material.unReviewed = false
-                $scope.material.broken = false
                 $scope.material.changed = false
                 $rootScope.learningObjectDeleted = false
                 $rootScope.learningObjectImproper = false
                 $rootScope.learningObjectUnreviewed = false
-                $rootScope.learningObjectBroken = false
                 $rootScope.learningObjectChanged = false
                 $rootScope.$broadcast('dashboard:adminCountsUpdated');
             }

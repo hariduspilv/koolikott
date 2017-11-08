@@ -56,9 +56,8 @@ angular.module('koolikottApp')
 
                     if ($scope.portfolio) {
                         $rootScope.private = ["PRIVATE"].includes($scope.portfolio.visibility);
-                        $rootScope.learningObjectBroken = $scope.portfolio.broken > 0;
                         $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
-                        $rootScope.learningObjectDeleted = $scope.portfolio.deleted == true;
+                        $rootScope.learningObjectDeleted = $scope.portfolio.deleted === true;
                         $rootScope.learningObjectChanged = $scope.portfolio.changed > 0;
                         $rootScope.learningObjectUnreviewed = !!$scope.portfolio.unReviewed;
                     }
