@@ -32,7 +32,7 @@ class controller extends Controller {
                         emptyPortfolio.chapters[0].contentRows.push({
                             learningObjects: [this.$rootScope.selectedMaterials[i]]
                         })
-                
+
                 else if(this.$rootScope.selectedSingleMaterial != null)
                     emptyPortfolio.chapters[0].contentRows = (emptyPortfolio.chapters[0].contentRows || []).concat({
                         learningObjects: [this.$rootScope.selectedSingleMaterial]
@@ -59,7 +59,8 @@ class controller extends Controller {
         this.$scope.copyPortfolio = () =>
             this.serverCallService
                 .makePost('rest/portfolio/copy', createPortfolio(this.$route.current.params.id))
-                .then(({ portfolio }) => {
+                .then(({ data }) => {
+                    let portfolio = data;
                     if (portfolio) {
                         this.storageService.setPortfolio(portfolio)
                         this.$rootScope.openMetadataDialog = true
