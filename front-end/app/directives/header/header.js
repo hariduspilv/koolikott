@@ -27,9 +27,13 @@ class controller extends Controller {
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
-        this.$mdSidenav('left', true).then(left =>
-            this.$scope.isSideNavOpen = left.isOpen()
-        )
+        try {
+            this.$mdSidenav('left', true).then(left =>
+                this.$scope.isSideNavOpen = left.isOpen()
+            )
+        } catch(e) {
+            console.error(e)
+        }
 
         this.$scope.detailedSearch.accessor = {
             clearSimpleSearch: () => this.$scope.searchFields.searchQuery = ''
