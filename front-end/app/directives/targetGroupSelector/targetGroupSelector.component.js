@@ -3,9 +3,13 @@
 {
 class controller extends Controller {
     $onInit() {
-        this.$scope.$on('detailedSearch:prefillTargetGroup', (evt, args) =>
+        this.$scope.$on('detailedSearch:prefillTargetGroup', (evt, args) => {
             this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(args)
-        )
+            this.setSelectedText()
+            this.$timeout(() =>
+                this.setSelectedText()
+            )
+        })
         this.fill()
         this.addListeners()
         this.selectValue()
@@ -32,16 +36,19 @@ class controller extends Controller {
             this.setSelectedText()
     }
     setSelectedText() {
+        const set = (selectedText) =>
+            this.$scope.selectedText = Array.isArray(selectedText)
+                ? selectedText.join(', ')
+                : selectedText
+
         const selected = this.$scope.selectedTargetGroup.length
             ? this.$scope.selectedTargetGroup
             : this.targetGroups && this.targetGroups.length
                 && this.targetGroups
 
         selected
-            ? this.$scope.selectedText = this.targetGroupService.getSelectedText(selected).join(', ')
-            : this.$translate('DETAILED_SEARCH_TARGET_GROUP').then(selectedText =>
-                this.$scope.selectedText = selectedText
-            )
+            ? this.targetGroupService.getSelectedText(selected).then(set)
+            : this.$translate('DETAILED_SEARCH_TARGET_GROUP').then(set)
     }
     parentClick(evt) {
         const added = !this.$scope.selectedTargetGroup.length || (

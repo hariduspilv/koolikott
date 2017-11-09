@@ -3,7 +3,6 @@
 {
 class controller extends Controller {
     $onInit() {
-        // get educational contexts
         this.metadataService.loadEducationalContexts(educationalContexts => {
             if (educationalContexts) {
                 this.educationalContexts = this.buildDomainSubjects(educationalContexts)
@@ -41,9 +40,6 @@ class controller extends Controller {
             }
             this._previousMarkRequired = this.markRequired
         }
-    }
-    reset(parentTaxon) {
-        this.taxon = parentTaxon
     }
     selectEducationalContext(educationalContext) {
         this.selectTaxon(educationalContext)
@@ -144,7 +140,6 @@ controller.$inject = [
     '$timeout',
     '$filter',
     'metadataService',
-    'serverCallService',
     'taxonService'
 ]
 component('dopTaxonSelector', {

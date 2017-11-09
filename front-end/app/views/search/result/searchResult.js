@@ -6,7 +6,6 @@ class controller extends Controller {
         super(...args)
 
         this.setParams()
-
         this.$scope.$watch(
             () => this.$location.search(),
             this.onLocationChange.bind(this),
@@ -14,11 +13,8 @@ class controller extends Controller {
         )
     }
     onLocationChange(newValue, oldValue) {
-        if (newValue !== oldValue) {
-            if (newValue.q === '')
-                this.searchService.setType('all')
+        if (newValue !== oldValue)
             this.setParams(newValue.q)
-        }
     }
     setParams(q) {
         q  ?  this.searchService.setSearch(q)
@@ -40,30 +36,19 @@ class controller extends Controller {
             sort: this.searchService.getSort(),
             sortDirection: this.searchService.getSortDirection(),
         }
-
         Object.keys(params).forEach((param) => {
             const value = params[param]
 
-            if (param == 'taxon' && (!value || !value[0])) {
-                return;
-            }
-
-            if (param == 'paid' && value !== false) {
-                return;
-            }
-
-            if (param == 'type' && (!value || !this.searchService.isValidType(value))) {
-                return;
-            }
-
-            if (param == 'specialEducation' && value !== true) {
-                return;
-            }
+            if ((param == 'taxon' && (!value || !value[0])) ||
+                (param == 'paid' && value !== false) ||
+                (param == 'type' && (!value || !this.searchService.isValidType(value))) ||
+                (param == 'specialEducation' && value !== true)
+            )
+                return
 
             if (typeof value !== 'undefined' && value !== '')
                 this.$scope.params[param] = value
-            }
-        )
+        })
     }
 }
 controller.$inject = [
