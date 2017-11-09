@@ -14,6 +14,8 @@ class controller extends Controller {
         this.addListeners()
         this.selectValue()
         this.setSelectedText()
+
+        this._previousTargetGroups = this.targetGroups
     }
     $onChanges({ taxon, markRequired, targetGroups }) {
         if (taxon &&
@@ -25,21 +27,31 @@ class controller extends Controller {
 
             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                 this.fill()
+                this.selectValue()
+                this.setSelectedText()
                 this.resetIfInvalid()
             }
         }
 
         if (markRequired && markRequired.currentValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
             this.$scope.targetGroupForm.targetGroupSelect.$touched = true
-
-        if (targetGroups && targetGroups.currentValue !== targetGroups.previousValue)
+    }
+    $doCheck() {
+        if (this.targetGroups !== this._previousTargetGroups) {
+            this.selectValue()
             this.setSelectedText()
+            this._previousTargetGroups = this.targetGroups
+        }
     }
     setSelectedText() {
-        const set = (selectedText) =>
+        const set = (selectedText) => {
             this.$scope.selectedText = Array.isArray(selectedText)
                 ? selectedText.join(', ')
                 : selectedText
+
+            // porno
+            this.$element.find('md-select').controller('ngModel').$render()
+        }
 
         const selected = this.$scope.selectedTargetGroup.length
             ? this.$scope.selectedTargetGroup
@@ -81,9 +93,10 @@ class controller extends Controller {
             const newEdCtx = this.taxonService.getEducationalContext(taxonChange.newValue)
             const oldEdCtx = this.taxonService.getEducationalContext(taxonChange.oldValue)
 
-            if (!_.isEqual(newEdCtx, oldEdCtx))
+            if (!_.isEqual(newEdCtx, oldEdCtx)) {
                 this.fill()
                 this.resetIfInvalid()
+            }
         })
 
         this.$scope.$on('targetGroupSelector:clear', () => {
@@ -121,20 +134,25 @@ class controller extends Controller {
             this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(this.targetGroups)
     }
     resetIfInvalid() {
-        const groupNames = []
+        const groupNames = this.$scope.groups.reduce(
+            (names, group) =>
+                Array.isArray(group.children) && group.children.length
+                    ? names.concat(group.label).concat(group.children)
+                    : names.concat(group.label),
+            []
+        )
+        const removeGroup = (name, collection) =>
+            collection.splice(collection.indexOf(name), 1)
 
-        if (this.$scope.groups)
-            this.$scope.groups.forEach(group =>
-                group && groupNames.push(group)
-            )
+        this.$scope.selectedTargetGroup.forEach(name => {
+            if (!groupNames.includes(name)) {
+                removeGroup(name, this.$scope.selectedTargetGroup)
+                removeGroup(name, this.targetGroups)
+            }
+        })
 
-        if (groupNames.indexOf(this.$scope.selectedTargetGroup) < 0 || !this.$scope.groups) {
-            this.$scope.selectedTargetGroup = []
-            this.targetGroups = []
-
-            if (this.$scope.groups && this.$scope.groups.length === 1)
-                this.$scope.selectedTargetGroup = this.$scope.groups
-        }
+        if (this.$scope.groups && this.$scope.groups.length === 1)
+            this.$scope.selectedTargetGroup = this.$scope.groups
     }
     addGroups(groupsToAdd) {
         [].push.apply(
@@ -166,6 +184,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$element',
     '$rootScope',
     '$timeout',
     '$translate',

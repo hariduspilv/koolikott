@@ -251,6 +251,7 @@ angular.module('koolikottApp')
             $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = $scope.material;
+                console.log('material.js: $scope.material:', $scope.material)
 
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
