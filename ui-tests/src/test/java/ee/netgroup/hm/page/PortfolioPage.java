@@ -27,9 +27,6 @@ public class PortfolioPage extends Page{
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
 	private By materialBox = By.cssSelector("div.pointer.layout-row");
-	private By doneButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
-	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
-	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
 	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment(comment, $event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	
@@ -73,13 +70,6 @@ public class PortfolioPage extends Page{
 	
 	public String getNotificationIsSentText() {
 		return getDriver().findElement(Constants.toastText).getText();
-	}
-
-	public PortfolioPage markContentAsNotImproper() {
-		Helpers.moveToElement(doneButton);
-		getDriver().findElement(doneButton).sendKeys(Keys.ENTER);;
-		Helpers.waitForMilliseconds(5000);
-		return this;
 	}
 
 	public boolean getPreFormattedTextTag() {
@@ -140,18 +130,6 @@ public class PortfolioPage extends Page{
 		Helpers.waitForClickable(removeFromRecommendations);
 		getDriver().findElement(removeFromRecommendations).click();
 		return this;
-	}
-
-	public PortfolioPage restoreDeletedPortfolio() {
-		Helpers.waitForClickable(restoreButton);
-		getDriver().findElement(restoreButton).click();
-		Helpers.waitForMilliseconds(3000);
-		return this;
-	}
-	
-	public boolean isErrorBannerHidden() {
-		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 	public PortfolioPage showPortfolioComments() {

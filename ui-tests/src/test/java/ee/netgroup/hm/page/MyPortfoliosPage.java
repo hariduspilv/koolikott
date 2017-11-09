@@ -11,7 +11,6 @@ import ee.netgroup.hm.helpers.Helpers;
 
 public class MyPortfoliosPage extends Page{
 	
-	//private By firstPortfolio = By.xpath("//h3[@data-ng-bind='$ctrl.learningObject.title']");
 	private static By addPortfolioMessage = By.cssSelector("h3");
 	
 	
@@ -22,10 +21,6 @@ public class MyPortfoliosPage extends Page{
 	public PortfolioPage openPortfolio() {
 		getDriver().findElement(Constants.firstPortfolio).click();
 		return new PortfolioPage();
-	}
-
-	public LeftMenu clickDashboard() {
-		return LeftMenu.clickDashboard();
 	}
 
 	public SearchResultsPage insertSearchCriteriaAndSearch(String searchString) {
@@ -59,6 +54,22 @@ public class MyPortfoliosPage extends Page{
 
 	public MyFavoritesPage goToMyFavorites() {
 		return LeftMenu.goToMyFavorites();
+	}
+
+	public LeftMenu openTableOfContents() {
+		return LeftMenu.openTableOfContents();
+	}
+
+	public ImproperLearningObjectsPage clickImproperLearningObjects() {
+		return LeftMenu.clickImproperLearningObjects();
+	}
+
+	public UnreviewedLearningObjectsPage clickUnreviewedLearninObjects() {
+		return LeftMenu.clickUnreviewedLearninObjects();
+	}
+
+	public DeletedLearningObjectsPage clickDeletedLearningObjects() {
+		return LeftMenu.clickDeletedLearningObjects();
 	}
 
 

@@ -5,13 +5,17 @@ import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ee.netgroup.hm.components.LeftMenu;
+
 public class ContentsTests {
 	
 	@Test
 	public void ContentsTests_FilterPreschoolEducation() {
 
-		String educationTaxon = goToLandingPage()
+		goToLandingPage()
 				.chooseUserType("User")
+				.openTableOfContents();
+		String educationTaxon = LeftMenu
 				.clickToFilterPreschoolEducation()
 				.clickToFilterPreschoolEducationEstonianLanguage()
 				.openSearchResultPortfolio()

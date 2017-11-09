@@ -2,11 +2,8 @@ package ee.netgroup.hm.components;
 
 import org.openqa.selenium.By;
 import ee.netgroup.hm.helpers.Helpers;
-import ee.netgroup.hm.page.BrokenMateriasPage;
-import ee.netgroup.hm.page.DeletedMaterialsPage;
-import ee.netgroup.hm.page.DeletedPortfoliosPage;
-import ee.netgroup.hm.page.ImproperMaterialsPage;
-import ee.netgroup.hm.page.ImproperPortfoliosPage;
+import ee.netgroup.hm.page.DeletedLearningObjectsPage;
+import ee.netgroup.hm.page.ImproperLearningObjectsPage;
 import ee.netgroup.hm.page.MyFavoritesPage;
 import ee.netgroup.hm.page.MyMaterialsPage;
 import ee.netgroup.hm.page.SearchResultsPage;
@@ -14,34 +11,24 @@ import ee.netgroup.hm.page.UnreviewedLearningObjectsPage;
 
 public class LeftMenu extends Component{
 	
-	private static By dashboardButton = By.id("dashboard");
-	private By improperPortfolios = By.id("improperPortfolios");
+	private static By improperLearningObjects = By.id("improper");
 	private static By preschoolEducation = By.xpath("//div/span[text()='Alusharidus']");
 	private By estonianLanguageTaxon = By.xpath("//div/span[text()='Eesti keel']");
 	private static By myMaterials = By.id("myMaterials");
 	private static By myThings = By.xpath("//a[@id='myProfile']");
 	private By myPortfolios = By.id("myPortfolios");
 	private static By myFavorites = By.id("myFavorites");
-	private By unreviewedLearningObjects = By.id("unReviewed");
-	private By deletedPortfolios = By.id("deletedPortfolios");
-	private By deletedMaterials = By.id("deletedMaterials");
-	private By brokenMaterials = By.id("brokenMaterials");
+	private static By unreviewedLearningObjects = By.id("unReviewed");
+	private static By deletedLearningObjects = By.id("deleted");
 	private By preschoolEducationMaterialCount = By.xpath("//span[@data-ng-bind='materialCount']");
-	private By preschoolEducationMaterialCountSearchPage = By.xpath("//span[@data-ng-bind='getNumberOfResults()']");
-	private By improperMaterials = By.id("improperMaterials");
+	private By preschoolEducationMaterialCountSearchPage = By.cssSelector("strong");
+	private static By tableOfContents = By.xpath("//span[@data-translate='TABLE_OF_CONTENTS']");
 	
-	public static LeftMenu clickDashboard() {
-		Helpers.waitForMilliseconds(2000);
-		Helpers.waitForClickable(dashboardButton);
-		getDriver().findElement(dashboardButton).click();
-		Helpers.waitForMilliseconds(2000);
-		return new LeftMenu();
-	}
 
-	public ImproperPortfoliosPage clickImproperPortfolios() {
-		Helpers.waitForClickable(improperPortfolios);
-		getDriver().findElement(improperPortfolios).click();
-		return new ImproperPortfoliosPage();
+	public static ImproperLearningObjectsPage clickImproperLearningObjects() {
+		Helpers.waitForClickable(improperLearningObjects);
+		getDriver().findElement(improperLearningObjects).click();
+		return new ImproperLearningObjectsPage();
 	}
 
 	public static LeftMenu clickToFilterPreschoolEducation() {
@@ -91,25 +78,16 @@ public class LeftMenu extends Component{
 		return new MyFavoritesPage();
 	}
 
-	public UnreviewedLearningObjectsPage clickUnreviewedLearninObjects() {
+	public static UnreviewedLearningObjectsPage clickUnreviewedLearninObjects() {
 		Helpers.waitForVisibility(unreviewedLearningObjects);
 		getDriver().findElement(unreviewedLearningObjects).click();
 		return new UnreviewedLearningObjectsPage();
 	}
 
-	public DeletedPortfoliosPage clickDeletedPortfolios() {
-		getDriver().findElement(deletedPortfolios).click();
-		return new DeletedPortfoliosPage();
-	}
-
-	public DeletedMaterialsPage clickDeletedMaterials() {
-		getDriver().findElement(deletedMaterials).click();
-		return new DeletedMaterialsPage();
-	}
-
-	public BrokenMateriasPage clickBrokenMaterials() {
-		getDriver().findElement(brokenMaterials).click();
-		return new BrokenMateriasPage();
+	public static DeletedLearningObjectsPage clickDeletedLearningObjects() {
+		Helpers.waitForClickable(deletedLearningObjects);
+		getDriver().findElement(deletedLearningObjects).click();
+		return new DeletedLearningObjectsPage();
 	}
 
 	public boolean getMaterialCount() {
@@ -126,9 +104,9 @@ public class LeftMenu extends Component{
 		}
 	}
 
-	public ImproperMaterialsPage clickImproperMaterials() {
-		getDriver().findElement(improperMaterials).click();
-		return new ImproperMaterialsPage();
+	public static LeftMenu openTableOfContents() {
+		getDriver().findElement(tableOfContents).click();
+		return new LeftMenu();
 	}
 
 }
