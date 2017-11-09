@@ -117,7 +117,7 @@ class controller extends Controller {
                 'username': this.authenticatedUserService.getUser().username
             })
             .then(
-                data => !data ? fail() : this.usersPortfolios = data.items,
+                data => !data ? fail() : this.usersPortfolios = data.data.items,
                 fail
             )
     }
