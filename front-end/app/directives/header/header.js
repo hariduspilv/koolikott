@@ -230,12 +230,14 @@ class controller extends Controller {
         if (!isMaterial && !isPortfolio && !isDashboard)
             return setDefault()
         
-        const { deleted, improper, broken, changed, unReviewed } = (
-            isMaterial
-                ? this.storageService.getMaterial()
-                : this.storageService.getPortfolio()
-        ) || {}
-        this.$scope.isHeaderGray = !!deleted
+        const {
+            learningObjectDeleted,
+            learningObjectImproper,
+            learningObjectUnreviewed,
+            learningObjectChanged
+        } = this.$rootScope
+
+        this.$scope.isHeaderGray = !!learningObjectDeleted
 
         // even tho the header'll be gray we still want to tell the sidenav
         // to use red to highlight it's links
@@ -246,10 +248,9 @@ class controller extends Controller {
 
         this.$scope.isHeaderRed = isDashboard || !!(
             (isMaterial || isPortfolio) && (
-                !!improper ||
-                !!broken ||
-                !!changed ||
-                !!unReviewed
+                !!learningObjectImproper ||
+                !!learningObjectChanged ||
+                !!learningObjectUnreviewed
             )
         )
         this.$rootScope.$broadcast(
