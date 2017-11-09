@@ -68,7 +68,7 @@ class controller extends Controller {
 
         return isInMenu
             ? menuLocation === currentLocation
-            : this.$rootScope.private
+            : this.$rootScope.learningObjectPrivate
                 ? false
                 : this.$rootScope.learningObjectDeleted
                     ? menuLocation === '/dashboard/deleted'

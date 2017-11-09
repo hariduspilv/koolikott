@@ -229,15 +229,16 @@ class controller extends Controller {
 
         if (!isMaterial && !isPortfolio && !isDashboard)
             return setDefault()
-        
+
         const {
+            learningObjectPrivate,
             learningObjectDeleted,
             learningObjectImproper,
             learningObjectUnreviewed,
             learningObjectChanged
         } = this.$rootScope
 
-        this.$scope.isHeaderGray = !!learningObjectDeleted
+        this.$scope.isHeaderGray = !!learningObjectDeleted || !!learningObjectPrivate
 
         // even tho the header'll be gray we still want to tell the sidenav
         // to use red to highlight it's links
