@@ -24,7 +24,6 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 
-@Ignore
 @RunWith(EasyMockRunner.class)
 public class ReviewableChangeAdminServiceTest {
 
@@ -53,7 +52,8 @@ public class ReviewableChangeAdminServiceTest {
 
         material.setId(1L);
         resourceType.setId(3L);
-        resourceType.setName("resource");
+        String resource = "resource";
+        resourceType.setName(resource);
         user.setId(1L);
         user.setRole(Role.ADMIN);
         targetGroup.setId(5L);
@@ -74,11 +74,9 @@ public class ReviewableChangeAdminServiceTest {
         expect(learningObjectService.get(1L, user)).andReturn(material);
         expect(reviewableChangeDao.getAllByLearningObject(1L)).andReturn(Arrays.asList(change1, change2));
         expect(learningObjectDao.createOrUpdate(material)).andReturn(material);
-        expect(translationDAO.getTranslationsForKey(Lists.newArrayList("resource"))).andReturn(null);
+        expect(translationDAO.getTranslationsForKey(Lists.newArrayList(resource))).andReturn(null);
         expect(translationDAO.getTranslationsForKey(Lists.newArrayList("ZERO_FIVE"))).andReturn(null);
-        replay(learningObjectService);
-        replay(reviewableChangeDao);
-        replay(learningObjectDao);
+        replay(learningObjectService, reviewableChangeDao, learningObjectDao, translationDAO);
 
         LearningObject updated = reviewableChangeAdminService.revertAllChanges(1L, user);
 
