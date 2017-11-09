@@ -8,8 +8,9 @@ class controller extends Controller {
             this.materialType = this.iconService.getMaterialIcon(
                 this.learningObject.resourceTypes
             )
-        } else if (this.isPortfolio(this.learningObject))
+        } else if (this.isPortfolio(this.learningObject)){
             this.learningObjectType = 'portfolio'
+        }
     }
 }
 controller.$inject = ['$rootScope', 'iconService']
