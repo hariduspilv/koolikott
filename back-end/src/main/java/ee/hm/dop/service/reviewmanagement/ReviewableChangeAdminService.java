@@ -144,6 +144,8 @@ public class ReviewableChangeAdminService {
 
     public void removeTagsByTranslation(LearningObject learningObject, List<String> translationKey) {
         List<String> translations = translationDAO.getTranslationsForKey(translationKey);
-        learningObject.getTags().removeIf(t -> translations.contains(t.getName().toUpperCase()));
+        if (CollectionUtils.isNotEmpty(translations)){
+            learningObject.getTags().removeIf(t -> translations.contains(t.getName().toUpperCase()));
+        }
     }
 }

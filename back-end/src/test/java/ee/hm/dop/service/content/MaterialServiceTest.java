@@ -39,7 +39,6 @@ import static org.easymock.EasyMock.expect;
 import static org.joda.time.DateTime.now;
 import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(EasyMockRunner.class)
 public class MaterialServiceTest {
 
@@ -176,7 +175,7 @@ public class MaterialServiceTest {
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
 
-        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
+        expect(reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES)).andReturn(false);
 
         replay(materialDao, material, solrEngineService, materialGetter);
 
@@ -263,7 +262,8 @@ public class MaterialServiceTest {
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
 
-        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
+        expect(reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES)).andReturn(false);
+
 
         replay(materialDao, material, materialGetter);
 
@@ -316,7 +316,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
-        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
+        expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 
         replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
 
@@ -342,7 +342,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
-        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
+        expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 
         replay(user, materialDao, reviewableChangeService, materialGetter);
 
