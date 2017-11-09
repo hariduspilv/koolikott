@@ -9,7 +9,7 @@ import ee.netgroup.hm.page.SearchResultsPage;
 public class Search extends Component{
 	
 	private static By searchField = By.xpath("//input[@id='header-search-input']");
-	private static By numberOfResultsText = By.xpath("//span[contains(text(), 'Otsingule leidus')]");
+	private static By numberOfResultsText = By.xpath("//h2[contains(text(), 'Otsingule leidus')]");
 	private static By advancedSearchIcon = By.id("header-show-detailed-search-icon");
 	private By materialTypeSelection = By.xpath("//md-select[@data-ng-model='detailedSearch.resourceType']");
 	private By audioType = By.xpath("//md-option[@value='AUDIO']");
@@ -17,7 +17,7 @@ public class Search extends Component{
 	private By languageSelection = By.xpath("//md-select[@data-ng-model='detailedSearch.language']");
 	private By russianLanguage = By.xpath("//md-option[@value='rus']");
 	private By educationalContext = By.id("taxonEducationalSelect");
-	private By allEducationalContexts = By.id("select_option_108");
+	private By allEducationalContexts = By.xpath("/html/body/div[4]/md-select-menu/md-content/md-option[1]");
 
 
 	public static SearchResultsPage insertSearchCriteriaAndSearch(String searchString) {
@@ -87,6 +87,7 @@ public class Search extends Component{
 	}
 
 	public Search selectAllEducationalContexts() {
+		Helpers.waitForMilliseconds(3000);
 		getDriver().findElement(educationalContext).click();
 		getDriver().findElement(allEducationalContexts).click();
 		Helpers.waitForMilliseconds(1000);

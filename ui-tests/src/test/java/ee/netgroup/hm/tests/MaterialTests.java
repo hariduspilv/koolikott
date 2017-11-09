@@ -232,20 +232,6 @@ public class MaterialTests {
 	}
 	
 	@Test
-	public void MaterialTests_ReportBroken_BrokenMaterialIsReported() {
-
-		String brokenContentIsReported = goToLandingPage()
-				.chooseUserType("User")
-				.clickMyMaterials()
-				.openMaterial()
-				.clickActionsMenu()
-				.clickReportBrokenMaterial()
-				.clickReportMaterial()
-				.getNotificationIsSentText();
-		Assert.assertEquals(Constants.reportedText, brokenContentIsReported);
-	}
-	
-	@Test
 	public void MaterialTests_ReportImproperTag_TagIsReported() {
 
 		String improperTagIsReported = goToLandingPage()

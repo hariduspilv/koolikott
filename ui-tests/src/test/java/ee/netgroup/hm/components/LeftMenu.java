@@ -74,6 +74,7 @@ public class LeftMenu extends Component{
 	}
 
 	public static MyFavoritesPage goToMyFavorites() {
+		Helpers.waitForClickable(myFavorites);
 		getDriver().findElement(myFavorites).click();
 		return new MyFavoritesPage();
 	}

@@ -19,6 +19,7 @@ public class MyPortfoliosPage extends Page{
 	}
 
 	public PortfolioPage openPortfolio() {
+		Helpers.waitForClickable(Constants.firstPortfolio);
 		getDriver().findElement(Constants.firstPortfolio).click();
 		return new PortfolioPage();
 	}

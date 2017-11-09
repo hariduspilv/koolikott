@@ -23,7 +23,7 @@ public class EditPortfolioPage extends Page{
 	private By preFormattedText = By.name("pre");
 	private By privacyPopUp = By.xpath("//md-dialog-content[@class='md-dialog-content']");
 	private By chapterTitle = By.xpath("//input[@data-ng-model='$ctrl.chapter.title']");
-	private By addMaterialButton = By.xpath("//button[@data-ng-click='$ctrl.openMenu($mdOpenMenu, $event)']");
+	private By addMaterialButton = By.xpath("//button[@data-ng-click='$mdMenu.open($event)']");
 	private By newMaterial = By.xpath("//button/span[text()='Uus']");
 	private By existingMaterial = By.xpath("//button/span[text()='Koolikotist']");
 	

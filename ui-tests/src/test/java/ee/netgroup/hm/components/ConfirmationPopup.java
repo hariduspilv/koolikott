@@ -19,10 +19,6 @@ public class ConfirmationPopup extends Component{
 		return new MaterialPage();
 	}
 
-	public MaterialPage clickReportMaterial() {
-		getDriver().findElement(confirm).click();
-		return new MaterialPage();
-	}
 
 	
 

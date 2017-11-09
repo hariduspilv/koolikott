@@ -15,13 +15,14 @@ public class AddMaterialPopUp extends Component{
 	private By insertPhoto = By.xpath("//span/md-icon[text()='insert_photo']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
-	private By educationalContext = By.xpath("(//md-select[@id='taxonEducationalSelect'])[2]");
+	//private By educationalContext = By.xpath("(//md-select[@id='taxonEducationalSelect'])[2]");
+	private By educationalContext = By.name("taxonForm");
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
 	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
-	private By targetGroup = By.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
+	private By targetGroup = By.xpath("//form[1][contains(@name, 'targetGroupForm')]");
 	private By selectedTargetGroup = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
-	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
+	private By closeButton = By.xpath("//md-icon[@aria-label='close']");
 	private By createMaterialButton = By.id("add-material-create-button");
 	private By deletedMaterialValidationError = By.xpath("//div[@class='md-input-message-animation']");
 	private By existingMaterialValidationError = By.cssSelector("div.md-input-message-animation > span");
@@ -75,6 +76,7 @@ public class AddMaterialPopUp extends Component{
 	}
 
 	public AddMaterialPopUp selectTargetGroup() {
+		Helpers.waitForClickable(targetGroup);
 		getDriver().findElement(targetGroup).click();
 		getDriver().findElement(selectedTargetGroup).click();
 		getDriver().findElements(closeButton).get(2).click();
