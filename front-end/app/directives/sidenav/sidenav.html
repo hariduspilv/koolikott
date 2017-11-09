@@ -149,11 +149,11 @@
       <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
     </div>
 
-    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"
+    <div uib-accordion-group class="panel-default" is-open="$root.isTaxonomyOpen"
          data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode">
       <uib-accordion-heading>
         <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
-           layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}"
+           layout-align="space-between center" data-ng-class="{'is-opened': $root.isTaxonomyOpen}"
            data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div layout="row" layout-align="center center">
             <span data-translate="TABLE_OF_CONTENTS" class="sidenav__name"></span>

@@ -227,20 +227,21 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
 
             var path = $location.path();
             var user = authenticatedUserService.getUser();
-            var isViewHomePage = isHomePage(path);
             var isViewMyProfile = isViewMyProfilePage($location, user);
+            let isLoggedIn = authenticatedUserService.isAuthenticated();
 
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
+            $rootScope.isViewHomePage = isHomePage(path);
             $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage);
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn);
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage));
 
             if ($rootScope.justLoggedIn) {
                 $rootScope.$broadcast('tour:start:firstTime');
