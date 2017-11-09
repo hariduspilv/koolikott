@@ -69,7 +69,7 @@ class controller extends Controller {
         }
     }
     isBasicOrSecondaryEducation() {
-        if (this.taxonPath.educationalContext)
+        if (!this.taxonPath.educationalContext)
             return false
 
         const { name } = this.taxonPath.educationalContext
