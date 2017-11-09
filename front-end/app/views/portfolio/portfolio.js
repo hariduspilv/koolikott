@@ -55,7 +55,7 @@ angular.module('koolikottApp')
                     storageService.setPortfolio(portfolio);
 
                     if ($scope.portfolio) {
-                        $rootScope.private = ["PRIVATE"].includes($scope.portfolio.visibility);
+                        $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.portfolio.visibility);
                         $rootScope.learningObjectImproper = $scope.portfolio.improper > 0;
                         $rootScope.learningObjectDeleted = $scope.portfolio.deleted === true;
                         $rootScope.learningObjectChanged = $scope.portfolio.changed > 0;

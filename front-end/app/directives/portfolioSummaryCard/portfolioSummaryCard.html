@@ -183,7 +183,7 @@
           </a>
         </p>
         <!-- Original creator -->
-        <p class="md-body-2" data-ng-if="portfolio.creator.id != portfolio.originalCreator.id">
+        <p class="md-body-2" data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id">
           <span class="md-caption caption-light">
             <span data-translate="ORIGINAL_CREATOR"></span>:
           </span>

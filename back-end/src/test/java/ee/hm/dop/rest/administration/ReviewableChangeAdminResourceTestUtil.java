@@ -58,15 +58,22 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertFalse(material.getChanged() == 0);
     }
 
+    public static void assertHasNoTaxonNoTag(Material material, TestTaxon testTaxon) {
+        assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertTrue(material.getChanged() == 0);
+    }
+
     public static void assertHasTagNotTaxon(Material material, TestTaxon testTaxon) {
         assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
         assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
         assertTrue(material.getChanged() == 0);
     }
 
-    public static void assertHasTagNotTaxonChangesDontMatter(Material material, TestTaxon testTaxon) {
-        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+    public static void assertHasNoTagsNoTaxonsChangesAre1(Material material, TestTaxon testTaxon) {
+        assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
         assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertTrue(material.getChanged() == 1);
     }
 
     public static void assertDoesntHave(Material material) {

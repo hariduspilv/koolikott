@@ -2,9 +2,11 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
+import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
 
 import javax.annotation.security.RolesAllowed;
@@ -19,6 +21,8 @@ public class LearningObjectResource extends BaseResource {
     private TagService tagService;
     @Inject
     private UserFavoriteService userFavoriteService;
+    @Inject
+    private UserLikeService userLikeService;
 
     @PUT
     @Path("{learningObjectId}/tags")
@@ -79,5 +83,31 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public Long getUsersFavoritesCount() {
         return userFavoriteService.getUserFavoritesSize(getLoggedInUser());
+    }
+
+    @POST
+    @Path("getUserLike")
+    public UserLike getUserLike(LearningObjectMiniDto learningObjectMiniDto) {
+        return userLikeService.getUserLike(learningObjectMiniDto.convert(), getLoggedInUser());
+    }
+
+    @POST
+    @Path("removeUserLike")
+    public void removeUserLike(LearningObjectMiniDto learningObjectMiniDto) {
+        userLikeService.removeUserLike(learningObjectMiniDto.convert(), getLoggedInUser());
+    }
+
+    @POST
+    @Path("like")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public void likeMaterial(LearningObjectMiniDto learningObjectMiniDto) {
+        userLikeService.addUserLike(learningObjectMiniDto.convert(), getLoggedInUser(), Like.LIKE);
+    }
+
+    @POST
+    @Path("dislike")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public void dislikeMaterial(LearningObjectMiniDto learningObjectMiniDto) {
+        userLikeService.addUserLike(learningObjectMiniDto.convert(), getLoggedInUser(), Like.DISLIKE);
     }
 }

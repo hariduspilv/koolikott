@@ -21,6 +21,10 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
     public static final String USERS_FAVOURITE_URL = "learningObject/usersFavorite?start=0";
     public static final String GET_FAVOURITE_COUNT_URL = "learningObject/usersFavorite/count";
+    private static final String LIKE_URL = "learningObject/like";
+    private static final String DISLIKE_URL = "learningObject/dislike";
+    private static final String GET_USER_LIKE_URL = "learningObject/getUserLike";
+    private static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
     public static final String TEST_SYSTEM_TAG = "matemaatika";
@@ -112,4 +116,71 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
         assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));
     }
+
+    @Test
+    public void likeMaterial_sets_it_as_liked() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(MATERIAL_5);
+
+        doPost(LIKE_URL, material);
+        UserLike userLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNotNull("User like exist", userLike);
+        assertEquals("Material is liked by user", true, userLike.isLiked());
+    }
+
+    @Test
+    public void dislikeMaterial_sets_it_as_not_liked() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(MATERIAL_5);
+
+        doPost(DISLIKE_URL, material);
+        UserLike userDislike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNotNull("User dislike exist", userDislike);
+        assertEquals("Material is disliked by user", false, userDislike.isLiked());
+    }
+
+    @Test
+    public void removeUserLike_removes_like_from_material() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(MATERIAL_5);
+
+        doPost(LIKE_URL, material);
+        doPost(REMOVE_USER_LIKE_URL, material);
+        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNull("User removed like does not exist", userRemoveLike);
+    }
+
+    @Test
+    public void likePortfolio_sets_it_as_liked() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        doPost(LIKE_URL, portfolio);
+        UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNotNull("User like exist", userLike);
+        assertEquals("Portfolio is liked by user", true, userLike.isLiked());
+    }
+
+    @Test
+    public void dislikePortfolio_sets_it_as_not_liked() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        doPost(DISLIKE_URL, portfolio);
+        UserLike userDislike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNotNull("User dislike exist", userDislike);
+        assertEquals("Portfolio is disliked by user", false, userDislike.isLiked());
+    }
+
+    @Test
+    public void removeUserLike_removes_like_from_portfolio() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        doPost(LIKE_URL, portfolio);
+        doPost(REMOVE_USER_LIKE_URL, portfolio);
+        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNull("User removed like does not exist", userRemoveLike);
+    }
+
 }
