@@ -8,10 +8,11 @@ directive('dopSelectClose', ['$compile', ($compile) => ({
         )($scope).appendTo(
             $element.find('md-select-menu[multiple]').parent()
         )
-        setTimeout(() => {
-            const $closeBtn = $element.find('md-select-menu[multiple]').parent().find('.select__close')
-            $closeBtn.on('click', () => angular.element('.md-select-backdrop').triggerHandler('click'))
-            $scope.$on('$destroy', () => $closeBtn.off())
-        })
+        angular.element(document).on('click', '.select__close', () =>
+            angular.element('.md-select-backdrop').triggerHandler('click')
+        )
+        $scope.$on('$destroy', () =>
+            angular.element(document).off('click', '.select__close')
+        )
     }
 })])
