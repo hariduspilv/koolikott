@@ -13,6 +13,7 @@ class controller extends Controller {
             this.$scope.filter = filter.currentValue
 
         if (params && !params.isFirstChange() && this.params) {
+            this.initialParams = Object.assign({}, this.params)
             this.setParams()
             this.search(true)
         }
@@ -21,6 +22,7 @@ class controller extends Controller {
         if (!this.url)
             this.url = 'rest/search'
 
+        this.initialParams = Object.assign({}, this.params)
         this.setParams()
 
         this.$scope.items = []
@@ -40,16 +42,12 @@ class controller extends Controller {
         }]
 
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
-        this.$scope.allResultsLoaded = () => this.allResultsLoaded()
-        this.$scope.sort = this.sort.bind(this)
-
         this.search()
     }
     setParams() {
         if (!this.params)
             this.params = {}
 
-        this.initialParams = Object.assign({}, this.params)
         this.searchCount = 0
         this.maxResults = this.params.maxResults || this.params.limit || 20
         this.expectedItemCount = this.maxResults
@@ -71,14 +69,16 @@ class controller extends Controller {
                                 : ''
         )
     }
-    sort(field, direction) {
-        field
-            ? this.params.sort = field
-            : this.params.sort = this.initialParams.sort
+    resetSort() {
+        this.params.sort = this.initialParams.sort
+        this.params.sortDirection = this.initialParams.sortDirection
 
-        direction
-            ? this.params.sortDirection = direction
-            : this.params.sortDirection = this.initialParams.sortDirection
+        this.setParams()
+        this.search(true)
+    }
+    sort(field, direction) {
+        this.params.sort = field
+        this.params.sortDirection = direction
 
         this.setParams()
         this.search(true)
@@ -134,6 +134,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$element',
     '$timeout',
     '$translate',
     'serverCallService'
