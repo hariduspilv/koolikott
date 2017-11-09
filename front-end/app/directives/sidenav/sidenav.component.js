@@ -9,6 +9,7 @@ class controller extends Controller {
         this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
+        this.$scope.toggleSidenav = () => this.$mdSidenav('left').toggle()
 
         // List of taxon icons
         this.$scope.taxonIcons = [
@@ -64,7 +65,6 @@ class controller extends Controller {
         this.$scope.user = this.authenticatedUserService.getUser();
         this.$scope.updateUserCounts();
     }
-
     isLocationActive(menuLocation) {
         if (!this.$scope.user)
             return false
@@ -178,6 +178,7 @@ controller.$inject = [
     '$rootScope',
     '$location',
     '$mdDialog',
+    '$mdSidenav',
     'authenticatedUserService',
     'userDataService',
     'taxonService'
