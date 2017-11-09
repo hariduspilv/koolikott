@@ -135,9 +135,8 @@ class controller extends Controller {
 
         this.$scope.$watch('searchFields.searchQuery', this.processSearchQuery.bind(this), true)
 
-        this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {
-            this.$scope.user = user
-        }, true)
+        this.$rootScope.$on('login:success', this.userChange.bind(this));
+        this.$rootScope.$on('logout:success', this.userChange.bind(this));
 
         this.$scope.$watch(() => this.searchService.getQuery(), (query) => {
             // Search query is not updated from search service while detailed search is open
@@ -209,6 +208,10 @@ class controller extends Controller {
         this.$scope.openTour = (isEditPage = false) =>
             this.$rootScope.$broadcast(isEditPage ? 'tour:start:editPage' : 'tour:start')
     }
+    userChange() {
+        this.$scope.user = this.authenticatedUserService.getUser();
+    }
+
     $doCheck() {
         this.setHeaderColor()
     }

@@ -78,7 +78,7 @@
               <md-icon class="material-icons sidenav__icon">warning</md-icon>
               <span data-translate="IMPROPER" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="improperCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="improperCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
@@ -90,7 +90,7 @@
               <md-icon class="material-icons sidenav__icon">lightbulb_outline</md-icon>
               <span data-translate="UNREVIEWED" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="unReviewedLearningObjectsCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="unReviewedLearningObjectsCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
@@ -102,7 +102,7 @@
               <md-icon class="material-icons sidenav__icon">autorenew</md-icon>
               <span data-translate="CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="changesCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="changesCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdmin">
@@ -113,7 +113,7 @@
               <md-icon class="material-icons sidenav__icon">face</md-icon>
               <span data-translate="MODERATORS_TAB" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="moderatorsCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="moderatorsCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdmin">
@@ -125,7 +125,7 @@
               <md-icon class="material-icons sidenav__icon">block</md-icon>
               <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="restrictedUsersCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="restrictedUsersCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" ng-if="isAdmin">
@@ -137,7 +137,7 @@
               <md-icon class="material-icons sidenav__icon">delete_forever</md-icon>
               <span data-translate="DELETED" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-bind="deletedCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="deletedCount"></span>
           </a>
         </li>
       </ul>
@@ -149,11 +149,11 @@
       <dop-table-of-contents data-portfolio="portfolio"></dop-table-of-contents>
     </div>
 
-    <div uib-accordion-group class="panel-default" is-open="$root.isTaxonomyOpen"
+    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"
          data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode">
       <uib-accordion-heading>
         <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
-           layout-align="space-between center" data-ng-class="{'is-opened': $root.isTaxonomyOpen}"
+           layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}"
            data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
           <div layout="row" layout-align="center center">
             <span data-translate="TABLE_OF_CONTENTS" class="sidenav__name"></span>
