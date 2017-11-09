@@ -49,6 +49,10 @@ class controller extends Controller {
                 this.$location.url().indexOf('/search') != -1
             )
         }, true)
+        this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {
+            this.$scope.user = user
+            this.$scope.updateUserCounts()
+        }, true)
         this.$scope.$on('header:red', () => this.$scope.isHeaderRed = true)
         this.$scope.$on('header:default', () => this.$scope.isHeaderRed = false)
     }
