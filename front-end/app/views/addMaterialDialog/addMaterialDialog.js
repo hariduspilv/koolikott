@@ -7,8 +7,6 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         $scope.showHints = true;
         $scope.creatorIsPublisher = false;
 
-        console.log('adMaterialDialog.js: $scope.material:', $scope.material)
-
         // fix for https://github.com/angular/material/issues/6905
         $timeout(function () {
             angular.element(document.querySelector('html')).css('overflow-y', '');
@@ -803,6 +801,8 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 material.source = getSource(material);
                 $mdDialog.hide(material);
                 if (!$scope.isChapterMaterial) {
+                    this.$rootScope.learningObjectUnreviewed = true
+                    this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                     $location.url('/material?id=' + material.id);
                 }
             }
