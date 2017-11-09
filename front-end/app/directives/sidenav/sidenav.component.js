@@ -6,7 +6,7 @@ class controller extends Controller {
         this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
         this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated()
-        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
+        this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
@@ -34,6 +34,8 @@ class controller extends Controller {
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
 
         this.$scope.$on('dashboard:adminCountsUpdated', this.updateAdminCounts.bind(this))
+        this.$rootScope.$on('login:success', this.userChange.bind(this));
+        this.$rootScope.$on('logout:success', this.userChange.bind(this));
         this.$scope.$watch(() => this.taxonService.getSidenavTaxons(), (newValue) => {
             if (newValue)
                 this.$scope.taxon = newValue
@@ -47,14 +49,18 @@ class controller extends Controller {
                 this.$location.url().indexOf('/search') != -1
             )
         }, true)
-        this.$scope.$watch(() => this.authenticatedUserService.getUser(), (user) => {
-            this.$scope.user = user
-            this.$scope.updateUserCounts()
-        }, true)
-
         this.$scope.$on('header:red', () => this.$scope.isHeaderRed = true)
         this.$scope.$on('header:default', () => this.$scope.isHeaderRed = false)
     }
+    userChange() {
+        this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated();
+        this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
+        this.$scope.isModerator = this.authenticatedUserService.isModerator();
+        this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
+        this.$scope.user = this.authenticatedUserService.getUser();
+        this.$scope.updateUserCounts();
+    }
+
     isLocationActive(menuLocation) {
         if (!this.$scope.user)
             return false
@@ -64,7 +70,7 @@ class controller extends Controller {
         if (currentLocation === "/")
             return false
 
-        if (!this.$scope.isAdmin && !this.$scope.isModerator)
+        if (!this.$rootScope.isAdmin && !this.$rootScope.isModerator)
             return menuLocation === currentLocation
 
         const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation)

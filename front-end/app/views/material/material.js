@@ -287,17 +287,19 @@ angular.module('koolikottApp')
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
                     'ALERT_CONFIRM_POSITIVE',
                     'ALERT_CONFIRM_NEGATIVE',
-                    deleteMaterial);
+                    () => {
+                        deleteMaterial(serverCallService, toastService, $scope, $rootScope)
+                    });
             };
 
-            function deleteMaterial() {
-                this.serverCallService
-                    .makeDelete('rest/material/'+material.id)
+            function deleteMaterial(serverCallService, toastService, $scope, $rootScope) {
+                serverCallService
+                    .makeDelete('rest/material/' + $scope.material.id)
                     .then(() => {
-                        this-toastService.showOnRouteChange('MATERIAL_DELETED')
-                        this.$scope.material.deleted = true
-                        this.$rootScope.learningObjectDeleted = true
-                        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                        toastService.showOnRouteChange('MATERIAL_DELETED')
+                        $scope.material.deleted = true
+                        $rootScope.learningObjectDeleted = true
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated')
                     })
             }
 
