@@ -4,13 +4,17 @@
 class controller extends Controller {
     navigateTo() {
         const { id } = this.learningObject
-        
+
         if (this.isMaterial(this.learningObject)) {
-            this.storageService.setMaterial(this.learningObject)
+            if (this.learningObject.type === '.Material'){
+                this.storageService.setMaterial(this.learningObject)
+            }
             this.$location.path('/material').search({ id })
         }
         if (isPortfolio(this.learningObject.type)) {
-            this.storageService.setPortfolio(this.learningObject)
+            if (this.learningObject.type === '.Portfolio'){
+                this.storageService.setPortfolio(this.learningObject)
+            }
             this.$location.path('/portfolio').search({ id })
         }
     }

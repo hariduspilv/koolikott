@@ -7,7 +7,9 @@ class controller extends Controller {
         this.likeFunction = () => {}
         this.dislikeFunction = () => {}
         this.entity = this.portfolio || this.material
-        this.url = this.portfolio ? 'rest/portfolio/' : 'rest/material/'
+        //todo testing unified url
+        // this.url = this.portfolio ? 'rest/portfolio/' : 'rest/material/'
+        this.url = 'rest/learningObject/';
         this.rating = {
             likes: (this.portfolio || this.material).likes,
             dislikes: (this.portfolio || this.material).dislikes

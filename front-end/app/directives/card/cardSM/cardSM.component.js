@@ -14,11 +14,15 @@ class controller extends Controller {
         const { id } = this.learningObject
 
         if (this.isMaterial(this.learningObject)) {
-            this.storageService.setMaterial(this.learningObject)
+            if (this.learningObject.type === '.Material'){
+                this.storageService.setMaterial(this.learningObject)
+            }
             this.$location.path('/material').search({ id })
         }
         if (this.isPortfolio(this.learningObject)) {
-            this.storageService.setPortfolio(this.learningObject)
+            if (this.learningObject.type === '.Portfolio'){
+                this.storageService.setPortfolio(this.learningObject)
+            }
             this.$location.path('/portfolio').search({ id })
         }
     }
