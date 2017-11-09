@@ -3,21 +3,38 @@
 {
 class controller extends Controller {
     $onInit() {
+        this.init()
+        this.$scope.disablePick = this.disablePick
+    }
+    $doCheck() {
+        if (this.learningObject !== this.$scope.learningObject)
+            this.init()
+        
+        if (this.disablePick !== this.$scope.disablePick)
+            this.$scope.disablePick = this.disablePick
+    }
+    init() {
         if (this.isMaterial(this.learningObject)) {
-            this.learningObjectType = 'material'
-            this.materialType = this.iconService.getMaterialIcon(
+            this.$scope.learningObjectType = 'material'
+            this.$scope.materialType = this.iconService.getMaterialIcon(
                 this.learningObject.resourceTypes
             )
-        } else if (this.isPortfolio(this.learningObject)){
-            this.learningObjectType = 'portfolio'
+            this.$scope.coverClass = this.learningObject.picture
+                ? 'card-cover imaged'
+                : `card-cover material ${this.$scope.materialType}`
+        } else if (this.isPortfolio(this.learningObject)) {
+            this.$scope.learningObjectType = 'portfolio'
+            this.$scope.coverClass = this.learningObject.picture
+                ? 'card-cover imaged'
+                : `card-cover portfolio`
         }
+        this.$scope.learningObject = this.learningObject
     }
 }
-controller.$inject = ['$rootScope', 'iconService']
+controller.$inject = ['$scope', 'iconService', 'authenticatedUserService']
 component('dopCardMedia', {
     bindings: {
         learningObject: '=',
-        isAuthenticated: '<',
         disablePick: '<'
     },
     templateUrl: 'directives/card/cardMedia/cardMedia.html',

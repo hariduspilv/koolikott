@@ -9,6 +9,12 @@ class controller extends Controller {
 
         this.domainSubjectList = this.taxonGroupingService.getDomainSubjectList(this.learningObject.taxons)
         this.targetGroups = this.targetGroupService.getConcentratedLabelByTargetGroups(this.learningObject.targetGroups)
+
+        this.$scope.learningObject = this.learningObject
+    }
+    $doCheck() {
+        if (this.learningObject !== this.$scope.learningObject)
+            this.$scope.learningObject = this.learningObject
     }
     navigateTo() {
         const { id } = this.learningObject
@@ -62,6 +68,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = [
+    '$scope',
     '$location',
     '$rootScope',
     'translationService',

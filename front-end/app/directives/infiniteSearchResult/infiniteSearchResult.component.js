@@ -14,7 +14,6 @@ class controller extends Controller {
 
         if (params && !params.isFirstChange() && this.params) {
             this.initialParams = Object.assign({}, this.params)
-            this.setParams()
             this.search(true)
         }
     }
@@ -73,20 +72,21 @@ class controller extends Controller {
         this.params.sort = this.initialParams.sort
         this.params.sortDirection = this.initialParams.sortDirection
 
-        this.setParams()
         this.search(true)
     }
     sort(field, direction) {
         this.params.sort = field
         this.params.sortDirection = direction
 
-        this.setParams()
         this.search(true)
     }
     allResultsLoaded() {
         return (this.$scope.items || []).length >= this.totalResults
     }
     search(newSearch) {
+        if (newSearch)
+            this.setParams()
+
         if (this.$scope.searching || !newSearch && this.allResultsLoaded())
             return
 
@@ -111,9 +111,10 @@ class controller extends Controller {
         if (!data || !data.items)
             return this.searchFail()
 
-        data.start === 0
-            ? this.$scope.items = data.items
-            : this.$scope.items.push.apply(this.$scope.items, data.items)
+        if (data.start === 0)
+            this.$scope.items.splice(0, this.$scope.items.length)
+
+        ;[].push.apply(this.$scope.items, data.items)
 
         this.totalResults = data.totalResults
         this.searchCount++
