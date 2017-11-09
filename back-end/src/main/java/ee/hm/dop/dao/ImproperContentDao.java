@@ -28,6 +28,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "FROM LearningObject lo\n" +
                         "  JOIN ImproperContent r ON r.learningObject = lo.id\n" +
                         "WHERE r.reviewed = 0\n" +
+                        "      AND lo.deleted = 0\n" +
                         "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
                         "GROUP BY lo.id\n" +
                         "ORDER BY min(r.createdAt) ASC")
@@ -45,6 +46,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "  JOIN ImproperContent r ON r.learningObject = lo.id\n" +
                         "  JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
                         "WHERE r.reviewed = 0\n" +
+                        "      AND lo.deleted = 0\n" +
                         "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
                         "      AND lt.taxon IN (:taxonIds)\n" +
                         "GROUP BY lo.id\n" +
@@ -62,6 +64,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "FROM ImproperContent f\n" +
                         "   JOIN LearningObject lo ON f.learningObject = lo.id\n" +
                         "WHERE f.reviewed = 0\n" +
+                        "   AND lo.deleted = 0\n" +
                         "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n")
                 .getSingleResult()).longValue();
     }
@@ -73,7 +76,8 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "   JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
                         "   JOIN ImproperContent r ON r.learningObject = lo.id " +
                         "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
-                        "  AND r.reviewed = 1 " +
+                        "  AND r.reviewed = 0 " +
+                        "  AND lo.deleted = 0\n" +
                         "  AND lt.taxon IN (:taxonIds)")
                 .setParameter("taxonIds", taxonDao.getUserTaxonsWithChildren(user))
                 .getSingleResult()).longValue();

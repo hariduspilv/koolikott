@@ -30,6 +30,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "FROM LearningObject lo\n" +
                         "  JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
                         "WHERE r.reviewed = 0\n" +
+                        "      AND lo.deleted = 0\n" +
                         "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
                         "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
                         "                        FROM FirstReview ic\n" +
@@ -55,6 +56,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "  JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
                         "  JOIN LearningObject_Taxon lt on lt.learningObject = lo.id\n" +
                         "WHERE r.reviewed = 0\n" +
+                        "      AND lo.deleted = 0\n" +
                         "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
                         "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
                         "                        FROM FirstReview ic\n" +
@@ -81,6 +83,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "   JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
                         "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
                         "  AND r.reviewed = 0 \n" +
+                        "  AND lo.deleted = 0 \n" +
                         "  AND lo.id NOT IN(SELECT ic.learningObject FROM ImproperContent ic " +
                         "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)\n" +
@@ -99,6 +102,7 @@ public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
                         "   JOIN ReviewableChange r ON r.learningObject = lo.id\n" +
                         "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
                         "  AND r.reviewed = 0 \n" +
+                        "  AND lo.deleted = 0 \n" +
                         "  AND lo.id NOT IN(SELECT ic.learningObject FROM ImproperContent ic " +
                         "                   WHERE ic.learningObject = lo.id " +
                         "                   AND ic.reviewed = 0)\n" +
