@@ -1,32 +1,44 @@
 <!--Without this the form will not initialize in addMaterialDialog-->
-<form name="dummy-for-init">
-</form>
+<form name="dummy-for-init"></form>
 <form name="targetGroupForm">
   <md-input-container class="md-block">
-    <label>
-      <span data-translate="DETAILED_SEARCH_TARGET_GROUP"></span>
-    </label>
-
-    <md-select multiple class="select"
-               data-ng-model="selectedTargetGroup"
-               name="targetGroupSelect"
-               md-selected-text="getSelectedText()"
-               md-on-open="update()"
-               ng-required="isRequired.trigger"
-               aria-label="Vanuse valiku menüü"
-               dop-select-close>
+    <md-select
+      multiple
+      class="select"
+      placeholder="{{ 'DETAILED_SEARCH_TARGET_GROUP' | translate }}"
+      md-selected-text="selectedText"
+      name="targetGroupSelect"
+      data-ng-model="selectedTargetGroup"
+      data-ng-model-options="{ trackBy: '$value' }"
+      data-ng-required="isRequired.trigger"
+      aria-label="Vanuse valiku menüü"
+      dop-select-close
+      >
       <div data-ng-repeat="group in groups">
-        <md-option ng-if="group.label" value="{{group.label}}" data-ng-click="parentClick(this)" class="select__parent">
+        <md-option
+          class="select__parent"
+          data-ng-click="$ctrl.parentClick(this)"
+          data-ng-if="group.label"
+          value="{{group.label}}"
+          >
           <span data-translate="TARGET_GROUP_{{group.label}}"></span>
         </md-option>
-        <md-option ng-if="child" class="select__child" data-ng-repeat="child in group.children" value="{{child}}">
+        <md-option
+          class="select__child"
+          data-ng-repeat="child in group.children"
+          data-ng-if="child"
+          value="{{child}}"
+          >
           <span data-translate="TARGET_GROUP_{{child.toUpperCase()}}"></span>
         </md-option>
       </div>
     </md-select>
     <div data-ng-messages="targetGroupForm.targetGroupSelect.$error">
-      <div data-ng-message="required"
-           class="validation-messages" data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"></div>
+      <div
+        data-ng-message="required"
+        class="validation-messages"
+        data-translate="PORTFOLIO_AGE_GROUP_REQUIRED"
+      ></div>
     </div>
   </md-input-container>
 </form>

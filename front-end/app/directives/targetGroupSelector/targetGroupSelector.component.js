@@ -3,49 +3,21 @@
 {
 class controller extends Controller {
     $onInit() {
-        this.$scope.isReady = false
-        this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(this.targetGroups)
-
-        this.$scope.parentClick = (evt) => {
-            if (!this.$scope.selectedTargetGroup)
-                this.$scope.selectedTargetGroup = []
-
-            const added = (evt.group && this.$scope.selectedTargetGroup.indexOf(evt.group.label) == -1)
-                || this.$scope.selectedTargetGroup === []
-
-            added
-                ? this.addMissingGrades(evt.group.children)
-                : this.removeGrades(evt.group.children)
-
-            this.parseSelectedTargetGroup()
-        }
-
-        // Reduced text for select label
-        this.$scope.getSelectedText = () =>
-            this.targetGroups && this.targetGroups.length > 0
-                ? _.join(this.targetGroupService.getSelectedText(this.targetGroups), ', ')
-                : this.$translate.instant('DETAILED_SEARCH_TARGET_GROUP')
-
-        this.$scope.update = () =>
-            !this.$scope.selectedTargetGroup &&
-            (this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(this.targetGroups))
-
         this.$scope.$on('detailedSearch:prefillTargetGroup', (evt, args) =>
             this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(args)
         )
-
         this.fill()
         this.addListeners()
         this.selectValue()
-        this.$timeout(() => this.$scope.isReady = true)
+        this.setSelectedText()
     }
-    $onChanges({ taxon, markRequired }) {
+    $onChanges({ taxon, markRequired, targetGroups }) {
         if (taxon &&
-            taxon.newValue !== taxon.oldValue &&
+            taxon.currentValue !== taxon.previousValue &&
             !this.$rootScope.isEditPortfolioMode
         ) {
-            const newEdCtx = this.taxonService.getEducationalContext(taxon.newValue)
-            const oldEdCtx = this.taxonService.getEducationalContext(taxon.oldValue)
+            const newEdCtx = this.taxonService.getEducationalContext(taxon.currentValue)
+            const oldEdCtx = this.taxonService.getEducationalContext(taxon.previousValue)
 
             if (!oldEdCtx || (newEdCtx && newEdCtx.name !== oldEdCtx.name) || !newEdCtx) {
                 this.fill()
@@ -53,8 +25,34 @@ class controller extends Controller {
             }
         }
 
-        if (markRequired && markRequired.newValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
+        if (markRequired && markRequired.currentValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
             this.$scope.targetGroupForm.targetGroupSelect.$touched = true
+
+        if (targetGroups && targetGroups.currentValue !== targetGroups.previousValue)
+            this.setSelectedText()
+    }
+    setSelectedText() {
+        const selected = this.$scope.selectedTargetGroup.length
+            ? this.$scope.selectedTargetGroup
+            : this.targetGroups && this.targetGroups.length
+                && this.targetGroups
+
+        selected
+            ? this.$scope.selectedText = this.targetGroupService.getSelectedText(selected).join(', ')
+            : this.$translate('DETAILED_SEARCH_TARGET_GROUP').then(selectedText =>
+                this.$scope.selectedText = selectedText
+            )
+    }
+    parentClick(evt) {
+        const added = !this.$scope.selectedTargetGroup.length || (
+            evt.group &&
+            this.$scope.selectedTargetGroup.indexOf(evt.group.label) < 0
+        )
+        added
+            ? this.addGroups(evt.group.children)
+            : this.removeGroups(evt.group.children)
+
+        this.parseSelectedTargetGroup()
     }
     addListeners() {
         this.$scope.$watch('selectedTargetGroup', (newGroup, oldGroup) => {
@@ -68,6 +66,8 @@ class controller extends Controller {
             }
             if (!newGroup)
                 this.$scope.selectedTargetGroup = []
+
+            this.setSelectedText()
         }, false)
 
         this.$scope.$on('detailedSearch:taxonChange', (evt, taxonChange) => {
@@ -110,7 +110,8 @@ class controller extends Controller {
         this.targetGroups = this.targetGroupService.getByLabel(this.$scope.selectedTargetGroup)
     }
     selectValue() {
-        this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(this.targetGroups)
+        if (!this.$scope.selectedTargetGroup)
+            this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(this.targetGroups)
     }
     resetIfInvalid() {
         const groupNames = []
@@ -121,54 +122,38 @@ class controller extends Controller {
             )
 
         if (groupNames.indexOf(this.$scope.selectedTargetGroup) < 0 || !this.$scope.groups) {
-            this.$scope.selectedTargetGroup = null
+            this.$scope.selectedTargetGroup = []
             this.targetGroups = []
 
             if (this.$scope.groups && this.$scope.groups.length === 1)
                 this.$scope.selectedTargetGroup = this.$scope.groups
         }
     }
-    addMissingGrades(targetGroups) {
-        if (!this.$scope.selectedTargetGroup)
-            this.$scope.selectedTargetGroup = []
-
-        ;[].push.apply(
-            this.$scope.selectedTargetGroup,
-            this.getMissingGrades(this.$scope.selectedTargetGroup, targetGroups)
-        )
-    }
-    getMissingGrades(selectedTargetGroup, targetGroups) {
-        return targetGroups.reduce(
-            (missing, group) =>
-                selectedTargetGroup.indexOf(group) < 0
-                    ? missing.concat(group)
-                    : missing,
-            []
-        )
-    }
-    removeGrades(items) {
-        for (let i = 0; i < items.length; i++)
-            this.$scope.selectedTargetGroup.splice(
-                this.$scope.selectedTargetGroup.indexOf(items[i]),
-                1
+    addGroups(groupsToAdd) {
+        [].push.apply(
+            this.$scope.selectedTargetGroup, 
+            groupsToAdd.reduce(
+                (missing, group) =>
+                    this.$scope.selectedTargetGroup.includes(group)
+                        ? missing
+                        : missing.concat(group),
+                []
             )
+        )
+    }
+    removeGroups(groupsToRemove) {
+        groupsToRemove.forEach(groupToRemove => {
+            const idx = this.$scope.selectedTargetGroup.indexOf(groupToRemove)
+            if (idx > -1)
+                this.$scope.selectedTargetGroup.splice(idx, 1)
+        })
     }
     updateParents() {
         for (let i = 0; i < this.$scope.groups.length; i++) {
-            const hasChildren = this.targetGroupService.hasAllChildren(
-                this.$scope.groups[i],
-                this.$scope.selectedTargetGroup
-            )
-
-            if (hasChildren && this.$scope.selectedTargetGroup.indexOf(this.$scope.groups[i].label) == -1)
-                this.$scope.selectedTargetGroup.push(this.$scope.groups[i].label)
-            
-            if (!hasChildren && this.$scope.selectedTargetGroup) {
-                const idx = this.$scope.selectedTargetGroup.indexOf(this.$scope.groups[i].label)
-
-                idx != -1 &&
-                this.$scope.selectedTargetGroup.splice(idx, 1)
-            }
+            const group = this.$scope.groups[i]
+            this.targetGroupService.hasAllChildren(group, this.$scope.selectedTargetGroup)
+                ? this.addGroups([ group.label ])
+                : this.removeGroups([ group.label ])
         }
     }
 }
