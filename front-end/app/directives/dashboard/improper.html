@@ -3,7 +3,7 @@
     <tr md-row>
       <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
-      <th md-column md-order-by="byCreatedAt"><span data-translate="SUBMITTED_AT"></span></th>
+      <th md-column md-order-by="byLastReportedAt"><span data-translate="SUBMITTED_AT"></span></th>
       <th md-column md-order-by="byReportCount"><span data-translate="REPORT_COUNT"></span></th>
       <th md-column md-order-by="byReportedBy"><span data-translate="SUBMITTED_BY"></span></th>
       <th md-column md-order-by="byReason"><span data-translate="REASON"></span></th>
@@ -21,7 +21,7 @@
           data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"
         ></a>
       </td>
-      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.getMostRecentImproperDateFormatted(item)"></td>
+      <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.getMostRecentReportDateFormatted(item)"></td>
       <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reports.length"></td>
       <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-bind="$ctrl.getReportedByLabel(item)">
         <md-tooltip data-ng-if="item.__reports.length > 1 && item.__reporters.length > 1">

@@ -42,6 +42,12 @@ class controller extends Controller {
             b.createdAt || b.added
         )
     }
+    byLastReportedAt(a, b) {
+        return this.compareDates(
+            this.getMostRecentReportDate(a),
+            this.getMostRecentReportDate(b)
+        )
+    }
     byLastChangedAt(a, b) {
         return this.compareDates(
             this.getMostRecentChangeDate(a),

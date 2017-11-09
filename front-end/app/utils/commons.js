@@ -808,27 +808,25 @@ class Controller {
         })
     }
     getMostRecentChangeDate(item) {
-        return this.getMostRecentChangeFromReviewList(item.reviewableChanges)
+        return this.getMostRecentDateFromReviewList(item.reviewableChanges)
     }
-    getMostRecentImproperDate(item) {
-        return this.getMostRecentChangeFromReviewList(item.improperContents)
+    getMostRecentReportDate(item) {
+        return this.getMostRecentDateFromReviewList(item.improperContents)
     }
-    getMostRecentChangeFromReviewList(reviews) {
-        return reviews
-            .filter(c => !c.reviewed)
-            .reduce((mostRecentDate, change) => {
-                const date = new Date(change.createdAt)
-                return !mostRecentDate || date > mostRecentDate
-                    ? date
-                    : mostRecentDate
-            }, null)
+    getMostRecentDateFromReviewList(reviews) {
+        return reviews.reduce((mostRecentDate, { createdAt, reviewed }) => {
+            const date = new Date(createdAt)
+            return !reviewed && !mostRecentDate || date > mostRecentDate
+                ? date
+                : mostRecentDate
+        }, null)
     }
     getMostRecentChangeDateFormatted(item) {
         const date = this.getMostRecentChangeDate(item)
         return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
     }
-    getMostRecentImproperDateFormatted(item) {
-        const date = this.getMostRecentImproperDate(item)
+    getMostRecentReportDateFormatted(item) {
+        const date = this.getMostRecentReportDate(item)
         return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
     }
     getChangedByLabel({ __changers }) {
