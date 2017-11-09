@@ -6,7 +6,7 @@ class controller extends Controller {
         this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
         this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated()
-        this.$scope.isTaxonomyOpen = !this.$scope.isAuthenticated
+        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
@@ -39,6 +39,9 @@ class controller extends Controller {
                 this.$scope.taxon = newValue
         })
         this.$scope.$watch(() => this.$location.url(), () => {
+            if (this.$location.url() === '/'){
+                this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
+            }
             this.$rootScope.isViewPortfolioAndEdit = (
                 this.$location.url().indexOf('/portfolio') != -1 ||
                 this.$location.url().indexOf('/search') != -1
