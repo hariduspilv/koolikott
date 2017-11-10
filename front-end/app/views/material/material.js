@@ -344,5 +344,9 @@ angular.module('koolikottApp')
                 if ($scope.material)
                     $scope.material.recommendation = recommendation
             }
+
+            $scope.$on('$destroy', () =>
+                storageService.setMaterial(null)
+            )
         }
     ]);
