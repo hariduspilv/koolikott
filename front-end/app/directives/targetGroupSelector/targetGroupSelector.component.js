@@ -38,8 +38,10 @@ class controller extends Controller {
     }
     $doCheck() {
         if (this.targetGroups !== this._previousTargetGroups) {
-            this.selectValue()
-            this.setSelectedText()
+            this.$timeout(() => {
+                this.selectValue(true)
+                this.setSelectedText()
+            })
             this._previousTargetGroups = this.targetGroups
         }
     }
@@ -129,9 +131,16 @@ class controller extends Controller {
     parseSelectedTargetGroup() {
         this.targetGroups = this.targetGroupService.getByLabel(this.$scope.selectedTargetGroup)
     }
-    selectValue() {
+    selectValue(force) {
         if (!this.$scope.selectedTargetGroup)
             this.$scope.selectedTargetGroup = this.targetGroupService.getLabelByTargetGroups(this.targetGroups)
+        else if (force) {
+            this.$scope.selectedTargetGroup.splice(0, this.$scope.selectedTargetGroup.length)
+            ;[].push.apply(
+                this.$scope.selectedTargetGroup,
+                this.targetGroupService.getLabelByTargetGroups(this.targetGroups)
+            )
+        }
     }
     resetIfInvalid() {
         const groupNames = this.$scope.groups.reduce(
