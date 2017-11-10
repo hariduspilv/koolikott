@@ -69,11 +69,11 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="userFavoritesCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="improper" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/improper')}"
-             data-ng-href="/dashboard/improper" data-ng-click=updateCount('improper')>
+             data-ng-href="/dashboard/improper" data-ng-click="updateCount('improper')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">warning</md-icon>
               <span data-translate="IMPROPER" class="sidenav__name"></span>
@@ -81,11 +81,11 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="improperCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="unReviewed" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/unReviewed')}"
-             data-ng-href="/dashboard/unReviewed" data-ng-click=updateCount('unReviewedLearningObjects')>
+             data-ng-href="/dashboard/unReviewed" data-ng-click="updateCount('unReviewedLearningObjects')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">lightbulb_outline</md-icon>
               <span data-translate="UNREVIEWED" class="sidenav__name"></span>
@@ -93,7 +93,7 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="unReviewedLearningObjectsCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdmin || isModerator">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="changes" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/changes')}"
@@ -105,7 +105,7 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="changesCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdmin">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
           <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}" data-ng-href="/dashboard/moderators"
              data-ng-click="updateCount('moderators')">
@@ -116,7 +116,7 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="moderatorsCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdmin">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
           <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/restrictedUsers')}"
@@ -128,7 +128,7 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="restrictedUsersCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" ng-if="isAdmin">
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="deleted" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/deleted')}"

@@ -33,6 +33,8 @@ class controller extends Controller {
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
+        this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
+        this.$scope.isAdminUser = this.isAdminUser.bind(this)
 
         this.$scope.$on('dashboard:adminCountsUpdated', this.updateAdminCounts.bind(this))
         this.$rootScope.$on('login:success', this.userChange.bind(this));
@@ -51,19 +53,22 @@ class controller extends Controller {
             )
         }, true)
         this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {
-            this.$scope.user = user
-            this.$scope.updateUserCounts()
+            this.userChange()
         }, true)
         this.$scope.$on('header:red', () => this.$scope.isHeaderRed = true)
         this.$scope.$on('header:default', () => this.$scope.isHeaderRed = false)
     }
     userChange() {
         this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated();
+        this.$scope.user = this.authenticatedUserService.getUser();
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
         this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
-        this.$scope.user = this.authenticatedUserService.getUser();
         this.$scope.updateUserCounts();
+        if (!this.$scope.isAuthenticated){
+            this.$location.url('/')
+            this.$rootScope.isUserTabOpen = false;
+        }
     }
     isLocationActive(menuLocation) {
         if (!this.$scope.user)
@@ -121,6 +126,9 @@ class controller extends Controller {
             this.authenticatedUserService.isModerator() ||
             this.authenticatedUserService.isAdmin()
         )
+    }
+    isAdminUser() {
+        return this.authenticatedUserService.isAdmin()
     }
     /**
      * @param {string} type - One of:
