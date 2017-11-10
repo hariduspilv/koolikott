@@ -184,6 +184,24 @@ public class PortfolioTests {
 		Assert.assertEquals(Constants.reportedText, improperCommentIsReported);
 	}
 
+	@Test
+	public void PortfolioTests_AddSystemTag_LOChangedBannerIsDisplayed() { // LO=Learning Object
+
+		String changedLOBannerText  = goToLandingPage()
+				.chooseUserType("Admin")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.clickCreatePortfolio()
+				.clickSaveAndExit()
+				.makePortfolioPublic()
+				.markNewPortfolioAsReviewed()
+				.addNewSystemTag()
+				.getChangedLOBannerText();
+		Assert.assertEquals(Constants.changedLOBannerText, changedLOBannerText);
+	}
 
 
 

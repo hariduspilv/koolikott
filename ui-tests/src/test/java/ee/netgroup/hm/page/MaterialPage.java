@@ -27,12 +27,12 @@ public class MaterialPage extends Page{
 	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By showMoreButton = By.xpath("//button[@ng-click='$ctrl.showMore()']");
 	private By addedTag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
-	private By errorBanner = By.xpath("//md-toolbar[@class='error-message _md _md-toolbar-transitions']");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
-	
+	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
+	private By changedLoBannerText = By.id("error-message-heading");
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -117,7 +117,7 @@ public class MaterialPage extends Page{
 	}
 
 	public String getUnreviewedBannerText() {
-		return getDriver().findElement(errorBanner).getText();
+		return getDriver().findElement(Constants.bannerToolbar).getText();
 	}
 
 	public String getNotificationIsSentText() {
@@ -150,6 +150,16 @@ public class MaterialPage extends Page{
 
 	public ReportImproperPopUp reportImproperComment() {
 		return Comments.reportImproperComment();
+	}
+
+	public MaterialPage markNewMaterialAsReviewed() {
+		Helpers.waitForClickable(markAsReviewed);
+		getDriver().findElement(markAsReviewed).click();
+		return this;
+	}
+
+	public String getChangedLinkBannerText() {
+		return getDriver().findElement(changedLoBannerText).getText();
 	}
 
 

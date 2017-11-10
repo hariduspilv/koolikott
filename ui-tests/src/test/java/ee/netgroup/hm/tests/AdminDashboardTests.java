@@ -14,7 +14,7 @@ public class AdminDashboardTests {
 				.clickImproperLearningObjects()
 				.openImproperLearningObject()
 				.markContentAsNotImproper()
-				.isErrorBannerHidden();
+				.isBannerToolbarHidden();
 		assertTrue(improperContentBannerIsHidden);
 	}
 	
@@ -26,7 +26,7 @@ public class AdminDashboardTests {
 				.clickImproperLearningObjects()
 				.openImproperLearningObject()
 				.markContentAsNotImproper()
-				.isErrorBannerHidden();
+				.isBannerToolbarHidden();
 		assertTrue(improperContentBannerIsHidden);
 	}
 
@@ -38,7 +38,7 @@ public class AdminDashboardTests {
 				.clickUnreviewedLearninObjects()
 				.openNewLearningObject()
 				.markContentIsReviewed()
-				.isErrorBannerHidden();
+				.isBannerToolbarHidden();
 		assertTrue(unreviwedBannerIsHidden);
 	}
 	
@@ -50,7 +50,7 @@ public class AdminDashboardTests {
 				.clickDeletedLearningObjects()
 				.openDeletedLearningObject()
 				.restoreDeletedLearningObject()
-				.isErrorBannerHidden();
+				.isBannerToolbarHidden();
 		assertTrue(deletedBannerIsHidden);
 	}
 

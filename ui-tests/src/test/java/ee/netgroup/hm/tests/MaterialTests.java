@@ -245,4 +245,30 @@ public class MaterialTests {
 				.getNotificationIsSentText();
 		Assert.assertEquals(Constants.reportedText, improperTagIsReported);
 	}
+	
+	@Test
+	public void MaterialTests_ChangeMaterialLink__LOChangedBannerIsDisplayed() {
+
+		String changedLinkBannerText  = goToLandingPage()	
+				.chooseUserType("Moderator")
+				.clickAddMaterial()
+				.setNewHyperLink()
+				.setMaterialTitle()
+				.addDescription()
+				.clickNextStep()
+				.selectEducation()
+				.selectSubjectArea()
+				.selectTargetGroup()
+				.clickNextStep()
+				.setAuthorFirstName()
+				.setAuthorSurName()
+				.clickCreateMaterial()
+				.markNewMaterialAsReviewed()
+				.clickActionsMenu()
+				.clickEditMaterial()
+				.setRandomHyperLink()
+				.clickUpdateMaterial()
+				.getChangedLinkBannerText();
+		Assert.assertEquals(Constants.changedLinkBannerText, changedLinkBannerText);
+	}
 }

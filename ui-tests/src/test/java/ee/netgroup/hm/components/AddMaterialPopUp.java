@@ -15,7 +15,6 @@ public class AddMaterialPopUp extends Component{
 	private By insertPhoto = By.xpath("//span/md-icon[text()='insert_photo']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
-	//private By educationalContext = By.xpath("(//md-select[@id='taxonEducationalSelect'])[2]");
 	private By educationalContext = By.name("taxonForm");
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
@@ -33,6 +32,7 @@ public class AddMaterialPopUp extends Component{
 	
 	
 	public AddMaterialPopUp setHyperLink() {
+		getDriver().findElement(linkField).clear();
 		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateUrl(30));
 		return this;
 	}
@@ -134,6 +134,12 @@ public class AddMaterialPopUp extends Component{
 		getDriver().findElement(insertTag).sendKeys(Helpers.generateRegisterNumber(18));
 		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
 		Helpers.waitForMilliseconds(1000);
+		return this;
+	}
+	
+	public AddMaterialPopUp setNewHyperLink() {
+		getDriver().findElement(linkField).clear();
+		getDriver().findElement(linkField).sendKeys(Constants.newMaterialUrl);
 		return this;
 	}
 

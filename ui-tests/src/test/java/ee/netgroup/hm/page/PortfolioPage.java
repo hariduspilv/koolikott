@@ -29,6 +29,10 @@ public class PortfolioPage extends Page{
 	private By materialBox = By.cssSelector("div.pointer.layout-row");
 	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
+	private By autocompleteSystemTag = By.xpath("//span[@md-highlight-text='$ctrl.newTag.tagName']");
+	private By newSystemTagNotification = By.xpath("//button[contains(text(), 'Ok')]");
+	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
+	private By changedLoBannerText = By.id("error-message-heading");
 	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
@@ -126,9 +130,9 @@ public class PortfolioPage extends Page{
 		return getDriver().findElement(materialBox).isDisplayed();
 	}
 
-	public PortfolioPage markContentIsReviewed() {
-		Helpers.waitForClickable(removeFromRecommendations);
-		getDriver().findElement(removeFromRecommendations).click();
+	public PortfolioPage markNewPortfolioAsReviewed() {
+		Helpers.waitForClickable(markAsReviewed);
+		getDriver().findElement(markAsReviewed).click();
 		return this;
 	}
 
@@ -152,6 +156,21 @@ public class PortfolioPage extends Page{
 	public ReportImproperPopUp reportImproperTag() {
 		getDriver().findElement(reportTagButton).click();
 		return new ReportImproperPopUp();
+	}
+
+	public PortfolioPage addNewSystemTag() {
+		Helpers.waitForVisibility(insertTag);
+		getDriver().findElement(insertTag).sendKeys(Constants.systemTag);
+		Helpers.waitForMilliseconds(1000);
+		getDriver().findElement(autocompleteSystemTag).click();
+		Helpers.waitForMilliseconds(2000);
+		getDriver().findElement(newSystemTagNotification).sendKeys(Keys.ENTER);
+		Helpers.waitForMilliseconds(5000);
+		return this;
+	}
+
+	public String getChangedLOBannerText() {
+		return getDriver().findElement(changedLoBannerText).getText();
 	}
 
 

@@ -44,11 +44,18 @@ public class Constants {
     // Detail view 
     public static By actionsMenu = By.xpath("//md-icon[text()='more_vert']");
 	public static String unreviewedBannerText = "See õppevara on üle vaatamata";
+	public static String changedLOBannerText = "Õppevara liigitus. Lisatud väärtus: Keel ja kirjandus";
+	public static String changedLinkBannerText = "Õppevara link. Enne oli: https://www.netgroup.ee";
 	public static String commentText = "Automaattesti lisatud kommentaar";
+    public static String systemTag = "keel ja ki";
+    public static By bannerToolbar = By.xpath("//md-toolbar[@class='error-message _md _md-toolbar-transitions']");
     
     // Materials
     public static String deletedMaterial = "https://www.gfycat.com/gifs/search/pug/detail/RingedWarpedCrayfish";
-    public static String existingMaterial= "https://test.ee";
+    public static String existingMaterial = "https://test.ee";
+    public static String newMaterialUrl = "https://www.netgroup.ee";
+    
+
     
     
 

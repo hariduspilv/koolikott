@@ -12,7 +12,7 @@ public class EditMaterialPopUp extends Page{
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
 	private By insertTag = By.xpath("//input[contains(@placeholder, 'Lisa märksõna')]");
 	private By updateMaterialButton = By.id("add-material-create-button");
-
+	private By linkField = By.id("add-material-url-input");
 	
 	public String getMaterialLanguage() {
 		return getDriver().findElement(selectedLanguage).getText();
@@ -35,6 +35,12 @@ public class EditMaterialPopUp extends Page{
 		getDriver().findElement(updateMaterialButton).sendKeys(Keys.ENTER);
 		Helpers.waitForMilliseconds(1000);
 		return new MaterialPage();
+	}
+	
+	public EditMaterialPopUp setRandomHyperLink() {
+		getDriver().findElement(linkField).clear();
+		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateUrl(30));
+		return this;
 	}
 
 }
