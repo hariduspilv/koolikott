@@ -242,7 +242,7 @@ class controller extends Controller {
             learningObjectChanged
         } = this.$rootScope
 
-        this.$scope.isHeaderGray = !!learningObjectDeleted || !!learningObjectPrivate
+        this.$scope.isHeaderGray = !!learningObjectDeleted
 
         // even tho the header'll be gray we still want to tell the sidenav
         // to use red to highlight it's links
@@ -251,12 +251,13 @@ class controller extends Controller {
             return this.$rootScope.$broadcast('header:red')
         }
 
-        this.$scope.isHeaderRed = isDashboard || !!(
-            (isMaterial || isPortfolio) && (
+        this.$scope.isHeaderRed = !learningObjectPrivate
+            && ( isDashboard ||
+                !!((isMaterial || isPortfolio) && (
                 !!learningObjectImproper ||
                 !!learningObjectChanged ||
                 !!learningObjectUnreviewed
-            )
+            ))
         )
         this.$rootScope.$broadcast(
             this.$scope.isHeaderRed
