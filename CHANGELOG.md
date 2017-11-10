@@ -1,4 +1,4 @@
-## e-Koolikott [1.12.0] (https://github.com/hariduspilv/koolikott/milestone/11) (10.11.2017)
+## e-Koolikott [1.12.0](https://github.com/hariduspilv/koolikott/milestone/11) (10.11.2017)
 
 ### Parandatud
 * Versiooni uuendamisel cache tühjendamine [#240](https://github.com/hariduspilv/koolikott/issues/240)
