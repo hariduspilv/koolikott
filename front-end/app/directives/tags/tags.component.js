@@ -116,7 +116,7 @@ class controller extends Controller {
     removeTag(removedTag) {
         if (this.learningObject && this.learningObject.tags)
             this.learningObject.tags.forEach((tag, idx) => {
-                if (tag.id === removedTag.id)
+                if (tag === removedTag)
                     this.learningObject.tags.splice(idx, 1)
             })
     }

@@ -123,7 +123,7 @@ angular.module('koolikottApp')
                     autoSaveInterval = $interval(function () {
                         isAutoSaving = true;
 
-                        if (!$scope.portfolio.deleted){
+                        if ($scope.portfolio && !$scope.portfolio.deleted){
                             updatePortfolio();
                         }
                     }, 20000);
