@@ -123,13 +123,6 @@ class controller extends Controller {
                 }
             })
     }
-    getCorrectLanguageTitle({ title, titles, language } = {}) {
-        return title || titles && this.getUserDefinedLanguageString(
-            titles,
-            this.translationService.getLanguage(),
-            language
-        )
-    }
     openLearningObject(learningObject) {
         this.$location.url(
             this.getLearningObjectUrl(learningObject)

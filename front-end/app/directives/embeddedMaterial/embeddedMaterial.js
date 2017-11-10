@@ -276,16 +276,6 @@ class controller extends Controller {
             this.$scope.sourceType = this.$scope.fallbackType
         }
     }
-    getCorrectLanguageTitle() {
-        const { titles, language } = this.material || {}
-
-        if (titles)
-            return this.getUserDefinedLanguageString(
-                titles,
-                this.translationService.getLanguage(),
-                language
-            )
-    }
     getMaterialIcon() {
         return this.iconService.getMaterialIcon(this.$scope.material.resourceTypes)
     }
@@ -321,6 +311,7 @@ directive('dopEmbeddedMaterial', {
         contentRow: '=',
         embeddable: '='
     },
+    controllerAs: '$ctrl',
     templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
     controller
 })
