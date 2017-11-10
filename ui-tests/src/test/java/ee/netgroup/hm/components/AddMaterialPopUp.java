@@ -29,11 +29,12 @@ public class AddMaterialPopUp extends Component{
 	private By authorSurname= By.xpath("//input[@data-ng-model='author.surname']");
 	private By publisherName = By.xpath("//input[@data-ng-model='material.publishers[0].name']");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'input-')])");
+	public static String newMaterialUrl = Helpers.generateUrl();
 	
 	
 	public AddMaterialPopUp setHyperLink() {
 		getDriver().findElement(linkField).clear();
-		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateUrl(30));
+		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateRandomUrl(30));
 		return this;
 	}
 
@@ -139,7 +140,7 @@ public class AddMaterialPopUp extends Component{
 	
 	public AddMaterialPopUp setNewHyperLink() {
 		getDriver().findElement(linkField).clear();
-		getDriver().findElement(linkField).sendKeys(Constants.newMaterialUrl);
+		getDriver().findElement(linkField).sendKeys(newMaterialUrl);
 		return this;
 	}
 

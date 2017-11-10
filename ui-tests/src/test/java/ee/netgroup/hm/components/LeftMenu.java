@@ -2,6 +2,7 @@ package ee.netgroup.hm.components;
 
 import org.openqa.selenium.By;
 import ee.netgroup.hm.helpers.Helpers;
+import ee.netgroup.hm.page.ChangedLearningObjectsPage;
 import ee.netgroup.hm.page.DeletedLearningObjectsPage;
 import ee.netgroup.hm.page.ImproperLearningObjectsPage;
 import ee.netgroup.hm.page.MyFavoritesPage;
@@ -23,7 +24,7 @@ public class LeftMenu extends Component{
 	private By preschoolEducationMaterialCount = By.xpath("//span[@data-ng-bind='materialCount']");
 	private By preschoolEducationMaterialCountSearchPage = By.cssSelector("strong");
 	private static By tableOfContents = By.xpath("//span[@data-translate='TABLE_OF_CONTENTS']");
-	
+	private static By changedLearningObjects = By.id("changes");
 
 	public static ImproperLearningObjectsPage clickImproperLearningObjects() {
 		Helpers.waitForClickable(improperLearningObjects);
@@ -108,6 +109,12 @@ public class LeftMenu extends Component{
 	public static LeftMenu openTableOfContents() {
 		getDriver().findElement(tableOfContents).click();
 		return new LeftMenu();
+	}
+
+	public static ChangedLearningObjectsPage clickChangedLearningObjects() {
+		Helpers.waitForVisibility(changedLearningObjects);
+		getDriver().findElement(changedLearningObjects).click();
+		return new ChangedLearningObjectsPage();
 	}
 
 }

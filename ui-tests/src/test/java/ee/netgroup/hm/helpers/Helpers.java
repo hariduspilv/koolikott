@@ -85,7 +85,7 @@ public class Helpers extends SeleniumUser{
 		builder.moveToElement(selectElement).perform();
 	}
 
-	public static String generateUrl(int length) {
+	public static String generateRandomUrl(int length) {
 		String allowedChars = "abcdefghijklmnopqrstuvwxyz" + // alphabets
 				"1234567890"; // numbers
 		String url = "";
@@ -115,6 +115,14 @@ public class Helpers extends SeleniumUser{
         WebDriverWait wait = new WebDriverWait(getDriver(), 20);
         wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
+
+	public static String generateUrl() {
+		int length = 4;
+		String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + // alphabets
+				"1234567890"; // numbers
+		String newGeneratedUrl = "https://www.netgroup"+RandomStringUtils.random(length, allowedChars)+".ee";
+		return newGeneratedUrl;
+	}
 
 	
 }

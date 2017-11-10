@@ -33,6 +33,8 @@ public class MaterialPage extends Page{
 	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
 	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
 	private By changedLoBannerText = By.id("error-message-heading");
+	private By declineButton = By.xpath("//button[1][@data-ng-click='button.onClick($ctrl)']");
+	private By materialUrl = By.xpath("//span[@data-ng-bind='material.source']");
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -160,6 +162,17 @@ public class MaterialPage extends Page{
 
 	public String getChangedLinkBannerText() {
 		return getDriver().findElement(changedLoBannerText).getText();
+	}
+
+	public MaterialPage markChangesDeclined() {
+		Helpers.waitForClickable(declineButton);
+		getDriver().findElement(declineButton).click();
+		return this;
+	}
+	
+	public String getMaterialUrlText() {
+		Helpers.waitForMilliseconds(1000);
+		return getDriver().findElement(materialUrl).getText();
 	}
 
 

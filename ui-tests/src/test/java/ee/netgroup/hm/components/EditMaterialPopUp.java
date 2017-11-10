@@ -39,8 +39,9 @@ public class EditMaterialPopUp extends Page{
 	
 	public EditMaterialPopUp setRandomHyperLink() {
 		getDriver().findElement(linkField).clear();
-		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateUrl(30));
+		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateRandomUrl(30));
 		return this;
 	}
+
 
 }

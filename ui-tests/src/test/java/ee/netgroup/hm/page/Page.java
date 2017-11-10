@@ -12,6 +12,7 @@ public abstract class Page extends SeleniumUser{
 	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
 	private By markProperButton = By.xpath("//button[@aria-label='Märgi sisu sobivaks']");
 	private By restoreButton = By.xpath("//button[@aria-label='Taasta']");
+	private By acceptButton = By.xpath("//button[2][@data-ng-click='button.onClick($ctrl)']");
 	
 
 	public Page markContentIsReviewed() {
@@ -35,6 +36,12 @@ public abstract class Page extends SeleniumUser{
 		Helpers.waitForClickable(restoreButton);
 		getDriver().findElement(restoreButton).click();
 		Helpers.waitForMilliseconds(3000);
+		return this;
+	}
+
+	public Page markChangesAccepted() {
+		Helpers.waitForClickable(acceptButton);
+		getDriver().findElement(acceptButton).click();
 		return this;
 	}
 

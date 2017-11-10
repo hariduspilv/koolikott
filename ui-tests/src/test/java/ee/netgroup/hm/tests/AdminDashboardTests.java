@@ -2,7 +2,9 @@ package ee.netgroup.hm.tests;
 
 import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
+import org.junit.Assert;
 import org.junit.Test;
+import ee.netgroup.hm.components.AddMaterialPopUp;
 
 public class AdminDashboardTests {
 	
@@ -54,6 +56,44 @@ public class AdminDashboardTests {
 		assertTrue(deletedBannerIsHidden);
 	}
 
+	@Test
+	public void AdminDashboardTests_ChangedLearningObject_ChangesAreAccepted() {
+
+		boolean changedBannerIsHidden = goToLandingPage()
+				.chooseUserType("Moderator")
+				.clickChangedLearningObjects()
+				.openChangedLearningObject()
+				.markChangesAccepted()
+				.isBannerToolbarHidden();
+		assertTrue(changedBannerIsHidden);
+	}
+	
+	@Test
+	public void AdminDashboardTests_ChangedMaterialLink__ChangesAreDeclined() {
+
+		String materialUrl  = goToLandingPage()	
+				.chooseUserType("Admin")
+				.clickAddMaterial()
+				.setNewHyperLink()
+				.setMaterialTitle()
+				.addDescription()
+				.clickNextStep()
+				.selectEducation()
+				.selectSubjectArea()
+				.selectTargetGroup()
+				.clickNextStep()
+				.setAuthorFirstName()
+				.setAuthorSurName()
+				.clickCreateMaterial()
+				.markNewMaterialAsReviewed()
+				.clickActionsMenu()
+				.clickEditMaterial()
+				.setRandomHyperLink()
+				.clickUpdateMaterial()
+				.markChangesDeclined()
+				.getMaterialUrlText();
+		Assert.assertEquals(AddMaterialPopUp.newMaterialUrl, materialUrl);
+	}
 
 
 	

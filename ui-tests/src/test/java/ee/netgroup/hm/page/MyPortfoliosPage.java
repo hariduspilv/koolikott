@@ -73,6 +73,10 @@ public class MyPortfoliosPage extends Page{
 		return LeftMenu.clickDeletedLearningObjects();
 	}
 
+	public ChangedLearningObjectsPage clickChangedLearningObjects() {
+		return LeftMenu.clickChangedLearningObjects();
+	}
+
 
 
 
