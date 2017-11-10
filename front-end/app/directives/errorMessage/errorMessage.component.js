@@ -127,21 +127,17 @@ class controller extends Controller {
     }
     init() {
         this.setState('', '', [], false); // reset
-        this.bannerType =
-            this.$rootScope.learningObjectPrivate ?
-            undefined :
-            this.$rootScope.learningObjectDeleted
-                ? 'showDeleted' :
-            this.$rootScope.learningObjectImproper
-                ? 'showImproper' :
-            this.$rootScope.learningObjectUnreviewed
-                ? 'showUnreviewed' :
-            this.$rootScope.learningObjectChanged
-                ? 'showChanged' :
-                undefined;
+        
+        if (!this.$rootScope.learningObjectPrivate) {
+            this.bannerType =
+                this.$rootScope.learningObjectDeleted ? 'showDeleted' :
+                this.$rootScope.learningObjectImproper ? 'showImproper' :
+                this.$rootScope.learningObjectUnreviewed ? 'showUnreviewed' :
+                this.$rootScope.learningObjectChanged && 'showChanged'
 
-        if (this.bannerType)
-            this.setState(...VIEW_STATE_MAP[this.bannerType])
+            if (this.bannerType)
+                this.setState(...VIEW_STATE_MAP[this.bannerType])
+        }
     }
     setState(icon, messageKey, buttons, cb) {
         this.$scope.show = typeof cb === 'boolean' ? cb : true
