@@ -60,19 +60,16 @@ class controller extends Controller {
         )
     }
     toggleChildren(id) {
-        if (this.$scope.materialCount == 0) {
+        if (this.$scope.materialCount == 0)
             return
-        } else if (this.$scope.opened == null) {
-            this.searchService.setTaxon([id])
-            this.$location.url(this.searchService.getURL())
-            this.$scope.opened = true
-        } else if (this.$scope.opened == true) {
-            this.$scope.opened = false
-        } else if (this.$scope.opened == false) {
-            this.searchService.setTaxon([id])
-            this.$location.url(this.searchService.getURL())
-            this.$scope.opened = true
-        }
+        
+        if (this.$scope.opened)
+            return this.$scope.opened = false
+
+        window.scrollTo(0,0)
+        this.searchService.setTaxon([id])
+        this.$location.url(this.searchService.getURL())
+        this.$scope.opened = true
     }
     checkTaxonLevelAndAssignValues(level, children) {
         if (this.taxon.level === level && children.length > 0) {
