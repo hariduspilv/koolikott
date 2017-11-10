@@ -28,7 +28,8 @@ public class AddMaterialsToPortfolioToolbar extends Component{
 	public static AddMaterialsToPortfolioToolbar clickToSelectMaterial2() {
 		Helpers.moveToElement(materialBox);
 		Helpers.moveToElement(uncheckedCircle);
-		getDriver().findElement(uncheckedCircle).click();
+		Helpers.waitForMilliseconds(1000);
+		getDriver().findElement(checkedCircle).click();
 		return new AddMaterialsToPortfolioToolbar();
 	}	
 

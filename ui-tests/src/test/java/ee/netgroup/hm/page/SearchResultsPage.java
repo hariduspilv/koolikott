@@ -8,8 +8,7 @@ import ee.netgroup.hm.helpers.Helpers;
 public class SearchResultsPage extends Page{
 	
 	private By sortDropdown = By.xpath("//md-select[@ng-model='sortDropdown']");
-    private By newestFirst = By.xpath("//md-option/div[text()='Uusimad eespool']");
-    //private By searchResultMaterial = By.xpath("//h3[@data-ng-bind='$ctrl.getCorrectLanguageTitle($ctrl.learningObject)']");
+    private By newestFirst = By.xpath("//md-option[text()='Uusimad eespool']");
     private By closeDetailedSearchButton = By.id("header-hide-detailed-search-icon");
 
 	public SearchResultsPage sortResultsNewestFirst() {

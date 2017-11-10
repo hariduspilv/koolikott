@@ -48,6 +48,7 @@ public class Search extends Component{
 	}
 
 	public static Search clickToOpenAdvancedSearch() {
+		Helpers.waitForClickable(advancedSearchIcon);
 		getDriver().findElement(advancedSearchIcon).click();
 		return new Search();
 	}

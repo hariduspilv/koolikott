@@ -38,8 +38,8 @@ public class Constants {
     public static String reportedText = "Teade saadetud administraatorile";
     
     // Open first portfolio or material on the list
-    public static By firstPortfolio = By.xpath("//dop-card-media[@data-learning-object='$ctrl.learningObject']");
-    public static By firstMaterial = By.xpath("//dop-card-media[@data-learning-object='$ctrl.learningObject']");
+    public static By firstPortfolio = By.xpath("//dop-card-media[@data-learning-object='learningObject']");
+    public static By firstMaterial = By.xpath("//dop-card-media[@data-learning-object='learningObject']");
     
     // Detail view 
     public static By actionsMenu = By.xpath("//md-icon[text()='more_vert']");

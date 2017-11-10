@@ -8,7 +8,7 @@ import ee.netgroup.hm.helpers.Helpers;
 public class MyMaterialsPage extends Page{
 	
 	private By materialMessage = By.cssSelector("span.md-toast-text");
-	private By selectMaterialBox = By.xpath("//dop-card-media[@data-learning-object='$ctrl.learningObject']");
+	//private By selectMaterialBox = By.xpath("//dop-card-media[@data-learning-object='$ctrl.learningObject']");
 	private By starIcon = By.xpath("//div[@class='md-icon-button md-button favorite']");
 	private static By addMaterialMessage = By.cssSelector("h3");
 
@@ -28,8 +28,8 @@ public class MyMaterialsPage extends Page{
 	}
 
 	public MyMaterialsPage clickToSelectStar() {
-		Helpers.waitForVisibility(selectMaterialBox);
-		Helpers.moveToElement(selectMaterialBox);
+		Helpers.waitForVisibility(Constants.firstMaterial);
+		Helpers.moveToElement(Constants.firstMaterial);
 		Helpers.waitForVisibility(starIcon);
 		getDriver().findElement(starIcon).click();
 		return this;

@@ -13,7 +13,8 @@ public class ReportImproperPopUp extends Component{
 
 	
 	public ReportImproperPopUp setImproperReason() {
-		Helpers.waitForVisibility(reportContent);
+		Helpers.waitForMilliseconds(1000);
+		Helpers.waitForClickable(reportContent);
 		getDriver().findElement(reportContent).click();
 		return this;
 	}

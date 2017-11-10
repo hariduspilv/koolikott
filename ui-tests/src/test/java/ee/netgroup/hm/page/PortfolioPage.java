@@ -21,13 +21,13 @@ public class PortfolioPage extends Page{
 	private By preTag = By.tagName("pre");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
-	private By addedTag = By.xpath("//a[contains(@href, \"search/result?q=tag:'"+newTag+"'\")]");
+	private By addedTag = By.xpath("//a[contains(@href, 'search/result?q=tag:\""+newTag+"\"')]"); 
 	private By addToRecommendations = By.xpath("//button[@data-ng-click='recommend()']");
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
 	private By materialBox = By.cssSelector("div.pointer.layout-row");
-	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment(comment, $event)']");
+	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	
 	

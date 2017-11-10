@@ -26,8 +26,10 @@ public class ContentsTests {
 	@Test
 	public void ContentsTests_MenuMaterialCount() {
 
-		boolean materialCount = goToLandingPage()
+		goToLandingPage()
 				.chooseUserType("User")
+				.openTableOfContents();
+		boolean materialCount = LeftMenu
 				.clickToFilterPreschoolEducation()
 				.getMaterialCount();
 		assertTrue(materialCount);

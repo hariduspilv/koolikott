@@ -12,7 +12,7 @@ public class EditPortfolioPage extends Page{
 	
 	private By successAlertText = By.cssSelector("p.md-toolbar-text");
 	private By saveAndExit = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
-	private By visibilityButton = By.xpath("//button[@ng-click='$mdOpenMenu($event)']");
+	private By visibilityButton = By.id("change-visibility");
 	private By shareWithLink = By.xpath("//button/span[contains(text(),'inult lingiga')]");
 	private By newChapter = By.xpath("//button[@data-ng-click='addNewChapter()']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])"); //TODO: et võtaks kõige viimase
