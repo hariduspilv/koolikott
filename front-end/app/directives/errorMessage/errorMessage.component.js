@@ -127,7 +127,7 @@ class controller extends Controller {
     }
     init() {
         this.setState('', '', [], false); // reset
-        
+
         if (!this.$rootScope.learningObjectPrivate) {
             this.bannerType =
                 this.$rootScope.learningObjectDeleted ? 'showDeleted' :
@@ -415,6 +415,7 @@ class controller extends Controller {
         this.isMaterial(data) ? this.storageService.setMaterial(data) :
         this.isPortfolio(data) && this.storageService.setPortfolio(data)
         this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+        this.$rootScope.$broadcast('tags:resetTags');
     }
 }
 controller.$inject = [
