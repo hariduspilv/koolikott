@@ -1,5 +1,30 @@
-<<<<<<< HEAD
-=======
+## e-Koolikott [1.12.0] (https://github.com/hariduspilv/koolikott/milestone/11) (10.11.2017)
+
+### Parandatud
+* Versiooni uuendamisel cache tühjendamine [#240](https://github.com/hariduspilv/koolikott/issues/240)
+
+### Muutunud
+* Angular põhiversiooni uuendamise eeltööd v.2 [#229](https://github.com/hariduspilv/koolikott/issues/229)
+* searchResults.html ja infinteSearchResults.html kokku viia [#159](https://github.com/hariduspilv/koolikott/issues/159)
+* Admini vasakmenüü korrastamine [#222](https://github.com/hariduspilv/koolikott/issues/222)
+* Listvaadete uus kujundus töölaua vaates [#210](https://github.com/hariduspilv/koolikott/issues/210)
+* Muutunud õppevara haldamine -> Andmebaasimuudatused muutunud materjali lingi salvestamiseks ja soft delete kasutamiseks [#214](https://github.com/hariduspilv/koolikott/issues/214)
+* Muutunud õppevara haldamine -> Muutunud õppevara listvaade [#215](https://github.com/hariduspilv/koolikott/issues/215)
+* Muutunud õppevara haldamine -> Muutunud õppevara bänner [#216](https://github.com/hariduspilv/koolikott/issues/216)
+* Muutunud õppevara haldamine -> Andmebaasikirje muutmine õppevara raporteerimise järel [#217](https://github.com/hariduspilv/koolikott/issues/217)
+* Muutunud õppevara haldamine -> Andmebaasikirje muutmine muudatuse manuaalse taastamise järel [#218](https://github.com/hariduspilv/koolikott/issues/218)
+* Muutunud õppevara haldamine -> Automaatne muutunud õppevara muudatuste kinnitamine [#219](https://github.com/hariduspilv/koolikott/issues/219)
+* Muutunud õppevara loomine -> tabelikirje loomine süsteemse märksõna lisamisel [#220](https://github.com/hariduspilv/koolikott/issues/220)
+* Muutunud õppevara loomine -> Tabelikirje loomine materjali lingi muutmisel [#221](https://github.com/hariduspilv/koolikott/issues/221)
+* Teatatud õppevara haldamine -> Ebasobivate ja katkiste listvaadete konsolideerimine [#236](https://github.com/hariduspilv/koolikott/issues/236)
+* Teatatud õppevara haldamine -> Detailvaate bänner [#237](https://github.com/hariduspilv/koolikott/issues/237)
+* Teatatud õppevara haldamine -> Õppevarast teatamise nuppude muudatused [#238](https://github.com/hariduspilv/koolikott/issues/238)
+* Teatatud õppevara haldamine -> Kustutatud kogumike ja materjalide konsolideerimine [#239](https://github.com/hariduspilv/koolikott/issues/239)
+* Kustutatud õppevara kolme täpi menüü kuvada ainult administraatorile [#190](https://github.com/hariduspilv/koolikott/issues/190)
+* Katkiste materjalide listvaade valdkonnapõhiseks [#201](https://github.com/hariduspilv/koolikott/issues/201)
+* Teatatud õpiobjektide listvaated valdkonnapõhiseks [#197](https://github.com/hariduspilv/koolikott/issues/197)
+
+
 ## e-Koolikott 1.11.0 (20.10.2017)
 
 ### Parandatud
@@ -24,7 +49,6 @@
 ### Parandatud
 * Aineeksperdi rollis ei saa ebasobivaks raporteeritud õppevara märkida uuesti sobivaks #207 https://github.com/hariduspilv/koolikott/issues/207
 
->>>>>>> new-develop
 ## e-Koolikott 1.10.1 (03.10.2017)
 
 ### Parandatud
