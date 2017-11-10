@@ -4,16 +4,17 @@
 class controller extends Controller {
     $onInit() {
         this.learningObject = this.$scope.material || this.$scope.portfolio
-        this.restUrlBase = `rest/${this.$scope.material ? 'material' : 'portfolio'}/`
+        this.restUrlBase = "rest/admin/learningObject/";
 
         this.$scope.recommend = () => this.post('recommend')
         this.$scope.removeRecommendation = () => this.post('removeRecommendation')
     }
     post(endpoint) {
-        if (this.authenticatedUserService.isAdmin() && this.learningObject) {
+        if (this.authenticatedUserService.isAdmin() && (this.$scope.material || this.$scope.portfolio)) {
+            const {id, type} = this.$scope.material || this.$scope.portfolio;
             this.serverCallService.makePost(
                 this.restUrlBase + endpoint,
-                this.learningObject,
+                {id, type},
                 this.querySuccess.bind(this),
                 () => console.log('Request failed')
             )
