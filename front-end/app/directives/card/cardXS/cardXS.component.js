@@ -10,8 +10,9 @@ class controller extends Controller {
                 this.storageService.setMaterial(this.learningObject)
             }
             this.$location.path('/material').search({ id })
-        } else if (this.isPortfolio(this.learningObject.type)) {
-            if (this.learningObject.type === '.Portfolio'){
+        }
+        if (isPortfolio(this.learningObject.type)) {
+            if (this.learningObject.type === '.ReducedPortfolio'){
                 this.storageService.setPortfolio(this.learningObject)
             }
             this.$location.path('/portfolio').search({ id })
