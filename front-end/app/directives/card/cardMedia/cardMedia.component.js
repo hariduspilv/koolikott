@@ -35,7 +35,8 @@ controller.$inject = ['$scope', 'iconService', 'authenticatedUserService']
 component('dopCardMedia', {
     bindings: {
         learningObject: '=',
-        disablePick: '<'
+        disablePick: '<',
+        showPrivacy: '<'
     },
     templateUrl: 'directives/card/cardMedia/cardMedia.html',
     controller

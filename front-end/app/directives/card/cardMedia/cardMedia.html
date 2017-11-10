@@ -1,5 +1,5 @@
 <div class="card-image" layout="column">
-  <div class="card__icon-holder" data-ng-if="$ctrl.authenticatedUserService.isAuthenticated()">
+  <div class="card__icon-holder" data-ng-if="$ctrl.showPrivacy && $ctrl.authenticatedUserService.isAuthenticated()">
     <md-icon data-ng-if="learningObject.visibility === 'PRIVATE'">lock</md-icon>
     <md-icon data-ng-if="learningObject.visibility === 'NOT_LISTED'">link</md-icon>
     <md-tooltip md-direction="bottom">
