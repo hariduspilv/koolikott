@@ -45,7 +45,7 @@ angular.module('koolikottApp')
                     controller: 'dashboardController',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/improperMaterials', {
+                .when('/dashboard/improper', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
@@ -57,19 +57,7 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/brokenMaterials', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
-                    controller: 'baseTableViewController',
-                    controllerAs: '$ctrl',
-                    permissions: ['ADMIN', 'MODERATOR']
-                })
-                .when('/dashboard/deletedMaterials', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
-                    controller: 'baseTableViewController',
-                    controllerAs: '$ctrl',
-                    permissions: ['ADMIN', 'MODERATOR']
-                })
-                .when('/dashboard/deletedPortfolios', {
+                .when('/dashboard/deleted', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
@@ -87,7 +75,7 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/dashboard/changedLearningObjects', {
+                .when('/dashboard/changes', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',

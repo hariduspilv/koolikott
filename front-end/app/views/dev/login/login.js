@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('devLoginController',
 [
-    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location',
-    function($scope, serverCallService, $route, authenticatedUserService, $location) {
+    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', '$rootScope',
+    function($scope, serverCallService, $route, authenticatedUserService, $location, $rootScope) {
         var idCode = $route.current.params.idCode;
         var params = {};
         serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail);
@@ -30,6 +30,7 @@ angular.module('koolikottApp')
         function finishLogin() {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
             $location.url('/' + authenticatedUser.user.username);
+            $rootScope.$broadcast('login:success')
         }
 
         function getRole() {

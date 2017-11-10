@@ -31,8 +31,8 @@
               <dop-share
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
-              <md-menu>
-                <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+              <md-menu ng-show="dotsAreShowing()">
+                <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
                 <md-menu-content width="4" class="material-menu-icon">
@@ -66,8 +66,6 @@
                   <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
                   <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
                                 data-learning-object="material"></md-menu-item>
-                  <md-menu-item data-ng-if="!isAdmin()"
-                                dop-report-broken-link></md-menu-item>
                   <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
                                 data-learning-object="material">
                   </md-menu-item>
@@ -134,8 +132,7 @@
             <div class="md-body-1 description textangular-view"
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
             <!--Embedded Material-->
-            <div data-embeddable="material.embeddable"
-                 data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortfolioPage && !isEditPortfolioPage}"
+            <div data-embeddable="material.embeddable" data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortfolioPage && !$root.isEditPortfolioPage}"
                  data-dop-embedded-material data-material="material" data-flex></div>
           </div>
           <!-- Tags -->
@@ -337,12 +334,11 @@
       <!-- SECTION 3: Comments -->
       <dop-comments-card
         data-learning-object="material"
-        data-submit-click="addComment(newComment, learningObject)"
         data-is-open="commentsOpen"
       ></dop-comments-card>
     </md-card>
   </div>
   <aside flex-gt-sm="25">
-    <div data-dop-aside data-learning-object="material"></div>
+    <data-dop-aside data-learning-object="material"></data-dop-aside>
   </aside>
 </div>

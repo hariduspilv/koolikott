@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.dao.AdminLearningObjectDao;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -12,6 +13,7 @@ import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class LearningObjectAdministrationService {
 
@@ -23,6 +25,8 @@ public class LearningObjectAdministrationService {
     private SolrEngineService solrEngineService;
     @Inject
     private ReviewManager reviewManager;
+    @Inject
+    private AdminLearningObjectDao adminLearningObjectDao;
 
     public Recommendation addRecommendation(LearningObject learningObject, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
@@ -49,17 +53,17 @@ public class LearningObjectAdministrationService {
         solrEngineService.updateIndex();
     }
 
-    public void restore(LearningObject learningObject, User user) {
+    public LearningObject restore(LearningObject learningObject, User user) {
         UserUtil.mustBeAdmin(user);
         LearningObject originalLearningObject = learningObjectService.validateAndFindDeletedOnly(learningObject);
 
         learningObjectDao.restore(originalLearningObject);
         reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED, ReviewType.SYSTEM_RESTORE);
         solrEngineService.updateIndex();
+        return originalLearningObject;
     }
 
-
-    public void delete(LearningObject learningObject, User loggedInUser) {
+    public LearningObject delete(LearningObject learningObject, User loggedInUser) {
         LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
 
         if (originalLearningObject instanceof IMaterial) {
@@ -73,5 +77,14 @@ public class LearningObjectAdministrationService {
         learningObjectDao.delete(originalLearningObject);
         reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED, ReviewType.SYSTEM_DELETE);
         solrEngineService.updateIndex();
+        return originalLearningObject;
+    }
+
+    public List<AdminLearningObject> findByIdDeleted() {
+        return adminLearningObjectDao.findByIdDeleted();
+    }
+
+    public Long findCountByIdDeleted() {
+        return adminLearningObjectDao.findCountByIdDeleted();
     }
 }

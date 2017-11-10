@@ -24,24 +24,8 @@ function MaterialService(serverCallService, authenticatedUserService) {
             });
     }
 
-    function addComment(comment, material) {
-        let params = {
-            'comment': comment,
-            'material': {
-                'type': '.Material',
-                'id': material.id
-            }
-        };
-
-        return serverCallService.makePost("rest/comment/material", params)
-            .then(response => {
-                return response.data;
-            });
-    }
-
     return {
         getMaterialById: getMaterialById,
-        increaseViewCount: increaseViewCount,
-        addComment: addComment
+        increaseViewCount: increaseViewCount
     }
 }

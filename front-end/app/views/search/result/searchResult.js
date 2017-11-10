@@ -6,7 +6,6 @@ class controller extends Controller {
         super(...args)
 
         this.setParams()
-
         this.$scope.$watch(
             () => this.$location.search(),
             this.onLocationChange.bind(this),
@@ -14,19 +13,15 @@ class controller extends Controller {
         )
     }
     onLocationChange(newValue, oldValue) {
-        if (newValue !== oldValue) {
-            if (newValue.q === '')
-                this.searchService.setType('all')
+        if (newValue !== oldValue)
             this.setParams(newValue.q)
-        }
     }
     setParams(q) {
         q  ?  this.searchService.setSearch(q)
         : q = this.searchService.getQuery()
 
         this.$scope.params = { q, start: 0 }
-        
-        Object.keys({
+        const params = {
             taxon: this.searchService.getTaxon(),
             paid: this.searchService.isPaid(),
             type: this.searchService.getType(),
@@ -40,27 +35,19 @@ class controller extends Controller {
             keyCompetence: this.searchService.getKeyCompetence(),
             sort: this.searchService.getSort(),
             sortDirection: this.searchService.getSortDirection(),
-        })
-        .forEach((param, idx, params) => {
+        }
+        Object.keys(params).forEach((param) => {
             const value = params[param]
 
-            switch(param) {
-                case 'taxon':
-                    if (!value || !value[0])
-                        return
-                case 'paid':
-                    if (value !== false)
-                        return
-                case 'type':
-                    if (!value || !this.searchService.isValidType(value))
-                        return
-                case 'specialEducation':
-                    if (value !== true)
-                        return
-                default:
-                    if (typeof value !== 'undefined')
-                        this.$scope[param] = value
-            }
+            if ((param == 'taxon' && (!value || !value[0])) ||
+                (param == 'paid' && value !== false) ||
+                (param == 'type' && (!value || !this.searchService.isValidType(value))) ||
+                (param == 'specialEducation' && value !== true)
+            )
+                return
+
+            if (typeof value !== 'undefined' && value !== '')
+                this.$scope.params[param] = value
         })
     }
 }
@@ -69,5 +56,5 @@ controller.$inject = [
     '$location',
     'searchService'
 ]
-_controller('searchResultController', controller)
+angular.module('koolikottApp').controller('searchResultController', controller)
 }

@@ -1,54 +1,34 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.component('dopCardXs', {
+{
+class controller extends Controller {
+    navigateTo() {
+        const { id } = this.learningObject
+
+        if (this.isMaterial(this.learningObject)) {
+            if (this.learningObject.type === '.Material'){
+                this.storageService.setMaterial(this.learningObject)
+            }
+            this.$location.path('/material').search({ id })
+        }
+        if (isPortfolio(this.learningObject.type)) {
+            if (this.learningObject.type === '.ReducedPortfolio'){
+                this.storageService.setPortfolio(this.learningObject)
+            }
+            this.$location.path('/portfolio').search({ id })
+        }
+    }
+}
+controller.$inject = [
+    '$location',
+    'translationService',
+    'storageService'
+]
+component('dopCardXs', {
     bindings: {
         learningObject: '='
     },
     templateUrl: 'directives/card/cardXS/cardXS.html',
-    controller: dopCardXsController
-});
-
-dopCardXsController.$inject = ['$location', 'translationService', 'storageService'];
-
-function dopCardXsController ($location, translationService, storageService) {
-    let vm = this;
-
-    vm.navigateTo = (learningObject, $event) => {
-        $event.preventDefault();
-
-        if (isMaterial(learningObject.type)) {
-            storageService.setMaterial(learningObject);
-
-            $location.path('/material').search({
-                id: learningObject.id
-            });
-        }
-
-        if (isPortfolio(learningObject.type)) {
-            storageService.setPortfolio(learningObject);
-
-            $location.path('/portfolio').search({
-                id: learningObject.id
-            });
-        }
-    };
-
-    vm.formatName = (name) => formatNameToInitials(name);
-    vm.formatSurname = (surname) => formatSurnameToInitialsButLast(surname);
-
-    vm.getCorrectLanguageTitle = (material) => {
-        if (material) {
-            return getCorrectLanguageString(material.titles, material.language);
-        }
-    };
-
-    vm.isMaterial = (type) => isMaterial(type);
-    vm.isPortfolio = (type) => isPortfolio(type);
-
-    function getCorrectLanguageString(languageStringList, materialLanguage) {
-        if (languageStringList) {
-            return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
-        }
-    }
+    controller
+})
 }

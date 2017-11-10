@@ -1,30 +1,25 @@
 package ee.hm.dop.rest;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TagUpVote;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.TagUpVoteService;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Path("tagUpVotes")
-@RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
+@RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
 public class TagUpVoteResource extends BaseResource {
 
     @Inject
@@ -74,10 +69,11 @@ public class TagUpVoteResource extends BaseResource {
         return Collections.emptyList();
     }
 
-    @DELETE
-    @Path("{tagUpVoteId}")
-    public void removeUpVote(@PathParam("tagUpVoteId") long tagUpVoteId) {
-        TagUpVote tagUpVote = tagUpVoteService.get(tagUpVoteId, getLoggedInUser());
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("delete")
+    public void removeUpVote(TagUpVote tagUpVote) {
         if (tagUpVote == null) {
             throw notFound();
         }

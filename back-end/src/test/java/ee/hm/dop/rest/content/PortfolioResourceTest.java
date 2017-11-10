@@ -26,10 +26,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
-    private static final String LIKE_URL = "portfolio/like";
-    private static final String DISLIKE_URL = "portfolio/dislike";
-    private static final String GET_USER_LIKE_URL = "portfolio/getUserLike";
-    private static final String REMOVE_USER_LIKE_URL = "portfolio/removeUserLike";
 
     private static final String CREATE_MATERIAL_URL = "material";
     public static final String NEW_SUBCHAPTER = "New subchapter";
@@ -291,7 +287,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void deletePortfolioAsCreator() {
         login(USER_SECOND);
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_12));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -340,39 +336,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(createdPortfolio.getId());
         assertEquals(((ChapterObject) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getText(), chapterObject.getText());
         assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(1)).getSource(), createdMaterial.getSource());
-    }
-
-    @Test
-    public void likePortfolio_sets_it_as_liked() throws Exception {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-
-        doPost(LIKE_URL, portfolio);
-        UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNotNull("User like exist", userLike);
-        assertEquals("Portfolio is liked by user", true, userLike.isLiked());
-    }
-
-    @Test
-    public void dislikePortfolio_sets_it_as_not_liked() throws Exception {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-
-        doPost(DISLIKE_URL, portfolio);
-        UserLike userDislike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNotNull("User dislike exist", userDislike);
-        assertEquals("Portfolio is disliked by user", false, userDislike.isLiked());
-    }
-
-    @Test
-    public void removeUserLike_removes_like_from_portfolio() throws Exception {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-
-        doPost(LIKE_URL, portfolio);
-        doPost(REMOVE_USER_LIKE_URL, portfolio);
-        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNull("User removed like does not exist", userRemoveLike);
     }
 
     private Portfolio createPortfolio() {

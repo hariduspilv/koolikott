@@ -1,11 +1,11 @@
 <div class="main-container">
-  <div class="nav-position" id="navmenu" data-dop-header></div>
+  <data-dop-header class="nav-position" id="navmenu"></data-dop-header>
   <dop-alert id="alert"></dop-alert>
-  <aside data-dop-sidenav></aside>
+  <data-dop-sidenav></data-dop-sidenav>
   <div
     id="main-content"
     class="content-container"
-    data-ng-view data-ng-class="{'nav-open': sidenavIsOpen()}"
+    data-ng-view data-ng-class="{'nav-open': isSidenavOpen}"
     autoscroll="true"
     role="main"
   ></div>

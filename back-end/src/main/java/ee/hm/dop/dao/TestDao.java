@@ -1,8 +1,5 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.FirstReview;
-import org.joda.time.DateTime;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -38,11 +35,6 @@ public class TestDao {
                         "reviewedAt = NULL, " +
                         "status = NULL " +
                         "WHERE learningObject in (:id)")
-                .setParameter("id", learningObjectId)
-                .executeUpdate();
-
-        entityManager.createNativeQuery(
-                "UPDATE BrokenContent SET deleted = 0 WHERE material in (:id)")
                 .setParameter("id", learningObjectId)
                 .executeUpdate();
 
@@ -83,11 +75,6 @@ public class TestDao {
 
         entityManager.createNativeQuery(
                 "DELETE FROM ImproperContent f WHERE f.learningObject in (:id)")
-                .setParameter("id", learningObjectId)
-                .executeUpdate();
-
-        entityManager.createNativeQuery(
-                "DELETE FROM BrokenContent f WHERE f.material in (:id)")
                 .setParameter("id", learningObjectId)
                 .executeUpdate();
 

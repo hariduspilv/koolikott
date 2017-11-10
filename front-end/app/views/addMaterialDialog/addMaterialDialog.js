@@ -801,7 +801,13 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 material.source = getSource(material);
                 $mdDialog.hide(material);
                 if (!$scope.isChapterMaterial) {
-                    $location.url('/material?id=' + material.id);
+                    $location.url('/material?id=' + material.id)
+                    $timeout(() => {
+                        $scope.isUpdateMode
+                            ? $rootScope.learningObjectChanged = true
+                            : $rootScope.learningObjectUnreviewed = true
+                        $rootScope.$broadcast('dashboard:adminCountsUpdated')
+                    })
                 }
             }
         }

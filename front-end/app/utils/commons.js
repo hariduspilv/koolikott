@@ -606,6 +606,15 @@ class Controller {
     isPortfolio({ type }) {
         return type === '.Portfolio' || type === '.ReducedPortfolio' || type === '.AdminPortfolio'
     }
+    getCorrectLanguageTitle({ title, titles, language } = {}) {
+        return !this.dependencyExists('translationService')
+            ? ''
+            : title || titles && this.getUserDefinedLanguageString(
+                titles,
+                this.translationService.getLanguage(),
+                language
+            )
+    }
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
             return
@@ -614,10 +623,10 @@ class Controller {
             return values[0].text
 
         let languageStringValue = this.getLanguageString(values, userLanguage)
-        
+
         if (!languageStringValue) {
             languageStringValue = this.getLanguageString(values, materialLanguage)
-            
+
             if (!languageStringValue)
                 languageStringValue = values[0].text
         }
@@ -724,7 +733,7 @@ class Controller {
     }
     formatDateToDayMonthYear(dateString) {
         const date = new Date(dateString)
-        
+
         return isNaN(date)
             ? ''
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
@@ -737,52 +746,85 @@ class Controller {
         })
     }
     getMostRecentChangeDate(item) {
-        return item.reviewableChanges
-            .filter(c => !c.reviewed)
-            .reduce((mostRecentDate, change) => {
-                const date = new Date(change.createdAt)
-                return !mostRecentDate || date > mostRecentDate
-                    ? date
-                    : mostRecentDate
-            }, null)
+        return this.getMostRecentDateFromReviewList(item.reviewableChanges)
+    }
+    getMostRecentReportDate(item) {
+        return this.getMostRecentDateFromReviewList(item.improperContents)
+    }
+    getMostRecentDateFromReviewList(reviews) {
+        return reviews.reduce((mostRecentDate, { createdAt, reviewed }) => {
+            const date = new Date(createdAt)
+            return !reviewed && !mostRecentDate || date > mostRecentDate
+                ? date
+                : mostRecentDate
+        }, null)
     }
     getMostRecentChangeDateFormatted(item) {
         const date = this.getMostRecentChangeDate(item)
-
-        return isNaN(date)
-            ? ''
-            : this.formatDateToDayMonthYear(date.toISOString())
+        return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
     }
-    getChangedByLabel(item) {
+    getMostRecentReportDateFormatted(item) {
+        const date = this.getMostRecentReportDate(item)
+        return isNaN(date) ? '' : this.formatDateToDayMonthYear(date.toISOString())
+    }
+    getChangedByLabel({ __changers }) {
         // Unknown
-        if (item.__numChanges === 1 && !item.reviewableChanges[0].createdBy)
+        if (__changers.length === 1 && __changers[0] === 'UNKNOWN')
             return this.dependencyExists('$translate')
                 ? this.$translate.instant('UNKNOWN')
                 : ''
 
         // One name
-        if ((item.__numChanges === 1 || item.__numChanges > 1 && item.__changers.length < 2) &&
-            item.reviewableChanges[0].createdBy
-        )
-            return item.reviewableChanges[0].createdBy.name+' '+item.reviewableChanges[0].createdBy.surname
+        if (__changers.length === 1)
+            return __changers[0].name+' '+__changers[0].surname
 
         // # changers
         return this.dependencyExists('$translate')
             ? this.sprintf(
                 this.$translate.instant('NUM_CHANGERS'),
-                item.__changers.length
+                __changers.length
+            )
+            : ''
+    }
+    getReportedByLabel({ __reporters }) {
+        // Unknown
+        if (__reporters.length === 1 && __reporters[0] === 'UNKNOWN')
+            return this.dependencyExists('$translate')
+                ? this.$translate.instant('UNKNOWN')
+                : ''
+
+        // One name
+        if (__reporters.length === 1)
+            return __reporters[0].name+' '+__reporters[0].surname
+
+        // # changers
+        return this.dependencyExists('$translate')
+            ? this.sprintf(
+                this.$translate.instant('NUM_REPORTERS'),
+                __reporters.length
             )
             : ''
     }
     getCommaSeparatedChangers(item) {
-        return item.__changers.reduce((str, c) => {
-            const { name, surname } = c.createdBy
+        return this.getCreatedByToString(item.__changers);
+    }
+    getCommaSeparatedReporters(item) {
+        return this.getCreatedByToString(item.__reporters);
+    }
+    getCreatedByToString(items){
+        return items.reduce((str, createdBy) => {
+            if (!createdBy)
+                return this.dependencyExists('$translate')
+                    ? this.$translate.instant('UNKNOWN')
+                    : ''
+            
+            const { name, surname } = createdBy
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')
     }
     dependencyExists(depName) {
         if (typeof this[depName] === 'undefined') {
-            throw new Error(`this.${depName} is undefined, please include '${depName}' in controller.$inject = [..., '${depName}'] if you wish to use controller.getChangedByLabel()`)
+            throw new Error(`this.${depName} is undefined, please include '${depName}' in controller.$inject = [..., '${depName}']`)
             return false
         }
         return true

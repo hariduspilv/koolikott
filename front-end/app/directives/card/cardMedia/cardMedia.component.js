@@ -1,30 +1,44 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.component('dopCardMedia', {
+{
+class controller extends Controller {
+    $onInit() {
+        this.init()
+        this.$scope.disablePick = this.disablePick
+    }
+    $doCheck() {
+        if (this.learningObject !== this.$scope.learningObject)
+            this.init()
+        
+        if (this.disablePick !== this.$scope.disablePick)
+            this.$scope.disablePick = this.disablePick
+    }
+    init() {
+        if (this.isMaterial(this.learningObject)) {
+            this.$scope.learningObjectType = 'material'
+            this.$scope.materialType = this.iconService.getMaterialIcon(
+                this.learningObject.resourceTypes
+            )
+            this.$scope.coverClass = this.learningObject.picture
+                ? 'card-cover imaged'
+                : `card-cover material ${this.$scope.materialType}`
+        } else if (this.isPortfolio(this.learningObject)) {
+            this.$scope.learningObjectType = 'portfolio'
+            this.$scope.coverClass = this.learningObject.picture
+                ? 'card-cover imaged'
+                : `card-cover portfolio`
+        }
+        this.$scope.learningObject = this.learningObject
+    }
+}
+controller.$inject = ['$scope', 'iconService', 'authenticatedUserService']
+component('dopCardMedia', {
     bindings: {
         learningObject: '=',
-        isAuthenticated: '<',
-        disablePick: '<'
+        disablePick: '<',
+        showPrivacy: '<'
     },
     templateUrl: 'directives/card/cardMedia/cardMedia.html',
-    controller: dopCardMediaController
-});
-
-dopCardMediaController.$inject = ['$rootScope', 'iconService'];
-
-function dopCardMediaController ($rootScope, iconService) {
-    let vm = this;
-
-    vm.$onInit = () => {
-        if (isMaterial(vm.learningObject.type)) {
-            vm.learningObjectType = 'material';
-            vm.materialType = iconService.getMaterialIcon(vm.learningObject.resourceTypes);
-        } else if (isPortfolio(vm.learningObject.type)) {
-            vm.learningObjectType = 'portfolio';
-        }
-    }
-
-    vm.isMaterial = (type) => isMaterial(type);
-    vm.isPortfolio = (type) => isPortfolio(type);
+    controller
+})
 }
