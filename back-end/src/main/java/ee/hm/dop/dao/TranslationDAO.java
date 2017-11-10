@@ -52,7 +52,7 @@ public class TranslationDAO {
         List<String> lowercaseKeys = translationKey.stream().map(String::toLowerCase).collect(Collectors.toList());
         try {
             return (List<String>) entityManager
-                    .createNativeQuery("SELECT upper(t.translation) FROM Translation t " +
+                    .createNativeQuery("SELECT t.translation FROM Translation t " +
                             "WHERE lower(t.translationKey) in (:translationKey)")
                     .setParameter("translationKey", lowercaseKeys)
                     .getResultList();
