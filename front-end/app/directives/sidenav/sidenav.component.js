@@ -74,7 +74,7 @@ class controller extends Controller {
         if (currentLocation === "/")
             return false
 
-        if (!this.$rootScope.isAdmin && !this.$rootScope.isModerator)
+        if (!this.$scope.isAdmin && !this.$scope.isModerator)
             return menuLocation === currentLocation
 
         const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation)
