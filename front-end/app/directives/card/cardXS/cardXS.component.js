@@ -17,16 +17,6 @@ class controller extends Controller {
             this.$location.path('/portfolio').search({ id })
         }
     }
-    getCorrectLanguageTitle() {
-        const { titles, language } = this.learningObject || {}
-
-        if (titles)
-            return this.getUserDefinedLanguageString(
-                titles,
-                this.translationService.getLanguage(),
-                language
-            )
-    }
 }
 controller.$inject = [
     '$location',

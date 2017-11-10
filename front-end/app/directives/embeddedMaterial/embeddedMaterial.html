@@ -5,7 +5,7 @@
     </md-card-avatar>
     <md-card-header-text flex class="ellipsis embed-responsive-header-text">
       <a data-ng-href="{{'/material?id=' + material.id}}" class="md-title no-link ellipsis ellipsis--multiline"
-         data-ng-bind="$ctrl.getCorrectLanguageTitle()">
+         data-ng-bind="$ctrl.getCorrectLanguageTitle(material)">
       </a>
       <span class="md-subhead ellipsis">
         <span data-ng-repeat="author in material.authors">

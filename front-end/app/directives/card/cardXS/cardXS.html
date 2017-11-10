@@ -8,7 +8,7 @@
     <h6
       data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
       class="ellipsis ellipsis--2 ellipsis--small no-margin"
-      data-ng-bind="$ctrl.getCorrectLanguageTitle()"
+      data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"
     ></h6>
     <p class="md-caption ellipsis">
       <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)" class="authors">
