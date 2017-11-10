@@ -89,7 +89,7 @@ public class ReviewableChangeAdminService {
         ReviewableChange change = reviewableChangeDao.findById(changeId);
         revertOneChange(learningObject, change);
         setReviewed(change, user, ReviewStatus.REJECTED);
-        learningObject.setChanged(learningObject.getChanged()-1);
+        learningObject.setChanged(learningObject.getChanged() - 1);
         return learningObjectDao.createOrUpdate(learningObject);
     }
 
@@ -100,7 +100,7 @@ public class ReviewableChangeAdminService {
 
         ReviewableChange change = reviewableChangeDao.findById(changeId);
         setReviewed(change, user, ReviewStatus.ACCEPTED);
-        learningObject.setChanged(learningObject.getChanged()-1);
+        learningObject.setChanged(learningObject.getChanged() - 1);
         return learningObjectDao.createOrUpdate(learningObject);
     }
 
@@ -120,9 +120,9 @@ public class ReviewableChangeAdminService {
                 }
             }
 
-            if (change.getMaterialSource() == null){
+            if (change.getMaterialSource() == null) {
                 List<String> translationKeys = getTranslationKeys(learningObject, change);
-                if (CollectionUtils.isNotEmpty(translationKeys)){
+                if (CollectionUtils.isNotEmpty(translationKeys)) {
                     removeTagsByTranslation(learningObject, translationKeys);
                 }
             }
@@ -144,8 +144,8 @@ public class ReviewableChangeAdminService {
 
     public void removeTagsByTranslation(LearningObject learningObject, List<String> translationKey) {
         List<String> translations = translationDAO.getTranslationsForKey(translationKey);
-        List<String> upperTranslations = translations.stream().map(String::toUpperCase).collect(Collectors.toList());
-        if (CollectionUtils.isNotEmpty(translations)){
+        if (CollectionUtils.isNotEmpty(translations)) {
+            List<String> upperTranslations = translations.stream().map(String::toUpperCase).collect(Collectors.toList());
             learningObject.getTags().removeIf(t -> upperTranslations.contains(t.getName().toUpperCase()));
         }
     }
