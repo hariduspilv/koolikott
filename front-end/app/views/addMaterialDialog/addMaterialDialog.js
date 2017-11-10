@@ -803,7 +803,9 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 if (!$scope.isChapterMaterial) {
                     $location.url('/material?id=' + material.id)
                     $timeout(() => {
-                        $rootScope.learningObjectUnreviewed = true
+                        $scope.isUpdateMode
+                            ? $rootScope.learningObjectChanged = true
+                            : $rootScope.learningObjectUnreviewed = true
                         $rootScope.$broadcast('dashboard:adminCountsUpdated')
                     })
                 }

@@ -5,6 +5,7 @@ class controller extends Controller {
     $onInit() {
         this.currentStep = -1 // disable tour on load
         this.isOpenedByUser = false
+        this.getUserTourData = this.tourService.getUserTourData()
         this.$scope.$on('tour:start:firstTime', this.startGeneralTour.bind(this))
         this.$scope.$on('tour:start', this.tourStart.bind(this))
         this.$scope.$on('tour:start:editPage', this.tourStart.bind(this, 0, true, true))
@@ -15,12 +16,14 @@ class controller extends Controller {
         this.$scope.$on('tour:close:pageSwitch', this.tourComplete.bind(this, false, true))
     }
     tourStart(startStep = 0, isOpenedByUser = true, isEditPage = false, isFirstTime = false) {
-        if (isFirstTime && this.userTourData && this.userTourData.editTour)
-            return
+        this.getUserTourData.then(userTourData => {
+            if (isFirstTime && userTourData && userTourData.editTour)
+                return
 
-        this.isEditPageTour = isEditPage
-        this.currentStep = startStep
-        this.isOpenedByUser = isOpenedByUser
+            this.isEditPageTour = isEditPage
+            this.currentStep = startStep
+            this.isOpenedByUser = isOpenedByUser
+        })
     }
     tourStartCancelled() {
         this.isCancelledTour = true
@@ -35,32 +38,23 @@ class controller extends Controller {
         const methodName = isEditPage ? 'setEditTourSeen' : 'setGeneralTourSeen'
 
         if (this.authenticatedUserService.isAuthenticated() && !isPageSwitch)
-            {
-                let promise = this.tourService[methodName](this.userTourData);
-                if (promise){
-                    promise.then(data =>
-                        this.userTourData = data
-                    )
-                }
-            }
+            this.getUserTourData.then(userTourData =>
+                this.getUserTourData = this.tourService[methodName](userTourData)
+            )
     }
     startGeneralTour() {
         if (window.innerWidth >= BREAK_SM &&
             this.authenticatedUserService.isAuthenticated() &&
             !this.$rootScope.isEditPortfolioPage
         )
-            this.tourService
-                .getUserTourData()
-                .then(data => {
-                    this.userTourData = data
-
-                    if (!this.userTourData.generalTour)
-                        this.$mdDialog.show({
-                            templateUrl: 'directives/tour/modal/tour.modal.html',
-                            controller: 'tourModalController',
-                            controllerAs: '$ctrl'
-                        })
-                })
+            this.getUserTourData.then(userTourData => {
+                if (!userTourData.generalTour)
+                    this.$mdDialog.show({
+                        templateUrl: 'directives/tour/modal/tour.modal.html',
+                        controller: 'tourModalController',
+                        controllerAs: '$ctrl'
+                    })
+            })
     }
 }
 controller.$inject = [
