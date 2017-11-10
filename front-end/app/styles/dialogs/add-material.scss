@@ -39,8 +39,12 @@
   padding-right: 50px;
 }
 
-.datepicker-container .validation-messages{
-  max-width: 180px;
+.datepicker-container {
+  overflow: hidden;
+
+  .validation-messages{
+    max-width: 180px;
+  }
 }
 
 .datepicker-error{
