@@ -17,7 +17,7 @@ class controller extends Controller {
         this.$scope.showAddPortfolioDialog = ($event) => {
             $event.preventDefault()
 
-            const emptyPortfolio = createPortfolio()
+            const emptyPortfolio = this.createPortfolio()
 
             if (this.$scope.userHasSelectedMaterials || this.$rootScope.selectedSingleMaterial) {
                 emptyPortfolio.chapters = []
@@ -58,7 +58,7 @@ class controller extends Controller {
 
         this.$scope.copyPortfolio = () =>
             this.serverCallService
-                .makePost('rest/portfolio/copy', createPortfolio(this.$route.current.params.id))
+                .makePost('rest/portfolio/copy', this.createPortfolio(this.$route.current.params.id))
                 .then(({ data }) => {
                     let portfolio = data;
                     if (portfolio) {

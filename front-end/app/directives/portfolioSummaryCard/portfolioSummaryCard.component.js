@@ -21,6 +21,10 @@ class controller extends Controller {
             if (newValue !== oldValue)
                 $scope.portfolioSubject = this.taxonService.getSubject(this.portfolio.taxon)
         }, true)
+        this.$scope.$watch(() => this.storageService.getPortfolio(), (currentValue, previousValue) => {
+            if (currentValue !== previousValue)
+                this.$scope.portfolio = currentValue
+        }, true)
 
         this.$scope.portfolio = this.portfolio
         this.$scope.commentsOpen = false

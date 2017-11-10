@@ -114,11 +114,14 @@ class controller extends Controller {
         this.tagsService.searchByTag(tag)
     }
     removeTag(removedTag) {
-        if (this.learningObject && this.learningObject.tags)
+        if (this.learningObject && this.learningObject.tags) {
             this.learningObject.tags.forEach((tag, idx) => {
                 if (tag === removedTag)
                     this.learningObject.tags.splice(idx, 1)
             })
+            this.isPortfolio(this.learningObject) ? this.storageService.setPortfolio(this.learningObject) :
+            this.isMaterial(this.learningObject) && this.storageService.setMaterial(this.learningObject)
+        }
     }
     addTag() {
         if (this.learningObject && this.learningObject.id) {
