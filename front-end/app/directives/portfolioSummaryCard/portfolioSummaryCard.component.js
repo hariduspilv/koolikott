@@ -53,7 +53,7 @@ class controller extends Controller {
         }
     }
     $doCheck() {
-        if (!this.$scope.portfolio && this.portfolio)
+        if (this.$scope.portfolio !== this.portfolio)
             this.$scope.portfolio = this.portfolio
     }
     canEdit() {
