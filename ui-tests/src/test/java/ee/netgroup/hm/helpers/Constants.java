@@ -48,6 +48,7 @@ public class Constants {
 	public static String commentText = "Automaattesti lisatud kommentaar";
     public static String systemTag = "keel ja ki";
     public static By bannerToolbar = By.xpath("//md-toolbar[@class='error-message _md _md-toolbar-transitions']");
+    public static By bannerText = By.id("error-message-heading");
     
     // Materials
     public static String deletedMaterial = "https://www.gfycat.com/gifs/search/pug/detail/RingedWarpedCrayfish";
