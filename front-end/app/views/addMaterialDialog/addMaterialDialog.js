@@ -836,7 +836,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                     if ($location.url() === url)
                         return done()
 
-                    const unsub = $rootScope.$on('$routeChangeSuccess', () => {
+                    const unsub = $rootScope.$on('$locationChangeSuccess', () => {
                         $timeout(done)
                         unsub()
                     })
