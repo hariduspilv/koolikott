@@ -1,9 +1,6 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.ReviewableChange;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -49,8 +46,16 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChange(@PathParam("id") Long learningObjectId) {
-        return reviewableChangeService.getAllByLearningObject(learningObjectId);
+    public List<ReviewableChange> getChanges(@PathParam("id") Long learningObjectId) {
+        return reviewableChangeService.getAllByLearningObjectOld(learningObjectId);
+    }
+
+    @POST
+    @Path("byLearningObject")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public List<ReviewableChange> getChangesByLearningObject(LearningObjectMiniDto learningObject) {
+        return reviewableChangeService.getAllByLearningObject(learningObject.convert());
     }
 
     @POST
@@ -70,10 +75,24 @@ public class ReviewableChangeAdminResource extends BaseResource {
     }
 
     @POST
+    @Path("acceptAll")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject acceptAllChanges2(LearningObjectMiniDto learningObject) {
+       return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject.convert(), ReviewStatus.ACCEPTED, ReviewType.CHANGE);
+    }
+
+    @POST
     @Path("{id}/revertAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId) {
         return reviewableChangeAdminService.revertAllChanges(learningObjectId, getLoggedInUser());
+    }
+
+    @POST
+    @Path("revertAll")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject revertAllChanges2(LearningObjectMiniDto learningObject) {
+        return reviewableChangeAdminService.revertAllChanges(learningObject.getId(), getLoggedInUser());
     }
 
     @POST
@@ -88,5 +107,40 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
         return reviewableChangeAdminService.revertOneChange(learningObjectId, changeId, getLoggedInUser());
+    }
+
+    @POST
+    @Path("acceptOne")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject acceptAllChanges2(ChangeForm changeForm) {
+        return reviewableChangeAdminService.acceptOneChange(changeForm.getLearningObject().getId(), changeForm.getChange().getId(), getLoggedInUser());
+    }
+
+    @POST
+    @Path("revertOne")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject revertAllChanges2(ChangeForm changeForm) {
+        return reviewableChangeAdminService.revertOneChange(changeForm.getLearningObject().getId(), changeForm.getChange().getId(), getLoggedInUser());
+    }
+
+    public static class ChangeForm {
+        private ReviewableChange change;
+        private LearningObject learningObject;
+
+        public ReviewableChange getChange() {
+            return change;
+        }
+
+        public void setChange(ReviewableChange change) {
+            this.change = change;
+        }
+
+        public LearningObject getLearningObject() {
+            return learningObject;
+        }
+
+        public void setLearningObject(LearningObject learningObject) {
+            this.learningObject = learningObject;
+        }
     }
 }

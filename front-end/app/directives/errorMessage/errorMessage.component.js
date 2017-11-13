@@ -128,7 +128,7 @@ class controller extends Controller {
     }
     init() {
         this.setState('', '', [], false); // reset
-        
+
         if (!this.$rootScope.learningObjectPrivate) {
             this.bannerType =
                 this.$rootScope.learningObjectDeleted ? 'showDeleted' :
@@ -172,7 +172,7 @@ class controller extends Controller {
             this.$scope.messageKey = ''
 
             this.serverCallService
-                .makeGet('rest/impropers/'+this.data.id)
+                .makeGet('rest/admin/improper/'+this.data.id)
                 .then(({ data: reports }) => {
                     if (Array.isArray(reports) && reports.length) {
                         const done = (reasons = '') => {

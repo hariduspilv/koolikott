@@ -17,8 +17,8 @@ function MaterialService(serverCallService, authenticatedUserService) {
             'type': '.Material',
             'id': material.id
         };
-
-        return serverCallService.makePost("rest/material/increaseViewCount", viewCountParams)
+        //todo ips unify with portfolio increaseViewCount
+        return serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
             .then(response => {
                 return response.data;
             });

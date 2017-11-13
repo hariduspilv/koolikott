@@ -6,6 +6,7 @@ import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.LearningObjectService;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
@@ -26,10 +27,15 @@ public class ReviewableChangeService {
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
     @Inject
-    private TranslationDAO translationDAO;
+    private LearningObjectService learningObjectService;
 
-    public List<ReviewableChange> getAllByLearningObject(Long id) {
+    public List<ReviewableChange> getAllByLearningObjectOld(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
+    }
+
+    public List<ReviewableChange> getAllByLearningObject(LearningObject learningObject) {
+        LearningObject originalLearningObject = learningObjectService.validateAndFind(learningObject);
+        return reviewableChangeDao.getAllByLearningObject(originalLearningObject.getId());
     }
 
     public ReviewableChange registerChange(LearningObject learningObject, User user, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup, String materialSource) {
