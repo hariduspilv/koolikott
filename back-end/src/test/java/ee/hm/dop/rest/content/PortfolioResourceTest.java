@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.content;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.*;
@@ -309,33 +310,32 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Portfolio portfolio = portfolioWithTitle("With chapters");
 
-        List<Chapter> chapters = new ArrayList<>();
+        ChapterObject chapterObject = chapterObject("Random textbox content");
+        Material json = materialWithSource("http://www.november.juliet.ru");
+        Material createdMaterial = doPut(CREATE_MATERIAL_URL, json, Material.class);
+
         Chapter firstChapter = chapter("First chapter");
-
-        List<LearningObject> learningObjects = new ArrayList<>();
-        ChapterObject chapterObject = new ChapterObject();
-        chapterObject.setText("Random textbox content");
-        learningObjects.add(chapterObject);
-
-        Material material = new Material();
-        material.setSource("http://www.november.juliet.ru");
-
-        Material createdMaterial = doPut(CREATE_MATERIAL_URL, material, Material.class);
-        learningObjects.add(createdMaterial);
-
-        List<ContentRow> contentRows = new ArrayList<>();
-        contentRows.add(new ContentRow(learningObjects));
-
-        firstChapter.setContentRows(contentRows);
-        chapters.add(firstChapter);
-        portfolio.setChapters(chapters);
+        firstChapter.setContentRows(Lists.newArrayList(new ContentRow(Lists.newArrayList(chapterObject, createdMaterial))));
+        portfolio.setChapters(Lists.newArrayList(firstChapter));
 
         Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
         assertNotNull(createdPortfolio);
         assertNotNull(createdPortfolio.getId());
         assertEquals(((ChapterObject) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getText(), chapterObject.getText());
-        assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(1)).getSource(), createdMaterial.getSource());
+        assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(1)).getSource(), doPut(CREATE_MATERIAL_URL, createdMaterial, Material.class).getSource());
+    }
+
+    private Material materialWithSource(String source) {
+        Material material = new Material();
+        material.setSource(source);
+        return material;
+    }
+
+    private ChapterObject chapterObject(String random_textbox_content) {
+        ChapterObject chapterObject = new ChapterObject();
+        chapterObject.setText(random_textbox_content);
+        return chapterObject;
     }
 
     private Portfolio createPortfolio() {
