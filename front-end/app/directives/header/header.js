@@ -43,7 +43,6 @@ class controller extends Controller {
 
         this.$scope.logout = () => {
             this.authenticationService.logout()
-            this.$rootScope.$broadcast('tour:close')
             this.$location.url('/')
         }
 
