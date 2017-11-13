@@ -1,23 +1,45 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-    .component('dopRemainingCharacters', {
-        bindings: {
-            text: '<',
-        },
-        templateUrl: 'directives/remainingCharacters/remaining-char.html',
-        controller: DopRemainingCharactersController
-    });
+{
+const MAX_CHARACTERS = 850
 
-function DopRemainingCharactersController() {
-    let vm = this;
+class controller extends Controller {
+    getRemainingCharacters() {
+        if (typeof this.text !== 'string')
+            return MAX_CHARACTERS
 
-    const MAX_CHARACTERS = 850;
-
-    vm.getRemainingCharacters = function () {
-        let text = vm.text ? vm.text : "";
         // max char - text length - newlines
-        let remaining = MAX_CHARACTERS - stripHtml(text).length - countOccurrences('</p>', text);
+        let remaining =
+            MAX_CHARACTERS -
+            this.stripHtml(this.text).length/* -
+            this.countOccurrences('<br>', this.text)*/
+
         return remaining >= 0 ? remaining : 0;
     }
+    stripHtml(htmlString) {
+        let tmp = document.createElement('div')
+        tmp.innerHTML = htmlString
+
+        return tmp.textContent || tmp.innerText || ''
+    }
+    countOccurrences(value, text) {
+        let count = 0
+        let index = text.indexOf(value)
+        
+        while (index !== -1) {
+            count++
+            index = text.indexOf(value, index + 1)
+        }
+
+        return count
+    }
+}
+controller.$inject = ['$scope']
+component('dopRemainingCharacters', {
+    bindings: {
+        text: '<',
+    },
+    templateUrl: 'directives/remainingCharacters/remaining-char.html',
+    controller
+})
 }

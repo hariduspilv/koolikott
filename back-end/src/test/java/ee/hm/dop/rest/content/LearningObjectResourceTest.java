@@ -2,6 +2,7 @@ package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -17,9 +18,13 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
     public static final String GET_FAVOURITE_URL = "learningObject/favorite?id=%s";
-    public static final String DELETE_FAVOURITE_URL = "learningObject/favorite?id=%s";
+    public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
     public static final String USERS_FAVOURITE_URL = "learningObject/usersFavorite?start=0";
     public static final String GET_FAVOURITE_COUNT_URL = "learningObject/usersFavorite/count";
+    private static final String LIKE_URL = "learningObject/like";
+    private static final String DISLIKE_URL = "learningObject/dislike";
+    private static final String GET_USER_LIKE_URL = "learningObject/getUserLike";
+    private static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
     public static final String TEST_SYSTEM_TAG = "matemaatika";
@@ -45,6 +50,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void adding_system_tag_adds_a_tag() throws Exception {
         login(USER_PEETER);
@@ -86,7 +92,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         long favouritesCount = doGet(GET_FAVOURITE_COUNT_URL, Long.class);
         assertEquals("User favourite count", 1, favouritesCount);
 
-        doDelete(format(DELETE_FAVOURITE_URL, PORTFOLIO_8));
+        doPost(DELETE_FAVOURITE_URL, portfolioWithId(PORTFOLIO_8));
     }
 
     @Test
@@ -105,9 +111,76 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
         doPost(SET_TO_FAVOURITE_URL, learningObject);
         doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
-        doDelete(format(DELETE_FAVOURITE_URL, PORTFOLIO_8));
+        doPost(DELETE_FAVOURITE_URL, portfolioWithId(PORTFOLIO_8));
 
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
         assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));
     }
+
+    @Test
+    public void likeMaterial_sets_it_as_liked() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(MATERIAL_5);
+
+        doPost(LIKE_URL, material);
+        UserLike userLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNotNull("User like exist", userLike);
+        assertEquals("Material is liked by user", true, userLike.isLiked());
+    }
+
+    @Test
+    public void dislikeMaterial_sets_it_as_not_liked() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(MATERIAL_5);
+
+        doPost(DISLIKE_URL, material);
+        UserLike userDislike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNotNull("User dislike exist", userDislike);
+        assertEquals("Material is disliked by user", false, userDislike.isLiked());
+    }
+
+    @Test
+    public void removeUserLike_removes_like_from_material() throws Exception {
+        login(USER_PEETER);
+        Material material = getMaterial(MATERIAL_5);
+
+        doPost(LIKE_URL, material);
+        doPost(REMOVE_USER_LIKE_URL, material);
+        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
+        assertNull("User removed like does not exist", userRemoveLike);
+    }
+
+    @Test
+    public void likePortfolio_sets_it_as_liked() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        doPost(LIKE_URL, portfolio);
+        UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNotNull("User like exist", userLike);
+        assertEquals("Portfolio is liked by user", true, userLike.isLiked());
+    }
+
+    @Test
+    public void dislikePortfolio_sets_it_as_not_liked() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        doPost(DISLIKE_URL, portfolio);
+        UserLike userDislike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNotNull("User dislike exist", userDislike);
+        assertEquals("Portfolio is disliked by user", false, userDislike.isLiked());
+    }
+
+    @Test
+    public void removeUserLike_removes_like_from_portfolio() throws Exception {
+        login(USER_PEETER);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        doPost(LIKE_URL, portfolio);
+        doPost(REMOVE_USER_LIKE_URL, portfolio);
+        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
+        assertNull("User removed like does not exist", userRemoveLike);
+    }
+
 }

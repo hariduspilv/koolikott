@@ -21,6 +21,26 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         const LICENSETYPE_CCBY = "CCBY";
         const RESOURCETYPE_VIDEO = "VIDEO";
 
+        // changing these properties constitutes the creation of a changedLearningObject
+        const changeable = {
+            source: {
+                value: null,
+                isChanged: (current, previous) => current != previous
+            },
+            /**
+             * @todo Currently unclear wheter we should even be able to change taxons in this dialog
+             */
+            /*taxons: {
+                value: null,
+                isChanged: (current, previous) => {
+                    for (let i = 0; i < current.length; i++) {
+                        if (!previous.find(p => p.id === current[i].id))
+                            return true
+                    }
+                }
+            }*/
+        }
+
         $scope.isUpdateMode = false;
         $scope.step = {};
         $scope.step.currentStep = 0;
@@ -247,7 +267,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         function isTabTwoTargetGroupValid() {
-            return $scope.material.targetGroups && $scope.material.targetGroups.length > 0;
+            return Array.isArray($scope.material.targetGroups) && !!$scope.material.targetGroups.length;
         }
 
         function isTaxonSet(index) {
@@ -430,6 +450,8 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 prefillMetadataFromPortfolio();
                 $scope.material.source = addChapterMaterialUrl;
             }
+
+            setChangeable()
 
             if ($scope.material.uploadedFile && $scope.material.uploadedFile.id) $scope.fileUploaded = true;
             setPublisher();
@@ -732,7 +754,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 }
 
                 if (storageService.getPortfolio().targetGroups) {
-                    $scope.material.targetGroups = storageService.getPortfolio().targetGroups.slice();
+                    $scope.material.targetGroups = (storageService.getPortfolio().targetGroups || []).slice();
                 }
             }
         }
@@ -792,16 +814,38 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         function saveMaterialSuccess(material) {
+            const done = () => {
+                $scope.isUpdateMode
+                    ? $rootScope.learningObjectChanged = isChanged(material)
+                    : $rootScope.learningObjectUnreviewed = true
+                $rootScope.$broadcast('dashboard:adminCountsUpdated')
+            }
+
             if (!material) {
-                saveMaterialFail();
+                saveMaterialFail()
             } else {
+                /**
+                 * @todo Hotfix: Shouldn't be mutating this in front-end.
+                 */
+                material.unReviewed = 1
+
                 storageService.setMaterial(material)
 
-                //Pass saved material back to material view
-                material.source = getSource(material);
-                $mdDialog.hide(material);
+                // Pass saved material back to material view
+                material.source = getSource(material)
+                $mdDialog.hide(material)
+                
                 if (!$scope.isChapterMaterial) {
-                    $location.url('/material?id=' + material.id);
+                    const url = '/material?id=' + material.id
+
+                    if ($location.url() === url)
+                        return done()
+
+                    const unsub = $rootScope.$on('$locationChangeSuccess', () => {
+                        $timeout(done)
+                        unsub()
+                    })
+                    $location.url(url)
                 }
             }
         }
@@ -871,5 +915,18 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             console.log('Failed to get max file size, using 500MB as default.');
         }
 
+        function setChangeable() {
+            Object.keys(changeable).forEach(key =>
+                changeable[key].value = $scope.material[key]
+            )
+        }
+
+        function isChanged(material) {
+            return Object.keys(changeable).reduce(
+                (isChanged, key) =>
+                    isChanged || changeable[key].isChanged(material[key], changeable[key].value),
+                false
+            )
+        }
     }
 ]);

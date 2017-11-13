@@ -26,6 +26,7 @@ import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -129,7 +130,6 @@ public class MaterialServiceTest {
         Material material = createMock(Material.class);
 
         material.setId(original.getId());
-        material.setBrokenContents(null);
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
@@ -140,7 +140,6 @@ public class MaterialServiceTest {
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
-        material.setBroken(0);
         material.setChanged(0);
         material.setImproper(0);
         material.setUnReviewed(0);
@@ -175,9 +174,8 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
-        expect(material.getBroken()).andReturn(0);
 
-        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
+        expect(reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES)).andReturn(false);
 
         replay(materialDao, material, solrEngineService, materialGetter);
 
@@ -233,11 +231,9 @@ public class MaterialServiceTest {
         material.setPeerReviews(null);
         material.setSource(SOURCE_WWW);
         material.setUpdated(EasyMock.anyObject(DateTime.class));
-        material.setBrokenContents(null);
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
-        material.setBroken(0);
         material.setChanged(0);
         material.setImproper(0);
         material.setUnReviewed(0);
@@ -265,9 +261,9 @@ public class MaterialServiceTest {
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
-        expect(material.getBroken()).andReturn(0);
 
-        reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES);
+        expect(reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES)).andReturn(false);
+
 
         replay(materialDao, material, materialGetter);
 
@@ -320,7 +316,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
-        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
+        expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 
         replay(user, materialDao, solrEngineService, reviewableChangeService, materialGetter);
 
@@ -346,7 +342,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
-        reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material));
+        expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 
         replay(user, materialDao, reviewableChangeService, materialGetter);
 

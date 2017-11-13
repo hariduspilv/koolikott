@@ -1,100 +1,78 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.component('dopCardSm', {
+{
+class controller extends Controller {
+    $onInit() {
+        this.selected = false
+        this.domains = []
+        this.subjects = []
+
+        this.domainSubjectList = this.taxonGroupingService.getDomainSubjectList(this.learningObject.taxons)
+        this.targetGroups = this.targetGroupService.getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
+
+        this.$scope.learningObject = this.learningObject
+    }
+    $doCheck() {
+        if (this.learningObject !== this.$scope.learningObject)
+            this.$scope.learningObject = this.learningObject
+    }
+    navigateTo() {
+        const { id } = this.learningObject
+
+        if (this.isMaterial(this.learningObject)) {
+            if (this.learningObject.type === '.Material'){
+                this.storageService.setMaterial(this.learningObject)
+            }
+            this.$location.path('/material').search({ id })
+        } else if (this.isPortfolio(this.learningObject)) {
+            if (this.learningObject.type === '.Portfolio'){
+                this.storageService.setPortfolio(this.learningObject)
+            }
+            this.$location.path('/portfolio').search({ id })
+        }
+    }
+    formatName(name) {
+        if (name)
+            return this.formatNameToInitials(name.trim())
+    }
+    formatSurname(surname) {
+        if (surname)
+            return this.formatSurnameToInitialsButLast(surname.trim())
+    }
+    isAuthenticated() {
+        const authenticated =
+            this.authenticatedUserService.getUser() &&
+            !this.authenticatedUserService.isRestricted() &&
+            !this.$rootScope.isEditPortfolioPage
+
+        if (!authenticated && this.isMaterial(this.learningObject.type))
+            this.learningObject.selected = false
+
+        return authenticated
+    }
+    hoverEnter() {
+        this.cardHover = true
+    }
+    hoverLeave() {
+        this.cardHover = false
+    }
+}
+controller.$inject = [
+    '$scope',
+    '$location',
+    '$rootScope',
+    'translationService',
+    'authenticatedUserService',
+    'targetGroupService',
+    'storageService',
+    'taxonGroupingService'
+]
+component('dopCardSm', {
     bindings: {
         learningObject: '=',
         chapter: '=?'
     },
     templateUrl: 'directives/card/cardSM/cardSM.html',
-    controller: dopCardSmController
-});
-
-dopCardSmController.$inject = ['$location', '$rootScope', 'translationService', 'authenticatedUserService', 'targetGroupService', 'storageService', 'taxonService', 'taxonGroupingService'];
-
-function dopCardSmController ($location, $rootScope, translationService, authenticatedUserService, targetGroupService, storageService, taxonService, taxonGroupingService) {
-    let vm = this;
-
-    vm.$onInit = () => {
-        vm.selected = false;
-        vm.isEditPortfolioPage = $rootScope.isEditPortfolioPage;
-        vm.isEditPortfolioMode = $rootScope.isEditPortfolioMode;
-        vm.domains = [];
-        vm.subjects = [];
-
-        vm.domainSubjectList = taxonGroupingService.getDomainSubjectList(vm.learningObject.taxons);
-        vm.targetGroups = targetGroupService.getConcentratedLabelByTargetGroups(vm.learningObject.targetGroups);
-    };
-
-    vm.navigateTo = (learningObject, $event) => {
-        $event.preventDefault();
-
-        if (isMaterial(learningObject.type)) {
-            storageService.setMaterial(learningObject);
-
-            $location.path('/material').search({
-                id: learningObject.id
-            });
-        }
-
-        if (isPortfolio(learningObject.type)) {
-            storageService.setPortfolio(learningObject);
-
-            $location.path('/portfolio').search({
-                id: learningObject.id
-            });
-        }
-    };
-
-    vm.getCorrectLanguageTitle = (material) => {
-        if (material) {
-            return getCorrectLanguageString(material.titles, material.language);
-        }
-    };
-
-    function getCorrectLanguageString(languageStringList, materialLanguage) {
-        if (languageStringList) {
-            return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), materialLanguage);
-        }
-    }
-
-    vm.formatMaterialIssueDate = (issueDate) => formatIssueDate(issueDate);
-
-    vm.formatName = (name) => {
-        if (name) {
-            return formatNameToInitials(name.trim());
-        }
-    };
-
-    vm.formatSurname = (surname) => {
-        if (surname) {
-            return formatSurnameToInitialsButLast(surname.trim());
-        }
-    };
-
-    vm.formatDate = (date) => formatDateToDayMonthYear(date);
-
-    vm.isAuthenticated = () => {
-        let authenticated = authenticatedUserService.getUser() && !authenticatedUserService.isRestricted() && !$rootScope.isEditPortfolioPage;
-        if (!authenticated && isMaterial(vm.learningObject.type)) {
-            vm.learningObject.selected = false;
-        }
-
-        return authenticated;
-    };
-
-    vm.isMaterial = (type) => isMaterial(type);
-    vm.isPortfolio = (type) => isPortfolio(type);
-
-    vm.getTaxons = () => {
-        return vm.domainSubjectList
-    };
-
-    vm.hoverEnter = () => {
-        vm.cardHover = true;
-    };
-
-    vm.hoverLeave = () => {
-        vm.cardHover = false;
-    }
+    controller
+})
 }

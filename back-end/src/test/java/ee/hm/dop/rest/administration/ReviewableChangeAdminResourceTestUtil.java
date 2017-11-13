@@ -58,20 +58,26 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertFalse(material.getChanged() == 0);
     }
 
+    public static void assertHasNoTaxonNoTag(Material material, TestTaxon testTaxon) {
+        assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+        assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertTrue(material.getChanged() == 0);
+    }
+
     public static void assertHasTagNotTaxon(Material material, TestTaxon testTaxon) {
         assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
         assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
         assertTrue(material.getChanged() == 0);
     }
 
-    public static void assertHasTagNotTaxonChangesDontMatter(Material material, TestTaxon testTaxon) {
-        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
+    public static void assertHasNoTagsNoTaxonsChangesAre1(Material material, TestTaxon testTaxon) {
+        assertFalse(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
         assertFalse(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
+        assertTrue(material.getChanged() == 1);
     }
 
     public static void assertDoesntHave(Material material) {
         assertTrue(material.getImproper() == 0);
-        assertTrue(material.getBroken() == 0);
         assertTrue(material.getUnReviewed() == 0);
         assertTrue(material.getChanged() == 0);
     }
@@ -79,9 +85,6 @@ public class ReviewableChangeAdminResourceTestUtil {
     public static void assertHas(Material material, ReviewType reviewType) {
         if (reviewType == ReviewType.IMPROPER) {
             assertFalse(material.getImproper() == 0);
-        }
-        if (reviewType == ReviewType.BROKEN) {
-            assertFalse(material.getBroken() == 0);
         }
         if (reviewType == ReviewType.FIRST) {
             assertFalse(material.getUnReviewed() == 0);
@@ -93,5 +96,14 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertTrue(review.isReviewed());
         assertNotNull(review.getReviewedAt());
         assertEquals(testUser.id, review.getReviewedBy().getId());
+    }
+
+    public static ImproperContent improper(Material material) {
+        ImproperContent json = new ImproperContent();
+        ReportingReason reason = new ReportingReason();
+        reason.setReason(ReportingReasonEnum.LO_CONTENT);
+        json.setLearningObject(material);
+        json.setReportingReasons(Lists.newArrayList(reason));
+        return json;
     }
 }

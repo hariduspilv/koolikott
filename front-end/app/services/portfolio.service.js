@@ -23,24 +23,9 @@ function portfolioService(serverCallService) {
             });
     }
 
-    function addComment(comment, portfolio) {
-        let params = {
-            'comment': comment,
-            'portfolio': portfolio
-        };
-
-        return serverCallService.makePost("rest/comment/portfolio", params)
-            .then(response => {
-                if (response.data) {
-                    return response.data;
-                }
-            });
-    }
-
 
     return {
         getPortfolioById: getPortfolioById,
-        increaseViewCount: increaseViewCount,
-        addComment: addComment
+        increaseViewCount: increaseViewCount
     }
 }

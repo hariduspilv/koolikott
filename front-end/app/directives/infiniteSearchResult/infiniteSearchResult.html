@@ -3,12 +3,12 @@
   <md-input-container data-ng-if="filter" flex-xs="60" flex-sm="30" flex-gt-sm="20">
     <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
       <md-option
-        data-ng-click="sort()"
+        data-ng-click="$ctrl.resetSort()"
         data-translate="RESET_SORT"
       ></md-option>
       <md-option
         data-ng-repeat="sortOption in sortOptions"
-        data-ng-click="sort(sortOption.field, sortOption.direction)"
+        data-ng-click="$ctrl.sort(sortOption.field, sortOption.direction)"
         data-translate="{{sortOption.option}}"
         data-ng-value="sortOption.option"
       ></md-option>
@@ -21,7 +21,7 @@
     <dop-card-sm learning-object="item"></dop-card-sm>
   </div>
 </div>
-<div data-ng-if="!allResultsLoaded() && searching">
+<div data-ng-if="!$ctrl.allResultsLoaded() && searching">
   <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center" data-translate="SEARCH_LOADING"></p>
   <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
     <md-progress-circular></md-progress-circular>

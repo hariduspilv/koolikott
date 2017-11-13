@@ -1,10 +1,10 @@
-<div data-ng-if="$ctrl.isEditable">
+<div data-ng-if="$root.isEditPortfolioMode">
   <md-button class="md-raised" aria-label="Lisa alampeatükk" data-ng-click="$ctrl.addNewSubChapter()" data-ng-if="!$ctrl.isSub">
     <md-icon class="material-icons">add</md-icon>
     <span data-translate="SUBCHAPTER"></span>
   </md-button>
   <md-menu>
-    <md-button aria-label="Lisa materjal" class="md-raised" data-ng-click="$ctrl.openMenu($mdOpenMenu, $event)">
+    <md-button aria-label="Lisa materjal" class="md-raised" data-ng-click="$mdMenu.open($event)">
       <md-icon class="material-icons">add</md-icon>
       <span data-translate="MATERIAL"></span>
       <md-icon>expand_more</md-icon>

@@ -14,14 +14,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest.BEYONCE;
 import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest.REVERT_ALL_CHANGES_URL;
-import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.*;
-import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.assertHasTagNotTaxon;
+import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.assertChanged;
+import static ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTestUtil.assertNotChanged;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

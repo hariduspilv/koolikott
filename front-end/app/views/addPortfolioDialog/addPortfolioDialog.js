@@ -156,7 +156,7 @@ angular.module('koolikottApp')
                         }
                     });
 
-                    return portfolio.title && portfolio.targetGroups[0] && hasCorrectTaxon;
+                    return portfolio.title && Array.isArray(portfolio.targetGroups) && portfolio.targetGroups.length && hasCorrectTaxon;
                 };
 
                 $scope.addNewTaxon = function () {

@@ -14,42 +14,27 @@ public class ImproperContentAdminService {
     @Inject
     private ImproperContentDao improperContentDao;
 
-    public List<ImproperContent> getImproperMaterials(User user) {
+    public List<AdminLearningObject> getImproper(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-//        if (UserUtil.isAdmin(user)) {
-            return improperContentDao.findAllImproperContentMaterial();
-//        }
-//        return improperContentDao.findAllImproperContentMaterial(user);
+        if (UserUtil.isAdmin(user)) {
+            return improperContentDao.findAllUnreviewed();
+        }
+        return improperContentDao.findAllUnreviewed(user);
     }
 
-    public List<ImproperContent> getImproperPortfolios(User user) {
+    public long getImproperCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
-//        if (UserUtil.isAdmin(user)) {
-            return improperContentDao.findAllImproperContentPortfolio();
-//        }
-//        return improperContentDao.findAllImproperContentPortfolio(user);
-    }
-
-    public long getImproperMaterialSize(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-//        if (UserUtil.isAdmin(user)) {
-            return improperContentDao.getImproperMaterialCount();
-//        }
-//        return improperContentDao.getImproperMaterialCount(user);
-    }
-
-    public long getImproperPortfolioSize(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-//        if (UserUtil.isAdmin(user)) {
-            return improperContentDao.getImproperPortfolioCount();
-//        }
-//        return improperContentDao.getImproperPortfolioCount(user);
+        if (UserUtil.isAdmin(user)) {
+            return improperContentDao.findCountOfUnreviewed();
+        }
+        return improperContentDao.findCountOfUnreviewed(user);
     }
 
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {
         for (ImproperContent improperContent : learningObject.getImproperContents()) {
             if (!improperContent.isReviewed()) {
                 setReviewed(user, reviewStatus, improperContent);
+                learningObject.setImproper(learningObject.getImproper()-1);
             }
         }
     }

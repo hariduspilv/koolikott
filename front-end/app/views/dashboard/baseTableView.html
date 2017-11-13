@@ -65,12 +65,9 @@
   <md-table-container class="table-container">
     <div data-ng-show="itemsCount" class="md-data-table">
       <dop-unreviewed data-ng-if="$ctrl.viewPath == 'unReviewed'"></dop-unreviewed>
-      <dop-improper data-ng-if="$ctrl.viewPath == 'improperMaterials'"></dop-improper>
-      <dop-improper data-ng-if="$ctrl.viewPath == 'improperPortfolios'"></dop-improper>
-      <dop-changed data-ng-if="$ctrl.viewPath == 'changedLearningObjects'"></dop-changed>
-      <dop-broken data-ng-if="$ctrl.viewPath == 'brokenMaterials'"></dop-broken>
-      <dop-deleted data-ng-if="$ctrl.viewPath == 'deletedPortfolios'"></dop-deleted>
-      <dop-deleted data-ng-if="$ctrl.viewPath == 'deletedMaterials'"></dop-deleted>
+      <dop-improper data-ng-if="$ctrl.viewPath == 'improper'"></dop-improper>
+      <dop-changed data-ng-if="$ctrl.viewPath == 'changes'"></dop-changed>
+      <dop-deleted data-ng-if="$ctrl.viewPath == 'deleted'"></dop-deleted>
       <dop-users data-ng-if="$ctrl.viewPath == 'moderators'"></dop-users>
       <dop-users data-ng-if="$ctrl.viewPath == 'restrictedUsers'"></dop-users>
     </div>

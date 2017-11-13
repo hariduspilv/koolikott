@@ -154,10 +154,6 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
-    protected static Response doDelete(String url) {
-        return getTarget(url).request().delete();
-    }
-
     protected static WebTarget getTarget(String url) {
         return getTarget(url, authenticationFilter);
     }

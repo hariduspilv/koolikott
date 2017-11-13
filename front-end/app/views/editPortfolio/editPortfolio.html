@@ -5,10 +5,10 @@
         <p class="md-toolbar-text" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
       </md-toolbar>
     </md-card>
-    <div data-dop-portfolio-summary-card data-portfolio="portfolio"></div>
+    <dop-portfolio-summary-card data-portfolio="portfolio"></dop-portfolio-summary-card>
     <div>
       <div data-ng-repeat="chapter in portfolio.chapters track by $index">
-        <dop-chapter data-on-delete="onDeleteChapter" data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
+        <dop-chapter data-on-delete="onDeleteChapter(chapter)" data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
       </div>
     </div>
     <md-card class="card-mb-20">
@@ -19,6 +19,6 @@
     </md-card>
   </div>
   <aside flex-gt-sm="25">
-    <div data-dop-aside data-learning-object="portfolio"></div>
+    <data-dop-aside data-learning-object="portfolio"></data-dop-aside>
   </aside>
 </div>

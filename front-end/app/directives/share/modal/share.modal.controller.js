@@ -1,54 +1,56 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.controller('shareModalController', [
-    '$mdDialog', 'locals', 'authenticatedUserService', '$translate', 'Socialshare', 'serverCallService', 'toastService',
-    function ($mdDialog, locals, authenticatedUserService, $translate, Socialshare, serverCallService, toastService) {
-        let vm = this;
+{
+class controller extends Controller {
+    constructor(...args) {
+        super(...args)
 
-        if ((locals.isOwner() || authenticatedUserService.isAdmin() || authenticatedUserService.isModerator()) && locals.isPrivate()) {
-            vm.showButtons = true;
-
-            vm.title = $translate.instant('THIS_IS_PRIVATE');
-            vm.context = $translate.instant('SHARE_PRIVATE_PORTFOLIO');
-            vm.ariaLabel = $translate.instant('THIS_IS_PRIVATE');
+        if (this.locals.isPrivate() && (
+                this.locals.isOwner() ||
+                this.authenticatedUserService.isAdmin() ||
+                this.authenticatedUserService.isModerator()
+            )
+        ) {
+            this.showButtons = true
+            this.title = this.$translate.instant('THIS_IS_PRIVATE')
+            this.context = this.$translate.instant('SHARE_PRIVATE_PORTFOLIO')
+            this.ariaLabel = this.$translate.instant('THIS_IS_PRIVATE')
         } else {
-            vm.title = $translate.instant('THIS_IS_UNLISTED');
-            vm.context = $translate.instant('THINK_AND_SHARE');
-            vm.ariaLabel = $translate.instant('THIS_IS_UNLISTED');
-        }
-
-        vm.updatePortfolio = (state) => {
-            let portfolioClone = angular.copy(locals.portfolio);
-            portfolioClone.visibility = state;
-            serverCallService.makePost("rest/portfolio/update", portfolioClone, updateSuccess, updateFail);
-
-            locals.setShareParams(locals.item);
-
-            $mdDialog.cancel();
-        };
-
-        function updateSuccess(data) {
-            if (isEmpty(data)) {
-                updateFail();
-            } else {
-                locals.portfolio.visibility = data.visibility;
-                toastService.show('PORTFOLIO_SAVED');
-            }
-        }
-
-        function updateFail() {
-            console.log("Updating portfolio failed");
-        }
-
-        vm.back = () => {
-            $mdDialog.cancel();
-        }
-
-        vm.success = () => {
-            locals.setShareParams(locals.item);
-
-            $mdDialog.cancel();
+            this.title = this.$translate.instant('THIS_IS_UNLISTED')
+            this.context = this.$translate.instant('THINK_AND_SHARE')
+            this.ariaLabel = this.$translate.instant('THIS_IS_UNLISTED')
         }
     }
-]);
+    updatePortfolio(state) {
+        const portfolioClone = angular.copy(this.locals.portfolio)
+        portfolioClone.visibility = state
+
+        this.serverCallService
+            .makePost('rest/portfolio/update', portfolioClone)
+            .then(({ data }) => {
+                if (data) {
+                    this.locals.portfolio.visibility = data.visibility
+                    this.toastService.show('PORTFOLIO_SAVED')
+                }
+            })
+        this.locals.setShareParams(this.locals.item)
+        this.$mdDialog.cancel()
+    }
+    back() {
+        this.$mdDialog.cancel()
+    }
+    success() {
+        this.locals.setShareParams(this.locals.item)
+        this.$mdDialog.cancel()
+    }
+}
+controller.$inject = [
+    '$mdDialog',
+    '$translate',
+    'locals',
+    'authenticatedUserService',
+    'serverCallService',
+    'toastService'
+]
+angular.module('koolikottApp').controller('shareModalController', controller)
+}

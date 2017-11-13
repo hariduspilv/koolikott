@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('toastService',
 [
-    '$mdToast', '$filter', '$rootScope',
-    function($mdToast, $filter, $rootScope) {
+    '$mdToast', '$translate', '$rootScope',
+    function($mdToast, $translate, $rootScope) {
         var instance;
         var toast;
 
@@ -16,8 +16,10 @@ angular.module('koolikottApp')
         });
 
         instance = {
-            show: function(content) {
-                $mdToast.show($mdToast.simple().position('right bottom').content($filter('translate')(content)));
+            show: function(translationKey) {
+                $translate(translationKey).then(translatedStr =>
+                    $mdToast.show($mdToast.simple().position('right bottom').content(translatedStr))
+                )
             },
 
             showOnRouteChange: function(content) {

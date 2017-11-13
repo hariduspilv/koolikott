@@ -126,9 +126,10 @@ public class PortfolioResource extends BaseResource {
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void delete(Portfolio portfolio) {
-        learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
+    public LearningObject delete(Portfolio portfolio) {
+        return learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
     }
 
     private User getValidCreator(@QueryParam("username") String username) {

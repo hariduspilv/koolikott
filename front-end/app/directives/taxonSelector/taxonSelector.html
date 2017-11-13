@@ -4,19 +4,19 @@
     <label for="taxonEducationalSelect">
       <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.educationalContext"
+    <md-select data-ng-model="$ctrl.taxonPath.educationalContext"
                id="taxonEducationalSelect"
-               data-ng-disabled="ctrl.disableEducationalContext"
+               data-ng-disabled="$ctrl.disableEducationalContext"
                name="educationalContext"
                aria-label="Haridustase"
-               ng-required="ctrl.isDomainRequired.trigger"
+               ng-required="$ctrl.isDomainRequired.trigger"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{'id':0}"
-                 ng-click="ctrl.reset({'id':0})"></md-option>
+      <md-option data-ng-if="$ctrl.isSearch" data-translate="SELECT_EDUCATIONAL_CONTEXT" ng-value="{ id: 0 }"
+                 ng-click="$ctrl.selectTaxon({ id: 0 })"></md-option>
       <md-option ng-value="educationalContext"
-                 ng-repeat="educationalContext in ctrl.educationalContexts track by educationalContext.id"
+                 ng-repeat="educationalContext in $ctrl.educationalContexts track by educationalContext.id"
                  data-translate="{{educationalContext.name.toUpperCase()}}"
-                 data-ng-click="ctrl.selectEducationalContext(educationalContext)"></md-option>
+                 data-ng-click="$ctrl.selectEducationalContext(educationalContext)"></md-option>
     </md-select>
 
     <div data-ng-messages="taxonForm.educationalContext.$error">
@@ -28,23 +28,23 @@
 
   <!-- Domain -->
   <md-input-container
-    data-ng-show="ctrl.taxonPath.educationalContext.id && !ctrl.isBasicOrSecondaryEducation()"
+    data-ng-show="$ctrl.taxonPath.educationalContext.id && !$ctrl.isBasicOrSecondaryEducation()"
     class="md-block" flex>
     <label for="taxonDomainSelect">
       <span data-translate="TAXON_PATH_DOMAIN"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domain"
+    <md-select data-ng-model="$ctrl.taxonPath.domain"
                id="taxonDomainSelect"
                name="domain"
                aria-label="Ainevaldkond"
-               ng-required="ctrl.isDomainRequired.trigger"
+               ng-required="$ctrl.isDomainRequired.trigger"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_DOMAIN"
-                 ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option data-ng-if="$ctrl.isSearch" data-translate="SELECT_DOMAIN"
+                 ng-click="$ctrl.reset($ctrl.taxonPath.educationalContext)"></md-option>
       <md-option ng-value="domain"
-                 ng-repeat="domain in ctrl.taxonPath.educationalContext.domains | orderBy: ctrl.translateTaxon"
+                 ng-repeat="domain in $ctrl.taxonPath.educationalContext.domains | orderBy: $ctrl.translateTaxon"
                  data-translate="DOMAIN_{{domain.name.toUpperCase()}}"
-                 data-ng-click="ctrl.selectTaxon(domain)"></md-option>
+                 data-ng-click="$ctrl.selectTaxon(domain)"></md-option>
     </md-select>
 
     <div data-ng-messages="taxonForm.domain.$error">
@@ -56,42 +56,42 @@
 
   <!-- Subject -->
   <md-input-container
-    data-ng-show="ctrl.taxonPath.domain && !ctrl.isBasicOrSecondaryEducation() && ctrl.taxonPath.domain.subjects.length > 0"
+    data-ng-show="$ctrl.taxonPath.domain && !$ctrl.isBasicOrSecondaryEducation() && $ctrl.taxonPath.domain.subjects.length > 0"
     class="md-block" flex>
     <label for="taxonSubjectSelect">
       <span data-translate="DETAIL_VIEW_SUBJECT"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.subject" id="taxonSubjectSelect" name="subject" aria-label="Teema"
+    <md-select data-ng-model="$ctrl.taxonPath.subject" id="taxonSubjectSelect" name="subject" aria-label="Teema"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_SUBJECT" ng-click="ctrl.reset(ctrl.taxonPath.domain)"></md-option>
-      <md-option ng-value="subject" ng-repeat="subject in ctrl.taxonPath.domain.subjects | orderBy: ctrl.translateTaxon"
+      <md-option data-translate="SELECT_SUBJECT" ng-click="$ctrl.reset($ctrl.taxonPath.domain)"></md-option>
+      <md-option ng-value="subject" ng-repeat="subject in $ctrl.taxonPath.domain.subjects | orderBy: $ctrl.translateTaxon"
                  data-translate="SUBJECT_{{subject.name.toUpperCase()}}"
-                 data-ng-click="ctrl.selectTaxon(subject)"></md-option>
+                 data-ng-click="$ctrl.selectTaxon(subject)"></md-option>
     </md-select>
   </md-input-container>
 
   <!-- Domain and Subject together for Basic Education -->
   <md-input-container
-    data-ng-show="ctrl.taxonPath.educationalContext && ctrl.taxonPath.educationalContext.name === 'BASICEDUCATION'"
+    data-ng-show="$ctrl.taxonPath.educationalContext && $ctrl.taxonPath.educationalContext.name === 'BASICEDUCATION'"
     class="md-block" flex>
     <label for="taxonDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domainSubject"
+    <md-select data-ng-model="$ctrl.taxonPath.domainSubject"
                id="taxonDomainSubjectsSelect"
                name="domainAndSubject"
                aria-label="Ainevaldkond ja teema"
-               ng-required="ctrl.isDomainRequired.trigger"
+               ng-required="$ctrl.isDomainRequired.trigger"
                class="select"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_DOMAIN_AND_SUBJECT"
-                 ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
-      <md-option ng-repeat="domainSubject in ctrl.basicEducationDomainSubjects"
+      <md-option data-ng-if="$ctrl.isSearch" data-translate="SELECT_DOMAIN_AND_SUBJECT"
+                 ng-click="$ctrl.reset($ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option ng-repeat="domainSubject in $ctrl.educationalContexts.basicEducationDomainSubjects"
                  data-ng-class="{ 'select__child' : domainSubject.level === '.Subject',
                  'select__parent' : domainSubject.level === '.Domain'}"
-                 data-ng-disabled="domainSubject.level !== '.Subject' && ctrl.isAddMaterialView"
+                 data-ng-disabled="domainSubject.level !== '.Subject' && $ctrl.isAddMaterialView"
                  ng-value="domainSubject"
-                 data-ng-click="ctrl.selectTaxon(domainSubject)"
+                 data-ng-click="$ctrl.selectTaxon(domainSubject)"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}">
       </md-option>
     </md-select>
@@ -105,25 +105,25 @@
 
   <!-- Domain and Subject together for Secondary Education -->
   <md-input-container
-    data-ng-show="ctrl.taxonPath.educationalContext && ctrl.taxonPath.educationalContext.name === 'SECONDARYEDUCATION'"
+    data-ng-show="$ctrl.taxonPath.educationalContext && $ctrl.taxonPath.educationalContext.name === 'SECONDARYEDUCATION'"
     class="md-block" flex>
     <label for="taxonSecondaryEducationDomainSubjectsSelect">
       <span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.domainSubject"
+    <md-select data-ng-model="$ctrl.taxonPath.domainSubject"
                id="taxonSecondaryEducationDomainSubjectsSelect"
                name="secondaryEducationDomainAndSubject"
                aria-label="Ainevaldkond ja teema"
-               ng-required="ctrl.isDomainRequired.trigger"
+               ng-required="$ctrl.isDomainRequired.trigger"
                class="select"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-ng-if="ctrl.isSearch" data-translate="SELECT_DOMAIN_AND_SUBJECT"
-                 ng-click="ctrl.reset(ctrl.taxonPath.educationalContext)"></md-option>
+      <md-option data-ng-if="$ctrl.isSearch" data-translate="SELECT_DOMAIN_AND_SUBJECT"
+                 ng-click="$ctrl.reset($ctrl.taxonPath.educationalContext)"></md-option>
       <md-option data-ng-class="{ 'select__child' : domainSubject.level === '.Subject',
                  'select__parent' : domainSubject.level === '.Domain'}"
                  data-ng-disabled="domainSubject.level !== '.Subject' && isAddMaterialView"
-                 ng-value="domainSubject" ng-repeat="domainSubject in ctrl.secondaryEducationDomainSubjects"
-                 data-ng-click="ctrl.selectTaxon(domainSubject)"
+                 ng-value="domainSubject" ng-repeat="domainSubject in $ctrl.educationalContexts.secondaryEducationDomainSubjects"
+                 data-ng-click="$ctrl.selectTaxon(domainSubject)"
                  data-translate="{{(domainSubject.level === '.Domain' ? 'DOMAIN_' : 'SUBJECT_') + domainSubject.name.toUpperCase()}}"></md-option>
     </md-select>
 
@@ -135,64 +135,64 @@
   </md-input-container>
 
   <!-- Specialization-->
-  <md-input-container data-ng-show="ctrl.taxonPath.domain && ctrl.taxonPath.domain.specializations.length > 0"
+  <md-input-container data-ng-show="$ctrl.taxonPath.domain && $ctrl.taxonPath.domain.specializations.length > 0"
                       class="md-block"
                       flex>
     <label for="taxonSpecializationSelect">
       <span data-translate="TAXON_PATH_SPECIALIZATION"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization"
+    <md-select data-ng-model="$ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization"
                aria-label="Eriala" ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_SPECIALIZATION" ng-click="ctrl.reset(ctrl.taxonPath.domain)"></md-option>
+      <md-option data-translate="SELECT_SPECIALIZATION" ng-click="$ctrl.reset($ctrl.taxonPath.domain)"></md-option>
       <md-option ng-value="specialization"
-                 ng-repeat="specialization in ctrl.taxonPath.domain.specializations | orderBy: ctrl.translateTaxon"
-                 data-ng-click="ctrl.selectTaxon(specialization)"
+                 ng-repeat="specialization in $ctrl.taxonPath.domain.specializations | orderBy: $ctrl.translateTaxon"
+                 data-ng-click="$ctrl.selectTaxon(specialization)"
                  data-translate="SPECIALIZATION_{{specialization.name.toUpperCase()}}"></md-option>
     </md-select>
   </md-input-container>
 
   <!-- Module-->
-  <md-input-container data-ng-show="ctrl.taxonPath.specialization && ctrl.taxonPath.specialization.modules.length > 0"
+  <md-input-container data-ng-show="$ctrl.taxonPath.specialization && $ctrl.taxonPath.specialization.modules.length > 0"
                       class="md-block" flex>
     <label for="taxonModuleSelect">
       <span data-translate="TAXON_PATH_MODULE"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.module" id="taxonModuleSelect" name="module" aria-label="Moodul"
+    <md-select data-ng-model="$ctrl.taxonPath.module" id="taxonModuleSelect" name="module" aria-label="Moodul"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_MODULE" ng-click="ctrl.reset(ctrl.taxonPath.specialization)"></md-option>
+      <md-option data-translate="SELECT_MODULE" ng-click="$ctrl.reset($ctrl.taxonPath.specialization)"></md-option>
       <md-option ng-value="module"
-                 ng-repeat="module in ctrl.taxonPath.specialization.modules | orderBy: ctrl.translateTaxon"
-                 data-ng-click="ctrl.selectTaxon(module)"
+                 ng-repeat="module in $ctrl.taxonPath.specialization.modules | orderBy: $ctrl.translateTaxon"
+                 data-ng-click="$ctrl.selectTaxon(module)"
                  data-translate="MODULE_{{module.name.toUpperCase()}}"></md-option>
     </md-select>
   </md-input-container>
 
   <!-- Topic -->
-  <md-input-container data-ng-show="ctrl.getTopics()" class="md-block" flex>
+  <md-input-container data-ng-show="$ctrl.getTopics()" class="md-block" flex>
     <label for="taxonTopicSelect">
       <span data-translate="TAXON_PATH_TOPIC"></span>
     </label>
-    <md-select data-ng-model="ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic" aria-label="Teema"
+    <md-select data-ng-model="$ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic" aria-label="Teema"
                ng-model-options="{trackBy: '$value.id'}">
       <md-option data-translate="SELECT_TOPIC"
-                 ng-click="ctrl.reset(ctrl.taxonPath.subject || ctrl.taxonPath.domain || ctrl.taxonPath.module, ctrl.taxonPath)"></md-option>
-      <md-option ng-value="topic" ng-repeat="topic in ctrl.getTopics() | orderBy: ctrl.translateTaxon"
-                 ng-selected="{{topic.id === ctrl.taxonPath.topic.id}}"
-                 data-ng-click="ctrl.selectTaxon(topic)"
+                 ng-click="$ctrl.reset($ctrl.taxonPath.subject || $ctrl.taxonPath.domain || $ctrl.taxonPath.module, $ctrl.taxonPath)"></md-option>
+      <md-option ng-value="topic" ng-repeat="topic in $ctrl.getTopics() | orderBy: $ctrl.translateTaxon"
+                 ng-selected="{{topic.id === $ctrl.taxonPath.topic.id}}"
+                 data-ng-click="$ctrl.selectTaxon(topic)"
                  data-translate="TOPIC_{{topic.name.toUpperCase()}}"></md-option>
     </md-select>
   </md-input-container>
 
   <!-- Subtopics-->
-  <md-input-container data-ng-show="ctrl.taxonPath.topic && ctrl.taxonPath.topic.subtopics.length > 0" class="md-block"
+  <md-input-container data-ng-show="$ctrl.taxonPath.topic && $ctrl.taxonPath.topic.subtopics.length > 0" class="md-block"
                       flex>
     <label for="taxonSubtopicSelect" data-translate="TAXON_PATH_SUBTOPIC"></label>
-    <md-select data-ng-model="ctrl.taxonPath.subtopic" id="taxonSubtopicSelect" aria-label="Alamteema"
+    <md-select data-ng-model="$ctrl.taxonPath.subtopic" id="taxonSubtopicSelect" aria-label="Alamteema"
                ng-model-options="{trackBy: '$value.id'}">
-      <md-option data-translate="SELECT_SUBTOPIC" ng-click="ctrl.reset(ctrl.taxonPath.topic)"></md-option>
+      <md-option data-translate="SELECT_SUBTOPIC" ng-click="$ctrl.reset($ctrl.taxonPath.topic)"></md-option>
       <md-option ng-value="subtopic"
-                 ng-repeat="subtopic in ctrl.taxonPath.topic.subtopics | orderBy: ctrl.translateTaxon"
-                 data-ng-click="ctrl.selectTaxon(subtopic)"
+                 ng-repeat="subtopic in $ctrl.taxonPath.topic.subtopics | orderBy: $ctrl.translateTaxon"
+                 data-ng-click="$ctrl.selectTaxon(subtopic)"
                  data-translate="SUBTOPIC_{{subtopic.name.toUpperCase()}}"></md-option>
     </md-select>
   </md-input-container>

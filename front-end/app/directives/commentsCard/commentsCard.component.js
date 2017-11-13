@@ -10,6 +10,7 @@ class controller extends Controller {
             this.$scope.comments = learningObject.currentValue.comments
     }
     $onInit() {
+        this.user = this.authenticatedUserService.getUser()
         this.visibleCommentsCount = COMMENTS_PER_PAGE
         this.$scope.newComment = { text: '' }
 
@@ -69,11 +70,42 @@ class controller extends Controller {
         return this.getLeftCommentsCount() > 0
     }
     addComment() {
-        if (this.$scope.newComment.text && typeof this.submitClick === 'function')
-            this.submitClick({
-                newComment: this.$scope.newComment, 
-                learningObject: this.learningObject
-            })
+        if (this.$scope.newComment.text && typeof this.submitClick === 'function') {
+            // setting up POST body
+            const { id, type } = this.learningObject
+            const body = {
+                comment: this.$scope.newComment,
+                learningObject: { id, type }
+            }
+
+            // optimistically adding new comment to $scope.comments
+            const added = new Date()
+            this.$scope.comments.unshift(
+                Object.assign({
+                    creator: this.user,
+                    id: added.getTime(), // timestamp as mock id
+                    added
+                }, body.comment)
+            )
+            // undo optimism
+            const undo = () => {
+                const id = added.getTime()
+                const idx = this.$scope.comments.findIndex(c => c.id === id)
+                if (idx > -1)
+                    this.$scope.comments.splice(idx, 1)
+            }
+
+            this.serverCallService
+                .makePost('rest/comment', body)
+                .then(({ status, data }) =>
+                    status < 200 || 300 <= status
+                        ? undo()
+                        : this.isPortfolio(response.data)
+                            ? this.storageService.setPortfolio(response.data)
+                            : this.storageService.setMaterial(response.data),
+                    undo
+                )
+        }
     }
     reportComment(evt) {
         this.authenticatedUserService.isAuthenticated()
@@ -185,10 +217,10 @@ controller.$inject = [
     '$timeout',
     'authenticatedUserService',
     'serverCallService',
-    'toastService'
+    'toastService',
+    'storageService'
 ]
-
-angular.module('koolikottApp').component('dopCommentsCard', {
+component('dopCommentsCard', {
     bindings: {
         learningObject: '<',
         isOpen: '<',

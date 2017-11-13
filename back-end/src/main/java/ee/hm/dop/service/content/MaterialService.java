@@ -113,8 +113,6 @@ public class MaterialService {
         material.setAdded(originalMaterial.getAdded());
         material.setUpdated(now());
 
-        material.setBrokenContents(originalMaterial.getBrokenContents());
-        material.setBroken(originalMaterial.getBroken());
         material.setFirstReviews(originalMaterial.getFirstReviews());
         material.setUnReviewed(originalMaterial.getUnReviewed());
         material.setImproperContents(originalMaterial.getImproperContents());
@@ -123,7 +121,10 @@ public class MaterialService {
         material.setChanged(originalMaterial.getChanged());
 
         Material updatedMaterial = createOrUpdate(material);
-        reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
+        boolean materialChanged = reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
+        if (materialChanged){
+            updatedMaterial = materialDao.createOrUpdate(updatedMaterial);
+        }
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }

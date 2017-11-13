@@ -72,6 +72,7 @@ angular.module('koolikottApp')
 
         function logoutSuccess(data) {
             authenticatedUserService.removeAuthenticatedUser();
+            $rootScope.$broadcast('logout:success');
             enableLogin();
         }
 

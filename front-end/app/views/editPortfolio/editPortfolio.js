@@ -24,7 +24,9 @@ angular.module('koolikottApp')
                     }
 
                     $rootScope.savedChapter = null;
-                    updatePortfolio();
+                    if ($scope.portfolio && !$scope.portfolio.deleted){
+                        updatePortfolio();
+                    }
                     startAutosave();
                 }
 
@@ -121,7 +123,9 @@ angular.module('koolikottApp')
                     autoSaveInterval = $interval(function () {
                         isAutoSaving = true;
 
-                        updatePortfolio();
+                        if ($scope.portfolio && !$scope.portfolio.deleted){
+                            updatePortfolio();
+                        }
                     }, 20000);
                 }
 

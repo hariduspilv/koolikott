@@ -1,16 +1,21 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.ReviewableChangeDao;
+import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
+import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.metadata.TaxonService.TAXON_PREFIXES;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
@@ -20,6 +25,8 @@ public class ReviewableChangeService {
     private ReviewableChangeDao reviewableChangeDao;
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
+    @Inject
+    private TranslationDAO translationDAO;
 
     public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);
@@ -53,15 +60,16 @@ public class ReviewableChangeService {
         return null;
     }
 
-    public void processChanges(Portfolio material, User user, ChangeProcessStrategy changeProcessStrategy) {
-        processChanges(material, user, null, changeProcessStrategy);
+    public boolean processChanges(Portfolio material, User user, ChangeProcessStrategy changeProcessStrategy) {
+        return processChanges(material, user, null, changeProcessStrategy);
     }
 
-    public void processChanges(Material material, User user, String sourceBefore, ChangeProcessStrategy changeProcessStrategy) {
-        processChanges((LearningObject) material, user, sourceBefore, changeProcessStrategy);
+    public boolean processChanges(Material material, User user, String sourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+        return processChanges((LearningObject) material, user, sourceBefore, changeProcessStrategy);
     }
 
-    private void processChanges(LearningObject learningObject, User user, String materialSourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+    private boolean processChanges(LearningObject learningObject, User user, String materialSourceBefore, ChangeProcessStrategy changeProcessStrategy) {
+        boolean learningObjectWasChanged = false;
         boolean linkWasAddedBefore = true;
         if (changeProcessStrategy.processNewChanges()) {
             if (learningObject instanceof Material) {
@@ -79,6 +87,11 @@ public class ReviewableChangeService {
             for (ReviewableChange change : learningObject.getReviewableChanges()) {
                 if (!change.isReviewed()) {
                     if (change.getMaterialSource() == null && !learningObjectHasThis(learningObject, change)) {
+                        List<String> translationKeys = reviewableChangeAdminService.getTranslationKeys(learningObject, change);
+                        if (CollectionUtils.isNotEmpty(translationKeys)) {
+                            learningObjectWasChanged = true;
+                            reviewableChangeAdminService.removeTagsByTranslation(learningObject, translationKeys);
+                        }
                         reviewableChangeAdminService.setReviewed(change, user, ReviewStatus.OBSOLETE);
                         learningObject.setChanged(learningObject.getChanged() - 1);
                     }
@@ -89,6 +102,7 @@ public class ReviewableChangeService {
                 }
             }
         }
+        return learningObjectWasChanged;
     }
 
     private boolean urlHasChanged(String materialSourceBefore, Material material) {

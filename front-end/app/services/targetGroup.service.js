@@ -230,17 +230,13 @@ angular.module('koolikottApp').factory('targetGroupService', [
              * Returns an array with translated grades for select label
              */
             getSelectedText: function (targetGroups) {
-                if (!targetGroups) {
-                    return [];
-                }
-
-                let list = this.getMinimalGroups(targetGroups);
-                let result = [];
-                for (let i = 0; i < list.length; i++) {
-                    result.push($translate.instant("TARGET_GROUP_" + list[i]));
-                }
-
-                return result;
+                return !targetGroups
+                    ? Promise.resolve([])
+                    : Promise.all(
+                        this.getMinimalGroups(targetGroups).map(group =>
+                            $translate('TARGET_GROUP_' + group)
+                        )
+                    )
             },
 
             isParent: function (item) {

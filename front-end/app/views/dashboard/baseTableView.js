@@ -3,41 +3,23 @@
 {
 const DASHBOARD_VIEW_STATE_MAP = {
     unReviewed: [
-        'DASHBOARD_UNREVIEWED', // title translation key
+        'UNREVIEWED', // title translation key
         'firstReview/unReviewed', // rest URI (after 'rest/admin/')
         '-byCreatedAt' // default sort by (use leading minus for DESC)
     ],
-    improperMaterials: [
-        'DASHBOARD_IMRPOPER_MATERIALS',
-        'improper/material',
+    improper: [
+        'IMPROPER',
+        'improper',
         '-byReportCount',
-        true // do merge reports
     ],
-    improperPortfolios: [
-        'DASHBOARD_IMRPOPER_PORTFOLIOS',
-        'improper/portfolio',
-        '-byReportCount',
-        true
-    ],
-    brokenMaterials: [
-        'BROKEN_MATERIALS',
-        'brokenContent/getBroken',
-        '-byReportCount',
-        true
-    ],
-    changedLearningObjects: [
-        'DASHBOARD_CHANGED_LEARNING_OBJECTS',
+    changes: [
+        'CHANGED_LEARNING_OBJECTS',
         'changed',
         'byLastChangedAt'
     ],
-    deletedPortfolios: [
-        'DASHBOARD_DELETED_PORTFOLIOS',
-        'deleted/portfolio/getDeleted',
-        'byUpdatedAt'
-    ],
-    deletedMaterials: [
-        'DASHBOARD_DELETED_MATERIALS',
-        'deleted/material/getDeleted',
+    deleted: [
+        'DELETED',
+        'deleted',
         'byUpdatedAt'
     ],
     moderators: [
@@ -113,7 +95,7 @@ class controller extends Controller {
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
-    getData(restUri, sortBy, doMerge) {
+    getData(restUri, sortBy) {
         this.serverCallService
             .makeGet('rest/admin/'+restUri)
             .then(({ data }) => {
@@ -121,15 +103,16 @@ class controller extends Controller {
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
-                    if (doMerge) {
-                        this.unmergedData = data.slice(0)
-                        data = this.merge(data)
-                    }
-
                     if (restUri == 'changed')
                         data.forEach(o => {
                             o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
                             o.__changers = this.getChangers(o)
+                        })
+                    if (restUri == 'improper')
+                        data.forEach(o => {
+                            o.__reports = o.improperContents.filter(c => !c.reviewed)
+                            o.__reporters = this.getReporters(o)
+                            o.__reportLabelKey = this.getImproperReportLabelKey(o)
                         })
 
                     this.collection = data
@@ -139,13 +122,6 @@ class controller extends Controller {
                     this.$scope.data = data.slice(0, this.$scope.query.limit)
                 }
             })
-    }
-    getCorrectLanguageTitle({ title, titles, language } = {}) {
-        return title || titles && this.getUserDefinedLanguageString(
-            titles,
-            this.translationService.getLanguage(),
-            language
-        )
     }
     openLearningObject(learningObject) {
         this.$location.url(
@@ -220,15 +196,19 @@ class controller extends Controller {
             .map(c => c.createdBy || c.creator)
     }
     getChangers({ reviewableChanges }) {
+        return this.getCreatedBy(reviewableChanges);
+    }
+    getReporters({ improperContents }) {
+        return this.getCreatedBy(improperContents)
+    }
+    getCreatedBy(items) {
         const ids = []
-        return reviewableChanges
-            .filter(c => !c.reviewed)
-            .filter(c => {
-                const { id } = c.createdBy
-                return ids.includes(id)
-                    ? false
-                    : ids.push(id)
-            })
+        return items.reduce((creators, { reviewed, createdBy }) => {
+            const { id } = createdBy || { id: 'UNKNOWN' }
+            return ids.includes(id)
+                ? creators
+                : ids.push(id) && creators.concat(createdBy || 'UNKNOWN')
+        }, [])
     }
     getDuplicates(item) {
         return item.learningObject
@@ -276,74 +256,37 @@ class controller extends Controller {
             ? this.filteredCollection.slice(start, end)
             : this.collection.slice(start, end)
     }
-    /**
-     *  Merge reports/changes so that every learning object is represented by only 1 row in the table.
-     */
-    merge(items) {
-        const merged = []
-        const isSame = (a, b) =>
-            (a.learningObject || a.material || a).id ===
-            (b.learningObject || b.material || b).id
-
-        for (let i = 0; i < items.length; i++) {
-            let isAlreadyReported = false
-
-            for (var j = 0; j < merged.length; j++)
-                if (isSame(merged[j], items[i])) {
-                    isAlreadyReported = true
-                    const __reportLabelKey = this.getImproperReportLabelKey(items[i])
-
-                    merged[j].__reportCount++
-                    merged[j].__reportLabelKey = __reportLabelKey
-                    items[i].__reportCount++
-                    items[i].__reportLabelKey = __reportLabelKey
-
-                    // include the newest
-                    const mergedDate = merged[j].createdAt || merged[j].added
-                    const itemDate = items[j].createdAt || items[j].added
-
-                    if (new Date(itemDate) > new Date(mergedDate))
-                        merged[j] = items[i]
-
-                    break
-                }
-
-            if (!isAlreadyReported) {
-                items[i].__reportCount = 1
-                items[i].__reportLabelKey = this.getImproperReportLabelKey(items[i])
-                merged.push(items[i])
-            }
-
-            items[i].__creators = this.getCreators(items[i])
-        }
-
-        return merged
-    }
     getImproperReportLabelKey(item) {
-        if (item.__reportCount && item.__reportCount === 1)
-            return !Array.isArray(item.reportingReasons)
+        if (!Array.isArray(item.__reports))
+            return ''
+
+        if (item.__reports.length === 1) {
+            let { reportingReasons } = item.__reports[0]
+
+            return !Array.isArray(reportingReasons)
                 ? ''
-                : item.reportingReasons.length === 1
-                    ? item.reportingReasons[0].reason
-                    : item.reportingReasons.length > 1
+                : reportingReasons.length === 1
+                    ? reportingReasons[0].reason
+                    : reportingReasons.length > 1
                         ? 'MULTIPLE_REASONS'
                         : ''
+        }
 
         let reasonKey = ''
-        const allReports = this.getDuplicates(item)
 
-        for (let i = 0; i < allReports.length; i++) {
-            if (!Array.isArray(allReports[i].reportingReasons))
-                return ''
+        for (let i = 0; i < item.__reports.length; i++) {
+            let { reportingReasons } = item.__reports[i]
 
-            if (allReports[i].reportingReasons.length > 1)
-                return 'MULTIPLE_REASONS'
-
-            if (allReports[i].reportingReasons.length === 1) {
-                if (!reasonKey)
-                    reasonKey = allReports[i].reportingReasons[0].reason
-                else if (reasonKey != allReports[i].reportingReasons[0].reason)
+            if (Array.isArray(reportingReasons)) {
+                if (reportingReasons.length > 1)
                     return 'MULTIPLE_REASONS'
+
+                if (reportingReasons.length === 1) {
+                    if (!reasonKey)
+                        reasonKey = reportingReasons[0].reason
+                    else if (reasonKey != reportingReasons[0].reason)
+                        return 'MULTIPLE_REASONS'
+                }
             }
         }
 
@@ -364,5 +307,5 @@ controller.$inject = [
     'iconService',
     'translationService'
 ]
-_controller('baseTableViewController', controller)
+angular.module('koolikottApp').controller('baseTableViewController', controller)
 }

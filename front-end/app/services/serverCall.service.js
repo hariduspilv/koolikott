@@ -31,9 +31,18 @@ angular.module('koolikottApp')
                 config.transformRequest = transformRequest;
             }
 
-            if (!successCallback) {
-                return $http(config);
-            }
+            if (!successCallback)
+                return $http(config).catch(response => {
+                    switch (response.status) {
+                        case 419:
+                            authenticatedUserService.removeAuthenticatedUser()
+                            break
+                        case 401:
+                        case 403:
+                            $location.url('/')
+                    }
+                    throw new Error(`HTTP request failed — ${method.toUpperCase()} ${url} ${status}`)
+                })
 
             $http(config)
             .then(function (response) {

@@ -37,17 +37,21 @@ class controller extends Controller {
         })
     }
 }
-controller.$inject = ['$scope', 'serverCallService', 'toastService', 'authenticatedUserService']
-
+controller.$inject = [
+    '$scope',
+    'serverCallService',
+    'toastService',
+    'authenticatedUserService'
+]
 /**
  * Declaring this as a directive since we need to use it as an attribute on
  * <md-menu-item> (component usage is restricted to element tagname only).
  */
-angular.module('koolikottApp').directive('dopRestrict', () => ({
+directive('dopRestrict', {
     scope: {
         learningObject: '<'
     },
     templateUrl: 'directives/restrict/restrict.html',
     controller
-}))
+})
 }
