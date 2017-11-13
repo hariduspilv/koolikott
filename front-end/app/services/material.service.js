@@ -6,7 +6,7 @@ angular.module('koolikottApp')
 function MaterialService(serverCallService, authenticatedUserService) {
 
     function getMaterialById(id) {
-        return serverCallService.makeGet("rest/material", {'materialId': id})
+        return serverCallService.makeGet("rest/material", {id})
             .then((response) => {
                 return response.data;
             });

@@ -30,14 +30,12 @@ import static org.junit.Assert.*;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
-    public static final String GET_MATERIAL_URL = "material?materialId=%s";
-    private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
-    private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
-    private static final String CREATE_MATERIAL_URL = "material";
-    private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
-    private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
-    private static final String RESTORE_MATERIAL = "admin/deleted/restore";
-    private static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
+    public static final String GET_MATERIAL_URL = "material?id=%s";
+    public static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
+    public static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
+    public static final String CREATE_MATERIAL_URL = "material";
+    public static final String RESTORE_MATERIAL = "admin/deleted/restore";
+    public static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
     public static final String GET_MATERIAL_BY_SOURCE_URL = "material/getBySource?source=";
     public static final String GET_ONE_MATERIAL_BY_SOURCE_URL = "material/getOneBySource?source=";
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";

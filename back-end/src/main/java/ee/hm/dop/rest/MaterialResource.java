@@ -38,24 +38,8 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Material get(@QueryParam("materialId") long materialId) {
+    public Material get(@QueryParam("id") long materialId) {
         return materialGetter.get(materialId, getLoggedInUser());
-    }
-
-    @GET
-    @Path("getBySource")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
-        return materialGetter.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
-    }
-
-    @GET
-    @Path("getOneBySource")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
-        return materialGetter.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
     }
 
     @GET
@@ -74,30 +58,25 @@ public class MaterialResource extends BaseResource {
         return (creator != null) ? materialGetter.getByCreatorSize(creator) : null;
     }
 
+    @GET
+    @Path("getBySource")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Material> getMaterialsByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return materialGetter.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
+    }
+
+    @GET
+    @Path("getOneBySource")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+        return materialGetter.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
+    }
+
     private User getValidCreator(@QueryParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);
-    }
-
-    @DELETE
-    @Path("{materialID}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject delete(@PathParam("materialID") Long materialID) {
-        Material material = materialGetter.get(materialID, getLoggedInUser());
-        if (material == null) {
-            throw notFound();
-        }
-        return learningObjectAdministrationService.delete(material, getLoggedInUser());
-    }
-
-    @POST
-    @Path("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject delete(Material material) {
-        return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 
     @PUT
@@ -109,5 +88,38 @@ public class MaterialResource extends BaseResource {
             return materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         }
         return materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
+    }
+
+    @POST
+    @Path("create")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material createMaterial(Material material) {
+        if (material.getId() == null) {
+            return materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
+        }
+        throw new UnsupportedOperationException("this is create method");
+    }
+
+    @POST
+    @Path("update")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material updateMaterial(Material material) {
+        if (material.getId() == null) {
+            throw new UnsupportedOperationException("this is update method");
+        }
+        return materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
+    }
+
+    @POST
+    @Path("delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject delete(Material material) {
+        return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 }
