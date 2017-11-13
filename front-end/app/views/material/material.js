@@ -118,7 +118,6 @@ angular.module('koolikottApp')
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
                     }
-                    console.log('getMaterialSuccess', material)
                     init();
                 }
             }
