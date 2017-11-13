@@ -159,7 +159,7 @@ class controller extends Controller {
     }
     getTargetGroups() {
         return this.portfolio
-            ? this.targetGroupService.getConcentratedLabelByTargetGroups(this.portfolio.targetGroups)
+            ? this.targetGroupService.getConcentratedLabelByTargetGroups(this.portfolio.targetGroups || [])
             : undefined
     }
     isAdminButtonsShowing() {

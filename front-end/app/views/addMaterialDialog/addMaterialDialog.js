@@ -267,7 +267,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         function isTabTwoTargetGroupValid() {
-            return $scope.material.targetGroups && $scope.material.targetGroups.length > 0;
+            return Array.isArray($scope.material.targetGroups) && !!$scope.material.targetGroups.length;
         }
 
         function isTaxonSet(index) {
@@ -754,7 +754,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 }
 
                 if (storageService.getPortfolio().targetGroups) {
-                    $scope.material.targetGroups = storageService.getPortfolio().targetGroups.slice();
+                    $scope.material.targetGroups = (storageService.getPortfolio().targetGroups || []).slice();
                 }
             }
         }
@@ -824,6 +824,11 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             if (!material) {
                 saveMaterialFail()
             } else {
+                /**
+                 * @todo Hotfix: Shouldn't be mutating this in front-end.
+                 */
+                material.unReviewed = 1
+
                 storageService.setMaterial(material)
 
                 // Pass saved material back to material view
