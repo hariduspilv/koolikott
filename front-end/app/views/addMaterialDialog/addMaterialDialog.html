@@ -76,7 +76,7 @@
 
               <!--Material language-->
               <span style="white-space: nowrap">Materjal on</span>
-              <md-input-container flex-xs="70" flex-gt-xs="15" flex-gt-sm="20" layout-align="end center" class="md-padding">
+              <md-input-container flex-xs="70" flex-gt-xs="40" flex-gt-sm="20" layout-align="end center" class="md-padding">
                 <md-select data-ng-model="material.language" id="add-material-language-select">
                   <md-option data-ng-repeat="language in languages" value="{{language}}">
                     <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
@@ -125,7 +125,7 @@
               <div data-ng-message="required" data-translate="MATERIAL_PUBLISHER_OR_AUTHOR_MANDATORY" class="validation-messages"></div>
             </div>
           </md-input-container>
-          <span class="md-padding">ja või autor *</span>
+          <span class="md-padding">ja/või autor *</span>
           <!-- Author -->
           <md-input-container flex-gt-sm="25" flex data-ng-required="!material.publishers[0].name || $index === 0">
             <label>
@@ -177,13 +177,13 @@
           <span data-translate="MATERIAL_SPECIAL_EDUCATION"></span>
         </md-checkbox>
 
-        <div layout="row" flex layout-align="space-between center">
+        <div layout="row" flex layout-xs="column" layout-align-xs="start stretch" layout-align="space-between center">
 
           <!--Target groups-->
-          <dop-target-group-selector data-target-groups="material.targetGroups" data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]" data-placeholder="jou" data-mark-required="addMaterialForm.$submitted" data-is-required="{trigger: true}" data-flex="25"></dop-target-group-selector>
+          <dop-target-group-selector data-target-groups="material.targetGroups" data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]" data-placeholder="jou" data-mark-required="addMaterialForm.$submitted" data-is-required="{trigger: true}" data-flex></dop-target-group-selector>
 
           <!--Key competences-->
-            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class="md-padding">
+            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class="md-padding chips--regular-font">
               <md-autocomplete id="key-competence-auto" md-input-id="key-competence-auto-input" md-no-cache="true" md-selected-item="selectedKeyCompetence" md-search-text="competenceSearchText" md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')" placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
                 md-autoselect>
@@ -199,7 +199,7 @@
             </div>
 
           <!--Cross-curricular themes-->
-            <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" flex name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')">
+            <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" flex name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')" class="chips--regular-font md-padding">
               <md-autocomplete id="cross-curricular-auto" md-input-id="cross-curricular-auto-input" md-no-cache="true" md-selected-item="selectedCrossCurricularTheme" md-search-text="crossCurricularSearchText" md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
                 md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')" placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
                 md-autoselect>
@@ -294,19 +294,9 @@
         <md-icon>arrow_forward</md-icon>
       </md-button>
 
-      <md-button aria-label="Mine tagasi eelmisse sammu" data-ng-click="step.previousStep()" data-ng-if="step.currentStep > 0 && !isSaving" class="md-primary">
-        <md-icon>arrow_back</md-icon>
-        <span data-translate="BUTTON_PREVIOUS_STEP"></span>
-      </md-button>
-
       <span flex></span>
       <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
-      </md-button>
-
-      <md-button aria-label="Loo materjal" id="add-material-create-button" data-ng-if="step.canCreateMaterial()" data-ng-disabled="isSaving || uploadingFile" data-ng-click="save()" class="md-primary">
-        <span data-ng-if="!isUpdateMode" data-translate="BUTTON_CREATE_MATERIAL"></span>
-        <span data-ng-if="isUpdateMode" data-translate="BUTTON_UPDATE_MATERIAL"></span>
       </md-button>
 
       <md-button aria-label="Ürita luua materjali" id="create-material-button" class="md-primary" data-ng-if="!step.canCreateMaterial()" data-ng-disabled="isSaving || uploadingFile" data-ng-click="addMaterialForm.$setSubmitted()">

@@ -28,6 +28,12 @@ md-chip md-chip-template {
 	align-items: center;
 }
 
+.chips--regular-font {
+	.md-chips {
+		font-size: 16px;
+	}
+}
+
 md-chips,
 .md-chips {
 	display: block;
