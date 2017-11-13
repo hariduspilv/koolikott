@@ -17,6 +17,7 @@ angular.module('koolikottApp')
                 $location.url('/');
             } else {
                 authenticatedUser = authUser;
+                $rootScope.justLoggedIn = true;
                 getRole();
             }
         }
