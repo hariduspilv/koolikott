@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     public static final String IMPROPERS = "impropers";
-    public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
+    public static final String GET_IMPROPERS_BY_ID = "admin/improper/%s";
 
     @Test
     public void setImproperNoData() {
@@ -51,15 +51,8 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getImpropers() {
-        login(USER_SECOND);
-        List<ImproperContent> improperContents = doGet(IMPROPERS, genericType());
-        assertTrue(CollectionUtils.isNotEmpty(improperContents));
-    }
-
-    @Test
     public void getImproperByLearningObject() {
-        login(USER_SECOND);
+        login(USER_ADMIN);
 
         List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, PORTFOLIO_3), genericType());
         assertTrue(CollectionUtils.isNotEmpty(improperContents));

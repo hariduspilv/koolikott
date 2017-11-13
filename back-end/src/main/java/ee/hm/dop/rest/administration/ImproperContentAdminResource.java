@@ -22,6 +22,8 @@ public class ImproperContentAdminResource extends BaseResource {
     private ImproperContentAdminService improperContentAdminService;
     @Inject
     private ReviewManager reviewManager;
+    @Inject
+    private ImproperContentService improperContentService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,5 +47,13 @@ public class ImproperContentAdminResource extends BaseResource {
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
     public LearningObject setProper(LearningObjectMiniDto loDto) {
         return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), loDto.convert(), ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
+    }
+
+    @GET
+    @Path("{learningObjectId}")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ImproperContent> getImproperById(@PathParam("learningObjectId") Long learningObjectId) {
+        return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
     }
 }
