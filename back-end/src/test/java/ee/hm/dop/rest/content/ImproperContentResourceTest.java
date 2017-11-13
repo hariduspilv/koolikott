@@ -28,14 +28,14 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void setImproperNoData() {
         login(USER_SECOND);
         Response response = doPut(IMPROPERS, new ImproperContent());
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_set_material_that_does_not_exist_to_improper() {
         login(USER_SECOND);
         Response response = doPut(IMPROPERS, improperMaterialContent(NOT_EXISTS_ID));
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test

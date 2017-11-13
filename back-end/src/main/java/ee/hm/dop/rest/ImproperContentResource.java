@@ -18,11 +18,7 @@ public class ImproperContentResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ImproperContent setImproper(ImproperContent improperContent) {
-        try {
-            return improperContentService.save(improperContent, getLoggedInUser());
-        } catch (Exception e) {
-            throw badRequest(e.getMessage());
-        }
+        return improperContentService.save(improperContent, getLoggedInUser());
     }
 
     @GET

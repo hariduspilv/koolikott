@@ -26,7 +26,6 @@ import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -314,7 +313,7 @@ public class MaterialServiceTest {
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
+        expect(reviewableChangeService.getAllByLearningObjectOld(material.getId())).andReturn(null);
         solrEngineService.updateIndex();
         expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 
@@ -341,7 +340,7 @@ public class MaterialServiceTest {
         expect(user.getId()).andReturn(1L).anyTimes();
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(materialGetter.get(material.getId(), user)).andReturn(material);
-        expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
+        expect(reviewableChangeService.getAllByLearningObjectOld(material.getId())).andReturn(null);
         expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 
         replay(user, materialDao, reviewableChangeService, materialGetter);

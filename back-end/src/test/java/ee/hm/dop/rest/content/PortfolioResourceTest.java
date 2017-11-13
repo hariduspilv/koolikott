@@ -23,7 +23,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
     private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
     private static final String GET_BY_CREATOR_COUNT_URL = "portfolio/getByCreator/count?username=%s";
-    private static final String PORTFOLIO_INCREASE_VIEW_COUNT_URL = "portfolio/increaseViewCount";
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
 
@@ -136,20 +135,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(0, portfolios.getItems().size());
         assertEquals(0, portfolios.getStart());
         assertEquals(0, portfolios.getTotalResults());
-    }
-
-    @Test
-    public void increaseViewCount() {
-        Portfolio portfolioBefore = getPortfolio(PORTFOLIO_3);
-        doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL, portfolioWithId(PORTFOLIO_3));
-        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_3);
-        assertEquals(Long.valueOf(portfolioBefore.getViews() + 1), portfolioAfter.getViews());
-    }
-
-    @Test
-    public void increaseViewCountNoPortfolio() {
-        Response response = doPost(PORTFOLIO_INCREASE_VIEW_COUNT_URL, portfolioWithId(99999L));
-        assertEquals(500, response.getStatus());
     }
 
     @Test

@@ -32,11 +32,7 @@ public class MaterialResource extends BaseResource {
     @Inject
     private UserService userService;
     @Inject
-    private UserLikeService userLikeService;
-    @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
-    @Inject
-    private LearningObjectService learningObjectService;
     @Inject
     private MaterialGetter materialGetter;
 
@@ -60,43 +56,6 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
         return materialGetter.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
-    }
-
-    @POST
-    @Path("increaseViewCount")
-    public Response increaseViewCount(Material material) {
-        Material originalMaterial = materialGetter.get(material.getId(), getLoggedInUser());
-        if (originalMaterial == null) {
-            throw notFound();
-        }
-        learningObjectService.incrementViewCount(originalMaterial);
-        return Response.status(HttpURLConnection.HTTP_OK).build();
-    }
-
-    @POST
-    @Path("like")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void likeMaterial(Material material) {
-        userLikeService.addUserLike(material, getLoggedInUser(), Like.LIKE);
-    }
-
-    @POST
-    @Path("dislike")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void dislikeMaterial(Material material) {
-        userLikeService.addUserLike(material, getLoggedInUser(), Like.DISLIKE);
-    }
-
-    @POST
-    @Path("getUserLike")
-    public UserLike getUserLike(Material material) {
-        return userLikeService.getUserLike(material, getLoggedInUser());
-    }
-
-    @POST
-    @Path("removeUserLike")
-    public void removeUserLike(Material material) {
-        userLikeService.removeUserLike(material, getLoggedInUser());
     }
 
     @GET

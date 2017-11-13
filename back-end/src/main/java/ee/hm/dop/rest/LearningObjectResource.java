@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
@@ -23,6 +24,8 @@ public class LearningObjectResource extends BaseResource {
     private UserFavoriteService userFavoriteService;
     @Inject
     private UserLikeService userLikeService;
+    @Inject
+    private LearningObjectService learningObjectService;
 
     @PUT
     @Path("{learningObjectId}/tags")
@@ -109,5 +112,11 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void dislikeMaterial(LearningObjectMiniDto learningObjectMiniDto) {
         userLikeService.addUserLike(learningObjectMiniDto.convert(), getLoggedInUser(), Like.DISLIKE);
+    }
+
+    @POST
+    @Path("increaseViewCount")
+    public void increaseViewCount(LearningObjectMiniDto learningObjectMiniDto) {
+        learningObjectService.incrementViewCount(learningObjectMiniDto.convert());
     }
 }

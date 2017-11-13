@@ -127,7 +127,7 @@ class controller extends Controller {
     }
     init() {
         this.setState('', '', [], false); // reset
-        
+
         if (!this.$rootScope.learningObjectPrivate) {
             this.bannerType =
                 this.$rootScope.learningObjectDeleted ? 'showDeleted' :
