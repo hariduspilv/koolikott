@@ -217,7 +217,7 @@ class controller extends Controller {
             this.$scope.detailedSearch.targetGroups = [...(this.storageService.getPortfolio().targetGroups || [])]
 
             this.$scope.$broadcast('detailedSearch:prefillTaxon', this.storageService.getPortfolio().taxons[0])
-            this.$scope.$broadcast('detailedSearch:prefillTargetGroup', this.storageService.getPortfolio().targetGroups)
+            this.$scope.$broadcast('detailedSearch:prefillTargetGroup', [...(this.storageService.getPortfolio().targetGroups || [])])
 
             this.prefilling = true
 

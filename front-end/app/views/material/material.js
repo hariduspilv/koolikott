@@ -25,9 +25,13 @@ angular.module('koolikottApp')
                 'CCBYNCND': ['by', 'nc', 'nd']
             };
 
-            if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial" && storageService.getMaterial().type !== ".AdminMaterial") {
-                $scope.material = storageService.getMaterial();
-
+            const storedMaterial = storageService.getMaterial()
+            if (storedMaterial &&
+                storedMaterial.type !== ".ReducedMaterial" &&
+                storedMaterial.type !== ".AdminMaterial"
+            ) {
+                $scope.material = storedMaterial
+                
                 if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                     $rootScope.selectedSingleMaterial = $scope.material;
                 }
@@ -335,7 +339,7 @@ angular.module('koolikottApp')
             }
 
             function getTargetGroups() {
-                if ($scope.material.targetGroups[0]) {
+                if (Array.isArray($scope.material.targetGroups) && $scope.material.targetGroups.length) {
                     return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
             }
@@ -344,5 +348,9 @@ angular.module('koolikottApp')
                 if ($scope.material)
                     $scope.material.recommendation = recommendation
             }
+
+            $scope.$on('$destroy', () =>
+                storageService.setMaterial(null)
+            )
         }
     ]);

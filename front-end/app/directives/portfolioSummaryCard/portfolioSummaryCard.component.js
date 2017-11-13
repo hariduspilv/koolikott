@@ -53,7 +53,7 @@ class controller extends Controller {
         }
     }
     $doCheck() {
-        if (!this.$scope.portfolio && this.portfolio)
+        if (this.$scope.portfolio !== this.portfolio)
             this.$scope.portfolio = this.portfolio
     }
     canEdit() {
@@ -159,7 +159,7 @@ class controller extends Controller {
     }
     getTargetGroups() {
         return this.portfolio
-            ? this.targetGroupService.getConcentratedLabelByTargetGroups(this.portfolio.targetGroups)
+            ? this.targetGroupService.getConcentratedLabelByTargetGroups(this.portfolio.targetGroups || [])
             : undefined
     }
     isAdminButtonsShowing() {

@@ -120,6 +120,7 @@ class controller extends Controller {
         this.$rootScope.learningObjectImproper = undefined
         this.$rootScope.learningObjectUnreviewed = undefined
         this.$rootScope.learningObjectChanged = undefined
+        this.$rootScope.learningObjectChanges = undefined
     }
     onLearningObjectChange(newLearningObject, oldLearningObject) {
         if (newLearningObject && (!oldLearningObject || newLearningObject.changed != oldLearningObject.changed))

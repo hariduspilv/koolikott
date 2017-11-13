@@ -32,7 +32,6 @@ public class PortfolioPage extends Page{
 	private By autocompleteSystemTag = By.xpath("//span[@md-highlight-text='$ctrl.newTag.tagName']");
 	private By newSystemTagNotification = By.xpath("//button[contains(text(), 'Ok')]");
 	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
-	private By changedLoBannerText = By.id("error-message-heading");
 	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
@@ -170,7 +169,7 @@ public class PortfolioPage extends Page{
 	}
 
 	public String getChangedLOBannerText() {
-		return getDriver().findElement(changedLoBannerText).getText();
+		return getDriver().findElement(Constants.bannerText).getText();
 	}
 
 

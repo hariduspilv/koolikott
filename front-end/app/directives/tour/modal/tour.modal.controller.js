@@ -2,7 +2,8 @@
 
 {
 class controller extends Controller {
-    $onInit() {
+    constructor(...args) {
+        super(...args)
         angular.element('body').addClass('tour-modal-is-showing')
 
         this.cancel = () => {

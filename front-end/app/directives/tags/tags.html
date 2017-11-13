@@ -3,7 +3,7 @@
 </p>
 <div layout="row" layout-xs="column">
   <md-chips
-    data-ng-model="tags"
+    data-ng-model="upvotes"
     readonly="true"
     data-md-removable="$root.isEditPortfolioMode"
     data-md-on-remove="$ctrl.removeTag($chip.tag)">
@@ -58,7 +58,7 @@
     data-ng-submit="$ctrl.addTag()"
     >
     <md-autocomplete
-      class="tags"
+      class="upvotes"
       data-md-selected-item="$ctrl.newTag.selectedItem"
       data-md-floating-label="{{'MATERIAL_ADD_TAG' | translate}}"
       data-md-item-text="tag"
@@ -86,7 +86,7 @@
     </md-icon>
   </md-button>
   <md-button
-    data-ng-show="!$ctrl.showMoreTags && tags.length > 10"
+    data-ng-show="!$ctrl.showMoreTags && upvotes.length > 10"
     data-ng-click="$ctrl.showLess()"
     >
     <span data-translate="SHOW_LESS"></span>

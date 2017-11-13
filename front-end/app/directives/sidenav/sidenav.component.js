@@ -65,10 +65,9 @@ class controller extends Controller {
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
         this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
         this.$scope.updateUserCounts();
-        if (!this.$scope.isAuthenticated){
-            this.$location.url('/')
-            this.$rootScope.isUserTabOpen = false;
-        }
+        
+        if (!this.$scope.isAuthenticated)
+            this.$rootScope.isUserTabOpen = false
     }
     isLocationActive(menuLocation) {
         if (!this.$scope.user)
