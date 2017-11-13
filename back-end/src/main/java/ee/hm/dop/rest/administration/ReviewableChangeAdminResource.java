@@ -47,15 +47,7 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ReviewableChange> getChanges(@PathParam("id") Long learningObjectId) {
-        return reviewableChangeService.getAllByLearningObjectOld(learningObjectId);
-    }
-
-    @POST
-    @Path("byLearningObject")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChangesByLearningObject(LearningObjectMiniDto learningObject) {
-        return reviewableChangeService.getAllByLearningObject(learningObject.convert());
+        return reviewableChangeService.getAllByLearningObject(learningObjectId);
     }
 
     @POST
@@ -112,35 +104,14 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @POST
     @Path("acceptOne")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject acceptAllChanges2(ChangeForm changeForm) {
-        return reviewableChangeAdminService.acceptOneChange(changeForm.getLearningObject().getId(), changeForm.getChange().getId(), getLoggedInUser());
+    public LearningObject acceptAllChanges2(ReviewableChange change) {
+        return reviewableChangeAdminService.acceptOneChange(change.getLearningObject().getId(), change.getId(), getLoggedInUser());
     }
 
     @POST
     @Path("revertOne")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject revertAllChanges2(ChangeForm changeForm) {
-        return reviewableChangeAdminService.revertOneChange(changeForm.getLearningObject().getId(), changeForm.getChange().getId(), getLoggedInUser());
-    }
-
-    public static class ChangeForm {
-        private ReviewableChange change;
-        private LearningObject learningObject;
-
-        public ReviewableChange getChange() {
-            return change;
-        }
-
-        public void setChange(ReviewableChange change) {
-            this.change = change;
-        }
-
-        public LearningObject getLearningObject() {
-            return learningObject;
-        }
-
-        public void setLearningObject(LearningObject learningObject) {
-            this.learningObject = learningObject;
-        }
+    public LearningObject revertAllChanges2(ReviewableChange change) {
+        return reviewableChangeAdminService.revertOneChange(change.getLearningObject().getId(), change.getId(), getLoggedInUser());
     }
 }

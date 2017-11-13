@@ -29,8 +29,8 @@ public class ImproperContentResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
-    public ImproperContent setImproper2(ImproperContentForm improperContent) {
-        return improperContentService.save(improperContent.getImproperContent(), getLoggedInUser(), improperContent.getLearningObject());
+    public ImproperContent setImproper2(ImproperContentForm form) {
+        return improperContentService.save(form.getImproperContent(), getLoggedInUser(), form.getLearningObject());
     }
 
     public static class ImproperContentForm {

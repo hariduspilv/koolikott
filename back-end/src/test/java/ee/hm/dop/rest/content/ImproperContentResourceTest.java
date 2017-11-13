@@ -3,6 +3,7 @@ package ee.hm.dop.rest.content;
 import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ReportingReason;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
@@ -41,10 +42,11 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void user_can_set_material_improper_with_reporting_reason() throws Exception {
         login(USER_SECOND);
-        Response response = doPut(IMPROPERS, improperMaterialContent(MATERIAL_13));
+        ImproperContentDto json = improperMaterialContent(MATERIAL_13);
+        Response response = doPut(IMPROPERS, json);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 
-        ImproperContent improperContent = doPut(IMPROPERS, improperMaterialContent(MATERIAL_13), ImproperContent.class);
+        ImproperContent improperContent = doPut(IMPROPERS, json, ImproperContent.class);
         assertTrue("Improper material has reporting reasons", CollectionUtils.isNotEmpty(improperContent.getReportingReasons()));
         Material improperMaterial = getMaterial(MATERIAL_13);
         assertTrue("Material is improper", improperMaterial.getImproper() > 0);
@@ -60,13 +62,43 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(5), improperContents.get(0).getId());
     }
 
+    public static class ImproperContentDto{
+        private LearningObject learningObject;
+        private String reportingText;
+        private List<ReportingReason> reportingReasons;
+
+        public LearningObject getLearningObject() {
+            return learningObject;
+        }
+
+        public void setLearningObject(LearningObject learningObject) {
+            this.learningObject = learningObject;
+        }
+
+        public String getReportingText() {
+            return reportingText;
+        }
+
+        public void setReportingText(String reportingText) {
+            this.reportingText = reportingText;
+        }
+
+        public List<ReportingReason> getReportingReasons() {
+            return reportingReasons;
+        }
+
+        public void setReportingReasons(List<ReportingReason> reportingReasons) {
+            this.reportingReasons = reportingReasons;
+        }
+    }
+
     private GenericType<List<ImproperContent>> genericType() {
         return new GenericType<List<ImproperContent>>() {
         };
     }
 
-    private ImproperContent improperMaterialContent(Long id) {
-        ImproperContent improperContent = new ImproperContent();
+    private ImproperContentDto improperMaterialContent(Long id) {
+        ImproperContentDto improperContent = new ImproperContentDto();
         improperContent.setLearningObject(materialWithId(id));
         improperContent.setReportingReasons(Lists.newArrayList(reason(LO_CONTENT), reason(LO_FORM)));
         return improperContent;
