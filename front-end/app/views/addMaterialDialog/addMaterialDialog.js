@@ -92,11 +92,9 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         $scope.addNewAuthor = function () {
-            console.log($scope.material.authors.length);
             $scope.material.authors.push({});
             $timeout(function () {
                 angular.element('#material-author-' + ($scope.material.authors.length - 1) + '-name').focus();
-                console.log($scope.material.authors.length);
             });
         };
 
