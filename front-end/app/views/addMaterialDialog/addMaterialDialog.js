@@ -31,6 +31,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         $scope.fileUploaded = false;
         $scope.uploadingFile = false;
         $scope.review = {};
+        $scope.additionalInfo = {};
         $scope.maxReviewSize = 10;
         $scope.charactersRemaining = 850;
         $scope.resourceTypeDTO = [];
@@ -81,6 +82,14 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
             addNewMetadata();
         };
+
+        $scope.openAdditionalInfo = function () {
+            $scope.additionalInfo.isVisible = true;
+        }
+
+        $scope.closeAdditionalInfo = function () {
+            $scope.additionalInfo.isVisible = false;
+        }
 
         $scope.addNewAuthor = function () {
             $scope.material.authors.push({});
@@ -168,6 +177,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         $scope.showThemesWarning = function (element) {
             if ($scope.isTouchedOrSubmitted(element) && $scope.material.crossCurricularThemes) {
+                console.log("hei")
                 return $scope.material.crossCurricularThemes.length === 0;
             }
         };
