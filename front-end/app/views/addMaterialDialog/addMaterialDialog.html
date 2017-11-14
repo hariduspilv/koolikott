@@ -58,7 +58,7 @@
 
             <div layout="row" flex layout-align="start center">
               <!--Upload button-->
-              <div flex-xs="70" flex-gt-xs="30" flex-gt-sm="20" layout-align="start center">
+              <div flex-gt-xs="25" layout-align="start center">
                 <div ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
                   <span>või</span>
                   <a class="md-raised md-primary">
@@ -76,7 +76,7 @@
 
               <!--Material language-->
               <span style="white-space: nowrap">Materjal on</span>
-              <md-input-container flex-xs="70" flex-gt-xs="40" flex-gt-sm="22" layout-align="end center" class="md-padding">
+              <md-input-container flex-gt-xs="22" flex-gt-sm="22" layout-align="end center" class="md-padding">
                 <md-select data-ng-model="material.language" id="add-material-language-select">
                   <md-option data-ng-repeat="language in languages" value="{{language}}">
                     <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
@@ -126,6 +126,7 @@
               </div>
             </md-input-container>
             <span class="md-padding">ja/või autor *</span>
+
             <!-- Author -->
             <md-input-container flex-gt-sm="25" flex data-ng-required="!material.publishers[0].name || $index === 0">
               <label>
@@ -177,43 +178,48 @@
           <span data-translate="MATERIAL_SPECIAL_EDUCATION"></span>
         </md-checkbox>
 
-        <div layout="row" flex layout-xs="column" layout-align-xs="start stretch" layout-align="space-between center">
-
+        <div layout="row" flex layout-xs="column" layout-align-xs="start stretch">
           <!--Target groups-->
-          <dop-target-group-selector data-target-groups="material.targetGroups" data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]" data-placeholder="jou" data-mark-required="addMaterialForm.$submitted" data-is-required="{trigger: true}" data-flex></dop-target-group-selector>
+          <div flex-gt-sm="25">
+            <dop-target-group-selector data-target-groups="material.targetGroups" data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]" data-mark-required="addMaterialForm.$submitted" data-is-required="{trigger: true}" data-flex></dop-target-group-selector>
+          </div>
 
           <!--Key competences-->
-          <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class="md-padding chips--regular-font">
-            <md-autocomplete id="key-competence-auto" md-input-id="key-competence-auto-input" md-no-cache="true" md-selected-item="selectedKeyCompetence" md-search-text="competenceSearchText" md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
-              md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')" placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
-              md-autoselect>
-              <span md-highlight-text="competenceSearchText" md-highlight-flags="^i" data-ng-class="{'disabled-option': keyCompetence.name==='NOT_RELEVANT' && material.keyCompetences.length > 0}">
-                      {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
-                    </span>
-            </md-autocomplete>
-            <md-chip-template>
-              <span data-translate="KEY_COMPETENCE_{{$chip.name.toUpperCase()}}" />
-            </md-chip-template>
-          </md-chips>
-          <div data-ng-show="showCompetencesWarning(addMaterialForm.keyCompetencesInput)" class="validation-messages-chips" data-translate="MATERIAL_KEY_COMPETENCE_IS_MANDATORY">
+          <div flex-gt-sm="35" class="chips-container">
+            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class=" chips--regular-font">
+              <md-autocomplete id="key-competence-auto" md-input-id="key-competence-auto-input" md-no-cache="true" md-selected-item="selectedKeyCompetence" md-search-text="competenceSearchText" md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
+                md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')" placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
+                md-autoselect>
+                <span md-highlight-text="competenceSearchText" md-highlight-flags="^i" data-ng-class="{'disabled-option': keyCompetence.name==='NOT_RELEVANT' && material.keyCompetences.length > 0}">
+                        {{translate(keyCompetence.name, 'KEY_COMPETENCE_')}}
+                      </span>
+              </md-autocomplete>
+              <md-chip-template>
+                <span data-translate="KEY_COMPETENCE_{{$chip.name.toUpperCase()}}" />
+              </md-chip-template>
+            </md-chips>
+            <div data-ng-show="showCompetencesWarning(addMaterialForm.keyCompetencesInput)" class="validation-messages-chips" data-translate="MATERIAL_KEY_COMPETENCE_IS_MANDATORY">
+            </div>
           </div>
 
           <!--Cross-curricular themes-->
-          <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" flex name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')"
-            class="chips--regular-font md-padding">
-            <md-autocomplete id="cross-curricular-auto" md-input-id="cross-curricular-auto-input" md-no-cache="true" md-selected-item="selectedCrossCurricularTheme" md-search-text="crossCurricularSearchText" md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
-              md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')" placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
-              md-autoselect>
-              <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i" data-ng-class="{'disabled-option': crossCurricularTheme.name==='NOT_RELEVANT' && material.crossCurricularThemes.length > 0}">
-                      {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
-                    </span>
-            </md-autocomplete>
-            <md-chip-template>
-              <span data-translate="CROSS_CURRICULAR_THEME_{{$chip.name.toUpperCase()}}" />
-            </md-chip-template>
+          <div flex-gt-sm="45" class="chips-container">
+            <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" flex name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')"
+              class="chips--regular-font">
+              <md-autocomplete id="cross-curricular-auto" md-input-id="cross-curricular-auto-input" md-no-cache="true" md-selected-item="selectedCrossCurricularTheme" md-search-text="crossCurricularSearchText" md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
+                md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')" placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
+                md-autoselect>
+                <span md-highlight-text="crossCurricularSearchText" md-highlight-flags="^i" data-ng-class="{'disabled-option': crossCurricularTheme.name==='NOT_RELEVANT' && material.crossCurricularThemes.length > 0}">
+                        {{translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')}}
+                      </span>
+              </md-autocomplete>
+              <md-chip-template>
+                <span data-translate="CROSS_CURRICULAR_THEME_{{$chip.name.toUpperCase()}}" />
+              </md-chip-template>
+            </md-chips>
             <div data-ng-show="showThemesWarning(addMaterialForm.crossCurricularThemesInput)" class="validation-messages-chips" data-translate="MATERIAL_CROSS_CURRICULAR_THEME_IS_MANDATORY">
             </div>
-          </md-chips>
+          </div>
         </div>
         <h5 class="no-margin">Illustratsioon:</h5>
         <div flex layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
@@ -341,7 +347,7 @@
             </div>
           </div>
           <div flex layout="row">
-            <div layout-align="start center" flex-xs="65">
+            <div layout-align="start center" flex-gt-sm="30">
               <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"><span>Materjali tüüp</span></md-option>

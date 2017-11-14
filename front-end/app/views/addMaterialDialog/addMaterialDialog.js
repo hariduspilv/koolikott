@@ -92,9 +92,11 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         }
 
         $scope.addNewAuthor = function () {
+            console.log($scope.material.authors.length);
             $scope.material.authors.push({});
             $timeout(function () {
                 angular.element('#material-author-' + ($scope.material.authors.length - 1) + '-name').focus();
+                console.log($scope.material.authors.length);
             });
         };
 
@@ -177,7 +179,6 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
         $scope.showThemesWarning = function (element) {
             if ($scope.isTouchedOrSubmitted(element) && $scope.material.crossCurricularThemes) {
-                console.log("hei")
                 return $scope.material.crossCurricularThemes.length === 0;
             }
         };
