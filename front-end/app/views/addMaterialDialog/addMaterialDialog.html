@@ -15,12 +15,12 @@
     <md-dialog-content layout="column">
       <md-content class="md-padding" style="padding-bottom: 0">
         <!--URL and Upload block-->
-        <div flex layout="row" class="flex-wrap-wrap" layout-align="start center">
+        <div layout="row" layout-wrap layout-align="start center">
           <!--Material source-->
-          <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-lg="35" layout="row" layout-align="start center">
+          <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-lg="40" layout="row" layout-align="start center">
           <div data-translate="Palun lisa link"></div>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
-            <md-input-container flex layout-fill>
+            <md-input-container layout-fill>
               <label>http://</label>
               <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" dop-validate-url data-ng-click="sourceIsFocused()">
               <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
@@ -86,7 +86,7 @@
         <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
           <h5 class="no-margin">Põhiandmed:</h5>
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
-            <md-input-container flex flex-order-xs="2" flex-sm="50">
+            <md-input-container flex flex-order-xs="2" flex-sm="50" flex-lg="35">
               <label data-translate="MATERIAL_TITLE"></label>
               <input data-ng-model="metadata.title" name="title" data-ng-required="$index === 0">
               <div data-ng-messages="addMaterialForm.title.$error">
@@ -107,7 +107,7 @@
               <input ng-model="metadata.description" id="add-material-description-input" />
             </md-input-container>
           </div>
-          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" class="flex-wrap-wrap">
+          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" layout-wrap>
             <!--Publisher-->
             <md-input-container flex-sm="35" flex-lg="30" flex data-ng-required="!material.authors[0].name && !material.authors[0].surname">
               <label>
@@ -123,8 +123,8 @@
             <span class="md-padding">ja/või autor *</span>
 
             <!-- Author -->
-            <div flex-lg="60" data-ng-repeat="author in material.authors">
-              <md-input-container flex-sm="45" flex-xs="30" flex data-ng-required="!material.publishers[0].name || $index === 0">
+            <div data-ng-repeat="author in material.authors">
+              <md-input-container flex-sm="45" flex-xs="30" data-ng-required="!material.publishers[0].name || $index === 0">
                 <label>
                   <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                 </label>
@@ -133,7 +133,7 @@
                   <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
                 </div>
               </md-input-container>
-              <md-input-container flex flex="45" flex-xs="30">
+              <md-input-container flex="45" flex-xs="30">
                 <label>
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
@@ -168,11 +168,11 @@
           </md-button>
         </div>
 
-        <md-checkbox data-ng-if="educationalContextId === 2" data-ng-model="material.specialEducation" aria-label="{{'MATERIAL_SPECIAL_EDUCATION' | translate}}" class="md-primary" flex>
+        <md-checkbox data-ng-if="educationalContextId === 2" data-ng-model="material.specialEducation" aria-label="{{'MATERIAL_SPECIAL_EDUCATION' | translate}}" class="md-primary">
           <span data-translate="MATERIAL_SPECIAL_EDUCATION"></span>
         </md-checkbox>
 
-        <div layout="row" flex layout-xs="column" layout-align-xs="start stretch">
+        <div layout="row" layout-xs="column" layout-align-xs="start stretch">
           <!--Target groups-->
           <div flex-sm="25" flex-md="30" flex-lg="30">
             <dop-target-group-selector data-target-groups="material.targetGroups" data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]" data-mark-required="addMaterialForm.$submitted" data-is-required="{trigger: true}" data-flex></dop-target-group-selector>
@@ -180,7 +180,7 @@
 
           <!--Key competences-->
           <div flex-sm="35" flex-md="30" flex-lg="30" class="chips-container">
-            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" flex name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class=" chips--regular-font">
+            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class=" chips--regular-font">
               <md-autocomplete id="key-competence-auto" md-input-id="key-competence-auto-input" md-no-cache="true" md-selected-item="selectedKeyCompetence" md-search-text="competenceSearchText" md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')" placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
                 md-autoselect>
@@ -198,7 +198,7 @@
 
           <!--Cross-curricular themes-->
           <div flex-sm="45" flex-md="45" flex-lg="40" class="chips-container">
-            <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" flex name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')"
+            <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')"
               class="chips--regular-font">
               <md-autocomplete id="cross-curricular-auto" md-input-id="cross-curricular-auto-input" md-no-cache="true" md-selected-item="selectedCrossCurricularTheme" md-search-text="crossCurricularSearchText" md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
                 md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')" placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
@@ -216,12 +216,12 @@
           </div>
         </div>
         <h5 class="no-margin">Illustratsioon:</h5>
-        <div flex class="flex-wrap-wrap" layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
+        <div layout-wrap layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
           <div flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
-            <div flex data-ngf-drop ngf-select ng-model="newPicture" class="drop-box no-margin" data-ngf-drag-over-class="'dragover'" data-ngf-multiple="false" data-accept="image/*" data-ngf-pattern="'image/*'" data-ngf-max-size="{{maxPictureSize + 'MB'}}" ngf-model-invalid="invalidPicture"
-              layout="row" layout-align="center center" flex>
+            <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box no-margin" data-ngf-drag-over-class="'dragover'" data-ngf-multiple="false" data-accept="image/*" data-ngf-pattern="'image/*'" data-ngf-max-size="{{maxPictureSize + 'MB'}}" ngf-model-invalid="invalidPicture"
+              layout="row" layout-align="center center">
 
-              <span flex data-ng-if="!newPicture && !material.picture && !showErrorOverlay">
+              <span data-ng-if="!newPicture && !material.picture && !showErrorOverlay">
               <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
                 <span data-translate="Suurus kuni"></span> {{maxPictureSize}}Mb
               </span>
@@ -243,7 +243,7 @@
             </div>
           </div>
           <div layout="column" flex-sm="70" flex-md="35" flex-lg="25" class="md-padding">
-            <md-input-container flex data-ng-required="!material.publishers[0].name || $index === 0">
+            <md-input-container data-ng-required="!material.publishers[0].name || $index === 0">
               <label data-translate="Autor*">
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
@@ -252,7 +252,7 @@
                 <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
               </div>
             </md-input-container>
-            <md-input-container flex data-ng-required="!material.publishers[0].name || $index === 0">
+            <md-input-container data-ng-required="!material.publishers[0].name || $index === 0">
               <label data-translate="Allikas*">
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
@@ -266,7 +266,7 @@
             <md-checkbox class="md-primary" flex style="margin-top: 28px;">
               <span data-translate="Olen ise autor"></span>
             </md-checkbox>
-            <div flex layout="row" layout-align="start center">
+            <div layout="row" layout-align="start center">
               <span data-translate="või litsentsitüüp*" style="white-space: nowrap; padding-right: 8px;"></span>
               <md-select flex-sm="100" flex-xs="100" flex-md="60" flex-lg="100" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
@@ -275,19 +275,15 @@
             </div>
           </div>
         </div>
-        <md-button aria-label="Ava lisaandmed" id="open-additional-info" class="md-primary no-margin" data-ng-disabled="isSaving || uploadingFile" data-ng-click="openAdditionalInfo()" data-ng-if="!additionalInfo.isVisible">
+        <md-button aria-label="Ava/sulge lisaandmed" id="open-additional-info" class="md-primary no-margin" data-ng-disabled="isSaving || uploadingFile" data-ng-click="additionalInfo.isVisible =! additionalInfo.isVisible">
           <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
-          <md-icon>arrow_forward</md-icon>
+          <md-icon data-ng-if="!additionalInfo.isVisible">arrow_forward</md-icon>
+          <md-icon data-ng-if="additionalInfo.isVisible">arrow_downward</md-icon>
         </md-button>
 
-        <md-button aria-label="Sulge lisaandmed" id="close-additional-info" class="md-primary no-margin" data-ng-disabled="isSaving || uploadingFile" data-ng-click="closeAdditionalInfo()" data-ng-if="additionalInfo.isVisible">
-          <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
-          <md-icon>arrow_downward</md-icon>
-        </md-button>
-
-        <div flex class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak style="padding-top: 0" class="md-padding">
-          <div layout="row" layout-align="start center" class="flex-wrap-wrap" flex data-ng-repeat="peerReview in material.peerReviews">
-            <div layout="row" flex layout-align="start center" flex-xs="100">
+        <div class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak style="padding-top: 0" class="md-padding">
+          <div layout="row" layout-align="start center" layout-wrap data-ng-repeat="peerReview in material.peerReviews">
+            <div layout="row" layout-align="start center" flex-xs="100" flex-lg="80" flex-md="70">
             <md-input-container flex-lg="50" flex ng-show="!peerReview.uploading && !peerReview.uploaded">
               <label ng-show="!peerReview.uploading && !peerReview.uploaded">
                 <span data-translate="Retsensiooni link"></span>
@@ -296,9 +292,9 @@
             </md-input-container>
             <!--Uploaded file name-->
             <div layout-fill data-ng-show="peerReview.uploading || peerReview.uploaded" layout-align="center">
-              <div data-ng-show="peerReview.uploading" class="upload-file-uploading" flex-offset="25" flex="50">
+              <div data-ng-show="peerReview.uploading" class="upload-file-uploading" flex-offset="25">
                 <h5 data-translate="ADD_FILE_UPLOADING"></h5>
-                <md-progress-linear md-mode="indeterminate" flex></md-progress-linear>
+                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
               </div>
               <div data-ng-show="peerReview.uploaded && !peerReview.uploading" class="upload-file-success">
                 <h5>
@@ -332,18 +328,20 @@
             </md-button>
           </div>
             <!--Upload button-->
-            <div class="datepicker-container">
-              <md-datepicker ng-model="issueDate" name="issueDate" required md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
-              </md-datepicker>
-              <div class="datepicker-error" data-ng-messages="addMaterialForm.issueDate.$error" data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">
-                <div class="validation-messages" data-ng-message="required" data-translate="MATERIAL_DATE_REQUIRED"></div>
+            <div layout="row" layout-align="end center" flex-lg="20">
+              <div class="datepicker-container">
+                <md-datepicker ng-model="issueDate" name="issueDate" required md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
+                </md-datepicker>
+                <div class="datepicker-error" data-ng-messages="addMaterialForm.issueDate.$error" data-ng-show="!material.issueDate.year && (addMaterialForm.issueDate.$touched || addMaterialForm.$submitted)">
+                  <div class="validation-messages" data-ng-message="required" data-translate="MATERIAL_DATE_REQUIRED"></div>
+                </div>
               </div>
             </div>
           </div>
-          <div flex layout="row" class="flex-wrap-wrap">
+          <div layout="row" layout-wrap layout-align="space-between center">
             <md-input-container flex-xs="100" flex-gt-xs="55" flex-lg="40" flex-md="40">
               <label data-translate="Materjali tüüp"></label>
-              <md-select data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
+              <md-select class="no-margin" data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
                 <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes" ng-selected="{{ isTypeSelected(resourceType) }}">
                   <span data-translate="{{resourceType.name}}"></span>
@@ -351,18 +349,18 @@
               </md-select>
             </md-input-container>
             <div layout-align="start center" flex-sm="70" flex-xs="60" flex-md="40" flex-lg="40">
-              <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
+              <md-select class="no-margin" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"><span data-translate="Litsentsi tüüp"/></md-option>
               </md-select>
             </div>
-            <div flex layout="row" layout-align="end center">
+            <div layout="row" layout-align="end center">
               <md-switch class="md-primary md-block md-padding" md-no-ink data-ng-model="material.paid" aria-label="{{'MATERIAL_PAID' | translate}}">
                 <span data-translate="MATERIAL_PAID"></span>
               </md-switch>
             </div>
           </div>
-          <div flex layout="row" layout-align="end center">
+          <div layout="row" layout-align="end center">
             <md-button ng-if="additionalInfo.isVisible" aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
               <span data-translate="BUTTON_CANCEL"></span>
             </md-button>

@@ -82,15 +82,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
 
             addNewMetadata();
         };
-
-        $scope.openAdditionalInfo = function () {
-            $scope.additionalInfo.isVisible = true;
-        }
-
-        $scope.closeAdditionalInfo = function () {
-            $scope.additionalInfo.isVisible = false;
-        }
-
+        
         $scope.addNewAuthor = function () {
             $scope.material.authors.push({});
             $timeout(function () {
