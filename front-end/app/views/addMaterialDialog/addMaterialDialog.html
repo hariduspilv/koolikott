@@ -127,7 +127,7 @@
 
             <!-- Author -->
             <div data-ng-repeat="author in material.authors">
-              <md-input-container flex-sm="45" flex data-ng-required="!material.publishers[0].name || $index === 0">
+              <md-input-container flex-sm="45" flex-xs="30" flex data-ng-required="!material.publishers[0].name || $index === 0">
                 <label>
                   <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                 </label>
@@ -136,7 +136,7 @@
                   <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
                 </div>
               </md-input-container>
-              <md-input-container flex flex="45">
+              <md-input-container flex flex="45" flex-xs="30">
                 <label>
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
@@ -244,15 +244,6 @@
               </span>
               </span>
             </div>
-            <md-button aria-label="Ava lisaandmed" id="open-additional-info" class="md-primary" data-ng-disabled="isSaving || uploadingFile" data-ng-click="openAdditionalInfo()" data-ng-if="!additionalInfo.isVisible">
-              <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
-              <md-icon>arrow_forward</md-icon>
-            </md-button>
-
-            <md-button aria-label="Sulge lisaandmed" id="close-additional-info" class="md-primary" data-ng-disabled="isSaving || uploadingFile" data-ng-click="closeAdditionalInfo()" data-ng-if="additionalInfo.isVisible">
-              <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
-              <md-icon>arrow_downward</md-icon>
-            </md-button>
           </div>
           <div layout="column" flex-sm="70" flex-md="35" flex-lg="25" class="md-padding">
             <md-input-container flex data-ng-required="!material.publishers[0].name || $index === 0">
@@ -287,6 +278,15 @@
             </div>
           </div>
         </div>
+        <md-button aria-label="Ava lisaandmed" id="open-additional-info" class="md-primary no-margin" data-ng-disabled="isSaving || uploadingFile" data-ng-click="openAdditionalInfo()" data-ng-if="!additionalInfo.isVisible">
+          <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
+          <md-icon>arrow_forward</md-icon>
+        </md-button>
+
+        <md-button aria-label="Sulge lisaandmed" id="close-additional-info" class="md-primary no-margin" data-ng-disabled="isSaving || uploadingFile" data-ng-click="closeAdditionalInfo()" data-ng-if="additionalInfo.isVisible">
+          <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
+          <md-icon>arrow_downward</md-icon>
+        </md-button>
 
         <div flex class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak style="padding-top: 0" class="md-padding">
           <div layout="row" layout-align="start center" flex data-ng-repeat="peerReview in material.peerReviews">
@@ -343,8 +343,8 @@
               </div>
             </div>
           </div>
-          <div flex layout="row">
-            <md-input-container flex-xs="100" flex-gt-xs="55" flex-lg="40">
+          <div flex layout="row" class="flex-wrap-wrap">
+            <md-input-container flex-xs="100" flex-gt-xs="55" flex-lg="40" flex-md="40">
               <label data-translate="Materjali tüüp"></label>
               <md-select data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
@@ -353,7 +353,7 @@
                 </md-option>
               </md-select>
             </md-input-container>
-            <div layout-align="start center" flex-sm="70" flex-xs="70" flex-md="80" flex-lg="40">
+            <div layout-align="start center" flex-sm="70" flex-xs="60" flex-md="40" flex-lg="40">
               <md-select data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"><span data-translate="Litsentsi tüüp"/></md-option>
