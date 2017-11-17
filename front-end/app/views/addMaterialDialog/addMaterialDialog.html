@@ -17,7 +17,7 @@
         <!--URL and Upload block-->
         <div layout="row" layout-wrap layout-align="start center">
           <!--Material source-->
-          <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-lg="40" layout="row" layout-align="start center">
+          <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-gt-lg="30" flex-lg="40" layout="row" layout-align="start center">
           <div data-translate="Palun lisa link"></div>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
@@ -68,10 +68,10 @@
                </h5>
               </div>
             </div>
-              <div flex-xs="100" flex-md="100" flex-sm="100" flex-lg="40" layout-align="start center">
+              <div flex-xs="100" flex-md="100" flex-sm="100" flex-gt-lg="40" flex-lg="40" layout-align="start center">
               <!--Material language-->
               <span style="white-space: nowrap">Materjal on</span>
-              <md-input-container flex-gt-xs="20" flex-sm="20" flex-lg="30" layout-align="end center" class="md-padding no-margin">
+              <md-input-container flex-gt-xs="20" flex-sm="20" flex-gt-lg="30" flex-lg="100" layout-align="end center" class="md-padding no-margin">
                 <md-select data-ng-model="material.language" id="add-material-language-select">
                   <md-option data-ng-repeat="language in languages" value="{{language}}">
                     <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
@@ -109,7 +109,7 @@
           </div>
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" layout-wrap>
             <!--Publisher-->
-            <md-input-container flex-sm="35" flex-lg="30" flex data-ng-required="!material.authors[0].name && !material.authors[0].surname">
+            <md-input-container flex-sm="35" flex-gt-lg="30" flex data-ng-required="!material.authors[0].name && !material.authors[0].surname">
               <label>
                     <span data-translate="MATERIAL_PUBLISHER"></span>
                     <span data-ng-hide="material.authors[0].name && material.authors[0].surname"></span>
@@ -133,7 +133,7 @@
                   <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
                 </div>
               </md-input-container>
-              <md-input-container flex="45" flex-xs="30">
+              <md-input-container flex-xs="30">
                 <label>
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
@@ -174,12 +174,12 @@
 
         <div layout="row" layout-xs="column" layout-align-xs="start stretch">
           <!--Target groups-->
-          <div flex-sm="25" flex-md="30" flex-lg="30">
+          <div flex-sm="25" flex-md="30" flex-gt-lg="30" flex-lg="35">
             <dop-target-group-selector data-target-groups="material.targetGroups" data-ng-show="educationalContextId !== 4" data-taxon="material.taxons[0]" data-mark-required="addMaterialForm.$submitted" data-is-required="{trigger: true}" data-flex></dop-target-group-selector>
           </div>
 
           <!--Key competences-->
-          <div flex-sm="35" flex-md="30" flex-lg="30" class="chips-container">
+          <div flex-sm="35" flex-md="30" flex-gt-lg="30" flex-lg="35" class="chips-container">
             <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class=" chips--regular-font">
               <md-autocomplete id="key-competence-auto" md-input-id="key-competence-auto-input" md-no-cache="true" md-selected-item="selectedKeyCompetence" md-search-text="competenceSearchText" md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')" placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
@@ -197,7 +197,7 @@
           </div>
 
           <!--Cross-curricular themes-->
-          <div flex-sm="45" flex-md="45" flex-lg="40" class="chips-container">
+          <div flex-sm="45" flex-md="45" flex-gt-lg="40" flex-lg="40" class="chips-container">
             <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')"
               class="chips--regular-font">
               <md-autocomplete id="cross-curricular-auto" md-input-id="cross-curricular-auto-input" md-no-cache="true" md-selected-item="selectedCrossCurricularTheme" md-search-text="crossCurricularSearchText" md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
@@ -242,7 +242,7 @@
               </span>
             </div>
           </div>
-          <div layout="column" flex-sm="70" flex-md="35" flex-lg="25" class="md-padding">
+          <div layout="column" flex-sm="70" flex-md="35" flex-gt-lg="25" flex-lg="25" class="md-padding">
             <md-input-container data-ng-required="!material.publishers[0].name || $index === 0">
               <label data-translate="Autor*">
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
@@ -262,13 +262,13 @@
               </div>
             </md-input-container>
           </div>
-          <div layout="column" flex-sm="100" flex-md="45" flex-lg="30" class="md-padding">
+          <div layout="column" flex-sm="100" flex-md="45" flex-gt-lg="30" flex-lg="25" class="md-padding">
             <md-checkbox class="md-primary" flex style="margin-top: 28px;">
               <span data-translate="Olen ise autor"></span>
             </md-checkbox>
             <div layout="row" layout-align="start center">
               <span data-translate="või litsentsitüüp*" style="white-space: nowrap; padding-right: 8px;"></span>
-              <md-select flex-sm="100" flex-xs="100" flex-md="60" flex-lg="100" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
+              <md-select flex-sm="100" flex-xs="100" flex-md="60" flex-gt-lg="100" flex-lg="100" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"></md-option>
               </md-select>
@@ -283,8 +283,8 @@
 
         <div class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak style="padding-top: 0" class="md-padding">
           <div layout="row" layout-align="start center" layout-wrap data-ng-repeat="peerReview in material.peerReviews">
-            <div layout="row" layout-align="start center" flex-xs="100" flex-lg="80" flex-md="70">
-            <md-input-container flex-lg="50" flex ng-show="!peerReview.uploading && !peerReview.uploaded">
+            <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70">
+            <md-input-container flex-gt-lg="50" flex-lg="45" flex ng-show="!peerReview.uploading && !peerReview.uploaded">
               <label ng-show="!peerReview.uploading && !peerReview.uploaded">
                 <span data-translate="Retsensiooni link"></span>
               </label>
@@ -328,7 +328,7 @@
             </md-button>
           </div>
             <!--Upload button-->
-            <div layout="row" layout-align="end center" flex-lg="20">
+            <div layout="row" layout-align="end center" flex-gt-lg="20" flex-lg="20">
               <div class="datepicker-container">
                 <md-datepicker ng-model="issueDate" name="issueDate" required md-placeholder="{{ 'MATERIAL_ISSUE_DATE' | translate }}">
                 </md-datepicker>
@@ -339,7 +339,7 @@
             </div>
           </div>
           <div layout="row" layout-wrap layout-align="space-between center">
-            <md-input-container flex-xs="100" flex-gt-xs="55" flex-lg="40" flex-md="40">
+            <md-input-container flex-gt-xs="55" flex-gt-lg="40" flex-md="40" flex-lg="40">
               <label data-translate="Materjali tüüp"></label>
               <md-select class="no-margin" data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
@@ -348,7 +348,7 @@
                 </md-option>
               </md-select>
             </md-input-container>
-            <div layout-align="start center" flex-sm="70" flex-xs="60" flex-md="40" flex-lg="40">
+            <div layout-align="start center" flex-sm="70" flex-xs="60" flex-md="40" flex-gt-lg="40" flex-lg="40">
               <md-select class="no-margin" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"><span data-translate="Litsentsi tüüp"/></md-option>
