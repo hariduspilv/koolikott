@@ -1,44 +1,49 @@
 'use strict';
 
-angular.module('koolikottApp').controller('addMaterialDialogController', [
-    '$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService', 'suggestService', 'taxonService', 'storageService', 'youtubeService',
-    function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService, suggestService, taxonService, storageService, youtubeService) {
-        $scope.isSaving = false;
-        $scope.showHints = true;
-        $scope.creatorIsPublisher = false;
+{
+const DASHBOARD_VIEW_STATE_MAP = {
+    creativeCommon: [
+        'CREATIVE_COMMON_LOWER'
+    ],
+    Youtube: [
+        'LICENSETYPE_YOUTUBE'
+    ],
+    CCBY: [
+        'LICENSETYPE_CCBY'
+    ],
+    VIDEO: [
+        'RESOURCETYPE_VIDEO'
+    ]
+}
 
-        // fix for https://github.com/angular/material/issues/6905
-        $timeout(function () {
-            angular.element(document.querySelector('html')).css('overflow-y', '');
-        });
+class controller extends Controller {
+    constructor(...args) {
+        super(...args)
+
+        this.$scope.isSaving = false;
+        this.$scope.showHints = true;
+        this.$scope.creatorIsPublisher = false;
+        this.$scope.isUpdateMode = false;
+        this.$scope.titleDescriptionGroups = [];
+        this.$scope.fileUploaded = false;
+        this.$scope.uploadingFile = false;
+        this.$scope.review = {};
+        this.$scope.additionalInfo = {};
+        this.$scope.maxReviewSize = 10;
+        this.$scope.charactersRemaining = 850;
+        this.$scope.resourceTypeDTO = [];
 
         let preferredLanguage;
         let uploadingPicture = false;
+    }
 
-        const TABS_COUNT = 2;
-        const CREATIVE_COMMON_LOWER = "creativecommon";
-        const LICENSETYPE_YOUTUBE = "Youtube";
-        const LICENSETYPE_CCBY = "CCBY";
-        const RESOURCETYPE_VIDEO = "VIDEO";
+        /* $timeout is not a function
+        // fix for https://github.com/angular/material/issues/6905
+        $timeout(function () {
+            angular.element(document.querySelector('html')).css('overflow-y', '');
+        }); */
 
-        $scope.isUpdateMode = false;
-        $scope.step = {};
-        $scope.step.currentStep = 0;
-        $scope.step.canProceed = false;
-        $scope.step.isMaterialUrlStepValid = false;
-        $scope.step.isMetadataStepValid = false;
-        $scope.titleDescriptionGroups = [];
-        $scope.fileUploaded = false;
-        $scope.uploadingFile = false;
-        $scope.review = {};
-        $scope.additionalInfo = {};
-        $scope.maxReviewSize = 10;
-        $scope.charactersRemaining = 850;
-        $scope.resourceTypeDTO = [];
-
-        init();
-
-        $scope.isTypeSelected = function (resourceType) {
+        isTypeSelected(resourceType) {
             let materialResourceTypes = $scope.material.resourceTypes;
 
             var isFound = materialResourceTypes.filter(function (mResourceType) {
@@ -48,88 +53,61 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             return isFound.length > 0;
         };
 
-        $scope.step.nextStep = function () {
-            $scope.step.currentStep += 1;
-        };
-
-        $scope.step.previousStep = function () {
-            $scope.step.currentStep -= 1;
-        };
-
-        $scope.step.isTabDisabled = function (index) {
-            if (index == 0)
-                return false;
-
-            return !isStepValid(index - 1);
-        };
-
-        $scope.step.canProceed = function () {
-            return isStepValid($scope.step.currentStep);
-        };
-
-        $scope.step.canCreateMaterial = function () {
-            return isStepValid(0) && isStepValid(1) && isStepValid(2);
-        };
-
-        $scope.step.isLastStep = function () {
-            return $scope.step.currentStep === TABS_COUNT;
-        };
-
-        $scope.addNewMetadata = function () {
+        addNewMetadata() {
             $scope.titleDescriptionGroups.forEach(function (item) {
                 item.expanded = false
             });
 
             addNewMetadata();
         };
-        
-        $scope.addNewAuthor = function () {
+
+        addNewAuthor() {
             $scope.material.authors.push({});
             $timeout(function () {
                 angular.element('#material-author-' + ($scope.material.authors.length - 1) + '-name').focus();
             });
         };
 
-        $scope.deleteAuthor = function (index) {
+        deleteAuthor(index) {
             $scope.material.authors.splice(index, 1);
         };
 
-        $scope.deleteMetadata = function (index) {
+        deleteMetadata(index) {
             $scope.titleDescriptionGroups.splice(index, 1);
         };
 
-        $scope.addNewTaxon = function () {
+        addNewTaxon() {
             var educationalContext = taxonService.getEducationalContext($scope.material.taxons[0]);
 
             $scope.material.taxons.push(educationalContext);
         };
 
-        $scope.deleteTaxon = function (index) {
+        deleteTaxon(index) {
             $scope.material.taxons.splice(index, 1);
         };
 
-        $scope.getLanguageById = function (id) {
+        getLanguageById(id) {
             return $scope.languages.filter(function (language) {
                 return language.id == id;
             })[0].name;
         };
 
-        $scope.cancel = function () {
+        cancel() {
             $mdDialog.hide();
         };
 
-        $scope.addNewPeerReview = function () {
+        addNewPeerReview () {
             $scope.material.peerReviews.push({});
             $timeout(function () {
                 angular.element('#material-peerReview-' + ($scope.material.authors.length - 1)).focus();
             });
         };
 
-        $scope.deletePeerReview = function (index) {
+        deletePeerReview (index) {
             $scope.material.peerReviews.splice(index, 1);
         };
 
-        $scope.save = function () {
+        save () {
             $scope.material.resourceTypes = $scope.resourceTypeDTO;
             $scope.isSaving = true;
             if (uploadingPicture) {
@@ -152,36 +130,35 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                         $scope.material.peerReviews.splice(i, 1);
                     }
                 });
-
                 serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
             }
         };
 
-        $scope.isTouchedOrSubmitted = function (element) {
+        isTouchedOrSubmitted (element) {
             return (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
         };
 
-        $scope.showCompetencesWarning = function (element) {
+        showCompetencesWarning (element) {
             if ($scope.isTouchedOrSubmitted(element) && $scope.material.keyCompetences) {
                 return $scope.material.keyCompetences.length === 0;
             }
         };
 
-        $scope.showThemesWarning = function (element) {
+        showThemesWarning (element) {
             if ($scope.isTouchedOrSubmitted(element) && $scope.material.crossCurricularThemes) {
                 return $scope.material.crossCurricularThemes.length === 0;
             }
         };
 
-        $scope.isAuthorOrPublisherSet = function () {
+        isAuthorOrPublisherSet () {
             return ($scope.material.authors[0].name && $scope.material.authors[0].surname) || ($scope.material.publishers[0] ? $scope.material.publishers[0].name : false);
         };
 
-        $scope.isAdmin = function () {
+        isAdmin () {
             return authenticatedUserService.isAdmin();
         };
 
-        function getIssueDate(date) {
+        getIssueDate(date) {
             return {
                 day: date.getDate(),
                 month: date.getMonth() + 1,
@@ -189,11 +166,11 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             };
         }
 
-        function getTitlesAndDecriptions() {
+        getTitlesAndDecriptions() {
             var titles = [];
             var descriptions = [];
 
-            $scope.titleDescriptionGroups.forEach(function (item) {
+            this.titleDescriptionGroups.forEach(function (item) {
                 if (item.title) {
                     var title = {
                         language: item.language,
@@ -219,51 +196,19 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             };
         }
 
-        $scope.isTabOneValid = function () {
-            return ( $scope.step.isMaterialUrlStepValid || $scope.fileUploaded) && isMetadataStepValid();
-        };
-
-        $scope.isTabTwoValid = function () {
-            let hasCorrectTaxon = true;
-            angular.forEach($scope.material.taxons, (key, value) => {
-                if (!isTaxonSet(value)) {
-                    hasCorrectTaxon = false;
-                }
-            });
-
-            return $scope.educationalContextId === 4 || isTabTwoTargetGroupValid()
-                && ($scope.isBasicOrSecondaryEducation() ? isTabTwoKeyCompetenceValid() && isTabTwoCrossCurricularThemeValid() : true) && hasCorrectTaxon;
-        };
-
-        $scope.isTabThreeValid = function () {
-            return areAuthorsValid() && (hasAuthors() || hasPublisher()) && $scope.material.issueDate.year;
-        };
-
-        function isTabTwoCrossCurricularThemeValid() {
-            return $scope.material.crossCurricularThemes && $scope.material.crossCurricularThemes.length > 0
-        }
-
-        function isTabTwoKeyCompetenceValid() {
-            return $scope.material.keyCompetences && $scope.material.keyCompetences.length > 0
-        }
-
-        function isTabTwoTargetGroupValid() {
-            return $scope.material.targetGroups && $scope.material.targetGroups.length > 0;
-        }
-
-        function isTaxonSet(index) {
+        isTaxonSet(index) {
             return $scope.material.taxons && $scope.material.taxons[index] && $scope.material.taxons[index].level && $scope.material.taxons[index].level !== ".EducationalContext";
         }
 
-        function hasPublisher() {
+        hasPublisher() {
             return $scope.material.publishers[0] && $scope.material.publishers[0].name;
         }
 
-        function hasAuthors() {
+        hasAuthors() {
             return $scope.material.authors.length > 0 && $scope.material.authors[0].surname;
         }
 
-        function areAuthorsValid() {
+        areAuthorsValid() {
             var res = true;
 
             $scope.material.authors.forEach(function (author) {
@@ -274,28 +219,14 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             return res;
         }
 
-
-        function isStepValid(index) {
-            switch (index) {
-                case 0:
-                    return $scope.isTabOneValid();
-                case 1:
-                    return $scope.isTabTwoValid();
-                case 2:
-                    return $scope.isTabThreeValid();
-                default:
-                    return isStepValid(index - 1);
-            }
-        }
-
-        $scope.translate = function (item, prefix) {
+        translate (item, prefix) {
             return $filter("translate")(prefix + item.toUpperCase());
         };
 
         /**
          * Search for keyCompetences.
          */
-        $scope.searchKeyCompetences = function (query) {
+        searchKeyCompetences (query) {
             return query ? $scope.keyCompetences
                 .filter(searchFilter(query, "KEY_COMPETENCE_")) : $scope.keyCompetences;
         };
@@ -303,16 +234,16 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         /**
          * Search for CrossCurricularThemes.
          */
-        $scope.searchCrossCurricularThemes = function (query) {
+        searchCrossCurricularThemes (query) {
             return query ? $scope.crossCurricularThemes
                 .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
         };
 
-        $scope.removeFocus = function (elementId) {
+        removeFocus (elementId) {
             document.getElementById(elementId).blur();
         };
 
-        $scope.autocompleteItemSelected = function (item, listName, elementId) {
+        autocompleteItemSelected (item, listName, elementId) {
 
             if (shouldRemoveNotRelevantFromList(listName)) {
                 $scope.material[listName] = removeLastElement(listName)
@@ -332,19 +263,19 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         };
 
-        $scope.doSuggest = function (tagName) {
+        doSuggest (tagName) {
             return suggestService.suggest(tagName, suggestService.getSuggestSystemTagURLbase());
         };
 
-        function shouldRemoveNotRelevantFromList(listName) {
+        shouldRemoveNotRelevantFromList(listName) {
             return $scope.material[listName].length > 1 && $scope.material[listName][$scope.material[listName].length - 1].name === 'NOT_RELEVANT';
         }
 
-        function removeLastElement(listName) {
+        removeLastElement(listName) {
             return $scope.material[listName].splice(0, $scope.material[listName].length - 1);
         }
 
-        function closeAutocomplete(elementId) {
+        closeAutocomplete(elementId) {
             // Hide suggestions and blur input to avoid triggering new search
             angular.element(document.querySelector('#' + elementId)).controller('mdAutocomplete').hidden = true;
             document.getElementById(elementId).blur();
@@ -354,7 +285,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
         /**
          * Create filter function for a query string
          */
-        function searchFilter(query, translationPrefix) {
+         searchFilter(query, translationPrefix) {
             var lowercaseQuery = angular.lowercase(query);
 
             return function filterFn(filterSearchObject) {
@@ -367,32 +298,32 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             };
         }
 
-        $scope.isBasicOrSecondaryEducation = function () {
+        isBasicOrSecondaryEducation () {
             return $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
         };
 
-        $scope.isURLInvalid = function () {
+        isURLInvalid () {
             if ($scope.addMaterialForm && $scope.addMaterialForm.source && $scope.addMaterialForm.source.$viewValue) {
                 $scope.addMaterialForm.source.$setTouched();
                 return !!$scope.addMaterialForm.source.$error.url && ($scope.addMaterialForm.source.$viewValue.length > 0);
             }
         };
 
-        $scope.sourceIsFocused = function () {
+        sourceIsFocused () {
             $scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
         };
 
-        function loadMetadata() {
+        loadMetadata() {
             metadataService.loadResourceTypes(setResourceTypes);
             metadataService.loadKeyCompetences(setKeyCompetences);
             metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
         }
 
-        $scope.isEmpty = function (object) {
+        isEmpty (object) {
             return _.isEmpty(object)
         };
 
-        function initEmptyMaterial() {
+        initEmptyMaterial() {
             $scope.material = {};
             $scope.material.tags = [];
             $scope.material.taxons = [{}];
@@ -407,7 +338,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             addNewMetadata();
         }
 
-        function setPublisher() {
+        setPublisher() {
             if (authenticatedUserService.isPublisher()) {
                 $scope.material.publishers = [{}];
                 $scope.material.publishers[0].name = authenticatedUserService.getUser().publisher.name;
@@ -415,7 +346,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function init() {
+        init() {
             if ($scope.material && $scope.material.uploadedFile) {
                 $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
             }
@@ -444,7 +375,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $timeout(setWatches);
         }
 
-        function setWatches() {
+        setWatches() {
             $scope.$watch(function () {
                 return $scope.newPicture;
             }, function (newPicture) {
@@ -472,10 +403,6 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 }
             });
 
-            $scope.$watch('addMaterialForm.source.$valid', function (isValid) {
-                $scope.step.isMaterialUrlStepValid = isValid;
-            });
-
             $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
                 if (newValue && newValue.level === taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
                     $scope.educationalContextId = newValue.id;
@@ -499,23 +426,24 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                     }
                 }
             }, true);
+
+            $scope.$watch('material.source', function (newValue) {
+                if ($scope.addMaterialForm.source) {
+                    $scope.addMaterialForm.source.$setValidity("exists", true);
+                    $scope.addMaterialForm.source.$setValidity("deleted", true);
+                }
+
+
+                if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
+                    let encodedUrl = encodeURIComponent(newValue);
+                    serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
+                        getByUrlSuccess, getByUrlFail);
+                }
+
+            }, true);
         }
 
-        $scope.$watch('material.source', function (newValue) {
-            if ($scope.addMaterialForm.source) {
-                $scope.addMaterialForm.source.$setValidity("exists", true);
-                $scope.addMaterialForm.source.$setValidity("deleted", true);
-            }
-
-            if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
-                let encodedUrl = encodeURIComponent(newValue);
-                serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
-                    getByUrlSuccess, getByUrlFail);
-            }
-
-        }, true);
-
-        function getByUrlSuccess(material) {
+        getByUrlSuccess(material) {
             if (material && (material.id !== $scope.material.id)) {
                 if (material.deleted) {
                     $scope.addMaterialForm.source.$setValidity("deleted", false);
@@ -530,10 +458,10 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function getByUrlFail() {
+        getByUrlFail() {
         }
 
-        function processSource(source) {
+        processSource(source) {
             if (isYoutubeVideo(source)) {
                 youtubeService.getYoutubeData(source)
                     .then((data) => {
@@ -554,7 +482,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
          *  - licenseType
          * @param data
          */
-        function populateMetadata(data) {
+        populateMetadata(data) {
             $scope.titleDescriptionGroups = [{
                 title: data.snippet.title,
                 description: data.snippet.description
@@ -577,7 +505,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             else $scope.material.licenseType = getLicenseTypeByName(LICENSETYPE_YOUTUBE);
         }
 
-        function setThumbnail(thumbnails) {
+        setThumbnail(thumbnails) {
             let thumbnailUrl;
 
             if (thumbnails.maxres) thumbnailUrl = thumbnails.maxres.url;
@@ -592,21 +520,21 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
                 });
         }
 
-        function getResourceTypeByName(name) {
+        getResourceTypeByName(name) {
             if (!$scope.resourceTypes) return;
             return $scope.resourceTypes.filter(type => {
                 return type.name === name
             })[0];
         }
 
-        function getLicenseTypeByName(name) {
+        getLicenseTypeByName(name) {
             if (!$scope.licenseTypes) return;
             return $scope.licenseTypes.filter(license => {
                 return license.name === name
             })[0];
         }
 
-        $scope.uploadReview = function (index, file) {
+        uploadReview (index, file) {
             if (file) {
                 $scope.material.peerReviews[index].uploading = true;
                 $scope.uploadingReviewId = index;
@@ -614,30 +542,29 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         };
 
-        function pictureUploadSuccess(picture) {
+        pictureUploadSuccess(picture) {
             $scope.material.picture = picture;
         }
 
-        function pictureUploadFailed() {
+        pictureUploadFailed() {
             log('Picture upload failed.');
         }
 
-        function pictureUploadFinally() {
+        pictureUploadFinally() {
             $scope.showErrorOverlay = false;
             uploadingPicture = false;
         }
 
-        function fileUploadSuccess(file) {
+        fileUploadSuccess(file) {
             $scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
             $scope.material.source = null;
             $scope.fileUploaded = true;
             $scope.uploadingFile = false;
             $scope.material.uploadedFile = file;
             $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
-            $scope.step.isMaterialUrlStepValid = true;
         }
 
-        function fileUploadFailed(response) {
+        fileUploadFailed(response) {
             console.log("File upload failed");
             if (response.data.cause == "filename too long") {
                 $scope.addMaterialForm.source.$setValidity("filenameTooLong", false);
@@ -645,25 +572,25 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function fileUploadFinally() {
+        fileUploadFinally() {
             $scope.uploadingFile = false;
         }
 
-        function reviewUploadSuccess(file) {
+        reviewUploadSuccess(file) {
             $scope.material.peerReviews[$scope.uploadingReviewId].name = file.name;
             $scope.material.peerReviews[$scope.uploadingReviewId].url = file.url;
             $scope.material.peerReviews[$scope.uploadingReviewId].uploaded = true;
         }
 
-        function reviewUploadFailed() {
+        reviewUploadFailed() {
             log('Review upload failed.');
         }
 
-        function reviewUploadFinally() {
+        reviewUploadFinally() {
             $scope.material.peerReviews[$scope.uploadingReviewId].uploading = false;
         }
 
-        function preSetMaterial(material) {
+        preSetMaterial(material) {
             $scope.isUpdateMode = true;
             $scope.material = material;
 
@@ -716,7 +643,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             if (!$scope.keyCompetences) $scope.keyCompetences = [];
         }
 
-        function prefillMetadataFromPortfolio() {
+        prefillMetadataFromPortfolio() {
             if (storageService.getPortfolio()) {
                 if (storageService.getPortfolio().taxons) {
                     var taxons = storageService.getPortfolio().taxons.slice();
@@ -738,14 +665,14 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function setLangugeges(data) {
+        setLangugeges(data) {
             $scope.languages = data;
 
             setDefaultMaterialMetadataLanguage();
             setMaterialLanguage();
         }
 
-        function setMaterialLanguage() {
+        setMaterialLanguage() {
             if (!$scope.material.language && preferredLanguage !== null && preferredLanguage !== undefined) {
 
                 if ($scope.titleDescriptionGroups[0] && !$scope.titleDescriptionGroups[0].language) {
@@ -756,7 +683,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function setLicenseTypes(data) {
+        setLicenseTypes(data) {
             var array = data.filter(function (type) {
                 return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
             });
@@ -769,7 +696,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
          * then move it
          * @param list
          */
-        function moveNotRelevantIfNecessary(list) {
+         moveNotRelevantIfNecessary(list) {
             if (list[list.length - 1].name !== "NOT_RELEVANT") {
                 var notRelevantIndex = list.map(function (e) {
                     return e.name;
@@ -778,21 +705,21 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function setCrossCurricularThemes(data) {
+        setCrossCurricularThemes(data) {
             if (!isEmpty(data)) {
                 $scope.crossCurricularThemes = data;
                 moveNotRelevantIfNecessary($scope.crossCurricularThemes);
             }
         }
 
-        function setKeyCompetences(data) {
+        setKeyCompetences(data) {
             if (!isEmpty(data)) {
                 $scope.keyCompetences = data;
                 moveNotRelevantIfNecessary($scope.keyCompetences);
             }
         }
 
-        function saveMaterialSuccess(material) {
+        saveMaterialSuccess(material) {
             if (!material) {
                 saveMaterialFail();
             } else {
@@ -813,15 +740,15 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             }
         }
 
-        function saveMaterialFail() {
+        saveMaterialFail() {
             console.log('Failed to add material.');
         }
 
-        function saveMaterialFinally() {
+        saveMaterialFinally() {
             $scope.isSaving = false;
         }
 
-        function setResourceTypes(data) {
+        setResourceTypes(data) {
             $scope.resourceTypes = data.sort(function (a, b) {
                 if ($filter('translate')(a.name) < $filter('translate')(b.name)) return -1;
                 if ($filter('translate')(a.name) > $filter('translate')(b.name)) return 1;
@@ -829,7 +756,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             });
         }
 
-        function setDefaultMaterialMetadataLanguage() {
+        setDefaultMaterialMetadataLanguage() {
             var userLanguage = translationService.getLanguage();
 
             preferredLanguage = $scope.languages.filter(function (language) {
@@ -837,7 +764,7 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             });
         }
 
-        function addNewMetadata() {
+        addNewMetadata() {
             var metadata = {
                 expanded: true,
                 title: ''
@@ -846,37 +773,61 @@ angular.module('koolikottApp').controller('addMaterialDialogController', [
             $scope.titleDescriptionGroups.push(metadata);
         }
 
-        function isMetadataStepValid() {
+        isMetadataStepValid() {
             return $scope.titleDescriptionGroups.filter(function (metadata) {
                 return metadata.title && metadata.title.length !== 0;
             }).length !== 0;
         }
 
-        function getMaxPictureSize() {
+        getMaxPictureSize() {
             serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);
         }
 
-        function getMaxPictureSizeSuccess(data) {
+        getMaxPictureSizeSuccess(data) {
             $scope.maxPictureSize = data;
         }
 
-        function getMaxPictureSizeFail() {
+        getMaxPictureSizeFail() {
             $scope.maxPictureSize = 10;
             console.log('Failed to get max picture size, using 10MB as default.');
         }
 
-        function getMaxFileSize() {
+        getMaxFileSize() {
             serverCallService.makeGet('/rest/uploadedFile/maxSize', {}, getMaxFileSizeSuccess, getMaxFileSizeFail);
         }
 
-        function getMaxFileSizeSuccess(data) {
+        getMaxFileSizeSuccess(data) {
             $scope.maxFileSize = data;
         }
 
-        function getMaxFileSizeFail() {
+        getMaxFileSizeFail() {
             $scope.maxFileSize = 500;
             console.log('Failed to get max file size, using 500MB as default.');
         }
+}
 
-    }
-]);
+controller.$inject = [
+  '$scope',
+  '$mdDialog',
+  '$mdDateLocale',
+  'serverCallService',
+  'translationService',
+  'metadataService',
+  '$filter',
+  '$location',
+  '$rootScope',
+  'authenticatedUserService',
+  '$timeout',
+  'pictureUploadService',
+  'fileUploadService',
+  'toastService',
+  'suggestService',
+  'taxonService',
+  'storageService',
+  'youtubeService'
+]
+
+window.addMaterialDialogController = controller
+
+angular.module('koolikottApp').controller('addMaterialDialogController', controller)
+}
