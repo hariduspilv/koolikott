@@ -148,7 +148,7 @@ class controller extends Controller {
         if (!taxon)
             return
 
-        if (taxon.level = ".TaxonDTO")
+        if (taxon.level == ".TaxonDTO")
             taxon = this.taxonService.getFullTaxon(taxon.id)
 
         if (!taxon)
