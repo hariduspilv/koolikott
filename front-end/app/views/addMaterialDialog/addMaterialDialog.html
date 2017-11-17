@@ -21,7 +21,7 @@
           <div data-translate="Palun lisa link"></div>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
-              <label>http://</label>
+              <label data-translate="HTTP_WORD"></label>
               <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" dop-validate-url data-ng-click="sourceIsFocused()">
               <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                 <div data-ng-show="isURLInvalid()" data-ng-message="url" class="invalid-url-message" data-translate="MATERIAL_URL_IS_INVALID"></div>
@@ -37,10 +37,10 @@
             </md-input-container>
           </div>
           <span ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
-            <span>või</span>
+            <span data-translate="OR_WORD"></span>
             <a class="md-raised md-primary">
               <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
-              <span data-ng-show="!material.uploadedFile" data-translate="fail"></span>
+              <span data-ng-show="!material.uploadedFile" data-translate="FILE_WORD"></span>
             </a>
             <span>materjalile*.</span>
           </span>
@@ -120,7 +120,7 @@
                 </div>
               </div>
             </md-input-container>
-            <span class="md-padding">ja/või autor *</span>
+            <span class="md-padding" data-translate="AND_OR_AUTHOR">*</span>
 
             <!-- Author -->
             <div data-ng-repeat="author in material.authors">
@@ -155,7 +155,7 @@
         </div>
 
         <!--Taxonomy-->
-        <h5 class="no-margin">Liigitus:</h5>
+        <h5 class="no-margin" data-translate="MATERIAL_TAXON"></h5>
         <div layout="row" data-ng-repeat="taxon in material.taxons track by $index" layout-align="start center">
           <dop-taxon-selector data-taxon="material.taxons[$index]" data-is-domain-required="{trigger: true}" data-mark-required="addMaterialForm.$submitted" data-flex></dop-taxon-selector>
           <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length" data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(material.taxons[0])">
@@ -215,7 +215,7 @@
             </div>
           </div>
         </div>
-        <h5 class="no-margin">Illustratsioon:</h5>
+        <h5 class="no-margin" data-translate="SUBTOPIC_ILLUSTRATSIOON"></h5>
         <div layout-wrap layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
           <div flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
             <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box no-margin" data-ngf-drag-over-class="'dragover'" data-ngf-multiple="false" data-accept="image/*" data-ngf-pattern="'image/*'" data-ngf-max-size="{{maxPictureSize + 'MB'}}" ngf-model-invalid="invalidPicture"
@@ -267,7 +267,7 @@
               <span data-translate="Olen ise autor"></span>
             </md-checkbox>
             <div layout="row" layout-align="start center">
-              <span data-translate="või litsentsitüüp*" style="white-space: nowrap; padding-right: 8px;"></span>
+              <span data-translate="OR_WORD litsentsitüüp*" style="white-space: nowrap; padding-right: 8px;"></span>
               <md-select flex-sm="100" flex-xs="100" flex-md="60" flex-gt-lg="100" flex-lg="100" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
                 <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
                 <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"></md-option>
