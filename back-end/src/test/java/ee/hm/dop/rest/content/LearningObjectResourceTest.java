@@ -8,12 +8,14 @@ import org.junit.Test;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import static ee.hm.dop.rest.content.MaterialResourceTest.GET_MATERIAL_URL;
 import static java.lang.String.format;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.junit.Assert.*;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
+    public static final String INCREASE_VIEW_COUNT_URL = "learningObject/increaseViewCount";
     public static final String ADD_TAG_URL = "learningObject/%s/tags";
     public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
@@ -21,10 +23,10 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
     public static final String USERS_FAVOURITE_URL = "learningObject/usersFavorite?start=0";
     public static final String GET_FAVOURITE_COUNT_URL = "learningObject/usersFavorite/count";
-    private static final String LIKE_URL = "learningObject/like";
-    private static final String DISLIKE_URL = "learningObject/dislike";
-    private static final String GET_USER_LIKE_URL = "learningObject/getUserLike";
-    private static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
+    public static final String LIKE_URL = "learningObject/like";
+    public static final String DISLIKE_URL = "learningObject/dislike";
+    public static final String GET_USER_LIKE_URL = "learningObject/getUserLike";
+    public static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
     public static final String TEST_SYSTEM_TAG = "matemaatika";
@@ -183,4 +185,42 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertNull("User removed like does not exist", userRemoveLike);
     }
 
+
+    @Test
+    public void increaseViewCount_material() {
+        Material materialBefore = getMaterial(MATERIAL_5);
+
+        Response response = doPost(INCREASE_VIEW_COUNT_URL, materialWithId(MATERIAL_5));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        Material materialAfter = getMaterial(MATERIAL_5);
+        assertEquals(Long.valueOf(materialBefore.getViews() + 1), materialAfter.getViews());
+    }
+
+    @Test
+    public void increaseViewCountNotExistingMaterial() {
+        Response response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        response = doPost(INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTS_ID));
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+        response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+
+    @Test
+    public void increaseViewCount_portfolio() {
+        Portfolio portfolioBefore = getPortfolio(PORTFOLIO_3);
+        doPost(INCREASE_VIEW_COUNT_URL, portfolioWithId(PORTFOLIO_3));
+        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_3);
+        assertEquals(Long.valueOf(portfolioBefore.getViews() + 1), portfolioAfter.getViews());
+    }
+
+    @Test
+    public void increaseViewCountNoPortfolio() {
+        Response response = doPost(INCREASE_VIEW_COUNT_URL, portfolioWithId(99999L));
+        assertEquals(500, response.getStatus());
+    }
 }

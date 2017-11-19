@@ -1,24 +1,26 @@
 <div data-layout="column" data-layout-gt-sm="row">
   <div flex-gt-xs="75">
-    <md-card class="card-mb-20" data-ng-if="showFirstMessage">
-      <md-toolbar>
-        <p class="md-toolbar-text" data-translate="NEW_PORTFOLIO_CREATED_MESSAGE"></p>
-      </md-toolbar>
-    </md-card>
-    <dop-portfolio-summary-card data-portfolio="portfolio"></dop-portfolio-summary-card>
-    <div>
-      <div data-ng-repeat="chapter in portfolio.chapters track by $index">
-        <dop-chapter data-on-delete="onDeleteChapter(chapter)" data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
+    <dop-portfolio-summary-card
+      data-portfolio="portfolio"
+    ></dop-portfolio-summary-card>
+    <dop-chapter
+      data-ng-repeat="chapter in portfolio._chapters track by $index"
+      data-chapter="chapter"
+      data-index="$index"
+      data-num-chapters="portfolio._chapters.length || 0"
+      data-on-delete="$ctrl.deleteChapter($index)"
+      data-on-move-up="$ctrl.move($index, true)"
+      data-on-move-down="$ctrl.move($index)"
+      data-is-edit-mode="true"
+    ></dop-chapter>
+    <div data-layout="row" data-layout-align="center">
+      <div class="add-chapter" data-ng-click="$ctrl.createChapter()">
+        <md-button class="md-icon-button organize-chapter-btn" aria-label="{{'PORTFOLIO_ADD_CHAPTER'|translate}}">
+          <md-icon class="material-icons">add</md-icon>
+        </md-button>
+        <label data-translate="PORTFOLIO_ADD_CHAPTER"></label>
       </div>
     </div>
-    <md-card class="card-mb-20">
-      <md-button aria-label="Lisa uus peatükk" data-ng-click="addNewChapter()">
-        <md-icon class="material-icons">add</md-icon>
-        <span data-translate="CHAPTER"></span>
-      </md-button>
-    </md-card>
   </div>
-  <aside flex-gt-sm="25">
-    <data-dop-aside data-learning-object="portfolio"></data-dop-aside>
-  </aside>
+  <div flex-gt-sm="25"></div>
 </div>

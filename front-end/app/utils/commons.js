@@ -681,10 +681,11 @@ class Controller {
             tags: []
         }
     }
-    getSource(material) {
-        if (material) {
-            return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
-        }
+    /**
+     * @todo Is that decodeUTF8 really necessary?
+     */
+    getMaterialSource(material) {
+        return material && material.source || material.uploadedFile && decodeUTF8(material.uploadedFile.url)
     }
     isYoutubeVideo(url) {
         // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
@@ -828,6 +829,37 @@ class Controller {
             return false
         }
         return true
+    }
+    scrollToElement(element, duration = 200, offset = 0) {
+        if (typeof element === 'string')
+            element = document.querySelector(element)
+
+        if (element) {
+            const startTime = Date.now()
+            const destinationX = element.getBoundingClientRect().top - offset + window.pageYOffset
+            const easeInOutSin = (t) => (1 + Math.sin(Math.PI * t - Math.PI / 2)) / 2
+            const scroll = () => {
+                const progress = Math.min(1, (Date.now() - startTime) / duration)
+                window.scrollTo(
+                    window.pageXOffset,
+                    easeInOutSin(progress) * destinationX
+                )
+                if (progress < 1)
+                    window.requestAnimationFrame(scroll)
+            }
+            scroll()
+        }
+    }
+    updateChaptersStateFromEditors() {
+        /**
+         * call updateState() on all dopChapters which updates $scope.chapter.blocks
+         * from editors' innerHTML values.
+         */
+        for (let chapter of document.querySelectorAll('dop-chapter, .dop-chapter, [dop-chapter]')) {
+            const chapterCtrl = angular.element(chapter).controller('dopChapter')
+            if (chapterCtrl && typeof chapterCtrl.updateState === 'funciton')
+                chapterCtrl.updateState()
+        }
     }
 }
 

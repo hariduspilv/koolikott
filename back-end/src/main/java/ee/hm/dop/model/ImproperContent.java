@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -26,6 +27,7 @@ public class ImproperContent implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "learningObject")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LearningObject learningObject;
 
     @Column

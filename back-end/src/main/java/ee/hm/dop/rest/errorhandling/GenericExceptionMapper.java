@@ -28,11 +28,10 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
         if (error instanceof WebApplicationException) {
             WebApplicationException webEx = (WebApplicationException) error;
             return webEx.getResponse();
-        } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Internal error")
-                    .type("text/plain").build();
         }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("Internal error")
+                .type("text/plain").build();
     }
 
     private void setTransactionRollbackOnly() {
