@@ -4,10 +4,10 @@
       data-portfolio="portfolio"
     ></dop-portfolio-summary-card>
     <dop-chapter
-      data-ng-repeat="chapter in portfolio._chapters track by $index"
+      data-ng-repeat="chapter in portfolio.chapters track by $index"
       data-chapter="chapter"
       data-index="$index"
-      data-num-chapters="portfolio._chapters.length || 0"
+      data-num-chapters="portfolio.chapters.length || 0"
       data-on-delete="$ctrl.deleteChapter($index)"
       data-on-move-up="$ctrl.move($index, true)"
       data-on-move-down="$ctrl.move($index)"

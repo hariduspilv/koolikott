@@ -596,9 +596,10 @@ if (typeof localStorage === 'object') {
  */
 class Controller {
     constructor() {
-        this.constructor.$inject.forEach((name, idx) =>
-            this[name] = arguments[idx]
-        )
+        if (Array.isArray(this.constructor.$inject))
+            this.constructor.$inject.forEach((name, idx) =>
+                this[name] = arguments[idx]
+            )
     }
     isMaterial({ type }) {
         return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
@@ -860,6 +861,45 @@ class Controller {
             if (chapterCtrl && typeof chapterCtrl.updateState === 'funciton')
                 chapterCtrl.updateState()
         }
+    }
+    getSlug(str, fallback = '') {
+        return str
+            ? str.replace(/\s+/g, '-')
+            : fallback
+    }
+    transformChapters(chapters) {
+        return !Array.isArray(chapters)
+            ? chapters
+            : chapters.reduce(
+                (chapters, c, idx) => chapters
+                    .concat({
+                        title: c.title,
+                        blocks: [{
+                            narrow: false,
+                            htmlContent: (c.text || '')
+                                + this.transformEmbeds(c)
+                                + c.subchapters.reduce(
+                                    (subchapters, s, subIdx) =>
+                                        subchapters
+                                        + `<h3 class="subchapter" id="${this.getSlug(s.title, `subchapter-${idx}-${subIdx}`)}">${s.title}</h3>`
+                                        + s.text
+                                        + this.transformEmbeds(s),
+                                    ''
+                                )
+                        }]
+                    }),
+                []
+            )
+    }
+    transformEmbeds(chapter) {
+        return !Array.isArray(chapter.contentRows)
+            ? ''
+            : chapter.contentRows.reduce(
+                (embeds, r) => Array.isArray(r.learningObjects) && r.learningObjects.length
+                    ? embeds + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${r.learningObjects[0].id}"></div>`
+                    : embeds,
+                ''
+            )
     }
 }
 

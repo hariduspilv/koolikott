@@ -2,20 +2,11 @@
 
 /**
  *  @todo
- 
- —— FRI ————————————
- -  NVP layout
- -  The pencil icon button (in chapter corner)
- -  Correct toolbar icons
-
- —— MON ————————————
+ -  tabIndexes
  -  Editor toolbar conf.
+ -  WYSIWYG theme
  -  Material embeds
  -  Intermediary solution: embed materials BETWEEN blocks the old way
-
- -  tabIndexes
- -  Position the caret at the end of the editor when suitable.
- -  WYSIWYG theme
  -  position: sticky (for browsers that support it)
  */
 
@@ -24,6 +15,13 @@ class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
             this.$scope.chapter = chapter.currentValue
+
+            if (!this.isEditMode)
+                this.$scope.chapter.title
+                    ? this.$scope.chapterTitle = this.$scope.chapter.title
+                    : this.$translate('PORTFOLIO_CHAPTER_TITLE_MISSING').then(missingTitle =>
+                        this.$scope.chapterTitle = missingTitle
+                    )
 
             // make sure there's always at least one empty block
             if (!Array.isArray(this.$scope.chapter.blocks))
@@ -38,17 +36,15 @@ class controller extends Controller {
             // yes, we want it to run in the cycle after next
             if (this.isEditMode)
                 this.$timeout(() =>
-                    this.$timeout(
-                        this.updateEditors.bind(this, true)
+                    this.$timeout(() =>
+                        this.updateEditors(/*true*/)
                     )
                 )
         }
     }
     $onInit() {
         this.$scope.$watch('chapter.title', (title) =>
-            this.$scope.slug = title
-                ? title.replace(/\s+/g, '-')
-                : `chapter-${this.index}`
+            this.$scope.slug = this.getSlug(title, `chapter-${this.index}`)
         )
 
         if (this.isEditMode) {
@@ -75,7 +71,7 @@ class controller extends Controller {
             window.addEventListener('load', this.onResize)
             setTimeout(this.onResize)
 
-            this.onScroll = () => this.$scope.isFocused && requestAnimationFrame(this.setStickyClasseNames.bind(this))
+            this.onScroll = () => this.$scope.isFocused && requestAnimationFrame(this.setStickyClassNames.bind(this))
             window.addEventListener('scroll', this.onScroll)
         }
     }
@@ -120,6 +116,14 @@ class controller extends Controller {
             ? this.focusTitle(true)
             : this.focusBlock(this.$scope.focusedBlockIdx)
     }
+    onClickToggleChapterFocus() {
+        if (!this.$scope.isFocused)
+            return this.focusTitle(true)
+
+        this.$scope.isFocused = false
+        this.$scope.isTitleFocused = false
+        this.$scope.focusedBlockIdx = null
+    }
     onClickBlock(idx, evt) {
         /**
          * For some reason ng-click fires also when space bar is pressed.
@@ -128,8 +132,6 @@ class controller extends Controller {
             this.focusBlock(idx)
     }
     onBlockChanges(blocks, previousBlocks) {
-        console.log('%cblocks changed:', 'color:teal', previousBlocks, '-->', blocks)
-        
         this.$timeout(() => {
             for (let [idx, el] of this.getEditorElements().entries())
                 this.createEditor(blocks, idx, el)
@@ -200,11 +202,11 @@ class controller extends Controller {
             this.placeholderTimer = this.$timeout(() => {
                 if (!el.focused && !el.innerHTML || el.innerHTML === '<p><br></p>')
                     el.classList.add('medium-editor-placeholder')
-            }, 100)
+            }, 200)
         })
     }
     getEditorElements() {
-        return this.$element[0].querySelectorAll('.chapter-block')
+        return this.$element[0].querySelectorAll('.chapter-block') || []
     }
     calcSizes() {
         if (this.isEditMode) {
@@ -218,15 +220,23 @@ class controller extends Controller {
             this.$scope.stickyStyle.width = sticky.offsetWidth
         }
     }
+    getChapterClassNames() {
+        return !this.isEditMode ? {} : {
+            'is-edit-mode': this.isEditMode,
+            'is-focused': this.$scope.isFocused,
+            'is-title-focused': this.$scope.isTitleFocused,
+            'is-block-focused': this.$scope.focusedBlockIdx !== null
+        }
+    }
     getBlockClassNames(idx) {
         const { narrow } = this.$scope.chapter.blocks[idx]
         const classNames = {
-            narrow,
-            'narrow-left': this.isNarrowLeft(idx),
-            focused: idx === this.$scope.focusedBlockIdx
+            'is-narrow': narrow,
+            'is-narrow-left': this.isNarrowLeft(idx),
+            'is-focused': this.isEditMode && idx === this.$scope.focusedBlockIdx
         }
         return Object.assign(classNames, {
-            'narrow-right': narrow && !classNames['narrow-left']
+            'is-narrow-right': narrow && !classNames['is-narrow-left']
         })
     }
     getBlockPlaceholder(idx) {
@@ -234,7 +244,7 @@ class controller extends Controller {
             ? 'Alusta selle muutmisega (kliki siia) - lisa lõike, teksti, pilte, videosid, materjale e-koolikotist. Salvestamine toimub automaatselt. Jõudu tööle!'
             : ''
     }
-    setStickyClasseNames(evt) {
+    setStickyClassNames(evt) {
         const set = (isSticky, isAtBottom) => {
             if (this.$scope.stickyClassNames['is-sticky'] != isSticky)
                 this.$scope.stickyClassNames['is-sticky'] = isSticky
@@ -255,6 +265,15 @@ class controller extends Controller {
         const isSticky = !isAtBottom && window.pageYOffset >= toolbarTopMin
 
         set(isSticky, isAtBottom)
+    }
+    getToggleColumnWidthIcon() {
+        const { narrow } = typeof this.$scope.focusedBlockIdx === 'number'
+            ? this.$scope.chapter.blocks[this.$scope.focusedBlockIdx] || {}
+            : {}
+
+        return narrow
+            ? '/images/chapter-toolbar-icon-column-wide.svg'
+            : '/images/chapter-toolbar-icon-column-narrow.svg'
     }
     isNarrowLeft(idx) {
         let i = 0, colsFilled = 0
@@ -289,7 +308,7 @@ class controller extends Controller {
     focusTitle(clickOnContainer = false) {
         if (!this.$scope.isFocused) {
             this.calcSizes()
-            this.setStickyClasseNames()
+            this.setStickyClassNames()
         }
         this.$timeout(() => {
             this.$scope.isFocused = true
@@ -306,7 +325,7 @@ class controller extends Controller {
 
         if (!this.$scope.isFocused) {
             this.calcSizes()
-            this.setStickyClasseNames()
+            this.setStickyClassNames()
         }
 
         this.$timeout(() => {
@@ -314,7 +333,7 @@ class controller extends Controller {
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = idx
             
-            const el = (this.getEditorElements() || [])[idx]
+            const el = this.getEditorElements()[idx]
             const editor = el && MediumEditor.getEditorFromElement(el)
 
             if (el)
@@ -392,7 +411,7 @@ class controller extends Controller {
             blocks[focusedBlockIdx].narrow = !blocks[focusedBlockIdx].narrow
             this.focusBlock(focusedBlockIdx)
         }
-    }
+    }   
     beforeMoveBlock(up = false) {
         const { focusedBlockIdx } = this.$scope
 
@@ -431,6 +450,7 @@ controller.$inject = [
     '$rootScope',
     '$element',
     '$timeout',
+    '$translate',
     'dialogService'
 ]
 component('dopChapter', {
