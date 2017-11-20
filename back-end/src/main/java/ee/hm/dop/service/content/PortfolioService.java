@@ -1,9 +1,6 @@
 package ee.hm.dop.service.content;
 
-import ee.hm.dop.dao.ChapterObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ChapterObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
@@ -25,8 +22,6 @@ public class PortfolioService {
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
-    private ChapterObjectDao chapterObjectDao;
-    @Inject
     private SolrEngineService solrEngineService;
     @Inject
     private ReviewableChangeService reviewableChangeService;
@@ -43,48 +38,22 @@ public class PortfolioService {
         TextFieldUtil.cleanTextFields(portfolio);
 
         originalPortfolio = portfolioConverter.setPortfolioUpdatableFields(originalPortfolio, portfolio);
-        saveNewObjectsInChapters(originalPortfolio);
         originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
         solrEngineService.updateIndex();
 
         boolean loChanged = reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
-        if (loChanged){
+        if (loChanged) {
             return portfolioDao.createOrUpdate(updatedPortfolio);
         }
         return updatedPortfolio;
     }
 
-    private void saveNewObjectsInChapters(Portfolio originalPortfolio) {
-        if (originalPortfolio.getChapters() == null) return;
-        originalPortfolio.getChapters().forEach(chapter -> {
-            saveAndUpdateChapterObjects(chapter);
-            if (chapter.getSubchapters() != null) {
-                chapter.getSubchapters().forEach(this::saveAndUpdateChapterObjects);
-            }
-        });
-    }
-
-    private void saveAndUpdateChapterObjects(Chapter chapter) {
-        if (chapter.getContentRows() == null) return;
-        chapter.getContentRows().forEach(chapterRow ->
-                chapterRow.getLearningObjects().replaceAll(learningObject -> {
-                    if (learningObject instanceof ChapterObject) {
-                        return chapterObjectDao.update((ChapterObject) learningObject);
-                    }
-                    return learningObject;
-                }));
-    }
-
     public Portfolio create(Portfolio portfolio, User creator) {
         ValidatorUtil.mustNotHaveId(portfolio);
         TextFieldUtil.cleanTextFields(portfolio);
-
-        Portfolio safePortfolio = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio);
-        saveNewObjectsInChapters(safePortfolio);
-
-        return doCreate(safePortfolio, creator, creator);
+        return doCreate(portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio), creator, creator);
     }
 
     Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {

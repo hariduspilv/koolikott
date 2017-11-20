@@ -213,11 +213,6 @@ angular.module('koolikottApp')
                 $location.url(searchService.getURL());
             };
 
-            $scope.showSourceFullscreen = ($event, ctrl) => {
-                $event.preventDefault();
-                ctrl.toggleFullscreen();
-            };
-
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();

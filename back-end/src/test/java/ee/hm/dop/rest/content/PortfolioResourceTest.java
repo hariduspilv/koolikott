@@ -295,32 +295,24 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Portfolio portfolio = portfolioWithTitle("With chapters");
 
-        ChapterObject chapterObject = chapterObject("Random textbox content");
         Material json = materialWithSource("http://www.november.juliet.ru");
         Material createdMaterial = doPut(CREATE_MATERIAL_URL, json, Material.class);
 
         Chapter firstChapter = chapter("First chapter");
-        firstChapter.setContentRows(Lists.newArrayList(new ContentRow(Lists.newArrayList(chapterObject, createdMaterial))));
+        firstChapter.setContentRows(Lists.newArrayList(new ContentRow(Lists.newArrayList(createdMaterial))));
         portfolio.setChapters(Lists.newArrayList(firstChapter));
 
         Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
 
         assertNotNull(createdPortfolio);
         assertNotNull(createdPortfolio.getId());
-        assertEquals(((ChapterObject) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getText(), chapterObject.getText());
-        assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(1)).getSource(), doPut(CREATE_MATERIAL_URL, createdMaterial, Material.class).getSource());
+        assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getSource(), doPut(CREATE_MATERIAL_URL, createdMaterial, Material.class).getSource());
     }
 
     private Material materialWithSource(String source) {
         Material material = new Material();
         material.setSource(source);
         return material;
-    }
-
-    private ChapterObject chapterObject(String random_textbox_content) {
-        ChapterObject chapterObject = new ChapterObject();
-        chapterObject.setText(random_textbox_content);
-        return chapterObject;
     }
 
     private Portfolio createPortfolio() {

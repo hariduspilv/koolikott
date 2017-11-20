@@ -10,18 +10,11 @@
           <!-- Headline -->
           <div class="card-lg__container card-lg__container--padding-l-r-t" layout="row">
             <h1 flex="80" flex-gt-sm="90">
-              <a data-ng-if="sourceType === 'LINK' && !material.embeddable"
+              <a data-ng-if="sourceType === 'LINK'"
                  data-ng-href="{{material.source}}" target="_blank">
                 <span data-ng-bind="getCorrectLanguageString(material.titles)"></span>
                 <md-tooltip md-direction="left">
                   <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
-                </md-tooltip>
-              </a>
-              <a flex data-ng-if="sourceType === 'LINK' && material.embeddable" data-ng-href="#"
-                 ng-click="showSourceFullscreen($event)">
-                <span data-ng-bind="getCorrectLanguageString(material.titles)"></span>
-                <md-tooltip md-direction="left">
-                  <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
                 </md-tooltip>
               </a>
               <span flex data-ng-if="sourceType !== 'LINK'"
