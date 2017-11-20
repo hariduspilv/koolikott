@@ -28,6 +28,7 @@ class controller extends Controller {
                 : 'chapter-' + chapterId
         )
     }
+
     goToElement(elementID) {
         const $chapter = angular.element(document.getElementById(elementID))
         this.$document.scrollToElement($chapter, 60, 200)

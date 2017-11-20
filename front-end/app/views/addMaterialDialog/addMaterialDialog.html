@@ -7,7 +7,7 @@
           <span data-ng-if="isUpdateMode" data-translate="MATERIAL_EDIT"></span>
         </h2>
         <span flex></span>
-        <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge materiali lisamise modaalaken">
+        <md-button ng-click="$ctrl.cancel()" class="md-icon-button" aria-label="Sulge materiali lisamise modaalaken">
           <md-icon>close</md-icon>
         </md-button>
       </div>
@@ -22,7 +22,7 @@
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
               <label data-translate="HTTP_WORD"></label>
-              <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" dop-validate-url data-ng-click="sourceIsFocused()">
+              <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" dop-validate-url data-ng-click="$ctrl.sourceIsFocused()">
               <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                 <div data-ng-show="isURLInvalid()" data-ng-message="url" class="invalid-url-message" data-translate="MATERIAL_URL_IS_INVALID"></div>
 
@@ -142,11 +142,11 @@
                   <div ng-message="required" data-translate="LAST_NAME_REQUIRED"></div>
                 </div>
               </md-input-container>
-              <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.authors.length" data-ng-click="addNewAuthor()">
+              <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.authors.length" data-ng-click="$ctrl.addNewAuthor()">
                 <md-icon>add_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_AUTHOR"></span></md-tooltip>
               </md-button>
-              <md-button class="md-icon-button" data-ng-show="material.authors.length > 1" data-ng-click="deleteAuthor($index)">
+              <md-button class="md-icon-button" data-ng-show="material.authors.length > 1" data-ng-click="$ctrl.deleteAuthor($index)">
                 <md-icon>remove_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
               </md-button>
@@ -158,11 +158,11 @@
         <h5 class="no-margin" data-translate="MATERIAL_TAXON"></h5>
         <div layout="row" data-ng-repeat="taxon in material.taxons track by $index" layout-align="start center">
           <dop-taxon-selector data-taxon="material.taxons[$index]" data-is-domain-required="{trigger: true}" data-mark-required="addMaterialForm.$submitted" data-flex></dop-taxon-selector>
-          <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length" data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(material.taxons[0])">
+          <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.taxons.length" data-ng-click="$ctrl.addNewTaxon()" data-ng-disabled="isEmpty(material.taxons[0])">
             <md-icon>add_circle</md-icon>
             <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
           </md-button>
-          <md-button class="md-icon-button md-accent-2" data-ng-show="material.taxons.length > 1" data-ng-click="deleteTaxon($index)">
+          <md-button class="md-icon-button md-accent-2" data-ng-show="material.taxons.length > 1" data-ng-click="$ctrl.deleteTaxon($index)">
             <md-icon>remove_circle</md-icon>
             <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE_TAXON"></span></md-tooltip>
           </md-button>
@@ -317,12 +317,12 @@
             <div data-ng-messages="file" data-ng-show="invalidReview && invalidReview.length > 0" class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}}MB
             </div>
 
-            <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.peerReviews.length" data-ng-click="addNewPeerReview()">
+            <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.peerReviews.length" data-ng-click="$ctrl.addNewPeerReview()">
               <md-icon>add_circle</md-icon>
               <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_PEER_REVIEW"></span>
               </md-tooltip>
             </md-button>
-            <md-button class="md-icon-button" data-ng-show="material.peerReviews.length > 1" data-ng-click="deletePeerReview($index)">
+            <md-button class="md-icon-button" data-ng-show="material.peerReviews.length > 1" data-ng-click="$ctrl.deletePeerReview($index)">
               <md-icon>remove_circle</md-icon>
               <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
             </md-button>
@@ -361,7 +361,7 @@
             </div>
           </div>
           <div layout="row" layout-align="end center">
-            <md-button ng-if="additionalInfo.isVisible" aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
+            <md-button ng-if="additionalInfo.isVisible" aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="$ctrl.cancel()">
               <span data-translate="BUTTON_CANCEL"></span>
             </md-button>
             <md-button aria-label="Ürita luua materjali" id="create-material-button" class="md-primary" data-ng-disabled="isSaving || uploadingFile" data-ng-click="addMaterialForm.$setSubmitted()" ng-if="additionalInfo.isVisible">
@@ -375,7 +375,7 @@
 
     <md-dialog-actions ng-if="!additionalInfo.isVisible">
       <span flex></span>
-      <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="cancel()">
+      <md-button aria-label="Tühista materjali lisamine" id="add-material-cancel-button" data-ng-click="$ctrl.cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
 

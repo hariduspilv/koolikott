@@ -255,6 +255,7 @@ angular.module('koolikottApp')
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
                     controller: 'addMaterialDialogController',
+                    controllerAs: '$ctrl'
                     scope: editMaterialScope
                 }).then((material) => {
                     if (material) {
