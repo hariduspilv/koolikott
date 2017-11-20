@@ -32,7 +32,8 @@
     "bluebird": "^3.4.7",
     "jquery-truncate-html": "^0.0.1",
     "core.js": "^2.5.1",
-    "medium-editor": "^5.23.2"
+    "medium-editor": "^5.23.2",
+    "angular-sortable-view": "^0.0.15"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",

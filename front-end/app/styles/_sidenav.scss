@@ -92,7 +92,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
     }
 
     .sidenav__name {
-      padding-left: 10px;
+      padding-left: 8px;
     }
   }
 }
@@ -108,7 +108,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   transition: background 0.2s;
   min-height: 46px;
   font-size: 13px;
-  padding: 0 22px;
+  padding: 0 22px 0 46px;
   width: 100%;
   color: rgba(0,0,0,.77);
 
@@ -204,7 +204,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__name {
-  margin-right: 10px;
+  margin: 0 10px;
   text-overflow: ellipsis;
   overflow: hidden;
 
@@ -238,4 +238,12 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 .sidenav__count {
   font-size: 12px;
   order: 3;
+}
+
+.sidenav__handle {
+  cursor: grab;
+  position: absolute;
+  top: 11px;
+  left: 20px;
+  z-index: 1;
 }
