@@ -31,7 +31,7 @@ angular.module('koolikottApp')
                 storedMaterial.type !== ".AdminMaterial"
             ) {
                 $scope.material = storedMaterial
-                
+
                 if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                     $rootScope.selectedSingleMaterial = $scope.material;
                 }
@@ -201,11 +201,6 @@ angular.module('koolikottApp')
 
                 searchService.setSearch('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
-            };
-
-            $scope.showSourceFullscreen = ($event, ctrl) => {
-                $event.preventDefault();
-                ctrl.toggleFullscreen();
             };
 
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
