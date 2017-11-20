@@ -862,6 +862,17 @@ class Controller {
                 chapterCtrl.updateState()
         }
     }
+    updateChapterEditorsFromState() {
+        /**
+         * call updateEditors() on all dopChapters which updates editors' innerHTML values
+         * from $scope.chapter.blocks.
+         */
+        for (let chapter of document.querySelectorAll('dop-chapter, .dop-chapter, [dop-chapter]')) {
+            const chapterCtrl = angular.element(chapter).controller('dopChapter')
+            if (chapterCtrl && typeof chapterCtrl.updateEditors === 'funciton')
+                chapterCtrl.updateEditors()
+        }
+    }
     getSlug(str, fallback = '') {
         return str
             ? str.replace(/\s+/g, '-')

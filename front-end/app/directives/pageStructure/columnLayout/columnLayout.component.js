@@ -12,10 +12,15 @@ class controller extends Controller {
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio) => {
             this.$scope.portfolio = newPortfolio
         })
+
+        this.$scope.$watch(() => this.$location.path(), (path) =>
+            this.$scope.isEditPortfolio = path === '/portfolio/edit'
+        )
     }
 }
 controller.$inject = [
     '$scope',
+    '$location',
     '$mdSidenav',
     'storageService'
 ]

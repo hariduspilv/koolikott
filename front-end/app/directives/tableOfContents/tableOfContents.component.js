@@ -2,6 +2,10 @@
 
 {
 class controller extends Controller {
+    $onChanges({ isEditMode } = {}) {
+        if (isEditMode && isEditMode.currentValue !== isEditMode.previousValue)
+            this.$scope.isEditMode = isEditMode
+    }
     $onInit() {
         this.$scope.$watch(
             () => this.storageService.getPortfolio(),
@@ -19,6 +23,8 @@ class controller extends Controller {
                         })
                 })
         }
+
+        this.$scope.onSortChapters = this.updateChapterEditorsFromState.bind(this)
     }
     gotoChapter(evt, chapterId, subchapterId) {
         evt.preventDefault()
@@ -46,6 +52,9 @@ controller.$inject = [
     'storageService'
 ]
 component('dopTableOfContents', {
+    bindings: {
+        isEditMode: '<'
+    },
     templateUrl: 'directives/tableOfContents/tableOfContents.html',
     controller
 })

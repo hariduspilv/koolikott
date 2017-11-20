@@ -102,13 +102,19 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   width: 100%;
 }
 
+.sidenav__item--chapter-title {
+  .is-sortable & a {
+    padding-left: 3.2rem;
+  }
+}
+
 .sidenav__header {
   position: relative;
   cursor: pointer;
   transition: background 0.2s;
   min-height: 46px;
   font-size: 13px;
-  padding: 0 22px 0 46px;
+  padding: 0 22px;
   width: 100%;
   color: rgba(0,0,0,.77);
 
@@ -204,7 +210,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__name {
-  margin: 0 10px;
+  margin-right: 10px;
   text-overflow: ellipsis;
   overflow: hidden;
 

@@ -191,6 +191,9 @@ controller.$inject = [
     'taxonService'
 ]
 component('dopSidenav', {
+    bindings: {
+        isEditPortfolio: '<'
+    },
     templateUrl: 'directives/sidenav/sidenav.html',
     controller
 })

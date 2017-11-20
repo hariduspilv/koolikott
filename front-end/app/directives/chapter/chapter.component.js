@@ -155,37 +155,42 @@ class controller extends Controller {
          * Update editor contents downstream:
          * $scope.chapter.blocks[idx].htmlContent -> editorElement.innerHTML
          */
-        for (let [idx, el] of this.getEditorElements().entries())
-            if (el && this.$scope.chapter.blocks[idx]) {
-                const editor = MediumEditor.getEditorFromElement(el)
-                if (editor) {
-                    const selection = editor.exportSelection()
+        if (this.isEditMode)
+            for (let [idx, el] of this.getEditorElements().entries())
+                if (el && this.$scope.chapter.blocks[idx]) {
+                    const editor = MediumEditor.getEditorFromElement(el)
+                    if (editor) {
+                        const selection = editor.exportSelection()
 
-                    if (safeMode) {
-                        editor.importSelection({
-                            start: 0,
-                            end: el.textContent.length
-                        })
-                        editor.pasteHTML(this.$scope.chapter.blocks[idx].htmlContent, {
-                            cleanAttrs: ['style', 'dir']
-                        })
-                    } else
-                        el.innerHTML = this.$scope.chapter.blocks[idx].htmlContent
+                        if (safeMode) {
+                            editor.importSelection({
+                                start: 0,
+                                end: el.textContent.length
+                            })
+                            editor.pasteHTML(this.$scope.chapter.blocks[idx].htmlContent, {
+                                cleanAttrs: ['style', 'dir']
+                            })
+                        } else
+                            el.innerHTML = this.$scope.chapter.blocks[idx].htmlContent
 
-                    editor.importSelection(selection)
+                        editor.importSelection(selection)
+
+                        if (el.innerHTML && el.innerHTML !== '<p><br></p>')
+                            el.classList.remove('medium-editor-placeholder')
+                    }
                 }
-            }
     }
     updateState() {
         /**
          * Update input contents upstream:
          * editorElement.innerHTML -> $scope.chapter.blocks[idx].htmlContent
          */
-        for (let [idx, el] of this.getEditorElements().entries())
-            if (el && this.$scope.chapter.blocks[idx].htmlContent !== el.innerHTML) {
-                this.$scope.chapter.blocks[idx].htmlContent = el.innerHTML
-                MediumEditor.getEditorFromElement(el).restoreSelection()
-            }
+        if (this.isEditMode)
+            for (let [idx, el] of this.getEditorElements().entries())
+                if (el && this.$scope.chapter.blocks[idx].htmlContent !== el.innerHTML) {
+                    this.$scope.chapter.blocks[idx].htmlContent = el.innerHTML
+                    MediumEditor.getEditorFromElement(el).restoreSelection()
+                }
     }
     optimizePlaceholder(el, editor) {
         /**
