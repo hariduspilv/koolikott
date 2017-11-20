@@ -34,9 +34,7 @@ angular.module('koolikottApp').controller('editUserController', [
         };
 
         $scope.addNewTaxon = function () {
-            var educationalContext = taxonService.getEducationalContext($scope.user.userTaxons[0]);
-
-            $scope.user.userTaxons.push(educationalContext);
+            $scope.user.userTaxons.push(undefined);
         };
 
         $scope.deleteTaxon = function (index) {

@@ -63,6 +63,9 @@ class controller extends Controller {
                         : null
         }
     }
+    reset(parentTaxon) {
+        this.taxon = parentTaxon;
+    };
     isBasicOrSecondaryEducation() {
         if (!this.taxonPath.educationalContext)
             return false

@@ -11,7 +11,6 @@ class controller extends Controller {
         this.$scope.listItemDown = this.listItemDown.bind(this)
         this.$scope.navigateToMaterial = this.navigateToMaterial.bind(this)
         this.$scope.fallbackToLink = this.fallbackToLink.bind(this)
-        this.$scope.showSourceFullscreen = this.showSourceFullscreen.bind(this)
 
         this.$scope.$watch('material', () => {
             if (this.$scope.material && this.$scope.material.id) {
@@ -98,10 +97,6 @@ class controller extends Controller {
     fallbackToLink() {
         return this.$scope.isEditPortfolioMode || !this.$scope.sourceType || this.$scope.sourceType === 'LINK'
     }
-    showSourceFullscreen($event, ctrl) {
-        $event.preventDefault()
-        ctrl.toggleFullscreen()
-    }
     videoSetup(redo) {
         let extension = getSource(this.$scope.material).split('.').pop()
         const video = document.createElement('video')
@@ -177,7 +172,7 @@ class controller extends Controller {
                 else
                 if (!redo) {
                     console.log('embeddedMaterial.js: sourceTypeAndPdfSetup AGAIN (EBOOK)')
-                    
+
                     this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
                 }
                 break
@@ -190,17 +185,17 @@ class controller extends Controller {
                 if (this.$scope.material.source.startsWith(baseUrl)) {
                     this.$scope.sourceType = 'PDF'
                     this.$scope.material.PDFLink = this.pdfjsLink(this.$scope.material.source)
-                    
+
                     const pdfContainer = document.querySelector('.embed-pdf-' + this.$scope.material.id)
 
                     if (pdfContainer) {
                         console.log('pdf element setup' + this.$scope.material.PDFLink)
-                        
+
                         pdfContainer.innerHTML = this.iFrameLink(this.$scope.material.PDFLink)
                     } else
                     if (!redo) {
                         console.log('embeddedMaterial.js: sourceTypeAndPdfSetup AGAIN (PDF)')
-                        
+
                         this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
                     }
                 } else {
@@ -209,10 +204,10 @@ class controller extends Controller {
                     this.$scope.fallbackType = 'LINK'
 
                     console.log('proxy tree')
-                    
+
                     if (this.$scope.isProxySource) {
                         console.log('material source: ' +this.$scope.material.source)
-                        
+
                         this.proxyUrl = baseUrl + '/rest/material/externalMaterial?url=' + encodeURIComponent(this.$scope.material.source)
                         this.serverCallService
                             .makeHead(this.proxyUrl)
@@ -245,34 +240,34 @@ class controller extends Controller {
         console.log('Content probing succeeded! twice is the charm')
 
         const { 'content-disposition': contentDisposition } = headers()
-        
+
         if (!contentDisposition) {
             console.log('content is not dispositioned')
-            
+
             this.$scope.sourceType = this.$scope.fallbackType
             return
         }
 
         const filename = contentDisposition.match(/filename="(.+)"/)[1]
-        
+
         if (this.getEmbedType({ source: filename }) === 'PDF') {
             console.log('it is pdf baby')
-            
+
             this.$scope.material.PDFLink = this.pdfjsLink(encodeURIComponent(this.proxyUrl))
-            
+
             console.log('proxy pdf link' + this.$scope.material.PDFLink)
-            
+
             const pdfContainer = document.querySelector('.embed-pdf-' + this.$scope.material.id)
 
             if (pdfContainer) {
                 console.log("proxy pdf element setup")
-                
+
                 pdfContainer.innerHTML(this.iFrameLink(this.$scope.material.PDFLink))
             } else
                 this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
         } else {
             console.log('everything is very sad')
-            
+
             this.$scope.sourceType = this.$scope.fallbackType
         }
     }

@@ -39,6 +39,7 @@ public class FirstReviewAdminService {
     }
 
     public FirstReview save(LearningObject learningObject) {
+        learningObject.setUnReviewed(learningObject.getUnReviewed() + 1);
         FirstReview firstReview = new FirstReview();
         firstReview.setLearningObject(learningObject);
         firstReview.setReviewed(false);
