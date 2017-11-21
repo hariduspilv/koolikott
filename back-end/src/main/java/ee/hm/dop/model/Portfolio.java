@@ -1,14 +1,11 @@
 package ee.hm.dop.model;
 
-import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.IPortfolio;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -72,9 +69,8 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
 
     private String getSanitizedHTML(String summary) {
         if (summary != null) {
-            summary = ALLOWED_HTML_TAGS_POLICY.sanitize(summary);
+            summary = LO_ALLOWED_HTML_TAGS_POLICY.sanitize(summary);
         }
-
         return summary;
     }
 }

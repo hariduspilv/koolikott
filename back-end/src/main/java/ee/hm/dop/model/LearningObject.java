@@ -38,11 +38,13 @@ import static javax.persistence.FetchType.LAZY;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class LearningObject implements Searchable, ILearningObject {
 
-    static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
+    @Deprecated
+    static PolicyFactory LO_ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")
             .allowAttributes("href", "target")
             .onElements("a")
             .toFactory();
+
     @Id
     @GeneratedValue
     private Long id;
