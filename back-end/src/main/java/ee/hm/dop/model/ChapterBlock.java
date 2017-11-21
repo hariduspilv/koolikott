@@ -11,10 +11,13 @@ import javax.persistence.Id;
 @Entity
 public class ChapterBlock {
 
-    static PolicyFactory BLOCK_ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
-            .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")
-            .allowAttributes("href", "target")
+    static PolicyFactory BLOCK_ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder()
+            .allowStandardUrlProtocols()
+            .allowElements("h3", "p", "ul", "li", "blockquote", "a", "b", "i", "div", "br")
+            .allowAttributes("href", "target", "class", "id")
             .onElements("a")
+            .allowAttributes("class", "id")
+            .onElements("h3", "p", "ul", "li", "blockquote", "b", "i", "div", "br")
             .toFactory();
 
     @Id
@@ -44,6 +47,9 @@ public class ChapterBlock {
     }
 
     public String getHtmlContent() {
+        if (htmlContent != null) {
+            htmlContent = BLOCK_ALLOWED_HTML_TAGS_POLICY.sanitize(htmlContent);
+        }
         return htmlContent;
     }
 
