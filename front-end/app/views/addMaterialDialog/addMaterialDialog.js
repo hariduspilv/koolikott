@@ -36,7 +36,7 @@ class controller extends Controller {
         this.$scope.additionalInfo = {};
         this.$scope.maxReviewSize = 10;
         this.$scope.charactersRemaining = 850;
-        this.$scope.resourceTypeDTO =
+        this.$scope.resourceTypeDTO = {};
         this.$scope.languages = [];
         this.$scope.licenseTypes = [];
         this.$scope.resourceTypes = [];
