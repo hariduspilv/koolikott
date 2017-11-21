@@ -7,6 +7,8 @@ class controller extends Controller {
             this.$scope.isEditMode = isEditMode
     }
     $onInit() {
+        this.$scope.authUser = false;
+        this.isAdminOrModerator();
         this.$scope.$watch(
             () => this.storageService.getPortfolio(),
             (portfolio) => this.$scope.portfolio = portfolio
@@ -42,6 +44,13 @@ class controller extends Controller {
         if (window.innerWidth < BREAK_LG)
             this.$mdSidenav(id).close()
     }
+    isAdminOrModerator() {
+        if (this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()) {
+            this.$scope.authUser = true;
+        } else {
+            this.$scope.authUser = false;
+        }
+    }
 }
 controller.$inject = [
     '$scope',
@@ -49,7 +58,8 @@ controller.$inject = [
     '$document',
     '$location',
     '$timeout',
-    'storageService'
+    'storageService',
+    'authenticatedUserService'
 ]
 component('dopTableOfContents', {
     bindings: {

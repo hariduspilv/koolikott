@@ -28,7 +28,7 @@
     data-ng-repeat="chapter in portfolio.chapters track by $index"
     data-sv-element
     >
-    <span data-sv-handle class="sidenav__handle"><md-icon>drag_handle</md-icon></span>
+    <span data-sv-handle class="sidenav__handle"><md-icon data-ng-if="authUser">drag_handle</md-icon></span>
     <a
       href="#"
       id="toc-chapter-{{$index}}"
