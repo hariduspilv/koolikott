@@ -16,8 +16,10 @@ public class ChapterBlock {
             .allowElements("h3", "p", "ul", "li", "blockquote", "a", "b", "i", "div", "br")
             .allowAttributes("href", "target", "class", "id")
             .onElements("a")
+            .allowAttributes("class", "id", "data-id", "data-src")
+            .onElements("div")
             .allowAttributes("class", "id")
-            .onElements("h3", "p", "ul", "li", "blockquote", "b", "i", "div", "br")
+            .onElements("h3", "p", "ul", "li", "blockquote", "b", "i", "br")
             .toFactory();
 
     @Id
