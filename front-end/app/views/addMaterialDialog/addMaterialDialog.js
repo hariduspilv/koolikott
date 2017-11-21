@@ -37,7 +37,77 @@ class controller extends Controller {
         this.$scope.maxReviewSize = 10;
         this.$scope.charactersRemaining = 850;
         this.$scope.resourceTypeDTO = [];
-        this.$scope.material = {};
+
+        this.$scope.languages = () => this.metadataService.loadLanguages(this.setLangugeges);
+        this.$scope.licenseTypes = () => this.metadataService.loadLicenseTypes(this.setLicenseTypes);
+
+        // Watches
+
+        // this.$scope.$watch(function () {
+        //     return this.$scope.newPicture;
+        // }, function (newPicture) {
+        //     if (newPicture) {
+        //         uploadingPicture = true;
+        //         this.pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
+        //     }
+        // });
+        //
+        // this.$scope.$watch(function () {
+        //     return this.$scope.newFile;
+        // }, function (newFile) {
+        //     if (newFile) {
+        //         this.$scope.uploadingFile = true;
+        //         this.fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
+        //     }
+        // });
+        //
+        // this.$scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
+        //     if (newValue && newValue.$error) {
+        //         this.$scope.showErrorOverlay = true;
+        //         this.$timeout(function () {
+        //             this.$scope.showErrorOverlay = false;
+        //         }, 6000);
+        //     }
+        // });
+        //
+        // this.$scope.$watch('material.taxons[0]', function (newValue, oldValue) {
+        //     if (newValue && newValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+        //         this.$scope.educationalContextId = newValue.id;
+        //     }
+        // }, false);
+        //
+        // this.$scope.$watch(function () {
+        //     let a = document.getElementsByClassName("md-datepicker-input");
+        //     if (a[0]) return a[0].value;
+        // }, function (newDate, oldDate) {
+        //     // if newDate is undefiend, use oldDate
+        //     newDate = newDate ? newDate : oldDate;
+        //
+        //     if (newDate !== oldDate || !this.$scope.material.issueDate) {
+        //         var dateObj = this.$mdDateLocale.parseDate(newDate);
+        //         this.$scope.material.issueDate = getIssueDate(dateObj);
+        //
+        //         //Set date for datepicker, which needs a full date
+        //         if (this.$scope.material.issueDate && this.$scope.material.issueDate.year) {
+        //             this.$scope.issueDate = dateObj;
+        //         }
+        //     }
+        // }, true);
+        //
+        // this.$scope.$watch('material.source', function (newValue) {
+        //     if (this.$scope.addMaterialForm.source) {
+        //         this.$scope.addMaterialForm.source.$setValidity("exists", true);
+        //         this.$scope.addMaterialForm.source.$setValidity("deleted", true);
+        //     }
+        //
+        //
+        //     if (newValue && this.$scope.addMaterialForm.source && (this.$scope.addMaterialForm.source.$error.url !== true)) {
+        //         let encodedUrl = encodeURIComponent(newValue);
+        //         this.serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
+        //             getByUrlSuccess, getByUrlFail);
+        //     }
+        //
+        // }, true);
 
         let preferredLanguage;
         let uploadingPicture = false;
@@ -46,11 +116,11 @@ class controller extends Controller {
             this.$scope.material.uploadedFile.displayName = decodeUTF8(this.$scope.material.uploadedFile.name);
         }
 
-        if (this.isChapterMaterial) {
+        if (this.$scope.isChapterMaterial) {
             var addChapterMaterialUrl = this.$scope.material.source;
         }
 
-        if (this.material && !this.isChapterMaterial) {
+        if (this.$scope.material && !this.$scope.isChapterMaterial) {
             preSetMaterial(this.$scope.material);
         } else {
             this.initEmptyMaterial();
@@ -58,12 +128,9 @@ class controller extends Controller {
             this.$scope.material.source = addChapterMaterialUrl;
         }
 
-        if (this.$scope.material.uploadedFile && this.$scope.material.uploadedFile.id) {
-            this.fileUploaded = true;
+        if (this.$scope.material.uploadedFile && this.$scope.material.uploadedFile.id)
+            this.$scope.fileUploaded = true;
             this.setPublisher();
-            this.metadataService.loadLanguages(this.setLangugeges());
-            this.metadataService.loadLicenseTypes(this.setLicenseTypes());
-        }
 
         // fix for https://github.com/angular/material/issues/6905
          this.$timeout(function () {
@@ -372,74 +439,6 @@ class controller extends Controller {
                 this.$scope.material.publishers[0].name = this.authenticatedUserService.getUser().publisher.name;
                 this.$scope.creatorIsPublisher = true;
             }
-        }
-
-        setWatches() {
-            this.$scope.$watch(function () {
-                return this.$scope.newPicture;
-            }, function (newPicture) {
-                if (newPicture) {
-                    uploadingPicture = true;
-                    this.pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
-                }
-            });
-
-            this.$scope.$watch(function () {
-                return this.$scope.newFile;
-            }, function (newFile) {
-                if (newFile) {
-                    this.$scope.uploadingFile = true;
-                    this.fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
-                }
-            });
-
-            this.$scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
-                if (newValue && newValue.$error) {
-                    this.$scope.showErrorOverlay = true;
-                    this.$timeout(function () {
-                        this.$scope.showErrorOverlay = false;
-                    }, 6000);
-                }
-            });
-
-            this.$scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-                if (newValue && newValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
-                    this.$scope.educationalContextId = newValue.id;
-                }
-            }, false);
-
-            this.$scope.$watch(function () {
-                let a = document.getElementsByClassName("md-datepicker-input");
-                if (a[0]) return a[0].value;
-            }, function (newDate, oldDate) {
-                // if newDate is undefiend, use oldDate
-                newDate = newDate ? newDate : oldDate;
-
-                if (newDate !== oldDate || !this.$scope.material.issueDate) {
-                    var dateObj = this.$mdDateLocale.parseDate(newDate);
-                    this.$scope.material.issueDate = getIssueDate(dateObj);
-
-                    //Set date for datepicker, which needs a full date
-                    if (this.$scope.material.issueDate && this.$scope.material.issueDate.year) {
-                        this.$scope.issueDate = dateObj;
-                    }
-                }
-            }, true);
-
-            this.$scope.$watch('material.source', function (newValue) {
-                if (this.$scope.addMaterialForm.source) {
-                    this.$scope.addMaterialForm.source.$setValidity("exists", true);
-                    this.$scope.addMaterialForm.source.$setValidity("deleted", true);
-                }
-
-
-                if (newValue && this.$scope.addMaterialForm.source && (this.$scope.addMaterialForm.source.$error.url !== true)) {
-                    let encodedUrl = encodeURIComponent(newValue);
-                    this.serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
-                        getByUrlSuccess, getByUrlFail);
-                }
-
-            }, true);
         }
 
         getByUrlSuccess(material) {

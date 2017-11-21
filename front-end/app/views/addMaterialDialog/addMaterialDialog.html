@@ -42,7 +42,7 @@
               <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
               <span data-ng-show="!material.uploadedFile" data-translate="FILE_WORD"></span>
             </a>
-            <span>materjalile*.</span>
+            <span data-translate="FOR_MATERIAL">*.</span>
           </span>
           <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
             <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
@@ -78,13 +78,13 @@
                   </md-option>
                 </md-select>
               </md-input-container>
-              <span>keeles.</span>
+              <span data-translate="IN_LANGUAGE">.</span>
             </div>
         </div>
 
         <!-- heading-desc-lang group -->
         <div class="form-group" data-ng-repeat="metadata in titleDescriptionGroups">
-          <h5 class="no-margin">Põhiandmed:</h5>
+          <h5 class="no-margin" data-translate="MATERIAL_TAB_MAIN_DATA"></h5>
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
             <md-input-container flex flex-order-xs="2" flex-sm="50" flex-lg="35">
               <label data-translate="MATERIAL_TITLE"></label>
@@ -103,7 +103,7 @@
           </div>
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
             <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-              <label>Sisukokkuvõte</label>
+              <label data-translate="CONTENT_SUMMARY"></label>
               <input ng-model="metadata.description" id="add-material-description-input" />
             </md-input-container>
           </div>
@@ -304,7 +304,7 @@
               </div>
             </div>
             <!--Uploaded file name-->
-            <span class="md-padding"> või lisa </span>
+            <span class="md-padding" data-translate="OR_ADD"> </span>
             <!--Upload button-->
             <div ngf-select data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxReviewSize + 'MB'}}" ngf-model-invalid="invalidReview" ngf-change="uploadReview($index, $file)">
 
