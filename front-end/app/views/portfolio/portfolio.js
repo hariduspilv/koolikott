@@ -9,7 +9,7 @@ angular.module('koolikottApp')
 
                 function init() {
                     if (storageService.getPortfolio() && storageService.getPortfolio().type !== ".ReducedPortfolio" && storageService.getPortfolio().type !== ".AdminPortfolio") {
-                        setPortfolio(storageService.getPortfolio());
+                        setPortfolio(storageService.getPortfolio(), true);
                         increaseViewCount();
                     } else {
                         getPortfolio(getPortfolioSuccess, getPortfolioFail);
@@ -50,7 +50,7 @@ angular.module('koolikottApp')
                     }, 1000);
                 }
 
-                function setPortfolio(portfolio) {
+                function setPortfolio(portfolio, isLocallyStored = false) {
                     $scope.portfolio = portfolio;
                     storageService.setPortfolio(portfolio);
 
@@ -61,6 +61,9 @@ angular.module('koolikottApp')
                         $rootScope.learningObjectChanged = $scope.portfolio.changed > 0;
                         $rootScope.learningObjectUnreviewed = !!$scope.portfolio.unReviewed;
                     }
+
+                    if (!isLocallyStored)
+                        portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
                 }
 
                 $scope.modUser = function () {
@@ -74,7 +77,7 @@ angular.module('koolikottApp')
                     eventService.notify('portfolio:reloadTaxonObject');
 
                     if (newPortfolio !== oldPortfolio) {
-                        setPortfolio(newPortfolio);
+                        setPortfolio(newPortfolio, true);
                     }
                 });
 
@@ -100,7 +103,7 @@ angular.module('koolikottApp')
 
                 $scope.$on("tags:updatePortfolio", function (event, value) {
                     if (!_.isEqual(value, $scope.portfolio)) {
-                        setPortfolio(value);
+                        setPortfolio(value, true);
                     }
                 });
 
