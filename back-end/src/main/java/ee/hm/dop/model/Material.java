@@ -1,6 +1,5 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ee.hm.dop.model.interfaces.IMaterial;
@@ -267,7 +266,7 @@ public class Material extends LearningObject implements Searchable, IMaterial {
             descriptions
                     .stream()
                     .filter(description -> description.getText() != null)
-                    .forEach(description -> description.setText(ALLOWED_HTML_TAGS_POLICY.sanitize(description.getText())));
+                    .forEach(description -> description.setText(LO_ALLOWED_HTML_TAGS_POLICY.sanitize(description.getText())));
         }
 
         return descriptions;

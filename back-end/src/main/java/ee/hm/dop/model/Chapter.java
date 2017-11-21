@@ -6,7 +6,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import java.util.List;
 
-import static ee.hm.dop.model.LearningObject.ALLOWED_HTML_TAGS_POLICY;
+import static ee.hm.dop.model.LearningObject.LO_ALLOWED_HTML_TAGS_POLICY;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
@@ -20,9 +20,21 @@ public class Chapter implements AbstractEntity {
     @Column
     private String title;
 
+    @ManyToMany(fetch = EAGER, cascade = ALL)
+    @Fetch(FetchMode.SELECT)
+    @OrderColumn(name = "rowOrder", nullable = false)
+    @JoinTable(
+            name = "Chapter_ChapterBlock",
+            joinColumns = {@JoinColumn(name = "chapter")},
+            inverseJoinColumns = {@JoinColumn(name = "chapterBlock")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"chapter", "chapterBlock", "rowOrder"}))
+    private List<ChapterBlock> blocks;
+
+    @Deprecated
     @Column(columnDefinition = "TEXT", name = "textValue")
     private String text;
 
+    @Deprecated
     @ManyToMany(fetch = EAGER, cascade = ALL)
     @Fetch(FetchMode.SELECT)
     @OrderColumn(name = "rowOrder", nullable = false)
@@ -33,6 +45,7 @@ public class Chapter implements AbstractEntity {
             uniqueConstraints = @UniqueConstraint(columnNames = {"chapter", "row", "rowOrder"}))
     private List<ContentRow> contentRows;
 
+    @Deprecated
     @OneToMany(fetch = EAGER, cascade = ALL)
     @JoinColumn(name = "parentChapter")
     private List<Chapter> subchapters;
@@ -55,9 +68,8 @@ public class Chapter implements AbstractEntity {
 
     public String getText() {
         if (text != null) {
-            text = ALLOWED_HTML_TAGS_POLICY.sanitize(text);
+            text = LO_ALLOWED_HTML_TAGS_POLICY.sanitize(text);
         }
-
         return text;
     }
 
@@ -84,5 +96,13 @@ public class Chapter implements AbstractEntity {
 
     public void setContentRows(List<ContentRow> rows) {
         this.contentRows = rows;
+    }
+
+    public List<ChapterBlock> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(List<ChapterBlock> blocks) {
+        this.blocks = blocks;
     }
 }
