@@ -879,7 +879,7 @@ class Controller {
             : fallback
     }
     transformChapters(chapters) {
-        return !Array.isArray(chapters)
+        return !Array.isArray(chapters) || !chapters.length || chapters[0].blocks
             ? chapters
             : chapters.reduce(
                 (chapters, c, idx) => chapters
