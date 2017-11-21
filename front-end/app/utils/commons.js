@@ -858,7 +858,7 @@ class Controller {
          */
         for (let chapter of document.querySelectorAll('dop-chapter, .dop-chapter, [dop-chapter]')) {
             const chapterCtrl = angular.element(chapter).controller('dopChapter')
-            if (chapterCtrl && typeof chapterCtrl.updateState === 'funciton')
+            if (chapterCtrl && typeof chapterCtrl.updateState === 'function')
                 chapterCtrl.updateState()
         }
     }
@@ -869,7 +869,7 @@ class Controller {
          */
         for (let chapter of document.querySelectorAll('dop-chapter, .dop-chapter, [dop-chapter]')) {
             const chapterCtrl = angular.element(chapter).controller('dopChapter')
-            if (chapterCtrl && typeof chapterCtrl.updateEditors === 'funciton')
+            if (chapterCtrl && typeof chapterCtrl.updateEditors === 'function')
                 chapterCtrl.updateEditors()
         }
     }

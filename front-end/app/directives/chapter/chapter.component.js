@@ -11,6 +11,145 @@
  */
 
 {
+/*rangy.init()
+const ParagraphButton = MediumEditor.Extension.extend({
+    name: 'p',
+    tagNames: ['p'],
+    init() {
+        this.classApplier = rangy.createClassApplier('p', {
+            elementTagName: 'p',
+            normalize: true
+        })
+        this.button = this.document.createElement('button')
+        this.button.classList.add('medium-editor-action')
+        this.button.classList.add('medium-editor-action-paragraph')
+        this.button.innerHTML = '<b>p</b>'
+    },
+    getButton() {
+        return this.button
+    },
+    handleClick(evt) {
+        evt.preventDefault()
+        evt.stopPropagation()
+
+        this.classApplier.toggleSelection()
+        this.base.checkContentChanged()
+    },
+    /*isAlreadyApplied(node) {
+        return node.nodeName.toLowerCase() === 'mark'
+    },
+    isActive() {
+        return this.button.classList.contains('medium-editor-button-active')
+    },
+    setInactive() {
+        this.button.classList.remove('medium-editor-button-active')
+    },
+    setActive() {
+        this.button.classList.add('medium-editor-button-active')
+    }*
+})
+const UnorderedListButton = MediumEditor.Extension.extend({
+    name: 'ul'
+})*/
+
+const ALLOWED_TAGS = ['H3', 'P', 'BR', 'B', 'I', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
+class ParagraphButton {
+    constructor() {
+        return new MediumButton({
+            label: '<b>p</b>',
+            action: (html, marked, parent) => {
+                console.log({ html, marked, parent })
+
+                /*if (parent.classList.contains('medium-editor-element'))
+
+                else */if (parent.nodeType === Node.ELEMENT_NODE && parent.tagName !== 'P')
+                    switch (parent.tagName) {
+                        case 'UL': return this.transformUL(parent)
+                        case 'LI': return this.transformLI(parent)
+                    }
+
+                return html
+            }
+        })
+    }
+    transformBlockLevelElement(parent) {
+
+    }
+    transformUL(parent) {
+        this.saveSelection()
+
+        const p = document.createElement('p')
+
+        for (let li of parent.children)
+            li.outerHTML = li.innerHTML
+
+        parent.parentElement.insertBefore(p, parent)
+        p.insertBefore(parent, null)
+        parent.outerHTML = parent.innerHTML
+
+        this.restoreSelection()
+
+        return ''
+    }
+    transformLI(parent) {
+        this.saveSelection()
+
+        const p = document.createElement('p')
+        const ul = this.getClosest('ul', parent)
+        const idx = [].slice.call(parent.parentElement.children, 0).indexOf(parent)
+        const extract = (after) => {
+            p.insertBefore(parent, null)
+            parent.outerHTML = parent.innerHTML
+            ul.parentElement.insertBefore(p, after ? ul.nextSibling : ul)
+        }
+        const splitLists = (atIdx) => {
+            const secondUL = document.createElement('ul')
+
+            while (atIdx < ul.children.length) {
+                secondUL.insertBefore(ul.children[atIdx], null)
+                atIdx++
+            }
+            ul.parentElement.insertBefore(secondUL, ul.nextSibling)
+        }
+
+        ul.children.length === 1
+            ? extract() || ul.parentElement.removeChild(ul)
+            : idx === 0
+                ? extract()
+                : idx === ul.children.length - 1
+                    ? extract(1)
+                    : splitLists() || extract(1)
+
+        this.restoreSelection()
+
+        return ''
+    }
+    getClosest(tagName, el) {
+        tagName = tagName.toUpperCase()
+        
+        let closest = el
+        
+        while (closest !== null) {
+            if (closest.tagName === tagName)
+                return closest
+
+            closest = el.parentElement
+        }
+        
+        return null
+    }
+    saveSelection() {
+        const selection = window.getSelection()
+        this.savedRange = selection.rangeCount && selection.getRangeAt(0)
+    }
+    restoreSelection() {
+        if (this.savedRange) {
+            const selection = window.getSelection()
+            selection.removeAllRanges()
+            selection.addRange(this.savedRange)
+        }
+    }
+}
 class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
@@ -140,7 +279,20 @@ class controller extends Controller {
     createEditor(blocks, idx, el) {
         if (!MediumEditor.getEditorFromElement(el)) {
             const editor = new MediumEditor(el, {
-                placeholder: idx === 0 && this.$scope.chapter.blocks.length === 1
+                placeholder: idx === 0 && this.$scope.chapter.blocks.length === 1,
+                toolbar: {
+                    buttons: ['h3', 'p', 'anchor', 'bold', 'italic', 'quote', 'ul']
+                },
+                extensions: {
+                    p: new ParagraphButton(),
+                    ul: new MediumButton({
+                        label: '<i class="fa fa-list-ul"></i>',
+                        action(html, marked, parent) {
+                            console.log({ html, marked, parent })
+                            return html
+                        }
+                    })
+                }
             })
 
             const saveSelection = editor.saveSelection.bind(editor)
@@ -148,6 +300,7 @@ class controller extends Controller {
             editor.subscribe('editableKeyup', saveSelection)
             
             this.optimizePlaceholder(el, editor)
+            this.disallowFormatting(el)
         }
     }
     updateEditors(safeMode = false) {
@@ -209,6 +362,30 @@ class controller extends Controller {
                     el.classList.add('medium-editor-placeholder')
             }, 200)
         })
+    }
+    disallowFormatting(el) {
+        /**
+         * Unwrap html tags that are not allowed as soon as they are created.
+         */
+        const unwrapNodeIfNecessary = (node) => {
+            if (!ALLOWED_TAGS.includes(node.tagName))
+                node.outerHTML = node.innerHTML
+        }
+        if ('MutationObserver' in window) {
+            el._mutationObserver = new MutationObserver(mutations =>
+                mutations.forEach(({ addedNodes }) =>
+                    addedNodes.forEach(unwrapNodeIfNecessary)
+                )
+            )
+            el._mutationObserver.observe(el, {
+                subtree: true,
+                childList: true,
+                characterData: true
+            })
+        } else
+            el.addEventListener('DOMNodeInserted', (evt) =>
+                unwrapNodeIfNecessary(evt.target)
+            )
     }
     getEditorElements() {
         return this.$element[0].querySelectorAll('.chapter-block') || []
