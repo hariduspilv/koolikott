@@ -36,10 +36,19 @@ class controller extends Controller {
         this.$scope.additionalInfo = {};
         this.$scope.maxReviewSize = 10;
         this.$scope.charactersRemaining = 850;
-        this.$scope.resourceTypeDTO = [];
+        this.$scope.resourceTypeDTO =
+        this.$scope.languages = [];
+        this.$scope.licenseTypes = [];
+        this.$scope.resourceTypes = [];
+        this.$scope.keyCompetences = [];
+        this.$scope.crossCurricularThemes = [];
 
-        this.$scope.languages = () => this.metadataService.loadLanguages(this.setLangugeges);
-        this.$scope.licenseTypes = () => this.metadataService.loadLicenseTypes(this.setLicenseTypes);
+
+        this.metadataService.loadLanguages(this.setLangugeges.bind(this));
+        this.metadataService.loadLicenseTypes(this.setLicenseTypes.bind(this));
+        this.metadataService.loadResourceTypes(this.setResourceTypes.bind(this));
+        this.metadataService.loadKeyCompetences(this.setKeyCompetences.bind(this));
+        this.metadataService.loadCrossCurricularThemes(this.setCrossCurricularThemes.bind(this));
 
         // Watches
 
@@ -139,7 +148,7 @@ class controller extends Controller {
     }
 
         isTypeSelected(resourceType) {
-            let materialResourceTypes = $scope.material.resourceTypes;
+            let materialResourceTypes = this.$scope.material.resourceTypes;
 
             var isFound = materialResourceTypes.filter(function (mResourceType) {
                 return mResourceType.id == resourceType.id;
@@ -153,13 +162,16 @@ class controller extends Controller {
                 item.expanded = false
             });
 
-            addNewMetadata();
+            this.addNewMetadata();
         };
 
         addNewAuthor() {
             this.$scope.material.authors.push({});
+
+            var authorsLength = this.$scope.material.authors.length;
+
             this.$timeout(function () {
-                angular.element('#material-author-' + (this.$scope.material.authors.length - 1) + '-name').focus();
+                angular.element('#material-author-' + (authorsLength - 1) + '-name').focus();
             });
         };
 
@@ -193,8 +205,11 @@ class controller extends Controller {
 
         addNewPeerReview() {
             this.$scope.material.peerReviews.push({});
+
+            var peerReviewLength = this.$scope.material.peerReviews.length;
+
             this.$timeout(function () {
-                angular.element('#material-peerReview-' + (this.$scope.material.authors.length - 1)).focus();
+                angular.element('#material-peerReview-' + (peerReviewLength - 1)).focus();
             });
         };
 
@@ -205,10 +220,10 @@ class controller extends Controller {
         save() {
             this.$scope.material.resourceTypes = this.$scope.resourceTypeDTO;
             this.$scope.isSaving = true;
-            if (uploadingPicture) {
+            if (this.uploadingPicture) {
                 this.$timeout(this.$scope.save, 500, false);
             } else {
-                let metadata = getTitlesAndDecriptions();
+                let metadata = this.getTitlesAndDecriptions();
                 this.$scope.material.titles = metadata.titles;
                 this.$scope.material.descriptions = metadata.descriptions;
                 this.$scope.material.type = ".Material";
@@ -323,7 +338,7 @@ class controller extends Controller {
          */
         searchKeyCompetences (query) {
             return query ? this.$scope.keyCompetences
-                .filter(searchFilter(query, "KEY_COMPETENCE_")) : this.$scope.keyCompetences;
+                .filter(this.searchFilter(query, "KEY_COMPETENCE_")) : this.$scope.keyCompetences;
         };
 
         /**
@@ -331,7 +346,7 @@ class controller extends Controller {
          */
         searchCrossCurricularThemes (query) {
             return query ? this.$scope.crossCurricularThemes
-                .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : this.$scope.crossCurricularThemes;
+                .filter(this.searchFilter(query, "CROSS_CURRICULAR_THEME_")) : this.$scope.crossCurricularThemes;
         };
 
         removeFocus (elementId) {
@@ -340,15 +355,15 @@ class controller extends Controller {
 
         autocompleteItemSelected (item, listName, elementId) {
 
-            if (shouldRemoveNotRelevantFromList(listName)) {
-                this.$scope.material[listName] = removeLastElement(listName)
+            if (this.shouldRemoveNotRelevantFromList(listName)) {
+                this.$scope.material[listName] = this.removeLastElement(listName)
             }
 
             if (!item) {
-                closeAutocomplete(elementId);
+                this.closeAutocomplete(elementId);
             } else {
                 // If 'NOT_RELEVANT' chip exists and new item is selected, replace it
-                if (listContains(this.$scope.material[listName], 'name', 'NOT_RELEVANT') && item.name !== 'NOT_RELEVANT') {
+                if (this.listContains(this.$scope.material[listName], 'name', 'NOT_RELEVANT') && item.name !== 'NOT_RELEVANT') {
                     this.$scope.material[listName] = this.$scope.material[listName].filter(function (e) {
                         return e.name !== "NOT_RELEVANT";
                     });
@@ -408,12 +423,6 @@ class controller extends Controller {
             this.$scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
         };
 
-        loadMetadata() {
-            this.metadataService.loadResourceTypes(setResourceTypes);
-            this.metadataService.loadKeyCompetences(setKeyCompetences);
-            this.metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
-        }
-
         isEmpty (object) {
             return _.isEmpty(object)
         };
@@ -452,7 +461,7 @@ class controller extends Controller {
                     this.$scope.existingMaterial = material;
                 }
             } else {
-                processSource(this.$scope.material.source);
+                this.processSource(this.$scope.material.source);
             }
         }
 
@@ -460,10 +469,10 @@ class controller extends Controller {
         }
 
         processSource(source) {
-            if (isYoutubeVideo(source)) {
+            if (this.isYoutubeVideo(source)) {
                 this.youtubeService.getYoutubeData(source)
                     .then((data) => {
-                        populateMetadata(data);
+                        this.populateMetadata(data);
                     })
             }
         }
@@ -486,20 +495,20 @@ class controller extends Controller {
                 description: data.snippet.description
             }];
 
-            if (data.snippet.thumbnails) setThumbnail(data.snippet.thumbnails);
+            if (data.snippet.thumbnails) this.setThumbnail(data.snippet.thumbnails);
 
             this.$scope.material.tags = data.snippet.tags;
 
             let find = this.$scope.material.publishers.find(p => p.name === data.snippet.channelTitle);
             if (!find) {
-                this.$scope.material.publishers.push({name: data.snippet.channelTitle});
+                this.$scope.material.publishers.push({na5me: data.snippet.channelTitle});
             }
 
             this.$scope.issueDate = new Date(data.snippet.publishedAt);
 
-            this.$scope.material.resourceTypes = [(getResourceTypeByName(RESOURCETYPE_VIDEO))];
+            this.$scope.material.resourceTypes = [(this.getResourceTypeByName(RESOURCETYPE_VIDEO))];
 
-            if (data.status.license.toLowerCase() === CREATIVE_COMMON_LOWER) this.$scope.material.licenseType = getLicenseTypeByName(LICENSETYPE_CCBY);
+            if (data.status.license.toLowerCase() === CREATIVE_COMMON_LOWER) this.$scope.material.licenseType = this.getLicenseTypeByName(LICENSETYPE_CCBY);
             else this.$scope.material.licenseType = this.getLicenseTypeByName(LICENSETYPE_YOUTUBE);
         }
 
@@ -514,7 +523,7 @@ class controller extends Controller {
 
             this.pictureUploadService.uploadFromUrl(thumbnailUrl)
                 .then(data => {
-                    pictureUploadSuccess(data);
+                    this.pictureUploadSuccess(data);
                 });
         }
 
@@ -550,7 +559,7 @@ class controller extends Controller {
 
         pictureUploadFinally() {
             this.$scope.showErrorOverlay = false;
-            uploadingPicture = false;
+            this.uploadingPicture = false;
         }
 
         fileUploadSuccess(file) {
@@ -608,7 +617,7 @@ class controller extends Controller {
             if (!this.$scope.titleDescriptionGroups[0]) this.$scope.titleDescriptionGroups.push({});
 
             if (material.issueDate) {
-                this.$scope.issueDate = issueDateToDate(material.issueDate);
+                this.$scope.issueDate = this.issueDateToDate(material.issueDate);
             }
 
             if (this.$scope.material.uploadedFile) {
@@ -616,7 +625,7 @@ class controller extends Controller {
             }
 
             if (this.$scope.material) {
-                this.$scope.material.source = getSource(this.$scope.material);
+                this.$scope.material.source = this.getSource(this.$scope.material);
             }
 
             if (!this.$scope.material.authors[0]) {
@@ -637,8 +646,8 @@ class controller extends Controller {
                 this.$scope.educationalContextId = educationalContext.id;
             }
 
-            if (!this.$scope.crossCurricularThemes) this.$scope.crossCurricularThemes = [];
-            if (!this.$scope.keyCompetences) this.$scope.keyCompetences = [];
+            if (!this.$scope.material.crossCurricularThemes) this.$scope.material.crossCurricularThemes = [];
+            if (!this.$scope.material.keyCompetences) this.$scope.material.keyCompetences = [];
         }
 
         prefillMetadataFromPortfolio() {
@@ -671,13 +680,12 @@ class controller extends Controller {
         }
 
         setMaterialLanguage() {
-            if (!this.$scope.material.language && preferredLanguage !== null && preferredLanguage !== undefined) {
+            if (!this.$scope.material.language && this.preferredLanguage !== null && this.preferredLanguage !== undefined) {
 
                 if (this.$scope.titleDescriptionGroups[0] && !this.$scope.titleDescriptionGroups[0].language) {
-                    this.$scope.titleDescriptionGroups[0].language = preferredLanguage[0];
+                    this.$scope.titleDescriptionGroups[0].language = this.preferredLanguage[0];
                 }
-
-                this.$scope.material.language = preferredLanguage[0];
+                this.$scope.material.language = this.preferredLanguage[0];
             }
         }
 
@@ -706,20 +714,20 @@ class controller extends Controller {
         setCrossCurricularThemes(data) {
             if (!isEmpty(data)) {
                 this.$scope.crossCurricularThemes = data;
-                moveNotRelevantIfNecessary(this.$scope.crossCurricularThemes);
+                this.moveNotRelevantIfNecessary(this.$scope.crossCurricularThemes);
             }
         }
 
         setKeyCompetences(data) {
             if (!isEmpty(data)) {
                 this.$scope.keyCompetences = data;
-                moveNotRelevantIfNecessary(this.$scope.keyCompetences);
+                this.moveNotRelevantIfNecessary(this.$scope.keyCompetences);
             }
         }
 
         saveMaterialSuccess(material) {
             if (!material) {
-                saveMaterialFail();
+                this.saveMaterialFail();
             } else {
                 this.storageService.setMaterial(material)
 
@@ -757,7 +765,7 @@ class controller extends Controller {
         setDefaultMaterialMetadataLanguage() {
             var userLanguage = this.translationService.getLanguage();
 
-            preferredLanguage = this.$scope.languages.filter(function (language) {
+            this.preferredLanguage = this.$scope.languages.filter(function (language) {
                 return language == userLanguage;
             });
         }
