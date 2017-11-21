@@ -13,7 +13,7 @@ class controller extends Controller {
         this.$mdDialog.show({
             templateUrl: 'addMaterialDialog.html',
             controller: 'addMaterialDialogController',
-            controllerAs: '$ctrl'
+            controllerAs: '$ctrl',
             scope
         }).then(material => {
             if (material) {
