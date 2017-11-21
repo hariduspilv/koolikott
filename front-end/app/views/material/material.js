@@ -238,11 +238,12 @@ angular.module('koolikottApp')
             function getSignedUserDataSuccess(data) {
                 let url = $scope.material.source;
                 url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + encodeURIComponent(data);
-                $scope.material.source = url;
+                $scope.material.linkSource = url;
             }
 
             function getSignedUserDataFail(data, status) {
                 console.log("Failed to get signed user data.")
+                $scope.material.linkSource = $scope.material.source;
             }
 
             $scope.edit = () => {

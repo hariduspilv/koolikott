@@ -91,9 +91,15 @@
       <!--Link as backup - if iframe is internally not working-->
       <a data-ng-href="{{material.source}}" class="wrapped regular-link md-primary" flex-xs="70" flex-sm="70"
          target="_blank" data-ng-if="((!sourceType || (sourceType === 'VIDEO' && !canPlayVideo)
-                    || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK')">
+                    || (sourceType === 'AUDIO' && !canPlayAudio)) || sourceType === 'LINK') && !embeddable">
         <span class="item-link" data-ng-bind="material.source"></span>
       </a>
+
+      <a class="wrapped regular-link md-primary" data-ng-href="{{material.linkSource}}" target="_blank"
+         data-ng-if="sourceType === 'LINK' && embeddable">
+        <span class="item-link" data-ng-bind="material.source"></span>
+      </a>
+    </div>
 
 <!--Up and down-->
       <div data-ng-if="$root.isEditPortfolioMode && $root.isEditPortfolioPage" flex-xs="30" flex-sm="30" layout="row" layout-align="end end" class="align-right">

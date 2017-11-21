@@ -11,6 +11,9 @@ class controller extends Controller {
         this.$scope.listItemDown = this.listItemDown.bind(this)
         this.$scope.navigateToMaterial = this.navigateToMaterial.bind(this)
         this.$scope.fallbackToLink = this.fallbackToLink.bind(this)
+        this.$scope.getSignedUserData = this.getSignedUserData.bind(this)
+        this.$scope.getSignedUserDataSuccess = this.getSignedUserDataSuccess.bind(this)
+        this.$scope.getSignedUserDataFail = this.getSignedUserDataFail.bind(this)
 
         this.$scope.$watch('material', () => {
             if (this.$scope.material && this.$scope.material.id) {
@@ -225,14 +228,31 @@ class controller extends Controller {
                             data.html.contains('<iframe')
                                 ? this.$scope.embeddedDataIframe = data.html.replace('http:', '')
                                 : this.$scope.embeddedData = data.html.replace('http:', '')
-                        } else
-                        if (this.$scope.material.source)
-                            this.$scope.iframeSource = this.$sce.trustAsResourceUrl(
-                                this.$scope.material.source.replace('http:', '')
-                            )
+                        } else if (this.$scope.material.source){
+                            this.$scope.sourceType = 'LINK';
+                            //foreign repositories need to have dop_token query param
+                            if (this.$scope.embeddable && !this.$scope.material.linkSource){
+                                this.getSignedUserData();
+                            }
+                        }
                     })
         }
     }
+    getSignedUserData() {
+        this.serverCallService.makeGet("rest/user/getSignedUserData", {}, this.getSignedUserDataSuccess, this.getSignedUserDataFail);
+    }
+
+    getSignedUserDataSuccess(data) {
+        let url = this.$scope.material.source;
+        url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + encodeURIComponent(data);
+        this.$scope.material.linkSource = url;
+    }
+
+    getSignedUserDataFail(data, status) {
+        console.log("Failed to get signed user data.")
+        this.$scope.material.linkSource = this.$scope.material.source;
+    }
+
     probeContentSuccess({ headers }) {
         console.log('Content probing succeeded!')
 
