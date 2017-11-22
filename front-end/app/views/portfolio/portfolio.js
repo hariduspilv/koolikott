@@ -62,7 +62,7 @@ angular.module('koolikottApp')
                         $rootScope.learningObjectUnreviewed = !!$scope.portfolio.unReviewed;
                     }
 
-                    if (!isLocallyStored)
+                    if (!isLocallyStored && portfolio.chapters)
                         portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
                 }
 
