@@ -1,7 +1,11 @@
 <md-card class="portfolio-chapter card-lg" data-ng-class="$ctrl.getChapterClassNames()" id="{{slug}}">
   <!--View-->
   <md-card-content data-ng-if="!$ctrl.isEditMode">
-    <h2 data-ng-if="chapter.title" data-ng-bind="chapterTitle"></h2>
+    <h2
+      class="chapter-title"
+      data-ng-if="chapter.title"
+      data-ng-bind="chapterTitle"
+    ></h2>
     <div class="chapter-blocks">
       <div
         class="chapter-block"
@@ -12,35 +16,13 @@
     </div>
   </md-card-content>
   <!--Edit-->
-  <md-card-content data-ng-if="$ctrl.isEditMode" data-ng-click="$ctrl.focusChapter($event)">
-    <md-input-container
-      class="md-block chapter-title"
-      data-ng-click="$ctrl.focusTitle(true)"
-      >
-      <label></label>
-      <input
-        class="md-headline"
-        placeholder="{{'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate}}"
-        data-ng-model="chapter.title"
-        data-ng-focus="$ctrl.focusTitle()"
-      >
-    </md-input-container>
-    <div class="chapter-blocks">
-      <div
-        class="chapter-block"
-        data-ng-repeat="block in chapter.blocks track by $index"
-        data-ng-class="$ctrl.getBlockClassNames($index)"
-        data-ng-click="$ctrl.onClickBlock($index, $event)"
-        data-placeholder="{{$ctrl.getBlockPlaceholder($index)}}"
-      ></div>
-    </div>
-  </md-card-content>
   <div
     data-ng-if="$ctrl.isEditMode"
     class="chapter-toolbar"
+    data-ng-class="stickyClassNames"
     data-ng-click="$ctrl.onClickEmptyToolbarArea($event)"
     >
-    <div class="sticky" data-ng-class="stickyClassNames" data-ng-style="stickyStyle">
+    <div class="sticky" data-ng-class="stickyClassNames">
       <div>
         <h5>Lisa sisu</h5>
         <!--<div class="chapter-btn chapter-btn--media" data-ng-click="$ctrl.addMedia()">
@@ -119,6 +101,30 @@
       </div>
     </div>
   </div>
+  <div class="chapter-toolbar-helper"></div>
+  <md-card-content data-ng-if="$ctrl.isEditMode" data-ng-click="$ctrl.focusChapter($event)">
+    <md-input-container
+      class="md-block chapter-title"
+      data-ng-click="$ctrl.focusTitle(true)"
+      >
+      <label></label>
+      <input
+        class="md-headline"
+        placeholder="{{'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate}}"
+        data-ng-model="chapter.title"
+        data-ng-focus="$ctrl.focusTitle()"
+      >
+    </md-input-container>
+    <div class="chapter-blocks">
+      <div
+        class="chapter-block"
+        data-ng-repeat="block in chapter.blocks track by $index"
+        data-ng-class="$ctrl.getBlockClassNames($index)"
+        data-ng-click="$ctrl.onClickBlock($index, $event)"
+        data-placeholder="{{$ctrl.getBlockPlaceholder($index)}}"
+      ></div>
+    </div>
+  </md-card-content>
   <div
     data-ng-if="$ctrl.isEditMode"
     class="organize-chapters"
@@ -141,84 +147,4 @@
     >
     <md-icon class="material-icons">edit</md-icon>
   </md-button>
-
-  <!-- Temp: old -->
-  <!--Chapter rows-->
-  <!--<ul
-    data-ng-if="$ctrl.isEditMode && $ctrl.chapter.contentRows.length"
-    class="portfolio-chapter-chapter-materials"
-    uib-collapse="$ctrl.isCollapsed"
-    >
-    <li data-ng-repeat="(rowIndex, contentRow) in $ctrl.chapter.contentRows track by $index" flex>
-      <ul
-        data-ng-if="contentRow.learningObjects.length"
-        dnd-list="contentRow.learningObjects"
-        data-layout-gt-sm="row"
-        >
-        <li
-          id="chapterMaterial-{{$ctrl.index}}-{{$index}}"
-          data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
-          data-dop-embedded-material
-          data-material="learningObject"
-          data-chapter="$ctrl.chapter"
-          data-row-index="rowIndex"
-          data-obj-index="columnIndex"
-          data-flex
-        ></li>
-      </ul>
-    </li>
-  </ul>
-  <div class="portfolio-chapter-subchapters" data-ng-if="!$ctrl.isEditMode">
-    <div
-      class="portfolio-chapter-subchapter"
-      id="chapter-{{$ctrl.index}}-{{$index}}"
-      data-ng-repeat="subchapter in $ctrl.chapter.subchapters track by $index"
-      >
-      <md-card class="card-lg chapter-card">
-        <md-card-content layout="row">
-          <div flex>
-            <div layout="row" class="pointer" data-ng-click="$ctrl.onClickSubChapter($index)">
-              <h3>
-                <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
-                <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
-              </h3>
-              <div class="chapter-arrow" data-ng-class="{'toggled': !$ctrl.subisCollapsed[$index]}">
-                <md-icon class="material-icons md-primary">keyboard_arrow_right</md-icon>
-              </div>
-              <md-tooltip md-direction="bottom">
-                <span data-ng-if="$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_OPEN_SUBCHAPTER">Open subchapter</span>
-                <span data-ng-if="!$ctrl.subisCollapsed[$index]" data-translate="TOOLTIP_CLOSE_SUBCHAPTER">Close subchapter</span>
-              </md-tooltip>
-            </div>
-            <div uib-collapse="$ctrl.subisCollapsed[$index]">
-              <p class="md-body-1 textangular-view" data-ng-class="{'hide': subchapter.text.length == undefined || subchapter.text.length == 0}"
-                data-ng-bind-html="subchapter.text"></p>
-            </div>
-          </div>
-        </md-card-content>
-      </md-card>
-      <ul
-        data-ng-if="subchapter.contentRows.length"
-        class="portfolio-chapter-subchapter-materials"
-        uib-collapse="$ctrl.subisCollapsed[$index]">
-        <li data-ng-repeat="(rowIndex, contentRow) in subchapter.contentRows track by $index" flex>
-          <ul
-            data-ng-if="contentRow.learningObjects.length"
-            dnd-list="contentRow.learningObjects"
-            data-layout-gt-sm="row">
-            <li
-              id="subChapterMaterial-{{$ctrl.index}}-{{$index}}"
-              data-ng-repeat="(columnIndex, learningObject) in contentRow.learningObjects track by $index"
-              data-dop-embedded-material
-              data-material="learningObject"
-              data-chapter="subchapter"
-              data-row-index="rowIndex"
-              data-obj-index="columnIndex"
-              data-flex
-            ></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>-->
 </md-card>

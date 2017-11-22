@@ -28,7 +28,7 @@
         </md-option>
         <md-option data-ng-value="$parent.$index + '_' + $index" class="toolbar-add-materials__subchapter" data-ng-repeat-end data-ng-repeat="subchapter in chapter.subchapters track by $index">
           <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
-          <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
+          <span data-ng-if="!subchapter.title" data-translate="PORTFOLIO_ENTER_CHAPTER_TITLE"></span>
         </md-option>
         <md-option data-ng-value="'-1'" data-translate="ADD_TO_NEW_CHAPTER"></md-option>
       </md-select>

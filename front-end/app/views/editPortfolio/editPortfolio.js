@@ -22,10 +22,7 @@ class controller extends Controller {
         // if (this.$scope.portfolio && !this.$scope.portfolio.deleted)
         //     this.updatePortfolio()
 
-        /**
-         * @todo Re-enable 
-         */
-        // this.startAutosave()
+        this.startAutosave()
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
         this.$scope.closeSidenav = (menuId) => this.$mdSidenav(menuId).close()
@@ -115,16 +112,10 @@ class controller extends Controller {
         this.serverCallService
             .makePost('rest/portfolio/update', this.$scope.portfolio)
             .then(({ data: portfolio }) => {
-                if (portfolio) {
-                    if (!this.isAutoSaving)
-                        this.setPortfolio(portfolio)
-
-                    this.toastService.show(
-                        this.isAutoSaving
-                            ? 'PORTFOLIO_AUTOSAVED'
-                            : 'PORTFOLIO_SAVED'
-                    )
-                }
+                if (portfolio)
+                    this.isAutoSaving
+                        ? this.$rootScope.$broadcast('portfolio:autoSave')
+                        : this.setPortfolio(portfolio)
             })
     }
     startAutosave() {
@@ -133,7 +124,7 @@ class controller extends Controller {
 
             if (this.$scope.portfolio && !this.$scope.portfolio.deleted)
                 this.updatePortfolio()
-        }, 20000)
+        }, 20e3) // 20 secs
     }
 }
 controller.$inject = [
@@ -147,7 +138,6 @@ controller.$inject = [
     'alertService',
     'authenticatedUserService',
     'dialogService',
-    'toastService',
     'serverCallService',
     'storageService',
 ]
