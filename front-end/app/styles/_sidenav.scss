@@ -247,7 +247,6 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
 .sidenav__handle {
   cursor: move;
-  display: none;
   margin: -.5rem;
   padding: .5rem;
   position: absolute;
@@ -268,7 +267,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 
 .sidenav__drag-placeholder {
   background-color: $gray-500-light;
-  height: 49px;
+  height: 46px;
   width: 259px;
 }
 
