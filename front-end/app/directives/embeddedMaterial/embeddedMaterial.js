@@ -206,8 +206,6 @@ class controller extends Controller {
                     this.$scope.sourceType = 'PDF'
                     this.$scope.fallbackType = 'LINK'
 
-                    console.log('proxy tree')
-
                     if (this.$scope.isProxySource) {
                         console.log('material source: ' +this.$scope.material.source)
 
@@ -257,7 +255,6 @@ class controller extends Controller {
 
     probeContentSuccess({ headers }) {
         console.log('Content probing succeeded!')
-        console.log('Content probing succeeded! twice is the charm')
 
         const { 'content-disposition': contentDisposition } = headers()
 
@@ -271,23 +268,17 @@ class controller extends Controller {
         const filename = contentDisposition.match(/filename="(.+)"/)[1]
 
         if (this.getEmbedType({ source: filename }) === 'PDF') {
-            console.log('it is pdf baby')
-
             this.$scope.material.PDFLink = this.pdfjsLink(encodeURIComponent(this.proxyUrl))
-
             console.log('proxy pdf link' + this.$scope.material.PDFLink)
-
             const pdfContainer = document.querySelector('.embed-pdf-' + this.$scope.material.id)
 
             if (pdfContainer) {
                 console.log("proxy pdf element setup")
-
                 pdfContainer.innerHTML(this.iFrameLink(this.$scope.material.PDFLink))
             } else
                 this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
         } else {
-            console.log('everything is very sad')
-
+            console.log('proxy is not possible')
             this.$scope.sourceType = this.$scope.fallbackType
         }
     }

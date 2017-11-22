@@ -247,7 +247,7 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__handle {
-  cursor: grab;
+  cursor: move; 
   position: absolute;
   top: 11px;
   left: 20px;

@@ -16,7 +16,7 @@
 <!-- Subitems -->
 <ul
   class="sidenav__list"
-  data-ng-class="{'is-sortable': isEditMode}"
+  data-ng-class="{'is-sortable': authUser && $root.isEditPortfolioMode}"
   data-sv-root
   data-sv-part="portfolio.chapters"
   data-sv-on-sort="onSortChapters()"
@@ -28,7 +28,7 @@
     data-ng-repeat="chapter in portfolio.chapters track by $index"
     data-sv-element
     >
-    <span data-sv-handle class="sidenav__handle"><md-icon>drag_handle</md-icon></span>
+    <span data-sv-handle class="sidenav__handle"><md-icon data-ng-if="authUser && $root.isEditPortfolioMode">drag_handle</md-icon></span>
     <a
       href="#"
       id="toc-chapter-{{$index}}"
