@@ -23,7 +23,7 @@
 
   <uib-accordion close-others="false">
     <!-- BEGIN My Profile -->
-    <div uib-accordion-group class="panel-default" is-open="$root.isUserTabOpen">
+    <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default" is-open="$root.isUserTabOpen">
       <uib-accordion-heading>
         <a id="myProfile" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isUserTabOpen}"
