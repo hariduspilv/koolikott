@@ -24,7 +24,7 @@
       <md-select data-ng-show="$ctrl.usersPortfolios && !$ctrl.loadingChapters && !$ctrl.loadingChaptersFailed || $ctrl.isPortfolioEdit && $ctrl.portfolio" aria-label="Vali peatükk" md-selected-text="$ctrl.getChapterSelectLabel()" data-ng-disabled="!$ctrl.portfolio || !$ctrl.portfolio.chapters" data-ng-model="$ctrl.chapter" class="toolbar-add-materials__select">
         <md-option data-ng-value="$index + ''" data-ng-repeat-start="chapter in $ctrl.portfolio.chapters track by $index">
           <span data-ng-if="chapter.title" data-ng-bind="chapter.title"></span>
-          <span data-ng-if="!chapter.title" data-translate="PORTFOLIO_CHAPTER_TITLE_MISSING"></span>
+          <span data-ng-if="!chapter.title" data-translate="PORTFOLIO_ENTER_CHAPTER_TITLE"></span>
         </md-option>
         <md-option data-ng-value="$parent.$index + '_' + $index" class="toolbar-add-materials__subchapter" data-ng-repeat-end data-ng-repeat="subchapter in chapter.subchapters track by $index">
           <span data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>

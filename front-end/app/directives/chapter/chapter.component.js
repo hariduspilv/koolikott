@@ -5,9 +5,7 @@
  -  tabIndexes
  -  Editor toolbar conf.
  -  WYSIWYG theme
- -  Material embeds
- -  Intermediary solution: embed materials BETWEEN blocks the old way
- -  position: sticky (for browsers that support it)
+ -  Material embeds - intermediary solution: embed materials BETWEEN blocks the old way
  */
 
 {
@@ -19,7 +17,7 @@ class controller extends Controller {
             if (!this.isEditMode)
                 this.$scope.chapter.title
                     ? this.$scope.chapterTitle = this.$scope.chapter.title
-                    : this.$translate('PORTFOLIO_CHAPTER_TITLE_MISSING').then(missingTitle =>
+                    : this.$translate('PORTFOLIO_ENTER_CHAPTER_TITLE').then(missingTitle =>
                         this.$scope.chapterTitle = missingTitle
                     )
 
