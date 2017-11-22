@@ -31,7 +31,7 @@ class controller extends Controller {
                 ? this.$translate.instant('ADD_TO_NEW_CHAPTER')
                 : indexes.length > 1
                     ? this.portfolio.chapters[indexes[0]].subchapters[indexes[1]].title || this.$translate.instant('PORTFOLIO_SUBCHAPTER_TITLE_MISSING')
-                    : this.portfolio.chapters[indexes[0]].title || this.$translate.instant('PORTFOLIO_CHAPTER_TITLE_MISSING')
+                    : this.portfolio.chapters[indexes[0]].title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE')
     }
     upgradeMaterials(materials) {
         return Promise.all(

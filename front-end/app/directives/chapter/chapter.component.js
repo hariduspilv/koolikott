@@ -5,9 +5,7 @@
  -  tabIndexes
  -  Editor toolbar conf.
  -  WYSIWYG theme
- -  Material embeds
- -  Intermediary solution: embed materials BETWEEN blocks the old way
- -  position: sticky (for browsers that support it)
+ -  Material embeds - intermediary solution: embed materials BETWEEN blocks the old way
  */
 
 {
@@ -19,7 +17,7 @@ class controller extends Controller {
             if (!this.isEditMode)
                 this.$scope.chapter.title
                     ? this.$scope.chapterTitle = this.$scope.chapter.title
-                    : this.$translate('PORTFOLIO_CHAPTER_TITLE_MISSING').then(missingTitle =>
+                    : this.$translate('PORTFOLIO_ENTER_CHAPTER_TITLE').then(missingTitle =>
                         this.$scope.chapterTitle = missingTitle
                     )
 
@@ -55,10 +53,6 @@ class controller extends Controller {
                 sticky: true,
                 'is-sticky': false,
                 'is-at-bottom': false
-            }
-            this.$scope.stickyStyle = {
-                left: 0,
-                top: 80 // site header height
             }
 
             this.$scope.$watch('chapter.blocks', this.onBlockChanges.bind(this), true)
@@ -215,14 +209,14 @@ class controller extends Controller {
     }
     calcSizes() {
         if (this.isEditMode) {
-            const sticky = this.$element[0].querySelector('.sticky')
-            const { top, right, height } = this.$element[0].getBoundingClientRect()
+            this.sticky = this.sticky || this.$element[0].querySelector('.sticky')
+
+            const { top } = this.sticky.getBoundingClientRect()
 
             this.offsetTop = top + window.pageYOffset
             this.chapterHeight = this.$element[0].firstChild.offsetHeight
-            this.toolbarHeight = sticky.offsetHeight
-            this.$scope.stickyStyle.left = right
-            this.$scope.stickyStyle.width = sticky.offsetWidth
+            this.toolbarHeight = this.sticky.offsetHeight
+            this.stickyTop = window.innerWidth < 960 ? 56 : 80
         }
     }
     getChapterClassNames() {
@@ -251,8 +245,10 @@ class controller extends Controller {
     }
     setStickyClassNames(evt) {
         const set = (isSticky, isAtBottom) => {
-            if (this.$scope.stickyClassNames['is-sticky'] != isSticky)
+            if (this.$scope.stickyClassNames['is-sticky'] != isSticky) {
                 this.$scope.stickyClassNames['is-sticky'] = isSticky
+                Stickyfill[isSticky ? 'addOne' : 'removeOne'](this.sticky)
+            }
             if (this.$scope.stickyClassNames['is-at-bottom'] != isAtBottom)
                 this.$scope.stickyClassNames['is-at-bottom'] = isAtBottom
 
@@ -264,8 +260,8 @@ class controller extends Controller {
         if (this.chapterHeight - this.toolbarHeight < 100)
             return set(false, false)
 
-        const toolbarTopMin = this.offsetTop - this.$scope.stickyStyle.top
-        const toolbarTopMax = this.offsetTop + this.chapterHeight - this.toolbarHeight - this.$scope.stickyStyle.top
+        const toolbarTopMin = this.offsetTop - this.stickyTop
+        const toolbarTopMax = this.offsetTop + this.chapterHeight - this.toolbarHeight - this.stickyTop
         const isAtBottom = window.pageYOffset >= toolbarTopMax
         const isSticky = !isAtBottom && window.pageYOffset >= toolbarTopMin
 
