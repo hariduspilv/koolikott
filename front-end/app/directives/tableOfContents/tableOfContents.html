@@ -42,7 +42,7 @@
       data-ng-click="$ctrl.gotoChapter($event, $index); $ctrl.closeSidenav('left');"
       >
       <span class="sidenav__name" data-ng-if="chapter.title" data-ng-bind="chapter.title"></span>
-      <span class="sidenav__name" data-ng-if="!chapter.title" data-translate="PORTFOLIO_CHAPTER_TITLE_MISSING"></span>
+      <span class="sidenav__name" data-ng-if="!chapter.title" data-translate="PORTFOLIO_ENTER_CHAPTER_TITLE"></span>
     </a>
     <ul class="sidenav__list sidenav__list--sub">
       <li class="sidenav__item" layout="column" data-ng-repeat="subchapter in chapter.subchapters track by $index">

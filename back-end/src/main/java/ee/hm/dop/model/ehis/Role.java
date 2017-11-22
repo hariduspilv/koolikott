@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 @Embeddable
 public class Role {
 
-    public static enum InstitutionalRole {
+    public enum InstitutionalRole {
         PRINCIPAL("koolijuht"), TEACHER("õpetaja"), STUDENT("õpilane");
 
         private final String estonianName;
@@ -18,16 +18,12 @@ public class Role {
         }
 
         public static InstitutionalRole byEstonianName(String estonianName) {
-            InstitutionalRole result = null;
-
             for (InstitutionalRole role : InstitutionalRole.values()) {
                 if (role.estonianName.equalsIgnoreCase(estonianName)) {
-                    result = role;
-                    break;
+                    return role;
                 }
             }
-
-            return result;
+            return null;
         }
     }
 
