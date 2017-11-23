@@ -1,7 +1,11 @@
 SET foreign_key_checks = 0;
 
-UPDATE Translation SET translation = 'See on näidis alampeatükk' WHERE translationKey = 'PORTFOLIO_ENTER_SUBCHAPTER_TITLE' and translationGroup = 1;
-UPDATE Translation SET translation = 'This is an example subchapter' WHERE translationKey = 'PORTFOLIO_ENTER_SUBCHAPTER_TITLE' and translationGroup = 3;
-UPDATE Translation SET translation = 'See on näidis alampeatükk' WHERE translationKey = 'PORTFOLIO_ENTER_SUBCHAPTER_TITLE' and translationGroup = 2;
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'ARE_YOU_SURE_DELETE', 'Kas oled kindel, et tahad kustutada?');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'ARE_YOU_SURE_DELETE', 'Are you sure that you want to delete?');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'ARE_YOU_SURE_DELETE', 'Kas oled kindel, et tahad kustutada?');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'GIVE_UP', 'Loobu');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'GIVE_UP', 'Give up');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'GIVE_UP', 'Loobu');
 
 SET foreign_key_checks = 1;
