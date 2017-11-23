@@ -534,31 +534,18 @@ class controller extends Controller {
         })
         this.focusBlock()
     }
-    /* Tõlge lisada
-        ARE_YOU_SURE_DELETE
-    */
     deleteBlock() {
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
-
-        if (focusedBlockIdx !== null) {
-            if (blocks[focusedBlockIdx].htmlContent == '') {
-                this.updateState()
-                blocks.splice(focusedBlockIdx, 1)
-                this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
-                this.updateEditors()
-            } else {
-                this.dialogService.showDeleteConfirmationDialog(
-                'Kas oled kindel, et soovid kustutada?',
-                '',
-                () => {
-                this.updateState()
-                blocks.splice(focusedBlockIdx, 1)
-                this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
-                this.updateEditors()
-                    }
-                )
-            }
+        const deleteBlock = () => {
+            this.updateState()
+            blocks.splice(focusedBlockIdx, 1)
+            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
+            this.updateEditors()
         }
+        if (focusedBlockIdx !== null)
+            this.getEditorElements()[focusedBlockIdx].innerHTML
+                ? this.dialogService.showDeleteConfirmationDialog('ARE_YOU_SURE_DELETE', '', deleteBlock)
+                : deleteBlock()
     }
     beforeToggleBlockWidth() {
         const { focusedBlockIdx } = this.$scope

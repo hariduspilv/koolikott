@@ -10,17 +10,10 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        /**
-         * @todo Get rid of rootScope reference
-         */
         if (this.$rootScope.newPortfolioCreated) {
             this.$rootScope.newPortfolioCreated = false
             this.$rootScope.$broadcast('tour:start:editPage:firstTime')
         }
-
-        // what's this for?
-        // if (this.$scope.portfolio && !this.$scope.portfolio.deleted)
-        //     this.updatePortfolio()
 
         this.startAutosave()
 
@@ -30,7 +23,7 @@ class controller extends Controller {
         this.$scope.$watch('portfolio', (currentValue, previousValue) => {
             if (currentValue !== previousValue)
                 this.storageService.setPortfolio(currentValue)
-        })
+        }, true)
         this.$scope.$watch(
             () => this.storageService.getPortfolio(),
             (portfolio) => this.$scope.portfolio = portfolio
@@ -51,13 +44,9 @@ class controller extends Controller {
             chapter.querySelector('input').focus()
         })
     }
-
-    /* Tõlge lisada
-       ARE_YOU_SURE_DELETE
-    */
     deleteChapter(idx) {
         this.dialogService.showDeleteConfirmationDialog(
-            'Kas oled kindel, et soovid kustutada?',
+            'ARE_YOU_SURE_DELETE',
             '',
             () => this.$scope.portfolio.chapters.splice(idx, 1)
         )

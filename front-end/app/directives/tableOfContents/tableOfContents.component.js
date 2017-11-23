@@ -8,13 +8,10 @@ class controller extends Controller {
     }
     $onInit() {
         this.$scope.authUser = this.authenticatedUserService.isAuthenticated()
-        this.$scope.$watch(
-            () => this.storageService.getPortfolio(),
-            (portfolio) => {
-                this.$scope.portfolio = portfolio
-                this.setChapters()
-            }
-        )
+        this.$scope.$watch(() => this.storageService.getPortfolio(), (portfolio) => {
+            this.$scope.portfolio = portfolio
+            this.setChapters()
+        }, true)
 
         this.setScrollPositionBasedOnLocationHash()
 
