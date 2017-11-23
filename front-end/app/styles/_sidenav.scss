@@ -246,7 +246,8 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__handle {
-  cursor: move;
+  cursor: move; /* Fallback for IE */
+  cursor: grab;
   display: none;
   margin: -.5rem;
   padding: .5rem;
@@ -270,8 +271,4 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   background-color: $gray-500-light;
   height: 46px;
   width: 259px;
-}
-
-.sidenav__drag-text {
-  color: $gray-500-light;
 }
