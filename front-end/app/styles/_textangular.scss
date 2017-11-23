@@ -1,0 +1,144 @@
+//
+// TextAngular styling for view
+//
+
+.textangular-view {
+    padding: 16px 0 0 0;
+}
+
+//
+// TextAngular element styling for editor and view
+//
+
+.textangular-editor, .textangular-view {
+  pre {
+    font-size: $font-medium;
+    padding: $md-padding;
+    line-height: $body-lineheight;
+    background-color: $bg-gray;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    margin: 0 0 $md-padding 0;
+    overflow-x: scroll;
+  }
+  blockquote {
+    padding: 0 1em;
+    color: #777;
+    border-left: 0.25em solid #ddd;
+
+    margin: 0 0 20px;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+  }
+  p {
+    margin-top: 0;
+    margin: 0 0 16px 0;
+  }
+  ul {
+    list-style: initial;
+    margin: 0;
+    padding: 0 20px;
+  }
+  ol {
+    -webkit-padding-start: 0em;
+    margin: 0;
+    padding: 0 20px;
+  }
+  .ta-bind > a {
+    margin-bottom: 16px;
+  }
+  .popover {
+    display: none !important;
+  }
+}
+
+//
+// TextAngular styling for editor
+//
+
+.textangular-editor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: white;
+  overflow: hidden;
+  padding: 7px 0;
+
+  @media (min-width: $layout-breakpoint-xs){
+    flex-direction: row-reverse;
+  }
+
+  // Button style
+  .btn-textangular {
+    border: none;
+    background: none;
+    padding: 3px;
+    @media (min-width: 340px) {
+      padding: 4px;
+    }
+    @media (min-width: $layout-breakpoint-xs) {
+      padding: 0;
+    }
+    md-icon {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  }
+
+  // Button group style
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      flex-direction: column;
+     }
+  }
+
+  // Toolbar style ( contains btn-group )
+  .ta-toolbar {
+    padding: 10px 10px 0 0;
+    @media (min-width: $layout-breakpoint-xs) {
+      padding: 10px 5px;
+    }
+    &.focussed {
+      .btn-group .btn:hover md-icon {
+        color: rgb(3,169,244);
+      }
+      .btn.active md-icon {
+        color: rgb(3,169,244);
+      }
+    }
+  }
+
+  // Text container inside form-control style
+  .ta-bind {
+    padding: 0;
+    height: 100%;
+    word-break: break-word;
+    a:hover {
+      text-decoration: none;
+    }
+    &::before {
+      color: rgba(0,0,0,0.38);
+    }
+  }
+
+  // Textarea / text container
+  .form-control {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1px;
+    outline: none;
+    flex-grow: 2;
+    overflow: auto;
+  }
+  &.focussed {
+    .form-control {
+      padding-bottom: 0;
+      border-bottom: 2px solid rgb(3,169,244);
+    }
+  }
+
+}
