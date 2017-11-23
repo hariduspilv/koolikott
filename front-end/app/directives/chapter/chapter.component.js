@@ -530,18 +530,30 @@ class controller extends Controller {
         })
         this.focusBlock()
     }
+    /* Tõlge lisada
+        ARE_YOU_SURE_DELETE
+    */
     deleteBlock() {
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
 
         if (focusedBlockIdx !== null) {
-        this.dialogService.showDeleteConfirmationDialog(
-            'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE',
-            '',
-            () => { this.updateState()
-            blocks.splice(focusedBlockIdx, 1)
-            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
-            this.updateEditors() }
-            )
+            if (blocks[focusedBlockIdx].htmlContent == '') {
+                this.updateState()
+                blocks.splice(focusedBlockIdx, 1)
+                this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
+                this.updateEditors()
+            } else {
+                this.dialogService.showDeleteConfirmationDialog(
+                'Kas oled kindel, et soovid kustutada?',
+                '',
+                () => {
+                this.updateState()
+                blocks.splice(focusedBlockIdx, 1)
+                this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
+                this.updateEditors()
+                    }
+                )
+            }
         }
     }
     beforeToggleBlockWidth() {

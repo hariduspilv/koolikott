@@ -51,9 +51,13 @@ class controller extends Controller {
             chapter.querySelector('input').focus()
         })
     }
+
+    /* Tõlge lisada
+       ARE_YOU_SURE_DELETE
+    */
     deleteChapter(idx) {
         this.dialogService.showDeleteConfirmationDialog(
-            'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE',
+            'Kas oled kindel, et soovid kustutada?',
             '',
             () => this.$scope.portfolio.chapters.splice(idx, 1)
         )
