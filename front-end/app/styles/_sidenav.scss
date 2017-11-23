@@ -259,6 +259,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   md-icon {
     color: $gray-600-light;
   }
+
+  &:hover + .sidenav__header {
+    background-color: $hover-background-color;
+  }
 }
 
 .sidenav__icon--title {
