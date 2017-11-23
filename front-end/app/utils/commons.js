@@ -837,13 +837,14 @@ class Controller {
 
         if (element) {
             const startTime = Date.now()
-            const destinationX = element.getBoundingClientRect().top - offset + window.pageYOffset
+            const { pageYOffset } = window
+            const destinationX = element.getBoundingClientRect().top - offset
             const easeInOutSin = (t) => (1 + Math.sin(Math.PI * t - Math.PI / 2)) / 2
             const scroll = () => {
                 const progress = Math.min(1, (Date.now() - startTime) / duration)
                 window.scrollTo(
                     window.pageXOffset,
-                    easeInOutSin(progress) * destinationX
+                    easeInOutSin(progress) * destinationX + pageYOffset
                 )
                 if (progress < 1)
                     window.requestAnimationFrame(scroll)
@@ -892,8 +893,8 @@ class Controller {
                                 + c.subchapters.reduce(
                                     (subchapters, s, subIdx) =>
                                         subchapters
-                                        + `<h3 class="subchapter" id="${this.getSlug(s.title, `subchapter-${idx}-${subIdx}`)}">${s.title}</h3>`
-                                        + s.text
+                                        + `<h3 class="subchapter">${s.title || (this.dependencyExists('$translate') ? this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE') : '')}</h3>`
+                                        + (s.text || '')
                                         + this.transformEmbeds(s),
                                     ''
                                 )

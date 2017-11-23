@@ -284,6 +284,10 @@ class controller extends Controller {
 
                         if (el.innerHTML && el.innerHTML !== '<p><br></p>')
                             el.classList.remove('medium-editor-placeholder')
+
+                        // add id attributes to all subchapters derived from subchapter titles
+                        for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
+                            subEl.id = this.getSlug(subEl.textContent, `subchapter-${this.index}-${subIdx}`)
                     }
                 }
     }

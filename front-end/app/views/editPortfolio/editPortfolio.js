@@ -135,6 +135,7 @@ controller.$inject = [
     '$interval',
     '$timeout',
     '$document',
+    '$translate',
     'alertService',
     'authenticatedUserService',
     'dialogService',

@@ -341,8 +341,6 @@ class controller extends Controller {
             })
     }
     invokeInkRippleOnSaveButton() {
-        console.log('$on(portfolio:autoSave)')
-
         const saveBtn = document.querySelector('.header-save-button')
         const ripple = document.createElement('div')
         const rippleContainer = document.createElement('div')

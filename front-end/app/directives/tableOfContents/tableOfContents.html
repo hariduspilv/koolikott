@@ -13,13 +13,60 @@
     <md-icon class="material-icons sidenav__icon--title sidenav__icon sidenav__icon--animate">keyboard_arrow_right</md-icon>
   </a>
 </uib-accordion-heading>
-<!-- Subitems -->
+<!-- chapters:NEW -->
 <ul
   class="sidenav__list"
-  data-ng-class="{'is-sortable': authUser && $root.isEditPortfolioMode}"
+  data-ng-if="chapters"
+  data-ng-class="{'is-sortable': authUser && isEditMode}"
   data-sv-root
   data-sv-part="portfolio.chapters"
-  data-sv-on-sort="onSortChapters()"
+  data-sv-on-sort="sortChapters()"
+  data-du-scroll-container="scrollable-content"
+  >
+  <div sv-placeholder class="sidenav__drag-placeholder"></div>
+  <li
+    class="sidenav__item sidenav__item--chapter-title"
+    data-layout="column"
+    data-ng-repeat="chapter in chapters"
+    data-sv-element
+    >
+    <span data-sv-handle class="sidenav__handle">
+      <md-icon data-ng-if="authUser && isEditMode">drag_handle</md-icon>
+    </span>
+    <a
+      href="#{{chapter.slug}}"
+      class="sidenav__header"
+      md-ink-ripple
+      data-layout="row"
+      data-layout-align="start center"
+      data-ng-click="gotoChapter(chapter.slug, $event)"
+      >
+      <span class="sidenav__name" data-ng-bind="chapter.title"></span>
+    </a>
+    <ul class="sidenav__list sidenav__list--sub">
+      <li class="sidenav__item" data-layout="column" data-ng-repeat="subChapter in chapter.subChapters">
+        <a
+          href="#{{subChapter.slug}}"
+          class="sidenav__header"
+          md-ink-ripple
+          data-layout="row"
+          data-layout-align="start center"
+          data-ng-click="gotoChapter(subChapter.slug, $event)"
+          >
+          <span class="sidenav__name" data-ng-if="subChapter.title" data-ng-bind="subChapter.title"></span>
+        </a>
+      </li>
+    </ul>
+  </li>
+</ul>
+<!-- chapters:OLD -->
+<ul
+  class="sidenav__list"
+  data-ng-if="!chapters"
+  data-ng-class="{'is-sortable': authUser && isEditMode}"
+  data-sv-root
+  data-sv-part="portfolio.chapters"
+  data-sv-on-sort="sortChapters()"
   data-du-scroll-container="scrollable-content"
   >
     <div sv-placeholder class="sidenav__drag-placeholder"></div>
@@ -29,7 +76,7 @@
     data-ng-repeat="chapter in portfolio.chapters track by $index"
     data-sv-element
     >
-    <span data-sv-handle class="sidenav__handle"><md-icon data-ng-if="authUser && $root.isEditPortfolioMode">drag_handle</md-icon></span>
+    <span data-sv-handle class="sidenav__handle"><md-icon data-ng-if="authUser && isEditMode">drag_handle</md-icon></span>
     <a
       href="#"
       id="toc-chapter-{{$index}}"
@@ -37,7 +84,7 @@
       md-ink-ripple
       data-layout="row"
       data-layout-align="start center"
-      data-ng-click="$ctrl.gotoChapter($event, $index); $ctrl.closeSidenav('left');"
+      data-ng-click="$ctrl._gotoChapter($event, $index); $ctrl._closeSidenav();"
       >
       <span class="sidenav__name" data-ng-if="chapter.title" data-ng-bind="chapter.title"></span>
       <span class="sidenav__name" data-ng-if="!chapter.title" data-translate="PORTFOLIO_ENTER_CHAPTER_TITLE"></span>
@@ -50,7 +97,7 @@
           class="sidenav__header"
           md-ink-ripple layout="row"
           data-layout-align="start center"
-          data-ng-click="$ctrl.gotoChapter($event, $parent.$index, $index); $ctrl.closeSidenav('left');"
+          data-ng-click="$ctrl._gotoChapter($event, $parent.$index, $index); $ctrl._closeSidenav();"
           >
           <span class="sidenav__name" data-ng-if="subchapter.title" data-ng-bind="subchapter.title"></span>
           <span class="sidenav__name" data-ng-if="!subchapter.title" data-translate="PORTFOLIO_SUBCHAPTER_TITLE_MISSING"></span>
