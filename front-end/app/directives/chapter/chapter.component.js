@@ -132,7 +132,7 @@ class controller extends Controller {
                     narrow: false,
                     htmlContent: ''
                 })
-            
+
             // yes, we want it to run in the cycle after next
             if (this.isEditMode)
                 this.$timeout(() =>
@@ -252,7 +252,7 @@ class controller extends Controller {
             const saveSelection = editor.saveSelection.bind(editor)
             editor.subscribe('editableClick', saveSelection)
             editor.subscribe('editableKeyup', saveSelection)
-            
+
             this.optimizePlaceholder(el, editor)
             this.disallowFormatting(el)
         }
@@ -424,7 +424,7 @@ class controller extends Controller {
     }
     isNarrowLeft(idx) {
         let i = 0, colsFilled = 0
-        
+
         for (let block of this.$scope.chapter.blocks) {
             if (this.$scope.chapter.blocks[idx].narrow &&
                 i === idx &&
@@ -479,7 +479,7 @@ class controller extends Controller {
             this.$scope.isFocused = true
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = idx
-            
+
             const el = this.getEditorElements()[idx]
             const editor = el && MediumEditor.getEditorFromElement(el)
 
@@ -534,10 +534,14 @@ class controller extends Controller {
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
 
         if (focusedBlockIdx !== null) {
-            this.updateState()
+        this.dialogService.showDeleteConfirmationDialog(
+            'PORTFOLIO_DELETE_CHAPTER_CONFIRM_TITLE',
+            '',
+            () => { this.updateState()
             blocks.splice(focusedBlockIdx, 1)
             this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
-            this.updateEditors()
+            this.updateEditors() }
+            )
         }
     }
     beforeToggleBlockWidth() {
@@ -558,7 +562,7 @@ class controller extends Controller {
             blocks[focusedBlockIdx].narrow = !blocks[focusedBlockIdx].narrow
             this.focusBlock(focusedBlockIdx)
         }
-    }   
+    }
     beforeMoveBlock(up = false) {
         const { focusedBlockIdx } = this.$scope
 
