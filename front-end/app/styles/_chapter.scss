@@ -426,6 +426,11 @@ md-input-container.chapter-title {
       height: 7.875rem;
     }
   }
+  @media (max-width: 599px) {
+    .is-focused & {
+      height: 4rem;
+    }
+  }
 }
 .chapter-btn {
   width: 25%;
