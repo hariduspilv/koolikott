@@ -1,6 +1,7 @@
 <md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-sm="75" flex class="fullscreen-dialog">
   <form name="addMaterialForm">
-    <md-toolbar data-md-colors="{ 'background-color': '$green-3' }">
+    <!-- ei saanud md-colorsit tööle, sellepärast ka ekstra klass -->
+    <md-toolbar class="toolbar--add-material">
       <div class="md-toolbar-tools" flex>
         <h2>
           <span data-ng-if="!isUpdateMode" data-translate="ADD_MATERIAL"></span>
@@ -13,9 +14,9 @@
       </div>
     </md-toolbar>
     <md-dialog-content layout="column">
-      <md-content class="md-padding" style="padding-bottom: 0">
+      <md-content class="md-padding">
         <!--URL and Upload block-->
-        <div layout="row" layout-wrap layout-align="start center">
+        <div layout="row" layout-align="start center">
           <!--Material source-->
           <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-gt-lg="30" flex-lg="40" layout="row" layout-align="start center">
           <div data-translate="ADD_MATERIAL_LINK"></div>
@@ -36,14 +37,14 @@
               </div>
             </md-input-container>
           </div>
-          <span ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
-            <span data-translate="OR_WORD"></span>
+          <div data-translate="OR_WORD"></div>
+          <div ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
             <a class="md-raised md-primary">
               <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
               <span data-ng-show="!material.uploadedFile" data-translate="FILE_WORD"></span>
             </a>
             <span data-translate="FOR_MATERIAL">*.</span>
-          </span>
+          </div>
           <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
             <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
           </div>
@@ -70,7 +71,7 @@
             </div>
               <div flex-xs="100" flex-md="100" flex-sm="100" flex-gt-lg="40" flex-lg="40" layout-align="start center">
               <!--Material language-->
-              <span style="white-space: nowrap" data-translate="MATERIAL_IS"></span>
+              <span class="white-space-no-wrap" data-translate="MATERIAL_IS"></span>
               <md-input-container flex-gt-xs="20" flex-sm="20" flex-gt-lg="30" flex-lg="100" layout-align="end center" class="md-padding no-margin">
                 <md-select data-ng-model="material.language" id="add-material-language-select">
                   <md-option data-ng-repeat="language in languages" value="{{language}}">
@@ -93,7 +94,7 @@
                 <div data-ng-message="required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
               </div>
             </md-input-container>
-            <!-- Dünaamiline keelevahetus peaks toimuma siin -->
+            <!-- Language change for title -->
             <md-button data-ng-class="{'button-material-language--selected': (newLanguageChosen === 'est' && metadata.title)}" class="button-material-language" data-ng-click="$ctrl.changeLanguage(1)" flex-gt-xs="20" flex-order-xs="1">
               ET
               <md-icon data-ng-show="newLanguageChosen === 'est' && metadata.title" class="button-material-language__icon">done</md-icon>
@@ -107,13 +108,6 @@
               <md-icon data-ng-show="newLanguageChosen === 'rus' && metadata.title" class="button-material-language__icon">done</md-icon>
             </md-button>
           </div>
-          <!--
-          <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
-            <md-option data-ng-repeat="language in languages" value="{{language}}" ng-selected="{{metadata.language ? language === metadata.language : language === material.language}}">
-              <span data-translate="LANGUAGE_{{language.toUpperCase()}}"></span>
-            </md-option>
-          </md-select>
-        -->
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
             <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
               <label data-translate="CONTENT_SUMMARY"></label>
@@ -121,6 +115,7 @@
             </md-input-container>
           </div>
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" layout-wrap>
+
             <!--Publisher-->
             <md-input-container flex-sm="35" flex-gt-lg="30" flex data-ng-required="!material.authors[0].name && !material.authors[0].surname">
               <label>
@@ -279,7 +274,7 @@
               <span data-translate="I_AM_AUTHOR"></span>
             </md-checkbox>
             <div layout="row" layout-align="start center">
-              <span data-translate="MATERIAL_VIEW_LICENSE_TYPE" style="white-space: nowrap; padding-right: 8px;"></span>
+              <span data-translate="MATERIAL_VIEW_LICENSE_TYPE" class="white-space-no-wrap"></span>
               <div layout-align="start center" flex-sm="100" flex-xs="100" flex-md="60" flex-gt-lg="100" flex-lg="100">
                 <md-select class="no-margin" data-ng-required="newPicture && !material.picture.source"  data-ng-model="material.picture.licenceType" id="pictureLicenceTypeSelect" name="licenceType" ng-model-options="{trackBy: '$value.id'}">
                   <md-option data-ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
@@ -297,7 +292,7 @@
           <md-icon data-ng-if="additionalInfo.isVisible">arrow_downward</md-icon>
         </md-button>
 
-        <div class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak style="padding-top: 0" class="md-padding">
+        <div class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak class="md-padding">
           <div layout="row" layout-align="start center" layout-wrap data-ng-repeat="peerReview in material.peerReviews">
             <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70">
             <md-input-container flex-gt-lg="50" flex-lg="45" flex ng-show="!peerReview.uploading && !peerReview.uploaded">
