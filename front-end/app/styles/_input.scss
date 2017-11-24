@@ -27,3 +27,20 @@ md-input-container .md-resize-handle {
   margin-top: 28px;
   margin-bottom: 27px;
 }
+
+.button-material-language {
+  border-bottom: 2px solid $gray-600-light;
+  color: $gray;
+  position: relative;
+  text-align: left;
+
+  &:hover {
+    border-color: $green1;
+  }
+}
+
+.button-material-language__icon {
+  position: absolute;
+  left: 216px;
+  top: 6px;
+}

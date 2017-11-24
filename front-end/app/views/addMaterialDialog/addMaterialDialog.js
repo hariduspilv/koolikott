@@ -25,7 +25,9 @@ class controller extends Controller {
         this.$scope.languages = [];
         this.$scope.licenseTypes = [];
         this.$scope.resourceTypes = [];
+        this.$scope.newLanguageChosen = '';
         this.$scope.keyCompetences = [];
+        this.$scope.selectedLanguage = this.translationService.getLanguage()
         this.$scope.crossCurricularThemes = [];
 
         this.metadataService.loadLanguages(this.setLangugeges.bind(this));
@@ -161,6 +163,16 @@ class controller extends Controller {
 
         iAmAuthor() {
 
+        }
+
+        changeLanguage(parameter) {
+            if (parameter == 1) {
+                this.$scope.newLanguageChosen = 'est';
+            } else if (parameter == 2) {
+                this.$scope.newLanguageChosen = 'eng';
+            } else if (parameter == 3){
+                this.$scope.newLanguageChosen = 'rus';
+            }
         }
 
         setAuthorToUser() {

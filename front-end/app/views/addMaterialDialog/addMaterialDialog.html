@@ -94,28 +94,26 @@
               </div>
             </md-input-container>
             <!-- Dünaamiline keelevahetus peaks toimuma siin -->
-            <md-input-container flex-gt-xs="20" flex-order-xs="1">
-              <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
-                <md-option data-ng-repeat="language in languages" value="{{language}}" ng-selected="{{metadata.language ? language === metadata.language : language === material.language}}">
-                  <span data-translate="LANGUAGE_{{language.toUpperCase()}}"></span>
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <md-input-container flex-gt-xs="20" flex-order-xs="1">
-              <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
-                <md-option data-ng-repeat="language in languages" value="{{language}}" ng-selected="{{metadata.language ? language === metadata.language : language === material.language}}">
-                  <span data-translate="LANGUAGE_{{language.toUpperCase()}}"></span>
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <md-input-container flex-gt-xs="20" flex-order-xs="1">
-              <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
-                <md-option data-ng-repeat="language in languages" value="{{language}}" ng-selected="{{metadata.language ? language === metadata.language : language === material.language}}">
-                  <span data-translate="LANGUAGE_{{language.toUpperCase()}}"></span>
-                </md-option>
-              </md-select>
-            </md-input-container>
+            <md-button class="button-material-language" data-ng-click="$ctrl.changeLanguage(1)" flex-gt-xs="20" flex-order-xs="1">
+              ET
+              <md-icon data-ng-show="newLanguageChosen === 'est' && metadata.title && metadata.description" class="button-material-language__icon">done</md-icon>
+            </md-button>
+            <md-button class="button-material-language" data-ng-click="$ctrl.changeLanguage(2)" flex-gt-xs="20" flex-order-xs="1">
+              EN
+              <md-icon data-ng-show="newLanguageChosen === 'eng' && metadata.title && metadata.description" class="button-material-language__icon">done</md-icon>
+            </md-button>
+            <md-button class="button-material-language" data-ng-click="$ctrl.changeLanguage(3)" flex-gt-xs="20" flex-order-xs="1">
+              RU
+              <md-icon data-ng-show="newLanguageChosen === 'rus' && metadata.title && metadata.description" class="button-material-language__icon">done</md-icon>
+            </md-button>
           </div>
+          <!--
+          <md-select data-ng-model="metadata.language" id="add-material-title-language-select">
+            <md-option data-ng-repeat="language in languages" value="{{language}}" ng-selected="{{metadata.language ? language === metadata.language : language === material.language}}">
+              <span data-translate="LANGUAGE_{{language.toUpperCase()}}"></span>
+            </md-option>
+          </md-select>
+        -->
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
             <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
               <label data-translate="CONTENT_SUMMARY"></label>
