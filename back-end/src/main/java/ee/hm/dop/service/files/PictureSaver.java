@@ -20,12 +20,6 @@ import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 public class PictureSaver {
 
-    public static final int LG_XS_THUMBNAIL_WIDTH = 600;
-    public static final int LG_THUMBNAIL_WIDTH = 300;
-    public static final int SM_THUMBNAIL_WIDTH = 200;
-    public static final int SM_THUMBNAIL_HEIGHT = 134;
-    public static final int SM_XS_XL_THUMBNAIL_WIDTH = 300;
-    public static final int SM_XS_XL_THUMBNAIL_HEIGHT = 200;
     public static final String DEFAULT_PICTURE_FORMAT = "jpg";
     public Logger logger = LoggerFactory.getLogger(getClass());
 

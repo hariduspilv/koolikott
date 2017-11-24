@@ -17,6 +17,12 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class PictureCutter {
+    public static final Integer LG_XS_THUMBNAIL_WIDTH = 600;
+    public static final Integer LG_THUMBNAIL_WIDTH = 300;
+    public static final Integer SM_THUMBNAIL_WIDTH = 200;
+    public static final Integer SM_THUMBNAIL_HEIGHT = 134;
+    public static final Integer SM_XS_XL_THUMBNAIL_WIDTH = 300;
+    public static final Integer SM_XS_XL_THUMBNAIL_HEIGHT = 200;
     private static Logger logger = LoggerFactory.getLogger(PictureCutter.class);
 
     public static Thumbnail getThumbnailFromPicture(Picture picture, Size size) throws IOException {

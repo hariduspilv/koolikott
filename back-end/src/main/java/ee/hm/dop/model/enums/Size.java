@@ -1,17 +1,18 @@
 package ee.hm.dop.model.enums;
 
+import ee.hm.dop.service.files.PictureCutter;
+
 import static ee.hm.dop.model.enums.ThumbnailcreatingStrategy.CREATE_USING_WIDTH_AND_HEIGHT;
 import static ee.hm.dop.model.enums.ThumbnailcreatingStrategy.CREATE_USING_WIDTH_ONLY;
-import static ee.hm.dop.service.files.PictureSaver.*;
 
 /**\
  * cardSize_screenSize1_screenSize2...
  */
 public enum Size {
-    SM(CREATE_USING_WIDTH_AND_HEIGHT, SM_THUMBNAIL_WIDTH, SM_THUMBNAIL_HEIGHT),
-    SM_XS_XL(CREATE_USING_WIDTH_AND_HEIGHT, SM_XS_XL_THUMBNAIL_WIDTH, SM_XS_XL_THUMBNAIL_HEIGHT),
-    LG(CREATE_USING_WIDTH_ONLY, LG_THUMBNAIL_WIDTH),
-    LG_XS(CREATE_USING_WIDTH_ONLY, LG_XS_THUMBNAIL_WIDTH);
+    SM(CREATE_USING_WIDTH_AND_HEIGHT, PictureCutter.SM_THUMBNAIL_WIDTH, PictureCutter.SM_THUMBNAIL_HEIGHT),
+    SM_XS_XL(CREATE_USING_WIDTH_AND_HEIGHT, PictureCutter.SM_XS_XL_THUMBNAIL_WIDTH, PictureCutter.SM_XS_XL_THUMBNAIL_HEIGHT),
+    LG(CREATE_USING_WIDTH_ONLY, PictureCutter.LG_THUMBNAIL_WIDTH),
+    LG_XS(CREATE_USING_WIDTH_ONLY, PictureCutter.LG_XS_THUMBNAIL_WIDTH);
 
     private Integer width;
     private Integer height;
