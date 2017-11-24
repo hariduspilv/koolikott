@@ -1,20 +1,6 @@
 'use strict';
 
 {
-// const DASHBOARD_VIEW_STATE_MAP = {
-//     creativeCommon: [
-//         'CREATIVE_COMMON_LOWER'
-//     ],
-//     LICENSE_TYPES: [
-//         'LICENSETYPE_YOUTUBE'
-//     ],
-//     CCBY: [
-//         'LICENSETYPE_CCBY'
-//     ],
-//     VIDEO: [
-//         'RESOURCETYPE_VIDEO'
-//     ]
-// }
 
 class controller extends Controller {
     constructor(...args) {
@@ -33,90 +19,88 @@ class controller extends Controller {
         this.$scope.fileUploaded = false;
         this.$scope.uploadingFile = false;
         this.$scope.review = {};
-        this.$scope.additionalInfo = {};
+        this.$scope.isUserAuthor = false;
         this.$scope.maxReviewSize = 10;
         this.$scope.charactersRemaining = 850;
-        this.$scope.resourceTypeDTO = {};
         this.$scope.languages = [];
         this.$scope.licenseTypes = [];
         this.$scope.resourceTypes = [];
         this.$scope.keyCompetences = [];
         this.$scope.crossCurricularThemes = [];
 
-
         this.metadataService.loadLanguages(this.setLangugeges.bind(this));
         this.metadataService.loadLicenseTypes(this.setLicenseTypes.bind(this));
         this.metadataService.loadResourceTypes(this.setResourceTypes.bind(this));
         this.metadataService.loadKeyCompetences(this.setKeyCompetences.bind(this));
         this.metadataService.loadCrossCurricularThemes(this.setCrossCurricularThemes.bind(this));
+        this.getMaxPictureSize();
+        this.getMaxFileSize();
 
-        // Watches
+        this.$scope.$watch(() => {
+            return this.$scope.newPicture;
+        }, (newPicture) => {
+            if (newPicture) {
+                uploadingPicture = true;
+                this.pictureUploadService.upload(this.newPicture, this.pictureUploadSuccess, this.pictureUploadFailed, this.pictureUploadFinally);
+            }
+        });
 
-        // this.$scope.$watch(function () {
-        //     return this.$scope.newPicture;
-        // }, function (newPicture) {
-        //     if (newPicture) {
-        //         uploadingPicture = true;
-        //         this.pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
-        //     }
-        // });
-        //
-        // this.$scope.$watch(function () {
-        //     return this.$scope.newFile;
-        // }, function (newFile) {
-        //     if (newFile) {
-        //         this.$scope.uploadingFile = true;
-        //         this.fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
-        //     }
-        // });
-        //
-        // this.$scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
-        //     if (newValue && newValue.$error) {
-        //         this.$scope.showErrorOverlay = true;
-        //         this.$timeout(function () {
-        //             this.$scope.showErrorOverlay = false;
-        //         }, 6000);
-        //     }
-        // });
-        //
-        // this.$scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-        //     if (newValue && newValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
-        //         this.$scope.educationalContextId = newValue.id;
-        //     }
-        // }, false);
-        //
-        // this.$scope.$watch(function () {
-        //     let a = document.getElementsByClassName("md-datepicker-input");
-        //     if (a[0]) return a[0].value;
-        // }, function (newDate, oldDate) {
-        //     // if newDate is undefiend, use oldDate
-        //     newDate = newDate ? newDate : oldDate;
-        //
-        //     if (newDate !== oldDate || !this.$scope.material.issueDate) {
-        //         var dateObj = this.$mdDateLocale.parseDate(newDate);
-        //         this.$scope.material.issueDate = getIssueDate(dateObj);
-        //
-        //         //Set date for datepicker, which needs a full date
-        //         if (this.$scope.material.issueDate && this.$scope.material.issueDate.year) {
-        //             this.$scope.issueDate = dateObj;
-        //         }
-        //     }
-        // }, true);
-        //
-        // this.$scope.$watch('material.source', function (newValue) {
-        //     if (this.$scope.addMaterialForm.source) {
-        //         this.$scope.addMaterialForm.source.$setValidity("exists", true);
-        //         this.$scope.addMaterialForm.source.$setValidity("deleted", true);
-        //     }
-        //
-        //
-        //     if (newValue && this.$scope.addMaterialForm.source && (this.$scope.addMaterialForm.source.$error.url !== true)) {
-        //         let encodedUrl = encodeURIComponent(newValue);
-        //         this.serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
-        //             getByUrlSuccess, getByUrlFail);
-        //     }
-        //
-        // }, true);
+        this.$scope.$watch(() => {
+            return this.$scope.newFile;
+        }, (newFile) => {
+            if (newFile) {
+                this.$scope.uploadingFile = true;
+                this.fileUploadService.upload(this.newFile, this.fileUploadSuccess, this.fileUploadFailed, this.fileUploadFinally);
+            }
+        });
+
+        this.$scope.$watchCollection('invalidPicture', (newValue, oldValue) => {
+            if (newValue && newValue.$error) {
+                this.$scope.showErrorOverlay = true;
+                this.$timeout(() => {
+                    this.$scope.showErrorOverlay = false;
+                }, 6000);
+            }
+        });
+
+        this.$scope.$watch('material.taxons[0]', (newValue, oldValue) => {
+            if (newValue && newValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
+                this.$scope.educationalContextId = newValue.id;
+            }
+        }, false);
+
+        this.$scope.$watch(() => {
+            let a = document.getElementsByClassName("md-datepicker-input");
+            if (a[0]) return a[0].value;
+        }, (newDate, oldDate) => {
+            // if newDate is undefiend, use oldDate
+            newDate = newDate ? newDate : oldDate;
+
+            if (newDate !== oldDate || !this.$scope.material.issueDate) {
+                var dateObj = this.$mdDateLocale.parseDate(newDate);
+                this.$scope.material.issueDate = this.getIssueDate(dateObj);
+
+                //Set date for datepicker, which needs a full date
+                if (this.$scope.material.issueDate && this.$scope.material.issueDate.year) {
+                    this.$scope.issueDate = dateObj;
+                }
+            }
+        }, true);
+
+        this.$scope.$watch('material.source', (newValue) => {
+            if (this.$scope.addMaterialForm.source) {
+                this.$scope.addMaterialForm.source.$setValidity("exists", true);
+                this.$scope.addMaterialForm.source.$setValidity("deleted", true);
+            }
+
+
+            if (newValue && this.$scope.addMaterialForm.source && (this.$scope.addMaterialForm.source.$error.url !== true)) {
+                let encodedUrl = encodeURIComponent(newValue);
+                this.serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
+                    getByUrlSuccess, getByUrlFail);
+            }
+
+        }, true);
 
         let preferredLanguage;
         let uploadingPicture = false;
@@ -174,6 +158,20 @@ class controller extends Controller {
                 angular.element('#material-author-' + (authorsLength - 1) + '-name').focus();
             });
         };
+
+        iAmAuthor() {
+
+        }
+
+        setAuthorToUser() {
+            if (this.$scope.material.picture.author != this.authenticatedUserService.getUser().name) {
+                this.$scope.material.picture.author = this.authenticatedUserService.getUser().name;
+                this.$scope.isUserAuthor = true;
+            } else {
+                this.$scope.material.picture.author = '';
+                this.$scope.isUserAuthor = false;
+            }
+        }
 
         deleteAuthor(index) {
             this.$scope.material.authors.splice(index, 1);
@@ -437,6 +435,10 @@ class controller extends Controller {
             this.$scope.material.crossCurricularThemes = [];
             this.$scope.material.publishers = [];
             this.$scope.material.resourceTypes = [];
+            this.$scope.material.picture = {};
+            this.$scope.material.picture.licenceType = '';
+            this.$scope.material.picture.author = '';
+            this.$scope.material.picture.source = '';
             this.$scope.issueDate = new Date();
 
             this.addNewMetadata();
@@ -545,7 +547,7 @@ class controller extends Controller {
             if (file) {
                 this.$scope.material.peerReviews[index].uploading = true;
                 this.$scope.uploadingReviewId = index;
-                this.fileUploadService.uploadReview(file, reviewUploadSuccess, reviewUploadFailed, reviewUploadFinally);
+                this.fileUploadService.uploadReview(file, this.reviewUploadSuccess, this.reviewUploadFailed, this.reviewUploadFinally);
             }
         };
 
@@ -790,11 +792,7 @@ class controller extends Controller {
         }
 
         setResourceTypes(data) {
-            this.$scope.resourceTypes = data.sort(function (a, b) {
-                if (this.$filter('translate')(a.name) < this.$filter('translate')(b.name)) return -1;
-                if (this.$filter('translate')(a.name) > this.$filter('translate')(b.name)) return 1;
-                return 0;
-            });
+            this.$scope.resourceTypes = data;
         }
 
         setDefaultMaterialMetadataLanguage() {
@@ -821,29 +819,15 @@ class controller extends Controller {
         }
 
         getMaxPictureSize() {
-            this.serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);
-        }
-
-        getMaxPictureSizeSuccess(data) {
-            this.$scope.maxPictureSize = data;
-        }
-
-        getMaxPictureSizeFail() {
-            this.$scope.maxPictureSize = 10;
-            console.log('Failed to get max picture size, using 10MB as default.');
+            this.serverCallService.makeGet('rest/picture/maxSize').then(({ data }) => {
+                this.$scope.maxPictureSize = data;
+            })
         }
 
         getMaxFileSize() {
-            this.serverCallService.makeGet('/rest/uploadedFile/maxSize', {}, getMaxFileSizeSuccess, getMaxFileSizeFail);
-        }
-
-        getMaxFileSizeSuccess(data) {
-            this.$scope.maxFileSize = data;
-        }
-
-        getMaxFileSizeFail() {
-            this.$scope.maxFileSize = 500;
-            console.log('Failed to get max file size, using 500MB as default.');
+            this.serverCallService.makeGet('/rest/uploadedFile/maxSize').then(({ data }) => {
+                this.$scope.maxFileSize = data;
+            })
         }
 
         setChangeable() {

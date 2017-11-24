@@ -18,7 +18,7 @@
         <div layout="row" layout-wrap layout-align="start center">
           <!--Material source-->
           <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-gt-lg="30" flex-lg="40" layout="row" layout-align="start center">
-          <div data-translate="Palun lisa link"></div>
+          <div data-translate="ADD_MATERIAL_LINK"></div>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
               <label data-translate="HTTP_WORD"></label>
@@ -235,63 +235,66 @@
           <div flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
             <div data-ngf-drop ngf-select ng-model="newPicture" class="drop-box no-margin" data-ngf-drag-over-class="'dragover'" data-ngf-multiple="false" data-accept="image/*" data-ngf-pattern="'image/*'" data-ngf-max-size="{{maxPictureSize + 'MB'}}" ngf-model-invalid="invalidPicture"
               layout="row" layout-align="center center">
-
-              <span data-ng-if="!newPicture && !material.picture && !showErrorOverlay">
-              <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
-                <span data-translate="SIZE_UNTIL"></span> {{maxPictureSize}}Mb
-              </span>
+              <span data-ng-if="!newPicture && !material.picture.name && !showErrorOverlay">
+                <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
+                  <span data-translate="SIZE_UNTIL"></span> {{maxPictureSize}} Mb
+                </span>
               </span>
 
               <!-- image preview -->
-              <md-input-container data-ng-if="(newPicture || material.picture) && !showErrorOverlay" class="md-block drop-box-preview-container">
+              <md-input-container data-ng-if="(newPicture || material.picture.name) && !showErrorOverlay" class="md-block drop-box-preview-container">
                 <div class="drop-box-preview">
                   <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture" ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}" alt="photo">
-                  <img data-ng-if="!newPicture && material.picture" data-ng-src="rest/picture/{{material.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}" alt="photo">
+                  <img data-ng-if="!newPicture && material.picture.name" data-ng-src="rest/picture/{{material.picture.name}}" ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}" alt="photo">
                 </div>
               </md-input-container>
 
               <span class="error-wrapper" data-ng-if="showErrorOverlay">
-              <span class="text-error">
-                <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
-              </span>
+                <span class="text-error">
+                  <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
+                </span>
               </span>
             </div>
           </div>
           <div layout="column" flex-sm="70" flex-md="35" flex-gt-lg="25" flex-lg="25" class="md-padding">
-            <md-input-container data-ng-required="!material.publishers[0].name || $index === 0">
-              <label data-translate="Autor*">
-                      <span data-ng-hide="author.name || author.surname || $index > 0"></span>
-                    </label>
-              <input data-ng-model="author.name" id="material-author-{{$index}}-name" data-ng-required="author.surname" name="firstname" md-maxlength="50">
-              <div ng-messages="addMaterialForm.firstname.$error" data-ng-show="!author.name && author.surname">
-                <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
+            <md-input-container>
+              <label data-translate="AUTHOR">
+                <span data-ng-hide="material.picture.author || $index > 0"></span>
+              </label>
+              <input data-ng-required="newPicture" data-ng-model="material.picture.author" id="material-picture-author-{{$index}}" name="authorName" md-maxlength="50" data-ng-disabled="isUserAuthor">
+              <div ng-messages="addMaterialForm.authorName.$error" data-ng-show="!material.picture.author">
+                <div ng-message="required" data-translate="AUTHOR_NAME_REQUIRED"></div>
               </div>
             </md-input-container>
-            <md-input-container data-ng-required="!material.publishers[0].name || $index === 0">
-              <label data-translate="Allikas*">
+            <md-input-container>
+              <label data-translate="SOURCE">
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
-              <input data-ng-model="author.name" id="material-author-{{$index}}-name" data-ng-required="author.surname" name="firstname" md-maxlength="50">
-              <div ng-messages="addMaterialForm.firstname.$error" data-ng-show="!author.name && author.surname">
-                <div ng-message="required" data-translate="FIRST_NAME_REQUIRED"></div>
+              <input data-ng-required="newPicture && !material.picture.licenceType" data-ng-model="material.picture.source" name="pictureSource" md-maxlength="50">
+              <div ng-messages="addMaterialForm.pictureSource.$error" data-ng-show="!material.picture.source">
+                <div ng-message="required" data-translate="SOURCE_REQUIRED"></div>
               </div>
             </md-input-container>
           </div>
           <div layout="column" flex-sm="100" flex-md="45" flex-gt-lg="30" flex-lg="25" class="md-padding">
-            <md-checkbox class="md-primary" flex style="margin-top: 28px;">
-              <span data-translate="Olen ise autor"></span>
+            <md-checkbox class="md-primary checkbox--material-author" data-ng-click="$ctrl.setAuthorToUser()" flex>
+              <span data-translate="I_AM_AUTHOR"></span>
             </md-checkbox>
             <div layout="row" layout-align="start center">
-              <span data-translate="MATERIAL_VIEW_LICENSE_TYPE" style="white-space: nowrap; padding-right: 8px;">*</span>
-              <md-select flex-sm="100" flex-xs="100" flex-md="60" flex-gt-lg="100" flex-lg="100" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
-                <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
-                <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"></md-option>
-              </md-select>
+              <span data-translate="MATERIAL_VIEW_LICENSE_TYPE" style="white-space: nowrap; padding-right: 8px;"></span>
+              <div layout-align="start center" flex-sm="100" flex-xs="100" flex-md="60" flex-gt-lg="100" flex-lg="100">
+                <md-select class="no-margin" data-ng-required="newPicture && !material.picture.source"  data-ng-model="material.picture.licenceType" id="pictureLicenceTypeSelect" name="licenceType" ng-model-options="{trackBy: '$value.id'}">
+                  <md-option data-ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
+                  <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
+                    <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"/>
+                  </md-option>
+                </md-select>
+              </div>
             </div>
           </div>
         </div>
         <md-button aria-label="Ava/sulge lisaandmed" id="open-additional-info" class="md-primary no-margin" data-ng-disabled="isSaving || uploadingFile" data-ng-click="additionalInfo.isVisible =! additionalInfo.isVisible">
-          <span data-ng-show="!isUpdateMode" data-translate="LISAANDMED"></span>
+          <span data-ng-show="!isUpdateMode" data-translate="MATERIAL_ADDITIONAL_DATA"></span>
           <md-icon data-ng-if="!additionalInfo.isVisible">arrow_forward</md-icon>
           <md-icon data-ng-if="additionalInfo.isVisible">arrow_downward</md-icon>
         </md-button>
@@ -325,11 +328,11 @@
 
               <a class="md-raised md-primary md-ink-ripple">
                 <span data-ng-show="peerReview.uploaded" data-translate="UPDATE_FILE"></span>
-                <span data-ng-show="!peerReview.uploaded" data-translate="fail"></span>
+                <span data-ng-show="!peerReview.uploaded" data-translate="FILE_WORD"></span>
               </a>
             </div>
 
-            <div data-ng-messages="file" data-ng-show="invalidReview && invalidReview.length > 0" class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}}MB
+            <div data-ng-messages="file" data-ng-show="invalidReview && invalidReview.length > 0" class="upload-file-error"><span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}} MB
             </div>
 
             <md-button class="md-icon-button md-primary" data-ng-show="$index+1 === material.peerReviews.length" data-ng-click="$ctrl.addNewPeerReview()">
@@ -356,19 +359,21 @@
           <div layout="row" layout-wrap layout-align="space-between center">
             <md-input-container flex-gt-xs="55" flex-gt-lg="40" flex-md="40" flex-lg="40">
               <label data-translate="MATERIAL_TYPE"></label>
-              <md-select class="no-margin" data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
+              <md-select class="no-margin" data-ng-model="material.resourceType" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
                 <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes" ng-selected="{{ isTypeSelected(resourceType) }}">
                   <span data-translate="{{resourceType.name}}"></span>
                 </md-option>
               </md-select>
             </md-input-container>
-            <div layout-align="start center" flex-sm="70" flex-xs="60" flex-md="40" flex-gt-lg="40" flex-lg="40">
-              <md-select class="no-margin" data-ng-model="material.licenseType" id="licenceTypeSelect" name="licenseType" ng-model-options="{trackBy: '$value.id'}">
-                <md-option ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
-                <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"><span data-translate="Litsentsi tüüp"/></md-option>
+            <md-input-container flex-sm="70" flex-xs="60" flex-md="40" flex-gt-lg="40" flex-lg="40">
+              <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
+              <md-select class="no-margin" data-ng-model="material.licenceType" id="licenceTypeSelect" name="licenceType" ng-model-options="{trackBy: '$value.id'}">
+                  <md-option data-ng-value="allRightsReserved" data-translate="LICENSETYPE_CANT_CHOOSE"></md-option>
+                  <md-option data-ng-value="licenceType" data-ng-repeat="licenceType in licenseTypes" data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}">
+                </md-option>
               </md-select>
-            </div>
+            </md-input-container>
             <div layout="row" layout-align="end center">
               <md-switch class="md-primary md-block md-padding" md-no-ink data-ng-model="material.paid" aria-label="{{'MATERIAL_PAID' | translate}}">
                 <span data-translate="MATERIAL_PAID"></span>
