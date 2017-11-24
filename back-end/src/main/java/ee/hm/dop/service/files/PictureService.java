@@ -7,7 +7,6 @@ import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
 
 import javax.inject.Inject;
-import java.util.function.Function;
 
 public class PictureService {
 
@@ -22,28 +21,12 @@ public class PictureService {
         return originalPictureDao.findByNameAny(name);
     }
 
-    public Thumbnail getSMThumbnailByName(String name) {
-        return getThumbNail(name, Size.SM, pictureSaver::tryToCreateSM);
-    }
-
-    public Thumbnail getSMLargeThumbnailByName(String name) {
-        return getThumbNail(name, Size.SM_XS_XL, pictureSaver::tryToCreateSMLarge);
-    }
-
-    public Thumbnail getLGThumbnailByName(String name) {
-        return getThumbNail(name, Size.LG, pictureSaver::tryToCreateLG);
-    }
-
-    public Thumbnail getLGLargeThumbnailByName(String name) {
-        return getThumbNail(name, Size.LG_XS, pictureSaver::tryToCreateLGLarge);
-    }
-
-    private Thumbnail getThumbNail(String name, Size size, Function<Picture, Thumbnail> tryToCreate) {
+    public Thumbnail getThumbnailByName(String name, Size size) {
         Thumbnail thumbnail = thumbnailDao.findByNameAndSize(name, size);
         if (thumbnail != null) {
             return thumbnail;
         }
         Picture existingPicture = getByName(name);
-        return existingPicture != null ? tryToCreate.apply(existingPicture) : null;
+        return existingPicture != null ? pictureSaver.createOneThumbnail(existingPicture, size) : null;
     }
 }
