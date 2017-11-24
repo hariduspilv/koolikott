@@ -20,12 +20,6 @@ import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 public class PictureSaver {
 
-    public static final int LG_XS_THUMBNAIL_WIDTH = 600;
-    public static final int LG_THUMBNAIL_WIDTH = 300;
-    public static final int SM_THUMBNAIL_WIDTH = 200;
-    public static final int SM_THUMBNAIL_HEIGHT = 134;
-    public static final int SM_XS_XL_THUMBNAIL_WIDTH = 300;
-    public static final int SM_XS_XL_THUMBNAIL_HEIGHT = 200;
     public static final String DEFAULT_PICTURE_FORMAT = "jpg";
     public Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -34,20 +28,8 @@ public class PictureSaver {
     @Inject
     private ThumbnailDao thumbnailDao;
 
-    public Thumbnail tryToCreateSM(Picture existingPicture) {
-        return createThumbnail(existingPicture, Size.SM, SM_THUMBNAIL_WIDTH, SM_THUMBNAIL_HEIGHT);
-    }
-
-    public Thumbnail tryToCreateSMLarge(Picture existingPicture) {
-        return createThumbnail(existingPicture, Size.SM_XS_XL, SM_XS_XL_THUMBNAIL_WIDTH, SM_XS_XL_THUMBNAIL_HEIGHT);
-    }
-
-    public Thumbnail tryToCreateLG(Picture existingPicture) {
-        return createThumbnail(existingPicture, Size.LG, LG_THUMBNAIL_WIDTH, null);
-    }
-
-    public Thumbnail tryToCreateLGLarge(Picture existingPicture) {
-        return createThumbnail(existingPicture, Size.LG_XS, LG_XS_THUMBNAIL_WIDTH, null);
+    public Thumbnail createOneThumbnail(Picture existingPicture, Size size) {
+        return tryToCreateThumbnail(existingPicture, size);
     }
 
     public Picture create(Picture picture) {
@@ -60,7 +42,7 @@ public class PictureSaver {
         //pictures are different, we always save new, but no need to cut thumbnails
         Picture newPicture = originalPictureDao.createOrUpdate((OriginalPicture) picture);
         if (existingPicture == null) {
-            createThumbnails(newPicture);
+            createAllThumbnails(newPicture);
         }
         return newPicture;
     }
@@ -82,36 +64,20 @@ public class PictureSaver {
         }
     }
 
-    private Thumbnail createThumbnail(Picture existingPicture, Size sm, Integer smThumbnailWidth, Integer smThumbnailHeight) {
+    private Thumbnail tryToCreateThumbnail(Picture existingPicture, Size sm) {
         try {
-            return createThumbnailInner(existingPicture, sm, smThumbnailWidth, smThumbnailHeight);
+            Thumbnail thumbnail = PictureCutter.getThumbnailFromPicture(existingPicture, sm);
+            return thumbnailDao.createOrUpdate(thumbnail);
         } catch (IOException ignored) {
             logError(existingPicture);
             return null;
         }
     }
 
-    private void createThumbnails(Picture picture) {
-        try {
-            createThumbnailInner(picture, Size.SM, SM_THUMBNAIL_WIDTH, SM_THUMBNAIL_HEIGHT);
-            createThumbnailInner(picture, Size.SM_XS_XL, SM_XS_XL_THUMBNAIL_WIDTH, SM_XS_XL_THUMBNAIL_HEIGHT);
-            createThumbnailInner(picture, Size.LG, LG_THUMBNAIL_WIDTH, null);
-            createThumbnailInner(picture, Size.LG_XS, LG_XS_THUMBNAIL_WIDTH, null);
-        } catch (IOException ignored) {
-            logError(picture);
+    private void createAllThumbnails(Picture picture) {
+        for (Size size : Size.values()) {
+            tryToCreateThumbnail(picture, size);
         }
-    }
-
-    private Thumbnail createThumbnailInner(Picture picture, Size size, int width, Integer height) throws IOException {
-        Thumbnail thumbnail;
-        if (height == null){
-            thumbnail = PictureCutter.getThumbnailFromPicture(picture, width);
-        } else {
-            thumbnail = PictureCutter.getThumbnailFromPicture(picture, width, height);
-        }
-        thumbnail.setSize(size);
-        thumbnailDao.createOrUpdate(thumbnail);
-        return thumbnail;
     }
 
     private void logError(Picture existingPicture) {

@@ -2,7 +2,6 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.service.files.PictureSaver;
@@ -45,24 +44,12 @@ public class PictureResource extends BaseResource {
     @GET
     @Path("thumbnail/{size}/{name}")
     @Produces("image/png")
-    public Response getSMThumbnailDataByName(@PathParam("size") String size, @PathParam("name") String pictureName) {
-        if (StringUtils.isBlank(size)) {
+    public Response getSMThumbnailDataByName(@PathParam("size") String sizeString, @PathParam("name") String pictureName) {
+        if (StringUtils.isBlank(sizeString)) {
             throw new UnsupportedOperationException("no size");
         }
-        Size sizeEnum = Size.valueOf(size.toUpperCase());
-        if (sizeEnum == Size.SM) {
-            return getPictureResponseWithCache(pictureService.getSMThumbnailByName(pictureName));
-        }
-        if (sizeEnum == Size.SM_XS_XL) {
-            return getPictureResponseWithCache(pictureService.getSMLargeThumbnailByName(pictureName));
-        }
-        if (sizeEnum == Size.LG) {
-            return getPictureResponseWithCache(pictureService.getLGThumbnailByName(pictureName));
-        }
-        if (sizeEnum == Size.LG_XS) {
-            return getPictureResponseWithCache(pictureService.getLGLargeThumbnailByName(pictureName));
-        }
-        throw new UnsupportedOperationException("unknown size");
+        Size size = Size.valueOf(sizeString.toUpperCase());
+        return getPictureResponseWithCache(pictureService.getThumbnailByName(pictureName, size));
     }
 
     private Response getPictureResponseWithCache(Picture picture) {

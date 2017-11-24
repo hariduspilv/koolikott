@@ -2,6 +2,7 @@ package ee.hm.dop.service.files;
 
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
+import ee.hm.dop.model.enums.Size;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,20 +17,33 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class PictureCutter {
+    public static final Integer LG_XS_THUMBNAIL_WIDTH = 600;
+    public static final Integer LG_THUMBNAIL_WIDTH = 300;
+    public static final Integer SM_THUMBNAIL_WIDTH = 200;
+    public static final Integer SM_THUMBNAIL_HEIGHT = 134;
+    public static final Integer SM_XS_XL_THUMBNAIL_WIDTH = 300;
+    public static final Integer SM_XS_XL_THUMBNAIL_HEIGHT = 200;
     private static Logger logger = LoggerFactory.getLogger(PictureCutter.class);
 
-    public static Thumbnail getThumbnailFromPicture(Picture picture, final int finalWidth) throws IOException {
+    public static Thumbnail getThumbnailFromPicture(Picture picture, Size size) throws IOException {
+        if (size.createUsingWidthAndHeight()) {
+            return getThumbnailFromPicture(picture, size, size.getWidth(), size.getHeight());
+        }
+        return getThumbnailFromPicture(picture, size, size.getWidth());
+    }
+
+    public static Thumbnail getThumbnailFromPicture(Picture picture, Size size, final int finalWidth) throws IOException {
         logger.info("Start creating thumbnail [name=" + picture.getName() + "]");
 
         ImageInputStream imageStream = getImageInputStreamFromPicture(picture.getData());
         String format = getPictureFormat(imageStream);
         BufferedImage resizedImage = resizeImage(imageStream, finalWidth);
 
-        return createThumbnail(resizedImage, picture.getName(), format);
+        return createThumbnail(resizedImage, size, picture.getName(), format);
     }
 
 
-    public static Thumbnail getThumbnailFromPicture(Picture picture, final int finalWidth, final int finalHeight) throws IOException {
+    public static Thumbnail getThumbnailFromPicture(Picture picture, Size size, final int finalWidth, final int finalHeight) throws IOException {
         logger.info("Start creating thumbnail [name=" + picture.getName() + "]");
 
         ImageInputStream imageStream = getImageInputStreamFromPicture(picture.getData());
@@ -37,7 +51,7 @@ public class PictureCutter {
         BufferedImage resizedImage = resizeImage(imageStream, finalWidth);
         BufferedImage thumbnailBufferedImage = cropThumbnailFromImage(resizedImage, finalWidth, finalHeight);
 
-        return createThumbnail(thumbnailBufferedImage, picture.getName(), format);
+        return createThumbnail(thumbnailBufferedImage, size, picture.getName(), format);
     }
 
     private static String getPictureFormat(ImageInputStream imageStream) throws IOException {
@@ -88,7 +102,7 @@ public class PictureCutter {
         return Scalr.crop(image, x, y, width, height);
     }
 
-    private static Thumbnail createThumbnail(BufferedImage image, String name, String format) throws IOException {
+    private static Thumbnail createThumbnail(BufferedImage image, Size size, String name, String format) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         ImageIO.write(image, format, baos);
@@ -98,6 +112,7 @@ public class PictureCutter {
         Thumbnail result = new Thumbnail();
         result.setData(baos.toByteArray());
         result.setName(name);
+        result.setSize(size);
 
         baos.close();
 
