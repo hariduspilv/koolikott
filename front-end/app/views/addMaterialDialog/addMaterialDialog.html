@@ -94,17 +94,17 @@
               </div>
             </md-input-container>
             <!-- Dünaamiline keelevahetus peaks toimuma siin -->
-            <md-button class="button-material-language" data-ng-click="$ctrl.changeLanguage(1)" flex-gt-xs="20" flex-order-xs="1">
+            <md-button data-ng-class="{'button-material-language--selected': (newLanguageChosen === 'est' && metadata.title)}" class="button-material-language" data-ng-click="$ctrl.changeLanguage(1)" flex-gt-xs="20" flex-order-xs="1">
               ET
-              <md-icon data-ng-show="newLanguageChosen === 'est' && metadata.title && metadata.description" class="button-material-language__icon">done</md-icon>
+              <md-icon data-ng-show="newLanguageChosen === 'est' && metadata.title" class="button-material-language__icon">done</md-icon>
             </md-button>
-            <md-button class="button-material-language" data-ng-click="$ctrl.changeLanguage(2)" flex-gt-xs="20" flex-order-xs="1">
+            <md-button data-ng-class="{'button-material-language--selected': (newLanguageChosen === 'eng' && metadata.title)}" class="button-material-language" data-ng-click="$ctrl.changeLanguage(2)" flex-gt-xs="20" flex-order-xs="1">
               EN
-              <md-icon data-ng-show="newLanguageChosen === 'eng' && metadata.title && metadata.description" class="button-material-language__icon">done</md-icon>
+              <md-icon data-ng-show="newLanguageChosen === 'eng' && metadata.title" class="button-material-language__icon">done</md-icon>
             </md-button>
-            <md-button class="button-material-language" data-ng-click="$ctrl.changeLanguage(3)" flex-gt-xs="20" flex-order-xs="1">
+            <md-button data-ng-class="{'button-material-language--selected': (newLanguageChosen === 'rus' && metadata.title)}" class="button-material-language" data-ng-click="$ctrl.changeLanguage(3)" flex-gt-xs="20" flex-order-xs="1">
               RU
-              <md-icon data-ng-show="newLanguageChosen === 'rus' && metadata.title && metadata.description" class="button-material-language__icon">done</md-icon>
+              <md-icon data-ng-show="newLanguageChosen === 'rus' && metadata.title" class="button-material-language__icon">done</md-icon>
             </md-button>
           </div>
           <!--
