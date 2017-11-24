@@ -238,8 +238,7 @@
 
               <span data-ng-if="!newPicture && !material.picture && !showErrorOverlay">
               <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
-                <!-- tõlge vaja teha -->
-                <span data-translate="Suurus kuni"></span> {{maxPictureSize}}Mb
+                <span data-translate="SIZE_UNTIL"></span> {{maxPictureSize}}Mb
               </span>
               </span>
 
@@ -302,8 +301,7 @@
             <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70">
             <md-input-container flex-gt-lg="50" flex-lg="45" flex ng-show="!peerReview.uploading && !peerReview.uploaded">
               <label ng-show="!peerReview.uploading && !peerReview.uploaded">
-                <!-- tõlge vaja teha -->
-                <span data-translate="Retsensiooni link"></span>
+                <span data-translate="RECESSION_LINK"></span>
               </label>
               <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url>
             </md-input-container>
@@ -357,8 +355,7 @@
           </div>
           <div layout="row" layout-wrap layout-align="space-between center">
             <md-input-container flex-gt-xs="55" flex-gt-lg="40" flex-md="40" flex-lg="40">
-              <!-- tõlget vaja teha -->
-              <label data-translate="Materjali tüüp"></label>
+              <label data-translate="MATERIAL_TYPE"></label>
               <md-select class="no-margin" data-ng-model="resourceTypeDTO" id="resourceTypeSelect"
                          ng-model-options="{trackBy: '$value.id'}" multiple dop-select-close>
                 <md-option ng-value="resourceType" data-ng-repeat="resourceType in resourceTypes" ng-selected="{{ isTypeSelected(resourceType) }}">
