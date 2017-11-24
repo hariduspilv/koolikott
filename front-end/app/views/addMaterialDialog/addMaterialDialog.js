@@ -673,6 +673,7 @@ class controller extends Controller {
                 }
             }
         }
+    }
 
         setLangugeges(data) {
             this.$scope.languages = data;
@@ -727,13 +728,14 @@ class controller extends Controller {
             }
         }
 
-        function saveMaterialSuccess(material) {
+        saveMaterialSuccess(material) {
             const done = () => {
                 $scope.isUpdateMode
                     ? $rootScope.learningObjectChanged = isChanged(material)
                     : $rootScope.learningObjectUnreviewed = true
                 $rootScope.$broadcast('dashboard:adminCountsUpdated')
             }
+        }
 
         saveMaterialSuccess(material) {
             if (!material) {
@@ -751,7 +753,7 @@ class controller extends Controller {
                 // Pass saved material back to material view
                 material.source = getSource(material)
                 $mdDialog.hide(material)
-                
+
                 if (!$scope.isChapterMaterial) {
                     const url = '/material?id=' + material.id
 
@@ -773,9 +775,11 @@ class controller extends Controller {
                         this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                     })
                     $location.url(url)
-                }
+                    }
+                })
             }
         }
+    }
 
         saveMaterialFail() {
             console.log('Failed to add material.');
@@ -841,23 +845,18 @@ class controller extends Controller {
             this.$scope.maxFileSize = 500;
             console.log('Failed to get max file size, using 500MB as default.');
         }
+
+        setChangeable() {
+            Object.keys(changeable).forEach(key =>
+                changeable[key].value = $scope.material[key]
+        )}
+
+        isChanged(material) { (isChanged, key) => {
+            return Object.keys(changeable).reduce( isChanged || changeable[key].isChanged(material[key], changeable[key].value), false)
+        }
+    }
 }
 
-        function setChangeable() {
-            Object.keys(changeable).forEach(key =>
-            )
-                changeable[key].value = $scope.material[key]
-        }
-
-        function isChanged(material) {
-                (isChanged, key) =>
-            return Object.keys(changeable).reduce(
-                    isChanged || changeable[key].isChanged(material[key], changeable[key].value),
-                false
-            )
-    }
-]);
-        }
 controller.$inject = [
   '$scope',
   '$mdDialog',
