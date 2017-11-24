@@ -4,9 +4,11 @@ import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -41,33 +43,26 @@ public class PictureResource extends BaseResource {
     }
 
     @GET
-    @Path("thumbnail/sm/{name}")
+    @Path("thumbnail/{size}/{name}")
     @Produces("image/png")
-    public Response getSMThumbnailDataByName(@PathParam("name") String pictureName) {
-        return getPictureResponseWithCache(pictureService.getSMThumbnailByName(pictureName));
-    }
-
-    @GET
-    @Path("thumbnail/sm_xs_xl/{name}")
-    @Produces("image/png")
-    public Response getSMLargeThumbnailDataByName(@PathParam("name") String pictureName) {
-        return getPictureResponseWithCache(pictureService.getSMLargeThumbnailByName(pictureName));
-    }
-
-    @GET
-    @Path("thumbnail/lg/{name}")
-    @Produces("image/png")
-    public Response getLGThumbnailDataByName(@PathParam("name") String pictureName) {
-        Thumbnail thumbnail = pictureService.getLGThumbnailByName(pictureName);
-        return getPictureResponseWithCache(thumbnail);
-    }
-
-    @GET
-    @Path("thumbnail/lg_xs/{name}")
-    @Produces("image/png")
-    public Response getLGLargeThumbnailDataByName(@PathParam("name") String pictureName) {
-        Thumbnail thumbnail = pictureService.getLGLargeThumbnailByName(pictureName);
-        return getPictureResponseWithCache(thumbnail);
+    public Response getSMThumbnailDataByName(@PathParam("size") String size, @PathParam("name") String pictureName) {
+        if (StringUtils.isBlank(size)) {
+            throw new UnsupportedOperationException("no size");
+        }
+        Size sizeEnum = Size.valueOf(size.toUpperCase());
+        if (sizeEnum == Size.SM) {
+            return getPictureResponseWithCache(pictureService.getSMThumbnailByName(pictureName));
+        }
+        if (sizeEnum == Size.SM_XS_XL) {
+            return getPictureResponseWithCache(pictureService.getSMLargeThumbnailByName(pictureName));
+        }
+        if (sizeEnum == Size.LG) {
+            return getPictureResponseWithCache(pictureService.getLGThumbnailByName(pictureName));
+        }
+        if (sizeEnum == Size.LG_XS) {
+            return getPictureResponseWithCache(pictureService.getLGLargeThumbnailByName(pictureName));
+        }
+        throw new UnsupportedOperationException("unknown size");
     }
 
     private Response getPictureResponseWithCache(Picture picture) {

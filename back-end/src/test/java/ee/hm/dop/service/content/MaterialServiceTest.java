@@ -173,6 +173,7 @@ public class MaterialServiceTest {
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
+        expect(material.getPicture()).andReturn(null);
 
         expect(reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES)).andReturn(false);
 
@@ -260,6 +261,7 @@ public class MaterialServiceTest {
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
         expect(material.getUnReviewed()).andReturn(0);
         expect(material.getImproper()).andReturn(0);
+        expect(material.getPicture()).andReturn(null);
 
         expect(reviewableChangeService.processChanges(material, null, null, ChangeProcessStrategy.REGISTER_NEW_CHANGES)).andReturn(false);
 

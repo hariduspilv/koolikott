@@ -19,7 +19,7 @@ public class PictureService {
     private PictureSaver pictureSaver;
 
     public Picture getByName(String name) {
-        return originalPictureDao.findByName(name);
+        return originalPictureDao.findByNameAny(name);
     }
 
     public Thumbnail getSMThumbnailByName(String name) {
