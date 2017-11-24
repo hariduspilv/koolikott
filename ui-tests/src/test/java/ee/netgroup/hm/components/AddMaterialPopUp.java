@@ -15,13 +15,13 @@ public class AddMaterialPopUp extends Component{
 	private By insertPhoto = By.xpath("//span/md-icon[text()='insert_photo']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
 	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
-	private By educationalContext = By.xpath("(//md-select[@id='taxonEducationalSelect'])[2]");
+	private By educationalContext = By.name("taxonForm");
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
 	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
-	private By targetGroup = By.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
+	private By targetGroup = By.xpath("//form[1][contains(@name, 'targetGroupForm')]");
 	private By selectedTargetGroup = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
-	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
+	private By closeButton = By.xpath("//md-icon[@aria-label='close']");
 	private By createMaterialButton = By.id("add-material-create-button");
 	private By deletedMaterialValidationError = By.xpath("//div[@class='md-input-message-animation']");
 	private By existingMaterialValidationError = By.cssSelector("div.md-input-message-animation > span");
@@ -29,10 +29,12 @@ public class AddMaterialPopUp extends Component{
 	private By authorSurname= By.xpath("//input[@data-ng-model='author.surname']");
 	private By publisherName = By.xpath("//input[@data-ng-model='material.publishers[0].name']");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'input-')])");
+	public static String newMaterialUrl = Helpers.generateUrl();
 	
 	
 	public AddMaterialPopUp setHyperLink() {
-		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateUrl(30));
+		getDriver().findElement(linkField).clear();
+		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateRandomUrl(30));
 		return this;
 	}
 
@@ -75,6 +77,7 @@ public class AddMaterialPopUp extends Component{
 	}
 
 	public AddMaterialPopUp selectTargetGroup() {
+		Helpers.waitForClickable(targetGroup);
 		getDriver().findElement(targetGroup).click();
 		getDriver().findElement(selectedTargetGroup).click();
 		getDriver().findElements(closeButton).get(2).click();
@@ -132,6 +135,12 @@ public class AddMaterialPopUp extends Component{
 		getDriver().findElement(insertTag).sendKeys(Helpers.generateRegisterNumber(18));
 		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
 		Helpers.waitForMilliseconds(1000);
+		return this;
+	}
+	
+	public AddMaterialPopUp setNewHyperLink() {
+		getDriver().findElement(linkField).clear();
+		getDriver().findElement(linkField).sendKeys(newMaterialUrl);
 		return this;
 	}
 

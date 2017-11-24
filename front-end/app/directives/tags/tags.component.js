@@ -6,11 +6,12 @@ const SHOW_TAG_REPORT_MODAL_HASH = 'dialog-report-tag'
 class controller extends Controller {
     $onInit() {
         this.newTag = {}
+        this.showMoreTags = false
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
-        this.init()
+        this.getTagUpVotes()
 
-        this.unsubscribeTagsAdded = this.$rootScope.$watch('learningObjectChanges', () => {
-            if (Array.isArray(this.$scope.tags) && this.$scope.tags.length)
+        this.unsubscribeTagsAdded = this.$rootScope.$watch('learningObjectChanges', (currentValue, previousValue) => {
+            if (currentValue !== previousValue)
                 this.setNewTags()
         }, true)
         this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this)) ;
@@ -21,6 +22,8 @@ class controller extends Controller {
                 ? this.onLoginSuccess()
                 : this.unsubscribeLoginSuccess = this.$rootScope.$on('login:success', this.onLoginSuccess.bind(this))
         )
+
+        this._previousTags = this.learningObject.tags || []
     }
     $onDestroy() {
         if (typeof this.unsubscribeLoginSuccess === 'function')
@@ -28,11 +31,11 @@ class controller extends Controller {
         if (typeof this.unsubscribeTagsAdded === 'function')
             this.unsubscribeTagsAdded()
     }
-    init() {
-        this.showMoreTags = false
-
-        if (this.learningObject && this.learningObject.id)
+    $doCheck() {
+        if (!_.isEqual(this.learningObject.tags, this._previousTags)) {
             this.getTagUpVotes()
+            this._previousTags = this.learningObject.tags
+        }
     }
     onLoginSuccess() {
         if (
@@ -49,19 +52,25 @@ class controller extends Controller {
         }
     }
     getTagUpVotes() {
+        const { id } = this.learningObject || {}
+
+        if (!id) {
+            this.$scope.upvotes = undefined
+            this.allUpvotes = undefined
+            return 
+        }
+
         this.serverCallService
-            .makeGet('rest/tagUpVotes/report', {
-                learningObject: this.learningObject.id
-            })
+            .makeGet('rest/tagUpVotes/report', { learningObject: id })
             .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
 
                 if (sorted.length > 10) {
-                    this.allTags = sorted
-                    this.$scope.tags = this.allTags.slice(0, 10)
+                    this.allUpvotes = sorted
+                    this.$scope.upvotes = this.allUpvotes.slice(0, 10)
                     this.showMoreTags = true
                 } else
-                    this.$scope.tags = sorted
+                    this.$scope.upvotes = sorted
 
                 this.setNewTags()
             })
@@ -88,7 +97,7 @@ class controller extends Controller {
             .then(tagUpVote => {
                 this.upVotedTag.tagUpVote = tagUpVote
                 this.upVotedTag.upVoteCount++
-                this.$scope.tags = this.sortTagsByUpVoteCount(this.$scope.tags)
+                this.$scope.upvotes = this.sortTagsByUpVoteCount(this.$scope.upvotes)
             })
     }
     isAllowed() {
@@ -103,7 +112,7 @@ class controller extends Controller {
                 if (this.removedTag) {
                     this.removedTag.tagUpVote = null
                     this.removedTag.upVoteCount--
-                    this.$scope.tags = this.sortTagsByUpVoteCount(this.$scope.tags)
+                    this.$scope.upvotes = this.sortTagsByUpVoteCount(this.$scope.upvotes)
                     this.removedTag = null
                 }
             }, () =>
@@ -145,7 +154,7 @@ class controller extends Controller {
             this.isPortfolio(learningObject) ? this.storageService.setPortfolio(learningObject) :
             this.isMaterial(learningObject) && this.storageService.setMaterial(learningObject)
 
-            this.init()
+            this.getTagUpVotes()
         }
     }
     reportTag(evt) {
@@ -185,11 +194,11 @@ class controller extends Controller {
         )
     }
     showMore() {
-        this.$scope.tags = this.allTags
+        this.$scope.upvotes = this.allUpvotes
         this.showMoreTags = false
     }
     showLess() {
-        this.$scope.tags = this.allTags.slice(0, 10)
+        this.$scope.upvotes = this.allUpvotes.slice(0, 10)
         this.showMoreTags = true
     }
     doSuggest(query) {
@@ -244,8 +253,10 @@ class controller extends Controller {
                     return false;
                 });
         });
-        setNew(this.$scope.tags)
-        setNew(this.allTags)
+        this.$translate.onReady().then(() => {
+            setNew(this.$scope.upvotes)
+            setNew(this.allUpvotes)
+        })
     }
 }
 controller.$inject = [

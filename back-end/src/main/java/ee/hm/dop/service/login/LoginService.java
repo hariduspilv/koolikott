@@ -62,8 +62,7 @@ public class LoginService {
         }
 
         newUser.setFirstLogin(true);
-        logger.info(format("User %s with id %s logged in for the first time.", newUser.getUser()
-                .getUsername(), idCode));
+        logger.info(format("User %s with id %s logged in for the first time.", newUser.getUser().getUsername(), idCode));
         return newUser;
     }
 
@@ -84,53 +83,44 @@ public class LoginService {
             return null;
         }
 
-        AuthenticatedUser authenticatedUser = login(authenticationState.getIdCode(), authenticationState.getName(),
-                authenticationState.getSurname());
-
+        AuthenticatedUser authenticatedUser = login(authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname());
         authenticationStateDao.delete(authenticationState);
-
         return authenticatedUser;
     }
 
     private AuthenticatedUser login(String idCode) {
         User user = userService.getUserByIdCode(idCode);
-        if (user == null) {
-            return null;
-        }
-        return createAuthenticatedUser(user);
+        return user != null ? createAuthenticatedUser(user) : null;
     }
 
     private AuthenticatedUser createAuthenticatedUser(User user) {
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setUser(user);
-
         //TODO: this should run in a separate thread
         Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        authenticatedUser.setPerson(person);
+        return createAuthenticatedUser(makeUser(user, person));
+    }
 
-        return createAuthenticatedUser(authenticatedUser);
+    private AuthenticatedUser makeUser(User user, Person person) {
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+        authenticatedUser.setUser(user);
+        authenticatedUser.setPerson(person);
+        return authenticatedUser;
     }
 
     private AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser) {
-        authenticatedUser.setToken(secureToken());
-
-        AuthenticatedUser returnedAuthenticatedUser;
         try {
-            returnedAuthenticatedUser = authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
+            authenticatedUser.setToken(secureToken());
+            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         } catch (DuplicateTokenException e) {
             authenticatedUser.setToken(secureToken());
-            returnedAuthenticatedUser = authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
+            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
-
-        return returnedAuthenticatedUser;
     }
 
     private String secureToken() {
         return new BigInteger(130, random).toString(32);
     }
 
-    public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language)
-            throws Exception {
+    public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language) throws Exception {
         return mobileIDLoginService.authenticate(phoneNumber, idCode, language);
     }
 

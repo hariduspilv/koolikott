@@ -1,15 +1,7 @@
 SET foreign_key_checks = 0;
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'SIZE_UNTIL', 'Suurus kuni');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'SIZE_UNTIL', 'Size until');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'SIZE_UNTIL', 'Suurus kuni');
-
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'RECESSION_LINK', 'Retsensiooni link');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'RECESSION_LINK', 'Recession link');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'RECESSION_LINK', 'Retsensiooni link');
-
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'MATERIAL_TYPE', 'Materjali tüüp');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'MATERIAL_TYPE', 'Material type');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'MATERIAL_TYPE', 'Materjali tüüp');
+UPDATE Translation SET translation = 'See on näidispeatükk' WHERE translationKey = 'PORTFOLIO_ENTER_CHAPTER_TITLE' and translationGroup = 1;
+UPDATE Translation SET translation = 'This is an example chapter' WHERE translationKey = 'PORTFOLIO_ENTER_CHAPTER_TITLE' and translationGroup = 3;
+UPDATE Translation SET translation = 'See on näidispeatükk' WHERE translationKey = 'PORTFOLIO_ENTER_CHAPTER_TITLE' and translationGroup = 2;
 
 SET foreign_key_checks = 1;

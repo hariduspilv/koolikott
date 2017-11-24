@@ -17,6 +17,7 @@ public class MyFavoritesPage extends Page{
 	}
 
 	public MaterialPage openMaterial() {
+		Helpers.waitForMilliseconds(2000);
 		getDriver().findElement(Constants.firstMaterial).click();
 		return new MaterialPage();
 	}

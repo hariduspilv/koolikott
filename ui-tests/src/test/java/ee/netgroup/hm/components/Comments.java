@@ -12,7 +12,7 @@ public class Comments extends Component{
 	private static By addCommentField = By.xpath("//textarea[@data-ng-model='newComment.text']");
 	private static By addComment = By.xpath("//button[@data-ng-click='$ctrl.addComment()']");
 	private static By comment = By.xpath("//p[@data-ng-bind='comment.text']");
-	private static By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment(comment, $event)']");
+	private static By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	
 	
 	public static PortfolioPage showPortfolioComments() {

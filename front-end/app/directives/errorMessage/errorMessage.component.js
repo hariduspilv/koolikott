@@ -120,6 +120,7 @@ class controller extends Controller {
         this.$rootScope.learningObjectImproper = undefined
         this.$rootScope.learningObjectUnreviewed = undefined
         this.$rootScope.learningObjectChanged = undefined
+        this.$rootScope.learningObjectChanges = undefined
     }
     onLearningObjectChange(newLearningObject, oldLearningObject) {
         if (newLearningObject && (!oldLearningObject || newLearningObject.changed != oldLearningObject.changed))
@@ -171,7 +172,7 @@ class controller extends Controller {
             this.$scope.messageKey = ''
 
             this.serverCallService
-                .makeGet('rest/impropers/'+this.data.id)
+                .makeGet('rest/admin/improper/'+this.data.id)
                 .then(({ data: reports }) => {
                     if (Array.isArray(reports) && reports.length) {
                         const done = (reasons = '') => {

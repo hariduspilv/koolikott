@@ -4,6 +4,8 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
+
+import ee.netgroup.hm.components.AddMaterialPopUp;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.page.MaterialPage;
 
@@ -232,20 +234,6 @@ public class MaterialTests {
 	}
 	
 	@Test
-	public void MaterialTests_ReportBroken_BrokenMaterialIsReported() {
-
-		String brokenContentIsReported = goToLandingPage()
-				.chooseUserType("User")
-				.clickMyMaterials()
-				.openMaterial()
-				.clickActionsMenu()
-				.clickReportBrokenMaterial()
-				.clickReportMaterial()
-				.getNotificationIsSentText();
-		Assert.assertEquals(Constants.reportedText, brokenContentIsReported);
-	}
-	
-	@Test
 	public void MaterialTests_ReportImproperTag_TagIsReported() {
 
 		String improperTagIsReported = goToLandingPage()
@@ -258,5 +246,31 @@ public class MaterialTests {
 				.clickNotifyMaterial()
 				.getNotificationIsSentText();
 		Assert.assertEquals(Constants.reportedText, improperTagIsReported);
+	}
+	
+	@Test
+	public void MaterialTests_ChangeMaterialLink__LOChangedBannerIsDisplayed() {
+
+		String changedLinkBannerText  = goToLandingPage()	
+				.chooseUserType("Moderator")
+				.clickAddMaterial()
+				.setNewHyperLink()
+				.setMaterialTitle()
+				.addDescription()
+				.clickNextStep()
+				.selectEducation()
+				.selectSubjectArea()
+				.selectTargetGroup()
+				.clickNextStep()
+				.setAuthorFirstName()
+				.setAuthorSurName()
+				.clickCreateMaterial()
+				.markNewMaterialAsReviewed()
+				.clickActionsMenu()
+				.clickEditMaterial()
+				.setRandomHyperLink()
+				.clickUpdateMaterial()
+				.getChangedLinkBannerText();
+		Assert.assertEquals("Õppevara link. Enne oli: "+AddMaterialPopUp.newMaterialUrl, changedLinkBannerText);
 	}
 }

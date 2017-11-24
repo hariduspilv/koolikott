@@ -2,7 +2,6 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-
 import ee.netgroup.hm.components.Comments;
 import ee.netgroup.hm.components.ConfirmationPopup;
 import ee.netgroup.hm.components.EditMaterialPopUp;
@@ -20,7 +19,7 @@ public class MaterialPage extends Page{
 	private By editMaterial = By.xpath("//button[@data-ng-click='edit()']");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
 	private By deleteMaterial = By.xpath("//button[@data-ng-click='confirmMaterialDeletion()']");
-	private By bannerRestoreButton = By.xpath("//button[@aria-label='Taasta']");
+    private By bannerRestoreButton = By.xpath("//button[@aria-label='Taasta']");
 	private By likeIcon = By.xpath("//div[@data-ng-click='$ctrl.like()']");
 	private By isLiked = By.xpath("//span[@data-ng-bind='$ctrl.rating.likes']");
 	private By selectedStar = By.xpath("//md-icon[@data-ng-if='$ctrl.hasFavorited']");
@@ -28,16 +27,13 @@ public class MaterialPage extends Page{
 	private By tagRow = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private By showMoreButton = By.xpath("//button[@ng-click='$ctrl.showMore()']");
 	private By addedTag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
-	private By errorBanner = By.id("error-message-heading");
-	private By reportMaterial = By.xpath("//span[contains(text(), 'Teavita katkisest materjalist')]");
-	private By doneButton = By.xpath("//md-icon[contains(text(), 'done')]");
-	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
-	private By restoreBrokenMaterialButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
-	
+	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
+	private By declineButton = By.xpath("//button[1][@data-ng-click='button.onClick($ctrl)']");
+	private By materialUrl = By.xpath("//span[@data-ng-bind='material.source']");
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
@@ -122,43 +118,11 @@ public class MaterialPage extends Page{
 	}
 
 	public String getUnreviewedBannerText() {
-		return getDriver().findElement(errorBanner).getText();
-	}
-
-	public ConfirmationPopup clickReportBrokenMaterial() {
-		Helpers.waitForClickable(reportMaterial);
-		Helpers.waitForMilliseconds(1000);
-		getDriver().findElement(reportMaterial).click();
-		return new ConfirmationPopup();
+		return getDriver().findElement(Constants.bannerText).getText();
 	}
 
 	public String getNotificationIsSentText() {
 		return getDriver().findElement(Constants.toastText).getText();
-	}
-
-	public MaterialPage restoreMaterial() {
-		Helpers.waitForClickable(restoreButton);
-		getDriver().findElement(restoreButton).click();
-		Helpers.waitForMilliseconds(3000);
-		return this;
-	}
-	
-	public MaterialPage restoreBrokenMaterial() {
-		Helpers.waitForClickable(restoreBrokenMaterialButton);
-		getDriver().findElement(restoreBrokenMaterialButton).click();
-		Helpers.waitForMilliseconds(3000);
-		return this;
-	}
-
-	public boolean isErrorBannerHidden() {
-		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElements(errorBanner).size() < 1;
-	}
-
-	public MaterialPage markContentAsNotImproper() {
-		Helpers.waitForClickable(doneButton);
-		getDriver().findElement(doneButton).click();
-		return this;
 	}
 
 	public MaterialPage addNewTag() {
@@ -187,6 +151,27 @@ public class MaterialPage extends Page{
 
 	public ReportImproperPopUp reportImproperComment() {
 		return Comments.reportImproperComment();
+	}
+
+	public MaterialPage markNewMaterialAsReviewed() {
+		Helpers.waitForClickable(markAsReviewed);
+		getDriver().findElement(markAsReviewed).click();
+		return this;
+	}
+
+	public String getChangedLinkBannerText() {
+		return getDriver().findElement(Constants.bannerText).getText();
+	}
+
+	public MaterialPage markChangesDeclined() {
+		Helpers.waitForClickable(declineButton);
+		getDriver().findElement(declineButton).click();
+		return this;
+	}
+	
+	public String getMaterialUrlText() {
+		Helpers.waitForMilliseconds(1000);
+		return getDriver().findElement(materialUrl).getText();
 	}
 
 

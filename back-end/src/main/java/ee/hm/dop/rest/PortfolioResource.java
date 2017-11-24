@@ -29,11 +29,7 @@ public class PortfolioResource extends BaseResource {
     @Inject
     private PortfolioCopier portfolioCopier;
     @Inject
-    private UserLikeService userLikeService;
-    @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
-    @Inject
-    private LearningObjectService learningObjectService;
     @Inject
     private PortfolioGetter portfolioGetter;
 
@@ -50,8 +46,7 @@ public class PortfolioResource extends BaseResource {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
-        User loggedInUser = getLoggedInUser();
-        return portfolioGetter.getByCreatorResult(creator, loggedInUser, start, maxResults);
+        return portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
     }
 
     @GET
@@ -62,38 +57,6 @@ public class PortfolioResource extends BaseResource {
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         return portfolioGetter.getCountByCreator(creator);
-    }
-
-    @POST
-    @Path("increaseViewCount")
-    public void increaseViewCount(Portfolio portfolio) {
-        learningObjectService.incrementViewCount(portfolio);
-    }
-
-    @POST
-    @Path("like")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void likePortfolio(Portfolio portfolio) {
-        userLikeService.addUserLike(portfolio, getLoggedInUser(), Like.LIKE);
-    }
-
-    @POST
-    @Path("dislike")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void dislikePortfolio(Portfolio portfolio) {
-        userLikeService.addUserLike(portfolio, getLoggedInUser(), Like.DISLIKE);
-    }
-
-    @POST
-    @Path("getUserLike")
-    public UserLike getUserLike(Portfolio portfolio) {
-        return userLikeService.getUserLike(portfolio, getLoggedInUser());
-    }
-
-    @POST
-    @Path("removeUserLike")
-    public void removeUserLike(Portfolio portfolio) {
-        userLikeService.removeUserLike(portfolio, getLoggedInUser());
     }
 
     @POST

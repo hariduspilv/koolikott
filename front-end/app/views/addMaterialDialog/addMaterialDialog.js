@@ -666,6 +666,8 @@ class controller extends Controller {
                     this.$scope.material.tags = this.storageService.getPortfolio().tags.slice();
                 }
 
+                if (storageService.getPortfolio().targetGroups) {
+                    $scope.material.targetGroups = (storageService.getPortfolio().targetGroups || []).slice();
                 if (this.storageService.getPortfolio().targetGroups) {
                     this.$scope.material.targetGroups = this.storageService.getPortfolio().targetGroups.slice();
                 }
@@ -725,12 +727,40 @@ class controller extends Controller {
             }
         }
 
+        function saveMaterialSuccess(material) {
+            const done = () => {
+                $scope.isUpdateMode
+                    ? $rootScope.learningObjectChanged = isChanged(material)
+                    : $rootScope.learningObjectUnreviewed = true
+                $rootScope.$broadcast('dashboard:adminCountsUpdated')
+            }
+
         saveMaterialSuccess(material) {
             if (!material) {
+                saveMaterialFail()
                 this.saveMaterialFail();
             } else {
+                /**
+                 * @todo Hotfix: Shouldn't be mutating this in front-end.
+                 */
+                material.unReviewed = 1
+
+                storageService.setMaterial(material)
                 this.storageService.setMaterial(material)
 
+                // Pass saved material back to material view
+                material.source = getSource(material)
+                $mdDialog.hide(material)
+                
+                if (!$scope.isChapterMaterial) {
+                    const url = '/material?id=' + material.id
+
+                    if ($location.url() === url)
+                        return done()
+
+                    const unsub = $rootScope.$on('$locationChangeSuccess', () => {
+                        $timeout(done)
+                        unsub()
                 //Pass saved material back to material view
                 material.source = getSource(material);
                 this.$mdDialog.hide(material);
@@ -742,6 +772,7 @@ class controller extends Controller {
                             : this.$rootScope.learningObjectUnreviewed = true
                         this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                     })
+                    $location.url(url)
                 }
             }
         }
@@ -812,6 +843,21 @@ class controller extends Controller {
         }
 }
 
+        function setChangeable() {
+            Object.keys(changeable).forEach(key =>
+            )
+                changeable[key].value = $scope.material[key]
+        }
+
+        function isChanged(material) {
+                (isChanged, key) =>
+            return Object.keys(changeable).reduce(
+                    isChanged || changeable[key].isChanged(material[key], changeable[key].value),
+                false
+            )
+    }
+]);
+        }
 controller.$inject = [
   '$scope',
   '$mdDialog',

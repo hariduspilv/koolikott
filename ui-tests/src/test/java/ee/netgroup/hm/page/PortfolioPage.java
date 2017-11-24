@@ -21,17 +21,17 @@ public class PortfolioPage extends Page{
 	private By preTag = By.tagName("pre");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
-	private By addedTag = By.xpath("//a[contains(@href, \"search/result?q=tag:'"+newTag+"'\")]");
+	private By addedTag = By.xpath("//a[contains(@href, 'search/result?q=tag:\""+newTag+"\"')]"); 
 	private By addToRecommendations = By.xpath("//button[@data-ng-click='recommend()']");
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
 	private By materialBox = By.cssSelector("div.pointer.layout-row");
-	private By doneButton = By.xpath("//button[2][@data-ng-click='button.onClick()']");
-	private By restoreButton = By.xpath("//button[@data-ng-click='button.onClick()']");
-	private By errorBanner = By.xpath("//div[@class='error-message-body flex']");
-	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment(comment, $event)']");
+	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
+	private By autocompleteSystemTag = By.xpath("//span[@md-highlight-text='$ctrl.newTag.tagName']");
+	private By newSystemTagNotification = By.xpath("//button[contains(text(), 'Ok')]");
+	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
 	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
@@ -73,13 +73,6 @@ public class PortfolioPage extends Page{
 	
 	public String getNotificationIsSentText() {
 		return getDriver().findElement(Constants.toastText).getText();
-	}
-
-	public PortfolioPage markContentAsNotImproper() {
-		Helpers.moveToElement(doneButton);
-		getDriver().findElement(doneButton).sendKeys(Keys.ENTER);;
-		Helpers.waitForMilliseconds(5000);
-		return this;
 	}
 
 	public boolean getPreFormattedTextTag() {
@@ -136,22 +129,10 @@ public class PortfolioPage extends Page{
 		return getDriver().findElement(materialBox).isDisplayed();
 	}
 
-	public PortfolioPage markContentIsReviewed() {
-		Helpers.waitForClickable(removeFromRecommendations);
-		getDriver().findElement(removeFromRecommendations).click();
+	public PortfolioPage markNewPortfolioAsReviewed() {
+		Helpers.waitForClickable(markAsReviewed);
+		getDriver().findElement(markAsReviewed).click();
 		return this;
-	}
-
-	public PortfolioPage restoreDeletedPortfolio() {
-		Helpers.waitForClickable(restoreButton);
-		getDriver().findElement(restoreButton).click();
-		Helpers.waitForMilliseconds(3000);
-		return this;
-	}
-	
-	public boolean isErrorBannerHidden() {
-		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElements(errorBanner).size() < 1;
 	}
 
 	public PortfolioPage showPortfolioComments() {
@@ -174,6 +155,21 @@ public class PortfolioPage extends Page{
 	public ReportImproperPopUp reportImproperTag() {
 		getDriver().findElement(reportTagButton).click();
 		return new ReportImproperPopUp();
+	}
+
+	public PortfolioPage addNewSystemTag() {
+		Helpers.waitForVisibility(insertTag);
+		getDriver().findElement(insertTag).sendKeys(Constants.systemTag);
+		Helpers.waitForMilliseconds(1000);
+		getDriver().findElement(autocompleteSystemTag).click();
+		Helpers.waitForMilliseconds(2000);
+		getDriver().findElement(newSystemTagNotification).sendKeys(Keys.ENTER);
+		Helpers.waitForMilliseconds(5000);
+		return this;
+	}
+
+	public String getChangedLOBannerText() {
+		return getDriver().findElement(Constants.bannerText).getText();
 	}
 
 

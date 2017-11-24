@@ -12,9 +12,9 @@ public class AddPortfolioForm extends Component{
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
 	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
-	private By ageGroup = By.xpath("//md-select[contains(@data-ng-model, 'selectedTargetGroup')][contains(@aria-invalid,'true')]");
+	private By ageGroup = By.xpath("//form[1][contains(@name, 'targetGroupForm')]");
 	private By age = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
-	private By closeButton = By.xpath("//button[@data-ng-click='closeSelect()']");
+	private By closeButton = By.xpath("//md-icon[@aria-label='close']");
 	private By insertPhoto = By.cssSelector("p.text-small.text-light > span");
 	private By openSummaryField = By.xpath("//input[@data-ng-click='openSummary()']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
@@ -44,7 +44,7 @@ public class AddPortfolioForm extends Component{
 	public AddPortfolioForm selectAgeGroup() {
 		getDriver().findElement(ageGroup).click();
 		getDriver().findElement(age).click();
-		getDriver().findElements(closeButton).get(1).click();
+		getDriver().findElements(closeButton).get(2).click();
 		return this;
 	}
 

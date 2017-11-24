@@ -17,11 +17,11 @@
                   <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
                 </md-tooltip>
               </a>
-              <a flex data-ng-if="sourceType === 'LINK' && material.embeddable" data-ng-href="#"
-                 ng-click="showSourceFullscreen($event)">
+              <a data-ng-if="sourceType === 'LINK' && material.embeddable"
+                 data-ng-href="{{material.linkSource}}" target="_blank">
                 <span data-ng-bind="getCorrectLanguageString(material.titles)"></span>
                 <md-tooltip md-direction="left">
-                  <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL"></span>
+                  <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
                 </md-tooltip>
               </a>
               <span flex data-ng-if="sourceType !== 'LINK'"

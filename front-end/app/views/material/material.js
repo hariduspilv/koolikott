@@ -25,8 +25,12 @@ angular.module('koolikottApp')
                 'CCBYNCND': ['by', 'nc', 'nd']
             };
 
-            if (storageService.getMaterial() && storageService.getMaterial().type !== ".ReducedMaterial" && storageService.getMaterial().type !== ".AdminMaterial") {
-                $scope.material = storageService.getMaterial();
+            const storedMaterial = storageService.getMaterial()
+            if (storedMaterial &&
+                storedMaterial.type !== ".ReducedMaterial" &&
+                storedMaterial.type !== ".AdminMaterial"
+            ) {
+                $scope.material = storedMaterial
 
                 if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                     $rootScope.selectedSingleMaterial = $scope.material;
@@ -54,9 +58,19 @@ angular.module('koolikottApp')
                 var materialSource = getSource($scope.material);
                 // If the initial type is a LINK, try to ask the type from our proxy
                 if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
-                    $scope.fallbackType = matchType(materialSource);
-                    $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
-                    serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                    if (baseUrl.startsWith("http://localhost:3001")) {
+                        console.log("dev mode grunt hack");
+                        let check = $scope.material.source.split(":8080/rest");
+                        if (!check[1]) { //link is not modified
+                            let pop = $scope.material.source.split("/rest");
+                            let origin = pop[0].split("https");
+                            $scope.material.source = "http" + origin[1] + ":8080/rest" + pop[1];
+                        }
+                    } else {
+                        $scope.fallbackType = matchType(materialSource);
+                        $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                        serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
+                    }
                 }
                 if (materialSource) {
                     $scope.sourceType = matchType(getSource($scope.material));
@@ -199,11 +213,6 @@ angular.module('koolikottApp')
                 $location.url(searchService.getURL());
             };
 
-            $scope.showSourceFullscreen = ($event, ctrl) => {
-                $event.preventDefault();
-                ctrl.toggleFullscreen();
-            };
-
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();
@@ -237,15 +246,14 @@ angular.module('koolikottApp')
             }
 
             function getSignedUserDataSuccess(data) {
-                var url = $scope.material.source;
-                var v = encodeURIComponent(data);
-                url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + v;
-
-                $scope.material.iframeSource = url;
+                let url = $scope.material.source;
+                url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + encodeURIComponent(data);
+                $scope.material.linkSource = url;
             }
 
             function getSignedUserDataFail(data, status) {
                 console.log("Failed to get signed user data.")
+                $scope.material.linkSource = $scope.material.source;
             }
 
             $scope.edit = () => {
@@ -336,7 +344,7 @@ angular.module('koolikottApp')
             }
 
             function getTargetGroups() {
-                if ($scope.material.targetGroups[0]) {
+                if (Array.isArray($scope.material.targetGroups) && $scope.material.targetGroups.length) {
                     return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
             }
@@ -345,5 +353,9 @@ angular.module('koolikottApp')
                 if ($scope.material)
                     $scope.material.recommendation = recommendation
             }
+
+            $scope.$on('$destroy', () =>
+                storageService.setMaterial(null)
+            )
         }
     ]);

@@ -12,7 +12,7 @@ public class EditPortfolioPage extends Page{
 	
 	private By successAlertText = By.cssSelector("p.md-toolbar-text");
 	private By saveAndExit = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
-	private By visibilityButton = By.xpath("//button[@ng-click='$mdOpenMenu($event)']");
+	private By visibilityButton = By.id("change-visibility");
 	private By shareWithLink = By.xpath("//button/span[contains(text(),'inult lingiga')]");
 	private By newChapter = By.xpath("//button[@data-ng-click='addNewChapter()']");
 	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])"); //TODO: et võtaks kõige viimase
@@ -23,7 +23,7 @@ public class EditPortfolioPage extends Page{
 	private By preFormattedText = By.name("pre");
 	private By privacyPopUp = By.xpath("//md-dialog-content[@class='md-dialog-content']");
 	private By chapterTitle = By.xpath("//input[@data-ng-model='$ctrl.chapter.title']");
-	private By addMaterialButton = By.xpath("//button[@data-ng-click='$ctrl.openMenu($mdOpenMenu, $event)']");
+	private By addMaterialButton = By.xpath("//button[@data-ng-click='$mdMenu.open($event)']");
 	private By newMaterial = By.xpath("//button/span[text()='Uus']");
 	private By existingMaterial = By.xpath("//button/span[text()='Koolikotist']");
 	

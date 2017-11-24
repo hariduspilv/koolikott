@@ -1,13 +1,16 @@
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak>
   <div flex-gt-sm="75">
-    <dop-error-message ng-if="modUser()" data="portfolio"></dop-error-message>
+    <dop-error-message ng-if="isModerator || isAdmin" data="portfolio"></dop-error-message>
     <data-dop-portfolio-summary-card
       comment="newComment"
       data-portfolio="portfolio"
     ></data-dop-portfolio-summary-card>
     <div>
       <div data-ng-repeat="chapter in portfolio.chapters">
-        <dop-chapter data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
+        <dop-chapter
+          data-chapter="chapter"
+          data-index="$index"
+        ></dop-chapter>
       </div>
     </div>
   </div>
