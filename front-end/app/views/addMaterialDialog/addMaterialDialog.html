@@ -16,9 +16,9 @@
     <md-dialog-content layout="column">
       <md-content class="md-padding">
         <!--URL and Upload block-->
-        <div layout="row" layout-align="start center">
+        <div layout="row" layout-wrap layout-align="start center">
           <!--Material source-->
-          <div flex-gt-xs="25" flex-md="100" flex-sm="100" flex-gt-lg="30" flex-lg="40" layout="row" layout-align="start center">
+          <div layout="row" layout-align="start center">
           <div data-translate="ADD_MATERIAL_LINK"></div>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
@@ -26,7 +26,6 @@
               <input data-ng-model="material.source" name="source" id="add-material-url-input" type="text" dop-validate-url data-ng-click="$ctrl.sourceIsFocused()">
               <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                 <div data-ng-show="isURLInvalid()" data-ng-message="url" class="invalid-url-message" data-translate="MATERIAL_URL_IS_INVALID"></div>
-
                 <div data-ng-message="exists">
                   <span data-translate="MATERIAL_ALREADY_EXISTS"></span>
                   <a target="_blank" data-ng-href="{{'/material?id=' + existingMaterial.id}}" data-translate="LOOK_AT_EXISTNG_MATERIAL"> </a>
@@ -38,12 +37,12 @@
             </md-input-container>
           </div>
           <div data-translate="OR_WORD"></div>
-          <div ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
+          <div class="md-padding" ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
             <a class="md-raised md-primary">
               <span data-ng-show="material.uploadedFile" data-translate="UPDATE_FILE"></span>
               <span data-ng-show="!material.uploadedFile" data-translate="FILE_WORD"></span>
             </a>
-            <span data-translate="FOR_MATERIAL">*.</span>
+            <span data-translate="FOR_MATERIAL"></span><span>*.</span>
           </div>
           <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
             <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
@@ -69,17 +68,17 @@
                </h5>
               </div>
             </div>
-              <div flex-xs="100" flex-md="100" flex-sm="100" flex-gt-lg="40" flex-lg="40" layout-align="start center">
+              <div layout="row" layout-align="start center">
               <!--Material language-->
               <span class="white-space-no-wrap" data-translate="MATERIAL_IS"></span>
-              <md-input-container flex-gt-xs="20" flex-sm="20" flex-gt-lg="30" flex-lg="100" layout-align="end center" class="md-padding no-margin">
+              <md-input-container layout-align="end center" class="md-padding no-margin">
                 <md-select data-ng-model="material.language" id="add-material-language-select">
                   <md-option data-ng-repeat="language in languages" value="{{language}}">
                     <span data-translate="LANGUAGE_{{language.toUpperCase()}}" />
                   </md-option>
                 </md-select>
               </md-input-container>
-              <span data-translate="IN_LANGUAGE"></span>
+              <span data-translate="IN_LANGUAGE"></span><span>.</span>
             </div>
         </div>
 
@@ -251,7 +250,7 @@
           </div>
           <div layout="column" flex-sm="70" flex-md="35" flex-gt-lg="25" flex-lg="25" class="md-padding">
             <md-input-container>
-              <label data-translate="AUTHOR">
+              <label data-translate="AUTHOR_WORD">
                 <span data-ng-hide="material.picture.author || $index > 0"></span>
               </label>
               <input data-ng-required="newPicture" data-ng-model="material.picture.author" id="material-picture-author-{{$index}}" name="authorName" md-maxlength="50" data-ng-disabled="isUserAuthor">
@@ -260,7 +259,7 @@
               </div>
             </md-input-container>
             <md-input-container>
-              <label data-translate="SOURCE">
+              <label data-translate="SOURCE_BIG">
                       <span data-ng-hide="author.name || author.surname || $index > 0"></span>
                     </label>
               <input data-ng-required="newPicture && !material.picture.licenceType" data-ng-model="material.picture.source" name="pictureSource" md-maxlength="50">
