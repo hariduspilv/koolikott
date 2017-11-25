@@ -84,7 +84,7 @@ public abstract class LearningObject implements Searchable, ILearningObject {
             uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "tag"}))
     private List<Tag> tags;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER, cascade = {MERGE, PERSIST})
     @JoinColumn(name = "picture")
     private OriginalPicture picture;
 

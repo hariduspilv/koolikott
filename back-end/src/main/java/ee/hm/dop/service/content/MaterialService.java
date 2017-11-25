@@ -1,6 +1,7 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
+import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -57,6 +58,8 @@ public class MaterialService {
     private FirstReviewAdminService firstReviewAdminService;
     @Inject
     private MaterialGetter materialGetter;
+    @Inject
+    private OriginalPictureDao originalPictureDao;
 
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
@@ -193,6 +196,12 @@ public class MaterialService {
             material.setCrossCurricularThemes(null);
         }
         material.setVisibility(Visibility.PUBLIC);
+
+        if (material.getPicture() != null){
+            OriginalPicture originalPicture = originalPictureDao.findById(material.getPicture().getId());
+            material.getPicture().setData(originalPicture.getData());
+            material.getPicture().setName(originalPicture.getName());
+        }
 
         return materialDao.createOrUpdate(material);
     }
