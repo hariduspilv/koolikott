@@ -1,12 +1,21 @@
 'use strict'
 
 /**
- *  @todo
+ @todo
  -  tabIndexes
  -  Editor toolbar conf.
- -  WYSIWYG theme
+    - p button
+    - h3 button
+    - a button
+    + b button
+    + i button
+    + blockquote button
+    + ul button
+    + toolbar theme
+    - display the wysiwyg toolbar in the beginning of empty paragraph/h3/blockquote (block-level element)
+ +  WYSIWYG theme
  -  Material embeds: intermediary solution: embed materials BETWEEN blocks the old way
- */
+*/
 
 {
 const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
@@ -219,13 +228,6 @@ class controller extends Controller {
         this.$scope.isFocused = false
         this.$scope.isTitleFocused = false
         this.$scope.focusedBlockIdx = null
-    }
-    onClickBlock(idx, evt) {
-        /**
-         * For some reason ng-click fires also when space bar is pressed.
-         */
-        if (evt.type === 'click')
-            this.focusBlock(idx)
     }
     onBlockChanges(blocks, previousBlocks) {
         this.$timeout(() => {
@@ -440,22 +442,6 @@ class controller extends Controller {
             i ++
         }
     }
-    focusChapter(evt) {
-        // abort if a block or title was directly clicked
-        let el = evt.target
-        while (el !== null) {
-            if (el.classList.contains('chapter-title') ||
-                el.classList.contains('chapter-block'))
-                return
-            el = el.parentElement
-        }
-        /**
-         * If title nor any of the blocks were directly clicked then focus
-         * the last block (which is probably the only one and shorter than
-         * the min-height of the whole chapter).
-         */
-        this.focusBlock()
-    }
     focusTitle(clickOnContainer = false) {
         if (!this.$scope.isFocused) {
             this.calcSizes()
@@ -520,6 +506,26 @@ class controller extends Controller {
                         cb()
                 })
         })
+    }
+    blurTitle() {
+        this.$timeout(() => {
+            if (this.$scope.focusedBlockIdx === null)
+                this.$scope.isFocused = false
+        }, 50)
+    }
+    blurBlock(idx) {
+        /**
+         * If focusedBlockIdx is still the same in next event loop then focus has left the blocks
+         * and it should be set to null.
+         */
+        this.$timeout(() => {
+            if (this.$scope.focusedBlockIdx === idx) {
+                this.$scope.focusedBlockIdx = null
+
+                if (!this.$scope.isTitleFocused)
+                    this.$scope.isFocused = false
+            }
+        }, 50)
     }
     /**
      * Block actions

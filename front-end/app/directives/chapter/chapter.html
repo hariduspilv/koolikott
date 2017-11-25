@@ -21,26 +21,44 @@
     <div class="sticky" data-ng-class="stickyClassNames">
       <div>
         <h5>Lisa sisu</h5>
-        <!--<div class="chapter-btn chapter-btn--media" data-ng-click="$ctrl.addMedia()">
-          <md-button class="md-icon-button" aria-label="Lisa meedia">
+        <!--<div
+          class="chapter-btn chapter-btn--media"
+          data-ng-click="$ctrl.addMedia()"
+          tabIndex="0"
+          >
+          <md-button class="md-icon-button" aria-label="Lisa meedia" tabIndex="-1">
             <md-icon class="material-icons">image</md-icon>
           </md-button>
           <label>Meedia</label>
         </div>
-        <div class="chapter-btn chapter-btn--preferred-material" data-ng-click="$ctrl.addRecommendedMaterial()">
-          <md-button class="md-icon-button" aria-label="Lisa eelistatud materjal">
+        <div
+          class="chapter-btn chapter-btn--preferred-material"
+          data-ng-click="$ctrl.addRecommendedMaterial()"
+          tabIndex="0"
+          >
+          <md-button class="md-icon-button" aria-label="Lisa eelistatud materjal" tabIndex="-1">
             <md-icon class="material-icons">star</md-icon>
           </md-button>
           <label>Eelistatud materjal</label>
         </div>-->
-        <div class="chapter-btn chapter-btn--existing-material" data-ng-click="$ctrl.addExistingMaterial()" style="width:50%;">
-          <md-button class="md-icon-button" aria-label="Lisa olemasolev materjal" style="display:block;margin:0 auto;">
+        <div
+          class="chapter-btn chapter-btn--existing-material"
+          data-ng-click="$ctrl.addExistingMaterial()"
+          tabIndex="0"
+          style="width:50%;"
+          >
+          <md-button class="md-icon-button" aria-label="Lisa olemasolev materjal" tabIndex="-1" style="display:block;margin:0 auto;">
             <md-icon class="material-icons">description</md-icon>
           </md-button>
           <label>Olemasolev materjal</label>
         </div>
-        <div class="chapter-btn chapter-btn--new-material" data-ng-click="$ctrl.addNewMaterial()" style="width:50%;">
-          <md-button class="md-icon-button" aria-label="Lisa uus materjal" style="display:block;margin:0 auto;">
+        <div
+          class="chapter-btn chapter-btn--new-material"
+          data-ng-click="$ctrl.addNewMaterial()"
+          tabIndex="0"
+          style="width:50%;"
+          >
+          <md-button class="md-icon-button" aria-label="Lisa uus materjal" tabIndex="-1" style="display:block;margin:0 auto;">
             <md-icon class="material-icons">
               <svg viewBox="0 0 28 24">
                 <path d="M22,2h-8c-1.1,0-2,0.9-2,2l0,16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L22,2z M24,18h-8v-2h8V18z M24,14h-8v-2h8V14z M21,9
@@ -58,8 +76,9 @@
           class="chapter-btn chapter-btn--toggle-block-width"
           data-ng-click="$ctrl.toggleBlockWidth()"
           data-ng-mousedown="$ctrl.beforeToggleBlockWidth(true)"
+          tabIndex="0"
           >
-          <md-button class="md-icon-button" aria-label="Muuda ploki laiust">
+          <md-button class="md-icon-button" aria-label="Muuda ploki laiust" tabIndex="-1">
             <md-icon class="material-icons">
               <svg viewBox="0 0 24 24">
                 <path d="M4,18h8V5H4V18z M21,18V5h-8v13H21z"/>
@@ -73,8 +92,9 @@
           data-ng-click="$ctrl.moveBlock(true)"
           data-ng-mousedown="$ctrl.beforeMoveBlock(true)"
           data-ng-disabled="focusedBlockIdx === 0"
+          tabIndex="0"
           >
-          <md-button class="md-icon-button" aria-label="Liiguta plokki tagasi">
+          <md-button class="md-icon-button" aria-label="Liiguta plokki tagasi" tabIndex="-1">
             <md-icon class="material-icons">arrow_back</md-icon>
           </md-button>
           <label>Liiguta tagasi</label>
@@ -84,22 +104,32 @@
           data-ng-click="$ctrl.moveBlock()"
           data-ng-mousedown="$ctrl.beforeMoveBlock()"
           data-ng-disabled="focusedBlockIdx === chapter.blocks.length - 1"
+          tabIndex="0"
           >
-          <md-button class="md-icon-button" aria-label="Liiguta plokki edasi">
+          <md-button class="md-icon-button" aria-label="Liiguta plokki edasi" tabIndex="-1">
             <md-icon class="material-icons">arrow_forward</md-icon>
           </md-button>
           <label>Liiguta edasi</label>
         </div>
-        <div class="chapter-btn chapter-btn--delete-block" data-ng-click="$ctrl.deleteBlock()" data-ng-disabled="chapter.blocks.length < 2">
-          <md-button class="md-icon-button" aria-label="Kustuta plokk">
+        <div
+          class="chapter-btn chapter-btn--delete-block"
+          data-ng-click="$ctrl.deleteBlock()"
+          data-ng-disabled="chapter.blocks.length < 2"
+          tabIndex="0"
+          >
+          <md-button class="md-icon-button" aria-label="Kustuta plokk" tabIndex="-1">
             <md-icon class="material-icons">delete</md-icon>
           </md-button>
           <label>Kustuta</label>
         </div>
       </div>
       <div>
-        <div class="chapter-btn-large" data-ng-click="$ctrl.addBlock()">
-          <md-button class="md-icon-button" aria-label="Lisa sisuplokk">
+        <div
+          class="chapter-btn-large"
+          data-ng-click="$ctrl.addBlock()"
+          tabIndex="0"
+          >
+          <md-button class="md-icon-button" aria-label="Lisa sisuplokk" tabIndex="-1">
             <md-icon class="material-icons">add</md-icon>
           </md-button>
           <label>Lisa sisuplokk</label>
@@ -108,10 +138,19 @@
     </div>
   </div>
   <div class="chapter-toolbar-helper"></div>
-  <md-card-content data-ng-if="$ctrl.isEditMode" data-ng-click="$ctrl.focusChapter($event)">
+  <md-card-content data-ng-if="$ctrl.isEditMode" tabindex="-1">
+    <md-button
+      class="md-icon-button toggle-chapter-focus"
+      data-ng-if="$ctrl.isEditMode"
+      data-ng-click="$ctrl.onClickToggleChapterFocus()"
+      tabindex="-1"
+      >
+      <md-icon class="material-icons">edit</md-icon>
+    </md-button>
     <md-input-container
       class="md-block chapter-title"
       data-ng-click="$ctrl.focusTitle(true)"
+      tabindex="-1"
       >
       <label></label>
       <input
@@ -119,6 +158,7 @@
         placeholder="{{'PORTFOLIO_ENTER_CHAPTER_TITLE' | translate}}"
         data-ng-model="chapter.title"
         data-ng-focus="$ctrl.focusTitle()"
+        data-ng-blur="$ctrl.blurTitle()"
       >
     </md-input-container>
     <div class="chapter-blocks">
@@ -126,7 +166,8 @@
         class="chapter-block"
         data-ng-repeat="block in chapter.blocks track by $index"
         data-ng-class="$ctrl.getBlockClassNames($index)"
-        data-ng-click="$ctrl.onClickBlock($index, $event)"
+        data-ng-focus="$ctrl.focusBlock($index)"
+        data-ng-blur="$ctrl.blurBlock($index)"
         data-placeholder="{{$ctrl.getBlockPlaceholder($index)}}"
       ></div>
     </div>
@@ -146,11 +187,4 @@
       <md-icon>delete</md-icon>
     </md-button>
   </div>
-  <md-button
-    class="md-icon-button toggle-chapter-focus"
-    data-ng-if="$ctrl.isEditMode"
-    data-ng-click="$ctrl.onClickToggleChapterFocus()"
-    >
-    <md-icon class="material-icons">edit</md-icon>
-  </md-button>
 </md-card>
