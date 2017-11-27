@@ -592,6 +592,28 @@ md-input-container.chapter-title {
   }
 }
 
+// Override for small screen
+.chapter-btn-large--title-mobile {
+  display: inline-block;
+  left: 8px !important;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    display: none;
+  }
+}
+
+.chapter-column {
+  @media (max-width: $layout-breakpoint-xs) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  // Override for extra small screen
+  @media (max-width: 333px) {
+    padding-top: 32px !important;
+  }
+}
+
 // blocks
 .chapter-blocks {
   display: flex;
