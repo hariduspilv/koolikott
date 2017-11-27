@@ -187,7 +187,7 @@
 
           <!--Key competences-->
           <div flex-sm="35" flex-md="30" flex-gt-lg="30" flex-lg="35" class="chips-container">
-            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class=" chips--regular-font">
+            <md-chips ng-model="material.keyCompetences" md-autocomplete-snap md-require-match="true" name="keyCompetencesInput" data-ng-click="addMaterialForm.keyCompetencesInput.$setTouched()" md-on-remove="removeFocus('key-competence-auto-input')" class=" chips--regular-font chips-with-chevron">
               <md-autocomplete id="key-competence-auto" md-input-id="key-competence-auto-input" md-no-cache="true" md-selected-item="selectedKeyCompetence" md-search-text="competenceSearchText" md-items="keyCompetence in searchKeyCompetences(competenceSearchText)"
                 md-item-text="translate(keyCompetence.name, 'KEY_COMPETENCE_')" placeholder="{{ 'MATERIAL_KEY_COMPETENCES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(keyCompetence, 'keyCompetences', 'key-competence-auto-input')"
                 md-autoselect>
@@ -206,7 +206,7 @@
           <!--Cross-curricular themes-->
           <div flex-sm="45" flex-md="45" flex-gt-lg="40" flex-lg="40" class="chips-container">
             <md-chips ng-model="material.crossCurricularThemes" md-autocomplete-snap md-require-match="true" name="crossCurricularThemesInput" data-ng-click="addMaterialForm.crossCurricularThemesInput.$setTouched()" md-on-remove="removeFocus('cross-curricular-auto-input')"
-              class="chips--regular-font">
+              class="chips--regular-font chips-with-chevron">
               <md-autocomplete id="cross-curricular-auto" md-input-id="cross-curricular-auto-input" md-no-cache="true" md-selected-item="selectedCrossCurricularTheme" md-search-text="crossCurricularSearchText" md-items="crossCurricularTheme in searchCrossCurricularThemes(crossCurricularSearchText)"
                 md-item-text="translate(crossCurricularTheme.name, 'CROSS_CURRICULAR_THEME_')" placeholder="{{ 'MATERIAL_CROSS_CURRICULAR_THEMES' | translate }}*" md-min-length="0" md-selected-item-change="autocompleteItemSelected(crossCurricularTheme, 'crossCurricularThemes', 'cross-curricular-auto-input')"
                 md-autoselect>
