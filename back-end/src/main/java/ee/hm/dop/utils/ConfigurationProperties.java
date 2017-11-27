@@ -37,13 +37,36 @@ public interface ConfigurationProperties {
     String MOBILEID_NAMESPACE_URI = "mobileID.namespace.uri";
     String MOBILEID_MESSAGE_TO_DISPLAY = "mobileID.messageToDisplay";
 
-    // EHIS
+    // EHIS V5
     String XTEE_NAMESPACE_PREFIX = "xtee.namespace.prefix";
     String XTEE_NAMESPACE_URI = "xtee.namespace.uri";
     String EHIS_ENDPOINT = "ehis.endpoint";
     String EHIS_INSTITUTION = "ehis.institution";
     String EHIS_SYSTEM_NAME = "ehis.system.name";
     String EHIS_SERVICE_NAME = "ehis.service.name";
+
+    // EHIS V6
+    String XROAD_EHIS_V6_NAMESPACE_XTEE_URI = "xroad.ehis.v6.namespace.xtee.uri";
+    String XROAD_EHIS_V6_NAMESPACE_XTEE_PREFIX = "xroad.ehis.v6.namespace.xtee.prefix";
+    String XROAD_EHIS_V6_NAMESPACE_XRO_URI = "xroad.ehis.v6.namespace.xro.uri";
+    String XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX = "xroad.ehis.v6.namespace.xro.prefix";
+    String XROAD_EHIS_V6_NAMESPACE_IDEN_URI = "xroad.ehis.v6.namespace.iden.uri";
+    String XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX = "xroad.ehis.v6.namespace.iden.prefix";
+    String XROAD_EHIS_V6_NAMESPACE_EHIS_URI = "xroad.ehis.v6.namespace.ehis.uri";
+    String XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX = "xroad.ehis.v6.namespace.ehis.prefix";
+    String XROAD_EHIS_V6_ENDPOINT = "xroad.ehis.v6.endpoint";
+    String XROAD_EHIS_V6_HEADER_PROTOCOL = "xroad.ehis.v6.header.protocol";
+    String XROAD_EHIS_V6_HEADER_ISSUE = "xroad.ehis.v6.header.issue";
+    String XROAD_EHIS_V6_SERVICE_INSTACE = "xroad.ehis.v6.service.instance";
+    String XROAD_EHIS_V6_SERVICE_MEMBER_CLASS = "xroad.ehis.v6.service.member.class";
+    String XROAD_EHIS_V6_SERVICE_MEMBER_CODE = "xroad.ehis.v6.service.member.code";
+    String XROAD_EHIS_V6_SERVICE_SUBSYSTEM_CODE = "xroad.ehis.v6.service.subsystem.code";
+    String XROAD_EHIS_V6_SERVICE_SERVICE_NAME = "xroad.ehis.v6.service.service.name";
+    String XROAD_EHIS_V6_SERVICE_SERVICE_VERSION = "xroad.ehis.v6.service.version";
+    String XROAD_EHIS_V6_SUBSYSTEM_INSTANCE = "xroad.ehis.v6.subsystem.instance";
+    String XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS = "xroad.ehis.v6.subsystem.member.class";
+    String XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE = "xroad.ehis.v6.subsystem.member.code";
+    String XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE = "xroad.ehis.v6.subsystem.subsystem.code";
 
     // EKool
     String EKOOL_CLIENT_ID = "ekool.client.id";
