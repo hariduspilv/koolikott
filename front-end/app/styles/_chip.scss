@@ -34,14 +34,7 @@ md-chip md-chip-template {
 	}
 }
 
-md-chips,
-.md-chips {
-	display: block;
-	font-size: 13px;
-	padding: 0px;
-	vertical-align: middle;
-	position: relative;
-
+.chips-with-chevron {
 	&:before {
 		content: '';
 		right: 0;
@@ -54,6 +47,15 @@ md-chips,
 	  border-right: 5px solid transparent;
 	  border-top: 5px solid black;
 	}
+}
+
+md-chips,
+.md-chips {
+	display: block;
+	font-size: 13px;
+	padding: 0px;
+	vertical-align: middle;
+	position: relative;
 
 	.md-chip {
 		padding: 0px 12px;
