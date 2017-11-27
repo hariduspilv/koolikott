@@ -84,7 +84,7 @@ md-card {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 3;
   }
 
   .icon-kind {
@@ -109,7 +109,7 @@ md-card {
   position: absolute;
   top: 2px;
   left: 20px;
-  z-index: 3 ;
+  z-index: 4;
 
   md-icon {
     color: #fff;
@@ -126,7 +126,7 @@ md-card {
   filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
   filter: url(#drop-shadow);
   filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
-  z-index: 3;
+  z-index: 2;
   opacity: .6;
   width: 33px;
   height: 53px;
