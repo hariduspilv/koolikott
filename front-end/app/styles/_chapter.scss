@@ -594,7 +594,6 @@ md-input-container.chapter-title {
 
 // Override for small screen
 .chapter-btn-large--title-mobile {
-  display: inline-block;
   left: 8px !important;
 
   @media (min-width: $layout-breakpoint-xs) {
@@ -609,7 +608,7 @@ md-input-container.chapter-title {
   }
 
   // Override for extra small screen
-  @media (max-width: 333px) {
+  @media (max-width: 330px) {
     padding-top: 32px !important;
   }
 }
