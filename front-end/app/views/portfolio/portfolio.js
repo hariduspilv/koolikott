@@ -92,7 +92,7 @@ class controller extends Controller {
 
                     for (let [idx, el] of entries('.portfolio-chapter'))
                         for (let [subIdx, subEl] of entries('.subchapter', el))
-                            subEl.id = this.getSlug(subEl.textContent, `subchapter-${idx}-${subIdx}`)
+                            subEl.id = this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
                 })
             )
         }

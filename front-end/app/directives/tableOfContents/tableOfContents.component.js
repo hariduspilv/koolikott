@@ -45,14 +45,14 @@ class controller extends Controller {
             this.$translate.onReady().then(() =>
                 this.$scope.chapters = chapters.map(({ title, blocks }, idx) => ({
                     title: title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE'),
-                    slug: this.getSlug(title, `chapter-${idx}`),
+                    slug: this.getSlug(`chapter-${idx + 1}`),
                     subChapters: blocks.reduce((subchapters, { htmlContent }) => {
                         const wrapper = document.createElement('div')
                         wrapper.innerHTML = htmlContent
                         return subchapters.concat(
                             [].slice.apply(wrapper.querySelectorAll('.subchapter')).map((el, subIdx) => ({
                                 title: el.textContent || this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE'),
-                                slug: this.getSlug(el.textContent, `subchapter-${idx}-${subIdx}`)
+                                slug: this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
                             }))
                         )
                     }, [])

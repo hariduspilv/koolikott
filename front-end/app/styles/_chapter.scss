@@ -144,10 +144,6 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
     }
   }
 
-  &:hover .toggle-chapter-focus {
-    display: inline-block;
-  }
-
   &.is-focused {
     box-shadow: $whiteframe-shadow-4dp;
   }
@@ -193,7 +189,7 @@ md-input-container.chapter-title {
 }
 
 // the pencil button
-.toggle-chapter-focus {
+.chapter-pencil-button {
   position: absolute;
   right: .5rem;
   top: .5rem;
@@ -201,6 +197,13 @@ md-input-container.chapter-title {
   width: auto;
   min-width: 0;
   margin: 0 !important;
+  opacity: 0;
+  transition: opacity .2s;
+  will-change: opacity;
+
+  .portfolio-chapter:hover & {
+    opacity: 1;
+  }
 
   &:not([disabled]).md-focused,
   &:not([disabled]):hover {
@@ -274,7 +277,10 @@ md-input-container.chapter-title {
   top: .3rem;
   width: $wvp-chapter-toolbar-width;
   display: flex;
-  justify-content: center;
+
+  > div {
+    margin-left: 2rem;
+  }
 
   @media (max-width: 959px) {
     left: auto;
@@ -643,7 +649,6 @@ md-input-container.chapter-title {
 .chapter-blocks {
   display: flex;
   flex-wrap: wrap;
-  flex-grow: 1;
   margin: -.75rem -1rem -1rem;
   width: calc(100% + 2rem);
 }
@@ -656,10 +661,6 @@ md-input-container.chapter-title {
 
   &:not(.medium-editor-placeholder) {
     overflow: hidden;
-  }
-
-  &:last-child {
-    padding-bottom: 1rem;
   }
 
   @media (min-width: 600px) {
@@ -684,10 +685,6 @@ md-input-container.chapter-title {
         bottom: .4rem;
         height: 2px;
         background-color: #03a9f4; // light-blue-500
-      }
-
-      &:last-child:after {
-        bottom: .65rem;
       }
     }
   }
