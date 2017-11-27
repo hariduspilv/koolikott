@@ -99,7 +99,7 @@ angular.module('koolikottApp')
                 var headers = {};
                 setAuthorization(headers);
 
-                Upload.upload({
+                return Upload.upload({
                     url: url,
                     data: data,
                     headers: headers

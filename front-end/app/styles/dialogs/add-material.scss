@@ -73,3 +73,32 @@
     border-radius: 0;
   }
 }
+
+.checkbox--material-author {
+  margin-top: 28px;
+  margin-bottom: 27px;
+}
+
+.button-material-language {
+  border-bottom: 2px solid $gray-600-light;
+  color: $gray;
+  margin-top: 0;
+  text-align: left;
+  border-radius: 0;
+
+  &:hover {
+    border-color: $green1;
+  }
+}
+
+.button-material-language__icon {
+  position: absolute;
+  right: 0%;
+  top: 6px;
+}
+
+.button-material-language--selected {
+  border-color: $green1;
+}
+
+
