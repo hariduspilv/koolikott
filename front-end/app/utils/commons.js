@@ -887,7 +887,7 @@ class Controller {
                         && new Date(issueDate.year, 0, 1)
         )
     }
-    stripHtml(htmlString) {
+    stripHtml(htmlString = '') {
         let tmp = document.createElement('div')
         tmp.innerHTML = htmlString
 
