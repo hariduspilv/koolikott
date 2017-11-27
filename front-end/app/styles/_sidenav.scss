@@ -100,11 +100,9 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 .sidenav__item {
   position: relative;
   width: 100%;
-}
 
-.sidenav__item--chapter-title {
-  .is-sortable & a {
-    padding-left: 3.2rem;
+  &:hover .sidenav__handle {
+    display: inline-block;
   }
 }
 
@@ -210,9 +208,10 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__name {
-  margin-right: 10px;
+  margin-right: 22px;
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
 
   .material-icons + & {
     margin-left: 10px;
@@ -247,9 +246,33 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
 }
 
 .sidenav__handle {
-  cursor: move; 
+  cursor: move; /* Fallback for IE */
+  cursor: grab;
+  display: none;
+  margin: -.5rem;
+  padding: .5rem;
   position: absolute;
   top: 11px;
-  left: 20px;
+  left: 213px;
   z-index: 1;
+
+  md-icon {
+    color: $gray-600-light;
+  }
+
+  &:hover + .sidenav__header {
+    background-color: $hover-background-color;
+  }
+}
+
+.sidenav__icon--title {
+  position: absolute;
+  top: 15px;
+  left: 213px;
+}
+
+.sidenav__drag-placeholder {
+  background-color: $gray-500-light;
+  height: 46px;
+  width: 259px;
 }

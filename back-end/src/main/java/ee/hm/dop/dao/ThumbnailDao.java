@@ -7,6 +7,6 @@ import ee.hm.dop.model.enums.Size;
 public class ThumbnailDao extends AbstractDao<Thumbnail> {
 
     public Thumbnail findByNameAndSize(String name, Size size) {
-        return findByField("name", name, "size", size);
+        return findByFieldAny("name", name, "size", size);
     }
 }

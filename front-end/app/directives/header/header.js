@@ -211,6 +211,8 @@ class controller extends Controller {
 
         this.$scope.openTour = (isEditPage = false) =>
             this.$rootScope.$broadcast(isEditPage ? 'tour:start:editPage' : 'tour:start')
+
+        this.$rootScope.$on('portfolio:autoSave', this.invokeInkRippleOnSaveButton)
     }
     $doCheck() {
         this.setHeaderColor()
@@ -338,6 +340,40 @@ class controller extends Controller {
                 }
             })
     }
+    invokeInkRippleOnSaveButton() {
+        const saveBtn = document.querySelector('.header-save-button')
+        const ripple = document.createElement('div')
+        const rippleContainer = document.createElement('div')
+
+        rippleContainer.insertBefore(ripple, null)
+        rippleContainer.classList.add('md-ripple-container')
+        
+        ripple.classList.add('md-ripple')
+        ripple.classList.add('md-ripple-placed')
+        ripple.style.cssText = `
+            left: 20px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgb(255, 255, 255);
+            border-color: rgb(255, 255, 255);`
+        
+        saveBtn.insertBefore(rippleContainer, null)
+
+        setTimeout(() => {
+            ripple.classList.add('md-ripple-active')
+            ripple.classList.add('md-ripple-scaled')
+
+            setTimeout(() =>
+                ripple.classList.remove('md-ripple-active'),
+                500
+            )
+            setTimeout(() =>
+                saveBtn.removeChild(rippleContainer),
+                1000
+            )
+        })
+    }
 }
 controller.$inject = [
     '$scope',
@@ -348,6 +384,7 @@ controller.$inject = [
     '$route',
     '$translate',
     '$mdSidenav',
+    '$mdInkRipple',
     'translationService',
     'searchService',
     'authenticationService',

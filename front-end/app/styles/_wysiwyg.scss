@@ -1,0 +1,49 @@
+.medium-editor-toolbar {
+  border-radius: 0;
+  background-color: #424242; // gray-800
+
+  li {
+    button {
+      padding: .25rem !important;
+      border-radius: 0 !important;
+      width: 2.5rem;
+      height: 2.5rem;
+
+      &.medium-editor-button-active {
+        background-color: #212121; // gray-900
+
+        svg {
+          fill: $white; // #03a9f4; // light-blue-500
+        }
+      }
+
+      svg {
+        width: 2rem;
+        height: 2rem;
+        fill: rgba($white, .7);
+      }
+    }
+
+    + li {
+      border-left: 1px solid #616161; // gray-700
+    }
+  }
+}
+.medium-toolbar-arrow-over:before {
+  border-color: transparent transparent #424242 transparent; // gray-800
+}
+.medium-editor-toolbar-form {
+  &, .medium-editor-toolbar-input {
+    background: transparent;
+  }
+}
+.medium-editor-toolbar-anchor-preview {
+  padding: .5rem 1rem;
+  font-family: inherit;
+  font-size: .875rem;
+  background-color: #424242; // gray-800
+
+  a {
+    margin: 0;
+  }
+}

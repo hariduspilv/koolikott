@@ -105,8 +105,6 @@ public class MaterialDaoTest extends DatabaseTestBase {
         material.setViews((long) 123);
         material.setVisibility(Visibility.PUBLIC);
 
-        material.setPicture(picture());
-
         Material updated = materialDao.createOrUpdate(material);
 
         Material newMaterial = materialDao.findByIdNotDeleted(updated.getId());
@@ -114,7 +112,6 @@ public class MaterialDaoTest extends DatabaseTestBase {
         assertEquals(material.getSource(), newMaterial.getSource());
         assertEquals(material.getAdded(), newMaterial.getAdded());
         assertEquals(material.getViews(), newMaterial.getViews());
-        assertEquals(material.getPicture().getId(), newMaterial.getPicture().getId());
         assertNull(newMaterial.getUpdated());
 
         materialDao.remove(newMaterial);
