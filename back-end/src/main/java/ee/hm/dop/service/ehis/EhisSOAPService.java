@@ -1,11 +1,6 @@
 package ee.hm.dop.service.ehis;
 
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_ENDPOINT;
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_INSTITUTION;
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_SERVICE_NAME;
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_SYSTEM_NAME;
-import static ee.hm.dop.utils.ConfigurationProperties.XTEE_NAMESPACE_PREFIX;
-import static ee.hm.dop.utils.ConfigurationProperties.XTEE_NAMESPACE_URI;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 
 import java.io.ByteArrayOutputStream;
@@ -48,11 +43,20 @@ public class EhisSOAPService implements IEhisSOAPService {
     private SOAPConnection connection;
     @Inject
     private EhisV5RequestBuilder ehisV5RequestBuilder;
+    @Inject
+    private EhisV6RequestBuilder ehisV6RequestBuilder;
 
     @Override
     public Person getPersonInformation(String idCode) {
         try {
-            SOAPMessage message = ehisV5RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
+            boolean useV6 = configuration.getBoolean(XROAD_EHIS_USE_V6);
+            SOAPMessage message;
+            if (useV6) {
+                message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
+            } else {
+                message = ehisV5RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
+            }
+
 
             if (logger.isInfoEnabled()) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();

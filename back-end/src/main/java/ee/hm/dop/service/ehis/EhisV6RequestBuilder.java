@@ -81,11 +81,11 @@ public class EhisV6RequestBuilder {
     }
 
     private void populateBody(String idCode, SOAPEnvelope envelope) throws SOAPException {
-        /*Name name = envelope.createName("isiku_rollid");
+        String ehis = c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX);
+        QName name = envelope.createQName("isikuRollid", ehis);
         envelope.getBody().addBodyElement(name) //
-                .addChildElement("keha") //
                 .addChildElement("isikukood") //
-                .addTextNode(idCode);*/
+                .addTextNode(idCode);
     }
 
     private String c(String name) {

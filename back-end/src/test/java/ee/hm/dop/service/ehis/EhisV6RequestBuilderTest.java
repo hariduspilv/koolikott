@@ -1,9 +1,9 @@
 package ee.hm.dop.service.ehis;
 
-import com.sun.xml.internal.messaging.saaj.soap.impl.ElementImpl;
 import ee.hm.dop.common.test.GuiceTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.NodeList;
 
 import javax.inject.Inject;
 import javax.xml.soap.Node;
@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(GuiceTestRunner.class)
 public class EhisV6RequestBuilderTest {
 
+    public static final String XRO = "xro:";
     @Inject
     private EhisV6RequestBuilder ehisV6RequestBuilder;
 
@@ -34,69 +35,69 @@ public class EhisV6RequestBuilderTest {
             outputStream.flush();
         }
 
-//        SOAPHeader header = message.getSOAPHeader();
-//        Iterator<Node> headerElements = (Iterator<Node>) header.getChildElements();
-//        while (headerElements.hasNext()) {
-//            validateHeader(headerElements.next());
-//        }
-//        SOAPBody body = message.getSOAPBody();
-//        Iterator<Node> bodyElements = (Iterator<Node>) body.getChildElements();
-//        while (bodyElements.hasNext()) {
-//            Node firstChild = bodyElements.next();
-//            validateBodyFirstLevel(firstChild);
-//            org.w3c.dom.Node secondChild = firstChild.getFirstChild();
-//            validateBodySecondLevel(secondChild);
-//            org.w3c.dom.Node thirdChild = secondChild.getFirstChild();
-//            validateBodyThirdLevel(thirdChild);
-//        }
+        SOAPHeader header = message.getSOAPHeader();
+        Iterator<Node> headerElements = (Iterator<Node>) header.getChildElements();
+        while (headerElements.hasNext()) {
+            validateHeader(headerElements.next());
+        }
+        SOAPBody body = message.getSOAPBody();
+        Iterator<Node> bodyElements = (Iterator<Node>) body.getChildElements();
+        while (bodyElements.hasNext()) {
+            Node firstChild = bodyElements.next();
+            validateBodyFirstLevel(firstChild);
+            Node secondChild = (Node) firstChild.getFirstChild();
+            validateBodySecondLevel(secondChild);
+        }
     }
 
     private void validateHeader(Node element) {
-        if (logicBlock(element, "andmekogu", "ehis")) return;
-        if (logicBlock(element, "isikukood", "123")) return;
-        if (logicBlock(element, "nimi", "ehis.isiku_rollid.v1")) return;
-        if (logicBlock(element, "id", "3ff13834-248b-4d0f-9ff0-585b729e7b27")) return;
-        if (logicBlock(element, "asutus", "10585438")) return;
+        if (logicBlock(element, XRO, "issue", "ehis")) return;
+        else if (logicBlock(element, XRO, "userId", "123")) return;
+        else if (logicBlock(element, XRO, "protocolVersion", "4.0")) return;
+        else if (logicBlock(element, XRO, "id", "3ff13834-248b-4d0f-9ff0-585b729e7b27")) return;
+        else if (element.getLocalName().equals("service")) {
+            NodeList childNodes = element.getChildNodes();
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node node = (Node) childNodes.item(i);
+                if (logicBlock(node, "iden:", "memberCode", "70000740")) continue;
+                if (logicBlock(node, "iden:", "serviceVersion", "v1")) continue;
+                if (logicBlock(node, "iden:", "serviceCode", "isiku_rollid")) continue;
+                if (logicBlock(node, "iden:", "xRoadInstance", "ee")) continue;
+                if (logicBlock(node, "iden:", "memberClass", "gov")) continue;
+                if (logicBlock(node, "iden:", "subsystemCode", "ehis")) continue;
+                else throw new UnsupportedOperationException("unknown element: " + node.getLocalName());
+            }
+        } else if (element.getLocalName().equals("client")) {
+            NodeList childNodes = element.getChildNodes();
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node node = (Node) childNodes.item(i);
+                if (logicBlock(node, "iden:", "memberCode", "10585438")) continue;
+                if (logicBlock(node, "iden:", "xRoadInstance", "ee")) continue;
+                if (logicBlock(node, "iden:", "memberClass", "gov")) continue;
+                if (logicBlock(node, "iden:", "subsystemCode", "10585438")) continue;
+                else throw new UnsupportedOperationException("unknown element: " + node.getLocalName());
+            }
+        } else throw new UnsupportedOperationException("unknown element: " + element.getLocalName());
+    }
+
+    private void validateBodyFirstLevel(Node element) {
+        if (logicBlock(element, "ehis:", "isikuRollid", null)) return;
         throw new UnsupportedOperationException("unknown element: " + element.getLocalName());
     }
 
-    private void validateBodyFirstLevel(org.w3c.dom.Node element) {
-        if (bodyLogicBlock(element, "isiku_rollid", null)) return;
-        throw new UnsupportedOperationException("unknown element: " + element.getLocalName());
-    }
-
-    private void validateBodySecondLevel(org.w3c.dom.Node secondChild) {
-        if (bodyLogicBlock(secondChild, "keha", null)) return;
+    private void validateBodySecondLevel(Node secondChild) {
+        if (logicBlock(secondChild, "", "isikukood", "123")) return;
         throw new UnsupportedOperationException("unknown element: " + secondChild.getLocalName());
     }
 
-    private void validateBodyThirdLevel(org.w3c.dom.Node secondChild) {
-        if (bodyLogicBlock(secondChild, "isikukood", "123")) return;
-        throw new UnsupportedOperationException("unknown element: " + secondChild.getLocalName());
-    }
-
-    private boolean logicBlock(Node element, String localName, String value) {
+    private boolean logicBlock(Node element, String prefix, String localName, String value) {
         if (element.getLocalName().equals(localName)) {
             if (!element.getLocalName().equals("id")) {
                 assertEquals(value, element.getValue());
             } else {
                 assertEquals(value.length(), element.getValue().length());
             }
-            assertEquals("xtee:" + localName, element.getNodeName());
-            return true;
-        }
-        return false;
-    }
-
-    private boolean bodyLogicBlock(org.w3c.dom.Node element, String localName, String value) {
-        ElementImpl element2 = (ElementImpl) element;
-        if (element2.getLocalName().equals(localName)) {
-            if (!element2.getLocalName().equals("id")) {
-                assertEquals(value, element2.getValue());
-            } else {
-                assertEquals(value.length(), element2.getValue().length());
-            }
-            assertEquals(localName, element2.getNodeName());
+            assertEquals(prefix + localName, element.getNodeName());
             return true;
         }
         return false;
