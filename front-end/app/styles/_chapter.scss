@@ -117,6 +117,9 @@ ul[dnd-list] li.selected {
  * Porfolio chapters V2
  */
 $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
+.focused-chapter-button {
+  outline: 1px dotted #03a9f4; // light-blue-500
+}
 
 // chapter
 .portfolio-chapter {
@@ -126,6 +129,8 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
   display: block;
 
   md-card-content {
+    display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 2;
     clear: both;
@@ -151,10 +156,6 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
     min-height: 20rem;
   }
 
-  /* &.is-block-focused md-card-content {
-    background-color: #f5f5f5; // gray-100
-  } */
-
   @media (max-width: 959px) {
     margin-top: 5rem;
   }
@@ -169,7 +170,7 @@ h2.chapter-title {
 
 // title input
 md-input-container.chapter-title {
-  padding: 1rem 1rem 0;
+  padding: 1rem;
   margin: -1rem -1rem 0;
 
   input {
@@ -191,6 +192,40 @@ md-input-container.chapter-title {
   }
 }
 
+// the pencil button
+.toggle-chapter-focus {
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+  z-index: 3;
+  width: auto;
+  min-width: 0;
+  margin: 0 !important;
+
+  &:not([disabled]).md-focused,
+  &:not([disabled]):hover {
+    background-color: transparent;
+    
+    md-icon {
+      color: #03a9f4; // light-blue-500 // #9c27b0; // purple-500
+    }
+  }
+
+  &:focus {
+    @extend .focused-chapter-button;
+  }
+
+  md-icon {
+    color: #e0e0e0; // gray-300
+    transition: color .2s;
+    will-change: color;
+
+    .is-focused & {
+      color: #03a9f4; // light-blue-500 // #9c27b0; // purple-500
+    }
+  }
+}
+
 // toolbar: manage chapters
 .add-chapter {
   cursor: pointer;
@@ -201,17 +236,27 @@ md-input-container.chapter-title {
     color: #757575; // gray-600
     cursor: pointer;
   }
+
   &:hover {
     .md-button {
       background-color: #bdbdbd !important; // gray-400
     }
   }
+
+  &:focus {
+    @extend .focused-chapter-button;
+  }
 }
 .organize-chapter-btn {
   background-color: #e0e0e0; // gray-300
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: #bdbdbd !important; // gray-400
+  }
+
+  &:focus {
+    @extend .focused-chapter-button;
   }
 
   &[disabled] {
@@ -251,37 +296,6 @@ md-input-container.chapter-title {
         min-width: 1em;
         min-height: 1em;
       }
-    }
-  }
-}
-
-// the pencil button
-.toggle-chapter-focus {
-  display: none;
-  position: absolute;
-  right: .5rem;
-  top: .5rem;
-  z-index: 2;
-  width: auto;
-  min-width: 0;
-  margin: 0 !important;
-
-  &:not([disabled]).md-focused,
-  &:not([disabled]):hover {
-    background-color: transparent;
-
-    md-icon {
-      color: #03a9f4; // light-blue-500 // #9c27b0; // purple-500
-    }
-  }
-
-  md-icon {
-    color: #e0e0e0; // gray-300
-    transition: color .2s;
-    will-change: color;
-
-    .is-focused & {
-      color: #03a9f4; // light-blue-500 // #9c27b0; // purple-500
     }
   }
 }
@@ -478,12 +492,18 @@ md-input-container.chapter-title {
   label {
     cursor: pointer;
     font-size: .75rem;
+    transition: color .2s;
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     &, md-icon {
       color: #616161; // gray-700
     }
+  }
+
+  &:focus {
+    @extend .focused-chapter-button;
   }
 
   @media (max-width: 959px) {
@@ -536,10 +556,16 @@ md-input-container.chapter-title {
     }
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     .md-button {
       background-color: #757575 !important; // gray-600
     }
+  }
+
+  &:focus {
+    @extend .focused-chapter-button;
+    outline-offset: .5rem;
   }
 
   label {
@@ -592,11 +618,33 @@ md-input-container.chapter-title {
   }
 }
 
+// Override for small screen
+.chapter-btn-large--title-mobile {
+  left: 8px !important;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    display: none;
+  }
+}
+
+.chapter-toolbar-column {
+  @media (max-width: $layout-breakpoint-xs) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  // Override for extra small screen
+  @media (max-width: 330px) {
+    padding-top: 32px !important;
+  }
+}
+
 // blocks
 .chapter-blocks {
   display: flex;
   flex-wrap: wrap;
-  margin: -.75rem -1rem;
+  flex-grow: 1;
+  margin: -.75rem -1rem -1rem;
   width: calc(100% + 2rem);
 }
 .chapter-block {
@@ -608,6 +656,10 @@ md-input-container.chapter-title {
 
   &:not(.medium-editor-placeholder) {
     overflow: hidden;
+  }
+
+  &:last-child {
+    padding-bottom: 1rem;
   }
 
   @media (min-width: 600px) {
@@ -622,12 +674,6 @@ md-input-container.chapter-title {
     }
 
     &.is-focused {
-      // background-color: $white;
-      // outline: 1px dotted rgba(#9c27b0, .5); // purple-500-0.5
-
-      // quirk: chrome does not display cursor without this:
-      // outline: 1px dotted transparent;
-
       position: relative;
 
       &:after {
@@ -638,6 +684,10 @@ md-input-container.chapter-title {
         bottom: .4rem;
         height: 2px;
         background-color: #03a9f4; // light-blue-500
+      }
+
+      &:last-child:after {
+        bottom: .65rem;
       }
     }
   }
