@@ -85,6 +85,9 @@ angular.module('koolikottApp')
                 }
                 var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
                 $scope.sourceType = matchType(filename);
+                if ($scope.sourceType !== 'LINK') {
+                    $scope.material.source = $scope.proxyUrl;
+                }
             }
 
             function probeContentFail() {
