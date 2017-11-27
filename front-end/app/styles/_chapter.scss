@@ -144,6 +144,10 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
     }
   }
 
+  &:hover .toggle-chapter-focus {
+    display: inline-block;
+  }
+
   &.is-focused {
     box-shadow: $whiteframe-shadow-4dp;
   }
@@ -227,7 +231,7 @@ md-input-container.chapter-title {
   cursor: pointer;
   font-weight: 500;
   text-transform: uppercase;
-  
+
   label {
     color: #757575; // gray-600
     cursor: pointer;
@@ -546,7 +550,7 @@ md-input-container.chapter-title {
     background-color: #9e9e9e; // gray-500
     transition: background-color .2s;
     will-change: background-color;
-    
+
     md-icon {
       color: $white;
     }
@@ -585,7 +589,7 @@ md-input-container.chapter-title {
       width: 1.5rem;
       height: 1.5rem;
     }
-    
+
     label {
       font-weight: inherit;
       color: #9e9e9e; // gray-500
@@ -611,6 +615,27 @@ md-input-container.chapter-title {
     label {
       display: none;
     }
+  }
+}
+
+// Override for small screen
+.chapter-btn-large--title-mobile {
+  left: 8px !important;
+
+  @media (min-width: $layout-breakpoint-xs) {
+    display: none;
+  }
+}
+
+.chapter-toolbar-column {
+  @media (max-width: $layout-breakpoint-xs) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  // Override for extra small screen
+  @media (max-width: 330px) {
+    padding-top: 32px !important;
   }
 }
 

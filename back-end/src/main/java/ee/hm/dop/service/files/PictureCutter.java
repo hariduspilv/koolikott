@@ -79,13 +79,11 @@ public class PictureCutter {
         // Landscape
         if (img.getWidth() > img.getHeight()) {
             heightToScale = (int) (1.1 * width);
-            widthToScale = (int) ((heightToScale * 1.0) / img.getHeight()
-                    * img.getWidth());
+            widthToScale = (int) ((heightToScale * 1.0) / img.getHeight() * img.getWidth());
         } else {
             //Portrait
             widthToScale = (int) (1.1 * width);
-            heightToScale = (int) ((widthToScale * 1.0) / img.getWidth()
-                    * img.getHeight());
+            heightToScale = (int) ((widthToScale * 1.0) / img.getWidth() * img.getHeight());
         }
 
         return Scalr.resize(img, widthToScale, heightToScale);

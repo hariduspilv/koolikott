@@ -123,13 +123,10 @@
           <label>Kustuta</label>
         </div>
       </div>
-      <div>
-        <div
-          class="chapter-btn-large"
-          data-ng-click="$ctrl.addBlock()"
-          tabIndex="0"
-          >
-          <md-button class="md-icon-button" aria-label="Lisa sisuplokk" tabIndex="-1">
+      <div class="chapter-toolbar-column">
+        <h5 class="chapter-btn-large--title-mobile">Lisa sisuplokk</h5>
+        <div class="chapter-btn-large" data-ng-click="$ctrl.addBlock()">
+          <md-button class="md-icon-button" aria-label="Lisa sisuplokk">
             <md-icon class="material-icons">add</md-icon>
           </md-button>
           <label>Lisa sisuplokk</label>
@@ -177,10 +174,10 @@
     class="organize-chapters"
     data-ng-hide="$ctrl.numChapters < 2"
     >
-    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-disabled="$ctrl.index === 0">
+    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-if="$ctrl.index !== 0">
       <md-icon>arrow_upward</md-icon>
     </md-button>
-    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-disabled="$ctrl.index === $ctrl.numChapters - 1">
+    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-if="$ctrl.index !== $ctrl.numChapters - 1">
       <md-icon>arrow_downward</md-icon>
     </md-button>
     <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onDelete()">
