@@ -136,10 +136,10 @@
     class="organize-chapters"
     data-ng-hide="$ctrl.numChapters < 2"
     >
-    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-disabled="$ctrl.index === 0">
+    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-if="$ctrl.index !== 0">
       <md-icon>arrow_upward</md-icon>
     </md-button>
-    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-disabled="$ctrl.index === $ctrl.numChapters - 1">
+    <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-if="$ctrl.index !== $ctrl.numChapters - 1">
       <md-icon>arrow_downward</md-icon>
     </md-button>
     <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onDelete()">
