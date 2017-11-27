@@ -2,8 +2,9 @@ package ee.hm.dop.model.enums;
 
 import ee.hm.dop.service.files.PictureCutter;
 
-import static ee.hm.dop.model.enums.ThumbnailcreatingStrategy.CREATE_USING_WIDTH_AND_HEIGHT;
-import static ee.hm.dop.model.enums.ThumbnailcreatingStrategy.CREATE_USING_WIDTH_ONLY;
+import static ee.hm.dop.model.enums.Size.ThumbnailcreatingStrategy.CREATE_USING_WIDTH_AND_HEIGHT;
+import static ee.hm.dop.model.enums.Size.ThumbnailcreatingStrategy.CREATE_USING_WIDTH_ONLY;
+
 
 /**\
  * cardSize_screenSize1_screenSize2...
@@ -40,4 +41,9 @@ public enum Size {
     public boolean createUsingWidthAndHeight(){
         return this.strategy == CREATE_USING_WIDTH_AND_HEIGHT;
     }
+
+    public enum  ThumbnailcreatingStrategy {
+        CREATE_USING_WIDTH_ONLY, CREATE_USING_WIDTH_AND_HEIGHT;
+    }
+
 }
