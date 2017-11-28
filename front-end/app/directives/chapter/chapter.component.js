@@ -1,12 +1,22 @@
 'use strict'
 
 /**
- *  @todo
- -  tabIndexes
+ @todo
+ +  WYSIWYG theme
+ +  tabIndexes
  -  Editor toolbar conf.
- -  WYSIWYG theme
+    - p button
+    - h3 button
+    - a button
+    + b button
+    + i button
+    + blockquote button
+    + ul button
+    + toolbar theme
+    - display the wysiwyg toolbar in the beginning of empty paragraph/h3/blockquote (block-level element)
  -  Material embeds: intermediary solution: embed materials BETWEEN blocks the old way
- */
+ -  translations
+*/
 
 {
 const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
@@ -137,14 +147,14 @@ class controller extends Controller {
             if (this.isEditMode)
                 this.$timeout(() =>
                     this.$timeout(() =>
-                        this.updateEditors(/*true*/)
+                        this.updateEditors()
                     )
                 )
         }
     }
     $onInit() {
         this.$scope.$watch('chapter.title', (title) =>
-            this.$scope.slug = this.getSlug(title, `chapter-${this.index}`)
+            this.$scope.slug = this.getSlug(`chapter-${this.index + 1}`)
         )
 
         if (this.isEditMode) {
@@ -198,12 +208,15 @@ class controller extends Controller {
             this.$scope.focusedBlockIdx = null
         }
     }
-    onClickEmptyToolbarArea(evt) {
+    onClickEmptyChapterArea(evt) {
         let el = evt.target
 
         while (el !== null) {
-            if (el.classList.contains('chapter-btn') ||
-                el.classList.contains('chapter-btn-large'))
+            if (el.classList.contains('chapter-block') ||
+                el.classList.contains('chapter-title') ||
+                el.classList.contains('chapter-btn') ||
+                el.classList.contains('chapter-btn-large') ||
+                el.classList.contains('chapter-pencil-button'))
                 return
             el = el.parentElement
         }
@@ -212,22 +225,8 @@ class controller extends Controller {
             ? this.focusTitle(true)
             : this.focusBlock(this.$scope.focusedBlockIdx)
     }
-    onClickToggleChapterFocus() {
-        if (!this.$scope.isFocused)
-            return this.focusTitle(true)
-
-        this.$scope.isFocused = false
-        this.$scope.isTitleFocused = false
-        this.$scope.focusedBlockIdx = null
-    }
-    onClickBlock(idx, evt) {
-        /**
-         * For some reason ng-click fires also when space bar is pressed.
-         */
-        if (evt.type === 'click')
-            this.focusBlock(idx)
-    }
     onBlockChanges(blocks, previousBlocks) {
+        // block elements are not in DOM before next loop
         this.$timeout(() => {
             for (let [idx, el] of this.getEditorElements().entries())
                 this.createEditor(blocks, idx, el)
@@ -252,12 +251,14 @@ class controller extends Controller {
             const saveSelection = editor.saveSelection.bind(editor)
             editor.subscribe('editableClick', saveSelection)
             editor.subscribe('editableKeyup', saveSelection)
+            editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
+            editor.subscribe('blur', this.onBlurBlock.bind(this, idx))
 
             this.optimizePlaceholder(el, editor)
             this.disallowFormatting(el)
         }
     }
-    updateEditors(safeMode = false) {
+    updateEditors() {
         /**
          * Update editor contents downstream:
          * $scope.chapter.blocks[idx].htmlContent -> editorElement.innerHTML
@@ -267,27 +268,14 @@ class controller extends Controller {
                 if (el && this.$scope.chapter.blocks[idx]) {
                     const editor = MediumEditor.getEditorFromElement(el)
                     if (editor) {
-                        const selection = editor.exportSelection()
-
-                        if (safeMode) {
-                            editor.importSelection({
-                                start: 0,
-                                end: el.textContent.length
-                            })
-                            editor.pasteHTML(this.$scope.chapter.blocks[idx].htmlContent, {
-                                cleanAttrs: ['style', 'dir']
-                            })
-                        } else
-                            el.innerHTML = this.$scope.chapter.blocks[idx].htmlContent
-
-                        editor.importSelection(selection)
+                        el.innerHTML = this.$scope.chapter.blocks[idx].htmlContent
 
                         if (el.innerHTML && el.innerHTML !== '<p><br></p>')
                             el.classList.remove('medium-editor-placeholder')
 
                         // add id attributes to all subchapters derived from subchapter titles
                         for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
-                            subEl.id = this.getSlug(subEl.textContent, `subchapter-${this.index}-${subIdx}`)
+                            subEl.id = this.getSlug(`${this.index + 1}-${subIdx + 1}`)
                     }
                 }
     }
@@ -298,10 +286,11 @@ class controller extends Controller {
          */
         if (this.isEditMode)
             for (let [idx, el] of this.getEditorElements().entries())
-                if (el && this.$scope.chapter.blocks[idx].htmlContent !== el.innerHTML) {
+                if (el &&
+                    this.$scope.chapter.blocks[idx] &&
+                    this.$scope.chapter.blocks[idx].htmlContent !== el.innerHTML
+                )
                     this.$scope.chapter.blocks[idx].htmlContent = el.innerHTML
-                    MediumEditor.getEditorFromElement(el).restoreSelection()
-                }
     }
     optimizePlaceholder(el, editor) {
         /**
@@ -350,6 +339,9 @@ class controller extends Controller {
     }
     getEditorElements() {
         return this.$element[0].querySelectorAll('.chapter-block') || []
+    }
+    getEditor(idx) {
+        return MediumEditor.getEditorFromElement(this.getEditorElements()[idx])
     }
     calcSizes() {
         if (this.isEditMode) {
@@ -440,23 +432,9 @@ class controller extends Controller {
             i ++
         }
     }
-    focusChapter(evt) {
-        // abort if a block or title was directly clicked
-        let el = evt.target
-        while (el !== null) {
-            if (el.classList.contains('chapter-title') ||
-                el.classList.contains('chapter-block'))
-                return
-            el = el.parentElement
-        }
-        /**
-         * If title nor any of the blocks were directly clicked then focus
-         * the last block (which is probably the only one and shorter than
-         * the min-height of the whole chapter).
-         */
-        this.focusBlock()
-    }
     focusTitle(clickOnContainer = false) {
+        this.$timeout.cancel(this.blurTimer)
+
         if (!this.$scope.isFocused) {
             this.calcSizes()
             this.setStickyClassNames()
@@ -470,61 +448,98 @@ class controller extends Controller {
                 this.$element[0].querySelector('input.md-headline').focus()
         })
     }
-    focusBlock(idx, cb) {
+    focusBlock(idx) {
         if (typeof idx !== 'number')
             idx = Math.max(0, this.$scope.chapter.blocks.length - 1)
+
+        const editor = this.getEditor(idx)
+
+        /**
+         * @todo See why trigger('focus') triggers it twice
+         */
+        if (editor)
+            editor.trigger('focus')
+    }
+    onFocusBlock(idx) {
+        this.$timeout.cancel(this.blurTimer)
 
         if (!this.$scope.isFocused) {
             this.calcSizes()
             this.setStickyClassNames()
         }
-
         this.$timeout(() => {
             this.$scope.isFocused = true
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = idx
 
+            // restore selection or put the caret to the end
             const el = this.getEditorElements()[idx]
-            const editor = el && MediumEditor.getEditorFromElement(el)
+            const editor = el && this.getEditor(idx)
+            if (editor) {
+                const onFocus = this.detachEditorListener(editor, 'focus', 'onFocusBlock')
+                
+                if (editor.selectionState) {
+                    editor.restoreSelection()
+                    delete editor.selectionState
+                }
+                /**
+                 * @todo Check if putting the caret to end works with embeds
+                 */
+                else {
+                    // get the lowest element that contains everything
+                    let node = el
+                    while (node.children.length === 1)
+                        node = node.children[0]
 
-            if (el)
-                this.$timeout(() => {
-                    el.focus()
+                    const range = document.createRange()
+                    range.selectNodeContents(node)
+                    const { length } = range.toString()
 
-                    if (editor) {
-                        editor.trigger('focus')
-
-                        // restore selection or put the caret to the end
-                        if (editor.selectionState) {
-                            editor.restoreSelection()
-                            delete editor.selectionState
-                        }
-                        /**
-                         * @todo Check if putting the caret to end works with embeds
-                         */
-                        else {
-                            // get the lowest element that contains everything
-                            let node = el
-                            while (node.children.length === 1)
-                                node = node.children[0]
-
-                            const range = document.createRange()
-                            range.selectNodeContents(node)
-                            const { length } = range.toString()
-
-                            editor.importSelection({ start: length, end: length })
-                            editor.saveSelection()
-                        }
-                    }
-                    if (typeof cb === 'function')
-                        cb()
-                })
+                    editor.importSelection({ start: length, end: length })
+                    editor.saveSelection()
+                }
+                
+                editor.subscribe('focus', onFocus)
+            }
         })
+    }
+    blurTitle() {
+        this.$timeout.cancel(this.blurTimer)
+
+        this.blurTimer = this.$timeout(() => {
+            if (this.$scope.focusedBlockIdx === null)
+                this.$scope.isFocused = false
+        }, 500)
+    }
+    onBlurBlock(idx) {
+        this.$timeout.cancel(this.blurTimer)
+
+        /**
+         * If focusedBlockIdx is still the same in next event loop then focus has left the blocks
+         * and it should be set to null.
+         */
+        this.blurTimer = this.$timeout(() => {
+            if (this.$scope.focusedBlockIdx === idx) {
+                this.$scope.focusedBlockIdx = null
+
+                if (!this.$scope.isTitleFocused)
+                    this.$scope.isFocused = false
+            }
+        }, 500)
+    }
+    detachEditorListener(editor, eventName, fnName) {
+        for (let listener of editor.events.customEvents[eventName])
+            if (listener.name.includes(fnName)) {
+                editor.unsubscribe(eventName, listener)
+                return listener
+            }
     }
     /**
      * Block actions
      */
     addBlock(htmlContent = '') {
+        this.$timeout.cancel(this.blurTimer)
+
         const { blocks } = this.$scope.chapter
 
         this.updateState()
@@ -532,30 +547,47 @@ class controller extends Controller {
             htmlContent,
             narrow: this.isNarrowLeft(blocks.length - 1)
         })
-        this.focusBlock()
+        /**
+         * Have to wait 2 loops:
+         * 1) block element to be injected to DOM
+         * 2) Medium Editor to be initialized on it
+         */
+        this.$timeout(() =>
+            this.$timeout(() =>
+                this.focusBlock(blocks.length - 1)
+            )
+        )
     }
     deleteBlock() {
+        this.$timeout.cancel(this.blurTimer)
+
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
         const deleteBlock = () => {
             this.updateState()
             blocks.splice(focusedBlockIdx, 1)
-            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
             this.updateEditors()
+            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1))
         }
-        if (focusedBlockIdx !== null)
-            this.getEditorElements()[focusedBlockIdx].innerHTML
-                ? this.dialogService.showDeleteConfirmationDialog('ARE_YOU_SURE_DELETE', '', deleteBlock)
-                : deleteBlock()
-    }
-    beforeToggleBlockWidth() {
-        const { focusedBlockIdx } = this.$scope
 
         if (focusedBlockIdx !== null) {
-            // save selection prior to mutation
-            const editorElements = this.getEditorElements()
-            const editor = MediumEditor.getEditorFromElement(editorElements[focusedBlockIdx])
-            editor.saveSelection()
+            const { innerHTML } = this.getEditorElements()[focusedBlockIdx]
+
+            /**
+             * @todo Properly estore selection if delete confirmation is declined
+             */
+            innerHTML && innerHTML !== '<p><br></p>'
+                ? this.dialogService.showDeleteConfirmationDialog('ARE_YOU_SURE_DELETE', '', deleteBlock)
+                : deleteBlock()
         }
+    }
+    beforeToggleBlockWidth() {
+        this.$timeout.cancel(this.blurTimer)
+
+        const { focusedBlockIdx } = this.$scope
+
+        // save selection prior to mutation
+        if (focusedBlockIdx !== null)
+            this.getEditor(focusedBlockIdx).saveSelection()
     }
     toggleBlockWidth() {
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
@@ -567,16 +599,20 @@ class controller extends Controller {
         }
     }
     beforeMoveBlock(up = false) {
+        this.$timeout.cancel(this.blurTimer)
+
         const { focusedBlockIdx } = this.$scope
 
         // swap and save selection states
         if (focusedBlockIdx !== null) {
             const newIdx = focusedBlockIdx + (up ? -1 : 1)
-            const editorElements = this.getEditorElements()
-            const fromEditor = MediumEditor.getEditorFromElement(editorElements[focusedBlockIdx])
-            const toEditor = MediumEditor.getEditorFromElement(editorElements[newIdx])
+            const fromEditor = this.getEditor(focusedBlockIdx)
+            const toEditor = this.getEditor(newIdx)
+            const onFocus = this.detachEditorListener(toEditor, 'focus', 'onFocusBlock')
+
             toEditor.importSelection(fromEditor.exportSelection())
             toEditor.saveSelection()
+            toEditor.subscribe('focus', onFocus)
         }
     }
     moveBlock(up = false) {
@@ -587,17 +623,17 @@ class controller extends Controller {
 
             this.updateState()
             blocks.splice(newIdx, 0, blocks.splice(focusedBlockIdx, 1)[0])
-            this.focusBlock(newIdx)
             this.updateEditors()
+            this.focusBlock(newIdx)
         }
     }
+    addExistingMaterial() {}
+    addNewMaterial() {}
     /**
      * @todo in MS 13: Embed actions
      */
     addMedia() {}
     addRecommendedMaterial() {}
-    addExistingMaterial() {}
-    addNewMaterial() {}
 }
 controller.$inject = [
     '$scope',

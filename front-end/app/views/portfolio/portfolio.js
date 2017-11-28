@@ -11,7 +11,7 @@ class controller extends Controller {
             storedPortfolio.type !== '.ReducedPortfolio' &&
             storedPortfolio.type !== '.AdminPortfolio'
         ) {
-            this.setPortfolio(storedPortfolio, true)
+            this.setPortfolio(storedPortfolio)
             increaseViewCount()
         } else
             this.getPortfolio()
@@ -24,7 +24,7 @@ class controller extends Controller {
             this.eventService.notify('portfolio:reloadTaxonObject')
 
             if (newPortfolio !== oldPortfolio)
-                this.setPortfolio(newPortfolio, true)
+                this.setPortfolio(newPortfolio)
         })
         this.$scope.$watch(() => this.$location.url().replace(window.location.hash, ''), (newValue, oldValue) => {
             if (newValue !== oldValue)
@@ -40,7 +40,7 @@ class controller extends Controller {
         )
         this.$scope.$on('tags:updatePortfolio', (evt, value) => {
             if (!_.isEqual(value, this.$scope.portfolio))
-                this.setPortfolio(value, true)
+                this.setPortfolio(value)
         })
     }
     getPortfolio() {
@@ -54,7 +54,7 @@ class controller extends Controller {
                 .makeGet('rest/portfolio', { id })
                 .then(({ status, data }) =>
                     200 <= status && status < 300
-                        ? this.setPortfolio(data) || increaseViewCount()
+                        ? this.setPortfolio(data, false) || increaseViewCount()
                         : fail(),
                     fail
                 )
@@ -72,19 +72,17 @@ class controller extends Controller {
                     .makePost('rest/learningObject/increaseViewCount', createPortfolio(this.$scope.portfolio.id))
         }, 1000)
     }
-    setPortfolio(portfolio, isLocallyStored = false) {
+    setPortfolio(portfolio, isLocallyStored = true) {
         this.$scope.portfolio = portfolio
         this.storageService.setPortfolio(portfolio)
 
-        if (this.$scope.portfolio) {
-            this.$rootScope.learningObjectPrivate = ['PRIVATE'].includes(this.$scope.portfolio.visibility)
-            this.$rootScope.learningObjectImproper = this.$scope.portfolio.improper > 0
-            this.$rootScope.learningObjectDeleted = this.$scope.portfolio.deleted === true
-            this.$rootScope.learningObjectChanged = this.$scope.portfolio.changed > 0
-            this.$rootScope.learningObjectUnreviewed = !!this.$scope.portfolio.unReviewed
-        }
+        this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
+        this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
+        this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
+        this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
+        this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
 
-        if (!isLocallyStored && portfolio.chapters) {
+        if (!isLocallyStored && portfolio && portfolio.chapters) {
             portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
 
             // add id attributes to all subchapters derived from subchapter titles
@@ -94,7 +92,7 @@ class controller extends Controller {
 
                     for (let [idx, el] of entries('.portfolio-chapter'))
                         for (let [subIdx, subEl] of entries('.subchapter', el))
-                            subEl.id = this.getSlug(subEl.textContent, `subchapter-${idx}-${subIdx}`)
+                            subEl.id = this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
                 })
             )
         }
