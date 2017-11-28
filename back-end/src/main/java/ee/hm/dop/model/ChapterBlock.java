@@ -56,6 +56,9 @@ public class ChapterBlock {
     }
 
     public void setHtmlContent(String htmlContent) {
+        if (htmlContent != null) {
+            htmlContent = BLOCK_ALLOWED_HTML_TAGS_POLICY.sanitize(htmlContent);
+        }
         this.htmlContent = htmlContent;
     }
 }
