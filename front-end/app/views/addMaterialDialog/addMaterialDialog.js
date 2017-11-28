@@ -410,26 +410,44 @@ class controller extends Controller {
             {}
         )
     }
-    // TODO: setTitlesAndDescriptions on Object, varem oli array
     getTitlesAndDescriptions() {
-        const titles = []
-        const descriptions = []
+        const titles = [];
+        const descriptions = [];
+        const languageCodeMap = {
+            ET: 'est',
+            EN: 'eng',
+            RU: 'rus'
+        }
 
-        console.log(this.$scope.titlesAndDescriptions);
-        this.$scope.titlesAndDescriptions.forEach(item => {
-            if (item.title)
+        Object.keys(this.$scope.titlesAndDescriptions).forEach(lang => {
+            const item = this.$scope.titlesAndDescriptions[lang];
+
+            if (item.title) {
                 titles.push({
-                    language: item.language,
+                    language: languageCodeMap[lang],
                     text: item.title
-                })
-            if (item.description)
+                });
+            }
+            if (item.description) {
                 descriptions.push({
-                    language: item.language,
+                    language: languageCodeMap[lang],
                     text: item.description
-                })
-        })
+                });
+            }
+        });
 
-        return { titles, descriptions }
+        return { titles, descriptions };
+    }
+    isLangFilled(lang) {
+        let isFilled = false;
+
+        Object.keys(this.$scope.titlesAndDescriptions).forEach(key => {
+            if (lang === key && this.$scope.titlesAndDescriptions[key].title !== "") {
+                isFilled = true;
+            }
+        });
+
+        return isFilled;
     }
     setPublisher() {
         if (this.authenticatedUserService.isPublisher()) {
@@ -666,7 +684,7 @@ class controller extends Controller {
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
-            || this.$scope.uploadingFile
+            || this.$scope.uploadingFile;
     }
 }
 controller.$inject = [

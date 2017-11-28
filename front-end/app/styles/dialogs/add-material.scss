@@ -89,6 +89,10 @@
   &:hover {
     border-color: $green1;
   }
+
+  &.is-selected {
+    border-color: $green1;
+  }
 }
 
 .button-material-language__icon {
@@ -96,9 +100,3 @@
   right: 0%;
   top: 6px;
 }
-
-.button-material-language--selected {
-  border-color: $green1;
-}
-
-
