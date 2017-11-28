@@ -1,6 +1,5 @@
 package ee.hm.dop.service.ehis;
 
-import com.sun.xml.internal.messaging.saaj.soap.impl.ElementImpl;
 import ee.hm.dop.common.test.GuiceTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +9,6 @@ import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
@@ -44,9 +40,9 @@ public class EhisV5RequestBuilderTest {
         while (bodyElements.hasNext()) {
             Node firstChild = bodyElements.next();
             validateBodyFirstLevel(firstChild);
-            org.w3c.dom.Node secondChild = firstChild.getFirstChild();
+            Node secondChild = (Node) firstChild.getFirstChild();
             validateBodySecondLevel(secondChild);
-            org.w3c.dom.Node thirdChild = secondChild.getFirstChild();
+            Node thirdChild = (Node) secondChild.getFirstChild();
             validateBodyThirdLevel(thirdChild);
         }
     }
@@ -60,17 +56,17 @@ public class EhisV5RequestBuilderTest {
         throw new UnsupportedOperationException("unknown element: " + element.getLocalName());
     }
 
-    private void validateBodyFirstLevel(org.w3c.dom.Node element) {
+    private void validateBodyFirstLevel(Node element) {
         if (bodyLogicBlock(element, "isiku_rollid", null)) return;
         throw new UnsupportedOperationException("unknown element: " + element.getLocalName());
     }
 
-    private void validateBodySecondLevel(org.w3c.dom.Node secondChild) {
+    private void validateBodySecondLevel(Node secondChild) {
         if (bodyLogicBlock(secondChild, "keha", null)) return;
         throw new UnsupportedOperationException("unknown element: " + secondChild.getLocalName());
     }
 
-    private void validateBodyThirdLevel(org.w3c.dom.Node secondChild) {
+    private void validateBodyThirdLevel(Node secondChild) {
         if (bodyLogicBlock(secondChild, "isikukood", "123")) return;
         throw new UnsupportedOperationException("unknown element: " + secondChild.getLocalName());
     }
@@ -88,15 +84,14 @@ public class EhisV5RequestBuilderTest {
         return false;
     }
 
-    private boolean bodyLogicBlock(org.w3c.dom.Node element, String localName, String value) {
-        ElementImpl element2 = (ElementImpl) element;
-        if (element2.getLocalName().equals(localName)) {
-            if (!element2.getLocalName().equals("id")) {
-                assertEquals(value, element2.getValue());
+    private boolean bodyLogicBlock(Node element, String localName, String value) {
+        if (element.getLocalName().equals(localName)) {
+            if (!element.getLocalName().equals("id")) {
+                assertEquals(value, element.getValue());
             } else {
-                assertEquals(value.length(), element2.getValue().length());
+                assertEquals(value.length(), element.getValue().length());
             }
-            assertEquals(localName, element2.getNodeName());
+            assertEquals(localName, element.getNodeName());
             return true;
         }
         return false;
