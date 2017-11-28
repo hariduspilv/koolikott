@@ -242,9 +242,9 @@
               </span>
               <span>
                   <span data-ng-repeat="group in targetGroups">
-                    <span data-ng-bind="group"></span><span data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
+                    <span data-translate="{{group}}"></span><span data-ng-bind="$index < targetGroups.length - 1 ? ', ' : ''"></span>
                   </span>
-                <span data-ng-if="isNullOrZeroLength(targetGroups)" data-translate="UNKNOWN">Unknown</span>
+                <span data-ng-if="isNullOrZeroLength(targetGroups)" data-translate="UNKNOWN"></span>
               </span>
             </p>
             <!-- Key competences -->
