@@ -10,7 +10,7 @@ public class VersionResource extends BaseResource{
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getUserTourData() {
+    public String getVersion() {
         return "1.12.0";
     }
 }
