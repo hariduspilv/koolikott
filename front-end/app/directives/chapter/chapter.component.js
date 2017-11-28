@@ -256,10 +256,9 @@ class controller extends Controller {
             editor.subscribe('editableKeyup', saveSelection)
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
             editor.subscribe('blur', this.onBlurBlock.bind(this, idx))
-            editor.subscribe('editableInput', this.onEditableInput.bind(this, idx))
 
             this.optimizePlaceholder(el, editor)
-            this.disallowFormatting(el)
+            this.watchEditableNodes(el)
         }
     }
     updateEditors() {
@@ -277,9 +276,7 @@ class controller extends Controller {
                         if (el.innerHTML && el.innerHTML !== '<p><br></p>')
                             el.classList.remove('medium-editor-placeholder')
 
-                        // add id attributes to all subchapters derived from subchapter titles
-                        for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
-                            subEl.id = this.getSlug(`${this.index + 1}-${subIdx + 1}`)
+                        this.registerSubchapters(el)
                     }
                 }
     }
@@ -314,38 +311,65 @@ class controller extends Controller {
             }, 200)
         })
     }
-    disallowFormatting(el) {
+    watchEditableNodes(el) {
         /**
-         * Unwrap html tags that are not allowed as soon as they are created.
+         * 1) Unwrap html tags that are not allowed as soon as they are created.
+         * 2) (Un)register subchapters upon creation/removal of <h3>
          */
-        const unwrapNodeIfNecessary = (node) => {
-            if (node.parentNode &&
-                node.nodeType === Node.ELEMENT_NODE &&
-                !ALLOWED_TAGS.includes(node.tagName)
-            )
-                node.outerHTML = node.innerHTML
+        const handleAddedNode = (node) => {
+            if (node.parentNode && node.nodeType === Node.ELEMENT_NODE) {
+                if (!ALLOWED_TAGS.includes(node.tagName))
+                    node.outerHTML = node.innerHTML
+                else if (node.tagName === 'H3') {
+                    node.classList.add('subchapter')
+                    this.updateState()
+                    this.registerSubchapters(this.getClosestEditor(node))
+                }
+            }
+        }
+        const handleRemovedNode = (node) => {
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'H3')
+                this.updateState()
         }
         if ('MutationObserver' in window) {
             el._mutationObserver = new MutationObserver(mutations =>
-                mutations.forEach(({ addedNodes }) =>
-                    addedNodes.forEach(unwrapNodeIfNecessary)
-                )
+                mutations.forEach(({ addedNodes, removedNodes }) => {
+                    addedNodes.forEach(handleAddedNode)
+                    removedNodes.forEach(handleRemovedNode)
+                })
             )
             el._mutationObserver.observe(el, {
                 subtree: true,
                 childList: true,
                 characterData: true
             })
-        } else
+        } else {
             el.addEventListener('DOMNodeInsertedIntoDocument', (evt) =>
-                unwrapNodeIfNecessary(evt.target)
+                handleAddedNode(evt.target)
             )
+            el.addEventListener('DOMNodeRemovedFromDocument', (evt) =>
+                handleRemovedNode(evt.target)
+            )
+        }
+    }
+    registerSubchapters(el) {
+        // add id attributes to all subchapters derived from subchapter titles
+        for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
+            subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     getEditorElements() {
         return this.$element[0].querySelectorAll('.chapter-block') || []
     }
     getEditor(idx) {
         return MediumEditor.getEditorFromElement(this.getEditorElements()[idx])
+    }
+    getClosestEditor(child) {
+        let el = child
+        while(el !== null) {
+            if (el.classList.contains('medium-editor-element'))
+                return el
+            el = el.parentElement
+        }
     }
     calcSizes() {
         if (this.isEditMode) {
@@ -537,18 +561,6 @@ class controller extends Controller {
                 editor.unsubscribe(eventName, listener)
                 return listener
             }
-    }
-    onEditableInput(idx) {
-        // add subchapter class to <h3>
-        let el = window.getSelection().getRangeAt(0).commonAncestorContainer
-
-        while (el !== null) {
-            if (el.nodeType === Node.ELEMENT_NODE && el.classList.contains('medium-editor-element'))
-                return
-            if (el.tagName === 'H3')
-                return el.classList.add('subchapter')
-            el = el.parentElement
-        }
     }
     /**
      * Block actions
