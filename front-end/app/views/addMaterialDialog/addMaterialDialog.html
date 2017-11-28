@@ -1,15 +1,11 @@
 <md-dialog aria-label="Materiali lisamise modaalaken" id="dialog-add-material" flex-sm="75" flex class="fullscreen-dialog">
   <form name="addMaterialForm">
     <md-toolbar data-md-colors="{ 'background-color': 'default-teal-800' }">
-      <div class="md-toolbar-tools" flex>
-        <h2>
-          <span data-ng-if="!isUpdateMode" data-translate="ADD_MATERIAL"></span>
-          <span data-ng-if="isUpdateMode" data-translate="MATERIAL_EDIT"></span>
-        </h2>
-        <span flex></span>
+      <div class="md-toolbar-tools" layout-align="space-between center">
+        <h2 data-translate="{{ isUpdateMode ? 'MATERIAL_EDIT' : 'ADD_MATERIAL' }}"></h2>
         <md-button
           ng-click="$ctrl.$mdDialog.hide()"
-          class="md-icon-button" 
+          class="md-icon-button"
           aria-label="Sulge materiali lisamise modaalaken"
           >
           <md-icon>close</md-icon>
@@ -25,7 +21,6 @@
           <div data-translate="ADD_MATERIAL_LINK"></div>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
-              <label></label>
               <input
                 data-ng-model="material.source"
                 name="source"
@@ -34,10 +29,10 @@
                 dop-validate-url
                 data-ng-click="$ctrl.sourceIsFocused()"
                 placeholder="{{'HTTP_WORD'|translate}}"
-              >
+              />
               <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                 <div
-                  data-ng-show="$ctrl.isURLInvalid()"
+                  data-ng-if="$ctrl.isURLInvalid()"
                   data-ng-message="url"
                   class="invalid-url-message"
                   data-translate="MATERIAL_URL_IS_INVALID"
@@ -51,8 +46,7 @@
                   ></a>
                 </div>
                 <div data-ng-message="deleted" data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
-                <div data-ng-message="filenameTooLong" data-translate="MATERIAL_FILE_NAME_TOO_LONG">
-                </div>
+                <div data-ng-message="filenameTooLong" data-translate="MATERIAL_FILE_NAME_TOO_LONG"></div>
               </div>
             </md-input-container>
           </div>
@@ -66,13 +60,12 @@
             data-ngf-max-size="{{maxFileSize + 'MB'}}"
             ngf-model-invalid="invalidFile"
             >
-            <a class="md-raised md-primary">
-              <span data-ng-if ="material.uploadedFile" data-translate="UPDATE_FILE"></span>
-              <span data-ng-if ="!material.uploadedFile" data-translate="FILE_WORD"></span></a>
+            <a href="javascript:void(0);" class="md-raised md-primary" data-translate="{{ material.uploadedFile ? 'UPDATE_FILE' : 'FILE_WORD' }}"></a>
             <span data-translate="FOR_MATERIAL"></span><span>*.</span>
           </div>
           <div class="currently-uploaded-file" data-ng-if="material.uploadedFile && !fileUploaded">
-            <span data-translate="CURRENTLY_UPLOADED_FILE"></span> {{ material.uploadedFile.name }}
+            <span data-translate="CURRENTLY_UPLOADED_FILE"></span>
+            <span data-ng-bind="material.uploadedFile.name"></span>
           </div>
           <div
             data-ng-messages="file"
@@ -508,7 +501,7 @@
                 <div data-ng-show="peerReview.uploaded && !peerReview.uploading" class="upload-file-success">
                   <h5>
                     <span data-translate="ADD_FILE_SUCCESS"></span>:
-                    <span class="ellipsis">{{ peerReview.name }}</span>
+                    <span class="ellipsis" data-ng-bind="peerReview.name"></span>
                   </h5>
                 </div>
               </div>
@@ -521,19 +514,17 @@
                 data-ngf-pattern="'*'"
                 data-ngf-max-size="{{maxReviewSize + 'MB'}}"
                 ngf-model-invalid="invalidReview"
-                ngf-change="uploadReview($index, $file)"
+                ngf-change="$ctrl.uploadReview($index, $file)"
                 >
-                <a class="md-raised md-primary md-ink-ripple">
-                  <span data-ng-show="peerReview.uploaded" data-translate="UPDATE_FILE"></span>
-                  <span data-ng-show="!peerReview.uploaded" data-translate="FILE_WORD"></span>
-                </a>
+                <a href="javascript:void(0);" class="md-raised md-primary md-ink-ripple" data-translate="{{ peerReview.uploaded ? 'UPDATE_FILE' : 'FILE_WORD' }}"></a>
               </div>
               <div
                 data-ng-messages="file"
                 data-ng-show="invalidReview && invalidReview.length > 0"
                 class="upload-file-error"
                 >
-                <span data-translate="DOCUMENT_MAX_SIZE"></span> {{maxReviewSize}} MB
+                <span data-translate="DOCUMENT_MAX_SIZE"></span>
+                <span data-ng-bind="maxReviewSize"></span> MB
               </div>
               <md-button
                 class="md-icon-button md-primary"
@@ -642,8 +633,7 @@
         data-ng-disabled="$ctrl.isSubmitDisabled()"
         data-ng-click="$ctrl.save()"
         >
-        <span data-ng-show="!isUpdateMode" data-translate="BUTTON_CREATE_MATERIAL"></span>
-        <span data-ng-show="isUpdateMode" data-translate="BUTTON_UPDATE_MATERIAL"></span>
+        <span data-translate="{{ isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL' }}"></span>
         <md-icon>arrow_forward</md-icon>
       </md-button>
       <md-progress-circular

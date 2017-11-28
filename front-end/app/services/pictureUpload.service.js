@@ -4,7 +4,7 @@
 class controller extends Controller {
     upload(file) {
         return this.Upload.dataUrl(file, true).then(() =>
-            console.log('upload this shit:', file) ||
+            console.log('upload this:', file) ||
             this.serverCallService.upload('rest/picture', {
                 picture: file.$ngfDataUrl.substring('data:image/png;base64,'.length)
             })

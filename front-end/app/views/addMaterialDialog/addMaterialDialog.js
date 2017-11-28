@@ -44,7 +44,7 @@ class controller extends Controller {
             this.$scope.material.uploadedFile.displayName = decodeUTF8(this.$scope.material.uploadedFile.name)
             this.$scope.fileUploaded = true
         }
-        
+
         this.metadataService.loadLanguages(this.setMaterialSourceLangugeges.bind(this))
         this.metadataService.loadLicenseTypes(this.setLicenseTypes.bind(this))
         this.metadataService.loadResourceTypes(this.setResourceTypes.bind(this))
@@ -199,15 +199,15 @@ class controller extends Controller {
     }
     save() {
         const save = () => {
-            this.$scope.material.resourceTypes = this.$scope.resourceTypeDTO
             this.$scope.isSaving = true
+            this.$scope.material.resourceTypes = this.$scope.resourceTypeDTO
 
-            const { titles, descriptions } = this.getTitlesAndDecriptions()
+            const { titles, descriptions } = this.getTitlesAndDescriptions()
 
             this.$scope.material.titles = titles
             this.$scope.material.descriptions = descriptions
             this.$scope.material.type = '.Material'
-            
+
             if (this.$scope.material.source)
                 this.$scope.material.uploadedFile = null
 
@@ -410,10 +410,12 @@ class controller extends Controller {
             {}
         )
     }
-    getTitlesAndDecriptions() {
+    // TODO: setTitlesAndDescriptions on Object, varem oli array
+    getTitlesAndDescriptions() {
         const titles = []
         const descriptions = []
 
+        console.log(this.$scope.titlesAndDescriptions);
         this.$scope.titlesAndDescriptions.forEach(item => {
             if (item.title)
                 titles.push({
@@ -502,23 +504,22 @@ class controller extends Controller {
         if (file) {
             this.$scope.material.peerReviews[index].uploading = true
             this.$scope.uploadingReviewId = index
-            this.fileUploadService.uploadReview(file, this.reviewUploadSuccess, this.reviewUploadFailed, this.reviewUploadFinally)
+            this.fileUploadService.uploadReview(file)
+                .then(({ data }) => {
+                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].name = data.name;
+                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].url = data.url;
+                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
+
+                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                }, ({ data }) => {
+                    this.toastService.show(`Error: ${data}`);
+                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                })
         }
-    }
-    reviewUploadSuccess(file) {
-        this.$scope.material.peerReviews[this.$scope.uploadingReviewId].name = file.name;
-        this.$scope.material.peerReviews[this.$scope.uploadingReviewId].url = file.url;
-        this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
-    }
-    reviewUploadFailed() {
-        log('Review upload failed.');
-    }
-    reviewUploadFinally() {
-        this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
     }
     preSetMaterial() {
         const { material } = this.$scope
-        
+
         this.$scope.isUpdateMode = true
 
         if (material.issueDate)
@@ -665,7 +666,7 @@ class controller extends Controller {
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
-            || this.$scope.uploadingFile        
+            || this.$scope.uploadingFile
     }
 }
 controller.$inject = [
