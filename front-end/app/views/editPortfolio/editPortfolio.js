@@ -33,13 +33,13 @@ class controller extends Controller {
         )
     }
     createChapter() {
-        this.$scope.portfolio.chapters = this.$scope.portfolio.chapters.concat({
+        this.$scope.portfolio.chapters.push({
             title: '',
             blocks: []
         })
         this.$timeout(() => {
             // scroll to new chapter & focus title input
-            const chapter = document.getElementById(`chapter-${this.$scope.portfolio.chapters.length - 1}`)
+            const chapter = document.getElementById(`chapter-${this.$scope.portfolio.chapters.length}`)
             this.scrollToElement(chapter, 200, 60)
             chapter.querySelector('input').focus()
         })
