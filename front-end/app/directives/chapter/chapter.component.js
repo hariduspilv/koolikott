@@ -4,17 +4,17 @@
  @todo
  +  WYSIWYG theme
  +  tabIndexes
+ -  Material embeds: intermediary solution: embed materials BETWEEN blocks the old way
  -  Editor toolbar conf.
-    - p button
-    - h3 button
-    - a button
+    - display the wysiwyg toolbar in the beginning of empty paragraph/h3/blockquote (block-level element)
+    - p button (button active state)
+    - h3 button (should not be toggleable?)
+    + a button
     + b button
     + i button
     + blockquote button
     + ul button
     + toolbar theme
-    - display the wysiwyg toolbar in the beginning of empty paragraph/h3/blockquote (block-level element)
- -  Material embeds: intermediary solution: embed materials BETWEEN blocks the old way
  -  translations
 */
 
@@ -47,19 +47,11 @@ class CustomMediumEditorButton {
             el = el.parentElement
         }
     }
-    /**
-     * @todo This selection caching doesn't work if dom changes. Instead do what rangy does: insert
-     * temporary invisible marker elements.
-     */
-    saveSelection() {
-        const selection = window.getSelection()
-        this.savedRange = selection.rangeCount && selection.getRangeAt(0)
-    }
-    restoreSelection() {
-        if (this.savedRange) {
-            const selection = window.getSelection()
-            selection.removeAllRanges()
-            selection.addRange(this.savedRange)
+    getEditorElement(el) {
+        while(el !== null) {
+            if (el.classList.contains('medium-editor-element'))
+                return el
+            el = el.parentElement
         }
     }
 }
@@ -68,30 +60,41 @@ class ParagraphButton extends CustomMediumEditorButton {
         super()
         return new MediumButton({
             label: `<svg viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">${ICON_SVG_CONTENTS.p}</svg>`,
-            action: (html, marked, parent) => {
-                this.saveSelection()
-
-                const closestBlockLevelAncestor = this.getClosestBlockLevelAncestor(parent)
-                if (closestBlockLevelAncestor.tagName === 'LI')
-                    this.mutateListItem(closestBlockLevelAncestor)
-
-                else {
-                    const p = document.createElement('p')
-                    const ancestorToMutate = this.getAncestorToMutate(parent)
-
-                    p.insertBefore(ancestorToMutate, null)
-                    ancestorToMutate.outerHTML = ancestorToMutate.innerHTML
-
-                    // now see if there are other block level elements that shouldn't remain nested
-                    // in a paragraph (such as orphaned <li> elements).
-                    for (let el of p.querySelectorAll('li'))
-                        el.outerHTML = el.innerHTML
-                }
-
-                this.restoreSelection()
-                return ''
-            }
+            action: this.action.bind(this)
         })
+    }
+    action(html, marked, parent) {
+        const selection = rangy.saveSelection()
+        const editorEl = this.getEditorElement(parent)
+        const editor = MediumEditor.getEditorFromElement(editorEl)
+        const toolbar = editor.getExtensionByName('toolbar')
+        const closestBlockLevelAncestor = this.getClosestBlockLevelAncestor(parent)
+        
+        if (closestBlockLevelAncestor.tagName === 'P') {
+            rangy.restoreSelection(selection)
+            return html
+        }
+        else if (closestBlockLevelAncestor.tagName === 'LI') {
+            this.mutateListItem(closestBlockLevelAncestor)
+        }
+        else {
+            const p = document.createElement('p')
+            const ancestorToMutate = this.getAncestorToMutate(parent)
+
+            editorEl.insertBefore(p, ancestorToMutate.nextSibling)
+            p.insertBefore(ancestorToMutate, null)
+            ancestorToMutate.outerHTML = ancestorToMutate.innerHTML
+
+            // now see if there are other block level elements that shouldn't remain nested
+            // in a paragraph (such as orphaned <li> elements).
+            for (let el of p.querySelectorAll('li'))
+                el.outerHTML = el.innerHTML
+        }
+
+        rangy.restoreSelection(selection)
+        toolbar.setToolbarPosition()
+        toolbar.checkState()
+        return html
     }
     mutateListItem(li) {
         const p = document.createElement('p')
@@ -198,7 +201,7 @@ class controller extends Controller {
             let el = evt.target
 
             while (el !== null) {
-                if (el === this.$element[0])
+                if (el === this.$element[0] || el.classList.contains('medium-editor-toolbar'))
                     return
                 el = el.parentElement
             }
@@ -253,6 +256,7 @@ class controller extends Controller {
             editor.subscribe('editableKeyup', saveSelection)
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
             editor.subscribe('blur', this.onBlurBlock.bind(this, idx))
+            editor.subscribe('editableInput', this.onEditableInput.bind(this, idx))
 
             this.optimizePlaceholder(el, editor)
             this.disallowFormatting(el)
@@ -533,6 +537,18 @@ class controller extends Controller {
                 editor.unsubscribe(eventName, listener)
                 return listener
             }
+    }
+    onEditableInput(idx) {
+        // add subchapter class to <h3>
+        let el = window.getSelection().getRangeAt(0).commonAncestorContainer
+
+        while (el !== null) {
+            if (el.nodeType === Node.ELEMENT_NODE && el.classList.contains('medium-editor-element'))
+                return
+            if (el.tagName === 'H3')
+                return el.classList.add('subchapter')
+            el = el.parentElement
+        }
     }
     /**
      * Block actions
