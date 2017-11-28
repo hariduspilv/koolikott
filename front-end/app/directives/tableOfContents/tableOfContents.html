@@ -30,7 +30,7 @@
     data-ng-repeat="chapter in chapters"
     data-sv-element
     >
-    <span data-ng-if="authUser && $root.isEditPortfolioMode" data-sv-handle class="sidenav__handle">
+    <span data-ng-class="{'hidden': !authUser || !$root.isEditPortfolioMode}" data-sv-handle class="sidenav__handle">
       <md-icon>drag_handle</md-icon>
     </span>
     <a
