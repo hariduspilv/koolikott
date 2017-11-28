@@ -59,13 +59,13 @@ angular.module('koolikottApp')
                 // If the initial type is a LINK, try to ask the type from our proxy
                 if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
                     if (baseUrl.startsWith("http://localhost:3001")) {
-                        console.log("dev mode grunt hack");
-                        let check = $scope.material.source.split(":8080/rest");
-                        if (!check[1]) { //link is not modified
-                            let pop = $scope.material.source.split("/rest");
-                            let origin = pop[0].split("https");
-                            $scope.material.source = "http" + origin[1] + ":8080/rest" + pop[1];
-                        }
+                        // console.log("dev mode grunt hack");
+                        // let check = $scope.material.source.split(":8080/rest");
+                        // if (!check[1]) { //link is not modified
+                        //     let pop = $scope.material.source.split("/rest");
+                        //     let origin = pop[0].split("https");
+                        //     $scope.material.source = "http" + origin[1] + ":8080/rest" + pop[1];
+                        // }
                     } else {
                         $scope.fallbackType = matchType(materialSource);
                         $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
