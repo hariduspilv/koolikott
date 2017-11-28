@@ -82,4 +82,19 @@ public class EhisSOAPServiceTest {
         assertNull(role2.getSchoolClass());
     }
 
+    @Test
+    public void getPerson4444() {
+        Person person = ehisSOAPService.getPersonInformation("4444");
+
+        List<Institution> institutions = person.getInstitutions();
+        assertEquals(1, institutions.size());
+
+        Institution institution = institutions.get(0);
+        assertEquals("668", institution.getEhisId());
+
+        Role role1 = institution.getRoles().get(0);
+        assertEquals(TEACHER, role1.getInstitutionalRole());
+        assertNull(role1.getSchoolYear());
+        assertNull(role1.getSchoolClass());
+    }
 }
