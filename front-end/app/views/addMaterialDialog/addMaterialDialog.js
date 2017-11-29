@@ -169,14 +169,14 @@ class controller extends Controller {
         )
     }
     setAuthorToUser() {
-        const { name } = this.authenticatedUserService.getUser()
+        const { name } = this.authenticatedUserService.getUser();
 
         if (this.$scope.material.picture.author !== name) {
-            this.$scope.material.picture.author = name
-            this.$scope.isUserAuthor = true
+            this.$scope.material.picture.author = name;
+            this.$scope.isUserAuthor = true;
         } else {
-            this.$scope.material.picture.author = ''
-            this.$scope.isUserAuthor = false
+            this.$scope.material.picture.author = '';
+            this.$scope.isUserAuthor = false;
         }
     }
     addNewTaxon() {
@@ -214,7 +214,7 @@ class controller extends Controller {
         return !!(this.$scope.material.authors[0] && this.$scope.material.authors[0].name && this.$scope.material.authors[0].surname)
             || !!(this.$scope.material.publishers[0] && this.$scope.material.publishers[0].name)
     }
-    isAdmin () {
+    isAdmin() {
         return this.authenticatedUserService.isAdmin();
     }
     getIssueDate(date) {
@@ -314,6 +314,7 @@ class controller extends Controller {
         this.$scope.material.crossCurricularThemes = []
         this.$scope.material.publishers = []
         this.$scope.material.resourceTypes = []
+        this.$scope.material.picture = {}
         this.$scope.issueDate = new Date()
         this.setTitlesAndDescriptions()
     }

@@ -22,3 +22,7 @@ md-input-container .md-resize-handle {
 .search-learning-objects::-ms-clear {
   display: none;
 }
+
+md-input-container label:not(.md-container-ignore).md-required:empty:after {
+    content: "";
+}
