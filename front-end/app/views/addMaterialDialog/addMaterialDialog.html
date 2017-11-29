@@ -18,7 +18,7 @@
         <div layout="row" layout-wrap layout-align="start center">
           <!--Material source-->
           <div layout="row" layout-align="start center">
-          <div data-translate="ADD_MATERIAL_LINK"></div>
+          <span data-translate="ADD_MATERIAL_LINK"></span>
           <div data-ng-hide="fileUploaded || uploadingFile" flex-xs="45" flex-sm="70" class="md-padding">
             <md-input-container layout-fill>
               <label></label>
@@ -36,8 +36,7 @@
                   data-ng-if="$ctrl.isURLInvalid()"
                   data-ng-message="url"
                   class="invalid-url-message"
-                  data-translate="MATERIAL_URL_IS_INVALID"
-                ></div>
+                  data-translate="MATERIAL_URL_IS_INVALID"></div>
                 <div data-ng-message="exists">
                   <span data-translate="MATERIAL_ALREADY_EXISTS"></span>
                   <a
@@ -480,8 +479,8 @@
           <md-icon>{{ additionalInfo.isVisible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
         </md-button>
         <div class="md-padding" id="additionalInfo" data-ng-if="additionalInfo.isVisible" ng-cloak class="md-padding">
-          <div layout="row" layout-align="start center" layout-wrap data-ng-repeat="peerReview in material.peerReviews track by $index">
-            <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70">
+          <div layout="row" layout-align="start start" layout-wrap>
+            <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70" data-ng-repeat="peerReview in material.peerReviews track by $index">
               <md-input-container flex-gt-lg="50" flex-lg="45" flex data-ng-if="!peerReview.uploading && !peerReview.uploaded">
                 <label data-ng-if="!peerReview.uploading && !peerReview.uploaded" data-translate="RECESSION_LINK"></label>
                 <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url aria-label="{{ 'RECESSION_LINK' | translate }}">
@@ -538,7 +537,8 @@
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
               </md-button>
             </div>
-            <!-- Upload button -->
+
+            <!-- issueDate datepicker -->
             <div layout="row" layout-align="end center" flex-gt-lg="20" flex-lg="20">
               <div class="datepicker-container">
                 <md-datepicker

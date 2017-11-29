@@ -58,7 +58,7 @@ class controller extends Controller {
         this.$scope.$watch('material.source', this.onMaterialSourceChange.bind(this), true)
         this.$scope.$watchCollection('invalidPicture', this.onInvalidPictureChange.bind(this))
         this.$scope.$watch(
-            () => (document.querySelector('md-datepicker-input') || {}).value,
+            () => (document.querySelector('.md-datepicker-input') || {}).value,
             this.onDatePickerChange.bind(this),
             true
         )
@@ -307,7 +307,6 @@ class controller extends Controller {
     }
     initEmptyMaterial() {
         this.$scope.material = {}
-        this.$scope.material.tags = []
         this.$scope.material.taxons = [{}]
         this.$scope.material.authors = [{}]
         this.$scope.material.peerReviews = [{}]
@@ -316,9 +315,6 @@ class controller extends Controller {
         this.$scope.material.publishers = []
         this.$scope.material.resourceTypes = []
         this.$scope.material.picture = {}
-        this.$scope.material.picture.licenseType = ''
-        this.$scope.material.picture.author = ''
-        this.$scope.material.picture.source = ''
         this.$scope.issueDate = new Date()
         this.setTitlesAndDescriptions()
     }
@@ -643,10 +639,10 @@ class controller extends Controller {
                     this.$scope.material.peerReviews.splice(i, 1)
             })
 
-            return console.log('send this:', this.$scope.material)
+            console.log('send this:', this.$scope.material)
 
             this.serverCallService
-                [this.locals.isEditMode ? 'makePut' : 'makePost']('rest/material', this.$scope.material)
+                [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)
                 .then(({ data: material }) => {
                     const done = () => {
                         this.$scope.isUpdateMode
