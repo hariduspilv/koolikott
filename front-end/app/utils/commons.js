@@ -258,23 +258,6 @@ function formatIssueDate(issueDate) {
     }
 }
 
-function issueDateToDate(issueDate) {
-    if (!issueDate) {
-        return;
-    }
-
-    if (issueDate.day && issueDate.month && issueDate.year) {
-        // full date
-        return new Date(issueDate.year, issueDate.month - 1, issueDate.day);
-    } else if (issueDate.month && issueDate.year) {
-        // month date
-        return new Date(issueDate.year, issueDate.month - 1, 1);
-    } else if (issueDate.year) {
-        // year date
-        return new Date(issueDate.year, 0, 1);
-    }
-}
-
 function formatDay(day) {
     return day > 9 ? "" + day : "0" + day;
 }
@@ -420,19 +403,6 @@ function getSource(material) {
 }
 
 /**
- * Check if list of objects contains element
- * @param list
- * @param field
- * @param value
- * @returns {boolean}
- */
-function listContains(list, field, value) {
-    return list.filter(function (e) {
-            return e[field] === value;
-        }).length > 0
-}
-
-/**
  * Move element in list from old_index to new_index
  * @param old_index
  * @param new_index
@@ -524,12 +494,6 @@ function isPortfolio(type) {
 
 function isMobile() {
     return window.innerWidth < BREAK_XS;
-}
-
-function stripHtml(htmlString) {
-    let tmp = document.createElement("div");
-    tmp.innerHTML = htmlString;
-    return tmp.textContent || tmp.innerText || "";
 }
 
 function countOccurrences(value, text) {
@@ -912,6 +876,22 @@ class Controller {
                     : embeds,
                 ''
             )
+    }
+    issueDateToDate(issueDate) {
+        return issueDate && (
+            issueDate.day && issueDate.month && issueDate.year
+                ? new Date(issueDate.year, issueDate.month - 1, issueDate.day)
+                : issueDate.month && issueDate.year
+                    ? new Date(issueDate.year, issueDate.month - 1, 1)
+                    : issueDate.year
+                        && new Date(issueDate.year, 0, 1)
+        )
+    }
+    stripHtml(htmlString = '') {
+        let tmp = document.createElement('div')
+        tmp.innerHTML = htmlString
+
+        return tmp.textContent || tmp.innerText || ''
     }
 }
 
