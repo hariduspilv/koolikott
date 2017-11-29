@@ -451,7 +451,7 @@ module.exports = function (grunt) {
         // ES6 syntax
         babel: {
             options: {
-                presets: ['@babel/preset-env']
+                presets: ['env']
             },
             dist: {
                 files: {
