@@ -493,6 +493,7 @@ md-input-container.chapter-title {
   button {
     display: inline-block;
     margin: 0;
+    pointer-events: none;
   }
 
   label {
@@ -553,6 +554,7 @@ md-input-container.chapter-title {
     width: 2rem;
     height: 2rem;
     min-height: 0;
+    pointer-events: none;
     background-color: #9e9e9e; // gray-500
     transition: background-color .2s;
     will-change: background-color;
@@ -771,6 +773,59 @@ md-input-container.chapter-title {
     margin-bottom: 0;
   }
 
+  .thumbnail {
+    padding-top: 56.25%;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .caption {
+    padding: 1rem 1rem 1rem 4.2rem;
+    height: 5.4rem;
+    box-sizing: border-box;
+    position: relative;
+
+    md-icon {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      background-color: #e0e0e0; // gray-300
+      padding: .375rem;
+      border-radius: 100%;
+      color: $white;
+    }
+
+    h5, p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: .875rem;
+      margin: 0;
+    }
+
+    .chapter-embed-card__publishers-and-authors {
+      color: #757575; // gray-600
+    }
+
+    .chapter-embed-card__source {
+      font-size: .75rem;
+      text-align: right;
+
+      span {
+        color: #757575; // gray-600
+      }
+
+      a {
+        color: inherit;
+
+        &:hover,
+        &:active {
+          color: #03a9f4; // light-blue-500
+        }
+      }
+    }
+  }
+
   // placeholder
   &:not(.chapter-embed-card--loaded) {
     &:before,
@@ -786,7 +841,7 @@ md-input-container.chapter-title {
       padding-top: 18.75rem;
     }
     &:after {
-      height: 4.3rem;
+      height: 5.4rem;
       background-image: url('data:image/png;base64,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');
       background-size: auto 2.25rem;
       background-position: 1rem 1rem;

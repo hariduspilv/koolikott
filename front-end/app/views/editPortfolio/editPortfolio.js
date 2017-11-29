@@ -84,6 +84,7 @@ class controller extends Controller {
             if  (!portfolio.chapters.length)
                 portfolio.chapters.push({ title: '', blocks: [] })
 
+            console.log('portfolio:', portfolio)
             this.storageService.setPortfolio(portfolio)
         }
     }

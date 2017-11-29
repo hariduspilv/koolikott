@@ -44,6 +44,7 @@
         </div>-->
         <div
           class="chapter-btn chapter-btn--existing-material"
+          data-ng-mousedown="$ctrl.beforeAddExistingMaterial()"
           data-ng-click="$ctrl.addExistingMaterial()"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
           style="width:50%;"
