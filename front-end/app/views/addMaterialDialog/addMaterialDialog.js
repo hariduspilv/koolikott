@@ -30,9 +30,9 @@ class controller extends Controller {
 
         const addChapterMaterialUrl = this.$scope.material && this.$scope.material.source
 
-        if (this.$scope.material && !this.$scope.isChapterMaterial)
+        if (this.$scope.material && !this.$scope.isChapterMaterial) {
             this.preSetMaterial()
-        else {
+        } else {
             this.initEmptyMaterial()
             this.prefillMetadataFromPortfolio()
 
@@ -196,71 +196,6 @@ class controller extends Controller {
     }
     toggleTitleAndDescriptionLanguageInputs(lang) {
         this.$scope.activeTitleAndDescriptionLanguage = lang
-    }
-    save() {
-        const save = () => {
-            this.$scope.isSaving = true
-            this.$scope.material.resourceTypes = this.$scope.resourceTypeDTO
-
-            const { titles, descriptions } = this.getTitlesAndDescriptions()
-
-            this.$scope.material.titles = titles
-            this.$scope.material.descriptions = descriptions
-            this.$scope.material.type = '.Material'
-
-            if (this.$scope.material.source)
-                this.$scope.material.uploadedFile = null
-
-            if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
-                this.$scope.material.publishers[0] = null
-
-            this.$scope.material.peerReviews.forEach((peerReview, i) => {
-                if (!peerReview || !peerReview.url)
-                    this.$scope.material.peerReviews.splice(i, 1)
-            })
-
-            return console.log('send this:', this.$scope.material)
-
-            this.serverCallService
-                [this.locals.isEditMode ? 'makePut' : 'makePost']('rest/material', this.$scope.material)
-                .then(({ data: material }) => {
-                    const done = () => {
-                        this.$scope.isUpdateMode
-                            ? this.$rootScope.learningObjectChanged = this.isChanged(material)
-                            : this.$rootScope.learningObjectUnreviewed = true
-                        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                    }
-                    if (material) {
-                        material.source = this.getMaterialSource(material)
-                        this.$mdDialog.hide()
-                        this.storageService.setMaterial(material)
-
-                        if (!this.$scope.isChapterMaterial) {
-                            const url = '/material?id=' + material.id
-
-                            if (this.$location.url() === url)
-                                return done()
-
-                            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
-                                unsubscribe()
-                                this.$timeout(done)
-                            })
-                            this.$location.url(url)
-                        }
-                    }
-                    this.$scope.isSaving = false
-                }, () =>
-                    this.$scope.isSaving = false
-                )
-        }
-        Promise.all(
-            ['fileUpload', 'pictureUpload'].reduce(
-                (promises, u) => this[u] && this[u].then
-                    ? promises.concat(this[u])
-                    : promises,
-                []
-            )
-        ).then(save)
     }
     isTouchedOrSubmitted(element) {
         return (element && element.$touched)
@@ -685,6 +620,71 @@ class controller extends Controller {
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
             || this.$scope.uploadingFile;
+    }
+    save() {
+        const save = () => {
+            this.$scope.isSaving = true
+            this.$scope.material.resourceTypes = this.$scope.resourceTypeDTO
+
+            const { titles, descriptions } = this.getTitlesAndDescriptions()
+
+            this.$scope.material.titles = titles
+            this.$scope.material.descriptions = descriptions
+            this.$scope.material.type = '.Material'
+
+            if (this.$scope.material.source)
+                this.$scope.material.uploadedFile = null
+
+            if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
+                this.$scope.material.publishers[0] = null
+
+            this.$scope.material.peerReviews.forEach((peerReview, i) => {
+                if (!peerReview || !peerReview.url)
+                    this.$scope.material.peerReviews.splice(i, 1)
+            })
+
+            return console.log('send this:', this.$scope.material)
+
+            this.serverCallService
+                [this.locals.isEditMode ? 'makePut' : 'makePost']('rest/material', this.$scope.material)
+                .then(({ data: material }) => {
+                    const done = () => {
+                        this.$scope.isUpdateMode
+                            ? this.$rootScope.learningObjectChanged = this.isChanged(material)
+                            : this.$rootScope.learningObjectUnreviewed = true
+                        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                    }
+                    if (material) {
+                        material.source = this.getMaterialSource(material)
+                        this.$mdDialog.hide()
+                        this.storageService.setMaterial(material)
+
+                        if (!this.$scope.isChapterMaterial) {
+                            const url = '/material?id=' + material.id
+
+                            if (this.$location.url() === url)
+                                return done()
+
+                            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
+                                unsubscribe()
+                                this.$timeout(done)
+                            })
+                            this.$location.url(url)
+                        }
+                    }
+                    this.$scope.isSaving = false
+                }, () =>
+                    this.$scope.isSaving = false
+                )
+        }
+        Promise.all(
+            ['fileUpload', 'pictureUpload'].reduce(
+                (promises, u) => this[u] && this[u].then
+                    ? promises.concat(this[u])
+                    : promises,
+                []
+            )
+        ).then(save)
     }
 }
 controller.$inject = [

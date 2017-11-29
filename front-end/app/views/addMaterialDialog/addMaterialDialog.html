@@ -147,25 +147,18 @@
             </md-input-container>
           </div>
         </div>
+
         <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" layout-wrap>
           <!--Publisher-->
-          <md-input-container
-            flex-sm="35"
-            flex-gt-lg="30"
-            flex
-            data-ng-required="!material.authors[0].name && !material.authors[0].surname"
-            >
-            <label>
-              <span data-translate="MATERIAL_PUBLISHER"></span>
-              <span data-ng-hide="material.authors[0].name && material.authors[0].surname"></span>
-            </label>
+          <md-input-container flex-sm="35" flex-gt-lg="30" flex>
+            <label data-translate="MATERIAL_PUBLISHER"></label>
             <input
               name="publisher"
               id="material-peerReview-{{$index}}"
               data-ng-model="material.publishers[0].name"
-              ng-disabled="creatorIsPublisher"
+              data-ng-disabled="creatorIsPublisher"
+              data-ng-required="!material.authors[0].name && !material.authors[0].surname"
               md-maxlength="50"
-              required
               maxlength="50"
             >
             <div
@@ -179,18 +172,17 @@
               ></div>
             </div>
           </md-input-container>
-          <span class="md-padding" data-translate="AND_OR_AUTHOR">*</span>
+          <span class="md-padding">
+            <span data-translate="AND_OR_AUTHOR"></span>
+          </span>
           <!-- Author -->
           <div data-ng-repeat="author in material.authors track by $index">
             <md-input-container flex-sm="45" flex-xs="30" data-ng-required="!material.publishers[0].name || $index === 0">
-              <label>
-                <span data-ng-hide="author.name || author.surname || $index > 0"></span>
-              </label>
+              <label data-translate="MATERIAL_AUTHOR_NAME"></label>
               <input
                 data-ng-model="author.name"
                 id="material-author-{{$index}}-name"
-                required
-                data-ng-required="author.surname"
+                data-ng-required="!material.publishers[0].name"
                 name="firstname"
                 md-maxlength="50"
               >
@@ -199,10 +191,13 @@
               </div>
             </md-input-container>
             <md-input-container flex-xs="30">
-              <label>
-                    <span data-ng-hide="author.name || author.surname || $index > 0"></span>
-                  </label>
-              <input data-ng-model="author.surname" data-ng-required="author.name" required name="surname" md-maxlength="50">
+              <label data-translate="MATERIAL_AUTHOR_SURNAME"></label>
+              <input
+               data-ng-model="author.surname"
+               data-ng-required="!material.publishers[0].name || author.name"
+               name="surname"
+               md-maxlength="50"
+              >
               <div ng-messages="addMaterialForm.surname.$error" data-ng-show="author.name && !author.surname">
                 <div ng-message="required" data-translate="LAST_NAME_REQUIRED"></div>
               </div>
