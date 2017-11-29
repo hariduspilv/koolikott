@@ -2,23 +2,11 @@
 
 {
 class controller extends Controller {
-    async upload(file_input) {
-        try {
-            let response = await this.makeUpload('rest/uploadedFile', file_input);
-
-            return response;
-        } catch(e) {
-            throw e;
-        }
+    upload(file_input) {
+        return this.makeUpload('rest/uploadedFile', file_input);
     }
-    async uploadReview(file_input) {
-        try {
-            let response = await this.makeUpload('rest/review', file_input, true);
-
-            return response;
-        } catch(e) {
-            throw e;
-        }
+    uploadReview(file_input) {
+        return this.makeUpload('rest/review', file_input, true);
     }
     makeUpload(url, file_input, isReview) {
         return new Promise((resolve, reject) => {
