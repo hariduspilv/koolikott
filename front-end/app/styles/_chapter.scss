@@ -208,7 +208,7 @@ md-input-container.chapter-title {
   &:not([disabled]).md-focused,
   &:not([disabled]):hover {
     background-color: transparent;
-    
+
     md-icon {
       color: #03a9f4; // light-blue-500 // #9c27b0; // purple-500
     }
@@ -251,7 +251,7 @@ md-input-container.chapter-title {
   }
 }
 .organize-chapter-btn {
-  background-color: #e0e0e0; // gray-300
+  background-color: #e0e0e0 !important; // gray-300
 
   &:hover,
   &:focus {
