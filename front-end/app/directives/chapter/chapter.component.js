@@ -230,9 +230,9 @@ class controller extends Controller {
         this.$scope.$watch('chapter.title', (title) =>
             this.$scope.slug = this.getSlug(`chapter-${this.index + 1}`)
         )
+        this.currentLanguage = this.translationService.getLanguage()
 
         if (this.isEditMode) {
-            this.currentLanguage = this.translationService.getLanguage()
             this.$scope.isFocused = false
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = null
