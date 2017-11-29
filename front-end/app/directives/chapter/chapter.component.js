@@ -256,7 +256,11 @@ class controller extends Controller {
             window.addEventListener('scroll', this.onScroll)
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
-        }
+        } else
+            this.$timeout(() => {
+                for (let el of this.getEditorElements())
+                    this.loadEmbeddedContents(el)
+            })
     }
     $onDestroy() {
         if (this.isEditMode) {
