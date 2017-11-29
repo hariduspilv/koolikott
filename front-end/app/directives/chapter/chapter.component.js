@@ -178,10 +178,12 @@ class ParagraphButton extends CustomMediumEditorButton {
                             toolbar.base.elements[0].classList.contains('is-focused')
                         )
                             setTimeout(() => {
-                                toolbar.toolbar.classList.add('force-show-on-empty')
-                                toolbar.showToolbar()
-                                toolbar.positionToolbar(window.getSelection())
-                                toolbar.setToolbarButtonStates()
+                                if (toolbar) {
+                                    toolbar.toolbar.classList.add('force-show-on-empty')
+                                    toolbar.showToolbar()
+                                    toolbar.positionToolbar(window.getSelection())
+                                    toolbar.setToolbarButtonStates()
+                                }
                             })
 
                         selectionParent && selectionParent.tagName === 'P'
@@ -831,11 +833,15 @@ class controller extends Controller {
     addNewMaterial() {
         this.$mdDialog.show({
             templateUrl: 'addMaterialDialog.html',
-            controller: 'addMaterialDialogController'
-        }).then(material => {
-            console.log('insert newly added material:', material)
+            controller: 'addMaterialDialogController',
+            controllerAs: '$ctrl',
+            locals: {
+                isEditMode: false,
+                isAddToPortfolio: true
+            }
+        }).then(material =>
             this.insertMaterials([material])
-        })
+        )
     }
     insertMaterials(materials) {
         const editorEl = this.getEditorElements()[window.materialInsertionBlockIdx]
@@ -892,6 +898,7 @@ controller.$inject = [
     '$element',
     '$timeout',
     '$translate',
+    '$mdDialog',
     'dialogService',
     'serverCallService',
     'translationService',

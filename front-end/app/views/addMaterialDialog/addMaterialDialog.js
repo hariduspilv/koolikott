@@ -638,8 +638,6 @@ class controller extends Controller {
                     this.$scope.material.peerReviews.splice(i, 1)
             })
 
-            console.log('send this:', this.$scope.material)
-
             this.serverCallService
                 [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)
                 .then(({ data: material }) => {
@@ -654,7 +652,7 @@ class controller extends Controller {
                         this.$mdDialog.hide(material)
                         this.storageService.setMaterial(material)
 
-                        if (!this.$scope.isChapterMaterial) {
+                        if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
                             const url = '/material?id=' + material.id
 
                             if (this.$location.url() === url)
