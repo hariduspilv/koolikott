@@ -316,7 +316,7 @@ class controller extends Controller {
         this.$scope.material.publishers = []
         this.$scope.material.resourceTypes = []
         this.$scope.material.picture = {}
-        this.$scope.material.picture.licenceType = ''
+        this.$scope.material.picture.licenseType = ''
         this.$scope.material.picture.author = ''
         this.$scope.material.picture.source = ''
         this.$scope.issueDate = new Date()
@@ -643,7 +643,7 @@ class controller extends Controller {
                     this.$scope.material.peerReviews.splice(i, 1)
             })
 
-            console.log('send this:', this.$scope.material)
+            return console.log('send this:', this.$scope.material)
 
             this.serverCallService
                 [this.locals.isEditMode ? 'makePut' : 'makePost']('rest/material', this.$scope.material)

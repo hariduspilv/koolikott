@@ -425,7 +425,7 @@
                 <span data-ng-hide="author.name || author.surname || $index > 0"></span>
               </label>
               <input
-                data-ng-required="newPicture && !material.picture.licenceType"
+                data-ng-required="newPicture && !material.picture.licenseType"
                 data-ng-model="material.picture.source"
                 name="pictureSource"
                 md-maxlength="50"
@@ -447,9 +447,9 @@
                 <md-select
                   class="no-margin"
                   data-ng-required="newPicture && !material.picture.source"
-                  data-ng-model="material.picture.licenceType"
-                  id="pictureLicenceTypeSelect"
-                  name="licenceType"
+                  data-ng-model="material.picture.licenseType"
+                  id="pictureLicenseTypeSelect"
+                  name="licenseType"
                   ng-model-options="{trackBy: '$value.id'}"
                   >
                   <md-option
@@ -457,9 +457,9 @@
                     data-translate="LICENSETYPE_CANT_CHOOSE"
                   ></md-option>
                   <md-option
-                    data-ng-value="licenceType"
-                    data-ng-repeat="licenceType in licenseTypes track by $index"
-                    data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"
+                    data-ng-value="licenseType"
+                    data-ng-repeat="licenseType in licenseTypes track by $index"
+                    data-translate="LICENSETYPE_{{licenseType.name.toUpperCase()}}"
                     >
                     <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"/>
                   </md-option>
@@ -484,7 +484,7 @@
             <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70">
               <md-input-container flex-gt-lg="50" flex-lg="45" flex data-ng-if="!peerReview.uploading && !peerReview.uploaded">
                 <label data-ng-if="!peerReview.uploading && !peerReview.uploaded" data-translate="RECESSION_LINK"></label>
-                <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url>
+                <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url aria-label="{{ 'RECESSION_LINK' | translate }}">
               </md-input-container>
               <!-- Uploaded file name -->
               <div layout-fill data-ng-if="peerReview.uploading || peerReview.uploaded" layout-align="center">
@@ -581,9 +581,9 @@
               <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
               <md-select
                 class="no-margin"
-                data-ng-model="material.licenceType"
-                id="licenceTypeSelect"
-                name="licenceType"
+                data-ng-model="material.licenseType"
+                id="licenseTypeSelect"
+                name="licenseType"
                 ng-model-options="{trackBy: '$value.id'}"
                 >
                 <md-option
@@ -591,9 +591,9 @@
                   data-translate="LICENSETYPE_CANT_CHOOSE"
                 ></md-option>
                 <md-option
-                  data-ng-value="licenceType"
-                  data-ng-repeat="licenceType in licenseTypes track by $index"
-                  data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"
+                  data-ng-value="licenseType"
+                  data-ng-repeat="licenseType in licenseTypes track by $index"
+                  data-translate="LICENSETYPE_{{licenseType.name.toUpperCase()}}"
                 ></md-option>
               </md-select>
             </md-input-container>
