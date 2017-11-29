@@ -72,8 +72,9 @@ class controller extends Controller {
         if (currentValue)
             this.pictureUpload = this.pictureUploadService
                 .upload(currentValue)
-                .then(({ data }) => {
-                    this.$scope.material.picture = data
+                .then(({ data: id, data: name }) => {
+                    this.$scope.material.picture.id = id
+                    this.$scope.material.picture.id = name
                     this.$scope.showErrorOverlay = false
                 }, () =>
                     this.$scope.showErrorOverlay = false
@@ -170,7 +171,7 @@ class controller extends Controller {
     setAuthorToUser() {
         const { name } = this.authenticatedUserService.getUser()
 
-        if (this.$scope.material.picture.author != name) {
+        if (this.$scope.material.picture.author !== name) {
             this.$scope.material.picture.author = name
             this.$scope.isUserAuthor = true
         } else {
@@ -624,7 +625,6 @@ class controller extends Controller {
     save() {
         const save = () => {
             this.$scope.isSaving = true
-            this.$scope.material.resourceTypes = this.$scope.resourceTypeDTO
 
             const { titles, descriptions } = this.getTitlesAndDescriptions()
 
@@ -643,7 +643,7 @@ class controller extends Controller {
                     this.$scope.material.peerReviews.splice(i, 1)
             })
 
-            return console.log('send this:', this.$scope.material)
+            console.log('send this:', this.$scope.material)
 
             this.serverCallService
                 [this.locals.isEditMode ? 'makePut' : 'makePost']('rest/material', this.$scope.material)

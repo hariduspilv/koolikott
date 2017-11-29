@@ -443,9 +443,7 @@
               <span data-translate="OR_WORD"></span>
               &nbsp;
               <md-input-container data-flex="100">
-                <label for="taxonEducationalSelect">
-                  <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
-                </label>
+                <label for="taxonEducationalSelect" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
                 <md-select
                   class="no-margin"
                   data-ng-required="newPicture && !material.picture.source"
@@ -460,7 +458,7 @@
                   ></md-option>
                   <md-option
                     data-ng-value="licenceType"
-                    data-ng-repeat="licenceType in licenseTypes"
+                    data-ng-repeat="licenceType in licenseTypes track by $index"
                     data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"
                     >
                     <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"/>
@@ -476,28 +474,25 @@
           id="open-additional-info"
           class="md-primary no-margin"
           data-ng-disabled="isSaving || uploadingFile"
-          data-ng-click="additionalInfo.isVisible =! additionalInfo.isVisible"
+          data-ng-click="additionalInfo.isVisible = !additionalInfo.isVisible"
           >
           <span data-translate="MATERIAL_ADDITIONAL_DATA"></span>
-          <md-icon data-ng-if="!additionalInfo.isVisible">arrow_forward</md-icon>
-          <md-icon data-ng-if="additionalInfo.isVisible">arrow_downward</md-icon>
+          <md-icon>{{ additionalInfo.isVisible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
         </md-button>
-        <div class="md-padding" id="additionalInfo" data-ng-show="additionalInfo.isVisible" ng-cloak class="md-padding">
-          <div layout="row" layout-align="start center" layout-wrap data-ng-repeat="peerReview in material.peerReviews">
+        <div class="md-padding" id="additionalInfo" data-ng-if="additionalInfo.isVisible" ng-cloak class="md-padding">
+          <div layout="row" layout-align="start center" layout-wrap data-ng-repeat="peerReview in material.peerReviews track by $index">
             <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70">
-              <md-input-container flex-gt-lg="50" flex-lg="45" flex ng-show="!peerReview.uploading && !peerReview.uploaded">
-                <label ng-show="!peerReview.uploading && !peerReview.uploaded">
-                  <span data-translate="RECESSION_LINK"></span>
-                </label>
+              <md-input-container flex-gt-lg="50" flex-lg="45" flex data-ng-if="!peerReview.uploading && !peerReview.uploaded">
+                <label data-ng-if="!peerReview.uploading && !peerReview.uploaded" data-translate="RECESSION_LINK"></label>
                 <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url>
               </md-input-container>
               <!-- Uploaded file name -->
-              <div layout-fill data-ng-show="peerReview.uploading || peerReview.uploaded" layout-align="center">
-                <div data-ng-show="peerReview.uploading" class="upload-file-uploading" flex-offset="25">
+              <div layout-fill data-ng-if="peerReview.uploading || peerReview.uploaded" layout-align="center">
+                <div data-ng-if="peerReview.uploading" class="upload-file-uploading" flex-offset="25">
                   <h5 data-translate="ADD_FILE_UPLOADING"></h5>
                   <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                 </div>
-                <div data-ng-show="peerReview.uploaded && !peerReview.uploading" class="upload-file-success">
+                <div data-ng-if="peerReview.uploaded && !peerReview.uploading" class="upload-file-success">
                   <h5>
                     <span data-translate="ADD_FILE_SUCCESS"></span>:
                     <span class="ellipsis" data-ng-bind="peerReview.name"></span>
@@ -567,7 +562,7 @@
               <label data-translate="MATERIAL_TYPE"></label>
               <md-select
                 class="no-margin"
-                data-ng-model="material.resourceType"
+                data-ng-model="material.resourceTypes"
                 id="resourceTypeSelect"
                 ng-model-options="{trackBy: '$value.id'}"
                 multiple
@@ -575,7 +570,7 @@
                 >
                 <md-option
                   ng-value="resourceType"
-                  data-ng-repeat="resourceType in resourceTypes"
+                  data-ng-repeat="resourceType in resourceTypes track by $index"
                   ng-selected="{{ $ctrl.isTypeSelected(resourceType) }}"
                   >
                   <span data-translate="{{resourceType.name}}"></span>
@@ -597,7 +592,7 @@
                 ></md-option>
                 <md-option
                   data-ng-value="licenceType"
-                  data-ng-repeat="licenceType in licenseTypes"
+                  data-ng-repeat="licenceType in licenseTypes track by $index"
                   data-translate="LICENSETYPE_{{licenceType.name.toUpperCase()}}"
                 ></md-option>
               </md-select>
@@ -625,12 +620,11 @@
         >
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-       <!-- TODO: remove ! from isSubmitDisabled if it is there -->
       <md-button
-        aria-label="{{(isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL') | translate}}"
+        aria-label="{{ (isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL') | translate }}"
         id="create-material-button"
         class="md-primary"
-        data-ng-disabled="!$ctrl.isSubmitDisabled()"
+        data-ng-disabled="$ctrl.isSubmitDisabled()"
         data-ng-click="$ctrl.save()"
         >
         <span data-translate="{{ isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL' }}"></span>
