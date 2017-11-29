@@ -29,7 +29,8 @@
                 type="text"
                 dop-validate-url
                 data-ng-click="$ctrl.sourceIsFocused()"
-                placeholder="{{'HTTP_WORD'|translate}}"
+                data-ng-required="!material.uploadedFile"
+                placeholder="{{ 'HTTP_WORD'|translate }}"
               />
               <div data-ng-messages="addMaterialForm.source.$error" data-multiple>
                 <div
@@ -181,7 +182,7 @@
               <input
                 data-ng-model="author.name"
                 id="material-author-{{$index}}-name"
-                data-ng-required="!material.publishers[0].name"
+                data-ng-required="!material.publishers[0].name && $index === 0"
                 name="firstname"
                 md-maxlength="50"
               >
@@ -193,7 +194,7 @@
               <label data-translate="MATERIAL_AUTHOR_SURNAME"></label>
               <input
                data-ng-model="author.surname"
-               data-ng-required="!material.publishers[0].name || author.name"
+               data-ng-required="(!material.publishers[0].name || author.name) && $index === 0"
                name="surname"
                md-maxlength="50"
               >
