@@ -4,11 +4,19 @@
  @todo
  +  WYSIWYG theme
  +  tabIndexes
- -  Material embeds: intermediary solution: embed materials BETWEEN blocks the old way
- -  Editor toolbar conf.
-    - display the wysiwyg toolbar in the beginning of empty paragraph/h3/blockquote (block-level element)
-    - p button (button active state)
-    - h3 button (should not be toggleable?)
+ +  Material embeds
+    + insert existing materials
+    + insert new materials
+        - bug: if material is last element, it can't be deleted
+        - bug: if two materials are adjecent then they can only be deleted together
+        - bug: caret jumps to the end of block upon adding materials
+ +  Editor toolbar conf.
+    + display the wysiwyg toolbar in the beginning of empty paragraph/h3/blockquote (block-level element)
+        - bug: button highlighting is not funtioning properly with empty selection
+    + p button
+        - bug: button active state
+    + h3 button
+        - bug: should not be toggleable
     + a button
     + b button
     + i button
@@ -41,8 +49,9 @@ class CustomMediumEditorButton {
     }
     getAncestorToMutate(el) {
         while(el !== null) {
-            if (el.parentElement.tagName === 'BLOCKQUOTE' ||
-                el.parentElement.classList.contains('medium-editor-element'))
+            if (el.parentElement && (
+                el.parentElement.tagName === 'BLOCKQUOTE' ||
+                el.parentElement.classList.contains('medium-editor-element')))
                 return el
             el = el.parentElement
         }
@@ -54,14 +63,33 @@ class CustomMediumEditorButton {
             el = el.parentElement
         }
     }
+    getSelectionParentElement() {
+        let parentEl = null, sel
+
+        if (window.getSelection) {
+            sel = window.getSelection()
+            if (sel.rangeCount) {
+                parentEl = sel.getRangeAt(0).commonAncestorContainer
+                if (parentEl.nodeType != 1)
+                    parentEl = parentEl.parentNode
+            }
+        } else if ((sel = document.selection) && sel.type != 'Control')
+            parentEl = sel.createRange().parentElement()
+
+        return parentEl
+    }
 }
 class ParagraphButton extends CustomMediumEditorButton {
-    constructor() {
+    constructor(editorEl) {
         super()
-        return new MediumButton({
+        setTimeout(() =>
+            this.monkeyPatchToolbar(editorEl)
+        )
+        this.mediumButton = new MediumButton({
             label: `<svg viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">${ICON_SVG_CONTENTS.p}</svg>`,
             action: this.action.bind(this)
         })
+        return this.mediumButton
     }
     action(html, marked, parent) {
         const selection = rangy.saveSelection()
@@ -78,17 +106,19 @@ class ParagraphButton extends CustomMediumEditorButton {
             this.mutateListItem(closestBlockLevelAncestor)
         }
         else {
-            const p = document.createElement('p')
             const ancestorToMutate = this.getAncestorToMutate(parent)
+            if (ancestorToMutate) {
+                const p = document.createElement('p')
 
-            editorEl.insertBefore(p, ancestorToMutate.nextSibling)
-            p.insertBefore(ancestorToMutate, null)
-            ancestorToMutate.outerHTML = ancestorToMutate.innerHTML
+                editorEl.insertBefore(p, ancestorToMutate.nextSibling)
+                p.insertBefore(ancestorToMutate, null)
+                ancestorToMutate.outerHTML = ancestorToMutate.innerHTML
 
-            // now see if there are other block level elements that shouldn't remain nested
-            // in a paragraph (such as orphaned <li> elements).
-            for (let el of p.querySelectorAll('li'))
-                el.outerHTML = el.innerHTML
+                // now see if there are other block level elements that shouldn't remain nested
+                // in a paragraph (such as orphaned <li> elements).
+                for (let el of p.querySelectorAll('li'))
+                    el.outerHTML = el.innerHTML
+            }
         }
 
         rangy.restoreSelection(selection)
@@ -122,6 +152,47 @@ class ParagraphButton extends CustomMediumEditorButton {
                 : idx === ul.children.length - 1
                     ? extract(1)
                     : splitLists() || extract(1)
+    }
+    monkeyPatchToolbar(editorEl) {
+        /**
+         * This way we can set active state to our custom button and
+         * display the toolbar in the beginning of a new paragraph wihtout any selection.
+         */
+        const editor = MediumEditor.getEditorFromElement(editorEl)
+        if (editor) {
+            const toolbar = editor.getExtensionByName('toolbar')
+            const origCheckState = toolbar.checkState.bind(toolbar)
+
+            toolbar.checkState = () => {
+                origCheckState()
+
+                clearTimeout(this.checkTimer)
+                this.checkTimer = setTimeout(() => {
+                    const selectionParent = this.getSelectionParentElement()
+
+                    if (selectionParent) {
+                        const pButton = this.mediumButton.getButton()
+
+                        // @todo Make this check of focused block more fail-safe
+                        if (!selectionParent.textContent.trim() &&
+                            toolbar.base.elements[0].classList.contains('is-focused')
+                        )
+                            setTimeout(() => {
+                                if (toolbar) {
+                                    toolbar.toolbar.classList.add('force-show-on-empty')
+                                    toolbar.showToolbar()
+                                    toolbar.positionToolbar(window.getSelection())
+                                    toolbar.setToolbarButtonStates()
+                                }
+                            })
+
+                        selectionParent && selectionParent.tagName === 'P'
+                            ? pButton.classList.add('medium-editor-button-active')
+                            : pButton.classList.remove('medium-editor-button-active')
+                    }
+                })
+            }
+        }
     }
 }
 class controller extends Controller {
@@ -159,6 +230,7 @@ class controller extends Controller {
         this.$scope.$watch('chapter.title', (title) =>
             this.$scope.slug = this.getSlug(`chapter-${this.index + 1}`)
         )
+        this.currentLanguage = this.translationService.getLanguage()
 
         if (this.isEditMode) {
             this.$scope.isFocused = false
@@ -182,7 +254,13 @@ class controller extends Controller {
 
             this.onScroll = () => this.$scope.isFocused && requestAnimationFrame(this.setStickyClassNames.bind(this))
             window.addEventListener('scroll', this.onScroll)
-        }
+
+            this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
+        } else
+            this.$timeout(() => {
+                for (let el of this.getEditorElements())
+                    this.loadEmbeddedContents(el)
+            })
     }
     $onDestroy() {
         if (this.isEditMode) {
@@ -194,6 +272,8 @@ class controller extends Controller {
                 let editor = MediumEditor.getEditorFromElement(el)
                 editor && editor.destroy()
             }
+
+            this.unsubscribeInsertMaterials()
         }
     }
     onClickOutside(evt) {
@@ -247,9 +327,12 @@ class controller extends Controller {
                     }))
                 },
                 extensions: {
-                    p: new ParagraphButton()
-                }
+                    p: new ParagraphButton(el)
+                },
+                updateOnEmptySelection: true
             })
+
+            console.log('createEditor', idx)
 
             const saveSelection = editor.saveSelection.bind(editor)
             editor.subscribe('editableClick', saveSelection)
@@ -277,6 +360,7 @@ class controller extends Controller {
                             el.classList.remove('medium-editor-placeholder')
 
                         this.registerSubchapters(el)
+                        this.loadEmbeddedContents(el)
                     }
                 }
     }
@@ -285,13 +369,33 @@ class controller extends Controller {
          * Update input contents upstream:
          * editorElement.innerHTML -> $scope.chapter.blocks[idx].htmlContent
          */
+        const sanitizeEditedHtml = (html) => {
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = html
+            
+            // 1) remove id atts from subchapters
+            for (let subchapter of wrapper.querySelectorAll('.subchapter'))
+                subchapter.removeAttribute('id')
+
+            // 2) reduce embedded materials to <div> without any content
+            for (let embed of wrapper.querySelectorAll('.chapter-embed-card')) {
+                embed.classList.remove('chapter-embed-card--loaded')
+                embed.removeAttribute('contenteditable')
+                while (embed.firstChild)
+                    embed.removeChild(embed.firstChild)
+            }
+
+            return wrapper.innerHTML
+        }
         if (this.isEditMode)
-            for (let [idx, el] of this.getEditorElements().entries())
-                if (el &&
-                    this.$scope.chapter.blocks[idx] &&
-                    this.$scope.chapter.blocks[idx].htmlContent !== el.innerHTML
+            for (let [idx, el] of this.getEditorElements().entries()) {
+                const sanitizedHtml = sanitizeEditedHtml(el.innerHTML)
+
+                if (this.$scope.chapter.blocks[idx] &&
+                    this.$scope.chapter.blocks[idx].htmlContent !== sanitizedHtml
                 )
-                    this.$scope.chapter.blocks[idx].htmlContent = el.innerHTML
+                    this.$scope.chapter.blocks[idx].htmlContent = sanitizedHtml
+            }
     }
     optimizePlaceholder(el, editor) {
         /**
@@ -354,8 +458,52 @@ class controller extends Controller {
     }
     registerSubchapters(el) {
         // add id attributes to all subchapters derived from subchapter titles
-        for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
-            subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
+        if (el)
+            for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
+                subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
+    }
+    loadEmbeddedContents(el) {
+        const encodeHtmlEntities = (str) => str.replace(/[\u00A0-\u9999<>\&]/gim, (i) =>
+            '&#' + i.charCodeAt(0) + ';'
+        )
+
+        for (let embed of el.querySelectorAll('.chapter-embed-card')) {
+            embed.setAttribute('contenteditable', 'false')
+
+            const { id } = embed.dataset
+            if (id)
+                this.serverCallService
+                    .makeGet('rest/material', { id })
+                    .then(({ data }) => {
+                        // insert thumbnail
+                        if (data.picture && data.picture.name) {
+                            const thumb = document.createElement('div')
+                            thumb.classList.add('thumbnail')
+                            thumb.style.backgroundImage = `url('/rest/picture/thumbnail/lg/${data.picture.name}')`
+                            embed.insertBefore(thumb, embed.firstChild)
+                        }
+
+                        // insert caption with icon, title, publisher, authors & source link
+                        // @todo derive specific material icon from data.resourceTypes
+                        const title = (data.titles.find(t => t.language === this.currentLanguage) || {}).text || ''
+                        const caption = document.createElement('div')
+                        const publishers = data.publishers.map(p => p.name)
+                        const authors = data.authors.map(a => a.name+' '+a.surname)
+
+                        caption.classList.add('caption')
+                        caption.innerHTML = `
+                            <md-icon class="material-icons">description</md-icon>
+                            <h5>${encodeHtmlEntities(title)}</h5>
+                            <p class="chapter-embed-card__publishers-and-authors">${encodeHtmlEntities(publishers.concat(authors).join(', '))}</p>
+                            <p class="chapter-embed-card__source">
+                                <span>${this.$translate.instant('SOURCE_BIG')}</span>:
+                                <a href="${data.source}" target="_blank">${data.source || ''}</a>
+                            </p>`
+                        embed.insertBefore(caption, null)
+
+                        embed.classList.add('chapter-embed-card--loaded')
+                    })
+        }
     }
     getEditorElements() {
         return this.$element[0].querySelectorAll('.chapter-block') || []
@@ -476,17 +624,18 @@ class controller extends Controller {
                 this.$element[0].querySelector('input.md-headline').focus()
         })
     }
-    focusBlock(idx) {
+    focusBlock(idx, scrollTo = false) {
         if (typeof idx !== 'number')
             idx = Math.max(0, this.$scope.chapter.blocks.length - 1)
 
         const editor = this.getEditor(idx)
 
-        /**
-         * @todo See why trigger('focus') triggers it twice
-         */
-        if (editor)
+        if (editor) {
             editor.trigger('focus')
+
+            if (scrollTo)
+                this.scrollToElement(this.getEditorElements()[idx])
+        }
     }
     onFocusBlock(idx) {
         this.$timeout.cancel(this.blurTimer)
@@ -582,7 +731,7 @@ class controller extends Controller {
          */
         this.$timeout(() =>
             this.$timeout(() =>
-                this.focusBlock(blocks.length - 1)
+                this.focusBlock(blocks.length - 1, true)
             )
         )
     }
@@ -655,8 +804,94 @@ class controller extends Controller {
             this.focusBlock(newIdx)
         }
     }
-    addExistingMaterial() {}
-    addNewMaterial() {}
+    beforeAddMaterial() {
+        const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
+        
+        this.insertHtmlAfterSelection('<div class="material-insertion-marker"></div>')
+        
+        // perhaps pass them around rather than cache on gloabl object
+        window.materialInsertionBlockContents = editorEl.innerHTML
+        window.materialInsertionBlockIdx = this.$scope.focusedBlockIdx
+        
+        const marker = editorEl.querySelector('.material-insertion-marker')
+        marker.parentNode.removeChild(marker)
+    }
+    addExistingMaterial() {
+        this.$rootScope.savedChapterIndexForMaterialInsertion = this.index
+        this.$rootScope.$broadcast(
+            window.innerWidth >= BREAK_SM
+                ? 'detailedSearch:open'
+                : 'mobileSearch:open'
+        )
+        this.$timeout(() => {
+            document.getElementById('header-search-input').focus()
+        })
+    }
+    onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
+        // @todo Are timeouts necessary?
+        if (chapterIdx === this.index)
+            this.$timeout(() =>
+                this.$timeout(() =>
+                    this.insertMaterials(selectedMaterials)
+                )
+            )
+    }
+    addNewMaterial() {
+        this.$mdDialog.show({
+            templateUrl: 'addMaterialDialog.html',
+            controller: 'addMaterialDialogController',
+            controllerAs: '$ctrl',
+            locals: {
+                isEditMode: false,
+                isAddToPortfolio: true
+            }
+        }).then(material =>
+            this.insertMaterials([material])
+        )
+    }
+    insertMaterials(materials) {
+        const editorEl = this.getEditorElements()[window.materialInsertionBlockIdx]
+        const materialsHtml = materials.reduce((html, { id }) =>
+            html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div>`,
+            ''
+        )
+        editorEl.innerHTML = window.materialInsertionBlockContents.replace('<div class="material-insertion-marker"></div>', materialsHtml)
+        
+        this.loadEmbeddedContents(editorEl)
+        // @todo restore caret position (put it after inserted materials)
+        this.focusBlock(window.materialInsertionBlockIdx, true)
+        delete window.materialInsertionBlockIdx
+        delete window.materialInsertionBlockContents
+    }
+    insertHtmlAfterSelection(html) {
+        let sel, range, node
+
+        if (window.getSelection) {
+            sel = window.getSelection()
+
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = window.getSelection().getRangeAt(0)
+                range.collapse(false)
+
+                // Range.createContextualFragment() would be useful here but is
+                // non-standard and not supported in all browsers (IE9, for one)
+                const el = document.createElement("div")
+                const frag = document.createDocumentFragment()
+
+                el.innerHTML = html
+
+                let node, lastNode
+                while (node = el.firstChild)
+                    lastNode = frag.appendChild(node)
+
+                range.insertNode(frag)
+            }
+        } else if (document.selection && document.selection.createRange) {
+            range = document.selection.createRange()
+            range.collapse(false)
+            range.pasteHTML(html)
+        }
+    }
     /**
      * @todo in MS 13: Embed actions
      */
@@ -669,7 +904,10 @@ controller.$inject = [
     '$element',
     '$timeout',
     '$translate',
-    'dialogService'
+    '$mdDialog',
+    'dialogService',
+    'serverCallService',
+    'translationService',
 ]
 component('dopChapter', {
     bindings: {

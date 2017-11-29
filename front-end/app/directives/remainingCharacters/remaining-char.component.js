@@ -16,12 +16,6 @@ class controller extends Controller {
 
         return remaining >= 0 ? remaining : 0;
     }
-    stripHtml(htmlString) {
-        let tmp = document.createElement('div')
-        tmp.innerHTML = htmlString
-
-        return tmp.textContent || tmp.innerText || ''
-    }
     countOccurrences(value, text) {
         let count = 0
         let index = text.indexOf(value)

@@ -53,7 +53,9 @@ class controller extends Controller {
         this.$scope.showAddMaterialDialog = () =>
             this.$mdDialog.show({
                 templateUrl: 'addMaterialDialog.html',
-                controller: 'addMaterialDialogController'
+                controller: 'addMaterialDialogController',
+                controllerAs: '$ctrl',
+                locals: { isEditMode: false }
             })
 
         this.$scope.copyPortfolio = () =>

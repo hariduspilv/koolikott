@@ -27,13 +27,12 @@ class controller extends Controller {
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
-        try {
+        // @see https://github.com/angular/material/issues/8308#issuecomment-216308108
+        this.$mdComponentRegistry.when('left').then(() =>
             this.$mdSidenav('left', true).then(left =>
                 this.$scope.isSideNavOpen = left.isOpen()
             )
-        } catch(e) {
-            console.error(e)
-        }
+        )
 
         this.$scope.detailedSearch.accessor = {
             clearSimpleSearch: () => this.$scope.searchFields.searchQuery = ''
@@ -384,7 +383,7 @@ controller.$inject = [
     '$route',
     '$translate',
     '$mdSidenav',
-    '$mdInkRipple',
+    '$mdComponentRegistry',
     'translationService',
     'searchService',
     'authenticationService',

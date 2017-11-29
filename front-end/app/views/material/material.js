@@ -121,6 +121,7 @@ angular.module('koolikottApp')
                     $location.url("/");
                 } else {
                     $scope.material = material;
+                    console.log(material);
 
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
@@ -260,7 +261,9 @@ angular.module('koolikottApp')
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
                     controller: 'addMaterialDialogController',
-                    scope: editMaterialScope
+                    controllerAs: '$ctrl',
+                    scope: editMaterialScope,
+                    locals: { isEditMode: true }
                 }).then((material) => {
                     if (material) {
                         $scope.material = material;

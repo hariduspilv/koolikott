@@ -14,6 +14,7 @@ class controller extends Controller {
             if (currentValue !== previousValue)
                 this.setNewTags()
         }, true)
+        this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this)) ;
 
         // auto-launch the report dialog upon login or page load if hash is found in location URL
         this.$timeout(() =>

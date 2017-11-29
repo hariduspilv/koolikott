@@ -1,40 +1,36 @@
 'use strict';
 
-angular.module('koolikottApp')
-.factory('fileUploadService',
-[
-    'serverCallService', 'Upload',
-    function (serverCallService, Upload) {
-
-        var instance = {
-            upload: function (file_input, successCallback, errorCallback, finallyCallback) {
-
-                Upload.dataUrl(file_input, true).then(function () {
-
-                    var file = {
-                        file: file_input
-                    };
-
-                    serverCallService.upload('rest/uploadedFile', file, function(response) {
-                        successCallback(response.data);
-                    }, errorCallback, finallyCallback);
-                });
-            },
-            uploadReview: function (file_input, successCallback, errorCallback, finallyCallback) {
-
-                Upload.dataUrl(file_input, true).then(function () {
-
-                    var review = {
-                        review: file_input
-                    };
-
-                    serverCallService.upload('rest/review', review, function(response) {
-                        successCallback(response.data);
-                    }, errorCallback, finallyCallback);
-                });
-            }
-        };
-
-        return instance;
+{
+class controller extends Controller {
+    upload(file_input) {
+        return this.makeUpload('rest/uploadedFile', file_input);
     }
-]);
+    uploadReview(file_input) {
+        return this.makeUpload('rest/review', file_input, true);
+    }
+    makeUpload(url, file_input, isReview) {
+        return new Promise((resolve, reject) => {
+            let uploaded = this.Upload.dataUrl(file_input, true).then(() => {
+                let file = {};
+
+                if (isReview) {
+                    file.review = file_input;
+                } else {
+                    file.file = file_input;
+                }
+
+                return this.serverCallService.upload(url, file).then(response => {
+                    return response;
+                });
+            });
+
+            resolve(uploaded);
+        });
+    }
+}
+controller.$inject = [
+    'serverCallService',
+    'Upload'
+]
+factory('fileUploadService', controller)
+}
