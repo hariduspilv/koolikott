@@ -314,7 +314,6 @@ class controller extends Controller {
         this.$scope.material.crossCurricularThemes = []
         this.$scope.material.publishers = []
         this.$scope.material.resourceTypes = []
-        this.$scope.material.picture = {}
         this.$scope.issueDate = new Date()
         this.setTitlesAndDescriptions()
     }
@@ -652,7 +651,7 @@ class controller extends Controller {
                     }
                     if (material) {
                         material.source = this.getMaterialSource(material)
-                        this.$mdDialog.hide()
+                        this.$mdDialog.hide(material)
                         this.storageService.setMaterial(material)
 
                         if (!this.$scope.isChapterMaterial) {
