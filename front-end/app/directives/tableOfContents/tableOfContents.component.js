@@ -2,10 +2,6 @@
 
 {
 class controller extends Controller {
-    $onChanges({ isEditMode } = {}) {
-        if (isEditMode && isEditMode.currentValue !== isEditMode.previousValue)
-            this.$scope.isEditMode = isEditMode
-    }
     $onInit() {
         this.$scope.authUser = this.authenticatedUserService.isAuthenticated()
         this.$scope.$watch(() => this.storageService.getPortfolio(), (portfolio) => {
@@ -21,7 +17,7 @@ class controller extends Controller {
         }
         this.$scope.gotoChapter = (slug, evt) => {
             evt.preventDefault()
-            
+
             // setting hash directly causes page to jump instantly
             history.pushState({}, '', this.$location.url().split('#')[0]+'#'+slug)
             this.scrollToElement('#'+slug, 500, 80)
@@ -34,7 +30,7 @@ class controller extends Controller {
         const setScroll = () => {
             const slug = this.$location.hash()
             const el = slug && document.getElementById(slug)
-            
+
             if (el)
                 window.scrollTo(0, el.offsetTop - 80)
         }
@@ -49,14 +45,14 @@ class controller extends Controller {
             this.$translate.onReady().then(() =>
                 this.$scope.chapters = chapters.map(({ title, blocks }, idx) => ({
                     title: title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE'),
-                    slug: this.getSlug(title, `chapter-${idx}`),
+                    slug: this.getSlug(`chapter-${idx + 1}`),
                     subChapters: blocks.reduce((subchapters, { htmlContent }) => {
                         const wrapper = document.createElement('div')
                         wrapper.innerHTML = htmlContent
                         return subchapters.concat(
                             [].slice.apply(wrapper.querySelectorAll('.subchapter')).map((el, subIdx) => ({
                                 title: el.textContent || this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE'),
-                                slug: this.getSlug(el.textContent, `subchapter-${idx}-${subIdx}`)
+                                slug: this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
                             }))
                         )
                     }, [])
@@ -92,9 +88,6 @@ controller.$inject = [
     'authenticatedUserService'
 ]
 component('dopTableOfContents', {
-    bindings: {
-        isEditMode: '<'
-    },
     templateUrl: 'directives/tableOfContents/tableOfContents.html',
     controller
 })

@@ -3,6 +3,11 @@
 {
 class controller extends Controller {
     $onInit() {
+
+        const VISIBILITY_PUBLIC = 'PUBLIC'
+        const VISIBILITY_PRIVATE = 'PRIVATE'
+        const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
+
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.getTaxonObject = this.getTaxonObject.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
@@ -46,6 +51,23 @@ class controller extends Controller {
         this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
 
+        this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
+
+        this.$scope.makePublic = () => {
+            this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
+            this.updatePortfolio()
+            this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
+        }
+
+        this.$scope.makeNotListed = () => {
+            this.storageService.getPortfolio().visibility = VISIBILITY_NOT_LISTED
+            this.updatePortfolio()
+        }
+
+        this.$scope.makePrivate = () => {
+            this.storageService.getPortfolio().visibility = VISIBILITY_PRIVATE
+            this.updatePortfolio()
+        }
 
         if (this.$rootScope.openMetadataDialog) {
             this.showEditMetadataDialog()
@@ -88,6 +110,15 @@ class controller extends Controller {
     editPortfolio() {
         this.$location.url('/portfolio/edit?id=' + this.$route.current.params.id)
     }
+    updatePortfolio() {
+    this.updateChaptersStateFromEditors()
+    this.serverCallService
+        .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+        .then(({ data: portfolio }) => {
+            if (portfolio)
+                this.storageService.setPortfolio(portfolio)
+        })
+}
     toggleCommentSection() {
         this.$scope.commentsOpen = !this.$scope.commentsOpen
     }

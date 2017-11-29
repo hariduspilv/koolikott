@@ -17,7 +17,7 @@
 <ul
   class="sidenav__list"
   data-ng-if="chapters"
-  data-ng-class="{'is-sortable': authUser && isEditMode}"
+  data-ng-class="{'is-sortable': authUser && $root.isEditPortfolioMode}"
   data-sv-root
   data-sv-part="portfolio.chapters"
   data-sv-on-sort="sortChapters()"
@@ -30,13 +30,14 @@
     data-ng-repeat="chapter in chapters"
     data-sv-element
     >
-    <span data-sv-handle class="sidenav__handle">
-      <md-icon data-ng-if="authUser && isEditMode">drag_handle</md-icon>
+    <span data-ng-class="{'hidden': !authUser || !$root.isEditPortfolioMode}" data-sv-handle class="sidenav__handle">
+      <md-icon>drag_handle</md-icon>
     </span>
     <a
       href="#{{chapter.slug}}"
       class="sidenav__header"
       md-ink-ripple
+      draggable="false"
       data-layout="row"
       data-layout-align="start center"
       data-ng-click="gotoChapter(chapter.slug, $event)"
@@ -59,7 +60,7 @@
     </ul>
   </li>
 </ul>
-<!-- chapters:OLD -->
+<!-- chapters:OLD (deprecated) -->
 <ul
   class="sidenav__list"
   data-ng-if="!chapters"

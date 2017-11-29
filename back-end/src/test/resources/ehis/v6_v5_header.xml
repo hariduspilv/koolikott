@@ -1,4 +1,6 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:ehis="http://producers.ehis.xtee.riik.ee/producer/ehis">
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xro="http://x-road.eu/xsd/xroad.xsd"
+                  xmlns:iden="http://x-road.eu/xsd/identifiers"
+                  xmlns:ehis="http://producers.ehis.xtee.riik.ee/producer/ehis">
     <soapenv:Header>
         <xro:protocolVersion>4.0</xro:protocolVersion>
         <xro:issue>ehis</xro:issue>
@@ -25,19 +27,19 @@
         </ehis:isikuRollid>
     </soapenv:Body>
 </soapenv:Envelope>
-<!--
-<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd" xmlns:ehis="http://producers.ehis.xtee.riik.ee/producer/ehis">
-<soapenv:Header>
-    <xtee:id xsi:type="xsd:string">?</xtee:id>
-    <xtee:nimi xsi:type="xsd:string">ehis.isiku_rollid.v1</xtee:nimi>
-    <xtee:isikukood xsi:type="xsd:string">REGKOOD</xtee:isikukood>
-    <xtee:andmekogu xsi:type="xsd:string">ehis</xtee:andmekogu>
-    <xtee:asutus xsi:type="xsd:string">REGKOOD</xtee:asutus>
+        <!--
+        <soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd" xmlns:ehis="http://producers.ehis.xtee.riik.ee/producer/ehis">
+        <soapenv:Header>
+            <xtee:id xsi:type="xsd:string">?</xtee:id>
+            <xtee:nimi xsi:type="xsd:string">ehis.isiku_rollid.v1</xtee:nimi>
+            <xtee:isikukood xsi:type="xsd:string">REGKOOD</xtee:isikukood>
+            <xtee:andmekogu xsi:type="xsd:string">ehis</xtee:andmekogu>
+            <xtee:asutus xsi:type="xsd:string">REGKOOD</xtee:asutus>
 
-</soapenv:Header>
-<soapenv:Body>
-    <ehis:isikuRollid>
-        <isikukood>?</isikukood>
-    </ehis:isikuRollid>
-</soapenv:Body>
-</soapenv:Envelope>-->
+        </soapenv:Header>
+        <soapenv:Body>
+            <ehis:isikuRollid>
+                <isikukood>?</isikukood>
+            </ehis:isikuRollid>
+        </soapenv:Body>
+        </soapenv:Envelope>-->

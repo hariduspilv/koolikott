@@ -80,7 +80,7 @@ class controller extends Controller {
         this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
         this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
         this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
-        this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewe
+        this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
 
         if (!isLocallyStored && portfolio && portfolio.chapters) {
             portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
@@ -92,7 +92,7 @@ class controller extends Controller {
 
                     for (let [idx, el] of entries('.portfolio-chapter'))
                         for (let [subIdx, subEl] of entries('.subchapter', el))
-                            subEl.id = this.getSlug(subEl.textContent, `subchapter-${idx}-${subIdx}`)
+                            subEl.id = this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
                 })
             )
         }

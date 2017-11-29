@@ -66,7 +66,6 @@
 
   @media (min-width: $layout-breakpoint-lg) {
     position: absolute;
-    width: $nav-button-area-width;
     right: $md-padding;
     top: 11px;
   }
@@ -192,4 +191,9 @@
   background-color: white;
   border-radius: 50%;
   font-weight: bold;
+}
+
+.navbar-search-filter-text {
+  align-self: center;
+  font-size: medium;
 }
