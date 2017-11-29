@@ -823,7 +823,9 @@ class controller extends Controller {
                 ? 'detailedSearch:open'
                 : 'mobileSearch:open'
         )
-        document.getElementById('header-search-input').focus()
+        this.$timeout(() => {
+            document.getElementById('header-search-input').focus()
+        })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
         // @todo Are timeouts necessary?
