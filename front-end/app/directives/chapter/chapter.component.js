@@ -230,9 +230,9 @@ class controller extends Controller {
         this.$scope.$watch('chapter.title', (title) =>
             this.$scope.slug = this.getSlug(`chapter-${this.index + 1}`)
         )
+        this.currentLanguage = this.translationService.getLanguage()
 
         if (this.isEditMode) {
-            this.currentLanguage = this.translationService.getLanguage()
             this.$scope.isFocused = false
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = null
@@ -256,7 +256,11 @@ class controller extends Controller {
             window.addEventListener('scroll', this.onScroll)
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
-        }
+        } else
+            this.$timeout(() => {
+                for (let el of this.getEditorElements())
+                    this.loadEmbeddedContents(el)
+            })
     }
     $onDestroy() {
         if (this.isEditMode) {
@@ -819,7 +823,9 @@ class controller extends Controller {
                 ? 'detailedSearch:open'
                 : 'mobileSearch:open'
         )
-        document.getElementById('header-search-input').focus()
+        this.$timeout(() => {
+            document.getElementById('header-search-input').focus()
+        })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
         // @todo Are timeouts necessary?

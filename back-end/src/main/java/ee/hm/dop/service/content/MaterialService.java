@@ -198,9 +198,13 @@ public class MaterialService {
         material.setVisibility(Visibility.PUBLIC);
 
         if (material.getPicture() != null){
-            OriginalPicture originalPicture = originalPictureDao.findById(material.getPicture().getId());
-            material.getPicture().setData(originalPicture.getData());
-            material.getPicture().setName(originalPicture.getName());
+            if (material.getPicture().getId() == null){
+                material.setPicture(null);
+            } else {
+                OriginalPicture originalPicture = originalPictureDao.findById(material.getPicture().getId());
+                material.getPicture().setData(originalPicture.getData());
+                material.getPicture().setName(originalPicture.getName());
+            }
         }
 
         return materialDao.createOrUpdate(material);
