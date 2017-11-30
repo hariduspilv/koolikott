@@ -179,6 +179,17 @@ class controller extends Controller {
             this.$scope.isUserAuthor = false;
         }
     }
+    setUserAuthorToFirstAuthor() {
+        const { name, surname } = this.authenticatedUserService.getUser();
+
+        if (this.$scope.material.authors[0].name !== name) {
+            this.$scope.material.authors[0].name = name;
+            this.$scope.material.authors[0].surname = surname;
+        } else {
+            this.$scope.material.authors[0].name = '';
+            this.$scope.material.authors[0].surname = '';
+        }
+    }
     addNewTaxon() {
         this.$scope.material.taxons.push(
             this.taxonService.getEducationalContext(
