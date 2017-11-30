@@ -18,9 +18,9 @@
     <md-dialog-content layout="column">
       <div class="md-padding md-padding-double-horizontal">
         <!-- URL and Upload block -->
-        <div layout="row" layout-wrap layout-align="start center">
+        <div layout="row" layout-wrap layout-align="center center" layout-align-gt-xs="start center">
           <!--Material source-->
-          <div layout="row" layout-align="start center">
+          <div layout="column" layout-gt-xs="row" layout-align="start center">
             <span data-ng-if="!material.uploadedFile && !uploadingFile">
               <span data-translate="ADD_MATERIAL_LINK"></span> *
             </span>
@@ -135,10 +135,10 @@
         </div>
 
         <div layout="row" layout-align="start center" layout-wrap>
-          <span flex="10" data-translate="AUTHOR"></span>
+          <span flex="100" flex-gt-xs="15" flex-gt-md="10" data-translate="AUTHOR"></span>
 
           <!-- Author -->
-          <div data-ng-repeat="author in material.authors track by $index" layout="row" layout-align="start center" flex="30">
+          <div data-ng-repeat="author in material.authors track by $index" layout="row" layout-align="start center" flex="100" flex-gt-xs="{{ $index > 0 ? '100' : '85' }}" flex-gt-sm="65" flex-gt-md="30">
             <md-input-container data-ng-required="!material.publishers[0].name || $index === 0" flex="35">
               <label data-translate="MATERIAL_AUTHOR_NAME"></label>
               <input
@@ -166,7 +166,7 @@
             </md-input-container>
             <md-button
               class="md-icon-button"
-              data-ng-show="material.authors.length > 1"
+              data-ng-if="material.authors.length > 1"
               data-ng-click="material.authors.splice($index, 1)"
               flex="10">
               <md-icon>remove_circle</md-icon>
@@ -182,17 +182,17 @@
             </md-button>
           </div>
 
-          <md-checkbox class="md-primary checkbox--material-author" data-ng-click="$ctrl.setUserAuthorToFirstAuthor()" flex="15" aria-label="{{ 'I_AM_AUTHOR' | translate }}">
+          <md-checkbox class="md-primary checkbox--material-author" data-ng-click="$ctrl.setUserAuthorToFirstAuthor()" flex="100" flex-gt-sm="20" flex-gt-md="15" aria-label="{{ 'I_AM_AUTHOR' | translate }}">
             <span data-translate="I_AM_AUTHOR"></span>
           </md-checkbox>
 
-          <span flex="15">
+          <span flex="100" flex-gt-xs="30" flex-gt-md="15">
             <span data-translate="AND_OR"></span>
             <span data-translate="MATERIAL_PUBLISHER"></span>
           </span>
 
           <!--Publisher-->
-          <md-input-container flex="30" flex>
+          <md-input-container flex="100" flex-gt-xs="70" flex-gt-md="30">
             <label data-translate="MATERIAL_PUBLISHER_SOURCE"></label>
             <input
               name="publisher"
@@ -350,7 +350,7 @@
         <!-- Illustration (the cover image) -->
         <h5 class="no-margin" data-translate="SUBTOPIC_ILLUSTRATSIOON"></h5>
         <div layout-wrap layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
-          <div flex-sm="25" flex-md="20" flex-gt-md="15" class="md-padding">
+          <div flex-sm="25" flex-md="20" flex-gt-md="15">
             <div
               data-ngf-drop
               ngf-select
@@ -474,8 +474,8 @@
           <span data-translate="MATERIAL_ADDITIONAL_DATA"></span>
           <md-icon>{{ additionalInfo.isVisible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
         </md-button>
-        <div class="md-padding" id="additionalInfo" data-ng-if="additionalInfo.isVisible" ng-cloak class="md-padding">
-          <div layout="row" layout-align="start start" layout-wrap>
+        <div id="additionalInfo" data-ng-if="additionalInfo.isVisible" ng-cloak>
+          <div layout="row" layout-align="start center" layout-wrap>
             <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70" data-ng-repeat="peerReview in material.peerReviews track by $index">
               <md-input-container flex-gt-lg="50" flex-lg="45" flex data-ng-if="!peerReview.uploading && !peerReview.uploaded">
                 <label data-ng-if="!peerReview.uploading && !peerReview.uploaded" data-translate="RECESSION_LINK"></label>
@@ -516,6 +516,14 @@
                 <span data-ng-bind="maxReviewSize"></span> MB
               </div>
               <md-button
+                class="md-icon-button"
+                data-ng-show="material.peerReviews.length > 1"
+                data-ng-click="material.peerReviews.splice($index, 1)"
+                >
+                <md-icon>remove_circle</md-icon>
+                <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
+              </md-button>
+              <md-button
                 class="md-icon-button md-primary"
                 data-ng-show="$index+1 === material.peerReviews.length"
                 data-ng-click="$ctrl.addNewPeerReview()"
@@ -523,14 +531,6 @@
                 <md-icon>add_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_NEW_PEER_REVIEW"></span>
                 </md-tooltip>
-              </md-button>
-              <md-button
-                class="md-icon-button"
-                data-ng-show="material.peerReviews.length > 1"
-                data-ng-click="material.peerReviews.splice($index, 1)"
-                >
-                <md-icon>remove_circle</md-icon>
-                <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
               </md-button>
             </div>
 
@@ -606,34 +606,33 @@
           </div>
         </div>
       </div>
+
+      <!-- Actions -->
+      <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double">
+        <md-button
+          aria-label="Tühista materjali lisamine"
+          id="add-material-cancel-button"
+          data-ng-click="$ctrl.$mdDialog.hide()"
+          >
+          <span data-translate="BUTTON_CANCEL"></span>
+        </md-button>
+        <md-button
+          aria-label="{{ (isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL') | translate }}"
+          id="create-material-button"
+          class="md-primary"
+          data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
+          data-ng-click="$ctrl.save()"
+          >
+          <span data-translate="{{ isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL' }}"></span>
+          <md-icon>arrow_forward</md-icon>
+        </md-button>
+        <md-progress-circular
+          class="md-accent ng-hide"
+          md-mode="indeterminate"
+          md-diameter="40"
+          data-ng-show="isSaving"
+        ></md-progress-circular>
+      </div>
     </md-dialog-content>
-
-    <!-- Actions -->
-    <md-dialog-actions>
-      <md-button
-        aria-label="Tühista materjali lisamine"
-        id="add-material-cancel-button"
-        data-ng-click="$ctrl.$mdDialog.hide()"
-        >
-        <span data-translate="BUTTON_CANCEL"></span>
-      </md-button>
-      <md-button
-        aria-label="{{ (isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL') | translate }}"
-        id="create-material-button"
-        class="md-primary"
-        data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
-        data-ng-click="$ctrl.save()"
-        >
-        <span data-translate="{{ isUpdateMode ? 'BUTTON_UPDATE_MATERIAL' : 'BUTTON_CREATE_MATERIAL' }}"></span>
-        <md-icon>arrow_forward</md-icon>
-      </md-button>
-      <md-progress-circular
-        class="md-accent ng-hide"
-        md-mode="indeterminate"
-        md-diameter="40"
-        data-ng-show="isSaving"
-      ></md-progress-circular>
-    </md-dialog-actions>
-
   </form>
 </md-dialog>
