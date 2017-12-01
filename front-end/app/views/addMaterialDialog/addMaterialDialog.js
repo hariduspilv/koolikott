@@ -72,9 +72,9 @@ class controller extends Controller {
         if (currentValue)
             this.pictureUpload = this.pictureUploadService
                 .upload(currentValue)
-                .then(({ data: id, data: name }) => {
-                    this.$scope.material.picture.id = id
-                    this.$scope.material.picture.id = name
+                .then(({ data }) => {
+                    this.$scope.material.picture.id = data.id
+                    this.$scope.material.picture.name = data.name
                     this.$scope.showErrorOverlay = false
                 }, () =>
                     this.$scope.showErrorOverlay = false
@@ -654,7 +654,7 @@ class controller extends Controller {
                     this.$scope.material.peerReviews.splice(i, 1)
             })
 
-            // return console.log(this.$scope.material);
+            console.log(this.$scope.material);
 
             this.serverCallService
                 [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)
