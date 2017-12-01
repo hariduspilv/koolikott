@@ -1,46 +1,40 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.factory('iconService',
-function() {
+{
+class controller {
+    getMaterialIcon(resourceTypes) {
+        if (!Array.isArray(resourceTypes) || !resourceTypes.length)
+            return 'description'
 
-    return {
-        getMaterialIcon: getMaterialIcon
-    };
-
-    function getMaterialIcon(resourceTypes) {
-        if (resourceTypes === undefined || resourceTypes === null) return '';
-        if (resourceTypes.length === 0) return 'description';
-
-        for (var i = 0; i < resourceTypes.length; i++) {
-            switch(resourceTypes[i].name.trim()) {
+        for (let { name } of resourceTypes)
+            switch(name.trim()) {
                 case 'AUDIO':
-                    return 'audiotrack';
+                    return 'audiotrack'
                 case 'IMAGE':
-                    return 'image';
+                    return 'image'
                 case 'VIDEO':
                 case 'BROADCAST':
-                    return 'ondemand_video';
+                    return 'ondemand_video'
                 case 'DEMONSTRATION':
                 case 'PRESENTATION':
-                    return 'dvr';
+                    return 'dvr'
                 case 'ASSESSMENT':
                 case 'DRILLANDPRACTICE':
-                    return 'assessment';
+                    return 'assessment'
                 case 'TOOL':
                 case 'APPLICATION':
-                    return 'web_asset';
+                    return 'web_asset'
                 case 'EDUCATIONALGAME':
                 case 'ROLEPLAY':
                 case 'SIMULATION':
-                    return 'casino';
+                    return 'casino'
                 case 'CASESTUDY':
                 case 'ENQUIRYORIENTEDACTIVITY':
                 case 'EXPERIMENT':
                 case 'EXPLORATION':
                 case 'OPENACTIVITY':
                 case 'PROJECT':
-                    return 'assignment';
+                    return 'assignment'
                 case 'WEBSITE':
                 case 'WEBLOG':
                 case 'WIKI':
@@ -53,10 +47,11 @@ function() {
                 case 'VIDEOSHARINGPLATFORM':
                 case 'OTHER':
                 case 'DATA':
-                    return 'web';
+                    return 'web'
+                default:
+                    return 'description'
             }
-        }
-        return 'description';
     }
-
-});
+}
+factory('iconService', controller)
+}
