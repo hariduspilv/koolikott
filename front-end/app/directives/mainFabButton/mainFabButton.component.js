@@ -42,7 +42,6 @@ class controller extends Controller {
             }
 
             this.storageService.setEmptyPortfolio(emptyPortfolio)
-            this.$rootScope.newPortfolioCreated = true
             this.$mdDialog.show({
                 templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                 controller: 'addPortfolioDialogController',

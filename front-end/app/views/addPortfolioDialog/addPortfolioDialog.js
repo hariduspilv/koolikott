@@ -42,7 +42,6 @@ angular.module('koolikottApp')
                 }
 
                 $scope.cancel = function () {
-                    $rootScope.newPortfolioCreated = false;
                     $mdDialog.hide();
                 };
 
@@ -82,7 +81,7 @@ angular.module('koolikottApp')
                         $timeout($scope.create, 500, false);
                     } else {
                         var url = "rest/portfolio/create";
-                        serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                        serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess.bind(null, true), createPortfolioFailed, savePortfolioFinally);
                     }
                 };
 
@@ -90,30 +89,27 @@ angular.module('koolikottApp')
                     $scope.newPortfolio.taxons.splice(index, 1);
                 };
 
-                function createPortfolioSuccess(portfolio) {
-                    if (isEmpty(portfolio)) {
-                        createPortfolioFailed();
-                    } else {
-                        eventService.notify("portfolio:reloadTaxonObject");
+                function createPortfolioSuccess(isCreate, portfolio) {
+                    if (portfolio) {
+                        eventService.notify('portfolio:reloadTaxonObject')
 
-                        if (!portfolio.chapters || portfolio.chapters.length === 0) {
-                            portfolio.chapters = [];
-                            portfolio.chapters.push({
-                                title: '',
-                                subchapters: [],
-                                contentRows: [
-                                    {
-                                        learningObjects: []
-                                    }
-                                ],
-                                openCloseChapter: false
-                            });
+                        if (!Array.isArray(portfolio.chapters) || !portfolio.chapters.length)
+                            portfolio.chapters = []
+
+                        storageService.setPortfolio(portfolio)
+                        $mdDialog.hide()
+
+                        if (isCreate) {
+                            const unsubscribe = $rootScope.$on('$locationChangeSuccess', () => {
+                                unsubscribe()
+                                $timeout(() => {
+                                    $rootScope.$broadcast('tags:focusInput')
+                                    $rootScope.$broadcast('tour:start:editPage:firstTime')
+                                })
+                            })
                         }
 
-                        storageService.setPortfolio(portfolio);
-
-                        $mdDialog.hide();
-                        $location.url('/portfolio/edit?id=' + storageService.getPortfolio().id);
+                        $location.url('/portfolio/edit?id=' + portfolio.id)
                     }
                 }
 
@@ -138,7 +134,7 @@ angular.module('koolikottApp')
                             $scope.portfolio.picture = $scope.newPortfolio.picture;
                         }
 
-                        serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                        serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess.bind(null, false), createPortfolioFailed, savePortfolioFinally);
                     }
                 };
 

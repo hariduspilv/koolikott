@@ -10,11 +10,6 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        if (this.$rootScope.newPortfolioCreated) {
-            this.$rootScope.newPortfolioCreated = false
-            this.$rootScope.$broadcast('tour:start:editPage:firstTime')
-        }
-
         this.startAutosave()
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
