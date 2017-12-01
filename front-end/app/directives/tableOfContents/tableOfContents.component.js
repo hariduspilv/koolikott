@@ -59,23 +59,6 @@ class controller extends Controller {
                 }))
             )
     }
-    // deprecated
-    _gotoChapter(evt, chapterId, subchapterId) {
-        evt.preventDefault()
-        this._goToElement(
-            subchapterId != null
-                ? 'chapter-' + chapterId + '-' + subchapterId
-                : 'chapter-' + chapterId
-        )
-    }
-    _goToElement(elementID) {
-        const $chapter = angular.element(document.getElementById(elementID))
-        this.$document.scrollToElement($chapter, 60, 200)
-    }
-    _closeSidenav() {
-        if (window.innerWidth < BREAK_LG)
-            this.$mdSidenav('left').close()
-    }
 }
 controller.$inject = [
     '$scope',
