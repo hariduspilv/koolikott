@@ -199,10 +199,10 @@ class controller extends Controller {
         )
     }
     addNewPeerReview() {
-        this.$scope.material.peerReviews.push({})
+        this.$scope.peerReviews.push({})
         this.$timeout(() =>
             angular
-                .element(`#material-peerReview-${this.$scope.material.peerReviews.length - 1}`)
+                .element(`#material-peerReview-${this.$scope.peerReviews.length - 1}`)
                 .focus()
         )
     }
@@ -320,7 +320,7 @@ class controller extends Controller {
         this.$scope.material = {}
         this.$scope.material.taxons = [{}]
         this.$scope.material.authors = [{}]
-        this.$scope.material.peerReviews = [{}]
+        this.$scope.peerReviews = [{}]
         this.$scope.material.keyCompetences = []
         this.$scope.material.crossCurricularThemes = []
         this.$scope.material.publishers = []
@@ -463,18 +463,18 @@ class controller extends Controller {
     }
     uploadReview(index, file) {
         if (file) {
-            this.$scope.material.peerReviews[index].uploading = true
+            this.$scope.peerReviews[index].uploading = true
             this.$scope.uploadingReviewId = index
             this.fileUploadService.uploadReview(file)
                 .then(({ data }) => {
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].name = data.name;
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].url = data.url;
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].name = data.name;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].url = data.url;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
 
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploading = false;
                 }, ({ data }) => {
                     this.toastService.show(`Error: ${data}`);
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploading = false;
                 })
         }
     }
@@ -501,8 +501,11 @@ class controller extends Controller {
         if (!this.$scope.material.taxons[0])
             this.$scope.material.taxons = [{}]
 
-        if (!this.$scope.material.peerReviews[0])
-            this.$scope.material.peerReviews = [{}]
+        if (!this.$scope.material.peerReviews[0]) {
+            this.$scope.peerReviews = [{}];
+        } else {
+            this.$scope.peerReviews = this.$scope.material.peerReviews;
+        }
 
         const educationalContext = this.taxonService.getEducationalContext(this.$scope.material.taxons[0])
 
@@ -645,10 +648,13 @@ class controller extends Controller {
             if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
                 this.$scope.material.publishers[0] = null
 
+            this.$scope.material.peerReviews = Object.assign([], this.$scope.peerReviews);
             this.$scope.material.peerReviews.forEach((peerReview, i) => {
                 if (!peerReview || !peerReview.url)
                     this.$scope.material.peerReviews.splice(i, 1)
             })
+
+            // return console.log(this.$scope.material);
 
             this.serverCallService
                 [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)

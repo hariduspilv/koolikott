@@ -476,26 +476,25 @@
         </md-button>
         <div id="additionalInfo" data-ng-if="additionalInfo.isVisible" ng-cloak>
           <div layout="row" layout-align="start center" layout-wrap>
-            <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70" data-ng-repeat="peerReview in material.peerReviews track by $index">
+            <div layout="row" layout-align="start center" flex-xs="100" flex-gt-lg="80" flex-lg="80" flex-md="70" data-ng-repeat="peerReview in peerReviews track by $index">
               <md-input-container flex-gt-lg="50" flex-lg="45" flex data-ng-if="!peerReview.uploading && !peerReview.uploaded">
                 <label data-ng-if="!peerReview.uploading && !peerReview.uploaded" data-translate="RECESSION_LINK"></label>
                 <input name="peerReview" data-ng-model="peerReview.url" dop-validate-url aria-label="{{ 'RECESSION_LINK' | translate }}">
               </md-input-container>
               <!-- Uploaded file name -->
-              <div layout-fill data-ng-if="peerReview.uploading || peerReview.uploaded" layout-align="center">
-                <div data-ng-if="peerReview.uploading" class="upload-file-uploading" flex-offset="25">
-                  <h5 data-translate="ADD_FILE_UPLOADING"></h5>
+              <div data-ng-if="peerReview.uploading || peerReview.uploaded" layout-align="center">
+                <div data-ng-if="peerReview.uploading" flex-offset="25">
+                  <div data-translate="ADD_FILE_UPLOADING"></div>
                   <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                 </div>
-                <div data-ng-if="peerReview.uploaded && !peerReview.uploading" class="upload-file-success">
-                  <h5>
-                    <span data-translate="ADD_FILE_SUCCESS"></span>:
+                <!-- Uploaded file name -->
+                <div data-ng-if="peerReview.uploaded && !peerReview.uploading">
                     <span class="ellipsis" data-ng-bind="peerReview.name"></span>
-                  </h5>
                 </div>
               </div>
-              <!-- Uploaded file name -->
-              <span class="md-padding" data-translate="OR_ADD"> </span>
+              <span class="md-padding">
+                <span data-ng-if="!peerReview.uploaded && !peerReview.uploading" data-translate="OR_ADD"></span>
+              </span>
               <!-- Upload button -->
               <div
                 ngf-select
@@ -517,15 +516,15 @@
               </div>
               <md-button
                 class="md-icon-button"
-                data-ng-show="material.peerReviews.length > 1"
-                data-ng-click="material.peerReviews.splice($index, 1)"
+                data-ng-show="peerReviews.length > 1"
+                data-ng-click="peerReviews.splice($index, 1)"
                 >
                 <md-icon>remove_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_REMOVE"></span></md-tooltip>
               </md-button>
               <md-button
                 class="md-icon-button md-primary"
-                data-ng-show="$index+1 === material.peerReviews.length"
+                data-ng-show="$index+1 === peerReviews.length"
                 data-ng-click="$ctrl.addNewPeerReview()"
                 >
                 <md-icon>add_circle</md-icon>
