@@ -424,6 +424,10 @@ class controller extends Controller {
                      * are not among these nor listed above in ALLOWED_TAGS are unwrapped.
                      */
                     cleanTags: FORBIDDEN_TAGS
+                },
+                anchor: {
+                    linkValidation: true,
+                    placeholderText: 'http://'
                 }
             })
 
