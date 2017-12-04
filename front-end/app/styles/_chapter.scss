@@ -655,12 +655,12 @@ md-input-container.chapter-title {
 .chapter-blocks {
   display: flex;
   flex-wrap: wrap;
-  margin: -.75rem -1rem -1rem;
-  width: calc(100% + 2rem);
+  margin: -.75rem -1.5rem -1rem;
+  width: calc(100% + 3rem);
 }
 .chapter-block {
   width: 100%;
-  padding: .75rem 1rem;
+  padding: .75rem 1.5rem;
   box-sizing: border-box;
   transition: opacity .2s;
   will-change: opacity;
@@ -687,8 +687,8 @@ md-input-container.chapter-title {
       &:after {
         content: '';
         position: absolute;
-        left: 1rem;
-        right: 1rem;
+        left: 1.5rem;
+        right: 1.5rem;
         bottom: .4rem;
         height: 2px;
         background-color: #03a9f4; // light-blue-500
@@ -757,7 +757,7 @@ md-input-container.chapter-title {
 
 // embeds
 .chapter-embed-card {
-  margin: 1rem -1rem;
+  margin: 1rem -1.5rem;
   background-color: $white;
   box-shadow: 0 0 0 1px #e0e0e0; // gray-300
   user-select: none;
@@ -860,7 +860,7 @@ md-input-container.chapter-title {
     .chapter-block:not(.is-narrow) & {
       float: left;
       width: 50%;
-      margin: 0 2rem 1rem -1rem;
+      margin: 0 2rem 1rem -1.5rem;
     }
   }
 }
@@ -869,7 +869,7 @@ md-input-container.chapter-title {
     .chapter-block:not(.is-narrow) & {
       float: right;
       width: 50%;
-      margin: 0 -1rem 1rem 2rem;
+      margin: 0 -1.5rem 1rem 2rem;
     }
   }
 }
