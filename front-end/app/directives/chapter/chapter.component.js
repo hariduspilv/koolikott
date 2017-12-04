@@ -236,7 +236,11 @@ class PreselectFormat {
 class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
+            const isFirstChange = chapter.isFirstChange()
             this.$scope.chapter = chapter.currentValue
+
+            if (!isFirstChange)
+                this.updateState()
 
             this.isEditMode
                 ? !this.$scope.chapter.title && (this.$scope.chapter.title = '')
@@ -257,7 +261,7 @@ class controller extends Controller {
                 })
 
             // yes, we want it to run in the cycle after next
-            if (this.isEditMode)
+            if (this.isEditMode && isFirstChange)
                 this.$timeout(() =>
                     this.$timeout(() =>
                         this.updateEditors()
