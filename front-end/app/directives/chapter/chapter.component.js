@@ -11,9 +11,22 @@
 */
 
 {
-const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
-const ALLOWED_INLINE_TAGS = ['BR', 'B', 'I', 'A']
-const ALLOWED_TAGS = ALLOWED_BLOCK_LEVEL_TAGS.concat(ALLOWED_INLINE_TAGS)
+// const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
+// const ALLOWED_INLINE_TAGS = ['BR', 'B', 'I', 'A']
+const ALLOWED_TAGS_AND_ATTRIBUTES = {
+    A: ['href', 'target'],
+    DIV: ['class', 'data-id', 'data-src'],
+    H3: ['class', 'id'],
+    P: [],
+    UL: [],
+    LI: [],
+    BLOCKQUOTE: [],
+    B: [],
+    I: [],
+    BR: []
+}
+const ALLOWED_TAGS = Object.keys(ALLOWED_TAGS_AND_ATTRIBUTES)
+const FORBIDDEN_TAGS = ['meta', 'script', 'link', 'style', 'img', 'map', 'audio', 'video', 'track', 'applet', 'embed', 'object', 'param', 'source', 'canvas', 'noscript']
 const ICON_SVG_CONTENTS = {
     h3: '<path d="M20,14.3400002 L21.4736328,14.34375 C22.5810602,14.34375 23.1347656,13.8017632 23.1347656,12.7177734 C23.1347656,12.2958963 23.002931,11.9516615 22.7392578,11.6850586 C22.4755846,11.4184557 22.103518,11.2851562 21.6230469,11.2851562 C21.2304668,11.2851562 20.8891616,11.3994129 20.5991211,11.6279297 C20.3090806,11.8564465 20.1640625,12.1406233 20.1640625,12.4804688 L17.2021484,12.4804688 C17.2021484,11.8066373 17.3896466,11.2060573 17.7646484,10.6787109 C18.1396503,10.1513646 18.6596646,9.73974757 19.324707,9.44384766 C19.9897494,9.14794774 20.7206991,9 21.5175781,9 C22.9414134,9 24.0605428,9.32519206 24.875,9.97558594 C25.6894572,10.6259798 26.0966797,11.5195256 26.0966797,12.65625 C26.0966797,13.207034 25.9282243,13.7270483 25.5913086,14.2163086 C25.2543928,14.7055689 24.7636751,15.1025375 24.1191406,15.4072266 C24.7988315,15.6533215 25.3320293,16.026853 25.71875,16.527832 C26.1054707,17.0288111 26.2988281,17.6484338 26.2988281,18.3867188 C26.2988281,19.5293026 25.8593794,20.4433559 24.9804688,21.1289062 C24.1015581,21.8144566 22.9472728,22.1572266 21.5175781,22.1572266 C20.6796833,22.1572266 19.9018591,21.9975602 19.184082,21.6782227 C18.466305,21.3588851 17.9228534,20.9165067 17.5537109,20.3510742 C17.1845685,19.7856417 17,19.1425817 17,18.421875 L19.9794922,18.421875 C19.9794922,18.8144551 20.1376937,19.1542954 20.4541016,19.4414062 C20.7705094,19.7285171 21.1601539,19.8720703 21.6230469,19.8720703 C22.1445339,19.8720703 22.5605453,19.7270522 22.8710938,19.4370117 C23.1816422,19.1469712 23.3369141,18.7763694 23.3369141,18.3251953 C23.3369141,17.6806608 23.1757829,17.2236342 22.8535156,16.9541016 C22.5312484,16.684569 22.0859403,16.5498047 21.5175781,16.5498047 L20,16.5498047 L20,14.3400002 Z M16,22 L13,22 L13,17 L9,17 L9,22 L6,22 L6,9 L9,9 L9,14 L13,14 L13,9 L16,9 L16,22 Z"></path>',
     p: '<path d="M20.9816895,17.2968826 C20.9816895,18.7734525 20.6491732,19.9526399 19.9841309,20.8344803 C19.3190885,21.7163206 18.2460994,22.1715698 17.1152344,22.1715698 C16.2421831,22.1715698 15.5625028,21.8489164 15,21.2102413 L15,25 L12,25 L12,11.9957809 L14.7685547,11.9957809 L14.8599997,12.8699999 C15.4283619,12.1668714 16.1718704,11.8199997 17.0976562,11.8199997 C18.2695371,11.8199997 19.3557096,12.2377886 20.0061035,13.1020508 C20.6564974,13.9663129 20.9816895,15.1542893 20.9816895,16.6660156 L20.9816895,17.2968826 Z M18.0197754,16.6220703 C18.0197754,14.9345619 17.352544,14.1051559 16.3681641,14.1051559 C15.6650355,14.1051559 15.2343762,14.3571066 15,14.8610153 L15,19.0953979 C15.2578138,19.6227443 15.6943325,19.8864136 16.3857422,19.8864136 C17.3291063,19.8864136 17.9904784,19.057633 18.0197754,17.4287186 L18.0197754,16.6220703 Z"></path>',
@@ -179,7 +192,7 @@ class ParagraphButton extends CustomMediumEditorExtension {
  * Display the toolbar in the beginning of a new paragraph wihtout any selection.
  */
 class PreselectFormat {
-    init() {
+    constructor() {
         setTimeout(() =>
             this.monkeyPatchToolbar()
         )
@@ -232,6 +245,34 @@ class PreselectFormat {
             el = el.parentElement
         }
     }
+}
+/**
+ * Overwriting Medium Editor's util methods to suit our needs.
+ * The original method accepts a blacklist of attributes that should be removed on all elements
+ * while our method accepts a whilelist object mapping which attributes are allowed on which elements.
+ * Original method is in source code at:
+ * https://github.com/yabwe/medium-editor/blob/c619e756c0c8dda7bbb587b6b97209d984c208e8/src/js/util.js#L1037-L1041
+ */
+MediumEditor.util.cleanupAttrs = (el, blacklist) => {
+    const allowed = ALLOWED_TAGS_AND_ATTRIBUTES[el.tagName]
+
+    for (let { name } of el.attributes)
+        if (!allowed || allowed.indexOf(name.toLowerCase()) < 0)
+            el.removeAttribute(name)
+}
+/**
+ * The original method unwraps elements that are specified in the provided blacklist (options.unwrapTags)
+ * while ours unwraps all elements that are not in our allowed whitelist.
+ * Original method is in source code at:
+ * https://github.com/yabwe/medium-editor/blob/c619e756c0c8dda7bbb587b6b97209d984c208e8/src/js/util.js#L1049-L1053
+ */
+MediumEditor.util.unwrapTags = (el, blacklist) => {
+    // convert other healines to H3
+    if (['H1', 'H2', 'H4', 'H5', 'H6'].indexOf(el.nodeName) > -1)
+        el.outerHTML = `<h3>${el.innerHTML}</h3>`
+    else
+    if (ALLOWED_TAGS.indexOf(el.nodeName) < 0)
+        MediumEditor.util.unwrap(el, document)
 }
 class controller extends Controller {
     $onChanges({ chapter }) {
@@ -373,12 +414,18 @@ class controller extends Controller {
                     // p: new ParagraphButton(el),
                     preselectFormat: new PreselectFormat()
                 },
-                updateOnEmptySelection: true
+                updateOnEmptySelection: true,
+                paste: {
+                    forcePlainText: false,
+                    cleanPastedHTML: true,
+                    /**
+                     * These tags (and their contents) are removed during paste. All other tags that
+                     * are not among these nor listed above in ALLOWED_TAGS are unwrapped.
+                     */
+                    cleanTags: FORBIDDEN_TAGS
+                }
             })
 
-            const saveSelection = editor.saveSelection.bind(editor)
-            editor.subscribe('editableClick', saveSelection)
-            editor.subscribe('editableKeyup', saveSelection)
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
             editor.subscribe('blur', this.onBlurBlock.bind(this, idx))
 
@@ -401,7 +448,7 @@ class controller extends Controller {
                         if (el.innerHTML && el.innerHTML !== '<p><br></p>')
                             el.classList.remove('medium-editor-placeholder')
 
-                        this.registerSubchapters(el)
+                        this.registerSubchapters()
                         this.loadEmbeddedContents(el)
                     }
                 }
@@ -461,6 +508,7 @@ class controller extends Controller {
         /**
          * 1) Unwrap html tags that are not allowed as soon as they are created.
          * 2) (Un)register subchapters upon creation/removal of <h3>
+         * 3) Update state (and as a result sidemenu) when mutation originates from within H3
          */
         const handleAddedNode = (node) => {
             if (node.parentNode && node.nodeType === Node.ELEMENT_NODE) {
@@ -469,7 +517,7 @@ class controller extends Controller {
                 else if (node.tagName === 'H3') {
                     node.classList.add('subchapter')
                     this.updateState()
-                    this.registerSubchapters(this.getClosestEditor(node))
+                    this.registerSubchapters()
                 }
             }
         }
@@ -477,11 +525,20 @@ class controller extends Controller {
             if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'H3')
                 this.updateState()
         }
+        const handleSubtitleChange = (targte) => {
+            if (target.nodeType === Node.ELEMENT_NODE && target.tagName === 'H3' ||
+                target.parentElement && target.parentElement.tagName === 'H3'
+            ) {
+                this.$timeout.cancel(this.subtitleChangeTimer)
+                this.subtitleChangeTimer = this.$timeout(this.updateState.bind(this), 800)
+            }
+        }
         if ('MutationObserver' in window) {
             el._mutationObserver = new MutationObserver(mutations =>
-                mutations.forEach(({ addedNodes, removedNodes }) => {
+                mutations.forEach(({ addedNodes, removedNodes, target }) => {
                     addedNodes.forEach(handleAddedNode)
                     removedNodes.forEach(handleRemovedNode)
+                    handleSubtitleChange(target)
                 })
             )
             el._mutationObserver.observe(el, {
@@ -498,11 +555,10 @@ class controller extends Controller {
             )
         }
     }
-    registerSubchapters(el) {
+    registerSubchapters() {
         // add id attributes to all subchapters derived from subchapter titles
-        if (el)
-            for (let [subIdx, subEl] of el.querySelectorAll('.subchapter').entries())
-                subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
+        for (let [subIdx, subEl] of document.querySelectorAll('.subchapter').entries())
+            subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(el) {
         const encodeHtmlEntities = (str) => str.replace(/[\u00A0-\u9999<>\&]/gim, (i) =>
@@ -567,14 +623,6 @@ class controller extends Controller {
     }
     getEditor(idx) {
         return MediumEditor.getEditorFromElement(this.getEditorElements()[idx])
-    }
-    getClosestEditor(child) {
-        let el = child
-        while(el !== null) {
-            if (el.classList.contains('medium-editor-element'))
-                return el
-            el = el.parentElement
-        }
     }
     calcSizes() {
         if (this.isEditMode) {
