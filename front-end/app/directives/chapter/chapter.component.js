@@ -395,10 +395,9 @@ class controller extends Controller {
                 for (let [idx, el] of this.getEditorElements().entries())
                     this.createEditor(blocks, idx, el)
 
-                this.$timeout(() => {
-                    console.log('onBlockChanges -> updateEditors')
+                this.$timeout(() =>
                     this.updateEditors()
-                })
+                )
             })
         }
     }
@@ -517,7 +516,6 @@ class controller extends Controller {
          * 4) Do not allow block-level elements to be nested in other block-level elements
          */
         const handleAddedNode = (node) => {
-            console.log('handleAddedNode:', node)
             if (node.parentNode && node.nodeType === Node.ELEMENT_NODE) {
                 if (!ALLOWED_TAGS.includes(node.tagName))
                     return node.outerHTML = node.innerHTML
@@ -579,9 +577,7 @@ class controller extends Controller {
 
         if ('MutationObserver' in window) {
             el._mutationObserver = new MutationObserver(mutations =>
-                mutations.forEach(mutations => {
-                    const { addedNodes, removedNodes, target } = mutations
-                    // console.log('mutations:', mutations)
+                mutations.forEach(({ addedNodes, removedNodes, target }) => {
                     addedNodes.forEach(handleAddedNode)
                     removedNodes.forEach(handleRemovedNode)
                     handleSubtitleChange(target)
