@@ -423,7 +423,8 @@ class controller extends Controller {
                      * are not among these nor listed above in ALLOWED_TAGS are unwrapped.
                      */
                     cleanTags: FORBIDDEN_TAGS
-                }
+                },
+                delay: 100 // delay the toolbar
             })
 
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
@@ -525,7 +526,7 @@ class controller extends Controller {
             if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'H3')
                 this.updateState()
         }
-        const handleSubtitleChange = (targte) => {
+        const handleSubtitleChange = (target) => {
             if (target.nodeType === Node.ELEMENT_NODE && target.tagName === 'H3' ||
                 target.parentElement && target.parentElement.tagName === 'H3'
             ) {
