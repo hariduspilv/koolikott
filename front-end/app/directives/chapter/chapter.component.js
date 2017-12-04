@@ -2,6 +2,8 @@
 
 /**
  @todo
+ + WYSIWYG
+    - bug: cannot create blockquote from bulleted list (selected content is left entirely unwrapped).
  + embedas
     - bug: if material is last element, it can't be deleted
     - bug: if two materials are adjecent then they can only be deleted together
@@ -11,8 +13,7 @@
 */
 
 {
-// const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
-// const ALLOWED_INLINE_TAGS = ['BR', 'B', 'I', 'A']
+const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
 const ALLOWED_TAGS_AND_ATTRIBUTES = {
     A: ['href', 'target'],
     DIV: ['class', 'data-id', 'data-src'],
@@ -204,38 +205,37 @@ class PreselectFormat {
         toolbar.checkState = () => {
             origCheckState()
 
-            // clearTimeout(this.checkTimer)
-            // this.checkTimer = setTimeout(() => {
-                const selection = window.getSelection()
+            const selection = window.getSelection()
+            if (selection.rangeCount) {
+                const range = selection.getRangeAt(0)
+                let selectionParent = range.commonAncestorContainer
 
-                if (selection.rangeCount) {
-                    let selectionParent = selection.getRangeAt(0).commonAncestorContainer
+                if (selectionParent.nodeType != Node.ELEMENT_NODE)
+                    selectionParent = selectionParent.parentNode
+                
+                const selectionEditor = this.getSelectionEditor(selectionParent)
 
-                    if (selectionParent.nodeType != Node.ELEMENT_NODE)
-                        selectionParent = selectionParent.parentNode
+                if (selectionParent &&
+                    !selectionParent.textContent.trim() &&
+                    this.base.elements[0] === selectionEditor
+                ) {
+                    /**
+                     * this is necessary so that the toolbar would be positioned
+                     * at the beginning of the empty row.
+                     */
+                    range.selectNodeContents(
+                        selectionParent === selectionEditor
+                            ? selectionParent.firstChild
+                            : selectionParent
+                    )
+                    selection.removeAllRanges()
+                    selection.addRange(range)
 
-                    const selectionEditor = this.getSelectionEditor(selectionParent)
-
-                    if (selectionParent &&
-                        !selectionParent.textContent.trim() &&
-                        this.base.elements[0] === selectionEditor
-                    ) {
-                        toolbar.showToolbar()
-                        toolbar.setToolbarButtonStates()
-
-                        /**
-                         * this is necessary so that the toolbar would be positioned
-                         * at the beginning of the empty row.
-                         */
-                        const range = document.createRange()
-                        range.selectNodeContents(selectionParent)
-                        selection.removeAllRanges()
-                        selection.addRange(range)
-                        
-                        toolbar.positionToolbar(window.getSelection())
-                    }
+                    toolbar.showToolbar()
+                    toolbar.setToolbarButtonStates()
+                    toolbar.positionToolbar(window.getSelection())
                 }
-            // }, 200)
+            }
         }
     }
     getSelectionEditor(el) {
@@ -271,7 +271,10 @@ MediumEditor.util.unwrapTags = (el, blacklist) => {
     if (['H1', 'H2', 'H4', 'H5', 'H6'].indexOf(el.nodeName) > -1)
         el.outerHTML = `<h3>${el.innerHTML}</h3>`
     else
-    if (ALLOWED_TAGS.indexOf(el.nodeName) < 0)
+    // unwrap DIVs that are not embeds & all other tags
+    if ((el.nodeType === Node.ELEMENT_NODE && el.nodeName === 'DIV' && !el.classList.contains('chapter-embed-card')) ||
+        ALLOWED_TAGS.indexOf(el.nodeName) < 0
+    )
         MediumEditor.util.unwrap(el, document)
 }
 class controller extends Controller {
@@ -298,16 +301,8 @@ class controller extends Controller {
             if (!this.$scope.chapter.blocks.length)
                 this.$scope.chapter.blocks.push({
                     narrow: false,
-                    htmlContent: ''
+                    htmlContent: '<p><br></p>'
                 })
-
-            // yes, we want it to run in the cycle after next
-            if (this.isEditMode && isFirstChange)
-                this.$timeout(() =>
-                    this.$timeout(() =>
-                        this.updateEditors()
-                    )
-                )
         }
     }
     $onInit() {
@@ -390,18 +385,25 @@ class controller extends Controller {
 
         this.$scope.isTitleFocused
             ? this.focusTitle(true)
-            : this.focusBlock(this.$scope.focusedBlockIdx, false, false, true)
+            : this.focusBlock(this.$scope.focusedBlockIdx, false, true)
     }
     onBlockChanges(blocks, previousBlocks) {
         // block elements are not in DOM before next loop
-        this.$timeout(() => {
-            for (let [idx, el] of this.getEditorElements().entries())
-                this.createEditor(blocks, idx, el)
-        })
+        if (!this.updatingState) {
+            this.$timeout.cancel(this.blockChangeTimer)
+            this.blockChangeTimer = this.$timeout(() => {
+                for (let [idx, el] of this.getEditorElements().entries())
+                    this.createEditor(blocks, idx, el)
+
+                this.$timeout(() => {
+                    console.log('onBlockChanges -> updateEditors')
+                    this.updateEditors()
+                })
+            })
+        }
     }
     createEditor(blocks, idx, el) {
         if (!MediumEditor.getEditorFromElement(el)) {
-            const svg = { open: '<svg viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">', close: '</svg>' }
             const editor = new MediumEditor(el, {
                 placeholder: idx === 0 && this.$scope.chapter.blocks.length === 1,
                 toolbar: {
@@ -423,8 +425,7 @@ class controller extends Controller {
                      * are not among these nor listed above in ALLOWED_TAGS are unwrapped.
                      */
                     cleanTags: FORBIDDEN_TAGS
-                },
-                delay: 100 // delay the toolbar
+                }
             })
 
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
@@ -454,7 +455,7 @@ class controller extends Controller {
                     }
                 }
     }
-    updateState() {
+    updateState(from) {
         /**
          * Update input contents upstream:
          * editorElement.innerHTML -> $scope.chapter.blocks[idx].htmlContent
@@ -477,7 +478,8 @@ class controller extends Controller {
 
             return wrapper.innerHTML
         }
-        if (this.isEditMode)
+        if (this.isEditMode) {
+            this.updatingState = true
             for (let [idx, el] of this.getEditorElements().entries()) {
                 const sanitizedHtml = sanitizeEditedHtml(el.innerHTML)
 
@@ -486,6 +488,8 @@ class controller extends Controller {
                 )
                     this.$scope.chapter.blocks[idx].htmlContent = sanitizedHtml
             }
+            this.$timeout(() => this.updatingState = false)
+        }
     }
     optimizePlaceholder(el, editor) {
         /**
@@ -510,33 +514,74 @@ class controller extends Controller {
          * 1) Unwrap html tags that are not allowed as soon as they are created.
          * 2) (Un)register subchapters upon creation/removal of <h3>
          * 3) Update state (and as a result sidemenu) when mutation originates from within H3
+         * 4) Do not allow block-level elements to be nested in other block-level elements
          */
         const handleAddedNode = (node) => {
+            console.log('handleAddedNode:', node)
             if (node.parentNode && node.nodeType === Node.ELEMENT_NODE) {
                 if (!ALLOWED_TAGS.includes(node.tagName))
-                    node.outerHTML = node.innerHTML
-                else if (node.tagName === 'H3') {
+                    return node.outerHTML = node.innerHTML
+
+                unwrapBlockLevelParents(node)
+                unwrapBlockLevelChildren(node, node)
+
+                if (node.tagName === 'H3') {
                     node.classList.add('subchapter')
-                    this.updateState()
+                    updateState()
                     this.registerSubchapters()
                 }
             }
         }
         const handleRemovedNode = (node) => {
             if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'H3')
-                this.updateState()
+                updateState()
         }
         const handleSubtitleChange = (target) => {
             if (target.nodeType === Node.ELEMENT_NODE && target.tagName === 'H3' ||
                 target.parentElement && target.parentElement.tagName === 'H3'
+            )
+                updateState()
+        }
+        // unwrap any nested block-level elements
+        const unwrapBlockLevelParents = (child) => {
+            const parent = child.parentElement
+            if (isNodeBlockLevelElement(child) &&
+                parent && !parent.classList.contains('medium-editor-element')
             ) {
-                this.$timeout.cancel(this.subtitleChangeTimer)
-                this.subtitleChangeTimer = this.$timeout(this.updateState.bind(this), 800)
+                unwrapBlockLevelParents(parent) // recursion
+
+                if (parent.parentElement &&
+                    isNodeBlockLevelElement(parent) &&
+                    !(parent.tagName === 'UL' && child.tagName === 'LI')
+                )
+                    parent.outerHTML = parent.innerHTML
             }
         }
+        const unwrapBlockLevelChildren = (parent, root) => {
+            if (isNodeBlockLevelElement(parent))
+                for (let child of parent.children) {
+                    unwrapBlockLevelChildren(child, root) // recursion
+
+                    if (isNodeBlockLevelElement(child) &&
+                        !(parent.tagName === 'UL' && child.tagName === 'LI' && root.tagName === 'UL')
+                    )
+                        child.outerHTML = child.innerHTML
+                }
+        }
+        const isNodeBlockLevelElement = (node) => {
+            return node.nodeType === Node.ELEMENT_NODE
+                && ALLOWED_BLOCK_LEVEL_TAGS.indexOf(node.tagName) > -1
+        }
+        const updateState = () => {
+            this.$timeout.cancel(this.subtitleChangeTimer)
+            this.subtitleChangeTimer = this.$timeout(this.updateState.bind(this), 500)
+        }
+
         if ('MutationObserver' in window) {
             el._mutationObserver = new MutationObserver(mutations =>
-                mutations.forEach(({ addedNodes, removedNodes, target }) => {
+                mutations.forEach(mutations => {
+                    const { addedNodes, removedNodes, target } = mutations
+                    // console.log('mutations:', mutations)
                     addedNodes.forEach(handleAddedNode)
                     removedNodes.forEach(handleRemovedNode)
                     handleSubtitleChange(target)
@@ -729,7 +774,7 @@ class controller extends Controller {
                 this.$element[0].querySelector('input.md-headline').focus()
         })
     }
-    focusBlock(idx, scrollTo = false, restoreSelection = false, putCaretToEnd = false) {
+    focusBlock(idx, restoreSelection = false, putCaretToEnd = false) {
         if (typeof idx !== 'number')
             idx = Math.max(0, this.$scope.chapter.blocks.length - 1)
 
@@ -738,9 +783,6 @@ class controller extends Controller {
 
         if (editor) {
             editorEl.focus()
-
-            if (scrollTo)
-                this.scrollToElement()
 
             if (restoreSelection && editor.selectionState) {
                 editor.restoreSelection()
@@ -808,7 +850,7 @@ class controller extends Controller {
     /**
      * Block actions
      */
-    addBlock(htmlContent = '') {
+    addBlock(htmlContent = '<p><br></p>') {
         this.$timeout.cancel(this.blurTimer)
 
         const { blocks } = this.$scope.chapter
@@ -819,13 +861,16 @@ class controller extends Controller {
             narrow: this.isNarrowLeft(blocks.length - 1)
         })
         /**
-         * Have to wait 2 loops:
-         * 1) block element to be injected to DOM
-         * 2) Medium Editor to be initialized on it
+         * 1st loop — block element has been injected to DOM
+         * 2nd loop — Medium Editor is initialized on it
+         * 3rd loop — Calling focusBlock in the 2nd loop does not invoke toolbar.checkState for some
+         * reason and so editor toolbar does not appear.
          */
         this.$timeout(() =>
             this.$timeout(() =>
-                this.focusBlock(blocks.length - 1, true)
+                this.$timeout(() =>
+                    this.focusBlock(blocks.length - 1)
+                )
             )
         )
     }
@@ -836,8 +881,7 @@ class controller extends Controller {
         const deleteBlock = () => {
             this.updateState()
             blocks.splice(focusedBlockIdx, 1)
-            this.updateEditors()
-            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1), false, false, true)
+            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1), false, true)
         }
 
         if (focusedBlockIdx !== null) {
@@ -866,7 +910,7 @@ class controller extends Controller {
         if (focusedBlockIdx !== null) {
             this.updateState()
             blocks[focusedBlockIdx].narrow = !blocks[focusedBlockIdx].narrow
-            this.focusBlock(focusedBlockIdx, false, true)
+            this.focusBlock(focusedBlockIdx, true)
         }
     }
     beforeMoveBlock(up = false) {
@@ -896,8 +940,7 @@ class controller extends Controller {
 
             this.updateState()
             blocks.splice(newIdx, 0, blocks.splice(focusedBlockIdx, 1)[0])
-            this.updateEditors()
-            this.focusBlock(newIdx, false, true)
+            this.focusBlock(newIdx, true)
         }
     }
     beforeAddMaterial() {
@@ -952,6 +995,7 @@ class controller extends Controller {
             ''
         )
         editorEl.innerHTML = window.materialInsertionBlockContents.replace('<div class="material-insertion-marker"></div>', materialsHtml)
+        this.updateState()
         
         this.loadEmbeddedContents(editorEl)
         // @todo Restore caret position (put it after inserted materials)
