@@ -190,63 +190,121 @@ class ParagraphButton extends CustomMediumEditorExtension {
     }
 }*/
 /**
- * Display the toolbar in the beginning of a new paragraph wihtout any selection.
+ * Returns the empty block-level element if caret is positioned on empty WYSIWYG row (and the toolbar
+ * is displayed for pre-selecting text format). Otherwise returns undefined.
  */
-class PreselectFormat {
-    constructor() {
-        setTimeout(() =>
-            this.monkeyPatchToolbar()
-        )
-    }
-    monkeyPatchToolbar() {
-        const toolbar = this.base.getExtensionByName('toolbar')
-        const origCheckState = toolbar.checkState.bind(toolbar)
-        
-        toolbar.checkState = () => {
-            origCheckState()
-
-            const selection = window.getSelection()
-            if (selection.rangeCount) {
-                const range = selection.getRangeAt(0)
-                let selectionParent = range.commonAncestorContainer
-
-                if (selectionParent.nodeType != Node.ELEMENT_NODE)
-                    selectionParent = selectionParent.parentNode
-                
-                const selectionEditor = this.getSelectionEditor(selectionParent)
-
-                if (selectionParent &&
-                    !selectionParent.textContent.trim() &&
-                    this.base.elements[0] === selectionEditor
-                ) {
-                    /**
-                     * this is necessary so that the toolbar would be positioned
-                     * at the beginning of the empty row.
-                     */
-                    range.selectNodeContents(
-                        selectionParent === selectionEditor && selectionParent.firstChild
-                            ? selectionParent.firstChild
-                            : selectionParent
-                    )
-                    selection.removeAllRanges()
-                    selection.addRange(range)
-
-                    // hide link editor
-                    if (!toolbar.isToolbarDefaultActionsDisplayed())
-                        toolbar.showToolbarDefaultActions()
-
-                    toolbar.showToolbar()
-                    toolbar.setToolbarButtonStates()
-                    toolbar.positionToolbar(window.getSelection())
-                }
-            }
-        }
-    }
-    getSelectionEditor(el) {
+function getEmptySelectionParent() {
+    const getSelectionEditor = (el) => {
         while (el !== null) {
             if (el.classList.contains('medium-editor-element'))
                 return el
             el = el.parentElement
+        }
+    }
+
+    const selection = window.getSelection()
+    
+    if (selection.rangeCount) {
+        const range = selection.getRangeAt(0)
+        let selectionParent = range.commonAncestorContainer
+
+        if (selectionParent.nodeType != Node.ELEMENT_NODE)
+            selectionParent = selectionParent.parentNode
+        
+        const selectionEditor = getSelectionEditor(selectionParent)
+
+        if (selectionParent &&
+            !selectionParent.textContent.trim() &&
+            this.base.elements[0] === selectionEditor
+        )
+            return selectionParent === selectionEditor && selectionParent.firstChild
+                ? selectionParent.firstChild
+                : selectionParent
+    }
+}
+MediumEditor.extensions.button.prototype.getEmptySelectionParent = getEmptySelectionParent
+MediumEditor.extensions.button.prototype.handleClick = function (evt) {
+    evt.preventDefault()
+    evt.stopPropagation()
+
+    const action = this.getAction()
+    if (action) {
+        if (action === 'bold' || action === 'italic') {
+            const emptySelectionParent = this.getEmptySelectionParent()
+
+            /**
+             * In case BOLD or ITALIC button is hit with empty selection wrap the empty selection
+             * with <b> or <i> or unwrap that element (toggle action).
+             */
+            if (emptySelectionParent) {
+                const tagName = action === 'bold' ? 'B' : 'I'
+                const selection = window.getSelection()
+
+                // @todo call checkState on toolbar
+                if (selection.rangeCount) {
+                    const range = selection.getRangeAt(0)
+                    const restoreSelection = (emptyEl) => {
+                        range.selectNodeContents(emptyEl)
+                        selection.removeAllRanges()
+                        selection.addRange(range)
+                        this.base.getExtensionByName('toolbar').checkState()
+                    }
+                    const unwrap = (el) => {
+                        const parent = el.parentNode
+
+                        while (el.firstChild)
+                            parent.insertBefore(el.firstChild, el)
+
+                        parent.removeChild(el)
+                        return parent
+                    }
+
+                    if (emptySelectionParent.tagName === tagName)
+                        restoreSelection(unwrap(emptySelectionParent))
+                    else if (emptySelectionParent.parentElement.tagName === tagName) {
+                        unwrap(emptySelectionParent.parentElement)
+                        restoreSelection(emptySelectionParent)
+                    } else {
+                        const newNode = document.createElement(tagName)
+                        range.surroundContents(newNode)
+                        restoreSelection(newNode)
+                    }
+                    return
+                }
+            }
+        }
+        this.execAction(action)
+    }
+}
+/**
+ * Display the toolbar in the beginning of a new paragraph wihtout any selection.
+ */
+const origToolbarCheckState = MediumEditor.extensions.toolbar.prototype.checkState
+MediumEditor.extensions.toolbar.prototype.getEmptySelectionParent = getEmptySelectionParent
+MediumEditor.extensions.toolbar.prototype.checkState = function () {
+    origToolbarCheckState.call(this)
+
+    const emptySelectionParent = this.getEmptySelectionParent()
+    if (emptySelectionParent) {
+        /**
+         * this is necessary so that the toolbar would be positioned
+         * at the beginning of the empty row.
+         */
+        const selection = window.getSelection()
+        if (selection.rangeCount) {
+            const range = selection.getRangeAt(0)
+
+            range.selectNodeContents(emptySelectionParent)
+            selection.removeAllRanges()
+            selection.addRange(range)
+
+            // hide link editor
+            if (!this.isToolbarDefaultActionsDisplayed())
+                this.showToolbarDefaultActions()
+
+            this.showToolbar()
+            this.setToolbarButtonStates()
+            this.positionToolbar(window.getSelection())
         }
     }
 }
@@ -435,10 +493,9 @@ class controller extends Controller {
                         contentDefault: `<svg viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">${ICON_SVG_CONTENTS[name]}</svg>`
                     }))
                 },
-                extensions: {
-                    // p: new ParagraphButton(el),
-                    preselectFormat: new PreselectFormat()
-                },
+                /*extensions: {
+                    p: new ParagraphButton(el),
+                },*/
                 updateOnEmptySelection: true,
                 paste: {
                     forcePlainText: false,
@@ -666,7 +723,6 @@ class controller extends Controller {
                         fragment.appendChild(caption)
 
                         // icon
-                        // @todo derive specific material icon from resourceTypes
                         caption.innerHTML = `<md-icon class="material-icons">${this.iconService.getMaterialIcon(resourceTypes)}</md-icon>`
 
                         // title
