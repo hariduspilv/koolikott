@@ -125,7 +125,7 @@ class controller extends Controller {
                 .makeGet('rest/material/getOneBySource?source=' + encodeURIComponent(currentValue))
                 .then(({ data: material }) => {
                     if (!material)
-                        return this.processSource($scope.material.source)
+                        return this.processSource(this.$scope.material.source)
 
                     if (material.deleted) {
                         this.$scope.addMaterialForm.source.$setValidity('deleted', false)
@@ -133,7 +133,7 @@ class controller extends Controller {
                     } else {
                         this.$scope.addMaterialForm.source.$setTouched()
                         this.$scope.addMaterialForm.source.$setValidity('exists', false)
-                        this.$scope.existingMaterial = material
+                        this.$scope.existingMaterialId = material.id
                     }
                 })
     }
@@ -403,10 +403,10 @@ class controller extends Controller {
         }
     }
     processSource(source) {
-        if (this.isYoutubeVideo(source))
+        if (isYoutubeVideo(source))
             this.youtubeService
                 .getYoutubeData(source)
-                .then(({ data: { snippet, status }}) => {
+                .then(({ snippet, status }) => {
                     /**
                      * Populated fields:
                      *  - title
@@ -418,13 +418,19 @@ class controller extends Controller {
                      *  - resourceType
                      *  - licenseType
                      */
-                    if (snippet.thumbnails)
-                        this.setThumbnail(snippet.thumbnails)
+                    if (snippet.thumbnails) {
+                        this.setThumbnail(snippet.thumbnails);
+                        this.$scope.material.picture.author = snippet.channelTitle;
+                        this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
+                            status.license.toLowerCase() === 'creativecommon'
+                                ? 'CCBY'
+                                : 'Youtube'
+                        );
+                    }
 
                     if (!this.$scope.material.publishers.find(p => p.name === snippet.channelTitle))
                         this.$scope.material.publishers.push({ name: snippet.channelTitle })
 
-                    this.$scope.material.tags = snippet.tags
                     this.$scope.issueDate = new Date(snippet.publishedAt)
                     this.$scope.material.resourceTypes = [this.getResourceTypeByName('VIDEO')]
                     this.$scope.material.licenseType = this.getLicenseTypeByName(
@@ -432,10 +438,11 @@ class controller extends Controller {
                             ? 'CCBY'
                             : 'Youtube'
                     )
-                    this.$scope.titlesAndDescriptions = [{
+
+                    this.$scope.titlesAndDescriptions.ET = {
                         title: snippet.title,
                         description: snippet.description
-                    }]
+                    }
                 })
     }
     setThumbnail(thumbnails) {
@@ -448,9 +455,10 @@ class controller extends Controller {
         else if (thumbnails.default) thumbnailUrl = thumbnails.default.url
 
         this.pictureUploadService.uploadFromUrl(thumbnailUrl)
-            .then(data =>
-                this.$scope.material.picture = data
-            )
+            .then(({ data: { id, name } }) => {
+                this.$scope.material.picture.id = id
+                this.$scope.material.picture.name = name
+            })
     }
     getResourceTypeByName(name) {
         if (!this.$scope.resourceTypes) return;

@@ -40,7 +40,7 @@
                   <div data-ng-if="$ctrl.isURLInvalid()" data-ng-message="url" class="invalid-url-message" data-translate="MATERIAL_URL_IS_INVALID"></div>
                   <div data-ng-message="exists">
                     <span data-translate="MATERIAL_ALREADY_EXISTS"></span>
-                    <a target="_blank" data-ng-href="{{'/material?id=' + existingMaterial.id}}" data-translate="LOOK_AT_EXISTNG_MATERIAL"></a>
+                    <a target="_blank" data-ng-href="{{'/material?id=' + existingMaterialId}}" data-translate="LOOK_AT_EXISTNG_MATERIAL"></a>
                   </div>
                   <div data-ng-message="required" data-translate="MATERIAL_SOURCE_EMPTY"></div>
                   <div data-ng-message="deleted" data-translate="MATERIAL_WITH_SAME_SOURCE_IS_DELETED"></div>
