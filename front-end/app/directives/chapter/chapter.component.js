@@ -37,158 +37,6 @@ const ICON_SVG_CONTENTS = {
     quote: '<path d="M10,21 L13,21 L15,17 L15,11 L9,11 L9,17 L12,17 L10,21 Z M18,21 L21,21 L23,17 L23,11 L17,11 L17,17 L20,17 L18,21 Z"></path>',
     unorderedlist: '<path d="M8,14.5 C7.17,14.5 6.5,15.17 6.5,16 C6.5,16.83 7.17,17.5 8,17.5 C8.83,17.5 9.5,16.83 9.5,16 C9.5,15.17 8.83,14.5 8,14.5 Z M8,8.5 C7.17,8.5 6.5,9.17 6.5,10 C6.5,10.83 7.17,11.5 8,11.5 C8.83,11.5 9.5,10.83 9.5,10 C9.5,9.17 8.83,8.5 8,8.5 Z M8,20.5 C7.17,20.5 6.5,21.18 6.5,22 C6.5,22.82 7.18,23.5 8,23.5 C8.82,23.5 9.5,22.82 9.5,22 C9.5,21.18 8.83,20.5 8,20.5 Z M11,23 L25,23 L25,21 L11,21 L11,23 Z M11,17 L25,17 L25,15 L11,15 L11,17 Z M11,9 L11,11 L25,11 L25,9 L11,9 Z"/>'
 }
-/*class CustomMediumEditorExtension {
-    getClosestBlockLevelAncestor(el) {
-        while(el !== null) {
-            if (ALLOWED_BLOCK_LEVEL_TAGS.includes(el.tagName))
-                return el
-            el = el.parentElement
-        }
-    }
-    getAncestorToMutate(el) {
-        while(el !== null) {
-            if (el.parentElement && (
-                el.parentElement.tagName === 'BLOCKQUOTE' ||
-                el.parentElement.classList.contains('medium-editor-element')))
-                return el
-            el = el.parentElement
-        }
-    }
-    getEditorElement(el) {
-        while(el !== null) {
-            if (el.classList.contains('medium-editor-element'))
-                return el
-            el = el.parentElement
-        }
-    }
-    getSelectionParentElement() {
-        let parentEl = null, sel
-
-        if (window.getSelection) {
-            sel = window.getSelection()
-            if (sel.rangeCount) {
-                parentEl = sel.getRangeAt(0).commonAncestorContainer
-                if (parentEl.nodeType != 1)
-                    parentEl = parentEl.parentNode
-            }
-        } else if ((sel = document.selection) && sel.type != 'Control')
-            parentEl = sel.createRange().parentElement()
-
-        return parentEl
-    }
-}
-class ParagraphButton extends CustomMediumEditorExtension {
-    constructor(editorEl) {
-        super()
-        setTimeout(() =>
-            this.monkeyPatchToolbar(editorEl)
-        )
-        this.mediumButton = new MediumButton({
-            label: `<svg viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">${ICON_SVG_CONTENTS.p}</svg>`,
-            action: this.action.bind(this)
-        })
-        return this.mediumButton
-    }
-    action(html, marked, parent) {
-        const selection = rangy.saveSelection()
-        const editorEl = this.getEditorElement(parent)
-        const editor = MediumEditor.getEditorFromElement(editorEl)
-        const toolbar = editor.getExtensionByName('toolbar')
-        const closestBlockLevelAncestor = this.getClosestBlockLevelAncestor(parent)
-        
-        if (closestBlockLevelAncestor.tagName === 'P') {
-            rangy.restoreSelection(selection)
-            return html
-        }
-        else if (closestBlockLevelAncestor.tagName === 'LI') {
-            this.mutateListItem(closestBlockLevelAncestor)
-        }
-        else {
-            const ancestorToMutate = this.getAncestorToMutate(parent)
-            if (ancestorToMutate) {
-                const p = document.createElement('p')
-
-                editorEl.insertBefore(p, ancestorToMutate.nextSibling)
-                p.insertBefore(ancestorToMutate, null)
-                ancestorToMutate.outerHTML = ancestorToMutate.innerHTML
-
-                // now see if there are other block level elements that shouldn't remain nested
-                // in a paragraph (such as orphaned <li> elements).
-                for (let el of p.querySelectorAll('li'))
-                    el.outerHTML = el.innerHTML
-            }
-        }
-
-        rangy.restoreSelection(selection)
-        toolbar.setToolbarPosition()
-        toolbar.checkState()
-        return html
-    }
-    mutateListItem(li) {
-        const p = document.createElement('p')
-        const ul = li.parentElement
-        const idx = [].slice.call(li.parentElement.children, 0).indexOf(li)
-        const extract = (insertAfter) => {
-            p.insertBefore(li, null)
-            li.outerHTML = li.innerHTML
-            ul.parentElement.insertBefore(p, insertAfter ? ul.nextSibling : ul)
-        }
-        const splitLists = (atIdx) => {
-            const secondUL = document.createElement('ul')
-
-            while (atIdx < ul.children.length) {
-                secondUL.insertBefore(ul.children[atIdx], null)
-                atIdx++
-            }
-            ul.parentElement.insertBefore(secondUL, ul.nextSibling)
-        }
-
-        ul.children.length === 1
-            ? extract() || ul.parentElement.removeChild(ul)
-            : idx === 0
-                ? extract()
-                : idx === ul.children.length - 1
-                    ? extract(1)
-                    : splitLists() || extract(1)
-    }
-    monkeyPatchToolbar(editorEl) {
-        /**
-         * This way we can set active state to our custom button and
-         * display the toolbar in the beginning of a new paragraph wihtout any selection.
-         *
-        const editor = MediumEditor.getEditorFromElement(editorEl)
-        if (editor) {
-            const toolbar = editor.getExtensionByName('toolbar')
-            const origCheckState = toolbar.checkState.bind(toolbar)
-
-            toolbar.checkState = () => {
-                origCheckState()
-
-                clearTimeout(this.checkTimer)
-                this.checkTimer = setTimeout(() => {
-                    const selectionParent = this.getSelectionParentElement()
-
-                    if (selectionParent) {
-                        const pButton = this.mediumButton.getButton()
-
-                        // @todo Make this check of focused block more fail-safe
-                        if (!selectionParent.textContent.trim() &&
-                            toolbar.base.elements[0].classList.contains('is-focused')
-                        ) {
-                            toolbar .showToolbar()
-                            toolbar.positionToolbar(window.getSelection())
-                            toolbar.setToolbarButtonStates()
-                        }
-
-                        selectionParent && selectionParent.tagName === 'P'
-                            ? pButton.classList.add('medium-editor-button-active')
-                            : pButton.classList.remove('medium-editor-button-active')
-                    }
-                })
-            }
-        }
-    }
-}*/
 /**
  * Returns the empty block-level element if caret is positioned on empty WYSIWYG row (and the toolbar
  * is displayed for pre-selecting text format). Otherwise returns undefined.
@@ -488,14 +336,11 @@ class controller extends Controller {
             const editor = new MediumEditor(el, {
                 placeholder: idx === 0 && this.$scope.chapter.blocks.length === 1,
                 toolbar: {
-                    buttons: ['h3', /*'p',*/ 'anchor', 'bold', 'italic', 'quote', 'unorderedlist'].map(name => ({
+                    buttons: ['h3', 'anchor', 'bold', 'italic', 'quote', 'unorderedlist'].map(name => ({
                         name,
                         contentDefault: `<svg viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet">${ICON_SVG_CONTENTS[name]}</svg>`
                     }))
                 },
-                /*extensions: {
-                    p: new ParagraphButton(el),
-                },*/
                 updateOnEmptySelection: true,
                 paste: {
                     forcePlainText: false,
