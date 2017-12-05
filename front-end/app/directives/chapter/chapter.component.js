@@ -231,6 +231,10 @@ class PreselectFormat {
                     selection.removeAllRanges()
                     selection.addRange(range)
 
+                    // hide link editor
+                    if (!toolbar.isToolbarDefaultActionsDisplayed())
+                        toolbar.showToolbarDefaultActions()
+
                     toolbar.showToolbar()
                     toolbar.setToolbarButtonStates()
                     toolbar.positionToolbar(window.getSelection())
@@ -335,6 +339,14 @@ class controller extends Controller {
             window.addEventListener('scroll', this.onScroll)
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
+
+            this.preventIOSPageShiftOnTitleInputFocus = () => document.body.scrollTop = 0
+            document.readyState === 'interactive'
+                ? this.isIOS() && document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+                : document.onreadystatechange = () => {
+                    if (document.readyState === 'interactive' && this.isIOS())
+                        document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+                }
         } else
             this.$timeout(() => {
                 for (let el of this.getEditorElements())
@@ -353,6 +365,9 @@ class controller extends Controller {
             }
 
             this.unsubscribeInsertMaterials()
+
+            if (this.isIOS())
+                document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
         }
     }
     onClickOutside(evt) {
@@ -771,7 +786,7 @@ class controller extends Controller {
             this.$scope.focusedBlockIdx = null
 
             if (clickOnContainer)
-                this.$element[0].querySelector('input.md-headline').focus()
+                this.$element[0].querySelector('.chapter-title-input').focus()
         })
     }
     focusBlock(idx, restoreSelection = false, putCaretToEnd = false) {
