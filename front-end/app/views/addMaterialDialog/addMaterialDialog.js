@@ -18,6 +18,7 @@ class controller extends Controller {
         this.$scope.uploadingFile = false
         this.$scope.review = {}
         this.$scope.isUserAuthor = false
+        this.$scope.isUserAuthorFirstAuthor = false
         this.$scope.maxReviewSize = 10
         this.$scope.charactersRemaining = 850
         this.$scope.languages = []
@@ -171,7 +172,7 @@ class controller extends Controller {
     setAuthorToUser() {
         const { name, surname } = this.authenticatedUserService.getUser();
 
-        if (this.$scope.material.picture.author !== name) {
+        if (this.$scope.material.picture.author !== `${name} ${surname}`) {
             this.$scope.material.picture.author = `${name} ${surname}`;
             this.$scope.isUserAuthor = true;
         } else {
@@ -185,9 +186,11 @@ class controller extends Controller {
         if (this.$scope.material.authors[0].name !== name) {
             this.$scope.material.authors[0].name = name;
             this.$scope.material.authors[0].surname = surname;
+            this.$scope.isUserAuthorFirstAuthor = true;
         } else {
             this.$scope.material.authors[0].name = '';
             this.$scope.material.authors[0].surname = '';
+            this.$scope.isUserAuthorFirstAuthor = false;
         }
     }
     addNewTaxon() {

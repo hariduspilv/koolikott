@@ -145,6 +145,7 @@
                 data-ng-model="author.name"
                 id="material-author-{{$index}}-name"
                 data-ng-required="!material.publishers[0].name && $index === 0"
+                data-ng-disabled="isUserAuthorFirstAuthor"
                 name="firstname"
                 md-maxlength="50"
               >
@@ -157,6 +158,7 @@
               <input
                data-ng-model="author.surname"
                data-ng-required="(!material.publishers[0].name || author.name) && $index === 0"
+               data-ng-disabled="isUserAuthorFirstAuthor"
                name="surname"
                md-maxlength="50"
               >
@@ -400,9 +402,7 @@
           </div>
           <div layout="column" flex-sm="70" flex-md="35" flex-gt-lg="25" flex-lg="25" class="md-padding">
             <md-input-container>
-              <label data-translate="AUTHOR_WORD">
-                <span data-ng-hide="material.picture.author || $index > 0"></span>
-              </label>
+              <label data-translate="AUTHOR_WORD"></label>
               <input
                 data-ng-required="newPicture"
                 data-ng-model="material.picture.author"
@@ -416,9 +416,7 @@
               </div>
             </md-input-container>
             <md-input-container>
-              <label data-translate="SOURCE_BIG">
-                <span data-ng-hide="author.name || author.surname || $index > 0"></span>
-              </label>
+              <label data-translate="SOURCE_BIG"></label>
               <input
                 data-ng-required="newPicture && !material.picture.licenseType"
                 data-ng-model="material.picture.source"
@@ -431,7 +429,7 @@
             </md-input-container>
           </div>
           <div layout="column" flex-sm="100" flex-md="45" flex-gt-lg="30" flex-lg="25" class="md-padding">
-            <md-checkbox class="md-primary checkbox--material-author" data-ng-click="$ctrl.setAuthorToUser()" flex aria-label="{{ 'I_AM_AUTHOR' | translate }}">
+            <md-checkbox class="md-primary checkbox--material-author" data-ng-click="$ctrl.setAuthorToUser()" aria-label="{{ 'I_AM_AUTHOR' | translate }}">
               <span data-translate="I_AM_AUTHOR"></span>
             </md-checkbox>
             <div layout="row" layout-align="start center">
