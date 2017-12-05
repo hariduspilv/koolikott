@@ -171,7 +171,7 @@ class controller extends Controller {
     setAuthorToUser() {
         const { name, surname } = this.authenticatedUserService.getUser();
 
-        if (this.$scope.material.picture.author !== name) {
+        if (this.$scope.material.picture.author !== `${name} ${surname}`) {
             this.$scope.material.picture.author = `${name} ${surname}`;
             this.$scope.isUserAuthor = true;
         } else {
