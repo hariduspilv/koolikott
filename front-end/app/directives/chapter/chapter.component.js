@@ -277,7 +277,7 @@ MediumEditor.util.unwrapTags = (el, blacklist) => {
     else
     // unwrap DIVs that are not embeds & all other tags
     if ((el.nodeType === Node.ELEMENT_NODE && el.nodeName === 'DIV' && !el.classList.contains('chapter-embed-card')) ||
-        ALLOWED_TAGS.indexOf(el.nodeName) < 0
+        (el.parentNode && ALLOWED_TAGS.indexOf(el.nodeName) < 0)
     )
         MediumEditor.util.unwrap(el, document)
 }
