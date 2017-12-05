@@ -224,7 +224,7 @@ class PreselectFormat {
                      * at the beginning of the empty row.
                      */
                     range.selectNodeContents(
-                        selectionParent === selectionEditor
+                        selectionParent === selectionEditor && selectionParent.firstChild
                             ? selectionParent.firstChild
                             : selectionParent
                     )
@@ -340,12 +340,19 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
 
-            this.preventIOSPageShiftOnTitleInputFocus = () => document.body.scrollTop = 0
+            this.preventIOSPageShiftOnTitleInput = () => document.body.scrollTop = 0
+            this.onIOSTouchMove = (evt) => evt.preventDefault()
+            const bindPreventIOSPageShiftOnTitleInput = () => {
+                if (this.isIOS()) {
+                    document.addEventListener('touchmove', this.onIOSTouchMove)
+                    document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInput)
+                }
+            }
             document.readyState === 'interactive'
-                ? this.isIOS() && document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+                ? bindPreventIOSPageShiftOnTitleInput()
                 : document.onreadystatechange = () => {
-                    if (document.readyState === 'interactive' && this.isIOS())
-                        document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+                    if (document.readyState === 'interactive')
+                        bindPreventIOSPageShiftOnTitleInput()
                 }
         } else
             this.$timeout(() => {
@@ -366,8 +373,10 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials()
 
-            if (this.isIOS())
-                document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+            if (this.isIOS()) {
+                document.removeEventListener('touchmove', this.onIOSTouchMove)
+                document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInput)
+            }
         }
     }
     onClickOutside(evt) {
@@ -473,7 +482,7 @@ class controller extends Controller {
                     }
                 }
     }
-    updateState(from) {
+    updateState(cb) {
         /**
          * Update input contents upstream:
          * editorElement.innerHTML -> $scope.chapter.blocks[idx].htmlContent
@@ -506,7 +515,12 @@ class controller extends Controller {
                 )
                     this.$scope.chapter.blocks[idx].htmlContent = sanitizedHtml
             }
-            this.$timeout(() => this.updatingState = false)
+            this.$timeout(() => {
+                this.updatingState = false
+
+                if (typeof cb === 'function')
+                    cb()
+            })
         }
     }
     optimizePlaceholder(el, editor) {
@@ -870,24 +884,25 @@ class controller extends Controller {
 
         const { blocks } = this.$scope.chapter
 
-        this.updateState()
-        blocks.push({
-            htmlContent,
-            narrow: this.isNarrowLeft(blocks.length - 1)
-        })
-        /**
-         * 1st loop — block element has been injected to DOM
-         * 2nd loop — Medium Editor is initialized on it
-         * 3rd loop — Calling focusBlock in the 2nd loop does not invoke toolbar.checkState for some
-         * reason and so editor toolbar does not appear.
-         */
-        this.$timeout(() =>
+        this.updateState(() => {
+            blocks.push({
+                htmlContent,
+                narrow: this.isNarrowLeft(blocks.length - 1)
+            })
+            /**
+             * 1st loop — block element has been injected to DOM
+             * 2nd loop — Medium Editor is initialized on it
+             * 3rd loop — Calling focusBlock in the 2nd loop does not invoke toolbar.checkState for
+             * some reason and so editor toolbar does not appear.
+             */
             this.$timeout(() =>
                 this.$timeout(() =>
-                    this.focusBlock(blocks.length - 1)
+                    this.$timeout(() =>
+                        this.focusBlock(blocks.length - 1)
+                    )
                 )
             )
-        )
+        })
     }
     deleteBlock() {
         this.$timeout.cancel(this.blurTimer)
@@ -953,9 +968,10 @@ class controller extends Controller {
         if (focusedBlockIdx !== null) {
             const newIdx = focusedBlockIdx + (up ? -1 : 1)
 
-            this.updateState()
-            blocks.splice(newIdx, 0, blocks.splice(focusedBlockIdx, 1)[0])
-            this.focusBlock(newIdx, true)
+            this.updateState(() => {
+                blocks.splice(newIdx, 0, blocks.splice(focusedBlockIdx, 1)[0])
+                this.focusBlock(newIdx, true)
+            })
         }
     }
     beforeAddMaterial() {
