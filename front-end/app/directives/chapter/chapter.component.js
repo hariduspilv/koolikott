@@ -340,12 +340,19 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
 
-            this.preventIOSPageShiftOnTitleInputFocus = () => document.body.scrollTop = 0
+            this.preventIOSPageShiftOnTitleInput = () => document.body.scrollTop = 0
+            this.onIOSTouchMove = (evt) => evt.preventDefault()
+            const bindPreventIOSPageShiftOnTitleInput = () => {
+                if (this.isIOS()) {
+                    document.addEventListener('touchmove', this.onIOSTouchMove)
+                    document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInput)
+                }
+            }
             document.readyState === 'interactive'
-                ? this.isIOS() && document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+                ? bindPreventIOSPageShiftOnTitleInput()
                 : document.onreadystatechange = () => {
-                    if (document.readyState === 'interactive' && this.isIOS())
-                        document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+                    if (document.readyState === 'interactive')
+                        bindPreventIOSPageShiftOnTitleInput()
                 }
         } else
             this.$timeout(() => {
@@ -366,8 +373,10 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials()
 
-            if (this.isIOS())
-                document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInputFocus)
+            if (this.isIOS()) {
+                document.removeEventListener('touchmove', this.onIOSTouchMove)
+                document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInput)
+            }
         }
     }
     onClickOutside(evt) {
