@@ -231,6 +231,10 @@ class PreselectFormat {
                     selection.removeAllRanges()
                     selection.addRange(range)
 
+                    // hide link editor
+                    if (!toolbar.isToolbarDefaultActionsDisplayed())
+                        toolbar.showToolbarDefaultActions()
+
                     toolbar.showToolbar()
                     toolbar.setToolbarButtonStates()
                     toolbar.positionToolbar(window.getSelection())
