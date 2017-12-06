@@ -1,17 +1,5 @@
 'use strict'
 
-/**
- @todo
- + WYSIWYG
-    - bug: cannot create blockquote from bulleted list (selected content is left entirely unwrapped).
- + embedas
-    - bug: if material is last element, it can't be deleted
-    - bug: if two materials are adjecent then they can only be deleted together
-    - bug: if there's an empty paragraph between two embeds then it can't be deleted without deleting one of the embdeds ("backspace" deletes preceding embed and "delete" deletes the following)
-    - bug: caret jumps to the end of block upon adding materials
- -  translations
-*/
-
 {
 const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
 const ALLOWED_TAGS_AND_ATTRIBUTES = {
@@ -244,7 +232,7 @@ class controller extends Controller {
             this.onScroll = () => this.$scope.isFocused && requestAnimationFrame(this.setStickyClassNames.bind(this))
             window.addEventListener('scroll', this.onScroll)
 
-            this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertMaterials', this.onInsertExistingMaterials.bind(this))
+            this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertExistingMaterials', this.onInsertExistingMaterials.bind(this))
 
             this.preventIOSPageShiftOnTitleInput = () => document.body.scrollTop = 0
             this.onIOSTouchMove = (evt) => evt.preventDefault()
@@ -399,6 +387,7 @@ class controller extends Controller {
 
             // 2) reduce embedded materials to <div> without any content
             for (let embed of wrapper.querySelectorAll('.chapter-embed-card')) {
+                embed.classList.remove('chapter-embed-card--loading')
                 embed.classList.remove('chapter-embed-card--loaded')
                 embed.removeAttribute('contenteditable')
                 while (embed.firstChild)
@@ -479,7 +468,7 @@ class controller extends Controller {
         const unwrapBlockLevelParents = (child) => {
             const parent = child.parentElement
             if (isNodeBlockLevelElement(child) &&
-                parent && !parent.classList.contains('medium-editor-element')
+                parent && !parent.classList.contains('chapter-block')
             ) {
                 unwrapBlockLevelParents(parent) // recursion
 
@@ -504,6 +493,11 @@ class controller extends Controller {
         const isNodeBlockLevelElement = (node) => {
             return node.nodeType === Node.ELEMENT_NODE
                 && ALLOWED_BLOCK_LEVEL_TAGS.indexOf(node.tagName) > -1
+                && !node.classList.contains('chapter-embed-card')
+                && !node.classList.contains('chapter-embed-card__publishers-and-authors')
+                && !node.classList.contains('chapter-embed-card__source')
+                && !node.classList.contains('chapter-embed-card__thumbnail')
+                && !node.classList.contains('chapter-embed-card__caption')
         }
         const updateState = () => {
             this.$timeout.cancel(this.subtitleChangeTimer)
@@ -538,33 +532,31 @@ class controller extends Controller {
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(el) {
-        const encodeHtmlEntities = (str) => str.replace(/[\u00A0-\u9999<>\&]/gim, (i) =>
-            '&#' + i.charCodeAt(0) + ';'
-        )
-
         for (let embed of el.querySelectorAll('.chapter-embed-card')) {
-            embed.setAttribute('contenteditable', 'false')
-
             const { id } = embed.dataset
-            if (id)
+            if (id
+                && !embed.classList.contains('chapter-embed-card--loading')
+                && !embed.classList.contains('chapter-embed-card--loaded')
+            ) {
+                embed.setAttribute('contenteditable', 'false')
+                embed.classList.add('chapter-embed-card--loading')
                 this.serverCallService
                     .makeGet('rest/material', { id })
                     .then(({ data }) => {
-                        // @see https://coderwall.com/p/o9ws2g/why-you-should-always-append-dom-elements-using-documentfragments
-                        const fragment = document.createDocumentFragment()
                         const { picture, publishers, authors, titles, source, uploadedFile, language, resourceTypes } = data
+                        const fragment = document.createDocumentFragment()
 
                         // insert thumbnail
                         if (picture && picture.name) {
                             const thumb = document.createElement('div')
-                            thumb.classList.add('thumbnail')
+                            thumb.classList.add('chapter-embed-card__thumbnail')
                             thumb.style.backgroundImage = `url('/rest/picture/thumbnail/lg/${picture.name}')`
                             fragment.appendChild(thumb)
                         }
 
                         // caption with icon, title, publishers, authors & source link
                         const caption = document.createElement('div')
-                        caption.classList.add('caption')
+                        caption.classList.add('chapter-embed-card__caption')
                         fragment.appendChild(caption)
 
                         // icon
@@ -591,7 +583,9 @@ class controller extends Controller {
 
                         embed.appendChild(fragment)
                         embed.classList.add('chapter-embed-card--loaded')
+                        embed.classList.remove('chapter-embed-card--loading')
                     })
+            }
         }
     }
     getEditorElements() {
@@ -887,7 +881,7 @@ class controller extends Controller {
         const marker = editorEl.querySelector('.material-insertion-marker')
         marker.parentNode.removeChild(marker)
     }
-    addExistingMaterial() {
+    onClickAddExistingMaterial() {
         this.$rootScope.savedChapterIndexForMaterialInsertion = this.index
         this.$rootScope.$broadcast(
             window.innerWidth >= BREAK_SM
@@ -896,6 +890,10 @@ class controller extends Controller {
         )
         this.$timeout(() => {
             document.getElementById('header-search-input').focus()
+            
+            const headerCtrl = angular.element('dop-header').controller('dopHeader')
+            if (headerCtrl)
+                headerCtrl.search()
         })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
@@ -907,7 +905,7 @@ class controller extends Controller {
                 )
             )
     }
-    addNewMaterial() {
+    onClickAddNewMaterial() {
         this.$mdDialog.show({
             templateUrl: 'addMaterialDialog.html',
             controller: 'addMaterialDialogController',
