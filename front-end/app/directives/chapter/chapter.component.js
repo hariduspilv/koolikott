@@ -254,14 +254,14 @@ class controller extends Controller {
                     this.loadEmbeddedContents(el)
 
                 /**
-                 * Register blank paragraphs so we could style them as necessary (the ones that
-                 * immediately follow embdeds).
-                 * Too bad we don't have :blank pseudo-selector yet.
-                 * https://drafts.csswg.org/selectors-4/#the-blank-pseudo
+                 * Remove blank paragraphs that follow embeds.
                  */
                 for (let p of this.$element[0].querySelectorAll('p'))
-                    if (!p.textContent.trim())
-                        p.classList.add('is-blank')
+                    if (!p.textContent.trim() &&
+                        previousSibling.nodeType === Node.ELEMENT_NODE &&
+                        previousSibling.classList.contains('chapter-embed-card')
+                    )
+                        p.parentNode.removeChild(p)
             })
         }
     }
