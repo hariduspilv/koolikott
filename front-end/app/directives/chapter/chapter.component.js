@@ -387,6 +387,7 @@ class controller extends Controller {
 
             // 2) reduce embedded materials to <div> without any content
             for (let embed of wrapper.querySelectorAll('.chapter-embed-card')) {
+                embed.classList.remove('chapter-embed-card--loading')
                 embed.classList.remove('chapter-embed-card--loaded')
                 embed.removeAttribute('contenteditable')
                 while (embed.firstChild)
@@ -531,15 +532,14 @@ class controller extends Controller {
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(el) {
-        const encodeHtmlEntities = (str) => str.replace(/[\u00A0-\u9999<>\&]/gim, (i) =>
-            '&#' + i.charCodeAt(0) + ';'
-        )
-
         for (let embed of el.querySelectorAll('.chapter-embed-card')) {
-            embed.setAttribute('contenteditable', 'false')
-
             const { id } = embed.dataset
-            if (id)
+            if (id
+                && !embed.classList.contains('chapter-embed-card--loading')
+                && !embed.classList.contains('chapter-embed-card--loaded')
+            ) {
+                embed.setAttribute('contenteditable', 'false')
+                embed.classList.add('chapter-embed-card--loading')
                 this.serverCallService
                     .makeGet('rest/material', { id })
                     .then(({ data }) => {
@@ -583,7 +583,9 @@ class controller extends Controller {
 
                         embed.appendChild(fragment)
                         embed.classList.add('chapter-embed-card--loaded')
+                        embed.classList.remove('chapter-embed-card--loading')
                     })
+            }
         }
     }
     getEditorElements() {
@@ -888,6 +890,10 @@ class controller extends Controller {
         )
         this.$timeout(() => {
             document.getElementById('header-search-input').focus()
+            
+            const headerCtrl = angular.element('dop-header').controller('dopHeader')
+            if (headerCtrl)
+                headerCtrl.search()
         })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
