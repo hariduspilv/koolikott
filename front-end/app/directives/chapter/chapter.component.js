@@ -260,6 +260,7 @@ class controller extends Controller {
                  */
                 for (let p of this.$element[0].querySelectorAll('p'))
                     if (!p.textContent.trim() &&
+                        p.previousSibling &&
                         p.previousSibling.nodeType === Node.ELEMENT_NODE &&
                         p.previousSibling.classList.contains('chapter-embed-card')
                     )
