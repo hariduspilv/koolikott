@@ -12,6 +12,8 @@ const ALLOWED_TAGS_AND_ATTRIBUTES = {
     BLOCKQUOTE: [],
     B: [],
     I: [],
+    STRONG: [],
+    EM: [],
     BR: []
 }
 const ALLOWED_TAGS = Object.keys(ALLOWED_TAGS_AND_ATTRIBUTES)

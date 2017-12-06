@@ -185,3 +185,15 @@ h2 {
 .white-space-no-wrap {
   white-space: nowrap;
 }
+
+/**
+ * This is necessary so that the WYSIWYG (Medium Editor) would work properly in Firefox.
+ * Medium Editor simply calls document.execCommand('bold') on a <div contenteditable="true">.
+ */
+b, strong {
+  font-weight: bold;
+}
+
+i, em {
+  font-style: italic;
+}
