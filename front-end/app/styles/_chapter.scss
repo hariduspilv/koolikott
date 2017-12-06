@@ -846,6 +846,10 @@ md-input-container.chapter-title {
       background-repeat: no-repeat;
     }
   }
+
+  .portfolio-chapter:not(.is-edit-mode) & + p.is-blank {
+    display: none;
+  }
 }
 .chapter-embed-card--float-left {
   @media (min-width: 600px) {

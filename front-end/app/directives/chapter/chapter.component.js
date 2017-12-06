@@ -25,6 +25,7 @@ const ICON_SVG_CONTENTS = {
     quote: '<path d="M10,21 L13,21 L15,17 L15,11 L9,11 L9,17 L12,17 L10,21 Z M18,21 L21,21 L23,17 L23,11 L17,11 L17,17 L20,17 L18,21 Z"></path>',
     unorderedlist: '<path d="M8,14.5 C7.17,14.5 6.5,15.17 6.5,16 C6.5,16.83 7.17,17.5 8,17.5 C8.83,17.5 9.5,16.83 9.5,16 C9.5,15.17 8.83,14.5 8,14.5 Z M8,8.5 C7.17,8.5 6.5,9.17 6.5,10 C6.5,10.83 7.17,11.5 8,11.5 C8.83,11.5 9.5,10.83 9.5,10 C9.5,9.17 8.83,8.5 8,8.5 Z M8,20.5 C7.17,20.5 6.5,21.18 6.5,22 C6.5,22.82 7.18,23.5 8,23.5 C8.82,23.5 9.5,22.82 9.5,22 C9.5,21.18 8.83,20.5 8,20.5 Z M11,23 L25,23 L25,21 L11,21 L11,23 Z M11,17 L25,17 L25,15 L11,15 L11,17 Z M11,9 L11,11 L25,11 L25,9 L11,9 Z"/>'
 }
+const EMBED_INSERTION_MARKER = '<div class="material-insertion-marker"></div>'
 /**
  * Returns the empty block-level element if caret is positioned on empty WYSIWYG row (and the toolbar
  * is displayed for pre-selecting text format). Otherwise returns undefined.
@@ -76,7 +77,6 @@ MediumEditor.extensions.button.prototype.handleClick = function (evt) {
                 const tagName = action === 'bold' ? 'B' : 'I'
                 const selection = window.getSelection()
 
-                // @todo call checkState on toolbar
                 if (selection.rangeCount) {
                     const range = selection.getRangeAt(0)
                     const restoreSelection = (emptyEl) => {
@@ -248,11 +248,22 @@ class controller extends Controller {
                     if (document.readyState === 'interactive')
                         bindPreventIOSPageShiftOnTitleInput()
                 }
-        } else
+        } else {
             this.$timeout(() => {
                 for (let el of this.getEditorElements())
                     this.loadEmbeddedContents(el)
+
+                /**
+                 * Register blank paragraphs so we could style them as necessary (the ones that
+                 * immediately follow embdeds).
+                 * Too bad we don't have :blank pseudo-selector yet.
+                 * https://drafts.csswg.org/selectors-4/#the-blank-pseudo
+                 */
+                for (let p of this.$element[0].querySelectorAll('p'))
+                    if (!p.textContent.trim())
+                        p.classList.add('is-blank')
             })
+        }
     }
     $onDestroy() {
         if (this.isEditMode) {
@@ -357,7 +368,7 @@ class controller extends Controller {
          * Update editor contents downstream:
          * $scope.chapter.blocks[idx].htmlContent -> editorElement.innerHTML
          */
-        if (this.isEditMode)
+        if (this.isEditMode) {
             for (let [idx, el] of this.getEditorElements().entries())
                 if (el && this.$scope.chapter.blocks[idx]) {
                     const editor = MediumEditor.getEditorFromElement(el)
@@ -367,10 +378,12 @@ class controller extends Controller {
                         if (el.innerHTML && el.innerHTML !== '<p><br></p>')
                             el.classList.remove('medium-editor-placeholder')
 
-                        this.registerSubchapters()
                         this.loadEmbeddedContents(el)
                     }
                 }
+            this.registerSubchapters()
+            this.discardEmptyElements()
+        }
     }
     updateState(cb) {
         /**
@@ -587,6 +600,13 @@ class controller extends Controller {
                     })
             }
         }
+    }
+    discardEmptyElements() {
+        for (let el of this.$element[0].querySelectorAll('h3:empty, p:empty, li:empty, blockquote:empty'))
+            el.parentNode.removeChild(el)
+
+        for (let el of this.$element[0].querySelectorAll('ul:empty'))
+            el.parentNode.removeChild(el)
     }
     getEditorElements() {
         return this.$element[0].querySelectorAll('.chapter-block') || []
@@ -870,19 +890,24 @@ class controller extends Controller {
         }
     }
     beforeAddMaterial() {
+        this.insertHtmlAfterSelection(EMBED_INSERTION_MARKER)
+
         const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
-        
-        this.insertHtmlAfterSelection('<div class="material-insertion-marker"></div>')
-        
-        // @todo Perhaps pass them around rather than cache on gloabl object?
-        window.materialInsertionBlockContents = editorEl.innerHTML
-        window.materialInsertionBlockIdx = this.$scope.focusedBlockIdx
-        
+
+        window.embedInsertionChapterIdx = this.index
+        window.embedInsertionBlockIdx = this.$scope.focusedBlockIdx
+        window.embedInsertionBlockContents = editorEl.innerHTML
+
         const marker = editorEl.querySelector('.material-insertion-marker')
         marker.parentNode.removeChild(marker)
     }
     onClickAddExistingMaterial() {
-        this.$rootScope.savedChapterIndexForMaterialInsertion = this.index
+        /**
+         * This calls this.updateChaptersStateFromEditors() and then initiates
+         * a POST request to rest/portfolio/update.
+         */
+        this.onAddExistingMaterial()
+
         this.$rootScope.$broadcast(
             window.innerWidth >= BREAK_SM
                 ? 'detailedSearch:open'
@@ -897,11 +922,14 @@ class controller extends Controller {
         })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
-        // @todo Are timeouts necessary?
+        /**
+         * These timeouts are necessary to ensure block elements are created in DOM and
+         * Medium Editors are initialized on them.
+         */
         if (chapterIdx === this.index)
             this.$timeout(() =>
                 this.$timeout(() =>
-                    this.insertMaterials(selectedMaterials)
+                    this.insertMaterials(selectedMaterials, true)
                 )
             )
     }
@@ -918,20 +946,47 @@ class controller extends Controller {
             this.insertMaterials([material])
         )
     }
-    insertMaterials(materials) {
-        const editorEl = this.getEditorElements()[window.materialInsertionBlockIdx]
+    insertMaterials(materials, isAddExisting = false) {
         const materialsHtml = materials.reduce((html, { id }) =>
-            html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div>`,
+            html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
-        editorEl.innerHTML = window.materialInsertionBlockContents.replace('<div class="material-insertion-marker"></div>', materialsHtml)
+        const insertingAtMarker = this.index === window.embedInsertionChapterIdx
+        const editorElements = this.getEditorElements()
+        const editorEl = insertingAtMarker
+            ? editorElements[window.embedInsertionBlockIdx]
+            : editorElements[editorElements.length - 1]
+
+        insertingAtMarker
+            ? editorEl.innerHTML = window.embedInsertionBlockContents.replace(EMBED_INSERTION_MARKER, materialsHtml)
+            : editorEl.innerHTML += materialsHtml
+
         this.updateState()
-        
         this.loadEmbeddedContents(editorEl)
-        // @todo Restore caret position (put it after inserted materials)
-        this.focusBlock(window.materialInsertionBlockIdx)
-        delete window.materialInsertionBlockIdx
-        delete window.materialInsertionBlockContents
+        this.clearEmbedInsertionData()
+
+        const focusBlock = () => {
+            insertingAtMarker
+                ? this.focusBlock(window.embedInsertionBlockIdx)
+                : this.focusBlock()
+            
+            const lastInsertedMaterial = editorEl.querySelector(`[data-id="${materials[materials.length - 1].id}"]`)
+            this.scrollToElement(lastInsertedMaterial)
+            this.putCaretAfterNode(lastInsertedMaterial)
+        }
+        /**
+         * Yet another timeout is necessary to wait for the editor to become properly focusable.
+         * When existing materials are being added the portfolio edit view is reloaded as the user
+         * arrives back from search view.
+         */
+        isAddExisting
+            ? this.$timeout(focusBlock, 500)
+            : focusBlock()
+    }
+    clearEmbedInsertionData() {
+        delete window.embedInsertionChapterIdx
+        delete window.embedInsertionBlockIdx
+        delete window.embedInsertionBlockContents
     }
     insertHtmlAfterSelection(html) {
         // courtesy of https://stackoverflow.com/a/6691294
@@ -963,6 +1018,16 @@ class controller extends Controller {
             range.pasteHTML(html)
         }
     }
+    putCaretAfterNode(node) {
+        const selection = window.getSelection()
+        if (selection.rangeCount) {
+            const range = window.getSelection().getRangeAt(0)
+            range.setStartAfter(node)
+            range.setEndAfter(node) 
+            selection.removeAllRanges()
+            selection.addRange(range)
+        }
+    }
     /**
      * @todo in MS 13: Embed actions
      */
@@ -980,6 +1045,7 @@ controller.$inject = [
     'iconService',
     'serverCallService',
     'translationService',
+    'serverCallService',
 ]
 component('dopChapter', {
     bindings: {
@@ -989,6 +1055,7 @@ component('dopChapter', {
         onMoveUp: '&',
         onMoveDown: '&',
         onDelete: '&',
+        onAddExistingMaterial: '&',
         isEditMode: '<'
     },
     templateUrl: 'directives/chapter/chapter.html',
