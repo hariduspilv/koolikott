@@ -60,7 +60,7 @@ class controller extends Controller {
             this.$rootScope.back()
             // it is imperative that 'chapter:insertMaterials' is broadcasted after navigating back
             this.$timeout(() => {
-                this.$rootScope.$broadcast('chapter:insertMaterials', parseInt(this.chapter, 10), selectedMaterials)
+                this.$rootScope.$broadcast('chapter:insertExistingMaterials', parseInt(this.chapter, 10), selectedMaterials)
                 this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
             })
             this.removeSelection()

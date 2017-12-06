@@ -45,7 +45,7 @@
         <div
           class="chapter-btn chapter-btn--existing-material"
           data-ng-mousedown="$ctrl.beforeAddMaterial()"
-          data-ng-click="$ctrl.addExistingMaterial()"
+          data-ng-click="$ctrl.onClickAddExistingMaterial()"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
           style="width:50%;"
           >
@@ -57,7 +57,7 @@
         <div
           class="chapter-btn chapter-btn--new-material"
           data-ng-mousedown="$ctrl.beforeAddMaterial()"
-          data-ng-click="$ctrl.addNewMaterial()"
+          data-ng-click="$ctrl.onClickAddNewMaterial()"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
           style="width:50%;"
           >
