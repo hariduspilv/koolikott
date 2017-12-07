@@ -2,10 +2,9 @@ package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.*;
-import ee.hm.dop.service.content.MaterialGetter;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -16,11 +15,8 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
 
     private static final String GET_DELETED = "admin/deleted/";
     private static final String GET_DELETED_COUNT = "admin/deleted/count";
-    private static final String ADD_RECOMMENDATION_URL = "admin/learningObject/recommend";
-    private static final String REMOVE_RECOMMENDATION_URL = "admin/learningObject/removeRecommendation";
-
-    @Inject
-    private MaterialGetter materialGetter;
+    private static final String PORTFOLIO_ADD_RECOMMENDATION_URL = "portfolio/recommend";
+    private static final String PORTFOLIO_REMOVE_RECOMMENDATION_URL = "portfolio/removeRecommendation";
 
     @Test
     public void admin_can_get_deleted_portfolios() throws Exception {
@@ -37,7 +33,7 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
     public void admin_can_add_recommendation_to_portfolio() {
         login(USER_ADMIN);
 
-        Recommendation recommendation = doPost(ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3), Recommendation.class);
+        Recommendation recommendation = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3), Recommendation.class);
         assertNotNull("Recommendation", recommendation);
         Portfolio portfolioAfterRecommend = getPortfolio(PORTFOLIO_3);
         assertNotNull("Portfolio has recommendations", portfolioAfterRecommend.getRecommendation());
@@ -46,9 +42,9 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void admin_can_remove_recommendation_from_portfolio() throws Exception {
         login(USER_ADMIN);
-        doPost(ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
+        doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
 
-        Response responseAfterRemove = doPost(REMOVE_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
+        Response responseAfterRemove = doPost(PORTFOLIO_REMOVE_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), responseAfterRemove.getStatus());
         Portfolio portfolioAfterRemoveRecommend = getPortfolio(PORTFOLIO_3);
         assertNull("Portfolio has no recommendations", portfolioAfterRemoveRecommend.getRecommendation());
@@ -64,14 +60,14 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void regular_user_can_not_add_recommendation_to_portfolio() throws Exception {
         login(USER_PEETER);
-        Response response = doPost(ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
+        Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void regular_user_can_not_remove_recommendation_from_portfolio() throws Exception {
         login(USER_PEETER);
-        Response response = doPost(ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
+        Response response = doPost(PORTFOLIO_ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -91,26 +87,6 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
         login(USER_PEETER);
         Response response = doGet(GET_DELETED);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
-    }
-
-
-    @Test
-    public void addRecommendation() {
-        User user = login(USER_ADMIN);
-        Material material = materialGetter.get(MATERIAL_3, user);
-
-        Recommendation recommendation = doPost(ADD_RECOMMENDATION_URL, material, Recommendation.class);
-        assertNotNull(recommendation);
-        assertEquals(Long.valueOf(8), recommendation.getCreator().getId());
-    }
-
-    @Test
-    public void removeRecommendation() {
-        User user = login(USER_ADMIN);
-
-        Material material = materialGetter.get(MATERIAL_3, user);
-        Response response = doPost(REMOVE_RECOMMENDATION_URL, material);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
 }

@@ -1,6 +1,9 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.ReviewableChange;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -46,7 +49,7 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChanges(@PathParam("id") Long learningObjectId) {
+    public List<ReviewableChange> getChange(@PathParam("id") Long learningObjectId) {
         return reviewableChangeService.getAllByLearningObject(learningObjectId);
     }
 
@@ -67,24 +70,10 @@ public class ReviewableChangeAdminResource extends BaseResource {
     }
 
     @POST
-    @Path("acceptAll")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject acceptAllChanges2(LearningObjectMiniDto learningObject) {
-       return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject.convert(), ReviewStatus.ACCEPTED, ReviewType.CHANGE);
-    }
-
-    @POST
     @Path("{id}/revertAll")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId) {
         return reviewableChangeAdminService.revertAllChanges(learningObjectId, getLoggedInUser());
-    }
-
-    @POST
-    @Path("revertAll")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject revertAllChanges2(LearningObjectMiniDto learningObject) {
-        return reviewableChangeAdminService.revertAllChanges(learningObject.getId(), getLoggedInUser());
     }
 
     @POST
@@ -99,19 +88,5 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
         return reviewableChangeAdminService.revertOneChange(learningObjectId, changeId, getLoggedInUser());
-    }
-
-    @POST
-    @Path("acceptOne")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject acceptAllChanges2(ReviewableChange change) {
-        return reviewableChangeAdminService.acceptOneChange(change.getLearningObject().getId(), change.getId(), getLoggedInUser());
-    }
-
-    @POST
-    @Path("revertOne")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject revertAllChanges2(ReviewableChange change) {
-        return reviewableChangeAdminService.revertOneChange(change.getLearningObject().getId(), change.getId(), getLoggedInUser());
     }
 }

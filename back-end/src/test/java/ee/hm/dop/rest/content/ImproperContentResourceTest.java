@@ -3,7 +3,6 @@ package ee.hm.dop.rest.content;
 import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ReportingReason;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
@@ -23,38 +22,44 @@ import static org.junit.Assert.assertTrue;
 public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
 
     public static final String IMPROPERS = "impropers";
-    public static final String GET_IMPROPERS_BY_ID = "admin/improper/%s";
+    public static final String GET_IMPROPERS_BY_ID = "impropers/%s";
 
     @Test
     public void setImproperNoData() {
         login(USER_SECOND);
         Response response = doPut(IMPROPERS, new ImproperContent());
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_set_material_that_does_not_exist_to_improper() {
         login(USER_SECOND);
         Response response = doPut(IMPROPERS, improperMaterialContent(NOT_EXISTS_ID));
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void user_can_set_material_improper_with_reporting_reason() throws Exception {
         login(USER_SECOND);
-        ImproperContentDto json = improperMaterialContent(MATERIAL_13);
-        Response response = doPut(IMPROPERS, json);
+        Response response = doPut(IMPROPERS, improperMaterialContent(MATERIAL_13));
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 
-        ImproperContent improperContent = doPut(IMPROPERS, json, ImproperContent.class);
+        ImproperContent improperContent = doPut(IMPROPERS, improperMaterialContent(MATERIAL_13), ImproperContent.class);
         assertTrue("Improper material has reporting reasons", CollectionUtils.isNotEmpty(improperContent.getReportingReasons()));
         Material improperMaterial = getMaterial(MATERIAL_13);
         assertTrue("Material is improper", improperMaterial.getImproper() > 0);
     }
 
     @Test
+    public void getImpropers() {
+        login(USER_SECOND);
+        List<ImproperContent> improperContents = doGet(IMPROPERS, genericType());
+        assertTrue(CollectionUtils.isNotEmpty(improperContents));
+    }
+
+    @Test
     public void getImproperByLearningObject() {
-        login(USER_ADMIN);
+        login(USER_SECOND);
 
         List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, PORTFOLIO_3), genericType());
         assertTrue(CollectionUtils.isNotEmpty(improperContents));
@@ -62,43 +67,13 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         assertEquals(new Long(5), improperContents.get(0).getId());
     }
 
-    public static class ImproperContentDto{
-        private LearningObject learningObject;
-        private String reportingText;
-        private List<ReportingReason> reportingReasons;
-
-        public LearningObject getLearningObject() {
-            return learningObject;
-        }
-
-        public void setLearningObject(LearningObject learningObject) {
-            this.learningObject = learningObject;
-        }
-
-        public String getReportingText() {
-            return reportingText;
-        }
-
-        public void setReportingText(String reportingText) {
-            this.reportingText = reportingText;
-        }
-
-        public List<ReportingReason> getReportingReasons() {
-            return reportingReasons;
-        }
-
-        public void setReportingReasons(List<ReportingReason> reportingReasons) {
-            this.reportingReasons = reportingReasons;
-        }
-    }
-
     private GenericType<List<ImproperContent>> genericType() {
         return new GenericType<List<ImproperContent>>() {
         };
     }
 
-    private ImproperContentDto improperMaterialContent(Long id) {
-        ImproperContentDto improperContent = new ImproperContentDto();
+    private ImproperContent improperMaterialContent(Long id) {
+        ImproperContent improperContent = new ImproperContent();
         improperContent.setLearningObject(materialWithId(id));
         improperContent.setReportingReasons(Lists.newArrayList(reason(LO_CONTENT), reason(LO_FORM)));
         return improperContent;

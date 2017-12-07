@@ -1,12 +1,15 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
-import ee.hm.dop.service.reviewmanagement.ImproperContentService;
+import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 import javax.annotation.security.RolesAllowed;
@@ -21,9 +24,9 @@ public class ImproperContentAdminResource extends BaseResource {
     @Inject
     private ImproperContentAdminService improperContentAdminService;
     @Inject
-    private ReviewManager reviewManager;
+    private LearningObjectService learningObjectService;
     @Inject
-    private ImproperContentService improperContentService;
+    private ReviewManager reviewManager;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,14 +49,14 @@ public class ImproperContentAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
     public LearningObject setProper(LearningObjectMiniDto loDto) {
-        return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), loDto.convert(), ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
-    }
-
-    @GET
-    @Path("{learningObjectId}")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ImproperContent> getImproperById(@PathParam("learningObjectId") Long learningObjectId) {
-        return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
+        if (loDto.getId() == null) {
+            throw badRequest("learningObject query param is required.");
+        }
+        User loggedInUser = getLoggedInUser();
+        LearningObject learningObject = learningObjectService.get(loDto.getId(), loggedInUser);
+        if (learningObject == null) {
+            throw notFound();
+        }
+        return reviewManager.setEverythingReviewedRefreshLO(loggedInUser, learningObject, ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
     }
 }

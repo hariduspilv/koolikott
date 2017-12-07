@@ -89,7 +89,6 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_ADD_MATERIAL_FAIL')
                 }
                 this.$rootScope.$broadcast('detailedSearch:empty')
-                this.updateChaptersStateFromEditors()
                 this.serverCallService
                     .makePost('rest/portfolio/update', tempPortfolio)
                     .then(({ data: portfolio }) => {

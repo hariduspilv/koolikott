@@ -32,30 +32,18 @@ public class MaterialResource extends BaseResource {
     @Inject
     private UserService userService;
     @Inject
+    private UserLikeService userLikeService;
+    @Inject
     private LearningObjectAdministrationService learningObjectAdministrationService;
+    @Inject
+    private LearningObjectService learningObjectService;
     @Inject
     private MaterialGetter materialGetter;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Material get(@QueryParam("id") long materialId) {
+    public Material get(@QueryParam("materialId") long materialId) {
         return materialGetter.get(materialId, getLoggedInUser());
-    }
-
-    @GET
-    @Path("getByCreator")
-    @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        User creator = getValidCreator(username);
-        return (creator != null) ? materialGetter.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
-    }
-
-    @GET
-    @Path("getByCreator/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Long getByCreatorCount(@QueryParam("username") String username) {
-        User creator = getValidCreator(username);
-        return (creator != null) ? materialGetter.getByCreatorSize(creator) : null;
     }
 
     @GET
@@ -74,9 +62,83 @@ public class MaterialResource extends BaseResource {
         return materialGetter.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
     }
 
+    @POST
+    @Path("increaseViewCount")
+    public Response increaseViewCount(Material material) {
+        Material originalMaterial = materialGetter.get(material.getId(), getLoggedInUser());
+        if (originalMaterial == null) {
+            throw notFound();
+        }
+        learningObjectService.incrementViewCount(originalMaterial);
+        return Response.status(HttpURLConnection.HTTP_OK).build();
+    }
+
+    @POST
+    @Path("like")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public void likeMaterial(Material material) {
+        userLikeService.addUserLike(material, getLoggedInUser(), Like.LIKE);
+    }
+
+    @POST
+    @Path("dislike")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public void dislikeMaterial(Material material) {
+        userLikeService.addUserLike(material, getLoggedInUser(), Like.DISLIKE);
+    }
+
+    @POST
+    @Path("getUserLike")
+    public UserLike getUserLike(Material material) {
+        return userLikeService.getUserLike(material, getLoggedInUser());
+    }
+
+    @POST
+    @Path("removeUserLike")
+    public void removeUserLike(Material material) {
+        userLikeService.removeUserLike(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getByCreator")
+    @Produces(MediaType.APPLICATION_JSON)
+    public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
+        User creator = getValidCreator(username);
+        return (creator != null) ? materialGetter.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
+    }
+
+    @GET
+    @Path("getByCreator/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Long getByCreatorCount(@QueryParam("username") String username) {
+        User creator = getValidCreator(username);
+        return (creator != null) ? materialGetter.getByCreatorSize(creator) : null;
+    }
+
     private User getValidCreator(@QueryParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);
+    }
+
+    @DELETE
+    @Path("{materialID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject delete(@PathParam("materialID") Long materialID) {
+        Material material = materialGetter.get(materialID, getLoggedInUser());
+        if (material == null) {
+            throw notFound();
+        }
+        return learningObjectAdministrationService.delete(material, getLoggedInUser());
+    }
+
+    @POST
+    @Path("delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject delete(Material material) {
+        return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 
     @PUT
@@ -88,38 +150,5 @@ public class MaterialResource extends BaseResource {
             return materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
         }
         return materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
-    }
-
-    @POST
-    @Path("create")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material createMaterial(Material material) {
-        if (material.getId() == null) {
-            return materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
-        }
-        throw new UnsupportedOperationException("this is create method");
-    }
-
-    @POST
-    @Path("update")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material updateMaterial(Material material) {
-        if (material.getId() == null) {
-            throw new UnsupportedOperationException("this is update method");
-        }
-        return materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
-    }
-
-    @POST
-    @Path("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject delete(Material material) {
-        return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 }

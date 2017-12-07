@@ -24,8 +24,8 @@ public class LearningObjectService {
     }
 
     public void incrementViewCount(LearningObject learningObject) {
-        LearningObject originalLearningObject = validateAndFindIncludeDeleted(learningObject);
-        learningObjectDao.incrementViewCount(originalLearningObject);
+        LearningObject originalPortfolio = validateAndFindIncludeDeleted(learningObject);
+        learningObjectDao.incrementViewCount(originalPortfolio);
         solrEngineService.updateIndex();
     }
 

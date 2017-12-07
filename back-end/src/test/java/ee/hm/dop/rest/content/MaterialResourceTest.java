@@ -30,12 +30,15 @@ import static org.junit.Assert.*;
 
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
-    public static final String GET_MATERIAL_URL = "material?id=%s";
-    public static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
-    public static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
-    public static final String CREATE_MATERIAL_URL = "material";
-    public static final String RESTORE_MATERIAL = "admin/deleted/restore";
-    public static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
+    private static final String MATERIAL_INCREASE_VIEW_COUNT_URL = "material/increaseViewCount";
+    public static final String GET_MATERIAL_URL = "material?materialId=%s";
+    private static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
+    private static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
+    private static final String CREATE_MATERIAL_URL = "material";
+    private static final String MATERIAL_ADD_RECOMMENDATION = "material/recommend";
+    private static final String MATERIAL_REMOVE_RECOMMENDATION = "material/removeRecommendation";
+    private static final String RESTORE_MATERIAL = "admin/deleted/restore";
+    private static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
     public static final String GET_MATERIAL_BY_SOURCE_URL = "material/getBySource?source=";
     public static final String GET_ONE_MATERIAL_BY_SOURCE_URL = "material/getOneBySource?source=";
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
@@ -45,6 +48,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private MaterialGetter materialGetter;
 
     @Test
     public void getMaterial() {
@@ -71,6 +76,29 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterialUpdatedDate() {
         assertEquals(new DateTime("1995-07-12T09:00:01.000+00:00"), getMaterial(MATERIAL_2).getUpdated());
+    }
+
+    @Test
+    public void increaseViewCount() {
+        Material materialBefore = getMaterial(MATERIAL_5);
+
+        Response response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(MATERIAL_5));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+        Material materialAfter = getMaterial(MATERIAL_5);
+        assertEquals(Long.valueOf(materialBefore.getViews() + 1), materialAfter.getViews());
+    }
+
+    @Test
+    public void increaseViewCountNotExistingMaterial() {
+        Response response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+
+        response = doPost(MATERIAL_INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTS_ID));
+        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+
+        response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -218,6 +246,25 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public void can_not_create_or_update_material_if_not_logged_in() throws Exception {
         Response response = createMaterial(new Material());
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void addRecommendation() {
+        User user = login(USER_ADMIN);
+        Material material = materialGetter.get(MATERIAL_3, user);
+
+        Recommendation recommendation = doPost(MATERIAL_ADD_RECOMMENDATION, material, Recommendation.class);
+        assertNotNull(recommendation);
+        assertEquals(Long.valueOf(8), recommendation.getCreator().getId());
+    }
+
+    @Test
+    public void removeRecommendation() {
+        User user = login(USER_ADMIN);
+
+        Material material = materialGetter.get(MATERIAL_3, user);
+        Response response = doPost(MATERIAL_REMOVE_RECOMMENDATION, material);
+        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 
     @Test(expected = RuntimeException.class)

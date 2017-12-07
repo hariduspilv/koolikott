@@ -17,7 +17,7 @@ class controller extends Controller {
 
         this.$scope.$watch('material', () => {
             if (this.$scope.material && this.$scope.material.id) {
-                this.$scope.material.source = this.getMaterialSource(this.$scope.material)
+                this.$scope.material.source = this.getSource(this.$scope.material)
                 this.$scope.materialType = this.getMaterialIcon()
                 this.audioSetup()
                 this.sourceTypeAndPdfSetup()
@@ -41,7 +41,7 @@ class controller extends Controller {
         this.$scope.isEditPortfolioMode = this.$rootScope.isEditPortfolioMode
 
         if (this.$scope.material) {
-            this.$scope.material.source = this.getMaterialSource(this.$scope.material)
+            this.$scope.material.source = getSource(this.$scope.material)
             this.$scope.materialType = this.getMaterialIcon()
             this.audioSetup()
             this.videoSetup()
@@ -101,7 +101,7 @@ class controller extends Controller {
         return this.$scope.isEditPortfolioMode || !this.$scope.sourceType || this.$scope.sourceType === 'LINK'
     }
     videoSetup(redo) {
-        let extension = this.getMaterialSource(this.$scope.material).split('.').pop()
+        let extension = getSource(this.$scope.material).split('.').pop()
         const video = document.createElement('video')
 
         /* ogv is a subtype of ogg therefore if ogg is supported ogv is also */
@@ -138,7 +138,7 @@ class controller extends Controller {
     }
     audioSetup() {
         if (!this.$scope.canPlayVideo) {
-            const extension = this.getMaterialSource(this.$scope.material).split('.').pop()
+            const extension = this.getSource(this.$scope.material).split('.').pop()
             const video = document.createElement('audio')
 
             if (video.canPlayType && video.canPlayType('audio/' + extension)) {

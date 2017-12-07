@@ -87,13 +87,7 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
         return findByFieldList("reviewed", false);
     }
 
-    public List<ImproperContent> findByLearningObjectId(Long learningObjectId) {
-        return getEntityManager()
-                .createQuery("select ic " +
-                        "from ImproperContent ic " +
-                        "where ic.learningObject.id = :loId " +
-                        "and ic.reviewed = false")
-                .setParameter("loId", learningObjectId)
-                .getResultList();
+    public List<ImproperContent> findByLearningObject(LearningObject learningObject) {
+        return findByFieldList("learningObject", learningObject, "reviewed", false);
     }
 }

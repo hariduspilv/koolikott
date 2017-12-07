@@ -7,10 +7,7 @@
     ></data-dop-portfolio-summary-card>
     <div>
       <div data-ng-repeat="chapter in portfolio.chapters">
-        <dop-chapter
-          data-chapter="chapter"
-          data-index="$index"
-        ></dop-chapter>
+        <dop-chapter data-chapter="chapter" data-index="{{$index}}"></dop-chapter>
       </div>
     </div>
   </div>

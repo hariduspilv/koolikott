@@ -1,7 +1,8 @@
 .content-container {
+  margin-top: $md-toolbar-height + $md-padding;
   transition: 0.2s;
   max-width: $layout-breakpoint-md;
-  padding: $md-toolbar-height + $md-padding $md-padding $md-padding;
+  padding: 0 $md-padding $md-padding;
 
   @media (min-width: $layout-breakpoint-md) {
     margin-left: auto;

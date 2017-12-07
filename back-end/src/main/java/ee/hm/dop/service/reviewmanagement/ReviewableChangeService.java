@@ -1,6 +1,8 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.ReviewableChangeDao;
+import ee.hm.dop.dao.TranslationDAO;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
@@ -11,7 +13,9 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.metadata.TaxonService.TAXON_PREFIXES;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
@@ -21,6 +25,8 @@ public class ReviewableChangeService {
     private ReviewableChangeDao reviewableChangeDao;
     @Inject
     private ReviewableChangeAdminService reviewableChangeAdminService;
+    @Inject
+    private TranslationDAO translationDAO;
 
     public List<ReviewableChange> getAllByLearningObject(Long id) {
         return reviewableChangeDao.getAllByLearningObject(id);

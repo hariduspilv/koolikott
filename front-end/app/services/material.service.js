@@ -6,7 +6,7 @@ angular.module('koolikottApp')
 function MaterialService(serverCallService, authenticatedUserService) {
 
     function getMaterialById(id) {
-        return serverCallService.makeGet("rest/material", {id})
+        return serverCallService.makeGet("rest/material", {'materialId': id})
             .then((response) => {
                 return response.data;
             });
@@ -17,8 +17,8 @@ function MaterialService(serverCallService, authenticatedUserService) {
             'type': '.Material',
             'id': material.id
         };
-        //todo ips unify with portfolio increaseViewCount
-        return serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
+
+        return serverCallService.makePost("rest/material/increaseViewCount", viewCountParams)
             .then(response => {
                 return response.data;
             });

@@ -81,7 +81,7 @@ class controller extends Controller {
         this.search(true)
     }
     allResultsLoaded() {
-        return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
+        return (this.$scope.items || []).length >= this.totalResults
     }
     search(newSearch) {
         if (newSearch)
