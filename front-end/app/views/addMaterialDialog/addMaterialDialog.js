@@ -428,8 +428,9 @@ class controller extends Controller {
                         );
                     }
 
-                    if (!this.$scope.material.publishers.find(p => p.name === snippet.channelTitle))
-                        this.$scope.material.publishers.push({ name: snippet.channelTitle })
+                    // Reset publishers before adding new from youtube
+                    this.$scope.material.publishers = []
+                    this.$scope.material.publishers.push({ name: snippet.channelTitle })
 
                     this.$scope.issueDate = new Date(snippet.publishedAt)
                     this.$scope.material.resourceTypes = [this.getResourceTypeByName('VIDEO')]
