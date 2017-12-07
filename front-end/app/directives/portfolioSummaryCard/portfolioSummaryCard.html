@@ -145,7 +145,7 @@
           <md-menu>
             <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button no-margin no-padding card-cover-menu-button" ng-click="$mdMenu.open($event)" data-ng-disabled="!$root.isEditPortfolioMode">
               <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
-              <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
+              <md-icon data-ng-if="$root.isEditPortfolioMode && getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
               <md-icon data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'">link</md-icon>
               <md-icon data-ng-if="getPortfolioVisibility() === 'PRIVATE'">lock</md-icon>
             </md-button>
