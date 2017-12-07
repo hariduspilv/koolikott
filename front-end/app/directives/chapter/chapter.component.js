@@ -571,8 +571,12 @@ class controller extends Controller {
         if ('MutationObserver' in window) {
             el._mutationObserver = new MutationObserver(mutations =>
                 mutations.forEach(({ addedNodes, removedNodes, target }) => {
-                    addedNodes.forEach(handleAddedNode)
-                    removedNodes.forEach(handleRemovedNode)
+                    /**
+                     * addedNodes and removedNodes aren't exactly arrays and IE does not include
+                     * forEach method on them.
+                     */
+                    [].forEach.call(addedNodes, handleAddedNode);
+                    [].forEach.call(removedNodes, handleRemovedNode)
                     handleSubtitleChange(target)
                 })
             )
