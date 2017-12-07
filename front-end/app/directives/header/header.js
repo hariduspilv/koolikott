@@ -222,6 +222,7 @@ class controller extends Controller {
         this.$rootScope.$watch('learningObjectImproper', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectUnreviewed', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectChanged', onLearningObjectAdminStatusChange)
+        this.$rootScope.$on('$locationChangeSuccess', this.setHeaderColor)
     }
     setHeaderColor() {
         const setDefault = () => {
