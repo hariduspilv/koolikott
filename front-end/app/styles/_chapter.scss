@@ -770,6 +770,15 @@ md-input-container.chapter-title {
     margin-bottom: 0;
   }
 
+  // embeds are links in non-edit view
+  > a {
+    color: inherit;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
   .chapter-embed-card__thumbnail {
     padding-top: 56.25%;
     background-size: cover;
