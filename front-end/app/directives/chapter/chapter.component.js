@@ -232,7 +232,7 @@ class controller extends Controller {
             this.$scope.chapter = chapter.currentValue
 
             if (!isFirstChange)
-                this.updateState()
+                this.updateEditors()
 
             this.isEditMode
                 ? !this.$scope.chapter.title && (this.$scope.chapter.title = '')
