@@ -23,6 +23,7 @@ public class AddPortfolioForm extends Component{
 
 	
 	public AddPortfolioForm setPortfolioTitle() {
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(portfolioTitle).sendKeys(Helpers.randomElement(Arrays.portfolioTitlesArray));
 		return this;
 	}

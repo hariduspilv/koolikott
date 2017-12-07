@@ -35,7 +35,7 @@ public class MaterialTests {
 	public void MaterialTests_DeleteMaterial_MaterialIsDeleted() {
 
 		boolean deletedMaterialBanner = goToLandingPage()
-				.chooseUserType("Admin")
+				.chooseUserType("Moderator")
 				.clickMyMaterials()
 				.openMaterial()
 				.clickActionsMenu()
