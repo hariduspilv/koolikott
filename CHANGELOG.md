@@ -1,3 +1,8 @@
+## e-Koolikott 1.12.1 (7.12.2017)
+
+### Parandatud
+* Aineeksperdi kustutamine ei toimi [#286](https://github.com/hariduspilv/koolikott/issues/286)
+
 ## e-Koolikott [1.12.0](https://github.com/hariduspilv/koolikott/milestone/11) (10.11.2017)
 
 ### Parandatud
