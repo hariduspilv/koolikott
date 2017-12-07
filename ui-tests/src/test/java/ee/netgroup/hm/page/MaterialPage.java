@@ -19,7 +19,6 @@ public class MaterialPage extends Page{
 	private By editMaterial = By.xpath("//button[@data-ng-click='edit()']");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
 	private By deleteMaterial = By.xpath("//button[@data-ng-click='confirmMaterialDeletion()']");
-    private By bannerRestoreButton = By.xpath("//button[@aria-label='Taasta']");
 	private By likeIcon = By.xpath("//div[@data-ng-click='$ctrl.like()']");
 	private By isLiked = By.xpath("//span[@data-ng-bind='$ctrl.rating.likes']");
 	private By selectedStar = By.xpath("//md-icon[@data-ng-if='$ctrl.hasFavorited']");
@@ -71,9 +70,9 @@ public class MaterialPage extends Page{
 		return new ConfirmationPopup();
 	}
 
-	public boolean isMaterialDeletedBannerVisible() {
+	public String getDeletedBannerText() {
 		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElement(bannerRestoreButton).isDisplayed();
+		return getDriver().findElement(Constants.bannerText).getText();
 	}
 
 	public MaterialPage likeMaterial() {

@@ -34,15 +34,15 @@ public class MaterialTests {
 	@Test
 	public void MaterialTests_DeleteMaterial_MaterialIsDeleted() {
 
-		boolean deletedMaterialBanner = goToLandingPage()
+		String deletedBannerText = goToLandingPage()
 				.chooseUserType("Moderator")
 				.clickMyMaterials()
 				.openMaterial()
 				.clickActionsMenu()
 				.clickDeleteMaterial()
 				.clickConfirmDeleteMaterial()
-				.isMaterialDeletedBannerVisible();
-		assertTrue(deletedMaterialBanner);
+				.getDeletedBannerText();
+		Assert.assertEquals(Constants.deletedBannerText, deletedBannerText);
 	}
 	
 	@Test
@@ -219,7 +219,7 @@ public class MaterialTests {
 		String changedLinkBannerText  = goToLandingPage()	
 				.chooseUserType("Moderator")
 				.clickAddMaterial()
-				.setHyperLink()
+				.setNewHyperLink()
 				.setMaterialTitle()
 				.addDescription()
 				.selectEducation()
@@ -231,7 +231,7 @@ public class MaterialTests {
 				.markNewMaterialAsReviewed()
 				.clickActionsMenu()
 				.clickEditMaterial()
-				.setRandomHyperLink()
+				.setHyperLink()
 				.clickUpdateMaterial()
 				.getChangedLinkBannerText();
 		Assert.assertEquals("Õppevara link. Enne oli: "+MaterialPopUp.newMaterialUrl, changedLinkBannerText);
