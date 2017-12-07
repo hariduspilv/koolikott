@@ -155,6 +155,51 @@ MediumEditor.extensions.toolbar.prototype.checkState = function () {
         }
     }
 }
+if (isIE()) {
+    MediumEditor.extensions.toolbar.prototype.handleBlur = function () {
+        clearTimeout(this.hideTimeout)
+        clearTimeout(this.delayShowTimeout)
+        this.hideTimeout = setTimeout(() => {
+            this.preventBlurClose
+                ? this.preventBlurClose = false
+                : this.hideToolbar()
+        }, 1)
+    }
+    MediumEditor.extensions.toolbar.prototype.createToolbarButtons = function () {
+        const ul = this.document.createElement('ul')
+        ul.id = 'medium-editor-toolbar-actions' + this.getEditorId()
+        ul.className = 'medium-editor-toolbar-actions'
+        ul.style.display = 'block'
+
+        this.buttons.forEach(button => {
+            const buttonName = typeof button === 'string' ? button : button.name
+            const buttonOpts = typeof button === 'string' ? null : button
+            const extension = this.base.addBuiltInExtension(buttonName, buttonOpts)
+
+            if (extension && typeof extension.getButton === 'function') {
+                const btn = extension.getButton(this.base)
+                const li = this.document.createElement('li')
+
+                li.addEventListener('mousedown', () =>
+                    this.preventBlurClose = true
+                )
+                MediumEditor.util.isElement(btn)
+                    ? li.appendChild(btn)
+                    : li.innerHTML = btn
+
+                ul.appendChild(li)
+            }
+        })
+
+        const buttons = ul.querySelectorAll('button')
+        if (buttons.length > 0) {
+            buttons[0].classList.add(this.firstButtonClass)
+            buttons[buttons.length - 1].classList.add(this.lastButtonClass)
+        }
+
+        return ul
+    }
+}
 /**
  * Overwriting Medium Editor's util methods to suit our needs.
  * The original method accepts a blacklist of attributes that should be removed on all elements
