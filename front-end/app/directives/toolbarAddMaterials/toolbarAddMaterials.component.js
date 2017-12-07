@@ -6,7 +6,7 @@ class controller extends Controller {
         if (this.$rootScope.isEditPortfolioMode) {
             this.isPortfolioEdit = true
             this.portfolio = this.storageService.getPortfolio()
-            this.chapter = this.$rootScope.savedChapterIndexForMaterialInsertion + ''
+            this.chapter = window.embedInsertionChapterIdx + ''
         } else
             this.loadUserPortfolios()
     }
@@ -55,12 +55,11 @@ class controller extends Controller {
         } else {
             const selectedMaterials = this.$rootScope.selectedMaterials.slice(0)
             this.isSaving = false
-            this.$rootScope.savedChapterIndexForMaterialInsertion = null
             this.$rootScope.$broadcast('detailedSearch:empty')
             this.$rootScope.back()
             // it is imperative that 'chapter:insertMaterials' is broadcasted after navigating back
             this.$timeout(() => {
-                this.$rootScope.$broadcast('chapter:insertMaterials', parseInt(this.chapter, 10), selectedMaterials)
+                this.$rootScope.$broadcast('chapter:insertExistingMaterials', parseInt(this.chapter, 10), selectedMaterials)
                 this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
             })
             this.removeSelection()

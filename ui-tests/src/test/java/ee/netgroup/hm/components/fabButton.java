@@ -26,11 +26,11 @@ public class fabButton extends Component{
 		return new AddPortfolioForm();
 	}
 
-	public static AddMaterialPopUp clickAddMaterial() {
+	public static MaterialPopUp clickAddMaterial() {
 		Helpers.moveToElement(addPortfolio);
 		Helpers.waitForVisibility(addMaterialButton);
 		getDriver().findElement(addMaterialButton).click();
-		return new AddMaterialPopUp();
+		return new MaterialPopUp();
 	}
 
 

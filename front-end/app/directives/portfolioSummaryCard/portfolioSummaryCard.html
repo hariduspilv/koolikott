@@ -1,11 +1,11 @@
-<md-card class="card-lg card-mb-20">
+<md-card class="card-lg summary-card">
   <!-- SECTION 1 -->
   <div data-layout-gt-xs="row">
     <!-- SECTION 1: Left -->
     <div data-flex data-flex-gt-xs="75" data-layout="column">
       <!-- Headline -->
       <div class="card-lg__container card-lg__container--padding-l-r-t" data-layout="row">
-        <h1 data-flex="80" data-flex-gt-sm="90" data-ng-bind="portfolio.title"></h1>
+        <h1 class="learning-object-title" data-flex="80" data-flex-gt-sm="90" data-ng-bind="portfolio.title"></h1>
         <div class="card-menus" data-layout="row">
           <dop-share
             data-title="portfolio.title"
@@ -143,7 +143,7 @@
         <div class="ribbon"></div>
         <div class="card__icon-holder card__icon-holder--small">
           <md-menu>
-            <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button no-margin no-padding card-cover-menu-button" ng-click="$mdMenu.open($event)">
+            <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button no-margin no-padding card-cover-menu-button" ng-click="$mdMenu.open($event)" data-ng-disabled="!$root.isEditPortfolioMode">
               <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
               <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
               <md-icon data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'">link</md-icon>

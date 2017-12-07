@@ -21,6 +21,7 @@ public class Comments extends Component{
 	}
 	
 	public static MaterialPage showMaterialComments() {
+		Helpers.waitForClickable(showCommentsButton);
 		getDriver().findElement(showCommentsButton).click();
 		return new MaterialPage();
 	}

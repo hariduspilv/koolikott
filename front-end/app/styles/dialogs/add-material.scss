@@ -20,6 +20,7 @@
 }
 
 .datepicker-container {
+    position: relative;
     overflow: hidden;
 
     .validation-messages{
@@ -50,8 +51,15 @@
     border-bottom: 2px solid $gray-600-light;
     color: $gray;
     margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
     text-align: left;
     border-radius: 0;
+
+    @media (min-width: $layout-breakpoint-xs) {
+        margin-left: $md-padding / 2;
+        margin-right: $md-padding / 2;
+    }
 
     &:hover {
         border-color: $green1;

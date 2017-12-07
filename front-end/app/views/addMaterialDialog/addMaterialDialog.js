@@ -18,6 +18,7 @@ class controller extends Controller {
         this.$scope.uploadingFile = false
         this.$scope.review = {}
         this.$scope.isUserAuthor = false
+        this.$scope.isUserAuthorFirstAuthor = false
         this.$scope.maxReviewSize = 10
         this.$scope.charactersRemaining = 850
         this.$scope.languages = []
@@ -72,9 +73,9 @@ class controller extends Controller {
         if (currentValue)
             this.pictureUpload = this.pictureUploadService
                 .upload(currentValue)
-                .then(({ data: id, data: name }) => {
-                    this.$scope.material.picture.id = id
-                    this.$scope.material.picture.id = name
+                .then(({ data }) => {
+                    this.$scope.material.picture.id = data.id
+                    this.$scope.material.picture.name = data.name
                     this.$scope.showErrorOverlay = false
                 }, () =>
                     this.$scope.showErrorOverlay = false
@@ -124,7 +125,7 @@ class controller extends Controller {
                 .makeGet('rest/material/getOneBySource?source=' + encodeURIComponent(currentValue))
                 .then(({ data: material }) => {
                     if (!material)
-                        return this.processSource($scope.material.source)
+                        return this.processSource(this.$scope.material.source)
 
                     if (material.deleted) {
                         this.$scope.addMaterialForm.source.$setValidity('deleted', false)
@@ -132,7 +133,7 @@ class controller extends Controller {
                     } else {
                         this.$scope.addMaterialForm.source.$setTouched()
                         this.$scope.addMaterialForm.source.$setValidity('exists', false)
-                        this.$scope.existingMaterial = material
+                        this.$scope.existingMaterialId = material.id
                     }
                 })
     }
@@ -169,14 +170,27 @@ class controller extends Controller {
         )
     }
     setAuthorToUser() {
-        const { name } = this.authenticatedUserService.getUser();
+        const { name, surname } = this.authenticatedUserService.getUser();
 
-        if (this.$scope.material.picture.author !== name) {
-            this.$scope.material.picture.author = name;
+        if (this.$scope.material.picture.author !== `${name} ${surname}`) {
+            this.$scope.material.picture.author = `${name} ${surname}`;
             this.$scope.isUserAuthor = true;
         } else {
             this.$scope.material.picture.author = '';
             this.$scope.isUserAuthor = false;
+        }
+    }
+    setUserAuthorToFirstAuthor() {
+        const { name, surname } = this.authenticatedUserService.getUser();
+
+        if (this.$scope.material.authors[0].name !== name) {
+            this.$scope.material.authors[0].name = name;
+            this.$scope.material.authors[0].surname = surname;
+            this.$scope.isUserAuthorFirstAuthor = true;
+        } else {
+            this.$scope.material.authors[0].name = '';
+            this.$scope.material.authors[0].surname = '';
+            this.$scope.isUserAuthorFirstAuthor = false;
         }
     }
     addNewTaxon() {
@@ -188,10 +202,10 @@ class controller extends Controller {
         )
     }
     addNewPeerReview() {
-        this.$scope.material.peerReviews.push({})
+        this.$scope.peerReviews.push({})
         this.$timeout(() =>
             angular
-                .element(`#material-peerReview-${this.$scope.material.peerReviews.length - 1}`)
+                .element(`#material-peerReview-${this.$scope.peerReviews.length - 1}`)
                 .focus()
         )
     }
@@ -309,7 +323,7 @@ class controller extends Controller {
         this.$scope.material = {}
         this.$scope.material.taxons = [{}]
         this.$scope.material.authors = [{}]
-        this.$scope.material.peerReviews = [{}]
+        this.$scope.peerReviews = [{}]
         this.$scope.material.keyCompetences = []
         this.$scope.material.crossCurricularThemes = []
         this.$scope.material.publishers = []
@@ -389,10 +403,10 @@ class controller extends Controller {
         }
     }
     processSource(source) {
-        if (this.isYoutubeVideo(source))
+        if (isYoutubeVideo(source))
             this.youtubeService
                 .getYoutubeData(source)
-                .then(({ data: { snippet, status }}) => {
+                .then(({ snippet, status }) => {
                     /**
                      * Populated fields:
                      *  - title
@@ -404,13 +418,19 @@ class controller extends Controller {
                      *  - resourceType
                      *  - licenseType
                      */
-                    if (snippet.thumbnails)
-                        this.setThumbnail(snippet.thumbnails)
+                    if (snippet.thumbnails) {
+                        this.setThumbnail(snippet.thumbnails);
+                        this.$scope.material.picture.author = snippet.channelTitle;
+                        this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
+                            status.license.toLowerCase() === 'creativecommon'
+                                ? 'CCBY'
+                                : 'Youtube'
+                        );
+                    }
 
                     if (!this.$scope.material.publishers.find(p => p.name === snippet.channelTitle))
                         this.$scope.material.publishers.push({ name: snippet.channelTitle })
 
-                    this.$scope.material.tags = snippet.tags
                     this.$scope.issueDate = new Date(snippet.publishedAt)
                     this.$scope.material.resourceTypes = [this.getResourceTypeByName('VIDEO')]
                     this.$scope.material.licenseType = this.getLicenseTypeByName(
@@ -418,10 +438,11 @@ class controller extends Controller {
                             ? 'CCBY'
                             : 'Youtube'
                     )
-                    this.$scope.titlesAndDescriptions = [{
+
+                    this.$scope.titlesAndDescriptions.ET = {
                         title: snippet.title,
                         description: snippet.description
-                    }]
+                    }
                 })
     }
     setThumbnail(thumbnails) {
@@ -434,9 +455,10 @@ class controller extends Controller {
         else if (thumbnails.default) thumbnailUrl = thumbnails.default.url
 
         this.pictureUploadService.uploadFromUrl(thumbnailUrl)
-            .then(data =>
-                this.$scope.material.picture = data
-            )
+            .then(({ data: { id, name } }) => {
+                this.$scope.material.picture.id = id
+                this.$scope.material.picture.name = name
+            })
     }
     getResourceTypeByName(name) {
         if (!this.$scope.resourceTypes) return;
@@ -452,18 +474,18 @@ class controller extends Controller {
     }
     uploadReview(index, file) {
         if (file) {
-            this.$scope.material.peerReviews[index].uploading = true
+            this.$scope.peerReviews[index].uploading = true
             this.$scope.uploadingReviewId = index
             this.fileUploadService.uploadReview(file)
                 .then(({ data }) => {
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].name = data.name;
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].url = data.url;
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].name = data.name;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].url = data.url;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
 
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploading = false;
                 }, ({ data }) => {
                     this.toastService.show(`Error: ${data}`);
-                    this.$scope.material.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploading = false;
                 })
         }
     }
@@ -490,8 +512,11 @@ class controller extends Controller {
         if (!this.$scope.material.taxons[0])
             this.$scope.material.taxons = [{}]
 
-        if (!this.$scope.material.peerReviews[0])
-            this.$scope.material.peerReviews = [{}]
+        if (!this.$scope.material.peerReviews[0]) {
+            this.$scope.peerReviews = [{}];
+        } else {
+            this.$scope.peerReviews = this.$scope.material.peerReviews;
+        }
 
         const educationalContext = this.taxonService.getEducationalContext(this.$scope.material.taxons[0])
 
@@ -634,10 +659,13 @@ class controller extends Controller {
             if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
                 this.$scope.material.publishers[0] = null
 
+            this.$scope.material.peerReviews = Object.assign([], this.$scope.peerReviews);
             this.$scope.material.peerReviews.forEach((peerReview, i) => {
                 if (!peerReview || !peerReview.url)
                     this.$scope.material.peerReviews.splice(i, 1)
             })
+
+            console.log(this.$scope.material);
 
             this.serverCallService
                 [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)

@@ -10,11 +10,6 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        if (this.$rootScope.newPortfolioCreated) {
-            this.$rootScope.newPortfolioCreated = false
-            this.$rootScope.$broadcast('tour:start:editPage:firstTime')
-        }
-
         this.startAutosave()
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
@@ -31,8 +26,17 @@ class controller extends Controller {
         this.$scope.$on('$destroy', () =>
             this.$interval.cancel(this.autoSaveInterval)
         )
+
+        // Create a new chapter if user wishes to add their chosen materials to a new chapter.
+        this.unsubscribeInsertMaterials = this.$rootScope.$on(
+            'chapter:insertExistingMaterials',
+            this.onInsertExistingMaterials.bind(this)
+        )
+        this.$scope.$on('$destroy', () =>
+            this.unsubscribeInsertMaterials()
+        )
     }
-    createChapter() {
+    createChapter(cb) {
         this.$scope.portfolio.chapters.push({
             title: '',
             blocks: []
@@ -41,7 +45,9 @@ class controller extends Controller {
             // scroll to new chapter & focus title input
             const chapter = document.getElementById(`chapter-${this.$scope.portfolio.chapters.length}`)
             this.scrollToElement(chapter, 200, 60)
-            chapter.querySelector('input').focus()
+
+            cb  ? cb()
+                : chapter.querySelector('.chapter-title-input').focus()
         })
     }
     deleteChapter(idx) {
@@ -119,6 +125,16 @@ class controller extends Controller {
             if (this.$scope.portfolio && !this.$scope.portfolio.deleted)
                 this.updatePortfolio()
         }, 20e3) // 20 secs
+    }
+    onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
+        if (chapterIdx === -1)
+            this.createChapter(() =>
+                this.$rootScope.$broadcast(
+                    'chapter:insertExistingMaterials',
+                    this.$scope.portfolio.chapters.length - 1,
+                    selectedMaterials
+                )
+            )
     }
 }
 controller.$inject = [

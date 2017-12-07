@@ -16,7 +16,8 @@ $font-small: 12px;
 $font-medium: 14px;
 $font-normal: 16px;
 $font-large: 26px;
-$md-padding: 16px;
+$md-padding: 1rem;
+$md-toolbar-height: 4rem; // material design defines this as 64px, overwriting it here using rem untis
 $layout-breakpoint-xxs: 370px;
 $gray: #808080;
 $gray-600-light: #a4a4a4;
@@ -64,7 +65,7 @@ $card-lg-padding: 25px;
 
 $desktop-navbar-height: $md-toolbar-height;
 
-$sidenav-width: 259px;
+$sidenav-width: 16.25rem;
 $nav-button-area-width: 178px;
 $button-width: 40px;
 

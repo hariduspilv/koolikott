@@ -4,7 +4,7 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
-import ee.netgroup.hm.components.AddMaterialPopUp;
+import ee.netgroup.hm.components.MaterialPopUp;
 
 public class AdminDashboardTests {
 	
@@ -69,19 +69,17 @@ public class AdminDashboardTests {
 	}
 	
 	@Test
-	public void AdminDashboardTests_ChangedMaterialLink__ChangesAreDeclined() {
+	public void AdminDashboardTests_ChangedMaterialLink_ChangesAreDeclined() {
 
 		String materialUrl  = goToLandingPage()	
 				.chooseUserType("Admin")
 				.clickAddMaterial()
-				.setNewHyperLink()
+				.setHyperLink()
 				.setMaterialTitle()
 				.addDescription()
-				.clickNextStep()
 				.selectEducation()
 				.selectSubjectArea()
 				.selectTargetGroup()
-				.clickNextStep()
 				.setAuthorFirstName()
 				.setAuthorSurName()
 				.clickCreateMaterial()
@@ -92,7 +90,7 @@ public class AdminDashboardTests {
 				.clickUpdateMaterial()
 				.markChangesDeclined()
 				.getMaterialUrlText();
-		Assert.assertEquals(AddMaterialPopUp.newMaterialUrl, materialUrl);
+		Assert.assertEquals(MaterialPopUp.newMaterialUrl, materialUrl);
 	}
 
 

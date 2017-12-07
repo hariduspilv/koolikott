@@ -101,6 +101,12 @@ md-card {
 // Override md-button width
 .card-cover-menu-button {
   width: 32px !important;
+
+  &:disabled {
+      md-icon {
+          color: #fff;
+      }
+  }
 }
 
 .card__icon-holder {

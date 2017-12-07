@@ -43,38 +43,27 @@ class controller extends Controller {
 
         if (Array.isArray(chapters) && chapters.length && chapters[0].blocks)
             this.$translate.onReady().then(() =>
-                this.$scope.chapters = chapters.map(({ title, blocks }, idx) => ({
-                    title: title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE'),
-                    slug: this.getSlug(`chapter-${idx + 1}`),
-                    subChapters: blocks.reduce((subchapters, { htmlContent }) => {
-                        const wrapper = document.createElement('div')
-                        wrapper.innerHTML = htmlContent
-                        return subchapters.concat(
-                            [].slice.apply(wrapper.querySelectorAll('.subchapter')).map((el, subIdx) => ({
-                                title: el.textContent || this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE'),
-                                slug: this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
-                            }))
-                        )
-                    }, [])
-                }))
+                this.$scope.chapters = chapters.map(({ title, blocks }, idx) => {
+                    let subIdx = 0
+                    return {
+                        title: title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE'),
+                        slug: this.getSlug(`chapter-${idx + 1}`),
+                        subChapters: blocks.reduce((subchapters, { htmlContent }) => {
+                            const wrapper = document.createElement('div')
+                            wrapper.innerHTML = htmlContent
+                            return subchapters.concat(
+                                [].slice.apply(wrapper.querySelectorAll('.subchapter')).map(el => {
+                                    subIdx++
+                                    return {
+                                        title: el.textContent || this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE'),
+                                        slug: this.getSlug(`subchapter-${idx + 1}-${subIdx}`)
+                                    }
+                                })
+                            )
+                        }, [])
+                    }
+                })
             )
-    }
-    // deprecated
-    _gotoChapter(evt, chapterId, subchapterId) {
-        evt.preventDefault()
-        this._goToElement(
-            subchapterId != null
-                ? 'chapter-' + chapterId + '-' + subchapterId
-                : 'chapter-' + chapterId
-        )
-    }
-    _goToElement(elementID) {
-        const $chapter = angular.element(document.getElementById(elementID))
-        this.$document.scrollToElement($chapter, 60, 200)
-    }
-    _closeSidenav() {
-        if (window.innerWidth < BREAK_LG)
-            this.$mdSidenav('left').close()
     }
 }
 controller.$inject = [

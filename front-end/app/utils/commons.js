@@ -697,6 +697,9 @@ class Controller {
             navigator.userAgent.match(/rv 11/))
         )
     }
+    isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    }
     formatDateToDayMonthYear(dateString) {
         const date = new Date(dateString)
 

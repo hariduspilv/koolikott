@@ -14,7 +14,12 @@ class controller extends Controller {
             if (currentValue !== previousValue)
                 this.setNewTags()
         }, true)
-        this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this)) ;
+        this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
+        this.$rootScope.$on('tags:focusInput', () => {
+            const input = this.$element[0].querySelector('input')
+            if (input)
+                input.focus()
+        })
 
         // auto-launch the report dialog upon login or page load if hash is found in location URL
         this.$timeout(() =>
@@ -134,7 +139,7 @@ class controller extends Controller {
         }
     }
     addTag() {
-        if (this.learningObject && this.learningObject.id) {
+        if (this.newTag && this.newTag.tagName && this.learningObject && this.learningObject.id) {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
                 .then(({ data }) =>
@@ -265,6 +270,7 @@ controller.$inject = [
     '$rootScope',
     '$mdDialog',
     '$timeout',
+    '$element',
     'authenticatedUserService',
     'storageService',
     'suggestService',

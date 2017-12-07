@@ -5,8 +5,8 @@ class controller extends Controller {
     navigateTo() {
         const { id } = this.learningObject
 
-        if (this.isMaterial(this.learningObject)) {
-            if (this.learningObject.type === '.Material'){
+        if (isMaterial(this.learningObject.type)) {
+            if (this.learningObject.type === '.ReducedMaterial'){
                 this.storageService.setMaterial(this.learningObject)
             }
             this.$location.path('/material').search({ id })
