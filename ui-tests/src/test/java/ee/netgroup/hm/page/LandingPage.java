@@ -67,7 +67,7 @@ public class LandingPage extends Page{
 	}
 
 	public static MaterialPage openMaterialUrl() {
-		getDriver().get(Constants.materialPageUrl);
+		getDriver().get(Constants.materialWithCommentsUrl);
 		return new MaterialPage();
 	}
 

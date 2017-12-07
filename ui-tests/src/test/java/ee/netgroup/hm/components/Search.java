@@ -17,7 +17,7 @@ public class Search extends Component{
 	private By languageSelection = By.xpath("//md-select[@data-ng-model='detailedSearch.language']");
 	private By russianLanguage = By.xpath("//md-option[@value='rus']");
 	private By educationalContext = By.id("taxonEducationalSelect");
-	private By allEducationalContexts = By.xpath("/html/body/div[4]/md-select-menu/md-content/md-option[1]");
+	private By allEducationalContexts = By.xpath("/html/body/div[3]/md-select-menu/md-content/md-option[1]");
 
 
 	public static SearchResultsPage insertSearchCriteriaAndSearch(String searchString) {
