@@ -12,14 +12,14 @@ import javax.persistence.Id;
 public class ChapterBlock {
 
     static PolicyFactory BLOCK_ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder()
-            .allowStandardUrlProtocols()
-            .allowElements("h3", "p", "ul", "li", "blockquote", "a", "b", "i", "div", "br")
-            .allowAttributes("href", "target", "class", "id")
+            .allowStandardUrlProtocols() //keep orders alphabetical
+            .allowElements("a", "b", "blockquote", "br", "div", "em", "i", "h3", "li", "p", "strong", "ul")
+            .allowAttributes("class", "href", "id", "target")
             .onElements("a")
-            .allowAttributes("class", "id", "data-id", "data-src")
+            .allowAttributes("class", "data-id", "data-src", "id")
             .onElements("div")
             .allowAttributes("class", "id")
-            .onElements("h3", "p", "ul", "li", "blockquote", "b", "i", "br")
+            .onElements("b", "blockquote", "br", "em", "h3", "i", "li", "p", "strong", "ul")
             .toFactory();
 
     @Id

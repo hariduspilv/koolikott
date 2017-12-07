@@ -1,3 +1,30 @@
+## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12) (08.12.2017)
+
+### Muutunud
+* X-tee versiooniuuendus [#235](https://github.com/hariduspilv/koolikott/issues/235)
+* Backendi rakenduse versiooni kuvamine [#271](https://github.com/hariduspilv/koolikott/issues/271)
+* Kogumiku UI/UX täiendused (arendus), v.1 [#269](https://github.com/hariduspilv/koolikott/issues/269)
+* Kogumiku peatüki sisu vormistamine -> Süsteemis kasutatava tekstiredaktori väljavahetamine [#256](https://github.com/hariduspilv/koolikott/issues/256)
+* Kogumiku peatüki sisu vormistamine -> peatüki sisuteksti vormindamise tooltip'i kasutamine feature [#255](https://github.com/hariduspilv/koolikott/issues/255)
+* Kogumiku sisuplokkide haldamine -> Sisuploki kustutamine [#263](https://github.com/hariduspilv/koolikott/issues/263)
+* Kogumiku sisuplokkide haldamine -> sisuplokkide järjestuse seadistamine peatükis [#262](https://github.com/hariduspilv/koolikott/issues/262)
+* Kogumiku sisuplokkide haldamine -> sisuplokkide laiuse seadistamine [#261](https://github.com/hariduspilv/koolikott/issues/261)
+* Kogumiku sisuplokkide haldamine -> sisuplokkide lisamine [#260](https://github.com/hariduspilv/koolikott/issues/260)
+* Kogumiku sisuplokkide haldamine -> andmemudeli täiendused sisuplokkide laiuste info talletamiseks [#259](https://github.com/hariduspilv/koolikott/issues/259)
+* Kogumiku peatükkide haldamine -> Peatükkide järjekorra muutmine nuppudega [#247](https://github.com/hariduspilv/koolikott/issues/247)
+* Kogumiku peatükkide haldamine -> Peatükkide järjekorra muutmine sisukorras [#246](https://github.com/hariduspilv/koolikott/issues/246)
+* Kogumiku peatükkide haldamine -> Peatükkide haldamise vormiplokid [#245](https://github.com/hariduspilv/koolikott/issues/245)
+* Kogumiku peatükkide haldamine -> Eemaldada peatükkide haldamisest üleliigsed elemendid [#244](https://github.com/hariduspilv/koolikott/issues/244)
+* Kogumikule alampeatüki lisamine -> Alampeatüki pealkirjastamine ja loomine [#248](https://github.com/hariduspilv/koolikott/issues/248)
+* Kogumikule uue materjali lisamine -> uue materjali lisamise uus modaal [#254](https://github.com/hariduspilv/koolikott/issues/254)
+* Kogumikule olemasoleva materiali lisamine -> Olemasoleva materiali kiirotsing [#253](https://github.com/hariduspilv/koolikott/issues/253)
+* Kogumikule võtmesõnade lisamine -> Aktiveerida automaatselt "Võtmesõna" väli ja sisu valideerimine võtmesõna lisamisel [#243](https://github.com/hariduspilv/koolikott/issues/243)
+
+## e-Koolikott 1.12.1 (7.12.2017)
+
+### Parandatud
+* Aineeksperdi kustutamine ei toimi [#286](https://github.com/hariduspilv/koolikott/issues/286)
+
 ## e-Koolikott [1.12.0](https://github.com/hariduspilv/koolikott/milestone/11) (10.11.2017)
 
 ### Parandatud
