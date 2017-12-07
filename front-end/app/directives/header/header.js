@@ -204,17 +204,24 @@ class controller extends Controller {
 
         this.$scope.getTranslation = (string) => this.$translate.instant(string)
 
-        this.$timeout(this.setHeaderColor.bind(this))
-
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.openTour = (isEditPage = false) =>
             this.$rootScope.$broadcast(isEditPage ? 'tour:start:editPage' : 'tour:start')
 
         this.$rootScope.$on('portfolio:autoSave', this.invokeInkRippleOnSaveButton)
-    }
-    $doCheck() {
-        this.setHeaderColor()
+
+        this.setHeaderColor = this.setHeaderColor.bind(this)
+        this.$timeout(this.setHeaderColor)
+        const onLearningObjectAdminStatusChange = (currentValue, previousValue) => {
+            if (currentValue !== previousValue)
+                this.setHeaderColor()
+        }
+        this.$rootScope.$watch('learningObjectPrivate', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectDeleted', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectImproper', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectUnreviewed', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectChanged', onLearningObjectAdminStatusChange)
     }
     setHeaderColor() {
         const setDefault = () => {
