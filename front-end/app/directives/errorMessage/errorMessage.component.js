@@ -131,10 +131,13 @@ class controller extends Controller {
 
         if (!this.$rootScope.learningObjectPrivate) {
             this.bannerType =
-                this.$rootScope.learningObjectDeleted ? 'showDeleted' :
                 this.$rootScope.learningObjectImproper ? 'showImproper' :
                 this.$rootScope.learningObjectUnreviewed ? 'showUnreviewed' :
                 this.$rootScope.learningObjectChanged && 'showChanged'
+
+            // make sure if deleted then show deleted stuff
+            if (this.$rootScope.learningObjectDeleted)
+                this.bannerType = 'showDeleted';
 
             if (this.bannerType)
                 this.setState(...VIEW_STATE_MAP[this.bannerType])
@@ -145,11 +148,13 @@ class controller extends Controller {
         this.$scope.icon = icon
         if (this.bannerType != 'showChanged')
             this.$scope.messageKey = typeof messageKey === 'function' ? messageKey(this) : messageKey
+            this.$scope.htmlMessage = false
         this.$scope.iconTooltipKey = messageKey
         this.$scope.message = ''
         this.$scope.buttons = buttons
         this.$scope.reports = null
         this.$scope.showExpandableReports = false
+        this.$scope.showExpandableChanges = false
 
         if (typeof cb === 'function')
             cb(this)

@@ -177,6 +177,54 @@ MediumEditor.util.unwrapTags = (el, blacklist) => {
     )
         MediumEditor.util.unwrap(el, document)
 }
+/**
+ * Need to patch this and add the condition: blockContainer.nodeName !== 'UL'. Without it creating
+ * blockquote from list item was broken. See Medium Editor source code for more inline comments:
+ * https://github.com/yabwe/medium-editor/blob/master/src/js/util.js#L512-L573
+ */
+MediumEditor.util.execFormatBlock = function (doc, tagName) {
+    const blockContainer = this.getTopBlockContainer(MediumEditor.selection.getSelectionStart(doc))
+
+    if (tagName === 'blockquote') {
+        if (blockContainer) {
+            if (blockContainer.nodeName === 'UL') {
+                // refresh the tollbar state
+                setTimeout(() => {
+                    const editor = MediumEditor.getEditorFromElement(this.getContainerEditorElement(blockContainer))
+                    if (editor)
+                        editor.getExtensionByName('toolbar').checkState()
+                }, 100)
+            } else
+                for (let childNode of blockContainer.childNodes)
+                    if (this.isBlockContainer(childNode))
+                        return doc.execCommand('outdent', false, null)
+        }
+
+        if (this.isIE)
+            return doc.execCommand('indent', false, tagName)
+    }
+
+    if (blockContainer && tagName === blockContainer.nodeName.toLowerCase())
+        tagName = 'p'
+
+    if (this.isIE)
+        tagName = '<' + tagName + '>'
+
+    if (blockContainer && blockContainer.nodeName.toLowerCase() === 'blockquote') {
+        if (this.isIE && tagName === '<p>')
+            return doc.execCommand('outdent', false, tagName)
+
+        if ((this.isFF || this.isEdge) && tagName === 'p') {
+            for (let childNode of blockContainer.childNodes)
+                if (!this.isBlockContainer(childNode))
+                    doc.execCommand('formatBlock', false, tagName)
+
+            return doc.execCommand('outdent', false, tagName)
+        }
+    }
+
+    return doc.execCommand('formatBlock', false, tagName)
+}
 class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
@@ -523,8 +571,12 @@ class controller extends Controller {
         if ('MutationObserver' in window) {
             el._mutationObserver = new MutationObserver(mutations =>
                 mutations.forEach(({ addedNodes, removedNodes, target }) => {
-                    addedNodes.forEach(handleAddedNode)
-                    removedNodes.forEach(handleRemovedNode)
+                    /**
+                     * addedNodes and removedNodes aren't exactly arrays and IE does not include
+                     * forEach method on them.
+                     */
+                    [].forEach.call(addedNodes, handleAddedNode);
+                    [].forEach.call(removedNodes, handleRemovedNode)
                     handleSubtitleChange(target)
                 })
             )
