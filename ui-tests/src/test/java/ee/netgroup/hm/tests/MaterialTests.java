@@ -11,7 +11,6 @@ public class MaterialTests {
 	
 	@Test
 	public void MaterialTests_CreateMaterial_AsPublisher_MaterialIsCreated() {
-
 		String creatorName = goToLandingPage()
 				.chooseUserType("Publisher")
 				.clickAddMaterial()
@@ -81,7 +80,7 @@ public class MaterialTests {
 				.addDescription()
 				.clickCreatePortfolio()
 				.setChapterTitle()
-				.clickAddMaterial()
+				.openChapterToolbar()
 				.clickAddNewMaterial()
 				.setHyperLink()
 				.setMaterialTitle()
@@ -105,7 +104,7 @@ public class MaterialTests {
 				.clickActionsMenu()
 				.clickEditPortfolio()
 				.setChapterTitle()
-				.clickAddMaterial()
+				.openChapterToolbar()
 				.clickAddExistingMaterial()
 				.selectAllEducationalContexts()
 				.insertMaterialSearchCriteria()

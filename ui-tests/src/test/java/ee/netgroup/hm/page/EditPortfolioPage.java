@@ -22,10 +22,10 @@ public class EditPortfolioPage extends Page{
 	private By numberedList = By.name("ol");
 	private By preFormattedText = By.name("pre");
 	private By privacyPopUp = By.xpath("//md-dialog-content[@class='md-dialog-content']");
-	private By chapterTitle = By.xpath("//input[@data-ng-model='$ctrl.chapter.title']");
-	private By addMaterialButton = By.xpath("//button[@data-ng-click='$mdMenu.open($event)']");
-	private By newMaterial = By.xpath("//button/span[text()='Uus']");
-	private By existingMaterial = By.xpath("//button/span[text()='Koolikotist']");
+	private By chapterTitle = By.xpath("//input[@data-ng-model='chapter.title']");
+	private By chapter = By.xpath("//div[@data-ng-class='$ctrl.getBlockClassNames($index)']");
+	private By newMaterial = By.xpath("//div/label[text()='Uus materjal']");
+	private By existingMaterial = By.xpath("//div/label[text()='Olemasolev materjal']");
 	
 
 	public String getSuccessAlertText() {
@@ -129,10 +129,10 @@ public class EditPortfolioPage extends Page{
 		return this;
 	}
 
-	public EditPortfolioPage clickAddMaterial() {
+	public EditPortfolioPage openChapterToolbar() {
 		Helpers.waitForMilliseconds(1000);
-		Helpers.waitForVisibility(addMaterialButton);
-		getDriver().findElement(addMaterialButton).click();
+		Helpers.waitForVisibility(chapter);
+		getDriver().findElement(chapter).click();
 		return this;
 	}
 	

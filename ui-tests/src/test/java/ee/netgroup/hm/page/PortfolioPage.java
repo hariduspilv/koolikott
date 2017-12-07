@@ -26,7 +26,7 @@ public class PortfolioPage extends Page{
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
-	private By materialBox = By.cssSelector("div.pointer.layout-row");
+	private By materialBox = By.cssSelector("div.chapter-embed-card__caption");
 	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	private By autocompleteSystemTag = By.xpath("//span[@md-highlight-text='$ctrl.newTag.tagName']");
