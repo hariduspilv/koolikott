@@ -16,9 +16,17 @@ class controller extends Controller {
         }, true)
         this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
         this.$rootScope.$on('tags:focusInput', () => {
-            const input = this.$element[0].querySelector('input')
-            if (input)
-                input.focus()
+            let numAttempts = 0
+            this.focusInterval = setInterval(() => {
+                numAttempts++
+                const input = this.$element[0].querySelector('input')
+                if (input) {
+                    input.focus()
+                    clearInterval(this.focusInterval)
+                }
+                if (numAttempts >= 20)
+                    clearInterval(this.focusInterval)
+            }, 500)
         })
 
         // auto-launch the report dialog upon login or page load if hash is found in location URL
