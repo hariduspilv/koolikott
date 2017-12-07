@@ -946,16 +946,23 @@ class controller extends Controller {
         }
     }
     beforeAddMaterial() {
-        this.insertHtmlAfterSelection(EMBED_INSERTION_MARKER)
-
-        const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
-
+        this.clearEmbedInsertionData()
         window.embedInsertionChapterIdx = this.index
-        window.embedInsertionBlockIdx = this.$scope.focusedBlockIdx
-        window.embedInsertionBlockContents = editorEl.innerHTML
 
-        const marker = editorEl.querySelector('.material-insertion-marker')
-        marker.parentNode.removeChild(marker)
+        if (this.$scope.focusedBlockIdx) {
+            const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
+
+            this.insertHtmlAfterSelection(EMBED_INSERTION_MARKER)
+            window.embedInsertionBlockIdx = this.$scope.focusedBlockIdx
+            window.embedInsertionBlockContents = editorEl.innerHTML
+
+            const marker = editorEl.querySelector('.material-insertion-marker')
+            marker.parentNode.removeChild(marker)
+        }
+        // if none of the blocks is focused, it must be the title that has the focus
+        else {
+
+        }
     }
     onClickAddExistingMaterial() {
         /**
@@ -1007,7 +1014,7 @@ class controller extends Controller {
             html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
-        const insertingAtMarker = this.index === window.embedInsertionChapterIdx
+        const insertingAtMarker = window.embedInsertionChapterIdx
         const editorElements = this.getEditorElements()
         const editorEl = insertingAtMarker
             ? editorElements[window.embedInsertionBlockIdx]
