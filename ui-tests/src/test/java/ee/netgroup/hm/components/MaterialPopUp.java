@@ -39,13 +39,13 @@ public class MaterialPopUp extends Component{
 	private By insertFile = By.xpath("//span[@data-translate='FILE_WORD']");
 	
 	
-	public MaterialPopUp setRandomHyperLink() {
+	public MaterialPopUp setHyperLink() {
 		getDriver().findElement(linkField).clear();
 		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateRandomUrl());
 		return this;
 	}
 	
-	public MaterialPopUp setHyperLink() {
+	public MaterialPopUp setNewHyperLink() {
 		getDriver().findElement(linkField).clear();
 		getDriver().findElement(linkField).sendKeys(newMaterialUrl);
 		Helpers.waitForMilliseconds(2000);

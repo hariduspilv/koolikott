@@ -74,7 +74,7 @@ public class AdminDashboardTests {
 		String materialUrl  = goToLandingPage()	
 				.chooseUserType("Admin")
 				.clickAddMaterial()
-				.setHyperLink()
+				.setNewHyperLink()
 				.setMaterialTitle()
 				.addDescription()
 				.selectEducation()
@@ -86,7 +86,7 @@ public class AdminDashboardTests {
 				.markNewMaterialAsReviewed()
 				.clickActionsMenu()
 				.clickEditMaterial()
-				.setRandomHyperLink()
+				.setHyperLink()
 				.clickUpdateMaterial()
 				.markChangesDeclined()
 				.getMaterialUrlText();
