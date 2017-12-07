@@ -4,7 +4,6 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.util.Random;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -27,19 +26,19 @@ public class Helpers extends SeleniumUser{
 	}
 	
 	 public static void waitForVisibility(By locator) {
-	        WebDriverWait wait = new WebDriverWait(getDriver(), 50);
-	        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));   
+		 WebDriverWait wait = new WebDriverWait(getDriver(), 50);
+	     wait.until(ExpectedConditions.visibilityOfElementLocated(locator));   
 	}
 	 
 	 public static void waitForClickable(By locator) {
-	        WebDriverWait wait = new WebDriverWait(getDriver(), 20);
-	        wait.until(ExpectedConditions.elementToBeClickable(locator));
+	     WebDriverWait wait = new WebDriverWait(getDriver(), 20);
+	     wait.until(ExpectedConditions.elementToBeClickable(locator));
 	 }
 	 
-		public static String randomElement(String[] array) {
-			String randomElement = array[new Random().nextInt(array.length)];
-			return randomElement;
-		}
+	public static String randomElement(String[] array) {
+		String randomElement = array[new Random().nextInt(array.length)];
+		return randomElement;
+	}
 	
 	public static void uploadFile() {
 
@@ -85,24 +84,6 @@ public class Helpers extends SeleniumUser{
 		builder.moveToElement(selectElement).perform();
 	}
 
-	public static String generateRandomUrl(int length) {
-		String allowedChars = "abcdefghijklmnopqrstuvwxyz" + // alphabets
-				"1234567890"; // numbers
-		String url = "";
-		String temp = RandomStringUtils.random(length, allowedChars);
-		url = temp.substring(0, temp.length() - 9) + ".com"; // .sendKeys(Helpers.generateEmail(30));
-		return url;
-	}
-
-	public static CharSequence generateRegisterNumber(int length) {
-		String allowedChars = "ABCDEFGHIJKLMNOPRSTUQWXZV" + // alphabets
-				"1234567890"; // numbers
-		String regnumber = "";
-		String temp = RandomStringUtils.random(length, allowedChars);
-		regnumber = temp.substring(0, temp.length() - 9); // .sendKeys(Helpers.generateRegisterNumber(20));
-		return regnumber;
-	}
-
 	public static void scrollDownToView(By locator) {
 		WebElement element = getDriver().findElement(locator);
 		Actions actions = new Actions(getDriver());
@@ -115,12 +96,22 @@ public class Helpers extends SeleniumUser{
         WebDriverWait wait = new WebDriverWait(getDriver(), 20);
         wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
+	
+	public static String generateRandomUrl() {
+		int length = 30;
+		String allowedChars = "abcdefghijklmnopqrstuvwxyz" + // alphabets
+				"1234567890"; // numbers
+		String url = "";
+		String temp = RandomStringUtils.random(length, allowedChars);
+		url = temp.substring(0, temp.length() - 9) + ".com"; // .sendKeys(Helpers.generateEmail(30));
+		return url;
+	}
 
 	public static String generateUrl() {
-		int length = 4;
+		int length = 20;
 		String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + // alphabets
 				"1234567890"; // numbers
-		String newGeneratedUrl = "https://www.netgroup"+RandomStringUtils.random(length, allowedChars)+".ee";
+		String newGeneratedUrl = "https://www.NGautomaattest"+RandomStringUtils.random(length, allowedChars)+".ee";
 		return newGeneratedUrl;
 	}
 

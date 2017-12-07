@@ -2,9 +2,9 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import ee.netgroup.hm.components.MaterialPopUp;
 import ee.netgroup.hm.components.Comments;
 import ee.netgroup.hm.components.ConfirmationPopup;
-import ee.netgroup.hm.components.EditMaterialPopUp;
 import ee.netgroup.hm.components.ReportImproperPopUp;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Constants;
@@ -55,10 +55,10 @@ public class MaterialPage extends Page{
 		return this;
 	}
 
-	public EditMaterialPopUp clickEditMaterial() {
+	public MaterialPopUp clickEditMaterial() {
 		Helpers.waitForClickable(editMaterial);
 		getDriver().findElement(editMaterial).sendKeys(Keys.ENTER);
-		return new EditMaterialPopUp();
+		return new MaterialPopUp();
 	}
 
 	public String getCreatorName() {

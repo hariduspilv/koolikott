@@ -2,7 +2,7 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import ee.netgroup.hm.components.AddMaterialPopUp;
+import ee.netgroup.hm.components.MaterialPopUp;
 import ee.netgroup.hm.components.PortfolioPrivacyPopUp;
 import ee.netgroup.hm.components.Search;
 import ee.netgroup.hm.helpers.Arrays;
@@ -136,11 +136,11 @@ public class EditPortfolioPage extends Page{
 		return this;
 	}
 	
-	public AddMaterialPopUp clickAddNewMaterial() {
+	public MaterialPopUp clickAddNewMaterial() {
 		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForVisibility(newMaterial);
 		getDriver().findElement(newMaterial).click();
-		return new AddMaterialPopUp();
+		return new MaterialPopUp();
 	}
 
 	public Search clickAddExistingMaterial() {

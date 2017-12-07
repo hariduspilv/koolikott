@@ -8,13 +8,12 @@ import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.EditPortfolioPage;
 import ee.netgroup.hm.page.MaterialPage;
 
-public class AddMaterialPopUp extends Component{
+public class MaterialPopUp extends Component{
 	
 	private By linkField = By.id("add-material-url-input");
 	private By inserTitle = By.name("title");
-	private By insertPhoto = By.xpath("//span/md-icon[text()='insert_photo']");
-	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
-	private By nextStep = By.xpath("//button[@data-ng-click='step.nextStep()']");
+	private By insertPhoto = By.xpath("//div[@ng-model='newPicture']"); 
+	private By descriptionField = By.id("add-material-description-input");
 	private By educationalContext = By.name("taxonForm");
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
@@ -22,46 +21,55 @@ public class AddMaterialPopUp extends Component{
 	private By targetGroup = By.xpath("//form[1][contains(@name, 'targetGroupForm')]");
 	private By selectedTargetGroup = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
 	private By closeButton = By.xpath("//md-icon[@aria-label='close']");
-	private By createMaterialButton = By.id("add-material-create-button");
+	private By createMaterialButton = By.id("create-material-button");
 	private By deletedMaterialValidationError = By.xpath("//div[@class='md-input-message-animation']");
 	private By existingMaterialValidationError = By.cssSelector("div.md-input-message-animation > span");
 	private By authorFirstName = By.id("material-author-0-name");
-	private By authorSurname= By.xpath("//input[@data-ng-model='author.surname']");
+	private By authorSurname= By.name("surname");
 	private By publisherName = By.xpath("//input[@data-ng-model='material.publishers[0].name']");
-	private By insertTag = By.xpath("(//input[starts-with(@id, 'input-')])");
 	public static String newMaterialUrl = Helpers.generateUrl();
+	private By illustrationAuthorCheckbox = By.xpath("//md-checkbox[@data-ng-click='$ctrl.setAuthorToUser()']");
+	private By illustrationSource = By.name("pictureSource");
+	private By illustrationLicenseType = By.id("pictureLicenseTypeSelect");
+	private By additionalData = By.id("open-additional-info");
+	private By reviewLink = By.name("peerReview");
+	//private By materialType = By.id("resourceTypeSelect");
+	private By selectedLanguage = By.cssSelector("#add-material-language-select md-select-value.md-select-value div.md-text span");
+	private By updateMaterialButton = By.id("create-material-button");
+	private By insertFile = By.xpath("//span[@data-translate='FILE_WORD']");
 	
 	
-	public AddMaterialPopUp setHyperLink() {
+	public MaterialPopUp setRandomHyperLink() {
 		getDriver().findElement(linkField).clear();
-		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateRandomUrl(30));
+		getDriver().findElement(linkField).sendKeys("http://a" + Helpers.generateRandomUrl());
+		return this;
+	}
+	
+	public MaterialPopUp setHyperLink() {
+		getDriver().findElement(linkField).clear();
+		getDriver().findElement(linkField).sendKeys(newMaterialUrl);
+		Helpers.waitForMilliseconds(2000);
 		return this;
 	}
 
-	public AddMaterialPopUp setMaterialTitle() {
+	public MaterialPopUp setMaterialTitle() {
 		getDriver().findElement(inserTitle).sendKeys(Helpers.randomElement(Arrays.materialTitlesArray));
 		return this;
 	}
 
-	public AddMaterialPopUp uploadPhoto() {
+	public MaterialPopUp uploadPhoto() {
 		Helpers.waitForClickable(insertPhoto);
 		getDriver().findElement(insertPhoto).click();
 		Helpers.uploadFile();
 		return this;
 	}
 
-	public AddMaterialPopUp addDescription() {
+	public MaterialPopUp addDescription() {
 		getDriver().findElement(descriptionField).sendKeys(Helpers.randomElement(Arrays.descriptionArray));
 		return this;
 	}
 
-	public AddMaterialPopUp clickNextStep() {
-		Helpers.waitForClickable(nextStep);
-		getDriver().findElement(nextStep).click();
-		return this;
-	}
-
-	public AddMaterialPopUp selectEducation() {
+	public MaterialPopUp selectEducation() {
 		Helpers.waitForVisibility(educationalContext);
 		getDriver().findElement(educationalContext).click();
 		getDriver().findElements(basicEducation).get(1).click();
@@ -69,27 +77,28 @@ public class AddMaterialPopUp extends Component{
 		return this;
 	}
 
-	public AddMaterialPopUp selectSubjectArea() {
+	public MaterialPopUp selectSubjectArea() {
 		getDriver().findElement(subjectArea).click();
 		getDriver().findElement(subject).click();
 		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
-	public AddMaterialPopUp selectTargetGroup() {
+	public MaterialPopUp selectTargetGroup() {
 		Helpers.waitForClickable(targetGroup);
 		getDriver().findElement(targetGroup).click();
 		getDriver().findElement(selectedTargetGroup).click();
-		getDriver().findElements(closeButton).get(2).click();
+		getDriver().findElements(closeButton).get(1).click();
 		return this;
 	}
 
 	public MaterialPage clickCreateMaterial() {
+		Helpers.moveToElement(createMaterialButton);
 		getDriver().findElement(createMaterialButton).click();
 		return new MaterialPage();
 	}
 
-	public AddMaterialPopUp insertDeletedMaterialUrl() {
+	public MaterialPopUp insertDeletedMaterialUrl() {
 		getDriver().findElement(linkField).sendKeys(Constants.deletedMaterial);
 		return this;
 	}
@@ -99,7 +108,7 @@ public class AddMaterialPopUp extends Component{
 		return getDriver().findElement(deletedMaterialValidationError).getText();
 	}
 
-	public AddMaterialPopUp insertExistingMaterialUrl() {
+	public MaterialPopUp insertExistingMaterialUrl() {
 		getDriver().findElement(linkField).sendKeys(Constants.existingMaterial);
 		return this;
 	}
@@ -109,19 +118,21 @@ public class AddMaterialPopUp extends Component{
 		return getDriver().findElement(existingMaterialValidationError).getText();
 	}
 
-	public AddMaterialPopUp setAuthorFirstName() {
+	public MaterialPopUp setAuthorFirstName() {
+		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(authorFirstName).clear();
 		getDriver().findElement(authorFirstName).sendKeys(Helpers.randomElement(Arrays.firstNamesArray));
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
-	public AddMaterialPopUp setAuthorSurName() {
+	public MaterialPopUp setAuthorSurName() {
 		getDriver().findElement(authorSurname).clear();
 		getDriver().findElement(authorSurname).sendKeys(Helpers.randomElement(Arrays.SurnamesArray));
 		return this;
 	}
 
-	public AddMaterialPopUp setPublisherName() {
+	public MaterialPopUp setPublisherName() {
 		getDriver().findElement(publisherName).sendKeys("Pegasus");
 		return this;
 	}
@@ -131,17 +142,56 @@ public class AddMaterialPopUp extends Component{
 		return new EditPortfolioPage();
 	}
 
-	public AddMaterialPopUp insertTagAndEnter() {
-		getDriver().findElement(insertTag).sendKeys(Helpers.generateRegisterNumber(18));
-		getDriver().findElement(insertTag).sendKeys(Keys.ENTER);
+	public MaterialPopUp checkIllustrationIamAuthor() {
+		getDriver().findElement(illustrationAuthorCheckbox).click();
+		return this;
+	}
+
+	public MaterialPopUp addIllustrationSource() {
+		getDriver().findElement(illustrationSource).sendKeys("Allikas Automaattest");
+		return this;
+	}
+
+	public MaterialPopUp addIllustrationLicenceType() {
+		
+		getDriver().findElement(illustrationLicenseType).click();
+		getDriver().findElement(By.xpath("//md-option[contains(text(), 'Ei oska valida')]")).click();
+		return this;
+	}
+
+	public MaterialPopUp clickAdditionalData() {
+		getDriver().findElement(additionalData).click();
+		return this;
+	}
+
+	public MaterialPopUp addReviewLink() {
+		getDriver().findElement(reviewLink).sendKeys(Helpers.generateUrl());
+		return this;
+	}
+/*
+	public MaterialPopUp addMaterialType() {
+		getDriver().findElement(materialType).click();
+		By typeOption = By.cssSelector("md-option[ng-value='resourceType']");
+		getDriver().findElements(typeOption).get(2).click();
+		return this;
+	}*/
+	
+	public String getMaterialLanguage() {
+		return getDriver().findElement(selectedLanguage).getText();
+	}
+
+	public MaterialPage clickUpdateMaterial() {
+		getDriver().findElement(updateMaterialButton).sendKeys(Keys.ENTER);
 		Helpers.waitForMilliseconds(1000);
+		return new MaterialPage();
+	}
+
+	public MaterialPopUp uploadFile() {
+		Helpers.waitForClickable(insertFile);
+		getDriver().findElement(insertFile).click();
+		Helpers.uploadFile();
 		return this;
 	}
 	
-	public AddMaterialPopUp setNewHyperLink() {
-		getDriver().findElement(linkField).clear();
-		getDriver().findElement(linkField).sendKeys(newMaterialUrl);
-		return this;
-	}
 
 }

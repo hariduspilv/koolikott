@@ -6,7 +6,7 @@ public class Constants {
 	
 
 	public static String landingPage = "https://oxygen.netgroupdigital.com/";
-	public static String materialPageUrl = "https://oxygen.netgroupdigital.com/material?id=11632";
+	public static String materialWithCommentsUrl = "https://oxygen.netgroupdigital.com/material?id=11632";
 	
 	// Users
 	public static String admin = "https://oxygen.netgroupdigital.com/dev/login/89898989898";
