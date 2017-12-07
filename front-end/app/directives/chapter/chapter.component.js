@@ -1077,7 +1077,7 @@ class controller extends Controller {
             html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
-        const insertingAtMarker = window.embedInsertionChapterIdx
+        const insertingAtMarker = typeof window.embedInsertionBlockIdx === 'number'
         const editorElements = this.getEditorElements()
         const editorEl = insertingAtMarker
             ? editorElements[window.embedInsertionBlockIdx]
