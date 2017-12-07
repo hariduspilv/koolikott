@@ -879,11 +879,11 @@ class controller extends Controller {
         this.$timeout.cancel(this.blurTimer)
 
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
-        const deleteBlock = () => {
-            this.updateState()
-            blocks.splice(focusedBlockIdx, 1)
-            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1), false, true)
-        }
+        const deleteBlock = () =>
+            this.updateState(() => {
+                blocks.splice(focusedBlockIdx, 1)
+                this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1), false, true)
+            })
 
         if (focusedBlockIdx !== null) {
             const { innerHTML } = this.getEditorElements()[focusedBlockIdx]
