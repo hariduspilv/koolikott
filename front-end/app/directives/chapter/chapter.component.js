@@ -799,6 +799,7 @@ class controller extends Controller {
                 const { length } = range.toString()
 
                 editor.importSelection({ start: length, end: length })
+                editor.getExtensionByName('toolbar').checkState()
             }
         }
     }
