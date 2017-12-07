@@ -127,7 +127,7 @@ angular.module('koolikottApp').factory('taxonService', ['eventService',
         }
 
         function getTaxonTranslationKey(taxon) {
-            if (taxon.level = ".TaxonDTO") {
+            if (taxon.level == ".TaxonDTO") {
                 taxon = getFullTaxon(taxon.id);
             }
 

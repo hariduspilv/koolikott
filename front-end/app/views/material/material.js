@@ -213,11 +213,6 @@ angular.module('koolikottApp')
                 $location.url(searchService.getURL());
             };
 
-            $scope.showSourceFullscreen = ($event, ctrl) => {
-                $event.preventDefault();
-                ctrl.toggleFullscreen();
-            };
-
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();
@@ -251,15 +246,14 @@ angular.module('koolikottApp')
             }
 
             function getSignedUserDataSuccess(data) {
-                var url = $scope.material.source;
-                var v = encodeURIComponent(data);
-                url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + v;
-
-                $scope.material.iframeSource = url;
+                let url = $scope.material.source;
+                url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + encodeURIComponent(data);
+                $scope.material.linkSource = url;
             }
 
             function getSignedUserDataFail(data, status) {
                 console.log("Failed to get signed user data.")
+                $scope.material.linkSource = $scope.material.source;
             }
 
             $scope.edit = () => {

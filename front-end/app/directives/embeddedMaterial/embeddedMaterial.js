@@ -11,7 +11,9 @@ class controller extends Controller {
         this.$scope.listItemDown = this.listItemDown.bind(this)
         this.$scope.navigateToMaterial = this.navigateToMaterial.bind(this)
         this.$scope.fallbackToLink = this.fallbackToLink.bind(this)
-        this.$scope.showSourceFullscreen = this.showSourceFullscreen.bind(this)
+        this.$scope.getSignedUserData = this.getSignedUserData.bind(this)
+        this.$scope.getSignedUserDataSuccess = this.getSignedUserDataSuccess.bind(this)
+        this.$scope.getSignedUserDataFail = this.getSignedUserDataFail.bind(this)
 
         this.$scope.$watch('material', () => {
             if (this.$scope.material && this.$scope.material.id) {
@@ -98,10 +100,6 @@ class controller extends Controller {
     fallbackToLink() {
         return this.$scope.isEditPortfolioMode || !this.$scope.sourceType || this.$scope.sourceType === 'LINK'
     }
-    showSourceFullscreen($event, ctrl) {
-        $event.preventDefault()
-        ctrl.toggleFullscreen()
-    }
     videoSetup(redo) {
         let extension = this.getMaterialSource(this.$scope.material).split('.').pop()
         const video = document.createElement('video')
@@ -177,7 +175,7 @@ class controller extends Controller {
                 else
                 if (!redo) {
                     console.log('embeddedMaterial.js: sourceTypeAndPdfSetup AGAIN (EBOOK)')
-                    
+
                     this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
                 }
                 break
@@ -190,17 +188,17 @@ class controller extends Controller {
                 if (this.$scope.material.source.startsWith(baseUrl)) {
                     this.$scope.sourceType = 'PDF'
                     this.$scope.material.PDFLink = this.pdfjsLink(this.$scope.material.source)
-                    
+
                     const pdfContainer = document.querySelector('.embed-pdf-' + this.$scope.material.id)
 
                     if (pdfContainer) {
                         console.log('pdf element setup' + this.$scope.material.PDFLink)
-                        
+
                         pdfContainer.innerHTML = this.iFrameLink(this.$scope.material.PDFLink)
                     } else
                     if (!redo) {
                         console.log('embeddedMaterial.js: sourceTypeAndPdfSetup AGAIN (PDF)')
-                        
+
                         this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
                     }
                 } else {
@@ -208,11 +206,9 @@ class controller extends Controller {
                     this.$scope.sourceType = 'PDF'
                     this.$scope.fallbackType = 'LINK'
 
-                    console.log('proxy tree')
-                    
                     if (this.$scope.isProxySource) {
                         console.log('material source: ' +this.$scope.material.source)
-                        
+
                         this.proxyUrl = baseUrl + '/rest/material/externalMaterial?url=' + encodeURIComponent(this.$scope.material.source)
                         this.serverCallService
                             .makeHead(this.proxyUrl)
@@ -232,47 +228,57 @@ class controller extends Controller {
                             data.html.contains('<iframe')
                                 ? this.$scope.embeddedDataIframe = data.html.replace('http:', '')
                                 : this.$scope.embeddedData = data.html.replace('http:', '')
-                        } else
-                        if (this.$scope.material.source)
-                            this.$scope.iframeSource = this.$sce.trustAsResourceUrl(
-                                this.$scope.material.source.replace('http:', '')
-                            )
+                        } else if (this.$scope.material.source){
+                            this.$scope.sourceType = 'LINK';
+                            //foreign repositories need to have dop_token query param
+                            if (this.$scope.embeddable && !this.$scope.material.linkSource){
+                                this.getSignedUserData();
+                            }
+                        }
                     })
         }
     }
+    getSignedUserData() {
+        this.serverCallService.makeGet("rest/user/getSignedUserData", {}, this.getSignedUserDataSuccess, this.getSignedUserDataFail);
+    }
+
+    getSignedUserDataSuccess(data) {
+        let url = this.$scope.material.source;
+        url += (url.split('?')[1] ? '&' : '?') + "dop_token=" + encodeURIComponent(data);
+        this.$scope.material.linkSource = url;
+    }
+
+    getSignedUserDataFail(data, status) {
+        console.log("Failed to get signed user data.")
+        this.$scope.material.linkSource = this.$scope.material.source;
+    }
+
     probeContentSuccess({ headers }) {
         console.log('Content probing succeeded!')
-        console.log('Content probing succeeded! twice is the charm')
 
         const { 'content-disposition': contentDisposition } = headers()
-        
+
         if (!contentDisposition) {
             console.log('content is not dispositioned')
-            
+
             this.$scope.sourceType = this.$scope.fallbackType
             return
         }
 
         const filename = contentDisposition.match(/filename="(.+)"/)[1]
-        
+
         if (this.getEmbedType({ source: filename }) === 'PDF') {
-            console.log('it is pdf baby')
-            
             this.$scope.material.PDFLink = this.pdfjsLink(encodeURIComponent(this.proxyUrl))
-            
             console.log('proxy pdf link' + this.$scope.material.PDFLink)
-            
             const pdfContainer = document.querySelector('.embed-pdf-' + this.$scope.material.id)
 
             if (pdfContainer) {
                 console.log("proxy pdf element setup")
-                
                 pdfContainer.innerHTML(this.iFrameLink(this.$scope.material.PDFLink))
             } else
                 this.$timeout(() => this.sourceTypeAndPdfSetup(true), 100)
         } else {
-            console.log('everything is very sad')
-            
+            console.log('proxy is not possible')
             this.$scope.sourceType = this.$scope.fallbackType
         }
     }
