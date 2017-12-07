@@ -659,7 +659,15 @@ class controller extends Controller {
                             <a href="${source || uploadedFile.url || ''}" target="_blank">${source || uploadedFile.url || ''}</a>`
                         caption.appendChild(sourceLink)
 
-                        embed.appendChild(fragment)
+                        if (this.isEditMode)
+                            embed.appendChild(fragment)
+                        else {
+                            const link = document.createElement('a')
+                            link.href = `/material?id=${id}`
+                            link.appendChild(fragment)
+                            embed.appendChild(link)
+                        }
+
                         embed.classList.add('chapter-embed-card--loaded')
                         embed.classList.remove('chapter-embed-card--loading')
                     })
