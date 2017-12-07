@@ -150,14 +150,14 @@ class controller extends Controller {
     }
     addTagSuccess(learningObject) {
         if (this.learningObject) {
-            learningObject.picture = this.learningObject.picture
-            this.learningObject = learningObject
+            const { tag, taxon, targetGroups, resourceTypes, changed } = learningObject
+            Object.assign(this.learningObject, { tag, taxon, targetGroups, resourceTypes, changed })
 
             if (!this.learningObject.source && learningObject.uploadedFile)
                 this.learningObject.source = learningObject.uploadedFile.url
 
-            this.isPortfolio(learningObject) ? this.storageService.setPortfolio(learningObject) :
-            this.isMaterial(learningObject) && this.storageService.setMaterial(learningObject)
+            this.isPortfolio(this.learningObject) ? this.storageService.setPortfolio(this.learningObject) :
+            this.isMaterial(this.learningObject) && this.storageService.setMaterial(this.learningObject)
 
             this.getTagUpVotes()
         }
