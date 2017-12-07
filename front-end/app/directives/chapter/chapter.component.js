@@ -68,48 +68,57 @@ MediumEditor.extensions.button.prototype.handleClick = function (evt) {
 
     const action = this.getAction()
     if (action) {
-        if (action === 'bold' || action === 'italic') {
-            const emptySelectionParent = this.getEmptySelectionParent()
+        switch (action) {
+            case 'bold':
+            case 'italic':
+                /**
+                 * In case BOLD or ITALIC button is hit with empty selection wrap the empty selection
+                 * with <b> or <i> or unwrap that element (toggle action).
+                 */
+                const emptySelectionParent = this.getEmptySelectionParent()
+                if (emptySelectionParent) {
+                    const tagName = action === 'bold' ? 'B' : 'I'
+                    const selection = window.getSelection()
 
-            /**
-             * In case BOLD or ITALIC button is hit with empty selection wrap the empty selection
-             * with <b> or <i> or unwrap that element (toggle action).
-             */
-            if (emptySelectionParent) {
-                const tagName = action === 'bold' ? 'B' : 'I'
-                const selection = window.getSelection()
+                    if (selection.rangeCount) {
+                        const range = selection.getRangeAt(0)
+                        const restoreSelection = (emptyEl) => {
+                            range.selectNodeContents(emptyEl)
+                            selection.removeAllRanges()
+                            selection.addRange(range)
+                            this.base.getExtensionByName('toolbar').checkState()
+                        }
+                        const unwrap = (el) => {
+                            const parent = el.parentNode
 
-                if (selection.rangeCount) {
-                    const range = selection.getRangeAt(0)
-                    const restoreSelection = (emptyEl) => {
-                        range.selectNodeContents(emptyEl)
-                        selection.removeAllRanges()
-                        selection.addRange(range)
-                        this.base.getExtensionByName('toolbar').checkState()
+                            while (el.firstChild)
+                                parent.insertBefore(el.firstChild, el)
+
+                            parent.removeChild(el)
+                            return parent
+                        }
+
+                        if (emptySelectionParent.tagName === tagName)
+                            restoreSelection(unwrap(emptySelectionParent))
+                        else if (emptySelectionParent.parentElement.tagName === tagName) {
+                            unwrap(emptySelectionParent.parentElement)
+                            restoreSelection(emptySelectionParent)
+                        } else {
+                            const newNode = document.createElement(tagName)
+                            range.surroundContents(newNode)
+                            restoreSelection(newNode)
+                        }
+                        return
                     }
-                    const unwrap = (el) => {
-                        const parent = el.parentNode
-
-                        while (el.firstChild)
-                            parent.insertBefore(el.firstChild, el)
-
-                        parent.removeChild(el)
-                        return parent
-                    }
-
-                    if (emptySelectionParent.tagName === tagName)
-                        restoreSelection(unwrap(emptySelectionParent))
-                    else if (emptySelectionParent.parentElement.tagName === tagName) {
-                        unwrap(emptySelectionParent.parentElement)
-                        restoreSelection(emptySelectionParent)
-                    } else {
-                        const newNode = document.createElement(tagName)
-                        range.surroundContents(newNode)
-                        restoreSelection(newNode)
-                    }
-                    return
                 }
-            }
+                break
+            case 'insertunorderedlist':
+                /**
+                 * When untoggling a list item it is not automatically wrapped in a <p>.
+                 */
+                const blockContainer = MediumEditor.util.getTopBlockContainer(MediumEditor.selection.getSelectionStart(document))
+                if (blockContainer.tagName === 'UL')
+                    MediumEditor.util.execFormatBlock(document, 'p')
         }
         this.execAction(action)
     }
@@ -190,7 +199,8 @@ MediumEditor.util.execFormatBlock = function (doc, tagName) {
             if (blockContainer.nodeName === 'UL') {
                 // refresh the tollbar state
                 setTimeout(() => {
-                    const editor = MediumEditor.getEditorFromElement(this.getContainerEditorElement(blockContainer))
+                    const edirorEl = this.getContainerEditorElement(blockContainer)
+                    const editor = edirorEl && MediumEditor.getEditorFromElement(edirorEl)
                     if (editor)
                         editor.getExtensionByName('toolbar').checkState()
                 }, 100)
@@ -232,7 +242,7 @@ class controller extends Controller {
             this.$scope.chapter = chapter.currentValue
 
             if (!isFirstChange)
-                this.updateState()
+                this.updateEditors()
 
             this.isEditMode
                 ? !this.$scope.chapter.title && (this.$scope.chapter.title = '')
@@ -799,6 +809,7 @@ class controller extends Controller {
                 const { length } = range.toString()
 
                 editor.importSelection({ start: length, end: length })
+                editor.getExtensionByName('toolbar').checkState()
             }
         }
     }
@@ -878,11 +889,11 @@ class controller extends Controller {
         this.$timeout.cancel(this.blurTimer)
 
         const { focusedBlockIdx, chapter: { blocks } } = this.$scope
-        const deleteBlock = () => {
-            this.updateState()
-            blocks.splice(focusedBlockIdx, 1)
-            this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1), false, true)
-        }
+        const deleteBlock = () =>
+            this.updateState(() => {
+                blocks.splice(focusedBlockIdx, 1)
+                this.focusBlock(Math.min(focusedBlockIdx, blocks.length - 1), false, true)
+            })
 
         if (focusedBlockIdx !== null) {
             const { innerHTML } = this.getEditorElements()[focusedBlockIdx]
@@ -945,16 +956,23 @@ class controller extends Controller {
         }
     }
     beforeAddMaterial() {
-        this.insertHtmlAfterSelection(EMBED_INSERTION_MARKER)
-
-        const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
-
+        this.clearEmbedInsertionData()
         window.embedInsertionChapterIdx = this.index
-        window.embedInsertionBlockIdx = this.$scope.focusedBlockIdx
-        window.embedInsertionBlockContents = editorEl.innerHTML
 
-        const marker = editorEl.querySelector('.material-insertion-marker')
-        marker.parentNode.removeChild(marker)
+        if (this.$scope.focusedBlockIdx) {
+            const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
+
+            this.insertHtmlAfterSelection(EMBED_INSERTION_MARKER)
+            window.embedInsertionBlockIdx = this.$scope.focusedBlockIdx
+            window.embedInsertionBlockContents = editorEl.innerHTML
+
+            const marker = editorEl.querySelector('.material-insertion-marker')
+            marker.parentNode.removeChild(marker)
+        }
+        // if none of the blocks is focused, it must be the title that has the focus
+        else {
+
+        }
     }
     onClickAddExistingMaterial() {
         /**
@@ -1006,7 +1024,7 @@ class controller extends Controller {
             html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
-        const insertingAtMarker = this.index === window.embedInsertionChapterIdx
+        const insertingAtMarker = window.embedInsertionChapterIdx
         const editorElements = this.getEditorElements()
         const editorEl = insertingAtMarker
             ? editorElements[window.embedInsertionBlockIdx]

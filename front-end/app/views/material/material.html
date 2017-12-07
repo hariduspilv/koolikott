@@ -49,7 +49,7 @@
                       <span data-translate="BUTTON_RESTORE"></span>
                     </md-button>
                   </md-menu-item>
-                  <md-menu-item data-ng-if="isAdmin() && !material.deleted && !isAdminButtonsShowing()">
+                  <md-menu-item data-ng-if="(isAdmin() || isModerator()) && !material.deleted && !isAdminButtonsShowing()">
                     <md-button data-ng-click="confirmMaterialDeletion()">
                       <md-icon md-menu-align-target>delete</md-icon>
                       <span data-translate="MATERIAL_DELETE"></span>

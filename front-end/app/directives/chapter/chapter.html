@@ -179,7 +179,7 @@
     data-ng-hide="$ctrl.numChapters < 2"
     >
     <div>
-      <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-style="{visibility: $ctrl.index !== 0 ? 'visible' : 'hidden'}">
+      <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-if="$ctrl.index !== 0">
         <md-icon>arrow_upward</md-icon>
       </md-button>
       <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-if="$ctrl.index !== $ctrl.numChapters - 1">

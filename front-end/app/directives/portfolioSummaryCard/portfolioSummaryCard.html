@@ -34,7 +34,7 @@
                   <span data-translate="PORTFOLIO_DELETE"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="isAdminOrModerator() && portfolio.deleted && !isAdminButtonsShowing()">
+              <md-menu-item data-ng-if="isAdmin() && portfolio.deleted && !isAdminButtonsShowing()">
                 <md-button data-ng-click="restorePortfolio()">
                   <md-icon md-menu-align-target>undo</md-icon>
                   <span data-translate="BUTTON_RESTORE"></span>
