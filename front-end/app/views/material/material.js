@@ -301,8 +301,9 @@ angular.module('koolikottApp')
             };
 
             function deleteMaterial(serverCallService, toastService, $scope, $rootScope) {
+                const { id, type } = $scope.material;
                 serverCallService
-                    .makeDelete('rest/material/' + $scope.material.id)
+                    .makePost('rest/material/delete', { id, type })
                     .then(() => {
                         toastService.showOnRouteChange('MATERIAL_DELETED')
                         $scope.material.deleted = true
