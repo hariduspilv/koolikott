@@ -145,7 +145,7 @@
                 data-ng-model="author.name"
                 id="material-author-{{$index}}-name"
                 data-ng-required="!material.publishers[0].name && $index === 0"
-                data-ng-disabled="isUserAuthorFirstAuthor"
+                data-ng-disabled="isUserAuthorFirstAuthor && $index === 0"
                 name="firstname"
                 md-maxlength="50"
               >
@@ -158,7 +158,7 @@
               <input
                data-ng-model="author.surname"
                data-ng-required="(!material.publishers[0].name || author.name) && $index === 0"
-               data-ng-disabled="isUserAuthorFirstAuthor"
+               data-ng-disabled="isUserAuthorFirstAuthor && $index === 0"
                name="surname"
                md-maxlength="50"
               >
