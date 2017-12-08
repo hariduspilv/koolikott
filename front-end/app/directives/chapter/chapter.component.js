@@ -971,7 +971,7 @@ class controller extends Controller {
         this.clearEmbedInsertionData()
         window.embedInsertionChapterIdx = this.index
 
-        if (this.$scope.focusedBlockIdx) {
+        if (typeof this.$scope.focusedBlockIdx === 'number') {
             const editorEl = this.getEditorElements()[this.$scope.focusedBlockIdx]
 
             this.insertHtmlAfterSelection(EMBED_INSERTION_MARKER)
@@ -980,10 +980,6 @@ class controller extends Controller {
 
             const marker = editorEl.querySelector('.material-insertion-marker')
             marker.parentNode.removeChild(marker)
-        }
-        // if none of the blocks is focused, it must be the title that has the focus
-        else {
-
         }
     }
     onClickAddExistingMaterial() {
