@@ -327,7 +327,8 @@ class controller extends Controller {
             this.$scope.$watch('chapter.blocks', this.onBlockChanges.bind(this), true)
 
             this.onClickOutside = this.onClickOutside.bind(this)
-            document.addEventListener('click', this.onClickOutside)
+            document.addEventListener('mousedown', this.onClickOutside)
+            document.addEventListener('touchstart', this.onClickOutside)
 
             this.onResize = () => requestAnimationFrame(this.calcSizes.bind(this))
             window.addEventListener('resize', this.onResize)
