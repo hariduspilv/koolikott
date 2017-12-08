@@ -200,6 +200,12 @@ if (isIE()) {
         return ul
     }
 }
+MediumEditor.extensions.placeholder.prototype.showPlaceholder = (el) => {
+    if (el) {
+        el.classList.add('medium-editor-placeholder')
+        el.classList.remove('medium-editor-placeholder-relative')
+    }
+}
 /**
  * Overwriting Medium Editor's util methods to suit our needs.
  * The original method accepts a blacklist of attributes that should be removed on all elements
