@@ -353,13 +353,6 @@ md-input-container.chapter-title {
       position: sticky;
       top: $md-toolbar-height;
       left: 0;
-
-      &.is-at-bottom {
-        position: absolute;
-        bottom: 0;
-        top: auto !important;
-        left: 0 !important;
-      }
     }
   }
 
@@ -382,12 +375,6 @@ md-input-container.chapter-title {
 
     .is-focused & {
       height: 7.875rem;
-    }
-
-    &.is-at-bottom {
-      position: absolute;
-      top: auto;
-      bottom: 0;
     }
 
     .portfolio-chapter:not(.is-focused) & {
@@ -432,12 +419,6 @@ md-input-container.chapter-title {
     }
   }
 }
-/**
- * If .chapter-toolbar which is sticky gets additional class .is-at-bottom (and hence position: absolute)
- * then it's taken out of the normal content flow and the toolbar no longer takes up space and the
- * whole .portfolio-chapter's height shrinks (by 7.875rem). This 1px wide element that we float next
- * to the sticky toolbar prevents that.
- */
 .chapter-toolbar-helper {
   width: 1px;
   height: 0;
