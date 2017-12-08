@@ -10,8 +10,7 @@ angular.module('koolikottApp')
                 $scope.isTouched = {};
                 $scope.isSummaryVisible = false;
                 $scope.charactersRemaining = 850;
-
-                var uploadingPicture = false;
+                $scope.uploadingPicture = false;
 
                 function init() {
                     var portfolio = storageService.getEmptyPortfolio();
@@ -42,7 +41,6 @@ angular.module('koolikottApp')
                 }
 
                 $scope.cancel = function () {
-                    $rootScope.newPortfolioCreated = false;
                     $mdDialog.hide();
                 };
 
@@ -50,8 +48,15 @@ angular.module('koolikottApp')
                     if (newFile && newFile[0] && newFile[0].$error) {
                         processInvalidUpload();
                     } else if (newFile && newFile[0] && !newFile[0].$error) {
-                        uploadingPicture = true;
-                        pictureUploadService.upload(newFile[0], pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
+                        $scope.uploadingPicture = true;
+                        pictureUploadService.upload(newFile[0]).then(function (response) {
+                            pictureUploadSuccess(response.data);
+                        }).catch(function () {
+                            pictureUploadFailed();
+                        }).finally(function () {
+                            pictureUploadFinally()
+                        });
+
                     }
                 };
 
@@ -72,17 +77,17 @@ angular.module('koolikottApp')
 
                 function pictureUploadFinally() {
                     $scope.showErrorOverlay = false;
-                    uploadingPicture = false;
+                    $scope.uploadingPicture = false;
                 }
 
                 $scope.create = function () {
                     $scope.isSaving = true;
 
-                    if (uploadingPicture) {
+                    if ($scope.uploadingPicture) {
                         $timeout($scope.create, 500, false);
                     } else {
                         var url = "rest/portfolio/create";
-                        serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                        serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess.bind(null, true), createPortfolioFailed, savePortfolioFinally);
                     }
                 };
 
@@ -90,30 +95,27 @@ angular.module('koolikottApp')
                     $scope.newPortfolio.taxons.splice(index, 1);
                 };
 
-                function createPortfolioSuccess(portfolio) {
-                    if (isEmpty(portfolio)) {
-                        createPortfolioFailed();
-                    } else {
-                        eventService.notify("portfolio:reloadTaxonObject");
+                function createPortfolioSuccess(isCreate, portfolio) {
+                    if (portfolio) {
+                        eventService.notify('portfolio:reloadTaxonObject')
 
-                        if (!portfolio.chapters || portfolio.chapters.length === 0) {
-                            portfolio.chapters = [];
-                            portfolio.chapters.push({
-                                title: '',
-                                subchapters: [],
-                                contentRows: [
-                                    {
-                                        learningObjects: []
-                                    }
-                                ],
-                                openCloseChapter: false
-                            });
+                        if (!Array.isArray(portfolio.chapters) || !portfolio.chapters.length)
+                            portfolio.chapters = []
+
+                        storageService.setPortfolio(portfolio)
+                        $mdDialog.hide()
+
+                        if (isCreate) {
+                            const unsubscribe = $rootScope.$on('$locationChangeSuccess', () => {
+                                unsubscribe()
+                                $timeout(() => {
+                                    $rootScope.$broadcast('tags:focusInput')
+                                    $rootScope.$broadcast('tour:start:editPage:firstTime')
+                                })
+                            })
                         }
 
-                        storageService.setPortfolio(portfolio);
-
-                        $mdDialog.hide();
-                        $location.url('/portfolio/edit?id=' + storageService.getPortfolio().id);
+                        $location.url('/portfolio/edit?id=' + portfolio.id)
                     }
                 }
 
@@ -124,7 +126,7 @@ angular.module('koolikottApp')
                 $scope.update = function () {
                     $scope.isSaving = true;
 
-                    if (uploadingPicture) {
+                    if ($scope.uploadingPicture) {
                         $timeout($scope.create, 500, false);
                     } else {
                         var url = "rest/portfolio/update";
@@ -138,7 +140,7 @@ angular.module('koolikottApp')
                             $scope.portfolio.picture = $scope.newPortfolio.picture;
                         }
 
-                        serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess, createPortfolioFailed, savePortfolioFinally);
+                        serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess.bind(null, false), createPortfolioFailed, savePortfolioFinally);
                     }
                 };
 
@@ -169,7 +171,7 @@ angular.module('koolikottApp')
                     $scope.isSaving = false;
                 }
 
-                function isTaxonSet (index) {
+                function isTaxonSet(index) {
                     return $scope.newPortfolio.taxons[index] && $scope.newPortfolio.taxons[index].level && $scope.newPortfolio.taxons[index].level !== ".EducationalContext";
                 };
 

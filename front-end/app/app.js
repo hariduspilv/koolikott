@@ -16,7 +16,8 @@ let app = angular.module('koolikottApp', [
     '720kb.socialshare',
     'ngMessages',
     'angular-tour',
-    'angularScreenfull'
+    'angularScreenfull',
+    'angular-sortable-view'
 ]);
 
 let provideProvider = null;

@@ -95,27 +95,29 @@ public class PortfolioTests {
 				.getNotificationIsSentText();
 		Assert.assertEquals(Constants.reportedText, improperContentIsReported);
 	}
-	/*
+	
 	@Test
-	public void PortfolioTests_editChapterDescription() { //TODO: fix this test after portfolio layout is changed
+	public void PortfolioTests_EditChapterDescription() {
 
-		boolean preTag = goToLandingPage()
-				.chooseUserType("Publisher")
-				.openPortfolio()
-				.clickActionsMenu()
-				.clickEditPortfolio()
-				.addNewChapter()
+		boolean quoteTag = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
 				.addDescription()
 				.clickToSelectDescription()
 				.clickToSelectBold()
 				.clickToSelectItalic()
-				.clickToSelectBulletedList()
-				.clickToSelectNumberedList()
-				.clickToSelectPreFormattedText()
+				.clickToSelectQuoteText()
 				.clickSaveAndExitConfirmationControl() 
-				.getPreFormattedTextTag();
-		assertTrue(preTag);
-	}*/
+				.getQuoteTextTag();
+		assertTrue(quoteTag);
+	}
 	
 	@Test
 	public void PortfolioTests_AddTag_TagIsAddedToPortfolio() {
@@ -185,7 +187,7 @@ public class PortfolioTests {
 	}
 
 	@Test
-	public void PortfolioTests_AddSystemTag_LOChangedBannerIsDisplayed() { // LO=Learning Object
+	public void PortfolioTests_AddSystemTag_LoChangedBannerIsDisplayed() { // LO=Learning Object
 
 		String changedLOBannerText  = goToLandingPage()
 				.chooseUserType("Admin")
@@ -203,6 +205,69 @@ public class PortfolioTests {
 		Assert.assertEquals(Constants.changedLOBannerText, changedLOBannerText);
 	}
 
+	@Test
+	public void PortfolioTests_NarrowChapterBlock_WidthIsNarrow() {
 
+		boolean chapterWidth = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
+				.addDescription()
+				.clickChangeChapterWidth()
+				.clickSaveAndExitConfirmationControl() 
+				.isChapterNarrow();
+		assertTrue(chapterWidth);
+	}
+	
+	@Test
+	public void PortfolioTests_AddSubchapter_SubchapterIsAdded() {
+
+		boolean subchapter = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
+				.addSubchapterTitle()
+				.clickToSelectDescription()
+				.setSubchapterTitleH3()
+				.clickSaveAndExitConfirmationControl() 
+				.isSubchapterDisplayed();
+		assertTrue(subchapter);
+	}
+	
+	@Test
+	public void PortfolioTests_ChangeChapterOrder_OrderIsChanged() {
+
+		String firstChapterTitle = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setSpecificChapterTitle("1")
+				.addNewChapter()
+				.setSecondChapterTitle("2")
+				.clickMoveChapterDown()
+				.clickSaveAndExitConfirmationControl() 
+				.isChapterOrderChanged();
+		Assert.assertEquals("2", firstChapterTitle);
+	}
+	
+	
+	
 
 }

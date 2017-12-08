@@ -13,6 +13,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractDao<Entity extends AbstractEntity> {
@@ -65,6 +66,11 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return findByField(NAME, value);
     }
 
+    public Entity findByNameAny(String value) {
+        List<Entity> list = findByName(Arrays.asList(value));
+        return list.stream().findAny().orElse(null);
+    }
+
     public List<Entity> findByName(List<String> value) {
         if (CollectionUtils.isEmpty(value)) {
             return Lists.newArrayList();
@@ -94,6 +100,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
 
     public Entity findByField(String field1, Object value1, String field2, Object value2, String field3, Object value3) {
         return getSingleResult(getFindByFieldQuery(field1, value1, field2, value2, field3, value3));
+    }
+
+    public Entity findByFieldAny(String field1, Object value1, String field2, Object value2) {
+        return getList(getFindByFieldQuery(field1, value1, field2, value2)).stream().findAny().orElse(null);
     }
 
     public List<Entity> findByFieldList(String field1, Object value1, String field2, Object value2) {

@@ -1,6 +1,10 @@
 .card-lg {
   position: relative;
 
+  md-card-content {
+    padding: $md-padding * 1.5;
+  }
+
   .embed-link{
     box-shadow: none;
   }
@@ -13,14 +17,12 @@
     color: $heading-color;
     font-size: 1.5rem;
     font-weight: normal;
-    text-transform: uppercase;
     margin-top: 0;
   }
   h3 {
     color: $heading-color;
     font-size: $font-medium;
     font-weight: normal;
-    text-transform: uppercase;
   }
   .md-button {
     font-weight: 400;
@@ -30,7 +32,8 @@
     top: 0;
     right: 0;
     z-index: 1;
-    margin-top: $md-padding;
+    margin-top: $md-padding * 1.5;
+
     .md-button {
       margin: 0;
     }
@@ -151,6 +154,10 @@
   }
 }
 
+.learning-object-title {
+  margin: 0;
+}
+
 // embed card by mart laus
 .noPadding {
   padding: 0;
@@ -189,8 +196,8 @@
   padding-top: 0px;
 }
 
-.card-mb-20 {
-  margin-bottom: $md-padding*2;
+.summary-card {
+  margin-bottom: 1.5rem;
 }
 
 // TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
@@ -247,7 +254,7 @@ a.embed-image-padded{
 }
 
 .card-lg__container {
-  padding: $md-padding;
+  padding: $md-padding * 1.5;
   position: relative;
   overflow: hidden;
 

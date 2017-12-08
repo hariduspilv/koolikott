@@ -2,7 +2,7 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import ee.netgroup.hm.components.AddMaterialPopUp;
+import ee.netgroup.hm.components.MaterialPopUp;
 import ee.netgroup.hm.components.PortfolioPrivacyPopUp;
 import ee.netgroup.hm.components.Search;
 import ee.netgroup.hm.helpers.Arrays;
@@ -14,20 +14,19 @@ public class EditPortfolioPage extends Page{
 	private By saveAndExit = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
 	private By visibilityButton = By.id("change-visibility");
 	private By shareWithLink = By.xpath("//button/span[contains(text(),'inult lingiga')]");
-	private By newChapter = By.xpath("//button[@data-ng-click='addNewChapter()']");
-	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])"); //TODO: et võtaks kõige viimase
-	private By boldButton = By.name("bold");
-	private By italicButton = By.name("italics");
-	private By bulletedList = By.name("ul");
-	private By numberedList = By.name("ol");
-	private By preFormattedText = By.name("pre");
+	private By newChapter = By.xpath("//div[@data-ng-click='$ctrl.createChapter()']");
+	private By boldButton = By.xpath("//button[@data-action='bold']");
+	private By italicButton = By.xpath("//button[@data-action='italic']");
+	private By quoteText = By.xpath("//button[@data-action='append-blockquote']");
 	private By privacyPopUp = By.xpath("//md-dialog-content[@class='md-dialog-content']");
-	private By chapterTitle = By.xpath("//input[@data-ng-model='$ctrl.chapter.title']");
-	private By addMaterialButton = By.xpath("//button[@data-ng-click='$mdMenu.open($event)']");
-	private By newMaterial = By.xpath("//button/span[text()='Uus']");
-	private By existingMaterial = By.xpath("//button/span[text()='Koolikotist']");
+	private By chapterTitle = By.xpath("//input[@data-ng-model='chapter.title']");
+	private By chapter = By.xpath("//div[@data-ng-class='$ctrl.getBlockClassNames($index)']");
+	private By newMaterial = By.xpath("//div/label[text()='Uus materjal']");
+	private By existingMaterial = By.xpath("//div/label[text()='Olemasolev materjal']");
+	private By chapterWidth = By.xpath("//div/label[text()='Muuda laiust']");
+	private By h3Button = By.xpath("//button[@data-action='append-h3']");
+	private By moveChapterDown = By.xpath("//button[@data-ng-click='$ctrl.onMoveDown()']");
 	
-
 	public String getSuccessAlertText() {
 		return getDriver().findElement(successAlertText).getText();
 	}
@@ -80,20 +79,19 @@ public class EditPortfolioPage extends Page{
 	}
 
 	public EditPortfolioPage addDescription() {
-		getDriver().findElement(descriptionField).clear();
-		getDriver().findElement(descriptionField).sendKeys(Helpers.randomElement(Arrays.descriptionArray));
+		getDriver().findElement(chapter).clear();
+		getDriver().findElement(chapter).sendKeys(Helpers.randomElement(Arrays.descriptionArray));
 		return this;
 	}
 
 	public EditPortfolioPage clickToSelectDescription() {
-		Helpers.waitForVisibility(descriptionField);
-		getDriver().findElement(descriptionField).sendKeys(Keys.CONTROL + "a");
+		Helpers.waitForVisibility(chapter);
+		getDriver().findElement(chapter).sendKeys(Keys.CONTROL + "a");
 		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
 	public EditPortfolioPage clickToSelectBold() {
-		Helpers.waitForVisibility(boldButton);
 		Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(boldButton).click();
 		Helpers.waitForMilliseconds(1000);
@@ -105,20 +103,9 @@ public class EditPortfolioPage extends Page{
 		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
-	
-	public EditPortfolioPage clickToSelectBulletedList() {
-		getDriver().findElement(bulletedList).click();
-		Helpers.waitForMilliseconds(1000);
-		return this;
-	}
-		
-	public EditPortfolioPage clickToSelectNumberedList() {
-		getDriver().findElement(numberedList).click();
-		return this;
-	}
 
-	public EditPortfolioPage clickToSelectPreFormattedText() {
-		getDriver().findElement(preFormattedText).click();
+	public EditPortfolioPage clickToSelectQuoteText() {
+		getDriver().findElement(quoteText).click();
 		return this;
 	}
 
@@ -129,25 +116,62 @@ public class EditPortfolioPage extends Page{
 		return this;
 	}
 
-	public EditPortfolioPage clickAddMaterial() {
-		Helpers.waitForMilliseconds(1000);
-		Helpers.waitForVisibility(addMaterialButton);
-		getDriver().findElement(addMaterialButton).click();
+	public EditPortfolioPage openChapterToolbar() {
+		//Helpers.waitForMilliseconds(1000);
+		Helpers.waitForVisibility(chapter);
+		getDriver().findElement(chapter).click();
 		return this;
 	}
 	
-	public AddMaterialPopUp clickAddNewMaterial() {
-		Helpers.waitForMilliseconds(1000);
+	public MaterialPopUp clickAddNewMaterial() {
+		//Helpers.waitForMilliseconds(1000);
 		Helpers.waitForVisibility(newMaterial);
 		getDriver().findElement(newMaterial).click();
-		return new AddMaterialPopUp();
+		return new MaterialPopUp();
 	}
 
 	public Search clickAddExistingMaterial() {
 		Helpers.waitForVisibility(existingMaterial);
-		Helpers.waitForMilliseconds(1000);
+		//Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(existingMaterial).click();
 		return new Search();
+	}
+
+	public EditPortfolioPage clickChangeChapterWidth() {
+		Helpers.waitForVisibility(chapterWidth);
+		getDriver().findElement(chapterWidth).click();
+		return this;
+	}
+
+	public EditPortfolioPage addSubchapterTitle() {
+		getDriver().findElement(chapter).clear();
+		getDriver().findElement(chapter).sendKeys(Helpers.randomElement(Arrays.portfolioTitlesArray));
+		return this;
+	}
+
+	public EditPortfolioPage setSubchapterTitleH3() {
+		getDriver().findElement(h3Button).click();
+		Helpers.waitForMilliseconds(1000);
+		return this;
+	}
+
+	public EditPortfolioPage setSpecificChapterTitle(String string) {
+		Helpers.waitForVisibility(chapterTitle);
+		getDriver().findElement(chapterTitle).clear();
+		getDriver().findElement(chapterTitle).sendKeys(string);
+		return this;
+	}
+
+	public EditPortfolioPage setSecondChapterTitle(String string) {
+		Helpers.waitForVisibility(chapterTitle);
+		getDriver().findElements(chapterTitle).get(1).clear();
+		getDriver().findElements(chapterTitle).get(1).sendKeys(string);
+		return this;
+	}
+
+	public EditPortfolioPage clickMoveChapterDown() {
+		getDriver().findElement(moveChapterDown).click();		
+		return this;
 	}
 
 

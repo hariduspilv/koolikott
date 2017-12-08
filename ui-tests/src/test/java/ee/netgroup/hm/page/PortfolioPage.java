@@ -18,7 +18,7 @@ public class PortfolioPage extends Page{
 	private By editPortfolio = By.xpath("//button[@data-ng-click='editPortfolio()']");
 	private By shareWithLinkIcon = By.xpath("//md-icon[text()='link']");
 	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
-	private By preTag = By.tagName("pre");
+	private By quoteTag = By.tagName("blockquote");
 	private By insertTag = By.xpath("(//input[starts-with(@id, 'fl-input-')])");
 	private String newTag = Helpers.generateNewTag();
 	private By addedTag = By.xpath("//a[contains(@href, 'search/result?q=tag:\""+newTag+"\"')]"); 
@@ -26,13 +26,15 @@ public class PortfolioPage extends Page{
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
-	private By materialBox = By.cssSelector("div.pointer.layout-row");
+	private By materialBox = By.cssSelector("div.chapter-embed-card__caption");
 	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	private By autocompleteSystemTag = By.xpath("//span[@md-highlight-text='$ctrl.newTag.tagName']");
 	private By newSystemTagNotification = By.xpath("//button[contains(text(), 'Ok')]");
 	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
-	
+	private By narrowChapter = By.xpath("//div[@class='chapter-block is-narrow is-narrow-left']");
+	private By subchapterTag = By.xpath("//h3[@class='subchapter']");
+	private By firstChapterTitle = By.xpath("//h2[@class='chapter-title']");
 	
 	public AddPortfolioForm clickCopyPortfolio() {
 		return fabButton.clickCopyPortfolio();
@@ -75,8 +77,8 @@ public class PortfolioPage extends Page{
 		return getDriver().findElement(Constants.toastText).getText();
 	}
 
-	public boolean getPreFormattedTextTag() {
-		return getDriver().findElement(preTag).isDisplayed();
+	public boolean getQuoteTextTag() {
+		return getDriver().findElement(quoteTag).isDisplayed();
 	}
 
 	public PortfolioPage addNewTag() {
@@ -170,6 +172,18 @@ public class PortfolioPage extends Page{
 
 	public String getChangedLOBannerText() {
 		return getDriver().findElement(Constants.bannerText).getText();
+	}
+
+	public boolean isChapterNarrow() {
+		return getDriver().findElements(narrowChapter).size() == 1;
+	}
+
+	public boolean isSubchapterDisplayed() {
+		return getDriver().findElements(subchapterTag).size() == 1;
+	}
+
+	public String isChapterOrderChanged() {
+		return getDriver().findElement(firstChapterTitle).getText();
 	}
 
 

@@ -2,9 +2,9 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import ee.netgroup.hm.components.MaterialPopUp;
 import ee.netgroup.hm.components.Comments;
 import ee.netgroup.hm.components.ConfirmationPopup;
-import ee.netgroup.hm.components.EditMaterialPopUp;
 import ee.netgroup.hm.components.ReportImproperPopUp;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Constants;
@@ -19,7 +19,6 @@ public class MaterialPage extends Page{
 	private By editMaterial = By.xpath("//button[@data-ng-click='edit()']");
 	private By creatorName = By.xpath("//p[@data-ng-if='isNullOrZeroLength(material.authors)']");
 	private By deleteMaterial = By.xpath("//button[@data-ng-click='confirmMaterialDeletion()']");
-    private By bannerRestoreButton = By.xpath("//button[@aria-label='Taasta']");
 	private By likeIcon = By.xpath("//div[@data-ng-click='$ctrl.like()']");
 	private By isLiked = By.xpath("//span[@data-ng-bind='$ctrl.rating.likes']");
 	private By selectedStar = By.xpath("//md-icon[@data-ng-if='$ctrl.hasFavorited']");
@@ -55,10 +54,10 @@ public class MaterialPage extends Page{
 		return this;
 	}
 
-	public EditMaterialPopUp clickEditMaterial() {
+	public MaterialPopUp clickEditMaterial() {
 		Helpers.waitForClickable(editMaterial);
 		getDriver().findElement(editMaterial).sendKeys(Keys.ENTER);
-		return new EditMaterialPopUp();
+		return new MaterialPopUp();
 	}
 
 	public String getCreatorName() {
@@ -71,9 +70,9 @@ public class MaterialPage extends Page{
 		return new ConfirmationPopup();
 	}
 
-	public boolean isMaterialDeletedBannerVisible() {
+	public String getDeletedBannerText() {
 		Helpers.waitForMilliseconds(1000);
-		return getDriver().findElement(bannerRestoreButton).isDisplayed();
+		return getDriver().findElement(Constants.bannerText).getText();
 	}
 
 	public MaterialPage likeMaterial() {

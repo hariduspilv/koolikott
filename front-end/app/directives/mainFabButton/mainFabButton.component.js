@@ -42,7 +42,6 @@ class controller extends Controller {
             }
 
             this.storageService.setEmptyPortfolio(emptyPortfolio)
-            this.$rootScope.newPortfolioCreated = true
             this.$mdDialog.show({
                 templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                 controller: 'addPortfolioDialogController',
@@ -53,7 +52,9 @@ class controller extends Controller {
         this.$scope.showAddMaterialDialog = () =>
             this.$mdDialog.show({
                 templateUrl: 'addMaterialDialog.html',
-                controller: 'addMaterialDialogController'
+                controller: 'addMaterialDialogController',
+                controllerAs: '$ctrl',
+                locals: { isEditMode: false }
             })
 
         this.$scope.copyPortfolio = () =>

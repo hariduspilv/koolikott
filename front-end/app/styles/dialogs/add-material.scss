@@ -1,80 +1,81 @@
-.form-group {
-  .layout-row:not(:first-of-type) {
-  margin-top: -30px;
-  }
-}
-.md-chips .md-chip-input-container input:not([type]),
-.md-chips .md-chip-input-container {
-  width: 100%;
-}
-
-.upload-file-success, .upload-file-uploading, .upload-file-placeholder{
-  text-align: center;
-}
-
 .upload-file-error{
-  color: rgb(221,44,0);
-  font-size: 12px;
-  text-align: center;
-}
-
-.currently-uploaded-file{
-  font-size: 12px;
-  text-align: center;
-  margin-top: 15px;
+    color: rgb(221,44,0);
+    font-size: 12px;
+    text-align: center;
 }
 
 .md-datepicker-triangle-button{
-  display: none;
+    display: none;
 }
 
 .md-button.md-icon-button.md-datepicker-button{
-  position: absolute;
-  margin-left: 130px;
-  margin-top: -9px;
-  z-index: 1;
+    position: absolute;
+    margin-left: 130px;
+    margin-top: -9px;
+    z-index: 1;
 }
 
 .md-datepicker-input-container{
-  padding-right: 50px;
+    padding-right: 50px;
 }
 
 .datepicker-container {
-  overflow: hidden;
+    position: relative;
+    overflow: hidden;
 
-  .validation-messages{
-    max-width: 180px;
-  }
+    .validation-messages{
+        max-width: 180px;
+    }
 }
 
 .datepicker-error{
-  margin-top: 23px;
-  margin-left: 12px;
+    margin-top: 23px;
+    margin-left: 12px;
 }
 
 .disabled-option {
-  color: rgba(0, 0, 0, 0.26);
+    color: rgba(0, 0, 0, 0.26);
 }
 
 .invalid-url-message.ng-hide {
-  // In some cases url validation message is visible even when it shouldn't
-  display: none !important;
+    // In some cases url validation message is visible even when it shouldn't
+    display: none !important;
 }
 
-@media screen and (max-width: $layout-breakpoint-xs) {
-  // Fix for window resize not calculating height correctly https://github.com/angular/material/issues/4513
-  body > .md-dialog-container {
-    height: 100vh !important;
-  }
+.checkbox--material-author {
+    margin-top: 28px;
+    margin-bottom: 27px;
+}
 
-  .fullscreen-dialog {
-    height:100%;
-    width:100%;
-    max-height:100%;
-    max-width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+.button-material-language {
+    border-bottom: 2px solid $gray-600-light;
+    color: $gray;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left;
     border-radius: 0;
-  }
+
+    @media (min-width: $layout-breakpoint-xs) {
+        margin-left: $md-padding / 2;
+        margin-right: $md-padding / 2;
+    }
+
+    &.is-selected,
+    &:hover,
+    &:focus {
+        border-color: rgb(3,169,244);
+    }
+}
+
+.button-material-language__icon {
+    position: absolute;
+    right: 0%;
+    top: 6px;
+
+    .button-material-language.is-selected &,
+    .button-material-language:hover &,
+    .button-material-language:focus & {
+        color: rgb(3,169,244);
+    }
 }

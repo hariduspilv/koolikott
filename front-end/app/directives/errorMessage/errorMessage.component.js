@@ -131,10 +131,13 @@ class controller extends Controller {
         
         if (!this.$rootScope.learningObjectPrivate) {
             this.bannerType =
-                this.$rootScope.learningObjectDeleted ? 'showDeleted' :
                 this.$rootScope.learningObjectImproper ? 'showImproper' :
                 this.$rootScope.learningObjectUnreviewed ? 'showUnreviewed' :
                 this.$rootScope.learningObjectChanged && 'showChanged'
+
+            // make sure if deleted then show deleted stuff
+            if (this.$rootScope.learningObjectDeleted)
+                this.bannerType = 'showDeleted';
 
             if (this.bannerType)
                 this.setState(...VIEW_STATE_MAP[this.bannerType])
@@ -145,11 +148,13 @@ class controller extends Controller {
         this.$scope.icon = icon
         if (this.bannerType != 'showChanged')
             this.$scope.messageKey = typeof messageKey === 'function' ? messageKey(this) : messageKey
+            this.$scope.htmlMessage = false
         this.$scope.iconTooltipKey = messageKey
         this.$scope.message = ''
         this.$scope.buttons = buttons
         this.$scope.reports = null
         this.$scope.showExpandableReports = false
+        this.$scope.showExpandableChanges = false
 
         if (typeof cb === 'function')
             cb(this)
@@ -294,7 +299,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost('rest/admin/improper/setProper', {id, type})
                 .then(({ status, data }) => {
-                    console.log('POST rest/admin/improper/setProper', { id, type }, status, data)
                     this.$rootScope.learningObjectImproper = false
                     this.$rootScope.learningObjectUnreviewed = false
                     this.$rootScope.learningObjectChanged = false
@@ -311,11 +315,6 @@ class controller extends Controller {
                 ? this.serverCallService.makePost('rest/portfolio/delete', { id, type })
                 : this.serverCallService.makePost('rest/material/delete', { id, type })
             ).then(({ status, data }) => {
-                console.log.apply(console,
-                    isPortfolio
-                        ? ['POST rest/portfolio/delete', { id, type }, status, data]
-                        : ['POST rest/material/delete', {id, type }, status, data]
-                )
                 this.data.deleted = true
                 this.toastService.showOnRouteChange(isPortfolio ? 'PORTFOLIO_DELETED' : 'MATERIAL_DELETED')
                 this.$rootScope.learningObjectDeleted = true
@@ -331,11 +330,6 @@ class controller extends Controller {
             const url = 'rest/admin/deleted/restore';
 
             this.serverCallService.makePost(url, { id, type }).then(({ status, data }) => {
-                console.log('POST rest/admin/deleted/restore',
-                    { id, type },
-                    status,
-                    data
-                )
                 this.data.deleted = false
                 this.data.improper = false
                 this.data.unReviewed = false
@@ -357,7 +351,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost('rest/admin/firstReview/setReviewed', { id, type })
                 .then(({ status, data }) => {
-                    console.log('POST rest/admin/firstReview/setReviewed', { id, type }, status, data)
                     this.$rootScope.learningObjectUnreviewed = false
                     this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 })
@@ -379,7 +372,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost(`rest/admin/changed/${id}/${action}All`)
                 .then(({ status, data }) => {
-                    console.log(`POST rest/admin/changed/${id}/${action}All`, status, data)
                     200 <= status && status < 300
                         ? this.setData(data)
                         : undo()
@@ -404,7 +396,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost(`rest/admin/changed/${id}/${action}One/${change.id}`)
                 .then(({ status, data }) => {
-                    console.log(`POST rest/admin/changed/${id}/${action}One/${change.id}`, status, data)
                     200 <= status && status < 300
                         ? this.setExpandableHeight() || this.setData(data)
                         : undo()
@@ -416,6 +407,7 @@ class controller extends Controller {
         this.isMaterial(data) ? this.storageService.setMaterial(data) :
         this.isPortfolio(data) && this.storageService.setPortfolio(data)
         this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+        this.$rootScope.$broadcast('tags:resetTags');
     }
 }
 controller.$inject = [

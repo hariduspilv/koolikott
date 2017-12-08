@@ -258,23 +258,6 @@ function formatIssueDate(issueDate) {
     }
 }
 
-function issueDateToDate(issueDate) {
-    if (!issueDate) {
-        return;
-    }
-
-    if (issueDate.day && issueDate.month && issueDate.year) {
-        // full date
-        return new Date(issueDate.year, issueDate.month - 1, issueDate.day);
-    } else if (issueDate.month && issueDate.year) {
-        // month date
-        return new Date(issueDate.year, issueDate.month - 1, 1);
-    } else if (issueDate.year) {
-        // year date
-        return new Date(issueDate.year, 0, 1);
-    }
-}
-
 function formatDay(day) {
     return day > 9 ? "" + day : "0" + day;
 }
@@ -420,19 +403,6 @@ function getSource(material) {
 }
 
 /**
- * Check if list of objects contains element
- * @param list
- * @param field
- * @param value
- * @returns {boolean}
- */
-function listContains(list, field, value) {
-    return list.filter(function (e) {
-            return e[field] === value;
-        }).length > 0
-}
-
-/**
  * Move element in list from old_index to new_index
  * @param old_index
  * @param new_index
@@ -526,12 +496,6 @@ function isMobile() {
     return window.innerWidth < BREAK_XS;
 }
 
-function stripHtml(htmlString) {
-    let tmp = document.createElement("div");
-    tmp.innerHTML = htmlString;
-    return tmp.textContent || tmp.innerText || "";
-}
-
 function countOccurrences(value, text) {
     let count = 0;
     let index = text.indexOf(value);
@@ -596,9 +560,10 @@ if (typeof localStorage === 'object') {
  */
 class Controller {
     constructor() {
-        this.constructor.$inject.forEach((name, idx) =>
-            this[name] = arguments[idx]
-        )
+        if (Array.isArray(this.constructor.$inject))
+            this.constructor.$inject.forEach((name, idx) =>
+                this[name] = arguments[idx]
+            )
     }
     isMaterial({ type }) {
         return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
@@ -681,10 +646,11 @@ class Controller {
             tags: []
         }
     }
-    getSource(material) {
-        if (material) {
-            return material.source || (material.uploadedFile && decodeUTF8(material.uploadedFile.url))
-        }
+    /**
+     * @todo Is that decodeUTF8 really necessary?
+     */
+    getMaterialSource(material) {
+        return material && material.source || material.uploadedFile && decodeUTF8(material.uploadedFile.url)
     }
     isYoutubeVideo(url) {
         // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
@@ -730,6 +696,9 @@ class Controller {
             !!(navigator.userAgent.match(/Trident/) ||
             navigator.userAgent.match(/rv 11/))
         )
+    }
+    isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     }
     formatDateToDayMonthYear(dateString) {
         const date = new Date(dateString)
@@ -828,6 +797,104 @@ class Controller {
             return false
         }
         return true
+    }
+    scrollToElement(element, duration = 200, offset = 0) {
+        if (typeof element === 'string')
+            element = document.querySelector(element)
+
+        if (element) {
+            const startTime = Date.now()
+            const { pageYOffset } = window
+            const destinationX = element.getBoundingClientRect().top - offset
+            const easeInOutSin = (t) => (1 + Math.sin(Math.PI * t - Math.PI / 2)) / 2
+            const scroll = () => {
+                const progress = Math.min(1, (Date.now() - startTime) / duration)
+                window.scrollTo(
+                    window.pageXOffset,
+                    easeInOutSin(progress) * destinationX + pageYOffset
+                )
+                if (progress < 1)
+                    window.requestAnimationFrame(scroll)
+            }
+            scroll()
+        }
+    }
+    updateChaptersStateFromEditors() {
+        /**
+         * call updateState() on all dopChapters which updates $scope.chapter.blocks
+         * from editors' innerHTML values.
+         */
+        for (let chapter of document.querySelectorAll('dop-chapter, .dop-chapter, [dop-chapter]')) {
+            const chapterCtrl = angular.element(chapter).controller('dopChapter')
+            if (chapterCtrl && typeof chapterCtrl.updateState === 'function')
+                chapterCtrl.updateState()
+        }
+    }
+    updateChapterEditorsFromState() {
+        /**
+         * call updateEditors() on all dopChapters which updates editors' innerHTML values
+         * from $scope.chapter.blocks.
+         */
+        for (let chapter of document.querySelectorAll('dop-chapter, .dop-chapter, [dop-chapter]')) {
+            const chapterCtrl = angular.element(chapter).controller('dopChapter')
+            if (chapterCtrl && typeof chapterCtrl.updateEditors === 'function')
+                chapterCtrl.updateEditors()
+        }
+    }
+    getSlug(str, fallback = '') {
+        return str
+            ? str.replace(/\s+/g, '-')
+            : fallback
+    }
+    transformChapters(chapters) {
+        return !Array.isArray(chapters) || !chapters.length || chapters[0].blocks
+            ? chapters
+            : chapters.reduce(
+                (chapters, c, idx) => chapters
+                    .concat({
+                        title: c.title,
+                        blocks: [{
+                            narrow: false,
+                            htmlContent: (c.text || '')
+                                + this.transformEmbeds(c)
+                                + c.subchapters.reduce(
+                                    (subchapters, s, subIdx) =>
+                                        subchapters
+                                        + `<h3 class="subchapter">${s.title || (this.dependencyExists('$translate') ? this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE') : '')}</h3>`
+                                        + (s.text || '')
+                                        + this.transformEmbeds(s),
+                                    ''
+                                )
+                        }]
+                    }),
+                []
+            )
+    }
+    transformEmbeds(chapter) {
+        return !Array.isArray(chapter.contentRows)
+            ? ''
+            : chapter.contentRows.reduce(
+                (embeds, r) => Array.isArray(r.learningObjects) && r.learningObjects.length
+                    ? embeds + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${r.learningObjects[0].id}"></div>`
+                    : embeds,
+                ''
+            )
+    }
+    issueDateToDate(issueDate) {
+        return issueDate && (
+            issueDate.day && issueDate.month && issueDate.year
+                ? new Date(issueDate.year, issueDate.month - 1, issueDate.day)
+                : issueDate.month && issueDate.year
+                    ? new Date(issueDate.year, issueDate.month - 1, 1)
+                    : issueDate.year
+                        && new Date(issueDate.year, 0, 1)
+        )
+    }
+    stripHtml(htmlString = '') {
+        let tmp = document.createElement('div')
+        tmp.innerHTML = htmlString
+
+        return tmp.textContent || tmp.innerText || ''
     }
 }
 

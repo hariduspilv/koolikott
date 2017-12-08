@@ -27,13 +27,12 @@ class controller extends Controller {
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
-        try {
+        // @see https://github.com/angular/material/issues/8308#issuecomment-216308108
+        this.$mdComponentRegistry.when('left').then(() =>
             this.$mdSidenav('left', true).then(left =>
                 this.$scope.isSideNavOpen = left.isOpen()
             )
-        } catch(e) {
-            console.error(e)
-        }
+        )
 
         this.$scope.detailedSearch.accessor = {
             clearSimpleSearch: () => this.$scope.searchFields.searchQuery = ''
@@ -205,15 +204,25 @@ class controller extends Controller {
 
         this.$scope.getTranslation = (string) => this.$translate.instant(string)
 
-        this.$timeout(this.setHeaderColor.bind(this))
-
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.openTour = (isEditPage = false) =>
             this.$rootScope.$broadcast(isEditPage ? 'tour:start:editPage' : 'tour:start')
-    }
-    $doCheck() {
-        this.setHeaderColor()
+
+        this.$rootScope.$on('portfolio:autoSave', this.invokeInkRippleOnSaveButton)
+
+        this.setHeaderColor = this.setHeaderColor.bind(this)
+        this.$timeout(this.setHeaderColor)
+        const onLearningObjectAdminStatusChange = (currentValue, previousValue) => {
+            if (currentValue !== previousValue)
+                this.setHeaderColor()
+        }
+        this.$rootScope.$watch('learningObjectPrivate', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectDeleted', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectImproper', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectUnreviewed', onLearningObjectAdminStatusChange)
+        this.$rootScope.$watch('learningObjectChanged', onLearningObjectAdminStatusChange)
+        this.$rootScope.$on('$locationChangeSuccess', this.setHeaderColor)
     }
     setHeaderColor() {
         const setDefault = () => {
@@ -331,6 +340,40 @@ class controller extends Controller {
                 }
             })
     }
+    invokeInkRippleOnSaveButton() {
+        const saveBtn = document.querySelector('.header-save-button')
+        const ripple = document.createElement('div')
+        const rippleContainer = document.createElement('div')
+
+        rippleContainer.insertBefore(ripple, null)
+        rippleContainer.classList.add('md-ripple-container')
+        
+        ripple.classList.add('md-ripple')
+        ripple.classList.add('md-ripple-placed')
+        ripple.style.cssText = `
+            left: 20px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgb(255, 255, 255);
+            border-color: rgb(255, 255, 255);`
+        
+        saveBtn.insertBefore(rippleContainer, null)
+
+        setTimeout(() => {
+            ripple.classList.add('md-ripple-active')
+            ripple.classList.add('md-ripple-scaled')
+
+            setTimeout(() =>
+                ripple.classList.remove('md-ripple-active'),
+                500
+            )
+            setTimeout(() =>
+                saveBtn.removeChild(rippleContainer),
+                1000
+            )
+        })
+    }
 }
 controller.$inject = [
     '$scope',
@@ -341,6 +384,7 @@ controller.$inject = [
     '$route',
     '$translate',
     '$mdSidenav',
+    '$mdComponentRegistry',
     'translationService',
     'searchService',
     'authenticationService',

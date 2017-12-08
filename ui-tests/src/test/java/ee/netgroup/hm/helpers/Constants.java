@@ -6,7 +6,7 @@ public class Constants {
 	
 
 	public static String landingPage = "https://oxygen.netgroupdigital.com/";
-	public static String materialPageUrl = "https://oxygen.netgroupdigital.com/material?id=11632";
+	public static String materialWithCommentsUrl = "https://oxygen.netgroupdigital.com/material?id=11632";
 	
 	// Users
 	public static String admin = "https://oxygen.netgroupdigital.com/dev/login/89898989898";
@@ -44,6 +44,7 @@ public class Constants {
     // Detail view 
     public static By actionsMenu = By.xpath("//md-icon[text()='more_vert']");
 	public static String unreviewedBannerText = "See õppevara on üle vaatamata";
+	public static Object deletedBannerText = "See õppevara on kustutatud";
 	public static String changedLOBannerText = "Õppevara liigitus. Lisatud väärtus: Keel ja kirjandus";
 	public static String commentText = "Automaattesti lisatud kommentaar";
     public static String systemTag = "keel ja ki";
@@ -53,9 +54,6 @@ public class Constants {
     // Materials
     public static String deletedMaterial = "https://www.gfycat.com/gifs/search/pug/detail/RingedWarpedCrayfish";
     public static String existingMaterial = "https://test.ee";
-
-    
-
     
     
 

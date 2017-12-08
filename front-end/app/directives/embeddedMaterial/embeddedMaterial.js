@@ -232,7 +232,9 @@ class controller extends Controller {
                             this.$scope.sourceType = 'LINK';
                             //foreign repositories need to have dop_token query param
                             if (this.$scope.embeddable && !this.$scope.material.linkSource){
-                                this.getSignedUserData();
+                                if (this.authenticatedUserService.isAuthenticated()) {
+                                    this.getSignedUserData();
+                                }
                             }
                         }
                     })

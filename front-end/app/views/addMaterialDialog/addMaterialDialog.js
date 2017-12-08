@@ -1,932 +1,750 @@
 'use strict';
 
-angular.module('koolikottApp').controller('addMaterialDialogController', [
-    '$scope', '$mdDialog', '$mdDateLocale', 'serverCallService', 'translationService', 'metadataService', '$filter', '$location', '$rootScope', 'authenticatedUserService', '$timeout', 'pictureUploadService', 'fileUploadService', 'toastService', 'suggestService', 'taxonService', 'storageService', 'youtubeService',
-    function ($scope, $mdDialog, $mdDateLocale, serverCallService, translationService, metadataService, $filter, $location, $rootScope, authenticatedUserService, $timeout, pictureUploadService, fileUploadService, toastService, suggestService, taxonService, storageService, youtubeService) {
-        $scope.isSaving = false;
-        $scope.showHints = true;
-        $scope.creatorIsPublisher = false;
+{
+class controller extends Controller {
+    constructor(...args) {
+        super(...args)
+
+        this.keyCompetences = []
+        this.crossCurricularThemes = []
+        this.titleAndSummaryLanguages = ['ET', 'EN', 'RU']
+
+        this.$scope.activeTitleAndDescriptionLanguage = this.titleAndSummaryLanguages[0]
+        this.$scope.isSaving = false
+        this.$scope.showHints = true
+        this.$scope.creatorIsPublisher = false
+        this.$scope.isUpdateMode = false
+        this.$scope.fileUploaded = false
+        this.$scope.uploadingFile = false
+        this.$scope.review = {}
+        this.$scope.isUserAuthor = false
+        this.$scope.isUserAuthorFirstAuthor = false
+        this.$scope.maxReviewSize = 10
+        this.$scope.charactersRemaining = 850
+        this.$scope.languages = []
+        this.$scope.licenseTypes = []
+        this.$scope.resourceTypes = []
+        this.$scope.selectedLanguage = this.translationService.getLanguage()
+
+        this.fetchMaxPictureSize()
+        this.fetchMaxFileSize()
+
+        const addChapterMaterialUrl = this.$scope.material && this.$scope.material.source
+
+        if (this.$scope.material && !this.$scope.isChapterMaterial) {
+            this.preSetMaterial()
+        } else {
+            this.initEmptyMaterial()
+            this.prefillMetadataFromPortfolio()
+
+            if (addChapterMaterialUrl)
+                this.$scope.material.source = addChapterMaterialUrl
+        }
+
+        if (this.$scope.material.uploadedFile) {
+            this.$scope.material.uploadedFile.displayName = decodeUTF8(this.$scope.material.uploadedFile.name)
+            this.$scope.fileUploaded = true
+        }
+
+        this.metadataService.loadLanguages(this.setMaterialSourceLangugeges.bind(this))
+        this.metadataService.loadLicenseTypes(this.setLicenseTypes.bind(this))
+        this.metadataService.loadResourceTypes(this.setResourceTypes.bind(this))
+        this.metadataService.loadKeyCompetences(this.setKeyCompetences.bind(this))
+        this.metadataService.loadCrossCurricularThemes(this.setCrossCurricularThemes.bind(this))
+        this.setPublisher()
+
+        this.$scope.$watch('newPicture', this.onNewPictureChange.bind(this))
+        this.$scope.$watch('newFile', this.onNewFileChange.bind(this))
+        this.$scope.$watch('material.taxons[0]', this.onTaxonsChange.bind(this), false)
+        this.$scope.$watch('material.source', this.onMaterialSourceChange.bind(this), true)
+        this.$scope.$watchCollection('invalidPicture', this.onInvalidPictureChange.bind(this))
+        this.$scope.$watch(
+            () => (document.querySelector('.md-datepicker-input') || {}).value,
+            this.onDatePickerChange.bind(this),
+            true
+        )
 
         // fix for https://github.com/angular/material/issues/6905
-        $timeout(function () {
-            angular.element(document.querySelector('html')).css('overflow-y', '');
-        });
-
-        let preferredLanguage;
-        let uploadingPicture = false;
-
-        const TABS_COUNT = 2;
-        const CREATIVE_COMMON_LOWER = "creativecommon";
-        const LICENSETYPE_YOUTUBE = "Youtube";
-        const LICENSETYPE_CCBY = "CCBY";
-        const RESOURCETYPE_VIDEO = "VIDEO";
-
-        // changing these properties constitutes the creation of a changedLearningObject
-        const changeable = {
-            source: {
-                value: null,
-                isChanged: (current, previous) => current != previous
-            },
-            /**
-             * @todo Currently unclear wheter we should even be able to change taxons in this dialog
-             */
-            /*taxons: {
-                value: null,
-                isChanged: (current, previous) => {
-                    for (let i = 0; i < current.length; i++) {
-                        if (!previous.find(p => p.id === current[i].id))
-                            return true
+        this.$timeout(() =>
+            angular.element(document.querySelector('html')).css('overflow-y', '')
+        )
+    }
+    onNewPictureChange(currentValue) {
+        if (currentValue)
+            this.pictureUpload = this.pictureUploadService
+                .upload(currentValue)
+                .then(({ data }) => {
+                    this.$scope.material.picture.id = data.id
+                    this.$scope.material.picture.name = data.name
+                    this.$scope.showErrorOverlay = false
+                }, () =>
+                    this.$scope.showErrorOverlay = false
+                )
+    }
+    onNewFileChange(currentValue) {
+        if (currentValue) {
+            this.$scope.uploadingFile = true
+            this.fileUpload = this.fileUploadService
+                .upload(currentValue)
+                .then(({ data }) => {
+                    this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', true)
+                    this.$scope.material.source = null
+                    this.$scope.fileUploaded = true
+                    this.$scope.uploadingFile = false
+                    this.$scope.material.uploadedFile = data
+                    this.$scope.material.uploadedFile.displayName = decodeUTF8(this.$scope.material.uploadedFile.name)
+                    this.$scope.uploadingFile = false
+                }, ({ data }) => {
+                    if (data.cause == 'filename too long') {
+                        this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', false)
+                        this.$scope.addMaterialForm.source.$setTouched()
                     }
-                }
-            }*/
-        }
-
-        $scope.isUpdateMode = false;
-        $scope.step = {};
-        $scope.step.currentStep = 0;
-        $scope.step.canProceed = false;
-        $scope.step.isMaterialUrlStepValid = false;
-        $scope.step.isMetadataStepValid = false;
-        $scope.titleDescriptionGroups = [];
-        $scope.fileUploaded = false;
-        $scope.uploadingFile = false;
-        $scope.review = {};
-        $scope.maxReviewSize = 10;
-        $scope.charactersRemaining = 850;
-        $scope.resourceTypeDTO = [];
-
-        init();
-
-        $scope.isTypeSelected = function (resourceType) {
-            let materialResourceTypes = $scope.material.resourceTypes;
-
-            var isFound = materialResourceTypes.filter(function (mResourceType) {
-                return mResourceType.id == resourceType.id;
-            });
-
-            return isFound.length > 0;
-        };
-
-        $scope.step.nextStep = function () {
-            $scope.step.currentStep += 1;
-        };
-
-        $scope.step.previousStep = function () {
-            $scope.step.currentStep -= 1;
-        };
-
-        $scope.step.isTabDisabled = function (index) {
-            if (index == 0)
-                return false;
-
-            return !isStepValid(index - 1);
-        };
-
-        $scope.step.canProceed = function () {
-            return isStepValid($scope.step.currentStep);
-        };
-
-        $scope.step.canCreateMaterial = function () {
-            return isStepValid(0) && isStepValid(1) && isStepValid(2);
-        };
-
-        $scope.step.isLastStep = function () {
-            return $scope.step.currentStep === TABS_COUNT;
-        };
-
-        $scope.addNewMetadata = function () {
-            $scope.titleDescriptionGroups.forEach(function (item) {
-                item.expanded = false
-            });
-
-            addNewMetadata();
-        };
-
-        $scope.addNewAuthor = function () {
-            $scope.material.authors.push({});
-            $timeout(function () {
-                angular.element('#material-author-' + ($scope.material.authors.length - 1) + '-name').focus();
-            });
-        };
-
-        $scope.deleteAuthor = function (index) {
-            $scope.material.authors.splice(index, 1);
-        };
-
-        $scope.deleteMetadata = function (index) {
-            $scope.titleDescriptionGroups.splice(index, 1);
-        };
-
-        $scope.addNewTaxon = function () {
-            var educationalContext = taxonService.getEducationalContext($scope.material.taxons[0]);
-
-            $scope.material.taxons.push(educationalContext);
-        };
-
-        $scope.deleteTaxon = function (index) {
-            $scope.material.taxons.splice(index, 1);
-        };
-
-        $scope.getLanguageById = function (id) {
-            return $scope.languages.filter(function (language) {
-                return language.id == id;
-            })[0].name;
-        };
-
-        $scope.cancel = function () {
-            $mdDialog.hide();
-        };
-
-        $scope.addNewPeerReview = function () {
-            $scope.material.peerReviews.push({});
-            $timeout(function () {
-                angular.element('#material-peerReview-' + ($scope.material.authors.length - 1)).focus();
-            });
-        };
-
-        $scope.deletePeerReview = function (index) {
-            $scope.material.peerReviews.splice(index, 1);
-        };
-
-        $scope.save = function () {
-            $scope.material.resourceTypes = $scope.resourceTypeDTO;
-            $scope.isSaving = true;
-            if (uploadingPicture) {
-                $timeout($scope.save, 500, false);
-            } else {
-                let metadata = getTitlesAndDecriptions();
-                $scope.material.titles = metadata.titles;
-                $scope.material.descriptions = metadata.descriptions;
-                $scope.material.type = ".Material";
-                if ($scope.material.source) {
-                    $scope.material.uploadedFile = null;
-                }
-
-                if ($scope.material.publishers[0] && !$scope.material.publishers[0].name) {
-                    $scope.material.publishers[0] = null;
-                }
-
-                $scope.material.peerReviews.forEach(function (peerReview, i) {
-                    if (!peerReview || !peerReview.url) {
-                        $scope.material.peerReviews.splice(i, 1);
-                    }
-                });
-
-                serverCallService.makePut('rest/material', $scope.material, saveMaterialSuccess, saveMaterialFail, saveMaterialFinally);
-            }
-        };
-
-        $scope.isTouchedOrSubmitted = function (element) {
-            return (element && element.$touched) || ($scope.addMaterialForm && $scope.addMaterialForm.$submitted);
-        };
-
-        $scope.showCompetencesWarning = function (element) {
-            if ($scope.isTouchedOrSubmitted(element) && $scope.material.keyCompetences) {
-                return $scope.material.keyCompetences.length === 0;
-            }
-        };
-
-        $scope.showThemesWarning = function (element) {
-            if ($scope.isTouchedOrSubmitted(element) && $scope.material.crossCurricularThemes) {
-                return $scope.material.crossCurricularThemes.length === 0;
-            }
-        };
-
-        $scope.isAuthorOrPublisherSet = function () {
-            return ($scope.material.authors[0].name && $scope.material.authors[0].surname) || ($scope.material.publishers[0] ? $scope.material.publishers[0].name : false);
-        };
-
-        $scope.isAdmin = function () {
-            return authenticatedUserService.isAdmin();
-        };
-
-        function getIssueDate(date) {
-            return {
-                day: date.getDate(),
-                month: date.getMonth() + 1,
-                year: date.getFullYear()
-            };
-        }
-
-        function getTitlesAndDecriptions() {
-            var titles = [];
-            var descriptions = [];
-
-            $scope.titleDescriptionGroups.forEach(function (item) {
-                if (item.title) {
-                    var title = {
-                        language: item.language,
-                        text: item.title
-                    };
-
-                    titles.push(title);
-                }
-
-                if (item.description) {
-                    var description = {
-                        language: item.language,
-                        text: item.description
-                    };
-
-                    descriptions.push(description);
-                }
-            });
-
-            return {
-                titles: titles,
-                descriptions: descriptions
-            };
-        }
-
-        $scope.isTabOneValid = function () {
-            return ( $scope.step.isMaterialUrlStepValid || $scope.fileUploaded) && isMetadataStepValid();
-        };
-
-        $scope.isTabTwoValid = function () {
-            let hasCorrectTaxon = true;
-            angular.forEach($scope.material.taxons, (key, value) => {
-                if (!isTaxonSet(value)) {
-                    hasCorrectTaxon = false;
-                }
-            });
-
-            return $scope.educationalContextId === 4 || isTabTwoTargetGroupValid()
-                && ($scope.isBasicOrSecondaryEducation() ? isTabTwoKeyCompetenceValid() && isTabTwoCrossCurricularThemeValid() : true) && hasCorrectTaxon;
-        };
-
-        $scope.isTabThreeValid = function () {
-            return areAuthorsValid() && (hasAuthors() || hasPublisher()) && $scope.material.issueDate.year;
-        };
-
-        function isTabTwoCrossCurricularThemeValid() {
-            return $scope.material.crossCurricularThemes && $scope.material.crossCurricularThemes.length > 0
-        }
-
-        function isTabTwoKeyCompetenceValid() {
-            return $scope.material.keyCompetences && $scope.material.keyCompetences.length > 0
-        }
-
-        function isTabTwoTargetGroupValid() {
-            return Array.isArray($scope.material.targetGroups) && !!$scope.material.targetGroups.length;
-        }
-
-        function isTaxonSet(index) {
-            return $scope.material.taxons && $scope.material.taxons[index] && $scope.material.taxons[index].level && $scope.material.taxons[index].level !== ".EducationalContext";
-        }
-
-        function hasPublisher() {
-            return $scope.material.publishers[0] && $scope.material.publishers[0].name;
-        }
-
-        function hasAuthors() {
-            return $scope.material.authors.length > 0 && $scope.material.authors[0].surname;
-        }
-
-        function areAuthorsValid() {
-            var res = true;
-
-            $scope.material.authors.forEach(function (author) {
-                if (author.name && !author.surname) res = false;
-                else if (author.surname && !author.name) res = false;
-            });
-
-            return res;
-        }
-
-
-        function isStepValid(index) {
-            switch (index) {
-                case 0:
-                    return $scope.isTabOneValid();
-                case 1:
-                    return $scope.isTabTwoValid();
-                case 2:
-                    return $scope.isTabThreeValid();
-                default:
-                    return isStepValid(index - 1);
-            }
-        }
-
-        $scope.translate = function (item, prefix) {
-            return $filter("translate")(prefix + item.toUpperCase());
-        };
-
-        /**
-         * Search for keyCompetences.
-         */
-        $scope.searchKeyCompetences = function (query) {
-            return query ? $scope.keyCompetences
-                .filter(searchFilter(query, "KEY_COMPETENCE_")) : $scope.keyCompetences;
-        };
-
-        /**
-         * Search for CrossCurricularThemes.
-         */
-        $scope.searchCrossCurricularThemes = function (query) {
-            return query ? $scope.crossCurricularThemes
-                .filter(searchFilter(query, "CROSS_CURRICULAR_THEME_")) : $scope.crossCurricularThemes;
-        };
-
-        $scope.removeFocus = function (elementId) {
-            document.getElementById(elementId).blur();
-        };
-
-        $scope.autocompleteItemSelected = function (item, listName, elementId) {
-
-            if (shouldRemoveNotRelevantFromList(listName)) {
-                $scope.material[listName] = removeLastElement(listName)
-            }
-
-            if (!item) {
-                closeAutocomplete(elementId);
-            } else {
-                // If 'NOT_RELEVANT' chip exists and new item is selected, replace it
-                if (listContains($scope.material[listName], 'name', 'NOT_RELEVANT') && item.name !== 'NOT_RELEVANT') {
-                    $scope.material[listName] = $scope.material[listName].filter(function (e) {
-                        return e.name !== "NOT_RELEVANT";
-                    });
-
-                    $scope.material[listName].push(item);
-                }
-            }
-        };
-
-        $scope.doSuggest = function (tagName) {
-            return suggestService.suggest(tagName, suggestService.getSuggestSystemTagURLbase());
-        };
-
-        function shouldRemoveNotRelevantFromList(listName) {
-            return $scope.material[listName].length > 1 && $scope.material[listName][$scope.material[listName].length - 1].name === 'NOT_RELEVANT';
-        }
-
-        function removeLastElement(listName) {
-            return $scope.material[listName].splice(0, $scope.material[listName].length - 1);
-        }
-
-        function closeAutocomplete(elementId) {
-            // Hide suggestions and blur input to avoid triggering new search
-            angular.element(document.querySelector('#' + elementId)).controller('mdAutocomplete').hidden = true;
-            document.getElementById(elementId).blur();
-        }
-
-
-        /**
-         * Create filter function for a query string
-         */
-        function searchFilter(query, translationPrefix) {
-            var lowercaseQuery = angular.lowercase(query);
-
-            return function filterFn(filterSearchObject) {
-                var lowercaseItem = $scope.translate(filterSearchObject.name, translationPrefix);
-                lowercaseItem = angular.lowercase(lowercaseItem);
-
-                if (lowercaseItem.indexOf(lowercaseQuery) === 0) {
-                    return filterSearchObject;
-                }
-            };
-        }
-
-        $scope.isBasicOrSecondaryEducation = function () {
-            return $scope.educationalContextId === 2 || $scope.educationalContextId === 3;
-        };
-
-        $scope.isURLInvalid = function () {
-            if ($scope.addMaterialForm && $scope.addMaterialForm.source && $scope.addMaterialForm.source.$viewValue) {
-                $scope.addMaterialForm.source.$setTouched();
-                return !!$scope.addMaterialForm.source.$error.url && ($scope.addMaterialForm.source.$viewValue.length > 0);
-            }
-        };
-
-        $scope.sourceIsFocused = function () {
-            $scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
-        };
-
-        function loadMetadata() {
-            metadataService.loadResourceTypes(setResourceTypes);
-            metadataService.loadKeyCompetences(setKeyCompetences);
-            metadataService.loadCrossCurricularThemes(setCrossCurricularThemes);
-        }
-
-        $scope.isEmpty = function (object) {
-            return _.isEmpty(object)
-        };
-
-        function initEmptyMaterial() {
-            $scope.material = {};
-            $scope.material.tags = [];
-            $scope.material.taxons = [{}];
-            $scope.material.authors = [{}];
-            $scope.material.peerReviews = [{}];
-            $scope.material.keyCompetences = [];
-            $scope.material.crossCurricularThemes = [];
-            $scope.material.publishers = [];
-            $scope.material.resourceTypes = [];
-            $scope.issueDate = new Date();
-
-            addNewMetadata();
-        }
-
-        function setPublisher() {
-            if (authenticatedUserService.isPublisher()) {
-                $scope.material.publishers = [{}];
-                $scope.material.publishers[0].name = authenticatedUserService.getUser().publisher.name;
-                $scope.creatorIsPublisher = true;
-            }
-        }
-
-        function init() {
-            if ($scope.material && $scope.material.uploadedFile) {
-                $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
-            }
-
-            if ($scope.isChapterMaterial) {
-                var addChapterMaterialUrl = $scope.material.source;
-            }
-
-            if ($scope.material && !$scope.isChapterMaterial) {
-                preSetMaterial($scope.material);
-            } else {
-                initEmptyMaterial();
-                prefillMetadataFromPortfolio();
-                $scope.material.source = addChapterMaterialUrl;
-            }
-
-            setChangeable()
-
-            if ($scope.material.uploadedFile && $scope.material.uploadedFile.id) $scope.fileUploaded = true;
-            setPublisher();
-            metadataService.loadLanguages(setLangugeges);
-            metadataService.loadLicenseTypes(setLicenseTypes);
-
-            //Can be loaded later, as they are not in the first tab
-            $timeout(getMaxPictureSize);
-            $timeout(loadMetadata);
-            $timeout(getMaxFileSize);
-            $timeout(setWatches);
-        }
-
-        function setWatches() {
-            $scope.$watch(function () {
-                return $scope.newPicture;
-            }, function (newPicture) {
-                if (newPicture) {
-                    uploadingPicture = true;
-                    pictureUploadService.upload(newPicture, pictureUploadSuccess, pictureUploadFailed, pictureUploadFinally);
-                }
-            });
-
-            $scope.$watch(function () {
-                return $scope.newFile;
-            }, function (newFile) {
-                if (newFile) {
-                    $scope.uploadingFile = true;
-                    fileUploadService.upload(newFile, fileUploadSuccess, fileUploadFailed, fileUploadFinally);
-                }
-            });
-
-            $scope.$watchCollection('invalidPicture', function (newValue, oldValue) {
-                if (newValue && newValue.$error) {
-                    $scope.showErrorOverlay = true;
-                    $timeout(function () {
-                        $scope.showErrorOverlay = false;
-                    }, 6000);
-                }
-            });
-
-            $scope.$watch('addMaterialForm.source.$valid', function (isValid) {
-                $scope.step.isMaterialUrlStepValid = isValid;
-            });
-
-            $scope.$watch('material.taxons[0]', function (newValue, oldValue) {
-                if (newValue && newValue.level === taxonService.constants.EDUCATIONAL_CONTEXT && newValue !== oldValue) {
-                    $scope.educationalContextId = newValue.id;
-                }
-            }, false);
-
-            $scope.$watch(function () {
-                let a = document.getElementsByClassName("md-datepicker-input");
-                if (a[0]) return a[0].value;
-            }, function (newDate, oldDate) {
-                // if newDate is undefiend, use oldDate
-                newDate = newDate ? newDate : oldDate;
-
-                if (newDate !== oldDate || !$scope.material.issueDate) {
-                    var dateObj = $mdDateLocale.parseDate(newDate);
-                    $scope.material.issueDate = getIssueDate(dateObj);
-
-                    //Set date for datepicker, which needs a full date
-                    if ($scope.material.issueDate && $scope.material.issueDate.year) {
-                        $scope.issueDate = dateObj;
-                    }
-                }
-            }, true);
-        }
-
-        $scope.$watch('material.source', function (newValue) {
-            if ($scope.addMaterialForm.source) {
-                $scope.addMaterialForm.source.$setValidity("exists", true);
-                $scope.addMaterialForm.source.$setValidity("deleted", true);
-            }
-
-            if (newValue && $scope.addMaterialForm.source && ($scope.addMaterialForm.source.$error.url !== true)) {
-                let encodedUrl = encodeURIComponent(newValue);
-                serverCallService.makeGet("rest/material/getOneBySource?source=" + encodedUrl, {},
-                    getByUrlSuccess, getByUrlFail);
-            }
-
-        }, true);
-
-        function getByUrlSuccess(material) {
-            if (material && (material.id !== $scope.material.id)) {
-                if (material.deleted) {
-                    $scope.addMaterialForm.source.$setValidity("deleted", false);
-                    toastService.show("MATERIAL_WITH_SAME_SOURCE_IS_DELETED");
-                } else {
-                    $scope.addMaterialForm.source.$setTouched();
-                    $scope.addMaterialForm.source.$setValidity("exists", false);
-                    $scope.existingMaterial = material;
-                }
-            } else {
-                processSource($scope.material.source);
-            }
-        }
-
-        function getByUrlFail() {
-        }
-
-        function processSource(source) {
-            if (isYoutubeVideo(source)) {
-                youtubeService.getYoutubeData(source)
-                    .then((data) => {
-                        populateMetadata(data);
-                    })
-            }
-        }
-
-        /**
-         * Populated fields:
-         *  - title
-         *  - description
-         *  - picture
-         *  - tags
-         *  - publisher
-         *  - issueDate
-         *  - resourceType
-         *  - licenseType
-         * @param data
-         */
-        function populateMetadata(data) {
-            $scope.titleDescriptionGroups = [{
-                title: data.snippet.title,
-                description: data.snippet.description
-            }];
-
-            if (data.snippet.thumbnails) setThumbnail(data.snippet.thumbnails);
-
-            $scope.material.tags = data.snippet.tags;
-
-            let find = $scope.material.publishers.find(p => p.name === data.snippet.channelTitle);
-            if (!find) {
-                $scope.material.publishers.push({name: data.snippet.channelTitle});
-            }
-
-            $scope.issueDate = new Date(data.snippet.publishedAt);
-
-            $scope.material.resourceTypes = [(getResourceTypeByName(RESOURCETYPE_VIDEO))];
-
-            if (data.status.license.toLowerCase() === CREATIVE_COMMON_LOWER) $scope.material.licenseType = getLicenseTypeByName(LICENSETYPE_CCBY);
-            else $scope.material.licenseType = getLicenseTypeByName(LICENSETYPE_YOUTUBE);
-        }
-
-        function setThumbnail(thumbnails) {
-            let thumbnailUrl;
-
-            if (thumbnails.maxres) thumbnailUrl = thumbnails.maxres.url;
-            else if (thumbnails.standard) thumbnailUrl = thumbnails.standard.url;
-            else if (thumbnails.high) thumbnailUrl = thumbnails.high.url;
-            else if (thumbnails.medium) thumbnailUrl = thumbnails.medium.url;
-            else if (thumbnails.default) thumbnailUrl = thumbnails.default.url;
-
-            pictureUploadService.uploadFromUrl(thumbnailUrl)
-                .then(data => {
-                    pictureUploadSuccess(data);
-                });
-        }
-
-        function getResourceTypeByName(name) {
-            if (!$scope.resourceTypes) return;
-            return $scope.resourceTypes.filter(type => {
-                return type.name === name
-            })[0];
-        }
-
-        function getLicenseTypeByName(name) {
-            if (!$scope.licenseTypes) return;
-            return $scope.licenseTypes.filter(license => {
-                return license.name === name
-            })[0];
-        }
-
-        $scope.uploadReview = function (index, file) {
-            if (file) {
-                $scope.material.peerReviews[index].uploading = true;
-                $scope.uploadingReviewId = index;
-                fileUploadService.uploadReview(file, reviewUploadSuccess, reviewUploadFailed, reviewUploadFinally);
-            }
-        };
-
-        function pictureUploadSuccess(picture) {
-            $scope.material.picture = picture;
-        }
-
-        function pictureUploadFailed() {
-            log('Picture upload failed.');
-        }
-
-        function pictureUploadFinally() {
-            $scope.showErrorOverlay = false;
-            uploadingPicture = false;
-        }
-
-        function fileUploadSuccess(file) {
-            $scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
-            $scope.material.source = null;
-            $scope.fileUploaded = true;
-            $scope.uploadingFile = false;
-            $scope.material.uploadedFile = file;
-            $scope.material.uploadedFile.displayName = decodeUTF8($scope.material.uploadedFile.name);
-            $scope.step.isMaterialUrlStepValid = true;
-        }
-
-        function fileUploadFailed(response) {
-            console.log("File upload failed");
-            if (response.data.cause == "filename too long") {
-                $scope.addMaterialForm.source.$setValidity("filenameTooLong", false);
-                $scope.addMaterialForm.source.$setTouched();
-            }
-        }
-
-        function fileUploadFinally() {
-            $scope.uploadingFile = false;
-        }
-
-        function reviewUploadSuccess(file) {
-            $scope.material.peerReviews[$scope.uploadingReviewId].name = file.name;
-            $scope.material.peerReviews[$scope.uploadingReviewId].url = file.url;
-            $scope.material.peerReviews[$scope.uploadingReviewId].uploaded = true;
-        }
-
-        function reviewUploadFailed() {
-            log('Review upload failed.');
-        }
-
-        function reviewUploadFinally() {
-            $scope.material.peerReviews[$scope.uploadingReviewId].uploading = false;
-        }
-
-        function preSetMaterial(material) {
-            $scope.isUpdateMode = true;
-            $scope.material = material;
-
-            for (var i = 0; i < material.titles.length; i++) {
-                if (material.descriptions[i]) {
-                    var desc = material.descriptions[i].text;
-                }
-
-                var meta = {
-                    title: material.titles[i].text,
-                    description: desc,
-                    language: material.titles[i].language
-                };
-
-                $scope.titleDescriptionGroups.push(meta);
-            }
-            if (!$scope.titleDescriptionGroups[0]) $scope.titleDescriptionGroups.push({});
-
-            if (material.issueDate) {
-                $scope.issueDate = issueDateToDate(material.issueDate);
-            }
-
-            if ($scope.material.uploadedFile) {
-                $scope.material.source = "";
-            }
-
-            if ($scope.material) {
-                $scope.material.source = getSource($scope.material);
-            }
-
-            if (!$scope.material.authors[0]) {
-                $scope.material.authors = [{}];
-            }
-
-            if (!$scope.material.taxons[0]) {
-                $scope.material.taxons = [{}];
-            }
-
-            if (!$scope.material.peerReviews[0]) {
-                $scope.material.peerReviews = [{}];
-            }
-
-            var educationalContext = taxonService.getEducationalContext($scope.material.taxons[0]);
-
-            if (educationalContext) {
-                $scope.educationalContextId = educationalContext.id;
-            }
-
-            if (!$scope.crossCurricularThemes) $scope.crossCurricularThemes = [];
-            if (!$scope.keyCompetences) $scope.keyCompetences = [];
-        }
-
-        function prefillMetadataFromPortfolio() {
-            if (storageService.getPortfolio()) {
-                if (storageService.getPortfolio().taxons) {
-                    var taxons = storageService.getPortfolio().taxons.slice();
-                    $scope.material.taxons = taxons;
-                    var educationalContext = taxonService.getEducationalContext(taxons[0]);
-
-                    if (educationalContext) {
-                        $scope.educationalContextId = educationalContext.id;
-                    }
-                }
-
-                if (storageService.getPortfolio().tags) {
-                    $scope.material.tags = storageService.getPortfolio().tags.slice();
-                }
-
-                if (storageService.getPortfolio().targetGroups) {
-                    $scope.material.targetGroups = (storageService.getPortfolio().targetGroups || []).slice();
-                }
-            }
-        }
-
-        function setLangugeges(data) {
-            $scope.languages = data;
-
-            setDefaultMaterialMetadataLanguage();
-            setMaterialLanguage();
-        }
-
-        function setMaterialLanguage() {
-            if (!$scope.material.language && preferredLanguage !== null && preferredLanguage !== undefined) {
-
-                if ($scope.titleDescriptionGroups[0] && !$scope.titleDescriptionGroups[0].language) {
-                    $scope.titleDescriptionGroups[0].language = preferredLanguage[0];
-                }
-
-                $scope.material.language = preferredLanguage[0];
-            }
-        }
-
-        function setLicenseTypes(data) {
-            var array = data.filter(function (type) {
-                return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
-            });
-            $scope.licenseTypes = data;
-            $scope.allRightsReserved = array[0];
-        }
-
-        /**
-         * If 'NOT_RELEVANT' is not last item in list
-         * then move it
-         * @param list
-         */
-        function moveNotRelevantIfNecessary(list) {
-            if (list[list.length - 1].name !== "NOT_RELEVANT") {
-                var notRelevantIndex = list.map(function (e) {
-                    return e.name;
-                }).indexOf("NOT_RELEVANT");
-                list.move(notRelevantIndex, list.length - 1);
-            }
-        }
-
-        function setCrossCurricularThemes(data) {
-            if (!isEmpty(data)) {
-                $scope.crossCurricularThemes = data;
-                moveNotRelevantIfNecessary($scope.crossCurricularThemes);
-            }
-        }
-
-        function setKeyCompetences(data) {
-            if (!isEmpty(data)) {
-                $scope.keyCompetences = data;
-                moveNotRelevantIfNecessary($scope.keyCompetences);
-            }
-        }
-
-        function saveMaterialSuccess(material) {
-            const done = () => {
-                $scope.isUpdateMode
-                    ? $rootScope.learningObjectChanged = isChanged(material)
-                    : $rootScope.learningObjectUnreviewed = true
-                $rootScope.$broadcast('dashboard:adminCountsUpdated')
-            }
-
-            if (!material) {
-                saveMaterialFail()
-            } else {
-                /**
-                 * @todo Hotfix: Shouldn't be mutating this in front-end.
-                 */
-                material.unReviewed = 1
-
-                storageService.setMaterial(material)
-
-                // Pass saved material back to material view
-                material.source = getSource(material)
-                $mdDialog.hide(material)
-                
-                if (!$scope.isChapterMaterial) {
-                    const url = '/material?id=' + material.id
-
-                    if ($location.url() === url)
-                        return done()
-
-                    const unsub = $rootScope.$on('$locationChangeSuccess', () => {
-                        $timeout(done)
-                        unsub()
-                    })
-                    $location.url(url)
-                }
-            }
-        }
-
-        function saveMaterialFail() {
-            console.log('Failed to add material.');
-        }
-
-        function saveMaterialFinally() {
-            $scope.isSaving = false;
-        }
-
-        function setResourceTypes(data) {
-            $scope.resourceTypes = data.sort(function (a, b) {
-                if ($filter('translate')(a.name) < $filter('translate')(b.name)) return -1;
-                if ($filter('translate')(a.name) > $filter('translate')(b.name)) return 1;
-                return 0;
-            });
-        }
-
-        function setDefaultMaterialMetadataLanguage() {
-            var userLanguage = translationService.getLanguage();
-
-            preferredLanguage = $scope.languages.filter(function (language) {
-                return language == userLanguage;
-            });
-        }
-
-        function addNewMetadata() {
-            var metadata = {
-                expanded: true,
-                title: ''
-            };
-
-            $scope.titleDescriptionGroups.push(metadata);
-        }
-
-        function isMetadataStepValid() {
-            return $scope.titleDescriptionGroups.filter(function (metadata) {
-                return metadata.title && metadata.title.length !== 0;
-            }).length !== 0;
-        }
-
-        function getMaxPictureSize() {
-            serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);
-        }
-
-        function getMaxPictureSizeSuccess(data) {
-            $scope.maxPictureSize = data;
-        }
-
-        function getMaxPictureSizeFail() {
-            $scope.maxPictureSize = 10;
-            console.log('Failed to get max picture size, using 10MB as default.');
-        }
-
-        function getMaxFileSize() {
-            serverCallService.makeGet('/rest/uploadedFile/maxSize', {}, getMaxFileSizeSuccess, getMaxFileSizeFail);
-        }
-
-        function getMaxFileSizeSuccess(data) {
-            $scope.maxFileSize = data;
-        }
-
-        function getMaxFileSizeFail() {
-            $scope.maxFileSize = 500;
-            console.log('Failed to get max file size, using 500MB as default.');
-        }
-
-        function setChangeable() {
-            Object.keys(changeable).forEach(key =>
-                changeable[key].value = $scope.material[key]
-            )
-        }
-
-        function isChanged(material) {
-            return Object.keys(changeable).reduce(
-                (isChanged, key) =>
-                    isChanged || changeable[key].isChanged(material[key], changeable[key].value),
-                false
-            )
+                    this.$scope.uploadingFile = false
+                })
         }
     }
-]);
+    onTaxonsChange(currentValue, previousValue) {
+        if (currentValue &&
+            currentValue !== previousValue &&
+            currentValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT
+        )
+            this.$scope.educationalContextId = currentValue.id
+    }
+    onMaterialSourceChange(currentValue, previousValue) {
+        if (this.$scope.addMaterialForm.source) {
+            this.$scope.addMaterialForm.source.$setValidity('exists', true)
+            this.$scope.addMaterialForm.source.$setValidity('deleted', true)
+        }
+        if (currentValue &&
+            currentValue !== previousValue &&
+            this.$scope.addMaterialForm.source &&
+            this.$scope.addMaterialForm.source.$error.url !== true &&
+            (!this.locals.isEditMode || currentValue !== this.originalSource)
+        )
+            this.serverCallService
+                .makeGet('rest/material/getOneBySource?source=' + encodeURIComponent(currentValue))
+                .then(({ data: material }) => {
+                    if (!material)
+                        return this.processSource(this.$scope.material.source)
+
+                    if (material.deleted) {
+                        this.$scope.addMaterialForm.source.$setValidity('deleted', false)
+                        this.toastService.show('MATERIAL_WITH_SAME_SOURCE_IS_DELETED')
+                    } else {
+                        this.$scope.addMaterialForm.source.$setTouched()
+                        this.$scope.addMaterialForm.source.$setValidity('exists', false)
+                        this.$scope.existingMaterialId = material.id
+                    }
+                })
+    }
+    onInvalidPictureChange(currentValue) {
+        if (currentValue && currentValue.$error) {
+            this.$scope.showErrorOverlay = true
+            this.$timeout(() => {
+                this.$scope.showErrorOverlay = false
+            }, 6000)
+        }
+    }
+    onDatePickerChange(currentDate, previousDate) {
+        currentDate = currentDate || previousDate
+
+        if (currentDate !== previousDate || !this.$scope.material.issueDate) {
+            const dateObj = this.$mdDateLocale.parseDate(currentDate)
+            this.$scope.material.issueDate = this.getIssueDate(dateObj)
+
+            //Set date for datepicker, which needs a full date
+            if (this.$scope.material.issueDate && this.$scope.material.issueDate.year)
+                this.$scope.issueDate = dateObj
+        }
+    }
+    isTypeSelected({ id }) {
+        const { resourceTypes } = this.$scope.material
+        return Array.isArray(resourceTypes) && !!resourceTypes.find(t => t.id === id)
+    }
+    addNewAuthor() {
+        this.$scope.material.authors.push({})
+        this.$timeout(() =>
+            angular
+                .element(`#material-author-${this.$scope.material.authors.length - 1}-name`)
+                .focus()
+        )
+    }
+    setAuthorToUser() {
+        const { name, surname } = this.authenticatedUserService.getUser();
+
+        if (this.$scope.material.picture && this.$scope.material.picture.author !== `${name} ${surname}`) {
+            this.$scope.material.picture.author = `${name} ${surname}`;
+            this.$scope.isUserAuthor = true;
+        } else {
+            this.$scope.material.picture.author = '';
+            this.$scope.isUserAuthor = false;
+        }
+    }
+    setUserAuthorToFirstAuthor() {
+        const { name, surname } = this.authenticatedUserService.getUser();
+
+        if (this.$scope.material.authors[0].name !== name) {
+            this.$scope.material.authors[0].name = name;
+            this.$scope.material.authors[0].surname = surname;
+            this.$scope.isUserAuthorFirstAuthor = true;
+        } else {
+            this.$scope.material.authors[0].name = '';
+            this.$scope.material.authors[0].surname = '';
+            this.$scope.isUserAuthorFirstAuthor = false;
+        }
+    }
+    addNewTaxon() {
+        this.$scope.material.taxons.push(
+            this.taxonService.getEducationalContext(
+                this.$scope.material.taxons &&
+                this.$scope.material.taxons[0]
+            )
+        )
+    }
+    addNewPeerReview() {
+        this.$scope.peerReviews.push({})
+        this.$timeout(() =>
+            angular
+                .element(`#material-peerReview-${this.$scope.peerReviews.length - 1}`)
+                .focus()
+        )
+    }
+    toggleTitleAndDescriptionLanguageInputs(lang) {
+        this.$scope.activeTitleAndDescriptionLanguage = lang
+    }
+    isTouchedOrSubmitted(element) {
+        return (element && element.$touched)
+            || (this.$scope.addMaterialForm && this.$scope.addMaterialForm.$submitted)
+    }
+    showCompetencesWarning(element) {
+        if (this.isTouchedOrSubmitted(element) && this.$scope.material.keyCompetences)
+            return this.$scope.material.keyCompetences.length === 0
+    }
+    showThemesWarning(element) {
+        if (this.isTouchedOrSubmitted(element) && this.$scope.material.crossCurricularThemes)
+            return this.$scope.material.crossCurricularThemes.length === 0
+    }
+    isAuthorOrPublisherSet() {
+        return !!(this.$scope.material.authors[0] && this.$scope.material.authors[0].name && this.$scope.material.authors[0].surname)
+            || !!(this.$scope.material.publishers[0] && this.$scope.material.publishers[0].name)
+    }
+    isAdmin() {
+        return this.authenticatedUserService.isAdmin();
+    }
+    getIssueDate(date) {
+        return {
+            day: date.getDate(),
+            month: date.getMonth() + 1,
+            year: date.getFullYear()
+        };
+    }
+    isTaxonSet(index) {
+        return this.$scope.material.taxons && this.$scope.material.taxons[index] && this.$scope.material.taxons[index].level && this.$scope.material.taxons[index].level !== ".EducationalContext";
+    }
+    hasPublisher() {
+        return this.$scope.material.publishers[0] && this.$scope.material.publishers[0].name;
+    }
+    hasAuthors() {
+        return this.$scope.material.authors.length > 0 && this.$scope.material.authors[0].surname;
+    }
+    areAuthorsValid() {
+        var res = true;
+
+        this.$scope.material.authors.forEach(function (author) {
+            if (author.name && !author.surname) res = false;
+            else if (author.surname && !author.name) res = false;
+        });
+
+        return res;
+    }
+    translate(prefix, { name }) {
+        return this.$translate.instant(prefix + name.toUpperCase())
+    }
+    searchList(listName, query) {
+        const prefixMap = {
+            keyCompetences: 'KEY_COMPETENCE_',
+            crossCurricularThemes: 'CROSS_CURRICULAR_THEME_'
+        }
+        return !query
+            ? this[listName]
+            : this[listName].filter(item =>
+                this.translate(prefixMap[listName], item)
+                    .toLowerCase()
+                    .startsWith(query.toLowerCase())
+            )
+    }
+    removeFocus(elementId) {
+        document.getElementById(elementId).blur()
+    }
+    autocompleteItemSelected(item, listName, elementId) {
+        if (this.shouldRemoveNotRelevantFromList(listName))
+            this.$scope.material[listName] = this.removeLastElement(listName)
+
+        if (!item)
+            return this.closeAutocomplete(elementId)
+
+        // If 'NOT_RELEVANT' chip exists and new item is selected, replace it
+        if (item.name !== 'NOT_RELEVANT' &&
+            this.$scope.material[listName].some(item => item.name === 'NOT_RELEVANT')
+        ) {
+            this.$scope.material[listName] = this.$scope.material[listName].filter(item => item.name !== 'NOT_RELEVANT')
+            this.$scope.material[listName].push(item)
+        }
+    }
+    shouldRemoveNotRelevantFromList(listName) {
+        return this.$scope.material[listName].length > 1
+            && this.$scope.material[listName][this.$scope.material[listName].length - 1].name === 'NOT_RELEVANT';
+    }
+    removeLastElement(listName) {
+        return this.$scope.material[listName].splice(0, this.$scope.material[listName].length - 1)
+    }
+    closeAutocomplete(elementId) {
+        // Hide suggestions and blur input to avoid triggering new search
+        const input = document.getElementById(elementId)
+        angular.element(input).controller('mdAutocomplete').hidden = true
+        input.blur()
+    }
+    isBasicOrSecondaryEducation () {
+        return this.$scope.educationalContextId === 2 || this.$scope.educationalContextId === 3
+    }
+    isURLInvalid() {
+        if (this.$scope.addMaterialForm && this.$scope.addMaterialForm.source && this.$scope.addMaterialForm.source.$viewValue) {
+            this.$scope.addMaterialForm.source.$setTouched();
+            return !!this.$scope.addMaterialForm.source.$error.url && (this.$scope.addMaterialForm.source.$viewValue.length > 0);
+        }
+    }
+    sourceIsFocused() {
+        this.$scope.addMaterialForm.source.$setValidity("filenameTooLong", true);
+    }
+    isEmpty (object) {
+        return _.isEmpty(object)
+    }
+    initEmptyMaterial() {
+        this.$scope.material = {}
+        this.$scope.material.taxons = [{}]
+        this.$scope.material.authors = [{}]
+        this.$scope.peerReviews = [{}]
+        this.$scope.material.keyCompetences = []
+        this.$scope.material.crossCurricularThemes = []
+        this.$scope.material.publishers = []
+        this.$scope.material.resourceTypes = []
+        this.$scope.material.picture = {}
+        this.$scope.issueDate = new Date()
+        this.setTitlesAndDescriptions()
+    }
+    setTitlesAndDescriptions() {
+        const languageCodeMap = {
+            ET: 'est',
+            EN: 'eng',
+            RU: 'rus'
+        }
+        const findText = (prop, lang) =>
+            ((this.$scope.material[prop] || []).find(c => c.language === languageCodeMap[lang]) || {}).text
+
+        this.$scope.titlesAndDescriptions = this.titleAndSummaryLanguages.reduce(
+            (titlesAndDescriptions, lang) =>
+                Object.assign(titlesAndDescriptions, {
+                    [lang]: {
+                        title: findText('titles', lang) || '',
+                        /**
+                         * @todo this.stripHtml is a temporary solution until
+                         * existing content is migrated in the DB
+                         */
+                        description: this.stripHtml(findText('descriptions', lang)) || '',
+                    }
+                }),
+            {}
+        )
+    }
+    getTitlesAndDescriptions() {
+        const titles = [];
+        const descriptions = [];
+        const languageCodeMap = {
+            ET: 'est',
+            EN: 'eng',
+            RU: 'rus'
+        }
+
+        Object.keys(this.$scope.titlesAndDescriptions).forEach(lang => {
+            const item = this.$scope.titlesAndDescriptions[lang];
+
+            if (item.title) {
+                titles.push({
+                    language: languageCodeMap[lang],
+                    text: item.title
+                });
+            }
+            if (item.description) {
+                descriptions.push({
+                    language: languageCodeMap[lang],
+                    text: item.description
+                });
+            }
+        });
+
+        return { titles, descriptions };
+    }
+    isLangFilled(lang) {
+        let isFilled = false;
+
+        Object.keys(this.$scope.titlesAndDescriptions).forEach(key => {
+            if (lang === key && this.$scope.titlesAndDescriptions[key].title !== "") {
+                isFilled = true;
+            }
+        });
+
+        return isFilled;
+    }
+    setPublisher() {
+        if (this.authenticatedUserService.isPublisher()) {
+            this.$scope.material.publishers = [{}]
+            this.$scope.material.publishers[0].name = this.authenticatedUserService.getUser().publisher.name
+            this.$scope.creatorIsPublisher = true
+        }
+    }
+    processSource(source) {
+        if (isYoutubeVideo(source))
+            this.youtubeService
+                .getYoutubeData(source)
+                .then(({ snippet, status }) => {
+                    /**
+                     * Populated fields:
+                     *  - title
+                     *  - description
+                     *  - picture
+                     *  - tags
+                     *  - publisher
+                     *  - issueDate
+                     *  - resourceType
+                     *  - licenseType
+                     */
+                    if (snippet.thumbnails) {
+                        if (!this.$scope.material.picture)
+                            this.$scope.material.picture = {}
+
+                        this.setThumbnail(snippet.thumbnails);
+                        this.$scope.material.picture.author = snippet.channelTitle;
+                        this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
+                            status.license.toLowerCase() === 'creativecommon'
+                                ? 'CCBY'
+                                : 'Youtube'
+                        );
+                    }
+
+                    // Reset publishers before adding new from youtube
+                    this.$scope.material.publishers = []
+                    this.$scope.material.publishers.push({ name: snippet.channelTitle })
+
+                    this.$scope.issueDate = new Date(snippet.publishedAt)
+                    this.$scope.material.resourceTypes = [this.getResourceTypeByName('VIDEO')]
+                    this.$scope.material.licenseType = this.getLicenseTypeByName(
+                        status.license.toLowerCase() === 'creativecommon'
+                            ? 'CCBY'
+                            : 'Youtube'
+                    )
+
+                    this.$scope.titlesAndDescriptions.ET = {
+                        title: snippet.title,
+                        description: snippet.description
+                    }
+                    console.log(this.$scope.titlesAndDescriptions);
+                })
+    }
+    setThumbnail(thumbnails) {
+        let thumbnailUrl
+
+        if (thumbnails.maxres) thumbnailUrl = thumbnails.maxres.url
+        else if (thumbnails.standard) thumbnailUrl = thumbnails.standard.url
+        else if (thumbnails.high) thumbnailUrl = thumbnails.high.url
+        else if (thumbnails.medium) thumbnailUrl = thumbnails.medium.url
+        else if (thumbnails.default) thumbnailUrl = thumbnails.default.url
+
+        this.pictureUploadService.uploadFromUrl(thumbnailUrl)
+            .then(({ data: { id, name } }) => {
+                this.$scope.material.picture.id = id
+                this.$scope.material.picture.name = name
+            })
+    }
+    getResourceTypeByName(name) {
+        if (!this.$scope.resourceTypes) return;
+        return this.$scope.resourceTypes.filter(type => {
+            return type.name === name
+        })[0];
+    }
+    getLicenseTypeByName(name) {
+        if (!this.$scope.licenseTypes) return;
+        return this.$scope.licenseTypes.filter(license => {
+            return license.name === name
+        })[0];
+    }
+    uploadReview(index, file) {
+        if (file) {
+            this.$scope.peerReviews[index].uploading = true
+            this.$scope.uploadingReviewId = index
+            this.fileUploadService.uploadReview(file)
+                .then(({ data }) => {
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].name = data.name;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].url = data.url;
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploaded = true;
+
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                }, ({ data }) => {
+                    this.toastService.show(`Error: ${data}`);
+                    this.$scope.peerReviews[this.$scope.uploadingReviewId].uploading = false;
+                })
+        }
+    }
+    preSetMaterial() {
+        const { material } = this.$scope
+
+        this.$scope.isUpdateMode = true
+
+        if (material.issueDate)
+            this.$scope.issueDate = this.issueDateToDate(material.issueDate)
+
+        this.$scope.material.source = this.getMaterialSource(material)
+
+        /**
+         * so we could compare user input and prevent the "already exists" error when user manually
+         * reverts the source link.
+         */
+        if (this.$scope.material.source)
+            this.originalSource = this.$scope.material.source
+
+        if (!this.$scope.material.authors[0])
+            this.$scope.material.authors = [{}]
+
+        if (!this.$scope.material.taxons[0])
+            this.$scope.material.taxons = [{}]
+
+        if (!this.$scope.material.peerReviews[0]) {
+            this.$scope.peerReviews = [{}];
+        } else {
+            this.$scope.peerReviews = this.$scope.material.peerReviews;
+        }
+
+        const educationalContext = this.taxonService.getEducationalContext(this.$scope.material.taxons[0])
+
+        if (educationalContext)
+            this.$scope.educationalContextId = educationalContext.id
+
+        if (!this.$scope.material.crossCurricularThemes)
+            this.$scope.material.crossCurricularThemes = []
+
+        if (!this.$scope.material.keyCompetences)
+            this.$scope.material.keyCompetences = []
+
+        this.setTitlesAndDescriptions()
+
+        if (!this.$scope.material.picture)
+            this.$scope.material.picture = {}
+
+        const { name, surname } = this.authenticatedUserService.getUser();
+        if (this.$scope.material.picture.author && this.$scope.material.picture.author === `${name} ${surname}`)
+            this.$scope.isUserAuthor = true
+
+        if (this.$scope.material.authors[0].name === name && this.$scope.material.authors[0].surname === surname)
+            this.$scope.isUserAuthorFirstAuthor = true
+    }
+    prefillMetadataFromPortfolio() {
+        const storedPortfolio = this.storageService.getPortfolio()
+
+        if (storedPortfolio) {
+            if (storedPortfolio.taxons) {
+                this.$scope.material.taxons = storedPortfolio.taxons.slice()
+
+                const educationalContext = this.taxonService.getEducationalContext(storedPortfolio.taxons[0])
+
+                if (educationalContext)
+                    this.$scope.educationalContextId = educationalContext.id
+            }
+
+            if (Array.isArray(storedPortfolio.tags))
+                this.$scope.material.tags = storedPortfolio.tags.slice()
+
+            if (Array.isArray(storedPortfolio.targetGroups))
+                this.$scope.material.targetGroups = storedPortfolio.targetGroups.slice()
+        }
+    }
+    setMaterialSourceLangugeges(data) {
+        this.$scope.languages = data
+        this.setDefaultMaterialMetadataLanguage()
+        this.setMaterialSourceLanguage()
+    }
+    setMaterialSourceLanguage() {
+        if (!this.$scope.material.language && this.preferredLanguage !== null && this.preferredLanguage !== undefined) {
+            if (this.$scope.titlesAndDescriptions[0] && !this.$scope.titlesAndDescriptions[0].language)
+                this.$scope.titlesAndDescriptions[0].language = this.preferredLanguage[0]
+
+            this.$scope.material.language = this.preferredLanguage[0]
+        }
+    }
+    setLicenseTypes(data) {
+        var array = data.filter(function (type) {
+            return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
+        });
+        this.$scope.licenseTypes = data;
+        this.$scope.allRightsReserved = array[0];
+    }
+    /**
+     * If 'NOT_RELEVANT' is not last item in list
+     * then move it
+     * @param list
+     */
+    moveNotRelevantIfNecessary(list) {
+        if (list[list.length - 1].name !== 'NOT_RELEVANT')
+            list.move(
+                list.findIndex(i => i.name === 'NOT_RELEVANT'),
+                list.length - 1
+            )
+    }
+    setCrossCurricularThemes(crossCurricularThemes) {
+        if (crossCurricularThemes) {
+            this.crossCurricularThemes = crossCurricularThemes
+            this.moveNotRelevantIfNecessary(this.crossCurricularThemes)
+        }
+    }
+    setKeyCompetences(keyCompetences) {
+        if (keyCompetences) {
+            this.keyCompetences = keyCompetences
+            this.moveNotRelevantIfNecessary(this.keyCompetences)
+        }
+    }
+    setResourceTypes(data) {
+        this.$scope.resourceTypes = data;
+    }
+    setDefaultMaterialMetadataLanguage() {
+        var userLanguage = this.translationService.getLanguage();
+
+        this.preferredLanguage = this.$scope.languages.filter(function (language) {
+            return language == userLanguage;
+        });
+    }
+    isMetadataStepValid() {
+        return this.$scope.titlesAndDescriptions.filter(function (metadata) {
+            return metadata.title && metadata.title.length !== 0;
+        }).length !== 0;
+    }
+    fetchMaxPictureSize() {
+        this.serverCallService
+            .makeGet('rest/picture/maxSize')
+            .then(({ data }) =>
+                this.$scope.maxPictureSize = data
+            )
+    }
+    fetchMaxFileSize() {
+        this.serverCallService
+            .makeGet('/rest/uploadedFile/maxSize')
+            .then(({ data }) =>
+                this.$scope.maxFileSize = data
+            )
+    }
+    setChangeable() {
+        Object.keys(changeable).forEach(key =>
+            changeable[key].value = $scope.material[key]
+        )
+    }
+    isChanged(material) {
+        return Object.keys(changeable).reduce(
+            (isChanged, key) =>
+                isChanged || changeable[key].isChanged(material[key], changeable[key].value),
+            false
+        )
+    }
+    isSubmitDisabled() {
+        return !this.$scope.addMaterialForm.$valid
+            || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
+            || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
+            || this.$scope.isSaving
+            || this.$scope.uploadingFile;
+    }
+    save() {
+        const save = () => {
+            this.$scope.isSaving = true
+
+            const { titles, descriptions } = this.getTitlesAndDescriptions()
+
+            this.$scope.material.titles = titles
+            this.$scope.material.descriptions = descriptions
+            this.$scope.material.type = '.Material'
+
+            if (this.$scope.material.source)
+                this.$scope.material.uploadedFile = null
+
+            if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
+                this.$scope.material.publishers[0] = null
+
+            this.$scope.material.peerReviews = Object.assign([], this.$scope.peerReviews);
+            this.$scope.material.peerReviews.forEach((peerReview, i) => {
+                if (!peerReview || !peerReview.url)
+                    this.$scope.material.peerReviews.splice(i, 1)
+            })
+
+            console.log(this.$scope.material);
+
+            this.serverCallService
+                [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)
+                .then(({ data: material }) => {
+                    const done = () => {
+                        this.$scope.isUpdateMode
+                            ? this.$rootScope.learningObjectChanged = this.isChanged(material)
+                            : this.$rootScope.learningObjectUnreviewed = true
+                        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                    }
+                    if (material) {
+                        material.source = this.getMaterialSource(material)
+                        this.$mdDialog.hide(material)
+                        this.storageService.setMaterial(material)
+
+                        if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
+                            const url = '/material?id=' + material.id
+
+                            if (this.$location.url() === url)
+                                return done()
+
+                            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
+                                unsubscribe()
+                                this.$timeout(done)
+                            })
+                            this.$location.url(url)
+                        }
+                    }
+                    this.$scope.isSaving = false
+                }, () =>
+                    this.$scope.isSaving = false
+                )
+        }
+        Promise.all(
+            ['fileUpload', 'pictureUpload'].reduce(
+                (promises, u) => this[u] && this[u].then
+                    ? promises.concat(this[u])
+                    : promises,
+                []
+            )
+        ).then(save)
+    }
+}
+controller.$inject = [
+  '$scope',
+  '$rootScope',
+  '$filter',
+  '$mdDateLocale',
+  '$mdDialog',
+  '$location',
+  '$timeout',
+  '$translate',
+  'authenticatedUserService',
+  'fileUploadService',
+  'locals',
+  'metadataService',
+  'pictureUploadService',
+  'serverCallService',
+  'storageService',
+  'suggestService',
+  'taxonService',
+  'toastService',
+  'translationService',
+  'youtubeService',
+]
+angular.module('koolikottApp').controller('addMaterialDialogController', controller)
+}

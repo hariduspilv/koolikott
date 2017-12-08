@@ -98,33 +98,48 @@ md-card {
   }
 }
 
+// Override md-button width
+.card-cover-menu-button {
+  width: 32px !important;
+
+  &:disabled {
+      md-icon {
+          color: #fff;
+      }
+  }
+}
+
 .card__icon-holder {
   display: flex;
   flex-direction: row;
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
+  top: 10px;
+  left: 24px;
+  z-index: 4;
 
   md-icon {
-    padding: 9px 23px;
     color: #fff;
     text-shadow: 1px 1px 2px rgba(0, 0,0, .37);
   }
 }
 
+.card__icon-holder--small {
+  top: 2px;
+  left: 20px;
+}
+
 .ribbon {
   position: absolute;
   left: 20px;
-  top: -3px;
+  top: 0;
   background-image: url('../images/bookmark.svg');
   background-size: contain;
   background-repeat: no-repeat;
   filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12,Color='#444')";
   filter: url(#drop-shadow);
   filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.5));
+  z-index: 2;
   opacity: .6;
-  z-index: 1;
   width: 33px;
   height: 53px;
 }

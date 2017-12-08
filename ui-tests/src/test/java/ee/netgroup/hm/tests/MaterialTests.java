@@ -4,27 +4,28 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
-
-import ee.netgroup.hm.components.AddMaterialPopUp;
+import ee.netgroup.hm.components.MaterialPopUp;
 import ee.netgroup.hm.helpers.Constants;
-import ee.netgroup.hm.page.MaterialPage;
 
 public class MaterialTests {
 	
 	@Test
 	public void MaterialTests_CreateMaterial_AsPublisher_MaterialIsCreated() {
-
 		String creatorName = goToLandingPage()
 				.chooseUserType("Publisher")
 				.clickAddMaterial()
-				.setHyperLink()
+				.uploadFile()
 				.setMaterialTitle()
-				.uploadPhoto()
 				.addDescription()
-				.clickNextStep()
 				.selectEducation()
 				.selectSubjectArea()
 				.selectTargetGroup()
+				.uploadPhoto()
+				.checkIllustrationIamAuthor()
+				.addIllustrationSource()
+				.addIllustrationLicenceType()
+				.clickAdditionalData()
+				.addReviewLink()
 				.clickCreateMaterial()
 				.getCreatorName();
 		Assert.assertEquals("Lisaja: Publisher Publisher", creatorName);
@@ -33,15 +34,15 @@ public class MaterialTests {
 	@Test
 	public void MaterialTests_DeleteMaterial_MaterialIsDeleted() {
 
-		boolean deletedMaterialBanner = goToLandingPage()
-				.chooseUserType("Admin")
+		String deletedBannerText = goToLandingPage()
+				.chooseUserType("Moderator")
 				.clickMyMaterials()
 				.openMaterial()
 				.clickActionsMenu()
 				.clickDeleteMaterial()
 				.clickConfirmDeleteMaterial()
-				.isMaterialDeletedBannerVisible();
-		assertTrue(deletedMaterialBanner);
+				.getDeletedBannerText();
+		Assert.assertEquals(Constants.deletedBannerText, deletedBannerText);
 	}
 	
 	@Test
@@ -79,13 +80,11 @@ public class MaterialTests {
 				.addDescription()
 				.clickCreatePortfolio()
 				.setChapterTitle()
-				.clickAddMaterial()
+				.openChapterToolbar()
 				.clickAddNewMaterial()
 				.setHyperLink()
 				.setMaterialTitle()
 				.addDescription()
-				.clickNextStep()
-				.clickNextStep()
 				.setAuthorFirstName()
 				.setAuthorSurName()
 				.setPublisherName()
@@ -105,7 +104,7 @@ public class MaterialTests {
 				.clickActionsMenu()
 				.clickEditPortfolio()
 				.setChapterTitle()
-				.clickAddMaterial()
+				.openChapterToolbar()
 				.clickAddExistingMaterial()
 				.selectAllEducationalContexts()
 				.insertMaterialSearchCriteria()
@@ -142,39 +141,7 @@ public class MaterialTests {
 				.likeMaterial()
 				.getLikesNumber();
 		Assert.assertEquals("1", likesNumber);
-	}
-	
-	@Test
-	public void MaterialTests_AddTag_TagIsAddedToMaterial() {
-
-		MaterialPage tagsAmount = goToLandingPage()	
-				.chooseUserType("Publisher")
-				.clickAddMaterial()
-				.setHyperLink()
-				.setMaterialTitle()
-				.addDescription()
-				.clickNextStep()
-				.insertTagAndEnter()
-				.selectEducation()
-				.selectSubjectArea()
-				.selectTargetGroup()
-				.clickCreateMaterial();
-				
-	int initialTagsAmount = tagsAmount.getTagsCount();
-	    
-	          tagsAmount = tagsAmount
-	        		  
-	        	.clickActionsMenu()
-	            .clickEditMaterial()
-	            .clickNextStep()
-	            .insertTagAndEnter()
-	            .clickUpdateMaterial();
-	            
-	int newTagsAmount = tagsAmount.getTagsCount();         
-             
-		assertTrue(initialTagsAmount + 1 == newTagsAmount);
-	}
-	
+	}	
 
 	@Test
 	public void MaterialTests_AddToFavorites_MaterialIsInFavourtes(){
@@ -221,11 +188,9 @@ public class MaterialTests {
 				.setHyperLink()
 				.setMaterialTitle()
 				.addDescription()
-				.clickNextStep()
 				.selectEducation()
 				.selectSubjectArea()
 				.selectTargetGroup()
-				.clickNextStep()
 				.setAuthorFirstName()
 				.setAuthorSurName()
 				.clickCreateMaterial()
@@ -249,7 +214,7 @@ public class MaterialTests {
 	}
 	
 	@Test
-	public void MaterialTests_ChangeMaterialLink__LOChangedBannerIsDisplayed() {
+	public void MaterialTests_ChangeMaterialLink_LoChangedBannerIsDisplayed() {
 
 		String changedLinkBannerText  = goToLandingPage()	
 				.chooseUserType("Moderator")
@@ -257,20 +222,18 @@ public class MaterialTests {
 				.setNewHyperLink()
 				.setMaterialTitle()
 				.addDescription()
-				.clickNextStep()
 				.selectEducation()
 				.selectSubjectArea()
 				.selectTargetGroup()
-				.clickNextStep()
 				.setAuthorFirstName()
 				.setAuthorSurName()
 				.clickCreateMaterial()
 				.markNewMaterialAsReviewed()
 				.clickActionsMenu()
 				.clickEditMaterial()
-				.setRandomHyperLink()
+				.setHyperLink()
 				.clickUpdateMaterial()
 				.getChangedLinkBannerText();
-		Assert.assertEquals("Õppevara link. Enne oli: "+AddMaterialPopUp.newMaterialUrl, changedLinkBannerText);
+		Assert.assertEquals("Õppevara link. Enne oli: "+MaterialPopUp.newMaterialUrl, changedLinkBannerText);
 	}
 }

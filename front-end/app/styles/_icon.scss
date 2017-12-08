@@ -3,6 +3,12 @@
   height: 1em;
 }
 
+.material-icons--font-size-28px-sm {
+  @media (min-width: $layout-breakpoint-sm) {
+    font-size: 28px;
+  }
+}
+
 md-toolbar .material-icons, md-card-actions .material-icons {
   min-height: 0;
   min-width: 0;
@@ -34,6 +40,14 @@ md-chip-template .md-button.md-icon-button {
 }
 .language-icon {
   float: left;
+}
+
+// md-icon-button height/width override
+.md-icon-button--44px-sm {
+  @media (min-width: $layout-breakpoint-sm) {
+    height: 44px !important;
+    width: 44px !important;
+  }
 }
 
 md-toolbar .md-button.md-icon-button md-icon, button.md-button.md-fab md-icon {

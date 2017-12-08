@@ -14,6 +14,20 @@ class controller extends Controller {
             if (currentValue !== previousValue)
                 this.setNewTags()
         }, true)
+        this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
+        this.$rootScope.$on('tags:focusInput', () => {
+            let numAttempts = 0
+            this.focusInterval = setInterval(() => {
+                numAttempts++
+                const input = this.$element[0].querySelector('input')
+                if (input) {
+                    input.focus()
+                    clearInterval(this.focusInterval)
+                }
+                if (numAttempts >= 20)
+                    clearInterval(this.focusInterval)
+            }, 500)
+        })
 
         // auto-launch the report dialog upon login or page load if hash is found in location URL
         this.$timeout(() =>
@@ -56,7 +70,7 @@ class controller extends Controller {
         if (!id) {
             this.$scope.upvotes = undefined
             this.allUpvotes = undefined
-            return 
+            return
         }
 
         this.serverCallService
@@ -133,7 +147,7 @@ class controller extends Controller {
         }
     }
     addTag() {
-        if (this.learningObject && this.learningObject.id) {
+        if (this.newTag && this.newTag.tagName && this.learningObject && this.learningObject.id) {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
                 .then(({ data }) =>
@@ -144,14 +158,14 @@ class controller extends Controller {
     }
     addTagSuccess(learningObject) {
         if (this.learningObject) {
-            learningObject.picture = this.learningObject.picture
-            this.learningObject = learningObject
+            const { tag, taxon, targetGroups, resourceTypes, changed } = learningObject
+            Object.assign(this.learningObject, { tag, taxon, targetGroups, resourceTypes, changed })
 
             if (!this.learningObject.source && learningObject.uploadedFile)
                 this.learningObject.source = learningObject.uploadedFile.url
 
-            this.isPortfolio(learningObject) ? this.storageService.setPortfolio(learningObject) :
-            this.isMaterial(learningObject) && this.storageService.setMaterial(learningObject)
+            this.isPortfolio(this.learningObject) ? this.storageService.setPortfolio(this.learningObject) :
+            this.isMaterial(this.learningObject) && this.storageService.setMaterial(this.learningObject)
 
             this.getTagUpVotes()
         }
@@ -208,6 +222,7 @@ class controller extends Controller {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
                 .then(({ data }) => {
+                    this.$rootScope.learningObjectChanged = true
                     this.addTagSuccess(data.learningObject)
                     this.showSystemTagDialog(data.tagTypeName)
                     this.$scope.$emit(
@@ -264,6 +279,7 @@ controller.$inject = [
     '$rootScope',
     '$mdDialog',
     '$timeout',
+    '$element',
     'authenticatedUserService',
     'storageService',
     'suggestService',

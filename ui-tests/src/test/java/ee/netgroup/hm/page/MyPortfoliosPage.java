@@ -1,7 +1,7 @@
 package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
-import ee.netgroup.hm.components.AddMaterialPopUp;
+import ee.netgroup.hm.components.MaterialPopUp;
 import ee.netgroup.hm.components.AddPortfolioForm;
 import ee.netgroup.hm.components.LeftMenu;
 import ee.netgroup.hm.components.Search;
@@ -40,7 +40,7 @@ public class MyPortfoliosPage extends Page{
 		return LeftMenu.clickToFilterPreschoolEducation();
 	}
 
-	public AddMaterialPopUp clickAddMaterial() {
+	public MaterialPopUp clickAddMaterial() {
 		return fabButton.clickAddMaterial();
 	}
 

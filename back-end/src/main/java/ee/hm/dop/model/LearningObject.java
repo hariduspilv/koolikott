@@ -38,11 +38,12 @@ import static javax.persistence.FetchType.LAZY;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class LearningObject implements Searchable, ILearningObject {
 
-    static PolicyFactory ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
+    static PolicyFactory LO_ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
             .allowElements("p", "b", "br", "i", "ul", "li", "div", "ol", "pre", "blockquote", "a")
             .allowAttributes("href", "target")
             .onElements("a")
             .toFactory();
+
     @Id
     @GeneratedValue
     private Long id;
@@ -83,7 +84,7 @@ public abstract class LearningObject implements Searchable, ILearningObject {
             uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "tag"}))
     private List<Tag> tags;
 
-    @ManyToOne
+    @ManyToOne(fetch = EAGER, cascade = {MERGE, PERSIST})
     @JoinColumn(name = "picture")
     private OriginalPicture picture;
 

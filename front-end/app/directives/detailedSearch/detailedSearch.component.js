@@ -16,7 +16,7 @@ class controller extends Controller {
         // Languages
         this.metadataService.loadUsedLanguages(languages => this.$scope.languages = languages)
         this.$scope.detailedSearch.language = this.searchService.getLanguage()
-        
+
         if (!this.searchService.getLanguage())
             this.$scope.detailedSearch.language = null
 
@@ -46,13 +46,13 @@ class controller extends Controller {
         // Issue date
         this.$scope.issueDateFirstYear = 2009
         this.$scope.issueDateLastYear = new Date().getFullYear()
-        
+
         const issuedFrom = this.searchService.getIssuedFrom()
         if (
             issuedFrom &&
             issuedFrom >= this.$scope.issueDateFirstYear &&
             issuedFrom <= this.$scope.issueDateLastYear
-        )   
+        )
             this.$scope.detailedSearch.issueDate = issuedFrom
 
         // Cross-curricular themes
@@ -86,6 +86,11 @@ class controller extends Controller {
                 this.metadataService.updateUsedResourceTypes(this.setUsedResourceTypes.bind(this))
             )
         )
+
+        // Issue 226 solution if needed
+        /*this.$scope.$on('detailedSearch:search', () =>
+            this.search()
+        )*/
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newValue, oldValue) => {
             if (newValue && oldValue && (newValue !== oldValue))
@@ -138,7 +143,7 @@ class controller extends Controller {
         if (newValue.CLIL !== oldValue.CLIL) return true
         if (newValue.taxon !== oldValue.taxon && this.$scope.detailedSearch.taxon) {
             this.$scope.detailedSearch.educationalContext = this.taxonService.getEducationalContext(this.$scope.detailedSearch.taxon)
-            
+
             if (this.$rootScope.isEditPortfolioMode)
                 this.$scope.$broadcast('detailedSearch:taxonChange', {
                     newValue: newValue.taxon,

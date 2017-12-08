@@ -28,12 +28,34 @@ md-chip md-chip-template {
 	align-items: center;
 }
 
+.chips--regular-font {
+	.md-chips {
+		font-size: 16px;
+	}
+}
+
+.chips-with-chevron {
+	&:before {
+		content: '';
+		right: 0;
+		top: 50%;
+		transform: translate(-50%, 50%);
+		position: absolute;
+		width: 0;
+	  height: 0;
+	  border-left: 5px solid transparent;
+	  border-right: 5px solid transparent;
+	  border-top: 5px solid black;
+	}
+}
+
 md-chips,
 .md-chips {
 	display: block;
 	font-size: 13px;
 	padding: 0px;
 	vertical-align: middle;
+	position: relative;
 
 	.md-chip {
 		padding: 0px 12px;
@@ -131,4 +153,8 @@ md-chips,
 
 md-chip.new {
 	background-color: #fff59d;
+}
+
+.chips-container {
+	padding: 9px 8px;
 }
