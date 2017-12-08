@@ -165,7 +165,7 @@ class controller extends Controller {
     }
     addGroups(groupsToAdd) {
         [].push.apply(
-            this.$scope.selectedTargetGroup, 
+            this.$scope.selectedTargetGroup,
             groupsToAdd.reduce(
                 (missing, group) =>
                     this.$scope.selectedTargetGroup.includes(group)

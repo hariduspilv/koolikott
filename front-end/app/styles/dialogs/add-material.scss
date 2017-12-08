@@ -62,7 +62,8 @@
     }
 
     &.is-selected,
-    &:hover {
+    &:hover,
+    &:focus {
         border-color: rgb(3,169,244);
     }
 }
@@ -73,7 +74,8 @@
     top: 6px;
 
     .button-material-language.is-selected &,
-    .button-material-language:hover & {
+    .button-material-language:hover &,
+    .button-material-language:focus & {
         color: rgb(3,169,244);
     }
 }
