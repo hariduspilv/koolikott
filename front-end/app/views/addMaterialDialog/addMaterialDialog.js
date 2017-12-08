@@ -419,6 +419,9 @@ class controller extends Controller {
                      *  - licenseType
                      */
                     if (snippet.thumbnails) {
+                        if (!this.$scope.material.picture)
+                            this.$scope.material.picture = {}
+
                         this.setThumbnail(snippet.thumbnails);
                         this.$scope.material.picture.author = snippet.channelTitle;
                         this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
@@ -444,6 +447,7 @@ class controller extends Controller {
                         title: snippet.title,
                         description: snippet.description
                     }
+                    console.log(this.$scope.titlesAndDescriptions);
                 })
     }
     setThumbnail(thumbnails) {
