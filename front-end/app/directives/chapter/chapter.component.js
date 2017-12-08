@@ -42,14 +42,14 @@ function getEmptySelectionParent() {
     }
 
     const selection = window.getSelection()
-    
+
     if (selection.rangeCount) {
         const range = selection.getRangeAt(0)
         let selectionParent = range.commonAncestorContainer
 
         if (selectionParent.nodeType != Node.ELEMENT_NODE)
             selectionParent = selectionParent.parentNode
-        
+
         const selectionEditor = getSelectionEditor(selectionParent)
 
         if (selectionParent &&
@@ -200,6 +200,12 @@ if (isIE()) {
         return ul
     }
 }
+MediumEditor.extensions.placeholder.prototype.showPlaceholder = (el) => {
+    if (el) {
+        el.classList.add('medium-editor-placeholder')
+        el.classList.remove('medium-editor-placeholder-relative')
+    }
+}
 /**
  * Overwriting Medium Editor's util methods to suit our needs.
  * The original method accepts a blacklist of attributes that should be removed on all elements
@@ -318,11 +324,6 @@ class controller extends Controller {
             this.$scope.isFocused = false
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = null
-            this.$scope.stickyClassNames = {
-                sticky: true,
-                'is-sticky': false,
-                'is-at-bottom': false
-            }
 
             this.$scope.$watch('chapter.blocks', this.onBlockChanges.bind(this), true)
 
@@ -330,13 +331,9 @@ class controller extends Controller {
             document.addEventListener('mousedown', this.onClickOutside)
             document.addEventListener('touchstart', this.onClickOutside)
 
-            this.onResize = () => requestAnimationFrame(this.calcSizes.bind(this))
-            window.addEventListener('resize', this.onResize)
-            window.addEventListener('load', this.onResize)
-            setTimeout(this.onResize)
-
-            this.onScroll = () => this.$scope.isFocused && requestAnimationFrame(this.setStickyClassNames.bind(this))
-            window.addEventListener('scroll', this.onScroll)
+            this.$timeout(() =>
+                Stickyfill.addOne(this.$element[0].querySelector('.sticky'))
+            )
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertExistingMaterials', this.onInsertExistingMaterials.bind(this))
 
@@ -500,7 +497,7 @@ class controller extends Controller {
         const sanitizeEditedHtml = (html) => {
             const wrapper = document.createElement('div')
             wrapper.innerHTML = html
-            
+
             // 1) remove id atts from subchapters
             for (let subchapter of wrapper.querySelectorAll('.subchapter'))
                 subchapter.removeAttribute('id')
@@ -734,18 +731,6 @@ class controller extends Controller {
     getEditor(idx) {
         return MediumEditor.getEditorFromElement(this.getEditorElements()[idx])
     }
-    calcSizes() {
-        if (this.isEditMode) {
-            this.sticky = this.sticky || this.$element[0].querySelector('.sticky')
-
-            const { top } = this.sticky.getBoundingClientRect()
-
-            this.offsetTop = top + window.pageYOffset
-            this.chapterHeight = this.$element[0].firstChild.offsetHeight
-            this.toolbarHeight = this.sticky.offsetHeight
-            this.stickyTop = window.innerWidth < 960 ? 56 : 80
-        }
-    }
     getChapterClassNames() {
         return Object.assign({
             'is-edit-mode': this.isEditMode
@@ -776,29 +761,6 @@ class controller extends Controller {
             ? 'Alusta selle muutmisega (kliki siia) - lisa lõike, teksti, pilte, videosid, materjale e-koolikotist. Salvestamine toimub automaatselt. Jõudu tööle!'
             : ''
     }
-    setStickyClassNames(evt) {
-        const set = (isSticky, isAtBottom) => {
-            if (this.$scope.stickyClassNames['is-sticky'] != isSticky) {
-                this.$scope.stickyClassNames['is-sticky'] = isSticky
-                Stickyfill[isSticky ? 'addOne' : 'removeOne'](this.sticky)
-            }
-            if (this.$scope.stickyClassNames['is-at-bottom'] != isAtBottom)
-                this.$scope.stickyClassNames['is-at-bottom'] = isAtBottom
-
-            if (evt)
-                this.$scope.$apply()
-        }
-
-        if (this.chapterHeight - this.toolbarHeight < 100)
-            return set(false, false)
-
-        const toolbarTopMin = this.offsetTop - this.stickyTop
-        const toolbarTopMax = this.offsetTop + this.chapterHeight - this.toolbarHeight - this.stickyTop
-        const isAtBottom = window.pageYOffset >= toolbarTopMax
-        const isSticky = !isAtBottom && window.pageYOffset >= toolbarTopMin
-
-        set(isSticky, isAtBottom)
-    }
     getToggleColumnWidthIcon() {
         const { narrow } = typeof this.$scope.focusedBlockIdx === 'number'
             ? this.$scope.chapter.blocks[this.$scope.focusedBlockIdx] || {}
@@ -824,15 +786,11 @@ class controller extends Controller {
     }
     focusTitle(clickOnContainer = false) {
         this.$timeout.cancel(this.blurTimer)
-
-        if (!this.$scope.isFocused) {
-            this.calcSizes()
-            this.setStickyClassNames()
-        }
         this.$timeout(() => {
             this.$scope.isFocused = true
             this.$scope.isTitleFocused = true
             this.$scope.focusedBlockIdx = null
+            this.$timeout(Stickyfill.refreshAll, 500)
 
             if (clickOnContainer)
                 this.$element[0].querySelector('.chapter-title-input').focus()
@@ -870,15 +828,11 @@ class controller extends Controller {
     }
     onFocusBlock(idx) {
         this.$timeout.cancel(this.blurTimer)
-
-        if (!this.$scope.isFocused) {
-            this.calcSizes()
-            this.setStickyClassNames()
-        }
         this.$timeout(() => {
             this.$scope.isFocused = true
             this.$scope.isTitleFocused = false
             this.$scope.focusedBlockIdx = idx
+            this.$timeout(Stickyfill.refreshAll, 500)
         })
     }
     blurTitle() {
@@ -1043,7 +997,9 @@ class controller extends Controller {
         )
         this.$timeout(() => {
             document.getElementById('header-search-input').focus()
-            
+            // Issue 226 solution if needed
+            /*this.$rootScope.$broadcast('detailedSearch:search');*/
+
             const headerCtrl = angular.element('dop-header').controller('dopHeader')
             if (headerCtrl)
                 headerCtrl.search()
@@ -1097,7 +1053,7 @@ class controller extends Controller {
             insertingAtMarker
                 ? this.focusBlock(window.embedInsertionBlockIdx)
                 : this.focusBlock()
-            
+
             const lastInsertedMaterial = editorEl.querySelector(`[data-id="${materials[materials.length - 1].id}"]`)
             this.scrollToElement(lastInsertedMaterial)
             this.putCaretAfterNode(lastInsertedMaterial)
@@ -1151,7 +1107,7 @@ class controller extends Controller {
         if (selection.rangeCount) {
             const range = window.getSelection().getRangeAt(0)
             range.setStartAfter(node)
-            range.setEndAfter(node) 
+            range.setEndAfter(node)
             selection.removeAllRanges()
             selection.addRange(range)
         }
