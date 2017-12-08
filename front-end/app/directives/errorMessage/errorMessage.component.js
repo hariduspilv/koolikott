@@ -299,7 +299,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost('rest/admin/improper/setProper', {id, type})
                 .then(({ status, data }) => {
-                    console.log('POST rest/admin/improper/setProper', { id, type }, status, data)
                     this.$rootScope.learningObjectImproper = false
                     this.$rootScope.learningObjectUnreviewed = false
                     this.$rootScope.learningObjectChanged = false
@@ -316,11 +315,6 @@ class controller extends Controller {
                 ? this.serverCallService.makePost('rest/portfolio/delete', { id, type })
                 : this.serverCallService.makePost('rest/material/delete', { id, type })
             ).then(({ status, data }) => {
-                console.log.apply(console,
-                    isPortfolio
-                        ? ['POST rest/portfolio/delete', { id, type }, status, data]
-                        : ['POST rest/material/delete', {id, type }, status, data]
-                )
                 this.data.deleted = true
                 this.toastService.showOnRouteChange(isPortfolio ? 'PORTFOLIO_DELETED' : 'MATERIAL_DELETED')
                 this.$rootScope.learningObjectDeleted = true
@@ -336,11 +330,6 @@ class controller extends Controller {
             const url = 'rest/admin/deleted/restore';
 
             this.serverCallService.makePost(url, { id, type }).then(({ status, data }) => {
-                console.log('POST rest/admin/deleted/restore',
-                    { id, type },
-                    status,
-                    data
-                )
                 this.data.deleted = false
                 this.data.improper = false
                 this.data.unReviewed = false
@@ -362,7 +351,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost('rest/admin/firstReview/setReviewed', { id, type })
                 .then(({ status, data }) => {
-                    console.log('POST rest/admin/firstReview/setReviewed', { id, type }, status, data)
                     this.$rootScope.learningObjectUnreviewed = false
                     this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 })
@@ -384,7 +372,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost(`rest/admin/changed/${id}/${action}All`)
                 .then(({ status, data }) => {
-                    console.log(`POST rest/admin/changed/${id}/${action}All`, status, data)
                     200 <= status && status < 300
                         ? this.setData(data)
                         : undo()
@@ -409,7 +396,6 @@ class controller extends Controller {
             this.serverCallService
                 .makePost(`rest/admin/changed/${id}/${action}One/${change.id}`)
                 .then(({ status, data }) => {
-                    console.log(`POST rest/admin/changed/${id}/${action}One/${change.id}`, status, data)
                     200 <= status && status < 300
                         ? this.setExpandableHeight() || this.setData(data)
                         : undo()

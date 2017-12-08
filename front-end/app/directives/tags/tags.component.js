@@ -222,6 +222,7 @@ class controller extends Controller {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
                 .then(({ data }) => {
+                    this.$rootScope.learningObjectChanged = true
                     this.addTagSuccess(data.learningObject)
                     this.showSystemTagDialog(data.tagTypeName)
                     this.$scope.$emit(

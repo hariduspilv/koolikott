@@ -133,25 +133,27 @@ MediumEditor.extensions.toolbar.prototype.checkState = function () {
 
     const emptySelectionParent = this.getEmptySelectionParent()
     if (emptySelectionParent) {
-        /**
-         * this is necessary so that the toolbar would be positioned
-         * at the beginning of the empty row.
-         */
         const selection = window.getSelection()
         if (selection.rangeCount) {
-            const range = selection.getRangeAt(0)
+                /**
+                 * this is necessary so that the toolbar would be positioned
+                 * at the beginning of the empty row.
+                 */
+                const range = selection.getRangeAt(0)
+                range.selectNodeContents(emptySelectionParent)
+                selection.removeAllRanges()
+                selection.addRange(range)
 
-            range.selectNodeContents(emptySelectionParent)
-            selection.removeAllRanges()
-            selection.addRange(range)
+                // hide link editor
+                if (!this.isToolbarDefaultActionsDisplayed())
+                    this.showToolbarDefaultActions()
 
-            // hide link editor
-            if (!this.isToolbarDefaultActionsDisplayed())
-                this.showToolbarDefaultActions()
+                this.showToolbar()
+                this.setToolbarButtonStates()
+                this.positionToolbar(window.getSelection())
 
-            this.showToolbar()
-            this.setToolbarButtonStates()
-            this.positionToolbar(window.getSelection())
+                // Without this FF won't let the cursor be moved off the empty row with keyboard arrows
+                range.collapse(true)
         }
     }
 }
@@ -933,6 +935,7 @@ class controller extends Controller {
             this.focusBlock(focusedBlockIdx, true)
         }
     }
+    // Leaving this unused since it did not perform properly on WIN platform
     beforeMoveBlock(up = false) {
         this.$timeout.cancel(this.blurTimer)
 
