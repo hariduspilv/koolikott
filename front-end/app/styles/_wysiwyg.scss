@@ -48,3 +48,6 @@
     margin: 0;
   }
 }
+.medium-editor-toolbar-input::-ms-clear {
+  display: none;
+}
