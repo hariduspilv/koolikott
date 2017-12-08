@@ -935,6 +935,7 @@ class controller extends Controller {
             this.focusBlock(focusedBlockIdx, true)
         }
     }
+    // Leaving this unused since it did not perform properly on WIN platform
     beforeMoveBlock(up = false) {
         this.$timeout.cancel(this.blurTimer)
 

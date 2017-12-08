@@ -91,7 +91,6 @@
         <div
           class="chapter-btn chapter-btn--move-block-back"
           data-ng-click="$ctrl.moveBlock(true)"
-          data-ng-mousedown="$ctrl.beforeMoveBlock(true)"
           data-ng-disabled="focusedBlockIdx === 0"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
           >
@@ -103,7 +102,6 @@
         <div
           class="chapter-btn chapter-btn--move-block-forward"
           data-ng-click="$ctrl.moveBlock()"
-          data-ng-mousedown="$ctrl.beforeMoveBlock()"
           data-ng-disabled="focusedBlockIdx === chapter.blocks.length - 1"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
           >
