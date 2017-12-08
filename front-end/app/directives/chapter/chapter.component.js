@@ -710,6 +710,7 @@ class controller extends Controller {
                         else {
                             const link = document.createElement('a')
                             link.href = `/material?id=${id}`
+                            link.target = '_blank'
                             link.appendChild(fragment)
                             embed.appendChild(link)
                         }
