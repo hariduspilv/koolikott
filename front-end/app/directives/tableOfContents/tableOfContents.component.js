@@ -31,8 +31,10 @@ class controller extends Controller {
             const slug = this.$location.hash()
             const el = slug && document.getElementById(slug)
 
-            if (el)
-                window.scrollTo(0, el.offsetTop - 80)
+            if (el) {
+                const { top } = el.getBoundingClientRect()
+                window.scrollTo(0, top + window.scrollY - 80)
+            }
         }
         document.readyState === 'complete'
             ? setScroll()

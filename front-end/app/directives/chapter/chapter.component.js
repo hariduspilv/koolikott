@@ -651,7 +651,7 @@ class controller extends Controller {
     }
     registerSubchapters() {
         // add id attributes to all subchapters derived from subchapter titles
-        for (let [subIdx, subEl] of document.querySelectorAll('.subchapter').entries())
+        for (let [subIdx, subEl] of this.$element[0].querySelectorAll('.subchapter').entries())
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(el) {
