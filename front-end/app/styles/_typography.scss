@@ -49,6 +49,19 @@ h2 {
   }
 }
 
+.md-body-3 {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+// stylistically same as .md-title
+.subchapter {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
 .md-caption.caption-light {
   font-weight: 300;
   margin-bottom: 0;

@@ -28,52 +28,6 @@ public class CommentResource extends BaseResource {
         return commentService.addComment(form.getComment(), form.getLearningObject(), getLoggedInUser());
     }
 
-    @POST
-    @Path("portfolio")
-    @Consumes("application/json")
-    public void addPortfolioComment(AddCommentForm form) {
-        Comment comment = form.getComment();
-        commentService.addComment(comment, form.getPortfolio(), getLoggedInUser());
-    }
-
-    @POST
-    @Path("material")
-    @Consumes("application/json")
-    public void addMaterialComment(AddCommentForm form) {
-        Comment comment = form.getComment();
-        commentService.addComment(comment, form.getMaterial(), getLoggedInUser());
-    }
-
-    public static class AddCommentForm {
-        private Comment comment;
-        private Portfolio portfolio;
-        private Material material;
-
-        public Comment getComment() {
-            return comment;
-        }
-
-        public void setComment(Comment comment) {
-            this.comment = comment;
-        }
-
-        public Portfolio getPortfolio() {
-            return portfolio;
-        }
-
-        public void setPortfolio(Portfolio portfolio) {
-            this.portfolio = portfolio;
-        }
-
-        public Material getMaterial() {
-            return material;
-        }
-
-        public void setMaterial(Material material) {
-            this.material = material;
-        }
-    }
-
     public static class AddComment {
         private Comment comment;
         private LearningObject learningObject;

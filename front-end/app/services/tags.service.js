@@ -97,16 +97,5 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                     });
             }
         },
-
-        getImpropers(params, successCallback, failCallback) {
-            if (successCallback) {
-                serverCallService.makeGet("rest/impropers", params, successCallback, failCallback);
-            } else {
-                return serverCallService.makeGet("rest/impropers", params)
-                    .then(response => {
-                        return response.data;
-                    });
-            }
-        }
     }
 }

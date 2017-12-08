@@ -325,9 +325,16 @@ class controller extends Controller {
             this.dontSearch = false
     }
     updatePortfolio() {
-        this.serverCallService.makePost('rest/portfolio/update', this.storageService.getPortfolio())
+        this.updateChaptersStateFromEditors()
+        this.serverCallService
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+            .then(({ data: portfolio }) => {
+                if (portfolio)
+                    this.storageService.setPortfolio(portfolio)
+            })
     }
     saveAndExit() {
+        this.updateChaptersStateFromEditors()
         this.serverCallService
             .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
