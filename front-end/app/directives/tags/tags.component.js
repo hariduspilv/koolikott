@@ -70,7 +70,7 @@ class controller extends Controller {
         if (!id) {
             this.$scope.upvotes = undefined
             this.allUpvotes = undefined
-            return 
+            return
         }
 
         this.serverCallService

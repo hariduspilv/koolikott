@@ -42,14 +42,14 @@ function getEmptySelectionParent() {
     }
 
     const selection = window.getSelection()
-    
+
     if (selection.rangeCount) {
         const range = selection.getRangeAt(0)
         let selectionParent = range.commonAncestorContainer
 
         if (selectionParent.nodeType != Node.ELEMENT_NODE)
             selectionParent = selectionParent.parentNode
-        
+
         const selectionEditor = getSelectionEditor(selectionParent)
 
         if (selectionParent &&
@@ -499,7 +499,7 @@ class controller extends Controller {
         const sanitizeEditedHtml = (html) => {
             const wrapper = document.createElement('div')
             wrapper.innerHTML = html
-            
+
             // 1) remove id atts from subchapters
             for (let subchapter of wrapper.querySelectorAll('.subchapter'))
                 subchapter.removeAttribute('id')
@@ -999,7 +999,9 @@ class controller extends Controller {
         )
         this.$timeout(() => {
             document.getElementById('header-search-input').focus()
-            
+            // Issue 226 solution if needed
+            /*this.$rootScope.$broadcast('detailedSearch:search');*/
+
             const headerCtrl = angular.element('dop-header').controller('dopHeader')
             if (headerCtrl)
                 headerCtrl.search()
@@ -1053,7 +1055,7 @@ class controller extends Controller {
             insertingAtMarker
                 ? this.focusBlock(window.embedInsertionBlockIdx)
                 : this.focusBlock()
-            
+
             const lastInsertedMaterial = editorEl.querySelector(`[data-id="${materials[materials.length - 1].id}"]`)
             this.scrollToElement(lastInsertedMaterial)
             this.putCaretAfterNode(lastInsertedMaterial)
@@ -1107,7 +1109,7 @@ class controller extends Controller {
         if (selection.rangeCount) {
             const range = window.getSelection().getRangeAt(0)
             range.setStartAfter(node)
-            range.setEndAfter(node) 
+            range.setEndAfter(node)
             selection.removeAllRanges()
             selection.addRange(range)
         }

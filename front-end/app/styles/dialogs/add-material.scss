@@ -61,12 +61,9 @@
         margin-right: $md-padding / 2;
     }
 
+    &.is-selected,
     &:hover {
-        border-color: $green1;
-    }
-
-    &.is-selected {
-        border-color: $green1;
+        border-color: rgb(3,169,244);
     }
 }
 
@@ -74,4 +71,9 @@
     position: absolute;
     right: 0%;
     top: 6px;
+
+    .button-material-language.is-selected &,
+    .button-material-language:hover & {
+        color: rgb(3,169,244);
+    }
 }
