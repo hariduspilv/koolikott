@@ -172,7 +172,7 @@ class controller extends Controller {
     setAuthorToUser() {
         const { name, surname } = this.authenticatedUserService.getUser();
 
-        if (this.$scope.material.picture.author !== `${name} ${surname}`) {
+        if (this.$scope.material.picture && this.$scope.material.picture.author !== `${name} ${surname}`) {
             this.$scope.material.picture.author = `${name} ${surname}`;
             this.$scope.isUserAuthor = true;
         } else {
@@ -535,6 +535,16 @@ class controller extends Controller {
             this.$scope.material.keyCompetences = []
 
         this.setTitlesAndDescriptions()
+
+        if (!this.$scope.material.picture)
+            this.$scope.material.picture = {}
+
+        const { name, surname } = this.authenticatedUserService.getUser();
+        if (this.$scope.material.picture.author && this.$scope.material.picture.author === `${name} ${surname}`)
+            this.$scope.isUserAuthor = true
+
+        if (this.$scope.material.authors[0].name === name && this.$scope.material.authors[0].surname === surname)
+            this.$scope.isUserAuthorFirstAuthor = true
     }
     prefillMetadataFromPortfolio() {
         const storedPortfolio = this.storageService.getPortfolio()
