@@ -101,36 +101,39 @@
         <div
           data-ng-repeat="lang in $ctrl.titleAndSummaryLanguages track by $index"
           data-ng-if="lang === activeTitleAndDescriptionLanguage"
+          layout="row"
+          layout-wrap
           >
           <!-- Title -->
-          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
-            <md-input-container flex flex-order-xs="2" flex-sm="50">
+          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex="100" flex-gt-sm="50">
+            <md-input-container flex>
               <label data-translate="MATERIAL_TITLE"></label>
               <input data-ng-model="titlesAndDescriptions[lang].title" name="title" data-ng-required="$index === 0">
               <div data-ng-messages="addMaterialForm.title.$error">
                 <div data-ng-message="required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
               </div>
             </md-input-container>
+          </div>
+          <!-- Description -->
+          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1" flex-order-gt-sm="2" flex="100">
+            <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+              <label data-translate="CONTENT_SUMMARY"></label>
+              <textarea ng-model="titlesAndDescriptions[lang].description" id="add-material-description-input"></textarea>
+            </md-input-container>
+          </div>
+          <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1">
             <!-- Material language -->
             <md-button
               class="button-material-language"
               data-ng-repeat="_lang in $ctrl.titleAndSummaryLanguages track by $index"
               data-ng-class="{'is-selected': lang === _lang}"
               data-ng-click="$ctrl.toggleTitleAndDescriptionLanguageInputs(_lang)"
-              flex-gt-xs="{{ activeTitleAndDescriptionLanguage === _lang ? '20' : '15' }}"
-              flex-order-xs="1"
+              flex-gt-xs="{{ activeTitleAndDescriptionLanguage === _lang ? '40' : '30' }}"
               aria-label="{{ _lang }} button"
               >
               <span data-ng-bind="_lang"></span>
               <md-icon class="button-material-language__icon" data-ng-if="$ctrl.isLangFilled(_lang) || activeTitleAndDescriptionLanguage === _lang">done</md-icon>
             </md-button>
-          </div>
-          <!-- Description -->
-          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center">
-            <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-              <label data-translate="CONTENT_SUMMARY"></label>
-              <textarea ng-model="titlesAndDescriptions[lang].description" id="add-material-description-input"></textarea>
-            </md-input-container>
           </div>
         </div>
 

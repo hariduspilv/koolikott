@@ -55,10 +55,31 @@
     margin-right: 0;
     text-align: left;
     border-radius: 0;
+    width: 100%;
 
     @media (min-width: $layout-breakpoint-xs) {
         margin-left: $md-padding / 2;
         margin-right: $md-padding / 2;
+    }
+
+    &:first-child {
+        @media (min-width: $layout-breakpoint-xs) {
+            margin-left: 0;
+        }
+
+        @media (min-width: $layout-breakpoint-sm) {
+            margin-left: $md-padding / 2;
+        }
+    }
+
+    &:last-child {
+        @media (min-width: $layout-breakpoint-xs) {
+            margin-right: 0;
+        }
+
+        @media (min-width: $layout-breakpoint-sm) {
+            margin-right: $md-padding / 2;
+        }
     }
 
     &.is-selected,
