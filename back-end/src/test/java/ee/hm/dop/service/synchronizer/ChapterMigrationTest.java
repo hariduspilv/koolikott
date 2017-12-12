@@ -126,8 +126,7 @@ public class ChapterMigrationTest {
 
         run();
 
-        assertTrue(isNotEmpty(chapter.getBlocks()));
-        assertEquals(1L, chapter.getBlocks().size());
+        assertTheresAreBlocks(chapter);
         validate1Chapter("<h3 class=\"subchapter\">Chapter_Title</h3>Chapter_Text<div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"1\"></div>", chapter);
     }
 
@@ -146,8 +145,7 @@ public class ChapterMigrationTest {
 
         run();
 
-        assertTrue(isNotEmpty(chapter.getBlocks()));
-        assertEquals(1L, chapter.getBlocks().size());
+        assertTheresAreBlocks(chapter);
         validate1Chapter("<h3 class=\"subchapter\">See on näidis alampeatükk</h3>Chapter_Text<div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"1\"></div>", chapter);
     }
 
@@ -164,8 +162,7 @@ public class ChapterMigrationTest {
 
         run();
 
-        assertTrue(isNotEmpty(chapter.getBlocks()));
-        assertEquals(1L, chapter.getBlocks().size());
+        assertTheresAreBlocks(chapter);
         validate1Chapter("<div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"1\"></div><h3 class=\"subchapter\">See on näidis alampeatükk</h3><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"1\"></div>", chapter);
 
         assertTrue(isNotEmpty(chapter.getContentRows()));
