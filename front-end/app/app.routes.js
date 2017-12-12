@@ -17,7 +17,15 @@ angular.module('koolikottApp')
                     templateUrl: 'views/search/result/searchResult.html',
                     controller: 'searchResultController',
                     controllerAs: '$ctrl',
-                    reloadOnSearch: false
+                    reloadOnSearch: false,
+                    isPreferred: false,
+                })
+                .when('/search/preferred', {
+                    templateUrl: 'views/search/result/searchResult.html',
+                    controller: 'searchResultController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false,
+                    isPreferred: true,
                 })
                 .when('/material', {
                     templateUrl: 'views/material/material.html',

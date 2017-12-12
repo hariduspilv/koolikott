@@ -1040,7 +1040,7 @@ class controller extends Controller {
             marker.parentNode.removeChild(marker)
         }
     }
-    onClickAddExistingMaterial() {
+    onClickAddExistingMaterial(preferred = false) {
         /**
          * This calls this.updateChaptersStateFromEditors() and then initiates
          * a POST request to rest/portfolio/update.
@@ -1172,8 +1172,7 @@ class controller extends Controller {
     /**
      * @todo in MS 13: Embed actions
      */
-    addMedia() {}
-    addRecommendedMaterial() {}
+    onClickAddMedia() {}
 }
 controller.$inject = [
     '$scope',

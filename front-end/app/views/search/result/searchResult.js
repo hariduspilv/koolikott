@@ -5,6 +5,7 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
+        this.$scope.isPreferred = this.$route.current.$$route.isPreferred
         this.setParams()
         this.$scope.$watch(
             () => this.$location.search(),
@@ -54,6 +55,7 @@ class controller extends Controller {
 controller.$inject = [
     '$scope',
     '$location',
+    '$route',
     'searchService'
 ]
 angular.module('koolikottApp').controller('searchResultController', controller)
