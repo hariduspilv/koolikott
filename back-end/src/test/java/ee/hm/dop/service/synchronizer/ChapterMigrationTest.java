@@ -98,6 +98,22 @@ public class ChapterMigrationTest {
     }
 
     @Test
+    public void chapter_with_many_subChapters_has_many_subChapters_migrated() throws Exception {
+        Chapter chapter = new Chapter();
+        chapter.setTitle(CHAPTER_TITLE);
+        chapter.setContentRows(new ArrayList<>());
+        chapter.setSubchapters(Arrays.asList(subChapter(), subChapter()));
+
+        expect(chapterDao.chaptersWithPortfolio()).andReturn(Arrays.asList(chapter));
+        expect(chapterDao.createOrUpdate(chapter)).andReturn(chapter);
+
+        run();
+
+        assertTheresAreBlocks(chapter);
+        validate1Chapter("<h3 class=\"subchapter\">Chapter_Title</h3>Chapter_Text<h3 class=\"subchapter\">Chapter_Title</h3>Chapter_Text", chapter);
+    }
+
+    @Test
     public void chapter_with_subChapters_w_LOs_has_subChapters_w_LOs_migrated() throws Exception {
         Chapter chapter = new Chapter();
         chapter.setContentRows(new ArrayList<>());
