@@ -132,8 +132,11 @@
             <div class="md-body-1 description textangular-view"
                  data-ng-bind-html="getCorrectLanguageString(material.descriptions)"></div>
             <!--Embedded Material-->
-            <div data-embeddable="material.embeddable" data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortfolioPage && !$root.isEditPortfolioPage}"
-                 data-dop-embedded-material data-material="material" data-flex></div>
+            <dop-embedded-material
+              data-ng-class="{'embed-card-picture': sourceType === 'PICTURE' && !$root.isViewPortfolioPage && !$root.isEditPortfolioPage}"
+              data-material="material"
+              data-flex
+            ></dop-embedded-material>
           </div>
           <!-- Tags -->
           <dop-tags data-ng-if="material && material.id"

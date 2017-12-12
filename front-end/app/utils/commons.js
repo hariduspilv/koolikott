@@ -655,7 +655,7 @@ class Controller {
     isYoutubeVideo(url) {
         // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
         const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
-        return url && url.match(youtubeUrlRegex)
+        return url && youtubeUrlRegex.test(url)
     }
     isSlideshareLink(url) {
         const slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
@@ -676,18 +676,19 @@ class Controller {
     isPDFLink(url) {
         return url && url.split('.').pop().toLowerCase() === "pdf"
     }
-    getEmbedType({ source }) {
-        if (!source)
+    getEmbedType({ source, uploadedFile }) {
+        if (!source && !uploadedFile)
             return
 
+        const url = source || uploadedFile.url
         switch (true) {
-            case isYoutubeVideo(source): return 'YOUTUBE'
-            case isSlideshareLink(source): return 'SLIDESHARE'
-            case isVideoLink(source): return 'VIDEO'
-            case isAudioLink(source): return 'AUDIO'
-            case isPictureLink(source): return 'PICTURE'
-            case isEbookLink(source): return 'EBOOK'
-            case isPDFLink(source): return 'PDF'
+            case this.isYoutubeVideo(url): return 'YOUTUBE'
+            case this.isSlideshareLink(url): return 'SLIDESHARE'
+            case this.isVideoLink(url): return 'VIDEO'
+            case this.isAudioLink(url): return 'AUDIO'
+            case this.isPictureLink(url): return 'PICTURE'
+            case this.isEbookLink(url): return 'EBOOK'
+            case this.isPDFLink(url): return 'PDF'
         }
     }
     isIE() {
