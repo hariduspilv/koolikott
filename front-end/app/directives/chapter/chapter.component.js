@@ -358,7 +358,7 @@ class controller extends Controller {
             MediumEditor.extensions.anchorPreview.prototype.getTemplate = () => {
                 return `
                     <div class="medium-editor-toolbar-anchor-preview" id="medium-editor-toolbar-anchor-preview">
-                        <div>${this.$translate.instant('EDIT')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
+                        <div>${this.$translate.instant('EDIT_LINK')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
                     </div>`
             }
         } else {
