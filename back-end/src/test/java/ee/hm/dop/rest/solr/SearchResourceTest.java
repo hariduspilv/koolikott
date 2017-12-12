@@ -301,6 +301,18 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void searchWithRecommededTrue() {
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setRecommended(true);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_7);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
     public void searchWithCurriculumLiteratureFalseAndLimit1() {
         String query = "data";
         SearchFilter searchFilter = new SearchFilter();
@@ -366,6 +378,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.getSortDirection() != null) {
             queryURL += "&sortDirection=" + searchFilter.getSortDirection().getValue();
+        }
+        if (searchFilter.isRecommended()) {
+            queryURL += "&recommended=" + searchFilter.isRecommended();
         }
         return queryURL;
     }

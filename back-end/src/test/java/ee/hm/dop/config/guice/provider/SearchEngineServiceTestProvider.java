@@ -63,6 +63,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
         addQueryWithLanguage();
         addQueryWithCurriculumLiteratureTrue();
+        addQueryWithRecommendedTrue();
         addQueryWithCurriculumLiteratureFalse();
         addQueryWithVisibility();
         addAdminQuery();
@@ -70,6 +71,12 @@ class SolrEngineServiceMock implements SolrEngineService {
         addSortedQuery();
         addResourceTypeQuery();
         addEmptySearchQuery();
+    }
+
+    private static void addQueryWithRecommendedTrue() {
+        String filteredQuery = "((data) OR (\"data\")) AND recommended:\"true\" AND (visibility:\"public\")";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 7L);
+        searchResponses.put(filteredQuery, result);
     }
 
     private static void addArabicQuery() {
