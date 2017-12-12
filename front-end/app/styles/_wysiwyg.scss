@@ -51,3 +51,23 @@
 .medium-editor-toolbar-input::-ms-clear {
   display: none;
 }
+.medium-editor-toolbar-anchor-preview {
+  text-align: left;
+  word-break: break-all;
+
+  > div {
+    cursor: pointer;
+    color: #e0e0e0; // gray-300
+    transition: color .2s;
+    will-change: color;
+  }
+}
+.medium-editor-toolbar-anchor-preview-inner {
+  color: inherit !important;
+  display: inline !important;
+  
+  &,
+  &:hover {
+    text-decoration: none;
+  }
+}
