@@ -36,12 +36,15 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
             ReviewableChangeDao reviewableChangeDao = newReviewableChangeDao();
             List<AdminLearningObject> allUnreviewed = reviewableChangeDao.findAllUnreviewed();
 
+            logger.info(String.format("Automatic ReviewableChange Acceptor found a total of %s changes",  allUnreviewed.size()));
             beginTransaction();
 
+            int accepted = 0;
             DateTime _10DaysBefore = DateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));
             for (AdminLearningObject learningObject : allUnreviewed) {
                 for (ReviewableChange reviewableChange : learningObject.getReviewableChanges()) {
                     if (!reviewableChange.isReviewed() && reviewableChange.getCreatedAt().isBefore(_10DaysBefore)) {
+                        accepted++;
                         reviewableChange.setReviewed(true);
                         reviewableChange.setReviewedAt(DateTime.now());
                         reviewableChange.setStatus(ReviewStatus.ACCEPTED_AUTOMATICALLY);
@@ -51,12 +54,16 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
             }
 
             closeTransaction();
-            logger.info("Automatically accepting ReviewableChange has finished execution");
+            logger.info("Automatic ReviewableChange Acceptor has finished execution, updated changes: " + accepted);
         } catch (Exception e) {
             logger.error("Unexpected error while automatically accepting ReviewableChange", e);
         }
     }
 
+    /**
+     * Can be started twice. Please refactor, meanwhile use with care
+     */
+    @Deprecated
     public void scheduleExecution(int hourOfDayToExecute) {
         TimerTask timerTask = new TimerTask() {
             @Override
