@@ -208,6 +208,52 @@ MediumEditor.extensions.placeholder.prototype.showPlaceholder = (el) => {
         el.classList.remove('medium-editor-placeholder-relative')
     }
 }
+MediumEditor.extensions.anchorPreview.prototype.handleEditableMouseover = function (event) {
+    const target = MediumEditor.util.getClosestTag(event.target, 'a')
+    const isEmbedElement = (el) => {
+        while (el !== null) {
+            if (el.classList.contains('chapter-embed-card') ||
+                el.classList.contains('embed-item') ||
+                el.classList.contains('embed-responsive-container') ||
+                el.classList.contains('embedded-material')
+            )
+                return true
+            if (el.classList.contains('chapter-block'))
+                return false
+            el = el.parentElement
+        }
+    }
+
+    if (target) {
+        if (isEmbedElement(target))
+            return true
+
+        if (!this.showOnEmptyLinks && (
+            !/href=["']\S+["']/.test(target.outerHTML) ||
+            /href=["']#\S+["']/.test(target.outerHTML)
+        ))
+            return true
+
+        const toolbar = this.base.getExtensionByName('toolbar');
+        if (!this.showWhenToolbarIsVisible &&
+            toolbar &&
+            toolbar.isDisplayed &&
+            toolbar.isDisplayed()
+        )
+            return true
+
+        if (this.activeAnchor && this.activeAnchor !== target)
+            this.detachPreviewHandlers()
+
+        this.anchorToPreview = target
+        this.instanceHandleAnchorMouseout = this.handleAnchorMouseout.bind(this)
+        this.on(this.anchorToPreview, 'mouseout', this.instanceHandleAnchorMouseout)
+        this.base.delay(() => {
+            if (this.anchorToPreview)
+                this.showPreview(this.anchorToPreview)
+        })
+    }
+}
 /**
  * Overwriting Medium Editor's util methods to suit our needs.
  * The original method accepts a blacklist of attributes that should be removed on all elements
