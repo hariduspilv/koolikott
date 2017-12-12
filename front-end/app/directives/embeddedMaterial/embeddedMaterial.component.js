@@ -68,9 +68,7 @@ class controller extends Controller {
             default:
                 this.$http
                     .get('https://noembed.com/embed?url=' + materialSource)
-                    .then(({ data }) => {
-                        const { html } = data
-                        console.log(data)
+                    .then(({ data: { html } }) => {
                         if (html) {
                             this.$scope.sourceType = 'NOEMBED'
                             this.$scope.noEmbedIsIframe = html.contains('<iframe')
