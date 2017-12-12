@@ -752,7 +752,8 @@ md-input-container.chapter-title {
   }
 
   // embeds are links in non-edit view
-  > a {
+  > a,
+  .chapter-embed-card__caption > a {
     color: inherit;
 
     &:hover {
@@ -836,6 +837,11 @@ md-input-container.chapter-title {
       background-repeat: no-repeat;
     }
   }
+
+  md-card,
+  md-card-content {
+    background: transparent;
+  }
 }
 .chapter-embed-card--float-left {
   @media (min-width: 600px) {
@@ -854,4 +860,8 @@ md-input-container.chapter-title {
       margin: 0 -1.5rem 1rem 2rem;
     }
   }
+}
+.chapter-embed-card__embedded-material-container {
+  background-size: cover;
+  background-position: center;
 }
