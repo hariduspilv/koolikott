@@ -450,6 +450,15 @@ public class SearchServiceTest extends SearchServiceTestUtil {
     }
 
     @Test
+    public void searchWithRecommended() {
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setRecommended(true);
+        String tokenizedQuery = "((german language) OR (\"german language\")) AND recommended:\"true\" AND (visibility:\"public\")";
+
+        testSearch(GERMAN_LANGUAGE, tokenizedQuery, searchFilter, M9_M2_P1);
+    }
+
+    @Test
     public void searchWithCurriculumLiteratureFalse() {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setCurriculumLiterature(false);

@@ -116,6 +116,7 @@ public class ChapterMigrationTest {
     @Test
     public void chapter_with_subChapters_w_LOs_has_subChapters_w_LOs_migrated() throws Exception {
         Chapter chapter = new Chapter();
+        chapter.setTitle(CHAPTER_TITLE);
         chapter.setContentRows(new ArrayList<>());
         Chapter chapter2 = subChapter();
         chapter2.setContentRows(mockRows());
@@ -134,6 +135,7 @@ public class ChapterMigrationTest {
     @Test
     public void chapter_with_subChapters_w_LOs_has_subChapters_w_LOs_migrated_no_sub_title() throws Exception {
         Chapter chapter = new Chapter();
+        chapter.setTitle(CHAPTER_TITLE);
         chapter.setContentRows(new ArrayList<>());
         Chapter chapter2 = new Chapter();
         chapter2.setText(CHAPTER_TEXT);
@@ -152,6 +154,7 @@ public class ChapterMigrationTest {
     @Test
     public void chapter_with_subChapters_w_LOs_and_LOs_has_everything_migrated() throws Exception {
         Chapter chapter = new Chapter();
+        chapter.setTitle(CHAPTER_TITLE);
         chapter.setContentRows(mockRows());
         Chapter chapter2 = new Chapter();
         chapter2.setContentRows(mockRows());
