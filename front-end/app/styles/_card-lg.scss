@@ -5,14 +5,6 @@
     padding: $md-padding * 1.5;
   }
 
-  .embed-link{
-    box-shadow: none;
-  }
-
-  .embed-link:hover{
-    background-color: transparent;
-  }
-
   h2 {
     color: $heading-color;
     font-size: 1.5rem;
@@ -154,81 +146,12 @@
   }
 }
 
-.learning-object-title {
-  margin: 0;
-}
-
-// embed card by mart laus
-.noPadding {
-  padding: 0;
-}
-.embed-header {
-  .pick {
-    position: absolute;
-    padding: $md-padding;
-    right: 0;
-    transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-    .checked {
-      display: none;
-    }
-
-    &:hover {
-      cursor: pointer;
-
-      .checked {
-        display: block;
-      }
-
-      .unchecked {
-        display: none;
-      }
-    }
-  }
-}
-
-.embed-card-content {
-  padding: 0px;
-  background-color: #fff;
-}
-
-.embeded-material-footer {
-  padding-top: 0px;
-}
-
 .summary-card {
   margin-bottom: 1.5rem;
 }
 
-// TODO: remove this if this bug is closed https://trello.com/c/TB5BRU7G/187-bug-issue-18-vistutatud-materjali-kuvamine-on-paigast-ara
-.embed-responsive-item {
-  overflow: hidden;
-}
-
-a.embed-link{
-  line-height: 0px;
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 1);
-}
-
-.embed-link img{
-  width: 100%;
-  max-width: 500px;
-  max-height: 500px;
-}
-
-.embed-link:hover img{
-  opacity: .8;
-  transition: ease all 0.5s;
-}
-
-.embed-card-picture{
-  line-height: 0;
-  display: inline-block;
-}
-
-a.embed-image-padded{
-  margin: $md-padding*2;
+.learning-object-title {
+  margin: 0;
 }
 
 // New styles

@@ -208,6 +208,52 @@ MediumEditor.extensions.placeholder.prototype.showPlaceholder = (el) => {
         el.classList.remove('medium-editor-placeholder-relative')
     }
 }
+MediumEditor.extensions.anchorPreview.prototype.handleEditableMouseover = function (event) {
+    const target = MediumEditor.util.getClosestTag(event.target, 'a')
+    const isEmbedElement = (el) => {
+        while (el !== null) {
+            if (el.classList.contains('chapter-embed-card') ||
+                el.classList.contains('embed-item') ||
+                el.classList.contains('embed-responsive-container') ||
+                el.classList.contains('embedded-material')
+            )
+                return true
+            if (el.classList.contains('chapter-block'))
+                return false
+            el = el.parentElement
+        }
+    }
+
+    if (target) {
+        if (isEmbedElement(target))
+            return true
+
+        if (!this.showOnEmptyLinks && (
+            !/href=["']\S+["']/.test(target.outerHTML) ||
+            /href=["']#\S+["']/.test(target.outerHTML)
+        ))
+            return true
+
+        const toolbar = this.base.getExtensionByName('toolbar');
+        if (!this.showWhenToolbarIsVisible &&
+            toolbar &&
+            toolbar.isDisplayed &&
+            toolbar.isDisplayed()
+        )
+            return true
+
+        if (this.activeAnchor && this.activeAnchor !== target)
+            this.detachPreviewHandlers()
+
+        this.anchorToPreview = target
+        this.instanceHandleAnchorMouseout = this.handleAnchorMouseout.bind(this)
+        this.on(this.anchorToPreview, 'mouseout', this.instanceHandleAnchorMouseout)
+        this.base.delay(() => {
+            if (this.anchorToPreview)
+                this.showPreview(this.anchorToPreview)
+        })
+    }
+}
 /**
  * Overwriting Medium Editor's util methods to suit our needs.
  * The original method accepts a blacklist of attributes that should be removed on all elements
@@ -291,6 +337,8 @@ MediumEditor.util.execFormatBlock = function (doc, tagName) {
 class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
+            this.embeddedMaterialsCache = this.embeddedMaterialsCache || {}
+
             const isFirstChange = chapter.isFirstChange()
             this.$scope.chapter = chapter.currentValue
 
@@ -560,6 +608,9 @@ class controller extends Controller {
          */
         const handleAddedNode = (node) => {
             if (node.parentNode && node.nodeType === Node.ELEMENT_NODE) {
+                if (isEmbedElement(node))
+                    return
+
                 if (!ALLOWED_TAGS.includes(node.tagName))
                     return node.outerHTML = node.innerHTML
 
@@ -594,8 +645,10 @@ class controller extends Controller {
                 if (parent.parentElement &&
                     isNodeBlockLevelElement(parent) &&
                     !(parent.tagName === 'UL' && child.tagName === 'LI')
-                )
+                ) {
+                    console.log('%cunwrapBlockLevelParents', 'color:red', parent)
                     parent.outerHTML = parent.innerHTML
+                }
             }
         }
         const unwrapBlockLevelChildren = (parent, root) => {
@@ -605,8 +658,10 @@ class controller extends Controller {
 
                     if (isNodeBlockLevelElement(child) &&
                         !(parent.tagName === 'UL' && child.tagName === 'LI' && root.tagName === 'UL')
-                    )
+                    ) {
+                        console.log('%cunwrapBlockLevelChildren', 'color:red', child)
                         child.outerHTML = child.innerHTML
+                    }
                 }
         }
         const isNodeBlockLevelElement = (node) => {
@@ -621,6 +676,19 @@ class controller extends Controller {
         const updateState = () => {
             this.$timeout.cancel(this.subtitleChangeTimer)
             this.subtitleChangeTimer = this.$timeout(this.updateState.bind(this), 500)
+        }
+        const isEmbedElement = (el) => {
+            while (el !== null) {
+                if (el.classList.contains('chapter-embed-card') ||
+                    el.classList.contains('embed-item') ||
+                    el.classList.contains('embed-responsive-container') ||
+                    el.classList.contains('embedded-material')
+                )
+                    return true
+                if (el.classList.contains('chapter-block'))
+                    return false
+                el = el.parentElement
+            }
         }
 
         if ('MutationObserver' in window) {
@@ -655,6 +723,41 @@ class controller extends Controller {
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(el) {
+        const setContents = (embed, material) => {
+            const { id, picture, publishers, authors, titles, source, uploadedFile, language, resourceTypes } = material
+            const fragment = document.createDocumentFragment()
+
+            // Embed the material
+            const embedContainer = document.createElement('div')
+            embedContainer.classList.add('chapter-embed-card__embedded-material-container')
+            const $embedScope = this.$scope.$new(true)
+            $embedScope.material = material
+            const embedTemplate = `<dop-embedded-material material="material"></dop-embedded-material>`
+            const [embeddedMaterial] = this.$compile(embedTemplate)($embedScope)
+            embedContainer.appendChild(embeddedMaterial)
+            fragment.appendChild(embedContainer)
+
+            // Embed footer bearing icon, title, publishers, authors & source link
+            const $embedFooterScope = this.$scope.$new(true)
+            $embedFooterScope.material = material
+            const embedFooterTemplate = `<dop-embed-footer learning-object="material"></dop-embed-footer>`
+            const [embedFooterMaterial] = this.$compile(embedFooterTemplate)($embedFooterScope)
+            fragment.appendChild(embedFooterMaterial)
+
+            if (this.isEditMode)
+                embed.appendChild(fragment)
+            else {
+                const link = document.createElement('a')
+                link.href = `/material?id=${id}`
+                link.target = '_blank'
+                link.appendChild(fragment)
+                embed.appendChild(link)
+            }
+
+            embed.classList.add('chapter-embed-card--loaded')
+            embed.classList.remove('chapter-embed-card--loading')
+        }
+
         for (let embed of el.querySelectorAll('.chapter-embed-card')) {
             const { id } = embed.dataset
             if (id
@@ -663,60 +766,15 @@ class controller extends Controller {
             ) {
                 embed.setAttribute('contenteditable', 'false')
                 embed.classList.add('chapter-embed-card--loading')
-                this.serverCallService
-                    .makeGet('rest/material', { id })
-                    .then(({ data }) => {
-                        const { picture, publishers, authors, titles, source, uploadedFile, language, resourceTypes } = data
-                        const fragment = document.createDocumentFragment()
 
-                        // insert thumbnail
-                        if (picture && picture.name) {
-                            const thumb = document.createElement('div')
-                            thumb.classList.add('chapter-embed-card__thumbnail')
-                            thumb.style.backgroundImage = `url('/rest/picture/thumbnail/lg/${picture.name}')`
-                            fragment.appendChild(thumb)
-                        }
-
-                        // caption with icon, title, publishers, authors & source link
-                        const caption = document.createElement('div')
-                        caption.classList.add('chapter-embed-card__caption')
-                        fragment.appendChild(caption)
-
-                        // icon
-                        caption.innerHTML = `<md-icon class="material-icons">${this.iconService.getMaterialIcon(resourceTypes)}</md-icon>`
-
-                        // title
-                        const title = document.createElement('h5')
-                        title.textContent = this.getUserDefinedLanguageString(titles, this.currentLanguage, language) || ''
-                        caption.appendChild(title)
-
-                        // publishers & authors
-                        const publishersAndAuthors = document.createElement('p')
-                        publishersAndAuthors.classList.add('chapter-embed-card__publishers-and-authors')
-                        publishersAndAuthors.textContent = publishers.map(p => p.name).concat(authors.map(a => a.name+' '+a.surname)).join(', ')
-                        caption.appendChild(publishersAndAuthors)
-
-                        // source link
-                        const sourceLink = document.createElement('p')
-                        sourceLink.classList.add('chapter-embed-card__source')
-                        sourceLink.innerHTML = `
-                            <span>${this.$translate.instant('SOURCE_BIG')}</span>:
-                            <a href="${source || uploadedFile.url || ''}" target="_blank">${source || uploadedFile.url || ''}</a>`
-                        caption.appendChild(sourceLink)
-
-                        if (this.isEditMode)
-                            embed.appendChild(fragment)
-                        else {
-                            const link = document.createElement('a')
-                            link.href = `/material?id=${id}`
-                            link.target = '_blank'
-                            link.appendChild(fragment)
-                            embed.appendChild(link)
-                        }
-
-                        embed.classList.add('chapter-embed-card--loaded')
-                        embed.classList.remove('chapter-embed-card--loading')
-                    })
+                this.embeddedMaterialsCache[id]
+                    ? setContents(embed, this.embeddedMaterialsCache[id])
+                    : this.serverCallService
+                        .makeGet('rest/material', { id })
+                        .then(({ data }) => {
+                            this.embeddedMaterialsCache[id] = data
+                            setContents(embed, data)
+                        })
             }
         }
     }
@@ -1124,6 +1182,7 @@ controller.$inject = [
     '$timeout',
     '$translate',
     '$mdDialog',
+    '$compile',
     'dialogService',
     'iconService',
     'serverCallService',
