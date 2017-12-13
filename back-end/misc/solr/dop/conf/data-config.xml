@@ -67,8 +67,8 @@
             </entity>
 
             <entity name="UserFavorite"
-                    query="select creator as favored_by_used_id from UserFavorite where learningObject='${LearningObject.id}'">
-                <entity name="User" query="select userName as favored_by_user from User where id = '${UserFavorite.favored_by_used_id}'"/>
+                    query="select creator as favored_by_user_id from UserFavorite where learningObject='${LearningObject.id}'">
+                <entity name="User" query="select userName as favored_by_user from User where id = '${UserFavorite.favored_by_user_id}'"/>
             </entity>
 
             <entity name="TagUpVote"

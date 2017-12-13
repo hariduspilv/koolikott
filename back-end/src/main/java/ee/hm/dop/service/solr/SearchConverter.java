@@ -228,13 +228,13 @@ public class SearchConverter {
             return SearchService.EMPTY;
         }
         if (searchFilter.isRecommended() && searchFilter.isFavorites()){
-            return "(recommended:\"true\" OR favored_by_user:" + searchFilter.getRequestingUser().getUsername() + ")";
+            return "(recommended:\"true\" OR favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\")";
         }
         if (searchFilter.isRecommended()){
             return "recommended:\"true\"";
         }
         if (searchFilter.isFavorites()){
-            return "favored_by_user:" + searchFilter.getRequestingUser().getUsername();
+            return "favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\"";
         }
         return SearchService.EMPTY;
     }
