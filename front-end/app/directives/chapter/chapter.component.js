@@ -387,6 +387,14 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertExistingMaterials', this.onInsertExistingMaterials.bind(this))
 
+            // Need to patch it here cuz we need to access $translate
+            MediumEditor.extensions.anchorPreview.prototype.getTemplate = () => {
+                return `
+                    <div class="medium-editor-toolbar-anchor-preview" id="medium-editor-toolbar-anchor-preview">
+                        <div>${this.$translate.instant('EDIT_LINK')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
+                    </div>`
+            }
+            
             this.compileAndInjectEmbedToolbar()
         } else {
             this.$timeout(() => {
@@ -494,7 +502,8 @@ class controller extends Controller {
                 anchor: {
                     linkValidation: true,
                     placeholderText: 'http://'
-                }
+                },
+                targetBlank: true
             })
 
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))

@@ -3,11 +3,15 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.Chapter;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChapterDao extends AbstractDao<Chapter> {
 
     public List<Chapter> chaptersWithPortfolio() {
+        if (0==0){
+            return new ArrayList<>();
+        }
         return getEntityManager()
                 .createNativeQuery("SELECT * FROM Chapter c " +
                         "WHERE c.Portfolio IS NOT NULL " +
@@ -46,6 +50,15 @@ public class ChapterDao extends AbstractDao<Chapter> {
         if (CollectionUtils.isNotEmpty(chapterId)) {
             getEntityManager()
                     .createNativeQuery("DELETE FROM Chapter WHERE id = :id")
+                    .setParameter("id", chapterId)
+                    .executeUpdate();
+        }
+    }
+
+    public void updateChapterText(List<Long> chapterId) {
+        if (CollectionUtils.isNotEmpty(chapterId)) {
+            getEntityManager()
+                    .createNativeQuery("UPDATE Chapter set textValue = NULL WHERE id = :id")
                     .setParameter("id", chapterId)
                     .executeUpdate();
         }
