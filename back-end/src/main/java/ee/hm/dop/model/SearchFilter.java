@@ -25,7 +25,8 @@ public class SearchFilter {
     private Boolean isCurriculumLiterature;
     private String sort;
     private SortDirection sortDirection;
-    private boolean myPrivates = false;
+    private boolean myPrivates;
+    private boolean recommended;
     private Long creator;
     private User requestingUser;
     private String searchType = "AND";
@@ -196,6 +197,14 @@ public class SearchFilter {
 
     public void setSearchType(String searchType) {
         this.searchType = searchType;
+    }
+
+    public boolean isRecommended() {
+        return recommended;
+    }
+
+    public void setRecommended(boolean recommended) {
+        this.recommended = recommended;
     }
 
     public enum SortDirection {

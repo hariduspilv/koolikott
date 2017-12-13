@@ -4,16 +4,14 @@ import ee.hm.dop.model.SearchFilter;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.service.metadata.*;
+import ee.hm.dop.service.solr.SearchConverter;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
 import org.apache.commons.lang.BooleanUtils;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class SearchResource extends BaseResource {
     public SearchResult search(@QueryParam("q") String query,
                                @QueryParam("start") Long start,
                                @QueryParam("taxon") List<Long> taxonIds,
-                               @QueryParam("paid") Boolean paid,
+                               @DefaultValue("true") @QueryParam("paid") boolean paid,
                                @QueryParam("type") String type,
                                @QueryParam("language") String languageCode,
                                @QueryParam("targetGroup") List<String> targetGroupNames,
@@ -51,18 +49,19 @@ public class SearchResource extends BaseResource {
                                @QueryParam("issuedFrom") Integer issuedFrom,
                                @QueryParam("crossCurricularTheme") List<Long> crossCurricularThemeIds,
                                @QueryParam("keyCompetence") List<Long> keyCompetenceIds,
-                               @QueryParam("curriculumLiterature") Boolean isCurriculumLiterature,
+                               @QueryParam("curriculumLiterature") boolean isCurriculumLiterature,
                                @QueryParam("sort") String sort,
                                @QueryParam("sortDirection") String sortDirection,
                                @QueryParam("limit") Long limit,
                                @QueryParam("creator") Long creator,
                                @QueryParam("private") boolean myPrivates,
-                               @QueryParam("isORSearch") Boolean isORSearch,
+                               @QueryParam("isORSearch") boolean isORSearch,
+                               @QueryParam("recommended") boolean recommended,
                                @QueryParam("excluded") List<Long> excluded) {
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
-        searchFilter.setPaid(paid == null ? true : paid);
+        searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(languageService.getLanguage(languageCode));
         searchFilter.setTargetGroups(targetGroupService.getByName(targetGroupNames));
@@ -78,9 +77,8 @@ public class SearchResource extends BaseResource {
         searchFilter.setRequestingUser(getLoggedInUser());
         searchFilter.setMyPrivates(myPrivates);
         searchFilter.setExcluded(excluded);
-        if (BooleanUtils.isTrue(isORSearch)) {
-            searchFilter.setSearchType("OR");
-        }
+        searchFilter.setRecommended(recommended);
+        searchFilter.setSearchType(isORSearch ? "OR" : "AND");
         return searchService.search(query, NumberUtils.nvl(start, 0L), limit, searchFilter);
     }
 
