@@ -66,6 +66,11 @@
                 <entity name="Tag" query="select name as tag from Tag where id = '${LearningObject_Tag.tag_id}'"/>
             </entity>
 
+            <entity name="UserFavorite"
+                    query="select creator as favored_by_used_id from UserFavorite where learningObject='${LearningObject.id}'">
+                <entity name="User" query="select userName as favored_by_user from User where id = '${UserFavorite.favored_by_used_id}'"/>
+            </entity>
+
             <entity name="TagUpVote"
                     query="select concat(t.name, '_', count(*)) as tag_up_vote from TagUpVote tuv, Tag t where tuv.tag = t.id AND tuv.learningObject = '${LearningObject.id}' AND tuv.deleted = false GROUP BY name"/>
 

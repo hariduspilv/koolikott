@@ -17,7 +17,7 @@ public class SearchFilter {
     private Language language;
     private List<TargetGroup> targetGroups;
     private ResourceType resourceType;
-    private boolean isSpecialEducation = false;
+    private boolean isSpecialEducation;
     private Integer issuedFrom;
     private List<CrossCurricularTheme> crossCurricularThemes;
     private List<KeyCompetence> keyCompetences;
@@ -27,6 +27,7 @@ public class SearchFilter {
     private SortDirection sortDirection;
     private boolean myPrivates;
     private boolean recommended;
+    private boolean favorites;
     private Long creator;
     private User requestingUser;
     private String searchType = "AND";
@@ -44,7 +45,7 @@ public class SearchFilter {
                 isEmpty(crossCurricularThemes) &&
                 isEmpty(keyCompetences) &&
                 isCurriculumLiterature == null &&
-                creator == null;
+                creator == null && !recommended && !favorites;
     }
 
     public List<Long> getExcluded() {
@@ -205,6 +206,14 @@ public class SearchFilter {
 
     public void setRecommended(boolean recommended) {
         this.recommended = recommended;
+    }
+
+    public boolean isFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(boolean favorites) {
+        this.favorites = favorites;
     }
 
     public enum SortDirection {

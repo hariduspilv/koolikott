@@ -72,7 +72,7 @@ public class SearchConverter {
         filters.add(getCrossCurricularThemesAsQuery(searchFilter));
         filters.add(getKeyCompetencesAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
-        filters.add(getRecommendedAsQuery(searchFilter));
+        filters.add(getRecommendedAndFavoritesAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
         filters.add(getCreatorAsQuery(searchFilter));
 
@@ -220,9 +220,21 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    private static String getRecommendedAsQuery(SearchFilter searchFilter) {
+    private static String getRecommendedAndFavoritesAsQuery(SearchFilter searchFilter) {
+        if (searchFilter.getRequestingUser() == null){
+            if (searchFilter.isRecommended()){
+                return "recommended:\"true\"";
+            }
+            return SearchService.EMPTY;
+        }
+        if (searchFilter.isRecommended() && searchFilter.isFavorites()){
+            return "(recommended:\"true\" OR favored_by_user:" + searchFilter.getRequestingUser().getUsername() + ")";
+        }
         if (searchFilter.isRecommended()){
             return "recommended:\"true\"";
+        }
+        if (searchFilter.isFavorites()){
+            return "favored_by_user:" + searchFilter.getRequestingUser().getUsername();
         }
         return SearchService.EMPTY;
     }
