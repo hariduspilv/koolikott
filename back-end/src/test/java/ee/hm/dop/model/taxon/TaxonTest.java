@@ -40,6 +40,11 @@ public class TaxonTest {
             }
 
             @Override
+            public String getSolrLevel() {
+                return null;
+            }
+
+            @Override
             public Set<? extends Taxon> getChildren() {
                 return null;
             }
@@ -79,6 +84,11 @@ public class TaxonTest {
             }
 
             @Override
+            public String getSolrLevel() {
+                return null;
+            }
+
+            @Override
             public Set<? extends Taxon> getChildren() {
                 return null;
             }
@@ -93,6 +103,11 @@ public class TaxonTest {
     private class TaxonImpl extends Taxon {
         @Override
         public Taxon getParent() {
+            return null;
+        }
+
+        @Override
+        public String getSolrLevel() {
             return null;
         }
 

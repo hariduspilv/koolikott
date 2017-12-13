@@ -22,7 +22,7 @@ public class SearchFilter {
     private List<CrossCurricularTheme> crossCurricularThemes;
     private List<KeyCompetence> keyCompetences;
     private List<Visibility> visibility;
-    private Boolean isCurriculumLiterature;
+    private boolean isCurriculumLiterature;
     private String sort;
     private SortDirection sortDirection;
     private boolean myPrivates;
@@ -44,7 +44,7 @@ public class SearchFilter {
                 issuedFrom == null &&
                 isEmpty(crossCurricularThemes) &&
                 isEmpty(keyCompetences) &&
-                isCurriculumLiterature == null &&
+                !isCurriculumLiterature &&
                 creator == null && !recommended && !favorites;
     }
 
@@ -144,11 +144,11 @@ public class SearchFilter {
         this.visibility = visibility;
     }
 
-    public Boolean isCurriculumLiterature() {
+    public boolean isCurriculumLiterature() {
         return isCurriculumLiterature;
     }
 
-    public void setCurriculumLiterature(Boolean isCurriculumLiterature) {
+    public void setCurriculumLiterature(boolean isCurriculumLiterature) {
         this.isCurriculumLiterature = isCurriculumLiterature;
     }
 
