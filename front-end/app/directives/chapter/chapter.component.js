@@ -387,21 +387,6 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertExistingMaterials', this.onInsertExistingMaterials.bind(this))
 
-            this.preventIOSPageShiftOnTitleInput = () => document.body.scrollTop = 0
-            this.onIOSTouchMove = (evt) => evt.preventDefault()
-            const bindPreventIOSPageShiftOnTitleInput = () => {
-                if (this.isIOS()) {
-                    document.addEventListener('touchmove', this.onIOSTouchMove)
-                    document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInput)
-                }
-            }
-            document.readyState === 'interactive'
-                ? bindPreventIOSPageShiftOnTitleInput()
-                : document.onreadystatechange = () => {
-                    if (document.readyState === 'interactive')
-                        bindPreventIOSPageShiftOnTitleInput()
-                }
-
             // Need to patch it here cuz we need to access $translate
             MediumEditor.extensions.anchorPreview.prototype.getTemplate = () => {
                 return `
@@ -409,6 +394,8 @@ class controller extends Controller {
                         <div>${this.$translate.instant('EDIT_LINK')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
                     </div>`
             }
+            
+            this.compileAndInjectEmbedToolbar()
         } else {
             this.$timeout(() => {
                 for (let el of this.getEditorElements())
@@ -775,6 +762,14 @@ class controller extends Controller {
             ) {
                 embed.setAttribute('contenteditable', 'false')
                 embed.classList.add('chapter-embed-card--loading')
+                embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
+                embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
+                /**
+                 * This is in place to prevent the context menu from appearing on touch devices when
+                 * user taps and holds on the embed element — to make way for the embed toolbar.
+                 */
+                if (this.isTouchDevice())
+                    embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
 
                 this.embeddedMaterialsCache[id]
                     ? setContents(embed, this.embeddedMaterialsCache[id])
@@ -1179,10 +1174,36 @@ class controller extends Controller {
         }
     }
     /**
-     * @todo in MS 13: Embed actions
+     * @todo in MS 13
      */
     addMedia() {}
     addRecommendedMaterial() {}
+    /**
+     * Embed toolbar (float left|right / full-width)
+     */
+    compileAndInjectEmbedToolbar() {
+        this.$embedToolbarScope = this.$scope.$new(true)
+        this.$embedToolbarScope.isVisible = false
+        this.$embedToolbarScope.target = undefined
+
+        const embedToolbarTemplate = `
+            <dop-embed-toolbar
+                is-visible="isVisible"
+                target="target"
+            ></dop-embed-toolbar>`
+        this.embedToolbar = this.$compile(embedToolbarTemplate)(this.$embedToolbarScope)[0]
+
+        document.body.appendChild(this.embedToolbar)
+    }
+    showEmbedToolbar(evt) {
+        this.$embedToolbarScope.isVisible = true
+        this.$embedToolbarScope.target = evt.target
+        this.$embedToolbarScope.$digest()
+    }
+    hideEmbedToolbar() {
+        this.$embedToolbarScope.isVisible = false
+        this.$embedToolbarScope.$digest()
+    }
 }
 controller.$inject = [
     '$scope',
