@@ -387,21 +387,6 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertExistingMaterials', this.onInsertExistingMaterials.bind(this))
 
-            this.preventIOSPageShiftOnTitleInput = () => document.body.scrollTop = 0
-            this.onIOSTouchMove = (evt) => evt.preventDefault()
-            const bindPreventIOSPageShiftOnTitleInput = () => {
-                if (this.isIOS()) {
-                    document.addEventListener('touchmove', this.onIOSTouchMove)
-                    document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInput)
-                }
-            }
-            document.readyState === 'interactive'
-                ? bindPreventIOSPageShiftOnTitleInput()
-                : document.onreadystatechange = () => {
-                    if (document.readyState === 'interactive')
-                        bindPreventIOSPageShiftOnTitleInput()
-                }
-
             // Need to patch it here cuz we need to access $translate
             MediumEditor.extensions.anchorPreview.prototype.getTemplate = () => {
                 return `
@@ -979,7 +964,7 @@ class controller extends Controller {
             /**
              * @todo Properly restore selection if delete confirmation is declined
              */
-            innerHTML && innerHTML !== '<p><br></p>'
+            innerHTML && innerHTML !== '<p><br></p>' && !this.isIOS()
                 ? this.dialogService.showDeleteConfirmationDialog('ARE_YOU_SURE_DELETE', '', deleteBlock)
                 : deleteBlock()
         }
