@@ -740,16 +740,7 @@ class controller extends Controller {
             const [embedFooterMaterial] = this.$compile(embedFooterTemplate)($embedFooterScope)
             fragment.appendChild(embedFooterMaterial)
 
-            if (this.isEditMode)
-                embed.appendChild(fragment)
-            else {
-                const link = document.createElement('a')
-                link.href = `/material?id=${id}`
-                link.target = '_blank'
-                link.appendChild(fragment)
-                embed.appendChild(link)
-            }
-
+            embed.appendChild(fragment)
             embed.classList.add('chapter-embed-card--loaded')
             embed.classList.remove('chapter-embed-card--loading')
         }
@@ -974,7 +965,7 @@ class controller extends Controller {
             /**
              * @todo Properly restore selection if delete confirmation is declined
              */
-            innerHTML && innerHTML !== '<p><br></p>'
+            innerHTML && innerHTML !== '<p><br></p>' && !this.isIOS()
                 ? this.dialogService.showDeleteConfirmationDialog('ARE_YOU_SURE_DELETE', '', deleteBlock)
                 : deleteBlock()
         }

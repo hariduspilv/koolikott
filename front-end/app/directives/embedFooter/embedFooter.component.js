@@ -36,6 +36,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$window',
     'authenticatedUserService',
     'iconService',
     'serverCallService',
