@@ -14,8 +14,6 @@ class controller extends Controller {
         this.addListeners()
         this.selectValue()
         this.setSelectedText()
-
-        this._previousTargetGroups = this.targetGroups
     }
     $onChanges({ taxon, markRequired, targetGroups }) {
         if (taxon &&
@@ -35,14 +33,12 @@ class controller extends Controller {
 
         if (markRequired && markRequired.currentValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
             this.$scope.targetGroupForm.targetGroupSelect.$touched = true
-    }
-    $doCheck() {
-        if (this.targetGroups !== this._previousTargetGroups) {
+
+        if (targetGroups.currentValue !== targetGroups.previousValue) {
             this.$timeout(() => {
                 this.selectValue(true)
                 this.setSelectedText()
             })
-            this._previousTargetGroups = this.targetGroups
         }
     }
     setSelectedText() {
@@ -202,9 +198,9 @@ controller.$inject = [
 ]
 component('dopTargetGroupSelector', {
     bindings: {
-        targetGroups: '=',
+        targetGroups: '<',
         taxon: '<',
-        isRequired: '=',
+        isRequired: '<',
         markRequired: '<'
     },
     templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',

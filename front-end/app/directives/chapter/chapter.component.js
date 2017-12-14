@@ -1048,13 +1048,19 @@ class controller extends Controller {
                 : 'mobileSearch:open'
         )
         this.$timeout(() => {
+            if (preferred) {
+                this.searchService.setIsFavorites(true)
+                this.searchService.setIsRecommended(true)
+            }
+
             document.getElementById('header-search-input').focus()
+
             // Issue 226 solution if needed
-            /*this.$rootScope.$broadcast('detailedSearch:search');*/
+            /*this.$rootScope.$broadcast('detailedSearch:search');
 
             const headerCtrl = angular.element('dop-header').controller('dopHeader')
             if (headerCtrl)
-                headerCtrl.search()
+                headerCtrl.search()*/
         })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
@@ -1165,7 +1171,6 @@ class controller extends Controller {
         }
     }
     onClickAddMedia() {}
-    addRecommendedMaterial() {}
     /**
      * Embed toolbar (float left|right / full-width)
      */
@@ -1206,6 +1211,7 @@ controller.$inject = [
     'serverCallService',
     'translationService',
     'serverCallService',
+    'searchService',
 ]
 component('dopChapter', {
     bindings: {

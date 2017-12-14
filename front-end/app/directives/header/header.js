@@ -283,7 +283,7 @@ class controller extends Controller {
             window.location.reload()
     }
     search() {
-        this.searchService.setSearch(this.$scope.searchFields.searchQuery)
+        this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
         this.$location.url(this.searchService.getURL())

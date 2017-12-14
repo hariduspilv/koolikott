@@ -207,7 +207,7 @@ angular.module('koolikottApp')
             $scope.getAuthorSearchURL = ($event, firstName, surName) => {
                 $event.preventDefault();
 
-                searchService.setSearch('author:"' + firstName + " " + surName + '"');
+                searchService.setQuery('author:"' + firstName + " " + surName + '"');
                 $location.url(searchService.getURL());
             };
 

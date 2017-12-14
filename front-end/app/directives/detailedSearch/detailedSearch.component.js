@@ -33,8 +33,9 @@ class controller extends Controller {
             : false
 
         // Type
-        this.$scope.detailedSearch.type = this.searchService.getType() && this.searchService.isValidType(this.searchService.getType())
-            ? this.searchService.getType()
+        const type = this.searchService.getType()
+        this.$scope.detailedSearch.type = type && this.searchService.isValidType(type)
+            ? type
             : 'all'
 
         // Curriculum literature
@@ -66,6 +67,10 @@ class controller extends Controller {
             this.$scope.keyCompetences = keyCompetences
         )
         this.$scope.detailedSearch.keyCompetence = this.searchService.getKeyCompetence()
+
+        // Preferred learning objects (favorites + recommended)
+        this.$scope.detailedSearch.isFavorites = this.searchService.isFavorites()
+        this.$scope.detailedSearch.isRecommended = this.searchService.isRecommended()
 
         if (this.$rootScope.isEditPortfolioMode && this.storageService.getPortfolio())
             this.setEditModePrefill()
@@ -141,6 +146,8 @@ class controller extends Controller {
         if (newValue.keyCompetence !== oldValue.keyCompetence) return true
         if (newValue.specialEducationalNeed !== oldValue.specialEducationalNeed) return true
         if (newValue.CLIL !== oldValue.CLIL) return true
+        if (newValue.isFavorites !== oldValue.isFavorites) return true
+        if (newValue.isRecommended !== oldValue.isRecommended) return true
         if (newValue.taxon !== oldValue.taxon && this.$scope.detailedSearch.taxon) {
             this.$scope.detailedSearch.educationalContext = this.taxonService.getEducationalContext(this.$scope.detailedSearch.taxon)
 
@@ -230,18 +237,20 @@ class controller extends Controller {
         }
     }
     search() {
-        this.searchService.setSearch(this.createSimpleSearchQuery())
+        this.searchService.setQuery(this.createSimpleSearchQuery())
         this.searchService.setPaid(!this.$scope.detailedSearch.paid)
         this.searchService.setType(this.$scope.detailedSearch.type)
         this.searchService.setLanguage(this.$scope.detailedSearch.language)
-        this.searchService.setTaxon(this.$scope.detailedSearch.taxon ? [this.$scope.detailedSearch.taxon.id] : null)
         this.searchService.setTargetGroups(this.$scope.detailedSearch.targetGroups || null)
         this.searchService.setResourceType(this.$scope.detailedSearch.resourceType || null)
-        this.searchService.setCurriculumLiterature(this.$scope.detailedSearch.onlyCurriculumLiterature)
+        this.searchService.setIsCurriculumLiterature(this.$scope.detailedSearch.onlyCurriculumLiterature)
         this.searchService.setIsSpecialEducation(this.$scope.detailedSearch.specialEducation)
         this.searchService.setIssuedFrom(this.$scope.getEffectiveIssueDate() || null)
         this.searchService.setCrossCurricularTheme(this.$scope.detailedSearch.crossCurricularTheme || null)
         this.searchService.setKeyCompetence(this.$scope.detailedSearch.keyCompetence || null)
+
+        if (this.$scope.detailedSearch.taxon)
+            this.searchService.setTaxon([this.$scope.detailedSearch.taxon.id])
 
         this.$location.url(this.searchService.getURL())
     }
