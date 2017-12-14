@@ -1,4 +1,4 @@
-## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12) (08.12.2017)
+## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12) (testimisel)
 
 ### Muutunud
 * X-tee versiooniuuendus [#235](https://github.com/hariduspilv/koolikott/issues/235)

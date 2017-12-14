@@ -1,9 +1,20 @@
-<div class="chapter-embed-card__caption">
+<div class="chapter-embed-card__caption" data-ng-click="$ctrl.$window.open(link)">
   <md-icon class="material-icons" data-ng-bind="icon"></md-icon>
-  <a data-ng-href="{{link}}" target="_blank"><h5 data-ng-bind="title"></h5></a>
+  <a
+    data-ng-href="{{link}}"
+    data-ng-click="$event.stopPropagation()"
+    target="_blank"
+    >
+    <h5 data-ng-bind="title"></h5>
+  </a>
   <p class="chapter-embed-card__publishers-and-authors" data-ng-bind="publishersAndAuthors"></p>
   <p class="chapter-embed-card__source">
     <span data-translate="SOURCE_BIG"></span>:
-    <a data-ng-href="{{sourceLink.url}}" target="_blank" data-ng-bind="sourceLink.text"></a>
+    <a
+      data-ng-href="{{sourceLink.url}}"
+      data-ng-click="$event.stopPropagation()"
+      target="_blank"
+      data-ng-bind="sourceLink.text"
+    ></a>
   </p>
 </div>
