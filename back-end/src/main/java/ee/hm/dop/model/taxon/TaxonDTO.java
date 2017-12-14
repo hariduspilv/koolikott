@@ -19,6 +19,12 @@ public class TaxonDTO extends Taxon {
 
     @JsonIgnore
     @Override
+    public String getSolrLevel() {
+        return null;
+    }
+
+    @JsonIgnore
+    @Override
     public Taxon getParent() {
         return this;
     }

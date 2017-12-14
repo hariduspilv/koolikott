@@ -1,0 +1,22 @@
+<div
+  data-ng-class="classNames"
+  data-ng-style="style"
+  data-ng-mouseenter="$ctrl.onMouseEnter()"
+  data-ng-mouseleave="$ctrl.onMouseLeave()"
+  >
+  <ul class="medium-editor-toolbar-actions">
+    <li data-ng-repeat="button in buttons">
+      <button
+        class="medium-editor-action"
+        data-ng-class="{'medium-editor-button-active': button.active}"
+        data-ng-click="button.action()"
+        >
+        <svg
+          viewBox="0 0 32 32"
+          preserveAspectRatio="xMidYMid meet"
+          data-ng-bind-html="button.svgContent"
+        ></svg>
+      </button>
+    </li>
+  </ul>
+</div>

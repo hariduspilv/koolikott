@@ -24,8 +24,7 @@ public class ChapterMigration extends DopDaemonProcess {
         try {
 
             ChapterDao chapterDao = newChapterDao();
-//            List<Chapter> chapters = chapterDao.chaptersWithPortfolio();
-            List<Chapter> chapters = new ArrayList<>();
+            List<Chapter> chapters = chapterDao.chaptersWithPortfolio();
             logger.info(String.format("analyzing %s chapters", chapters.size()));
             int noRowsNoSubChapters = 0;
             int chaptersMigrated = 0;
@@ -33,19 +32,25 @@ public class ChapterMigration extends DopDaemonProcess {
             beginTransaction();
 
             for (Chapter chapter : chapters) {
-                if (CollectionUtils.isEmpty(chapter.getContentRows()) || CollectionUtils.isEmpty(chapter.getSubchapters())) {
+                if (CollectionUtils.isEmpty(chapter.getContentRows()) && CollectionUtils.isEmpty(chapter.getSubchapters()) && StringUtils.isEmpty(chapter.getText())) {
                     noRowsNoSubChapters++;
                     //has subs or content rows, but no chapters
                 } else if (CollectionUtils.isEmpty(chapter.getBlocks())) {
                     chaptersMigrated++;
-                    String result = transformContentRows(chapter);
+                    String result = "";
+                    if (StringUtils.isNotBlank(chapter.getText())) {
+                        result += chapter.getText();
+                    }
+                    if (CollectionUtils.isNotEmpty(chapter.getContentRows())) {
+                        result += transformContentRows(chapter);
+                    }
                     if (CollectionUtils.isNotEmpty(chapter.getSubchapters())) {
-                        result = result + chapter.getSubchapters().stream().map(ChapterMigration::mapChapterToString).collect(Collectors.joining());
+                        result += chapter.getSubchapters().stream().map(ChapterMigration::mapChapterToString).collect(Collectors.joining());
                     }
                     if (StringUtils.isNotBlank(result)) {
                         chapter.setBlocks(Lists.newArrayList(newChapterBlock(result)));
+                        chapterDao.createOrUpdate(chapter);
                     }
-                    chapterDao.createOrUpdate(chapter);
 //                    cleanUp(chapterDao, chapter);
                 } else {
                     //has been migrated, needs cleanup
@@ -56,12 +61,9 @@ public class ChapterMigration extends DopDaemonProcess {
 
             closeTransaction();
             logger.info(String.format("Chapters that didn't need migration: %s, because they have no blocks, rows or subchapters", noRowsNoSubChapters));
-            logger.info(String.format("Chapters that were migrated: %s, because they ", chaptersMigrated));
+            logger.info(String.format("Chapters that were migrated: %s ", chaptersMigrated));
             logger.info(String.format("Chapters that need to cleanup their rows: %s, because they have blocks already", chaptersThatNeedCleanUp));
-        } catch (
-                Exception e)
-
-        {
+        } catch (Exception e) {
             logger.info("Chapter migration unexpected error ", e);
         }
 
@@ -73,6 +75,7 @@ public class ChapterMigration extends DopDaemonProcess {
             chapterDao.deleteChapter(Arrays.asList(subchapter.getId()));
         }
         deleteContentRows(chapter, chapterDao);
+        chapterDao.updateChapterText(Arrays.asList(chapter.getId()));
     }
 
     @Override
@@ -97,7 +100,8 @@ public class ChapterMigration extends DopDaemonProcess {
     }
 
     private static String mapChapterToString(Chapter chapter) {
-        String text = "<h3 class=\"subchapter\">" + (StringUtils.isNotBlank(chapter.getTitle()) ? chapter.getTitle() : NO_TITLE) + "</h3>";
+        String title = StringUtils.isNotBlank(chapter.getTitle()) ? chapter.getTitle() : NO_TITLE;
+        String text = "<h3 class=\"subchapter\">" + title + "</h3>";
         text = text + (StringUtils.isNotBlank(chapter.getText()) ? chapter.getText() : "");
         if (CollectionUtils.isNotEmpty(chapter.getContentRows())) {
             text = text + transformContentRows(chapter);

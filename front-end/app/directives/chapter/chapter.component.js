@@ -387,20 +387,15 @@ class controller extends Controller {
 
             this.unsubscribeInsertMaterials = this.$rootScope.$on('chapter:insertExistingMaterials', this.onInsertExistingMaterials.bind(this))
 
-            this.preventIOSPageShiftOnTitleInput = () => document.body.scrollTop = 0
-            this.onIOSTouchMove = (evt) => evt.preventDefault()
-            const bindPreventIOSPageShiftOnTitleInput = () => {
-                if (this.isIOS()) {
-                    document.addEventListener('touchmove', this.onIOSTouchMove)
-                    document.querySelector('.chapter-title-input').addEventListener('focus', this.preventIOSPageShiftOnTitleInput)
-                }
+            // Need to patch it here cuz we need to access $translate
+            MediumEditor.extensions.anchorPreview.prototype.getTemplate = () => {
+                return `
+                    <div class="medium-editor-toolbar-anchor-preview" id="medium-editor-toolbar-anchor-preview">
+                        <div>${this.$translate.instant('EDIT_LINK')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
+                    </div>`
             }
-            document.readyState === 'interactive'
-                ? bindPreventIOSPageShiftOnTitleInput()
-                : document.onreadystatechange = () => {
-                    if (document.readyState === 'interactive')
-                        bindPreventIOSPageShiftOnTitleInput()
-                }
+            
+            this.compileAndInjectEmbedToolbar()
         } else {
             this.$timeout(() => {
                 for (let el of this.getEditorElements())
@@ -507,7 +502,8 @@ class controller extends Controller {
                 anchor: {
                     linkValidation: true,
                     placeholderText: 'http://'
-                }
+                },
+                targetBlank: true
             })
 
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
@@ -744,16 +740,7 @@ class controller extends Controller {
             const [embedFooterMaterial] = this.$compile(embedFooterTemplate)($embedFooterScope)
             fragment.appendChild(embedFooterMaterial)
 
-            if (this.isEditMode)
-                embed.appendChild(fragment)
-            else {
-                const link = document.createElement('a')
-                link.href = `/material?id=${id}`
-                link.target = '_blank'
-                link.appendChild(fragment)
-                embed.appendChild(link)
-            }
-
+            embed.appendChild(fragment)
             embed.classList.add('chapter-embed-card--loaded')
             embed.classList.remove('chapter-embed-card--loading')
         }
@@ -766,6 +753,14 @@ class controller extends Controller {
             ) {
                 embed.setAttribute('contenteditable', 'false')
                 embed.classList.add('chapter-embed-card--loading')
+                embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
+                embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
+                /**
+                 * This is in place to prevent the context menu from appearing on touch devices when
+                 * user taps and holds on the embed element — to make way for the embed toolbar.
+                 */
+                if (this.isTouchDevice())
+                    embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
 
                 this.embeddedMaterialsCache[id]
                     ? setContents(embed, this.embeddedMaterialsCache[id])
@@ -970,7 +965,7 @@ class controller extends Controller {
             /**
              * @todo Properly restore selection if delete confirmation is declined
              */
-            innerHTML && innerHTML !== '<p><br></p>'
+            innerHTML && innerHTML !== '<p><br></p>' && !this.isIOS()
                 ? this.dialogService.showDeleteConfirmationDialog('ARE_YOU_SURE_DELETE', '', deleteBlock)
                 : deleteBlock()
         }
@@ -1169,10 +1164,34 @@ class controller extends Controller {
             selection.addRange(range)
         }
     }
-    /**
-     * @todo in MS 13: Embed actions
-     */
     onClickAddMedia() {}
+    addRecommendedMaterial() {}
+    /**
+     * Embed toolbar (float left|right / full-width)
+     */
+    compileAndInjectEmbedToolbar() {
+        this.$embedToolbarScope = this.$scope.$new(true)
+        this.$embedToolbarScope.isVisible = false
+        this.$embedToolbarScope.target = undefined
+
+        const embedToolbarTemplate = `
+            <dop-embed-toolbar
+                is-visible="isVisible"
+                target="target"
+            ></dop-embed-toolbar>`
+        this.embedToolbar = this.$compile(embedToolbarTemplate)(this.$embedToolbarScope)[0]
+
+        document.body.appendChild(this.embedToolbar)
+    }
+    showEmbedToolbar(evt) {
+        this.$embedToolbarScope.isVisible = true
+        this.$embedToolbarScope.target = evt.target
+        this.$embedToolbarScope.$digest()
+    }
+    hideEmbedToolbar() {
+        this.$embedToolbarScope.isVisible = false
+        this.$embedToolbarScope.$digest()
+    }
 }
 controller.$inject = [
     '$scope',

@@ -32,6 +32,9 @@
 .medium-toolbar-arrow-over:before {
   border-color: transparent transparent #424242 transparent; // gray-800
 }
+.medium-toolbar-arrow-under:after {
+  border-color: #424242 transparent transparent transparent; // gray-800
+}
 .medium-editor-toolbar-form {
   &, .medium-editor-toolbar-input {
     background: transparent;
@@ -50,4 +53,27 @@
 }
 .medium-editor-toolbar-input::-ms-clear {
   display: none;
+}
+.medium-editor-toolbar-anchor-preview {
+  text-align: left;
+  word-break: break-all;
+
+  > div {
+    cursor: pointer;
+    color: #e0e0e0; // gray-300
+    transition: color .2s;
+    will-change: color;
+  }
+}
+.medium-editor-toolbar-anchor-preview-inner {
+  color: inherit !important;
+  display: inline !important;
+  
+  &,
+  &:hover {
+    text-decoration: none;
+  }
+}
+.embed-toolbar {
+  margin: -3.6rem 0 0 calc((-7.5rem + 2px) / 2);
 }

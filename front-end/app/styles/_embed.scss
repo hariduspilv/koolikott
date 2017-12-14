@@ -62,6 +62,14 @@
     white-space: normal;
     word-break: break-word;
   }
+
+  @media (max-width: 599px) {
+    font-size: 1.125rem;
+  }
+  .chapter-embed-card--float-left &,
+  .chapter-embed-card--float-right & {
+    font-size: 1.125rem;
+  }
 }
 
 .embedded-material__picture {

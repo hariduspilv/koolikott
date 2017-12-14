@@ -17,15 +17,17 @@ public class SearchFilter {
     private Language language;
     private List<TargetGroup> targetGroups;
     private ResourceType resourceType;
-    private boolean isSpecialEducation = false;
+    private boolean isSpecialEducation;
     private Integer issuedFrom;
     private List<CrossCurricularTheme> crossCurricularThemes;
     private List<KeyCompetence> keyCompetences;
     private List<Visibility> visibility;
-    private Boolean isCurriculumLiterature;
+    private boolean isCurriculumLiterature;
     private String sort;
     private SortDirection sortDirection;
-    private boolean myPrivates = false;
+    private boolean myPrivates;
+    private boolean recommended;
+    private boolean favorites;
     private Long creator;
     private User requestingUser;
     private String searchType = "AND";
@@ -42,8 +44,8 @@ public class SearchFilter {
                 issuedFrom == null &&
                 isEmpty(crossCurricularThemes) &&
                 isEmpty(keyCompetences) &&
-                isCurriculumLiterature == null &&
-                creator == null;
+                !isCurriculumLiterature &&
+                creator == null && !recommended && !favorites;
     }
 
     public List<Long> getExcluded() {
@@ -142,11 +144,11 @@ public class SearchFilter {
         this.visibility = visibility;
     }
 
-    public Boolean isCurriculumLiterature() {
+    public boolean isCurriculumLiterature() {
         return isCurriculumLiterature;
     }
 
-    public void setCurriculumLiterature(Boolean isCurriculumLiterature) {
+    public void setCurriculumLiterature(boolean isCurriculumLiterature) {
         this.isCurriculumLiterature = isCurriculumLiterature;
     }
 
@@ -196,6 +198,22 @@ public class SearchFilter {
 
     public void setSearchType(String searchType) {
         this.searchType = searchType;
+    }
+
+    public boolean isRecommended() {
+        return recommended;
+    }
+
+    public void setRecommended(boolean recommended) {
+        this.recommended = recommended;
+    }
+
+    public boolean isFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(boolean favorites) {
+        this.favorites = favorites;
     }
 
     public enum SortDirection {

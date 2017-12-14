@@ -1,6 +1,5 @@
 package ee.hm.dop.service.solr;
 
-import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
@@ -12,7 +11,6 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
@@ -22,27 +20,29 @@ public class SearchConverter {
 
     public static String composeQueryString(String query, SearchFilter searchFilter) {
         String tokenizedQueryString = getTokenizedQueryString(query);
-        String queryString = SearchService.EMPTY;
-
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
-        if (StringUtils.isNotEmpty(filtersAsQuery)) {
-            if (StringUtils.isEmpty(tokenizedQueryString)) {
-                queryString = filtersAsQuery;
-            } else {
-                queryString = format("((%s)", tokenizedQueryString);
 
-                //Search for full phrase also, as they are more relevant
-                if (fullPhraseSearch(tokenizedQueryString)) {
-                    queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
-                }
-
-                queryString = queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
-            }
-        }
+        String queryString = getQueryString(searchFilter, tokenizedQueryString, filtersAsQuery);
         if (queryString.isEmpty()) {
             throw new RuntimeException("No query string and filters present.");
         }
         return queryString;
+    }
+
+    private static String getQueryString(SearchFilter searchFilter, String tokenizedQueryString, String filtersAsQuery) {
+        if (StringUtils.isEmpty(filtersAsQuery)) {
+            return SearchService.EMPTY;
+        }
+        if (StringUtils.isEmpty(tokenizedQueryString)) {
+            return filtersAsQuery;
+        }
+        String queryString = format("((%s)", tokenizedQueryString);
+
+        //Search for full phrase also, as they are more relevant
+        if (fullPhraseSearch(tokenizedQueryString)) {
+            queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
+        }
+        return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
     }
 
 
@@ -70,13 +70,14 @@ public class SearchConverter {
         filters.add(getCrossCurricularThemesAsQuery(searchFilter));
         filters.add(getKeyCompetencesAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
+        filters.add(getRecommendedAndFavoritesAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
         filters.add(getCreatorAsQuery(searchFilter));
 
         // Remove empty elements
-        filters = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.toList());
-        String query = StringUtils.join(filters, format(" %s ", searchFilter.getSearchType()));
-        return query.concat(getExcludedAsQuery(searchFilter));
+        String delimiter = " " + searchFilter.getSearchType() + " ";
+        String filter = filters.stream().filter(f -> !f.isEmpty()).collect(Collectors.joining(delimiter));
+        return filter.concat(getExcludedAsQuery(searchFilter));
     }
 
     public static List<Visibility> getSearchVisibility(User loggedInUser) {
@@ -96,11 +97,11 @@ public class SearchConverter {
 
     private static String getExcludedAsQuery(SearchFilter searchFilter) {
         List<Long> excluded = searchFilter.getExcluded();
-        if (CollectionUtils.isNotEmpty(excluded)) {
-            List<String> result = excluded.stream().map(id -> "-id:" + id.toString()).collect(Collectors.toList());
-            return SearchService.AND + StringUtils.join(result, SearchService.AND);
+        if (CollectionUtils.isEmpty(excluded)) {
+            return SearchService.EMPTY;
         }
-        return SearchService.EMPTY;
+        List<String> result = excluded.stream().map(id -> "-id:" + id.toString()).collect(Collectors.toList());
+        return SearchService.AND + StringUtils.join(result, SearchService.AND);
     }
 
     private static String getLanguageAsQuery(SearchFilter searchFilter) {
@@ -119,14 +120,12 @@ public class SearchConverter {
     }
 
     private static String getVisibilityAsQuery(SearchFilter searchFilter) {
-        List<Visibility> visibilities = searchFilter.getVisibility();
-        List<String> filter = visibilities
-                .stream()
+        String filter = searchFilter.getVisibility().stream()
                 .map(visibility -> format("visibility:\"%s\"", visibility.toString().toLowerCase()))
-                .collect(Collectors.toList());
+                .collect(Collectors.joining(SearchService.OR));
 
         //Visible to user according to their role or is a material or is the creator
-        String query = "(" + StringUtils.join(filter, SearchService.OR) + ")";
+        String query = "(" + filter + ")";
         if (searchFilter.getRequestingUser() != null && searchFilter.getMyPrivates()) {
             query = query + " OR creator:" + searchFilter.getRequestingUser().getId();
         }
@@ -141,13 +140,11 @@ public class SearchConverter {
     }
 
     private static String getTypeAsQuery(SearchFilter searchFilter) {
-        Set<String> types = ImmutableSet.of(SearchService.MATERIAL_TYPE, SearchService.PORTFOLIO_TYPE, SearchService.ALL_TYPE);
-
         String type = searchFilter.getType();
         if (type != null) {
             type = ClientUtils.escapeQueryChars(type).toLowerCase();
-            if (types.contains(type)) {
-                if (type.equals("all")) {
+            if (SearchService.SEARCH_TYPES.contains(type)) {
+                if (type.equals(SearchService.ALL_TYPE)) {
                     return "(type:\"material\" OR type:\"portfolio\")";
                 }
                 return format("type:\"%s\"", type);
@@ -175,9 +172,8 @@ public class SearchConverter {
 
     private static void addTaxonToQuery(Taxon taxon, List<String> taxons) {
         String name = getTaxonName(taxon);
-        String taxonLevel = getTaxonLevel(taxon);
-        if (taxonLevel != null) {
-            taxons.add(format("%s:\"%s\"", taxonLevel, name));
+        if (taxon.getSolrLevel() != null) {
+            taxons.add(format("%s:\"%s\"", taxon.getSolrLevel(), name));
         }
     }
 
@@ -185,29 +181,9 @@ public class SearchConverter {
         return ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
     }
 
-    private static String getTaxonLevel(Taxon taxon) {
-        if (taxon instanceof EducationalContext) {
-            return "educational_context";
-        } else if (taxon instanceof Domain) {
-            return "domain";
-        } else if (taxon instanceof Subject) {
-            return "subject";
-        } else if (taxon instanceof Topic) {
-            return "topic";
-        } else if (taxon instanceof Subtopic) {
-            return "subtopic";
-        } else if (taxon instanceof Specialization) {
-            return "specialization";
-        } else if (taxon instanceof Module) {
-            return "module";
-        }
-        return null;
-    }
-
     private static String getResourceTypeAsQuery(SearchFilter searchFilter) {
-        ResourceType resourceType = searchFilter.getResourceType();
-        if (resourceType != null) {
-            return format("resource_type:\"%s\"", resourceType.getName().toLowerCase());
+        if (searchFilter.getResourceType() != null) {
+            return format("resource_type:\"%s\"", searchFilter.getResourceType().getName().toLowerCase());
         }
         return SearchService.EMPTY;
     }
@@ -215,6 +191,28 @@ public class SearchConverter {
     private static String isSpecialEducationAsQuery(SearchFilter searchFilter) {
         if (searchFilter.isSpecialEducation()) {
             return "special_education:\"true\"";
+        }
+        return SearchService.EMPTY;
+    }
+
+    private static String getRecommendedAndFavoritesAsQuery(SearchFilter searchFilter) {
+        if (!searchFilter.isRecommended() && !searchFilter.isFavorites()) {
+            return SearchService.EMPTY;
+        }
+        if (searchFilter.getRequestingUser() == null) {
+            if (searchFilter.isRecommended()) {
+                return "recommended:\"true\"";
+            }
+            return SearchService.EMPTY;
+        }
+        if (searchFilter.isRecommended() && searchFilter.isFavorites()) {
+            return "(recommended:\"true\" OR favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\")";
+        }
+        if (searchFilter.isRecommended()) {
+            return "recommended:\"true\"";
+        }
+        if (searchFilter.isFavorites()) {
+            return "favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\"";
         }
         return SearchService.EMPTY;
     }
@@ -264,11 +262,9 @@ public class SearchConverter {
     }
 
     private static String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
-        Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
-        if (Boolean.TRUE.equals(isCurriculumLiterature)) {
+        if (searchFilter.isCurriculumLiterature()) {
             return "(peerReview:[* TO *] OR curriculum_literature:\"true\")";
         }
-
         return SearchService.EMPTY;
     }
 

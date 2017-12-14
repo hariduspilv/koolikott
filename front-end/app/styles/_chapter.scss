@@ -768,10 +768,11 @@ md-input-container.chapter-title {
   }
 
   .chapter-embed-card__caption {
-    padding: 1rem 1rem 1rem 4.2rem;
+    padding: 1rem 1.5rem 1rem 4.2rem;
     height: 5.6rem;
     box-sizing: border-box;
     position: relative;
+    cursor: pointer;
 
     md-icon {
       position: absolute;
@@ -798,7 +799,7 @@ md-input-container.chapter-title {
     .chapter-embed-card__source {
       font-size: .75rem;
       text-align: right;
-      margin: .2rem 0 0 -3.2rem;
+      margin: .2rem 0 0 -2.7rem;
 
       span {
         color: #757575; // gray-600

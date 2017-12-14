@@ -413,7 +413,7 @@ directive('dopHeader', {
             isSuggestVisible = false
 
         const checkWindowWidth = () => {
-            if ($ctrl.isMobile())
+            if ($ctrl.isNVP())
                 $scope.isMobileView = true
 
             if (window.innerWidth >= BREAK_SM)

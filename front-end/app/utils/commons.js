@@ -492,10 +492,6 @@ function isPortfolio(type) {
     return type === ".Portfolio" || type === ".ReducedPortfolio"
 }
 
-function isMobile() {
-    return window.innerWidth < BREAK_XS;
-}
-
 function countOccurrences(value, text) {
     let count = 0;
     let index = text.indexOf(value);
@@ -632,9 +628,6 @@ class Controller {
 
         return res.trim()
     }
-    isMobile() {
-        return window.innerWidth < BREAK_XS
-    }
     createPortfolio(id) {
         return {
             id,
@@ -700,6 +693,12 @@ class Controller {
     }
     isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    }
+    isTouchDevice() {
+        return 'ontouchstart' in window || navigator.msMaxTouchPoints
+    }
+    isNVP() {
+        return window.innerWidth < BREAK_XS
     }
     formatDateToDayMonthYear(dateString) {
         const date = new Date(dateString)

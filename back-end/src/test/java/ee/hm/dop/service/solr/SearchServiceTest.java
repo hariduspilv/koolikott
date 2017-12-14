@@ -3,14 +3,8 @@ package ee.hm.dop.service.solr;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserFavoriteDao;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.ReducedLearningObject;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
-import ee.hm.dop.model.User;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import org.apache.commons.lang3.StringUtils;
@@ -445,6 +439,24 @@ public class SearchServiceTest extends SearchServiceTestUtil {
         searchFilter.setCurriculumLiterature(true);
         String tokenizedQuery = "((german language) OR (\"german language\")) AND (peerReview:[* TO *] OR curriculum_literature:\"true\")"
                 + " AND (visibility:\"public\")";
+
+        testSearch(GERMAN_LANGUAGE, tokenizedQuery, searchFilter, M9_M2_P1);
+    }
+
+    @Test
+    public void searchWithRecommended() {
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setRecommended(true);
+        String tokenizedQuery = "((german language) OR (\"german language\")) AND recommended:\"true\" AND (visibility:\"public\")";
+
+        testSearch(GERMAN_LANGUAGE, tokenizedQuery, searchFilter, M9_M2_P1);
+    }
+
+    @Test
+    public void searchWithRecommendedAndFavorites_no_user() {
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setRecommended(true);
+        String tokenizedQuery = "((german language) OR (\"german language\")) AND recommended:\"true\" AND (visibility:\"public\")";
 
         testSearch(GERMAN_LANGUAGE, tokenizedQuery, searchFilter, M9_M2_P1);
     }
