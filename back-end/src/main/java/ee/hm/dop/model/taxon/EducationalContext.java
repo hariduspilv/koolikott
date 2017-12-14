@@ -15,6 +15,12 @@ public class EducationalContext extends Taxon {
     @OneToMany(mappedBy = "educationalContext")
     private Set<Domain> domains;
 
+    @JsonIgnore
+    @Override
+    public String getSolrLevel() {
+        return "educational_context";
+    }
+
     public Set<Domain> getDomains() {
         return domains;
     }

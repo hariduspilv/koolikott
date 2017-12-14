@@ -57,6 +57,7 @@ public class SearchResource extends BaseResource {
                                @QueryParam("private") boolean myPrivates,
                                @QueryParam("isORSearch") boolean isORSearch,
                                @QueryParam("recommended") boolean recommended,
+                               @QueryParam("favorites") boolean favorites,
                                @QueryParam("excluded") List<Long> excluded) {
 
         SearchFilter searchFilter = new SearchFilter();
@@ -78,6 +79,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setMyPrivates(myPrivates);
         searchFilter.setExcluded(excluded);
         searchFilter.setRecommended(recommended);
+        searchFilter.setFavorites(favorites);
         searchFilter.setSearchType(isORSearch ? "OR" : "AND");
         return searchService.search(query, NumberUtils.nvl(start, 0L), limit, searchFilter);
     }

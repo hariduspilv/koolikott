@@ -2,6 +2,7 @@ package ee.hm.dop.rest.solr;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
+import ee.hm.dop.common.test.TestUser;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
@@ -313,6 +314,48 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    public void searchWithRecommededAndFavorites() {
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setRecommended(true);
+        searchFilter.setFavorites(true);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_7);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithRecommededAndFavoritesAndUser() {
+        login(USER_PEETER);
+
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setRecommended(true);
+        searchFilter.setFavorites(true);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_7);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
+    public void searchWithFavoritesAndUser() {
+        login(USER_PEETER);
+
+        String query = "data";
+        SearchFilter searchFilter = new SearchFilter();
+        searchFilter.setFavorites(true);
+        SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
+
+        assertMaterialIdentifiers(searchResult.getItems(), MATERIAL_1, MATERIAL_7);
+        assertEquals(2, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
+    }
+
+    @Test
     public void searchWithCurriculumLiteratureFalseAndLimit1() {
         String query = "data";
         SearchFilter searchFilter = new SearchFilter();
@@ -370,7 +413,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         if (searchFilter.getIssuedFrom() != null) {
             queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
         }
-        if (searchFilter.isCurriculumLiterature() != null && searchFilter.isCurriculumLiterature()) {
+        if (searchFilter.isCurriculumLiterature()) {
             queryURL += "&curriculumLiterature=true";
         }
         if (searchFilter.getSort() != null) {
@@ -381,6 +424,9 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         }
         if (searchFilter.isRecommended()) {
             queryURL += "&recommended=" + searchFilter.isRecommended();
+        }
+        if (searchFilter.isFavorites()) {
+            queryURL += "&favorites=" + searchFilter.isFavorites();
         }
         return queryURL;
     }

@@ -1,6 +1,5 @@
 package ee.hm.dop.service.solr;
 
-import com.google.common.collect.ImmutableSet;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
@@ -12,7 +11,6 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
@@ -72,7 +70,7 @@ public class SearchConverter {
         filters.add(getCrossCurricularThemesAsQuery(searchFilter));
         filters.add(getKeyCompetencesAsQuery(searchFilter));
         filters.add(isCurriculumLiteratureAsQuery(searchFilter));
-        filters.add(getRecommendedAsQuery(searchFilter));
+        filters.add(getRecommendedAndFavoritesAsQuery(searchFilter));
         filters.add(getVisibilityAsQuery(searchFilter));
         filters.add(getCreatorAsQuery(searchFilter));
 
@@ -142,13 +140,11 @@ public class SearchConverter {
     }
 
     private static String getTypeAsQuery(SearchFilter searchFilter) {
-        Set<String> types = ImmutableSet.of(SearchService.MATERIAL_TYPE, SearchService.PORTFOLIO_TYPE, SearchService.ALL_TYPE);
-
         String type = searchFilter.getType();
         if (type != null) {
             type = ClientUtils.escapeQueryChars(type).toLowerCase();
-            if (types.contains(type)) {
-                if (type.equals("all")) {
+            if (SearchService.SEARCH_TYPES.contains(type)) {
+                if (type.equals(SearchService.ALL_TYPE)) {
                     return "(type:\"material\" OR type:\"portfolio\")";
                 }
                 return format("type:\"%s\"", type);
@@ -176,9 +172,8 @@ public class SearchConverter {
 
     private static void addTaxonToQuery(Taxon taxon, List<String> taxons) {
         String name = getTaxonName(taxon);
-        String taxonLevel = getTaxonLevel(taxon);
-        if (taxonLevel != null) {
-            taxons.add(format("%s:\"%s\"", taxonLevel, name));
+        if (taxon.getSolrLevel() != null) {
+            taxons.add(format("%s:\"%s\"", taxon.getSolrLevel(), name));
         }
     }
 
@@ -186,29 +181,9 @@ public class SearchConverter {
         return ClientUtils.escapeQueryChars(taxon.getName()).toLowerCase();
     }
 
-    private static String getTaxonLevel(Taxon taxon) {
-        if (taxon instanceof EducationalContext) {
-            return "educational_context";
-        } else if (taxon instanceof Domain) {
-            return "domain";
-        } else if (taxon instanceof Subject) {
-            return "subject";
-        } else if (taxon instanceof Topic) {
-            return "topic";
-        } else if (taxon instanceof Subtopic) {
-            return "subtopic";
-        } else if (taxon instanceof Specialization) {
-            return "specialization";
-        } else if (taxon instanceof Module) {
-            return "module";
-        }
-        return null;
-    }
-
     private static String getResourceTypeAsQuery(SearchFilter searchFilter) {
-        ResourceType resourceType = searchFilter.getResourceType();
-        if (resourceType != null) {
-            return format("resource_type:\"%s\"", resourceType.getName().toLowerCase());
+        if (searchFilter.getResourceType() != null) {
+            return format("resource_type:\"%s\"", searchFilter.getResourceType().getName().toLowerCase());
         }
         return SearchService.EMPTY;
     }
@@ -220,9 +195,24 @@ public class SearchConverter {
         return SearchService.EMPTY;
     }
 
-    private static String getRecommendedAsQuery(SearchFilter searchFilter) {
-        if (searchFilter.isRecommended()){
+    private static String getRecommendedAndFavoritesAsQuery(SearchFilter searchFilter) {
+        if (!searchFilter.isRecommended() && !searchFilter.isFavorites()) {
+            return SearchService.EMPTY;
+        }
+        if (searchFilter.getRequestingUser() == null) {
+            if (searchFilter.isRecommended()) {
+                return "recommended:\"true\"";
+            }
+            return SearchService.EMPTY;
+        }
+        if (searchFilter.isRecommended() && searchFilter.isFavorites()) {
+            return "(recommended:\"true\" OR favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\")";
+        }
+        if (searchFilter.isRecommended()) {
             return "recommended:\"true\"";
+        }
+        if (searchFilter.isFavorites()) {
+            return "favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\"";
         }
         return SearchService.EMPTY;
     }
@@ -272,11 +262,9 @@ public class SearchConverter {
     }
 
     private static String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
-        Boolean isCurriculumLiterature = searchFilter.isCurriculumLiterature();
-        if (Boolean.TRUE.equals(isCurriculumLiterature)) {
+        if (searchFilter.isCurriculumLiterature()) {
             return "(peerReview:[* TO *] OR curriculum_literature:\"true\")";
         }
-
         return SearchService.EMPTY;
     }
 

@@ -24,6 +24,12 @@ public class Module extends Taxon {
     @JoinColumn(name = "specialization", nullable = false)
     private Specialization specialization;
 
+    @JsonIgnore
+    @Override
+    public String getSolrLevel() {
+        return "module";
+    }
+
     public Set<Topic> getTopics() {
         return topics;
     }

@@ -25,6 +25,12 @@ public class Specialization extends Taxon {
     @JoinColumn(name = "domain", nullable = false)
     private Domain domain;
 
+    @JsonIgnore
+    @Override
+    public String getSolrLevel() {
+        return "specialization";
+    }
+
     public Set<Module> getModules() {
         return modules;
     }

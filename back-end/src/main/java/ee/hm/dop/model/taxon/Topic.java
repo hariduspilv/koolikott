@@ -34,6 +34,12 @@ public class Topic extends Taxon {
     @JoinColumn(name = "module")
     private Module module;
 
+    @JsonIgnore
+    @Override
+    public String getSolrLevel() {
+        return "topic";
+    }
+
     public Set<Subtopic> getSubtopics() {
         return subtopics;
     }

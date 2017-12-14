@@ -31,6 +31,12 @@ public class Domain extends Taxon {
     @JoinColumn(name = "educationalContext", nullable = false)
     private EducationalContext educationalContext;
 
+    @JsonIgnore
+    @Override
+    public String getSolrLevel() {
+        return "domain";
+    }
+
     public Set<Subject> getSubjects() {
         return subjects;
     }
