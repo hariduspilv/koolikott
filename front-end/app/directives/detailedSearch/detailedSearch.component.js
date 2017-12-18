@@ -91,11 +91,7 @@ class controller extends Controller {
                 this.metadataService.updateUsedResourceTypes(this.setUsedResourceTypes.bind(this))
             )
         )
-
-        // Issue 226 solution if needed
-        /*this.$scope.$on('detailedSearch:search', () =>
-            this.search()
-        )*/
+        this.$scope.$on('detailedSearch:search', () => this.search())
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newValue, oldValue) => {
             if (newValue && oldValue && (newValue !== oldValue))

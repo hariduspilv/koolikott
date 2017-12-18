@@ -1052,15 +1052,9 @@ class controller extends Controller {
                 this.searchService.setIsFavorites(true)
                 this.searchService.setIsRecommended(true)
             }
-
+            this.searchService.setType('material')
             document.getElementById('header-search-input').focus()
-
-            // Issue 226 solution if needed
-            /*this.$rootScope.$broadcast('detailedSearch:search');
-
-            const headerCtrl = angular.element('dop-header').controller('dopHeader')
-            if (headerCtrl)
-                headerCtrl.search()*/
+            this.$rootScope.$broadcast('detailedSearch:search')
         })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
