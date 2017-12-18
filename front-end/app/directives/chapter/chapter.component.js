@@ -438,7 +438,10 @@ class controller extends Controller {
             let el = evt.target
 
             while (el !== null) {
-                if (el === this.$element[0] || el.classList.contains('medium-editor-toolbar'))
+                if (el === this.$element[0] ||
+                    el.classList.contains('medium-editor-toolbar') ||
+                    el.classList.contains('medium-editor-anchor-preview')
+                )
                     return
                 el = el.parentElement
             }
