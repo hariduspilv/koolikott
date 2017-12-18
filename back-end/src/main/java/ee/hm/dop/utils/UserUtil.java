@@ -1,5 +1,6 @@
 package ee.hm.dop.utils;
 
+import ee.hm.dop.model.Media;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.interfaces.ILearningObject;
@@ -12,6 +13,10 @@ public class UserUtil {
 
     public static boolean isCreator(ILearningObject learningObject, User loggedInUser) {
         return loggedInUser != null && learningObject.getCreator().getId().equals(loggedInUser.getId());
+    }
+
+    public static boolean isCreator(Media media, User loggedInUser) {
+        return loggedInUser != null && media.getCreatedBy().getId().equals(loggedInUser.getId());
     }
 
     public static boolean isAdmin(User loggedInUser) {

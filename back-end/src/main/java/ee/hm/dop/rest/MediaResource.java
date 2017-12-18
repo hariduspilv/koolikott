@@ -1,10 +1,8 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Media;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.MediaService;
-import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -20,7 +18,7 @@ public class MediaResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Media get(@QueryParam("id") long mediaId) {
-        return mediaService.get(mediaId, getLoggedInUser());
+        return mediaService.get(mediaId);
     }
 
     @POST
@@ -28,7 +26,7 @@ public class MediaResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Media createMaterial(Media media) {
+    public Media createMedia(Media media) {
         return mediaService.save(media, getLoggedInUser());
     }
 
@@ -37,7 +35,7 @@ public class MediaResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Media updateMaterial(Media media) {
+    public Media updateMedia(Media media) {
         return mediaService.update(media, getLoggedInUser());
     }
 
