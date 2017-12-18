@@ -127,7 +127,7 @@ class controller extends Controller {
         )
             this.parseSimpleSearchQuery(queryIn.currentValue)
 
-        if (isVisible) {
+        if (isVisible)
             !isVisible.currentValue
                 ? this.$rootScope.detailedSearchHeight = 0
                 : this.$timeout(() =>
