@@ -70,7 +70,7 @@
       <div class="embed-responsive-item" data-ng-bind-html="noEmbedData"></div>
     </div>
   </div>
-  <div data-ng-if="sourceType === 'LINK' || !sourceType">
+  <div data-ng-if="(sourceType === 'LINK' || !sourceType) && !$ctrl.hideLink">
     <a
       data-ng-href="{{materialSource}}"
       data-ng-bind="materialSource"

@@ -728,7 +728,7 @@ class controller extends Controller {
             embedContainer.classList.add('chapter-embed-card__embedded-material-container')
             const $embedScope = this.$scope.$new(true)
             $embedScope.material = material
-            const embedTemplate = `<dop-embedded-material material="material"></dop-embedded-material>`
+            const embedTemplate = `<dop-embedded-material material="material" hide-link="true"></dop-embedded-material>`
             const [embeddedMaterial] = this.$compile(embedTemplate)($embedScope)
             embedContainer.appendChild(embeddedMaterial)
             fragment.appendChild(embedContainer)
@@ -1206,13 +1206,17 @@ class controller extends Controller {
         document.body.appendChild(this.embedToolbar)
     }
     showEmbedToolbar(evt) {
-        this.$embedToolbarScope.isVisible = true
-        this.$embedToolbarScope.target = evt.target
-        this.$embedToolbarScope.$digest()
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = true
+            this.$embedToolbarScope.target = evt.target
+            this.$embedToolbarScope.$digest()
+        }
     }
     hideEmbedToolbar() {
-        this.$embedToolbarScope.isVisible = false
-        this.$embedToolbarScope.$digest()
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = false
+            this.$embedToolbarScope.$digest()
+        }
     }
 }
 controller.$inject = [

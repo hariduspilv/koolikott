@@ -114,7 +114,8 @@ controller.$inject = [
 ]
 component('dopEmbeddedMaterial', {
     bindings: {
-        material: '<'
+        material: '<',
+        hideLink: '<',
     },
     templateUrl: 'directives/embeddedMaterial/embeddedMaterial.html',
     controller
