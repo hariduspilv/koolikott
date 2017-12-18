@@ -1189,13 +1189,17 @@ class controller extends Controller {
         document.body.appendChild(this.embedToolbar)
     }
     showEmbedToolbar(evt) {
-        this.$embedToolbarScope.isVisible = true
-        this.$embedToolbarScope.target = evt.target
-        this.$embedToolbarScope.$digest()
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = true
+            this.$embedToolbarScope.target = evt.target
+            this.$embedToolbarScope.$digest()
+        }
     }
     hideEmbedToolbar() {
-        this.$embedToolbarScope.isVisible = false
-        this.$embedToolbarScope.$digest()
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = false
+            this.$embedToolbarScope.$digest()
+        }
     }
 }
 controller.$inject = [
