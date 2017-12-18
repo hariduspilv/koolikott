@@ -6,6 +6,14 @@ md-dialog md-dialog-actions {
   }
 }
 
+.add-media-dialog {
+  max-width: 60rem;
+}
+
+.add-media-dialog__subhead {
+  margin: .5rem 0 1rem;
+}
+
 md-dialog.login-dialog {
   max-height: 100%;
   min-width: 18rem;

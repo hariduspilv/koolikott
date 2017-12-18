@@ -21,7 +21,7 @@
     <div class="sticky" data-ng-class="stickyClassNames">
       <div>
         <h5 data-translate="ADD_EMBEDDED_CONTENT_TO_CHAPTER"></h5>
-        <!-- <div
+        <div
           class="chapter-btn chapter-btn--media"
           data-ng-click="$ctrl.onClickAddMedia()"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
@@ -30,15 +30,14 @@
             <md-icon class="material-icons">image</md-icon>
           </md-button>
           <label data-translate="ADD_MEDIA_TO_CHAPTER"></label>
-        </div> -->
+        </div>
         <div
           class="chapter-btn chapter-btn--preferred-material"
           data-ng-mousedown="$ctrl.beforeAddMaterial()"
           data-ng-click="$ctrl.onClickAddExistingMaterial(true)"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
-          style="width:33.33%"
           >
-          <md-button class="md-icon-button" aria-label="Lisa eelistatud materjal" tabIndex="-1" style="display: block; margin: 0 auto;">
+          <md-button class="md-icon-button" aria-label="Lisa eelistatud materjal" tabIndex="-1">
             <md-icon class="material-icons">star</md-icon>
           </md-button>
           <label data-translate="ADD_PREFERRED_MATERIAL_TO_CHAPTER"></label>
@@ -48,9 +47,8 @@
           data-ng-mousedown="$ctrl.beforeAddMaterial()"
           data-ng-click="$ctrl.onClickAddExistingMaterial()"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
-          style="width:33.33%"
           >
-          <md-button class="md-icon-button md-icon-button--44px-sm" aria-label="Lisa olemasolev materjal" tabIndex="-1" style="display: block; margin: 0 auto;">
+          <md-button class="md-icon-button md-icon-button--44px-sm" aria-label="Lisa olemasolev materjal" tabIndex="-1">
             <md-icon class="material-icons material-icons--font-size-28px-sm">description</md-icon>
           </md-button>
           <label data-translate="ADD_EXISTING_MATERIAL_TO_CHAPTER"></label>
@@ -60,9 +58,8 @@
           data-ng-mousedown="$ctrl.beforeAddMaterial()"
           data-ng-click="$ctrl.onClickAddNewMaterial()"
           tabIndex="{{focusedBlockIdx ? 0 : -1}}"
-          style="width:33.33%"
           >
-          <md-button class="md-icon-button md-icon-button--44px-sm" aria-label="Lisa uus materjal" tabIndex="-1" style="display: block; margin: 0 auto;">
+          <md-button class="md-icon-button md-icon-button--44px-sm" aria-label="Lisa uus materjal" tabIndex="-1">
             <md-icon class="material-icons material-icons--font-size-28px-sm">
               <svg viewBox="0 0 28 24">
                 <path d="M22,2h-8c-1.1,0-2,0.9-2,2l0,16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L22,2z M24,18h-8v-2h8V18z M24,14h-8v-2h8V14z M21,9 V3.5L26.5,9H21z"/>

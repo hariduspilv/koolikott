@@ -1170,7 +1170,26 @@ class controller extends Controller {
             selection.addRange(range)
         }
     }
-    onClickAddMedia() {}
+    onClickAddMedia() {
+        /**
+         * @todo
+         *  1) Restore caret position when cancelling the dialog
+         *  2) Insert the newly created media
+         */
+        this.$mdDialog.show({
+            templateUrl: 'views/addMediaDialog/addMediaDialog.html',
+            controller: 'addMediaDialogController',
+            controllerAs: '$ctrl',
+            locals: {
+                isEditMode: false, // @todo
+            }
+        }).then(media => {
+            console.log('insert media:', media)
+            // this.insertMaterials([media])
+        }, () => {
+            console.timeEnd('cancel media dialog')
+        })
+    }
     /**
      * Embed toolbar (float left|right / full-width)
      */
