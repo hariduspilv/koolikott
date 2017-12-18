@@ -66,7 +66,6 @@ class controller extends Controller {
     }
     setClassNames(isVisible) {
         this.$scope.classNames = {
-            'embed-toolbar': true,
             'medium-editor-toolbar': true,
             'medium-editor-stalker-toolbar': true,
             'medium-toolbar-arrow-under': true,
