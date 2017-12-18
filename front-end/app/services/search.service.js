@@ -174,7 +174,7 @@ class controller extends Controller {
         const { type } = this.$location.search()
 
         if (type)
-            return this.setType(type)
+            this.setType(type)
 
         return this.search.type
     }
