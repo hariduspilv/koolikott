@@ -728,7 +728,7 @@ class controller extends Controller {
             embedContainer.classList.add('chapter-embed-card__embedded-material-container')
             const $embedScope = this.$scope.$new(true)
             $embedScope.material = material
-            const embedTemplate = `<dop-embedded-material material="material"></dop-embedded-material>`
+            const embedTemplate = `<dop-embedded-material material="material" hide-link="true"></dop-embedded-material>`
             const [embeddedMaterial] = this.$compile(embedTemplate)($embedScope)
             embedContainer.appendChild(embeddedMaterial)
             fragment.appendChild(embedContainer)
