@@ -24,16 +24,28 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'ADD_MEDIA_LINK', 'Insert link to a media file');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'ADD_MEDIA_LINK', 'Sisesta link media failile');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'MEDIA_URL_IS_INVALID', 'Media URL on vigane');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'MEDIA_URL_IS_INVALID', 'Meedia URL on vigane');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'MEDIA_URL_IS_INVALID', 'Media URL is invalid');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'MEDIA_URL_IS_INVALID', 'Media URL on vigane');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'MEDIA_URL_IS_INVALID', 'Meedia URL on vigane');
 
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'MEDIA_URL_IS_REQUIRED', 'Media URL on kohustuslik');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'MEDIA_URL_IS_REQUIRED', 'Meedia URL on kohustuslik');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'MEDIA_URL_IS_REQUIRED', 'Media URL is required');
-INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'MEDIA_URL_IS_REQUIRED', 'Media URL on kohustuslik');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'MEDIA_URL_IS_REQUIRED', 'Meedia URL on kohustuslik');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'TITLE_IS_REQUIRED', 'Pealkiri on kohustuslik');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'TITLE_IS_REQUIRED', 'Title is required');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'TITLE_IS_REQUIRED', 'Pealkiri on kohustuslik');
+
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION', 'Meediafaili laiend ei ole vastu võetav');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION', 'Media file extension is not accepted');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION', 'Meediafaili laiend ei ole vastu võetav');
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'LICENSE_TYPE_IS_REQUIRED', 'Litsentsi tüüp kohustuslik');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'LICENSE_TYPE_IS_REQUIRED', 'License type is required');
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'LICENSE_TYPE_IS_REQUIRED', 'Litsentsi tüüp kohustuslik');
+
+# Possessive form is written with apostrophe and S. Otherwise (an S without an apostrophe) designates plural.
+# https://en.wikipedia.org/wiki/English_possessive
+UPDATE Translation SET translation = "Author's name is required" WHERE translationKey = 'AUTHOR_NAME_REQUIRED' and translationGroup = 3;
 
 SET foreign_key_checks = 1;

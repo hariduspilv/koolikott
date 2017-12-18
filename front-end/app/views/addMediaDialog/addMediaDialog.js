@@ -22,6 +22,11 @@ class controller extends Controller {
         })
 
         this.$scope.$watch('media.url', this.processURL.bind(this))
+        this.$timeout(() => {
+            this.$scope.addMediaForm.url.$validators.accepted = (url) =>
+                // Let's not display ‘not accepted’ error before the URL is in valid shape
+                this.$scope.addMediaForm.url.$error.url || this.isAcceptedEmbeddableMediaLink(url)
+        })
 
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
@@ -39,33 +44,27 @@ class controller extends Controller {
             this.$scope.isUserAuthor = false
         }
     }
-    isTouchedOrSubmitted(element) {
-        return (element && element.$touched)
-            || (this.$scope.addMediaForm && this.$scope.addMediaForm.$submitted)
-    }
-    isURLInvalid() {
-        if (this.$scope.addMediaForm && this.$scope.addMediaForm.source && this.$scope.addMediaForm.source.$viewValue) {
-            this.$scope.addMediaForm.source.$setTouched();
-            return !!this.$scope.addMediaForm.source.$error.url && (this.$scope.addMediaForm.source.$viewValue.length > 0);
-        }
-    }
     processURL(currentValue, previousValue) {
-        if (currentValue && currentValue !== previousValue && this.isYoutubeVideo(currentValue))
-            this.youtubeService
-                .getYoutubeData(currentValue)
-                .then(({ snippet, status }) => {
-                    const licenseTypeName = status.license.toLowerCase() === 'creativecommon' ? 'CCBY' : 'Youtube'
-                    this.$scope.media.licenseType = this.$scope.licenseTypes.find(l => l.name === licenseTypeName)
-                    this.$scope.media.title = snippet.title
-                    this.$scope.media.source = snippet.channelTitle
-                })
+        if (currentValue && currentValue !== previousValue) {
+            if (this.isYoutubeLink(currentValue))
+                this.youtubeService
+                    .getYoutubeData(currentValue)
+                    .then(({ snippet, status }) => {
+                        const licenseTypeName = status.license.toLowerCase() === 'creativecommon' ? 'CCBY' : 'Youtube'
+                        this.$scope.media.licenseType = this.$scope.licenseTypes.find(l => l.name === licenseTypeName)
+                        this.$scope.media.title = snippet.title
+                        this.$scope.media.source = snippet.channelTitle
+                    })
+            else if (this.isSoundcloudLink(currentValue)) {
+                // @todo Fetch data from soundcloud api (#250 work)
+            }
+        }
     }
     isSubmitDisabled() {
         return !this.$scope.addMediaForm.$valid || this.$scope.isSaving
     }
     save() {
         this.$scope.isSaving = true
-        console.log('make post')
         this.serverCallService
             .makePost(this.locals.isEditMode ? 'rest/media/update' : 'rest/media/create', this.$scope.media)
             .then(({ status, data: media }) => {
@@ -79,9 +78,12 @@ class controller extends Controller {
             )
     }
     cancel() {
-        console.log('cancel!')
-        console.time('cancel media dialog')
-        this.$mdDialog.cancel(true)
+        /**
+         * There's a known issue that delays the actual closing of the dialog in Google Chrome on Mac OS
+         * and even after it closes in 3-4 seconds it leaves the whole app unresponsive for another 5-7 seconds.
+         * @see https://github.com/angular/material/issues/8598
+         */
+        this.$mdDialog.cancel()
     }
 }
 controller.$inject = [

@@ -403,7 +403,7 @@ class controller extends Controller {
         }
     }
     processSource(source) {
-        if (isYoutubeVideo(source))
+        if (isYoutubeLink(source))
             this.youtubeService
                 .getYoutubeData(source)
                 .then(({ snippet, status }) => {

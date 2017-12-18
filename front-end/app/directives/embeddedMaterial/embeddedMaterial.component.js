@@ -12,7 +12,7 @@ class controller extends Controller {
         this.$scope.materialSource = materialSource
         let ext = materialSource.split('.').pop()
 
-        const type = this.getEmbedType(this.material)
+        const type = this.getEmbeddedMaterialType(this.material)
         switch (type) {
             case 'YOUTUBE':
             case 'SLIDESHARE':
@@ -52,7 +52,7 @@ class controller extends Controller {
                         .makeHead('/rest/material/externalMaterial?url=' + encodeURIComponent(materialSource))
                         .then(({ headers }) => {
                             const { 'content-disposition': contentDisposition } = headers()
-                            const proxyType = contentDisposition && this.getEmbedType({
+                            const proxyType = contentDisposition && this.getEmbeddedMaterialType({
                                 source: contentDisposition.match(/filename="(.+)"/)[1]
                             })
 

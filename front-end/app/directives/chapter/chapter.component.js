@@ -1184,10 +1184,8 @@ class controller extends Controller {
                 isEditMode: false, // @todo
             }
         }).then(media => {
+            // @todo
             console.log('insert media:', media)
-            // this.insertMaterials([media])
-        }, () => {
-            console.timeEnd('cancel media dialog')
         })
     }
     /**

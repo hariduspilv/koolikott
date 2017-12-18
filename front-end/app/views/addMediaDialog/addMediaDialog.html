@@ -31,7 +31,6 @@
             >
             <div data-ng-messages="addMediaForm.url.$error" data-multiple>
               <div
-                data-ng-if="$ctrl.isURLInvalid()"
                 data-ng-message="url"
                 class="invalid-url-message"
                 data-translate="MEDIA_URL_IS_INVALID"
@@ -39,6 +38,10 @@
               <div
                 data-ng-message="required"
                 data-translate="MEDIA_URL_IS_REQUIRED"
+              ></div>
+              <div
+                data-ng-message="accepted"
+                data-translate="MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION"
               ></div>
             </div>
           </md-input-container>
@@ -48,7 +51,10 @@
         <div data-layout="row">
           <md-input-container data-flex>
             <label data-translate="TITLE"></label>
-            <input data-ng-model="media.title" name="title">
+            <input data-ng-model="media.title" name="title" required>
+            <div data-ng-messages="addMediaForm.title.$error">
+              <div data-ng-message="required" data-translate="TITLE_IS_REQUIRED"></div>
+            </div>
           </md-input-container>
         </div>
         <!-- Author -->
@@ -56,11 +62,15 @@
           <md-input-container data-flex>
             <label data-translate="AUTHOR_WORD"></label>
             <input
-              name="authorName"
+              name="author"
               data-ng-model="media.author"
               md-maxlength="255"
               data-ng-disabled="isUserAuthor"
+              required
             >
+            <div data-ng-messages="addMediaForm.author.$error">
+              <div data-ng-message="required" data-translate="AUTHOR_NAME_REQUIRED"></div>
+            </div>
           </md-input-container>
           <md-input-container data-layout="row" data-layout-align="start center">
             <md-checkbox
@@ -113,7 +123,7 @@
       <!-- Actions -->
       <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double">
         <md-button
-          data-ng-click="$ctrl.$mdDialog.cancel()"
+          data-ng-click="$ctrl.cancel()"
           aria-label="Tühista meedia lisamine"
           >
           <span data-translate="BUTTON_CANCEL"></span>
@@ -128,7 +138,7 @@
           <md-icon>arrow_forward</md-icon>
         </md-button>
         <md-progress-circular
-          class="md-accent ng-hide"
+          class="ng-hide"
           md-mode="indeterminate"
           md-diameter="40"
           data-ng-show="isSaving"

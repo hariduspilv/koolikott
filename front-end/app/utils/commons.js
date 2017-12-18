@@ -645,10 +645,13 @@ class Controller {
     getMaterialSource(material) {
         return material && material.source || material.uploadedFile && decodeUTF8(material.uploadedFile.url)
     }
-    isYoutubeVideo(url) {
+    isYoutubeLink(url) {
         // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
         const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
         return url && youtubeUrlRegex.test(url)
+    }
+    isSoundcloudLink(url) {
+        return url && /^https?:\/\/(soundcloud\.com)\/(.*)$/.test(url)
     }
     isSlideshareLink(url) {
         const slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
@@ -669,13 +672,13 @@ class Controller {
     isPDFLink(url) {
         return url && url.split('.').pop().toLowerCase() === "pdf"
     }
-    getEmbedType({ source, uploadedFile }) {
+    getEmbeddedMaterialType({ source, uploadedFile }) {
         if (!source && !uploadedFile)
             return
 
         const url = source || uploadedFile.url
         switch (true) {
-            case this.isYoutubeVideo(url): return 'YOUTUBE'
+            case this.isYoutubeLink(url): return 'YOUTUBE'
             case this.isSlideshareLink(url): return 'SLIDESHARE'
             case this.isVideoLink(url): return 'VIDEO'
             case this.isAudioLink(url): return 'AUDIO'
@@ -683,6 +686,15 @@ class Controller {
             case this.isEbookLink(url): return 'EBOOK'
             case this.isPDFLink(url): return 'PDF'
         }
+    }
+    isAcceptedEmbeddableMediaLink(url) {
+        if (this.isYoutubeLink(url) || this.isSoundcloudLink(url))
+            return true
+
+        const acceptedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'mp3', 'ogg', 'wav', 'mp4', 'ogv', 'webm']
+        const extension = url.split('.').pop()
+
+        return !!extension && acceptedExtensions.indexOf(extension) > -1
     }
     isIE() {
         return (
