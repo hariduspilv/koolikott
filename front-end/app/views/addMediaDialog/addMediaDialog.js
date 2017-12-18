@@ -27,6 +27,19 @@ class controller extends Controller {
                 // Let's not display ‘not accepted’ error before the URL is in valid shape
                 this.$scope.addMediaForm.url.$error.url || this.isAcceptedEmbeddableMediaLink(url)
         })
+        this.$translate('MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION').then(message => {
+            const set = (and) => this.$scope.urlIsNotAcceptedMessage = message.replace(
+                '%s',
+                `jpg (jpeg), png, gif, mp3, ogg, wav, mp4, ogv, webm, YouTube ${and} SoundCloud`
+            )
+            switch (this.translationService.getLanguage()) {
+                case 'est': return set('ja')
+                case 'eng': return set('and')
+                case 'rus': return set('и')
+            }
+        }, () =>
+            this.$scope.urlIsNotAcceptedMessage = 'MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION'
+        )
 
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
@@ -90,10 +103,12 @@ controller.$inject = [
   '$scope',
   '$mdDialog',
   '$timeout',
+  '$translate',
   'authenticatedUserService',
   'locals',
   'metadataService',
   'serverCallService',
+  'translationService',
   'youtubeService',
 ]
 angular.module('koolikottApp').controller('addMediaDialogController', controller)

@@ -39,10 +39,7 @@
                 data-ng-message="required"
                 data-translate="MEDIA_URL_IS_REQUIRED"
               ></div>
-              <div
-                data-ng-message="accepted"
-                data-translate="MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION"
-              ></div>
+              <div data-ng-message="accepted">{{urlIsNotAcceptedMessage}}</div>
             </div>
           </md-input-container>
         </div>
