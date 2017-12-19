@@ -13,16 +13,16 @@ public class PortfolioConverter {
 
     public Portfolio getPortfolioWithAllowedFieldsOnCreate(Portfolio portfolio) {
         Portfolio safePortfolio = new Portfolio();
-        return commonConvert(safePortfolio, portfolio, true);
+        return commonConvert(safePortfolio, portfolio);
     }
 
     public Portfolio setPortfolioUpdatableFields(Portfolio to, Portfolio from) {
-        commonConvert(to, from, false);
+        commonConvert(to, from);
         to.setVisibility(from.getVisibility());
         return to;
     }
 
-    private Portfolio commonConvert(Portfolio to, Portfolio from, boolean create) {
+    private Portfolio commonConvert(Portfolio to, Portfolio from) {
         to.setTitle(from.getTitle());
         to.setSummary(from.getSummary());
         to.setTags(from.getTags());
@@ -31,7 +31,7 @@ public class PortfolioConverter {
         to.setChapters(from.getChapters());
         to.setPicture(from.getPicture());
         if (from.getPicture() != null) {
-            if (from.getPicture().getId() == null && create) {
+            if (from.getPicture().getId() == null) {
                 to.setPicture(null);
             } else {
                 OriginalPicture originalPicture = originalPictureDao.findById(from.getPicture().getId());
