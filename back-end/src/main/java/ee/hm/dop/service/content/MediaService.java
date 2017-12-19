@@ -21,9 +21,6 @@ public class MediaService {
         if (media.getUrl() == null){
             throw new UnsupportedOperationException("must have url");
         }
-        if (!(UserUtil.isAdminOrModerator(loggedInUser) || UserUtil.isCreator(media, loggedInUser))){
-            throw new UnsupportedOperationException(" must be admin, moderator or creator");
-        }
         media.setUrl(UrlUtil.processURL(media.getUrl()));
         media.setCreatedBy(loggedInUser);
         media.setCreatedAt(DateTime.now());

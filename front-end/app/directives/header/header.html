@@ -67,7 +67,7 @@
           </md-autocomplete>
           <span class="inline-suggestion"><span class="suggestion-hidden">{{hiddenInline}}</span>{{inlineSuggestion}}</span>
         </md-input-container>
-        <div class="navbar-search-filter-text" data-hide-sm>
+        <div class="navbar-search-filter-text" data-hide-xs data-hide-sm>
           Filter
         </div>
         <div data-ng-if="!mobileSearch.isVisible" data-hide-sm>
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <span class="flex" hide-gt-lg></span>
+    <span class="flex" hide-gt-xs></span>
     <!-- language menu, login and user menu button -->
     <div class="navbar-buttons-area" data-ng-if="!mobileSearch.isVisible">
       <div class="button-container mobile-search-button">
@@ -190,7 +190,7 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div class="button-container" data-ng-if="$root.isEditPortfolioMode">
+      <div class="button-container" ng-class="{'padding-left-52': $root.isEditPortfolioMode}" data-ng-if="$root.isEditPortfolioMode">
         <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
                     data-ng-click="openTour(true)">
             <md-tooltip><span data-translate="HEADER_EDIT_TOOLTIP_HELP"></span></md-tooltip>

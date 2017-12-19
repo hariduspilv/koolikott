@@ -8,10 +8,25 @@ $border-color: rgba(0,0,0,0.12);
 
 .filter-wrapper {
   padding-top: 0;
+
+  @media (min-width: $layout-breakpoint-md) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .filter-content {
   background: #fff;
+
+  @media (min-width: $layout-breakpoint-lg) {
+    margin-left: 50px;
+    margin-right: -50px;
+  }
+
+  @media (min-width: $layout-breakpoint-main-content-margin) {
+    margin-left: 49px;
+    margin-right: -49px;
+  }
 
   md-radio-button {
     display: inline-block;
