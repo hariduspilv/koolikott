@@ -8,10 +8,25 @@ $border-color: rgba(0,0,0,0.12);
 
 .filter-wrapper {
   padding-top: 0;
+
+  @media (min-width: $layout-breakpoint-md) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .filter-content {
   background: #fff;
+
+  @media (min-width: $layout-breakpoint-lg) {
+    margin-left: 50px;
+    margin-right: -50px;
+  }
+
+  @media (min-width: $layout-breakpoint-main-content-margin) {
+    margin-left: 49px;
+    margin-right: -49px;
+  }
 
   md-radio-button {
     display: inline-block;
@@ -25,12 +40,11 @@ $border-color: rgba(0,0,0,0.12);
 }
 
 .md-toolbar-filter {
-  max-height: 999px;
-  position: relative;
-  transition: max-height 0.35s ease;
   padding-top: 64px;
-  margin-bottom: -64px;
-  z-index: 2;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 
   @media (min-width: $layout-breakpoint-xs) {
     overflow: hidden;
@@ -148,14 +162,5 @@ md-slider.md-default-theme.md-min[md-discrete] .md-thumb:after, md-slider.md-min
 
   .suggestion-hidden {
     visibility: hidden;
-  }
-}
-
-.md-toolbar-filter {
-  &--fixed {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
   }
 }

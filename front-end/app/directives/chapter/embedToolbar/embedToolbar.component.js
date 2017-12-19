@@ -1,7 +1,7 @@
 {
 class controller extends Controller {
     $onChanges({ isVisible }) {
-        if (isVisible.currentValue !== isVisible.previousValue) {
+        if (isVisible && isVisible.currentValue !== isVisible.previousValue) {
             isVisible.currentValue && this.target instanceof HTMLElement
                 ? this.setState() || this.show()
                 : this.hide()
@@ -66,7 +66,6 @@ class controller extends Controller {
     }
     setClassNames(isVisible) {
         this.$scope.classNames = {
-            'embed-toolbar': true,
             'medium-editor-toolbar': true,
             'medium-editor-stalker-toolbar': true,
             'medium-toolbar-arrow-under': true,

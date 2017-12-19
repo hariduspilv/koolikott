@@ -734,13 +734,17 @@ md-input-container.chapter-title {
   background-color: $white;
   box-shadow: 0 0 0 1px #e0e0e0; // gray-300
   user-select: none;
+  display: inline-block;
+  width: calc(100% + 3rem);
 
   @media (min-width: 600px) {
     .chapter-block.is-narrow-left & {
       margin-right: 0;
+      width: calc(100% + 1.5rem);
     }
     .chapter-block.is-narrow-right & {
       margin-left: 0;
+      width: calc(100% + 1.5rem);
     }
   }
 

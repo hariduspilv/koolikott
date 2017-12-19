@@ -149,7 +149,7 @@ class controller extends Controller {
         if (this.bannerType != 'showChanged')
             this.$scope.messageKey = typeof messageKey === 'function' ? messageKey(this) : messageKey
             this.$scope.htmlMessage = false
-        this.$scope.iconTooltipKey = messageKey
+        this.$scope.iconTooltipKey = this.$scope.messageKey
         this.$scope.message = ''
         this.$scope.buttons = buttons
         this.$scope.reports = null

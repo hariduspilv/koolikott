@@ -438,7 +438,10 @@ class controller extends Controller {
             let el = evt.target
 
             while (el !== null) {
-                if (el === this.$element[0] || el.classList.contains('medium-editor-toolbar'))
+                if (el === this.$element[0] ||
+                    el.classList.contains('medium-editor-toolbar') ||
+                    el.classList.contains('medium-editor-anchor-preview')
+                )
                     return
                 el = el.parentElement
             }
@@ -728,7 +731,7 @@ class controller extends Controller {
             embedContainer.classList.add('chapter-embed-card__embedded-material-container')
             const $embedScope = this.$scope.$new(true)
             $embedScope.material = material
-            const embedTemplate = `<dop-embedded-material material="material"></dop-embedded-material>`
+            const embedTemplate = `<dop-embedded-material material="material" hide-link="true"></dop-embedded-material>`
             const [embeddedMaterial] = this.$compile(embedTemplate)($embedScope)
             embedContainer.appendChild(embeddedMaterial)
             fragment.appendChild(embedContainer)
@@ -1052,15 +1055,9 @@ class controller extends Controller {
                 this.searchService.setIsFavorites(true)
                 this.searchService.setIsRecommended(true)
             }
-
+            this.searchService.setType('material')
             document.getElementById('header-search-input').focus()
-
-            // Issue 226 solution if needed
-            /*this.$rootScope.$broadcast('detailedSearch:search');
-
-            const headerCtrl = angular.element('dop-header').controller('dopHeader')
-            if (headerCtrl)
-                headerCtrl.search()*/
+            this.$rootScope.$broadcast('detailedSearch:search')
         })
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
@@ -1170,7 +1167,24 @@ class controller extends Controller {
             selection.addRange(range)
         }
     }
-    onClickAddMedia() {}
+    onClickAddMedia() {
+        /**
+         * @todo
+         *  1) Restore caret position when cancelling the dialog
+         *  2) Insert the newly created media
+         */
+        this.$mdDialog.show({
+            templateUrl: 'views/addMediaDialog/addMediaDialog.html',
+            controller: 'addMediaDialogController',
+            controllerAs: '$ctrl',
+            locals: {
+                isEditMode: false, // @todo
+            }
+        }).then(media => {
+            // @todo
+            console.log('insert media:', media)
+        })
+    }
     /**
      * Embed toolbar (float left|right / full-width)
      */
@@ -1189,13 +1203,17 @@ class controller extends Controller {
         document.body.appendChild(this.embedToolbar)
     }
     showEmbedToolbar(evt) {
-        this.$embedToolbarScope.isVisible = true
-        this.$embedToolbarScope.target = evt.target
-        this.$embedToolbarScope.$digest()
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = true
+            this.$embedToolbarScope.target = evt.target
+            this.$embedToolbarScope.$digest()
+        }
     }
     hideEmbedToolbar() {
-        this.$embedToolbarScope.isVisible = false
-        this.$embedToolbarScope.$digest()
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = false
+            this.$embedToolbarScope.$digest()
+        }
     }
 }
 controller.$inject = [

@@ -423,20 +423,6 @@ directive('dopHeader', {
         checkWindowWidth()
         window.addEventListener('resize', checkWindowWidth)
 
-        window.addEventListener('scroll', () => {
-            clearTimeout(scrollTimer)
-            scrollTimer = setTimeout(() => {
-                if (
-                    !document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop').length &&
-                    detailedSearch.getAttribute('aria-hidden') &&
-                    !isSuggestVisible
-                )
-                    window.pageYOffset >= $header.offsetHeight && window.innerWidth >= BREAK_SM
-                        ? $detailedSearch.addClass('md-toolbar-filter--fixed')
-                        : $detailedSearch.removeClass('md-toolbar-filter--fixed')
-            }, 200)
-        })
-
         setTimeout(() => {
             const headerInput = document.getElementById('header-search-input')
 

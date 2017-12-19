@@ -53,7 +53,7 @@ md-toolbar.navbar.md-gray {
     display: inline-block;
   }
 
-  @media (min-width: $layout-breakpoint-lg) {
+  @media (min-width: $layout-breakpoint-md) {
     margin-left: auto;
     margin-right: auto;
   }
@@ -72,6 +72,12 @@ md-toolbar.navbar.md-gray {
 
   .button-container {
     display: inline-block;
+
+    @media (min-width: $layout-breakpoint-xs) {
+      &.padding-left-52 {
+        padding-left: 52px;
+      }
+    }
 
     @media (max-width: 350px) {
       .md-icon-button {
@@ -104,7 +110,8 @@ md-toolbar.navbar.md-gray {
   background: rgba(255,255,255,.15);
 
   @media (min-width: $layout-breakpoint-lg) {
-    margin-left: $button-width;
+    margin-left: 48px;
+    margin-right: -48px;
   }
 
   .nav-search__autocomplete {

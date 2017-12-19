@@ -91,11 +91,7 @@ class controller extends Controller {
                 this.metadataService.updateUsedResourceTypes(this.setUsedResourceTypes.bind(this))
             )
         )
-
-        // Issue 226 solution if needed
-        /*this.$scope.$on('detailedSearch:search', () =>
-            this.search()
-        )*/
+        this.$scope.$on('detailedSearch:search', () => this.search())
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newValue, oldValue) => {
             if (newValue && oldValue && (newValue !== oldValue))
@@ -124,12 +120,19 @@ class controller extends Controller {
                 this.clear()
         }, true)
     }
-    $onChanges({ queryIn } = {}) {
+    $onChanges({ queryIn, isVisible } = {}) {
         if (queryIn &&
             queryIn.currentValue !== queryIn.previousValue &&
             this.isVisible
         )
             this.parseSimpleSearchQuery(queryIn.currentValue)
+
+        if (isVisible)
+            !isVisible.currentValue
+                ? this.$rootScope.detailedSearchHeight = 0
+                : this.$timeout(() =>
+                    this.$rootScope.detailedSearchHeight = this.$element[0].firstChild.offsetHeight
+                )
     }
     hasSearchChanged(newValue, oldValue) {
         if (newValue.main !== oldValue.main) return true
@@ -355,6 +358,7 @@ class controller extends Controller {
 controller.$inject = [
     '$scope',
     '$rootScope',
+    '$element',
     '$location',
     '$timeout',
     'metadataService',
@@ -367,7 +371,7 @@ component('dopDetailedSearch', {
         queryIn: '<',
         mainField: '=',
         accessor: '=',
-        isVisible: '='
+        isVisible: '<'
     },
     templateUrl: 'directives/detailedSearch/detailedSearch.html',
     controller
