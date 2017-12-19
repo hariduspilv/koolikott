@@ -68,9 +68,11 @@ class controller extends Controller {
                         this.$scope.media.title = snippet.title
                         this.$scope.media.source = snippet.channelTitle
                     })
-            else if (this.isSoundcloudLink(currentValue)) {
-                // @todo Fetch data from soundcloud api (#250 work)
-            }
+            /**
+             * Soundcloud has temporarily suspended registering new apps at http://soundcloud.com/you/apps/new
+             * so fetching some details to auto-fill some fields cannot be completed at this time.
+             */
+            // else if (this.isSoundcloudLink(currentValue)) {}
         }
     }
     isSubmitDisabled() {

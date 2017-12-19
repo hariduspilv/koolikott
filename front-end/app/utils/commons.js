@@ -8,6 +8,10 @@ const LOGIN_ORIGIN = "loginOrigin";
 const BREAK_XS = 600;
 const BREAK_SM = 960;
 const BREAK_LG = 1280;
+const EMBEDDABLE_IMAGE_FILE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
+const EMBEDDABLE_AUDIO_FILE_EXTENSIONS = ['mp3', 'ogg', 'wav']
+const EMBEDDABLE_VIDEO_FILE_EXTENSIONS = ['mp4', 'ogv', 'webm']
+const EMBEDDABLE_MEDIA_FILE_EXTENSIONS = EMBEDDABLE_IMAGE_FILE_EXTENSIONS.concat(EMBEDDABLE_AUDIO_FILE_EXTENSIONS, EMBEDDABLE_VIDEO_FILE_EXTENSIONS)
 
 function log() {
     if (console && console.log) {
@@ -691,10 +695,23 @@ class Controller {
         if (this.isYoutubeLink(url) || this.isSoundcloudLink(url))
             return true
 
-        const acceptedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'mp3', 'ogg', 'wav', 'mp4', 'ogv', 'webm']
         const extension = url.split('.').pop()
 
-        return !!extension && acceptedExtensions.indexOf(extension) > -1
+        return !!extension && EMBEDDABLE_MEDIA_FILE_EXTENSIONS.indexOf(extension) > -1
+    }
+    getEmbeddedMediaType({ url }) {
+        switch (true) {
+            case this.isYoutubeLink(url): return 'YOUTUBE'
+            case this.isSoundcloudLink(url): return 'SOUNDCLOUD'
+            default:
+                const extension = url.split('.').pop()
+                switch (true) {
+                    case !extension: return 'UNKNOWN'
+                    case EMBEDDABLE_IMAGE_FILE_EXTENSIONS.indexOf(extension) > -1: return 'PICTURE'
+                    case EMBEDDABLE_AUDIO_FILE_EXTENSIONS.indexOf(extension) > -1: return 'AUDIO'
+                    case EMBEDDABLE_VIDEO_FILE_EXTENSIONS.indexOf(extension) > -1: return 'VIDEO'
+                }
+        }
     }
     isIE() {
         return (
