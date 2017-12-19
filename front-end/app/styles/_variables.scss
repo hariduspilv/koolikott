@@ -19,6 +19,7 @@ $font-large: 26px;
 $md-padding: 1rem;
 $md-toolbar-height: 4rem; // material design defines this as 64px, overwriting it here using rem untis
 $layout-breakpoint-xxs: 370px;
+$layout-breakpoint-main-content-margin: 1734px; // the screen width at where the card container starts moving with auto margins
 $gray: #808080;
 $gray-600-light: #a4a4a4;
 $gray-500-light: #cfcfcf;
