@@ -337,7 +337,7 @@ MediumEditor.util.execFormatBlock = function (doc, tagName) {
 class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
-            this.embeddedMaterialsCache = this.embeddedMaterialsCache || {}
+            this.embedCache = this.embedCache || {}
 
             const isFirstChange = chapter.isFirstChange()
             this.$scope.chapter = chapter.currentValue
@@ -722,30 +722,20 @@ class controller extends Controller {
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(el) {
-        const setContents = (embed, material) => {
-            const { id, picture, publishers, authors, titles, source, uploadedFile, language, resourceTypes } = material
+        const setContents = (embed, data) => {
             const fragment = document.createDocumentFragment()
 
-            // Embed the material
-            const embedContainer = document.createElement('div')
-            embedContainer.classList.add('chapter-embed-card__embedded-material-container')
-            const $embedScope = this.$scope.$new(true)
-            $embedScope.material = material
-            const embedTemplate = `<dop-embedded-material material="material" hide-link="true"></dop-embedded-material>`
-            const [embeddedMaterial] = this.$compile(embedTemplate)($embedScope)
-            embedContainer.appendChild(embeddedMaterial)
-            fragment.appendChild(embedContainer)
-
-            // Embed footer bearing icon, title, publishers, authors & source link
-            const $embedFooterScope = this.$scope.$new(true)
-            $embedFooterScope.material = material
-            const embedFooterTemplate = `<dop-embed-footer learning-object="material"></dop-embed-footer>`
-            const [embedFooterMaterial] = this.$compile(embedFooterTemplate)($embedFooterScope)
-            fragment.appendChild(embedFooterMaterial)
+            fragment.appendChild(compile(data, `<dop-embed data="data" hide-link="true"></dop-embedded-material>`))
+            fragment.appendChild(compile(data, `<dop-embed-footer data="data"></dop-embed-footer>`))
 
             embed.appendChild(fragment)
             embed.classList.add('chapter-embed-card--loaded')
             embed.classList.remove('chapter-embed-card--loading')
+        }
+        const compile = (data, template) => {
+            const $scope = this.$scope.$new(true)
+            $scope.data = data
+            return this.$compile(template)($scope)[0]
         }
 
         for (let embed of el.querySelectorAll('.chapter-embed-card')) {
@@ -765,13 +755,23 @@ class controller extends Controller {
                 if (this.isTouchDevice())
                     embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
 
-                this.embeddedMaterialsCache[id]
-                    ? setContents(embed, this.embeddedMaterialsCache[id])
+                const url = embed.classList.contains('chapter-embed-card--material')
+                    ? 'rest/material'
+                    : 'rest/media'
+
+                // Read embeddable material/media data from cache or fetch it from the back-end
+                this.embedCache[id]
+                    ? setContents(embed, this.embedCache[id])
                     : this.serverCallService
-                        .makeGet('rest/material', { id })
-                        .then(({ data }) => {
-                            this.embeddedMaterialsCache[id] = data
-                            setContents(embed, data)
+                        .makeGet(url, { id })
+                        .then(({ status, data }) => {
+                            if (200 <= status && status < 300) {
+                                this.embedCache[id] = data
+                                setContents(embed, data)
+                            } else {
+                                embed.classList.add('chapter-embed-card--error')
+                                embed.classList.remove('chapter-embed-card--loading')
+                            }
                         })
             }
         }
@@ -1023,7 +1023,7 @@ class controller extends Controller {
             })
         }
     }
-    beforeAddMaterial() {
+    beforeAddEmbed() {
         this.clearEmbedInsertionData()
         window.embedInsertionChapterIdx = this.index
 
@@ -1060,7 +1060,7 @@ class controller extends Controller {
             this.$rootScope.$broadcast('detailedSearch:search')
         })
     }
-    onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
+    onInsertExistingMaterials(evt, chapterIdx, materials) {
         /**
          * These timeouts are necessary to ensure block elements are created in DOM and
          * Medium Editors are initialized on them.
@@ -1068,7 +1068,11 @@ class controller extends Controller {
         if (chapterIdx === this.index)
             this.$timeout(() =>
                 this.$timeout(() =>
-                    this.insertMaterials(selectedMaterials, true)
+                    this.insertEmbeds(
+                        this.getMaterialsMarkup(materials),
+                        materials[materials.length - 1].id,
+                        true
+                    )
                 )
             )
     }
@@ -1081,15 +1085,40 @@ class controller extends Controller {
                 isEditMode: false,
                 isAddToPortfolio: true
             }
-        }).then(material =>
-            this.insertMaterials([material])
-        )
+        }).then(material => {
+            this.embedCache[material.id] = material
+            this.insertEmbeds(this.getMaterialsMarkup([material], material.id))
+        })
     }
-    insertMaterials(materials, isAddExisting = false) {
-        const materialsHtml = materials.reduce((html, { id }) =>
+    getMaterialsMarkup(materials) {
+        materials.reduce((html, { id }) =>
             html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
+    }
+    onClickAddMedia() {
+        /**
+         * @todo
+         *  1) Restore caret position when cancelling the dialog
+         */
+        this.$mdDialog
+            .show({
+                templateUrl: 'views/addMediaDialog/addMediaDialog.html',
+                controller: 'addMediaDialogController',
+                controllerAs: '$ctrl',
+                locals: {
+                    isEditMode: false, // @todo
+                }
+            })
+            .then(media => {
+                this.embedCache[media.id] = media
+                this.insertEmbeds(
+                    `<div class="chapter-embed-card chapter-embed-card--media" data-id="${media.id}"></div><p><br></p>`,
+                    media.id
+                )
+            })
+    }
+    insertEmbeds(embedsHtml, lastId, isAddExisting = false) {
         const insertingAtMarker = typeof window.embedInsertionBlockIdx === 'number'
         const editorElements = this.getEditorElements()
         const editorEl = insertingAtMarker
@@ -1097,8 +1126,8 @@ class controller extends Controller {
             : editorElements[editorElements.length - 1]
 
         insertingAtMarker
-            ? editorEl.innerHTML = window.embedInsertionBlockContents.replace(EMBED_INSERTION_MARKER, materialsHtml)
-            : editorEl.innerHTML += materialsHtml
+            ? editorEl.innerHTML = window.embedInsertionBlockContents.replace(EMBED_INSERTION_MARKER, embedsHtml)
+            : editorEl.innerHTML += embedsHtml
 
         this.updateState()
         this.loadEmbeddedContents(editorEl)
@@ -1109,9 +1138,9 @@ class controller extends Controller {
                 ? this.focusBlock(window.embedInsertionBlockIdx)
                 : this.focusBlock()
 
-            const lastInsertedMaterial = editorEl.querySelector(`[data-id="${materials[materials.length - 1].id}"]`)
-            this.scrollToElement(lastInsertedMaterial)
-            this.putCaretAfterNode(lastInsertedMaterial)
+            const lastInsertedEmbed = editorEl.querySelector(`[data-id="${lastId}"]`)
+            this.scrollToElement(lastInsertedEmbed)
+            this.putCaretAfterNode(lastInsertedEmbed)
         }
         /**
          * Yet another timeout is necessary to wait for the editor to become properly focusable.
@@ -1166,24 +1195,6 @@ class controller extends Controller {
             selection.removeAllRanges()
             selection.addRange(range)
         }
-    }
-    onClickAddMedia() {
-        /**
-         * @todo
-         *  1) Restore caret position when cancelling the dialog
-         *  2) Insert the newly created media
-         */
-        this.$mdDialog.show({
-            templateUrl: 'views/addMediaDialog/addMediaDialog.html',
-            controller: 'addMediaDialogController',
-            controllerAs: '$ctrl',
-            locals: {
-                isEditMode: false, // @todo
-            }
-        }).then(media => {
-            // @todo
-            console.log('insert media:', media)
-        })
     }
     /**
      * Embed toolbar (float left|right / full-width)

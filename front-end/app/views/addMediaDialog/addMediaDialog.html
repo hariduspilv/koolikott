@@ -88,7 +88,11 @@
               name="source"
               data-ng-model="media.source"
               md-maxlength="255"
+              required
             >
+            <div data-ng-messages="addMediaForm.source.$error">
+              <div data-ng-message="required" data-translate="SOURCE_REQUIRED"></div>
+            </div>
           </md-input-container>
           <!-- License type -->
           <md-input-container data-flex>
@@ -105,7 +109,7 @@
                 data-translate="LICENSETYPE_CANT_CHOOSE"
               ></md-option>
               <md-option
-                data-ng-repeat="licenseType in licenseTypes track by $index"
+                data-ng-repeat="licenseType in licenseTypes"
                 data-ng-value="licenseType"
                 data-translate="LICENSETYPE_{{licenseType.name.toUpperCase()}}"
                 >

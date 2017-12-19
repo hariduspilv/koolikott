@@ -34,20 +34,17 @@ class controller extends Controller {
         if (markRequired && markRequired.currentValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
             this.$scope.targetGroupForm.targetGroupSelect.$touched = true
 
-        if (targetGroups.currentValue !== targetGroups.previousValue) {
+        if (targetGroups.currentValue !== targetGroups.previousValue)
             this.$timeout(() => {
                 this.selectValue(true)
                 this.setSelectedText()
             })
-        }
     }
     setSelectedText() {
         const set = (selectedText) => {
             this.$scope.selectedText = Array.isArray(selectedText)
                 ? selectedText.join(', ')
                 : selectedText
-
-            // porno
             this.$element.find('md-select').controller('ngModel').$render()
         }
 
@@ -126,6 +123,9 @@ class controller extends Controller {
     }
     parseSelectedTargetGroup() {
         this.targetGroups = this.targetGroupService.getByLabel(this.$scope.selectedTargetGroup)
+
+        if (typeof this.onChange === 'function')
+            this.onChange({ targetGroups: this.targetGroups })
     }
     selectValue(force) {
         if (!this.$scope.selectedTargetGroup)
@@ -152,7 +152,6 @@ class controller extends Controller {
         this.$scope.selectedTargetGroup.forEach(name => {
             if (!groupNames.includes(name)) {
                 removeGroup(name, this.$scope.selectedTargetGroup)
-                removeGroup(name, this.targetGroups)
             }
         })
 
@@ -201,7 +200,8 @@ component('dopTargetGroupSelector', {
         targetGroups: '<',
         taxon: '<',
         isRequired: '<',
-        markRequired: '<'
+        markRequired: '<',
+        onChange: '&',
     },
     templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
     controller

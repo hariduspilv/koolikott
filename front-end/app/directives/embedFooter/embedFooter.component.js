@@ -5,19 +5,22 @@ class controller extends Controller {
     $onInit() {
         this.currentLanguage = this.translationService.getLanguage()
     }
-    $onChanges({ learningObject }) {
-        if (learningObject.currentValue !== learningObject.previousValue) {
-            const { id, publishers, authors, titles, source, uploadedFile, language, resourceTypes } = learningObject.currentValue
-
-            this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
-            this.$scope.link = '/material?id=' + id
-            this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
-            this.$scope.publishersAndAuthors = publishers.map(p => p.name).concat(authors.map(a => a.name+' '+a.surname)).join(', ')
-            this.setSourceLink()
+    $onChanges({ data }) {
+        if (data.currentValue !== data.previousValue) {
+            this.isMaterial(data.currentValue)
+                ? this.setMaterialFooterData(data.currentValue)
+                : this.setMediaFooterData(data.currentValue)
         }
     }
-    setSourceLink() {
-        const { embeddable, source, uploadedFile } = this.learningObject
+    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes }) {
+        this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
+        this.$scope.link = '/material?id=' + id
+        this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
+        this.$scope.publishersAndAuthors = publishers.map(p => p.name).concat(authors.map(a => a.name+' '+a.surname)).join(', ')
+        this.setMaterialSourceLink()
+    }
+    setMaterialSourceLink() {
+        const { embeddable, source, uploadedFile } = this.data
         const set = (url) => this.$scope.sourceLink = {
             url: url || source || uploadedFile.url,
             text: source || uploadedFile.url
@@ -33,6 +36,16 @@ class controller extends Controller {
                     set
                 )
     }
+    setMediaFooterData(media) {
+        this.$scope.icon = this.iconService.getMediaIcon(this.getEmbeddedMediaType(media))
+        this.$scope.link = media.url
+        this.$scope.title = media.title
+        this.$scope.publishersAndAuthors = media.author
+        this.$scope.sourceLink = {
+            url: media.url,
+            text: media.source
+        }
+    }
 }
 controller.$inject = [
     '$scope',
@@ -44,7 +57,7 @@ controller.$inject = [
 ]
 component('dopEmbedFooter', {
     bindings: {
-        learningObject: '<',
+        data: '<',
     },
     templateUrl: 'directives/embedFooter/embedFooter.html',
     controller

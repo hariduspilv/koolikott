@@ -16,6 +16,9 @@ class controller extends Controller {
         this.$scope.isUserAuthor = false
         this.$scope.licenseTypes = []
 
+        const { name, surname } = this.authenticatedUserService.getUser()
+        this.userFullName = `${name} ${surname}`
+
         this.metadataService.loadLicenseTypes(data => {
             this.$scope.licenseTypes = data
             this.$scope.allRightsReserved = data.find(t => t.name.toUpperCase() === 'ALLRIGHTSRESERVED')
@@ -41,21 +44,20 @@ class controller extends Controller {
             this.$scope.urlIsNotAcceptedMessage = 'MEDIA_URL_IS_NOT_ACCEPTED_BY_EXTENSION'
         )
 
+        this.$scope.$watch('media.author', (currentValue, previousValue) => {
+            if (currentValue !== previousValue)
+                this.$scope.isUserAuthor = currentValue === this.userFullName
+        })
+
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
             angular.element(document.querySelector('html')).css('overflow-y', '')
         )
     }
     setAuthorToUser() {
-        const { name, surname } = this.authenticatedUserService.getUser()
-
-        if (this.$scope.media.author !== `${name} ${surname}`) {
-            this.$scope.media.author = `${name} ${surname}`
-            this.$scope.isUserAuthor = true
-        } else {
-            this.$scope.media.author = ''
-            this.$scope.isUserAuthor = false
-        }
+        this.$scope.media.author = this.$scope.media.author !== this.userFullName
+            ? this.userFullName
+            : ''
     }
     processURL(currentValue, previousValue) {
         if (currentValue && currentValue !== previousValue) {
@@ -68,9 +70,11 @@ class controller extends Controller {
                         this.$scope.media.title = snippet.title
                         this.$scope.media.source = snippet.channelTitle
                     })
-            else if (this.isSoundcloudLink(currentValue)) {
-                // @todo Fetch data from soundcloud api (#250 work)
-            }
+            /**
+             * Soundcloud has temporarily suspended registering new apps at http://soundcloud.com/you/apps/new
+             * so fetching some details to auto-fill some fields cannot be completed at this time.
+             */
+            // else if (this.isSoundcloudLink(currentValue)) {}
         }
     }
     isSubmitDisabled() {
