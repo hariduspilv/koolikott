@@ -198,7 +198,7 @@ public class MaterialService {
         material.setVisibility(Visibility.PUBLIC);
 
         if (material.getPicture() != null){
-            if (material.getPicture().getId() == null && create){
+            if (material.getPicture().getId() == null){
                 material.setPicture(null);
             } else {
                 OriginalPicture originalPicture = originalPictureDao.findById(material.getPicture().getId());
