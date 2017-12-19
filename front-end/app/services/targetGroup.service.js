@@ -142,8 +142,8 @@ angular.module('koolikottApp').factory('targetGroupService', [
             getLabelByTargetGroups: function (targetGroups) {
                 let selectedTargetGroup = [];
 
-                if (targetGroups) {
-                    selectedTargetGroup = targetGroups;
+                if (Array.isArray(targetGroups)) {
+                    selectedTargetGroup = targetGroups.slice();
 
                     for (let i = 0; i < groups.length; i++) {
                         let hasChildren = this.hasAllChildren(groups[i], selectedTargetGroup);
