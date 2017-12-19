@@ -53,13 +53,13 @@ md-toolbar.navbar.md-gray {
     display: inline-block;
   }
 
-  @media (min-width: $layout-breakpoint-lg) {
+  @media (min-width: $layout-breakpoint-md) {
     margin-left: auto;
     margin-right: auto;
   }
 }
 
-.navbar-buttons-area {
+.navbar-buttons-area {  
   @media (min-width: $layout-breakpoint-xs) {
     flex: 0 0 auto;
   }
@@ -104,7 +104,8 @@ md-toolbar.navbar.md-gray {
   background: rgba(255,255,255,.15);
 
   @media (min-width: $layout-breakpoint-lg) {
-    margin-left: $button-width;
+    margin-left: 49px;
+    margin-right: -49px;
   }
 
   .nav-search__autocomplete {
