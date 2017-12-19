@@ -4,6 +4,13 @@
 class controller extends Controller {
     $onInit() {
         this.currentLanguage = this.translationService.getLanguage()
+        this.metadataService.loadLicenseTypes(data =>
+            this.$scope.defaultLicenseTypeName = data.reduce(
+                (defaultTypeName, type) =>
+                    defaultTypeName || type.name === 'allRightsReserved' && type.name.toUpperCase(),
+                null
+            )
+        )
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
@@ -12,12 +19,15 @@ class controller extends Controller {
                 : this.setMediaFooterData(data.currentValue)
         }
     }
-    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes }) {
+    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType }) {
         this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
         this.$scope.link = '/material?id=' + id
         this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
         this.$scope.publishersAndAuthors = publishers.map(p => p.name).concat(authors.map(a => a.name+' '+a.surname)).join(', ')
         this.setMaterialSourceLink()
+
+        const { name: licenseTypeName } = licenseType || {}
+        this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
     }
     setMaterialSourceLink() {
         const { embeddable, source, uploadedFile } = this.data
@@ -45,6 +55,9 @@ class controller extends Controller {
             url: media.url,
             text: media.source
         }
+
+        const { name: licenseTypeName } = media.licenseType || {}
+        this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
     }
 }
 controller.$inject = [
@@ -52,6 +65,7 @@ controller.$inject = [
     '$window',
     'authenticatedUserService',
     'iconService',
+    'metadataService',
     'serverCallService',
     'translationService',
 ]
