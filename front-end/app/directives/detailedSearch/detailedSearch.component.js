@@ -119,6 +119,13 @@ class controller extends Controller {
             else if (!newValue && (newValue !== oldValue))
                 this.clear()
         }, true)
+
+        this.$scope.$watch('detailedSearch', (currentValue, previousValue) => {
+            if (this.isVisible && currentValue !== previousValue)
+                this.$timeout(() =>
+                    this.$rootScope.detailedSearchHeight = this.$element[0].firstChild.offsetHeight
+                )
+        }, true)
     }
     $onChanges({ queryIn, isVisible } = {}) {
         if (queryIn &&
