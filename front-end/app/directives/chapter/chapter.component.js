@@ -119,6 +119,9 @@ class controller extends Controller {
                 document.removeEventListener('touchmove', this.onIOSTouchMove)
                 document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInput)
             }
+
+            if (this.embedToolbar)
+                this.embedToolbar.parentNode.removeChild(this.embedToolbar)
         }
     }
     onClickOutside(evt) {
