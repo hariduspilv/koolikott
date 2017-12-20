@@ -75,6 +75,7 @@ public class AdminDashboardTests {
 				.chooseUserType("Admin")
 				.clickAddMaterial()
 				.setNewHyperLink()
+				.addMaterialLicenseType()
 				.setMaterialTitle()
 				.addDescription()
 				.selectEducation()
