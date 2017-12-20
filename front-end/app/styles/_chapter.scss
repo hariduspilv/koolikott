@@ -130,8 +130,8 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
   transition: box-shadow .2s;
   will-change: box-shadow;
 
-  &:hover,
-  &.is-focused {
+  &.is-edit-mode:hover,
+  &.is-edit-mode.is-focused {
     box-shadow: $whiteframe-shadow-4dp;
   }
 
