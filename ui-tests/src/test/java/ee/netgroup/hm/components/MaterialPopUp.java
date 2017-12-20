@@ -18,7 +18,7 @@ public class MaterialPopUp extends Component{
 	private By basicEducation = By.cssSelector("md-option[data-translate='PRESCHOOLEDUCATION']");
 	private By subjectArea = By.xpath("(//md-select[contains(@id, 'taxonDomainSelect')])[2]");
 	private By subject = By.cssSelector("md-option[data-translate='DOMAIN_ESTONIAN']");
-	private By targetGroup = By.xpath("//form[1][contains(@name, 'targetGroupForm')]");
+	private By targetGroup = By.xpath("//form[contains(@name, 'targetGroupForm')]");
 	private By selectedTargetGroup = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
 	private By closeButton = By.xpath("//md-icon[@aria-label='close']");
 	private By createMaterialButton = By.id("create-material-button");
@@ -30,10 +30,10 @@ public class MaterialPopUp extends Component{
 	public static String newMaterialUrl = Helpers.generateUrl();
 	private By illustrationAuthorCheckbox = By.xpath("//md-checkbox[@data-ng-click='$ctrl.setAuthorToUser()']");
 	private By illustrationSource = By.name("pictureSource");
-	private By illustrationLicenseType = By.id("pictureLicenseTypeSelect");
 	private By additionalData = By.id("open-additional-info");
 	private By reviewLink = By.name("peerReview");
-	//private By materialType = By.id("resourceTypeSelect");
+	private By licenseType = By.id("licenseTypeSelect");
+	private By licenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_CCBY']");
 	private By selectedLanguage = By.cssSelector("#add-material-language-select md-select-value.md-select-value div.md-text span");
 	private By updateMaterialButton = By.id("create-material-button");
 	private By insertFile = By.xpath("//span[@data-translate='FILE_WORD']");
@@ -57,7 +57,7 @@ public class MaterialPopUp extends Component{
 		return this;
 	}
 
-	public MaterialPopUp uploadPhoto() {
+	public MaterialPopUp uploadIllustration() {
 		Helpers.waitForClickable(insertPhoto);
 		getDriver().findElement(insertPhoto).click();
 		Helpers.uploadFile();
@@ -85,10 +85,10 @@ public class MaterialPopUp extends Component{
 	}
 
 	public MaterialPopUp selectTargetGroup() {
-		Helpers.waitForClickable(targetGroup);
-		getDriver().findElement(targetGroup).click();
+		//Helpers.waitForClickable(targetGroup);
+		getDriver().findElements(targetGroup).get(1).click();
 		getDriver().findElement(selectedTargetGroup).click();
-		getDriver().findElements(closeButton).get(1).click();
+		getDriver().findElements(closeButton).get(2).click();
 		return this;
 	}
 
@@ -152,13 +152,6 @@ public class MaterialPopUp extends Component{
 		return this;
 	}
 
-	public MaterialPopUp addIllustrationLicenceType() {
-		
-		getDriver().findElement(illustrationLicenseType).click();
-		getDriver().findElement(By.xpath("//md-option[contains(text(), 'Ei oska valida')]")).click();
-		return this;
-	}
-
 	public MaterialPopUp clickAdditionalData() {
 		getDriver().findElement(additionalData).click();
 		return this;
@@ -168,13 +161,12 @@ public class MaterialPopUp extends Component{
 		getDriver().findElement(reviewLink).sendKeys(Helpers.generateUrl());
 		return this;
 	}
-/*
-	public MaterialPopUp addMaterialType() {
-		getDriver().findElement(materialType).click();
-		By typeOption = By.cssSelector("md-option[ng-value='resourceType']");
-		getDriver().findElements(typeOption).get(2).click();
+
+	public MaterialPopUp addMaterialLicenseType() {
+		getDriver().findElement(licenseType).click();
+		getDriver().findElements(licenseTypeOption).get(1).click();
 		return this;
-	}*/
+	}
 	
 	public String getMaterialLanguage() {
 		return getDriver().findElement(selectedLanguage).getText();
