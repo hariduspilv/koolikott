@@ -95,15 +95,9 @@ class controller extends Controller {
                 for (let el of this.getEditorElements())
                     this.loadEmbeddedContents(el)
 
-                /**
-                 * Remove blank paragraphs that follow embeds.
-                 */
+                // Remove blank paragraphs.
                 for (let p of this.$element[0].querySelectorAll('p'))
-                    if (!p.textContent.trim() &&
-                        p.previousSibling &&
-                        p.previousSibling.nodeType === Node.ELEMENT_NODE &&
-                        p.previousSibling.classList.contains('chapter-embed-card')
-                    )
+                    if (!p.textContent.trim())
                         p.parentNode.removeChild(p)
             })
         }
@@ -797,7 +791,7 @@ class controller extends Controller {
         })
     }
     getMaterialsMarkup(materials) {
-        materials.reduce((html, { id }) =>
+        return materials.reduce((html, { id }) =>
             html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
