@@ -32,7 +32,8 @@ public class MaterialPage extends Page{
 	private By improperContent = By.xpath("//span[@data-translate='REPORT_IMPROPER']");
 	private By markAsReviewed = By.xpath("//button[@aria-label='Märgi ülevaadatuks']");
 	private By declineButton = By.xpath("//button[1][@data-ng-click='button.onClick($ctrl)']");
-	private By materialUrl = By.xpath("//span[@data-ng-bind='material.source']");
+	private By materialUrl = By.xpath("//a[@data-ng-bind='url']");
+
 	
 	public String getPublisherName() {
 		return getDriver().findElement(publisherName).getText();
