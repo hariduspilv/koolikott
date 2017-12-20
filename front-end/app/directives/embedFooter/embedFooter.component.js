@@ -14,9 +14,10 @@ class controller extends Controller {
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
-            this.isMaterial(data.currentValue)
-                ? this.setMaterialFooterData(data.currentValue)
-                : this.setMediaFooterData(data.currentValue)
+            this.isMedia = !this.isMaterial(data.currentValue)
+            this.isMedia
+                ? this.setMediaFooterData(data.currentValue)
+                : this.setMaterialFooterData(data.currentValue)
         }
     }
     setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType }) {
@@ -59,10 +60,26 @@ class controller extends Controller {
         const { name: licenseTypeName } = media.licenseType || {}
         this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
     }
+    onClick() {
+        if (this.isMedia && this.isEditMode) {
+            clearTimeout(this.clickTimer)
+            this.clickTimer = setTimeout(
+                () => window.open(this.$scope.link),
+                300
+            )
+        } else
+            window.open(this.$scope.link)
+    }
+    onDblClick() {
+        if (this.isMedia && this.isEditMode) {
+            clearTimeout(this.clickTimer)
+            if (typeof this.onDoubleClick === 'function')
+                this.onDoubleClick()
+        }
+    }
 }
 controller.$inject = [
     '$scope',
-    '$window',
     'authenticatedUserService',
     'iconService',
     'metadataService',
@@ -72,6 +89,8 @@ controller.$inject = [
 component('dopEmbedFooter', {
     bindings: {
         data: '<',
+        isEditMode: '<',
+        onDoubleClick: '&',
     },
     templateUrl: 'directives/embedFooter/embedFooter.html',
     controller
