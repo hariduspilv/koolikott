@@ -47,8 +47,7 @@ class controller extends Controller {
         )
 
         this.$scope.$watch('media.author', (currentValue, previousValue) => {
-            if (currentValue)
-                this.$scope.isUserAuthor = currentValue === this.userFullName
+            this.$scope.isUserAuthor = currentValue === this.userFullName
         })
 
         // fix for https://github.com/angular/material/issues/6905
