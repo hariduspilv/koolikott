@@ -246,13 +246,8 @@ class controller extends Controller {
                 subchapter.removeAttribute('id')
 
             // 2) reduce embedded materials to <div> without any content
-            for (let embed of wrapper.querySelectorAll('.chapter-embed-card')) {
-                embed.classList.remove('chapter-embed-card--loading')
-                embed.classList.remove('chapter-embed-card--loaded')
-                embed.removeAttribute('contenteditable')
-                while (embed.firstChild)
-                    embed.removeChild(embed.firstChild)
-            }
+            for (let embed of wrapper.querySelectorAll('.chapter-embed-card'))
+                this.unloadEmbeddedContent(embed)
 
             return wrapper.innerHTML
         }
@@ -415,60 +410,77 @@ class controller extends Controller {
         for (let [subIdx, subEl] of this.$element[0].querySelectorAll('.subchapter').entries())
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
-    loadEmbeddedContents(el) {
+    loadEmbeddedContents(editorEl) {
+        for (let embed of editorEl.querySelectorAll('.chapter-embed-card'))
+            this.loadEmbeddedContent(embed)
+    }
+    loadEmbeddedContent(embed, update = false) {
+        if (update)
+            this.unloadEmbeddedContent(embed)
+
+        const { id } = embed.dataset
+        if (!id
+            || embed.classList.contains('chapter-embed-card--loading')
+            || embed.classList.contains('chapter-embed-card--loaded')
+        )
+            return
+
+        embed.classList.add('chapter-embed-card--loading')
+        embed.setAttribute('contenteditable', 'false')
+        embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
+        embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
+        /**
+         * This is in place to prevent the context menu from appearing on touch devices when
+         * user taps and holds on the embed element — to make way for the embed toolbar.
+         */
+        if (this.isTouchDevice())
+            embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
+
         const setContents = (embed, data) => {
             const fragment = document.createDocumentFragment()
+            const onDoubleClick = embed.classList.contains('chapter-embed-card--media')
+                ? this.openMediaDialog.bind(this, data)
+                : undefined
 
-            fragment.appendChild(compile(data, `<dop-embed data="data" hide-link="true"></dop-embedded-material>`))
-            fragment.appendChild(compile(data, `<dop-embed-footer data="data"></dop-embed-footer>`))
+            fragment.appendChild(compile({ data }, `<dop-embed data="data" hide-link="true"></dop-embedded-material>`))
+            fragment.appendChild(compile({ data, onDoubleClick }, `<dop-embed-footer data="data" is-edit-mode="${this.isEditMode}" on-double-click="onDoubleClick()"></dop-embed-footer>`))
 
             embed.appendChild(fragment)
             embed.classList.add('chapter-embed-card--loaded')
             embed.classList.remove('chapter-embed-card--loading')
         }
-        const compile = (data, template) => {
+        const compile = (scopeData, template) => {
             const $scope = this.$scope.$new(true)
-            $scope.data = data
+            Object.assign($scope, scopeData)
             return this.$compile(template)($scope)[0]
         }
+        const url = embed.classList.contains('chapter-embed-card--material')
+            ? 'rest/material'
+            : 'rest/media'
 
-        for (let embed of el.querySelectorAll('.chapter-embed-card')) {
-            const { id } = embed.dataset
-            if (id
-                && !embed.classList.contains('chapter-embed-card--loading')
-                && !embed.classList.contains('chapter-embed-card--loaded')
-            ) {
-                embed.setAttribute('contenteditable', 'false')
-                embed.classList.add('chapter-embed-card--loading')
-                embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
-                embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
-                /**
-                 * This is in place to prevent the context menu from appearing on touch devices when
-                 * user taps and holds on the embed element — to make way for the embed toolbar.
-                 */
-                if (this.isTouchDevice())
-                    embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
-
-                const url = embed.classList.contains('chapter-embed-card--material')
-                    ? 'rest/material'
-                    : 'rest/media'
-
-                // Read embeddable material/media data from cache or fetch it from the back-end
-                this.embedCache[id]
-                    ? setContents(embed, this.embedCache[id])
-                    : this.serverCallService
-                        .makeGet(url, { id })
-                        .then(({ status, data }) => {
-                            if (200 <= status && status < 300) {
-                                this.embedCache[id] = data
-                                setContents(embed, data)
-                            } else {
-                                embed.classList.add('chapter-embed-card--error')
-                                embed.classList.remove('chapter-embed-card--loading')
-                            }
-                        })
-            }
-        }
+        // Read embeddable material/media data from cache or fetch it from the back-end
+        this.embedCache[id]
+            ? setContents(embed, this.embedCache[id])
+            : this.serverCallService
+                .makeGet(url, { id })
+                .then(({ status, data }) => {
+                    if (200 <= status && status < 300) {
+                        this.embedCache[id] = data
+                        setContents(embed, data)
+                    } else {
+                        embed.classList.add('chapter-embed-card--error')
+                        embed.classList.remove('chapter-embed-card--loading')
+                    }
+                })
+    }
+    unloadEmbeddedContent(embed) {
+        embed.classList.remove('chapter-embed-card--loading')
+        embed.classList.remove('chapter-embed-card--loaded')
+        embed.classList.remove('chapter-embed-card--error')
+        embed.removeAttribute('contenteditable')
+        
+        while (embed.firstChild)
+            embed.removeChild(embed.firstChild)
     }
     discardEmptyElements() {
         for (let el of this.$element[0].querySelectorAll('h3:empty, p:empty, li:empty, blockquote:empty'))
@@ -790,27 +802,34 @@ class controller extends Controller {
             ''
         )
     }
-    onClickAddMedia() {
+    openMediaDialog(editableMedia) {
         /**
-         * @todo
-         *  1) Restore caret position when cancelling the dialog
+         * @todo Restore caret position when cancelling the dialog
          */
-        this.$mdDialog
-            .show({
-                templateUrl: 'views/addMediaDialog/addMediaDialog.html',
-                controller: 'addMediaDialogController',
-                controllerAs: '$ctrl',
-                locals: {
-                    isEditMode: false, // @todo
-                }
-            })
-            .then(media => {
-                this.embedCache[media.id] = media
-                this.insertEmbeds(
+        const options = {
+            templateUrl: 'views/addMediaDialog/addMediaDialog.html',
+            controller: 'addMediaDialogController',
+            controllerAs: '$ctrl',
+            locals: {
+                isEditMode: !!editableMedia
+            }
+        }
+        if (editableMedia) {
+            options.scope = this.$scope.$new(true)
+            options.scope.media = editableMedia
+        }
+
+        this.$mdDialog.show(options).then(media => {
+            this.embedCache[media.id] = media
+            const editableElement = this.$element[0].querySelector(`[data-id="${media.id}"]`)
+
+            editableMedia && editableElement
+                ? this.loadEmbeddedContent(editableElement, true)
+                : this.insertEmbeds(
                     `<div class="chapter-embed-card chapter-embed-card--media" data-id="${media.id}"></div><p><br></p>`,
                     media.id
                 )
-            })
+        })
     }
     insertEmbeds(embedsHtml, lastId, isAddExisting = false) {
         const insertingAtMarker = typeof window.embedInsertionBlockIdx === 'number'

@@ -5,13 +5,15 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
-        this.$scope.media = {
-            url: '',
-            title: '',
-            source: '',
-            author: '',
-            licenseType: null
-        }
+        if (!this.$scope.media)
+            this.$scope.media = {
+                url: '',
+                title: '',
+                source: '',
+                author: '',
+                licenseType: null
+            }
+
         this.$scope.isSaving = false
         this.$scope.isUserAuthor = false
         this.$scope.licenseTypes = []
@@ -45,7 +47,7 @@ class controller extends Controller {
         )
 
         this.$scope.$watch('media.author', (currentValue, previousValue) => {
-            if (currentValue !== previousValue)
+            if (currentValue)
                 this.$scope.isUserAuthor = currentValue === this.userFullName
         })
 
