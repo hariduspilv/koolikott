@@ -91,7 +91,7 @@ component('dopEmbedToolbar', {
         target: '<',
         isVisible: '<',
     },
-    templateUrl: 'directives/chapter/embedToolbar/embedToolbar.html',
+    templateUrl: 'directives/embedToolbar/embedToolbar.html',
     controller
 })
 }
