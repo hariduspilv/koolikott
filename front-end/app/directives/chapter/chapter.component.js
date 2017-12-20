@@ -492,6 +492,13 @@ class controller extends Controller {
     getEditor(idx) {
         return MediumEditor.getEditorFromElement(this.getEditorElements()[idx])
     }
+    getParentEditor(el) {
+        while (el !== null) {
+            if (el.classList.contains('chapter-block'))
+                return el
+            el = el.parentElement
+        }
+    }
     getChapterClassNames() {
         return Object.assign({
             'is-edit-mode': this.isEditMode
@@ -924,7 +931,8 @@ class controller extends Controller {
         document.body.appendChild(this.embedToolbar)
     }
     showEmbedToolbar(evt) {
-        if (this.$embedToolbarScope) {
+        const parentEditor = this.getParentEditor(evt.target)
+        if (this.$embedToolbarScope && parentEditor && !parentEditor.classList.contains('is-narrow')) {
             this.$embedToolbarScope.isVisible = true
             this.$embedToolbarScope.target = evt.target
             this.$embedToolbarScope.$digest()
