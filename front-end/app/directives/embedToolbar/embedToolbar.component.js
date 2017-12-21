@@ -46,8 +46,8 @@ class controller extends Controller {
         const { left, top, width } = this.target.getBoundingClientRect()
 
         this.$scope.style = {
-            left: left + window.scrollX + (width / 2)  + 'px',
-            top: top + window.scrollY + 'px',
+            left: left + window.pageXOffset + (width / 2)  + 'px',
+            top: top + window.pageYOffset + 'px',
         }
 
         this.$scope.buttons[0].active = this.target.classList.contains('chapter-embed-card--float-left')
