@@ -1,6 +1,6 @@
 package ee.netgroup.hm.page;
 
-import ee.netgroup.hm.components.ReportImproperPopUp;
+import ee.netgroup.hm.components.ReportImproperModal;
 import ee.netgroup.hm.components.Search;
 import ee.netgroup.hm.components.UserMenu;
 import ee.netgroup.hm.helpers.Constants;
@@ -75,8 +75,8 @@ public class LandingPage extends Page{
 		return Search.searchTag(tag);
 	}
 
-	public ReportImproperPopUp getReportImproperPopUp() {
-		return ReportImproperPopUp.getReportImproperPopUp();
+	public ReportImproperModal getReportImproperPopUp() {
+		return ReportImproperModal.getReportImproperPopUp();
 	}
 
 

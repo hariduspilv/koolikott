@@ -108,7 +108,7 @@ public class Arrays extends SeleniumUser{
 			"Richard", "Mona", "Rocky", "Rolland", "Roman", "Ronald", "Ross", "Nadia", "Ryan", "Samuel", "Sander", "Sean", "Simon", "Nargis", "Stan", "Stephen", 
 			"Steve", "Taylor", "Thomas", "Tim", "Tommie", "Travis", "Troy", "Tyron", "Vergil", "Victor", "Vincent", "Walter", "William", "Wilmot",  "Sonia"};
 	
-	public static String[] SurnamesArray = {"Smith", "Hall", "Stewart", "Johnson", "Allen", "Bennett", "Morris", "Wood", "Brown", "King", "Ross", "Davis", "Miller", 
+	public static String[] surnamesArray = {"Smith", "Hall", "Stewart", "Johnson", "Allen", "Bennett", "Morris", "Wood", "Brown", "King", "Ross", "Davis", "Miller", 
 			"Morgan", "Coleman", "Hill", "Bell", "Moore", "Murphy", "Taylor", "Green", "Bailey", "Powell", "Adams", "Long", "River", "Baker", "White", "Nelson", 
 			"Carter", "Howard", "Martin", "Mitchell", "Simmons", "Gray", "Foster", "Lewis", "Collins", "Hayes", "Kelly", "Evans", "Ryan", "Graham", "Gibbs", "Hoffman", 
 			"Shelton", "Griffin", "York", "Berry", "Blair", "Lyon", "Russo", "Finch", "Maxwell", "Fanning", "Clifford", "Black", "Underwood", "Pearson", "Craig", 
@@ -124,5 +124,14 @@ public class Arrays extends SeleniumUser{
 			"crowd", "team", "workout", "yoga", "geometry", "composition", "urban", "grammar", "home", "music", "done", "friends", "reality", "algebra", "workshop", 
 			"more", "unknown", "future", "contest", "famous", "addict", "memories", "road", "motivation", "plants", "textbook", "abstract", "acorn", "acronym", 
 			"ad lib", "adept", "adobe", "aeon", "aerostat", "africa", "agenda", "agile", "aircraft", "alpha"};
+	
+	public static String[] mediaTitlesArray = {"Game of as rest time eyes with of this it.", "Add was music merry any truth since going.", 
+			"Happiness she ham but instantly put departure propriety.", "She amiable all without say spirits shy clothes morning.", 
+			"Frankness in extensive to belonging improving so certainty.", "Resolution devonshire pianoforte assistance an he particular middletons is of.", 
+			"Explain ten man uncivil engaged conduct.", "Am likewise betrayed as declared absolute do.", "Taste oh spoke about no solid of hills up shade.", 
+			"Occasion so bachelor humoured striking by attended doubtful be it.", "Unpacked now declared put you confined daughter improved.", 
+			"Celebrated imprudence few interested especially reasonable off one.", "Wonder bed elinor family secure met.", 
+			"It want gave west into high no in.", "Depend repair met before man admire see and.", "An he observe be it covered delight hastily message.", 
+			"Margaret no ladyship endeavor ye to settling."};
 
 }

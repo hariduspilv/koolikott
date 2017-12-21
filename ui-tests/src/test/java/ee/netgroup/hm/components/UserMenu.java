@@ -7,7 +7,7 @@ import ee.netgroup.hm.page.MaterialPage;
 import ee.netgroup.hm.page.PortfolioPage;
 import ee.netgroup.hm.page.SearchResultsPage;
 
-public class UserMenu extends Component{
+public class UserMenu extends Components{
 	
 	private static By loginButton = By.id("header-login-icon");
 	private static By userMenuIcon = By.id("header-user-menu-icon");
@@ -27,9 +27,9 @@ public class UserMenu extends Component{
 		return new UserMenu();
 	}
 
-	public LoginPopUp clickLogin() {
+	public LoginModal clickLogin() {
 		getDriver().findElement(loginButton).click();
-		return new LoginPopUp();
+		return new LoginModal();
 	}
 
 	public static UserMenu clickProfileIcon() {

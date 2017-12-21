@@ -4,7 +4,7 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
-import ee.netgroup.hm.components.MaterialPopUp;
+import ee.netgroup.hm.components.MaterialModal;
 import ee.netgroup.hm.helpers.Constants;
 
 public class MaterialTests {
@@ -235,6 +235,6 @@ public class MaterialTests {
 				.setHyperLink()
 				.clickUpdateMaterial()
 				.getChangedLinkBannerText();
-		Assert.assertEquals("Õppevara link. Enne oli: "+MaterialPopUp.newMaterialUrl, changedLinkBannerText);
+		Assert.assertEquals("Õppevara link. Enne oli: "+MaterialModal.newMaterialUrl, changedLinkBannerText);
 	}
 }

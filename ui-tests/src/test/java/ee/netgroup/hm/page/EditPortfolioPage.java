@@ -2,8 +2,9 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import ee.netgroup.hm.components.MaterialPopUp;
-import ee.netgroup.hm.components.PortfolioPrivacyPopUp;
+import ee.netgroup.hm.components.MaterialModal;
+import ee.netgroup.hm.components.MediaModal;
+import ee.netgroup.hm.components.PortfolioPrivacyModal;
 import ee.netgroup.hm.components.Search;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Helpers;
@@ -27,6 +28,7 @@ public class EditPortfolioPage extends Page{
 	private By chapterWidth = By.xpath("//div/label[text()='Muuda laiust']");
 	private By h3Button = By.xpath("//button[@data-action='append-h3']");
 	private By moveChapterDown = By.xpath("//button[@data-ng-click='$ctrl.onMoveDown()']");
+	private By newMedia = By.xpath("//div/label[@data-translate='ADD_MEDIA_TO_CHAPTER']");
 	
 	public String getSuccessAlertText() {
 		return getDriver().findElement(successAlertText).getText();
@@ -45,17 +47,17 @@ public class EditPortfolioPage extends Page{
 		Helpers.waitForClickable(saveAndExit);
 		getDriver().findElement(saveAndExit).click();
 		if (Helpers.elementExists(privacyPopUp) == true){ 	
-			return PortfolioPrivacyPopUp.makePortfolioPublic();
+			return PortfolioPrivacyModal.makePortfolioPublic();
 		}
 		return new PortfolioPage();
 	}
 	
 	public PortfolioPage makePortfolioPublic() {
-		return PortfolioPrivacyPopUp.makePortfolioPublic();
+		return PortfolioPrivacyModal.makePortfolioPublic();
 	}
 	
 	public PortfolioPage clickExitAndStayPrivate() {
-		return PortfolioPrivacyPopUp.clickExitAndStayPrivate();
+		return PortfolioPrivacyModal.clickExitAndStayPrivate();
 	}
 
 	public EditPortfolioPage clickVisibilityButton() {
@@ -123,10 +125,10 @@ public class EditPortfolioPage extends Page{
 		return this;
 	}*/
 	
-	public MaterialPopUp clickAddNewMaterial() {
+	public MaterialModal clickAddNewMaterial() {
 		Helpers.waitForVisibility(newMaterial);
 		getDriver().findElement(newMaterial).click();
-		return new MaterialPopUp();
+		return new MaterialModal();
 	}
 
 	public Search clickAddExistingMaterial() {
@@ -172,6 +174,11 @@ public class EditPortfolioPage extends Page{
 		return this;
 	}
 
+	public MediaModal clickAddNewMedia() {
+		Helpers.waitForVisibility(newMedia);
+		getDriver().findElement(newMedia).click();
+		return new MediaModal();
+	}
 
 	
 }

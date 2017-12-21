@@ -2,10 +2,10 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import ee.netgroup.hm.components.MaterialPopUp;
+import ee.netgroup.hm.components.MaterialModal;
 import ee.netgroup.hm.components.Comments;
-import ee.netgroup.hm.components.ConfirmationPopup;
-import ee.netgroup.hm.components.ReportImproperPopUp;
+import ee.netgroup.hm.components.ConfirmationModal;
+import ee.netgroup.hm.components.ReportImproperModal;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
@@ -55,20 +55,20 @@ public class MaterialPage extends Page{
 		return this;
 	}
 
-	public MaterialPopUp clickEditMaterial() {
+	public MaterialModal clickEditMaterial() {
 		Helpers.waitForClickable(editMaterial);
 		getDriver().findElement(editMaterial).sendKeys(Keys.ENTER);
-		return new MaterialPopUp();
+		return new MaterialModal();
 	}
 
 	public String getCreatorName() {
 		return getDriver().findElement(creatorName).getText();
 	}
 
-	public ConfirmationPopup clickDeleteMaterial() {
+	public ConfirmationModal clickDeleteMaterial() {
 		Helpers.waitForClickable(deleteMaterial);
 		getDriver().findElement(deleteMaterial).click();
-		return new ConfirmationPopup();
+		return new ConfirmationModal();
 	}
 
 	public String getDeletedBannerText() {
@@ -134,22 +134,22 @@ public class MaterialPage extends Page{
 		return this;
 	}
 
-	public ReportImproperPopUp reportImproperTag() {
+	public ReportImproperModal reportImproperTag() {
 		getDriver().findElement(reportTagButton).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
-	public ReportImproperPopUp clickReportImproperContent() {
+	public ReportImproperModal clickReportImproperContent() {
 		Helpers.waitForClickable(improperContent);
 		getDriver().findElement(improperContent).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
 	public MaterialPage showMaterialComments() {
 		return Comments.showMaterialComments();
 	}
 
-	public ReportImproperPopUp reportImproperComment() {
+	public ReportImproperModal reportImproperComment() {
 		return Comments.reportImproperComment();
 	}
 

@@ -4,7 +4,7 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
-import ee.netgroup.hm.components.MaterialPopUp;
+import ee.netgroup.hm.components.MaterialModal;
 
 public class AdminDashboardTests {
 	
@@ -91,7 +91,7 @@ public class AdminDashboardTests {
 				.clickUpdateMaterial()
 				.markChangesDeclined()
 				.getMaterialUrlText();
-		Assert.assertEquals(MaterialPopUp.newMaterialUrl, materialUrl);
+		Assert.assertEquals(MaterialModal.newMaterialUrl, materialUrl);
 	}
 
 

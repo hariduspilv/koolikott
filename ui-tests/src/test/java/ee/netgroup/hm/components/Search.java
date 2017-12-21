@@ -6,7 +6,7 @@ import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.SearchResultsPage;
 
-public class Search extends Component{
+public class Search extends Components{
 	
 	private static By searchField = By.xpath("//input[@id='header-search-input']");
 	private static By numberOfResultsText = By.xpath("//h2[contains(text(), 'Otsingule leidus')]");

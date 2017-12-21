@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ee.netgroup.hm.components.AddPortfolioForm;
 import ee.netgroup.hm.components.Comments;
-import ee.netgroup.hm.components.ConfirmationPopup;
-import ee.netgroup.hm.components.ReportImproperPopUp;
+import ee.netgroup.hm.components.ConfirmationModal;
+import ee.netgroup.hm.components.ReportImproperModal;
 import ee.netgroup.hm.components.fabButton;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
@@ -50,10 +50,10 @@ public class PortfolioPage extends Page{
 		return this;
 	}
 
-	public ConfirmationPopup clickDeletePortfolio() {
+	public ConfirmationModal clickDeletePortfolio() {
 		Helpers.waitForClickable(deletePortfolio);
 		getDriver().findElement(deletePortfolio).click();
-		return new ConfirmationPopup();
+		return new ConfirmationModal();
 	}
 
 	public EditPortfolioPage clickEditPortfolio() {
@@ -67,10 +67,10 @@ public class PortfolioPage extends Page{
         return getDriver().findElement(shareWithLinkIcon).isDisplayed();
 	}
 
-	public ReportImproperPopUp clickReportImproperContent() {
+	public ReportImproperModal clickReportImproperContent() {
 		Helpers.waitForClickable(improperContent);
 		getDriver().findElement(improperContent).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 	
 	public String getNotificationIsSentText() {
@@ -149,14 +149,14 @@ public class PortfolioPage extends Page{
 		return Comments.getCommentText();
 	}
 
-	public ReportImproperPopUp reportImproperComment() {
+	public ReportImproperModal reportImproperComment() {
 		getDriver().findElement(reportCommentButton).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
-	public ReportImproperPopUp reportImproperTag() {
+	public ReportImproperModal reportImproperTag() {
 		getDriver().findElement(reportTagButton).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
 	public PortfolioPage addNewSystemTag() {
@@ -185,8 +185,10 @@ public class PortfolioPage extends Page{
 	public String isChapterOrderChanged() {
 		return getDriver().findElement(firstChapterTitle).getText();
 	}
-
-
+	
+	public boolean isMediaFileAddedToChapter() {
+		return getDriver().findElements(materialBox).size() == 1;
+	}
 
 }
 
