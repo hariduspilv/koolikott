@@ -5,7 +5,7 @@ import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.EditPortfolioPage;
 import ee.netgroup.hm.page.MyMaterialsPage;
 
-public class AddMaterialsToPortfolioToolbar extends Component{
+public class AddMaterialsToPortfolioToolbar extends Components{
 	
 	
 	private static By materialBox = By.xpath("//div[@class='card-hover material description']"); //TODO: kordub?

@@ -267,7 +267,31 @@ public class PortfolioTests {
 		Assert.assertEquals("2", firstChapterTitle);
 	}
 	
-	
+	@Test
+	public void PortfolioTests_AddMediaFile_MediaFileIsAddedToChapter() {
+
+		boolean newMediaFile = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
+				.addDescription()
+				.clickAddNewMedia()
+				.setMediaLink()
+				.setMediaTitle()
+				.setMediaAuthor()
+				.setMediaSource()
+				.setMediaLicenseType()
+				.clickAddMedia() 
+				.clickSaveAndExitConfirmationControl()
+				.isMediaFileAddedToChapter();
+		assertTrue(newMediaFile);
+	}
 	
 
 }

@@ -10,7 +10,7 @@ import ee.netgroup.hm.page.MyMaterialsPage;
 import ee.netgroup.hm.page.SearchResultsPage;
 import ee.netgroup.hm.page.UnreviewedLearningObjectsPage;
 
-public class LeftMenu extends Component{
+public class LeftMenu extends Components{
 	
 	private static By improperLearningObjects = By.id("improper");
 	private static By preschoolEducation = By.xpath("//div/span[text()='Alusharidus']");
@@ -56,22 +56,22 @@ public class LeftMenu extends Component{
 		return new LeftMenu();
 	}
 
-	public LoginPopUp clickMyPortfolios() {
+	public LoginModal clickMyPortfolios() {
 		Helpers.waitForClickable(myPortfolios);
 		getDriver().findElement(myPortfolios).click();
-		return new LoginPopUp();
+		return new LoginModal();
 	}
 
-	public LoginPopUp clickMyMaterialsWhenNotLoggedIn() {
+	public LoginModal clickMyMaterialsWhenNotLoggedIn() {
 		Helpers.waitForClickable(myMaterials);
 		getDriver().findElement(myMaterials).click();
-		return new LoginPopUp();
+		return new LoginModal();
 	}
 
-	public LoginPopUp clickMyFavorites() {
+	public LoginModal clickMyFavorites() {
 		Helpers.waitForClickable(myFavorites);
 		getDriver().findElement(myFavorites).click();
-		return new LoginPopUp();
+		return new LoginModal();
 	}
 
 	public static MyFavoritesPage goToMyFavorites() {

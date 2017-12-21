@@ -6,7 +6,7 @@ import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.MaterialPage;
 import ee.netgroup.hm.page.PortfolioPage;
 
-public class Comments extends Component{
+public class Comments extends Components{
 		
 	private static By showCommentsButton = By.id("show-comments");
 	private static By addCommentField = By.xpath("//textarea[@data-ng-model='newComment.text']");
@@ -37,9 +37,9 @@ public class Comments extends Component{
 		return getDriver().findElement(comment).getText();
 	}
 	
-	public static ReportImproperPopUp reportImproperComment() {
+	public static ReportImproperModal reportImproperComment() {
 		getDriver().findElement(reportCommentButton).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
 

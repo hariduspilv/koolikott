@@ -7,7 +7,7 @@ import ee.netgroup.hm.page.LandingPage;
 import ee.netgroup.hm.page.StuudiumPage;
 import ee.netgroup.hm.page.EKoolPage;
 
-public class LoginPopUp extends Component{
+public class LoginModal extends Components{
 	
 	private By mobileIdCodeField = By.name("idCode");
     private By mobilePhoneNumberField = By.name("phoneNumber");
@@ -16,7 +16,7 @@ public class LoginPopUp extends Component{
     private By stuudiumButton = By.xpath("//button[@data-ng-click='stuudiumAuth()']");
     private static By logInText = By.xpath("//h2[@data-ng-bind='title']");
     
-	public LoginPopUp insertMobileIDCode(String mobileIdCode) {
+	public LoginModal insertMobileIDCode(String mobileIdCode) {
 		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForVisibility(mobileIdCodeField);
     	getDriver().findElement(mobileIdCodeField).sendKeys(mobileIdCode);
@@ -24,7 +24,7 @@ public class LoginPopUp extends Component{
         return this;
 	}
 	
-	public LoginPopUp insertMobilePhoneNumber(String mobilePhoneNumber) {
+	public LoginModal insertMobilePhoneNumber(String mobilePhoneNumber) {
 	    Helpers.waitForVisibility(mobilePhoneNumberField);
 		getDriver().findElement(mobilePhoneNumberField).sendKeys(mobilePhoneNumber);
 	    return this;
@@ -52,8 +52,8 @@ public class LoginPopUp extends Component{
 		return getDriver().findElement(logInText).getText();
 	}
 
-	public static LoginPopUp getLogInPopUp() {
-		return new LoginPopUp();
+	public static LoginModal getLogInPopUp() {
+		return new LoginModal();
 	}
 
 	

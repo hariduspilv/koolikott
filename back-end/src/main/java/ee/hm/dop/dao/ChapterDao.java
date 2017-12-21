@@ -8,6 +8,18 @@ import java.util.List;
 
 public class ChapterDao extends AbstractDao<Chapter> {
 
+    public List<Chapter> chaptersWithPortfolio(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)){
+            return new ArrayList<>();
+        }
+        return getEntityManager()
+                .createNativeQuery("SELECT * FROM Chapter c " +
+                        "WHERE c.Portfolio in (:ids) " +
+                        "AND c.parentChapter IS NULL ", Chapter.class)
+                .setParameter("ids", ids)
+                .getResultList();
+    }
+
     public List<Chapter> chaptersWithPortfolio() {
         if (0==0){
             return new ArrayList<>();

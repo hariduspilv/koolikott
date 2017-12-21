@@ -10,6 +10,7 @@ import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,6 +22,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+@Ignore
 @RunWith(EasyMockRunner.class)
 public class ChapterMigrationTest {
 
