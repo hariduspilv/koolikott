@@ -85,7 +85,6 @@ public class MaterialModal extends Components{
 	}
 
 	public MaterialModal selectTargetGroup() {
-		//Helpers.waitForClickable(targetGroup);
 		getDriver().findElements(targetGroup).get(1).click();
 		getDriver().findElement(selectedTargetGroup).click();
 		getDriver().findElements(closeButton).get(2).click();

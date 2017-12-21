@@ -29,6 +29,7 @@ public class EditPortfolioPage extends Page{
 	private By h3Button = By.xpath("//button[@data-action='append-h3']");
 	private By moveChapterDown = By.xpath("//button[@data-ng-click='$ctrl.onMoveDown()']");
 	private By newMedia = By.xpath("//div/label[@data-translate='ADD_MEDIA_TO_CHAPTER']");
+	private By alignRight = By.xpath("//button[@class='medium-editor-action']");
 	
 	public String getSuccessAlertText() {
 		return getDriver().findElement(successAlertText).getText();
@@ -178,6 +179,13 @@ public class EditPortfolioPage extends Page{
 		Helpers.waitForVisibility(newMedia);
 		getDriver().findElement(newMedia).click();
 		return new MediaModal();
+	}
+
+	public EditPortfolioPage clickAlignRight() {
+		Helpers.moveToElement(PortfolioPage.materialBox);
+		getDriver().findElements(alignRight).get(1).click();
+		Helpers.waitForMilliseconds(1000);
+		return this;
 	}
 
 	

@@ -293,5 +293,31 @@ public class PortfolioTests {
 		assertTrue(newMediaFile);
 	}
 	
+	@Test
+	public void PortfolioTests_AlignRight_MaterialIsAligned() {
+
+		boolean alignRight = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
+				.addDescription()
+				.clickAddExistingMaterial()
+				.selectAllEducationalContexts()
+				.insertMaterialSearchCriteria()
+				.closeDetailedSearch()
+				.clickToSelectMaterial2()
+				.clickAddMaterialToPortfolio()
+				.clickAlignRight()
+				.clickSaveAndExitConfirmationControl() 
+				.isMaterialAligned();
+		assertTrue(alignRight);
+	}
+	
 
 }
