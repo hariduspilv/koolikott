@@ -4,8 +4,12 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
+
+import ee.netgroup.hm.components.AddMaterialsToPortfolioToolbar;
 import ee.netgroup.hm.components.MaterialModal;
 import ee.netgroup.hm.helpers.Constants;
+import ee.netgroup.hm.page.MyMaterialsPage;
+import ee.netgroup.hm.page.PortfolioPage;
 
 public class MaterialTests {
 	
@@ -114,20 +118,31 @@ public class MaterialTests {
 				.isMaterialBoxDisplayed();
 		assertTrue(isMaterialBoxDisplayed);
 	}
-	
 
 	@Test
 	public void MaterialTests_AddExistingMaterial_FromMyMaterialsPage_MaterialIsAddedToPortfolio() {
 
-		String successMessage = goToLandingPage()
+				goToLandingPage()
 				.chooseUserType("Publisher")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.clickCreatePortfolio()
+				.clickSaveAndExitConfirmationControl()
 				.clickMyMaterials()
-				.clickToSelectMaterial()
-				.selectPortfolio()
+				.clickToSelectMaterial();
+		
+		String materialTitle = MyMaterialsPage.getMaterialTitle();
+		
+		AddMaterialsToPortfolioToolbar .selectPortfolio()
 				.selectChapter()
-				.clickDone()
-				.getSuccessMessage();
-		Assert.assertEquals("Materjal(id) edukalt lisatud", successMessage);
+				.clickDone();
+		
+		String materialTitle2 = PortfolioPage.getMaterialTitle();
+		
+		Assert.assertEquals(materialTitle2, materialTitle);
 	}
 	
 	@Test
