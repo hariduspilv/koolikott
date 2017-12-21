@@ -640,7 +640,8 @@ class Controller {
             summary: '',
             taxon: null,
             targetGroups: [],
-            tags: []
+            tags: [],
+            chapters: []
         }
     }
     /**
