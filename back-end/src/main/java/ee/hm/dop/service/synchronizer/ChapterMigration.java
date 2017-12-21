@@ -24,7 +24,7 @@ public class ChapterMigration extends DopDaemonProcess {
         try {
 
             ChapterDao chapterDao = newChapterDao();
-            List<Chapter> chapters = chapterDao.chaptersWithPortfolio();
+            List<Chapter> chapters = chapterDao.chaptersWithPortfolio(Arrays.asList(11164L, 10239L));
             logger.info(String.format("analyzing %s chapters", chapters.size()));
             int noRowsNoSubChapters = 0;
             int chaptersMigrated = 0;
