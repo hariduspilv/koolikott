@@ -9,8 +9,7 @@ class controller extends Controller {
     }
     $onInit() {
         this.$scope.buttons = [{
-            // float left
-            svgContent: '<path d="M27,25 L6,25 L6,23 L27,23 L27,25 Z M21,21 L6,21 L6,19 L21,19 L21,21 Z M27,17 L19,17 L19,15 L27,15 L27,17 Z M23,13 L19,13 L19,11 L23,11 L23,13 Z M27,7 L27,9 L19,9 L19,7 L27,7 Z M6,7 L17,7 L17,17 L6,17 L6,7 Z"></path>',
+            name: 'float left',
             action: () => {
                 if (this.target) {
                     if (this.target.classList.contains('chapter-embed-card--float-right'))
@@ -20,16 +19,14 @@ class controller extends Controller {
                 }
             }
         }, {
-            // set full width
-            svgContent: '<path d="M27,25 L6,25 L6,23 L27,23 L27,25 Z M6,11 L27,11 L27,21 L6,21 L6,11 Z M27,7 L27,9 L6,9 L6,7 L27,7 Z"></path>',
+            name: 'full width',
             action: () => {
                 this.target.classList.remove('chapter-embed-card--float-left')
                 this.target.classList.remove('chapter-embed-card--float-right')
                 this.setState()
             }
         }, {
-            // float right
-            svgContent: '<path d="M6,25 L6,23 L27,23 L27,25 L6,25 Z M6,21 L6,19 L21,19 L21,21 L6,21 Z M6,17 L6,15 L14,15 L14,17 L6,17 Z M6,13 L6,11 L10,11 L10,13 L6,13 Z M6,7 L14,7 L14,9 L6,9 L6,7 Z M27,7 L27,17 L16,17 L16,7 L27,7 Z"></path>',
+            name: 'float right',
             action: () => {
                 if (this.target) {
                     if (this.target.classList.contains('chapter-embed-card--float-left'))
