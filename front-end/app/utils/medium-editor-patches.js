@@ -3,6 +3,21 @@
  */
 
 {
+const ALLOWED_TAGS_AND_ATTRIBUTES = {
+    A: ['href', 'target'],
+    DIV: ['class', 'data-id', 'data-src'],
+    H3: ['class', 'id'],
+    P: [],
+    UL: [],
+    LI: [],
+    BLOCKQUOTE: [],
+    B: [],
+    I: [],
+    STRONG: [],
+    EM: [],
+    BR: []
+}
+const ALLOWED_TAGS = Object.keys(ALLOWED_TAGS_AND_ATTRIBUTES)
 /**
  * Returns the empty block-level element if caret is positioned on empty WYSIWYG row (and the toolbar
  * is displayed for pre-selecting text format). Otherwise returns undefined.
