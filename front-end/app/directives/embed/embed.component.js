@@ -23,7 +23,7 @@ class controller extends Controller {
             case 'AUDIO':
                 this.$scope.type = type
                 this.$scope.extName = this.getExtension(url)
-                this.$scope.canPlay = this.canPlayType(type.toLowerCase(), ext)
+                this.$scope.canPlay = this.canPlayType(type.toLowerCase(), this.$scope.extName)
                 break
             case 'SLIDESHARE':
                 if (!isMaterial)

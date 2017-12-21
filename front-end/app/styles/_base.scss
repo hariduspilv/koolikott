@@ -11,6 +11,11 @@ html, body {
   min-width: 320px;
 }
 
+body {
+  height: auto;
+  min-height: 100vh;
+}
+
 // Fix IE background going to black when md-backdrop is in dom
 html.ua-ie,
 .ua-ie body {

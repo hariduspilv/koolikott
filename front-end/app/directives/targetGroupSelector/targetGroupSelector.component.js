@@ -34,7 +34,7 @@ class controller extends Controller {
         if (markRequired && markRequired.currentValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
             this.$scope.targetGroupForm.targetGroupSelect.$touched = true
 
-        if (targetGroups.currentValue !== targetGroups.previousValue)
+        if (targetGroups && targetGroups.currentValue !== targetGroups.previousValue)
             this.$timeout(() => {
                 this.selectValue(true)
                 this.setSelectedText()

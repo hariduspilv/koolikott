@@ -130,8 +130,8 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
   transition: box-shadow .2s;
   will-change: box-shadow;
 
-  &:hover,
-  &.is-focused {
+  &.is-edit-mode:hover,
+  &.is-edit-mode.is-focused {
     box-shadow: $whiteframe-shadow-4dp;
   }
 
@@ -765,12 +765,6 @@ md-input-container.chapter-title {
     }
   }
 
-  .chapter-embed-card__thumbnail {
-    padding-top: 56.25%;
-    background-size: cover;
-    background-position: center;
-  }
-
   .chapter-embed-card__caption {
     padding: 1rem 1.5rem 1rem 4.2rem;
     height: 5.8rem;
@@ -788,30 +782,36 @@ md-input-container.chapter-title {
       color: $white;
     }
 
-    h5, p {
+    h5, p, .chapter-embed-card__publishers-and-authors {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: .875rem;
       margin: 0;
+      max-width: 100%;
+    }
+
+    .chapter-embed-card__mid-row {
+      display: flex;
+      align-items: flex-end;
+      width: 100%;
     }
 
     .chapter-embed-card__publishers-and-authors {
       color: #757575; // gray-600
+      flex-shrink: 1;
+      min-width: 0;
     }
 
-    .chapter-embed-card__source {
-      position: absolute;
-      right: 1.5rem;
-      bottom: 1rem;
-      width: calc(100% - 3rem);
-      font-size: .75rem;
-      line-height: 1;
-      text-align: right;
+    .chapter-embed-card__license-type span,
+    .chapter-embed-card__source span {
+      color: #757575; // gray-600
+    }
 
-      span {
-        color: #757575; // gray-600
-      }
+    .chapter-embed-card__license-type,
+    .chapter-embed-card__source {
+      font-size: .75rem;
+      text-align: right;
 
       a {
         color: inherit;
@@ -821,6 +821,20 @@ md-input-container.chapter-title {
           color: #03a9f4; // light-blue-500
         }
       }
+    }
+
+    .chapter-embed-card__license-type {
+      white-space: nowrap;
+      flex-grow: 1;
+      padding-left: 1rem;
+    }
+
+    .chapter-embed-card__source {
+      position: absolute;
+      right: 1.5rem;
+      bottom: 1rem;
+      width: calc(100% - 3rem);
+      line-height: 1;
     }
   }
 

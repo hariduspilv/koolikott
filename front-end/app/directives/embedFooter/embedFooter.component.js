@@ -4,20 +4,31 @@
 class controller extends Controller {
     $onInit() {
         this.currentLanguage = this.translationService.getLanguage()
+        this.metadataService.loadLicenseTypes(data =>
+            this.$scope.defaultLicenseTypeName = data.reduce(
+                (defaultTypeName, type) =>
+                    defaultTypeName || type.name === 'allRightsReserved' && type.name.toUpperCase(),
+                null
+            )
+        )
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
-            this.isMaterial(data.currentValue)
-                ? this.setMaterialFooterData(data.currentValue)
-                : this.setMediaFooterData(data.currentValue)
+            this.isMedia = !this.isMaterial(data.currentValue)
+            this.isMedia
+                ? this.setMediaFooterData(data.currentValue)
+                : this.setMaterialFooterData(data.currentValue)
         }
     }
-    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes }) {
+    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType }) {
         this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
         this.$scope.link = '/material?id=' + id
         this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
-        this.$scope.publishersAndAuthors = publishers.map(p => p.name).concat(authors.map(a => a.name+' '+a.surname)).join(', ')
+        this.$scope.publishersAndAuthors = publishers.filter(p => p.name).map(p => p.name).concat(authors.filter(a => a.name || a.surname).map(a => a.name ? a.name+(a.surname ? ' '+a.surname : '') : a.surname)).join(', ')
         this.setMaterialSourceLink()
+
+        const { name: licenseTypeName } = licenseType || {}
+        this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
     }
     setMaterialSourceLink() {
         const { embeddable, source, uploadedFile } = this.data
@@ -45,19 +56,41 @@ class controller extends Controller {
             url: media.url,
             text: media.source
         }
+
+        const { name: licenseTypeName } = media.licenseType || {}
+        this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
+    }
+    onClick() {
+        if (this.isMedia && this.isEditMode) {
+            clearTimeout(this.clickTimer)
+            this.clickTimer = setTimeout(
+                () => window.open(this.$scope.link),
+                300
+            )
+        } else
+            window.open(this.$scope.link)
+    }
+    onDblClick() {
+        if (this.isMedia && this.isEditMode) {
+            clearTimeout(this.clickTimer)
+            if (typeof this.onDoubleClick === 'function')
+                this.onDoubleClick()
+        }
     }
 }
 controller.$inject = [
     '$scope',
-    '$window',
     'authenticatedUserService',
     'iconService',
+    'metadataService',
     'serverCallService',
     'translationService',
 ]
 component('dopEmbedFooter', {
     bindings: {
         data: '<',
+        isEditMode: '<',
+        onDoubleClick: '&',
     },
     templateUrl: 'directives/embedFooter/embedFooter.html',
     controller

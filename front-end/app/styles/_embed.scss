@@ -48,7 +48,6 @@
 }
 
 .embedded-material__link {
-  font-size: 1.5rem;
   font-weight: 400;
   padding: 1rem 1.5rem 0;
   display: inline-block;
@@ -62,14 +61,6 @@
     padding: 1rem;
     white-space: normal;
     word-break: break-word;
-  }
-
-  @media (max-width: 599px) {
-    font-size: 1.125rem;
-  }
-  .chapter-embed-card--float-left &,
-  .chapter-embed-card--float-right & {
-    font-size: 1.125rem;
   }
 }
 

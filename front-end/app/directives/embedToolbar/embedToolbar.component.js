@@ -55,22 +55,14 @@ class controller extends Controller {
         this.$scope.buttons[1].active = !this.$scope.buttons[0].active && !this.$scope.buttons[2].active
     }
     show() {
-        this.$timeout(() => this.setClassNames(true))
+        this.$timeout(() => this.$scope.isVisible = true)
     }
     hide() {
         if (!this.mouseover)
             this.hideTimer = this.$timeout(
-                this.setClassNames.bind(this, false),
+                () => this.$scope.isVisible = false,
                 500
             )
-    }
-    setClassNames(isVisible) {
-        this.$scope.classNames = {
-            'medium-editor-toolbar': true,
-            'medium-editor-stalker-toolbar': true,
-            'medium-toolbar-arrow-under': true,
-            'medium-editor-toolbar-active': isVisible,
-        }
     }
     onMouseEnter() {
         this.$timeout.cancel(this.hideTimer)
@@ -91,7 +83,7 @@ component('dopEmbedToolbar', {
         target: '<',
         isVisible: '<',
     },
-    templateUrl: 'directives/chapter/embedToolbar/embedToolbar.html',
+    templateUrl: 'directives/embedToolbar/embedToolbar.html',
     controller
 })
 }
