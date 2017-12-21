@@ -57,6 +57,9 @@ md-toolbar.navbar.md-gray {
     margin-left: auto;
     margin-right: auto;
   }
+  @media (min-width: $layout-breakpoint-lg) {
+    margin-left: 22rem;
+  }
 }
 
 .navbar-buttons-area {
@@ -108,11 +111,6 @@ md-toolbar.navbar.md-gray {
   border-radius: 2px;
   padding: 4px 0;
   background: rgba(255,255,255,.15);
-
-  @media (min-width: $layout-breakpoint-lg) {
-    margin-left: 48px;
-    margin-right: -48px;
-  }
 
   .nav-search__autocomplete {
     background-color: transparent;
