@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
 
-public class fabButton extends Component{
+public class fabButton extends Components{
 	
 	private static By addPortfolio = By.id("add-portfolio");
 	private static By copyPortfolioButton = By.xpath("//button[@data-ng-click='copyPortfolio()']");
@@ -26,11 +26,11 @@ public class fabButton extends Component{
 		return new AddPortfolioForm();
 	}
 
-	public static MaterialPopUp clickAddMaterial() {
+	public static MaterialModal clickAddMaterial() {
 		Helpers.moveToElement(addPortfolio);
 		Helpers.waitForVisibility(addMaterialButton);
 		getDriver().findElement(addMaterialButton).click();
-		return new MaterialPopUp();
+		return new MaterialModal();
 	}
 
 

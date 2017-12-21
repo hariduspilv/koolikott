@@ -5,7 +5,7 @@ import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.EditPortfolioPage;
 
-public class AddPortfolioForm extends Component{
+public class AddPortfolioForm extends Components{
 	
 	private By portfolioTitle = By.id("add-portfolio-title-input");
 	private By educationalContext = By.xpath("(//md-select[@id='taxonEducationalSelect'])[2]");

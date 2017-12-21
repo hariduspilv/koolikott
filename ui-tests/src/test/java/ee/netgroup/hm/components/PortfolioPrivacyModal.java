@@ -3,7 +3,7 @@ package ee.netgroup.hm.components;
 import org.openqa.selenium.By;
 import ee.netgroup.hm.page.PortfolioPage;
 
-public class PortfolioPrivacyPopUp extends Component{
+public class PortfolioPrivacyModal extends Components{
 	
 	private static By exitAndMakePublic = By.xpath("//button[text()='Välju ja tee avalikuks']");
 	private static By exitAndStayPrivate = By.xpath("//button[text()='Välju avalikuks tegemata']");
