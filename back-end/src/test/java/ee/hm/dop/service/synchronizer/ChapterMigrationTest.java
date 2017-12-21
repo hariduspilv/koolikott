@@ -62,6 +62,71 @@ public class ChapterMigrationTest {
         validate1Chapter(CHAPTER_TEXT, chapter);
     }
 
+    @Test
+    public void chapter_with_ordered_list_is_numbered() throws Exception {
+        Chapter chapter = subChapter();
+        chapter.setText(
+                "lalala" +
+                    "<ol>" +
+                        "<li>esiteks</li>" +
+                        "<li>teiseks</li>" +
+                    "</ol>" +
+                "lololo");
+        chapter.setContentRows(new ArrayList<>());
+
+        expect(chapterDao.chaptersWithPortfolio()).andReturn(Arrays.asList(chapter));
+        expect(chapterDao.createOrUpdate(chapter)).andReturn(chapter);
+
+        run();
+
+        assertTheresAreBlocks(chapter);
+        validate1Chapter("lalala<br />1. esiteks<br />2. teiseks<br /><br />lololo", chapter);
+    }
+
+    @Test
+    public void chapter_with_2_ordered_lists_is_numbered() throws Exception {
+        Chapter chapter = subChapter();
+        chapter.setText(
+                "lalala" +
+                    "<ol>" +
+                        "<li>esiteks</li>" +
+                        "<li>teiseks</li>" +
+                    "</ol>" +
+                    "<ol>" +
+                        "<li>esiteks</li>" +
+                        "<li>teiseks</li>" +
+                    "</ol>" +
+                "lololo");
+        chapter.setContentRows(new ArrayList<>());
+
+        expect(chapterDao.chaptersWithPortfolio()).andReturn(Arrays.asList(chapter));
+        expect(chapterDao.createOrUpdate(chapter)).andReturn(chapter);
+
+        run();
+
+        assertTheresAreBlocks(chapter);
+        validate1Chapter("lalala<br />1. esiteks<br />2. teiseks<br /><br /><br />1. esiteks<br />2. teiseks<br /><br />lololo", chapter);
+    }
+
+    @Test
+    public void chapter_with_ordered_list_is_numbered_but_doesnt_break_on_missing_end_tag() throws Exception {
+        Chapter chapter = subChapter();
+        chapter.setText("lalala " +
+                    "<ol>" +
+                        "<li>esiteks</li>" +
+                        "<li>teiseks</li>" +
+                "lololo");
+        chapter.setContentRows(new ArrayList<>());
+
+        expect(chapterDao.chaptersWithPortfolio()).andReturn(Arrays.asList(chapter));
+        expect(chapterDao.createOrUpdate(chapter)).andReturn(chapter);
+
+        run();
+
+        assertTheresAreBlocks(chapter);
+        validate1Chapter("lalala<br />1. esiteks<br />2. teiseks<br />lololo", chapter);
+    }
+
     private void run() {
         replay(chapterDao, configuration);
         chapterMigration.run();
@@ -97,6 +162,28 @@ public class ChapterMigrationTest {
 
         assertTheresAreBlocks(chapter);
         validate1Chapter("<h3 class=\"subchapter\">Chapter_Title</h3>Chapter_Text", chapter);
+    }
+
+    @Test
+    public void chapter_with_subChapters_has_subChapters_w_ordered_list_migrated() throws Exception {
+        Chapter chapter = new Chapter();
+        chapter.setTitle(CHAPTER_TITLE);
+        chapter.setContentRows(new ArrayList<>());
+        Chapter sub = subChapter();
+        sub.setText("lalala " +
+                "<ol>" +
+                    "<li>esiteks</li>" +
+                    "<li>teiseks</li>" +
+                "lololo");;
+        chapter.setSubchapters(Arrays.asList(sub));
+
+        expect(chapterDao.chaptersWithPortfolio()).andReturn(Arrays.asList(chapter));
+        expect(chapterDao.createOrUpdate(chapter)).andReturn(chapter);
+
+        run();
+
+        assertTheresAreBlocks(chapter);
+        validate1Chapter("<h3 class=\"subchapter\">Chapter_Title</h3>lalala <br />1. esiteks<br />2. teiseks<br />3. lololo<br /><br />", chapter);
     }
 
     @Test
