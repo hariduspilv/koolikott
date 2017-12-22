@@ -46,11 +46,23 @@ class controller extends Controller {
         this.removeSelection()
 
         const insertAfterLocationChange = (chapterIdx) => {
+            let numAttempts = 0
+            const insertMaterials = () => {
+                if (numAttempts <= 20) {
+                    if (!window.isEditPortfolioControllerConstructed) {
+                        numAttempts++
+                        return setTimeout(insertMaterials, 500)
+                    }
+
+                    this.$timeout(() => {
+                        this.$rootScope.$broadcast('chapter:insertExistingMaterials', chapterIdx, selectedMaterials)
+                        this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
+                    })
+                } else
+                    console.error('Waited a whole 10 seconds for editPortfolio view controller to construct. Aborting the insertion of selected materials')
+            }
             const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
-                this.$timeout(() => {
-                    this.$rootScope.$broadcast('chapter:insertExistingMaterials', chapterIdx, selectedMaterials)
-                    this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
-                })
+                insertMaterials()
                 unsubscribe()
             })
         }
