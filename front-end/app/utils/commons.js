@@ -12,6 +12,23 @@ const EMBEDDABLE_IMAGE_FILE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
 const EMBEDDABLE_AUDIO_FILE_EXTENSIONS = ['mp3', 'ogg', 'wav']
 const EMBEDDABLE_VIDEO_FILE_EXTENSIONS = ['mp4', 'ogv', 'webm']
 const EMBEDDABLE_MEDIA_FILE_EXTENSIONS = EMBEDDABLE_IMAGE_FILE_EXTENSIONS.concat(EMBEDDABLE_AUDIO_FILE_EXTENSIONS, EMBEDDABLE_VIDEO_FILE_EXTENSIONS)
+const EDITOR_ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
+const EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES = {
+    A: ['href', 'target'],
+    DIV: ['class', 'data-id', 'data-src'],
+    H3: ['class', 'id'],
+    P: [],
+    UL: [],
+    LI: [],
+    BLOCKQUOTE: [],
+    B: [],
+    I: [],
+    STRONG: [],
+    EM: [],
+    BR: []
+}
+const EDITOR_ALLOWED_TAGS = Object.keys(EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES)
+const EDITOR_FORBIDDEN_TAGS = ['meta', 'script', 'link', 'style', 'img', 'map', 'audio', 'video', 'track', 'applet', 'embed', 'object', 'param', 'source', 'canvas', 'noscript']
 
 function log() {
     if (console && console.log) {

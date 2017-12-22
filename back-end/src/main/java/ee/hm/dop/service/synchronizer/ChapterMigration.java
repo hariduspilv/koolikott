@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +23,8 @@ public class ChapterMigration extends DopDaemonProcess {
         try {
 
             ChapterDao chapterDao = newChapterDao();
-            List<Chapter> chapters = chapterDao.chaptersWithPortfolio(Arrays.asList(11164L, 10239L));
+            List<Chapter> chapters = chapterDao.chaptersWithPortfolio(Arrays.asList(11164L, 10239L, 11627L));
+//            List<Chapter> chapters = chapterDao.chaptersWithPortfolio();
             logger.info(String.format("analyzing %s chapters", chapters.size()));
             int noRowsNoSubChapters = 0;
             int chaptersMigrated = 0;
@@ -39,7 +39,12 @@ public class ChapterMigration extends DopDaemonProcess {
                     chaptersMigrated++;
                     String result = "";
                     if (StringUtils.isNotBlank(chapter.getText())) {
-                        result += chapter.getText();
+                        String text = chapter.getText();
+                        if (text.contains("<ol>")) {
+                            result += modifyNumbers(text);
+                        } else {
+                            result += chapter.getText();
+                        }
                     }
                     if (CollectionUtils.isNotEmpty(chapter.getContentRows())) {
                         result += transformContentRows(chapter);
@@ -67,6 +72,26 @@ public class ChapterMigration extends DopDaemonProcess {
             logger.info("Chapter migration unexpected error ", e);
         }
 
+    }
+
+    private static String modifyNumbers(String text) {
+        int startIndex = text.indexOf("<ol>");
+        int endIndex = text.indexOf("</ol>");
+        String before = text.substring(0, startIndex);
+        int endValue = endIndex == -1 ? 0 : 5;
+        String between = text.substring(startIndex, endIndex + endValue);
+        String after = text.substring(endIndex + endValue);
+        int i = 1;
+        while (between.contains("<li>")) {
+            between = between.replaceFirst("<li>", Integer.toString(i++) + ". ");
+            between = between.replaceFirst("</li>", "<br/>");
+        }
+        between = between.replaceFirst("</ol>", "<br/>");
+        between = between.replaceFirst("<ol>", "<br/>");
+        if (!after.contains("<ol>")) {
+            return before + between + after;
+        }
+        return before + between + modifyNumbers(after);
     }
 
     private void cleanUp(ChapterDao chapterDao, Chapter chapter) {
@@ -102,7 +127,17 @@ public class ChapterMigration extends DopDaemonProcess {
     private static String mapChapterToString(Chapter chapter) {
         String title = StringUtils.isNotBlank(chapter.getTitle()) ? chapter.getTitle() : NO_TITLE;
         String text = "<h3 class=\"subchapter\">" + title + "</h3>";
-        text = text + (StringUtils.isNotBlank(chapter.getText()) ? chapter.getText() : "");
+        String chapterText;
+        if (StringUtils.isBlank(chapter.getText())) {
+            chapterText= "";
+        } else {
+            if (chapter.getText().contains("<ol>")) {
+                chapterText = modifyNumbers(chapter.getText());
+            } else {
+                chapterText = chapter.getText();
+            }
+        }
+        text = text + chapterText;
         if (CollectionUtils.isNotEmpty(chapter.getContentRows())) {
             text = text + transformContentRows(chapter);
         }
