@@ -41,19 +41,23 @@ class controller extends Controller {
     addMaterialsToChapter(chapter, portfolio) {
         // Start spinner
         this.isSaving = true
+
         const selectedMaterials = this.$rootScope.selectedMaterials.slice(0)
-        const invokeInsert = (chapterIdx) => {
-            this.$rootScope.$broadcast('chapter:insertExistingMaterials', chapterIdx, selectedMaterials)
-            this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
-        }
         this.removeSelection()
+
+        const insertAfterLocationChange = (chapterIdx) => {
+            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
+                this.$timeout(() => {
+                    this.$rootScope.$broadcast('chapter:insertExistingMaterials', chapterIdx, selectedMaterials)
+                    this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
+                })
+                unsubscribe()
+            })
+        }
 
         if (portfolio == -1) {
             this.storageService.setPortfolio(this.createPortfolio())
-            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
-                this.$timeout(() => invokeInsert(0))
-                unsubscribe()
-            })
+            insertAfterLocationChange(0)
             this.$mdDialog
                 .show({
                     templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
@@ -64,13 +68,10 @@ class controller extends Controller {
                     this.$rootScope.$broadcast('detailedSearch:empty')
                 })
         } else {
+            insertAfterLocationChange(parseInt(this.chapter, 10))
             this.isSaving = false
             this.$rootScope.$broadcast('detailedSearch:empty')
             this.$location.url('/portfolio/edit?id=' + portfolio.id)
-            // it is imperative that 'chapter:insertMaterials' is broadcasted after navigating to portfolio edit screen
-            this.$timeout(() =>
-                invokeInsert(parseInt(this.chapter, 10))
-            )
         }
     }
     portfolioSelectChange() {

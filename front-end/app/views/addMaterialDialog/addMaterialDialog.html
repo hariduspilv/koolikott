@@ -98,23 +98,25 @@
           <md-input-container flex="100" flex-gt-sm="60" flex-gt-md="25">
             <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
             <md-select
+              name="licenseType"
               class="no-margin"
               data-ng-model="material.licenseType"
-              id="licenseTypeSelect"
-              name="licenseType"
               data-ng-model-options="{trackBy: '$value.id'}"
-              data-ng-required="true"
+              required
               >
               <md-option
                 data-ng-value="allRightsReserved"
                 data-translate="LICENSETYPE_CANT_CHOOSE"
               ></md-option>
               <md-option
-                data-ng-value="licenseType"
                 data-ng-repeat="licenseType in licenseTypes track by $index"
-                data-translate="LICENSETYPE_{{licenseType.name.toUpperCase()}}"
+                data-ng-value="licenseType"
+                data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
               ></md-option>
             </md-select>
+            <div data-ng-messages="addMaterialForm.licenseType.$error">
+              <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
+            </div>
           </md-input-container>
         </div>
 
@@ -602,7 +604,7 @@
                     data-ng-required="newPicture && !material.picture.source"
                     data-ng-model="material.picture.licenseType"
                     id="pictureLicenseTypeSelect"
-                    name="licenseType"
+                    name="pictureLicenseType"
                     ng-model-options="{trackBy: '$value.id'}"
                     >
                     <md-option

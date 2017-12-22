@@ -77,6 +77,11 @@ class controller extends Controller {
                 this.onDoubleClick()
         }
     }
+    getLicenseTypeLink() {
+        return (this.$scope.licenseTypeName || this.$scope.defaultLicenseTypeName) === 'YOUTUBE'
+            ? 'https://www.youtube.com/static?template=terms'
+            : 'http://hitsa.ee/teenused/autorioigused/litsentside-selgitused'
+    }
 }
 controller.$inject = [
     '$scope',
