@@ -11,7 +11,7 @@ import ee.netgroup.hm.helpers.Helpers;
 
 public class EditPortfolioPage extends Page{
 	
-	private By successAlertText = By.cssSelector("p.md-toolbar-text");
+	private By successAlertText = By.xpath("//div[@class='chapter-block medium-editor-element medium-editor-placeholder']");
 	private By saveAndExit = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
 	private By visibilityButton = By.id("change-visibility");
 	private By shareWithLink = By.xpath("//button/span[contains(text(),'inult lingiga')]");
@@ -30,9 +30,11 @@ public class EditPortfolioPage extends Page{
 	private By moveChapterDown = By.xpath("//button[@data-ng-click='$ctrl.onMoveDown()']");
 	private By newMedia = By.xpath("//div/label[@data-translate='ADD_MEDIA_TO_CHAPTER']");
 	private By alignRight = By.xpath("//button[@class='medium-editor-action']");
+	private By preferredMaterial = By.xpath("//div/label[@data-translate='ADD_PREFERRED_MATERIAL_TO_CHAPTER']");
+	
 	
 	public String getSuccessAlertText() {
-		return getDriver().findElement(successAlertText).getText();
+		return getDriver().findElement(successAlertText).getAttribute("data-placeholder");
 	}
 
 	public EditPortfolioPage clickSaveAndExit() {
@@ -186,6 +188,12 @@ public class EditPortfolioPage extends Page{
 		getDriver().findElements(alignRight).get(1).click();
 		Helpers.waitForMilliseconds(1000);
 		return this;
+	}
+
+	public Search clickAddPreferredMaterial() {
+		Helpers.waitForVisibility(preferredMaterial);
+		getDriver().findElement(preferredMaterial).click();
+		return new Search();
 	}
 
 	

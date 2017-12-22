@@ -72,55 +72,7 @@ public class MaterialTests {
 	}
 
 	@Test
-	public void MaterialTests_CreateNewMaterial_FromPortfolioEditPage_MaterialIsAddedToPortfolio() {
-
-		boolean isMaterialBoxDisplayed = goToLandingPage()
-				.chooseUserType("User")
-				.clickAddPortfolio()
-				.setPortfolioTitle()
-				.selectEducationalContext()
-				.selectSubjectArea()
-				.selectAgeGroup()
-				.addDescription()
-				.clickCreatePortfolio()
-				.setChapterTitle()
-				.clickAddNewMaterial()
-				.setHyperLink()
-				.setMaterialTitle()
-				.addDescription()
-				.addMaterialLicenseType()
-				.setAuthorFirstName()
-				.setAuthorSurName()
-				.setPublisherName()
-				.clickCreateMaterialPortfolio()
-				.clickSaveAndExit()
-				.makePortfolioPublic()
-				.isMaterialBoxDisplayed();
-		assertTrue(isMaterialBoxDisplayed);
-	}
-	
-	@Test
-	public void MaterialTests_AddExistingMaterial_FromPortfolioEditPage_MaterialIsAddedToPortfolio() { 
-
-		boolean isMaterialBoxDisplayed = goToLandingPage()
-				.chooseUserType("Admin")
-				.openPortfolio()
-				.clickActionsMenu()
-				.clickEditPortfolio()
-				.setChapterTitle()
-				.clickAddExistingMaterial()
-				.selectAllEducationalContexts()
-				.insertMaterialSearchCriteria()
-				.closeDetailedSearch()
-				.clickToSelectMaterial2()
-				.clickAddMaterialToPortfolio()
-				.clickSaveAndExitConfirmationControl()
-				.isMaterialBoxDisplayed();
-		assertTrue(isMaterialBoxDisplayed);
-	}
-
-	@Test
-	public void MaterialTests_AddExistingMaterial_FromMyMaterialsPage_MaterialIsAddedToPortfolio() {
+	public void MaterialTests_AddMaterialToPortfolioFromMyMaterialsPage_MaterialIsAddedToPortfolio() {
 
 				goToLandingPage()
 				.chooseUserType("Publisher")

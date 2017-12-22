@@ -92,6 +92,7 @@ public class MaterialPage extends Page{
 
 	public MaterialPage unselectStar() {
 		Helpers.waitForVisibility(selectedStar);
+		Helpers.waitForMilliseconds(2500);
 		getDriver().findElement(selectedStar).click();
 		return this;
 	}
