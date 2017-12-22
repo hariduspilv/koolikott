@@ -3,21 +3,6 @@
  */
 
 {
-const ALLOWED_TAGS_AND_ATTRIBUTES = {
-    A: ['href', 'target'],
-    DIV: ['class', 'data-id', 'data-src'],
-    H3: ['class', 'id'],
-    P: [],
-    UL: [],
-    LI: [],
-    BLOCKQUOTE: [],
-    B: [],
-    I: [],
-    STRONG: [],
-    EM: [],
-    BR: []
-}
-const ALLOWED_TAGS = Object.keys(ALLOWED_TAGS_AND_ATTRIBUTES)
 /**
  * Returns the empty block-level element if caret is positioned on empty WYSIWYG row (and the toolbar
  * is displayed for pre-selecting text format). Otherwise returns undefined.
@@ -257,7 +242,7 @@ MediumEditor.extensions.anchorPreview.prototype.handleEditableMouseover = functi
  * https://github.com/yabwe/medium-editor/blob/c619e756c0c8dda7bbb587b6b97209d984c208e8/src/js/util.js#L1037-L1041
  */
 MediumEditor.util.cleanupAttrs = (el, blacklist) => {
-    const allowed = ALLOWED_TAGS_AND_ATTRIBUTES[el.tagName]
+    const allowed = EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES[el.tagName]
 
     for (let { name } of el.attributes)
         if (!allowed || allowed.indexOf(name.toLowerCase()) < 0)
@@ -276,7 +261,7 @@ MediumEditor.util.unwrapTags = (el, blacklist) => {
     else
     // unwrap DIVs that are not embeds & all other tags
     if ((el.nodeType === Node.ELEMENT_NODE && el.nodeName === 'DIV' && !el.classList.contains('chapter-embed-card')) ||
-        (el.parentNode && ALLOWED_TAGS.indexOf(el.nodeName) < 0)
+        (el.parentNode && EDITOR_ALLOWED_TAGS.indexOf(el.nodeName) < 0)
     )
         MediumEditor.util.unwrap(el, document)
 }
