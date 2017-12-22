@@ -16,7 +16,7 @@
     <div class="chapter-embed-card__license-type">
       <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>:
       <a
-        href="http://hitsa.ee/teenused/autorioigused/litsentside-selgitused"
+        data-ng-href="{{$ctrl.getLicenseTypeLink()}}"
         target="_blank"
         data-ng-click="$event.stopPropagation()"
         data-translate="LICENSETYPE_{{ licenseTypeName || defaultLicenseTypeName }}"

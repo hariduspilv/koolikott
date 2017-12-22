@@ -13,7 +13,7 @@ public class MediaModal extends Components{
 	private static By mediaAuthorCheckbox = By.xpath("//span[@data-translate='I_AM_AUTHOR']");
 	private static By mediaSource = By.xpath("//input[@data-ng-model='media.source']");
 	private static By mediaLicenseType = By.xpath("//md-select[@data-ng-model='media.licenseType']");
-	private static By mediaLicenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_LONG_NAME_CCBYNCND']");
+	private static By mediaLicenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_CCBYNCND']");
 	private static By addMediaButton = By.xpath("//span[@data-translate='BUTTON_ADD_MEDIA']");
 	
 
