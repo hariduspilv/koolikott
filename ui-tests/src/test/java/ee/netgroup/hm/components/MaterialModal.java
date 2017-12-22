@@ -32,8 +32,8 @@ public class MaterialModal extends Components{
 	private By illustrationSource = By.name("pictureSource");
 	private By additionalData = By.id("open-additional-info");
 	private By reviewLink = By.name("peerReview");
-	private By licenseType = By.id("licenseTypeSelect");
-	private By licenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_CCBY']");
+	private By licenseType = By.xpath("//md-select[@data-ng-model='material.licenseType']");
+	private By licenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_LONG_NAME_CCBY']");
 	private By selectedLanguage = By.cssSelector("#add-material-language-select md-select-value.md-select-value div.md-text span");
 	private By updateMaterialButton = By.id("create-material-button");
 	private By insertFile = By.xpath("//span[@data-translate='FILE_WORD']");
@@ -163,7 +163,8 @@ public class MaterialModal extends Components{
 
 	public MaterialModal addMaterialLicenseType() {
 		getDriver().findElement(licenseType).click();
-		getDriver().findElements(licenseTypeOption).get(1).click();
+		//getDriver().findElements(licenseTypeOption).get(0).click();
+		getDriver().findElement(licenseTypeOption).click();
 		return this;
 	}
 	

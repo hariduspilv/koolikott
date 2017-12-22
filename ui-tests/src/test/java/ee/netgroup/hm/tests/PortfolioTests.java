@@ -25,7 +25,7 @@ public class PortfolioTests {
 				.addDescription()
 				.clickCreatePortfolio()
 				.getSuccessAlertText();
-		Assert.assertEquals("Kogumik loodud! Täienda seda võtmesõnadega ja jätkake alloleva tööriistariba abil peatükkide, alampeatükkide, sisutekstide ja materjalide lisamisega.", portfolioIsCreatedAlertText);
+		Assert.assertEquals("Alusta selle muutmisega (kliki siia) - lisa lõike, teksti, pilte, videosid, materjale e-koolikotist. Salvestamine toimub automaatselt. Jõudu tööle!", portfolioIsCreatedAlertText);
 	}
 	
 	@Test
@@ -318,6 +318,79 @@ public class PortfolioTests {
 				.isMaterialAligned();
 		assertTrue(alignRight);
 	}
+	
+	@Test
+	public void PortfolioTests_CreateNewMaterial_MaterialIsAddedToPortfolio() {
+
+		boolean isMaterialBoxDisplayed = goToLandingPage()
+				.chooseUserType("User")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
+				.clickAddNewMaterial()
+				.setHyperLink()
+				.setMaterialTitle()
+				.addDescription()
+				.addMaterialLicenseType()
+				.setAuthorFirstName()
+				.setAuthorSurName()
+				.setPublisherName()
+				.clickCreateMaterialPortfolio()
+				.clickSaveAndExit()
+				.makePortfolioPublic()
+				.isMaterialBoxDisplayed();
+		assertTrue(isMaterialBoxDisplayed);
+	}
+	
+	@Test
+	public void PortfolioTests_AddExistingMaterial_MaterialIsAddedToPortfolio() { 
+
+		boolean isMaterialBoxDisplayed = goToLandingPage()
+				.chooseUserType("Admin")
+				.openPortfolio()
+				.clickActionsMenu()
+				.clickEditPortfolio()
+				.setChapterTitle()
+				.clickAddExistingMaterial()
+				.selectAllEducationalContexts()
+				.insertMaterialSearchCriteria()
+				.closeDetailedSearch()
+				.clickToSelectMaterial2()
+				.clickAddMaterialToPortfolio()
+				.clickSaveAndExitConfirmationControl()
+				.isMaterialBoxDisplayed();
+		assertTrue(isMaterialBoxDisplayed);
+	}
+	
+	@Test
+	public void PortfolioTests_AddPreferredMaterial_MaterialIsAddedToPortfolio() { 
+
+		boolean isMaterialBoxDisplayed = goToLandingPage()
+				.chooseUserType("Admin")
+				.clickAddPortfolio()
+				.setPortfolioTitle()
+				.selectEducationalContext()
+				.selectSubjectArea()
+				.selectAgeGroup()
+				.addDescription()
+				.clickCreatePortfolio()
+				.setChapterTitle()
+				.clickAddPreferredMaterial()
+				.selectAllEducationalContexts()
+				.insertMaterialSearchCriteria()
+				.closeDetailedSearch()
+				.clickToSelectMaterial2()
+				.clickAddMaterialToPortfolio()
+				.clickSaveAndExitConfirmationControl()
+				.isMaterialBoxDisplayed();
+		assertTrue(isMaterialBoxDisplayed);
+	}
+	
 	
 
 }
