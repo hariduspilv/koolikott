@@ -40,6 +40,7 @@ md-toolbar.navbar.md-gray {
   width: 100%;
   max-width: $layout-breakpoint-md;
   display: none;
+  position: relative;
 
   &.has-mobile-search-open {
     display: flex;
@@ -57,8 +58,9 @@ md-toolbar.navbar.md-gray {
     margin-left: auto;
     margin-right: auto;
   }
+
   @media (min-width: $layout-breakpoint-lg) {
-    margin-left: 22rem;
+    left: 3rem;
   }
 }
 

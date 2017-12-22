@@ -51,19 +51,16 @@
   padding-bottom: $md-padding;
   max-width: $layout-breakpoint-md;
 
-  @media (min-width: $layout-breakpoint-md) {
-    margin-right: 11.05rem;
-  }
-
   &.nav-open {
     @media (min-width: $layout-breakpoint-md) {
       margin-left: $sidenav-width + $md-padding;
+      margin-right: $nav-button-area-width;
     }
 
     @media (min-width: $layout-breakpoint-main-content-margin) {
       margin-left: auto;
       margin-right: auto;
-      padding-left: 6rem;
+      padding-left: $sidenav-width - 10.20rem;
     }
   }
 }
