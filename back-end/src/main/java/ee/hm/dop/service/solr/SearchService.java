@@ -15,10 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -28,6 +25,7 @@ public class SearchService {
     public static final String MATERIAL_TYPE = "material";
     public static final String PORTFOLIO_TYPE = "portfolio";
     public static final String ALL_TYPE = "all";
+    public static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
     public static final String SEARCH_BY_TAG_PREFIX = "tag:";
     public static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
     public static final String SEARCH_BY_AUTHOR_PREFIX = "author:";

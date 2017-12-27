@@ -1,0 +1,77 @@
+<div class="embedded-material">
+  <div data-ng-if="type === 'PICTURE'" class="embedded-material__picture">
+    <a data-ng-href="{{url}}" target="_blank">
+      <img data-ng-src="{{url}}" class="embedded-material__img"/>
+    </a>
+  </div>
+  <div data-ng-if="type === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
+    <div class="embed-responsive-container" data-ng-if="type === 'YOUTUBE'">
+      <youtube-video
+        data-ng-if="type === 'YOUTUBE'"
+        video-url="url"
+        player-width="'768'"
+        player-height="'432'"
+        class="embed-item embed-responsive-item"
+      ></youtube-video>
+    </div>
+  </div>
+  <div data-ng-if="type === 'VIDEO'" class="embed-responsive-container embed-video">
+    <video
+      data-ng-if="canPlay"
+      data-ng-src="{{url}}"
+      type="video/{{extName}}"
+      controls
+      preload="metadata"
+      class="embedded-material__video"
+    ></video>
+    <md-toolbar data-ng-if="!canPlay" class="md-warn md-tall" layout-align="center center">
+      <div class="md-toolbar-tools" layout-align="center center">
+        <span data-translate="NO_VIDEO_SUPPORT_FOR_BROWSER" class="line-height--normal"></span>
+      </div>
+    </md-toolbar>
+  </div>
+  <div data-ng-if="type === 'AUDIO'" class="embed-responsive-container embed-audio">
+    <audio
+      data-ng-if="canPlay"
+      data-ng-src="{{url}}"
+      type="audio/{{extName}}"
+      controls
+      preload="metadata"
+      class="embedded-material__audio"
+    ></audio>
+    <md-toolbar data-ng-if="!canPlay" class="md-warn md-tall" layout-align="center center">
+      <div class="md-toolbar-tools" layout-align="center center">
+        <span data-translate="NO_VIDEO_SUPPORT_FOR_BROWSER" class="line-height--normal"></span>
+      </div>
+    </md-toolbar>
+  </div>
+  <div data-ng-if="type === 'SLIDESHARE'" class="embed-responsive embed-responsive-4by3">
+    <div class="embed-responsive-container">
+      <data-dop-slideshare
+        data-ng-if="type === 'SLIDESHARE'"
+        source="url"
+        class="embed-responsive-item"
+      ></data-dop-slideshare>
+    </div>
+  </div>
+  <div data-ng-if="type === 'EBOOK' || type === 'PDF' || type === 'SOUNDCLOUD'" class="embed-responsive-container">
+    <iframe
+      width="100%"
+      height="500px"
+      data-ng-src="{{url}}"
+    ></iframe>
+  </div>
+  <div data-ng-if="type === 'NOEMBED'" data-ng-class="{'embed-responsive': noEmbedIsIframe}">
+    <div class="embed-responsive-container">
+      <div class="embed-responsive-item" data-ng-bind-html="noEmbedData"></div>
+    </div>
+  </div>
+  <div data-ng-if="(type === 'LINK' || !type) && !$ctrl.hideLink">
+    <a
+      data-ng-href="{{url}}"
+      data-ng-bind="url"
+      target="_blank"
+      class="embedded-material__link md-primary"
+    ></a>
+  </div>
+</div>

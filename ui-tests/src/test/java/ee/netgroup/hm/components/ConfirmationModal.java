@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import ee.netgroup.hm.page.LandingPage;
 import ee.netgroup.hm.page.MaterialPage;
 
-public class ConfirmationPopup extends Component{
+public class ConfirmationModal extends Components{
 	
 	private static By confirm = By.xpath("//button[@class='md-primary md-confirm-button md-button md-ink-ripple md-default-theme']");
 	

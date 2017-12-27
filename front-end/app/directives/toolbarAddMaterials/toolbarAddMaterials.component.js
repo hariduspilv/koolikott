@@ -10,61 +10,6 @@ class controller extends Controller {
         } else
             this.loadUserPortfolios()
     }
-    getPortfolioSelectLabel() {
-        return !this.portfolio
-            ? this.$translate.instant('CHOOSE_PORTFOLIO')
-            : this.portfolio === '-1'
-                ? this.$translate.instant('ADD_TO_NEW_PORTFOLIO')
-                : this.portfolio.title || ''
-    }
-    getChapterSelectLabel() {
-        return !this.chapter
-            ? this.$translate.instant('CHOOSE_PORTFOLIO_CHAPTER')
-            : this.chapter === -1 || !this.portfolio.chapters[this.chapter]
-                ? this.$translate.instant('ADD_TO_NEW_CHAPTER')
-                : this.portfolio.chapters[this.chapter].title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE')
-    }
-    upgradeMaterials(materials) {
-        return Promise.all(
-            materials.map(m =>
-                this.materialService.getMaterialById(m.id).then(data => ({
-                    learningObjects: [data]
-                }))
-            )
-        )
-    }
-    addMaterialsToChapter(chapter, portfolio) {
-        // Start spinner
-        this.isSaving = true
-
-        if (portfolio === '-1') {
-            // @todo
-            const tempPortfolio = this.createPortfolio()
-            tempPortfolio.chapters = []
-
-            if (indexes[0] === -1)
-                chapterIndex = 0
-
-            this.toastService.showOnRouteChange('PORTFOLIO_ADD_MATERIAL_SUCCESS')
-            this.storageService.setPortfolio(tempPortfolio)
-            this.$mdDialog.show({
-                templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                controller: 'addPortfolioDialogController'
-            })
-            this.removeSelection()
-        } else {
-            const selectedMaterials = this.$rootScope.selectedMaterials.slice(0)
-            this.isSaving = false
-            this.$rootScope.$broadcast('detailedSearch:empty')
-            this.$rootScope.back()
-            // it is imperative that 'chapter:insertMaterials' is broadcasted after navigating back
-            this.$timeout(() => {
-                this.$rootScope.$broadcast('chapter:insertExistingMaterials', parseInt(this.chapter, 10), selectedMaterials)
-                this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
-            })
-            this.removeSelection()
-        }
-    }
     loadUserPortfolios() {
         const fail = () => {
             this.toastService.show('LOADING_PORTFOLIOS_FAIL')
@@ -79,12 +24,71 @@ class controller extends Controller {
                 fail
             )
     }
-    removeSelection() {
-        this.$rootScope.selectedMaterials = []
+    getPortfolioSelectLabel() {
+        return !this.portfolio
+            ? this.$translate.instant('CHOOSE_PORTFOLIO')
+            : this.portfolio == -1
+                ? this.$translate.instant('ADD_TO_NEW_PORTFOLIO')
+                : this.portfolio.title || ''
+    }
+    getChapterSelectLabel() {
+        return !this.chapter
+            ? this.$translate.instant('CHOOSE_PORTFOLIO_CHAPTER')
+            : this.chapter == -1 || !this.portfolio.chapters[this.chapter]
+                ? this.$translate.instant('ADD_TO_NEW_CHAPTER')
+                : this.portfolio.chapters[this.chapter].title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE')
+    }
+    addMaterialsToChapter(chapter, portfolio) {
+        // Start spinner
+        this.isSaving = true
+
+        const selectedMaterials = this.$rootScope.selectedMaterials.slice(0)
+        this.removeSelection()
+
+        const insertAfterLocationChange = (chapterIdx) => {
+            let numAttempts = 0
+            const insertMaterials = () => {
+                if (numAttempts <= 20) {
+                    if (!window.isEditPortfolioControllerConstructed) {
+                        numAttempts++
+                        return setTimeout(insertMaterials, 500)
+                    }
+
+                    this.$timeout(() => {
+                        this.$rootScope.$broadcast('chapter:insertExistingMaterials', chapterIdx, selectedMaterials)
+                        this.toastService.show('PORTFOLIO_ADD_MATERIAL_SUCCESS')
+                    })
+                } else
+                    console.error('Waited a whole 10 seconds for editPortfolio view controller to construct. Aborting the insertion of selected materials')
+            }
+            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
+                insertMaterials()
+                unsubscribe()
+            })
+        }
+
+        if (portfolio == -1) {
+            this.storageService.setPortfolio(this.createPortfolio())
+            insertAfterLocationChange(0)
+            this.$mdDialog
+                .show({
+                    templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                    controller: 'addPortfolioDialogController'
+                })
+                .then(() => {
+                    this.isSaving = false
+                    this.$rootScope.$broadcast('detailedSearch:empty')
+                })
+        } else {
+            insertAfterLocationChange(parseInt(this.chapter, 10))
+            this.isSaving = false
+            this.$rootScope.$broadcast('detailedSearch:empty')
+            this.$location.url('/portfolio/edit?id=' + portfolio.id)
+        }
     }
     portfolioSelectChange() {
         this.chapter = null
-        this.portfolio === '-1'
+        this.portfolio == -1
             ? this.chapter = '-1'
             : this.loadPortfolioChapters()
     }
@@ -102,9 +106,13 @@ class controller extends Controller {
                 this.toastService.show('LOADING_PORTFOLIOS_FAIL')
             })
     }
+    removeSelection() {
+        this.$rootScope.selectedMaterials = []
+    }
 }
 controller.$inject = [
     '$rootScope',
+    '$location',
     '$translate',
     '$timeout',
     '$mdDialog',

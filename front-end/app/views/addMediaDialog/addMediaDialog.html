@@ -1,0 +1,150 @@
+<md-dialog aria-label="Meedia lisamise modaalaken" class="add-media-dialog fullscreen-dialog">
+  <!-- Toolbar -->
+  <md-toolbar>
+    <div class="md-toolbar-tools md-padding-double-horizontal" layout-align="space-between center">
+      <h2 data-translate="{{ $ctrl.locals.isEditMode ? 'EDIT_MEDIA' : 'ADD_MEDIA' }}"></h2>
+      <md-button
+        ng-click="$ctrl.cancel()"
+        class="md-icon-button"
+        aria-label="Sulge meedia lisamise modaalaken"
+        >
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <form name="addMediaForm">
+    <!-- Content -->
+    <md-dialog-content data-layout-margin data-layout-padding>
+      <div data-layout="column">
+        <!-- URL -->
+        <div data-layout="row" data-layout-align="start center">
+          <span data-translate="ADD_MEDIA_LINK"></span>&nbsp;* &nbsp;
+          <md-input-container data-flex>
+            <label></label>
+            <input
+              data-ng-model="media.url"
+              name="url"
+              type="text"
+              dop-validate-url
+              required
+              placeholder="{{ 'HTTP_WORD' | translate }}"
+            >
+            <div data-ng-messages="addMediaForm.url.$error" data-multiple>
+              <div
+                data-ng-message="url"
+                class="invalid-url-message"
+                data-translate="MEDIA_URL_IS_INVALID"
+              ></div>
+              <div
+                data-ng-message="required"
+                data-translate="MEDIA_URL_IS_REQUIRED"
+              ></div>
+              <div data-ng-message="accepted">{{urlIsNotAcceptedMessage}}</div>
+            </div>
+          </md-input-container>
+        </div>
+        <h5 class="add-media-dialog__subhead"><span data-translate="DETAILS"></span>:</h5>
+        <!-- Title -->
+        <div data-layout="row">
+          <md-input-container data-flex>
+            <label data-translate="TITLE"></label>
+            <input data-ng-model="media.title" name="title" required>
+            <div data-ng-messages="addMediaForm.title.$error">
+              <div data-ng-message="required" data-translate="TITLE_IS_REQUIRED"></div>
+            </div>
+          </md-input-container>
+        </div>
+        <!-- Author -->
+        <div data-layout="row" data-layout-xs="column">
+          <md-input-container data-flex>
+            <label data-translate="AUTHOR_WORD"></label>
+            <input
+              name="author"
+              data-ng-model="media.author"
+              md-maxlength="255"
+              data-ng-disabled="isUserAuthor"
+              required
+            >
+            <div data-ng-messages="addMediaForm.author.$error">
+              <div data-ng-message="required" data-translate="AUTHOR_NAME_REQUIRED"></div>
+            </div>
+          </md-input-container>
+          <md-input-container data-layout="row" data-layout-align="start center">
+            <md-checkbox
+              class="md-primary no-margin"
+              data-ng-click="$ctrl.setAuthorToUser()"
+              data-ng-checked="isUserAuthor"
+              aria-label="{{ 'I_AM_AUTHOR' | translate }}"
+              >
+              <span data-translate="I_AM_AUTHOR"></span>
+            </md-checkbox>
+          </md-input-container>
+        </div>
+        <div data-layout="row" data-layout-xs="column">
+          <!-- Source -->
+          <md-input-container data-flex>
+            <label data-translate="SOURCE_BIG"></label>
+            <input
+              name="source"
+              data-ng-model="media.source"
+              md-maxlength="255"
+              required
+            >
+            <div data-ng-messages="addMediaForm.source.$error">
+              <div data-ng-message="required" data-translate="SOURCE_REQUIRED"></div>
+            </div>
+          </md-input-container>
+          <!-- License type -->
+          <md-input-container data-flex>
+            <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
+            <md-select
+              name="licenseType"
+              class="no-margin"
+              data-ng-model="media.licenseType"
+              data-ng-model-options="{trackBy: '$value.id'}"
+              required
+              >
+              <md-option
+                data-ng-value="allRightsReserved"
+                data-translate="LICENSETYPE_CANT_CHOOSE"
+              ></md-option>
+              <md-option
+                data-ng-repeat="licenseType in licenseTypes"
+                data-ng-value="licenseType"
+                data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
+                >
+              </md-option>
+            </md-select>
+            <div data-ng-messages="addMediaForm.licenseType.$error">
+              <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
+            </div>
+          </md-input-container>
+        </div>
+      </div>
+      <!-- Actions -->
+      <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double">
+        <md-button
+          data-ng-click="$ctrl.cancel()"
+          aria-label="Tühista meedia lisamine"
+          >
+          <span data-translate="BUTTON_CANCEL"></span>
+        </md-button>
+        <md-button
+          aria-label="{{ $ctrl.locals.isEditMode ? 'BUTTON_UPDATE_MEDIA' : 'BUTTON_ADD_MEDIA' | translate }}"
+          class="md-primary"
+          data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
+          data-ng-click="$ctrl.save()"
+          >
+          <span data-translate="{{ $ctrl.locals.isEditMode ? 'BUTTON_UPDATE_MEDIA' : 'BUTTON_ADD_MEDIA' }}"></span>
+          <md-icon>arrow_forward</md-icon>
+        </md-button>
+        <md-progress-circular
+          class="ng-hide"
+          md-mode="indeterminate"
+          md-diameter="40"
+          data-ng-show="isSaving"
+        ></md-progress-circular>
+      </div>
+    </md-dialog-content>
+  </form>
+</md-dialog>

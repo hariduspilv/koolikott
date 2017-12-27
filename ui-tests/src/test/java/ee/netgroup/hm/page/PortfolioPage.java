@@ -4,8 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ee.netgroup.hm.components.AddPortfolioForm;
 import ee.netgroup.hm.components.Comments;
-import ee.netgroup.hm.components.ConfirmationPopup;
-import ee.netgroup.hm.components.ReportImproperPopUp;
+import ee.netgroup.hm.components.ConfirmationModal;
+import ee.netgroup.hm.components.LeftMenu;
+import ee.netgroup.hm.components.ReportImproperModal;
 import ee.netgroup.hm.components.fabButton;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
@@ -26,7 +27,7 @@ public class PortfolioPage extends Page{
 	private By removeFromRecommendations = By.xpath("//button[@data-ng-click='removeRecommendation()']");
 	private By tag = By.xpath("//a[@data-ng-click='$ctrl.getTagSearchURL($event, $chip.tag)']");
 	private By educationalTaxon = By.xpath("//span[@data-translate='PRESCHOOLEDUCATION']");
-	private By materialBox = By.cssSelector("div.chapter-embed-card__caption");
+	public static By materialBox = By.cssSelector("div.chapter-embed-card__caption");
 	private By reportCommentButton = By.xpath("//button[@ng-click='$ctrl.reportComment($event)']");
 	private By reportTagButton = By.xpath("//button[@ng-click='$ctrl.reportTag($event)']");
 	private By autocompleteSystemTag = By.xpath("//span[@md-highlight-text='$ctrl.newTag.tagName']");
@@ -35,6 +36,9 @@ public class PortfolioPage extends Page{
 	private By narrowChapter = By.xpath("//div[@class='chapter-block is-narrow is-narrow-left']");
 	private By subchapterTag = By.xpath("//h3[@class='subchapter']");
 	private By firstChapterTitle = By.xpath("//h2[@class='chapter-title']");
+	private By alignedMaterialBox = By.xpath("//div[@class='chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right chapter-embed-card--loaded']");
+	private static By materialTitle = By.xpath("//h5[@data-ng-bind='title']");
+	
 	
 	public AddPortfolioForm clickCopyPortfolio() {
 		return fabButton.clickCopyPortfolio();
@@ -50,10 +54,10 @@ public class PortfolioPage extends Page{
 		return this;
 	}
 
-	public ConfirmationPopup clickDeletePortfolio() {
+	public ConfirmationModal clickDeletePortfolio() {
 		Helpers.waitForClickable(deletePortfolio);
 		getDriver().findElement(deletePortfolio).click();
-		return new ConfirmationPopup();
+		return new ConfirmationModal();
 	}
 
 	public EditPortfolioPage clickEditPortfolio() {
@@ -67,10 +71,10 @@ public class PortfolioPage extends Page{
         return getDriver().findElement(shareWithLinkIcon).isDisplayed();
 	}
 
-	public ReportImproperPopUp clickReportImproperContent() {
+	public ReportImproperModal clickReportImproperContent() {
 		Helpers.waitForClickable(improperContent);
 		getDriver().findElement(improperContent).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 	
 	public String getNotificationIsSentText() {
@@ -149,14 +153,14 @@ public class PortfolioPage extends Page{
 		return Comments.getCommentText();
 	}
 
-	public ReportImproperPopUp reportImproperComment() {
+	public ReportImproperModal reportImproperComment() {
 		getDriver().findElement(reportCommentButton).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
-	public ReportImproperPopUp reportImproperTag() {
+	public ReportImproperModal reportImproperTag() {
 		getDriver().findElement(reportTagButton).click();
-		return new ReportImproperPopUp();
+		return new ReportImproperModal();
 	}
 
 	public PortfolioPage addNewSystemTag() {
@@ -185,8 +189,22 @@ public class PortfolioPage extends Page{
 	public String isChapterOrderChanged() {
 		return getDriver().findElement(firstChapterTitle).getText();
 	}
+	
+	public boolean isMediaFileAddedToChapter() {
+		return getDriver().findElements(materialBox).size() == 1;
+	}
 
+	public boolean isMaterialAligned() {
+		return getDriver().findElements(alignedMaterialBox).size() == 1;
+	}
 
+	public static String getMaterialTitle() {
+		return getDriver().findElement(materialTitle).getText();
+	}
+
+	public MyMaterialsPage clickMyMaterials() {
+		return LeftMenu.clickMyMaterials();
+	}
 
 }
 

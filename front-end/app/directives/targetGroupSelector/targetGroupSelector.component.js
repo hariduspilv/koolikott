@@ -14,8 +14,6 @@ class controller extends Controller {
         this.addListeners()
         this.selectValue()
         this.setSelectedText()
-
-        this._previousTargetGroups = this.targetGroups
     }
     $onChanges({ taxon, markRequired, targetGroups }) {
         if (taxon &&
@@ -35,23 +33,18 @@ class controller extends Controller {
 
         if (markRequired && markRequired.currentValue && this.isRequired && this.$scope.selectedTargetGroup.length === 0)
             this.$scope.targetGroupForm.targetGroupSelect.$touched = true
-    }
-    $doCheck() {
-        if (this.targetGroups !== this._previousTargetGroups) {
+
+        if (targetGroups && targetGroups.currentValue !== targetGroups.previousValue)
             this.$timeout(() => {
                 this.selectValue(true)
                 this.setSelectedText()
             })
-            this._previousTargetGroups = this.targetGroups
-        }
     }
     setSelectedText() {
         const set = (selectedText) => {
             this.$scope.selectedText = Array.isArray(selectedText)
                 ? selectedText.join(', ')
                 : selectedText
-
-            // porno
             this.$element.find('md-select').controller('ngModel').$render()
         }
 
@@ -130,6 +123,9 @@ class controller extends Controller {
     }
     parseSelectedTargetGroup() {
         this.targetGroups = this.targetGroupService.getByLabel(this.$scope.selectedTargetGroup)
+
+        if (typeof this.onChange === 'function')
+            this.onChange({ targetGroups: this.targetGroups })
     }
     selectValue(force) {
         if (!this.$scope.selectedTargetGroup)
@@ -156,7 +152,6 @@ class controller extends Controller {
         this.$scope.selectedTargetGroup.forEach(name => {
             if (!groupNames.includes(name)) {
                 removeGroup(name, this.$scope.selectedTargetGroup)
-                removeGroup(name, this.targetGroups)
             }
         })
 
@@ -202,10 +197,11 @@ controller.$inject = [
 ]
 component('dopTargetGroupSelector', {
     bindings: {
-        targetGroups: '=',
+        targetGroups: '<',
         taxon: '<',
-        isRequired: '=',
-        markRequired: '<'
+        isRequired: '<',
+        markRequired: '<',
+        onChange: '&',
     },
     templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
     controller

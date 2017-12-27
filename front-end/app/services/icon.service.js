@@ -1,7 +1,7 @@
 'use strict'
 
 {
-class controller {
+class controller extends Controller {
     getMaterialIcon(resourceTypes) {
         if (!Array.isArray(resourceTypes) || !resourceTypes.length)
             return 'description'
@@ -51,6 +51,21 @@ class controller {
                 default:
                     return 'description'
             }
+    }
+    getMediaIcon(type) {
+        switch(type) {
+            case 'AUDIO':
+            case 'SOUNDCLOUD':
+                return 'audiotrack'
+            case 'IMAGE':
+            case 'PICTURE':
+                return 'image'
+            case 'VIDEO':
+            case 'YOUTUBE':
+                return 'ondemand_video'
+            default:
+                return 'description'
+        }
     }
 }
 factory('iconService', controller)

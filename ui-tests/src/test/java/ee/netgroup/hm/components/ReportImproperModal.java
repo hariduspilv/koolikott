@@ -5,21 +5,21 @@ import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.page.MaterialPage;
 import ee.netgroup.hm.page.PortfolioPage;
 
-public class ReportImproperPopUp extends Component{
+public class ReportImproperModal extends Components{
 	
 	private By reportContent = By.name("LO_CONTENT");
 	private static By reportDescription = By.xpath("//textarea[@data-ng-model='data.reportingText']");
 	private static By notify = By.xpath("//button[@data-ng-click='sendReport()']");
 
 	
-	public ReportImproperPopUp setImproperReason() {
+	public ReportImproperModal setImproperReason() {
 		Helpers.waitForMilliseconds(1000);
 		Helpers.waitForClickable(reportContent);
 		getDriver().findElement(reportContent).click();
 		return this;
 	}
 	
-	public ReportImproperPopUp setImproperDescription() {
+	public ReportImproperModal setImproperDescription() {
 		Helpers.waitForVisibility(reportDescription);
 		getDriver().findElement(reportDescription).click();
 		Helpers.waitForMilliseconds(1000);
@@ -39,15 +39,15 @@ public class ReportImproperPopUp extends Component{
 	}
 
 	public String getLogginInIsRequiredText() {
-		return LoginPopUp.getLogginInIsRequiredText();
+		return LoginModal.getLogginInIsRequiredText();
 	}
 
-	public LoginPopUp getLogInPopUp() {
-		return LoginPopUp.getLogInPopUp();
+	public LoginModal getLogInPopUp() {
+		return LoginModal.getLogInPopUp();
 	}
 
-	public static ReportImproperPopUp getReportImproperPopUp() {
-		return new ReportImproperPopUp();
+	public static ReportImproperModal getReportImproperPopUp() {
+		return new ReportImproperModal();
 	}
 
 

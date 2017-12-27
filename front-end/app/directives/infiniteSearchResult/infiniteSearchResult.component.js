@@ -22,7 +22,6 @@ class controller extends Controller {
             this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
-        this.setParams()
 
         this.$scope.items = []
         this.$scope.searching = false
@@ -41,7 +40,7 @@ class controller extends Controller {
         }]
 
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
-        this.search()
+        this.search(true)
     }
     setParams() {
         if (!this.params)
@@ -83,11 +82,11 @@ class controller extends Controller {
     allResultsLoaded() {
         return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
     }
-    search(newSearch) {
-        if (newSearch)
+    search(isNewSearch) {
+        if (isNewSearch)
             this.setParams()
 
-        if (this.$scope.searching || !newSearch && this.allResultsLoaded())
+        if (this.$scope.searching || !isNewSearch && this.allResultsLoaded())
             return
 
         this.$scope.searching = true
@@ -147,7 +146,8 @@ component('dopInfiniteSearchResult', {
         title: '<',
         subtitle: '<',
         filter: '<',
-        cache: '<?'
+        cache: '<?',
+        isPreferred: '<',
     },
     templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
     controller

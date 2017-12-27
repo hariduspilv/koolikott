@@ -20,7 +20,6 @@ class controller extends Controller {
             const emptyPortfolio = this.createPortfolio()
 
             if (this.$scope.userHasSelectedMaterials || this.$rootScope.selectedSingleMaterial) {
-                emptyPortfolio.chapters = []
                 emptyPortfolio.chapters.push({
                     title: '',
                     subchapters: [],

@@ -79,7 +79,7 @@ class controller extends Controller {
             })
     }
     showMoreRecommendations() {
-        this.searchService.setSearch('recommended:true')
+        this.searchService.setQuery('recommended:true')
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setSort('recommendation_timestamp')
         this.searchService.setSortDirection('desc')

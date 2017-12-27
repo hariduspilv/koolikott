@@ -1,23 +1,6 @@
 'use strict'
 
 {
-const ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
-const ALLOWED_TAGS_AND_ATTRIBUTES = {
-    A: ['href', 'target'],
-    DIV: ['class', 'data-id', 'data-src'],
-    H3: ['class', 'id'],
-    P: [],
-    UL: [],
-    LI: [],
-    BLOCKQUOTE: [],
-    B: [],
-    I: [],
-    STRONG: [],
-    EM: [],
-    BR: []
-}
-const ALLOWED_TAGS = Object.keys(ALLOWED_TAGS_AND_ATTRIBUTES)
-const FORBIDDEN_TAGS = ['meta', 'script', 'link', 'style', 'img', 'map', 'audio', 'video', 'track', 'applet', 'embed', 'object', 'param', 'source', 'canvas', 'noscript']
 const ICON_SVG_CONTENTS = {
     h3: '<path d="M20,14.3400002 L21.4736328,14.34375 C22.5810602,14.34375 23.1347656,13.8017632 23.1347656,12.7177734 C23.1347656,12.2958963 23.002931,11.9516615 22.7392578,11.6850586 C22.4755846,11.4184557 22.103518,11.2851562 21.6230469,11.2851562 C21.2304668,11.2851562 20.8891616,11.3994129 20.5991211,11.6279297 C20.3090806,11.8564465 20.1640625,12.1406233 20.1640625,12.4804688 L17.2021484,12.4804688 C17.2021484,11.8066373 17.3896466,11.2060573 17.7646484,10.6787109 C18.1396503,10.1513646 18.6596646,9.73974757 19.324707,9.44384766 C19.9897494,9.14794774 20.7206991,9 21.5175781,9 C22.9414134,9 24.0605428,9.32519206 24.875,9.97558594 C25.6894572,10.6259798 26.0966797,11.5195256 26.0966797,12.65625 C26.0966797,13.207034 25.9282243,13.7270483 25.5913086,14.2163086 C25.2543928,14.7055689 24.7636751,15.1025375 24.1191406,15.4072266 C24.7988315,15.6533215 25.3320293,16.026853 25.71875,16.527832 C26.1054707,17.0288111 26.2988281,17.6484338 26.2988281,18.3867188 C26.2988281,19.5293026 25.8593794,20.4433559 24.9804688,21.1289062 C24.1015581,21.8144566 22.9472728,22.1572266 21.5175781,22.1572266 C20.6796833,22.1572266 19.9018591,21.9975602 19.184082,21.6782227 C18.466305,21.3588851 17.9228534,20.9165067 17.5537109,20.3510742 C17.1845685,19.7856417 17,19.1425817 17,18.421875 L19.9794922,18.421875 C19.9794922,18.8144551 20.1376937,19.1542954 20.4541016,19.4414062 C20.7705094,19.7285171 21.1601539,19.8720703 21.6230469,19.8720703 C22.1445339,19.8720703 22.5605453,19.7270522 22.8710938,19.4370117 C23.1816422,19.1469712 23.3369141,18.7763694 23.3369141,18.3251953 C23.3369141,17.6806608 23.1757829,17.2236342 22.8535156,16.9541016 C22.5312484,16.684569 22.0859403,16.5498047 21.5175781,16.5498047 L20,16.5498047 L20,14.3400002 Z M16,22 L13,22 L13,17 L9,17 L9,22 L6,22 L6,9 L9,9 L9,14 L13,14 L13,9 L16,9 L16,22 Z"></path>',
     p: '<path d="M20.9816895,17.2968826 C20.9816895,18.7734525 20.6491732,19.9526399 19.9841309,20.8344803 C19.3190885,21.7163206 18.2460994,22.1715698 17.1152344,22.1715698 C16.2421831,22.1715698 15.5625028,21.8489164 15,21.2102413 L15,25 L12,25 L12,11.9957809 L14.7685547,11.9957809 L14.8599997,12.8699999 C15.4283619,12.1668714 16.1718704,11.8199997 17.0976562,11.8199997 C18.2695371,11.8199997 19.3557096,12.2377886 20.0061035,13.1020508 C20.6564974,13.9663129 20.9816895,15.1542893 20.9816895,16.6660156 L20.9816895,17.2968826 Z M18.0197754,16.6220703 C18.0197754,14.9345619 17.352544,14.1051559 16.3681641,14.1051559 C15.6650355,14.1051559 15.2343762,14.3571066 15,14.8610153 L15,19.0953979 C15.2578138,19.6227443 15.6943325,19.8864136 16.3857422,19.8864136 C17.3291063,19.8864136 17.9904784,19.057633 18.0197754,17.4287186 L18.0197754,16.6220703 Z"></path>',
@@ -28,316 +11,10 @@ const ICON_SVG_CONTENTS = {
     unorderedlist: '<path d="M8,14.5 C7.17,14.5 6.5,15.17 6.5,16 C6.5,16.83 7.17,17.5 8,17.5 C8.83,17.5 9.5,16.83 9.5,16 C9.5,15.17 8.83,14.5 8,14.5 Z M8,8.5 C7.17,8.5 6.5,9.17 6.5,10 C6.5,10.83 7.17,11.5 8,11.5 C8.83,11.5 9.5,10.83 9.5,10 C9.5,9.17 8.83,8.5 8,8.5 Z M8,20.5 C7.17,20.5 6.5,21.18 6.5,22 C6.5,22.82 7.18,23.5 8,23.5 C8.82,23.5 9.5,22.82 9.5,22 C9.5,21.18 8.83,20.5 8,20.5 Z M11,23 L25,23 L25,21 L11,21 L11,23 Z M11,17 L25,17 L25,15 L11,15 L11,17 Z M11,9 L11,11 L25,11 L25,9 L11,9 Z"/>'
 }
 const EMBED_INSERTION_MARKER = '<div class="material-insertion-marker"></div>'
-/**
- * Returns the empty block-level element if caret is positioned on empty WYSIWYG row (and the toolbar
- * is displayed for pre-selecting text format). Otherwise returns undefined.
- */
-function getEmptySelectionParent() {
-    const getSelectionEditor = (el) => {
-        while (el !== null) {
-            if (el.classList.contains('medium-editor-element'))
-                return el
-            el = el.parentElement
-        }
-    }
-
-    const selection = window.getSelection()
-
-    if (selection.rangeCount) {
-        const range = selection.getRangeAt(0)
-        let selectionParent = range.commonAncestorContainer
-
-        if (selectionParent.nodeType != Node.ELEMENT_NODE)
-            selectionParent = selectionParent.parentNode
-
-        const selectionEditor = getSelectionEditor(selectionParent)
-
-        if (selectionParent &&
-            !selectionParent.textContent.trim() &&
-            this.base.elements[0] === selectionEditor
-        )
-            return selectionParent === selectionEditor && selectionParent.firstChild
-                ? selectionParent.firstChild
-                : selectionParent
-    }
-}
-MediumEditor.extensions.button.prototype.getEmptySelectionParent = getEmptySelectionParent
-MediumEditor.extensions.button.prototype.handleClick = function (evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
-
-    const action = this.getAction()
-    if (action) {
-        switch (action) {
-            case 'bold':
-            case 'italic':
-                /**
-                 * In case BOLD or ITALIC button is hit with empty selection wrap the empty selection
-                 * with <b> or <i> or unwrap that element (toggle action).
-                 */
-                const emptySelectionParent = this.getEmptySelectionParent()
-                if (emptySelectionParent) {
-                    const tagName = action === 'bold' ? 'B' : 'I'
-                    const selection = window.getSelection()
-
-                    if (selection.rangeCount) {
-                        const range = selection.getRangeAt(0)
-                        const restoreSelection = (emptyEl) => {
-                            range.selectNodeContents(emptyEl)
-                            selection.removeAllRanges()
-                            selection.addRange(range)
-                            this.base.getExtensionByName('toolbar').checkState()
-                        }
-                        const unwrap = (el) => {
-                            const parent = el.parentNode
-
-                            while (el.firstChild)
-                                parent.insertBefore(el.firstChild, el)
-
-                            parent.removeChild(el)
-                            return parent
-                        }
-
-                        if (emptySelectionParent.tagName === tagName)
-                            restoreSelection(unwrap(emptySelectionParent))
-                        else if (emptySelectionParent.parentElement.tagName === tagName) {
-                            unwrap(emptySelectionParent.parentElement)
-                            restoreSelection(emptySelectionParent)
-                        } else {
-                            const newNode = document.createElement(tagName)
-                            range.surroundContents(newNode)
-                            restoreSelection(newNode)
-                        }
-                        return
-                    }
-                }
-                break
-            case 'insertunorderedlist':
-                /**
-                 * When untoggling a list item it is not automatically wrapped in a <p>.
-                 */
-                const blockContainer = MediumEditor.util.getTopBlockContainer(MediumEditor.selection.getSelectionStart(document))
-                if (blockContainer.tagName === 'UL')
-                    MediumEditor.util.execFormatBlock(document, 'p')
-        }
-        this.execAction(action)
-    }
-}
-/**
- * Display the toolbar in the beginning of a new paragraph wihtout any selection.
- */
-const origToolbarCheckState = MediumEditor.extensions.toolbar.prototype.checkState
-MediumEditor.extensions.toolbar.prototype.getEmptySelectionParent = getEmptySelectionParent
-MediumEditor.extensions.toolbar.prototype.checkState = function () {
-    origToolbarCheckState.call(this)
-
-    const emptySelectionParent = this.getEmptySelectionParent()
-    if (emptySelectionParent) {
-        const selection = window.getSelection()
-        if (selection.rangeCount) {
-                /**
-                 * this is necessary so that the toolbar would be positioned
-                 * at the beginning of the empty row.
-                 */
-                const range = selection.getRangeAt(0)
-                range.selectNodeContents(emptySelectionParent)
-                selection.removeAllRanges()
-                selection.addRange(range)
-
-                // hide link editor
-                if (!this.isToolbarDefaultActionsDisplayed())
-                    this.showToolbarDefaultActions()
-
-                this.showToolbar()
-                this.setToolbarButtonStates()
-                this.positionToolbar(window.getSelection())
-
-                // Without this FF won't let the cursor be moved off the empty row with keyboard arrows
-                range.collapse(true)
-        }
-    }
-}
-if (isIE()) {
-    MediumEditor.extensions.toolbar.prototype.handleBlur = function () {
-        clearTimeout(this.hideTimeout)
-        clearTimeout(this.delayShowTimeout)
-        this.hideTimeout = setTimeout(() => {
-            this.preventBlurClose
-                ? this.preventBlurClose = false
-                : this.hideToolbar()
-        }, 1)
-    }
-    MediumEditor.extensions.toolbar.prototype.createToolbarButtons = function () {
-        const ul = this.document.createElement('ul')
-        ul.id = 'medium-editor-toolbar-actions' + this.getEditorId()
-        ul.className = 'medium-editor-toolbar-actions'
-        ul.style.display = 'block'
-
-        this.buttons.forEach(button => {
-            const buttonName = typeof button === 'string' ? button : button.name
-            const buttonOpts = typeof button === 'string' ? null : button
-            const extension = this.base.addBuiltInExtension(buttonName, buttonOpts)
-
-            if (extension && typeof extension.getButton === 'function') {
-                const btn = extension.getButton(this.base)
-                const li = this.document.createElement('li')
-
-                li.addEventListener('mousedown', () =>
-                    this.preventBlurClose = true
-                )
-                MediumEditor.util.isElement(btn)
-                    ? li.appendChild(btn)
-                    : li.innerHTML = btn
-
-                ul.appendChild(li)
-            }
-        })
-
-        const buttons = ul.querySelectorAll('button')
-        if (buttons.length > 0) {
-            buttons[0].classList.add(this.firstButtonClass)
-            buttons[buttons.length - 1].classList.add(this.lastButtonClass)
-        }
-
-        return ul
-    }
-}
-MediumEditor.extensions.placeholder.prototype.showPlaceholder = (el) => {
-    if (el) {
-        el.classList.add('medium-editor-placeholder')
-        el.classList.remove('medium-editor-placeholder-relative')
-    }
-}
-MediumEditor.extensions.anchorPreview.prototype.handleEditableMouseover = function (event) {
-    const target = MediumEditor.util.getClosestTag(event.target, 'a')
-    const isEmbedElement = (el) => {
-        while (el !== null) {
-            if (el.classList.contains('chapter-embed-card') ||
-                el.classList.contains('embed-item') ||
-                el.classList.contains('embed-responsive-container') ||
-                el.classList.contains('embedded-material')
-            )
-                return true
-            if (el.classList.contains('chapter-block'))
-                return false
-            el = el.parentElement
-        }
-    }
-
-    if (target) {
-        if (isEmbedElement(target))
-            return true
-
-        if (!this.showOnEmptyLinks && (
-            !/href=["']\S+["']/.test(target.outerHTML) ||
-            /href=["']#\S+["']/.test(target.outerHTML)
-        ))
-            return true
-
-        const toolbar = this.base.getExtensionByName('toolbar');
-        if (!this.showWhenToolbarIsVisible &&
-            toolbar &&
-            toolbar.isDisplayed &&
-            toolbar.isDisplayed()
-        )
-            return true
-
-        if (this.activeAnchor && this.activeAnchor !== target)
-            this.detachPreviewHandlers()
-
-        this.anchorToPreview = target
-        this.instanceHandleAnchorMouseout = this.handleAnchorMouseout.bind(this)
-        this.on(this.anchorToPreview, 'mouseout', this.instanceHandleAnchorMouseout)
-        this.base.delay(() => {
-            if (this.anchorToPreview)
-                this.showPreview(this.anchorToPreview)
-        })
-    }
-}
-/**
- * Overwriting Medium Editor's util methods to suit our needs.
- * The original method accepts a blacklist of attributes that should be removed on all elements
- * while our method accepts a whilelist object mapping which attributes are allowed on which elements.
- * Original method is in source code at:
- * https://github.com/yabwe/medium-editor/blob/c619e756c0c8dda7bbb587b6b97209d984c208e8/src/js/util.js#L1037-L1041
- */
-MediumEditor.util.cleanupAttrs = (el, blacklist) => {
-    const allowed = ALLOWED_TAGS_AND_ATTRIBUTES[el.tagName]
-
-    for (let { name } of el.attributes)
-        if (!allowed || allowed.indexOf(name.toLowerCase()) < 0)
-            el.removeAttribute(name)
-}
-/**
- * The original method unwraps elements that are specified in the provided blacklist (options.unwrapTags)
- * while ours unwraps all elements that are not in our allowed whitelist.
- * Original method is in source code at:
- * https://github.com/yabwe/medium-editor/blob/c619e756c0c8dda7bbb587b6b97209d984c208e8/src/js/util.js#L1049-L1053
- */
-MediumEditor.util.unwrapTags = (el, blacklist) => {
-    // convert other healines to H3
-    if (['H1', 'H2', 'H4', 'H5', 'H6'].indexOf(el.nodeName) > -1)
-        el.outerHTML = `<h3>${el.innerHTML}</h3>`
-    else
-    // unwrap DIVs that are not embeds & all other tags
-    if ((el.nodeType === Node.ELEMENT_NODE && el.nodeName === 'DIV' && !el.classList.contains('chapter-embed-card')) ||
-        (el.parentNode && ALLOWED_TAGS.indexOf(el.nodeName) < 0)
-    )
-        MediumEditor.util.unwrap(el, document)
-}
-/**
- * Need to patch this and add the condition: blockContainer.nodeName !== 'UL'. Without it creating
- * blockquote from list item was broken. See Medium Editor source code for more inline comments:
- * https://github.com/yabwe/medium-editor/blob/master/src/js/util.js#L512-L573
- */
-MediumEditor.util.execFormatBlock = function (doc, tagName) {
-    const blockContainer = this.getTopBlockContainer(MediumEditor.selection.getSelectionStart(doc))
-
-    if (tagName === 'blockquote') {
-        if (blockContainer) {
-            if (blockContainer.nodeName === 'UL') {
-                // refresh the tollbar state
-                setTimeout(() => {
-                    const edirorEl = this.getContainerEditorElement(blockContainer)
-                    const editor = edirorEl && MediumEditor.getEditorFromElement(edirorEl)
-                    if (editor)
-                        editor.getExtensionByName('toolbar').checkState()
-                }, 100)
-            } else
-                for (let childNode of blockContainer.childNodes)
-                    if (this.isBlockContainer(childNode))
-                        return doc.execCommand('outdent', false, null)
-        }
-
-        if (this.isIE)
-            return doc.execCommand('indent', false, tagName)
-    }
-
-    if (blockContainer && tagName === blockContainer.nodeName.toLowerCase())
-        tagName = 'p'
-
-    if (this.isIE)
-        tagName = '<' + tagName + '>'
-
-    if (blockContainer && blockContainer.nodeName.toLowerCase() === 'blockquote') {
-        if (this.isIE && tagName === '<p>')
-            return doc.execCommand('outdent', false, tagName)
-
-        if ((this.isFF || this.isEdge) && tagName === 'p') {
-            for (let childNode of blockContainer.childNodes)
-                if (!this.isBlockContainer(childNode))
-                    doc.execCommand('formatBlock', false, tagName)
-
-            return doc.execCommand('outdent', false, tagName)
-        }
-    }
-
-    return doc.execCommand('formatBlock', false, tagName)
-}
 class controller extends Controller {
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
-            this.embeddedMaterialsCache = this.embeddedMaterialsCache || {}
+            this.embedCache = this.embedCache || {}
 
             const isFirstChange = chapter.isFirstChange()
             this.$scope.chapter = chapter.currentValue
@@ -394,20 +71,16 @@ class controller extends Controller {
                         <div>${this.$translate.instant('EDIT_LINK')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
                     </div>`
             }
+
+            this.compileAndInjectEmbedToolbar()
         } else {
             this.$timeout(() => {
                 for (let el of this.getEditorElements())
                     this.loadEmbeddedContents(el)
 
-                /**
-                 * Remove blank paragraphs that follow embeds.
-                 */
+                // Remove blank paragraphs.
                 for (let p of this.$element[0].querySelectorAll('p'))
-                    if (!p.textContent.trim() &&
-                        p.previousSibling &&
-                        p.previousSibling.nodeType === Node.ELEMENT_NODE &&
-                        p.previousSibling.classList.contains('chapter-embed-card')
-                    )
+                    if (!p.textContent.trim())
                         p.parentNode.removeChild(p)
             })
         }
@@ -429,6 +102,9 @@ class controller extends Controller {
                 document.removeEventListener('touchmove', this.onIOSTouchMove)
                 document.querySelector('.chapter-title-input').removeEventListener('focus', this.preventIOSPageShiftOnTitleInput)
             }
+
+            if (this.embedToolbar)
+                this.embedToolbar.parentNode.removeChild(this.embedToolbar)
         }
     }
     onClickOutside(evt) {
@@ -436,7 +112,10 @@ class controller extends Controller {
             let el = evt.target
 
             while (el !== null) {
-                if (el === this.$element[0] || el.classList.contains('medium-editor-toolbar'))
+                if (el === this.$element[0] ||
+                    el.classList.contains('medium-editor-toolbar') ||
+                    el.classList.contains('medium-editor-anchor-preview')
+                )
                     return
                 el = el.parentElement
             }
@@ -493,9 +172,9 @@ class controller extends Controller {
                     cleanPastedHTML: true,
                     /**
                      * These tags (and their contents) are removed during paste. All other tags that
-                     * are not among these nor listed above in ALLOWED_TAGS are unwrapped.
+                     * are not among these nor listed above in EDITOR_ALLOWED_TAGS are unwrapped.
                      */
-                    cleanTags: FORBIDDEN_TAGS
+                    cleanTags: EDITOR_FORBIDDEN_TAGS
                 },
                 anchor: {
                     linkValidation: true,
@@ -547,13 +226,8 @@ class controller extends Controller {
                 subchapter.removeAttribute('id')
 
             // 2) reduce embedded materials to <div> without any content
-            for (let embed of wrapper.querySelectorAll('.chapter-embed-card')) {
-                embed.classList.remove('chapter-embed-card--loading')
-                embed.classList.remove('chapter-embed-card--loaded')
-                embed.removeAttribute('contenteditable')
-                while (embed.firstChild)
-                    embed.removeChild(embed.firstChild)
-            }
+            for (let embed of wrapper.querySelectorAll('.chapter-embed-card'))
+                this.unloadEmbeddedContent(embed)
 
             return wrapper.innerHTML
         }
@@ -605,7 +279,7 @@ class controller extends Controller {
                 if (isEmbedElement(node))
                     return
 
-                if (!ALLOWED_TAGS.includes(node.tagName))
+                if (!EDITOR_ALLOWED_TAGS.includes(node.tagName))
                     return node.outerHTML = node.innerHTML
 
                 unwrapBlockLevelParents(node)
@@ -660,7 +334,7 @@ class controller extends Controller {
         }
         const isNodeBlockLevelElement = (node) => {
             return node.nodeType === Node.ELEMENT_NODE
-                && ALLOWED_BLOCK_LEVEL_TAGS.indexOf(node.tagName) > -1
+                && EDITOR_ALLOWED_BLOCK_LEVEL_TAGS.indexOf(node.tagName) > -1
                 && !node.classList.contains('chapter-embed-card')
                 && !node.classList.contains('chapter-embed-card__publishers-and-authors')
                 && !node.classList.contains('chapter-embed-card__source')
@@ -716,52 +390,77 @@ class controller extends Controller {
         for (let [subIdx, subEl] of this.$element[0].querySelectorAll('.subchapter').entries())
             subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
     }
-    loadEmbeddedContents(el) {
-        const setContents = (embed, material) => {
-            const { id, picture, publishers, authors, titles, source, uploadedFile, language, resourceTypes } = material
+    loadEmbeddedContents(editorEl) {
+        for (let embed of editorEl.querySelectorAll('.chapter-embed-card'))
+            this.loadEmbeddedContent(embed)
+    }
+    loadEmbeddedContent(embed, update = false) {
+        if (update)
+            this.unloadEmbeddedContent(embed)
+
+        const { id } = embed.dataset
+        if (!id
+            || embed.classList.contains('chapter-embed-card--loading')
+            || embed.classList.contains('chapter-embed-card--loaded')
+        )
+            return
+
+        embed.classList.add('chapter-embed-card--loading')
+        embed.setAttribute('contenteditable', 'false')
+        embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
+        embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
+        /**
+         * This is in place to prevent the context menu from appearing on touch devices when
+         * user taps and holds on the embed element — to make way for the embed toolbar.
+         */
+        if (this.isTouchDevice())
+            embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
+
+        const setContents = (embed, data) => {
             const fragment = document.createDocumentFragment()
+            const onDoubleClick = embed.classList.contains('chapter-embed-card--media')
+                ? this.openMediaDialog.bind(this, data)
+                : undefined
 
-            // Embed the material
-            const embedContainer = document.createElement('div')
-            embedContainer.classList.add('chapter-embed-card__embedded-material-container')
-            const $embedScope = this.$scope.$new(true)
-            $embedScope.material = material
-            const embedTemplate = `<dop-embedded-material material="material"></dop-embedded-material>`
-            const [embeddedMaterial] = this.$compile(embedTemplate)($embedScope)
-            embedContainer.appendChild(embeddedMaterial)
-            fragment.appendChild(embedContainer)
-
-            // Embed footer bearing icon, title, publishers, authors & source link
-            const $embedFooterScope = this.$scope.$new(true)
-            $embedFooterScope.material = material
-            const embedFooterTemplate = `<dop-embed-footer learning-object="material"></dop-embed-footer>`
-            const [embedFooterMaterial] = this.$compile(embedFooterTemplate)($embedFooterScope)
-            fragment.appendChild(embedFooterMaterial)
+            fragment.appendChild(compile({ data }, `<dop-embed data="data" hide-link="true"></dop-embedded-material>`))
+            fragment.appendChild(compile({ data, onDoubleClick }, `<dop-embed-footer data="data" is-edit-mode="${this.isEditMode}" on-double-click="onDoubleClick()"></dop-embed-footer>`))
 
             embed.appendChild(fragment)
             embed.classList.add('chapter-embed-card--loaded')
             embed.classList.remove('chapter-embed-card--loading')
         }
-
-        for (let embed of el.querySelectorAll('.chapter-embed-card')) {
-            const { id } = embed.dataset
-            if (id
-                && !embed.classList.contains('chapter-embed-card--loading')
-                && !embed.classList.contains('chapter-embed-card--loaded')
-            ) {
-                embed.setAttribute('contenteditable', 'false')
-                embed.classList.add('chapter-embed-card--loading')
-
-                this.embeddedMaterialsCache[id]
-                    ? setContents(embed, this.embeddedMaterialsCache[id])
-                    : this.serverCallService
-                        .makeGet('rest/material', { id })
-                        .then(({ data }) => {
-                            this.embeddedMaterialsCache[id] = data
-                            setContents(embed, data)
-                        })
-            }
+        const compile = (scopeData, template) => {
+            const $scope = this.$scope.$new(true)
+            Object.assign($scope, scopeData)
+            return this.$compile(template)($scope)[0]
         }
+        const url = embed.classList.contains('chapter-embed-card--material')
+            ? 'rest/material'
+            : 'rest/media'
+
+        // Read embeddable material/media data from cache or fetch it from the back-end
+        this.embedCache[id]
+            ? setContents(embed, this.embedCache[id])
+            : this.serverCallService
+                .makeGet(url, { id })
+                .then(({ status, data }) => {
+                    if (200 <= status && status < 300) {
+                        this.embedCache[id] = data
+                        setContents(embed, data)
+                    } else {
+                        embed.classList.add('chapter-embed-card--error')
+                        embed.classList.remove('chapter-embed-card--loading')
+                    }
+                })
+    }
+    unloadEmbeddedContent(embed) {
+        embed.classList.remove('chapter-embed-card--loading')
+        embed.classList.remove('chapter-embed-card--loaded')
+        embed.classList.remove('chapter-embed-card--error')
+        embed.removeAttribute('contenteditable')
+
+        while (embed.firstChild)
+            embed.removeChild(embed.firstChild)
     }
     discardEmptyElements() {
         for (let el of this.$element[0].querySelectorAll('h3:empty, p:empty, li:empty, blockquote:empty'))
@@ -775,6 +474,13 @@ class controller extends Controller {
     }
     getEditor(idx) {
         return MediumEditor.getEditorFromElement(this.getEditorElements()[idx])
+    }
+    getParentEditor(el) {
+        while (el !== null) {
+            if (el.classList.contains('chapter-block'))
+                return el
+            el = el.parentElement
+        }
     }
     getChapterClassNames() {
         return Object.assign({
@@ -1010,7 +716,7 @@ class controller extends Controller {
             })
         }
     }
-    beforeAddMaterial() {
+    beforeAddEmbed() {
         this.clearEmbedInsertionData()
         window.embedInsertionChapterIdx = this.index
 
@@ -1025,7 +731,7 @@ class controller extends Controller {
             marker.parentNode.removeChild(marker)
         }
     }
-    onClickAddExistingMaterial() {
+    onClickAddExistingMaterial(preferred = false) {
         /**
          * This calls this.updateChaptersStateFromEditors() and then initiates
          * a POST request to rest/portfolio/update.
@@ -1038,16 +744,14 @@ class controller extends Controller {
                 : 'mobileSearch:open'
         )
         this.$timeout(() => {
+            this.searchService.setIsFavorites(preferred ? true : false)
+            this.searchService.setIsRecommended(preferred ? true : false)
+            this.searchService.setType('material')
             document.getElementById('header-search-input').focus()
-            // Issue 226 solution if needed
-            /*this.$rootScope.$broadcast('detailedSearch:search');*/
-
-            const headerCtrl = angular.element('dop-header').controller('dopHeader')
-            if (headerCtrl)
-                headerCtrl.search()
+            this.$rootScope.$broadcast('detailedSearch:search')
         })
     }
-    onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
+    onInsertExistingMaterials(evt, chapterIdx, materials) {
         /**
          * These timeouts are necessary to ensure block elements are created in DOM and
          * Medium Editors are initialized on them.
@@ -1055,7 +759,11 @@ class controller extends Controller {
         if (chapterIdx === this.index)
             this.$timeout(() =>
                 this.$timeout(() =>
-                    this.insertMaterials(selectedMaterials, true)
+                    this.insertEmbeds(
+                        this.getMaterialsMarkup(materials),
+                        materials[materials.length - 1].id,
+                        true
+                    )
                 )
             )
     }
@@ -1068,15 +776,47 @@ class controller extends Controller {
                 isEditMode: false,
                 isAddToPortfolio: true
             }
-        }).then(material =>
-            this.insertMaterials([material])
-        )
+        }).then(material => {
+            this.embedCache[material.id] = material
+            this.insertEmbeds(this.getMaterialsMarkup([material], material.id))
+        })
     }
-    insertMaterials(materials, isAddExisting = false) {
-        const materialsHtml = materials.reduce((html, { id }) =>
+    getMaterialsMarkup(materials) {
+        return materials.reduce((html, { id }) =>
             html + `<div class="chapter-embed-card chapter-embed-card--material" data-id="${id}"></div><p><br></p>`,
             ''
         )
+    }
+    openMediaDialog(editableMedia) {
+        /**
+         * @todo Restore caret position when cancelling the dialog
+         */
+        const options = {
+            templateUrl: 'views/addMediaDialog/addMediaDialog.html',
+            controller: 'addMediaDialogController',
+            controllerAs: '$ctrl',
+            locals: {
+                isEditMode: !!editableMedia
+            }
+        }
+        if (editableMedia) {
+            options.scope = this.$scope.$new(true)
+            options.scope.media = editableMedia
+        }
+
+        this.$mdDialog.show(options).then(media => {
+            this.embedCache[media.id] = media
+            const editableElement = this.$element[0].querySelector(`[data-id="${media.id}"]`)
+
+            editableMedia && editableElement
+                ? this.loadEmbeddedContent(editableElement, true)
+                : this.insertEmbeds(
+                    `<div class="chapter-embed-card chapter-embed-card--media" data-id="${media.id}"></div><p><br></p>`,
+                    media.id
+                )
+        })
+    }
+    insertEmbeds(embedsHtml, lastId, isAddExisting = false) {
         const insertingAtMarker = typeof window.embedInsertionBlockIdx === 'number'
         const editorElements = this.getEditorElements()
         const editorEl = insertingAtMarker
@@ -1084,8 +824,8 @@ class controller extends Controller {
             : editorElements[editorElements.length - 1]
 
         insertingAtMarker
-            ? editorEl.innerHTML = window.embedInsertionBlockContents.replace(EMBED_INSERTION_MARKER, materialsHtml)
-            : editorEl.innerHTML += materialsHtml
+            ? editorEl.innerHTML = window.embedInsertionBlockContents.replace(EMBED_INSERTION_MARKER, embedsHtml)
+            : editorEl.innerHTML += embedsHtml
 
         this.updateState()
         this.loadEmbeddedContents(editorEl)
@@ -1096,9 +836,9 @@ class controller extends Controller {
                 ? this.focusBlock(window.embedInsertionBlockIdx)
                 : this.focusBlock()
 
-            const lastInsertedMaterial = editorEl.querySelector(`[data-id="${materials[materials.length - 1].id}"]`)
-            this.scrollToElement(lastInsertedMaterial)
-            this.putCaretAfterNode(lastInsertedMaterial)
+            const lastInsertedEmbed = editorEl.querySelector(`[data-id="${lastId}"]`)
+            this.scrollToElement(lastInsertedEmbed)
+            this.putCaretAfterNode(lastInsertedEmbed)
         }
         /**
          * Yet another timeout is necessary to wait for the editor to become properly focusable.
@@ -1155,10 +895,36 @@ class controller extends Controller {
         }
     }
     /**
-     * @todo in MS 13: Embed actions
+     * Embed toolbar (float left|right / full-width)
      */
-    addMedia() {}
-    addRecommendedMaterial() {}
+    compileAndInjectEmbedToolbar() {
+        this.$embedToolbarScope = this.$scope.$new(true)
+        this.$embedToolbarScope.isVisible = false
+        this.$embedToolbarScope.target = undefined
+
+        const embedToolbarTemplate = `
+            <dop-embed-toolbar
+                is-visible="isVisible"
+                target="target"
+            ></dop-embed-toolbar>`
+        this.embedToolbar = this.$compile(embedToolbarTemplate)(this.$embedToolbarScope)[0]
+
+        document.body.appendChild(this.embedToolbar)
+    }
+    showEmbedToolbar(evt) {
+        const parentEditor = this.getParentEditor(evt.target)
+        if (this.$embedToolbarScope && parentEditor && !parentEditor.classList.contains('is-narrow')) {
+            this.$embedToolbarScope.isVisible = true
+            this.$embedToolbarScope.target = evt.target
+            this.$embedToolbarScope.$digest()
+        }
+    }
+    hideEmbedToolbar() {
+        if (this.$embedToolbarScope) {
+            this.$embedToolbarScope.isVisible = false
+            this.$embedToolbarScope.$digest()
+        }
+    }
 }
 controller.$inject = [
     '$scope',
@@ -1173,6 +939,7 @@ controller.$inject = [
     'serverCallService',
     'translationService',
     'serverCallService',
+    'searchService',
 ]
 component('dopChapter', {
     bindings: {

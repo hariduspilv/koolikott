@@ -36,6 +36,12 @@ public class Subtopic extends Taxon {
 
     @JsonIgnore
     @Override
+    public String getSolrLevel() {
+        return "subtopic";
+    }
+
+    @JsonIgnore
+    @Override
     public Set<? extends Taxon> getChildren() {
         return null;
     }

@@ -120,9 +120,9 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return getTarget(url).request().headers(headers).accept(mediaType).get(Response.class);
     }
 
-    protected static <T> T doPost(String url, Object json, Class<? extends T> clazz) {
+    protected static <T> T doPost(String url, Object json, Class<? extends T> responseClass) {
         Response response = doPost(url, Entity.entity(json, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
-        return response.readEntity(clazz);
+        return response.readEntity(responseClass);
     }
 
     protected static Response doPost(String url, Entity<?> requestEntity) {

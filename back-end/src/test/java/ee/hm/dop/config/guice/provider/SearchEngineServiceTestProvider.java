@@ -64,12 +64,33 @@ class SolrEngineServiceMock implements SolrEngineService {
         addQueryWithLanguage();
         addQueryWithCurriculumLiteratureTrue();
         addQueryWithCurriculumLiteratureFalse();
+        addQueryWithRecommendedTrue();
+        addQueryWithRecommendedTrueFavoredTruePeeter();
+        addQueryWithFavoredTruePeeter();
         addQueryWithVisibility();
         addAdminQuery();
 
         addSortedQuery();
         addResourceTypeQuery();
         addEmptySearchQuery();
+    }
+
+    private static void addQueryWithRecommendedTrueFavoredTruePeeter() {
+        String filteredQuery = "((data) OR (\"data\")) AND (recommended:\"true\" OR favored_by_user:\"peeter.paan\") AND (visibility:\"public\")";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 7L);
+        searchResponses.put(filteredQuery, result);
+    }
+
+    private static void addQueryWithFavoredTruePeeter() {
+        String filteredQuery = "((data) OR (\"data\")) AND favored_by_user:\"peeter.paan\" AND (visibility:\"public\")";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 7L);
+        searchResponses.put(filteredQuery, result);
+    }
+
+    private static void addQueryWithRecommendedTrue() {
+        String filteredQuery = "((data) OR (\"data\")) AND recommended:\"true\" AND (visibility:\"public\")";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 7L);
+        searchResponses.put(filteredQuery, result);
     }
 
     private static void addArabicQuery() {

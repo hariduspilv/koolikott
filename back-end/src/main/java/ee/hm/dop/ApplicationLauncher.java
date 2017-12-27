@@ -4,6 +4,7 @@ import com.google.inject.Singleton;
 import ee.hm.dop.config.EmbeddedJetty;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
+import ee.hm.dop.service.synchronizer.ChapterMigration;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
 import org.apache.commons.configuration.Configuration;
 import org.opensaml.DefaultBootstrap;
@@ -33,6 +34,8 @@ public class ApplicationLauncher {
     private static SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
     @Inject
     private static AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
+    @Inject
+    private static ChapterMigration chapterMigration;
 
     public static void startApplication() {
         GuiceInjector.init();
@@ -47,7 +50,14 @@ public class ApplicationLauncher {
             initOpenSaml();
             synchronizeMaterials();
             acceptReviewableChange();
+            migrateChapters();
         }
+    }
+
+    private static void migrateChapters() {
+        Executors.newSingleThreadExecutor().submit(() -> {
+            chapterMigration.run();
+        });
     }
 
     private static void acceptReviewableChange() {

@@ -4,8 +4,12 @@ import static ee.netgroup.hm.page.LandingPage.goToLandingPage;
 import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
-import ee.netgroup.hm.components.MaterialPopUp;
+
+import ee.netgroup.hm.components.AddMaterialsToPortfolioToolbar;
+import ee.netgroup.hm.components.MaterialModal;
 import ee.netgroup.hm.helpers.Constants;
+import ee.netgroup.hm.page.MyMaterialsPage;
+import ee.netgroup.hm.page.PortfolioPage;
 
 public class MaterialTests {
 	
@@ -17,14 +21,14 @@ public class MaterialTests {
 				.uploadFile()
 				.setMaterialTitle()
 				.addDescription()
+				.addMaterialLicenseType()
 				.selectEducation()
 				.selectSubjectArea()
 				.selectTargetGroup()
-				.uploadPhoto()
+				.clickAdditionalData()
+				.uploadIllustration()
 				.checkIllustrationIamAuthor()
 				.addIllustrationSource()
-				.addIllustrationLicenceType()
-				.clickAdditionalData()
 				.addReviewLink()
 				.clickCreateMaterial()
 				.getCreatorName();
@@ -68,67 +72,29 @@ public class MaterialTests {
 	}
 
 	@Test
-	public void MaterialTests_CreateNewMaterial_FromPortfolioEditPage_MaterialIsAddedToPortfolio() {
+	public void MaterialTests_AddMaterialToPortfolioFromMyMaterialsPage_MaterialIsAddedToPortfolio() {
 
-		boolean isMaterialBoxDisplayed = goToLandingPage()
-				.chooseUserType("User")
+				goToLandingPage()
+				.chooseUserType("Publisher")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
-				.addDescription()
 				.clickCreatePortfolio()
-				.setChapterTitle()
-				.openChapterToolbar()
-				.clickAddNewMaterial()
-				.setHyperLink()
-				.setMaterialTitle()
-				.addDescription()
-				.setAuthorFirstName()
-				.setAuthorSurName()
-				.setPublisherName()
-				.clickCreateMaterialPortfolio()
-				.clickSaveAndExit()
-				.makePortfolioPublic()
-				.isMaterialBoxDisplayed();
-		assertTrue(isMaterialBoxDisplayed);
-	}
-	
-	@Test
-	public void MaterialTests_AddExistingMaterial_FromPortfolioEditPage_MaterialIsAddedToPortfolio() { 
-
-		boolean isMaterialBoxDisplayed = goToLandingPage()
-				.chooseUserType("Admin")
-				.openPortfolio()
-				.clickActionsMenu()
-				.clickEditPortfolio()
-				.setChapterTitle()
-				.openChapterToolbar()
-				.clickAddExistingMaterial()
-				.selectAllEducationalContexts()
-				.insertMaterialSearchCriteria()
-				.closeDetailedSearch()
-				.clickToSelectMaterial2()
-				.clickAddMaterialToPortfolio()
 				.clickSaveAndExitConfirmationControl()
-				.isMaterialBoxDisplayed();
-		assertTrue(isMaterialBoxDisplayed);
-	}
-	
-
-	@Test
-	public void MaterialTests_AddExistingMaterial_FromMyMaterialsPage_MaterialIsAddedToPortfolio() {
-
-		String successMessage = goToLandingPage()
-				.chooseUserType("Publisher")
 				.clickMyMaterials()
-				.clickToSelectMaterial()
-				.selectPortfolio()
+				.clickToSelectMaterial();
+		
+		String materialTitle = MyMaterialsPage.getMaterialTitle();
+		
+		AddMaterialsToPortfolioToolbar .selectPortfolio()
 				.selectChapter()
-				.clickDone()
-				.getSuccessMessage();
-		Assert.assertEquals("Materjal(id) edukalt lisatud", successMessage);
+				.clickDone();
+		
+		String materialTitle2 = PortfolioPage.getMaterialTitle();
+		
+		Assert.assertEquals(materialTitle2, materialTitle);
 	}
 	
 	@Test
@@ -188,6 +154,7 @@ public class MaterialTests {
 				.setHyperLink()
 				.setMaterialTitle()
 				.addDescription()
+				.addMaterialLicenseType()
 				.selectEducation()
 				.selectSubjectArea()
 				.selectTargetGroup()
@@ -220,6 +187,7 @@ public class MaterialTests {
 				.chooseUserType("Moderator")
 				.clickAddMaterial()
 				.setNewHyperLink()
+				.addMaterialLicenseType()
 				.setMaterialTitle()
 				.addDescription()
 				.selectEducation()
@@ -234,6 +202,6 @@ public class MaterialTests {
 				.setHyperLink()
 				.clickUpdateMaterial()
 				.getChangedLinkBannerText();
-		Assert.assertEquals("Õppevara link. Enne oli: "+MaterialPopUp.newMaterialUrl, changedLinkBannerText);
+		Assert.assertEquals("Õppevara link. Enne oli: "+MaterialModal.newMaterialUrl, changedLinkBannerText);
 	}
 }

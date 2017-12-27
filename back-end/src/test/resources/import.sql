@@ -674,5 +674,11 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (113, 1, CUR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (114, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (115, 0, CURRENT_TIMESTAMP);
 
+-- Version
+
 INSERT into Version(id, version, released) VALUES (1, 1.0, '2017-01-18 14:31:47');
 INSERT into Version(id, version, released) VALUES (2, 2.0, '2017-02-18 14:31:47');
+
+-- Media
+
+INSERT into Media(id, url, createdBy, createdAt) VALUES (1, 'source123.com', 2, '2017-02-18 14:31:47');

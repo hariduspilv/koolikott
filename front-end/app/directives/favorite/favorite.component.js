@@ -27,9 +27,9 @@ class controller extends Controller {
         $event.preventDefault()
         $event.stopPropagation()
 
-        const makePost = (data) =>
+        const makePost = ({ id, type }) =>
             this.serverCallService
-                .makePost('rest/learningObject/favorite', data)
+                .makePost('rest/learningObject/favorite', { id, type })
                 .then(response => {
                     if (200 <= status && status < 300) {
                         this.toastService.show('ADDED_TO_FAVORITES')
@@ -52,9 +52,11 @@ class controller extends Controller {
         $event.preventDefault()
         $event.stopPropagation()
 
+        const { id, type } = this.learningObject
+
         if (this.hasFavorited && this.authenticatedUserService.isAuthenticated()) {
             this.serverCallService
-                .makeDelete('rest/learningObject/favorite', this.learningObject)
+                .makeDelete('rest/learningObject/favorite', { id, type })
                 .then(({ status }) => {
                     if (200 <= status && status < 300) {
                         this.toastService.show('REMOVED_FROM_FAVORITES')

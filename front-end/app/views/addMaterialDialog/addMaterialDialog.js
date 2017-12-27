@@ -64,6 +64,15 @@ class controller extends Controller {
             true
         )
 
+        /**
+         * Immediately show license type field error in edit-mode if it is not filled to tell the user
+         * that it is now required before any changes may be saved.
+         */
+        if (this.locals.isEditMode)
+            this.$timeout(() =>
+                this.$scope.addMaterialForm.licenseType.$setTouched()
+            )
+
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
             angular.element(document.querySelector('html')).css('overflow-y', '')
@@ -403,7 +412,7 @@ class controller extends Controller {
         }
     }
     processSource(source) {
-        if (isYoutubeVideo(source))
+        if (isYoutubeLink(source))
             this.youtubeService
                 .getYoutubeData(source)
                 .then(({ snippet, status }) => {

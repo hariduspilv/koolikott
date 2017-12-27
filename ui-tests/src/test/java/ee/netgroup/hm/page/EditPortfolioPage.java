@@ -2,15 +2,16 @@ package ee.netgroup.hm.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import ee.netgroup.hm.components.MaterialPopUp;
-import ee.netgroup.hm.components.PortfolioPrivacyPopUp;
+import ee.netgroup.hm.components.MaterialModal;
+import ee.netgroup.hm.components.MediaModal;
+import ee.netgroup.hm.components.PortfolioPrivacyModal;
 import ee.netgroup.hm.components.Search;
 import ee.netgroup.hm.helpers.Arrays;
 import ee.netgroup.hm.helpers.Helpers;
 
 public class EditPortfolioPage extends Page{
 	
-	private By successAlertText = By.cssSelector("p.md-toolbar-text");
+	private By successAlertText = By.xpath("//div[@class='chapter-block medium-editor-element medium-editor-placeholder']");
 	private By saveAndExit = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
 	private By visibilityButton = By.id("change-visibility");
 	private By shareWithLink = By.xpath("//button/span[contains(text(),'inult lingiga')]");
@@ -21,14 +22,19 @@ public class EditPortfolioPage extends Page{
 	private By privacyPopUp = By.xpath("//md-dialog-content[@class='md-dialog-content']");
 	private By chapterTitle = By.xpath("//input[@data-ng-model='chapter.title']");
 	private By chapter = By.xpath("//div[@data-ng-class='$ctrl.getBlockClassNames($index)']");
+	private By chapterToolbarButton = By.xpath("//button[@class='md-icon-button chapter-pencil-button md-button md-ink-ripple']");
 	private By newMaterial = By.xpath("//div/label[text()='Uus materjal']");
 	private By existingMaterial = By.xpath("//div/label[text()='Olemasolev materjal']");
 	private By chapterWidth = By.xpath("//div/label[text()='Muuda laiust']");
 	private By h3Button = By.xpath("//button[@data-action='append-h3']");
 	private By moveChapterDown = By.xpath("//button[@data-ng-click='$ctrl.onMoveDown()']");
+	private By newMedia = By.xpath("//div/label[@data-translate='ADD_MEDIA_TO_CHAPTER']");
+	private By alignRight = By.xpath("//button[@class='medium-editor-action']");
+	private By preferredMaterial = By.xpath("//div/label[@data-translate='ADD_PREFERRED_MATERIAL_TO_CHAPTER']");
+	
 	
 	public String getSuccessAlertText() {
-		return getDriver().findElement(successAlertText).getText();
+		return getDriver().findElement(successAlertText).getAttribute("data-placeholder");
 	}
 
 	public EditPortfolioPage clickSaveAndExit() {
@@ -44,17 +50,17 @@ public class EditPortfolioPage extends Page{
 		Helpers.waitForClickable(saveAndExit);
 		getDriver().findElement(saveAndExit).click();
 		if (Helpers.elementExists(privacyPopUp) == true){ 	
-			return PortfolioPrivacyPopUp.makePortfolioPublic();
+			return PortfolioPrivacyModal.makePortfolioPublic();
 		}
 		return new PortfolioPage();
 	}
 	
 	public PortfolioPage makePortfolioPublic() {
-		return PortfolioPrivacyPopUp.makePortfolioPublic();
+		return PortfolioPrivacyModal.makePortfolioPublic();
 	}
 	
 	public PortfolioPage clickExitAndStayPrivate() {
-		return PortfolioPrivacyPopUp.clickExitAndStayPrivate();
+		return PortfolioPrivacyModal.clickExitAndStayPrivate();
 	}
 
 	public EditPortfolioPage clickVisibilityButton() {
@@ -115,24 +121,21 @@ public class EditPortfolioPage extends Page{
 		getDriver().findElement(chapterTitle).sendKeys(Helpers.randomElement(Arrays.portfolioTitlesArray));
 		return this;
 	}
-
+/*
 	public EditPortfolioPage openChapterToolbar() {
-		//Helpers.waitForMilliseconds(1000);
-		Helpers.waitForVisibility(chapter);
-		getDriver().findElement(chapter).click();
+		Helpers.waitForVisibility(chapterToolbarButton);
+		getDriver().findElement(chapterToolbarButton).click();
 		return this;
-	}
+	}*/
 	
-	public MaterialPopUp clickAddNewMaterial() {
-		//Helpers.waitForMilliseconds(1000);
+	public MaterialModal clickAddNewMaterial() {
 		Helpers.waitForVisibility(newMaterial);
 		getDriver().findElement(newMaterial).click();
-		return new MaterialPopUp();
+		return new MaterialModal();
 	}
 
 	public Search clickAddExistingMaterial() {
 		Helpers.waitForVisibility(existingMaterial);
-		//Helpers.waitForMilliseconds(1000);
 		getDriver().findElement(existingMaterial).click();
 		return new Search();
 	}
@@ -174,6 +177,24 @@ public class EditPortfolioPage extends Page{
 		return this;
 	}
 
+	public MediaModal clickAddNewMedia() {
+		Helpers.waitForVisibility(newMedia);
+		getDriver().findElement(newMedia).click();
+		return new MediaModal();
+	}
+
+	public EditPortfolioPage clickAlignRight() {
+		Helpers.moveToElement(PortfolioPage.materialBox);
+		getDriver().findElements(alignRight).get(1).click();
+		Helpers.waitForMilliseconds(1000);
+		return this;
+	}
+
+	public Search clickAddPreferredMaterial() {
+		Helpers.waitForVisibility(preferredMaterial);
+		getDriver().findElement(preferredMaterial).click();
+		return new Search();
+	}
 
 	
 }

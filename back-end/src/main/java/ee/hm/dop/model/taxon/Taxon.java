@@ -87,6 +87,9 @@ public abstract class Taxon implements AbstractEntity {
     public abstract Taxon getParent();
 
     @JsonIgnore
+    public abstract String getSolrLevel();
+
+    @JsonIgnore
     public abstract Set<? extends Taxon> getChildren();
 
 

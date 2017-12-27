@@ -17,7 +17,7 @@ class controller extends Controller {
             this.setParams(newValue.q)
     }
     setParams(q) {
-        q  ?  this.searchService.setSearch(q)
+        q  ?  this.searchService.setQuery(q)
         : q = this.searchService.getQuery()
 
         this.$scope.params = { q, start: 0 }
@@ -33,6 +33,8 @@ class controller extends Controller {
             issuedFrom: this.searchService.getIssuedFrom(),
             crossCurricularTheme: this.searchService.getCrossCurricularTheme(),
             keyCompetence: this.searchService.getKeyCompetence(),
+            favorites: this.searchService.isFavorites(),
+            recommended: this.searchService.isRecommended(),
             sort: this.searchService.getSort(),
             sortDirection: this.searchService.getSortDirection(),
         }
@@ -54,6 +56,7 @@ class controller extends Controller {
 controller.$inject = [
     '$scope',
     '$location',
+    '$route',
     'searchService'
 ]
 angular.module('koolikottApp').controller('searchResultController', controller)

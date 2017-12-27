@@ -8,6 +8,27 @@ const LOGIN_ORIGIN = "loginOrigin";
 const BREAK_XS = 600;
 const BREAK_SM = 960;
 const BREAK_LG = 1280;
+const EMBEDDABLE_IMAGE_FILE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif']
+const EMBEDDABLE_AUDIO_FILE_EXTENSIONS = ['mp3', 'ogg', 'wav']
+const EMBEDDABLE_VIDEO_FILE_EXTENSIONS = ['mp4', 'ogv', 'webm']
+const EMBEDDABLE_MEDIA_FILE_EXTENSIONS = EMBEDDABLE_IMAGE_FILE_EXTENSIONS.concat(EMBEDDABLE_AUDIO_FILE_EXTENSIONS, EMBEDDABLE_VIDEO_FILE_EXTENSIONS)
+const EDITOR_ALLOWED_BLOCK_LEVEL_TAGS = ['H3', 'P', 'UL', 'LI', 'BLOCKQUOTE', 'DIV']
+const EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES = {
+    A: ['href', 'target'],
+    DIV: ['class', 'data-id', 'data-src'],
+    H3: ['class', 'id'],
+    P: [],
+    UL: [],
+    LI: [],
+    BLOCKQUOTE: [],
+    B: [],
+    I: [],
+    STRONG: [],
+    EM: [],
+    BR: []
+}
+const EDITOR_ALLOWED_TAGS = Object.keys(EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES)
+const EDITOR_FORBIDDEN_TAGS = ['meta', 'script', 'link', 'style', 'img', 'map', 'audio', 'video', 'track', 'applet', 'embed', 'object', 'param', 'source', 'canvas', 'noscript']
 
 function log() {
     if (console && console.log) {
@@ -492,10 +513,6 @@ function isPortfolio(type) {
     return type === ".Portfolio" || type === ".ReducedPortfolio"
 }
 
-function isMobile() {
-    return window.innerWidth < BREAK_XS;
-}
-
 function countOccurrences(value, text) {
     let count = 0;
     let index = text.indexOf(value);
@@ -632,9 +649,6 @@ class Controller {
 
         return res.trim()
     }
-    isMobile() {
-        return window.innerWidth < BREAK_XS
-    }
     createPortfolio(id) {
         return {
             id,
@@ -643,7 +657,8 @@ class Controller {
             summary: '',
             taxon: null,
             targetGroups: [],
-            tags: []
+            tags: [],
+            chapters: []
         }
     }
     /**
@@ -652,10 +667,13 @@ class Controller {
     getMaterialSource(material) {
         return material && material.source || material.uploadedFile && decodeUTF8(material.uploadedFile.url)
     }
-    isYoutubeVideo(url) {
+    isYoutubeLink(url) {
         // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
         const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
         return url && youtubeUrlRegex.test(url)
+    }
+    isSoundcloudLink(url) {
+        return url && /^https?:\/\/(soundcloud\.com)\/(.*)$/.test(url)
     }
     isSlideshareLink(url) {
         const slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
@@ -676,19 +694,41 @@ class Controller {
     isPDFLink(url) {
         return url && url.split('.').pop().toLowerCase() === "pdf"
     }
-    getEmbedType({ source, uploadedFile }) {
+    getEmbeddedMaterialType({ source, uploadedFile }) {
         if (!source && !uploadedFile)
             return
 
         const url = source || uploadedFile.url
         switch (true) {
-            case this.isYoutubeVideo(url): return 'YOUTUBE'
+            case this.isYoutubeLink(url): return 'YOUTUBE'
             case this.isSlideshareLink(url): return 'SLIDESHARE'
             case this.isVideoLink(url): return 'VIDEO'
             case this.isAudioLink(url): return 'AUDIO'
             case this.isPictureLink(url): return 'PICTURE'
             case this.isEbookLink(url): return 'EBOOK'
             case this.isPDFLink(url): return 'PDF'
+        }
+    }
+    isAcceptedEmbeddableMediaLink(url) {
+        if (this.isYoutubeLink(url) || this.isSoundcloudLink(url))
+            return true
+
+        const extension = url.split('.').pop()
+
+        return !!extension && EMBEDDABLE_MEDIA_FILE_EXTENSIONS.indexOf(extension) > -1
+    }
+    getEmbeddedMediaType({ url }) {
+        switch (true) {
+            case this.isYoutubeLink(url): return 'YOUTUBE'
+            case this.isSoundcloudLink(url): return 'SOUNDCLOUD'
+            default:
+                const extension = url.split('.').pop()
+                switch (true) {
+                    case !extension: return 'UNKNOWN'
+                    case EMBEDDABLE_IMAGE_FILE_EXTENSIONS.indexOf(extension) > -1: return 'PICTURE'
+                    case EMBEDDABLE_AUDIO_FILE_EXTENSIONS.indexOf(extension) > -1: return 'AUDIO'
+                    case EMBEDDABLE_VIDEO_FILE_EXTENSIONS.indexOf(extension) > -1: return 'VIDEO'
+                }
         }
     }
     isIE() {
@@ -700,6 +740,12 @@ class Controller {
     }
     isIOS() {
         return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    }
+    isTouchDevice() {
+        return 'ontouchstart' in window || navigator.msMaxTouchPoints
+    }
+    isNVP() {
+        return window.innerWidth < BREAK_XS
     }
     formatDateToDayMonthYear(dateString) {
         const date = new Date(dateString)

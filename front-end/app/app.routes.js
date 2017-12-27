@@ -17,7 +17,7 @@ angular.module('koolikottApp')
                     templateUrl: 'views/search/result/searchResult.html',
                     controller: 'searchResultController',
                     controllerAs: '$ctrl',
-                    reloadOnSearch: false
+                    reloadOnSearch: false,
                 })
                 .when('/material', {
                     templateUrl: 'views/material/material.html',

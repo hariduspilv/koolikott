@@ -1,26 +1,27 @@
-'use strict';
+'use strict'
 
-angular.module('koolikottApp')
-.factory('searchService',
-[
-    '$location',
-    function($location) {
-        var searchURLbase = "search/result?";
-        var taxonURL = "&taxon=";
-        var paidURL = "&paid=";
-        var typeURL = "&type=";
-        var languageURL = "&language=";
-        var targetGroupsURL = "&targetGroup=";
-        var resourceTypeURL = "&resourceType=";
-        var isSpecialEducationURL = "&specialEducation=";
-        var issuedFromURL = "&issuedFrom=";
-        var crossCurricularThemeURL = "&crossCurricularTheme=";
-        var keyCompetenceURL = "&keyCompetence=";
-        var isCurriculumLiteratureURL = "&curriculumLiterature=";
-        var sortURL = "&sort=";
-        var sortDirectionURL = "&sortDirection=";
+{
+class controller extends Controller {
+    constructor(...args) {
+        super(...args)
 
-        var search = {
+        this.searchURLbase = 'search/result?'
+        this.taxonURL = '&taxon='
+        this.paidURL = '&paid='
+        this.typeURL = '&type='
+        this.languageURL = '&language='
+        this.targetGroupsURL = '&targetGroup='
+        this.resourceTypeURL = '&resourceType='
+        this.isSpecialEducationURL = '&specialEducation='
+        this.issuedFromURL = '&issuedFrom='
+        this.crossCurricularThemeURL = '&crossCurricularTheme='
+        this.keyCompetenceURL = '&keyCompetence='
+        this.isCurriculumLiteratureURL = '&curriculumLiterature='
+        this.isFavoritesURL = '&favorites='
+        this.isRecommendedURL = '&recommended='
+        this.sortURL = '&sort='
+        this.sortDirectionURL = '&sortDirection='
+        this.search = {
             query: '',
             taxons: [],
             paid: '',
@@ -33,372 +34,331 @@ angular.module('koolikottApp')
             crossCurricularTheme: '',
             keyCompetence: '',
             isCurriculumLiterature: '',
+            isPreferred: '',
             sort: '',
             sortDirection: ''
-        };
-
-        function init() {
-            var searchObject = $location.search();
-            for (var property in searchObject) {
-                if (searchObject.hasOwnProperty(property) && searchObject[property] != null) {
-                    if (property === 'targetGroup') {
-                        search['targetGroups'] = asArray(searchObject[property]);
-                    } else if (property === 'taxon') {
-                        search['taxons'] = asArray(searchObject[property]);
-                    } else {
-                        search[property] = searchObject[property];
-                    }
-                }
-            }
         }
 
-        function escapeQuery(query) {
-            query = query.replace(/\+/g, "%2B");
-
-            return query;
-        }
-
-        function arrayToLowerCase(upperCaseArray) {
-            var lowerCaseArray = [];
-            for (i = 0; i < upperCaseArray.length; i++) {
-                if (upperCaseArray[i] && isString(upperCaseArray[i])) {
-                    lowerCaseArray.push(upperCaseArray[i].toLowerCase());
+        const searchObject = this.$location.search()
+        for (let prop in searchObject)
+            if (searchObject.hasOwnProperty(prop) && searchObject[prop] !== null)
+                switch (prop) {
+                    case 'targetGroup':
+                        this.search[prop] = this.asArray(searchObject[prop])
+                        break
+                    case 'taxon':
+                        this.search[prop] = this.asArray(searchObject[prop])
+                        break
+                    default:
+                        this.search[prop] = searchObject[prop]
                 }
-            }
-            return lowerCaseArray;
-        }
-
-        function arrayToUpperCase(lowerCaseArray) {
-            var upperCaseArray = [];
-            for (i = 0; i < lowerCaseArray.length; i++) {
-                if (lowerCaseArray[i] && isString(lowerCaseArray[i])) {
-                    upperCaseArray.push(lowerCaseArray[i].toUpperCase());
-                }
-            }
-            return upperCaseArray;
-        }
-
-        function isString(value) {
-            return typeof value === 'string' || value instanceof String;
-        }
-
-        // Get value as array
-        function asArray(value) {
-            if (!Array.isArray(value)) {
-                var valueArray = [];
-                valueArray.push(value);
-                return valueArray;
-            } else {
-                return value;
-            }
-        }
-
-        init();
-
-        return {
-
-            setSearch: function(query) {
-                search.query = query;
-            },
-
-            setTaxon: function(taxon) {
-                search.taxons = taxon;
-            },
-
-            setPaid: function(paid) {
-                search.paid = paid;
-            },
-
-            setType: function(type) {
-                search.type = type;
-            },
-
-            setLanguage: function(language) {
-                search.language = language;
-            },
-
-            setTargetGroups: function(targetGroups) {
-                search.targetGroups = arrayToLowerCase(asArray(targetGroups));
-            },
-
-            setResourceType: function(resourceType) {
-                search.resourceType = resourceType;
-            },
-
-            setIsSpecialEducation: function(isSpecialEducation) {
-                search.isSpecialEducation = isSpecialEducation;
-            },
-
-            setIssuedFrom: function(issuedFrom) {
-                search.issuedFrom = issuedFrom;
-            },
-
-            setCrossCurricularTheme: function(crossCurricularTheme) {
-                search.crossCurricularTheme = crossCurricularTheme;
-            },
-
-            setKeyCompetence: function(keyCompetence) {
-                search.keyCompetence = keyCompetence;
-            },
-
-            setCurriculumLiterature: function(isCurriculumLiterature) {
-                search.isCurriculumLiterature = isCurriculumLiterature;
-            },
-
-            setSort: function(sort) {
-                search.sort = sort;
-            },
-
-            setSortDirection: function(sortDirection) {
-                search.sortDirection = sortDirection;
-            },
-
-            getURL: function(isBackendQuery) {
-                return searchURLbase + this.getQueryURL(isBackendQuery);
-            },
-
-            getQueryURL: function(isBackendQuery) {
-                var searchURL = 'q=';
-                if (search.query) {
-                    searchURL += escapeQuery(search.query)
-                }
-
-                if (search.taxons) {
-                    for (var i = 0; i < search.taxons.length; i++) {
-                        if (search.taxons[i]) {
-                            searchURL += taxonURL + search.taxons[i];
-                        }
-                    }
-                }
-                if (search.paid.toString() === "false") {
-                    searchURL += paidURL + search.paid;
-                }
-                if (search.type && this.isValidType(search.type)) {
-                    searchURL += typeURL + search.type;
-                }
-                if (search.language) {
-                    searchURL += languageURL + search.language;
-                }
-                if (search.targetGroups) {
-                    for (var i = 0; i < search.targetGroups.length; i++) {
-                        if (isBackendQuery && search.targetGroups[i]) {
-                            // Enums are case sensitive, so they must be uppercase for the back-end query
-                            searchURL += targetGroupsURL + search.targetGroups[i].toUpperCase();
-                        } else {
-                            searchURL += targetGroupsURL + search.targetGroups[i];
-                        }
-                    }
-                }
-                if (search.resourceType) {
-                    searchURL += resourceTypeURL + search.resourceType;
-                }
-                if (search.isSpecialEducation.toString() === "true") {
-                    searchURL += isSpecialEducationURL + search.isSpecialEducation;
-                }
-                if (search.issuedFrom) {
-                    searchURL += issuedFromURL + search.issuedFrom;
-                }
-                if (search.crossCurricularTheme) {
-                    searchURL += crossCurricularThemeURL + search.crossCurricularTheme;
-                }
-                if (search.keyCompetence) {
-                    searchURL += keyCompetenceURL + search.keyCompetence;
-                }
-                if (search.isCurriculumLiterature) {
-                    searchURL += isCurriculumLiteratureURL + search.isCurriculumLiterature;
-                }
-                if (search.sort && search.sortDirection) {
-                    searchURL += sortURL + search.sort + sortDirectionURL + search.sortDirection;
-                }
-
-                return searchURL;
-            },
-
-            queryExists: function() {
-                var searchObject = $location.search();
-                return !!(searchObject.q || searchObject.taxon || searchObject.paid === "false" ||
-                (searchObject.type && this.isValidType(searchObject.type)) || searchObject.language || searchObject.targetGroup ||
-                searchObject.resourceType || searchObject.specialEducation || searchObject.issuedFrom || searchObject.crossCurricularTheme ||
-                searchObject.keyCompetence || searchObject.curriculumLiterature || (searchObject.sort && searchObject.sortDirection));
-            },
-
-            getQuery: function() {
-                if (search.query === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.q) {
-                        search.query = searchObject.q;
-                    }
-                }
-
-                return search.query;
-            },
-
-            getTaxon: function() {
-                if (!search.taxons || search.taxons.length === 0) {
-                    var searchObject = $location.search();
-                    if (searchObject.taxon) {
-                        return asArray(searchObject.taxon);
-                    }
-                }
-
-                return search.taxons;
-            },
-
-            isPaid: function() {
-                if (search.paid === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.paid) {
-                        return searchObject.paid.toString() === 'true';
-                    }
-                }
-
-                return search.paid;
-            },
-
-            getType: function() {
-                if (search.type === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.type) {
-                        return searchObject.type;
-                    }
-                }
-
-                return search.type;
-            },
-
-            getLanguage: function() {
-                if (search.language === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.language) {
-                        return searchObject.language;
-                    }
-                }
-
-                return search.language;
-            },
-
-            getTargetGroups: function() {
-                if (!search.targetGroups || search.targetGroups.length === 0) {
-                    var searchObject = $location.search();
-                    if (searchObject.targetGroup) {
-                        return arrayToUpperCase(asArray(searchObject.targetGroup));
-                    }
-                }
-
-                return arrayToUpperCase(search.targetGroups);
-            },
-
-            getResourceType: function() {
-                if (search.resourceType === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.resourceType) {
-                        return searchObject.resourceType;
-                    }
-                }
-
-                return search.resourceType;
-            },
-
-            isSpecialEducation: function() {
-                if (search.isSpecialEducation === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.specialEducation) {
-                        return searchObject.specialEducation === 'true';
-                    }
-                }
-
-                return search.isSpecialEducation;
-            },
-
-            getIssuedFrom: function() {
-                if (search.issuedFrom === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.issuedFrom) {
-                        return searchObject.issuedFrom;
-                    }
-                }
-
-                return search.issuedFrom;
-            },
-
-            getCrossCurricularTheme: function() {
-                if (search.crossCurricularTheme === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.crossCurricularTheme) {
-                        return searchObject.crossCurricularTheme;
-                    }
-                }
-
-                return search.crossCurricularTheme;
-            },
-
-            getKeyCompetence: function() {
-                if (search.keyCompetence === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.keyCompetence) {
-                        return searchObject.keyCompetence;
-                    }
-                }
-
-                return search.keyCompetence;
-            },
-
-            getSort: function() {
-                if (search.sort === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.sort) {
-                        return searchObject.sort;
-                    }
-                }
-
-                return search.sort;
-            },
-
-            getSortDirection: function() {
-                if (search.sortDirection === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.sortDirection) {
-                        return searchObject.sortDirection;
-                    }
-                }
-
-                return search.sortDirection;
-            },
-
-            isCurriculumLiterature: function() {
-                if (search.isCurriculumLiterature === "") {
-                    var searchObject = $location.search();
-                    if (searchObject.curriculumLiterature) {
-                        return searchObject.curriculumLiterature === 'true';
-                    }
-                }
-
-                return search.isCurriculumLiterature;
-            },
-
-            clearFieldsNotInSimpleSearch: function() {
-                search.taxons = '';
-                search.paid = '';
-                search.type = '';
-                search.language = '';
-                search.targetGroups = '';
-                search.resourceType = '';
-                search.isSpecialEducation = '';
-                search.issuedFrom = '';
-                search.crossCurricularTheme = '';
-                search.keyCompetence = '';
-                search.isCurriculumLiterature = '';
-                search.sort = '';
-                search.sortDirection = '';
-            },
-
-            isValidType: function(type) {
-                return type === 'material' || type === 'portfolio' || type === 'all';
-            },
-
-            getSearchURLbase: function() {
-                return searchURLbase;
-            }
-        };
     }
-]);
+    escapeQuery(query) {
+        return query.replace(/\+/g, "%2B")
+    }
+    arrayToLowerCase(upperCaseArray) {
+        const lowerCaseArray = []
+
+        for (i = 0; i < upperCaseArray.length; i++)
+            if (upperCaseArray[i] && this.isString(upperCaseArray[i]))
+                lowerCaseArray.push(upperCaseArray[i].toLowerCase())
+
+        return lowerCaseArray
+    }
+    arrayToUpperCase(lowerCaseArray) {
+        const upperCaseArray = []
+
+        for (i = 0; i < lowerCaseArray.length; i++)
+            if (lowerCaseArray[i] && this.isString(lowerCaseArray[i]))
+                upperCaseArray.push(lowerCaseArray[i].toUpperCase())
+
+        return upperCaseArray
+    }
+    isString(value) {
+        return typeof value === 'string' || value instanceof String
+    }
+    asArray(value) {
+        return Array.isArray(value) ? value : [value]
+    }
+    setQuery(query) {
+        this.search.query = query
+    }
+    setTaxon(taxon) {
+        this.search.taxons = taxon
+    }
+    setPaid(paid) {
+        this.search.paid = paid
+    }
+    setType(type) {
+        this.search.type = type
+    }
+    setLanguage(language) {
+        this.search.language = language
+    }
+    setTargetGroups(targetGroups) {
+        this.search.targetGroups = this.arrayToLowerCase(this.asArray(targetGroups))
+    }
+    setResourceType(resourceType) {
+        this.search.resourceType = resourceType
+    }
+    setIsSpecialEducation(isSpecialEducation) {
+        this.search.isSpecialEducation = isSpecialEducation
+    }
+    setIssuedFrom(issuedFrom) {
+        this.search.issuedFrom = issuedFrom
+    }
+    setCrossCurricularTheme(crossCurricularTheme) {
+        this.search.crossCurricularTheme = crossCurricularTheme
+    }
+    setKeyCompetence(keyCompetence) {
+        this.search.keyCompetence = keyCompetence
+    }
+    setIsCurriculumLiterature(isCurriculumLiterature) {
+        this.search.isCurriculumLiterature = isCurriculumLiterature
+    }
+    setIsFavorites(isFavorites) {
+        this.search.isFavorites = isFavorites
+    }
+    setIsRecommended(isRecommended) {
+        this.search.isRecommended = isRecommended
+    }
+    setSort(sort) {
+        this.search.sort = sort
+    }
+    setSortDirection(sortDirection) {
+        this.search.sortDirection = sortDirection
+    }
+    queryExists() {
+        const searchObject = this.$location.search()
+        return !!(
+            searchObject.q ||
+            searchObject.taxon ||
+            searchObject.paid === 'false' ||
+            (searchObject.type && this.isValidType(searchObject.type)) ||
+            searchObject.language ||
+            searchObject.targetGroup ||
+            searchObject.resourceType ||
+            searchObject.specialEducation ||
+            searchObject.issuedFrom ||
+            searchObject.crossCurricularTheme ||
+            searchObject.keyCompetence ||
+            searchObject.curriculumLiterature ||
+            (searchObject.sort && searchObject.sortDirection)
+        )
+    }
+    getQuery() {
+        const { q } = this.$location.search()
+
+        if (q)
+            this.setQuery(q)
+
+        return this.search.query
+    }
+    getTaxon() {
+        const { taxon } = this.$location.search()
+
+        if (taxon)
+            this.setTaxon(this.asArray(taxon))
+
+        return this.search.taxons
+    }
+    isPaid() {
+        const { paid } = this.$location.search()
+
+        if (paid)
+            this.setPaid(paid.toString() === 'true')
+
+        return this.search.paid
+    }
+    getType() {
+        const { type } = this.$location.search()
+
+        if (type)
+            this.setType(type)
+
+        return this.search.type
+    }
+    getLanguage() {
+        const { language } = this.$location.search()
+
+        if (language)
+            this.setLanguage(language)
+
+        return this.search.language
+    }
+    getTargetGroups() {
+        var { targetGroup } = this.$location.search()
+
+        if (targetGroup)
+            this.setTargetGroups(targetGroup)
+
+        return this.arrayToUpperCase(this.search.targetGroups)
+    }
+    getResourceType() {
+        const { resourceType } = this.$location.search()
+
+        if (resourceType)
+            this.setResourceType(resourceType)
+
+        return this.search.resourceType
+    }
+    isSpecialEducation() {
+        const { specialEducation } = this.$location.search()
+
+        if (specialEducation)
+            this.setIsSpecialEducation(specialEducation === 'true')
+
+        return this.search.isSpecialEducation
+    }
+    getIssuedFrom() {
+        const { issuedFrom } = this.$location.search()
+
+        if (issuedFrom)
+            this.setIssuedFrom(issuedFrom)
+
+        return this.search.issuedFrom
+    }
+    getCrossCurricularTheme() {
+        const { crossCurricularTheme } = this.$location.search()
+
+        if (crossCurricularTheme)
+            this.setCrossCurricularTheme(crossCurricularTheme)
+
+        return this.search.crossCurricularTheme
+    }
+    getKeyCompetence() {
+        const { keyCompetence } = this.$location.search()
+
+        if (keyCompetence)
+            this.setKeyCompetence(keyCompetence)
+
+        return this.search.keyCompetence
+    }
+    getSort() {
+        const { sort } = this.$location.search()
+
+        if (sort)
+            this.setSort(sort)
+
+        return this.search.sort
+    }
+    getSortDirection() {
+        const { sortDirection } = this.$location.search()
+
+        if (sortDirection)
+            this.setSortDirection(sortDirection)
+
+        return this.search.sortDirection
+    }
+    isCurriculumLiterature() {
+        const { curriculumLiterature } = this.$location.search()
+
+        if (curriculumLiterature)
+            this.setIsCurriculumLiterature(curriculumLiterature === 'true')
+
+        return this.search.isCurriculumLiterature
+    }
+    isFavorites() {
+        const { favorites } = this.$location.search()
+
+        if (favorites)
+            this.setIsFavorites(favorites === 'true')
+
+        return this.search.isFavorites
+    }
+    isRecommended() {
+        const { recommended } = this.$location.search()
+
+        if (recommended)
+            this.setIsRecommended(recommended === 'true')
+
+        return this.search.isRecommended
+    }
+    clearFieldsNotInSimpleSearch() {
+        this.search.taxons = ''
+        this.search.paid = ''
+        this.search.type = ''
+        this.search.language = ''
+        this.search.targetGroups = ''
+        this.search.resourceType = ''
+        this.search.isSpecialEducation = ''
+        this.search.issuedFrom = ''
+        this.search.crossCurricularTheme = ''
+        this.search.keyCompetence = ''
+        this.search.isCurriculumLiterature = ''
+        this.search.sort = ''
+        this.search.sortDirection = ''
+    }
+    isValidType(type) {
+        return type === 'material' || type === 'portfolio' || type === 'all'
+    }
+    getSearchURLbase() {
+        return this.searchURLbase
+    }
+    getURL(isBackendQuery) {
+        return this.searchURLbase + this.getQueryURL(isBackendQuery)
+    }
+    getQueryURL(isBackendQuery) {
+        let searchURL = 'q='
+
+        if (this.search.query)
+            searchURL += this.escapeQuery(this.search.query)
+
+        if (this.search.taxons)
+            for (var i = 0; i < this.search.taxons.length; i++)
+                if (this.search.taxons[i])
+                    searchURL += this.taxonURL + this.search.taxons[i]
+
+        if (this.search.paid.toString() === 'false')
+            searchURL += this.paidURL + this.search.paid;
+
+        if (this.search.type && this.isValidType(this.search.type))
+            searchURL += this.typeURL + this.search.type
+
+        if (this.search.language)
+            searchURL += this.languageURL + this.search.language
+
+        if (this.search.targetGroups)
+            for (var i = 0; i < this.search.targetGroups.length; i++)
+                searchURL += this.targetGroupsURL + (
+                    // Enums are case sensitive, so they must be uppercase for the back-end query
+                    isBackendQuery && this.search.targetGroups[i]
+                        ? this.search.targetGroups[i].toUpperCase()
+                        : this.search.targetGroups[i]
+                )
+
+        if (this.search.resourceType)
+            searchURL += this.resourceTypeURL + this.search.resourceType
+
+        if (this.search.isSpecialEducation.toString() === 'true')
+            searchURL += this.isSpecialEducationURL + this.search.isSpecialEducation
+
+        if (this.search.issuedFrom)
+            searchURL += this.issuedFromURL + this.search.issuedFrom
+
+        if (this.search.crossCurricularTheme)
+            searchURL += this.crossCurricularThemeURL + this.search.crossCurricularTheme
+
+        if (this.search.keyCompetence)
+            searchURL += this.keyCompetenceURL + this.search.keyCompetence
+
+        if (this.search.isCurriculumLiterature)
+            searchURL += this.isCurriculumLiteratureURL + this.search.isCurriculumLiterature
+
+        if (typeof this.search.isFavorites === 'boolean')
+            searchURL += this.isFavoritesURL + this.search.isFavorites
+
+        if (typeof this.search.isRecommended === 'boolean')
+            searchURL += this.isRecommendedURL + this.search.isRecommended
+
+        if (this.search.sort && this.search.sortDirection)
+            searchURL += this.sortURL + this.search.sort + this.sortDirectionURL + this.search.sortDirection
+
+        return searchURL
+    }
+}
+controller.$inject = [
+    '$location'
+]
+factory('searchService', controller)
+}

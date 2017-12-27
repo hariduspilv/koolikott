@@ -8,9 +8,9 @@ import ee.netgroup.hm.helpers.Helpers;
 public class MyMaterialsPage extends Page{
 	
 	private By materialMessage = By.cssSelector("span.md-toast-text");
-	//private By selectMaterialBox = By.xpath("//dop-card-media[@data-learning-object='$ctrl.learningObject']");
 	private By starIcon = By.xpath("//div[@class='md-icon-button md-button favorite']");
 	private static By addMaterialMessage = By.cssSelector("h3");
+	private static By materialTitle = By.xpath("//h3[@data-ng-if='$ctrl.isMaterial(learningObject)']");
 
 	public MaterialPage openMaterial() {
 		Helpers.waitForVisibility(Constants.firstMaterial);
@@ -38,6 +38,10 @@ public class MyMaterialsPage extends Page{
 	public static boolean getAddMaterialMessageText() {
 		Helpers.waitForMilliseconds(1000);
 		return getDriver().findElement(addMaterialMessage).getText().contains("Materjali lisamiseks");
+	}
+
+	public static String getMaterialTitle() {
+		return getDriver().findElement(materialTitle).getText();
 	}
 
 

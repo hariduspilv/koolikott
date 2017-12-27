@@ -32,9 +32,12 @@ class controller extends Controller {
             'chapter:insertExistingMaterials',
             this.onInsertExistingMaterials.bind(this)
         )
-        this.$scope.$on('$destroy', () =>
+        this.$scope.$on('$destroy', () => {
             this.unsubscribeInsertMaterials()
-        )
+            window.isEditPortfolioControllerConstructed = false
+        })
+
+        window.isEditPortfolioControllerConstructed = true
     }
     createChapter(cb) {
         this.$scope.portfolio.chapters.push({

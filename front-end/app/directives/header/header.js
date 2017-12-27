@@ -283,7 +283,7 @@ class controller extends Controller {
             window.location.reload()
     }
     search() {
-        this.searchService.setSearch(this.$scope.searchFields.searchQuery)
+        this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
         this.$location.url(this.searchService.getURL())
@@ -293,6 +293,8 @@ class controller extends Controller {
             if (!this.$rootScope.isEditPortfolioMode) {
                 this.$scope.clearTaxonSelector()
                 this.$scope.detailedSearch.accessor.clear()
+                this.searchService.setIsFavorites(false)
+                this.searchService.setIsRecommended(false)
             }
         }, 500)
         this.dontSearch = true
@@ -342,6 +344,8 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_SAVED')
                     this.storageService.setPortfolio(null)
                     this.$location.url('/portfolio?id=' + portfolio.id)
+                    this.searchService.setIsFavorites(false)
+                    this.searchService.setIsRecommended(false)
                     this.dontSearch = true // otherwise reload will trigger search if search has values
                     this.$route.reload()
                 }
@@ -354,7 +358,7 @@ class controller extends Controller {
 
         rippleContainer.insertBefore(ripple, null)
         rippleContainer.classList.add('md-ripple-container')
-        
+
         ripple.classList.add('md-ripple')
         ripple.classList.add('md-ripple-placed')
         ripple.style.cssText = `
@@ -364,7 +368,7 @@ class controller extends Controller {
             height: 40px;
             background: rgb(255, 255, 255);
             border-color: rgb(255, 255, 255);`
-        
+
         saveBtn.insertBefore(rippleContainer, null)
 
         setTimeout(() => {
@@ -413,7 +417,7 @@ directive('dopHeader', {
             isSuggestVisible = false
 
         const checkWindowWidth = () => {
-            if ($ctrl.isMobile())
+            if ($ctrl.isNVP())
                 $scope.isMobileView = true
 
             if (window.innerWidth >= BREAK_SM)
@@ -422,20 +426,6 @@ directive('dopHeader', {
 
         checkWindowWidth()
         window.addEventListener('resize', checkWindowWidth)
-
-        window.addEventListener('scroll', () => {
-            clearTimeout(scrollTimer)
-            scrollTimer = setTimeout(() => {
-                if (
-                    !document.querySelectorAll('.md-menu-backdrop, .md-select-backdrop').length &&
-                    detailedSearch.getAttribute('aria-hidden') &&
-                    !isSuggestVisible
-                )
-                    window.pageYOffset >= $header.offsetHeight && window.innerWidth >= BREAK_SM
-                        ? $detailedSearch.addClass('md-toolbar-filter--fixed')
-                        : $detailedSearch.removeClass('md-toolbar-filter--fixed')
-            }, 200)
-        })
 
         setTimeout(() => {
             const headerInput = document.getElementById('header-search-input')

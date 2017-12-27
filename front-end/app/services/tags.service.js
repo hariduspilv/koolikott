@@ -6,7 +6,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
     return {
         searchByTag(tag) {
             searchService.clearFieldsNotInSimpleSearch();
-            searchService.setSearch('tag:"' + tag + '"');
+            searchService.setQuery('tag:"' + tag + '"');
             $location.url(searchService.getURL());
         },
 
