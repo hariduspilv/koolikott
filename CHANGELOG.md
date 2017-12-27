@@ -6,7 +6,7 @@
 * Uue kogumiku tekitamine -> Luua skript andmete kohaldamiseks uue disainilahendusega [#242](https://github.com/hariduspilv/koolikott/issues/242)
 * Kogumikule meediafaili lisamine -> Meediafaili lisamise modaal [#249](https://github.com/hariduspilv/koolikott/issues/249)
 * Kogumikule meediafaili lisamine -> Meediafaili vistutamine [#250](https://github.com/hariduspilv/koolikott/issues/250)
-* Kogumikule meediafaili lisamine ->Meediafaili lisamiseks andmemudeli täiendus [#251](https://github.com/hariduspilv/koolikott/issues/251)
+* Kogumikule meediafaili lisamine -> Meediafaili lisamiseks andmemudeli täiendus [#251](https://github.com/hariduspilv/koolikott/issues/251)
 * Kogumikule eelistatud materjali lisamine -> eelistatud materjalide kiirotsing [#252](https://github.com/hariduspilv/koolikott/issues/252)
 * Vistutatud objektide küljendamine -> vistutatud objektide joondamise tooltipi kasutamine [#257](https://github.com/hariduspilv/koolikott/issues/257)
 * Vistutatud objektide küljendamine -> Vistutatud objektide vormistus ja käitumine [#258](https://github.com/hariduspilv/koolikott/issues/258)
