@@ -1,3 +1,20 @@
+## e-Koolikott [1.14.0](https://github.com/hariduspilv/koolikott/milestone/13)
+
+### Muutunud
+* Õppevara otsing -> olemasoleva materjali otsing kogumikku lisamiseks [#226](https://github.com/hariduspilv/koolikott/issues/226)
+* Uue kogumiku tekitamine -> Eemaldada üleliigsed elemendid kogumiku muutmise vormilt [#241](https://github.com/hariduspilv/koolikott/issues/241)
+* Uue kogumiku tekitamine -> Luua skript andmete kohaldamiseks uue disainilahendusega [#242](https://github.com/hariduspilv/koolikott/issues/242)
+* Kogumikule meediafaili lisamine -> Meediafaili lisamise modaal [#249](https://github.com/hariduspilv/koolikott/issues/249)
+* Kogumikule meediafaili lisamine -> Meediafaili vistutamine [#250](https://github.com/hariduspilv/koolikott/issues/250)
+* Kogumikule meediafaili lisamine ->Meediafaili lisamiseks andmemudeli täiendus [#251](https://github.com/hariduspilv/koolikott/issues/251)
+* Kogumikule eelistatud materjali lisamine -> eelistatud materjalide kiirotsing [#252](https://github.com/hariduspilv/koolikott/issues/252)
+* Vistutatud objektide küljendamine -> vistutatud objektide joondamise tooltipi kasutamine [#257](https://github.com/hariduspilv/koolikott/issues/257)
+* Vistutatud objektide küljendamine -> Vistutatud objektide vormistus ja käitumine [#258](https://github.com/hariduspilv/koolikott/issues/258)
+* Kogumiku detailvaates meediafaili juures kuvada meediafaili pealkirja, autorit, allikat ning litsentsitüüpi [#294](https://github.com/hariduspilv/koolikott/issues/294)
+* Materjali lisamise modaali täiendused v.2 [#296](https://github.com/hariduspilv/koolikott/issues/296)
+* Litsentsi klassifikaatorite sidumine tõlkeväärtuste loogikaga [#298](https://github.com/hariduspilv/koolikott/issues/298)
+
+
 ## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12) (testimisel)
 
 ### Muutunud
