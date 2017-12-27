@@ -293,6 +293,8 @@ class controller extends Controller {
             if (!this.$rootScope.isEditPortfolioMode) {
                 this.$scope.clearTaxonSelector()
                 this.$scope.detailedSearch.accessor.clear()
+                this.searchService.setIsFavorites(false)
+                this.searchService.setIsRecommended(false)
             }
         }, 500)
         this.dontSearch = true
