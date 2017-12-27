@@ -71,7 +71,7 @@ class controller extends Controller {
                         <div>${this.$translate.instant('EDIT_LINK')}: <a class="medium-editor-toolbar-anchor-preview-inner"></a></div>
                     </div>`
             }
-            
+
             this.compileAndInjectEmbedToolbar()
         } else {
             this.$timeout(() => {
@@ -458,7 +458,7 @@ class controller extends Controller {
         embed.classList.remove('chapter-embed-card--loaded')
         embed.classList.remove('chapter-embed-card--error')
         embed.removeAttribute('contenteditable')
-        
+
         while (embed.firstChild)
             embed.removeChild(embed.firstChild)
     }
@@ -744,10 +744,8 @@ class controller extends Controller {
                 : 'mobileSearch:open'
         )
         this.$timeout(() => {
-            if (preferred) {
-                this.searchService.setIsFavorites(true)
-                this.searchService.setIsRecommended(true)
-            }
+            this.searchService.setIsFavorites(preferred ? true : false)
+            this.searchService.setIsRecommended(preferred ? true : false)
             this.searchService.setType('material')
             document.getElementById('header-search-input').focus()
             this.$rootScope.$broadcast('detailedSearch:search')

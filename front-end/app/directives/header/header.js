@@ -342,6 +342,8 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_SAVED')
                     this.storageService.setPortfolio(null)
                     this.$location.url('/portfolio?id=' + portfolio.id)
+                    this.searchService.setIsFavorites(false)
+                    this.searchService.setIsRecommended(false)
                     this.dontSearch = true // otherwise reload will trigger search if search has values
                     this.$route.reload()
                 }
@@ -354,7 +356,7 @@ class controller extends Controller {
 
         rippleContainer.insertBefore(ripple, null)
         rippleContainer.classList.add('md-ripple-container')
-        
+
         ripple.classList.add('md-ripple')
         ripple.classList.add('md-ripple-placed')
         ripple.style.cssText = `
@@ -364,7 +366,7 @@ class controller extends Controller {
             height: 40px;
             background: rgb(255, 255, 255);
             border-color: rgb(255, 255, 255);`
-        
+
         saveBtn.insertBefore(rippleContainer, null)
 
         setTimeout(() => {
