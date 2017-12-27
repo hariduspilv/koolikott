@@ -1,4 +1,4 @@
-## e-Koolikott [1.14.0](https://github.com/hariduspilv/koolikott/milestone/13)
+## e-Koolikott [1.14.0](https://github.com/hariduspilv/koolikott/milestone/13) (testimisel)
 
 ### Muutunud
 * Õppevara otsing -> olemasoleva materjali otsing kogumikku lisamiseks [#226](https://github.com/hariduspilv/koolikott/issues/226)
