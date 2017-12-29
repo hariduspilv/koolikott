@@ -3,6 +3,7 @@ package ee.hm.dop.service.useractions;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
@@ -16,6 +17,8 @@ public class UserFavoriteService {
     private LearningObjectDao learningObjectDao;
     @Inject
     private UserFavoriteDao userFavoriteDao;
+    @Inject
+    private SolrEngineService solrEngineService;
 
     public UserFavorite addUserFavorite(LearningObject learningObject, User loggedInUser) {
         ValidatorUtil.mustHaveId(learningObject);
@@ -25,13 +28,16 @@ public class UserFavoriteService {
         userFavorite.setCreator(loggedInUser);
         userFavorite.setLearningObject(learningObject);
 
-        return userFavoriteDao.createOrUpdate(userFavorite);
+        UserFavorite created = userFavoriteDao.createOrUpdate(userFavorite);
+        solrEngineService.updateIndex();
+        return created;
     }
 
     public void removeUserFavorite(Long id, User loggedInUser) {
         LearningObject learningObject = learningObjectDao.findById(id);
         ValidatorUtil.mustHaveId(learningObject);
         userFavoriteDao.deleteByLearningObjectAndUser(learningObject, loggedInUser);
+        solrEngineService.updateIndex();
     }
 
     public UserFavorite hasFavorited(Long id, User loggedInUser) {
