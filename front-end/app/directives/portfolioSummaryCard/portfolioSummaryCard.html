@@ -70,8 +70,8 @@
               <span
                 data-translate="{{educationalContext}}"
               ></span><span
-                data-ng-bind="$index < taxonObject.educationalContexts.length - 1 ? ', ' : ''"
-              ></span>
+              data-ng-bind="$index < taxonObject.educationalContexts.length - 1 ? ', ' : ''"
+            ></span>
             </span>
             <span data-ng-if="!taxonObject.educationalContexts.length" data-translate="UNKNOWN"></span>
           </p>
@@ -86,8 +86,8 @@
               <span
                 data-translate="{{taxon}}"
               ></span><span
-                data-ng-bind="$index < taxonObject.domainGroup.length - 1 ? ', ' : ''"
-              ></span>
+              data-ng-bind="$index < taxonObject.domainGroup.length - 1 ? ', ' : ''"
+            ></span>
             </span>
             <span data-ng-if="!taxonObject.domainGroup.length" data-translate="UNKNOWN"></span>
           </p>
@@ -102,8 +102,8 @@
               <span
                 data-translate="{{topic}}"
               ></span><span
-                data-ng-bind="$index < taxonObject.topics.length - 1 ? ', ' : ''"
-              ></span>
+              data-ng-bind="$index < taxonObject.topics.length - 1 ? ', ' : ''"
+            ></span>
             </span>
           </p>
         </div>
@@ -117,8 +117,8 @@
               <span
                 data-translate="{{subtopic}}"
               ></span><span
-                data-ng-bind="$index < taxonObject.subtopics.length - 1 ? ', ' : ''"
-              ></span>
+              data-ng-bind="$index < taxonObject.subtopics.length - 1 ? ', ' : ''"
+            ></span>
             </span>
           </p>
         </div>
@@ -143,11 +143,13 @@
         <div class="ribbon"></div>
         <div class="card__icon-holder card__icon-holder--small">
           <md-menu>
-            <md-button id="change-visibility" aria-label="Jaga" class="md-icon-button no-margin no-padding card-cover-menu-button" ng-click="$mdMenu.open($event)" data-ng-disabled="!$root.isEditPortfolioMode">
+            <md-button id="change-visibility" aria-label="Jaga"
+                       class="md-icon-button no-margin no-padding card-cover-menu-button"
+                       ng-click="$mdMenu.open($event)">
               <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
-              <md-icon data-ng-if="$root.isEditPortfolioMode && getPortfolioVisibility() === 'PUBLIC'">lock_open</md-icon>
+              <md-icon data-ng-if="getPortfolioVisibility() === 'PUBLIC'">visibility</md-icon>
               <md-icon data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'">link</md-icon>
-              <md-icon data-ng-if="getPortfolioVisibility() === 'PRIVATE'">lock</md-icon>
+              <md-icon data-ng-if="getPortfolioVisibility() === 'PRIVATE'">visibility_off</md-icon>
             </md-button>
             <md-menu-content>
               <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
@@ -155,12 +157,12 @@
               <md-menu-item>
                 <md-button data-ng-if="getPortfolioVisibility() === 'PUBLIC'"
                            aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
-                  <md-icon>lock_open</md-icon>
+                  <md-icon>visibility</md-icon>
                   <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
                 </md-button>
                 <md-button data-ng-if="getPortfolioVisibility() != 'PUBLIC'"
                            aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-                  <md-icon>lock_open</md-icon>
+                  <md-icon>visibility</md-icon>
                   <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
                 </md-button>
               </md-menu-item>
@@ -182,12 +184,12 @@
               <md-menu-item>
                 <md-button data-ng-if="getPortfolioVisibility() === 'PRIVATE'"
                            aria-label="{{PORTFOLIO_VISIBILITY_PRIVATE | translate}}">
-                  <md-icon>lock</md-icon>
+                  <md-icon>visibility_off</md-icon>
                   <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
                 </md-button>
                 <md-button data-ng-if="getPortfolioVisibility() != 'PRIVATE'"
                            aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
-                  <md-icon>lock</md-icon>
+                  <md-icon>visibility_off</md-icon>
                   <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>
                 </md-button>
               </md-menu-item>
@@ -228,7 +230,8 @@
           </a>
         </p>
         <!-- Original creator -->
-        <p class="md-body-2" data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id">
+        <p class="md-body-2"
+           data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id">
           <span class="md-caption caption-light">
             <span data-translate="ORIGINAL_CREATOR"></span>:
           </span>
@@ -256,8 +259,8 @@
             <span
               data-ng-bind="group"
             ></span><span
-              data-ng-bind="$index < getTargetGroups().length - 1 ? ', ' : ''"
-            ></span>
+            data-ng-bind="$index < getTargetGroups().length - 1 ? ', ' : ''"
+          ></span>
           </span>
         </p>
       </md-content>
@@ -270,14 +273,14 @@
     class="card-lg__actions"
     data-layout="column"
     data-layout-gt-xs="row"
-    >
+  >
     <div
       data-flex
       data-flex-gt-xs="75"
       class="card-lg__container"
       data-layout="row"
       data-layout-align="space-between center"
-      >
+    >
       <!-- Reviews placeholder -->
       <div class="review"></div>
       <!-- Container for comments button -->
@@ -286,7 +289,7 @@
           class="md-icon-button comments__button"
           data-ng-click="toggleCommentSection()"
           id="show-comments"
-          >
+        >
           <md-icon class="comments__icon">comment</md-icon>
           <md-tooltip md-direction="top">
             <span data-ng-if="isLoggedIn()" data-translate="COMMENTS_TITLE"></span>
@@ -302,7 +305,7 @@
       data-layout="column"
       data-layout-align="center stretch"
       class="card-lg__container card-lg__container--border-left"
-      >
+    >
       <!-- Ratings area -->
       <dop-rating
         data-ng-if="!$root.isEditPortfolioMode && portfolio.type"

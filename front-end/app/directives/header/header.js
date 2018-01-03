@@ -174,9 +174,16 @@ class controller extends Controller {
         }
 
         this.$scope.saveAndExitPortfolio = () => {
-            if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC)
-                return this.saveAndExit()
+            if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
+                this.storageService.getPortfolio().publicationConfirmed = true;
+                return this.saveAndExit();
+            }
 
+            if (this.storageService.getPortfolio().publicationConfirmed) {
+                return this.saveAndExit();
+            }
+
+            this.storageService.getPortfolio().publicationConfirmed = true;
             this.dialogService.showConfirmationDialog(
                 "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
                 "{{'PORTFOLIO_WARNING' | translate}}",
