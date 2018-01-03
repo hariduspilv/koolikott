@@ -19,6 +19,7 @@ public class PortfolioConverter {
     public Portfolio setPortfolioUpdatableFields(Portfolio to, Portfolio from) {
         commonConvert(to, from);
         to.setVisibility(from.getVisibility());
+        to.setPublicationConfirmed(from.isPublicationConfirmed());
         return to;
     }
 

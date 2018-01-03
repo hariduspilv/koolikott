@@ -172,6 +172,9 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime lastInteraction;
 
+    @Column(nullable = false)
+    private boolean publicationConfirmed = false;
+
     @Transient
     private Boolean favorite;
 
@@ -374,5 +377,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setReviewableChanges(List<ReviewableChange> reviewableChanges) {
         this.reviewableChanges = reviewableChanges;
+    }
+
+    public boolean isPublicationConfirmed() {
+        return publicationConfirmed;
+    }
+
+    public void setPublicationConfirmed(boolean publicationConfirmed) {
+        this.publicationConfirmed = publicationConfirmed;
     }
 }
