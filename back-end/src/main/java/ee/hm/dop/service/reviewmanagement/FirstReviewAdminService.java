@@ -6,11 +6,13 @@ import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
+import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;

@@ -8,31 +8,31 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.joda.time.DateTime;
 
-public class StatisticSearchFilterDto {
+public class StatisticsFilterDto {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime start;
+    private DateTime from;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime end;
+    private DateTime to;
     private Taxon taxon;
     private User user;
 
-    public DateTime getStart() {
-        return start;
+    public DateTime getFrom() {
+        return from;
     }
 
-    public void setStart(DateTime start) {
-        this.start = start;
+    public void setFrom(DateTime from) {
+        this.from = from;
     }
 
-    public DateTime getEnd() {
-        return end;
+    public DateTime getTo() {
+        return to;
     }
 
-    public void setEnd(DateTime end) {
-        this.end = end;
+    public void setTo(DateTime to) {
+        this.to = to;
     }
 
     public Taxon getTaxon() {

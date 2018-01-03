@@ -80,7 +80,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .collect(Collectors.toList());
     }
 
-    List<Long> getTaxonWithChildren(Taxon taxon) {
+    public List<Long> getTaxonWithChildren(Taxon taxon) {
         List<String> tree = TaxonUtils.getLevelTree(taxon);
         return getTaxonWithChildren(Arrays.asList(taxon.getId()), tree);
     }
@@ -115,8 +115,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
                         "       OR subject.id IN (:taxonIds)\n" +
                         "       OR topic.id IN (:taxonIds)\n" +
                         "       OR subtopic.id IN (:taxonIds))\n" +
-                        "      AND taxon.level\n" +
-                        "          IN (:levels)")
+                        "      AND taxon.level IN (:levels)")
                 .setParameter("taxonIds", ids)
                 .setParameter("levels", levels)
                 .getResultList();
