@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import ee.hm.dop.dao.LanguageDao;
-import ee.hm.dop.dao.TranslationDAO;
+import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.TranslationGroup;
@@ -19,7 +19,7 @@ public class TranslationService {
     public static final String SUBJECT = "SUBJECT";
     public static final String HELPER = "HELPER_";
     @Inject
-    private TranslationDAO translationDAO;
+    private TranslationGroupDao translationGroupDao;
     @Inject
     private LanguageDao languageDao;
 
@@ -32,7 +32,7 @@ public class TranslationService {
         if (language == null) {
             return null;
         }
-        TranslationGroup translationGroupFor = translationDAO.findTranslationGroupFor(language);
+        TranslationGroup translationGroupFor = translationGroupDao.findTranslationGroupFor(language);
         if (translationGroupFor == null) {
             return null;
         }
@@ -65,7 +65,7 @@ public class TranslationService {
         if (language == null) {
             return null;
         }
-        TranslationGroup translationGroupFor = translationDAO.findTranslationGroupFor(language);
+        TranslationGroup translationGroupFor = translationGroupDao.findTranslationGroupFor(language);
         if (translationGroupFor == null) {
             return null;
         }
@@ -75,7 +75,7 @@ public class TranslationService {
     }
 
     public String getTranslationKeyByTranslation(String translation) {
-        return translationDAO.getTranslationKeyByTranslation(translation);
+        return translationGroupDao.getTranslationKeyByTranslation(translation);
     }
 
     public static LanguageString filterByLanguage(List<LanguageString> languageStringList, String lang) {

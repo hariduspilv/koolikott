@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.TranslationDAO;
+import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.dao.VersionDao;
 import ee.hm.dop.model.Author;
 import ee.hm.dop.model.LanguageString;
@@ -22,7 +22,6 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Version;
 import ee.hm.dop.model.enums.LanguageC;
-import ee.hm.dop.utils.NumberUtils;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
@@ -48,7 +47,7 @@ public class AtomFeedService {
     @Inject
     private VersionDao versionDao;
     @Inject
-    private TranslationDAO translationDAO;
+    private TranslationGroupDao translationGroupDao;
     @Inject
     private LanguageDao languageDao;
 
@@ -195,7 +194,7 @@ public class AtomFeedService {
 
     private String translateString(String toTranslate) {
         Long langCode = languageDao.findByCode(lang).getId();
-        return translationDAO.getTranslationByKeyAndLangcode(toTranslate, langCode);
+        return translationGroupDao.getTranslationByKeyAndLangcode(toTranslate, langCode);
     }
 
 }

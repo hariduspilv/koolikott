@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import com.google.common.collect.Lists;
+import ee.hm.dop.dao.AbstractDao;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
 import org.apache.commons.collections.CollectionUtils;
@@ -14,22 +15,18 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TranslationDAO {
-
-    @Inject
-    private EntityManager entityManager;
+public class TranslationGroupDao extends AbstractDao<TranslationGroup>{
 
     public TranslationGroup findTranslationGroupFor(Language language) {
         try {
             return entityManager
                     .createQuery("SELECT tg FROM TranslationGroup tg " +
-                            "WHERE tg.language = :language", TranslationGroup.class)
+                            "WHERE tg.language = :language", entity())
                     .setParameter("language", language)
                     .getSingleResult();
         } catch (NoResultException ignored) {
             return null;
         }
-
     }
 
     public String getTranslationKeyByTranslation(String translation) {

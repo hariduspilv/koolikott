@@ -11,10 +11,10 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class TranslationDAOTest extends DatabaseTestBase {
+public class TranslationGroupDaoTest extends DatabaseTestBase {
 
     @Inject
-    private TranslationDAO translationDAO;
+    private TranslationGroupDao translationGroupDao;
 
     @Test
     public void getTranslationGroupForEstonian() {
@@ -22,7 +22,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
         language.setId((long) 1);
         language.setCode(LanguageC.EST);
 
-        TranslationGroup translationGroup = translationDAO.findTranslationGroupFor(language);
+        TranslationGroup translationGroup = translationGroupDao.findTranslationGroupFor(language);
 
         assertNotNull(translationGroup);
         assertEquals(language.getCode(), translationGroup.getLanguage().getCode());
@@ -41,10 +41,10 @@ public class TranslationDAOTest extends DatabaseTestBase {
         language.setId((long) 1);
         language.setCode(LanguageC.EST);
 
-        String translationKey = translationDAO.getTranslationKeyByTranslation("FOO sõnum");
+        String translationKey = translationGroupDao.getTranslationKeyByTranslation("FOO sõnum");
         assertNotNull(translationKey);
         assertEquals("FOO", translationKey);
-        String translationKey2 = translationDAO.getTranslationKeyByTranslation("FOO");
+        String translationKey2 = translationGroupDao.getTranslationKeyByTranslation("FOO");
         assertNull(translationKey2);
     }
 
@@ -54,10 +54,10 @@ public class TranslationDAOTest extends DatabaseTestBase {
         language.setId((long) 1);
         language.setCode(LanguageC.EST);
 
-        String translation = translationDAO.getTranslationByKeyAndLangcode("FOO", 1L);
+        String translation = translationGroupDao.getTranslationByKeyAndLangcode("FOO", 1L);
         assertNotNull(translation);
         assertEquals("FOO sõnum", translation);
-        String translation2 = translationDAO.getTranslationByKeyAndLangcode("P", 1L);
+        String translation2 = translationGroupDao.getTranslationByKeyAndLangcode("P", 1L);
         assertNull(translation2);
     }
 
@@ -68,7 +68,7 @@ public class TranslationDAOTest extends DatabaseTestBase {
         language.setId((long) 2);
         language.setCode(LanguageC.RUS);
 
-        TranslationGroup translationGroup = translationDAO.findTranslationGroupFor(language);
+        TranslationGroup translationGroup = translationGroupDao.findTranslationGroupFor(language);
 
         assertNotNull(translationGroup);
         assertEquals(language.getCode(), translationGroup.getLanguage().getCode());

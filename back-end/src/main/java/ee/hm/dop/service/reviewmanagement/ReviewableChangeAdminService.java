@@ -3,7 +3,7 @@ package ee.hm.dop.service.reviewmanagement;
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
-import ee.hm.dop.dao.TranslationDAO;
+import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
@@ -30,7 +30,7 @@ public class ReviewableChangeAdminService {
     @Inject
     private LearningObjectDao learningObjectDao;
     @Inject
-    private TranslationDAO translationDAO;
+    private TranslationGroupDao translationGroupDao;
 
     public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -143,7 +143,7 @@ public class ReviewableChangeAdminService {
     }
 
     public void removeTagsByTranslation(LearningObject learningObject, List<String> translationKey) {
-        List<String> translations = translationDAO.getTranslationsForKey(translationKey);
+        List<String> translations = translationGroupDao.getTranslationsForKey(translationKey);
         if (CollectionUtils.isNotEmpty(translations)) {
             List<String> upperTranslations = translations.stream().map(String::toUpperCase).collect(Collectors.toList());
             learningObject.getTags().removeIf(t -> upperTranslations.contains(t.getName().toUpperCase()));

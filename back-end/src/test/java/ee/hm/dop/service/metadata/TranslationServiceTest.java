@@ -1,10 +1,9 @@
 package ee.hm.dop.service.metadata;
 
 import ee.hm.dop.dao.LanguageDao;
-import ee.hm.dop.dao.TranslationDAO;
+import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
-import ee.hm.dop.service.metadata.TranslationService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -27,7 +26,7 @@ public class TranslationServiceTest {
     private LanguageDao languageDao;
 
     @Mock
-    private TranslationDAO translationDAO;
+    private TranslationGroupDao translationGroupDao;
 
     @Test
     public void getTranslationsForNull() {
@@ -58,7 +57,7 @@ public class TranslationServiceTest {
         Language language = createMock(Language.class);
 
         expect(languageDao.findByCode(languageCode)).andReturn(language);
-        expect(translationDAO.findTranslationGroupFor(language)).andReturn(null);
+        expect(translationGroupDao.findTranslationGroupFor(language)).andReturn(null);
 
         replayAll(language);
 
@@ -76,7 +75,7 @@ public class TranslationServiceTest {
         Map<String, String> translations = createMock(Map.class);
 
         expect(languageDao.findByCode(languageCode)).andReturn(language);
-        expect(translationDAO.findTranslationGroupFor(language)).andReturn(translationGroup);
+        expect(translationGroupDao.findTranslationGroupFor(language)).andReturn(translationGroup);
         expect(translationGroup.getTranslations()).andReturn(translations);
         expect(language.getCode()).andReturn("").times(2);
 
@@ -88,7 +87,7 @@ public class TranslationServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(languageDao, translationDAO);
+        replay(languageDao, translationGroupDao);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -98,7 +97,7 @@ public class TranslationServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(languageDao, translationDAO);
+        verify(languageDao, translationGroupDao);
 
         if (mocks != null) {
             for (Object object : mocks) {
