@@ -1,22 +1,18 @@
 .content-container {
   transition: 0.2s;
   max-width: $layout-breakpoint-md;
-  padding: $md-toolbar-height + $md-padding $md-padding $md-padding;
+  padding: ($md-toolbar-height + $md-padding) $md-padding $md-padding;
 
   @media (min-width: $layout-breakpoint-md) {
     margin-left: auto;
     margin-right: auto;
-    padding-left: $sidenav-width + $md-padding;
+    padding-left: calc(#{$sidenav-width} + #{$md-padding});
     padding-right: $nav-button-area-width;
-  }
-
-  @media (min-width: $layout-breakpoint-lg) {
-    padding-left: $sidenav-width + $md-padding;
   }
 
   &.nav-open {
     @media (min-width: $layout-breakpoint-md) {
-      padding-left: $sidenav-width + $md-padding;
+      padding-left: calc(#{$sidenav-width} + #{$md-padding});
       padding-right: $nav-button-area-width;
     }
     .card-container {
@@ -53,14 +49,14 @@
 
   &.nav-open {
     @media (min-width: $layout-breakpoint-md) {
-      margin-left: $sidenav-width + $md-padding;
+      margin-left: calc(#{$sidenav-width} + #{$md-padding});
       margin-right: $nav-button-area-width;
     }
 
     @media (min-width: $layout-breakpoint-main-content-margin) {
       margin-left: auto;
       margin-right: auto;
-      padding-left: $sidenav-width - 10.20rem;
+      padding-left: calc(#{$sidenav-width} - 11em);
     }
   }
 }

@@ -20,8 +20,8 @@
 .fab-closed-icon,
 .fab-open-icon {
   position: absolute;
-  top: $md-padding;
-  left: $md-padding;
+  top: 16px;
+  left: 16px;
   transition: all 0.3s ease-in-out;
   opacity: 1;
 }

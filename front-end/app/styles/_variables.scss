@@ -16,8 +16,8 @@ $font-small: 12px;
 $font-medium: 14px;
 $font-normal: 16px;
 $font-large: 26px;
-$md-padding: 1rem;
-$md-toolbar-height: 4rem; // material design defines this as 64px, overwriting it here using rem untis
+$md-padding: 1em;
+$md-toolbar-height: 4em; // material design defines this as 64px, overwriting it here using rem untis
 $layout-breakpoint-xxs: 370px;
 $layout-breakpoint-main-content-margin: 1734px; // the screen width at where the card container starts moving with auto margins
 $gray: #808080;
@@ -66,7 +66,7 @@ $card-lg-padding: 25px;
 
 $desktop-navbar-height: $md-toolbar-height;
 
-$sidenav-width: 16.25rem;
+$sidenav-width: 260px;
 $nav-button-area-width: 178px;
 $button-width: 40px;
 
