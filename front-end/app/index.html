@@ -7,12 +7,12 @@
   <meta name="description" content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum.
   The portal allows finding educational materials located in different digital tool collections.
   The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals.">
-  <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'/>
 
   <!-- build:css(app) /styles/vendor.css -->
-  <link rel="stylesheet" href="/libs/angular-material-data-table/dist/md-data-table.min.css" />
-  <link rel="stylesheet" href="/libs/medium-editor/dist/css/medium-editor.css" />
-  <link rel="stylesheet" href="/libs/medium-editor/dist/css/themes/beagle.css" />
+  <link rel="stylesheet" href="/libs/angular-material-data-table/dist/md-data-table.min.css"/>
+  <link rel="stylesheet" href="/libs/medium-editor/dist/css/medium-editor.css"/>
+  <link rel="stylesheet" href="/libs/medium-editor/dist/css/themes/beagle.css"/>
 
   <!-- endbuild -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic,300italic">
@@ -21,183 +21,196 @@
   <link rel="stylesheet" href="/styles/main.css">
   <!-- endbuild -->
 
-  <meta property="og:url" content="https://e-koolikott.ee" />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="e-Koolikott" />
-  <meta property="og:description" content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum. The portal allows finding educational materials located in different digital tool collections. The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals." />
-  <meta property="og:image:secure_url" content="https://e-koolikott.ee/koolikott.png" />
+  <meta property="og:url" content="https://e-koolikott.ee"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="e-Koolikott"/>
+  <meta property="og:description"
+        content="e-Koolikott is a single web environment comprising digital learning material arranged by keywords on the basis of the curriculum. The portal allows finding educational materials located in different digital tool collections. The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point - the user no longer needs to search for materials in different portals."/>
+  <meta property="og:image:secure_url" content="https://e-koolikott.ee/koolikott.png"/>
 </head>
 <body>
-  <!--[if lt IE 11]>
-  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
-  <![endif]-->
-  <img data-ng-if="!hasAppInitated" id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
+<!--[if lt IE 11]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
+<img data-ng-if="!hasAppInitated" id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
 
-  <data-dop-column-layout data-ng-if="hasAppInitated" layout-fill></data-dop-column-layout>
-  <data-dop-main-fab-button></data-dop-main-fab-button>
+<data-dop-column-layout data-ng-if="hasAppInitated" layout-fill></data-dop-column-layout>
+<data-dop-main-fab-button></data-dop-main-fab-button>
 
-  <!--preloader-->
-  <script src="utils/preloader/preloader.js"></script>
+<!--preloader-->
+<script src="utils/preloader/preloader.js"></script>
 
-  <!-- vendor -->
-  <script src="libs/core.js/client/shim.min.js"></script>
-  <script src="libs/cssua.js/cssua.min.js"></script>
-  <script src="libs/jquery/dist/jquery.min.js"></script>
-  <script src="libs/angular/angular.min.js"></script>
-  <script src="libs/angular-animate/angular-animate.min.js"></script>
-  <script src="libs/angular-aria/angular-aria.js"></script>
-  <script src="libs/angular-click-outside/clickoutside.directive.js"></script>
-  <script src="libs/angular-material/angular-material.js"></script>
-  <script src="libs/angular-route/angular-route.min.js"></script>
-  <script src="libs/angular-translate/angular-translate.min.js"></script>
-  <script src="libs/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
-  <script src="libs/angular-youtube-mb/dist/angular-youtube-embed.min.js"></script>
-  <script src="libs/angular-screenfull/dist/angular-screenfull.min.js"></script>
-  <script src="libs/angular-scroll/angular-scroll.js"></script>
-  <script src="libs/angular-material-data-table/dist/md-data-table.js"></script>
-  <script src="libs/screenfull/dist/screenfull.js"></script>
-  <script src="libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
-  <script src="libs/ng-file-upload/ng-file-upload.min.js"></script>
-  <script src="libs/clipboard/dist/clipboard.min.js"></script>
-  <script src="libs/moment/min/moment.min.js"></script>
-  <script src="utils/ui-bootstrap-custom-tpls.min.js"></script>
-  <script src="libs/rangy/rangy-core.min.js"></script>
-  <script src="libs/rangy/rangy-selectionsaverestore.min.js"></script>
-  <script src="libs/textAngular/dist/textAngular-sanitize.min.js"></script>
-  <script src="libs/textAngular/dist/textAngularSetup.js"></script>
-  <script src="utils/koolikottTextAngular.js"></script>
-  <script src="libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="libs/lodash/dist/lodash.min.js"></script>
-  <script src="libs/angular-socialshare/dist/angular-socialshare.min.js"></script>
-  <script src="libs/angular-messages/angular-messages.min.js"></script>
-  <script src="utils/angular-tour-tpls.js"></script>
-  <script src="libs/bluebird/js/browser/bluebird.min.js"></script>
-  <script src="libs/jquery-truncate-html/jquery.truncate.js"></script>
-  <script src="libs/medium-editor/dist/js/medium-editor.js"></script>
-  <script src="libs/medium-button/src/medium-button.js"></script>
-  <script src="libs/angular-sortable-view/src/angular-sortable-view.js"></script>
-  <script src="utils/stickyfill.min.js"></script>
-  <script>
-    window.___gcfg = {
-      parsetags: 'explicit'
-    };
-  </script>
-  <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+<!-- vendor -->
+<script src="libs/core.js/client/shim.min.js"></script>
+<script src="libs/cssua.js/cssua.min.js"></script>
+<script src="libs/jquery/dist/jquery.min.js"></script>
+<script src="libs/angular/angular.min.js"></script>
+<script src="libs/angular-animate/angular-animate.min.js"></script>
+<script src="libs/angular-aria/angular-aria.js"></script>
+<script src="libs/angular-click-outside/clickoutside.directive.js"></script>
+<script src="libs/angular-material/angular-material.js"></script>
+<script src="libs/angular-route/angular-route.min.js"></script>
+<script src="libs/angular-translate/angular-translate.min.js"></script>
+<script src="libs/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
+<script src="libs/angular-youtube-mb/dist/angular-youtube-embed.min.js"></script>
+<script src="libs/angular-screenfull/dist/angular-screenfull.min.js"></script>
+<script src="libs/angular-scroll/angular-scroll.js"></script>
+<script src="libs/angular-material-data-table/dist/md-data-table.js"></script>
+<script src="libs/screenfull/dist/screenfull.js"></script>
+<script src="libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
+<script src="libs/ng-file-upload/ng-file-upload.min.js"></script>
+<script src="libs/clipboard/dist/clipboard.min.js"></script>
+<script src="libs/moment/min/moment.min.js"></script>
+<script src="utils/ui-bootstrap-custom-tpls.min.js"></script>
+<script src="libs/rangy/rangy-core.min.js"></script>
+<script src="libs/rangy/rangy-selectionsaverestore.min.js"></script>
+<script src="libs/textAngular/dist/textAngular-sanitize.min.js"></script>
+<script src="libs/textAngular/dist/textAngularSetup.js"></script>
+<script src="utils/koolikottTextAngular.js"></script>
+<script src="libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="libs/lodash/dist/lodash.min.js"></script>
+<script src="libs/angular-socialshare/dist/angular-socialshare.min.js"></script>
+<script src="libs/angular-messages/angular-messages.min.js"></script>
+<script src="utils/angular-tour-tpls.js"></script>
+<script src="libs/bluebird/js/browser/bluebird.min.js"></script>
+<script src="libs/jquery-truncate-html/jquery.truncate.js"></script>
+<script src="libs/medium-editor/dist/js/medium-editor.js"></script>
+<script src="libs/medium-button/src/medium-button.js"></script>
+<script src="libs/angular-sortable-view/src/angular-sortable-view.js"></script>
+<script src="utils/stickyfill.min.js"></script>
+<script>
+  window.___gcfg = {
+    parsetags: 'explicit'
+  };
+</script>
+<script src="https://apis.google.com/js/client:platform.js" async defer></script>
 
-  <script src="constants.js"></script>
+<script src="constants.js"></script>
 
-  <!-- build:js js/config.js -->
-  <script src="utils/commons.js"></script>
-  <script src="utils/medium-editor-patches.js"></script>
-  <script src="app.js"></script>
-  <script src="app.routes.js"></script>
-  <!-- endbuild -->
+<!-- build:js js/config.js -->
+<script src="utils/commons.js"></script>
+<script src="utils/medium-editor-patches.js"></script>
+<script src="app.js"></script>
+<script src="app.routes.js"></script>
+<!-- endbuild -->
 
-  <!-- build:js js/services.js -->
-  <script src="services/authentication.service.js"></script>
-  <script src="services/authenticatedUser.service.js"></script>
-  <script src="services/serverCall.service.js"></script>
-  <script src="services/metadata.service.js"></script>
-  <script src="services/taxon.service.js"></script>
-  <script src="services/alert.service.js"></script>
-  <script src="services/dialog.service.js"></script>
-  <script src="services/embed.service.js"></script>
-  <script src="services/fileUpload.service.js"></script>
-  <script src="services/icon.service.js"></script>
-  <script src="services/pictureUpload.service.js"></script>
-  <script src="services/recursionHelper.js"></script>
-  <script src="services/search.service.js"></script>
-  <script src="services/storage.service.js"></script>
-  <script src="services/suggest.service.js"></script>
-  <script src="services/targetGroup.service.js"></script>
-  <script src="services/toast.service.js"></script>
-  <script src="services/translation.service.js"></script>
-  <script src="services/userData.service.js"></script>
-  <script src="services/changedLearningObject.service.js"></script>
-  <script src="services/youtube.service.js"></script>
-  <script src="services/material.service.js"></script>
-  <script src="services/tour.service.js"></script>
-  <script src="services/sort.service.js"></script>
-  <script src="services/portfolio.service.js"></script>
-  <script src="services/tags.service.js"></script>
-  <script src="services/taxonGrouping.service.js"></script>
-  <script src="services/event.service.js"></script>
-  <!-- endbuild -->
+<!-- build:js js/services.js -->
+<script src="services/authentication.service.js"></script>
+<script src="services/authenticatedUser.service.js"></script>
+<script src="services/serverCall.service.js"></script>
+<script src="services/metadata.service.js"></script>
+<script src="services/taxon.service.js"></script>
+<script src="services/alert.service.js"></script>
+<script src="services/dialog.service.js"></script>
+<script src="services/embed.service.js"></script>
+<script src="services/fileUpload.service.js"></script>
+<script src="services/icon.service.js"></script>
+<script src="services/pictureUpload.service.js"></script>
+<script src="services/recursionHelper.js"></script>
+<script src="services/search.service.js"></script>
+<script src="services/storage.service.js"></script>
+<script src="services/suggest.service.js"></script>
+<script src="services/targetGroup.service.js"></script>
+<script src="services/toast.service.js"></script>
+<script src="services/translation.service.js"></script>
+<script src="services/userData.service.js"></script>
+<script src="services/changedLearningObject.service.js"></script>
+<script src="services/youtube.service.js"></script>
+<script src="services/material.service.js"></script>
+<script src="services/tour.service.js"></script>
+<script src="services/sort.service.js"></script>
+<script src="services/portfolio.service.js"></script>
+<script src="services/tags.service.js"></script>
+<script src="services/taxonGrouping.service.js"></script>
+<script src="services/event.service.js"></script>
+<!-- endbuild -->
 
-  <!-- build:js js/controllers.js -->
-  <script src="views/addMaterialDialog/addMaterialDialog.js"></script>
-  <script src="views/addMediaDialog/addMediaDialog.js"></script>
-  <script src="views/addPortfolioDialog/addPortfolioDialog.js"></script>
-  <script src="views/dashboard/baseTableView.js"></script>
-  <script src="views/dashboard/dashboard.js"></script>
-  <script src="views/editPortfolio/editPortfolio.js"></script>
-  <script src="views/editUserDialog/editUser.js"></script>
-  <script src="views/home/home.js"></script>
-  <script src="views/loginDialog/loginDialog.js"></script>
-  <script src="views/loginRedirect/loginRedirect.js"></script>
-  <script src="views/material/material.js"></script>
-  <script src="views/portfolio/portfolio.js"></script>
-  <script src="views/profile/favorites/favorites.js"></script>
-  <script src="views/profile/materials/materials.js"></script>
-  <script src="views/profile/portfolios/portfolios.js"></script>
-  <script src="views/profile/profile.js"></script>
-  <script src="views/search/result/searchResult.js"></script>
-  <script src="views/static/about/about.js"></script>
-  <script src="views/static/help/help.js"></script>
-  <script src="views/static/abstractStaticPage.js"></script>
-  <script src="directives/share/modal/share.modal.controller.js"></script>
-  <script src="directives/tour/modal/tour.modal.controller.js"></script>
-  <!-- endbuild -->
+<!-- build:js js/controllers.js -->
+<script src="views/addMaterialDialog/addMaterialDialog.js"></script>
+<script src="views/addMediaDialog/addMediaDialog.js"></script>
+<script src="views/addPortfolioDialog/addPortfolioDialog.js"></script>
+<script src="views/dashboard/baseTableView.js"></script>
+<script src="views/dashboard/dashboard.js"></script>
+<script src="views/editPortfolio/editPortfolio.js"></script>
+<script src="views/editUserDialog/editUser.js"></script>
+<script src="views/home/home.js"></script>
+<script src="views/loginDialog/loginDialog.js"></script>
+<script src="views/loginRedirect/loginRedirect.js"></script>
+<script src="views/material/material.js"></script>
+<script src="views/portfolio/portfolio.js"></script>
+<script src="views/profile/favorites/favorites.js"></script>
+<script src="views/profile/materials/materials.js"></script>
+<script src="views/profile/portfolios/portfolios.js"></script>
+<script src="views/profile/profile.js"></script>
+<script src="views/search/result/searchResult.js"></script>
+<script src="views/static/about/about.js"></script>
+<script src="views/static/help/help.js"></script>
+<script src="views/static/abstractStaticPage.js"></script>
+<script src="directives/share/modal/share.modal.controller.js"></script>
+<script src="directives/tour/modal/tour.modal.controller.js"></script>
+<!-- endbuild -->
 
-  <!-- build:js js/directives.js -->
-  <script src="directives/copyPermalink/copyPermalink.js"></script>
-  <script src="directives/dashboard/dashboard.js"></script>
-  <script src="directives/header/header.js"></script>
-  <script src="directives/recommend/recommend.js"></script>
-  <script src="directives/report/improper/improper.js"></script>
-  <script src="directives/restrict/restrict.js"></script>
-  <script src="directives/selectClose/selectClose.js"></script>
-  <script src="directives/validate/validateUrl.js"></script>
-  <script src="directives/input-value-control.js"></script>
-  <!-- endbuild -->
+<!-- build:js js/directives.js -->
+<script src="directives/copyPermalink/copyPermalink.js"></script>
+<script src="directives/dashboard/dashboard.js"></script>
+<script src="directives/header/header.js"></script>
+<script src="directives/recommend/recommend.js"></script>
+<script src="directives/report/improper/improper.js"></script>
+<script src="directives/restrict/restrict.js"></script>
+<script src="directives/selectClose/selectClose.js"></script>
+<script src="directives/validate/validateUrl.js"></script>
+<script src="directives/input-value-control.js"></script>
+<!-- endbuild -->
 
-  <!-- build:js js/components.js -->
-  <script src="directives/alert/alert.component.js"></script>
-  <script src="directives/aside/aside.component.js"></script>
-  <script src="directives/card/cardMedia/cardMedia.component.js"></script>
-  <script src="directives/card/cardSM/cardSM.component.js"></script>
-  <script src="directives/card/cardXS/cardXS.component.js"></script>
-  <script src="directives/chapter/chapter.component.js"></script>
-  <script src="directives/commentsCard/commentsCard.component.js"></script>
-  <script src="directives/detailedSearch/detailedSearch.component.js"></script>
-  <script src="directives/embed/embed.component.js"></script>
-  <script src="directives/embedFooter/embedFooter.component.js"></script>
-  <script src="directives/embedToolbar/embedToolbar.component.js"></script>
-  <script src="directives/errorMessage/errorMessage.component.js"></script>
-  <script src="directives/favorite/favorite.component.js"></script>
-  <script src="directives/infiniteSearchResult/infiniteSearchResult.component.js"></script>
-  <script src="directives/mainFabButton/mainFabButton.component.js"></script>
-  <script src="directives/pageStructure/columnLayout/columnLayout.component.js"></script>
-  <script src="directives/pickMaterial/pickMaterial.component.js"></script>
-  <script src="directives/portfolioSummaryCard/portfolioSummaryCard.component.js"></script>
-  <script src="directives/rating/rating.component.js"></script>
-  <script src="directives/share/share.component.js"></script>
-  <script src="directives/sidenav/sidenav.component.js"></script>
-  <script src="directives/sidenavTaxon/sidenavTaxon.component.js"></script>
-  <script src="directives/slideshare/slideshare.component.js"></script>
-  <script src="directives/tableOfContents/tableOfContents.component.js"></script>
-  <script src="directives/tags/tags.component.js"></script>
-  <script src="directives/targetGroupSelector/targetGroupSelector.component.js"></script>
-  <script src="directives/taxonSelector/taxonSelector.component.js"></script>
-  <script src="directives/toolbarAddMaterials/toolbarAddMaterials.component.js"></script>
-  <script src="directives/remainingCharacters/remaining-char.component.js"></script>
-  <script src="directives/tour/tour.component.js"></script>
-  <!-- endbuild -->
+<!-- build:js js/components.js -->
+<script src="directives/alert/alert.component.js"></script>
+<script src="directives/aside/aside.component.js"></script>
+<script src="directives/card/cardMedia/cardMedia.component.js"></script>
+<script src="directives/card/cardSM/cardSM.component.js"></script>
+<script src="directives/card/cardXS/cardXS.component.js"></script>
+<script src="directives/chapter/chapter.component.js"></script>
+<script src="directives/commentsCard/commentsCard.component.js"></script>
+<script src="directives/detailedSearch/detailedSearch.component.js"></script>
+<script src="directives/embed/embed.component.js"></script>
+<script src="directives/embedFooter/embedFooter.component.js"></script>
+<script src="directives/embedToolbar/embedToolbar.component.js"></script>
+<script src="directives/errorMessage/errorMessage.component.js"></script>
+<script src="directives/favorite/favorite.component.js"></script>
+<script src="directives/infiniteSearchResult/infiniteSearchResult.component.js"></script>
+<script src="directives/mainFabButton/mainFabButton.component.js"></script>
+<script src="directives/pageStructure/columnLayout/columnLayout.component.js"></script>
+<script src="directives/pickMaterial/pickMaterial.component.js"></script>
+<script src="directives/portfolioSummaryCard/portfolioSummaryCard.component.js"></script>
+<script src="directives/rating/rating.component.js"></script>
+<script src="directives/share/share.component.js"></script>
+<script src="directives/sidenav/sidenav.component.js"></script>
+<script src="directives/sidenavTaxon/sidenavTaxon.component.js"></script>
+<script src="directives/slideshare/slideshare.component.js"></script>
+<script src="directives/tableOfContents/tableOfContents.component.js"></script>
+<script src="directives/tags/tags.component.js"></script>
+<script src="directives/targetGroupSelector/targetGroupSelector.component.js"></script>
+<script src="directives/taxonSelector/taxonSelector.component.js"></script>
+<script src="directives/toolbarAddMaterials/toolbarAddMaterials.component.js"></script>
+<script src="directives/remainingCharacters/remaining-char.component.js"></script>
+<script src="directives/tour/tour.component.js"></script>
+<!-- endbuild -->
 
-  <!-- remove-html-for-live -->
-  <script src="views/dev/login/login.js"></script>
-  <!-- end-remove-html-for-live -->
+<!-- remove-html-for-live -->
+<script src="views/dev/login/login.js"></script>
+<!-- end-remove-html-for-live -->
+
+<script>
+  if (window.location.hostname === "e-koolikott.ee") {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-72667340-1', 'auto');
+  ga('send', 'pageview');
+  }
+</script>
+
 </body>
 </html>
