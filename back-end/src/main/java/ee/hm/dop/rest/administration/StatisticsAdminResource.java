@@ -1,10 +1,6 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.enums.ReviewStatus;
-import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.StatisticsService;
@@ -13,7 +9,10 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("admin/statistics/")
@@ -27,6 +26,7 @@ public class StatisticsAdminResource extends BaseResource{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public StatisticsResult search(StatisticsFilterDto searchFilter) {
-        return statisticsService.statistics(searchFilter, getLoggedInUser());
+        StatisticsFilterDto filter = searchFilter != null ? searchFilter : new StatisticsFilterDto();
+        return statisticsService.statistics(filter, getLoggedInUser());
     }
 }

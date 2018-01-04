@@ -17,8 +17,10 @@ import static ee.hm.dop.rest.useractions.UserResourceTest.GET_TAXON_URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase{
+public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
     private static final String SEARCH_STATISTICS = "admin/statistics/";
+    public static final DateTime FROM = new DateTime(2000, 10, 10, 10, 10);
+    public static final DateTime TO = new DateTime(2020, 10, 10, 10, 10);
 
     @Test
     public void anonymous_user_can_not_search_statistics() throws Exception {
@@ -43,13 +45,85 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase{
         assertEquals(Response.Status.OK.getStatusCode(), doPost(SEARCH_STATISTICS).getStatus());
     }
 
-
     @Test
-    public void only_admin_can_sea2rch_statistics() throws Exception {
+    public void admin_from_only_doesnt_fail() throws Exception {
         login(USER_ADMIN);
         StatisticsFilterDto dto = new StatisticsFilterDto();
-        dto.setFrom(new DateTime(2000, 10, 10, 10, 10));
-        dto.setTo(new DateTime(2020, 10, 10, 10, 10));
+        dto.setFrom(FROM);
+        StatisticsResult result = doPost(SEARCH_STATISTICS, dto, StatisticsResult.class);
+        assertEquals(result.getFilter().getFrom(), dto.getFrom());
+        assertEquals(result.getFilter().getTo(), dto.getTo());
+        assertEquals(result.getFilter().getTaxon(), dto.getTaxon());
+        if (dto.getUser() != null) {
+            assertEquals(result.getFilter().getUser().getUsername(), dto.getUser().getUsername());
+        } else {
+            assertEquals(result.getFilter().getUser(), dto.getUser());
+        }
+        assertTrue(CollectionUtils.isNotEmpty(result.getRows()));
+        assertTrue(result.getSum() != null);
+    }
+
+    @Test
+    public void admin_to_only_doesnt_fail() throws Exception {
+        login(USER_ADMIN);
+        StatisticsFilterDto dto = new StatisticsFilterDto();
+        dto.setTo(TO);
+        StatisticsResult result = doPost(SEARCH_STATISTICS, dto, StatisticsResult.class);
+        assertEquals(result.getFilter().getFrom(), dto.getFrom());
+        assertEquals(result.getFilter().getTo(), dto.getTo());
+        assertEquals(result.getFilter().getTaxon(), dto.getTaxon());
+        if (dto.getUser() != null) {
+            assertEquals(result.getFilter().getUser().getUsername(), dto.getUser().getUsername());
+        } else {
+            assertEquals(result.getFilter().getUser(), dto.getUser());
+        }
+        assertTrue(CollectionUtils.isNotEmpty(result.getRows()));
+        assertTrue(result.getSum() != null);
+    }
+
+    @Test
+    public void admin_taxon_search_doesnt_fail() throws Exception {
+        login(USER_ADMIN);
+        StatisticsFilterDto dto = new StatisticsFilterDto();
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_MATHEMATICS_DOMAIN.id), Taxon.class);
+        dto.setTaxon(taxon);
+        StatisticsResult result = doPost(SEARCH_STATISTICS, dto, StatisticsResult.class);
+        assertEquals(result.getFilter().getFrom(), dto.getFrom());
+        assertEquals(result.getFilter().getTo(), dto.getTo());
+        assertEquals(result.getFilter().getTaxon(), dto.getTaxon());
+        if (dto.getUser() != null) {
+            assertEquals(result.getFilter().getUser().getUsername(), dto.getUser().getUsername());
+        } else {
+            assertEquals(result.getFilter().getUser(), dto.getUser());
+        }
+        assertTrue(CollectionUtils.isNotEmpty(result.getRows()));
+        assertTrue(result.getSum() != null);
+    }
+
+    @Test
+    public void admin_user_search_doesnt_fail() throws Exception {
+        login(USER_ADMIN);
+        StatisticsFilterDto dto = new StatisticsFilterDto();
+        dto.setUser(getUser(USER_MODERATOR));
+        StatisticsResult result = doPost(SEARCH_STATISTICS, dto, StatisticsResult.class);
+        assertEquals(result.getFilter().getFrom(), dto.getFrom());
+        assertEquals(result.getFilter().getTo(), dto.getTo());
+        assertEquals(result.getFilter().getTaxon(), dto.getTaxon());
+        if (dto.getUser() != null) {
+            assertEquals(result.getFilter().getUser().getUsername(), dto.getUser().getUsername());
+        } else {
+            assertEquals(result.getFilter().getUser(), dto.getUser());
+        }
+        assertTrue(CollectionUtils.isNotEmpty(result.getRows()));
+        assertTrue(result.getSum() != null);
+    }
+
+    @Test
+    public void admin_full_search_doesnt_fail() throws Exception {
+        login(USER_ADMIN);
+        StatisticsFilterDto dto = new StatisticsFilterDto();
+        dto.setFrom(FROM);
+        dto.setTo(TO);
         Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_MATHEMATICS_DOMAIN.id), Taxon.class);
         dto.setTaxon(taxon);
         dto.setUser(getUser(USER_MODERATOR));
@@ -57,7 +131,11 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase{
         assertEquals(result.getFilter().getFrom(), dto.getFrom());
         assertEquals(result.getFilter().getTo(), dto.getTo());
         assertEquals(result.getFilter().getTaxon(), dto.getTaxon());
-        assertEquals(result.getFilter().getUser().getUsername(), dto.getUser().getUsername());
+        if (dto.getUser() != null) {
+            assertEquals(result.getFilter().getUser().getUsername(), dto.getUser().getUsername());
+        } else {
+            assertEquals(result.getFilter().getUser(), dto.getUser());
+        }
         assertTrue(CollectionUtils.isNotEmpty(result.getRows()));
         assertTrue(result.getSum() != null);
     }
