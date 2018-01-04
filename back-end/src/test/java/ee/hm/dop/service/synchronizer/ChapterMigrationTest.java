@@ -22,7 +22,6 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(EasyMockRunner.class)
 public class ChapterMigrationTest {
 
@@ -106,25 +105,6 @@ public class ChapterMigrationTest {
 
         assertTheresAreBlocks(chapter);
         validate1Chapter("lalala<br />1. esiteks<br />2. teiseks<br /><br /><br />1. esiteks<br />2. teiseks<br /><br />lololo", chapter);
-    }
-
-    @Test
-    public void chapter_with_ordered_list_is_numbered_but_doesnt_break_on_missing_end_tag() throws Exception {
-        Chapter chapter = subChapter();
-        chapter.setText("lalala " +
-                    "<ol>" +
-                        "<li>esiteks</li>" +
-                        "<li>teiseks</li>" +
-                "lololo");
-        chapter.setContentRows(new ArrayList<>());
-
-        expect(chapterDao.chaptersWithPortfolio()).andReturn(Arrays.asList(chapter));
-        expect(chapterDao.createOrUpdate(chapter)).andReturn(chapter);
-
-        run();
-
-        assertTheresAreBlocks(chapter);
-        validate1Chapter("lalala<br />1. esiteks<br />2. teiseks<br />lololo", chapter);
     }
 
     private void run() {
