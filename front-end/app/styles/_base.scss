@@ -14,6 +14,10 @@ html, body {
 body {
   height: auto;
   min-height: 100vh;
+
+  @media (min-width: 3840px) {
+    zoom: 2;
+  }
 }
 
 // Fix IE background going to black when md-backdrop is in dom

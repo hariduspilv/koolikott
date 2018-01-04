@@ -172,6 +172,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime lastInteraction;
 
+    @Column(nullable = false)
+    private boolean publicationConfirmed = false;
+
+    @ManyToOne
+    @JoinColumn(name = "licenseType")
+    private LicenseType licenseType;
+
     @Transient
     private Boolean favorite;
 
@@ -374,5 +381,21 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setReviewableChanges(List<ReviewableChange> reviewableChanges) {
         this.reviewableChanges = reviewableChanges;
+    }
+
+    public boolean isPublicationConfirmed() {
+        return publicationConfirmed;
+    }
+
+    public void setPublicationConfirmed(boolean publicationConfirmed) {
+        this.publicationConfirmed = publicationConfirmed;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 }
