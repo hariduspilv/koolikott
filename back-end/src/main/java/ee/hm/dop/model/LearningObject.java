@@ -175,6 +175,10 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @Column(nullable = false)
     private boolean publicationConfirmed = false;
 
+    @ManyToOne
+    @JoinColumn(name = "licenseType")
+    private LicenseType licenseType;
+
     @Transient
     private Boolean favorite;
 
@@ -385,5 +389,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setPublicationConfirmed(boolean publicationConfirmed) {
         this.publicationConfirmed = publicationConfirmed;
+    }
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
     }
 }

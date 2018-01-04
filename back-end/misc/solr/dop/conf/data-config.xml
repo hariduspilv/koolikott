@@ -31,9 +31,9 @@
         </entity>
 
         <entity name="LearningObject" pk="id"
-                query="select id, added, views, creator, visibility from LearningObject
+                query="select id, added, views, creator, visibility, licenseType from LearningObject
                 WHERE deleted = false"
-                deltaImportQuery="select id, added, views, creator, visibility from LearningObject
+                deltaImportQuery="select id, added, views, creator, visibility, licenseType from LearningObject
                 where id = '${dih.delta.id}'"
                 deltaQuery="select id from LearningObject
                     where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}'
@@ -68,7 +68,8 @@
 
             <entity name="UserFavorite"
                     query="select creator as favored_by_user_id from UserFavorite where learningObject='${LearningObject.id}'">
-                <entity name="User" query="select userName as favored_by_user from User where id = '${UserFavorite.favored_by_user_id}'"/>
+                <entity name="User"
+                        query="select userName as favored_by_user from User where id = '${UserFavorite.favored_by_user_id}'"/>
             </entity>
 
             <entity name="TagUpVote"
@@ -79,6 +80,9 @@
 
             <entity name="LearningObject_Recommended"
                     query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'"/>
+
+            <entity name="LicenseType"
+                    query="select name as license_type from LicenseType where id='${LearningObject.licenseType}'"/>
 
             <entity name="LearningObject_Taxon"
                     query="select taxon as taxon_id from LearningObject_Taxon
@@ -398,7 +402,7 @@
             </entity>
 
             <entity name="Material"
-                    query="select id, source, licenseType, paid, lang,
+                    query="select id, source, paid, lang,
                     isSpecialEducation as special_education,
                     issueDate as issue_date_id,
                     curriculumLiterature as curriculum_literature
@@ -457,10 +461,6 @@
                             query="select name as resource_type from ResourceType
                             where id = '${Material_ResourceType.resourceType_id}'"/>
                 </entity>
-
-                <entity name="LicenseType"
-                        query="select name as license_type from LicenseType
-                        where id='${Material.licenseType}'"/>
 
                 <entity name="Material_Language"
                         query="select code as language from LanguageTable

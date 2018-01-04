@@ -203,42 +203,42 @@ insert into Thumbnail(id, name, data, size) values(1, 'thumbnail1', '65425284561
 
 -- Materials
 
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, 1, 1, false, 1, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(1, 1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', true, true, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(2, '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2, false, 2, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(2, 2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 1, 'isssiidosa00dsa', true, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(3, '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(3, 4, 3, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(4, '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null, 1, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(4, 3, 4, 1,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(5, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(5, 3, 5, 2,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(6, null, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(7, '2001-07-01 00:00:01', null, 700, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(7, 4, 6, 3, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(8, '2014-06-01 00:00:01', null, 800, null, 1, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(8, 5, 7, 1, 'http://www.palmeiras.com.br/historia/titulos', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(9, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(9, null, null, null, 'http://www.chaging.it.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(10, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(10, null, null, null, 'http://www.boo.com', null, null, false, false, false); -- Do not use this material, it is deleted by tests
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(11, '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, 2, 1, true, 7, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(11, 1, null, 1, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', false, false, false); -- This material should be amoung the 8 latest materials
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(12, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(12, null, null, null, 'http://estRepo.com', 2, null, false, false, true);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(13, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(13, null, null, null, 'http://example.com/123', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, null, 'http://example.com/456', null, 1, true, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, null, 'http://example.com/123', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, null, 'http://www.bieber.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(17, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(17, null, null, null, 'http://www.bieber2.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) values(18, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC');
-insert into Material(id, lang, issueDate, licenseType, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(18, null, null, null, 'http://www.bieber3.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(1, '1999-01-01 00:00:01', '2000-03-01 07:00:01', 100, 1, 1, false, 1, 'PUBLIC', 1);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(1, 1, 1, 'https://www.youtube.com/watch?v=gSWbx3CvVUk', 1, 'isssiiaawej', true, true, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(2, '1970-01-01 00:00:01', '1995-07-12 09:00:01', 200, null, 2, false, 2, 'PUBLIC', 2);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(2, 2, 2, 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 1, 'isssiidosa00dsa', true, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(3, '2009-01-01 00:00:01', '2011-01-10 19:00:01', 300, null, null, false, null, 'PUBLIC', 3);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(3, 4, 3,  'http://eloquentjavascript.net/Eloquent_JavaScript.pdf', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(4, '2012-01-01 00:00:01', '2012-08-28 22:40:01', 400, null, 1, false, null, 'PUBLIC', 1);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(4, 3, 4,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(5, '2011-09-01 00:00:01', '2012-11-04 09:30:01', 500, null, 2, false, null, 'PUBLIC', 2);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(5, 3, 5,  'https://en.wikipedia.org/wiki/Power_Architecture', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(6, '1911-09-01 00:00:01', null, 600, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(6, null, null, 'http://www.planalto.gov.br/ccivil_03/Constituicao/Constituicao.htm', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(7, '2001-07-01 00:00:01', null, 700, null, null, false, null, 'PUBLIC', 3);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(7, 4, 6, 'https://president.ee/en/republic-of-estonia/the-constitution/index.html', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(8, '2014-06-01 00:00:01', null, 800, null, 1, false, null, 'PUBLIC', 1);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(8, 5, 7, 'http://www.palmeiras.com.br/historia/titulos', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(9, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(9, null, null, 'http://www.chaging.it.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(10, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(10, null, null, 'http://www.boo.com', null, null, false, false, false); -- Do not use this material, it is deleted by tests
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(11, '2015-09-02 00:00:01', '2015-09-03 07:00:01', 100, 2, 1, true, 7, 'PUBLIC', 1);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(11, 1, null, 'https://www.deleted.com/', 1, 'isssiiaawejdsada4564', false, false, false); -- This material should be amoung the 8 latest materials
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(12, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(12, null, null, 'http://estRepo.com', 2, null, false, false, true);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(13, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(13, null, null, 'http://example.com/123', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(14, '2005-09-02 04:00:31', null, 0, null, null, true, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(14, null, null, 'http://example.com/456', null, 1, true, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(15, '2005-09-02 00:00:31', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(15, null, null, 'http://example.com/123', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(16, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(16, null, null, 'http://www.bieber.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(17, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(17, null, null, 'http://www.bieber2.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(18, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(18, null, null, 'http://www.bieber3.com', null, null, false, false, false);
 
 
 -- Authors
