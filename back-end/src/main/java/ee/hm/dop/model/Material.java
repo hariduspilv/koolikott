@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"repositoryIdentifier", "repository"})})
@@ -72,10 +73,6 @@ public class Material extends LearningObject implements Searchable, IMaterial {
             inverseJoinColumns = {@JoinColumn(name = "peerReview")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "peerReview"}))
     private List<PeerReview> peerReviews;
-
-    @ManyToOne
-    @JoinColumn(name = "licenseType")
-    private LicenseType licenseType;
 
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
@@ -176,14 +173,6 @@ public class Material extends LearningObject implements Searchable, IMaterial {
 
     public void setPeerReviews(List<PeerReview> peerReviews) {
         this.peerReviews = peerReviews;
-    }
-
-    public LicenseType getLicenseType() {
-        return licenseType;
-    }
-
-    public void setLicenseType(LicenseType licenseType) {
-        this.licenseType = licenseType;
     }
 
     public List<Publisher> getPublishers() {

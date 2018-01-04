@@ -137,6 +137,7 @@
     <field name="creator" type="string" indexed="true" stored="false" multiValued="false"/>
     <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="favored_by_user" type="string" indexed="true" stored="false" multiValued="true"/>
+    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Material & Portfolio -->
     <field name="title" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -156,7 +157,6 @@
     <field name="description" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="author" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="resource_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="paid" type="boolean" indexed="true" stored="false" multiValued="false"/>
     <field name="language" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="special_education" type="boolean" indexed="true" stored="false" multiValued="false"/>
