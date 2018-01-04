@@ -4,6 +4,9 @@ import java.util.List;
 
 public class StatisticsResult {
 
+    public StatisticsResult() {
+    }
+
     public StatisticsResult(StatisticsFilterDto filter, List<StatisticsRow> rows, StatisticsRow sum) {
         this.filter = filter;
         this.rows = rows;

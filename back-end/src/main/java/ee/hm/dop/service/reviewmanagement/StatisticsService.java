@@ -9,6 +9,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
+import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
@@ -26,8 +27,13 @@ public class StatisticsService {
     @Inject
     private StatisticsDao statisticsDao;
 
-    public StatisticsResult statistics(StatisticsFilterDto filter) {
+    public StatisticsResult statistics(StatisticsFilterDto filter, User loggedInUser) {
+        UserUtil.mustBeAdmin(loggedInUser);
+
         List<User> users = getUsers(filter);
+        if (CollectionUtils.isEmpty(users)){
+            throw new IllegalArgumentException("no moderators");
+        }
         List<Long> taxons = getTaxons(filter);
 
         List<StatisticsRow> rows = createRows(filter, users, taxons);
@@ -63,7 +69,7 @@ public class StatisticsService {
         return rows;
     }
 
-    public StatisticsRow getSum(List<StatisticsRow> rows) {
+    private StatisticsRow getSum(List<StatisticsRow> rows) {
         if (CollectionUtils.isEmpty(rows)) {
             return null;
         }
@@ -74,6 +80,7 @@ public class StatisticsService {
             sum.setDeletedReportedLOCount(r1.getDeletedReportedLOCount() + r2.getDeletedReportedLOCount());
             sum.setAcceptedChangedLOCount(r1.getAcceptedChangedLOCount() + r2.getAcceptedChangedLOCount());
             sum.setRejectedChangedLOCount(r1.getRejectedChangedLOCount() + r2.getRejectedChangedLOCount());
+            sum.setReportedLOCount(r1.getReportedLOCount() + r2.getReportedLOCount());
             sum.setPortfolioCount(r1.getPortfolioCount() + r2.getPortfolioCount());
             sum.setPublicPortfolioCount(r1.getPublicPortfolioCount() + r2.getPublicPortfolioCount());
             sum.setMaterialCount(r1.getMaterialCount() + r2.getMaterialCount());
@@ -88,22 +95,18 @@ public class StatisticsService {
     }
 
     private List<User> getUsers(StatisticsFilterDto filter) {
-        List<User> users;
         if (filter.getUser() != null) {
-            users = Arrays.asList(userDao.findById(filter.getUser().getId()));
+            return Arrays.asList(userDao.findById(filter.getUser().getId()));
         } else {
-            users = userDao.getUsersByRole(Role.MODERATOR);
+            return userDao.getUsersByRole(Role.MODERATOR);
         }
-        return users;
     }
 
     private List<Long> getTaxons(StatisticsFilterDto filter) {
-        List<Long> taxons;
         if (filter.getTaxon() != null) {
-            taxons = taxonDao.getTaxonWithChildren(filter.getTaxon());
+            return taxonDao.getTaxonWithChildren(filter.getTaxon());
         } else {
-            taxons = new ArrayList<>();
+            return new ArrayList<>();
         }
-        return taxons;
     }
 }
