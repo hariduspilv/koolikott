@@ -55,6 +55,7 @@ public class StatisticsService {
         for (User user : users) {
             StatisticsRow row = new StatisticsRow();
             row.setUser(user);
+            row.setUsertaxons(taxonDao.getUserTaxons(user));
             row.setReviewedLOCount(getCount(reviewedLOCount, user));
             row.setApprovedReportedLOCount(getCount(approvedReportedLOCount, user));
             row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
@@ -73,7 +74,7 @@ public class StatisticsService {
         if (CollectionUtils.isEmpty(rows)) {
             return null;
         }
-        Optional<StatisticsRow> reduce = rows.stream().reduce((r1, r2) -> {
+        return rows.stream().reduce(emptyRow(),  (r1, r2) -> {
             StatisticsRow sum = new StatisticsRow();
             sum.setReviewedLOCount(r1.getReviewedLOCount() + r2.getReviewedLOCount());
             sum.setApprovedReportedLOCount(r1.getApprovedReportedLOCount() + r2.getApprovedReportedLOCount());
@@ -86,7 +87,22 @@ public class StatisticsService {
             sum.setMaterialCount(r1.getMaterialCount() + r2.getMaterialCount());
             return sum;
         });
-        return reduce.orElseThrow(RuntimeException::new);
+    }
+
+    private StatisticsRow emptyRow() {
+        StatisticsRow identity = new StatisticsRow();
+        identity.setUser(null);
+        identity.setUsertaxons(null);
+        identity.setReviewedLOCount(0L);
+        identity.setApprovedReportedLOCount(0L);
+        identity.setDeletedReportedLOCount(0L);
+        identity.setAcceptedChangedLOCount(0L);
+        identity.setRejectedChangedLOCount(0L);
+        identity.setReportedLOCount(0L);
+        identity.setPortfolioCount(0L);
+        identity.setPublicPortfolioCount(0L);
+        identity.setMaterialCount(0L);
+        return identity;
     }
 
     private Long getCount(List<StatisticsQuery> reviewed, User user) {

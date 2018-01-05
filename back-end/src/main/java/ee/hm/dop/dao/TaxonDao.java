@@ -54,6 +54,24 @@ public class TaxonDao extends AbstractDao<Taxon> {
         return null;
     }
 
+    public List<Taxon> getUserTaxons(User user) {
+        UserUtil.mustBeModerator(user);
+        //i am sorry i tried very hard
+        Collection userTaxons = getEntityManager().createQuery("SELECT t.userTaxons \n" +
+                "FROM User t\n" +
+                "WHERE t.id = :userId", Collection.class)
+                .setParameter("userId", user.getId())
+                .getResultList();
+
+
+        List<Taxon> taxons = new ArrayList<>();
+        for (Object userTaxon : userTaxons) {
+            taxons.add((Taxon) userTaxon);
+        }
+
+        return taxons;
+    }
+
     /**
      * when user is assigned high level taxon
      * then they can access all of its children
