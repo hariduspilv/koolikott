@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,12 +49,17 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup>{
         }
         List<String> lowercaseKeys = translationKey.stream().map(String::toLowerCase).collect(Collectors.toList());
         try {
-            return (List<String>) entityManager
+            List<Clob> translations = entityManager
                     .createNativeQuery("SELECT t.translation FROM Translation t " +
                             "WHERE lower(t.translationKey) in (:translationKey)")
                     .setParameter("translationKey", lowercaseKeys)
                     .getResultList();
-        } catch (NonUniqueResultException | NoResultException ignored) {
+            List<String> stringArrayList = new ArrayList<>();
+            for (Clob clob : translations) {
+                stringArrayList.add(clob.getSubString(1, (int) clob.length()));
+            }
+            return stringArrayList;
+        } catch (NonUniqueResultException | NoResultException | SQLException ignored) {
             return null;
         }
     }
