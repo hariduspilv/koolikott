@@ -19,8 +19,8 @@ public class TranslationGroup implements AbstractEntity {
     @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "Translation", uniqueConstraints = @UniqueConstraint(columnNames = {"translationGroup",
             "translationKey"}), joinColumns = @JoinColumn(name = "translationGroup"))
-    @MapKeyColumn(name = "translationKey", nullable = false)
-    @Column(name = "translation", nullable = false, columnDefinition = "TEXT")
+    @MapKeyColumn(name = "translationKey")
+    @Column(name = "translation", nullable = false)
     private Map<String, String> translations;
 
     public Long getId() {

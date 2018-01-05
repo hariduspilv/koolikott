@@ -52,17 +52,16 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
-    @Ignore
     @Test
     public void adding_system_tag_adds_a_tag() throws Exception {
         login(USER_PEETER);
 
-        Portfolio portfolio = getPortfolio(PORTFOLIO_8);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_16);
         assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
 
-        doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_8), tag(TEST_SYSTEM_TAG));
+        doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_16), tag(TEST_SYSTEM_TAG));
 
-        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_8);
+        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_16);
         assertTrue("System tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
     }
 

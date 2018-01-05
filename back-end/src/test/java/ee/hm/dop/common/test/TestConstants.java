@@ -26,6 +26,23 @@ public class TestConstants {
     public static final Long MATERIAL_16 = 16L;
     public static final Long MATERIAL_17 = 17L;
     public static final Long MATERIAL_18 = 18L;
+    public static final Long MATERIAL_19 = 19L;
+    public static final Long MATERIAL_20 = 20L;
+    public static final Long MATERIAL_21 = 21L;
+    public static final Long MATERIAL_22 = 22L;
+    public static final Long MATERIAL_23 = 23L;
+    public static final Long MATERIAL_24 = 24L;
+    public static final Long MATERIAL_25 = 25L;
+    public static final Long MATERIAL_26 = 26L;
+    public static final Long MATERIAL_27 = 27L;
+    public static final Long MATERIAL_28 = 28L;
+    public static final Long MATERIAL_29 = 29L;
+    public static final Long MATERIAL_30 = 30L;
+    public static final Long MATERIAL_31 = 31L;
+    public static final Long MATERIAL_32 = 32L;
+    public static final Long MATERIAL_33 = 33L;
+    public static final Long MATERIAL_34 = 34L;
+    public static final Long MATERIAL_35 = 35L;
 
     public static final Long PORTFOLIO_1 = 101L;
     public static final Long PORTFOLIO_2 = 102L;
@@ -42,6 +59,7 @@ public class TestConstants {
     public static final Long PORTFOLIO_13 = 113L;
     public static final Long PORTFOLIO_14 = 114L;
     public static final Long PORTFOLIO_15 = 115L;
+    public static final Long PORTFOLIO_16 = 116L;
 
     public static final TestUser USER_MATI = new TestUser(1L, "39011220011", "mati.maasikas", "Mati", "Maasikas");
     public static final TestUser USER_PEETER = new TestUser(2L, "38011550077", "peeter.paan", "Peeter", "Paan");

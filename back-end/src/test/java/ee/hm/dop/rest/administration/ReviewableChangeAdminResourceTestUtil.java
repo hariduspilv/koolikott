@@ -98,12 +98,26 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertEquals(testUser.id, review.getReviewedBy().getId());
     }
 
-    public static ImproperContent improper(Material material) {
-        ImproperContent json = new ImproperContent();
+    public static ImproperContentDto improper(Material material) {
+        ImproperContentDto json = new ImproperContentDto();
         ReportingReason reason = new ReportingReason();
         reason.setReason(ReportingReasonEnum.LO_CONTENT);
         json.setLearningObject(material);
         json.setReportingReasons(Lists.newArrayList(reason));
         return json;
+    }
+
+    private static class ImproperContentDto extends ImproperContent{
+        private LearningObject learningObject;
+
+        @Override
+        public LearningObject getLearningObject() {
+            return learningObject;
+        }
+
+        @Override
+        public void setLearningObject(LearningObject learningObject) {
+            this.learningObject = learningObject;
+        }
     }
 }

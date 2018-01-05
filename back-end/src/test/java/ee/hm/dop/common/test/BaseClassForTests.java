@@ -44,6 +44,23 @@ public interface BaseClassForTests {
     Long MATERIAL_16 = TestConstants.MATERIAL_16;
     Long MATERIAL_17 = TestConstants.MATERIAL_17;
     Long MATERIAL_18 = TestConstants.MATERIAL_18;
+    Long MATERIAL_19 = TestConstants.MATERIAL_19;
+    Long MATERIAL_20 = TestConstants.MATERIAL_20;
+    Long MATERIAL_21 = TestConstants.MATERIAL_21;
+    Long MATERIAL_22 = TestConstants.MATERIAL_22;
+    Long MATERIAL_23 = TestConstants.MATERIAL_23;
+    Long MATERIAL_24 = TestConstants.MATERIAL_24;
+    Long MATERIAL_25 = TestConstants.MATERIAL_25;
+    Long MATERIAL_26 = TestConstants.MATERIAL_26;
+    Long MATERIAL_27 = TestConstants.MATERIAL_27;
+    Long MATERIAL_28 = TestConstants.MATERIAL_28;
+    Long MATERIAL_29 = TestConstants.MATERIAL_29;
+    Long MATERIAL_30 = TestConstants.MATERIAL_30;
+    Long MATERIAL_31 = TestConstants.MATERIAL_31;
+    Long MATERIAL_32 = TestConstants.MATERIAL_32;
+    Long MATERIAL_33 = TestConstants.MATERIAL_33;
+    Long MATERIAL_34 = TestConstants.MATERIAL_34;
+    Long MATERIAL_35 = TestConstants.MATERIAL_35;
 
     Long PORTFOLIO_1 = TestConstants.PORTFOLIO_1;
     Long PORTFOLIO_2 = TestConstants.PORTFOLIO_2;
@@ -60,6 +77,7 @@ public interface BaseClassForTests {
     Long PORTFOLIO_13 = TestConstants.PORTFOLIO_13;
     Long PORTFOLIO_14 = TestConstants.PORTFOLIO_14;
     Long PORTFOLIO_15 = TestConstants.PORTFOLIO_15;
+    Long PORTFOLIO_16 = TestConstants.PORTFOLIO_16;
 
     TestTaxon TAXON_MATHEMATICS_DOMAIN = TestConstants.TAXON_MATHEMATICS_DOMAIN;
     TestTaxon TAXON_FOREIGNLANGUAGE_DOMAIN = TestConstants.TAXON_FOREIGNLANGUAGE_DOMAIN;
