@@ -10,6 +10,7 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
+import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.utils.DbUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -116,8 +117,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void I_add_new_system_tag_then_update_material_not_to_have_it___change_is_removed() {
         Material material = getMaterial(MATERIAL_23);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_23), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_23);
+        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_23), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
+        Material updatedMaterial = (Material) tagDTO.getLearningObject();
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN);
 
         updatedMaterial.setTaxons(new ArrayList<>());
@@ -129,8 +130,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void I_add_new_system_tag_it_is_approved_then_I_update_material_not_to_have_it___change_is_reviewed_not_removed() {
         Material material = getMaterial(MATERIAL_24);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_24), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_24);
+        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_24), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
+        Material updatedMaterial = (Material) tagDTO.getLearningObject();
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN);
 
         Material updatedMaterial2 = doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_24), null, Material.class);
