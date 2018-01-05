@@ -43,10 +43,8 @@ public class StatisticsExcelExporter {
         writeRow(sheet, rowNum, statistics.getSum());
 
 
-        try {
-            FileOutputStream outputStream = new FileOutputStream(fileName);
+        try (FileOutputStream outputStream = new FileOutputStream(fileName)){
             workbook.write(outputStream);
-            workbook.close();
         } catch (IOException e) {
             logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
         }

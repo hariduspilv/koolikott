@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public class CsvUtil {
 
-    public static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir") + File.separator + "ekoolikott" + File.separator;
+//    public static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir") + File.separator + "ekoolikott" + File.separator;
+    public static final String TEMP_FOLDER = "tmp";
 
     public static String getUniqueFileName(FileFormat format) {
-//        File tempFolder = new File(TEMP_FOLDER);
-        File tempFolder = new File("tmp");
+        File tempFolder = new File(TEMP_FOLDER);
         boolean tempFolderExists = true;
         if (!tempFolder.exists()) {
             tempFolderExists = tempFolder.mkdir();
