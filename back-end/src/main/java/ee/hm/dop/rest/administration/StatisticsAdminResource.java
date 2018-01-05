@@ -27,10 +27,7 @@ import java.io.UnsupportedEncodingException;
 @Path("admin/statistics/")
 public class StatisticsAdminResource extends BaseResource {
 
-    public static final String DOWNLOAD_PATH = "rest/admin/statistics/export/download";
-    public static final String FILENAME = "?filename=";
     private static final String TEMP_FOLDER = CsvUtil.TEMP_FOLDER;
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Inject
     private StatisticsService statisticsService;
