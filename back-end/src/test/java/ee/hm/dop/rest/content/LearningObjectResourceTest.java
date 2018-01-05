@@ -53,7 +53,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void adding_system_tag_adds_a_tag() throws Exception {
+    public void adding_system_tag_adds_a_tag()  {
         login(USER_PEETER);
 
         Portfolio portfolio = getPortfolio(PORTFOLIO_16);
@@ -66,7 +66,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void adding_tag_with_same_name_throws_an_error() throws Exception {
+    public void adding_tag_with_same_name_throws_an_error()  {
         login(USER_PEETER);
 
         Portfolio portfolio = getPortfolio(PORTFOLIO_8);
@@ -80,7 +80,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void addUserFavorite_adds_learningObject_to_user_favorites() throws Exception {
+    public void addUserFavorite_adds_learningObject_to_user_favorites()  {
         login(USER_PEETER);
 
         LearningObject learningObject = getPortfolio(PORTFOLIO_8);
@@ -97,7 +97,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void cannot_find_user_favorite_when_it_is_not_set() throws Exception {
+    public void cannot_find_user_favorite_when_it_is_not_set()  {
         login(USER_PEETER);
 
         UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
@@ -105,7 +105,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void deleting_user_favorite_removes_it_from_user_favorites() throws Exception {
+    public void deleting_user_favorite_removes_it_from_user_favorites()  {
         login(USER_PEETER);
 
         LearningObject learningObject = getPortfolio(PORTFOLIO_8);
@@ -119,7 +119,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void likeMaterial_sets_it_as_liked() throws Exception {
+    public void likeMaterial_sets_it_as_liked()  {
         login(USER_PEETER);
         Material material = getMaterial(MATERIAL_5);
 
@@ -130,7 +130,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void dislikeMaterial_sets_it_as_not_liked() throws Exception {
+    public void dislikeMaterial_sets_it_as_not_liked()  {
         login(USER_PEETER);
         Material material = getMaterial(MATERIAL_5);
 
@@ -141,7 +141,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void removeUserLike_removes_like_from_material() throws Exception {
+    public void removeUserLike_removes_like_from_material()  {
         login(USER_PEETER);
         Material material = getMaterial(MATERIAL_5);
 
@@ -152,7 +152,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void likePortfolio_sets_it_as_liked() throws Exception {
+    public void likePortfolio_sets_it_as_liked()  {
         login(USER_PEETER);
         Portfolio portfolio = getPortfolio(PORTFOLIO_3);
 
@@ -163,7 +163,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void dislikePortfolio_sets_it_as_not_liked() throws Exception {
+    public void dislikePortfolio_sets_it_as_not_liked()  {
         login(USER_PEETER);
         Portfolio portfolio = getPortfolio(PORTFOLIO_3);
 
@@ -174,7 +174,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void removeUserLike_removes_like_from_portfolio() throws Exception {
+    public void removeUserLike_removes_like_from_portfolio()  {
         login(USER_PEETER);
         Portfolio portfolio = getPortfolio(PORTFOLIO_3);
 
