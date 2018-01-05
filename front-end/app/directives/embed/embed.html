@@ -75,5 +75,5 @@
     ></a>
   </div>
 
-  <div class="embedded-material__overlay" data-ng-class="{'is-top': isAdminOrModerator}" data-ng-if="deleted && ($root.isViewPortfolioPage || $root.isEditPortfolioPage)"></div>
+  <div class="embedded-material__overlay" data-ng-class="{'is-top': !isAdminOrModerator}" data-ng-if="deleted && ($root.isViewPortfolioPage || $root.isEditPortfolioPage)"></div>
 </div>
