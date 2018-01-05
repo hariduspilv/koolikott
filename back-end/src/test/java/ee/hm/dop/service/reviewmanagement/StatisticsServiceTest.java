@@ -1,5 +1,6 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
@@ -8,15 +9,19 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
+import ee.hm.dop.service.statistics.StatisticsService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
 import static com.google.common.collect.Lists.newArrayList;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(EasyMockRunner.class)
 public class StatisticsServiceTest {
@@ -27,6 +32,8 @@ public class StatisticsServiceTest {
     private StatisticsDao statisticsDao;
     @Mock
     private UserDao userDao;
+    @Mock
+    private TaxonDao taxonDao;
 
     @Test
     public void ask_for_statistics_1_moderator() throws Exception {
@@ -43,6 +50,7 @@ public class StatisticsServiceTest {
         expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
         expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
         expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
+        expect(taxonDao.getUserTaxons(user)).andReturn(new ArrayList<>());
 
         replayAll();
 
@@ -51,7 +59,7 @@ public class StatisticsServiceTest {
         StatisticsRow firstRow = userRow(user, statistics);
         assertEquals(1L, firstRow.getReviewedLOCount().longValue());
         assertEquals(1L, firstRow.getApprovedReportedLOCount().longValue());
-        assertEquals(1L, firstRow.getRejectedChangedLOCount().longValue());
+        assertEquals(1L, firstRow.getDeletedReportedLOCount().longValue());
         assertEquals(1L, firstRow.getAcceptedChangedLOCount().longValue());
         assertEquals(1L, firstRow.getRejectedChangedLOCount().longValue());
         assertEquals(1L, firstRow.getReportedLOCount().longValue());
@@ -60,9 +68,11 @@ public class StatisticsServiceTest {
         assertEquals(1L, firstRow.getMaterialCount().longValue());
 
         StatisticsRow sumRow = statistics.getSum();
+        assertNull(sumRow.getUser());
+        assertNull(sumRow.getUsertaxons());
         assertEquals(1L, sumRow.getReviewedLOCount().longValue());
         assertEquals(1L, sumRow.getApprovedReportedLOCount().longValue());
-        assertEquals(1L, sumRow.getRejectedChangedLOCount().longValue());
+        assertEquals(1L, sumRow.getDeletedReportedLOCount().longValue());
         assertEquals(1L, sumRow.getAcceptedChangedLOCount().longValue());
         assertEquals(1L, sumRow.getRejectedChangedLOCount().longValue());
         assertEquals(1L, sumRow.getReportedLOCount().longValue());
@@ -91,6 +101,8 @@ public class StatisticsServiceTest {
         expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
         expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
         expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
+        expect(taxonDao.getUserTaxons(user1)).andReturn(new ArrayList<>());
+        expect(taxonDao.getUserTaxons(user2)).andReturn(new ArrayList<>());
 
         replayAll();
 
@@ -119,6 +131,8 @@ public class StatisticsServiceTest {
         assertEquals(2L, secondRow.getMaterialCount().longValue());
 
         StatisticsRow sumRow = statistics.getSum();
+        assertNull(sumRow.getUser());
+        assertNull(sumRow.getUsertaxons());
         assertEquals(3L, sumRow.getReviewedLOCount().longValue());
         assertEquals(3L, sumRow.getApprovedReportedLOCount().longValue());
         assertEquals(3L, sumRow.getDeletedReportedLOCount().longValue());
@@ -156,7 +170,7 @@ public class StatisticsServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(statisticsDao, userDao);
+        replay(statisticsDao, userDao, taxonDao);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -166,7 +180,7 @@ public class StatisticsServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(statisticsDao, userDao);
+        verify(statisticsDao, userDao, taxonDao);
 
         if (mocks != null) {
             for (Object object : mocks) {

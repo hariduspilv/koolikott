@@ -18,6 +18,7 @@ public class StatisticsFilterDto {
     private DateTime to;
     private Taxon taxon;
     private User user;
+    private FileFormat format;
 
     public DateTime getFrom() {
         return from;
@@ -49,5 +50,13 @@ public class StatisticsFilterDto {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public FileFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(FileFormat format) {
+        this.format = format;
     }
 }

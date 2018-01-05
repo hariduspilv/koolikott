@@ -3,10 +3,12 @@ package ee.hm.dop.service.reviewmanagement.dto;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 
+import java.util.List;
+
 public class StatisticsRow {
 
     private User user;
-    private Taxon taxon;
+    private List<Taxon> usertaxons;
     private Long reviewedLOCount;
     private Long approvedReportedLOCount;
     private Long deletedReportedLOCount;
@@ -25,12 +27,12 @@ public class StatisticsRow {
         this.user = user;
     }
 
-    public Taxon getTaxon() {
-        return taxon;
+    public List<Taxon> getUsertaxons() {
+        return usertaxons;
     }
 
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
+    public void setUsertaxons(List<Taxon> usertaxons) {
+        this.usertaxons = usertaxons;
     }
 
     public Long getReviewedLOCount() {
