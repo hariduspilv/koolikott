@@ -15,6 +15,8 @@ class controller extends Controller {
         this.$scope.url = url
         this.$scope.deleted = this.data.deleted
 
+        this.$scope.isAdminOrModerator = this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
+
         switch (type) {
             case 'YOUTUBE':
             case 'PICTURE':
