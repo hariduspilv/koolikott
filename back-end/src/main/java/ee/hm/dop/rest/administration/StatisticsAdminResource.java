@@ -4,7 +4,7 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.statistics.StatisticsCsvExporter;
 import ee.hm.dop.service.statistics.StatisticsExcelExporter;
-import ee.hm.dop.service.reviewmanagement.StatisticsService;
+import ee.hm.dop.service.statistics.StatisticsService;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.utils.io.CsvUtil;

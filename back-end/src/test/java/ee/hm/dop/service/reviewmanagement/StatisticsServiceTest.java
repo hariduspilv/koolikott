@@ -9,6 +9,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
+import ee.hm.dop.service.statistics.StatisticsService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

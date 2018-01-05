@@ -1,4 +1,4 @@
-package ee.hm.dop.service.reviewmanagement;
+package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;

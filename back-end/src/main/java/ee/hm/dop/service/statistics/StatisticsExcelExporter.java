@@ -29,24 +29,10 @@ public class StatisticsExcelExporter {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Statistika aruanne");
 
-        String[] headings = {
-                "Kasutaja",
-                "Valdkond",
-                "Ülevaadatuks märgitud õppevara",
-                "Sobivaks märgitud teatatud õppevara",
-                "Kustutatuks märgitud teatatud õppevara",
-                "Kinnitatud muudatustega õppevara",
-                "Eemaldatud muudatustega õppevara",
-                "Ebasobivaks/katkiseks märgitud õppevara",
-                "Lisatud kogumikke",
-                "Avalikustatud kogumikke",
-                "Materjali lisamine"
-        };
-
         int rowNum = 0;
         int xlsColNum = 0;
         Row headersRow = sheet.createRow(rowNum++);
-        for (String heading : headings) {
+        for (String heading : StatisticsUtil.HEADERS) {
             Cell cell = headersRow.createCell(xlsColNum++);
             cell.setCellValue(heading);
         }

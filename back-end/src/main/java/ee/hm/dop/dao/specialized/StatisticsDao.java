@@ -1,7 +1,7 @@
 package ee.hm.dop.dao.specialized;
 
 import ee.hm.dop.model.User;
-import ee.hm.dop.service.reviewmanagement.StatisticsUtil;
+import ee.hm.dop.service.statistics.StatisticsUtil;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;

@@ -155,4 +155,18 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(EXPORT_STATISTICS, dto);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
+
+    @Test
+    public void admin_can_generate_csv() throws Exception {
+        login(USER_ADMIN);
+        StatisticsFilterDto dto = new StatisticsFilterDto();
+        dto.setFrom(FROM);
+        dto.setTo(TO);
+        Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_MATHEMATICS_DOMAIN.id), Taxon.class);
+        dto.setTaxon(taxon);
+        dto.setUser(getUser(USER_MODERATOR));
+        dto.setFormat(FileFormat.csv);
+        Response response = doPost(EXPORT_STATISTICS, dto);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
 }

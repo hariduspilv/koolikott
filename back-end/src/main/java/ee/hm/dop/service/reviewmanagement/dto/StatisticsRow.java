@@ -8,7 +8,6 @@ import java.util.List;
 public class StatisticsRow {
 
     private User user;
-    private Taxon taxon;
     private List<Taxon> usertaxons;
     private Long reviewedLOCount;
     private Long approvedReportedLOCount;
@@ -26,14 +25,6 @@ public class StatisticsRow {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Taxon getTaxon() {
-        return taxon;
-    }
-
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
     }
 
     public List<Taxon> getUsertaxons() {
