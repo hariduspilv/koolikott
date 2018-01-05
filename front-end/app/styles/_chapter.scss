@@ -730,6 +730,7 @@ md-input-container.chapter-title {
 
 // embeds
 .chapter-embed-card {
+  position: relative;
   margin: 1rem -1.5rem;
   background-color: $white;
   box-shadow: 0 0 0 1px #e0e0e0; // gray-300
@@ -882,5 +883,35 @@ md-input-container.chapter-title {
       width: 50%;
       margin: 0 -1.5rem 1rem 1.5rem;
     }
+  }
+}
+
+.chapter-embed-card__title {
+  .chapter-embed-card.is-deleted:hover & {
+    display: none;
+  }
+}
+
+.chapter-embed-card__deleted-message {
+  display: none;
+  text-transform: uppercase;
+  color: $color-admin;
+
+  .chapter-embed-card.is-deleted:hover & {
+    display: block;
+  }
+}
+
+.chapter-embed-card__icon {
+  .chapter-embed-card.is-deleted:hover & {
+    background: $color-admin;
+  }
+}
+
+.chapter-embed-card__deleted-icon {
+  display: none;
+
+  .chapter-embed-card.is-deleted:hover & {
+    display: block;
   }
 }

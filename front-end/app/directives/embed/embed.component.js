@@ -11,8 +11,9 @@ class controller extends Controller {
         const isMaterial = this.isMaterial(this.data)
         const type = isMaterial ? this.getEmbeddedMaterialType(this.data) : this.getEmbeddedMediaType(this.data)
         const url = isMaterial ? this.getMaterialSource(this.data) : this.data.url
-        
+
         this.$scope.url = url
+        this.$scope.deleted = this.data.deleted
 
         switch (type) {
             case 'YOUTUBE':
@@ -62,7 +63,7 @@ class controller extends Controller {
                             this.$scope.type = 'PDF'
                             this.$scope.url = this.getPDFJSURL(
                                 encodeURIComponent('/rest/material/externalMaterial?url=' + url)
-                            )   
+                            )
                         })
                 break
             case 'SOUNDCLOUD':

@@ -20,12 +20,14 @@ class controller extends Controller {
                 : this.setMaterialFooterData(data.currentValue)
         }
     }
-    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType }) {
+    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType, deleted }) {
         this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
         this.$scope.link = '/material?id=' + id
         this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
         this.$scope.publishersAndAuthors = publishers.filter(p => p.name).map(p => p.name).concat(authors.filter(a => a.name || a.surname).map(a => a.name ? a.name+(a.surname ? ' '+a.surname : '') : a.surname)).join(', ')
         this.setMaterialSourceLink()
+
+        this.$scope.deleted = deleted
 
         const { name: licenseTypeName } = licenseType || {}
         this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()

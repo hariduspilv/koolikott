@@ -833,7 +833,7 @@ class Controller {
                 return this.dependencyExists('$translate')
                     ? this.$translate.instant('UNKNOWN')
                     : ''
-            
+
             const { name, surname } = createdBy
             return `${str}${str ? ', ' : ''}${name} ${surname}`
         }, '')

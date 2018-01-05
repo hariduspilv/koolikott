@@ -426,6 +426,9 @@ class controller extends Controller {
             fragment.appendChild(compile({ data, onDoubleClick }, `<dop-embed-footer data="data" is-edit-mode="${this.isEditMode}" on-double-click="onDoubleClick()"></dop-embed-footer>`))
 
             embed.appendChild(fragment)
+
+            if (data.deleted)
+                embed.classList.add('is-deleted')
             embed.classList.add('chapter-embed-card--loaded')
             embed.classList.remove('chapter-embed-card--loading')
         }
