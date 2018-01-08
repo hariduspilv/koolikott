@@ -54,10 +54,6 @@ angular.module('koolikottApp')
                      * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
                      * would be auto-selected.
                      */
-                    const setLicenseTypeSelectedText = () =>
-                        $translate('LICENSETYPE_LONG_NAME_' + $scope.newPortfolio.licenseType.name.toUpperCase()).then(translation =>
-                            $scope.licenseTypeSelectedText = translation
-                        )
                     if ($scope.newPortfolio.licenseType)
                         setLicenseTypeSelectedText()
                     $scope.$watch('newPortfolio.licenseType', (currentValue, previousValue) => {
@@ -221,6 +217,12 @@ angular.module('koolikottApp')
                         $scope.isUserAuthor = false;
                     }
                 };
+
+                function setLicenseTypeSelectedText() {
+                    $translate('LICENSETYPE_LONG_NAME_' + $scope.newPortfolio.licenseType.name.toUpperCase()).then(translation =>
+                        $scope.licenseTypeSelectedText = translation
+                    )
+                }
 
                 init();
             }
