@@ -3,21 +3,24 @@
 angular.module('koolikottApp')
     .controller('addPortfolioDialogController',
         [
-            '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService',
-            function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService) {
+            '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService',
+            function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService) {
                 $scope.isSaving = false;
                 $scope.showHints = true;
                 $scope.isTouched = {};
-                $scope.isSummaryVisible = false;
-                $scope.charactersRemaining = 850;
                 $scope.uploadingPicture = false;
+                $scope.isUserAuthor = false;
+
+                $scope.$watch('newPicture', onNewPictureChange.bind(this));
+                $scope.$watchCollection('invalidPicture', onInvalidPictureChange.bind(this));
 
                 function init() {
-                    var portfolio = storageService.getEmptyPortfolio();
+                    let portfolio = storageService.getEmptyPortfolio();
 
                     if (!portfolio) portfolio = storageService.getPortfolio();
                     else storageService.setEmptyPortfolio(null);
 
+                    metadataService.loadLicenseTypes(setLicenseTypes.bind(this));
                     $scope.newPortfolio = createPortfolio();
                     $scope.portfolio = portfolio;
                     $scope.newPortfolio.chapters = portfolio.chapters;
@@ -25,16 +28,25 @@ angular.module('koolikottApp')
 
                     if ($scope.portfolio.id != null) {
                         $scope.isEditPortfolio = true;
-                        $scope.isSummaryVisible = true;
-
-                        var portfolioClone = angular.copy(portfolio);
+                        let portfolioClone = angular.copy(portfolio);
 
                         $scope.newPortfolio.title = portfolioClone.title;
+                        $scope.newPortfolio.licenseType = portfolioClone.licenseType;
                         $scope.newPortfolio.summary = portfolioClone.summary;
                         $scope.newPortfolio.taxons = portfolioClone.taxons;
                         $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                         $scope.newPortfolio.tags = portfolioClone.tags;
                         $scope.newPortfolio.picture = portfolioClone.picture;
+                    }
+
+                    /**
+                     * Immediately show license type field error in edit-mode if it is not filled to tell the user
+                     * that it is now required before any changes may be saved.
+                     */
+                    if ($scope.isEditPortfolio && ($scope.newPortfolio.licenseType === undefined)) {
+                        $timeout(() =>
+                            $scope.addPortfolioForm.licenseType.$setTouched()
+                        )
                     }
 
                     getMaxPictureSize();
@@ -44,49 +56,13 @@ angular.module('koolikottApp')
                     $mdDialog.hide();
                 };
 
-                $scope.fileUpload = function (files, file, newFile) {
-                    if (newFile && newFile[0] && newFile[0].$error) {
-                        processInvalidUpload();
-                    } else if (newFile && newFile[0] && !newFile[0].$error) {
-                        $scope.uploadingPicture = true;
-                        pictureUploadService.upload(newFile[0]).then(function (response) {
-                            pictureUploadSuccess(response.data);
-                        }).catch(function () {
-                            pictureUploadFailed();
-                        }).finally(function () {
-                            pictureUploadFinally()
-                        });
-
-                    }
-                };
-
-                function processInvalidUpload() {
-                    $scope.showErrorOverlay = true;
-                    $timeout(function () {
-                        $scope.showErrorOverlay = false;
-                    }, 6000);
-                }
-
-                function pictureUploadSuccess(picture) {
-                    $scope.newPortfolio.picture = picture;
-                }
-
-                function pictureUploadFailed() {
-                    log('Picture upload failed.');
-                }
-
-                function pictureUploadFinally() {
-                    $scope.showErrorOverlay = false;
-                    $scope.uploadingPicture = false;
-                }
-
                 $scope.create = function () {
                     $scope.isSaving = true;
 
                     if ($scope.uploadingPicture) {
                         $timeout($scope.create, 500, false);
                     } else {
-                        var url = "rest/portfolio/create";
+                        let url = "rest/portfolio/create";
                         serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess.bind(null, true), createPortfolioFailed, savePortfolioFinally);
                     }
                 };
@@ -129,12 +105,13 @@ angular.module('koolikottApp')
                     if ($scope.uploadingPicture) {
                         $timeout($scope.create, 500, false);
                     } else {
-                        var url = "rest/portfolio/update";
+                        let url = "rest/portfolio/update";
                         $scope.portfolio.title = $scope.newPortfolio.title;
                         $scope.portfolio.summary = $scope.newPortfolio.summary;
                         $scope.portfolio.taxons = $scope.newPortfolio.taxons;
                         $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
                         $scope.portfolio.tags = $scope.newPortfolio.tags;
+                        $scope.portfolio.licenseType = $scope.newPortfolio.licenseType;
 
                         if ($scope.newPortfolio.picture) {
                             $scope.portfolio.picture = $scope.newPortfolio.picture;
@@ -158,11 +135,11 @@ angular.module('koolikottApp')
                         }
                     });
 
-                    return portfolio.title && Array.isArray(portfolio.targetGroups) && portfolio.targetGroups.length && hasCorrectTaxon;
+                    return $scope.addPortfolioForm.$valid && hasCorrectTaxon;
                 };
 
                 $scope.addNewTaxon = function () {
-                    var educationalContext = taxonService.getEducationalContext($scope.newPortfolio.taxons[0]);
+                    let educationalContext = taxonService.getEducationalContext($scope.newPortfolio.taxons[0]);
 
                     $scope.newPortfolio.taxons.push(educationalContext);
                 };
@@ -188,13 +165,45 @@ angular.module('koolikottApp')
                     console.log('Failed to get max picture size, using 10MB as default.');
                 }
 
-                $scope.openSummary = function () {
-                    $scope.isSummaryVisible = true;
-
-                    $timeout(function () {
-                        var editorScope = textAngularManager.retrieveEditor('portfolioDescription').scope;
-                        editorScope.displayElements.text.focus();
+                function setLicenseTypes(data) {
+                    let array = data.filter(function (type) {
+                        return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
                     });
+                    $scope.licenseTypes = data;
+                    $scope.allRightsReserved = array[0];
+                }
+
+                function onNewPictureChange(currentValue) {
+                    if (currentValue)
+                        this.pictureUpload = pictureUploadService
+                            .upload(currentValue)
+                            .then(({data}) => {
+                                    $scope.newPortfolio.picture = data;
+                                    $scope.showErrorOverlay = false;
+                                }, () =>
+                                    $scope.showErrorOverlay = false
+                            )
+                }
+
+                function onInvalidPictureChange(currentValue) {
+                    if (currentValue && currentValue.$error) {
+                        $scope.showErrorOverlay = true;
+                        this.$timeout(() => {
+                            this.$scope.showErrorOverlay = false
+                        }, 6000)
+                    }
+                }
+
+                $scope.setAuthorToUser = function () {
+                    const {name, surname} = authenticatedUserService.getUser();
+
+                    if ($scope.newPortfolio.picture && $scope.newPortfolio.picture.author !== `${name} ${surname}`) {
+                        $scope.newPortfolio.picture.author = `${name} ${surname}`;
+                        $scope.isUserAuthor = true;
+                    } else {
+                        $scope.newPortfolio.picture.author = '';
+                        $scope.isUserAuthor = false;
+                    }
                 };
 
                 init();

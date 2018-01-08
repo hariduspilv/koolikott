@@ -387,7 +387,8 @@ function createPortfolio(id) {
         summary: "",
         taxon: null,
         targetGroups: [],
-        tags: []
+        tags: [],
+        licenseType: ""
     };
     return portfolio;
 }

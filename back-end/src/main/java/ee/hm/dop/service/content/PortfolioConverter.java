@@ -31,6 +31,7 @@ public class PortfolioConverter {
         to.setTaxons(from.getTaxons());
         to.setChapters(from.getChapters());
         to.setPicture(from.getPicture());
+        to.setLicenseType(from.getLicenseType());
         if (from.getPicture() != null) {
             if (from.getPicture().getId() == null) {
                 to.setPicture(null);

@@ -7,6 +7,14 @@ class controller extends Controller {
         const VISIBILITY_PUBLIC = 'PUBLIC'
         const VISIBILITY_PRIVATE = 'PRIVATE'
         const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
+        const licenceTypeMap = {
+            'CCBY': ['by'],
+            'CCBYSA': ['by', 'sa'],
+            'CCBYND': ['by', 'nd'],
+            'CCBYNC': ['by', 'nc'],
+            'CCBYNCSA': ['by', 'nc', 'sa'],
+            'CCBYNCND': ['by', 'nc', 'nd']
+        };
 
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.getTaxonObject = this.getTaxonObject.bind(this)
@@ -51,6 +59,11 @@ class controller extends Controller {
         this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
 
+        this.$scope.getLicenseIconList = () => {
+            if (this.portfolio && this.portfolio.licenseType) {
+                return licenceTypeMap[this.portfolio.licenseType.name];
+            }
+        };
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {

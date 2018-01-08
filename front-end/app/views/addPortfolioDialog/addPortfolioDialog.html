@@ -13,54 +13,44 @@
     </md-toolbar>
     <md-content class="md-padding">
       <div layout="row" layout-align="center center" layout-align-xs="start center">
-        <div flex-xs="70" flex-gt-xs="90">
-          <md-input-container class="md-block" layout-fill>
-            <label>
-              <span data-translate="PORTFOLIO_TITLE"></span>
-            </label>
-            <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
-            <div data-ng-messages="addPortfolioForm.title.$error">
-              <div data-ng-message="required" data-ng-hide="newPortfolio.title.length > 0"
-                   data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
-            </div>
-          </md-input-container>
-        </div>
-        <div flex-xs="30" flex-sm="25" flex-md="20" flex-gt-md="15">
-          <div data-ngf-drop data-ngf-select data-ngf-change="fileUpload($files, $file, $newFiles)" class="drop-box"
-               data-ngf-drag-over-class="'dragover'"
-               data-ngf-multiple="false"
-               data-accept="image/*"
-               data-ngf-pattern="'image/*'"
-               data-ngf-max-size="{{maxPictureSize + 'MB'}}"
-               layout="row"
-               layout-align="center center">
-
-            <!-- image preview -->
-            <md-input-container data-ng-if="newPicture || newPortfolio.picture"
-                                class="md-block drop-box-preview-container">
-              <div class="drop-box-preview" ng-if="!showErrorOverlay">
-                <img data-ng-if="newPicture" data-ngf-thumbnail="newPicture"
-                     ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
-                <img data-ng-if="!newPicture && newPortfolio.picture"
-                     data-ng-src="rest/picture/{{newPortfolio.picture.name}}"
-                     ngf-size="{width: 300, height: 200, quality: 0.9}" alt="photo">
-              </div>
-            </md-input-container>
-            <p class="text-small text-light" data-ng-class="{'text-error': showErrorOverlay}"
-               data-ng-if="!newPicture && !newPortfolio.picture && !showErrorOverlay">
-              <span data-translate="LOAD_IMAGE"></span>
-              <span data-translate="MAX_SIZE"></span> {{maxPictureSize}}MB
-            </p>
-            <div class="error-wrapper" data-ng-if="showErrorOverlay">
-              <span class="text-error" data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
-            </div>
+        <md-input-container class="md-block" layout-fill>
+          <label>
+            <span data-translate="PORTFOLIO_TITLE"></span>
+          </label>
+          <input data-ng-model="newPortfolio.title" id="add-portfolio-title-input" name="title" required>
+          <div data-ng-messages="addPortfolioForm.title.$error">
+            <div data-ng-message="required" data-ng-hide="newPortfolio.title.length > 0"
+                 data-translate="PORTFOLIO_TITLE_IS_MANDATORY"></div>
           </div>
+        </md-input-container>
 
-
-          <md-tooltip><span data-translate="PORTFOLIO_PHOTO_UPLOAD_HELP"></span></md-tooltip>
-        </div>
+        <!-- License type -->
+        <md-input-container flex="100" flex-gt-sm="60" flex-gt-md="25">
+          <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
+          <md-select
+            name="licenseType"
+            class="no-margin"
+            data-ng-model="newPortfolio.licenseType"
+            data-ng-model-options="{trackBy: '$value.id'}"
+            required
+          >
+            <md-option
+              data-ng-value="allRightsReserved"
+              data-translate="LICENSETYPE_CANT_CHOOSE"
+            ></md-option>
+            <md-option
+              data-ng-repeat="licenseType in licenseTypes track by $index"
+              data-ng-value="licenseType"
+              data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
+            ></md-option>
+          </md-select>
+          <div data-ng-messages="addPortfolioForm.licenseType.$error">
+            <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
+          </div>
+        </md-input-container>
       </div>
 
+      <!-- Taxons -->
       <div layout="row" layout-align="none center" data-ng-repeat="taxon in newPortfolio.taxons track by $index">
         <dop-taxon-selector
           data-taxon="newPortfolio.taxons[$index]"
@@ -77,29 +67,146 @@
           <md-icon>add_circle</md-icon>
           <md-tooltip md-direction="top"><span data-translate="MATERIAL_TAB_ADD_TAXON"></span></md-tooltip>
         </md-button>
-
       </div>
 
+      <!-- Target groups -->
       <dop-target-group-selector
         data-target-groups="newPortfolio.targetGroups"
         data-is-required="{trigger: true}"
         data-on-change="newPortfolio.targetGroups = targetGroups"
       ></dop-target-group-selector>
 
-      <md-input-container class="md-block margin-top-36" data-ng-show="!isSummaryVisible">
-        <label>
-          <span data-translate="PORTFOLIO_SUMMARY"></span>
-        </label>
-        <input type="text" data-ng-click="openSummary()">
-      </md-input-container>
-      <md-input-container class="md-block animate-if margin-top-36 remaining-charaters-wrapper"
-                          data-ng-if="isSummaryVisible">
+      <!-- Description -->
+      <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
+           flex-order-gt-sm="2" flex="100">
+        <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+          <label data-translate="PORTFOLIO_SUMMARY"></label>
+          <textarea ng-model="newPortfolio.summary" id="add-portfolio-description-input"></textarea>
+        </md-input-container>
+      </div>
 
-        <text-angular id="add-portfolio-description-input" name="portfolioDescription"
-                      class="textangular-editor" placeholder="{{'PORTFOLIO_SUMMARY' | translate}}"
-                      ng-model="newPortfolio.summary" ta-maxlength="850"></text-angular>
-        <dop-remaining-characters class="remaining-charaters" text="newPortfolio.summary"></dop-remaining-characters>
-      </md-input-container>
+      <!-- Illustration (cover image) -->
+      <div layout-wrap layout="row" layout-align="start center">
+        <div flex="100" flex-gt-sm="20" flex-gt-md="10">
+          <div
+            data-ngf-drop
+            ngf-select
+            ng-model="newPicture"
+            class="drop-box no-margin"
+            data-ngf-drag-over-class="'dragover'"
+            data-ngf-multiple="false"
+            data-accept="image/*"
+            data-ngf-pattern="'image/*'"
+            data-ngf-max-size="{{maxPictureSize + 'MB'}}"
+            ngf-model-invalid="invalidPicture"
+            layout="row"
+            layout-align="center center"
+          >
+                <span data-ng-if="!newPicture && !newPortfolio.picture.name && !showErrorOverlay">
+                  <span data-ng-class="{'error-text': (invalidPicture && invalidPicture.length > 0)}">
+                    <span data-translate="SIZE_UNTIL"></span>
+                    <span data-ng-bind="maxPictureSize"></span> MB
+                  </span>
+                </span>
+            <!-- image preview -->
+            <md-input-container
+              data-ng-if="(newPicture || newPortfolio.picture.name) && !showErrorOverlay"
+              class="md-block drop-box-preview-container"
+            >
+              <div class="drop-box-preview">
+                <img
+                  data-ng-if="newPicture"
+                  data-ngf-thumbnail="newPicture"
+                  ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}"
+                  alt="photo"
+                >
+                <img
+                  data-ng-if="!newPicture && newPortfolio.picture.name"
+                  data-ng-src="rest/picture/{{newPortfolio.picture.name}}"
+                  ngf-size="{width: 300, height: 300, quality: 0.9, autoCrop: true}"
+                  alt="photo"
+                >
+              </div>
+            </md-input-container>
+            <span class="error-wrapper" data-ng-if="showErrorOverlay">
+              <span class="text-error">
+                <span data-translate="UPLOADED_PICTURE_TOO_BIG"></span>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="md-padding" flex="50" flex-gt-sm="20">
+          <h5 class="no-margin" data-translate="SUBTOPIC_ILLUSTRATSIOON"></h5>
+          <md-input-container>
+            <label data-translate="AUTHOR_WORD"></label>
+            <input
+              data-ng-required="newPicture || newPortfolio.picture.name"
+              data-ng-model="newPortfolio.picture.author"
+              id="newPortfolio-picture-author-{{$index}}"
+              name="authorName"
+              md-maxlength="50"
+              data-ng-disabled="isUserAuthor"
+            >
+            <div ng-messages="addPortfolioForm.authorName.$error" data-ng-show="!newPortfolio.picture.author">
+              <div ng-message="required" data-translate="AUTHOR_NAME_REQUIRED"></div>
+            </div>
+          </md-input-container>
+        </div>
+
+        <div class="md-padding" flex="50" flex-gt-sm="20">
+          <md-checkbox class="md-primary checkbox--material-author" data-ng-click="setAuthorToUser()"
+                       data-ng-checked="isUserAuthor" aria-label="{{ 'I_AM_AUTHOR' | translate }}">
+            <span data-translate="I_AM_AUTHOR"></span>
+          </md-checkbox>
+        </div>
+
+        <div class="md-padding" flex="50" flex-gt-sm="20">
+          <md-input-container>
+            <label data-translate="SOURCE_BIG"></label>
+            <input
+              data-ng-required="(newPicture || newPortfolio.picture.name) && !newPortfolio.picture.licenseType"
+              data-ng-model="newPortfolio.picture.source"
+              name="pictureSource"
+              md-maxlength="50"
+            >
+            <div ng-messages="addPortfolioForm.pictureSource.$error" data-ng-show="!newPortfolio.picture.source">
+              <div ng-message="required" data-translate="SOURCE_OR_LICENSE_TYPE_REQUIRED"></div>
+            </div>
+          </md-input-container>
+        </div>
+
+        <div class="md-padding">
+          <span data-translate="OR_WORD"></span>
+        </div>
+
+        <div class="md-padding" flex="50" flex-gt-sm="20">
+          <md-input-container>
+            <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
+            <md-select
+              class="no-margin"
+              data-ng-required="(newPicture || newPortfolio.picture.name) && !newPortfolio.picture.source"
+              data-ng-model="newPortfolio.picture.licenseType"
+              id="pictureLicenseTypeSelect"
+              name="pictureLicenseType"
+              ng-model-options="{trackBy: '$value.id'}"
+            >
+              <md-option
+                data-ng-value="allRightsReserved"
+                data-translate="LICENSETYPE_CANT_CHOOSE"
+              ></md-option>
+              <md-option
+                data-ng-value="licenseType"
+                data-ng-repeat="licenseType in licenseTypes track by $index"
+                data-translate="LICENSETYPE_{{licenseType.name.toUpperCase()}}"
+              >
+                <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"/>
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+
     </md-content>
 
     <md-dialog-actions>
