@@ -7,6 +7,7 @@
   "repository": {},
   "devDependencies": {
     "autoprefixer": "^6.7.0",
+    "babel-plugin-angularjs-annotate": "^0.8.2",
     "babel-preset-env": "^1.6.1",
     "compression": "^1.6.1",
     "connect-modrewrite": "^0.9.0",

@@ -310,24 +310,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // ng-annotate tries to make the code safe for minification automatically
-        // by using the Angular long form for dependency injection.
-        ngAnnotate: {
-            dist: {
-                files: [{
-                    expand: true,
-                    src: [
-                        '<%= yeoman.app %>/*.js',
-                        '<%= yeoman.app %>/directives/**/**/*.js',
-                        '<%= yeoman.app %>/services/**/**/*.js',
-                        '<%= yeoman.app %>/views/**/**/*.js',
-                        '<%= yeoman.app %>/utils/**/**/*.js'
-                    ],
-                    dest: '.tmp'
-                }]
-            }
-        },
-
         // Replace Google CDN references
         cdnify: {
             dist: {
@@ -451,7 +433,8 @@ module.exports = function (grunt) {
         // ES6 syntax
         babel: {
             options: {
-                presets: ['env']
+                presets: ['env'],
+                plugins: ['angularjs-annotate']
             },
             dist: {
                 files: {
@@ -540,7 +523,6 @@ module.exports = function (grunt) {
         'postcss:dist',
         'concat',
         'babel',
-        'ngAnnotate',
         'copy:dist',
         'ngconstant:dist',
         'string-replace:constants',
@@ -569,7 +551,6 @@ module.exports = function (grunt) {
         'postcss:dist',
         'concat',
         'babel',
-        'ngAnnotate',
         'copy:dist',
         'strip_code',
         'ngconstant:dist',
