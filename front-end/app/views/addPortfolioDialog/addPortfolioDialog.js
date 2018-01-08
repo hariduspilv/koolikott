@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
     .controller('addPortfolioDialogController',
         [
-            '$scope', '$mdDialog', '$location', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService',
-            function ($scope, $mdDialog, $location, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService) {
+            '$scope', '$mdDialog', '$location', '$translate', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService',
+            function ($scope, $mdDialog, $location, $translate, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService) {
                 $scope.isSaving = false;
                 $scope.showHints = true;
                 $scope.isTouched = {};
@@ -48,6 +48,22 @@ angular.module('koolikottApp')
                             $scope.addPortfolioForm.licenseType.$setTouched()
                         )
                     }
+
+                    /**
+                     * Manually set license type selected text based on the selected license type because
+                     * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
+                     * would be auto-selected.
+                     */
+                    const setLicenseTypeSelectedText = () =>
+                        $translate('LICENSETYPE_LONG_NAME_' + $scope.newPortfolio.licenseType.name.toUpperCase()).then(translation =>
+                            $scope.licenseTypeSelectedText = translation
+                        )
+                    if ($scope.newPortfolio.licenseType)
+                        setLicenseTypeSelectedText()
+                    $scope.$watch('newPortfolio.licenseType', (currentValue, previousValue) => {
+                        if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
+                            setLicenseTypeSelectedText()
+                    })
 
                     getMaxPictureSize();
                 }

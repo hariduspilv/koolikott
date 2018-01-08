@@ -73,6 +73,18 @@ class controller extends Controller {
                 this.$scope.addMaterialForm.licenseType.$setTouched()
             )
 
+        /**
+         * Manually set license type selected text based on the selected license type because
+         * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
+         * would be auto-selected.
+         */
+        if (this.$scope.material.licenseType)
+            this.setLicenseTypeSelectedText()
+        this.$scope.$watch('material.licenseType', (currentValue, previousValue) => {
+            if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
+                this.setLicenseTypeSelectedText()
+        })
+
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
             angular.element(document.querySelector('html')).css('overflow-y', '')
@@ -594,6 +606,11 @@ class controller extends Controller {
         });
         this.$scope.licenseTypes = data;
         this.$scope.allRightsReserved = array[0];
+    }
+    setLicenseTypeSelectedText() {
+        this.$translate('LICENSETYPE_LONG_NAME_' + this.$scope.material.licenseType.name.toUpperCase()).then(translation =>
+            this.$scope.licenseTypeSelectedText = translation
+        )
     }
     /**
      * If 'NOT_RELEVANT' is not last item in list

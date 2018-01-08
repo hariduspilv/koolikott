@@ -50,6 +50,18 @@ class controller extends Controller {
             this.$scope.isUserAuthor = currentValue === this.userFullName
         })
 
+        /**
+         * Manually set license type selected text based on the selected license type because
+         * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
+         * would be auto-selected.
+         */
+        if (this.$scope.media.licenseType)
+            this.setLicenseTypeSelectedText()
+        this.$scope.$watch('media.licenseType', (currentValue, previousValue) => {
+            if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
+                this.setLicenseTypeSelectedText()
+        })
+
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
             angular.element(document.querySelector('html')).css('overflow-y', '')
@@ -102,6 +114,11 @@ class controller extends Controller {
          * @see https://github.com/angular/material/issues/8598
          */
         this.$mdDialog.cancel()
+    }
+    setLicenseTypeSelectedText() {
+        this.$translate('LICENSETYPE_LONG_NAME_' + this.$scope.media.licenseType.name.toUpperCase()).then(translation =>
+            this.$scope.licenseTypeSelectedText = translation
+        )
     }
 }
 controller.$inject = [
