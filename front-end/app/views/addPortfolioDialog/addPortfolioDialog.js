@@ -56,7 +56,7 @@ angular.module('koolikottApp')
                      */
                     if ($scope.newPortfolio.licenseType)
                         setLicenseTypeSelectedText()
-                    $scope.$watch('newPortfolio.licenseType', (currentValue, previousValue) => {
+                    $scope.$watch('newPortfolio.licenseType', function (currentValue, previousValue) {
                         if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
                             setLicenseTypeSelectedText()
                     })
@@ -219,9 +219,9 @@ angular.module('koolikottApp')
                 };
 
                 function setLicenseTypeSelectedText() {
-                    $translate('LICENSETYPE_LONG_NAME_' + $scope.newPortfolio.licenseType.name.toUpperCase()).then(translation =>
+                    $translate('LICENSETYPE_LONG_NAME_' + $scope.newPortfolio.licenseType.name.toUpperCase()).then(function (translation) {
                         $scope.licenseTypeSelectedText = translation
-                    )
+                    })
                 }
 
                 init();
