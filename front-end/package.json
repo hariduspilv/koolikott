@@ -7,7 +7,6 @@
   "repository": {},
   "devDependencies": {
     "autoprefixer": "^6.7.0",
-    "babel-plugin-angularjs-annotate": "^0.8.2",
     "babel-preset-env": "^1.6.1",
     "compression": "^1.6.1",
     "connect-modrewrite": "^0.9.0",
@@ -32,7 +31,6 @@
     "grunt-filerev": "^2.1.2",
     "grunt-google-cdn": "^0.4.3",
     "grunt-newer": "^1.1.0",
-    "grunt-ng-annotate": "^0.9.2",
     "grunt-ng-constant": "^2.0.1",
     "grunt-postcss": "^0.8.0",
     "grunt-requirejs": "^0.4.2",

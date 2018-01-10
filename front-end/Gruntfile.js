@@ -433,8 +433,7 @@ module.exports = function (grunt) {
         // ES6 syntax
         babel: {
             options: {
-                presets: ['env'],
-                plugins: ['angularjs-annotate']
+                presets: ['env']
             },
             dist: {
                 files: {
