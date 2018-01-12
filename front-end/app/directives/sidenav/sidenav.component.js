@@ -27,6 +27,7 @@ class controller extends Controller {
             '/dashboard/moderators',
             '/dashboard/restrictedUsers',
             '/dashboard/deleted',
+            '/dashboard/expertStatistics',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
@@ -65,7 +66,7 @@ class controller extends Controller {
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
         this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
         this.$scope.updateUserCounts();
-        
+
         if (!this.$scope.isAuthenticated)
             this.$rootScope.isUserTabOpen = false
     }

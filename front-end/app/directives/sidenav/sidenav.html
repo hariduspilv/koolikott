@@ -23,7 +23,8 @@
 
   <uib-accordion close-others="false">
     <!-- BEGIN My Profile -->
-    <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default" is-open="$root.isUserTabOpen">
+    <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default"
+         is-open="$root.isUserTabOpen">
       <uib-accordion-heading>
         <a id="myProfile" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isUserTabOpen}"
@@ -90,7 +91,8 @@
               <md-icon class="material-icons sidenav__icon">lightbulb_outline</md-icon>
               <span data-translate="UNREVIEWED" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="unReviewedLearningObjectsCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated"
+                  data-ng-bind="unReviewedLearningObjectsCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
@@ -107,7 +109,8 @@
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
           <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}" data-ng-href="/dashboard/moderators"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}"
+             data-ng-href="/dashboard/moderators"
              data-ng-click="updateCount('moderators')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">face</md-icon>
@@ -138,6 +141,29 @@
               <span data-translate="DELETED" class="sidenav__name"></span>
             </div>
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="deletedCount"></span>
+          </a>
+        </li>
+        <!--Must be hidden for now-->
+        <!--<li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="statistics" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/statistics')}"
+             data-ng-href="/dashboard/statistics">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">insert_chart</md-icon>
+              <span data-translate="STATISTICS" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>-->
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="expertStatistics" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/expertStatistics')}"
+             data-ng-href="/dashboard/expertStatistics">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">insert_chart</md-icon>
+              <span data-translate="EXPERT_STATISTICS" class="sidenav__name"></span>
+            </div>
           </a>
         </li>
       </ul>
@@ -187,7 +213,8 @@
       <a class="sidenav__header sidenav__header--version-number" md-ink-ripple layout="row" layout-align="start center"
          target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md">
         <span class="material-icons icon-github-circled"></span>
-        <div class="sidenav__name"><span data-translate="APP_VERSION"></span> <span ng-bind="$root.APP_VERSION"></span></div>
+        <div class="sidenav__name"><span data-translate="APP_VERSION"></span> <span ng-bind="$root.APP_VERSION"></span>
+        </div>
       </a>
     </div>
   </div>
