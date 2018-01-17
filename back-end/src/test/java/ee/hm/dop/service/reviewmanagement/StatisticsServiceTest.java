@@ -1,14 +1,15 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.service.reviewmanagement.dto.*;
 import ee.hm.dop.service.statistics.StatisticsService;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -17,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.easymock.EasyMock.*;
@@ -50,13 +52,16 @@ public class StatisticsServiceTest {
         expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
         expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
         expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(taxonDao.getUserTaxons(user)).andReturn(new ArrayList<>());
+
+        expect(taxonDao.findTaxonByLevel(TaxonDao.EDUCATIONAL_CONTEXT)).andReturn(Lists.newArrayList(educationalContext()));
+        expect(taxonDao.getTaxonsWithChildren(anyObject())).andReturn(Lists.newArrayList(new TaxonWithChildren(educationalContext(), new ArrayList<>())));
 
         replayAll();
 
         StatisticsResult statistics = statisticsService.statistics(new StatisticsFilterDto(), admin());
         assertEquals(1, statistics.getRows().size());
-        StatisticsRow firstRow = userRow(user, statistics);
+        UserStatistics userRow = userRow(user, statistics);
+        StatisticsRow firstRow = userRow.getRows().get(0);
         assertEquals(1L, firstRow.getReviewedLOCount().longValue());
         assertEquals(1L, firstRow.getApprovedReportedLOCount().longValue());
         assertEquals(1L, firstRow.getDeletedReportedLOCount().longValue());
@@ -69,7 +74,7 @@ public class StatisticsServiceTest {
 
         StatisticsRow sumRow = statistics.getSum();
         assertNull(sumRow.getUser());
-        assertNull(sumRow.getUsertaxons());
+        assertNull(sumRow.getUsertaxon());
         assertEquals(1L, sumRow.getReviewedLOCount().longValue());
         assertEquals(1L, sumRow.getApprovedReportedLOCount().longValue());
         assertEquals(1L, sumRow.getDeletedReportedLOCount().longValue());
@@ -101,14 +106,17 @@ public class StatisticsServiceTest {
         expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
         expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
         expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
-        expect(taxonDao.getUserTaxons(user1)).andReturn(new ArrayList<>());
-        expect(taxonDao.getUserTaxons(user2)).andReturn(new ArrayList<>());
+
+        expect(taxonDao.findTaxonByLevel(TaxonDao.EDUCATIONAL_CONTEXT)).andReturn(Lists.newArrayList(educationalContext()));
+        expect(taxonDao.getTaxonsWithChildren(anyObject())).andReturn(Lists.newArrayList(new TaxonWithChildren(educationalContext(), new ArrayList<>())));
+
 
         replayAll();
 
         StatisticsResult statistics = statisticsService.statistics(new StatisticsFilterDto(), admin());
         assertEquals(2, statistics.getRows().size());
-        StatisticsRow firstRow = userRow(user1, statistics);
+        UserStatistics userRow = userRow(user1, statistics);
+        StatisticsRow firstRow = userRow.getRows().get(0);
         assertEquals(1L, firstRow.getReviewedLOCount().longValue());
         assertEquals(1L, firstRow.getApprovedReportedLOCount().longValue());
         assertEquals(1L, firstRow.getDeletedReportedLOCount().longValue());
@@ -119,7 +127,8 @@ public class StatisticsServiceTest {
         assertEquals(0L, firstRow.getPublicPortfolioCount().longValue());
         assertEquals(0L, firstRow.getMaterialCount().longValue());
 
-        StatisticsRow secondRow = userRow(user2, statistics);
+        UserStatistics userRow2 = userRow(user2, statistics);
+        StatisticsRow secondRow = userRow2.getRows().get(0);
         assertEquals(2L, secondRow.getReviewedLOCount().longValue());
         assertEquals(2L, secondRow.getApprovedReportedLOCount().longValue());
         assertEquals(2L, secondRow.getDeletedReportedLOCount().longValue());
@@ -132,7 +141,7 @@ public class StatisticsServiceTest {
 
         StatisticsRow sumRow = statistics.getSum();
         assertNull(sumRow.getUser());
-        assertNull(sumRow.getUsertaxons());
+        assertNull(sumRow.getUsertaxon());
         assertEquals(3L, sumRow.getReviewedLOCount().longValue());
         assertEquals(3L, sumRow.getApprovedReportedLOCount().longValue());
         assertEquals(3L, sumRow.getDeletedReportedLOCount().longValue());
@@ -146,7 +155,20 @@ public class StatisticsServiceTest {
         verifyAll();
     }
 
-    private StatisticsRow userRow(User user, StatisticsResult statistics) {
+    private EducationalContext educationalContext() {
+        EducationalContext educationalContext = new EducationalContext();
+        Domain domain = new Domain();
+        Subject subject = new Subject();
+        HashSet<Subject> subjects = new HashSet<>();
+        subjects.add(subject);
+        domain.setSubjects(subjects);
+        HashSet<Domain> domains = new HashSet<>();
+        domains.add(domain);
+        educationalContext.setDomains(domains);
+        return educationalContext;
+    }
+
+    private UserStatistics userRow(User user, StatisticsResult statistics) {
         return statistics.getRows().stream().filter(r -> r.getUser().getId().equals(user.getId())).findAny().orElseThrow(RuntimeException::new);
     }
 
