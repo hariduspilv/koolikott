@@ -30,13 +30,12 @@
           <md-select
             name="licenseType"
             class="no-margin"
-            data-md-selected-text="licenseTypeSelectedText"
             data-ng-model="newPortfolio.licenseType"
             data-ng-model-options="{trackBy: '$value.id'}"
             required
           >
             <md-option
-              data-ng-value="allRightsReserved"
+              data-ng-value="doNotKnow"
               data-translate="LICENSETYPE_CANT_CHOOSE"
             ></md-option>
             <md-option
@@ -193,7 +192,7 @@
               ng-model-options="{trackBy: '$value.id'}"
             >
               <md-option
-                data-ng-value="allRightsReserved"
+                data-ng-value="doNotKnow"
                 data-translate="LICENSETYPE_CANT_CHOOSE"
               ></md-option>
               <md-option

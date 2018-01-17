@@ -23,7 +23,8 @@ class controller extends Controller {
 
         this.metadataService.loadLicenseTypes(data => {
             this.$scope.licenseTypes = data
-            this.$scope.allRightsReserved = data.find(t => t.name.toUpperCase() === 'ALLRIGHTSRESERVED')
+            this.$scope.doNotKnow = { id: 'doNotKnow' }
+            this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
         })
 
         this.$scope.$watch('media.url', this.processURL.bind(this))
@@ -51,15 +52,11 @@ class controller extends Controller {
         })
 
         /**
-         * Manually set license type selected text based on the selected license type because
-         * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
-         * would be auto-selected.
+         * Set license type to “All rights reserved” if user chooses “Do not know” option.
          */
-        if (this.$scope.media.licenseType)
-            this.setLicenseTypeSelectedText()
-        this.$scope.$watch('media.licenseType', (currentValue, previousValue) => {
-            if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
-                this.setLicenseTypeSelectedText()
+        this.$scope.$watch('media.licenseType', (selectedValue) => {
+            if (selectedValue && selectedValue.id === 'doNotKnow')
+                this.$scope.media.licenseType = this.$scope.allRightsReserved
         })
 
         // fix for https://github.com/angular/material/issues/6905
