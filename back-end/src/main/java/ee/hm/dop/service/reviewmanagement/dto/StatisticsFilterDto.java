@@ -8,6 +8,8 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 public class StatisticsFilterDto {
 
     @JsonSerialize(using = DateTimeSerializer.class)
@@ -16,8 +18,8 @@ public class StatisticsFilterDto {
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime to;
-    private Taxon taxon;
-    private User user;
+    private List<Taxon> taxons;
+    private List<User> users;
     private FileFormat format;
 
     public DateTime getFrom() {
@@ -36,20 +38,20 @@ public class StatisticsFilterDto {
         this.to = to;
     }
 
-    public Taxon getTaxon() {
-        return taxon;
+    public List<Taxon> getTaxons() {
+        return taxons;
     }
 
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
     }
 
-    public User getUser() {
-        return user;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public FileFormat getFormat() {

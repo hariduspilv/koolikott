@@ -5,13 +5,16 @@ import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
+import ee.hm.dop.service.reviewmanagement.dto.UserStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
@@ -27,19 +30,23 @@ public class StatisticsCsvExporter {
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileName))) {
             writer.writeNext(StatisticsUtil.HEADERS);
 
-            for (StatisticsRow s : statistics.getRows()) {
-                writer.writeNext(generateRow(s));
+            for (UserStatistics s : statistics.getRows()) {
+                List<StatisticsRow> rows = s.getRows();
+                for (int i = 0; i < rows.size(); i++) {
+                    StatisticsRow row = rows.get(i);
+                    writer.writeNext(generateRow(row, i == 0, null));
+                }
             }
-            writer.writeNext(generateRow(statistics.getSum()));
+            writer.writeNext(generateRow(statistics.getSum(), false, "Kokku"));
         } catch (IOException ex) {
             logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
         }
     }
 
-    private String[] generateRow(StatisticsRow s) {
+    private String[] generateRow(StatisticsRow s, boolean firstRow, String name) {
         Long estId = languageDao.findByCode("et").getId();
-        String username = s.getUser() != null ? s.getUser().getUsername() : "";
-        String userTaxons = isNotEmpty(s.getUsertaxons()) ? joinTranslation(s, estId) : "";
+        String username = !firstRow || s.getUser() == null ? "" : s.getUser().getUsername();
+        String userTaxons = name != null ? name : s.getUsertaxon() != null ? joinTranslation(s, estId) : "";
         return new String[]{
                 username,
                 userTaxons,
@@ -56,7 +63,7 @@ public class StatisticsCsvExporter {
     }
 
     private String joinTranslation(StatisticsRow s, Long langCode) {
-        return s.getUsertaxons().stream()
+        return Stream.of(s.getUsertaxon())
                 .map(t -> t.getLevel().toUpperCase() + "_" + t.getName().toUpperCase())
                 .map(tk -> translationGroupDao.getTranslationByKeyAndLangcode(tk, langCode))
                 .collect(Collectors.joining(", "));

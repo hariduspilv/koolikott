@@ -7,14 +7,14 @@ public class StatisticsResult {
     public StatisticsResult() {
     }
 
-    public StatisticsResult(StatisticsFilterDto filter, List<StatisticsRow> rows, StatisticsRow sum) {
+    public StatisticsResult(StatisticsFilterDto filter, List<UserStatistics> rows, StatisticsRow sum) {
         this.filter = filter;
         this.rows = rows;
         this.sum = sum;
     }
 
     private StatisticsFilterDto filter;
-    private List<StatisticsRow> rows;
+    private List<UserStatistics> rows;
     private StatisticsRow sum;
 
     public StatisticsFilterDto getFilter() {
@@ -25,11 +25,11 @@ public class StatisticsResult {
         this.filter = filter;
     }
 
-    public List<StatisticsRow> getRows() {
+    public List<UserStatistics> getRows() {
         return rows;
     }
 
-    public void setRows(List<StatisticsRow> rows) {
+    public void setRows(List<UserStatistics> rows) {
         this.rows = rows;
     }
 
