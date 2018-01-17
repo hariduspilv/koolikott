@@ -74,15 +74,11 @@ class controller extends Controller {
             )
 
         /**
-         * Manually set license type selected text based on the selected license type because
-         * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
-         * would be auto-selected.
+         * Set license type to “All rights reserved” if user chooses “Do not know” option.
          */
-        if (this.$scope.material.licenseType)
-            this.setLicenseTypeSelectedText()
-        this.$scope.$watch('material.licenseType', (currentValue, previousValue) => {
-            if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
-                this.setLicenseTypeSelectedText()
+        this.$scope.$watch('material.licenseType', (selectedValue) => {
+            if (selectedValue && selectedValue.id === 'doNotKnow')
+                this.$scope.material.licenseType = this.$scope.allRightsReserved
         })
 
         // fix for https://github.com/angular/material/issues/6905
@@ -601,16 +597,9 @@ class controller extends Controller {
         }
     }
     setLicenseTypes(data) {
-        var array = data.filter(function (type) {
-            return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
-        });
-        this.$scope.licenseTypes = data;
-        this.$scope.allRightsReserved = array[0];
-    }
-    setLicenseTypeSelectedText() {
-        this.$translate('LICENSETYPE_LONG_NAME_' + this.$scope.material.licenseType.name.toUpperCase()).then(translation =>
-            this.$scope.licenseTypeSelectedText = translation
-        )
+        this.$scope.licenseTypes = data
+        this.$scope.doNotKnow = { id: 'doNotKnow' }
+        this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
     }
     /**
      * If 'NOT_RELEVANT' is not last item in list
