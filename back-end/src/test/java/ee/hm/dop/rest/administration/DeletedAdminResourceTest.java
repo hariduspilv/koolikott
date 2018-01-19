@@ -97,7 +97,7 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void addRecommendation() {
         User user = login(USER_ADMIN);
-        Material material = materialGetter.get(MATERIAL_3, user);
+        Material material = materialGetter.get(MATERIAL_3);
 
         Recommendation recommendation = doPost(ADD_RECOMMENDATION_URL, material, Recommendation.class);
         assertNotNull(recommendation);
@@ -108,7 +108,7 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
     public void removeRecommendation() {
         User user = login(USER_ADMIN);
 
-        Material material = materialGetter.get(MATERIAL_3, user);
+        Material material = materialGetter.get(MATERIAL_3);
         Response response = doPost(REMOVE_RECOMMENDATION_URL, material);
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
