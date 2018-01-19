@@ -37,6 +37,13 @@ angular.module('koolikottApp')
                         $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                         $scope.newPortfolio.tags = portfolioClone.tags;
                         $scope.newPortfolio.picture = portfolioClone.picture;
+
+                        if($scope.newPortfolio.picture){
+                            const {name, surname} = authenticatedUserService.getUser();
+                            if($scope.newPortfolio.picture.author === `${name} ${surname}`){
+                                $scope.isUserAuthor = true;
+                            }
+                        }
                     }
 
                     /**
