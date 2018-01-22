@@ -5,6 +5,7 @@ import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
 import ee.hm.dop.service.reviewmanagement.dto.UserStatistics;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -45,6 +46,11 @@ public class StatisticsExcelExporter {
             for (int i = 0; i < rows1.size(); i++) {
                 StatisticsRow row = rows1.get(i);
                 rowNum = writeRow(sheet, rowNum, row, i == 0, null);
+                if (CollectionUtils.isNotEmpty(row.getSubjects())){
+                    for (StatisticsRow childRow : row.getSubjects()) {
+                        rowNum = writeRow(sheet, rowNum, childRow, false, null);
+                    }
+                }
             }
         }
         writeRow(sheet, rowNum, statistics.getSum(), false, "Kokku");

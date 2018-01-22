@@ -6,6 +6,7 @@ import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
 import ee.hm.dop.service.reviewmanagement.dto.UserStatistics;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,13 @@ public class StatisticsCsvExporter {
                 for (int i = 0; i < rows.size(); i++) {
                     StatisticsRow row = rows.get(i);
                     writer.writeNext(generateRow(row, i == 0, null));
+                    if (CollectionUtils.isNotEmpty(row.getSubjects())){
+                        for (StatisticsRow childRow : row.getSubjects()) {
+                            writer.writeNext(generateRow(childRow, false, null));
+                        }
+                    }
                 }
+
             }
             writer.writeNext(generateRow(statistics.getSum(), false, "Kokku"));
         } catch (IOException ex) {
