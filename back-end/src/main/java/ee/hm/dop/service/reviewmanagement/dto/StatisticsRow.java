@@ -7,6 +7,7 @@ import java.util.List;
 
 public class StatisticsRow {
 
+    private List<StatisticsRow> subjects;
     private User user;
     private Taxon usertaxon;
     private Long reviewedLOCount;
@@ -105,5 +106,13 @@ public class StatisticsRow {
 
     public void setMaterialCount(Long materialCount) {
         this.materialCount = materialCount;
+    }
+
+    public List<StatisticsRow> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<StatisticsRow> subjects) {
+        this.subjects = subjects;
     }
 }

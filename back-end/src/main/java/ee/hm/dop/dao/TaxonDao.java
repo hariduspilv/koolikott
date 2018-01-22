@@ -106,12 +106,6 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .collect(Collectors.toList());
     }
 
-    public List<TaxonWithChildren> getTaxonsWithChildren(List<Taxon> taxon) {
-        return taxon.stream()
-                .map(t -> new TaxonWithChildren(t, getTaxonWithChildren(t)))
-                .collect(Collectors.toList());
-    }
-
     public List<Long> getTaxonWithChildren(Taxon taxon) {
         List<String> tree = TaxonUtils.getLevelTree(taxon);
         return getTaxonWithChildren(Arrays.asList(taxon.getId()), tree);

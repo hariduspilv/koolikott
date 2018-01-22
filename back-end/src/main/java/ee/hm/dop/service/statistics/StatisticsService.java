@@ -1,10 +1,10 @@
 package ee.hm.dop.service.statistics;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
@@ -46,29 +46,81 @@ public class StatisticsService {
     private List<UserStatistics> createRows(StatisticsFilterDto filter, List<User> users, List<TaxonWithChildren> taxons) {
         List<UserStatistics> statistics = makeEmptyUserStatistics(users);
         for (TaxonWithChildren taxon : taxons) {
-            List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> reportedLOCount = statisticsDao.reportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
-            List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonWithChildren());
+            List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> reportedLOCount = statisticsDao.reportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
+            List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
             for (User user : users) {
-                StatisticsRow row = new StatisticsRow();
-                row.setUser(user);
-                row.setUsertaxon(taxon.getTaxon());
-                row.setReviewedLOCount(getCount(reviewedLOCount, user));
-                row.setApprovedReportedLOCount(getCount(approvedReportedLOCount, user));
-                row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
-                row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
-                row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount, user));
-                row.setReportedLOCount(getCount(reportedLOCount, user));
-                row.setPortfolioCount(getCount(portfolioCount, user));
-                row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
-                row.setMaterialCount(getCount(materialCount, user));
-                getStatistic(statistics, user).getRows().add(row);
+                UserStatistics statistic = getStatistic(statistics, user);
+                if (statistic.getUserTaxons().stream().map(Taxon::getId).anyMatch(t -> taxon.getTaxon().getId().equals(t))) {
+                    StatisticsRow row = new StatisticsRow();
+                    row.setUser(user);
+                    row.setUsertaxon(taxon.getTaxon());
+                    row.setReviewedLOCount(getCount(reviewedLOCount, user));
+                    row.setApprovedReportedLOCount(getCount(approvedReportedLOCount, user));
+                    row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
+                    row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
+                    row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount, user));
+                    row.setReportedLOCount(getCount(reportedLOCount, user));
+                    row.setPortfolioCount(getCount(portfolioCount, user));
+                    row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
+                    row.setMaterialCount(getCount(materialCount, user));
+                    row.setSubjects(new ArrayList<>());
+                    statistic.getRows().add(row);
+                }
+            }
+            if (CollectionUtils.isNotEmpty(taxon.getSubjects())) {
+                for (TaxonWithChildren child : taxon.getSubjects()) {
+                    List<StatisticsQuery> reviewedLOCount2 = statisticsDao.reviewedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> approvedReportedLOCount2 = statisticsDao.approvedReportedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> rejectedReportedLOCount2 = statisticsDao.rejectedReportedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> acceptedChangedLOCount2 = statisticsDao.acceptedChangedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> rejectedChangedLOCount2 = statisticsDao.rejectedChangedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> reportedLOCount2 = statisticsDao.reportedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> portfolioCount2 = statisticsDao.createdPortfolioCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> publicPortfolioCount2 = statisticsDao.createdPublicPortfolioCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    List<StatisticsQuery> materialCount2 = statisticsDao.createdMaterialCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
+                    for (User user : users) {
+                        UserStatistics statistic = getStatistic(statistics, user);
+                        if (statistic.getUserTaxons().stream().map(Taxon::getId).anyMatch(t -> taxon.getTaxon().getId().equals(t))) {
+                            Optional<StatisticsRow> parentRow = statistic.getRows().stream().filter(r -> r.getUsertaxon().getId().equals(child.getParent().getId())).findAny();
+                            if (parentRow.isPresent()) {
+                                StatisticsRow row = new StatisticsRow();
+                                row.setUser(user);
+                                row.setUsertaxon(taxon.getTaxon());
+                                row.setReviewedLOCount(getCount(reviewedLOCount2, user));
+                                row.setApprovedReportedLOCount(getCount(approvedReportedLOCount2, user));
+                                row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount2, user));
+                                row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount2, user));
+                                row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount2, user));
+                                row.setReportedLOCount(getCount(reportedLOCount2, user));
+                                row.setPortfolioCount(getCount(portfolioCount2, user));
+                                row.setPublicPortfolioCount(getCount(publicPortfolioCount2, user));
+                                row.setMaterialCount(getCount(materialCount2, user));
+                                parentRow.get().getSubjects().add(row);
+                            } else {
+                                StatisticsRow row = new StatisticsRow();
+                                row.setUser(user);
+                                row.setUsertaxon(taxon.getTaxon());
+                                row.setReviewedLOCount(getCount(reviewedLOCount2, user));
+                                row.setApprovedReportedLOCount(getCount(approvedReportedLOCount2, user));
+                                row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount2, user));
+                                row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount2, user));
+                                row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount2, user));
+                                row.setReportedLOCount(getCount(reportedLOCount2, user));
+                                row.setPortfolioCount(getCount(portfolioCount2, user));
+                                row.setPublicPortfolioCount(getCount(publicPortfolioCount2, user));
+                                row.setMaterialCount(getCount(materialCount2, user));
+                                getStatistic(statistics, user).getRows().add(row);
+                            }
+                        }
+                    }
+                }
             }
         }
         return statistics;
@@ -81,6 +133,7 @@ public class StatisticsService {
     private UserStatistics convert(User user) {
         UserStatistics userStatistics = new UserStatistics();
         userStatistics.setUser(user);
+        userStatistics.setUserTaxons(taxonDao.getUserTaxons(user));
         userStatistics.setRows(new ArrayList<>());
         return userStatistics;
     }
@@ -93,9 +146,16 @@ public class StatisticsService {
         if (CollectionUtils.isEmpty(rows)) {
             return null;
         }
-        return rows.stream()
-                .map(UserStatistics::getRows)
-                .flatMap(Collection::stream)
+        List<StatisticsRow> results = new ArrayList<>();
+        for (UserStatistics row : rows) {
+            results.addAll(row.getRows());
+            for (StatisticsRow innerRow : row.getRows()) {
+                if (CollectionUtils.isNotEmpty(innerRow.getSubjects())){
+                    results.addAll(innerRow.getSubjects());
+                }
+            }
+        }
+        return results.stream()
                 .reduce(emptyRow(), (r1, r2) -> {
                     StatisticsRow sum = new StatisticsRow();
                     sum.setReviewedLOCount(r1.getReviewedLOCount() + r2.getReviewedLOCount());
@@ -144,31 +204,61 @@ public class StatisticsService {
         if (isEmpty(filter.getTaxons())) {
             filter.setTaxons(taxonDao.findTaxonByLevel(TaxonDao.EDUCATIONAL_CONTEXT));
         }
-        List<Taxon> taxonsToQuery = new ArrayList<>();
+        List<TaxonWithChildren> taxonWithChildren = new ArrayList<>();
         for (Taxon taxon : filter.getTaxons()) {
             if (taxon instanceof EducationalContext) {
                 EducationalContext educationalContext = (EducationalContext) taxon;
-                Set<Domain> domains = educationalContext.getDomains();
-                taxonsToQuery.addAll(domains);
-                for (Domain domain : domains) {
-                    if (CollectionUtils.isNotEmpty(domain.getSubjects())) {
-                        Set<Subject> subjects = domain.getSubjects();
-                        taxonsToQuery.addAll(subjects);
-                    }
+                for (Domain domain : educationalContext.getDomains()) {
+                    taxonWithChildren.add(convertDomain(domain));
                 }
             }
             if (taxon instanceof Domain) {
                 Domain domain = (Domain) taxon;
-                taxonsToQuery.add(domain);
-                if (CollectionUtils.isNotEmpty(domain.getSubjects())) {
-                    Set<Subject> subjects = domain.getSubjects();
-                    taxonsToQuery.addAll(subjects);
-                }
+                taxonWithChildren.add(convertDomain(domain));
             }
             if (taxon instanceof Subject) {
-                taxonsToQuery.add(taxon);
+                TaxonWithChildren parent = new TaxonWithChildren();
+                parent.setTaxon(taxon);
+                taxonWithChildren.add(parent);
             }
         }
-        return taxonDao.getTaxonsWithChildren(taxonsToQuery);
+        return getTaxonsWithChildren(taxonWithChildren);
+    }
+
+    private TaxonWithChildren convertDomain(Domain domain) {
+        TaxonWithChildren parent = new TaxonWithChildren();
+        parent.setTaxon(domain);
+        parent.setSubjects(new ArrayList<>());
+        if (CollectionUtils.isEmpty(domain.getSubjects())) {
+            parent.setCapped(true);
+        } else {
+            for (Subject subject : domain.getSubjects()) {
+                TaxonWithChildren children = new TaxonWithChildren();
+                children.setTaxon(subject);
+                children.setParent(domain);
+                parent.getSubjects().add(children);
+            }
+        }
+        return parent;
+    }
+
+    public List<TaxonWithChildren> getTaxonsWithChildren(List<TaxonWithChildren> taxons) {
+        for (TaxonWithChildren taxon : taxons) {
+            if (taxon.isCapped()) {
+                taxon.setTaxonIds(Lists.newArrayList(taxon.getTaxon().getId()));
+            } else {
+                taxon.setTaxonIds(taxonDao.getTaxonWithChildren(taxon.getTaxon()));
+            }
+            if (CollectionUtils.isNotEmpty(taxon.getSubjects())) {
+                for (TaxonWithChildren child : taxon.getSubjects()) {
+                    if (child.isCapped()) {
+                        child.setTaxonIds(Lists.newArrayList(child.getTaxon().getId()));
+                    } else {
+                        child.setTaxonIds(taxonDao.getTaxonWithChildren(child.getTaxon()));
+                    }
+                }
+            }
+        }
+        return taxons;
     }
 }

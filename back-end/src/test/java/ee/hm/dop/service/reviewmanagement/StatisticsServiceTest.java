@@ -17,7 +17,6 @@ import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -43,18 +42,19 @@ public class StatisticsServiceTest {
         User user = user(1L);
 
         expect(userDao.getUsersByRole(Role.MODERATOR)).andReturn(newArrayList(user));
-        expect(statisticsDao.reviewedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.approvedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.rejectedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.acceptedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.rejectedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.reportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
-        expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query));
+        expect(statisticsDao.reviewedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.approvedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.rejectedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.acceptedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.rejectedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.reportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
+        expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
 
         expect(taxonDao.findTaxonByLevel(TaxonDao.EDUCATIONAL_CONTEXT)).andReturn(Lists.newArrayList(educationalContext()));
-        expect(taxonDao.getTaxonsWithChildren(anyObject())).andReturn(Lists.newArrayList(new TaxonWithChildren(educationalContext(), new ArrayList<>())));
+        expect(taxonDao.getTaxonWithChildren(anyObject())).andReturn(Lists.newArrayList(1L)).times(2);
+        expect(taxonDao.getUserTaxons(user)).andReturn(Lists.newArrayList(domain(), subject()));
 
         replayAll();
 
@@ -72,18 +72,29 @@ public class StatisticsServiceTest {
         assertEquals(1L, firstRow.getPublicPortfolioCount().longValue());
         assertEquals(1L, firstRow.getMaterialCount().longValue());
 
+        StatisticsRow firstSubRow = userRow.getRows().get(0).getSubjects().get(0);
+        assertEquals(1L, firstSubRow.getReviewedLOCount().longValue());
+        assertEquals(1L, firstSubRow.getApprovedReportedLOCount().longValue());
+        assertEquals(1L, firstSubRow.getDeletedReportedLOCount().longValue());
+        assertEquals(1L, firstSubRow.getAcceptedChangedLOCount().longValue());
+        assertEquals(1L, firstSubRow.getRejectedChangedLOCount().longValue());
+        assertEquals(1L, firstSubRow.getReportedLOCount().longValue());
+        assertEquals(1L, firstSubRow.getPortfolioCount().longValue());
+        assertEquals(1L, firstSubRow.getPublicPortfolioCount().longValue());
+        assertEquals(1L, firstSubRow.getMaterialCount().longValue());
+
         StatisticsRow sumRow = statistics.getSum();
         assertNull(sumRow.getUser());
         assertNull(sumRow.getUsertaxon());
-        assertEquals(1L, sumRow.getReviewedLOCount().longValue());
-        assertEquals(1L, sumRow.getApprovedReportedLOCount().longValue());
-        assertEquals(1L, sumRow.getDeletedReportedLOCount().longValue());
-        assertEquals(1L, sumRow.getAcceptedChangedLOCount().longValue());
-        assertEquals(1L, sumRow.getRejectedChangedLOCount().longValue());
-        assertEquals(1L, sumRow.getReportedLOCount().longValue());
-        assertEquals(1L, sumRow.getPortfolioCount().longValue());
-        assertEquals(1L, sumRow.getPublicPortfolioCount().longValue());
-        assertEquals(1L, sumRow.getMaterialCount().longValue());
+        assertEquals(2L, sumRow.getReviewedLOCount().longValue());
+        assertEquals(2L, sumRow.getApprovedReportedLOCount().longValue());
+        assertEquals(2L, sumRow.getDeletedReportedLOCount().longValue());
+        assertEquals(2L, sumRow.getAcceptedChangedLOCount().longValue());
+        assertEquals(2L, sumRow.getRejectedChangedLOCount().longValue());
+        assertEquals(2L, sumRow.getReportedLOCount().longValue());
+        assertEquals(2L, sumRow.getPortfolioCount().longValue());
+        assertEquals(2L, sumRow.getPublicPortfolioCount().longValue());
+        assertEquals(2L, sumRow.getMaterialCount().longValue());
 
         verifyAll();
     }
@@ -97,18 +108,20 @@ public class StatisticsServiceTest {
         User user1 = user(1L);
         User user2 = user(2L);
         expect(userDao.getUsersByRole(Role.MODERATOR)).andReturn(newArrayList(user1, user2));
-        expect(statisticsDao.reviewedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2, query3));
-        expect(statisticsDao.approvedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2));
-        expect(statisticsDao.rejectedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2));
-        expect(statisticsDao.acceptedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1));
-        expect(statisticsDao.rejectedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1));
-        expect(statisticsDao.reportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1));
-        expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
-        expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
-        expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2));
+        expect(statisticsDao.reviewedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2, query3)).times(2);
+        expect(statisticsDao.approvedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2)).times(2);
+        expect(statisticsDao.rejectedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2)).times(2);
+        expect(statisticsDao.acceptedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1)).times(2);
+        expect(statisticsDao.rejectedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1)).times(2);
+        expect(statisticsDao.reportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1)).times(2);
+        expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2)).times(2);
+        expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2)).times(2);
+        expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2)).times(2);
 
         expect(taxonDao.findTaxonByLevel(TaxonDao.EDUCATIONAL_CONTEXT)).andReturn(Lists.newArrayList(educationalContext()));
-        expect(taxonDao.getTaxonsWithChildren(anyObject())).andReturn(Lists.newArrayList(new TaxonWithChildren(educationalContext(), new ArrayList<>())));
+        expect(taxonDao.getTaxonWithChildren(anyObject())).andReturn(Lists.newArrayList(1L)).times(2);
+        expect(taxonDao.getUserTaxons(user1)).andReturn(Lists.newArrayList(domain(), subject()));
+        expect(taxonDao.getUserTaxons(user2)).andReturn(Lists.newArrayList(domain(), subject()));
 
 
         replayAll();
@@ -142,23 +155,24 @@ public class StatisticsServiceTest {
         StatisticsRow sumRow = statistics.getSum();
         assertNull(sumRow.getUser());
         assertNull(sumRow.getUsertaxon());
-        assertEquals(3L, sumRow.getReviewedLOCount().longValue());
-        assertEquals(3L, sumRow.getApprovedReportedLOCount().longValue());
-        assertEquals(3L, sumRow.getDeletedReportedLOCount().longValue());
-        assertEquals(1L, sumRow.getAcceptedChangedLOCount().longValue());
-        assertEquals(1L, sumRow.getRejectedChangedLOCount().longValue());
-        assertEquals(1L, sumRow.getReportedLOCount().longValue());
-        assertEquals(2L, sumRow.getPortfolioCount().longValue());
-        assertEquals(2L, sumRow.getPublicPortfolioCount().longValue());
-        assertEquals(2L, sumRow.getMaterialCount().longValue());
+        assertEquals(6L, sumRow.getReviewedLOCount().longValue());
+        assertEquals(6L, sumRow.getApprovedReportedLOCount().longValue());
+        assertEquals(6L, sumRow.getDeletedReportedLOCount().longValue());
+        assertEquals(2L, sumRow.getAcceptedChangedLOCount().longValue());
+        assertEquals(2L, sumRow.getRejectedChangedLOCount().longValue());
+        assertEquals(2L, sumRow.getReportedLOCount().longValue());
+        assertEquals(4L, sumRow.getPortfolioCount().longValue());
+        assertEquals(4L, sumRow.getPublicPortfolioCount().longValue());
+        assertEquals(4L, sumRow.getMaterialCount().longValue());
 
         verifyAll();
     }
 
     private EducationalContext educationalContext() {
         EducationalContext educationalContext = new EducationalContext();
-        Domain domain = new Domain();
-        Subject subject = new Subject();
+        educationalContext.setId(1L);
+        Domain domain = domain();
+        Subject subject = subject();
         HashSet<Subject> subjects = new HashSet<>();
         subjects.add(subject);
         domain.setSubjects(subjects);
@@ -166,6 +180,18 @@ public class StatisticsServiceTest {
         domains.add(domain);
         educationalContext.setDomains(domains);
         return educationalContext;
+    }
+
+    private Subject subject() {
+        Subject subject = new Subject();
+        subject.setId(3L);
+        return subject;
+    }
+
+    private Domain domain() {
+        Domain domain = new Domain();
+        domain.setId(2L);
+        return domain;
     }
 
     private UserStatistics userRow(User user, StatisticsResult statistics) {

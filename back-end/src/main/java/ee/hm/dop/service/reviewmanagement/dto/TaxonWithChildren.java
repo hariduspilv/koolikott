@@ -6,12 +6,13 @@ import java.util.List;
 
 public class TaxonWithChildren {
 
+    private Taxon parent;
     private Taxon taxon;
-    private List<Long> taxonWithChildren;
+    private List<Long> taxonIds;
+    private boolean capped;
+    private List<TaxonWithChildren> subjects;
 
-    public TaxonWithChildren(Taxon taxon, List<Long> taxonWithChildren) {
-        this.taxon = taxon;
-        this.taxonWithChildren = taxonWithChildren;
+    public TaxonWithChildren() {
     }
 
     public Taxon getTaxon() {
@@ -22,11 +23,35 @@ public class TaxonWithChildren {
         this.taxon = taxon;
     }
 
-    public List<Long> getTaxonWithChildren() {
-        return taxonWithChildren;
+    public List<Long> getTaxonIds() {
+        return taxonIds;
     }
 
-    public void setTaxonWithChildren(List<Long> taxonWithChildren) {
-        this.taxonWithChildren = taxonWithChildren;
+    public void setTaxonIds(List<Long> taxonIds) {
+        this.taxonIds = taxonIds;
+    }
+
+    public boolean isCapped() {
+        return capped;
+    }
+
+    public void setCapped(boolean capped) {
+        this.capped = capped;
+    }
+
+    public List<TaxonWithChildren> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<TaxonWithChildren> subjects) {
+        this.subjects = subjects;
+    }
+
+    public Taxon getParent() {
+        return parent;
+    }
+
+    public void setParent(Taxon parent) {
+        this.parent = parent;
     }
 }
