@@ -15,12 +15,17 @@ public class AddPortfolioForm extends Components{
 	private By ageGroup = By.xpath("//form[1][contains(@name, 'targetGroupForm')]");
 	private By age = By.xpath("(//md-option[contains(@value, 'ZERO_FIVE')])[2]");
 	private By closeButton = By.xpath("//md-icon[@aria-label='close']");
-	private By insertPhoto = By.cssSelector("p.text-small.text-light > span");
-	private By openSummaryField = By.xpath("//input[@data-ng-click='openSummary()']");
-	private By descriptionField = By.xpath("(//div[starts-with(@id, 'taTextElement')])");
+	private By insertPhoto = By.xpath("//div[@ng-model='newPicture']"); 
+	private By descriptionField = By.id("add-portfolio-description-input");
 	private By createPortfolio = By.id("add-portfolio-create-button");
 	private By savePortfolio = By.id("add-portfolio-edit-button");
 
+	private By portfolioLicenseType = By.xpath("//md-select[@data-ng-model='newPortfolio.licenseType']");
+	private By portfolioLicenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_LONG_NAME_CCBYNCND']");
+	private By portfolioIllustrationAuthor = By.id("newPortfolio-picture-author-");
+	private By portfolioIllustrationSource = By.name("pictureSource");
+	private By portfolioIllustrationLicenseType = By.id("pictureLicenseTypeSelect");
+	private By portfolioIllustrationLicenseTypeOption = By.xpath("//md-option[@data-translate='LICENSETYPE_LONG_NAME_CCBYNCSA']");
 	
 	public AddPortfolioForm setPortfolioTitle() {
 		Helpers.waitForMilliseconds(1000);
@@ -46,6 +51,7 @@ public class AddPortfolioForm extends Components{
 		getDriver().findElement(ageGroup).click();
 		getDriver().findElement(age).click();
 		getDriver().findElements(closeButton).get(2).click();
+		Helpers.waitForMilliseconds(1000);
 		return this;
 	}
 
@@ -56,8 +62,7 @@ public class AddPortfolioForm extends Components{
 		return this;
 	}
 
-	public AddPortfolioForm addDescription() {
-		getDriver().findElement(openSummaryField).click();
+	public AddPortfolioForm addDescription(){
 		getDriver().findElement(descriptionField).sendKeys(Helpers.randomElement(Arrays.descriptionArray));
 		return this;
 	}
@@ -80,7 +85,28 @@ public class AddPortfolioForm extends Components{
 		Helpers.waitForMilliseconds(1500);
 		return new EditPortfolioPage();
 	}
+
+	public AddPortfolioForm setPortfolioLicenseType() {
+		getDriver().findElement(portfolioLicenseType).click();
+		getDriver().findElements(portfolioLicenseTypeOption).get(1).click();
+		return this;
+	}
+
+	public AddPortfolioForm setPortfolioIllustrationAuthor() {
+		getDriver().findElement(portfolioIllustrationAuthor).sendKeys(Helpers.randomElement(Arrays.surnamesArray));
+		return this;
+	}
 	
+	public AddPortfolioForm setPortfolioIllustrationSource() {
+		getDriver().findElement(portfolioIllustrationSource).sendKeys("Allikas Automaattest");
+		return this;
+	}
+	
+	public AddPortfolioForm setPortfolioIllustrationLicenseType() {
+		getDriver().findElement(portfolioIllustrationLicenseType).click();
+		getDriver().findElements(portfolioIllustrationLicenseTypeOption).get(1).click();
+		return this;
+	}
 	
 
 }

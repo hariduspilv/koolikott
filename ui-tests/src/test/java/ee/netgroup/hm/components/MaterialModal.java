@@ -163,8 +163,7 @@ public class MaterialModal extends Components{
 
 	public MaterialModal addMaterialLicenseType() {
 		getDriver().findElement(licenseType).click();
-		//getDriver().findElements(licenseTypeOption).get(0).click();
-		getDriver().findElement(licenseTypeOption).click();
+		getDriver().findElements(licenseTypeOption).get(1).click();
 		return this;
 	}
 	
