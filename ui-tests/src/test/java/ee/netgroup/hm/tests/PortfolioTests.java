@@ -408,6 +408,17 @@ public class PortfolioTests {
 		assertTrue(isMaterialBoxDisplayed);
 	}
 	
+	@Test
+	public void PortfolioTests_ChangeVisibilityInDetailview_VisibilityIsChanged() { 
+
+		String portfolioPublicText = goToLandingPage()
+				.chooseUserType("User")
+				.openPrivatePortfolio()
+				.changeVisibility()
+				.setVisibilityToPublic()
+				.getPublicPortfolioText();
+		Assert.assertEquals("Kõik muutused on nüüd avalikult nähtavad", portfolioPublicText);
+	}
 	
 
 }
