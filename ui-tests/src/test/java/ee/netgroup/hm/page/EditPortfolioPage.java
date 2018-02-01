@@ -13,7 +13,7 @@ public class EditPortfolioPage extends Page{
 	
 	private By successAlertText = By.xpath("//div[@class='chapter-block medium-editor-element medium-editor-placeholder']");
 	private By saveAndExit = By.xpath("//button[@data-ng-click='saveAndExitPortfolio()']");
-	private By visibilityButton = By.id("change-visibility");
+	public static By visibilityButton = By.id("change-visibility");
 	private By shareWithLink = By.xpath("//button/span[contains(text(),'inult lingiga')]");
 	private By newChapter = By.xpath("//div[@data-ng-click='$ctrl.createChapter()']");
 	private By boldButton = By.xpath("//button[@data-action='bold']");
@@ -22,7 +22,6 @@ public class EditPortfolioPage extends Page{
 	private By privacyPopUp = By.xpath("//md-dialog-content[@class='md-dialog-content']");
 	private By chapterTitle = By.xpath("//input[@data-ng-model='chapter.title']");
 	private By chapter = By.xpath("//div[@data-ng-class='$ctrl.getBlockClassNames($index)']");
-	private By chapterToolbarButton = By.xpath("//button[@class='md-icon-button chapter-pencil-button md-button md-ink-ripple']");
 	private By newMaterial = By.xpath("//div/label[text()='Uus materjal']");
 	private By existingMaterial = By.xpath("//div/label[text()='Olemasolev materjal']");
 	private By chapterWidth = By.xpath("//div/label[text()='Muuda laiust']");
@@ -121,12 +120,6 @@ public class EditPortfolioPage extends Page{
 		getDriver().findElement(chapterTitle).sendKeys(Helpers.randomElement(Arrays.portfolioTitlesArray));
 		return this;
 	}
-/*
-	public EditPortfolioPage openChapterToolbar() {
-		Helpers.waitForVisibility(chapterToolbarButton);
-		getDriver().findElement(chapterToolbarButton).click();
-		return this;
-	}*/
 	
 	public MaterialModal clickAddNewMaterial() {
 		Helpers.waitForVisibility(newMaterial);

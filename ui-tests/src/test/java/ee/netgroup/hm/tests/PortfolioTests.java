@@ -18,10 +18,14 @@ public class PortfolioTests {
 				.chooseUserType("Publisher")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
 				.uploadPhoto()
+				.setPortfolioIllustrationAuthor()
+				.setPortfolioIllustrationSource()
+				.setPortfolioIllustrationLicenseType()
 				.addDescription()
 				.clickCreatePortfolio()
 				.getSuccessAlertText();
@@ -35,11 +39,15 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
-				.uploadPhoto()
-				.selectAgeGroup()
 				.addDescription()
+				.selectAgeGroup()
+				.uploadPhoto()
+				.setPortfolioIllustrationAuthor()
+				.setPortfolioIllustrationSource()
+				.setPortfolioIllustrationLicenseType()
 				.clickCreatePortfolio()
 				.clickSaveAndExit()
 				.makePortfolioPublic()
@@ -103,10 +111,11 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
-				.selectAgeGroup()
 				.addDescription()
+				.selectAgeGroup()
 				.clickCreatePortfolio()
 				.setChapterTitle()
 				.addDescription()
@@ -193,6 +202,7 @@ public class PortfolioTests {
 				.chooseUserType("Admin")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -212,6 +222,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -232,6 +243,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -253,6 +265,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -274,6 +287,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -300,6 +314,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -326,6 +341,7 @@ public class PortfolioTests {
 				.chooseUserType("User")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -374,6 +390,7 @@ public class PortfolioTests {
 				.chooseUserType("Admin")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
@@ -391,6 +408,17 @@ public class PortfolioTests {
 		assertTrue(isMaterialBoxDisplayed);
 	}
 	
+	@Test
+	public void PortfolioTests_ChangeVisibilityInDetailview_VisibilityIsChanged() { 
+
+		String portfolioPublicText = goToLandingPage()
+				.chooseUserType("User")
+				.openPrivatePortfolio()
+				.changeVisibility()
+				.setVisibilityToPublic()
+				.getPublicPortfolioText();
+		Assert.assertEquals("Kõik muutused on nüüd avalikult nähtavad", portfolioPublicText);
+	}
 	
 
 }

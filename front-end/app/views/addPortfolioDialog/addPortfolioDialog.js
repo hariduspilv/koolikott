@@ -36,11 +36,10 @@ angular.module('koolikottApp')
                         $scope.newPortfolio.taxons = portfolioClone.taxons;
                         $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                         $scope.newPortfolio.tags = portfolioClone.tags;
-                        $scope.newPortfolio.picture = portfolioClone.picture;
-
-                        if($scope.newPortfolio.picture){
+                        if (portfolioClone.picture) {
+                            $scope.newPortfolio.picture = portfolioClone.picture;
                             const {name, surname} = authenticatedUserService.getUser();
-                            if($scope.newPortfolio.picture.author === `${name} ${surname}`){
+                            if ($scope.newPortfolio.picture.author === `${name} ${surname}`) {
                                 $scope.isUserAuthor = true;
                             }
                         }
@@ -195,7 +194,8 @@ angular.module('koolikottApp')
                         this.pictureUpload = pictureUploadService
                             .upload(currentValue)
                             .then(({data}) => {
-                                    $scope.newPortfolio.picture = data;
+                                    $scope.newPortfolio.picture.id = data.id;
+                                    $scope.newPortfolio.picture.name = data.name;
                                     $scope.showErrorOverlay = false;
                                 }, () =>
                                     $scope.showErrorOverlay = false

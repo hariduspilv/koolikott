@@ -20,7 +20,6 @@ public class PortfolioConverter {
         commonConvert(to, from);
         to.setVisibility(from.getVisibility());
         to.setPublicationConfirmed(from.isPublicationConfirmed());
-        to.setChanged(from.getChanged() + 1);
         return to;
     }
 

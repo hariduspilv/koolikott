@@ -12,7 +12,7 @@ import ee.netgroup.hm.helpers.Helpers;
 public class MyPortfoliosPage extends Page{
 	
 	private static By addPortfolioMessage = By.cssSelector("h3");
-	
+	private By firstPrivatePortfolio = By.xpath("//md-icon[@aria-label='visibility_off']");
 	
 	public AddPortfolioForm clickAddPortfolio() {
 		return fabButton.clickAddPortfolio();
@@ -75,6 +75,12 @@ public class MyPortfoliosPage extends Page{
 
 	public ChangedLearningObjectsPage clickChangedLearningObjects() {
 		return LeftMenu.clickChangedLearningObjects();
+	}
+
+	public PortfolioPage openPrivatePortfolio() {
+		Helpers.waitForClickable(firstPrivatePortfolio);
+		getDriver().findElement(firstPrivatePortfolio).click();
+		return new PortfolioPage();
 	}
 
 
