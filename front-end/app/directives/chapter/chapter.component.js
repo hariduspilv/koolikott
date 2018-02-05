@@ -398,6 +398,9 @@ class controller extends Controller {
         if (update)
             this.unloadEmbeddedContent(embed)
 
+        embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
+        embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
+
         const { id } = embed.dataset
         if (!id
             || embed.classList.contains('chapter-embed-card--loading')
@@ -407,8 +410,6 @@ class controller extends Controller {
 
         embed.classList.add('chapter-embed-card--loading')
         embed.setAttribute('contenteditable', 'false')
-        embed.addEventListener('mouseenter', this.showEmbedToolbar.bind(this))
-        embed.addEventListener('mouseleave', this.hideEmbedToolbar.bind(this))
         /**
          * This is in place to prevent the context menu from appearing on touch devices when
          * user taps and holds on the embed element — to make way for the embed toolbar.
