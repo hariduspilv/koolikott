@@ -4,35 +4,6 @@
     text-align: center;
 }
 
-.md-datepicker-triangle-button{
-    display: none;
-}
-
-.md-button.md-icon-button.md-datepicker-button{
-    position: absolute;
-    margin-left: 130px;
-    margin-top: -9px;
-    z-index: 1;
-}
-
-.md-datepicker-input-container{
-    padding-right: 50px;
-}
-
-.datepicker-container {
-    position: relative;
-    overflow: hidden;
-
-    .validation-messages{
-        max-width: 180px;
-    }
-}
-
-.datepicker-error{
-    margin-top: 23px;
-    margin-left: 12px;
-}
-
 .disabled-option {
     color: rgba(0, 0, 0, 0.26);
 }

@@ -85,10 +85,6 @@ a {
   flex: 1;
 }
 
-md-datepicker {
-  margin-right: 0;
-}
-
 .validation-messages {
   font-size: 12px;
   color: $error;
@@ -128,17 +124,29 @@ md-datepicker {
 }
 
 .md-padding-double {
-    padding: $md-padding * 2;
+  padding: $md-padding * 2;
 }
 
 .md-padding-double-vertical {
-    padding-top: $md-padding * 2;
-    padding-bottom: $md-padding * 2;
+  padding-top: $md-padding * 2;
+  padding-bottom: $md-padding * 2;
 }
 
 .md-padding-double-horizontal {
-    padding-left: $md-padding * 2;
-    padding-right: $md-padding * 2;
+  padding-left: $md-padding * 2;
+  padding-right: $md-padding * 2;
+}
+
+.layout-padding,
+.layout-padding-gt-sm,
+.layout-padding-md {
+  &,
+  & > *,
+  & > .flex,
+  & > .flex-gt-sm,
+  & > .flex-md {
+    padding: .75rem;
+  }
 }
 
 // Remove when #101 is complete
