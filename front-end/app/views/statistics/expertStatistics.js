@@ -48,11 +48,13 @@ class controller extends Controller {
             })
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
-    onFilterChange({ user, ...rest }) {
-        const params = Object.assign({}, rest)
+    onFilterChange(filter) {
+        const params = Object.assign({}, filter)
 
-        if (user)
-            params.users = [user]
+        if (params.user) {
+            params.users = [params.user]
+            delete params.user
+        }
 
         this.$scope.params = params
     }
