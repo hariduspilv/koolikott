@@ -1,3 +1,13 @@
+## e-Koolikott [1.15.0](https://github.com/hariduspilv/koolikott/milestone/14) (testimisel)
+
+### Muutunud
+* Kogumiku koostamise modaali täiendused [#295](https://github.com/hariduspilv/koolikott/issues/295)
+* Lisada eKoolikoti lehele Google Analytics tracking code [#308](https://github.com/hariduspilv/koolikott/issues/308)
+* Kogumiku nähtavuse muutmine [#304](https://github.com/hariduspilv/koolikott/issues/304)
+* Kustutatud materjalide kuvamine kogumikes [#284](https://github.com/hariduspilv/koolikott/issues/284)
+* Murdepunktide korrastamine [#136](https://github.com/hariduspilv/koolikott/issues/136)
+* Responsiivsus puudu suurel (gt-lg) murdepunktil [#297](https://github.com/hariduspilv/koolikott/issues/297)
+
 ## e-Koolikott [1.14.0](https://github.com/hariduspilv/koolikott/milestone/13) (testimisel)
 
 ### Muutunud
@@ -13,7 +23,6 @@
 * Kogumiku detailvaates meediafaili juures kuvada meediafaili pealkirja, autorit, allikat ning litsentsitüüpi [#294](https://github.com/hariduspilv/koolikott/issues/294)
 * Materjali lisamise modaali täiendused v.2 [#296](https://github.com/hariduspilv/koolikott/issues/296)
 * Litsentsi klassifikaatorite sidumine tõlkeväärtuste loogikaga [#298](https://github.com/hariduspilv/koolikott/issues/298)
-
 
 ## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12) (testimisel)
 
