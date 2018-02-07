@@ -72,6 +72,12 @@ table.md-table:not(.md-row-select) th.md-column:nth-child(n+2):nth-last-child(n+
 }
 
 table.md-table {
+  th.md-column md-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem !important;
+    line-height: 1 !important;
+  }
   td.md-cell {
     &.dashboard-cell--type-icon {
       width: 1%;

@@ -18,6 +18,12 @@ class controller extends Controller {
         this.translateTaxon = this.translateTaxon.bind(this)
         this._previousTaxon = this.taxon
         this._previousMarkRequired = this.markRequired
+
+        if (this.isStatisticsSelect && typeof this.onStatisticsMultiselect === 'function') {
+            const onMultiSelect = (taxons) => taxons && this.onStatisticsMultiselect({ taxons })
+            this.$scope.$watch(() => this.taxonPath && this.taxonPath.domain, onMultiSelect, true)
+            this.$scope.$watch(() => this.taxonPath && this.taxonPath.domainSubject, onMultiSelect, true)
+        }
     }
     $doCheck() {
         const taxonChanged =
@@ -25,7 +31,7 @@ class controller extends Controller {
             (!this.taxon && this._previousTaxon) ||
             !_.isEqual(this.taxon, this._previousTaxon)
 
-        if (this.taxon && (taxonChanged || _.isEmpty(this.taxonPath)))
+        if (taxonChanged)
             this.buildTaxonPath()
 
         if (taxonChanged)
@@ -152,7 +158,9 @@ component('dopTaxonSelector', {
         isDomainRequired: '=',
         touched: '=',
         isSearch: '=?',
-        markRequired: '='
+        markRequired: '=',
+        isStatisticsSelect: '<',
+        onStatisticsMultiselect: '&',
     },
     templateUrl: 'directives/taxonSelector/taxonSelector.html',
     controller

@@ -1,9 +1,127 @@
 <md-card class="md-data-table">
-  <!-- BEGIN Headline -->
   <md-toolbar class="md-table-toolbar md-default">
     <div class="md-toolbar-tools">
-      <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
+      <h2 class="md-headline" data-translate="EXPERT_STATISTICS" data-flex></h2>
+      <md-button
+        class="statistics-info-text-toggle"
+        data-md-colors="{color: 'grey-500'}"
+        data-ng-click="isInfoTextOpen = !isInfoTextOpen"
+        aria-label="Ava infotekst"
+        >
+        <span data-ng-if="!isInfoTextOpen" data-translate="OPEN_INFO_TEXT"></span>
+        <span data-ng-if="isInfoTextOpen" data-translate="CLOSE_INFO_TEXT"></span>
+      </md-button>
     </div>
   </md-toolbar>
-  <!-- END Headline -->
+  <md-content
+    class="statistics-info-text text-small"
+    data-ng-class="{'is-open': isInfoTextOpen}"
+    data-md-colors="{color: 'grey-600'}"
+    data-layout-padding
+    >
+    <div data-translate="STATISTICS_INFO_TEXT"></div>
+  </md-content>
+  <md-content class="statistics-filter" data-layout-padding>
+    <div class="statistics-filter__inputs" data-layout="row" data-layout-align="center center">
+      <md-datepicker
+        data-ng-model="filter.from"
+        data-md-placeholder="{{'SELECT_DATE' | translate}}"
+        data-md-open-on-focus
+        aria-label="Vali alguskuupäev"
+      ></md-datepicker>
+      <span data-translate="UNTIL"></span>
+      <md-datepicker
+        data-ng-model="filter.to"
+        data-md-placeholder="{{'SELECT_DATE' | translate}}"
+        data-md-open-on-focus
+        aria-label="Vali lõppkuupäev"
+      ></md-datepicker>
+      <span>,</span>
+      <md-select
+        flex
+        data-placeholder="{{'EXPERT' | translate}}"
+        data-ng-model="filter.user"
+        data-ng-model-options="{trackBy: '$value.id'}"
+        data-ng-show="isExpertsSelectVisible"
+        aria-label="Vali ekspert"
+        >
+        <md-option
+          data-ng-repeat="user in moderators"
+          data-ng-value="user"
+          data-ng-bind="user.name + ' ' + user.surname"
+        ></md-option>
+      </md-select>
+      <span
+        data-translate="OR_WORD"
+        data-ng-show="isExpertsSelectVisible && isTaxonSelectVisible"
+      ></span>
+      <dop-taxon-selector
+        flex
+        data-taxon="educationalContext"
+        data-is-statistics-select="true"
+        data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
+        data-ng-show="isTaxonSelectVisible"
+      ></dop-taxon-selector>
+    </div>
+    <div class="statistics-filter__buttons" data-layout="row" data-layout-align="end center">
+      <md-button
+        data-translate="CLEAR_FORM"
+        data-ng-click="$ctrl.clearFilter()"
+        data-ng-show="filter.from || filter.to || filter.user || filter.taxons || educationalContext"
+        aria-label="Tühejenda filtriväljad"
+      ></md-button>
+      <md-button
+        class="md-raised md-primary"
+        data-ng-click="$ctrl.getStatistics()"
+        data-ng-disabled="!isSubmitButtonEnabled"
+        aria-label="Käivita filter"
+        >
+        <span data-translate="DO_FILTER"></span>
+        <md-icon>arrow_forward</md-icon>
+      </md-button>
+    </div>
+  </md-content>
+  <md-table-container>
+    <table md-table class="statistics-table">
+      <thead md-head>
+        <tr md-row>
+          <th md-column rowspan="3">Haridustase</th>
+          <th md-column rowspan="3">(Alam)valdkond</th>
+          <th md-column colspan="5">Vaatas üle</th>
+          <th md-column colspan="3">Lisas</th>
+        </tr>
+        <tr md-row>
+          <th md-column><md-icon>lightbulb_outline</md-icon></th>
+          <th md-column colspan="2"><md-icon>warning</md-icon></th>
+          <th md-column colspan="2"><md-icon>autorenew</md-icon></th>
+          <th md-column colspan="2"><md-icon>book</md-icon></th>
+          <th md-column><md-icon>description</md-icon></th>
+        </tr>
+        <tr md-row>
+          <th md-column><md-icon>done</md-icon></th>
+          <th md-column><md-icon>done</md-icon></th>
+          <th md-column><md-icon>close</md-icon></th>
+          <th md-column><md-icon>done</md-icon></th>
+          <th md-column><md-icon>close</md-icon></th>
+          <th md-column><md-icon>remove_red_eye</md-icon></th>
+          <th md-column><md-icon>done</md-icon></th>
+          <th md-column><md-icon>done</md-icon></th>
+        </tr>
+      </thead>
+      <tbody md-body data-ng-repeat="row in rows">
+        <tr md-row data-ng-repeat="subrow in row.rows">
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+          <td md-cell></td>
+        </tr>
+      </tbody>
+    </table>
+  </md-table-container>
 </md-card>
