@@ -99,7 +99,7 @@ public class MaterialService {
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
         ValidatorUtil.mustHaveId(material);
-        Material originalMaterial = materialGetter.get(material.getId(), changer);
+        Material originalMaterial = materialGetter.get(material.getId());
         mustHavePermission(changer, originalMaterial);
         mustBeValid(originalMaterial, changer);
         String sourceBefore = originalMaterial.getSource();

@@ -96,6 +96,7 @@ class controller extends Controller {
                 })
             )
         }
+        this.$rootScope.$broadcast('portfolioChanged')
     }
 }
 controller.$inject = [

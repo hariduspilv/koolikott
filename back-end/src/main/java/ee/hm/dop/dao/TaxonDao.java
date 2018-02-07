@@ -3,6 +3,7 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.reviewmanagement.dto.TaxonWithChildren;
 import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -25,6 +26,13 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .setParameter("name", name.toLowerCase())
                 .setParameter("level", level);
         return getSingleResult(findByName);
+    }
+
+    public List<Taxon> findTaxonByLevel(String level) {
+        TypedQuery<Taxon> findByName = getEntityManager()
+                .createQuery("FROM Taxon t WHERE level = :level", entity()) //
+                .setParameter("level", level);
+        return getList(findByName);
     }
 
     public List<EducationalContext> findAllEducationalContext() {

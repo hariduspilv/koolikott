@@ -38,7 +38,7 @@ public class PortfolioPage extends Page{
 	private By firstChapterTitle = By.xpath("//h2[@class='chapter-title']");
 	private By alignedMaterialBox = By.xpath("//div[@class='chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right chapter-embed-card--loaded']");
 	private static By materialTitle = By.xpath("//h5[@data-ng-bind='title']");
-	
+	private By publicVisibility = By.xpath("//button[@data-ng-click='makePublic()']");
 	
 	public AddPortfolioForm clickCopyPortfolio() {
 		return fabButton.clickCopyPortfolio();
@@ -204,6 +204,21 @@ public class PortfolioPage extends Page{
 
 	public MyMaterialsPage clickMyMaterials() {
 		return LeftMenu.clickMyMaterials();
+	}
+
+	public PortfolioPage changeVisibility() {
+		getDriver().findElement(EditPortfolioPage.visibilityButton).click();
+		return this;
+	}
+
+	public PortfolioPage setVisibilityToPublic() {
+		Helpers.waitForVisibility(publicVisibility);
+		getDriver().findElement(publicVisibility).click();
+		return this;
+	}
+
+	public String getPublicPortfolioText() {
+		return getDriver().findElement(Constants.toastText).getText();
 	}
 
 }

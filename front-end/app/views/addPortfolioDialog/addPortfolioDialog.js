@@ -1,4 +1,4 @@
-'use strict';
+
 
 angular.module('koolikottApp')
     .controller('addPortfolioDialogController',
@@ -36,7 +36,13 @@ angular.module('koolikottApp')
                         $scope.newPortfolio.taxons = portfolioClone.taxons;
                         $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
                         $scope.newPortfolio.tags = portfolioClone.tags;
-                        $scope.newPortfolio.picture = portfolioClone.picture;
+                        if (portfolioClone.picture) {
+                            $scope.newPortfolio.picture = portfolioClone.picture;
+                            const {name, surname} = authenticatedUserService.getUser();
+                            if ($scope.newPortfolio.picture.author === `${name} ${surname}`) {
+                                $scope.isUserAuthor = true;
+                            }
+                        }
                     }
 
                     /**
@@ -50,15 +56,15 @@ angular.module('koolikottApp')
                     }
 
                     /**
-                     * Manually set license type selected text based on the selected license type because
-                     * if user selects ALLRIGHTSRESERVED option, then both "Do not know" and "All rights reserved"
-                     * would be auto-selected.
+                     * Set license type to “All rights reserved” if user chooses “Do not know” option.
                      */
-                    if ($scope.newPortfolio.licenseType)
-                        setLicenseTypeSelectedText()
-                    $scope.$watch('newPortfolio.licenseType', function (currentValue, previousValue) {
-                        if (currentValue && (!previousValue || currentValue.name !== previousValue.name))
-                            setLicenseTypeSelectedText()
+                    $scope.$watch('newPortfolio.licenseType', (selectedValue) => {
+                        if (selectedValue && selectedValue.id === 'doNotKnow')
+                            $scope.newPortfolio.licenseType = $scope.allRightsReserved
+                    })
+                    $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
+                        if (selectedValue && selectedValue.id === 'doNotKnow')
+                            $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
                     })
 
                     getMaxPictureSize();
@@ -178,11 +184,9 @@ angular.module('koolikottApp')
                 }
 
                 function setLicenseTypes(data) {
-                    let array = data.filter(function (type) {
-                        return type.name.toUpperCase() === "ALLRIGHTSRESERVED"
-                    });
-                    $scope.licenseTypes = data;
-                    $scope.allRightsReserved = array[0];
+                    $scope.licenseTypes = data
+                    $scope.doNotKnow = { id: 'doNotKnow' }
+                    $scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
                 }
 
                 function onNewPictureChange(currentValue) {
@@ -190,7 +194,8 @@ angular.module('koolikottApp')
                         this.pictureUpload = pictureUploadService
                             .upload(currentValue)
                             .then(({data}) => {
-                                    $scope.newPortfolio.picture = data;
+                                    $scope.newPortfolio.picture.id = data.id;
+                                    $scope.newPortfolio.picture.name = data.name;
                                     $scope.showErrorOverlay = false;
                                 }, () =>
                                     $scope.showErrorOverlay = false
@@ -217,12 +222,6 @@ angular.module('koolikottApp')
                         $scope.isUserAuthor = false;
                     }
                 };
-
-                function setLicenseTypeSelectedText() {
-                    $translate('LICENSETYPE_LONG_NAME_' + $scope.newPortfolio.licenseType.name.toUpperCase()).then(function (translation) {
-                        $scope.licenseTypeSelectedText = translation
-                    })
-                }
 
                 init();
             }

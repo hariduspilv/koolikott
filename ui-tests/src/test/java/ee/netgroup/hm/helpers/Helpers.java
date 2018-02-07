@@ -26,7 +26,7 @@ public class Helpers extends SeleniumUser{
 	}
 	
 	 public static void waitForVisibility(By locator) {
-		 WebDriverWait wait = new WebDriverWait(getDriver(), 50);
+		 WebDriverWait wait = new WebDriverWait(getDriver(), 20);
 	     wait.until(ExpectedConditions.visibilityOfElementLocated(locator));   
 	}
 	 

@@ -20,15 +20,8 @@ public class MaterialGetter {
     @Inject
     private ReducedLearningObjectDao reducedLearningObjectDao;
 
-    public Material get(Long materialId, User loggedInUser) {
-        if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            return materialDao.findById(materialId);
-        }
-        return materialDao.findByIdNotDeleted(materialId);
-    }
-
-    public Material validateAndFindNotDeleted(Material material) {
-        return ValidatorUtil.findValid(material, (Function<Long, Material>) materialDao::findByIdNotDeleted);
+    public Material get(Long materialId) {
+        return materialDao.findById(materialId);
     }
 
     public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {

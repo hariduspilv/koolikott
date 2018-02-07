@@ -7,8 +7,9 @@ import java.util.List;
 
 public class StatisticsRow {
 
+    private List<StatisticsRow> subjects;
     private User user;
-    private List<Taxon> usertaxons;
+    private Taxon usertaxon;
     private Long reviewedLOCount;
     private Long approvedReportedLOCount;
     private Long deletedReportedLOCount;
@@ -27,12 +28,12 @@ public class StatisticsRow {
         this.user = user;
     }
 
-    public List<Taxon> getUsertaxons() {
-        return usertaxons;
+    public Taxon getUsertaxon() {
+        return usertaxon;
     }
 
-    public void setUsertaxons(List<Taxon> usertaxons) {
-        this.usertaxons = usertaxons;
+    public void setUsertaxon(Taxon usertaxon) {
+        this.usertaxon = usertaxon;
     }
 
     public Long getReviewedLOCount() {
@@ -105,5 +106,13 @@ public class StatisticsRow {
 
     public void setMaterialCount(Long materialCount) {
         this.materialCount = materialCount;
+    }
+
+    public List<StatisticsRow> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<StatisticsRow> subjects) {
+        this.subjects = subjects;
     }
 }

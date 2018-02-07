@@ -4,6 +4,7 @@ import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
+import ee.hm.dop.service.reviewmanagement.dto.UserStatistics;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StatisticsExcelExporter {
     private static final Logger logger = LoggerFactory.getLogger(StatisticsExcelExporter.class);
@@ -37,35 +40,53 @@ public class StatisticsExcelExporter {
             cell.setCellValue(heading);
         }
 
-        for (StatisticsRow s : statistics.getRows()) {
-            rowNum = writeRow(sheet, rowNum, s);
+        List<UserStatistics> rows = statistics.getRows();
+        for (UserStatistics s : rows) {
+            List<StatisticsRow> rows1 = s.getRows();
+            for (int i = 0; i < rows1.size(); i++) {
+                StatisticsRow row = rows1.get(i);
+                rowNum = writeRow(sheet, rowNum, row, i == 0, null);
+                if (CollectionUtils.isNotEmpty(row.getSubjects())){
+                    for (StatisticsRow childRow : row.getSubjects()) {
+                        rowNum = writeRow(sheet, rowNum, childRow, false, null);
+                    }
+                }
+            }
         }
-        writeRow(sheet, rowNum, statistics.getSum());
+        writeRow(sheet, rowNum, statistics.getSum(), false, "Kokku");
 
 
-        try (FileOutputStream outputStream = new FileOutputStream(fileName)){
+        try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
             workbook.write(outputStream);
         } catch (IOException e) {
             logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
         }
     }
 
-    private int writeRow(XSSFSheet sheet, int rowNum, StatisticsRow s) {
+    private int writeRow(XSSFSheet sheet, int rowNum, StatisticsRow s, boolean firstRow, String name) {
         int xlsColNum;
         xlsColNum = 0;
         Row row = sheet.createRow(rowNum++);
         Cell cell = row.createCell(xlsColNum++);
-        if (s.getUser() != null) {
-            cell.setCellValue(s.getUser().getUsername());
-        } else {
+        if (!firstRow) {
             cell.setCellValue("");
+        } else {
+            if (s.getUser() != null) {
+                cell.setCellValue(s.getUser().getUsername());
+            } else {
+                cell.setCellValue("");
+            }
         }
         cell = row.createCell(xlsColNum++);
-        if (CollectionUtils.isEmpty(s.getUsertaxons())){
-            cell.setCellValue("");
+        if (name != null) {
+            cell.setCellValue(name);
         } else {
-            Long estId = languageDao.findByCode("et").getId();
-            cell.setCellValue(joinTranslation(s, estId));
+            if (s.getUsertaxon() == null) {
+                cell.setCellValue("");
+            } else {
+                Long estId = languageDao.findByCode("et").getId();
+                cell.setCellValue(joinTranslation(s, estId));
+            }
         }
         cell = row.createCell(xlsColNum++);
         cell.setCellValue(s.getReviewedLOCount());
@@ -89,8 +110,8 @@ public class StatisticsExcelExporter {
     }
 
     private String joinTranslation(StatisticsRow s, Long langCode) {
-        return s.getUsertaxons().stream()
-                .map(t  -> t.getLevel().toUpperCase() + "_" + t.getName().toUpperCase())
+        return Stream.of(s.getUsertaxon())
+                .map(t -> t.getLevel().toUpperCase() + "_" + t.getName().toUpperCase())
                 .map(tk -> translationGroupDao.getTranslationByKeyAndLangcode(tk, langCode))
                 .collect(Collectors.joining(", "));
     }

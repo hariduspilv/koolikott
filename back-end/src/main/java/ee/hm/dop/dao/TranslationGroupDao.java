@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TranslationGroupDao extends AbstractDao<TranslationGroup>{
+public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
 
     public TranslationGroup findTranslationGroupFor(Language language) {
         try {
@@ -44,19 +44,25 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup>{
     }
 
     public List<String> getTranslationsForKey(List<String> translationKey) {
-        if (CollectionUtils.isEmpty(translationKey)){
+        if (CollectionUtils.isEmpty(translationKey)) {
             return Lists.newArrayList();
         }
         List<String> lowercaseKeys = translationKey.stream().map(String::toLowerCase).collect(Collectors.toList());
         try {
-            List<Clob> translations = entityManager
+            List translations = entityManager
                     .createNativeQuery("SELECT t.translation FROM Translation t " +
-                            "WHERE lower(t.translationKey) in (:translationKey)")
+                            "WHERE lower(t.translationKey) IN (:translationKey)")
                     .setParameter("translationKey", lowercaseKeys)
                     .getResultList();
             List<String> stringArrayList = new ArrayList<>();
-            for (Clob clob : translations) {
-                stringArrayList.add(clob.getSubString(1, (int) clob.length()));
+            for (Object object : translations) {
+                if (object instanceof String) {
+                    String string = (String) object;
+                    stringArrayList.add(string);
+                } else if (object instanceof Clob) {
+                    Clob clob = (Clob) object;
+                    stringArrayList.add(clob.getSubString(1, (int) clob.length()));
+                }
             }
             return stringArrayList;
         } catch (NonUniqueResultException | NoResultException | SQLException ignored) {

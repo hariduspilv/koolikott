@@ -38,6 +38,7 @@ public class AtomFeedService {
     public static final String FEED_VERSION_TITLE = "FEED_VERSION_TITLE";
     public static final String FEED_PORTFOLIO_TITLE = "FEED_PORTFOLIO_TITLE";
     public static final String FEED_MATERIAL_TITLE = "FEED_MATERIAL_TITLE";
+
     @Inject
     private Configuration configuration;
     @Inject

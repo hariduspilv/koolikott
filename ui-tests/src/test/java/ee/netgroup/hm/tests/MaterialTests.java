@@ -78,6 +78,7 @@ public class MaterialTests {
 				.chooseUserType("Publisher")
 				.clickAddPortfolio()
 				.setPortfolioTitle()
+				.setPortfolioLicenseType()
 				.selectEducationalContext()
 				.selectSubjectArea()
 				.selectAgeGroup()
