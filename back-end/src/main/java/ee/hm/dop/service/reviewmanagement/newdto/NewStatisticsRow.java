@@ -1,4 +1,4 @@
-package ee.hm.dop.service.reviewmanagement.dto;
+package ee.hm.dop.service.reviewmanagement.newdto;
 
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
@@ -8,13 +8,8 @@ import ee.hm.dop.model.taxon.Taxon;
 
 import java.util.List;
 
-public class StatisticsRow {
+public class NewStatisticsRow {
 
-    /**
-     * add to the same level
-     */
-    @Deprecated
-    private List<StatisticsRow> subjects;
     private User user;
     private EducationalContext educationalContext;
     private Domain domain;
@@ -152,13 +147,5 @@ public class StatisticsRow {
 
     public void setMaterialCount(Long materialCount) {
         this.materialCount = materialCount;
-    }
-
-    public List<StatisticsRow> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<StatisticsRow> subjects) {
-        this.subjects = subjects;
     }
 }
