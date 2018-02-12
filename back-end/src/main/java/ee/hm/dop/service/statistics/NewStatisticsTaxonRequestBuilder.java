@@ -7,15 +7,20 @@ import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
+import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
+import ee.hm.dop.service.reviewmanagement.newdto.UserWithTaxons;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NewStatisticsTaxonRequestBuilder {
 
@@ -24,44 +29,52 @@ public class NewStatisticsTaxonRequestBuilder {
     @Inject
     private TaxonDao taxonDao;
     @Inject
-    private StatisticsDao statisticsDao;
+    private NewStatisticsCommonRequestBuilder commonRequestBuilder;
 
     public List<TaxonAndUserRequest> composeRequest(StatisticsFilterDto filter) {
+        List<UserWithTaxons> userWithTaxons = convertToUserWithTaxon(userDao.getUsersByRole(Role.MODERATOR));
+
         List<TaxonAndUserRequest> taxonAndUserRequests = new ArrayList<>();
-        List<User> users = userDao.getUsersByRole(Role.MODERATOR);
-        for (Taxon taxon : filter.getTaxons()) {
+        for (Taxon searchTaxon : filter.getTaxons()) {
             TaxonAndUserRequest request = new TaxonAndUserRequest();
-            request.setTaxon(taxon);
             request.setUsers(Lists.newArrayList());
-            for (User user : users) {
-                //todo not sure will work so easily
-                List<Taxon> userTaxons = taxonDao.getUserTaxons(user);
-                if (userTaxons.contains(taxon)){
-                    request.getUsers().add(user);
+            for (UserWithTaxons userWithTaxon : userWithTaxons) {
+                if (userWithTaxon.hasTaxon(searchTaxon)) {
+                    request.getUsers().add(userWithTaxon.getUser());
+                }
+            }
+            if (CollectionUtils.isEmpty(request.getUsers())) {
+                request.setNoResults(true);
+            } else {
+                if (searchTaxon instanceof Domain) {
+                    Domain domain = (Domain) searchTaxon;
+                    DomainWithChildren domainWithChildren = commonRequestBuilder.convertRealDomain(domain);
+                    request.setDomainWithChildren(domainWithChildren);
+                } else if (searchTaxon instanceof Subject) {
+                    Subject subject = (Subject) searchTaxon;
+                    DomainWithChildren domainWithChildren = commonRequestBuilder.convertSubjectDomain(subject, subject.getDomain());
+                    request.setDomainWithChildren(domainWithChildren);
                 }
             }
             taxonAndUserRequests.add(request);
         }
-        /*List<DomainWithChildren> domainsWithChildren = new ArrayList<>();
-        for (Taxon taxon : taxons) {
-            if (taxon instanceof Domain) {
-                domainsWithChildren.add(convertRealDomain((Domain) taxon));
-            } else if (!(taxon instanceof Subject)) {
-                //todo log something, user has wierd taxons
-            }
-        }
-        for (Taxon taxon : taxons) {
-            if (taxon instanceof Subject) {
-                Domain domain = (Domain) taxon.getParent();
-                boolean subjectIsNew = domainsWithChildren.stream().noneMatch(t -> t.getDomain().getId().equals(taxon.getId()));
-                if (subjectIsNew) {
-                    domainsWithChildren.add(convertSubjectDomain((Subject) taxon, domain));
+        return taxonAndUserRequests;
+    }
+
+    private List<UserWithTaxons> convertToUserWithTaxon(List<User> users) {
+        List<UserWithTaxons> userWithTaxons = new ArrayList<>();
+        for (User user : users) {
+            List<Taxon> userDomainsAndSubjects = new ArrayList<>();
+            for (Taxon userTaxon : taxonDao.getUserTaxons(user)) {
+                if (userTaxon instanceof Domain) {
+                    userDomainsAndSubjects.add(userTaxon);
+                    userDomainsAndSubjects.addAll(((Domain) userTaxon).getSubjects());
+                } else if (userTaxon instanceof Subject) {
+                    userDomainsAndSubjects.add(userTaxon);
                 }
             }
-        return domainsWithChildren;
-        }*/
-
-
-        return taxonAndUserRequests;
+            userWithTaxons.add(new UserWithTaxons(user, userDomainsAndSubjects));
+        }
+        return userWithTaxons;
     }
 }

@@ -1,23 +1,27 @@
 package ee.hm.dop.service.reviewmanagement.newdto;
 
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Subject;
 
 import java.util.List;
 
 public class TaxonAndUserRequest {
 
-    private Taxon taxon;
+    private EducationalContext educationalContext;
+    private Domain domain;
+    private Subject subject;
     private List<User> users;
-    private DomainWithChildren domain;
-    private SubjectWithChildren subject;
+    private boolean noResults;
+    private DomainWithChildren domainWithChildren;
 
-    public Taxon getTaxon() {
-        return taxon;
+    public boolean isNoResults() {
+        return noResults;
     }
 
-    public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
+    public void setNoResults(boolean noResults) {
+        this.noResults = noResults;
     }
 
     public List<User> getUsers() {
@@ -28,19 +32,35 @@ public class TaxonAndUserRequest {
         this.users = users;
     }
 
-    public DomainWithChildren getDomain() {
+    public EducationalContext getEducationalContext() {
+        return educationalContext;
+    }
+
+    public void setEducationalContext(EducationalContext educationalContext) {
+        this.educationalContext = educationalContext;
+    }
+
+    public Domain getDomain() {
         return domain;
     }
 
-    public void setDomain(DomainWithChildren domain) {
+    public void setDomain(Domain domain) {
         this.domain = domain;
     }
 
-    public SubjectWithChildren getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(SubjectWithChildren subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public DomainWithChildren getDomainWithChildren() {
+        return domainWithChildren;
+    }
+
+    public void setDomainWithChildren(DomainWithChildren domainWithChildren) {
+        this.domainWithChildren = domainWithChildren;
     }
 }

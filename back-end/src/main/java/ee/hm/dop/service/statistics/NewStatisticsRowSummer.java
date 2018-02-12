@@ -1,21 +1,19 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
-import ee.hm.dop.service.reviewmanagement.newdto.NewUserStatistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewStatisticsRowSummer {
 
-    public NewStatisticsRow getSum(List<NewUserStatistics> userRows) {
+    public NewStatisticsRow getSum(List<NewStatisticsRow> userRows) {
         List<NewStatisticsRow> rowsToSum = new ArrayList<>();
-        for (NewUserStatistics userRow : userRows) {
-            for (NewStatisticsRow domainRows : userRow.getRows()) {
-                if (domainRows.isDomainUsed()){
-                    rowsToSum.add(domainRows);
-                }
+        for (NewStatisticsRow domainRow : userRows) {
+            if (domainRow.isDomainUsed()) {
+                rowsToSum.add(domainRow);
             }
+            rowsToSum.addAll(domainRow.getSubjects());
         }
         return rowsToSum.stream()
                 .reduce(emptyRow(), (r1, r2) -> {

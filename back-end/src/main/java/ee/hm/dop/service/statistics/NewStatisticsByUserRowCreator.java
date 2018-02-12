@@ -1,13 +1,10 @@
 package ee.hm.dop.service.statistics;
 
 import com.google.common.collect.Lists;
-import ee.hm.dop.dao.TaxonDao;
-import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.NewUserStatistics;
@@ -15,6 +12,7 @@ import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,19 +21,22 @@ public class NewStatisticsByUserRowCreator {
     @Inject
     private StatisticsDao statisticsDao;
 
-    public NewUserStatistics createRows(StatisticsFilterDto filter, User user, List<DomainWithChildren> taxons) {
-        NewUserStatistics statistic = convert(user);
+    public List<NewStatisticsRow> createRows(StatisticsFilterDto filter, User user, List<DomainWithChildren> taxons) {
+        List<NewStatisticsRow> rows = new ArrayList<>();
         for (DomainWithChildren domain : taxons) {
+            NewStatisticsRow domainRow;
             if (domain.isDomainIsUsed()) {
-                NewStatisticsRow domainRow = convertFromUsedDomain(user, domain, filter.getFrom(), filter.getTo());
-                statistic.getRows().add(domainRow);
+                domainRow = convertFromUsedDomain(user, domain, filter.getFrom(), filter.getTo());
+            } else {
+                domainRow = convertFromEmptyDomain(user, domain);
             }
             for (SubjectWithChildren subject : domain.getSubjects()) {
                 NewStatisticsRow subjectRow = convertFromSubject(user, subject, filter.getFrom(), filter.getTo());
-                statistic.getRows().add(subjectRow);
+                domainRow.getSubjects().add(subjectRow);
             }
+            rows.add(domainRow);
         }
-        return statistic;
+        return rows;
     }
 
     private NewStatisticsRow convertFromUsedDomain(User user, DomainWithChildren domain, DateTime from, DateTime to) {
@@ -66,6 +67,7 @@ public class NewStatisticsByUserRowCreator {
         row.setPortfolioCount(getCount(portfolioCount, user));
         row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
         row.setMaterialCount(getCount(materialCount, user));
+        row.setSubjects(Lists.newArrayList());
         return row;
     }
 
@@ -99,15 +101,18 @@ public class NewStatisticsByUserRowCreator {
         return row;
     }
 
-    private NewUserStatistics convert(User user) {
-        NewUserStatistics userStatistics = new NewUserStatistics();
-        userStatistics.setUser(user);
-        userStatistics.setRows(Lists.newArrayList());
-        return userStatistics;
-    }
-
     private Long getCount(List<StatisticsQuery> reviewed, User user) {
         Optional<StatisticsQuery> userQuery = reviewed.stream().filter(q -> q.getUserId().equals(user.getId())).findAny();
         return userQuery.map(StatisticsQuery::getCount).orElse(0L);
+    }
+
+    private NewStatisticsRow convertFromEmptyDomain(User user, DomainWithChildren domain) {
+        NewStatisticsRow row = new NewStatisticsRow();
+        row.setDomainUsed(false);
+        row.setUser(user);
+        row.setEducationalContext(domain.getEducationalContext());
+        row.setDomain(domain.getDomain());
+        row.setSubjects(Lists.newArrayList());
+        return row;
     }
 }

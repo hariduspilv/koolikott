@@ -17,6 +17,8 @@ public class NewStatisticsRow {
      * domain row does not contain subject
      */
     private Subject subject;
+    private List<NewStatisticsRow> subjects;
+    private boolean noUsersFound;
     private boolean domainUsed;
     private Taxon usertaxon;
     private Long reviewedLOCount;
@@ -28,6 +30,22 @@ public class NewStatisticsRow {
     private Long portfolioCount;
     private Long publicPortfolioCount;
     private Long materialCount;
+
+    public List<NewStatisticsRow> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<NewStatisticsRow> subjects) {
+        this.subjects = subjects;
+    }
+
+    public boolean isNoUsersFound() {
+        return noUsersFound;
+    }
+
+    public void setNoUsersFound(boolean noUsersFound) {
+        this.noUsersFound = noUsersFound;
+    }
 
     public boolean isDomainUsed() {
         return domainUsed;

@@ -17,20 +17,34 @@ public class NewTaxonRowCreator {
     @Inject
     private StatisticsDao statisticsDao;
 
-    public NewUserStatistics createRows(StatisticsFilterDto filter, List<TaxonAndUserRequest> taxonAndUserRequests) {
-        NewUserStatistics statistic = convert();
-        for (TaxonAndUserRequest taxon : taxonAndUserRequests) {
-            if (taxon.getDomain() != null) {
-                List<NewStatisticsRow> domainRow = convertFromUsedDomain(taxon.getUsers(), taxon.getDomain(), filter.getFrom(), filter.getTo());
-                statistic.getRows().addAll(domainRow);
-            }
-            if (taxon.getSubject() != null) {
-                List<NewStatisticsRow> subjectRow = convertFromSubject(taxon.getUsers(), taxon.getSubject(), filter.getFrom(), filter.getTo());
-                statistic.getRows().addAll(subjectRow);
-            }
-        }
+    public List<NewStatisticsRow> createRows(StatisticsFilterDto filter, List<TaxonAndUserRequest> taxonAndUserRequests) {
+        List<NewStatisticsRow> rows = new ArrayList<>();
+        for (TaxonAndUserRequest taxonAndUserRequest : taxonAndUserRequests) {
+            List<NewStatisticsRow> domainRows;
+            if (taxonAndUserRequest.isNoResults()) {
+                domainRows = convertFromNoResults(taxonAndUserRequest);
+            } else {
 
-        return null;
+                if (taxonAndUserRequest.getDomainWithChildren().isDomainIsUsed()) {
+                    domainRows = convertFromUsedDomain(taxonAndUserRequest.getUsers(), taxonAndUserRequest.getDomainWithChildren(), filter.getFrom(), filter.getTo());
+                } else {
+                    domainRows = convertFromEmptyDomain(taxonAndUserRequest.getDomainWithChildren());
+                }
+
+            }
+            rows.addAll(domainRows);
+        }
+        return rows;
+    }
+
+    private List<NewStatisticsRow> convertFromNoResults(TaxonAndUserRequest taxonAndUserRequest) {
+        NewStatisticsRow row = new NewStatisticsRow();
+        row.setNoUsersFound(true);
+        row.setEducationalContext(taxonAndUserRequest.getEducationalContext());
+        row.setDomain(taxonAndUserRequest.getDomain());
+        row.setSubject(taxonAndUserRequest.getSubject());
+        row.setSubjects(Lists.newArrayList());
+        return Lists.newArrayList(row);
     }
 
     private List<NewStatisticsRow> convertFromUsedDomain(List<User> users, DomainWithChildren domain, DateTime from, DateTime to) {
@@ -63,6 +77,10 @@ public class NewTaxonRowCreator {
             row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
             row.setMaterialCount(getCount(materialCount, user));
             rows.add(row);
+        }
+        for (SubjectWithChildren subject : domain.getSubjects()) {
+//            NewStatisticsRow subjectRow = convertFromSubject(users, subject, from, to);
+//            domainRows.getSubjects().add(subjectRow);
         }
         return rows;
     }
@@ -100,11 +118,13 @@ public class NewTaxonRowCreator {
         return rows;
     }
 
-    private NewUserStatistics convert() {
-        NewUserStatistics userStatistics = new NewUserStatistics();
-//        userStatistics.setUser(user);
-        userStatistics.setRows(Lists.newArrayList());
-        return userStatistics;
+    private List<NewStatisticsRow> convertFromEmptyDomain(DomainWithChildren domain) {
+        NewStatisticsRow row = new NewStatisticsRow();
+        row.setDomainUsed(false);
+        row.setEducationalContext(domain.getEducationalContext());
+        row.setDomain(domain.getDomain());
+        row.setSubjects(Lists.newArrayList());
+        return Lists.newArrayList(row);
     }
 
     private Long getCount(List<StatisticsQuery> reviewed, User user) {
