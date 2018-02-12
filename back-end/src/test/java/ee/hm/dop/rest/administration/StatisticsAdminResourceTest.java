@@ -12,6 +12,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -28,6 +29,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
     private static final String SEARCH_STATISTICS = "admin/statistics/";
     private static final String EXPORT_STATISTICS = "admin/statistics/export";

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class NewTaxonRowCreator {
+
     @Inject
     private StatisticsDao statisticsDao;
 
@@ -28,7 +29,12 @@ public class NewTaxonRowCreator {
                 if (taxonAndUserRequest.getDomainWithChildren().isDomainIsUsed()) {
                     domainRows = convertFromUsedDomain(taxonAndUserRequest.getUsers(), taxonAndUserRequest.getDomainWithChildren(), filter.getFrom(), filter.getTo());
                 } else {
-                    domainRows = convertFromEmptyDomain(taxonAndUserRequest.getDomainWithChildren());
+                    domainRows = convertFromEmptyDomain(taxonAndUserRequest.getUsers(), taxonAndUserRequest.getDomainWithChildren(), filter.getFrom(), filter.getTo());
+                }
+
+                for (SubjectWithChildren subject : taxonAndUserRequest.getDomainWithChildren().getSubjects()) {
+                    List<NewStatisticsRow> subjectRows = convertFromSubject(taxonAndUserRequest.getUsers(), subject, filter.getFrom(), filter.getTo());
+                    domainRows.get(rows.size()-1).getSubjects().addAll(subjectRows);
                 }
 
             }
@@ -78,10 +84,6 @@ public class NewTaxonRowCreator {
             row.setMaterialCount(getCount(materialCount, user));
             rows.add(row);
         }
-        for (SubjectWithChildren subject : domain.getSubjects()) {
-//            NewStatisticsRow subjectRow = convertFromSubject(users, subject, from, to);
-//            domainRows.getSubjects().add(subjectRow);
-        }
         return rows;
     }
 
@@ -118,7 +120,7 @@ public class NewTaxonRowCreator {
         return rows;
     }
 
-    private List<NewStatisticsRow> convertFromEmptyDomain(DomainWithChildren domain) {
+    private List<NewStatisticsRow> convertFromEmptyDomain(List<User> users, DomainWithChildren domain, DateTime from, DateTime to) {
         NewStatisticsRow row = new NewStatisticsRow();
         row.setDomainUsed(false);
         row.setEducationalContext(domain.getEducationalContext());

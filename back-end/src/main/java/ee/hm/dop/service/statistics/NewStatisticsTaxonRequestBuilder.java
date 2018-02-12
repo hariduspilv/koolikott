@@ -35,7 +35,9 @@ public class NewStatisticsTaxonRequestBuilder {
         List<UserWithTaxons> userWithTaxons = convertToUserWithTaxon(userDao.getUsersByRole(Role.MODERATOR));
 
         List<TaxonAndUserRequest> taxonAndUserRequests = new ArrayList<>();
-        for (Taxon searchTaxon : filter.getTaxons()) {
+        List<Long> taxonIds = filter.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+        List<Taxon> filterTaxons = taxonDao.findById(taxonIds);
+        for (Taxon searchTaxon : filterTaxons) {
             TaxonAndUserRequest request = new TaxonAndUserRequest();
             request.setUsers(Lists.newArrayList());
             for (UserWithTaxons userWithTaxon : userWithTaxons) {
@@ -43,6 +45,17 @@ public class NewStatisticsTaxonRequestBuilder {
                     request.getUsers().add(userWithTaxon.getUser());
                 }
             }
+            if (searchTaxon instanceof Domain) {
+                Domain domain = (Domain) searchTaxon;
+                request.setEducationalContext(domain.getEducationalContext());
+                request.setDomain(domain);
+            } else if (searchTaxon instanceof  Subject){
+                Subject subject = (Subject) searchTaxon;
+                request.setEducationalContext(subject.getDomain().getEducationalContext());
+                request.setDomain(subject.getDomain());
+                request.setSubject(subject);
+            }
+
             if (CollectionUtils.isEmpty(request.getUsers())) {
                 request.setNoResults(true);
             } else {

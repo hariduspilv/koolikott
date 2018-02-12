@@ -5,6 +5,8 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.dto.FileFormat;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsResult;
+import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
+import ee.hm.dop.service.statistics.NewStatisticsService;
 import ee.hm.dop.service.statistics.StatisticsCsvExporter;
 import ee.hm.dop.service.statistics.StatisticsExcelExporter;
 import ee.hm.dop.service.statistics.StatisticsService;
@@ -12,8 +14,6 @@ import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.io.CsvUtil;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -32,16 +32,27 @@ public class StatisticsAdminResource extends BaseResource {
     @Inject
     private StatisticsService statisticsService;
     @Inject
+    private NewStatisticsService newStatisticsService;
+    @Inject
     private StatisticsExcelExporter statisticsExcelExporter;
     @Inject
     private StatisticsCsvExporter statisticsCsvExporter;
 
     @POST
+    @Path("old")
     @RolesAllowed({RoleString.ADMIN})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public StatisticsResult search(StatisticsFilterDto searchFilter) {
         return statisticsService.statistics(nvl(searchFilter), getLoggedInUser());
+    }
+
+    @POST
+    @RolesAllowed({RoleString.ADMIN})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public NewStatisticsResult newsearch(StatisticsFilterDto searchFilter) {
+        return newStatisticsService.statistics(nvl(searchFilter), getLoggedInUser());
     }
 
     @GET
