@@ -19,7 +19,7 @@ public class NewTaxonRowCreator {
     private StatisticsDao statisticsDao;
 
     public List<NewStatisticsRow> createRows(StatisticsFilterDto filter, List<TaxonAndUserRequest> taxonAndUserRequests) {
-        List<NewStatisticsRow> rows = new ArrayList<>();
+        List<NewStatisticsRow> resultRows = new ArrayList<>();
         for (TaxonAndUserRequest taxonAndUserRequest : taxonAndUserRequests) {
             List<NewStatisticsRow> domainRows;
             if (taxonAndUserRequest.isNoResults()) {
@@ -38,9 +38,9 @@ public class NewTaxonRowCreator {
                 }
 
             }
-            rows.addAll(domainRows);
+            resultRows.addAll(domainRows);
         }
-        return rows;
+        return resultRows;
     }
 
     private List<NewStatisticsRow> convertFromNoResults(TaxonAndUserRequest taxonAndUserRequest) {
