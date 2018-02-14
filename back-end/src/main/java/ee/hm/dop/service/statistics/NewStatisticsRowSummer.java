@@ -1,6 +1,7 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,9 @@ public class NewStatisticsRowSummer {
             if (domainRow.isDomainUsed()) {
                 rowsToSum.add(domainRow);
             }
-            rowsToSum.addAll(domainRow.getSubjects());
+            if (CollectionUtils.isNotEmpty(domainRow.getSubjects())) {
+                rowsToSum.addAll(domainRow.getSubjects());
+            }
         }
         return rowsToSum.stream()
                 .reduce(emptyRow(), (r1, r2) -> {
@@ -34,7 +37,6 @@ public class NewStatisticsRowSummer {
     private NewStatisticsRow emptyRow() {
         NewStatisticsRow identity = new NewStatisticsRow();
         identity.setUser(null);
-        identity.setUsertaxon(null);
         identity.setReviewedLOCount(0L);
         identity.setApprovedReportedLOCount(0L);
         identity.setDeletedReportedLOCount(0L);

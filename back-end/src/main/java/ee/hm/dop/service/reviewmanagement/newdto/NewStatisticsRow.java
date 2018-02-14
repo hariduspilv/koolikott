@@ -20,7 +20,6 @@ public class NewStatisticsRow {
     private List<NewStatisticsRow> subjects;
     private boolean noUsersFound;
     private boolean domainUsed;
-    private Taxon usertaxon;
     private Long reviewedLOCount;
     private Long approvedReportedLOCount;
     private Long deletedReportedLOCount;
@@ -85,14 +84,6 @@ public class NewStatisticsRow {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
-    }
-
-    public Taxon getUsertaxon() {
-        return usertaxon;
-    }
-
-    public void setUsertaxon(Taxon usertaxon) {
-        this.usertaxon = usertaxon;
     }
 
     public Long getReviewedLOCount() {
