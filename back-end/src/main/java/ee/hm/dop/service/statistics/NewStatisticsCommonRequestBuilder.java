@@ -33,7 +33,7 @@ public class NewStatisticsCommonRequestBuilder {
         domainDto.setDomainIsUsed(true);
         domainDto.setEducationalContext((EducationalContext) domain.getParent());
         domainDto.setDomain(domain);
-        if (CollectionUtils.isEmpty(domainDto.getSubjects())) {
+        if (CollectionUtils.isEmpty(domain.getSubjects())) {
             domainDto.setSubjects(new ArrayList<>());
             domainDto.setTaxonIds(taxonDao.getTaxonWithChildren(domain));
             return domainDto;

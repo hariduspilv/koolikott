@@ -98,6 +98,7 @@ public class NewStatisticsByUserRowCreator {
         row.setPortfolioCount(getCount(portfolioCount, user));
         row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
         row.setMaterialCount(getCount(materialCount, user));
+        row.setSubjects(Lists.newArrayList());
         return row;
     }
 
