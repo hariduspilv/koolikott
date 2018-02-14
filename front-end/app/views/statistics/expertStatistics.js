@@ -12,10 +12,11 @@ class controller extends Controller {
         this.$scope.isTaxonSelectVisible = true
         this.$scope.params = {}
         this.$scope.filter = {
-            from: moment().subtract(1, 'month').startOf('month').toDate(),
-            to: moment().subtract(1, 'month').endOf('month').toDate(),
+            from: moment().subtract(1, 'year').startOf('year').toDate(), // moment().subtract(1, 'month').startOf('month').toDate(),
+            to: moment().subtract(1, 'year').endOf('year').toDate(), // moment().subtract(1, 'month').endOf('month').toDate(),
         }
         this.$scope.isInfoTextOpen = false
+        this.$scope.data = {}
 
         this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
         this.$scope.$watch('params', this.onParamsChange.bind(this), true)
@@ -25,10 +26,9 @@ class controller extends Controller {
         this.onResizeWindow = this.onResizeWindow.bind(this)
         window.addEventListener('resize', this.onResizeWindow)
         this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.onResizeWindow))
-        this.onResizeWindow()
+        setTimeout(this.onResizeWindow, 1000)
 
-        this.$scope.$watch('rows', (rows) => console.log('rows:', rows), true)
-        this.$scope.$watch('sum', (sum) => console.log('sum:', sum), true)
+        this.$scope.$watch('data', (data) => console.log('data:', data), true)
     }
     getModerators() {
         this.serverCallService
@@ -36,15 +36,16 @@ class controller extends Controller {
             .then(res => this.$scope.moderators = res.data)
     }
     getStatistics() {
+        const params = this.getPostParams()
+        console.log('POST rest/admin/statistics', JSON.stringify(params, null, 2))
         console.time('statistics request')
         this.serverCallService
-            .makePost('rest/admin/statistics', this.$scope.params)
+            .makePost('rest/admin/statistics', params)
             .then(({ status, data: { rows, sum } }) => {
                 console.timeEnd('statistics request')
-                if (200 <= status && status < 300) {
-                    this.$scope.rows = rows
-                    this.$scope.sum = sum
-                }
+                console.log('status:', status, angular.equals(this.$scope.data, { rows, sum }) ? 'fetched data is equal' : 'fetched data is different', rows, sum)
+                if (200 <= status && status < 300)
+                    Object.assign(this.$scope.data, { rows, sum })
             })
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
@@ -77,6 +78,15 @@ class controller extends Controller {
             const infoText = document.querySelector('.statistics-info-text')
             infoText.style.height = infoText.scrollHeight + 'px'
         })
+    }
+    getPostParams() {
+        const params = Object.assign({}, this.$scope.params)
+
+        if (params.taxons) {
+            params.taxons = params.taxons.map(({ id, level }) => ({ id, level }))
+        }
+
+        return params
     }
 }
 controller.$inject = [
