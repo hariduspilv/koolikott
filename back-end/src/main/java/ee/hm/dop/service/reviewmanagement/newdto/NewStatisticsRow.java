@@ -1,4 +1,4 @@
-package ee.hm.dop.service.reviewmanagement.dto;
+package ee.hm.dop.service.reviewmanagement.newdto;
 
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
@@ -8,13 +8,8 @@ import ee.hm.dop.model.taxon.Taxon;
 
 import java.util.List;
 
-public class StatisticsRow {
+public class NewStatisticsRow {
 
-    /**
-     * add to the same level
-     */
-    @Deprecated
-    private List<StatisticsRow> subjects;
     private User user;
     private EducationalContext educationalContext;
     private Domain domain;
@@ -22,8 +17,9 @@ public class StatisticsRow {
      * domain row does not contain subject
      */
     private Subject subject;
+    private List<NewStatisticsRow> subjects;
+    private boolean noUsersFound;
     private boolean domainUsed;
-    private Taxon usertaxon;
     private Long reviewedLOCount;
     private Long approvedReportedLOCount;
     private Long deletedReportedLOCount;
@@ -33,6 +29,22 @@ public class StatisticsRow {
     private Long portfolioCount;
     private Long publicPortfolioCount;
     private Long materialCount;
+
+    public List<NewStatisticsRow> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<NewStatisticsRow> subjects) {
+        this.subjects = subjects;
+    }
+
+    public boolean isNoUsersFound() {
+        return noUsersFound;
+    }
+
+    public void setNoUsersFound(boolean noUsersFound) {
+        this.noUsersFound = noUsersFound;
+    }
 
     public boolean isDomainUsed() {
         return domainUsed;
@@ -72,14 +84,6 @@ public class StatisticsRow {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
-    }
-
-    public Taxon getUsertaxon() {
-        return usertaxon;
-    }
-
-    public void setUsertaxon(Taxon usertaxon) {
-        this.usertaxon = usertaxon;
     }
 
     public Long getReviewedLOCount() {
@@ -152,13 +156,5 @@ public class StatisticsRow {
 
     public void setMaterialCount(Long materialCount) {
         this.materialCount = materialCount;
-    }
-
-    public List<StatisticsRow> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<StatisticsRow> subjects) {
-        this.subjects = subjects;
     }
 }

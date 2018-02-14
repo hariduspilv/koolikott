@@ -7,8 +7,11 @@ import java.util.List;
 public class TaxonWithChildren {
 
     private Taxon parent;
-    private Taxon taxon;
+    private Taxon domain;
     private List<Long> taxonIds;
+    /**
+     * if domain then dont ask for children elements
+     */
     private boolean capped;
     private List<TaxonWithChildren> subjects;
 
@@ -16,11 +19,11 @@ public class TaxonWithChildren {
     }
 
     public Taxon getTaxon() {
-        return taxon;
+        return domain;
     }
 
     public void setTaxon(Taxon taxon) {
-        this.taxon = taxon;
+        this.domain = taxon;
     }
 
     public List<Long> getTaxonIds() {
