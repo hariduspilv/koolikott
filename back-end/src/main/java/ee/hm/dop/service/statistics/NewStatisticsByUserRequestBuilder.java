@@ -11,6 +11,7 @@ import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class NewStatisticsByUserRequestBuilder {
 
@@ -41,6 +42,23 @@ public class NewStatisticsByUserRequestBuilder {
                 }
             }
         }
-        return domainsWithChildren;
+        return combineSubjectPrivilegesUnderDomain(domainsWithChildren);
+    }
+
+    /**
+     * if user has 2 subject under 1 empty domain, but does not have privileges for the domain itself,
+     * then we merge subjects under empty domain
+     */
+    private List<DomainWithChildren> combineSubjectPrivilegesUnderDomain(List<DomainWithChildren> domainsWithChildren) {
+        List<DomainWithChildren> uniqueDomains = new ArrayList<>();
+        for (DomainWithChildren domain : domainsWithChildren) {
+            Optional<DomainWithChildren> existingDomain = uniqueDomains.stream().filter(d -> d.getDomain().getId().equals(domain.getDomain().getId())).findAny();
+            if (!existingDomain.isPresent()) {
+                uniqueDomains.add(domain);
+            } else {
+                existingDomain.get().getSubjects().addAll(domain.getSubjects());
+            }
+        }
+        return uniqueDomains;
     }
 }
