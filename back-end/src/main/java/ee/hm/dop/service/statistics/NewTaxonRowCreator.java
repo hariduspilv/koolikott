@@ -34,7 +34,7 @@ public class NewTaxonRowCreator {
 
                 for (SubjectWithChildren subject : taxonAndUserRequest.getDomainWithChildren().getSubjects()) {
                     List<NewStatisticsRow> subjectRows = convertFromSubject(taxonAndUserRequest.getUsers(), subject, filter.getFrom(), filter.getTo());
-                    domainRows.get(rows.size()-1).getSubjects().addAll(subjectRows);
+                    domainRows.get(domainRows.size()-1).getSubjects().addAll(subjectRows);
                 }
 
             }
