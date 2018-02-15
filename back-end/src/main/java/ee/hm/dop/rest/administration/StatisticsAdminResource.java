@@ -69,6 +69,9 @@ public class StatisticsAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN})
     @Consumes(MediaType.APPLICATION_JSON)
     public String searchExport(StatisticsFilterDto searchFilter) {
+        if (1==1){
+            return "123";
+        }
         StatisticsFilterDto filter = nvl(searchFilter);
         if (filter.getFormat() == null) {
             throw badRequest("format is needed");
