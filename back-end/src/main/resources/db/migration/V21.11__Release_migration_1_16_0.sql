@@ -20,4 +20,28 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'DELETED_LEARNING_OBJECTS', 'Deleted learning objects');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'DELETED_LEARNING_OBJECTS', 'Kustutatud õppevara');
 
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'REVIEWED', 'Üle vaadatud');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'REVIEWED', 'Reviewed');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'REVIEWED', 'Üle vaadatud');
+
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'APPROVED', 'Heaks kiidetud');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'APPROVED', 'Approved');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'APPROVED', 'Heaks kiidetud');
+
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'CHANGES_ACCEPTED', 'Muudatused kinnitatud');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'CHANGES_ACCEPTED', 'Changes accepted');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'CHANGES_ACCEPTED', 'Muudatused kinnitatud');
+
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'CHANGES_REJECTED', 'Muudatused eemaldatud');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'CHANGES_REJECTED', 'Changes rejected');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'CHANGES_REJECTED', 'Muudatused eemaldatud');
+
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'PUBLICIZED', 'Avalikustatud');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'PUBLICIZED', 'Publicized');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'PUBLICIZED', 'Avalikustatud');
+
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'NEW', 'Uus');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'NEW', 'New');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'NEW', 'Uus');
+
 SET foreign_key_checks = 1;

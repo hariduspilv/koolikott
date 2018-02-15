@@ -122,21 +122,21 @@
           <th md-column colspan="3"><span data-translate="USER_DID_ADD"></span></th>
         </tr>
         <tr md-row>
-          <th md-column><md-icon>lightbulb_outline</md-icon></th>
-          <th md-column colspan="2"><md-icon>warning</md-icon></th>
-          <th md-column colspan="2"><md-icon>autorenew</md-icon></th>
-          <th md-column colspan="2"><md-icon>book</md-icon></th>
-          <th md-column><md-icon>description</md-icon></th>
+          <th md-column><md-icon>lightbulb_outline</md-icon><md-tooltip><span data-translate="UNREVIEWED"></span></md-tooltip></th>
+          <th md-column colspan="2"><md-icon>warning</md-icon><md-tooltip><span data-translate="IMPROPER"></span></md-tooltip></th>
+          <th md-column colspan="2"><md-icon>autorenew</md-icon><md-tooltip><span data-translate="CHANGED_LEARNING_OBJECTS"></span></md-tooltip></th>
+          <th md-column colspan="2"><md-icon>book</md-icon><md-tooltip><span data-translate="PORTFOLIO_RESOURCE"></span></md-tooltip></th>
+          <th md-column><md-icon>description</md-icon><md-tooltip><span data-translate="MATERIAL"></span></md-tooltip></th>
         </tr>
         <tr md-row>
-          <th md-column><md-icon>done</md-icon></th>
-          <th md-column><md-icon>done</md-icon></th>
-          <th md-column><md-icon>close</md-icon></th>
-          <th md-column><md-icon>done</md-icon></th>
-          <th md-column><md-icon>close</md-icon></th>
-          <th md-column><md-icon>remove_red_eye</md-icon></th>
-          <th md-column><md-icon>done</md-icon></th>
-          <th md-column><md-icon>done</md-icon></th>
+          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="REVIEWED"></span></md-tooltip></th>
+          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="APPROVED"></span></md-tooltip></th>
+          <th md-column><md-icon>close</md-icon><md-tooltip><span data-translate="DELETED"></span></md-tooltip></th>
+          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="CHANGES_ACCEPTED"></span></md-tooltip></th>
+          <th md-column><md-icon>close</md-icon><md-tooltip><span data-translate="CHANGES_REJECTED"></span></md-tooltip></th>
+          <th md-column><md-icon>remove_red_eye</md-icon><md-tooltip><span data-translate="PUBLICIZED"></span></md-tooltip></th>
+          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="NEW"></span></md-tooltip></th>
+          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="NEW"></span></md-tooltip></th>
         </tr>
       </thead>
       <tbody md-body data-ng-repeat="educationalContextRow in data.rows">
