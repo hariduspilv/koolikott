@@ -18,7 +18,7 @@ const DASHBOARD_VIEW_STATE_MAP = {
         'byLastChangedAt'
     ],
     deleted: [
-        'DELETED',
+        'DELETED_LEARNING_OBJECTS',
         'deleted',
         'byUpdatedAt'
     ],
