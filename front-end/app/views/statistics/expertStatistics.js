@@ -45,7 +45,10 @@ class controller extends Controller {
                 console.timeEnd('statistics request')
                 console.log('status:', status, angular.equals(this.$scope.data, { rows, sum }) ? 'fetched data is equal' : 'fetched data is different', rows, sum)
                 if (200 <= status && status < 300)
-                    Object.assign(this.$scope.data, { rows, sum })
+                    Object.assign(this.$scope.data, {
+                        rows: this.getFlattenedRows(rows),
+                        sum,
+                    })
             })
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
@@ -87,6 +90,21 @@ class controller extends Controller {
         }
 
         return params
+    }
+    getFlattenedRows(rows) {
+        return rows.map(educationalContextRow => {
+            const rows = educationalContextRow.rows.reduce((flattenedDomainRows, domainRow) => {
+                if (domainRow.domainUsed)
+                    flattenedDomainRows.push(domainRow)
+
+                else if (domainRow.subjects.length)
+                    [].push.apply(flattenedDomainRows, domainRow.subjects)
+
+                return flattenedDomainRows
+            }, [])
+
+            return Object.assign({}, educationalContextRow, { rows })
+        })
     }
 }
 controller.$inject = [

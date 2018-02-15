@@ -1,3 +1,7 @@
+.statistics-card {
+  margin-bottom: 5rem; // make room for the Floating Action Button
+}
+
 .statistics-filter {
   ._md-datepicker-has-triangle-icon {
     margin-right: 0;
@@ -5,12 +9,12 @@
   }
 
   .md-datepicker-input-container {
-    padding-top: 6px;
+    display: block;
   }
 
   .md-datepicker-input {
     font-size: inherit;
-    padding-bottom: 4px;
+    max-width: none;
   }
 
   .md-datepicker-button {
@@ -27,23 +31,43 @@
 }
 
 .statistics-filter__inputs {
-  > * {
-    margin: 0;
+  position: relative;
+}
 
-    + * {
-      margin-left: 1em; 
-    }
+.statistics-filter__conjunction {
+  padding: $input-container-padding;
+}
+
+.statistics-filter__conjunction--comma {
+  position: absolute;
+  right: .2rem;
+  top: 7.8rem;
+
+  @media (min-width: $layout-breakpoint-sm) {
+    margin: 0 1em 0 0;
+    position: static;
   }
 }
 
-.statistics-filter__buttons {
-  button {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+.statistics-filter__conjunction--until,
+.statistics-filter__conjunction--or {
+  @media (min-width: $layout-breakpoint-sm) {
+    margin: 0 1em;
+  }
+}
 
-    md-icon {
-      margin-left: 1rem;
-    }
+.statistics-filter__to-container {
+  @media (max-width: $layout-breakpoint-sm - 1) {
+    margin-bottom: 3rem;
+  }
+}
+
+.statistics-filter__buttons button {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+
+  md-icon {
+    margin-left: 1rem;
   }
 }
 
@@ -56,6 +80,10 @@
   &:not(.is-open) {
     height: 0 !important;
   }
+}
+
+.statistics-info-text-toggle {
+  text-transform: none;
 }
 
 table.statistics-table {
@@ -84,35 +112,17 @@ table.statistics-table {
     }
   }
 
-  td:nth-child(-n+2) {
-    max-width: 0; // for the text-overflow: ellipsis to work
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  td:nth-child(1) {
-    min-width: 80px;
-  }
-
-  td:nth-child(2) {
-    min-width: 120px;
-  }
-
-  thead th:not([rowspan="3"]) {
-    padding: .5rem !important;
-  }
-
   thead th {
     background-color: #eeeeee; // gray-200
     border: 1px solid #ffffff;
 
-    &:not([rowspan]) {
-      text-align: center !important;
+    &[rowspan] {
+      font-size: .875rem;
     }
 
-    &[rowspan="3"] {
-      font-size: .875rem;
+    &:not([rowspan]) {
+      text-align: center !important;
+      padding: .5rem !important;
     }
   }
 
@@ -125,4 +135,25 @@ table.statistics-table {
     text-transform: uppercase;
     border-top: 1px rgba(0,0,0,.24) solid;
   }
+}
+
+.statistics-table__educational-context-cell,
+.statistics-table__domain-or-subject-cell,
+.statistics-table__expert-cell {
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statistics-table__educational-context-cell {
+  min-width: 80px;
+}
+
+.statistics-table__domain-or-subject-cell {
+  min-width: 120px;
+}
+
+.statistics-table__expert-cell {
+  min-width: 120px;
 }
