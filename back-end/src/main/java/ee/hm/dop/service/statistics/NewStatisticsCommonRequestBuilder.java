@@ -28,7 +28,24 @@ public class NewStatisticsCommonRequestBuilder {
         return domainDto;
     }
 
-    DomainWithChildren convertRealDomain(Domain domain) {
+    DomainWithChildren convertRealDomainForTaxon(Domain domain) {
+        DomainWithChildren domainDto = new DomainWithChildren();
+        domainDto.setDomainIsUsed(true);
+        domainDto.setEducationalContext((EducationalContext) domain.getParent());
+        domainDto.setDomain(domain);
+        if (CollectionUtils.isEmpty(domain.getSubjects())) {
+            domainDto.setSubjects(new ArrayList<>());
+            domainDto.setTaxonIds(taxonDao.getTaxonWithChildren(domain));
+            return domainDto;
+        }
+        //if domain has subjects it is capped
+        domainDto.setCapped(true);
+        domainDto.setTaxonIds(Lists.newArrayList(domain.getId()));
+        domainDto.setSubjects(Lists.newArrayList());
+        return domainDto;
+    }
+
+    DomainWithChildren convertRealDomainForUser(Domain domain) {
         DomainWithChildren domainDto = new DomainWithChildren();
         domainDto.setDomainIsUsed(true);
         domainDto.setEducationalContext((EducationalContext) domain.getParent());

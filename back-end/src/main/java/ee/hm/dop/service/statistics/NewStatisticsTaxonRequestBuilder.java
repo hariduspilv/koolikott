@@ -3,16 +3,13 @@ package ee.hm.dop.service.statistics;
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Domain;
-import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
-import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
 import ee.hm.dop.service.reviewmanagement.newdto.UserWithTaxons;
 import org.apache.commons.collections.CollectionUtils;
@@ -61,7 +58,7 @@ public class NewStatisticsTaxonRequestBuilder {
             } else {
                 if (searchTaxon instanceof Domain) {
                     Domain domain = (Domain) searchTaxon;
-                    DomainWithChildren domainWithChildren = commonRequestBuilder.convertRealDomain(domain);
+                    DomainWithChildren domainWithChildren = commonRequestBuilder.convertRealDomainForTaxon(domain);
                     request.setDomainWithChildren(domainWithChildren);
                 } else if (searchTaxon instanceof Subject) {
                     Subject subject = (Subject) searchTaxon;
@@ -70,6 +67,8 @@ public class NewStatisticsTaxonRequestBuilder {
                 }
             }
             taxonAndUserRequests.add(request);
+
+            //todo merge domains
         }
         return taxonAndUserRequests;
     }

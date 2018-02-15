@@ -28,7 +28,7 @@ public class NewStatisticsByUserRequestBuilder {
         List<DomainWithChildren> domainsWithChildren = new ArrayList<>();
         for (Taxon taxon : taxons) {
             if (taxon instanceof Domain) {
-                domainsWithChildren.add(commonRequestBuilder.convertRealDomain((Domain) taxon));
+                domainsWithChildren.add(commonRequestBuilder.convertRealDomainForUser((Domain) taxon));
             } else if (!(taxon instanceof Subject)) {
                 //todo log something, user has wierd taxons
             }
