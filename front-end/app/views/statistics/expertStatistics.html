@@ -153,17 +153,18 @@
             </span>
           </td>
           <!-- display this column if querying by taxon -->
-          <td md-cell data-ng-if="!isExpertsSelectVisible" class="statistics-table__expert-cell">
-            <span data-ng-bind="domainOrSubjectRow.user.name + ' ' + domainOrSubjectRow.user.surname"></span>
+          <td md-cell data-ng-if="!isExpertsSelectVisible" class="statistics-table__expert-cell" colspan="{{domainOrSubjectRow.noUsersFound ? 9 : 1}}">
+            <span data-ng-if="domainOrSubjectRow.noUsersFound" data-translate="NO_USERS_FOUND"></span>
+            <span data-ng-if="!domainOrSubjectRow.noUsersFound" data-ng-bind="domainOrSubjectRow.user.name + ' ' + domainOrSubjectRow.user.surname"></span>
           </td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.reviewedLOCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.approvedReportedLOCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.deletedReportedLOCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.acceptedChangedLOCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.rejectedChangedLOCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.publicPortfolioCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.portfolioCount"></span></td>
-          <td md-cell><span data-ng-bind="domainOrSubjectRow.materialCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.reviewedLOCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.approvedReportedLOCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.deletedReportedLOCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.acceptedChangedLOCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.rejectedChangedLOCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.publicPortfolioCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.portfolioCount"></span></td>
+          <td md-cell data-ng-if="!domainOrSubjectRow.noUsersFound"><span data-ng-bind="domainOrSubjectRow.materialCount"></span></td>
         </tr>
       </tbody>
       <tfoot data-ng-if="data.sum">

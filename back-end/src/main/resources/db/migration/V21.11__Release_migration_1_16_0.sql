@@ -44,4 +44,8 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'NEW', 'New');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'NEW', 'Uus');
 
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'NO_USERS_FOUND', 'Ei leidnud ühtegi kasutajat');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'NO_USERS_FOUND', 'No users found');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'NO_USERS_FOUND', 'Ei leidnud ühtegi kasutajat');
+
 SET foreign_key_checks = 1;

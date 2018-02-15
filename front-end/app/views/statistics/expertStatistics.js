@@ -93,12 +93,12 @@ class controller extends Controller {
     }
     getFlattenedRows(rows) {
         return rows.map(educationalContextRow => {
-            const rows = educationalContextRow.rows.reduce((flattenedDomainRows, domainRow) => {
-                if (domainRow.domainUsed)
-                    flattenedDomainRows.push(domainRow)
+            const rows = educationalContextRow.rows.reduce((flattenedDomainRows, domainOrSubjectRow) => {
+                if (domainOrSubjectRow.domainUsed || domainOrSubjectRow.noUsersFound)
+                    flattenedDomainRows.push(domainOrSubjectRow)
 
-                if (domainRow.subjects.length)
-                    [].push.apply(flattenedDomainRows, domainRow.subjects)
+                if (domainOrSubjectRow.subjects.length)
+                    [].push.apply(flattenedDomainRows, domainOrSubjectRow.subjects)
 
                 return flattenedDomainRows
             }, [])
