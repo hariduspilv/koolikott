@@ -4,7 +4,7 @@
 class controller extends Controller {
     constructor(...args) {
         super(...args)
-        
+
         this.getModerators()
 
         this.$scope.isSubmitButtonEnabled = false
@@ -97,7 +97,7 @@ class controller extends Controller {
                 if (domainRow.domainUsed)
                     flattenedDomainRows.push(domainRow)
 
-                else if (domainRow.subjects.length)
+                if (domainRow.subjects.length)
                     [].push.apply(flattenedDomainRows, domainRow.subjects)
 
                 return flattenedDomainRows
