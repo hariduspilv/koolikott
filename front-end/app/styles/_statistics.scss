@@ -62,6 +62,15 @@
   }
 }
 
+.statistics-filter__taxon-container {
+  @media (max-width: $layout-breakpoint-sm - 1) {
+    md-input-container {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+}
+
 .statistics-filter__buttons button {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
