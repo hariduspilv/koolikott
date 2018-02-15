@@ -19,7 +19,7 @@ public class NewTaxonRowCreator {
     private StatisticsDao statisticsDao;
 
     public List<NewStatisticsRow> createRows(StatisticsFilterDto filter, List<TaxonAndUserRequest> taxonAndUserRequests) {
-        List<NewStatisticsRow> rows = new ArrayList<>();
+        List<NewStatisticsRow> resultRows = new ArrayList<>();
         for (TaxonAndUserRequest taxonAndUserRequest : taxonAndUserRequests) {
             List<NewStatisticsRow> domainRows;
             if (taxonAndUserRequest.isNoResults()) {
@@ -34,13 +34,13 @@ public class NewTaxonRowCreator {
 
                 for (SubjectWithChildren subject : taxonAndUserRequest.getDomainWithChildren().getSubjects()) {
                     List<NewStatisticsRow> subjectRows = convertFromSubject(taxonAndUserRequest.getUsers(), subject, filter.getFrom(), filter.getTo());
-                    domainRows.get(rows.size()-1).getSubjects().addAll(subjectRows);
+                    domainRows.get(domainRows.size() - 1).getSubjects().addAll(subjectRows);
                 }
 
             }
-            rows.addAll(domainRows);
+            resultRows.addAll(domainRows);
         }
-        return rows;
+        return resultRows;
     }
 
     private List<NewStatisticsRow> convertFromNoResults(TaxonAndUserRequest taxonAndUserRequest) {
@@ -82,6 +82,7 @@ public class NewTaxonRowCreator {
             row.setPortfolioCount(getCount(portfolioCount, user));
             row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
             row.setMaterialCount(getCount(materialCount, user));
+            row.setSubjects(Lists.newArrayList());
             rows.add(row);
         }
         return rows;
