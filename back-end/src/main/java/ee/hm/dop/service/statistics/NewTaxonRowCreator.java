@@ -34,7 +34,7 @@ public class NewTaxonRowCreator {
 
                 for (SubjectWithChildren subject : taxonAndUserRequest.getDomainWithChildren().getSubjects()) {
                     List<NewStatisticsRow> subjectRows = convertFromSubject(taxonAndUserRequest.getUsers(), subject, filter.getFrom(), filter.getTo());
-                    domainRows.get(domainRows.size()-1).getSubjects().addAll(subjectRows);
+                    domainRows.get(domainRows.size() - 1).getSubjects().addAll(subjectRows);
                 }
 
             }
@@ -82,6 +82,7 @@ public class NewTaxonRowCreator {
             row.setPortfolioCount(getCount(portfolioCount, user));
             row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
             row.setMaterialCount(getCount(materialCount, user));
+            row.setSubjects(Lists.newArrayList());
             rows.add(row);
         }
         return rows;
