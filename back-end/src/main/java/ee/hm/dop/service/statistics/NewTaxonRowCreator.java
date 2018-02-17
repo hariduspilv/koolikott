@@ -60,7 +60,6 @@ public class NewTaxonRowCreator {
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, users, taxonIds);
         List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(from, to, users, taxonIds);
         List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> reportedLOCount = statisticsDao.reportedLOCount(from, to, users, taxonIds);
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, users, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, users, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, users, taxonIds);
@@ -78,7 +77,6 @@ public class NewTaxonRowCreator {
             row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
             row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
             row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount, user));
-            row.setReportedLOCount(getCount(reportedLOCount, user));
             row.setPortfolioCount(getCount(portfolioCount, user));
             row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
             row.setMaterialCount(getCount(materialCount, user));
@@ -95,7 +93,6 @@ public class NewTaxonRowCreator {
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, users, taxonIds);
         List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(from, to, users, taxonIds);
         List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> reportedLOCount = statisticsDao.reportedLOCount(from, to, users, taxonIds);
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, users, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, users, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, users, taxonIds);
@@ -112,7 +109,6 @@ public class NewTaxonRowCreator {
             row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
             row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
             row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount, user));
-            row.setReportedLOCount(getCount(reportedLOCount, user));
             row.setPortfolioCount(getCount(portfolioCount, user));
             row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
             row.setMaterialCount(getCount(materialCount, user));

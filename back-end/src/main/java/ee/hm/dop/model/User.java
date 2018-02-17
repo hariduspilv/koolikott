@@ -53,6 +53,11 @@ public class User implements AbstractEntity {
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
 
+    @JsonIgnore
+    public String getFullName(){
+        return name + " " + surname;
+    }
+
     public Long getId() {
         return id;
     }

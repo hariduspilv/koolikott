@@ -15,7 +15,7 @@ public class DopPrincipal implements Principal {
 
     @Override
     public String getName() {
-        return getUser().getName() + " " + getUser().getSurname();
+        return getUser().getFullName();
     }
 
     public User getUser() {

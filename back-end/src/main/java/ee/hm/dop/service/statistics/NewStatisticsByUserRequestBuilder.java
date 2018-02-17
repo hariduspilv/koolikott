@@ -1,12 +1,13 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.TaxonDao;
+import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
+import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -20,10 +21,8 @@ public class NewStatisticsByUserRequestBuilder {
     @Inject
     private NewStatisticsCommonRequestBuilder commonRequestBuilder;
 
-
-    public List<DomainWithChildren> userPath(StatisticsFilterDto filter) {
+    public List<DomainWithChildren> userPath(User user) {
         //there is only 1 user currently
-        User user = filter.getUsers().get(0);
         List<Taxon> taxons = taxonDao.getUserTaxons(user);
         List<DomainWithChildren> domainsWithChildren = new ArrayList<>();
         for (Taxon taxon : taxons) {
@@ -52,11 +51,22 @@ public class NewStatisticsByUserRequestBuilder {
     private List<DomainWithChildren> combineSubjectPrivilegesUnderDomain(List<DomainWithChildren> domainsWithChildren) {
         List<DomainWithChildren> uniqueDomains = new ArrayList<>();
         for (DomainWithChildren domain : domainsWithChildren) {
-            Optional<DomainWithChildren> existingDomain = uniqueDomains.stream().filter(d -> d.getDomain().getId().equals(domain.getDomain().getId())).findAny();
+            Optional<DomainWithChildren> existingDomain = uniqueDomains.stream()
+                    .filter(d -> d.getDomain().getId().equals(domain.getDomain().getId()))
+                    .findAny();
             if (!existingDomain.isPresent()) {
                 uniqueDomains.add(domain);
             } else {
-                existingDomain.get().getSubjects().addAll(domain.getSubjects());
+                List<SubjectWithChildren> uniqueSubjects = existingDomain.get().getSubjects();
+                for (SubjectWithChildren newSubject : domain.getSubjects()) {
+                    Optional<SubjectWithChildren> existingSubject = uniqueSubjects.stream()
+                            .filter(d -> d.getSubject().getId().equals(newSubject.getSubject().getId()))
+                            .findAny();
+                    if (!existingSubject.isPresent()) {
+                        uniqueSubjects.add(newSubject);
+                    }
+                }
+                existingDomain.get().setSubjects(uniqueSubjects);
             }
         }
         return uniqueDomains;
