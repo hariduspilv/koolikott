@@ -1,8 +1,6 @@
 package ee.hm.dop.service.statistics;
 
-import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
