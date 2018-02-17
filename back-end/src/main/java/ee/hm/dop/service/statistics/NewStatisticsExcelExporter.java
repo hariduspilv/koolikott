@@ -24,7 +24,7 @@ import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
 
 public class NewStatisticsExcelExporter {
 
-    private static final Logger logger = LoggerFactory.getLogger(StatisticsExcelExporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(NewStatisticsExcelExporter.class);
 
     @Inject
     private LanguageDao languageDao;
