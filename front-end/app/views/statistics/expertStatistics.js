@@ -12,8 +12,8 @@ class controller extends Controller {
         this.$scope.isTaxonSelectVisible = true
         this.$scope.params = {}
         this.$scope.filter = {
-            from: moment().subtract(1, 'year').startOf('year').toDate(), // moment().subtract(1, 'month').startOf('month').toDate(),
-            to: moment().subtract(1, 'year').endOf('year').toDate(), // moment().subtract(1, 'month').endOf('month').toDate(),
+            from: moment().subtract(1, 'month').startOf('month').toDate(),
+            to: moment().subtract(1, 'month').endOf('month').toDate(),
         }
         this.$scope.isInfoTextOpen = false
         this.$scope.data = {}
@@ -29,8 +29,6 @@ class controller extends Controller {
         window.addEventListener('resize', this.onResizeWindow)
         this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.onResizeWindow))
         setTimeout(this.onResizeWindow, 1000)
-
-        this.$scope.$watch('data', (data) => console.log('data:', data), true)
     }
     getModerators() {
         this.serverCallService
@@ -39,55 +37,29 @@ class controller extends Controller {
     }
     getStatistics() {
         this.$scope.fetching = true
-        const params = this.getPostParams()
-
-        console.log('POST rest/admin/statistics', JSON.stringify(params, null, 2))
-        console.time('statistics request')
-
         this.serverCallService
-            .makePost('rest/admin/statistics', params)
+            .makePost('rest/admin/statistics', this.getPostParams())
             .then(({ status, data: { rows, sum } }) => {
                 this.$scope.fetching = false
-
-                console.timeEnd('statistics request')
-                console.log(status, rows, sum)
                 
                 if (200 <= status && status < 300) {
-                    Object.assign(this.$scope.data, {
-                        rows: this.getFlattenedRows(rows),
-                        sum,
-                    })
+                    Object.assign(this.$scope.data, { rows: this.getFlattenedRows(rows), sum })
                     this.onSort(this.$scope.sortBy)
                 }
-            }, (err) => {
-                this.$scope.fetching = false
-                console.log('request error', err)
             })
     }
     downloadStatistics(format) {
         this.$scope.fetchingDownload = true
-        const params = Object.assign(this.getPostParams(), { format })
-
-        console.log(`POST rest/admin/statistics/export`, JSON.stringify(params, null, 2))
-        console.time('statistics export request')
-
         this.serverCallService
-            .makePost(`rest/admin/statistics/export/`, params)
+            .makePost(`rest/admin/statistics/export/`, Object.assign(this.getPostParams(), { format }))
             .then(({ status, data: filename }) => {
                 this.$scope.fetchingDownload = false
 
-                console.timeEnd('statistics export request')
-                console.log(status, filename)
-
                 if (200 <= status && status < 300) {
                     const downloadLink = document.createElement('a')
-                    downloadLink.download = filename
                     downloadLink.href = `/rest/admin/statistics/export/download/${filename}`
                     downloadLink.dispatchEvent(new MouseEvent('click'))
                 }
-            }, (err) => {
-                this.$scope.fetchingDownload = false
-                console.log('request error', err)
             })
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
@@ -130,6 +102,10 @@ class controller extends Controller {
             params.taxons = params.taxons.map(({ id, level }) => ({ id, level }))
         }
 
+        if (params.users) {
+            params.users = params.users.map(({ id }) => ({ id }))
+        }
+
         return params
     }
     getFlattenedRows(rows) {
@@ -159,7 +135,6 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
-    '$location',
     'serverCallService',
     'sortService',
 ]
