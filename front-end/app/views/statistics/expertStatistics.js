@@ -17,6 +17,8 @@ class controller extends Controller {
         }
         this.$scope.isInfoTextOpen = false
         this.$scope.data = {}
+        this.$scope.sortBy = 'byEducationalContext'
+        this.$scope.onSort = this.onSort.bind(this)
 
         this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
         this.$scope.$watch('params', this.onParamsChange.bind(this), true)
@@ -36,19 +38,56 @@ class controller extends Controller {
             .then(res => this.$scope.moderators = res.data)
     }
     getStatistics() {
+        this.$scope.fetching = true
         const params = this.getPostParams()
+
         console.log('POST rest/admin/statistics', JSON.stringify(params, null, 2))
         console.time('statistics request')
+
         this.serverCallService
             .makePost('rest/admin/statistics', params)
             .then(({ status, data: { rows, sum } }) => {
+                this.$scope.fetching = false
+
                 console.timeEnd('statistics request')
-                console.log('status:', status, angular.equals(this.$scope.data, { rows, sum }) ? 'fetched data is equal' : 'fetched data is different', rows, sum)
-                if (200 <= status && status < 300)
+                console.log(status, rows, sum)
+                
+                if (200 <= status && status < 300) {
                     Object.assign(this.$scope.data, {
                         rows: this.getFlattenedRows(rows),
                         sum,
                     })
+                    this.onSort(this.$scope.sortBy)
+                }
+            }, (err) => {
+                this.$scope.fetching = false
+                console.log('request error', err)
+            })
+    }
+    downloadStatistics(format) {
+        this.$scope.fetchingDownload = true
+        const params = Object.assign(this.getPostParams(), { format })
+
+        console.log(`POST rest/admin/statistics/export`, JSON.stringify(params, null, 2))
+        console.time('statistics export request')
+
+        this.serverCallService
+            .makePost(`rest/admin/statistics/export/`, params)
+            .then(({ status, data: filename }) => {
+                this.$scope.fetchingDownload = false
+
+                console.timeEnd('statistics export request')
+                console.log(status, filename)
+
+                if (200 <= status && status < 300) {
+                    const downloadLink = document.createElement('a')
+                    downloadLink.download = filename
+                    downloadLink.href = `/rest/admin/statistics/export/download/${filename}`
+                    downloadLink.dispatchEvent(new MouseEvent('click'))
+                }
+            }, (err) => {
+                this.$scope.fetchingDownload = false
+                console.log('request error', err)
             })
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
@@ -68,10 +107,12 @@ class controller extends Controller {
     }
     onEducationalContextChange(educationalContext) {
         this.$scope.isExpertsSelectVisible = !educationalContext
+        this.$scope.sortBy = educationalContext ? 'byDomainOrSubject' : 'byEducationalContext'
     }
-    clearFilter() {
+    clear() {
         this.$scope.filter = {}
         this.$scope.educationalContext = undefined
+        this.$scope.data = {}
     }
     onSelectTaxons(taxons) {
         this.$scope.filter.taxons = taxons
@@ -92,7 +133,7 @@ class controller extends Controller {
         return params
     }
     getFlattenedRows(rows) {
-        return rows.map(educationalContextRow => {
+        return rows.reduce((flattenedRows, educationalContextRow) => {
             const rows = educationalContextRow.rows.reduce((flattenedDomainRows, domainOrSubjectRow) => {
                 if (domainOrSubjectRow.domainUsed || domainOrSubjectRow.noUsersFound)
                     flattenedDomainRows.push(domainOrSubjectRow)
@@ -103,14 +144,24 @@ class controller extends Controller {
                 return flattenedDomainRows
             }, [])
 
-            return Object.assign({}, educationalContextRow, { rows })
-        })
+            ;[].push.apply(flattenedRows, rows)
+
+            return flattenedRows
+        }, [])
+    }
+    onSort(order) {
+        this.$scope.sortBy = order
+        this.sortService.orderItems(this.$scope.data.rows, order)
+    }
+    openDownloadMenu($mdMenu, evt) {
+        $mdMenu.open(evt)
     }
 }
 controller.$inject = [
     '$scope',
     '$location',
     'serverCallService',
+    'sortService',
 ]
 angular.module('koolikottApp').controller('statisticsController', controller)
 }
