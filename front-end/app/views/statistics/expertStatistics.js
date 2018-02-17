@@ -135,6 +135,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$translate',
     'serverCallService',
     'sortService',
 ]

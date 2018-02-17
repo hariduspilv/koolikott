@@ -46,6 +46,7 @@
         data-ng-show="isExpertsSelectVisible"
         >
         <md-select
+          data-ng-if="$ctrl.$translate.isReady()"
           data-placeholder="{{'EXPERT' | translate}}"
           data-ng-model="filter.user"
           data-ng-model-options="{trackBy: '$value.id'}"
@@ -132,12 +133,12 @@
       <thead md-head md-order="sortBy" md-on-reorder="onSort">
         <tr md-row>
           <th md-column rowspan="3" md-order-by="{{isExpertsSelectVisible ? 'byEducationalContext' : 'byDomainOrSubject'}}">
-            <span data-ng-if="isExpertsSelectVisible" data-translate="EDUCATIONAL_CONTEXT"></span>
+            <span data-ng-if="isExpertsSelectVisible" data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
             <span data-ng-if="!isExpertsSelectVisible" data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
           </th>
           <th md-column rowspan="3" md-order-by="{{isExpertsSelectVisible ? 'byDomainOrSubject' : 'byExpert'}}">
             <span data-ng-if="isExpertsSelectVisible" data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
-            <span data-ng-if="!isExpertsSelectVisible" data-translate="USER"></span>
+            <span data-ng-if="!isExpertsSelectVisible" data-translate="EXPERT"></span>
           </th>
           <th md-column colspan="5"><span data-translate="USER_DID_REVIEW"></span></th>
           <th md-column colspan="3"><span data-translate="USER_DID_ADD"></span></th>
