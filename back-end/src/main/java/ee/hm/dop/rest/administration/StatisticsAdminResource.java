@@ -46,7 +46,6 @@ public class StatisticsAdminResource extends BaseResource {
 
     @GET
     @Path("export/download/{filename}")
-    @RolesAllowed({RoleString.ADMIN})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("filename") String filename) {
         String[] split = filename.split("\\.");
