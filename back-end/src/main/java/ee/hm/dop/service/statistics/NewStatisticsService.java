@@ -40,7 +40,7 @@ public class NewStatisticsService {
     public NewStatisticsResult statistics(StatisticsFilterDto filter, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
 
-        if (CollectionUtils.isNotEmpty(filter.getUsers())) {
+        if (filter.isUserSearch()) {
             return userSearchPath(filter);
         }
         return taxonSearchPath(filter);

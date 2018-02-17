@@ -1,11 +1,13 @@
 package ee.hm.dop.service.reviewmanagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import org.apache.commons.collections4.CollectionUtils;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -21,6 +23,24 @@ public class StatisticsFilterDto {
     private List<Taxon> taxons;
     private List<User> users;
     private FileFormat format;
+
+    @JsonIgnore
+    public boolean isValidSearch(){
+        if (CollectionUtils.isNotEmpty(users) && CollectionUtils.isNotEmpty(taxons)){
+            return false;
+        }
+        return CollectionUtils.isNotEmpty(users) || CollectionUtils.isNotEmpty(taxons);
+    }
+
+    @JsonIgnore
+    public boolean isValidExportRequest(){
+        return isValidSearch() && format != null;
+    }
+
+    @JsonIgnore
+    public boolean isUserSearch(){
+        return CollectionUtils.isNotEmpty(users);
+    }
 
     public DateTime getFrom() {
         return from;
