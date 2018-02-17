@@ -16,6 +16,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import static ee.hm.dop.service.statistics.StatisticsUtil.EMPTY_ROW;
+import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
+
 public class NewStatisticsCsvExporter {
 
     private static final Logger logger = LoggerFactory.getLogger(NewStatisticsCsvExporter.class);
@@ -28,10 +31,7 @@ public class NewStatisticsCsvExporter {
         Long estId = languageDao.findByCode("et").getId();
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
             if (statistics.getFilter().isUserSearch()) {
-                writer.writeNext(new String[]{
-                        "Kasutaja",
-                        statistics.getFilter().getUsers().get(0).getFullName()
-                });
+                writer.writeNext(StatisticsUtil.userHeader(statistics));
                 writer.writeNext(StatisticsUtil.USER_HEADERS);
                 for (EducationalContextRow s : statistics.getRows()) {
                     List<NewStatisticsRow> rows = s.getRows();
@@ -77,15 +77,15 @@ public class NewStatisticsCsvExporter {
                 translationOrName(estId, row.getEducationalContext()),
                 translationOrName(estId, row.getDomain()),
                 row.getSubject() == null ? "" : translationOrName(estId, row.getSubject()),
-                "Ei leitud ühtegi kasutajat",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-",
-                "-"
+                NO_USER_FOUND,
+                EMPTY_ROW,
+                EMPTY_ROW,
+                EMPTY_ROW,
+                EMPTY_ROW,
+                EMPTY_ROW,
+                EMPTY_ROW,
+                EMPTY_ROW,
+                EMPTY_ROW
         };
     }
 

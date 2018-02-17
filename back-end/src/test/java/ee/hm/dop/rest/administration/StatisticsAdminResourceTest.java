@@ -123,15 +123,23 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    @Ignore
     public void admin_can_generate_excel_97_user() throws Exception {
         generateAndDownload(FileFormat.xls, "xls", true);
     }
 
     @Test
-    @Ignore
+    public void admin_can_generate_excel_97_taxon() throws Exception {
+        generateAndDownload(FileFormat.xls, "xls", false);
+    }
+
+    @Test
     public void admin_can_generate_excel_2003plus_user() throws Exception {
         generateAndDownload(FileFormat.xlsx, "xlsx", true);
+    }
+
+    @Test
+    public void admin_can_generate_excel_2003plus_taxon() throws Exception {
+        generateAndDownload(FileFormat.xlsx, "xlsx", false);
     }
 
     @Test
@@ -142,18 +150,6 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void admin_can_generate_csv_taxon() throws Exception {
         generateAndDownload(FileFormat.csv, "csv", false);
-    }
-
-    @Test
-    @Ignore
-    public void admin_can_generate_excel_97_taxon() throws Exception {
-        generateAndDownload(FileFormat.xls, "xls", false);
-    }
-
-    @Test
-    @Ignore
-    public void admin_can_generate_excel_2003plus_taxon() throws Exception {
-        generateAndDownload(FileFormat.xlsx, "xlsx", false);
     }
 
     private void generateAndDownload(FileFormat format, String filename, boolean userSearch) throws IOException {
