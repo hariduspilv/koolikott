@@ -3,6 +3,9 @@ package ee.hm.dop.service.statistics;
 import com.opencsv.CSVWriter;
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
+import ee.hm.dop.dao.UserDao;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.newdto.EducationalContextRow;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
@@ -26,12 +29,16 @@ public class NewStatisticsCsvExporter {
     private TranslationGroupDao translationGroupDao;
     @Inject
     private LanguageDao languageDao;
+    @Inject
+    private UserDao userDao;
 
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
             if (statistics.getFilter().isUserSearch()) {
-                writer.writeNext(StatisticsUtil.userHeader(statistics));
+                User userDto = statistics.getFilter().getUsers().get(0);
+                User user = userDao.findById(userDto.getId());
+                writer.writeNext(StatisticsUtil.userHeader(user));
                 writer.writeNext(StatisticsUtil.USER_HEADERS);
                 for (EducationalContextRow s : statistics.getRows()) {
                     List<NewStatisticsRow> rows = s.getRows();
@@ -129,6 +136,9 @@ public class NewStatisticsCsvExporter {
     }
 
     private String getTranslationKey(Taxon taxon) {
+        if (taxon instanceof EducationalContext){
+            return taxon.getName().toUpperCase();
+        }
         return taxon.getTaxonLevel().toUpperCase() + "_" + taxon.getName().toUpperCase();
     }
 }

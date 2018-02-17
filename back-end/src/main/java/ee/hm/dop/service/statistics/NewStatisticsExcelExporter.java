@@ -2,6 +2,8 @@ package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
+import ee.hm.dop.dao.UserDao;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.newdto.EducationalContextRow;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
@@ -30,6 +32,8 @@ public class NewStatisticsExcelExporter {
     private LanguageDao languageDao;
     @Inject
     private TranslationGroupDao translationGroupDao;
+    @Inject
+    private UserDao userDao;
 
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
@@ -40,7 +44,9 @@ public class NewStatisticsExcelExporter {
         int xlsColNum = 0;
         if (statistics.getFilter().isUserSearch()) {
             Row headersRow = sheet.createRow(rowNum++);
-            for (String heading : StatisticsUtil.userHeader(statistics)) {
+            User userDto = statistics.getFilter().getUsers().get(0);
+            User user = userDao.findById(userDto.getId());
+            for (String heading : StatisticsUtil.userHeader(user)) {
                 Cell cell = headersRow.createCell(xlsColNum++);
                 cell.setCellValue(heading);
             }
