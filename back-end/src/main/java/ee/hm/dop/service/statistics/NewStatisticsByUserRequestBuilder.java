@@ -1,11 +1,11 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.TaxonDao;
+import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 
@@ -21,10 +21,8 @@ public class NewStatisticsByUserRequestBuilder {
     @Inject
     private NewStatisticsCommonRequestBuilder commonRequestBuilder;
 
-
-    public List<DomainWithChildren> userPath(StatisticsFilterDto filter) {
+    public List<DomainWithChildren> userPath(User user) {
         //there is only 1 user currently
-        User user = filter.getUsers().get(0);
         List<Taxon> taxons = taxonDao.getUserTaxons(user);
         List<DomainWithChildren> domainsWithChildren = new ArrayList<>();
         for (Taxon taxon : taxons) {
