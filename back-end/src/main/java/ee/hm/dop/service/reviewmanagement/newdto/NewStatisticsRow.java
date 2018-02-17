@@ -25,7 +25,6 @@ public class NewStatisticsRow {
     private Long deletedReportedLOCount;
     private Long acceptedChangedLOCount;
     private Long rejectedChangedLOCount;
-    private Long reportedLOCount;
     private Long portfolioCount;
     private Long publicPortfolioCount;
     private Long materialCount;
@@ -124,14 +123,6 @@ public class NewStatisticsRow {
 
     public void setRejectedChangedLOCount(Long rejectedChangedLOCount) {
         this.rejectedChangedLOCount = rejectedChangedLOCount;
-    }
-
-    public Long getReportedLOCount() {
-        return reportedLOCount;
-    }
-
-    public void setReportedLOCount(Long reportedLOCount) {
-        this.reportedLOCount = reportedLOCount;
     }
 
     public Long getPortfolioCount() {

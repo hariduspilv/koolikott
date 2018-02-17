@@ -35,7 +35,7 @@ public class StatisticsExcelExporter {
         int rowNum = 0;
         int xlsColNum = 0;
         Row headersRow = sheet.createRow(rowNum++);
-        for (String heading : StatisticsUtil.HEADERS) {
+        for (String heading : StatisticsUtil.USER_HEADERS) {
             Cell cell = headersRow.createCell(xlsColNum++);
             cell.setCellValue(heading);
         }

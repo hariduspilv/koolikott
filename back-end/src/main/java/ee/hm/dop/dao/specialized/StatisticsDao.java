@@ -105,17 +105,6 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
-    public List<StatisticsQuery> reportedLOCount(DateTime from, DateTime to, List<User> users, List<Long> taxons) {
-        String select = "SELECT\n" +
-                "  f.createdBy,\n" +
-                "  count(DISTINCT lo.id) AS c\n" +
-                "FROM ImproperContent f\n" +
-                "  JOIN LearningObject lo ON f.learningObject = lo.id\n";
-        String where = "WHERE f.createdBy IN (:users)\n";
-        String groupBy = "GROUP BY f.createdBy";
-        return query(select, where, groupBy, from, to, users, taxons, "f", "createdAt");
-    }
-
     public List<StatisticsQuery> createdPortfolioCount(DateTime from, DateTime to, List<User> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  lo.creator,\n" +

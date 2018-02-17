@@ -47,7 +47,6 @@ public class StatisticsServiceTest {
         expect(statisticsDao.rejectedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
         expect(statisticsDao.acceptedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
         expect(statisticsDao.rejectedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
-        expect(statisticsDao.reportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
         expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
         expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
         expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query)).times(2);
@@ -113,7 +112,6 @@ public class StatisticsServiceTest {
         expect(statisticsDao.rejectedReportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1, query2)).times(2);
         expect(statisticsDao.acceptedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1)).times(2);
         expect(statisticsDao.rejectedChangedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1)).times(2);
-        expect(statisticsDao.reportedLOCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query1)).times(2);
         expect(statisticsDao.createdPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2)).times(2);
         expect(statisticsDao.createdPublicPortfolioCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2)).times(2);
         expect(statisticsDao.createdMaterialCount(anyObject(), anyObject(), anyObject(), anyObject())).andReturn(newArrayList(query2)).times(2);

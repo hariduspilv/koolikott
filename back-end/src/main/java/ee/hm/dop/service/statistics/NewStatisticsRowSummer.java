@@ -26,7 +26,6 @@ public class NewStatisticsRowSummer {
                     sum.setDeletedReportedLOCount(r1.getDeletedReportedLOCount() + r2.getDeletedReportedLOCount());
                     sum.setAcceptedChangedLOCount(r1.getAcceptedChangedLOCount() + r2.getAcceptedChangedLOCount());
                     sum.setRejectedChangedLOCount(r1.getRejectedChangedLOCount() + r2.getRejectedChangedLOCount());
-                    sum.setReportedLOCount(r1.getReportedLOCount() + r2.getReportedLOCount());
                     sum.setPortfolioCount(r1.getPortfolioCount() + r2.getPortfolioCount());
                     sum.setPublicPortfolioCount(r1.getPublicPortfolioCount() + r2.getPublicPortfolioCount());
                     sum.setMaterialCount(r1.getMaterialCount() + r2.getMaterialCount());
@@ -42,7 +41,6 @@ public class NewStatisticsRowSummer {
         identity.setDeletedReportedLOCount(0L);
         identity.setAcceptedChangedLOCount(0L);
         identity.setRejectedChangedLOCount(0L);
-        identity.setReportedLOCount(0L);
         identity.setPortfolioCount(0L);
         identity.setPublicPortfolioCount(0L);
         identity.setMaterialCount(0L);

@@ -51,7 +51,6 @@ public class StatisticsService {
             List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
             List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
             List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
-            List<StatisticsQuery> reportedLOCount = statisticsDao.reportedLOCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
             List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
             List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
             List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(filter.getFrom(), filter.getTo(), users, taxon.getTaxonIds());
@@ -66,7 +65,6 @@ public class StatisticsService {
                     row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
                     row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
                     row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount, user));
-                    row.setReportedLOCount(getCount(reportedLOCount, user));
                     row.setPortfolioCount(getCount(portfolioCount, user));
                     row.setPublicPortfolioCount(getCount(publicPortfolioCount, user));
                     row.setMaterialCount(getCount(materialCount, user));
@@ -81,7 +79,6 @@ public class StatisticsService {
                     List<StatisticsQuery> rejectedReportedLOCount2 = statisticsDao.rejectedReportedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
                     List<StatisticsQuery> acceptedChangedLOCount2 = statisticsDao.acceptedChangedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
                     List<StatisticsQuery> rejectedChangedLOCount2 = statisticsDao.rejectedChangedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
-                    List<StatisticsQuery> reportedLOCount2 = statisticsDao.reportedLOCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
                     List<StatisticsQuery> portfolioCount2 = statisticsDao.createdPortfolioCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
                     List<StatisticsQuery> publicPortfolioCount2 = statisticsDao.createdPublicPortfolioCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
                     List<StatisticsQuery> materialCount2 = statisticsDao.createdMaterialCount(filter.getFrom(), filter.getTo(), users, child.getTaxonIds());
@@ -98,7 +95,6 @@ public class StatisticsService {
                                 row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount2, user));
                                 row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount2, user));
                                 row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount2, user));
-                                row.setReportedLOCount(getCount(reportedLOCount2, user));
                                 row.setPortfolioCount(getCount(portfolioCount2, user));
                                 row.setPublicPortfolioCount(getCount(publicPortfolioCount2, user));
                                 row.setMaterialCount(getCount(materialCount2, user));
@@ -112,7 +108,6 @@ public class StatisticsService {
                                 row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount2, user));
                                 row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount2, user));
                                 row.setRejectedChangedLOCount(getCount(rejectedChangedLOCount2, user));
-                                row.setReportedLOCount(getCount(reportedLOCount2, user));
                                 row.setPortfolioCount(getCount(portfolioCount2, user));
                                 row.setPublicPortfolioCount(getCount(publicPortfolioCount2, user));
                                 row.setMaterialCount(getCount(materialCount2, user));

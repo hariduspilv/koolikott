@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-
 public class StatisticsCsvExporter {
     private static final Logger logger = LoggerFactory.getLogger(StatisticsCsvExporter.class);
 
@@ -29,7 +27,7 @@ public class StatisticsCsvExporter {
 
     public void generate(String fileName, StatisticsResult statistics) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(fileName))) {
-            writer.writeNext(StatisticsUtil.HEADERS);
+            writer.writeNext(StatisticsUtil.USER_HEADERS);
 
             for (UserStatistics s : statistics.getRows()) {
                 List<StatisticsRow> rows = s.getRows();

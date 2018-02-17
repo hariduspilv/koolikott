@@ -27,49 +27,108 @@ public class NewStatisticsCsvExporter {
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
-            writer.writeNext(StatisticsUtil.HEADERS);
-
             if (statistics.getFilter().isUserSearch()) {
+                writer.writeNext(new String[]{
+                        "Kasutaja",
+                        statistics.getFilter().getUsers().get(0).getFullName()
+                });
+                writer.writeNext(StatisticsUtil.USER_HEADERS);
                 for (EducationalContextRow s : statistics.getRows()) {
                     List<NewStatisticsRow> rows = s.getRows();
-                    for (int i = 0; i < rows.size(); i++) {
-                        NewStatisticsRow row = rows.get(i);
+                    for (NewStatisticsRow row : rows) {
                         if (row.isDomainUsed()) {
-                            writer.writeNext(generateRow(row, null, estId));
+                            writer.writeNext(generateUserRow(row, null, estId));
                         }
                         if (CollectionUtils.isNotEmpty(row.getSubjects())) {
                             for (NewStatisticsRow childRow : row.getSubjects()) {
-                                writer.writeNext(generateRow(childRow, null, estId));
+                                writer.writeNext(generateUserRow(childRow, null, estId));
                             }
                         }
                     }
-
                 }
+                writer.writeNext(generateUserRow(statistics.getSum(), "Kokku", estId));
+            } else {
+                writer.writeNext(StatisticsUtil.TAXON_HEADERS);
+                for (EducationalContextRow s : statistics.getRows()) {
+                    List<NewStatisticsRow> rows = s.getRows();
+                    for (NewStatisticsRow row : rows) {
+                        if (row.isNoUsersFound()){
+                            writer.writeNext(generateNoUserFoundRow(estId, row));
+                        }
+                        if (row.isDomainUsed()) {
+                            writer.writeNext(generateTaxonRow(row, null, estId));
+                        }
+                        if (CollectionUtils.isNotEmpty(row.getSubjects())) {
+                            for (NewStatisticsRow childRow : row.getSubjects()) {
+                                writer.writeNext(generateTaxonRow(childRow, null, estId));
+                            }
+                        }
+                    }
+                }
+                writer.writeNext(generateTaxonRow(statistics.getSum(), "Kokku", estId));
             }
-            writer.writeNext(generateRow(statistics.getSum(), "Kokku", estId));
         } catch (IOException ex) {
             logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
         }
     }
 
-    private String[] generateRow(NewStatisticsRow s, String nameOfTheRow, Long estId) {
+    private String[] generateNoUserFoundRow(Long estId, NewStatisticsRow row) {
         return new String[]{
-                translationGroupDao.getTranslationByKeyAndLangcode(getTranslationKey(s.getEducationalContext()), estId),
-                translationGroupDao.getTranslationByKeyAndLangcode(getTranslationKey(s.getDomain()), estId),
-                s.getSubject() == null ? "" : translationGroupDao.getTranslationByKeyAndLangcode(getTranslationKey(s.getSubject()), estId),
+                translationOrName(estId, row.getEducationalContext()),
+                translationOrName(estId, row.getDomain()),
+                row.getSubject() == null ? "" : translationOrName(estId, row.getSubject()),
+                "Ei leitud ühtegi kasutajat",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-"
+        };
+    }
+
+    private String[] generateUserRow(NewStatisticsRow s, String sumRow, Long estId) {
+        return new String[]{
+                sumRow != null ? "" : translationOrName(estId, s.getEducationalContext()),
+                sumRow != null ? "" : translationOrName(estId, s.getDomain()),
+                sumRow != null ? sumRow : s.getSubject() == null ? "" : translationOrName(estId, s.getSubject()),
                 s.getReviewedLOCount().toString(),
                 s.getApprovedReportedLOCount().toString(),
                 s.getDeletedReportedLOCount().toString(),
                 s.getAcceptedChangedLOCount().toString(),
                 s.getRejectedChangedLOCount().toString(),
-                s.getReportedLOCount().toString(),
                 s.getPortfolioCount().toString(),
                 s.getPublicPortfolioCount().toString(),
                 s.getMaterialCount().toString()
         };
     }
 
+    private String[] generateTaxonRow(NewStatisticsRow s, String sumRow, Long estId) {
+        return new String[]{
+                sumRow != null ? "" : translationOrName(estId, s.getEducationalContext()),
+                sumRow != null ? "" : translationOrName(estId, s.getDomain()),
+                sumRow != null ? "" : s.getSubject() == null ? "" : translationOrName(estId, s.getSubject()),
+                sumRow != null ? sumRow : s.getUser().getFullName(),
+                s.getReviewedLOCount().toString(),
+                s.getApprovedReportedLOCount().toString(),
+                s.getDeletedReportedLOCount().toString(),
+                s.getAcceptedChangedLOCount().toString(),
+                s.getRejectedChangedLOCount().toString(),
+                s.getPortfolioCount().toString(),
+                s.getPublicPortfolioCount().toString(),
+                s.getMaterialCount().toString()
+        };
+    }
+
+    private String translationOrName(Long estId, Taxon taxon) {
+        String translationKey = getTranslationKey(taxon);
+        String translation = translationGroupDao.getTranslationByKeyAndLangcode(translationKey, estId);
+        return translation != null ? translation : taxon.getName();
+    }
+
     private String getTranslationKey(Taxon taxon) {
-        return taxon.getLevel().toUpperCase() + "_" + taxon.getName().toUpperCase();
+        return taxon.getTaxonLevel().toUpperCase() + "_" + taxon.getName().toUpperCase();
     }
 }

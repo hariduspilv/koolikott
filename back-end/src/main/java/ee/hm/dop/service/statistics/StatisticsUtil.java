@@ -7,18 +7,33 @@ import java.util.stream.Collectors;
 
 public class StatisticsUtil {
 
-    public static final String[] HEADERS = new String[]{
-            "Kasutaja",
+    public static final String[] USER_HEADERS = new String[]{
+            "Haridustase",
             "Valdkond",
+            "Alamvaldkond",
             "Ülevaadatuks märgitud õppevara",
             "Sobivaks märgitud teatatud õppevara",
             "Kustutatuks märgitud teatatud õppevara",
             "Kinnitatud muudatustega õppevara",
             "Eemaldatud muudatustega õppevara",
-            "Ebasobivaks/katkiseks märgitud õppevara",
             "Lisatud kogumikke",
             "Avalikustatud kogumikke",
-            "Materjali lisamine"
+            "Lisatud materjale"
+    };
+
+    public static final String[] TAXON_HEADERS = new String[]{
+            "Haridustase",
+            "Valdkond",
+            "Alamvaldkond",
+            "Kasutaja",
+            "Ülevaadatuks märgitud õppevara",
+            "Sobivaks märgitud teatatud õppevara",
+            "Kustutatuks märgitud teatatud õppevara",
+            "Kinnitatud muudatustega õppevara",
+            "Eemaldatud muudatustega õppevara",
+            "Lisatud kogumikke",
+            "Avalikustatud kogumikke",
+            "Lisatud materjale"
     };
 
     public static List<StatisticsQuery> convertToStatisticsQuery(List<Object[]> userCountPairs) {

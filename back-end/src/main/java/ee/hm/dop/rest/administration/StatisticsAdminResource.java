@@ -67,7 +67,11 @@ public class StatisticsAdminResource extends BaseResource {
         if (filter.getFormat().isExcel()) {
             statisticsExcelExporter.generate(filename, statistics);
         } else {
-            statisticsCsvExporter.generate(filename, statistics);
+            try {
+                statisticsCsvExporter.generate(filename, statistics);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return new File(filename).getName();
     }
