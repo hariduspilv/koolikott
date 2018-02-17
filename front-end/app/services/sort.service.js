@@ -15,6 +15,16 @@ class controller extends Controller {
                 : 0
         )
     }
+    compareStrings(a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase(), this.translationService.getLanguageCode())
+    }
+    compareDates(a, b) {
+        const getDate = (v) => {
+            const d = new Date(v)
+            return isNaN(d) ? 0 : d
+        }
+        return getDate(a) - getDate(b)
+    }
     byType(a, b) {
         const getTypeLabel = (o) => this.$translate.instant(
             this.isPortfolio(o)
@@ -137,15 +147,50 @@ class controller extends Controller {
             getTaxonStr(b)
         )
     }
-    compareStrings(a, b) {
-        return a.toLowerCase().localeCompare(b.toLowerCase(), this.translationService.getLanguageCode())
+    // Statistics table
+    byEducationalContext(a, b) {
+        return this.compareStrings(
+            `${this.$translate.instant(a.educationalContext.name)}`,
+            `${this.$translate.instant(b.educationalContext.name)}`
+        )
     }
-    compareDates(a, b) {
-        const getDate = (v) => {
-            const d = new Date(v)
-            return isNaN(d) ? 0 : d
-        }
-        return getDate(a) - getDate(b)
+    byDomainOrSubject(a, b) {
+        const getTranslation = (o, prop) => this.$translate.instant(prop.toUpperCase() + '_' + o[prop].name.toUpperCase())
+
+        return this.compareStrings(
+            a.subject ? `${getTranslation(a, 'domain')} › ${getTranslation(a, 'subject')}` : getTranslation(a, 'domain'),
+            b.subject ? `${getTranslation(b, 'domain')} › ${getTranslation(b, 'subject')}` : getTranslation(b, 'domain')
+        )
+    }
+    byExpert(a, b) {
+        return this.compareStrings(
+            `${a.user.name} ${a.user.surname}`,
+            `${b.user.name} ${b.user.surname}`
+        )
+    }
+    byNewReviewed(a, b) {
+        return a.reviewedLOCount - b.reviewedLOCount
+    }
+    byImproperApproved(a, b) {
+        return a.approvedReportedLOCount - b.approvedReportedLOCount
+    }
+    byImproperDeleted(a, b) {
+        return a.deletedReportedLOCount - b.deletedReportedLOCount
+    }
+    byChangesAccepted(a, b) {
+        return a.acceptedChangedLOCount - b.acceptedChangedLOCount
+    }
+    byChangesRejected(a, b) {
+        return a.rejectedChangedLOCount - b.rejectedChangedLOCount
+    }
+    byPortfolioPublicized(a, b) {
+        return a.publicPortfolioCount - b.publicPortfolioCount
+    }
+    byPortfolioCreated(a, b) {
+        return a.portfolioCount - b.portfolioCount
+    }
+    byMaterialCreated(a, b) {
+        return a.materialCount - b.materialCount
     }
 }
 controller.$inject = [

@@ -74,20 +74,41 @@
     </div>
     <div class="statistics-filter__buttons" data-layout="row" data-layout-align="end center">
       <md-button
+        class="statistics-filter__clear"
         data-translate="CLEAR_FORM"
-        data-ng-click="$ctrl.clearFilter()"
+        data-ng-click="$ctrl.clear()"
         data-ng-show="filter.from || filter.to || filter.user || filter.taxons || educationalContext"
         aria-label="Tühejenda filtriväljad"
       ></md-button>
       <md-button
-        class="md-raised md-primary"
+        class="md-raised md-primary statistics-filter__submit"
+        data-ng-class="{fetching: fetching}"
         data-ng-click="$ctrl.getStatistics()"
         data-ng-disabled="!isSubmitButtonEnabled"
         aria-label="Käivita filter"
         >
+        <div class="spinner"><md-progress-circular data-md-diameter="20"></md-progress-circular></div>
         <span data-translate="DO_FILTER"></span>
         <md-icon>arrow_forward</md-icon>
       </md-button>
+      <md-menu data-ng-if="isSubmitButtonEnabled && data.rows">
+        <md-button
+          class="md-raised md-primary statistics-filter__download"
+          data-ng-class="{fetching: fetchingDownload}"
+          data-ng-click="$ctrl.openDownloadMenu($mdMenu, $event)"
+          aria-label="Lae andmed alla"
+          md-menu-origin
+          >
+          <div class="spinner"><md-progress-circular data-md-diameter="20"></md-progress-circular></div>
+          <span data-translate="DO_DOWNLOAD"></span>
+          <md-icon>arrow_downward</md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item><md-button data-ng-click="$ctrl.downloadStatistics('xlsx')">xlsx</md-button></md-menu-item>
+          <md-menu-item><md-button data-ng-click="$ctrl.downloadStatistics('xls')">xls</md-button></md-menu-item>
+          <md-menu-item><md-button data-ng-click="$ctrl.downloadStatistics('csv')">csv</md-button></md-menu-item>
+        </md-menu-content>
+      </md-menu>
     </div>
   </md-content>
   <md-table-container>
@@ -108,13 +129,13 @@
         <col width="6.25%">
         <col width="6.25%">
       </colgroup>
-      <thead md-head>
+      <thead md-head md-order="sortBy" md-on-reorder="onSort">
         <tr md-row>
-          <th md-column rowspan="3">
+          <th md-column rowspan="3" md-order-by="{{isExpertsSelectVisible ? 'byEducationalContext' : 'byDomainOrSubject'}}">
             <span data-ng-if="isExpertsSelectVisible" data-translate="EDUCATIONAL_CONTEXT"></span>
             <span data-ng-if="!isExpertsSelectVisible" data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
           </th>
-          <th md-column rowspan="3">
+          <th md-column rowspan="3" md-order-by="{{isExpertsSelectVisible ? 'byDomainOrSubject' : 'byExpert'}}">
             <span data-ng-if="isExpertsSelectVisible" data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span>
             <span data-ng-if="!isExpertsSelectVisible" data-translate="USER"></span>
           </th>
@@ -129,28 +150,26 @@
           <th md-column><md-icon>description</md-icon><md-tooltip><span data-translate="MATERIAL"></span></md-tooltip></th>
         </tr>
         <tr md-row>
-          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="REVIEWED"></span></md-tooltip></th>
-          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="APPROVED"></span></md-tooltip></th>
-          <th md-column><md-icon>close</md-icon><md-tooltip><span data-translate="DELETED"></span></md-tooltip></th>
-          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="CHANGES_ACCEPTED"></span></md-tooltip></th>
-          <th md-column><md-icon>close</md-icon><md-tooltip><span data-translate="CHANGES_REJECTED"></span></md-tooltip></th>
-          <th md-column><md-icon>remove_red_eye</md-icon><md-tooltip><span data-translate="PUBLICIZED"></span></md-tooltip></th>
-          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="NEW"></span></md-tooltip></th>
-          <th md-column><md-icon>done</md-icon><md-tooltip><span data-translate="NEW"></span></md-tooltip></th>
+          <th md-column md-order-by="byNewReviewed"><md-icon>done</md-icon><md-tooltip><span data-translate="REVIEWED"></span></md-tooltip></th>
+          <th md-column md-order-by="byImproperApproved"><md-icon>done</md-icon><md-tooltip><span data-translate="APPROVED"></span></md-tooltip></th>
+          <th md-column md-order-by="byImproperDeleted"><md-icon>close</md-icon><md-tooltip><span data-translate="DELETED"></span></md-tooltip></th>
+          <th md-column md-order-by="byChangesAccepted"><md-icon>done</md-icon><md-tooltip><span data-translate="CHANGES_ACCEPTED"></span></md-tooltip></th>
+          <th md-column md-order-by="byChangesRejected"><md-icon>close</md-icon><md-tooltip><span data-translate="CHANGES_REJECTED"></span></md-tooltip></th>
+          <th md-column md-order-by="byPortfolioPublicized"><md-icon>remove_red_eye</md-icon><md-tooltip><span data-translate="PUBLICIZED"></span></md-tooltip></th>
+          <th md-column md-order-by="byPortfolioCreated"><md-icon>done</md-icon><md-tooltip><span data-translate="NEW"></span></md-tooltip></th>
+          <th md-column md-order-by="byMaterialCreated"><md-icon>done</md-icon><md-tooltip><span data-translate="NEW"></span></md-tooltip></th>
         </tr>
       </thead>
-      <tbody md-body data-ng-repeat="educationalContextRow in data.rows">
-        <tr md-row data-ng-repeat="domainOrSubjectRow in educationalContextRow.rows track by $index">
+      <tbody md-body>
+        <tr md-row data-ng-repeat="domainOrSubjectRow in data.rows track by $index">
           <!-- display this column if querying by an expert -->
           <td md-cell data-ng-if="isExpertsSelectVisible" class="statistics-table__educational-context-cell">
-            <span data-ng-if="$index === 0" data-translate="{{educationalContextRow.educationalContext.name.toUpperCase()}}"></span>
+            <span data-translate="{{domainOrSubjectRow.educationalContext.name.toUpperCase()}}"></span>
           </td>
           <td md-cell class="statistics-table__domain-or-subject-cell">
-            <span data-ng-if="isExpertsSelectVisible || $index === 0 || (domainOrSubjectRow.subject ? domainOrSubjectRow.subject.id : domainOrSubjectRow.domain.id) !== (domainOrSubjectRow.subject ? educationalContextRow.rows[$index - 1].subject.id : educationalContextRow.rows[$index - 1].domain.id)" data-ng-class="{'text-light': domainOrSubjectRow.noUsersFound}">
-              <strong data-translate="{{'DOMAIN_' + domainOrSubjectRow.domain.name.toUpperCase()}}"></strong>
-              <span data-ng-if="domainOrSubjectRow.subject"> › </span>
-              <span data-ng-if="domainOrSubjectRow.subject" data-translate="{{'SUBJECT_' + domainOrSubjectRow.subject.name.toUpperCase()}}"></span>
-            </span>
+            <strong data-translate="{{'DOMAIN_' + domainOrSubjectRow.domain.name.toUpperCase()}}"></strong>
+            <span data-ng-if="domainOrSubjectRow.subject"> › </span>
+            <span data-ng-if="domainOrSubjectRow.subject" data-translate="{{'SUBJECT_' + domainOrSubjectRow.subject.name.toUpperCase()}}"></span>
           </td>
           <!-- display this column if querying by taxon -->
           <td md-cell data-ng-if="!isExpertsSelectVisible" class="statistics-table__expert-cell">
