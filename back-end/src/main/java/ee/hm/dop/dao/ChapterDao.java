@@ -21,9 +21,6 @@ public class ChapterDao extends AbstractDao<Chapter> {
     }
 
     public List<Chapter> chaptersWithPortfolio() {
-        if (0==0){
-            return new ArrayList<>();
-        }
         return getEntityManager()
                 .createNativeQuery("SELECT * FROM Chapter c " +
                         "WHERE c.Portfolio IS NOT NULL " +

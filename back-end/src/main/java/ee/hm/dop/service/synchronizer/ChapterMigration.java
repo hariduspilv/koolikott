@@ -23,7 +23,6 @@ public class ChapterMigration extends DopDaemonProcess {
         try {
 
             ChapterDao chapterDao = newChapterDao();
-//            List<Chapter> chapters = chapterDao.chaptersWithPortfolio(Arrays.asList(11164L, 10239L, 11627L));
             List<Chapter> chapters = chapterDao.chaptersWithPortfolio();
             logger.info(String.format("analyzing %s chapters", chapters.size()));
             int noRowsNoSubChapters = 0;
