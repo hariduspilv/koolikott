@@ -7,7 +7,6 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
-import ee.hm.dop.service.reviewmanagement.newdto.NewUserStatistics;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.joda.time.DateTime;
 
