@@ -5,7 +5,7 @@
       <md-button
         class="statistics-info-text-toggle text-small"
         data-md-colors="{color: 'grey-500'}"
-        data-ng-click="isInfoTextOpen = !isInfoTextOpen"
+        data-ng-click="$ctrl.toggleInfoText()"
         aria-label="Ava infotekst"
         >
         <span data-ng-if="!isInfoTextOpen" data-translate="OPEN_INFO_TEXT"></span>
@@ -131,7 +131,7 @@
         <col width="6.25%">
         <col width="6.25%">
       </colgroup>
-      <thead md-head md-order="sortBy" md-on-reorder="onSort">
+      <thead md-head md-order="sortBy" md-on-reorder="sort">
         <tr md-row>
           <th md-column rowspan="3" md-order-by="{{isExpertsSelectVisible ? 'byEducationalContext' : 'byDomainOrSubject'}}">
             <span data-ng-if="isExpertsSelectVisible" data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT"></span>
@@ -188,7 +188,7 @@
           <td md-cell><span data-ng-bind="domainOrSubjectRow.materialCount"></span></td>
         </tr>
       </tbody>
-      <tfoot data-ng-if="data.sum">
+      <tfoot data-ng-if="data.sum && page === numPages">
         <tr>
           <th md-cell></th>
           <th md-cell data-translate="TOTAL"></th>
@@ -204,4 +204,13 @@
       </tfoot>
     </table>
   </md-table-container>
+  <md-table-pagination
+    class="statistics-pagination"
+    data-ng-if="numPages > 1"
+    data-md-limit="perPage"
+    data-md-page="page"
+    data-md-total="{{allRows.length}}"
+    data-md-on-paginate="paginate"
+    data-md-page-select
+  ></md-table-pagination>
 </md-card>

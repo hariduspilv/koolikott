@@ -18,18 +18,22 @@ class controller extends Controller {
         this.$scope.isInfoTextOpen = false
         this.$scope.data = {}
         this.$scope.sortBy = 'byEducationalContext'
-        this.$scope.onSort = this.onSort.bind(this)
+        this.$scope.sort = this.sort.bind(this)
+        this.$scope.paginate = this.paginate.bind(this)
         this.$scope.maxDate = new Date()
+        this.$scope.perPage = 100
+        this.$scope.page = 1
+        this.$scope.numPages = 1
 
         this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
         this.$scope.$watch('params', this.onParamsChange.bind(this), true)
         this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
 
         // Set the info text height in pixels for css-animatable collapse
-        this.onResizeWindow = this.onResizeWindow.bind(this)
-        window.addEventListener('resize', this.onResizeWindow)
-        this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.onResizeWindow))
-        setTimeout(this.onResizeWindow, 1000)
+        this.setInfoTextHeight = this.setInfoTextHeight.bind(this)
+        window.addEventListener('resize', this.setInfoTextHeight)
+        this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.setInfoTextHeight))
+        setTimeout(this.setInfoTextHeight)
     }
     getModerators() {
         this.serverCallService
@@ -44,8 +48,12 @@ class controller extends Controller {
                 this.$scope.fetching = false
                 
                 if (200 <= status && status < 300) {
-                    Object.assign(this.$scope.data, { rows: this.getFlattenedRows(rows), sum })
-                    this.onSort(this.$scope.sortBy)
+                    this.$scope.allRows = this.getFlattenedRows(rows)
+                    this.$scope.data.sum = sum
+                    this.$scope.page = 1
+                    this.$scope.numPages = Math.ceil(this.$scope.allRows.length / this.$scope.perPage)
+                    this.paginate(this.$scope.page, this.$scope.perPage)
+                    this.sort(this.$scope.sortBy)
                 }
             })
     }
@@ -90,7 +98,7 @@ class controller extends Controller {
     onSelectTaxons(taxons) {
         this.$scope.filter.taxons = taxons
     }
-    onResizeWindow() {
+    setInfoTextHeight(cb) {
         requestAnimationFrame(() => {
             const infoText = document.querySelector('.statistics-info-text')
             infoText.style.height = infoText.scrollHeight + 'px'
@@ -126,12 +134,22 @@ class controller extends Controller {
             return flattenedRows
         }, [])
     }
-    onSort(order) {
+    sort(order) {
         this.$scope.sortBy = order
-        this.sortService.orderItems(this.$scope.data.rows, order)
+        this.sortService.orderItems(this.$scope.allRows, order)
+        this.paginate(this.$scope.page, this.$scope.perPage)
     }
     openDownloadMenu($mdMenu, evt) {
         $mdMenu.open(evt)
+    }
+    toggleInfoText() {
+        this.setInfoTextHeight()
+        this.$scope.isInfoTextOpen = !this.$scope.isInfoTextOpen
+    }
+    paginate(page, perPage) {
+        const startIdx = (page - 1) * perPage
+        this.$scope.page = page
+        this.$scope.data.rows = this.$scope.allRows.slice(startIdx, startIdx + perPage)
     }
 }
 controller.$inject = [
