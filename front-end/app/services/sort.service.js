@@ -163,9 +163,17 @@ class controller extends Controller {
         )
     }
     byExpert(a, b) {
+        // if there is no userin the domain/subject row then make sure those rows fall to the end (after Z in A-Z)
+        if (!a.user && b.user)
+            return 1
+        else if (a.user && !b.user)
+            return -1
+        else if (!a.user && !b.user)
+            return 0
+
         return this.compareStrings(
-            `${a.user.name} ${a.user.surname}`,
-            `${b.user.name} ${b.user.surname}`
+            `${a.user ? a.user.name : ''} ${a.user ? a.user.surname : ''}`,
+            `${b.user ? b.user.name : ''} ${b.user ? b.user.surname : ''}`
         )
     }
     byNewReviewed(a, b) {

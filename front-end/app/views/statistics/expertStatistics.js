@@ -19,6 +19,7 @@ class controller extends Controller {
         this.$scope.data = {}
         this.$scope.sortBy = 'byEducationalContext'
         this.$scope.onSort = this.onSort.bind(this)
+        this.$scope.maxDate = new Date()
 
         this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
         this.$scope.$watch('params', this.onParamsChange.bind(this), true)
