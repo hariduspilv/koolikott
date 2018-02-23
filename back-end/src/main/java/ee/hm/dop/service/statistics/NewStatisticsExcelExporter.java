@@ -1,7 +1,6 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.LanguageDao;
-import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;

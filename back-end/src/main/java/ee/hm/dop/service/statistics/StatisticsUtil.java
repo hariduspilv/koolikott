@@ -12,9 +12,6 @@ import java.util.stream.Collectors;
 
 public class StatisticsUtil {
 
-
-
-
     public static final String[] USER_HEADERS = new String[]{
             "Haridustase",
             "Valdkond",
