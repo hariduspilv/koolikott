@@ -26,7 +26,7 @@ public class ApplicationLauncher {
 
     private static final int DEFAULT_SERVER_PORT = 8080;
     private static final int MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY = 1;
-    private static final int AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY = 1;
+    private static final int AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY = 2;
 
     @Inject
     private static Configuration configuration;

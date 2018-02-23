@@ -1,7 +1,7 @@
 package ee.hm.dop.service.statistics;
 
+import ee.hm.dop.model.User;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
-import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,10 +39,10 @@ public class StatisticsUtil {
     public static final String NO_USER_FOUND = "Ei leitud ühtegi kasutajat";
     public static final String EMPTY_ROW = "-";
 
-    public static String[] userHeader(NewStatisticsResult statistics) {
+    public static String[] userHeader(User user) {
         return new String[]{
                 "Kasutaja",
-                statistics.getFilter().getUsers().get(0).getFullName()
+                user.getFullName()
         };
     }
 

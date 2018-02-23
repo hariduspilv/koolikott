@@ -73,13 +73,17 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
 
     public String getTranslationByKeyAndLangcode(String translationKey, Long langCode) {
         try {
-            Clob singleResult = (Clob) entityManager
+            Object result = entityManager
                     .createNativeQuery("SELECT t.translation FROM Translation t " +
                             "WHERE t.translationKey = :translationKey " +
                             "AND t.translationGroup = :translationGroup")
                     .setParameter("translationKey", translationKey)
                     .setParameter("translationGroup", langCode)
                     .getSingleResult();
+            if (result instanceof String){
+                return (String) result;
+            }
+            Clob singleResult = (Clob) result;
             return singleResult.getSubString(1, (int) singleResult.length());
         } catch (RuntimeException | SQLException ignored) {
             return null;
