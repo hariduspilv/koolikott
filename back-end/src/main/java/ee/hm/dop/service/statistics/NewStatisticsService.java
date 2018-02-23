@@ -1,8 +1,10 @@
 package ee.hm.dop.service.statistics;
 
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.*;
 import ee.hm.dop.utils.UserUtil;
@@ -26,6 +28,8 @@ public class NewStatisticsService {
     private NewStatisticsTaxonRequestBuilder taxonRequestBuilder;
     @Inject
     private NewTaxonRowCreator taxonRowCreator;
+    @Inject
+    private TaxonDao taxonDao;
 
     public NewStatisticsResult statistics(StatisticsFilterDto filter, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
@@ -44,9 +48,15 @@ public class NewStatisticsService {
     }
 
     private NewStatisticsResult taxonSearchPath(StatisticsFilterDto filter) {
-        List<TaxonAndUserRequest> taxonAndUserRequests = taxonRequestBuilder.composeRequest(filter);
+        List<Taxon> dbTaxons = refreshTaxons(filter);
+        List<TaxonAndUserRequest> taxonAndUserRequests = taxonRequestBuilder.composeRequest(dbTaxons);
         List<NewStatisticsRow> rows = taxonRowCreator.createRows(filter, taxonAndUserRequests);
-        return new NewStatisticsResult(filter, convertECRows(groupByEC(rows)), rowSummer.getSum(rows));
+        return new NewStatisticsResult(dbTaxons, filter, convertECRows(groupByEC(rows)), rowSummer.getSum(rows));
+    }
+
+    private List<Taxon> refreshTaxons(StatisticsFilterDto filter) {
+        List<Long> taxonIds = filter.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+        return taxonDao.findById(taxonIds);
     }
 
     private Map<EducationalContext, List<NewStatisticsRow>> groupByEC(List<NewStatisticsRow> rows) {

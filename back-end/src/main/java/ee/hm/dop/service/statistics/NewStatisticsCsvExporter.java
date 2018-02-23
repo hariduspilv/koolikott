@@ -5,8 +5,8 @@ import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.EducationalContextRow;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.statistics.StatisticsUtil.EMPTY_ROW;
 import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
@@ -26,19 +27,20 @@ public class NewStatisticsCsvExporter {
 
     private static final Logger logger = LoggerFactory.getLogger(NewStatisticsCsvExporter.class);
     @Inject
-    private TranslationGroupDao translationGroupDao;
-    @Inject
     private LanguageDao languageDao;
     @Inject
     private UserDao userDao;
+    @Inject
+    private CommonStatisticsExporter commonStatisticsExporter;
 
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
+        StatisticsFilterDto filter = statistics.getFilter();
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
-            if (statistics.getFilter().isUserSearch()) {
-                User userDto = statistics.getFilter().getUsers().get(0);
+            if (filter.isUserSearch()) {
+                User userDto = filter.getUsers().get(0);
                 User user = userDao.findById(userDto.getId());
-                writer.writeNext(StatisticsUtil.userHeader(user));
+                writer.writeNext(StatisticsUtil.userHeader(filter.getFrom(), filter.getTo(), user));
                 writer.writeNext(StatisticsUtil.USER_HEADERS);
                 for (EducationalContextRow s : statistics.getRows()) {
                     List<NewStatisticsRow> rows = s.getRows();
@@ -55,11 +57,12 @@ public class NewStatisticsCsvExporter {
                 }
                 writer.writeNext(generateUserRow(statistics.getSum(), "Kokku", estId));
             } else {
+                writer.writeNext(commonStatisticsExporter.taxonHeader(statistics, estId));
                 writer.writeNext(StatisticsUtil.TAXON_HEADERS);
                 for (EducationalContextRow s : statistics.getRows()) {
                     List<NewStatisticsRow> rows = s.getRows();
                     for (NewStatisticsRow row : rows) {
-                        if (row.isNoUsersFound()){
+                        if (row.isNoUsersFound()) {
                             writer.writeNext(generateNoUserFoundRow(estId, row));
                         }
                         if (row.isDomainUsed()) {
@@ -75,15 +78,15 @@ public class NewStatisticsCsvExporter {
                 writer.writeNext(generateTaxonRow(statistics.getSum(), "Kokku", estId));
             }
         } catch (IOException ex) {
-            logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
+            logger.error(filter.getFormat().name() + " file generation failed");
         }
     }
 
     private String[] generateNoUserFoundRow(Long estId, NewStatisticsRow row) {
         return new String[]{
-                translationOrName(estId, row.getEducationalContext()),
-                translationOrName(estId, row.getDomain()),
-                row.getSubject() == null ? "" : translationOrName(estId, row.getSubject()),
+                commonStatisticsExporter.translationOrName(estId, row.getEducationalContext()),
+                commonStatisticsExporter.translationOrName(estId, row.getDomain()),
+                row.getSubject() == null ? "" : commonStatisticsExporter.translationOrName(estId, row.getSubject()),
                 NO_USER_FOUND,
                 EMPTY_ROW,
                 EMPTY_ROW,
@@ -98,9 +101,9 @@ public class NewStatisticsCsvExporter {
 
     private String[] generateUserRow(NewStatisticsRow s, String sumRow, Long estId) {
         return new String[]{
-                sumRow != null ? "" : translationOrName(estId, s.getEducationalContext()),
-                sumRow != null ? "" : translationOrName(estId, s.getDomain()),
-                sumRow != null ? sumRow : s.getSubject() == null ? "" : translationOrName(estId, s.getSubject()),
+                sumRow != null ? "" : commonStatisticsExporter.translationOrName(estId, s.getEducationalContext()),
+                sumRow != null ? "" : commonStatisticsExporter.translationOrName(estId, s.getDomain()),
+                sumRow != null ? sumRow : s.getSubject() == null ? "" : commonStatisticsExporter.translationOrName(estId, s.getSubject()),
                 s.getReviewedLOCount().toString(),
                 s.getApprovedReportedLOCount().toString(),
                 s.getDeletedReportedLOCount().toString(),
@@ -114,9 +117,9 @@ public class NewStatisticsCsvExporter {
 
     private String[] generateTaxonRow(NewStatisticsRow s, String sumRow, Long estId) {
         return new String[]{
-                sumRow != null ? "" : translationOrName(estId, s.getEducationalContext()),
-                sumRow != null ? "" : translationOrName(estId, s.getDomain()),
-                sumRow != null ? "" : s.getSubject() == null ? "" : translationOrName(estId, s.getSubject()),
+                sumRow != null ? "" : commonStatisticsExporter.translationOrName(estId, s.getEducationalContext()),
+                sumRow != null ? "" : commonStatisticsExporter.translationOrName(estId, s.getDomain()),
+                sumRow != null ? "" : s.getSubject() == null ? "" : commonStatisticsExporter.translationOrName(estId, s.getSubject()),
                 sumRow != null ? sumRow : s.getUser().getFullName(),
                 s.getReviewedLOCount().toString(),
                 s.getApprovedReportedLOCount().toString(),
@@ -127,18 +130,5 @@ public class NewStatisticsCsvExporter {
                 s.getPublicPortfolioCount().toString(),
                 s.getMaterialCount().toString()
         };
-    }
-
-    private String translationOrName(Long estId, Taxon taxon) {
-        String translationKey = getTranslationKey(taxon);
-        String translation = translationGroupDao.getTranslationByKeyAndLangcode(translationKey, estId);
-        return translation != null ? translation : taxon.getName();
-    }
-
-    private String getTranslationKey(Taxon taxon) {
-        if (taxon instanceof EducationalContext){
-            return taxon.getName().toUpperCase();
-        }
-        return taxon.getTaxonLevel().toUpperCase() + "_" + taxon.getName().toUpperCase();
     }
 }

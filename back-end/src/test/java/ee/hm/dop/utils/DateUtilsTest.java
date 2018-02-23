@@ -11,6 +11,12 @@ import org.junit.runners.JUnit4;
 public class DateUtilsTest {
 
     @Test
+    public void x() {
+        String s = DateUtils.toString_ddMMyyyy(new DateTime(2000, 1, 2, 3, 4));
+        assertEquals("02.01.2000", s);
+    }
+
+    @Test
     public void fromJson() {
         String json = "2014-10-30T08:37:05Z";
         DateTime fromJson = DateUtils.fromJson(json);

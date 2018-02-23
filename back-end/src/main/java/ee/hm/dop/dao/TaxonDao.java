@@ -3,7 +3,6 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.reviewmanagement.dto.TaxonWithChildren;
 import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.collections.CollectionUtils;

@@ -28,12 +28,10 @@ public class NewStatisticsTaxonRequestBuilder {
     @Inject
     private NewStatisticsCommonRequestBuilder commonRequestBuilder;
 
-    public List<TaxonAndUserRequest> composeRequest(StatisticsFilterDto filter) {
+    public List<TaxonAndUserRequest> composeRequest(List<Taxon> filterTaxons) {
         List<UserWithTaxons> userWithTaxons = convertToUserWithTaxon(userDao.getUsersByRole(Role.MODERATOR));
 
         List<TaxonAndUserRequest> taxonAndUserRequests = new ArrayList<>();
-        List<Long> taxonIds = filter.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
-        List<Taxon> filterTaxons = taxonDao.findById(taxonIds);
         for (Taxon searchTaxon : filterTaxons) {
             TaxonAndUserRequest request = new TaxonAndUserRequest();
             request.setUsers(Lists.newArrayList());
