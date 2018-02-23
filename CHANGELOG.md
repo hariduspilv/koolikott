@@ -8,7 +8,7 @@
 * Murdepunktide korrastamine [#136](https://github.com/hariduspilv/koolikott/issues/136)
 * Responsiivsus puudu suurel (gt-lg) murdepunktil [#297](https://github.com/hariduspilv/koolikott/issues/297)
 
-## e-Koolikott [1.14.0](https://github.com/hariduspilv/koolikott/milestone/13) (testimisel)
+## e-Koolikott [1.14.0](https://github.com/hariduspilv/koolikott/milestone/13)
 
 ### Muutunud
 * Õppevara otsing -> olemasoleva materjali otsing kogumikku lisamiseks [#226](https://github.com/hariduspilv/koolikott/issues/226)
@@ -24,7 +24,7 @@
 * Materjali lisamise modaali täiendused v.2 [#296](https://github.com/hariduspilv/koolikott/issues/296)
 * Litsentsi klassifikaatorite sidumine tõlkeväärtuste loogikaga [#298](https://github.com/hariduspilv/koolikott/issues/298)
 
-## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12) (testimisel)
+## e-Koolikott [1.13.0](https://github.com/hariduspilv/koolikott/milestone/12)
 
 ### Muutunud
 * X-tee versiooniuuendus [#235](https://github.com/hariduspilv/koolikott/issues/235)
