@@ -238,7 +238,9 @@ class controller extends Controller {
             this.$scope.isHeaderRed = false
         }
 
-        if (!this.$scope.isAdmin && !this.$scope.isModerator)
+        if (!this.authenticatedUserService.isAdmin() &&
+            !this.authenticatedUserService.isModerator()
+        )
             return setDefault()
 
         const path = this.$location.path()
