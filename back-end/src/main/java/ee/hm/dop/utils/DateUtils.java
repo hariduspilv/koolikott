@@ -13,7 +13,7 @@ public class DateUtils {
     private static DateTimeFormatter formatterWithoutMillis = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             .withZoneUTC();
 
-    private static DateTimeFormatter ddMMyyyy_formatter = DateTimeFormat.forPattern("dd.MM.yyyy").withZoneUTC();
+    private static DateTimeFormatter ddMMyyyy_formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
 
     public static String toString_ddMMyyyy(DateTime dateTime){
         return dateTime != null ? dateTime.toString(ddMMyyyy_formatter) : "";
