@@ -7,6 +7,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.utils.DateUtils;
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,7 @@ public class StatisticsUtil {
 
     public static List<StatisticsQuery> convertToStatisticsQuery(List<Object[]> userCountPairs) {
         return userCountPairs.stream()
-                .map(object -> new StatisticsQuery((Long) object[0], (Long) object[1]))
+                .map(object -> new StatisticsQuery(bigDecimalToLong(object[0]), bigDecimalToLong(object[1])))
                 .collect(Collectors.toList());
     }
 
@@ -78,5 +79,9 @@ public class StatisticsUtil {
             return taxon.getName().toUpperCase();
         }
         return taxon.getTaxonLevel().toUpperCase() + "_" + taxon.getName().toUpperCase();
+    }
+
+    private static Long bigDecimalToLong(Object o) {
+        return new BigDecimal(o.toString()).longValue();
     }
 }

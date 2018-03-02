@@ -172,10 +172,10 @@ public class StatisticsDao {
             query = query.setParameter("taxons", taxons);
         }
         if (from != null) {
-            query = query.setParameter("from", from);
+            query = query.setParameter("from", from.toString());
         }
         if (to != null) {
-            query = query.setParameter("to", to);
+            query = query.setParameter("to", to.toString());
         }
         return query;
     }
