@@ -8,6 +8,7 @@ class controller extends Controller {
         this.getModerators()
 
         this.$scope.isSubmitButtonEnabled = false
+        this.$scope.isDownloadButtonEnabled = false;
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isTaxonSelectVisible = true
         this.$scope.params = {}
@@ -46,7 +47,7 @@ class controller extends Controller {
             .makePost('rest/admin/statistics', this.getPostParams())
             .then(({ status, data: { rows, sum } }) => {
                 this.$scope.fetching = false
-                
+
                 if (200 <= status && status < 300) {
                     this.$scope.allRows = this.getFlattenedRows(rows)
                     this.$scope.data.sum = sum
@@ -54,6 +55,7 @@ class controller extends Controller {
                     this.$scope.numPages = Math.ceil(this.$scope.allRows.length / this.$scope.perPage)
                     this.paginate(this.$scope.page, this.$scope.perPage)
                     this.sort(this.$scope.sortBy)
+                    this.$scope.isDownloadButtonEnabled = true;
                 }
             })
     }
@@ -89,6 +91,8 @@ class controller extends Controller {
     onEducationalContextChange(educationalContext) {
         this.$scope.isExpertsSelectVisible = !educationalContext
         this.$scope.sortBy = educationalContext ? 'byDomainOrSubject' : 'byEducationalContext'
+        this.$scope.isDownloadButtonEnabled = false;
+        this.onParamsChange({});
     }
     clear() {
         this.$scope.filter = {}
