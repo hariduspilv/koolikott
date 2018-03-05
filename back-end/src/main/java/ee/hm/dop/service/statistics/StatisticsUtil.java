@@ -50,7 +50,7 @@ public class StatisticsUtil {
                 DateUtils.toString_ddMMyyyy(from),
                 "Kuni",
                 DateUtils.toString_ddMMyyyy(to),
-                "Kasutaja",
+                "Ekspert",
                 user.getFullName()
         };
     }
