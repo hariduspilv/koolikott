@@ -110,7 +110,12 @@ class controller extends Controller {
     }
     getPostParams() {
         const params = Object.assign({}, this.$scope.params)
-
+        if (params.from){
+            params.from = moment(params.from).startOf('day').toDate()
+        }
+        if (params.to){
+            params.to = moment(params.to).endOf('day').toDate()
+        }
         if (params.taxons) {
             params.taxons = params.taxons.map(({ id, level }) => ({ id, level }))
         }
