@@ -802,31 +802,17 @@ md-input-container.chapter-title {
 }
 
 .chapter-embed-card__title {
-  .chapter-embed-card.is-deleted:hover & {
-    display: none;
-  }
+  display: inline-block;
+  width: 65%;
 }
 
 .chapter-embed-card__deleted-message {
-  display: none;
+  display: inline-block;
+  float: right;
   text-transform: uppercase;
   color: $color-admin;
-
-  .chapter-embed-card.is-deleted:hover & {
-    display: block;
-  }
-}
-
-.chapter-embed-card__icon {
-  .chapter-embed-card.is-deleted:hover & {
-    background: $color-admin;
-  }
 }
 
 .chapter-embed-card__deleted-icon {
   display: none;
-
-  .chapter-embed-card.is-deleted:hover & {
-    display: block;
-  }
 }

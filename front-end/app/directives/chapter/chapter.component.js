@@ -439,7 +439,7 @@ class controller extends Controller {
             return this.$compile(template)($scope)[0]
         }
         const url = embed.classList.contains('chapter-embed-card--material')
-            ? 'rest/material'
+            ? 'rest/material/chapter'
             : 'rest/media'
 
         // Read embeddable material/media data from cache or fetch it from the back-end
@@ -942,7 +942,6 @@ controller.$inject = [
     'iconService',
     'serverCallService',
     'translationService',
-    'serverCallService',
     'searchService',
 ]
 component('dopChapter', {

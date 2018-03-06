@@ -12,7 +12,6 @@ import ee.hm.dop.utils.ValidatorUtil;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class MaterialGetter {
 
@@ -32,6 +31,10 @@ public class MaterialGetter {
             throw ValidatorUtil.permissionError();
         }
         return material;
+    }
+
+    public Material getWithoutValidation(Long materialId) {
+        return materialDao.findById(materialId);
     }
 
     public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
