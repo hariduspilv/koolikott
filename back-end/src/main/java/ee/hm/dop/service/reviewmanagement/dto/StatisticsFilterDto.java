@@ -7,6 +7,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.apache.commons.collections4.CollectionUtils;
 import org.joda.time.DateTime;
 

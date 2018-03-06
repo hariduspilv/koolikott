@@ -1,11 +1,14 @@
 package ee.hm.dop.service.reviewmanagement.newdto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 
 import java.util.List;
 
 public class EducationalContextRow {
 
+    @JsonSerialize(using = TaxonSerializer.class)
     private EducationalContext educationalContext;
     private List<NewStatisticsRow> rows;
 

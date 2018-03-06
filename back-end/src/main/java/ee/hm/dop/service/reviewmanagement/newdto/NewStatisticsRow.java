@@ -1,21 +1,25 @@
 package ee.hm.dop.service.reviewmanagement.newdto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 
 import java.util.List;
 
 public class NewStatisticsRow {
 
     private User user;
+    @JsonSerialize(using = TaxonSerializer.class)
     private EducationalContext educationalContext;
+    @JsonSerialize(using = TaxonSerializer.class)
     private Domain domain;
     /**
      * domain row does not contain subject
      */
+    @JsonSerialize(using = TaxonSerializer.class)
     private Subject subject;
     private List<NewStatisticsRow> subjects;
     private boolean noUsersFound;

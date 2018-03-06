@@ -1,12 +1,13 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.dto.FileFormat;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
-import ee.hm.dop.service.statistics.*;
+import ee.hm.dop.service.statistics.NewStatisticsCsvExporter;
+import ee.hm.dop.service.statistics.NewStatisticsExcelExporter;
+import ee.hm.dop.service.statistics.NewStatisticsService;
 import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.io.CsvUtil;
