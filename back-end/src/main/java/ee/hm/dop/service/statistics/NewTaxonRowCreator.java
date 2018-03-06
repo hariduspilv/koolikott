@@ -21,13 +21,11 @@ import java.util.stream.Collectors;
 
 public class NewTaxonRowCreator {
 
-    private static final Logger logger = LoggerFactory.getLogger(NewTaxonRowCreator.class);
     @Inject
     private StatisticsDao statisticsDao;
 
     public List<NewStatisticsRow> createRows(StatisticsFilterDto filter, List<TaxonAndUserRequest> taxonAndUserRequests) {
         List<NewStatisticsRow> resultRows = new ArrayList<>();
-        logger.info("creating rows");
         for (TaxonAndUserRequest taxonAndUserRequest : taxonAndUserRequests) {
             List<NewStatisticsRow> domainRows;
             if (taxonAndUserRequest.isNoResults()) {
@@ -62,15 +60,6 @@ public class NewTaxonRowCreator {
     private List<NewStatisticsRow> convertFromUsedDomain(List<User> users, DomainWithChildren domain, DateTime from, DateTime to) {
         List<Long> taxonIds = domain.getTaxonIds();
         List<Long> userIds = users.stream().map(User::getId).collect(Collectors.toList());
-        logger.info("convertFromUsedDomain");
-        logger.info("input userIds" + userIds);
-        logger.info("input taxonIds" + taxonIds);
-        if (from != null) {
-            logger.info("from: " + from.toString());
-        }
-        if (to != null) {
-            logger.info("to: " + to.toString());
-        }
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -79,13 +68,6 @@ public class NewTaxonRowCreator {
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
-        if (reviewedLOCount.isEmpty()) {
-            logger.info("output is empty");
-        } else {
-            for (StatisticsQuery query : reviewedLOCount) {
-                logger.info("query result uId " + query.getUserId() + "c " + query.getCount());
-            }
-        }
 
         List<NewStatisticsRow> rows = new ArrayList<>();
         for (User user : users) {
@@ -95,15 +77,7 @@ public class NewTaxonRowCreator {
             row.setEducationalContext(domain.getEducationalContext());
             row.setDomain(domain.getDomain());
             row.setSubject(null);
-            Optional<StatisticsQuery> userQuery = reviewedLOCount.stream().filter(q -> q.getUserId().equals(user.getId())).findAny();
-            if (userQuery.isPresent()) {
-                logger.info("user found");
-            } else {
-                logger.info("user not found");
-            }
-            Long count = userQuery.map(StatisticsQuery::getCount).orElse(0L);
-            logger.info("count" + count);
-            row.setReviewedLOCount(count);
+            row.setReviewedLOCount(getCount(reviewedLOCount, user));
             row.setApprovedReportedLOCount(getCount(approvedReportedLOCount, user));
             row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
             row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
@@ -121,15 +95,6 @@ public class NewTaxonRowCreator {
         List<Long> taxonIds = subject.getTaxonIds();
         List<Long> userIds = users.stream().map(User::getId).collect(Collectors.toList());
 
-        logger.info("convertFromSubject");
-        logger.info("input userIds" + userIds);
-        logger.info("input taxonIds" + taxonIds);
-        if (from != null) {
-            logger.info("from: " + from.toString());
-        }
-        if (to != null) {
-            logger.info("to: " + to.toString());
-        }
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -138,13 +103,6 @@ public class NewTaxonRowCreator {
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
-        if (reviewedLOCount.isEmpty()) {
-            logger.info("output is empty");
-        } else {
-            for (StatisticsQuery query : reviewedLOCount) {
-                logger.info("query result uId " + query.getUserId() + "c " + query.getCount());
-            }
-        }
 
         List<NewStatisticsRow> rows = new ArrayList<>();
         for (User user : users) {
@@ -153,15 +111,7 @@ public class NewTaxonRowCreator {
             row.setEducationalContext(subject.getEducationalContext());
             row.setDomain(subject.getDomain());
             row.setSubject(subject.getSubject());
-            Optional<StatisticsQuery> userQuery = reviewedLOCount.stream().filter(q -> q.getUserId().equals(user.getId())).findAny();
-            if (userQuery.isPresent()) {
-                logger.info("user found");
-            } else {
-                logger.info("user not found");
-            }
-            Long count = userQuery.map(StatisticsQuery::getCount).orElse(0L);
-            logger.info("count" + count);
-            row.setReviewedLOCount(count);
+            row.setReviewedLOCount(getCount(reviewedLOCount, user));
             row.setApprovedReportedLOCount(getCount(approvedReportedLOCount, user));
             row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
             row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
