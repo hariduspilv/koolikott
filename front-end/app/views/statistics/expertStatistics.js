@@ -55,7 +55,7 @@ class controller extends Controller {
                     this.$scope.numPages = Math.ceil(this.$scope.allRows.length / this.$scope.perPage)
                     this.paginate(this.$scope.page, this.$scope.perPage)
                     this.sort(this.$scope.sortBy)
-                    this.$scope.isDownloadButtonEnabled = true;
+                    this.$scope.isDownloadButtonEnabled = this.$scope.allRows.length > 0;
                 }
             })
     }
