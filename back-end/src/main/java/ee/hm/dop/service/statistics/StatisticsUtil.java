@@ -31,7 +31,7 @@ public class StatisticsUtil {
             "Haridustase",
             "Valdkond",
             "Alamvaldkond",
-            "Kasutaja",
+            "Ekspert",
             "Ülevaadatuks märgitud õppevara",
             "Sobivaks märgitud teatatud õppevara",
             "Kustutatuks märgitud teatatud õppevara",
