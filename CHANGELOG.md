@@ -1,3 +1,9 @@
+## e-Koolikott [1.16.0](https://github.com/hariduspilv/koolikott/milestone/15) (testimisel)
+
+### Muutunud
+* Statistika aineekspertide tegevuste kohta [#228](https://github.com/hariduspilv/koolikott/issues/228)
+
+
 ## e-Koolikott [1.15.0](https://github.com/hariduspilv/koolikott/milestone/14) (testimisel)
 
 ### Muutunud
