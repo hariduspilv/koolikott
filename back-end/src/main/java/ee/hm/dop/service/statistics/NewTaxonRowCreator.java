@@ -27,6 +27,7 @@ public class NewTaxonRowCreator {
 
     public List<NewStatisticsRow> createRows(StatisticsFilterDto filter, List<TaxonAndUserRequest> taxonAndUserRequests) {
         List<NewStatisticsRow> resultRows = new ArrayList<>();
+        logger.info("creating rows");
         for (TaxonAndUserRequest taxonAndUserRequest : taxonAndUserRequests) {
             List<NewStatisticsRow> domainRows;
             if (taxonAndUserRequest.isNoResults()) {
@@ -114,6 +115,9 @@ public class NewTaxonRowCreator {
         List<Long> taxonIds = subject.getTaxonIds();
         List<Long> userIds = users.stream().map(User::getId).collect(Collectors.toList());
 
+        logger.info("convertFromUsedDomain");
+        logger.info("input userIds" + userIds);
+        logger.info("input taxonIds" + taxonIds);
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -130,7 +134,15 @@ public class NewTaxonRowCreator {
             row.setEducationalContext(subject.getEducationalContext());
             row.setDomain(subject.getDomain());
             row.setSubject(subject.getSubject());
-            row.setReviewedLOCount(getCount(reviewedLOCount, user));
+            Optional<StatisticsQuery> userQuery = reviewedLOCount.stream().filter(q -> q.getUserId().equals(user.getId())).findAny();
+            if (userQuery.isPresent()){
+                logger.info("user found");
+            } else {
+                logger.info("user not found");
+            }
+            Long count = userQuery.map(StatisticsQuery::getCount).orElse(0L);
+            logger.info("count" + count);
+            row.setReviewedLOCount(count);
             row.setApprovedReportedLOCount(getCount(approvedReportedLOCount, user));
             row.setDeletedReportedLOCount(getCount(rejectedReportedLOCount, user));
             row.setAcceptedChangedLOCount(getCount(acceptedChangedLOCount, user));
