@@ -2,10 +2,8 @@ package ee.hm.dop.service.statistics;
 
 import com.opencsv.CSVWriter;
 import ee.hm.dop.dao.LanguageDao;
-import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.EducationalContextRow;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
@@ -18,7 +16,6 @@ import javax.inject.Inject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.statistics.StatisticsUtil.EMPTY_ROW;
 import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
@@ -38,48 +35,56 @@ public class NewStatisticsCsvExporter {
         StatisticsFilterDto filter = statistics.getFilter();
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
             if (filter.isUserSearch()) {
-                User userDto = filter.getUsers().get(0);
-                User user = userDao.findById(userDto.getId());
-                writer.writeNext(StatisticsUtil.userHeader(filter.getFrom(), filter.getTo(), user));
-                writer.writeNext(StatisticsUtil.USER_HEADERS);
-                for (EducationalContextRow s : statistics.getRows()) {
-                    List<NewStatisticsRow> rows = s.getRows();
-                    for (NewStatisticsRow row : rows) {
-                        if (row.isDomainUsed()) {
-                            writer.writeNext(generateUserRow(row, null, estId));
-                        }
-                        if (CollectionUtils.isNotEmpty(row.getSubjects())) {
-                            for (NewStatisticsRow childRow : row.getSubjects()) {
-                                writer.writeNext(generateUserRow(childRow, null, estId));
-                            }
-                        }
-                    }
-                }
-                writer.writeNext(generateUserRow(statistics.getSum(), "Kokku", estId));
+                userCsv(statistics, estId, filter, writer);
             } else {
-                writer.writeNext(commonStatisticsExporter.taxonHeader(statistics, estId));
-                writer.writeNext(StatisticsUtil.TAXON_HEADERS);
-                for (EducationalContextRow s : statistics.getRows()) {
-                    List<NewStatisticsRow> rows = s.getRows();
-                    for (NewStatisticsRow row : rows) {
-                        if (row.isNoUsersFound()) {
-                            writer.writeNext(generateNoUserFoundRow(estId, row));
-                        }
-                        if (row.isDomainUsed()) {
-                            writer.writeNext(generateTaxonRow(row, null, estId));
-                        }
-                        if (CollectionUtils.isNotEmpty(row.getSubjects())) {
-                            for (NewStatisticsRow childRow : row.getSubjects()) {
-                                writer.writeNext(generateTaxonRow(childRow, null, estId));
-                            }
-                        }
-                    }
-                }
-                writer.writeNext(generateTaxonRow(statistics.getSum(), "Kokku", estId));
+                taxonCsv(statistics, estId, writer);
             }
         } catch (IOException ex) {
             logger.error(filter.getFormat().name() + " file generation failed");
         }
+    }
+
+    private void taxonCsv(NewStatisticsResult statistics, Long estId, CSVWriter writer) {
+        writer.writeNext(commonStatisticsExporter.taxonHeader(statistics, estId));
+        writer.writeNext(StatisticsUtil.TAXON_HEADERS);
+        for (EducationalContextRow s : statistics.getRows()) {
+            List<NewStatisticsRow> rows = s.getRows();
+            for (NewStatisticsRow row : rows) {
+                if (row.isNoUsersFound()) {
+                    writer.writeNext(generateNoUserFoundRow(estId, row));
+                }
+                if (row.isDomainUsed()) {
+                    writer.writeNext(generateTaxonRow(row, null, estId));
+                }
+                if (CollectionUtils.isNotEmpty(row.getSubjects())) {
+                    for (NewStatisticsRow childRow : row.getSubjects()) {
+                        writer.writeNext(generateTaxonRow(childRow, null, estId));
+                    }
+                }
+            }
+        }
+        writer.writeNext(generateTaxonRow(statistics.getSum(), "Kokku", estId));
+    }
+
+    private void userCsv(NewStatisticsResult statistics, Long estId, StatisticsFilterDto filter, CSVWriter writer) {
+        User userDto = filter.getUsers().get(0);
+        User user = userDao.findById(userDto.getId());
+        writer.writeNext(StatisticsUtil.userHeader(filter.getFrom(), filter.getTo(), user));
+        writer.writeNext(StatisticsUtil.USER_HEADERS);
+        for (EducationalContextRow s : statistics.getRows()) {
+            List<NewStatisticsRow> rows = s.getRows();
+            for (NewStatisticsRow row : rows) {
+                if (row.isDomainUsed()) {
+                    writer.writeNext(generateUserRow(row, null, estId));
+                }
+                if (CollectionUtils.isNotEmpty(row.getSubjects())) {
+                    for (NewStatisticsRow childRow : row.getSubjects()) {
+                        writer.writeNext(generateUserRow(childRow, null, estId));
+                    }
+                }
+            }
+        }
+        writer.writeNext(generateUserRow(statistics.getSum(), "Kokku", estId));
     }
 
     private String[] generateNoUserFoundRow(Long estId, NewStatisticsRow row) {

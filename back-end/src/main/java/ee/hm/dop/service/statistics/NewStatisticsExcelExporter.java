@@ -7,6 +7,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.EducationalContextRow;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
+import ee.hm.dop.utils.DopConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,82 +36,96 @@ public class NewStatisticsExcelExporter {
     private CommonStatisticsExporter commonStatisticsExporter;
 
     public void generate(String filename, NewStatisticsResult statistics) {
-        Long estId = languageDao.findByCode("et").getId();
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("Statistika aruanne");
-
-        int rowNum = 0;
-        int xlsColNum = 0;
-        StatisticsFilterDto filter = statistics.getFilter();
-        if (filter.isUserSearch()) {
-            Row headersRow = sheet.createRow(rowNum++);
-            User userDto = filter.getUsers().get(0);
-            User user = userDao.findById(userDto.getId());
-            for (String heading : StatisticsUtil.userHeader(filter.getFrom(), filter.getTo(), user)) {
-                Cell cell = headersRow.createCell(xlsColNum++);
-                cell.setCellValue(heading);
-            }
-            xlsColNum = 0;
-            headersRow = sheet.createRow(rowNum++);
-            for (String heading : StatisticsUtil.USER_HEADERS) {
-                Cell cell = headersRow.createCell(xlsColNum++);
-                cell.setCellValue(heading);
-            }
-
-            List<EducationalContextRow> ecRows = statistics.getRows();
-            for (EducationalContextRow s : ecRows) {
-                List<NewStatisticsRow> rows = s.getRows();
-                for (NewStatisticsRow row : rows) {
-                    if (row.isDomainUsed()) {
-                        rowNum = writeUserRow(sheet, rowNum, row, null, estId);
-                    }
-                    if (CollectionUtils.isNotEmpty(row.getSubjects())) {
-                        for (NewStatisticsRow childRow : row.getSubjects()) {
-                            rowNum = writeUserRow(sheet, rowNum, childRow, null, estId);
-                        }
-                    }
-                }
-            }
-            writeUserRow(sheet, rowNum, statistics.getSum(), "Kokku", estId);
-        } else {
-            Row headersRow = sheet.createRow(rowNum++);
-            for (String heading : commonStatisticsExporter.taxonHeader(statistics, estId)) {
-                Cell cell = headersRow.createCell(xlsColNum++);
-                cell.setCellValue(heading);
-            }
-            xlsColNum = 0;
-            headersRow = sheet.createRow(rowNum++);
-            for (String heading : StatisticsUtil.TAXON_HEADERS) {
-                Cell cell = headersRow.createCell(xlsColNum++);
-                cell.setCellValue(heading);
-            }
-
-            List<EducationalContextRow> ecRows = statistics.getRows();
-            for (EducationalContextRow s : ecRows) {
-                List<NewStatisticsRow> rows = s.getRows();
-                for (NewStatisticsRow row : rows) {
-                    if (row.isNoUsersFound()) {
-                        rowNum = writeNoUserFoundRow(sheet, rowNum, row, null, estId);
-                    }
-                    if (row.isDomainUsed()) {
-                        rowNum = writeTaxonRow(sheet, rowNum, row, null, estId);
-                    }
-                    if (CollectionUtils.isNotEmpty(row.getSubjects())) {
-                        for (NewStatisticsRow childRow : row.getSubjects()) {
-                            rowNum = writeTaxonRow(sheet, rowNum, childRow, null, estId);
-                        }
-                    }
-                }
-            }
-            writeTaxonRow(sheet, rowNum, statistics.getSum(), "Kokku", estId);
-        }
-
+        Long estId = languageDao.findByCode(DopConstants.LANGUAGE_ET).getId();
+        XSSFWorkbook workbook = createWorkBook(statistics, estId);
 
         try (FileOutputStream outputStream = new FileOutputStream(filename)) {
             workbook.write(outputStream);
         } catch (IOException e) {
-            logger.error(filter.getFormat().name() + " file generation failed");
+            logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
         }
+    }
+
+    private XSSFWorkbook createWorkBook(NewStatisticsResult statistics, Long estId) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Statistika aruanne");
+        NewStatisticsResult sortedStatistics = commonStatisticsExporter.translateAndSort(statistics, estId);
+        if (sortedStatistics.getFilter().isUserSearch()) {
+            writeUserExcel(sortedStatistics, estId, sheet);
+        } else {
+            writeTaxonExcel(sortedStatistics, estId, sheet);
+        }
+        return workbook;
+    }
+
+    private void writeTaxonExcel(NewStatisticsResult statistics, Long estId, XSSFSheet sheet) {
+        int rowNum = 0;
+        int xlsColNum = 0;
+        Row headersRow = sheet.createRow(rowNum++);
+        for (String heading : commonStatisticsExporter.taxonHeader(statistics, estId)) {
+            Cell cell = headersRow.createCell(xlsColNum++);
+            cell.setCellValue(heading);
+        }
+        xlsColNum = 0;
+        headersRow = sheet.createRow(rowNum++);
+        for (String heading : StatisticsUtil.TAXON_HEADERS) {
+            Cell cell = headersRow.createCell(xlsColNum++);
+            cell.setCellValue(heading);
+        }
+
+        List<EducationalContextRow> ecRows = statistics.getRows();
+        for (EducationalContextRow s : ecRows) {
+            List<NewStatisticsRow> rows = s.getRows();
+            for (NewStatisticsRow row : rows) {
+                if (row.isNoUsersFound()) {
+                    rowNum = writeNoUserFoundRow(sheet, rowNum, row, null, estId);
+                }
+                if (row.isDomainUsed()) {
+                    rowNum = writeTaxonRow(sheet, rowNum, row, null, estId);
+                }
+                if (CollectionUtils.isNotEmpty(row.getSubjects())) {
+                    for (NewStatisticsRow childRow : row.getSubjects()) {
+                        rowNum = writeTaxonRow(sheet, rowNum, childRow, null, estId);
+                    }
+                }
+            }
+        }
+        writeTaxonRow(sheet, rowNum, statistics.getSum(), "Kokku", estId);
+    }
+
+    private void writeUserExcel(NewStatisticsResult statistics, Long estId, XSSFSheet sheet) {
+        StatisticsFilterDto filter = statistics.getFilter();
+        int rowNum = 0;
+        int xlsColNum = 0;
+        Row headersRow = sheet.createRow(rowNum++);
+        User userDto = filter.getUsers().get(0);
+        User user = userDao.findById(userDto.getId());
+        for (String heading : StatisticsUtil.userHeader(filter.getFrom(), filter.getTo(), user)) {
+            Cell cell = headersRow.createCell(xlsColNum++);
+            cell.setCellValue(heading);
+        }
+        xlsColNum = 0;
+        headersRow = sheet.createRow(rowNum++);
+        for (String heading : StatisticsUtil.USER_HEADERS) {
+            Cell cell = headersRow.createCell(xlsColNum++);
+            cell.setCellValue(heading);
+        }
+
+        List<EducationalContextRow> ecRows = statistics.getRows();
+        for (EducationalContextRow s : ecRows) {
+            List<NewStatisticsRow> rows = s.getRows();
+            for (NewStatisticsRow row : rows) {
+                if (row.isDomainUsed()) {
+                    rowNum = writeUserRow(sheet, rowNum, row, null, estId);
+                }
+                if (CollectionUtils.isNotEmpty(row.getSubjects())) {
+                    for (NewStatisticsRow childRow : row.getSubjects()) {
+                        rowNum = writeUserRow(sheet, rowNum, childRow, null, estId);
+                    }
+                }
+            }
+        }
+        writeUserRow(sheet, rowNum, statistics.getSum(), "Kokku", estId);
     }
 
     private int writeUserRow(XSSFSheet sheet, int rowNum, NewStatisticsRow s, String sumRowText, Long estId) {

@@ -41,7 +41,7 @@ public class StatisticsUtil {
             "Avalikustatud kogumikke",
             "Lisatud materjale"
     };
-    public static final String NO_USER_FOUND = "Ei leitud ühtegi kasutajat";
+    public static final String NO_USER_FOUND = "Ei leitud ühtegi eksperti";
     public static final String EMPTY_ROW = "-";
 
     public static String[] userHeader(DateTime from, DateTime to, User user) {

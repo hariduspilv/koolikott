@@ -5,7 +5,10 @@ import ee.hm.dop.dao.specialized.StatisticsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
-import ee.hm.dop.service.reviewmanagement.newdto.*;
+import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
+import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
+import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
+import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
