@@ -32,15 +32,14 @@ public class NewStatisticsCsvExporter {
 
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
-        StatisticsFilterDto filter = statistics.getFilter();
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
-            if (filter.isUserSearch()) {
-                userCsv(statistics, estId, filter, writer);
+            if (statistics.getFilter().isUserSearch()) {
+                userCsv(statistics, estId, writer);
             } else {
                 taxonCsv(statistics, estId, writer);
             }
         } catch (IOException ex) {
-            logger.error(filter.getFormat().name() + " file generation failed");
+            logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
         }
     }
 
@@ -66,7 +65,8 @@ public class NewStatisticsCsvExporter {
         writer.writeNext(generateTaxonRow(statistics.getSum(), "Kokku", estId));
     }
 
-    private void userCsv(NewStatisticsResult statistics, Long estId, StatisticsFilterDto filter, CSVWriter writer) {
+    private void userCsv(NewStatisticsResult statistics, Long estId, CSVWriter writer) {
+        StatisticsFilterDto filter = statistics.getFilter();
         User userDto = filter.getUsers().get(0);
         User user = userDao.findById(userDto.getId());
         writer.writeNext(StatisticsUtil.userHeader(filter.getFrom(), filter.getTo(), user));
