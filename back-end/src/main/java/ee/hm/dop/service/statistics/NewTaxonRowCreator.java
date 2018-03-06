@@ -115,7 +115,7 @@ public class NewTaxonRowCreator {
         List<Long> taxonIds = subject.getTaxonIds();
         List<Long> userIds = users.stream().map(User::getId).collect(Collectors.toList());
 
-        logger.info("convertFromUsedDomain");
+        logger.info("convertFromSubject");
         logger.info("input userIds" + userIds);
         logger.info("input taxonIds" + taxonIds);
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
