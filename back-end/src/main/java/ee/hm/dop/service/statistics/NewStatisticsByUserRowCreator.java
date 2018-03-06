@@ -39,16 +39,16 @@ public class NewStatisticsByUserRowCreator {
     }
 
     private NewStatisticsRow convertFromUsedDomain(User user, DomainWithChildren domain, DateTime from, DateTime to) {
-        List<User> users = Lists.newArrayList(user);
         List<Long> taxonIds = domain.getTaxonIds();
-        List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, users, taxonIds);
-        List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, users, taxonIds);
-        List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, users, taxonIds);
+        List<Long> userIds = Lists.newArrayList(user.getId());
+        List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
 
         NewStatisticsRow row = new NewStatisticsRow();
         row.setDomainUsed(true);
@@ -69,16 +69,16 @@ public class NewStatisticsByUserRowCreator {
     }
 
     private NewStatisticsRow convertFromSubject(User user, SubjectWithChildren subject, DateTime from, DateTime to) {
-        List<User> users = Lists.newArrayList(user);
+        List<Long> userIds = Lists.newArrayList(user.getId());
         List<Long> taxonIds = subject.getTaxonIds();
-        List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(from, to, users, taxonIds);
-        List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, users, taxonIds);
-        List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, users, taxonIds);
-        List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, users, taxonIds);
+        List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> acceptedChangedLOCount = statisticsDao.acceptedChangedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> rejectedChangedLOCount = statisticsDao.rejectedChangedLOCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
+        List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
 
         NewStatisticsRow row = new NewStatisticsRow();
         row.setUser(user);
