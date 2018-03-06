@@ -1,15 +1,15 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
-import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
-import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
 
@@ -17,9 +17,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -40,6 +38,13 @@ public class MaterialResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("id") long materialId) {
         return materialGetter.get(materialId, getLoggedInUser());
+    }
+
+    @GET
+    @Path("chapter")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Material getWithoutValidation(@QueryParam("id") long materialId) {
+        return materialGetter.getWithoutValidation(materialId);
     }
 
     @GET
