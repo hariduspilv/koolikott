@@ -9,6 +9,7 @@ import org.easymock.TestSubject;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -119,6 +120,7 @@ public class SynchronizeMaterialsExecutorTest {
      * should run once
      */
     @Deprecated
+    @Ignore
     @Test
     public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
