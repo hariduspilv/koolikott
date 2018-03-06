@@ -39,7 +39,7 @@ public class MaterialResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("id") long materialId) {
-        return materialGetter.get(materialId);
+        return materialGetter.get(materialId, getLoggedInUser());
     }
 
     @GET
