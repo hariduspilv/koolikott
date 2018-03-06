@@ -198,6 +198,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void increaseViewCountNotExistingMaterial() {
+        login(USER_ADMIN);
         Response response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 

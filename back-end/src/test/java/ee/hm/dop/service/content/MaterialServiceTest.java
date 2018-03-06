@@ -168,7 +168,7 @@ public class MaterialServiceTest {
         expect(material.getKeyCompetences()).andReturn(Collections.singletonList(keyCompetence)).anyTimes();
         expect(material.getCrossCurricularThemes()).andReturn(Collections.singletonList(crossCurricularTheme)).anyTimes();
 
-        expect(materialGetter.get(materialId)).andReturn(original);
+        expect(materialGetter.get(materialId, null)).andReturn(original);
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
         expect(material.getUnReviewed()).andReturn(0);
@@ -194,7 +194,7 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
         expect(material.getId()).andReturn(materialId).times(2);
-        expect(materialGetter.get(materialId)).andReturn(null);
+        expect(materialGetter.get(materialId, null)).andReturn(null);
 
         replay(materialDao, material, materialGetter);
 
@@ -244,7 +244,7 @@ public class MaterialServiceTest {
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getSource()).andReturn(SOURCE_WWW).times(3);
         expect(materialGetter.getBySource(SOURCE_WWW, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(materialGetter.get(materialId)).andReturn(original);
+        expect(materialGetter.get(materialId, null)).andReturn(original);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
 
@@ -310,7 +310,7 @@ public class MaterialServiceTest {
         material.setRepository(null);
         material.setSource(SOURCE);
 
-        expect(materialGetter.get(material.getId())).andReturn(material).anyTimes();
+        expect(materialGetter.get(material.getId(), user)).andReturn(material).anyTimes();
         expect(materialDao.findById(material.getId())).andReturn(material).anyTimes();
         expect(user.getRole()).andReturn(Role.ADMIN).anyTimes();
         expect(materialDao.createOrUpdate(material)).andReturn(material);
@@ -341,7 +341,7 @@ public class MaterialServiceTest {
         expect(materialDao.createOrUpdate(material)).andReturn(material);
         expect(user.getId()).andReturn(1L).anyTimes();
         expect(materialGetter.getBySource(SOURCE, GetMaterialStrategy.INCLUDE_DELETED)).andReturn(null);
-        expect(materialGetter.get(material.getId())).andReturn(material);
+        expect(materialGetter.get(material.getId(), user)).andReturn(material);
         expect(reviewableChangeService.getAllByLearningObject(material.getId())).andReturn(null);
         expect(reviewableChangeService.processChanges(material, user, material.getSource(), ChangeProcessStrategy.processStrategy(material))).andReturn(false);
 

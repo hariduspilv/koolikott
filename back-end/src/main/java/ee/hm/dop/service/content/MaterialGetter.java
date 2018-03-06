@@ -4,6 +4,7 @@ import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
+import ee.hm.dop.service.permission.MaterialPermission;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -19,9 +20,18 @@ public class MaterialGetter {
     private MaterialDao materialDao;
     @Inject
     private ReducedLearningObjectDao reducedLearningObjectDao;
+    @Inject
+    private MaterialPermission materialPermission;
 
-    public Material get(Long materialId) {
-        return materialDao.findById(materialId);
+    public Material get(Long materialId, User loggedInUser) {
+        if (UserUtil.isAdminOrModerator(loggedInUser)) {
+            return materialDao.findById(materialId);
+        }
+        Material material = materialDao.findByIdNotDeleted(materialId);
+        if (!materialPermission.canView(loggedInUser, material)) {
+            throw ValidatorUtil.permissionError();
+        }
+        return material;
     }
 
     public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
