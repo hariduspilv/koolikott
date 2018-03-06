@@ -126,6 +126,13 @@ public class NewTaxonRowCreator {
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
+        if (reviewedLOCount.isEmpty()) {
+            logger.info("output is empty");
+        } else {
+            for (StatisticsQuery query : reviewedLOCount) {
+                logger.info("query result uId " + query.getUserId() + "c " + query.getCount());
+            }
+        }
 
         List<NewStatisticsRow> rows = new ArrayList<>();
         for (User user : users) {
