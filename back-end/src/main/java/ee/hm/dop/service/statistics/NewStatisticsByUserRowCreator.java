@@ -9,6 +9,8 @@ import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 public class NewStatisticsByUserRowCreator {
 
+    private static final Logger logger = LoggerFactory.getLogger(NewStatisticsByUserRowCreator.class);
     @Inject
     private StatisticsDao statisticsDao;
 
@@ -41,6 +44,12 @@ public class NewStatisticsByUserRowCreator {
     private NewStatisticsRow convertFromUsedDomain(User user, DomainWithChildren domain, DateTime from, DateTime to) {
         List<Long> taxonIds = domain.getTaxonIds();
         List<Long> userIds = Lists.newArrayList(user.getId());
+
+        logger.info("convertFromSubject");
+        logger.info("input userIds" + userIds);
+        logger.info("input taxonIds" + taxonIds);
+        logger.info("from: " + from.toString());
+        logger.info("to: " + to.toString());
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -49,6 +58,13 @@ public class NewStatisticsByUserRowCreator {
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
+        if (reviewedLOCount.isEmpty()) {
+            logger.info("output is empty");
+        } else {
+            for (StatisticsQuery query : reviewedLOCount) {
+                logger.info("query result uId " + query.getUserId() + "c " + query.getCount());
+            }
+        }
 
         NewStatisticsRow row = new NewStatisticsRow();
         row.setDomainUsed(true);
@@ -71,6 +87,12 @@ public class NewStatisticsByUserRowCreator {
     private NewStatisticsRow convertFromSubject(User user, SubjectWithChildren subject, DateTime from, DateTime to) {
         List<Long> userIds = Lists.newArrayList(user.getId());
         List<Long> taxonIds = subject.getTaxonIds();
+
+        logger.info("convertFromSubject");
+        logger.info("input userIds" + userIds);
+        logger.info("input taxonIds" + taxonIds);
+        logger.info("from: " + from.toString());
+        logger.info("to: " + to.toString());
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -79,6 +101,13 @@ public class NewStatisticsByUserRowCreator {
         List<StatisticsQuery> portfolioCount = statisticsDao.createdPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> publicPortfolioCount = statisticsDao.createdPublicPortfolioCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> materialCount = statisticsDao.createdMaterialCount(from, to, userIds, taxonIds);
+        if (reviewedLOCount.isEmpty()) {
+            logger.info("output is empty");
+        } else {
+            for (StatisticsQuery query : reviewedLOCount) {
+                logger.info("query result uId " + query.getUserId() + "c " + query.getCount());
+            }
+        }
 
         NewStatisticsRow row = new NewStatisticsRow();
         row.setUser(user);

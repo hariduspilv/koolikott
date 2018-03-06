@@ -65,6 +65,8 @@ public class NewTaxonRowCreator {
         logger.info("convertFromUsedDomain");
         logger.info("input userIds" + userIds);
         logger.info("input taxonIds" + taxonIds);
+        logger.info("from: " + from.toString());
+        logger.info("to: " + to.toString());
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -118,6 +120,8 @@ public class NewTaxonRowCreator {
         logger.info("convertFromSubject");
         logger.info("input userIds" + userIds);
         logger.info("input taxonIds" + taxonIds);
+        logger.info("from: " + from.toString());
+        logger.info("to: " + to.toString());
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
