@@ -1,7 +1,6 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.TaxonDao;
-import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.Subject;

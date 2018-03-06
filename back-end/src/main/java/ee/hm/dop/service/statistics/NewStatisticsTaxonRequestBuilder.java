@@ -8,7 +8,6 @@ import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
 import ee.hm.dop.service.reviewmanagement.newdto.UserWithTaxons;
@@ -17,7 +16,6 @@ import org.apache.commons.collections.CollectionUtils;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class NewStatisticsTaxonRequestBuilder {
 

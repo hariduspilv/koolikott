@@ -37,6 +37,24 @@ public class NewStatisticsRow {
     private Long portfolioCount;
     private Long publicPortfolioCount;
     private Long materialCount;
+    private String domainTranslation;
+    private String subjectTranslation;
+
+    public String getDomainTranslation() {
+        return domainTranslation;
+    }
+
+    public void setDomainTranslation(String domainTranslation) {
+        this.domainTranslation = domainTranslation;
+    }
+
+    public String getSubjectTranslation() {
+        return subjectTranslation;
+    }
+
+    public void setSubjectTranslation(String subjectTranslation) {
+        this.subjectTranslation = subjectTranslation;
+    }
 
     public List<NewStatisticsRow> getSubjects() {
         return subjects;

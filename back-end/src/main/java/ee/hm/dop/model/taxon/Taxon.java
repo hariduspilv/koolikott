@@ -107,6 +107,7 @@ public abstract class Taxon implements AbstractEntity {
     public int hashCode() {
         return new HashCodeBuilder(19, 37) //
                 .append(name) //
+                .append(taxonLevel) //
                 .append(getClass()) //
                 .toHashCode();
     }
@@ -128,7 +129,8 @@ public abstract class Taxon implements AbstractEntity {
 
         Taxon other = (Taxon) obj;
 
-        return new EqualsBuilder().append(name, other.name) //
+        return new EqualsBuilder().append(name, other.name)
+                .append(taxonLevel, other.taxonLevel)
                 .isEquals();
     }
 

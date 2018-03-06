@@ -51,7 +51,7 @@ public class NewStatisticsService {
         List<Taxon> dbTaxons = refreshTaxons(filter);
         List<TaxonAndUserRequest> taxonAndUserRequests = taxonRequestBuilder.composeRequest(dbTaxons);
         List<NewStatisticsRow> rows = taxonRowCreator.createRows(filter, taxonAndUserRequests);
-        return new NewStatisticsResult(dbTaxons, filter, convertECRows(groupByEC(rows)), rowSummer.getSum(rows));
+        return new NewStatisticsResult(filter, convertECRows(groupByEC(rows)), rowSummer.getSum(rows));
     }
 
     private List<Taxon> refreshTaxons(StatisticsFilterDto filter) {
