@@ -65,8 +65,12 @@ public class NewTaxonRowCreator {
         logger.info("convertFromUsedDomain");
         logger.info("input userIds" + userIds);
         logger.info("input taxonIds" + taxonIds);
-        logger.info("from: " + from.toString());
-        logger.info("to: " + to.toString());
+        if (from != null) {
+            logger.info("from: " + from.toString());
+        }
+        if (to != null) {
+            logger.info("to: " + to.toString());
+        }
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -92,7 +96,7 @@ public class NewTaxonRowCreator {
             row.setDomain(domain.getDomain());
             row.setSubject(null);
             Optional<StatisticsQuery> userQuery = reviewedLOCount.stream().filter(q -> q.getUserId().equals(user.getId())).findAny();
-            if (userQuery.isPresent()){
+            if (userQuery.isPresent()) {
                 logger.info("user found");
             } else {
                 logger.info("user not found");
@@ -120,8 +124,12 @@ public class NewTaxonRowCreator {
         logger.info("convertFromSubject");
         logger.info("input userIds" + userIds);
         logger.info("input taxonIds" + taxonIds);
-        logger.info("from: " + from.toString());
-        logger.info("to: " + to.toString());
+        if (from != null) {
+            logger.info("from: " + from.toString());
+        }
+        if (to != null) {
+            logger.info("to: " + to.toString());
+        }
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> approvedReportedLOCount = statisticsDao.approvedReportedLOCount(from, to, userIds, taxonIds);
         List<StatisticsQuery> rejectedReportedLOCount = statisticsDao.rejectedReportedLOCount(from, to, userIds, taxonIds);
@@ -146,7 +154,7 @@ public class NewTaxonRowCreator {
             row.setDomain(subject.getDomain());
             row.setSubject(subject.getSubject());
             Optional<StatisticsQuery> userQuery = reviewedLOCount.stream().filter(q -> q.getUserId().equals(user.getId())).findAny();
-            if (userQuery.isPresent()){
+            if (userQuery.isPresent()) {
                 logger.info("user found");
             } else {
                 logger.info("user not found");
