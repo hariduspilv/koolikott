@@ -115,6 +115,14 @@
     </div>
   </md-content>
   <md-table-container>
+
+    <md-content>
+
+    <div data-layout="row" data-layout-align="space-between center" data-ng-if="data.rows.length === 0">
+      <!--<h3 data-translate="">-->
+      <h4 style="padding-left: 20px" data-translate="USER_TAXONS_DEFINED_WRONGLY_ERROR"></h4>
+    </div>
+    </md-content>
     <table data-ng-if="data.rows && data.rows.length" md-table class="statistics-table">
       <colgroup>
         <!-- if querying by an expert -->
