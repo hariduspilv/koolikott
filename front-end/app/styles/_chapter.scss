@@ -683,7 +683,7 @@ md-input-container.chapter-title {
 
   .chapter-embed-card__caption {
     padding: 1rem 1.5rem 1rem 4.2rem;
-    height: 6.8rem;
+    height: 7.8rem;
     box-sizing: border-box;
     position: relative;
     cursor: pointer;
@@ -711,6 +711,15 @@ md-input-container.chapter-title {
       display: flex;
       align-items: flex-end;
       width: 100%;
+    }
+
+    .chapter-embed-card__mid-row-bottom {
+      display: flex;
+      align-items: flex-end;
+      width: 100%;
+      bottom: 1.7rem;
+      right: 1.5rem;
+      position: absolute;
     }
 
     .chapter-embed-card__publishers-and-authors {
@@ -809,6 +818,7 @@ md-input-container.chapter-title {
   display: block;
   text-transform: uppercase;
   color: $color-admin;
+  font-size: 0.75em !important;
 }
 
 .chapter-embed-card__deleted-icon {
