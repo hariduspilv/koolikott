@@ -16,47 +16,44 @@ public class StatisticsDao {
 
     public List<StatisticsQuery> reviewedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
-                "  f.reviewedBy,\n" +
+                "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
-                "FROM FirstReview f\n" +
-                "  JOIN LearningObject lo ON f.learningObject = lo.id\n";
-        String where = "WHERE f.reviewed = 1\n" +
-                "      AND f.reviewedBy IN (:users)\n" +
+                "FROM FirstReview r\n" +
+                "  JOIN LearningObject lo ON r.learningObject = lo.id\n";
+        String where = "WHERE r.reviewed = 1\n" +
+                "      AND r.reviewedBy IN (:users)\n" +
                 "      AND lo.deleted = 0\n" +
-                "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
-                "                        FROM ImproperContent ic\n" +
-                "                        WHERE ic.learningObject = lo.id\n" +
-                "                              AND ic.reviewed = 1)\n";
-        String groupBy = "GROUP BY f.reviewedBy";
-        return query(select, where, groupBy, from, to, users, taxons, "f", "reviewedAt");
+                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")";
+        String groupBy = "GROUP BY r.reviewedBy";
+        return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
     public List<StatisticsQuery> approvedReportedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
-                "  f.reviewedBy,\n" +
+                "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
-                "FROM ImproperContent f\n" +
-                "  JOIN LearningObject lo ON f.learningObject = lo.id\n";
-        String where = "WHERE f.reviewed = 1\n" +
-                "      AND f.reviewedBy IN (:users)\n" +
+                "FROM ImproperContent r\n" +
+                "  JOIN LearningObject lo ON r.learningObject = lo.id\n";
+        String where = "WHERE r.reviewed = 1\n" +
+                "      AND r.reviewedBy IN (:users)\n" +
                 "      AND lo.deleted = 0\n" +
-                "      AND f.status IN ('ACCEPTED')\n";
-        String groupBy = "GROUP BY f.reviewedBy";
-        return query(select, where, groupBy, from, to, users, taxons, "f", "reviewedAt");
+                "      AND r.status IN ('ACCEPTED')\n";
+        String groupBy = "GROUP BY r.reviewedBy";
+        return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
     public List<StatisticsQuery> rejectedReportedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
-                "  f.reviewedBy,\n" +
+                "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
-                "FROM ImproperContent f\n" +
-                "  JOIN LearningObject lo ON f.learningObject = lo.id\n";
-        String where = "WHERE f.reviewed = 1\n" +
-                "      AND f.reviewedBy IN (:users)\n" +
+                "FROM ImproperContent r\n" +
+                "  JOIN LearningObject lo ON r.learningObject = lo.id\n";
+        String where = "WHERE r.reviewed = 1\n" +
+                "      AND r.reviewedBy IN (:users)\n" +
                 "      AND lo.deleted = 1\n" +
-                "      AND f.status IN ('REJECTED', 'DELETED')\n";
-        String groupBy = "GROUP BY f.reviewedBy";
-        return query(select, where, groupBy, from, to, users, taxons, "f", "reviewedAt");
+                "      AND r.status IN ('REJECTED', 'DELETED')\n";
+        String groupBy = "GROUP BY r.reviewedBy";
+        return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
     public List<StatisticsQuery> acceptedChangedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
@@ -69,14 +66,8 @@ public class StatisticsDao {
                 "      AND r.reviewedBy IN (:users)\n" +
                 "      AND r.status IN ('ACCEPTED')\n" +
                 "      AND lo.deleted = 0\n" +
-                "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
-                "                        FROM ImproperContent ic\n" +
-                "                        WHERE ic.learningObject = lo.id\n" +
-                "                              AND ic.reviewed = 1)\n" +
-                "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
-                "                        FROM FirstReview ic\n" +
-                "                        WHERE ic.learningObject = lo.id\n" +
-                "                              AND ic.reviewed = 1)\n";
+                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")\n" +
+                "      AND lo.id NOT IN (" + firstReviewInner(from, to) + ")\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
@@ -92,14 +83,8 @@ public class StatisticsDao {
                 "      AND r.reviewedBy IN (:users)\n" +
                 "      AND r.status IN ('REJECTED')\n" +
                 "      AND lo.deleted = 0\n" +
-                "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
-                "                        FROM ImproperContent ic\n" +
-                "                        WHERE ic.learningObject = lo.id\n" +
-                "                              AND ic.reviewed = 1)\n" +
-                "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
-                "                        FROM FirstReview ic\n" +
-                "                        WHERE ic.learningObject = lo.id\n" +
-                "                              AND ic.reviewed = 1)\n";
+                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")\n" +
+                "      AND lo.id NOT IN (" + firstReviewInner(from, to) + ")\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
@@ -180,5 +165,33 @@ public class StatisticsDao {
             query = query.setParameter("to", to.toString());
         }
         return query;
+    }
+
+    private String firstReviewInner(DateTime from, DateTime to) {
+        String fr = "SELECT ic.learningObject\n" +
+                "                        FROM FirstReview ic\n" +
+                "                        WHERE ic.learningObject = lo.id\n" +
+                "                              AND ic.reviewed = 1\n";
+        if (from != null) {
+            fr = fr + " AND ic.reviewedAt > :from";
+        }
+        if (to != null) {
+            fr = fr + " AND ic.reviewedAt < :to";
+        }
+        return fr;
+    }
+
+    private String improperContentInner(DateTime from, DateTime to) {
+        String ic = "SELECT ic.learningObject\n" +
+                "                        FROM ImproperContent ic\n" +
+                "                        WHERE ic.learningObject = lo.id\n" +
+                "                              AND ic.reviewed = 1\n";
+        if (from != null) {
+            ic = ic + " AND ic.reviewedAt > :from";
+        }
+        if (to != null) {
+            ic = ic + " AND ic.reviewedAt < :to";
+        }
+        return ic;
     }
 }
