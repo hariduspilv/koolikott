@@ -683,7 +683,7 @@ md-input-container.chapter-title {
 
   .chapter-embed-card__caption {
     padding: 1rem 1.5rem 1rem 4.2rem;
-    height: 5.8rem;
+    height: 6.8rem;
     box-sizing: border-box;
     position: relative;
     cursor: pointer;
@@ -802,13 +802,11 @@ md-input-container.chapter-title {
 }
 
 .chapter-embed-card__title {
-  display: inline-block;
-  width: 65%;
+  display: block;
 }
 
 .chapter-embed-card__deleted-message {
-  display: inline-block;
-  float: right;
+  display: block;
   text-transform: uppercase;
   color: $color-admin;
 }
