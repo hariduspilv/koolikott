@@ -62,7 +62,7 @@ class controller extends Controller {
     downloadStatistics(format) {
         this.$scope.fetchingDownload = true
         this.serverCallService
-            .makePost(`rest/admin/statistics/export/`, Object.assign(this.getPostParams(), { format }))
+            .makePost(`rest/admin/statistics/export/`, Object.assign(this.$scope.paramsForDownload, { format }))
             .then(({ status, data: filename }) => {
                 this.$scope.fetchingDownload = false
 
@@ -85,7 +85,9 @@ class controller extends Controller {
         this.$scope.params = params
     }
     onParamsChange({ from, to, users, taxons }) {
-        this.$scope.isSubmitButtonEnabled = from && to && (users || taxons)
+        this.$scope.isSubmitButtonEnabled = from && to
+            && moment(from).startOf('day').toDate() < moment(to).endOf('day').toDate()
+            && (users || taxons)
         this.$scope.isTaxonSelectVisible = !users
     }
     onEducationalContextChange(educationalContext) {
@@ -123,7 +125,7 @@ class controller extends Controller {
         if (params.users) {
             params.users = params.users.map(({ id }) => ({ id }))
         }
-
+        this.$scope.paramsForDownload = params;
         return params
     }
     getFlattenedRows(rows) {
