@@ -75,7 +75,7 @@ public class MaterialService {
             material.setEmbeddable(true);
         }
         material.setRecommendation(null);
-        Material createdMaterial = createOrUpdate(material, true);
+        Material createdMaterial = createOrUpdate(material);
         if (strategy.updateIndex()) {
             solrEngineService.updateIndex();
         }
@@ -123,7 +123,7 @@ public class MaterialService {
         material.setReviewableChanges(originalMaterial.getReviewableChanges());
         material.setChanged(originalMaterial.getChanged());
 
-        Material updatedMaterial = createOrUpdate(material, false);
+        Material updatedMaterial = createOrUpdate(material);
         boolean materialChanged = reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
         if (materialChanged){
             updatedMaterial = materialDao.createOrUpdate(updatedMaterial);
@@ -175,7 +175,7 @@ public class MaterialService {
         }
     }
 
-    private Material createOrUpdate(Material material, boolean create) {
+    private Material createOrUpdate(Material material) {
         Long materialId = material.getId();
         boolean isNew = materialId == null;
 
