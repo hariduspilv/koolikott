@@ -66,8 +66,7 @@ public class StatisticsDao {
                 "      AND r.reviewedBy IN (:users)\n" +
                 "      AND r.status IN ('ACCEPTED')\n" +
                 "      AND lo.deleted = 0\n" +
-                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")\n" +
-                "      AND lo.id NOT IN (" + firstReviewInner(from, to) + ")\n";
+                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
@@ -83,8 +82,7 @@ public class StatisticsDao {
                 "      AND r.reviewedBy IN (:users)\n" +
                 "      AND r.status IN ('REJECTED')\n" +
                 "      AND lo.deleted = 0\n" +
-                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")\n" +
-                "      AND lo.id NOT IN (" + firstReviewInner(from, to) + ")\n";
+                "      AND lo.id NOT IN (" + improperContentInner(from, to) + ")\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
