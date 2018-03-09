@@ -49,8 +49,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
+
 public abstract class MaterialParser {
 
+    public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
@@ -136,7 +139,7 @@ public abstract class MaterialParser {
         material.setTaxons(uniqueTaxons);
     }
 
-    protected void setIdentifier(Material material, Document doc) {
+    private void setIdentifier(Material material, Document doc) {
         Element header = (Element) doc.getElementsByTagName("header").item(0);
         Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
         material.setRepositoryIdentifier(identifier.getTextContent().trim());
@@ -159,7 +162,7 @@ public abstract class MaterialParser {
         }
     }
 
-    protected void setPublisherFromVCard(List<Publisher> publishers, String data) {
+    private void setPublisherFromVCard(List<Publisher> publishers, String data) {
         if (StringUtils.isNotEmpty(data)) {
             VCard vcard = Ezvcard.parse(data).first();
 
@@ -232,13 +235,13 @@ public abstract class MaterialParser {
         return resourceTypeService.getResourceTypeByName(results);
     }
 
-    protected List<PeerReview> getPeerReviews(Document doc, String path) {
+    private List<PeerReview> getPeerReviews(Document doc, String path) {
         NodeList nl = getNodeList(doc, path);
         List<String> results = IntStream.range(0, nl.getLength()).mapToObj(i -> getElementValue(nl.item(i))).distinct().collect(Collectors.toList());
         return peerReviewService.getPeerReviewByURL(results);
     }
 
-    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
+    private void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
         NodeList nl = getNodeList(doc, path);
 
         for (int i = 0; i < nl.getLength(); i++) {
@@ -258,7 +261,7 @@ public abstract class MaterialParser {
         return node.getTextContent().trim().toUpperCase();
     }
 
-    protected void setTaxon(Material material, Document doc) {
+    private void setTaxon(Material material, Document doc) {
         Set<Taxon> taxons = new HashSet<>();
         Taxon parent = null;
 
@@ -376,7 +379,7 @@ public abstract class MaterialParser {
         material.setAuthors(authors);
     }
 
-    protected void setPublishersData(Document doc, Material material) {
+    private void setPublishersData(Document doc, Material material) {
         List<Publisher> publishers = new ArrayList<>();
         IssueDate issueDate = null;
         NodeList nodeList = getNodeList(doc, getPathToContribute());
@@ -405,7 +408,7 @@ public abstract class MaterialParser {
         material.setIssueDate(issueDate);
     }
 
-    protected String getRoleString(Node contributorNode) {
+    private String getRoleString(Node contributorNode) {
         try {
             Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
             return roleNode.getTextContent().trim().toUpperCase();
@@ -414,8 +417,7 @@ public abstract class MaterialParser {
         }
     }
 
-    protected String getVCard(Node contributorNode) {
-        String vCard = "";
+    private String getVCard(Node contributorNode) {
         Node node = getNode(contributorNode, "./*[local-name()='entity']");
 
         if (node != null) {
@@ -429,40 +431,36 @@ public abstract class MaterialParser {
             }
         }
 
-        return vCard;
+        return "";
     }
 
-    protected NodeList getNodeList(Document doc, String path) {
+    protected NodeList getNodeList(Node node, String path) {
         try {
             XPathExpression expr = xpath.compile(path);
-            return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+            return (NodeList) expr.evaluate(node, XPathConstants.NODESET);
         } catch (XPathExpressionException ignored) {
             return null;
         }
 
     }
 
-    protected Node getNode(Node parent, String path) {
+    protected Node getNode(Node node, String path) {
         try {
             XPathExpression expr = xpath.compile(path);
-            return (Node) expr.evaluate(parent, XPathConstants.NODE);
+            return (Node) expr.evaluate(node, XPathConstants.NODE);
         } catch (XPathExpressionException ignored) {
             return null;
         }
     }
 
     private List<Node> getTaxonPathNodes(Document doc) {
-        try {
             List<Node> nodes = new ArrayList<>();
             NodeList classifications = getNodeList(doc, getPathToClassification());
 
             for (int i = 0; i < classifications.getLength(); i++) {
-                Node classification = classifications.item(i);
+            NodeList nl = getNodeList(classifications.item(i), TAXON_PATH);
 
-                XPathExpression expr2 = xpath.compile("./*[local-name()='taxonPath']");
-                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
-
-                if (nl != null && nl.getLength() > 0) {
+            if (notEmpty(nl)) {
                     for (int j = 0; j < nl.getLength(); j++) {
                         nodes.add(nl.item(j));
                     }
@@ -470,9 +468,6 @@ public abstract class MaterialParser {
             }
             return nodes;
 
-        } catch (XPathExpressionException ignored) {
-            return new ArrayList<>();
-        }
     }
 
     protected Taxon setEducationalContext(Node taxonPath) {
@@ -519,7 +514,7 @@ public abstract class MaterialParser {
         return domain;
     }
 
-    protected Taxon setTopic(Node taxonPath, Taxon parent) {
+    private Taxon setTopic(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
             Node node = getNode(taxonPath, taxonPath(tag, "topic"));
 
@@ -545,7 +540,7 @@ public abstract class MaterialParser {
         return parent;
     }
 
-    protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
+    private Taxon setSpecialization(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
             Node node = getNode(taxonPath, taxonPath(tag, "specialization"));
 
@@ -561,7 +556,7 @@ public abstract class MaterialParser {
         return parent;
     }
 
-    protected Taxon setModule(Node taxonPath, Taxon parent) {
+    private Taxon setModule(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
             Node node = getNode(taxonPath, taxonPath(tag, "module"));
 
@@ -577,7 +572,7 @@ public abstract class MaterialParser {
         return parent;
     }
 
-    protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
+    private Taxon setSubTopic(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
             Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subtopic']");
             if (node != null) {
