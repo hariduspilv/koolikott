@@ -27,7 +27,7 @@ class controller extends Controller {
             '/dashboard/moderators',
             '/dashboard/restrictedUsers',
             '/dashboard/deleted',
-            '/dashboard/expertStatistics',
+            '/dashboard/stat/expert',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
