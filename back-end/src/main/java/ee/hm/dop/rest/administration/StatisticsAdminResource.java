@@ -64,14 +64,14 @@ public class StatisticsAdminResource extends BaseResource {
 
         String filename = CsvUtil.getUniqueFileName(filter.getFormat());
         NewStatisticsResult statistics = statisticsService.statistics(filter, getLoggedInUser());
-        if (filter.getFormat().isExcel()) {
-            statisticsExcelExporter.generate(filename, statistics);
+        if (filter.getFormat() == FileFormat.xlsx) {
+            statisticsExcelExporter.generateXlsx(filename, statistics);
+        } else if (filter.getFormat() == FileFormat.xls) {
+            statisticsExcelExporter.generateXls(filename, statistics);
+        } else if (filter.getFormat() == FileFormat.csv) {
+            statisticsCsvExporter.generate(filename, statistics);
         } else {
-            try {
-                statisticsCsvExporter.generate(filename, statistics);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+            throw new IllegalStateException("FileFormat is in unknown state: " + filter.getFormat());
         }
         return new File(filename).getName();
     }
