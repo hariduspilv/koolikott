@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPath;
@@ -35,6 +37,8 @@ import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -61,8 +65,7 @@ public abstract class MaterialParser {
         taxonMap.put("vocationalTaxon", "vocationalEducation");
     }
 
-    private XPathFactory xPathfactory = XPathFactory.newInstance();
-    protected XPath xpath = xPathfactory.newXPath();
+    protected XPath xpath = XPathFactory.newInstance().newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
@@ -157,21 +160,20 @@ public abstract class MaterialParser {
     }
 
     protected void setPublisherFromVCard(List<Publisher> publishers, String data) {
-        if (data != null && data.length() > 0) {
+        if (StringUtils.isNotEmpty(data)) {
             VCard vcard = Ezvcard.parse(data).first();
-            String name = vcard.getFormattedName().getValue();
-            String website = null;
 
-            if (vcard.getUrls() != null && vcard.getUrls().size() > 0) {
-                website = vcard.getUrls().get(0).getValue();
-            }
+            if (CollectionUtils.isNotEmpty(vcard.getUrls())) {
+                String name = vcard.getFormattedName().getValue();
+                String website = vcard.getUrls().get(0).getValue();
 
-            if (name != null && website != null) {
-                Publisher publisher = publisherService.getPublisherByName(name);
-                if (publisher == null) {
-                    publishers.add(publisherService.createPublisher(name, website));
-                } else if (!publishers.contains(publisher)) {
-                    publishers.add(publisher);
+                if (name != null && website != null) {
+                    Publisher publisher = publisherService.getPublisherByName(name);
+                    if (publisher == null) {
+                        publishers.add(publisherService.createPublisher(name, website));
+                    } else if (!publishers.contains(publisher)) {
+                        publishers.add(publisher);
+                    }
                 }
             }
         }
@@ -182,31 +184,32 @@ public abstract class MaterialParser {
         NodeList nodeList = node.getChildNodes();
 
         for (int i = 0; i < nodeList.getLength(); i++) {
-            LanguageString languageString = new LanguageString();
             Node currentNode = nodeList.item(i);
 
             String text = currentNode.getTextContent().trim();
-            if (!text.isEmpty()) {
-                languageString.setText(text);
 
-                if (currentNode.hasAttributes()) {
-                    String languageCode = currentNode.getAttributes().item(0).getTextContent().trim();
-                    String[] tokens = languageCode.split("-");
-
-                    Language language = languageService.getLanguage(tokens[0]);
-                    if (language != null) {
-                        languageString.setLanguage(language);
-                    } else {
-                        String message = "No such language for '%s'. LanguageString will have no Language";
-                        logger.warn(String.format(message, languageCode));
-                    }
-                }
-
-                languageStrings.add(languageString);
+            if (StringUtils.isNotEmpty(text)) {
+                languageStrings.add(new LanguageString(getLanguageCode(languageService, currentNode), text));
             }
         }
 
         return languageStrings;
+    }
+
+    private Language getLanguageCode(LanguageService languageService, Node currentNode) {
+        if (currentNode.hasAttributes()) {
+            String languageCode = currentNode.getAttributes().item(0).getTextContent().trim();
+            String[] tokens = languageCode.split("-");
+
+            Language language = languageService.getLanguage(tokens[0]);
+            if (language != null) {
+                return language;
+            } else {
+                String message = "No such language for '%s'. LanguageString will have no Language";
+                logger.warn(String.format(message, languageCode));
+            }
+        }
+        return null;
     }
 
     protected String getVCardWithNewLines(CharacterData characterData) {
@@ -214,59 +217,25 @@ public abstract class MaterialParser {
     }
 
     protected List<Tag> getTagsFromKeywords(NodeList keywords, TagService tagService) {
-        List<Tag> tags = new ArrayList<>();
-        for (int i = 0; i < keywords.getLength(); i++) {
-            String keyword = keywords.item(i).getTextContent().trim().toLowerCase();
+        List<String> strings = IntStream.range(0, keywords.getLength()).mapToObj(i -> keywords.item(i).getTextContent().trim().toLowerCase()).distinct().collect(Collectors.toList());
+        return strings.stream().map(s -> mapTag(tagService, s)).distinct().collect(Collectors.toList());
+    }
 
-            if (!keyword.isEmpty()) {
-                Tag tag = tagService.getTagByName(keyword);
-                if (tag == null) {
-                    tag = new Tag();
-                    tag.setName(keyword);
-                }
-
-                if (!tags.contains(tag)) {
-                    tags.add(tag);
-                }
-            }
-        }
-        return tags;
+    private Tag mapTag(TagService tagService, String s) {
+        Tag tag = tagService.getTagByName(s);
+        return tag != null ? tag : new Tag(s);
     }
 
     protected List<ResourceType> getResourceTypes(Document doc, String path) {
-        List<ResourceType> resourceTypes = new ArrayList<>();
-
         NodeList nl = getNodeList(doc, path);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
-            String type = getElementValue(node);
-
-            ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
-            if (!resourceTypes.contains(resourceType) && resourceType != null) {
-                resourceTypes.add(resourceType);
-            }
-        }
-
-        return resourceTypes;
+        List<String> results = IntStream.range(0, nl.getLength()).mapToObj(i -> getElementValue(nl.item(i))).distinct().collect(Collectors.toList());
+        return resourceTypeService.getResourceTypeByName(results);
     }
 
     protected List<PeerReview> getPeerReviews(Document doc, String path) {
-        List<PeerReview> peerReviews = new ArrayList<>();
-
         NodeList nl = getNodeList(doc, path);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
-            String url = getElementValue(node);
-
-            PeerReview peerReview = peerReviewService.getPeerReviewByURL(url);
-            if (!peerReviews.contains(peerReview) && peerReview != null) {
-                peerReviews.add(peerReview);
-            }
-        }
-
-        return peerReviews;
+        List<String> results = IntStream.range(0, nl.getLength()).mapToObj(i -> getElementValue(nl.item(i))).distinct().collect(Collectors.toList());
+        return peerReviewService.getPeerReviewByURL(results);
     }
 
     protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
