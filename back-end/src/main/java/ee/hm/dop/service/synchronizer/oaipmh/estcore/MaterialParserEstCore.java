@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathExpressionException;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
+import ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
@@ -25,6 +26,7 @@ import org.w3c.dom.NodeList;
 
 public class MaterialParserEstCore extends MaterialParser {
     private static final String YES = "YES";
+    public static final String LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION = "//*[local-name()='estcore']/*[local-name()='classification']";
     @Inject
     private LanguageService languageService;
     @Inject
@@ -99,7 +101,7 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setIsPaid(Material material, Document doc) {
         Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
-        material.setIsPaid(isPaid != null && isPaid.getTextContent().trim().toUpperCase().equals(YES));
+        material.setIsPaid(isPaid != null && valueToUpper(isPaid).equals(YES));
     }
 
     @Override
@@ -114,44 +116,39 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected String getPathToClassification() {
-        return "//*[local-name()='estcore']/*[local-name()='classification']";
+        return LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION;
     }
 
     @Override
     protected void setPicture(Material material, Document doc) {
-        Picture picture = null;
         Node imageNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='imgSrc']");
         if (imageNode != null) {
             byte[] bytes = Base64.decodeBase64(imageNode.getTextContent());
             if (bytes.length > 0) {
-                picture = new OriginalPicture();
+                Picture picture = new OriginalPicture();
                 picture.setData(bytes);
+                material.setPicture(picture);
             }
         }
-        material.setPicture(picture);
     }
 
     @Override
     protected void setCrossCurricularThemes(Material material, Document doc) {
         List<CrossCurricularTheme> crossCurricularThemes = new ArrayList<>();
-        try {
-            NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
-            for (int i = 0; i < classifications.getLength(); i++) {
-                Node classification = classifications.item(i);
+        NodeList classifications = getNodeList(doc, LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION);
+        for (int i = 0; i < classifications.getLength(); i++) {
+            Node classification = classifications.item(i);
 
-                XPathExpression expr2 = xpath.compile(
-                        "./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='crossCurricularTheme']/*[local-name()='subject']");
-                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
+            NodeList nl = getNodeList(classification, getCrossOrKeyComp("crossCurricularTheme"));
 
-                if (nl != null && nl.getLength() > 0) {
-                    for (int j = 0; j < nl.getLength(); j++) {
-                        CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
-                                .getThemeByName(nl.item(j).getTextContent().trim().replace(" ", "_"));
-                        crossCurricularThemes.add(crossCurricularTheme);
-                    }
+            if (MaterialParserUtil.notEmpty(nl)) {
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node item = nl.item(j);
+                    CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
+                            .getThemeByName(value(item).replace(" ", "_"));
+                    crossCurricularThemes.add(crossCurricularTheme);
                 }
             }
-        } catch (XPathExpressionException ignored) {
         }
 
         material.setCrossCurricularThemes(crossCurricularThemes);
@@ -160,28 +157,27 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setKeyCompetences(Material material, Document doc) {
         List<KeyCompetence> keyCompetences = new ArrayList<>();
-        try {
-            NodeList classifications = getNodeList(doc, "//*[local-name()='estcore']/*[local-name()='classification']");
-            for (int i = 0; i < classifications.getLength(); i++) {
-                Node classification = classifications.item(i);
+        NodeList classifications = getNodeList(doc, LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION);
+        for (int i = 0; i < classifications.getLength(); i++) {
+            Node classification = classifications.item(i);
 
-                XPathExpression expr2 = xpath.compile(
-                        "./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='keyCompetence']/*[local-name()='subject']");
-                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
+            NodeList nl = getNodeList(classification, getCrossOrKeyComp("keyCompetence"));
 
-                if (nl != null && nl.getLength() > 0) {
-                    for (int j = 0; j < nl.getLength(); j++) {
-                        KeyCompetence keyCompetence = keyCompetenceService
-                                .findKeyCompetenceByName(nl.item(j).getTextContent().trim().replace(" ", "_"));
-                        keyCompetences.add(keyCompetence);
-                    }
+            if (MaterialParserUtil.notEmpty(nl)) {
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node item = nl.item(j);
+                    // todo map first, search second
+                    KeyCompetence keyCompetence = keyCompetenceService.findKeyCompetenceByName(value(item).replace(" ", "_"));
+                    keyCompetences.add(keyCompetence);
                 }
             }
-
-        } catch (XPathExpressionException ignored) {
         }
 
         material.setKeyCompetences(keyCompetences);
+    }
+
+    private String getCrossOrKeyComp(String keyCompetence2) {
+        return "./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='" + keyCompetence2 + "']/*[local-name()='subject']";
     }
 
     @Override
@@ -191,7 +187,7 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private Language getLanguage(Document doc) {
         Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='language']");
-        String[] tokens = node.getFirstChild().getTextContent().trim().split("-");
+        String[] tokens = value(node.getFirstChild()).split("-");
         return languageService.getLanguage(tokens[0]);
     }
 
@@ -209,5 +205,13 @@ public class MaterialParserEstCore extends MaterialParser {
         NodeList keywords = getNodeList(doc,
                 "//*[local-name()='estcore']/*[local-name()='general']/*[local-name()='keyword']/*[local-name()='string']");
         return getTagsFromKeywords(keywords, tagService);
+    }
+
+    private String value(Node node) {
+        return node.getTextContent().trim();
+    }
+
+    private String valueToUpper(Node node) {
+        return value(node).toUpperCase();
     }
 }

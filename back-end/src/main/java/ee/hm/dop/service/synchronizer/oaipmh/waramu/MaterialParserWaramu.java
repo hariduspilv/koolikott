@@ -204,14 +204,11 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     private List<LanguageString> getTitles(Element lom) throws ParseException {
-        List<LanguageString> titles;
         try {
             Node title = lom.getElementsByTagName("title").item(0);
-            titles = getLanguageStrings(title, languageService);
+            return getLanguageStrings(title, languageService);
         } catch (Exception e) {
             throw new ParseException("Error in parsing Material title");
         }
-
-        return titles;
     }
 }
