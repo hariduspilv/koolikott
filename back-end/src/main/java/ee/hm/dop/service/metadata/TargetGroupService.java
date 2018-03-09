@@ -49,6 +49,7 @@ public class TargetGroupService {
         Set<TargetGroup> targetGroups = new HashSet<>();
         Range<Integer> range = Range.between(from, to);
 
+        //todo improve
         for (TargetGroupEnum targetGroupEnum : TargetGroupEnum.values()) {
             if (targetGroupEnum.getRange().isOverlappedBy(range)) {
                 targetGroups.add(getByName(targetGroupEnum.name()));

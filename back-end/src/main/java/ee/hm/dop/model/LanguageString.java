@@ -21,6 +21,14 @@ public class LanguageString implements AbstractEntity {
     @Column(nullable = false, columnDefinition = "TEXT", name = "textValue")
     private String text;
 
+    public LanguageString() {
+    }
+
+    public LanguageString(Language language, String text) {
+        this.language = language;
+        this.text = text;
+    }
+
     public Long getId() {
         return id;
     }

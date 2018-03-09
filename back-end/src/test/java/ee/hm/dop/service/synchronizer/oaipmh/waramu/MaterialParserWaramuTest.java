@@ -137,8 +137,8 @@ public class MaterialParserWaramuTest extends BaseParserTest {
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
         expect(tagService.getTagByName("grammaire")).andReturn(tag);
-        expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
-        expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+        expect(resourceTypeService.getResourceTypeByName(Lists.newArrayList(resourceType1.getName(), resourceType2.getName())))
+                .andReturn(Lists.newArrayList(resourceType1, resourceType2));
         expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(author);
 
 

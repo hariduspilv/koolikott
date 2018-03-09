@@ -17,6 +17,10 @@ public class ResourceTypeService {
         return resourceTypeDao.findByName(name);
     }
 
+    public List<ResourceType> getResourceTypeByName(List<String> name) {
+        return resourceTypeDao.findByName(name);
+    }
+
     public List<ResourceType> getAllResourceTypes() {
         return resourceTypeDao.findAll();
     }

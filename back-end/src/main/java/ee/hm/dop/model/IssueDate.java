@@ -2,6 +2,7 @@ package ee.hm.dop.model;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,21 @@ public class IssueDate implements AbstractEntity {
 
     @Column
     private Integer year;
+
+    public IssueDate() {
+    }
+
+    public IssueDate(Short day, Short month, Integer year) {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
+
+    public IssueDate(DateTime dateTime) {
+        this.day = (short) dateTime.getDayOfMonth();
+        this.month = (short) dateTime.getMonthOfYear();
+        this.year = dateTime.getYear();
+    }
 
     public Long getId() {
         return id;

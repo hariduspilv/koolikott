@@ -145,8 +145,8 @@ public class MaterialParserEstCoreTest extends BaseParserTest{
         expect(authorService.getAuthorByFullName(author2.getName(), author2.getSurname())).andReturn(author2);
         expect(tagService.getTagByName(tag1.getName())).andReturn(tag1);
         expect(tagService.getTagByName(tag2.getName())).andReturn(tag2);
-        expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
-        expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+        expect(resourceTypeService.getResourceTypeByName(Lists.newArrayList(resourceType1.getName(), resourceType2.getName())))
+                .andReturn(Lists.newArrayList(resourceType1, resourceType2));
         expect(publisherService.getPublisherByName(publisher.getName())).andReturn(null);
         expect(publisherService.createPublisher(publisher.getName(), publisher.getWebsite())).andReturn(publisher);
 
@@ -192,7 +192,7 @@ public class MaterialParserEstCoreTest extends BaseParserTest{
         expect(keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName())).andReturn(keyCompetence);
 
         // Peer reviews
-        expect(peerReviewService.getPeerReviewByURL(peerReview.getUrl().toUpperCase())).andReturn(peerReview);
+        expect(peerReviewService.getPeerReviewByURL(Lists.newArrayList(peerReview.getUrl().toUpperCase()))).andReturn(Lists.newArrayList(peerReview));
 
         TargetGroup targetGroupSixSeven = targetGroup(TargetGroupEnum.SIX_SEVEN);
         TargetGroup targetGroupGrade1 = targetGroup(TargetGroupEnum.GRADE1);
