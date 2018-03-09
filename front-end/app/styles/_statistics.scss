@@ -182,21 +182,21 @@ table.statistics-table {
 .statistics-table__domain-or-subject-cell,
 .statistics-table__expert-cell {
   max-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  //overflow: hidden;
+  //text-overflow: ellipsis;
+  //white-space: nowrap;
 }
 
 .statistics-table__educational-context-cell {
-  min-width: 80px;
+  //min-width: 70px;
 }
 
 .statistics-table__domain-or-subject-cell {
-  min-width: 180px;
+  //min-width: 90px;
 }
 
 .statistics-table__expert-cell {
-  min-width: 120px;
+  //min-width: 100px;
 }
 
 .statistics-pagination {
