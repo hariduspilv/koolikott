@@ -394,12 +394,7 @@ public abstract class MaterialParser {
 
                 Node issueDateNode = getNode(contributorNode, "./*[local-name()='date']/*[local-name()='dateTime']");
                 if (issueDateNode != null) {
-                    DateTime dateTime = new DateTime(issueDateNode.getTextContent().trim());
-                    issueDate = new IssueDate();
-
-                    issueDate.setDay((short) dateTime.getDayOfMonth());
-                    issueDate.setMonth((short) dateTime.getMonthOfYear());
-                    issueDate.setYear(dateTime.getYear());
+                    issueDate = new IssueDate(new DateTime(issueDateNode.getTextContent().trim()));
                 }
             }
         }
@@ -454,19 +449,19 @@ public abstract class MaterialParser {
     }
 
     private List<Node> getTaxonPathNodes(Document doc) {
-            List<Node> nodes = new ArrayList<>();
-            NodeList classifications = getNodeList(doc, getPathToClassification());
+        List<Node> nodes = new ArrayList<>();
+        NodeList classifications = getNodeList(doc, getPathToClassification());
 
-            for (int i = 0; i < classifications.getLength(); i++) {
+        for (int i = 0; i < classifications.getLength(); i++) {
             NodeList nl = getNodeList(classifications.item(i), TAXON_PATH);
 
             if (notEmpty(nl)) {
-                    for (int j = 0; j < nl.getLength(); j++) {
-                        nodes.add(nl.item(j));
-                    }
+                for (int j = 0; j < nl.getLength(); j++) {
+                    nodes.add(nl.item(j));
                 }
             }
-            return nodes;
+        }
+        return nodes;
 
     }
 
