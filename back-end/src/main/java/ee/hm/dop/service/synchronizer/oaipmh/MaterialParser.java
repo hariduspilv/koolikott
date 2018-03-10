@@ -2,12 +2,7 @@ package ee.hm.dop.service.synchronizer.oaipmh;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -50,9 +45,11 @@ import org.w3c.dom.NodeList;
 
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 public abstract class MaterialParser {
 
+    public static final String SPECIALEDUCATION = "SPECIALEDUCATION";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     private static final String[] SCHEMES = {"http", "https"};
@@ -134,7 +131,7 @@ public abstract class MaterialParser {
     private void setIdentifier(Material material, Document doc) {
         Element header = (Element) doc.getElementsByTagName("header").item(0);
         Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
-        material.setRepositoryIdentifier(identifier.getTextContent().trim());
+        material.setRepositoryIdentifier(value(identifier));
     }
 
     protected void setAuthorFromVCard(List<Author> authors, String data) {
@@ -181,7 +178,7 @@ public abstract class MaterialParser {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node currentNode = nodeList.item(i);
 
-            String text = currentNode.getTextContent().trim();
+            String text = value(currentNode);
 
             if (StringUtils.isNotEmpty(text)) {
                 languageStrings.add(new LanguageString(getLanguageCode(languageService, currentNode), text));
@@ -194,7 +191,8 @@ public abstract class MaterialParser {
     private Language getLanguageCode(LanguageService languageService, Node currentNode) {
         if (currentNode.hasAttributes()) {
             Node item = currentNode.getAttributes().item(0);
-            String languageCode = value(item);;
+            String languageCode = value(item);
+            ;
             String[] tokens = languageCode.split("-");
 
             Language language = languageService.getLanguage(tokens[0]);
@@ -213,7 +211,7 @@ public abstract class MaterialParser {
     }
 
     protected List<Tag> getTagsFromKeywords(NodeList keywords, TagService tagService) {
-        List<String> strings = IntStream.range(0, keywords.getLength()).mapToObj(i -> keywords.item(i).getTextContent().trim().toLowerCase()).distinct().collect(Collectors.toList());
+        List<String> strings = IntStream.range(0, keywords.getLength()).mapToObj(i -> value(keywords.item(i)).toLowerCase()).distinct().collect(Collectors.toList());
         return strings.stream().map(s -> mapTag(tagService, s)).distinct().collect(Collectors.toList());
     }
 
@@ -251,16 +249,15 @@ public abstract class MaterialParser {
     }
 
     protected String getElementValue(Node node) {
-        return node.getTextContent().trim().toUpperCase();
+        return valueToUpper(node);
     }
 
     private void setTaxon(Material material, Document doc) {
         Set<Taxon> taxons = new HashSet<>();
-        Taxon parent = null;
 
         try {
             for (Node taxonPath : getTaxonPathNodes(doc)) {
-                parent = null;
+                Taxon parent;
                 parent = setEducationalContext(taxonPath);
                 parent = setDomain(taxonPath, parent);
 
@@ -271,21 +268,21 @@ public abstract class MaterialParser {
                 parent = setTopic(taxonPath, parent);
                 parent = setSubTopic(taxonPath, parent);
 
-                taxons.add(parent);
+                if (parent != null) {
+                    taxons.add(parent);
+                }
             }
-        } catch (Exception e) {
-            taxons.add(parent);
+        } catch (Exception ignored) {
         }
 
         //Set contexts that are specified separately, not inside the taxon
         setEducationalContexts(doc, taxons, getPathToContext(), material);
 
-        taxons.removeAll(Collections.singleton(null));
         material.setTaxons(new ArrayList<>(taxons));
     }
 
     private void setIsSpecialEducation(Material material, String context) {
-        if (context.equals("SPECIALEDUCATION")) {
+        if (context.equals(SPECIALEDUCATION)) {
             material.setSpecialEducation(true);
         }
     }
@@ -320,13 +317,7 @@ public abstract class MaterialParser {
             logger.error(message);
             throw new ParseException(message);
         }
-
-        String source = nodeList.item(0).getTextContent().trim();
-
-        URI uri = new URI(source);
-        if (uri.getScheme() == null) {
-            source = "http://" + source;
-        }
+        String source = getInitialSource(nodeList);
 
         UrlValidator urlValidator = new UrlValidator(SCHEMES);
         if (!urlValidator.isValid(source)) {
@@ -338,13 +329,19 @@ public abstract class MaterialParser {
         return source;
     }
 
+    private String getInitialSource(NodeList nodeList) throws URISyntaxException {
+        String source = value(nodeList.item(0));
+        URI uri = new URI(source);
+        return uri.getScheme() != null ? source : "http://" + source;
+    }
+
     protected void setTargetGroups(Material material, Document doc) {
         Set<TargetGroup> targetGroups = new HashSet<>();
         NodeList ageRanges = getNodeList(doc, getPathToTargetGroups());
 
         for (int i = 0; i < ageRanges.getLength(); i++) {
-            String ageRange = ageRanges.item(i).getTextContent().trim();
-            String[] ranges = ageRange.split("-");
+            Node item = ageRanges.item(i);
+            String[] ranges = value(item).split("-");
 
             if (ranges.length == 2) {
                 int from = Integer.parseInt(ranges[0].trim());
@@ -387,7 +384,7 @@ public abstract class MaterialParser {
 
                 Node issueDateNode = getNode(contributorNode, "./*[local-name()='date']/*[local-name()='dateTime']");
                 if (issueDateNode != null) {
-                    issueDate = new IssueDate(new DateTime(issueDateNode.getTextContent().trim()));
+                    issueDate = new IssueDate(new DateTime(value(issueDateNode)));
                 }
             }
         }
@@ -399,7 +396,7 @@ public abstract class MaterialParser {
     private String getRoleString(Node contributorNode) {
         try {
             Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
-            return roleNode.getTextContent().trim().toUpperCase();
+            return valueToUpper(roleNode);
         } catch (Exception ignored) {
             return null;
         }
@@ -412,9 +409,9 @@ public abstract class MaterialParser {
             NodeList authorNodes = node.getChildNodes();
 
             for (int j = 0; j < authorNodes.getLength(); j++) {
-                if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
-                    CharacterData characterData = (CharacterData) authorNodes.item(j);
-                    return getVCardWithNewLines(characterData);
+                Node item = authorNodes.item(j);
+                if (StringUtils.isNotEmpty(value(item))) {
+                    return getVCardWithNewLines((CharacterData) item);
                 }
             }
         }
@@ -470,15 +467,12 @@ public abstract class MaterialParser {
 
     protected Taxon setDomain(Node taxonPath, Taxon educationalContext) {
         for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "domain"));
+            Node node = getTaxonNode(taxonPath, tag, "domain");
 
             if (node != null) {
                 List<Taxon> domains = new ArrayList<>(((EducationalContext) educationalContext).getDomains());
-                String systemName = getTaxon(node.getTextContent(), Domain.class).getName();
-
-                Taxon taxon = getTaxonByName(domains, systemName);
-                if (taxon != null)
-                    return taxon;
+                Taxon taxon = getTaxon(node, domains, Domain.class);
+                if (taxon != null) return taxon;
             }
         }
 
@@ -487,15 +481,13 @@ public abstract class MaterialParser {
 
     protected Taxon setSubject(Node taxonPath, Taxon domain) {
         for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "subject"));
+            Node node = getTaxonNode(taxonPath, tag, "subject");
 
             if (node != null) {
                 List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
-                String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
-                Taxon taxon = getTaxonByName(subjects, systemName);
+                Taxon taxon = getTaxon(node, subjects, Subject.class);
 
-                if (taxon != null)
-                    return taxon;
+                if (taxon != null) return taxon;
             }
         }
 
@@ -504,23 +496,21 @@ public abstract class MaterialParser {
 
     private Taxon setTopic(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "topic"));
+            Node node = getTaxonNode(taxonPath, tag, "topic");
 
             if (node != null) {
                 List<Taxon> topics = null;
-                if (parent instanceof Module && tag.equals("vocationalTaxon")) {
+                if (parent instanceof Module && tag.equals(MaterialParserUtil.VOCATIONAL_TAXON)) {
                     topics = new ArrayList<>(((Module) parent).getTopics());
-                } else if (parent instanceof Domain && tag.equals("preschoolTaxon")) {
+                } else if (parent instanceof Domain && tag.equals(MaterialParserUtil.PRESCHOOL_TAXON)) {
                     topics = new ArrayList<>(((Domain) parent).getTopics());
                 } else if (parent instanceof Subject) {
                     topics = new ArrayList<>(((Subject) parent).getTopics());
                 }
 
                 if (topics != null) {
-                    String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
-                    Taxon taxon = getTaxonByName(topics, systemName);
-                    if (taxon != null)
-                        return taxon;
+                    Taxon taxon = getTaxon(node, topics, Topic.class);
+                    if (taxon != null) return taxon;
                 }
             }
         }
@@ -528,14 +518,18 @@ public abstract class MaterialParser {
         return parent;
     }
 
+    private Taxon getTaxon(Node node, List<Taxon> list, Class<? extends Taxon> level) {
+        String systemName = getTaxon(node.getTextContent(), level).getName();
+        return getTaxonByName(list, systemName);
+    }
+
     private Taxon setSpecialization(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "specialization"));
+            Node node = getTaxonNode(taxonPath, tag, "specialization");
 
             if (node != null) {
                 List<Taxon> specializations = new ArrayList<>(((Domain) parent).getSpecializations());
-                String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
-                Taxon taxon = getTaxonByName(specializations, systemName);
+                Taxon taxon = getTaxon(node, specializations, Specialization.class);
                 if (taxon != null)
                     return taxon;
             }
@@ -545,29 +539,34 @@ public abstract class MaterialParser {
     }
 
     private Taxon setModule(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "module"));
+        /*for (String tag : taxonMap.keySet()) {
+            Node node = getTaxonNode(taxonPath, tag, "module");
 
             if (node != null) {
                 List<Taxon> modules = new ArrayList<>(((Specialization) parent).getModules());
 
-                String systemName = getTaxon(node.getTextContent(), Module.class).getName();
-                Taxon taxon = getTaxonByName(modules, systemName);
+                Taxon taxon = getTaxon(node, modules, Module.class);
                 if (taxon != null)
                     return taxon;
             }
-        }
-        return parent;
+        }*/
+        return taxonMap.keySet().stream()
+                .map(tag->getTaxonNode(taxonPath, tag, "module"))
+                .filter(Objects::nonNull)
+                .map(node->getTaxon(node, parent.getChildrenList(), Module.class))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(parent);
+//        return parent;
     }
 
     private Taxon setSubTopic(Node taxonPath, Taxon parent) {
         for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subtopic']");
+            Node node = getTaxonNode(taxonPath, tag, "subtopic");
             if (node != null) {
                 List<Taxon> subtopics = new ArrayList<>(((Topic) parent).getSubtopics());
 
-                String systemName = getTaxon(node.getTextContent(), Subtopic.class).getName();
-                Taxon taxon = getTaxonByName(subtopics, systemName);
+                Taxon taxon = getTaxon(node, subtopics, Subtopic.class);
                 if (taxon != null)
                     return taxon;
             }
@@ -620,5 +619,9 @@ public abstract class MaterialParser {
     private void logFail(RuntimeException e) {
         logger.error("Unexpected error while parsing document. Document may not"
                 + " match mapping or XML structure - " + e.getMessage(), e);
+    }
+
+    private Node getTaxonNode(Node taxonPath, String tag, String domain) {
+        return getNode(taxonPath, taxonPath(tag, domain));
     }
 }

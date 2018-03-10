@@ -206,11 +206,11 @@ public class MaterialParserEstCoreTest extends BaseParserTest{
         TargetGroup targetGroupGymnasium = targetGroup(TargetGroupEnum.GYMNASIUM);
 
         expect(targetGroupService.getTargetGroupsByAge(6, 7))
-                .andReturn(Sets.newHashSet(targetGroupSixSeven, targetGroupGrade1));
+                .andReturn(Lists.newArrayList(targetGroupSixSeven, targetGroupGrade1));
         expect(targetGroupService.getTargetGroupsByAge(10, 13))
-                .andReturn(Sets.newHashSet(targetGroupGrade3, targetGroupGrade4, targetGroupGrade5, targetGroupGrade6, targetGroupGrade7));
+                .andReturn(Lists.newArrayList(targetGroupGrade3, targetGroupGrade4, targetGroupGrade5, targetGroupGrade6, targetGroupGrade7));
         expect(targetGroupService.getTargetGroupsByAge(14, 25))
-                .andReturn(Sets.newHashSet(targetGroupGrade7, targetGroupGrade8, targetGroupGrade9, targetGroupGymnasium));
+                .andReturn(Lists.newArrayList(targetGroupGrade7, targetGroupGrade8, targetGroupGrade9, targetGroupGymnasium));
 
         LanguageString title1 = languageString(english, "first title");
         LanguageString title2 = languageString(estonian, "teine pealkiri");

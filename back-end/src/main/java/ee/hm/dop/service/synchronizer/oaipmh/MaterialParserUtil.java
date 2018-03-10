@@ -8,12 +8,15 @@ import java.util.Map;
 
 public class MaterialParserUtil {
 
+    public static final String PRESCHOOL_TAXON = "preschoolTaxon";
+    public static final String VOCATIONAL_TAXON = "vocationalTaxon";
+
     public static Map<String, String> getTaxonMap() {
         Map<String, String> taxonMap = new HashMap<>();
-        taxonMap.put("preschoolTaxon", "preschoolEducation");
+        taxonMap.put(PRESCHOOL_TAXON, "preschoolEducation");
         taxonMap.put("basicSchoolTaxon", "basicEducation");
         taxonMap.put("gymnasiumTaxon", "secondaryEducation");
-        taxonMap.put("vocationalTaxon", "vocationalEducation");
+        taxonMap.put(VOCATIONAL_TAXON, "vocationalEducation");
         return taxonMap;
     }
 

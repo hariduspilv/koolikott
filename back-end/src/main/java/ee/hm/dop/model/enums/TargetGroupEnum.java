@@ -1,10 +1,11 @@
 package ee.hm.dop.model.enums;
 
-import java.util.List;
-
-
 import ee.hm.dop.model.TargetGroup;
 import org.apache.commons.lang3.Range;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public enum TargetGroupEnum {
     ZERO_FIVE(0, 5),
@@ -32,5 +33,19 @@ public enum TargetGroupEnum {
 
     public static boolean containsTargetGroup(List<TargetGroup> targetGroups, TargetGroupEnum groupEnum) {
         return targetGroups.stream().anyMatch(t -> t.getName().equals(groupEnum.name()));
+    }
+
+    public static List<String> getTargetGroupEnumNames(int from, int to) {
+        return getTargetGroupEnumsByAge(from, to).stream()
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
+
+    public static List<TargetGroupEnum> getTargetGroupEnumsByAge(int from, int to) {
+        Range<Integer> range = Range.between(from, to);
+
+        return Arrays.stream(TargetGroupEnum.values())
+                .filter(targetGroupEnum -> targetGroupEnum.getRange().isOverlappedBy(range))
+                .collect(Collectors.toList());
     }
 }

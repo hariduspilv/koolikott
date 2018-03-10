@@ -330,11 +330,11 @@ public class MaterialParserWaramuTest extends BaseParserTest {
         verify(languageService);
     }
 
-    private HashSet<TargetGroup> targetGroup6to9() {
+    private List<TargetGroup> targetGroup6to9() {
         TargetGroup targetGroupGrade6 = targetGroup(TargetGroupEnum.GRADE6);
         TargetGroup targetGroupGrade7 = targetGroup(TargetGroupEnum.GRADE7);
         TargetGroup targetGroupGrade8 = targetGroup(TargetGroupEnum.GRADE8);
         TargetGroup targetGroupGrade9 = targetGroup(TargetGroupEnum.GRADE9);
-        return Sets.newHashSet(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9);
+        return Lists.newArrayList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9);
     }
 }

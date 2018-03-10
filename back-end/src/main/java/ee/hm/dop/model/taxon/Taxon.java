@@ -18,6 +18,8 @@ import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -92,6 +94,10 @@ public abstract class Taxon implements AbstractEntity {
     @JsonIgnore
     public abstract Set<? extends Taxon> getChildren();
 
+    @JsonIgnore
+    public List<Taxon> getChildrenList() {
+        return new ArrayList<>(getChildren());
+    }
 
     public boolean containsTaxon(Taxon taxon) {
         if (this.equals(taxon)) {
