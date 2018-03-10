@@ -10,6 +10,7 @@ public class MaterialParserUtil {
 
     public static final String PRESCHOOL_TAXON = "preschoolTaxon";
     public static final String VOCATIONAL_TAXON = "vocationalTaxon";
+    public static final String SPECIALEDUCATION = "SPECIALEDUCATION";
 
     public static Map<String, String> getTaxonMap() {
         Map<String, String> taxonMap = new HashMap<>();
@@ -30,5 +31,13 @@ public class MaterialParserUtil {
 
     public static String valueToUpper(Node node) {
         return value(node).toUpperCase();
+    }
+
+    public static String valueToLower(Node node) {
+        return value(node).toLowerCase();
+    }
+
+    public static boolean isSpecialEducation(String context) {
+        return context.equals(SPECIALEDUCATION);
     }
 }

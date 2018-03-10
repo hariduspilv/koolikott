@@ -3,6 +3,7 @@ package ee.hm.dop.service.synchronizer.oaipmh;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,21 +44,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
 
 public abstract class MaterialParser {
 
-    public static final String SPECIALEDUCATION = "SPECIALEDUCATION";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
+    private static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     private static final String[] SCHEMES = {"http", "https"};
-    public static final String PUBLISHER = "PUBLISHER";
-    public static final String AUTHOR = "AUTHOR";
+    private static final String PUBLISHER = "PUBLISHER";
+    private static final String AUTHOR = "AUTHOR";
     private static final Map<String, String> taxonMap = MaterialParserUtil.getTaxonMap();
-
-    protected XPath xpath = XPathFactory.newInstance().newXPath();
+    private XPath xpath = XPathFactory.newInstance().newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
@@ -210,9 +207,12 @@ public abstract class MaterialParser {
         return characterData.getData().trim().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
     }
 
-    protected List<Tag> getTagsFromKeywords(NodeList keywords, TagService tagService) {
-        List<String> strings = IntStream.range(0, keywords.getLength()).mapToObj(i -> value(keywords.item(i)).toLowerCase()).distinct().collect(Collectors.toList());
-        return strings.stream().map(s -> mapTag(tagService, s)).distinct().collect(Collectors.toList());
+    protected List<Tag> getTagsFromKeywords(NodeList nl, TagService tagService) {
+        return IntStream.range(0, nl.getLength())
+                .mapToObj(i -> valueToLower(nl.item(i)))
+                .distinct()
+                .map(s -> mapTag(tagService, s))
+                .collect(Collectors.toList());
     }
 
     private Tag mapTag(TagService tagService, String s) {
@@ -230,26 +230,6 @@ public abstract class MaterialParser {
         NodeList nl = getNodeList(doc, path);
         List<String> results = IntStream.range(0, nl.getLength()).mapToObj(i -> getElementValue(nl.item(i))).distinct().collect(Collectors.toList());
         return peerReviewService.getPeerReviewByURL(results);
-    }
-
-    private void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
-        NodeList nl = getNodeList(doc, path);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
-            String context = getElementValue(node);
-
-            EducationalContext educationalContext = (EducationalContext) getTaxon(context, EducationalContext.class);
-            setIsSpecialEducation(material, context);
-
-            if (educationalContext != null) {
-                taxons.add(educationalContext);
-            }
-        }
-    }
-
-    protected String getElementValue(Node node) {
-        return valueToUpper(node);
     }
 
     private void setTaxon(Material material, Document doc) {
@@ -276,15 +256,36 @@ public abstract class MaterialParser {
         }
 
         //Set contexts that are specified separately, not inside the taxon
-        setEducationalContexts(doc, taxons, getPathToContext(), material);
+        taxons.addAll(getEducationalContexts(doc, getPathToContext()));
+        setSpecialEducation(doc, getPathToContext(), material);
 
         material.setTaxons(new ArrayList<>(taxons));
     }
 
-    private void setIsSpecialEducation(Material material, String context) {
-        if (context.equals(SPECIALEDUCATION)) {
+    private List<EducationalContext> getEducationalContexts(Document doc, String path) {
+        NodeList nl = getNodeList(doc, path);
+
+        return IntStream.range(0, nl.getLength())
+                .mapToObj(nl::item)
+                .map(this::getElementValue)
+                .map(context -> (EducationalContext) getTaxon(context, EducationalContext.class))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private void setSpecialEducation(Document doc, String path, Material material) {
+        NodeList nl = getNodeList(doc, path);
+
+        if (IntStream.range(0, nl.getLength())
+                .mapToObj(nl::item)
+                .map(this::getElementValue)
+                .anyMatch(MaterialParserUtil::isSpecialEducation)) {
             material.setSpecialEducation(true);
         }
+    }
+
+    protected String getElementValue(Node node) {
+        return valueToUpper(node);
     }
 
     private void setLearningResourceType(Material material, Document doc) {
@@ -452,126 +453,60 @@ public abstract class MaterialParser {
             }
         }
         return nodes;
-
     }
 
     protected Taxon setEducationalContext(Node taxonPath) {
-        for (Map.Entry<String, String> tag : taxonMap.entrySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag.getKey() + "']");
-            if (node != null) {
-                return getTaxon(tag.getValue(), EducationalContext.class);
-            }
-        }
-        return null;
+        return taxonMap.entrySet().stream()
+                .filter(tag -> getNode(taxonPath, "./*[local-name()='" + tag.getKey() + "']") != null)
+                .map(tag -> getTaxon(tag.getValue(), EducationalContext.class))
+                .findFirst()
+                .orElse(null);
     }
 
-    protected Taxon setDomain(Node taxonPath, Taxon educationalContext) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getTaxonNode(taxonPath, tag, "domain");
-
-            if (node != null) {
-                List<Taxon> domains = new ArrayList<>(((EducationalContext) educationalContext).getDomains());
-                Taxon taxon = getTaxon(node, domains, Domain.class);
-                if (taxon != null) return taxon;
-            }
-        }
-
-        return educationalContext;
+    protected Taxon setDomain(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Domain.class, "domain", (t, key) -> t instanceof EducationalContext);
     }
 
-    protected Taxon setSubject(Node taxonPath, Taxon domain) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getTaxonNode(taxonPath, tag, "subject");
-
-            if (node != null) {
-                List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
-                Taxon taxon = getTaxon(node, subjects, Subject.class);
-
-                if (taxon != null) return taxon;
-            }
-        }
-
-        return domain;
+    protected Taxon setSubject(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Subject.class, "subject", (t, key) -> t instanceof Domain);
     }
 
     private Taxon setTopic(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getTaxonNode(taxonPath, tag, "topic");
+        return setTaxon(taxonPath, parent, Topic.class, "topic", this::topicParentValidation);
+    }
 
-            if (node != null) {
-                List<Taxon> topics = null;
-                if (parent instanceof Module && tag.equals(MaterialParserUtil.VOCATIONAL_TAXON)) {
-                    topics = new ArrayList<>(((Module) parent).getTopics());
-                } else if (parent instanceof Domain && tag.equals(MaterialParserUtil.PRESCHOOL_TAXON)) {
-                    topics = new ArrayList<>(((Domain) parent).getTopics());
-                } else if (parent instanceof Subject) {
-                    topics = new ArrayList<>(((Subject) parent).getTopics());
-                }
+    private Taxon setSpecialization(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Specialization.class, "specialization", (t, key) -> t instanceof Domain);
+    }
 
-                if (topics != null) {
-                    Taxon taxon = getTaxon(node, topics, Topic.class);
-                    if (taxon != null) return taxon;
-                }
-            }
-        }
+    private Taxon setModule(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Module.class, "module", (t, key) -> t instanceof Specialization);
+    }
 
-        return parent;
+    private Taxon setSubTopic(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Subtopic.class, "subtopic", (t, key) -> t instanceof Topic);
+    }
+
+    private Taxon setTaxon(Node taxonPath, Taxon parent, Class<? extends Taxon> level, String levelString, BiFunction<Taxon, String, Boolean> parentValidator) {
+        return taxonMap.keySet().stream()
+                .filter(tag -> parentValidator.apply(parent, tag))
+                .map(tag -> getTaxonNode(taxonPath, tag, levelString))
+                .filter(Objects::nonNull)
+                .map(node -> getTaxon(node, parent.getChildrenList(), level))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(parent);
+    }
+
+    private boolean topicParentValidation(Taxon parent, String tag) {
+        return parent instanceof Module && tag.equals(MaterialParserUtil.VOCATIONAL_TAXON) ||
+                parent instanceof Domain && tag.equals(MaterialParserUtil.PRESCHOOL_TAXON) ||
+                parent instanceof Subject;
     }
 
     private Taxon getTaxon(Node node, List<Taxon> list, Class<? extends Taxon> level) {
         String systemName = getTaxon(node.getTextContent(), level).getName();
         return getTaxonByName(list, systemName);
-    }
-
-    private Taxon setSpecialization(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getTaxonNode(taxonPath, tag, "specialization");
-
-            if (node != null) {
-                List<Taxon> specializations = new ArrayList<>(((Domain) parent).getSpecializations());
-                Taxon taxon = getTaxon(node, specializations, Specialization.class);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return parent;
-    }
-
-    private Taxon setModule(Node taxonPath, Taxon parent) {
-        /*for (String tag : taxonMap.keySet()) {
-            Node node = getTaxonNode(taxonPath, tag, "module");
-
-            if (node != null) {
-                List<Taxon> modules = new ArrayList<>(((Specialization) parent).getModules());
-
-                Taxon taxon = getTaxon(node, modules, Module.class);
-                if (taxon != null)
-                    return taxon;
-            }
-        }*/
-        return taxonMap.keySet().stream()
-                .map(tag->getTaxonNode(taxonPath, tag, "module"))
-                .filter(Objects::nonNull)
-                .map(node->getTaxon(node, parent.getChildrenList(), Module.class))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(parent);
-//        return parent;
-    }
-
-    private Taxon setSubTopic(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getTaxonNode(taxonPath, tag, "subtopic");
-            if (node != null) {
-                List<Taxon> subtopics = new ArrayList<>(((Topic) parent).getSubtopics());
-
-                Taxon taxon = getTaxon(node, subtopics, Subtopic.class);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-        return parent;
     }
 
     private Taxon getTaxonByName(List<Taxon> topics, String systemName) {
