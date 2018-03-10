@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
@@ -23,6 +20,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 
 public class MaterialParserEstCore extends MaterialParser {
     private static final String YES = "YES";
@@ -101,7 +100,7 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setIsPaid(Material material, Document doc) {
         Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
-        material.setIsPaid(isPaid != null && valueToUpper(isPaid).equals(YES));
+        material.setIsPaid(isPaid != null && MaterialParserUtil.valueToUpper(isPaid).equals(YES));
     }
 
     @Override
@@ -207,11 +206,4 @@ public class MaterialParserEstCore extends MaterialParser {
         return getTagsFromKeywords(keywords, tagService);
     }
 
-    private String value(Node node) {
-        return node.getTextContent().trim();
-    }
-
-    private String valueToUpper(Node node) {
-        return value(node).toUpperCase();
-    }
 }

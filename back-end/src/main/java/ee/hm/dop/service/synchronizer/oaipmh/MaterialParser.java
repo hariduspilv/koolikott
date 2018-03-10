@@ -4,7 +4,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,23 +49,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 
 public abstract class MaterialParser {
 
-    public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     private static final String[] SCHEMES = {"http", "https"};
     public static final String PUBLISHER = "PUBLISHER";
     public static final String AUTHOR = "AUTHOR";
-    private static final Map<String, String> taxonMap;
-
-    static {
-        taxonMap = new HashMap<>();
-        taxonMap.put("preschoolTaxon", "preschoolEducation");
-        taxonMap.put("basicSchoolTaxon", "basicEducation");
-        taxonMap.put("gymnasiumTaxon", "secondaryEducation");
-        taxonMap.put("vocationalTaxon", "vocationalEducation");
-    }
+    private static final Map<String, String> taxonMap = MaterialParserUtil.getTaxonMap();
 
     protected XPath xpath = XPathFactory.newInstance().newXPath();
 
@@ -201,7 +193,8 @@ public abstract class MaterialParser {
 
     private Language getLanguageCode(LanguageService languageService, Node currentNode) {
         if (currentNode.hasAttributes()) {
-            String languageCode = currentNode.getAttributes().item(0).getTextContent().trim();
+            Node item = currentNode.getAttributes().item(0);
+            String languageCode = value(item);;
             String[] tokens = languageCode.split("-");
 
             Language language = languageService.getLanguage(tokens[0]);

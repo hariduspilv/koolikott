@@ -1,26 +1,21 @@
 package ee.hm.dop.service.synchronizer.oaipmh.waramu;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import ee.hm.dop.model.Author;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
-import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
+import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 public class MaterialParserWaramu extends MaterialParser {
 
@@ -29,36 +24,33 @@ public class MaterialParserWaramu extends MaterialParser {
 
     @Inject
     private LanguageService languageService;
-
     @Inject
     private TagService tagService;
-
     @Inject
     private TaxonService taxonService;
 
     @Override
     protected void setTags(Material material, Document doc) {
-        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        Element lom = getFirstLom(doc);
         setTags(material, lom);
     }
 
     @Override
     protected void setDescriptions(Material material, Document doc) {
-        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        Element lom = getFirstLom(doc);
         setDescriptions(material, lom);
-
     }
 
     @Override
     protected void setLanguage(Material material, Document doc) {
-        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        Element lom = getFirstLom(doc);
         setMaterialLanguage(material, lom);
 
     }
 
     @Override
     protected void setTitles(Material material, Document doc) throws ParseException {
-        Element lom = (Element) doc.getElementsByTagName("lom").item(0);
+        Element lom = getFirstLom(doc);
         setTitle(material, lom);
     }
 
@@ -81,7 +73,7 @@ public class MaterialParserWaramu extends MaterialParser {
     protected String getElementValue(Node node) {
         Node valueNode = getNode(node, "./*[local-name()='value']");
 
-        String value = valueNode.getTextContent().trim().toUpperCase().replaceAll("\\s", "");
+        String value = valueToUpper(valueNode).replaceAll("\\s", "");
 
         // Waramu specific values
         if (value.equals(WEB_PAGE)) {
@@ -159,56 +151,50 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     private void setTags(Material material, Element lom) {
-        List<Tag> tags = getTags(lom);
-        material.setTags(tags);
+        material.setTags(getTags(lom));
     }
 
     private void setDescriptions(Material material, Element lom) {
-        List<LanguageString> descriptions = getDescriptions(lom);
-        material.setDescriptions(descriptions);
+        material.setDescriptions(getDescriptions(lom));
     }
 
     private void setMaterialLanguage(Material material, Element lom) {
-        Language materialLanguage = getMaterialLanguage(lom);
-        material.setLanguage(materialLanguage);
+        material.setLanguage(getMaterialLanguage(lom));
     }
 
     private void setTitle(Material material, Element lom) throws ParseException {
-        List<LanguageString> titles = getTitles(lom);
-
-        if (titles.isEmpty()) {
-            throw new ParseException("Error parsing document. No title found");
+        try {
+            Node title = getFirst(lom, "title");
+            List<LanguageString> titles = getLanguageStrings(title, languageService);
+            if (titles.isEmpty()) {
+                throw new ParseException("Error parsing document. No title found");
+            }
+            material.setTitles(titles);
+        } catch (Exception e) {
+            throw new ParseException("Error in parsing Material title");
         }
-
-        material.setTitles(titles);
     }
 
     private List<Tag> getTags(Element lom) {
         NodeList keywords = lom.getElementsByTagName("keyword");
-
         return getTagsFromKeywords(keywords, tagService);
     }
 
     private List<LanguageString> getDescriptions(Element lom) {
-        NodeList descriptionNode = lom.getElementsByTagName("description");
-        Node description = descriptionNode.item(0);
-
+        Node description = getFirst(lom, "description");
         return getLanguageStrings(description, languageService);
     }
 
     private Language getMaterialLanguage(Element lom) {
-        NodeList languageNode = lom.getElementsByTagName("language");
-        String materialLanguageString = languageNode.item(0).getTextContent().trim();
-
-        return languageService.getLanguage(materialLanguageString);
+        Node item = getFirst(lom, "language");
+        return languageService.getLanguage(value(item));
     }
 
-    private List<LanguageString> getTitles(Element lom) throws ParseException {
-        try {
-            Node title = lom.getElementsByTagName("title").item(0);
-            return getLanguageStrings(title, languageService);
-        } catch (Exception e) {
-            throw new ParseException("Error in parsing Material title");
-        }
+    private Node getFirst(Element lom, String description) {
+        return lom.getElementsByTagName(description).item(0);
+    }
+
+    private Element getFirstLom(Document doc) {
+        return (Element) doc.getElementsByTagName("lom").item(0);
     }
 }
