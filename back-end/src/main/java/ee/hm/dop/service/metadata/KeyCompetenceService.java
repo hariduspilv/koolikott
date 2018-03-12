@@ -27,4 +27,8 @@ public class KeyCompetenceService {
     public KeyCompetence findKeyCompetenceByName(String name) {
         return keyCompetenceDao.findByName(name);
     }
+
+    public List<KeyCompetence> findKeyCompetenceByName(List<String> name) {
+        return keyCompetenceDao.findByName(name);
+    }
 }

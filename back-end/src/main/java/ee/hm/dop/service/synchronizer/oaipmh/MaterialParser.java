@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.xml.xpath.XPath;
@@ -34,6 +35,7 @@ import ezvcard.Ezvcard;
 import ezvcard.VCard;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -48,6 +50,9 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
 
 public abstract class MaterialParser {
 
+    public static final String NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE = "No such language for '%s'. LanguageString will have no Language";
+    public static final String MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED = "Material has more or less than one source, can't be mapped.";
+    public static final String ERROR_PARSING_DOCUMENT_INVALID_URL_S = "Error parsing document. Invalid URL %s";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     private static final String[] SCHEMES = {"http", "https"};
@@ -174,7 +179,6 @@ public abstract class MaterialParser {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node currentNode = nodeList.item(i);
-
             String text = value(currentNode);
 
             if (StringUtils.isNotEmpty(text)) {
@@ -186,30 +190,28 @@ public abstract class MaterialParser {
     }
 
     private Language getLanguageCode(LanguageService languageService, Node currentNode) {
-        if (currentNode.hasAttributes()) {
-            Node item = currentNode.getAttributes().item(0);
-            String languageCode = value(item);
-            ;
-            String[] tokens = languageCode.split("-");
-
-            Language language = languageService.getLanguage(tokens[0]);
-            if (language != null) {
-                return language;
-            } else {
-                String message = "No such language for '%s'. LanguageString will have no Language";
-                logger.warn(String.format(message, languageCode));
-            }
+        if (!currentNode.hasAttributes()) {
+            return null;
         }
+        Node item = currentNode.getAttributes().item(0);
+        String languageCode = value(item);
+        String[] tokens = languageCode.split("-");
+
+        Language language = languageService.getLanguage(tokens[0]);
+        if (language != null) {
+            return language;
+        }
+        logger.warn(String.format(NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE, languageCode));
         return null;
     }
 
     protected String getVCardWithNewLines(CharacterData characterData) {
-        return characterData.getData().trim().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
+        return characterData.getData().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
     }
 
     protected List<Tag> getTagsFromKeywords(NodeList nl, TagService tagService) {
-        return IntStream.range(0, nl.getLength())
-                .mapToObj(i -> valueToLower(nl.item(i)))
+        return getNodeStream(nl)
+                .map(MaterialParserUtil::valueToLower)
                 .distinct()
                 .map(s -> mapTag(tagService, s))
                 .collect(Collectors.toList());
@@ -221,14 +223,18 @@ public abstract class MaterialParser {
     }
 
     protected List<ResourceType> getResourceTypes(Document doc, String path) {
-        NodeList nl = getNodeList(doc, path);
-        List<String> results = IntStream.range(0, nl.getLength()).mapToObj(i -> getElementValue(nl.item(i))).distinct().collect(Collectors.toList());
+        List<String> results = getNodeStream(doc, path)
+                .map(this::getElementValue)
+                .distinct()
+                .collect(Collectors.toList());
         return resourceTypeService.getResourceTypeByName(results);
     }
 
     private List<PeerReview> getPeerReviews(Document doc, String path) {
-        NodeList nl = getNodeList(doc, path);
-        List<String> results = IntStream.range(0, nl.getLength()).mapToObj(i -> getElementValue(nl.item(i))).distinct().collect(Collectors.toList());
+        List<String> results = getNodeStream(doc, path)
+                .map(this::getElementValue)
+                .distinct()
+                .collect(Collectors.toList());
         return peerReviewService.getPeerReviewByURL(results);
     }
 
@@ -257,27 +263,21 @@ public abstract class MaterialParser {
 
         //Set contexts that are specified separately, not inside the taxon
         taxons.addAll(getEducationalContexts(doc, getPathToContext()));
-        setSpecialEducation(doc, getPathToContext(), material);
+        setSpecialEducation(material, doc, getPathToContext());
 
         material.setTaxons(new ArrayList<>(taxons));
     }
 
     private List<EducationalContext> getEducationalContexts(Document doc, String path) {
-        NodeList nl = getNodeList(doc, path);
-
-        return IntStream.range(0, nl.getLength())
-                .mapToObj(nl::item)
+        return getNodeStream(doc, path)
                 .map(this::getElementValue)
                 .map(context -> (EducationalContext) getTaxon(context, EducationalContext.class))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    private void setSpecialEducation(Document doc, String path, Material material) {
-        NodeList nl = getNodeList(doc, path);
-
-        if (IntStream.range(0, nl.getLength())
-                .mapToObj(nl::item)
+    private void setSpecialEducation(Material material, Document doc, String path) {
+        if (getNodeStream(doc, path)
                 .map(this::getElementValue)
                 .anyMatch(MaterialParserUtil::isSpecialEducation)) {
             material.setSpecialEducation(true);
@@ -306,25 +306,22 @@ public abstract class MaterialParser {
         try {
             material.setSource(getSource(doc));
         } catch (Exception e) {
-            throw new ParseException("Error parsing document source.");
+            throw new ParseException("Error parsing document source.", e);
         }
-
     }
 
     private String getSource(Document doc) throws ParseException, URISyntaxException {
         NodeList nodeList = getNodeList(doc, getPathToLocation());
         if (nodeList.getLength() != 1) {
-            String message = "Material has more or less than one source, can't be mapped.";
-            logger.error(message);
-            throw new ParseException(message);
+            logger.error(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
+            throw new ParseException(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
         }
         String source = getInitialSource(nodeList);
 
         UrlValidator urlValidator = new UrlValidator(SCHEMES);
         if (!urlValidator.isValid(source)) {
-            String message = "Error parsing document. Invalid URL %s";
-            logger.error(String.format(message, source));
-            throw new ParseException(String.format(message, source));
+            logger.error(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
+            throw new ParseException(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
         }
 
         return source;
@@ -353,7 +350,7 @@ public abstract class MaterialParser {
         material.setTargetGroups(new ArrayList<>(targetGroups));
     }
 
-    protected void setAuthors(Document doc, Material material) throws ParseException {
+    protected void setAuthors(Document doc, Material material) {
         List<Author> authors = new ArrayList<>();
         NodeList nodeList = getNodeList(doc, getPathToContribute());
 
@@ -405,19 +402,23 @@ public abstract class MaterialParser {
 
     private String getVCard(Node contributorNode) {
         Node node = getNode(contributorNode, "./*[local-name()='entity']");
-
-        if (node != null) {
-            NodeList authorNodes = node.getChildNodes();
-
-            for (int j = 0; j < authorNodes.getLength(); j++) {
-                Node item = authorNodes.item(j);
-                if (StringUtils.isNotEmpty(value(item))) {
-                    return getVCardWithNewLines((CharacterData) item);
-                }
-            }
+        if (node == null) {
+            return "";
         }
+        return getNodeStream(node.getChildNodes())
+                .filter(item -> StringUtils.isNotEmpty(value(item)))
+                .map(item -> getVCardWithNewLines((CharacterData) item))
+                .findFirst()
+                .orElse("");
+    }
 
-        return "";
+    protected Stream<Node> getNodeStream(Document doc, String path) {
+        return getNodeStream(getNodeList(doc, path));
+    }
+
+    protected Stream<Node> getNodeStream(NodeList nl) {
+        return IntStream.range(0, nl.getLength())
+                .mapToObj(nl::item);
     }
 
     protected NodeList getNodeList(Node node, String path) {
@@ -447,9 +448,7 @@ public abstract class MaterialParser {
             NodeList nl = getNodeList(classifications.item(i), TAXON_PATH);
 
             if (notEmpty(nl)) {
-                for (int j = 0; j < nl.getLength(); j++) {
-                    nodes.add(nl.item(j));
-                }
+                nodes.addAll(getNodeStream(nl).collect(Collectors.toList()));
             }
         }
         return nodes;

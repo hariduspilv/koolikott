@@ -186,10 +186,10 @@ public class MaterialParserEstCoreTest extends BaseParserTest{
         expect(taxonService.getTaxonByEstCoreName("SPECIALEDUCATION", EducationalContext.class)).andReturn(null);
 
         // Cross-curricular themes
-        expect(crossCurricularThemeService.getThemeByName(crossCurricularTheme.getName())).andReturn(crossCurricularTheme);
+        expect(crossCurricularThemeService.getThemeByName(Lists.newArrayList(crossCurricularTheme.getName()))).andReturn(Lists.newArrayList(crossCurricularTheme));
 
         // Key competence
-        expect(keyCompetenceService.findKeyCompetenceByName(keyCompetence.getName())).andReturn(keyCompetence);
+        expect(keyCompetenceService.findKeyCompetenceByName(Lists.newArrayList(keyCompetence.getName()))).andReturn(Lists.newArrayList(keyCompetence));
 
         // Peer reviews
         expect(peerReviewService.getPeerReviewByURL(Lists.newArrayList(peerReview.getUrl().toUpperCase()))).andReturn(Lists.newArrayList(peerReview));

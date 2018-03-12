@@ -2,6 +2,8 @@ package ee.hm.dop.service.synchronizer.oaipmh.estcore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,8 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 public class MaterialParserEstCore extends MaterialParser {
     private static final String YES = "YES";
     public static final String LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION = "//*[local-name()='estcore']/*[local-name()='classification']";
+    public static final String CROSS_CURRICULAR_THEME = getCrossOrKeyComp("crossCurricularTheme");
+    public static final String KEY_COMPETENCE = getCrossOrKeyComp("keyCompetence");
     @Inject
     private LanguageService languageService;
     @Inject
@@ -133,49 +137,38 @@ public class MaterialParserEstCore extends MaterialParser {
 
     @Override
     protected void setCrossCurricularThemes(Material material, Document doc) {
-        List<CrossCurricularTheme> crossCurricularThemes = new ArrayList<>();
         NodeList classifications = getNodeList(doc, LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION);
-        for (int i = 0; i < classifications.getLength(); i++) {
-            Node classification = classifications.item(i);
-
-            NodeList nl = getNodeList(classification, getCrossOrKeyComp("crossCurricularTheme"));
-
-            if (MaterialParserUtil.notEmpty(nl)) {
-                for (int j = 0; j < nl.getLength(); j++) {
-                    Node item = nl.item(j);
-                    CrossCurricularTheme crossCurricularTheme = crossCurricularThemeService
-                            .getThemeByName(value(item).replace(" ", "_"));
-                    crossCurricularThemes.add(crossCurricularTheme);
-                }
-            }
-        }
-
-        material.setCrossCurricularThemes(crossCurricularThemes);
+        List<String> names = getNamesForCrossCurricularOrCompetence(classifications, CROSS_CURRICULAR_THEME);
+        material.setCrossCurricularThemes(crossCurricularThemeService.getThemeByName(names));
     }
 
     @Override
     protected void setKeyCompetences(Material material, Document doc) {
-        List<KeyCompetence> keyCompetences = new ArrayList<>();
         NodeList classifications = getNodeList(doc, LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION);
+        List<String> names = getNamesForCrossCurricularOrCompetence(classifications, KEY_COMPETENCE);
+        material.setKeyCompetences(keyCompetenceService.findKeyCompetenceByName(names));
+    }
+
+    private List<String> getNamesForCrossCurricularOrCompetence(NodeList classifications, String crossCurricularTheme) {
+        List<String> names  = new ArrayList<>();
         for (int i = 0; i < classifications.getLength(); i++) {
             Node classification = classifications.item(i);
 
-            NodeList nl = getNodeList(classification, getCrossOrKeyComp("keyCompetence"));
+            NodeList nl = getNodeList(classification, crossCurricularTheme);
 
             if (MaterialParserUtil.notEmpty(nl)) {
-                for (int j = 0; j < nl.getLength(); j++) {
-                    Node item = nl.item(j);
-                    // todo map first, search second
-                    KeyCompetence keyCompetence = keyCompetenceService.findKeyCompetenceByName(value(item).replace(" ", "_"));
-                    keyCompetences.add(keyCompetence);
-                }
+                List<String> subNames = IntStream.range(0, nl.getLength())
+                        .mapToObj(nl::item)
+                        .map(MaterialParserUtil::value)
+                        .map(s -> s.replace(" ", "_"))
+                        .collect(Collectors.toList());
+                names.addAll(subNames);
             }
         }
-
-        material.setKeyCompetences(keyCompetences);
+        return names;
     }
 
-    private String getCrossOrKeyComp(String keyCompetence2) {
+    private static String getCrossOrKeyComp(String keyCompetence2) {
         return "./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='" + keyCompetence2 + "']/*[local-name()='subject']";
     }
 

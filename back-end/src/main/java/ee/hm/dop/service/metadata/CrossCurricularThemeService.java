@@ -28,4 +28,8 @@ public class CrossCurricularThemeService {
         return crossCurricularThemeDao.findByName(name);
     }
 
+    public List<CrossCurricularTheme> getThemeByName(List<String> name) {
+        return crossCurricularThemeDao.findByName(name);
+    }
+
 }
