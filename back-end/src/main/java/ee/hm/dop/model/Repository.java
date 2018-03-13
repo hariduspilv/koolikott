@@ -48,6 +48,9 @@ public class Repository implements AbstractEntity {
     @JoinColumn(name = "repository")
     private List<RepositoryURL> repositoryURLs;
 
+    @Column(nullable = false)
+    private boolean used;
+
     public Long getId() {
         return id;
     }
@@ -104,6 +107,14 @@ public class Repository implements AbstractEntity {
 
     public void setRepositoryURLs(List<RepositoryURL> repositoryURLs) {
         this.repositoryURLs = repositoryURLs;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     @Override

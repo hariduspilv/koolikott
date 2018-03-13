@@ -50,7 +50,7 @@ public class SynchronizeMaterialsExecutorTest {
         repositories.add(repository1);
         repositories.add(repository2);
 
-        expect(repositoryService.getAllRepositories()).andReturn(repositories);
+        expect(repositoryService.getAllUsedRepositories()).andReturn(repositories);
 
         expectLastCall();
 
@@ -70,7 +70,7 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Test
     public void synchronizeMaterialsUnexpectedError() {
-        expect(repositoryService.getAllRepositories()).andThrow(new RuntimeException("Some error..."));
+        expect(repositoryService.getAllUsedRepositories()).andThrow(new RuntimeException("Some error..."));
 
         replay(repositoryService);
 
@@ -89,7 +89,7 @@ public class SynchronizeMaterialsExecutorTest {
         repositories.add(repository1);
         repositories.add(repository2);
 
-        expect(repositoryService.getAllRepositories()).andReturn(repositories);
+        expect(repositoryService.getAllUsedRepositories()).andReturn(repositories);
 
         expectLastCall();
 
@@ -124,7 +124,7 @@ public class SynchronizeMaterialsExecutorTest {
     @Test
     public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();
-        expect(repositoryService.getAllRepositories()).andReturn(repositories).times(2);
+        expect(repositoryService.getAllUsedRepositories()).andReturn(repositories).times(2);
         solrEngineService.updateIndex();
         expectLastCall().times(2);
 

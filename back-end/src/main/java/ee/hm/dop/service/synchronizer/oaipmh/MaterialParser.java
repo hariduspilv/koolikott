@@ -1,5 +1,27 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.taxon.*;
+import ee.hm.dop.service.author.AuthorService;
+import ee.hm.dop.service.author.PublisherService;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.metadata.ResourceTypeService;
+import ee.hm.dop.service.metadata.TagService;
+import ee.hm.dop.service.metadata.TargetGroupService;
+import ee.hm.dop.service.useractions.PeerReviewService;
+import ezvcard.Ezvcard;
+import ezvcard.VCard;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.UrlValidator;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.*;
+
+import javax.inject.Inject;
+import javax.xml.xpath.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -7,44 +29,6 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import javax.inject.Inject;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.Domain;
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Module;
-import ee.hm.dop.model.taxon.Specialization;
-import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Subtopic;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.model.taxon.Topic;
-import ee.hm.dop.service.useractions.PeerReviewService;
-import ee.hm.dop.service.author.AuthorService;
-import ee.hm.dop.service.author.PublisherService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.metadata.TargetGroupService;
-import ezvcard.Ezvcard;
-import ezvcard.VCard;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.validator.routines.UrlValidator;
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
 

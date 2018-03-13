@@ -45,6 +45,10 @@ public class RepositoryService {
         return repositoryDao.findAll();
     }
 
+    public List<Repository> getAllUsedRepositories() {
+        return repositoryDao.findByFieldList("used", true);
+    }
+
     public void synchronize(Repository repository) {
         logStart(repository);
 
