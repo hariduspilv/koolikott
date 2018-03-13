@@ -126,7 +126,7 @@ public class RepositoryService {
         Material existentMaterial = materialDao.findByRepository(repository, material.getRepositoryIdentifier());
 
         material.setRepository(repository);
-        if (repository.isEstonianPublisher()) {
+        if (repository.isContentIsEmbeddable()) {
             material.setEmbeddable(true);
         }
 

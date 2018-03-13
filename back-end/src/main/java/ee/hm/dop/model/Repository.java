@@ -38,7 +38,7 @@ public class Repository implements AbstractEntity {
     private String schema;
 
     @Column
-    private boolean isEstonianPublisher;
+    private boolean contentIsEmbeddable;
 
     @Column(nullable = false)
     private String metadataPrefix;
@@ -85,12 +85,12 @@ public class Repository implements AbstractEntity {
         this.schema = schema;
     }
 
-    public boolean isEstonianPublisher() {
-        return isEstonianPublisher;
+    public boolean isContentIsEmbeddable() {
+        return contentIsEmbeddable;
     }
 
-    public void setIsEstonianPublisher(boolean isEstonianPublisher) {
-        this.isEstonianPublisher = isEstonianPublisher;
+    public void setContentIsEmbeddable(boolean contentIsEmbeddable) {
+        this.contentIsEmbeddable = contentIsEmbeddable;
     }
 
     public String getMetadataPrefix() {
