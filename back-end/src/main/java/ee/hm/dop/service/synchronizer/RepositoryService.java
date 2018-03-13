@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.String.format;
 
@@ -148,6 +149,7 @@ public class RepositoryService {
                 repository.getRepositoryURLs().stream()
                         .map(RepositoryURL::getBaseURL)
                         .map(this::getDomainName)
+                        .filter(Objects::nonNull)
                         .anyMatch(r -> r.equals(domainName));
     }
 
