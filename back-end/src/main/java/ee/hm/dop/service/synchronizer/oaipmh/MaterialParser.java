@@ -4,10 +4,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.*;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.metadata.TargetGroupService;
+import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
@@ -33,11 +30,11 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
 
 public abstract class MaterialParser {
 
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final String NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE = "No such language for '%s'. LanguageString will have no Language";
     public static final String MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED = "Material has more or less than one source, can't be mapped.";
     public static final String ERROR_PARSING_DOCUMENT_INVALID_URL_S = "Error parsing document. Invalid URL %s";
     public static final String ERROR_PARSING_DOCUMENT_SOURCE = "Error parsing document source.";
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     private static final String[] SCHEMES = {"http", "https"};
     private static final String PUBLISHER = "PUBLISHER";
@@ -55,6 +52,8 @@ public abstract class MaterialParser {
     private AuthorService authorService;
     @Inject
     private TargetGroupService targetGroupService;
+    @Inject
+    private TaxonService taxonService;
 
     public Material parse(Document doc) throws ParseException {
         try {
@@ -507,7 +506,9 @@ public abstract class MaterialParser {
 
     protected abstract void setKeyCompetences(Material material, Document doc);
 
-    protected abstract Taxon getTaxon(String context, Class level);
+    private Taxon getTaxon(String context, Class level){
+        return taxonService.getTaxonByEstCoreName(context, level);
+    }
 
     protected abstract String getPathToContext();
 

@@ -28,8 +28,6 @@ public class MaterialParserWaramu extends MaterialParser {
     private LanguageService languageService;
     @Inject
     private TagService tagService;
-    @Inject
-    private TaxonService taxonService;
 
     @Override
     protected void setTags(Material material, Document doc) {
@@ -47,7 +45,6 @@ public class MaterialParserWaramu extends MaterialParser {
     protected void setLanguage(Material material, Document doc) {
         Element lom = getFirstLom(doc);
         setMaterialLanguage(material, lom);
-
     }
 
     @Override
@@ -132,11 +129,6 @@ public class MaterialParserWaramu extends MaterialParser {
     }
 
     @Override
-    protected Taxon getTaxon(String context, Class level) {
-        return taxonService.getTaxonByEstCoreName(context, level);
-    }
-
-    @Override
     protected void setIsPaid(Material material, Document doc) {
     }
 
@@ -173,7 +165,7 @@ public class MaterialParserWaramu extends MaterialParser {
             }
             material.setTitles(titles);
         } catch (Exception e) {
-            throw new ParseException("Error in parsing Material title");
+            throw new ParseException("Error in parsing Material title", e);
         }
     }
 

@@ -23,10 +23,12 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 public class MaterialParserEstCore extends MaterialParser {
+
     private static final String YES = "YES";
     public static final String LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION = "//*[local-name()='estcore']/*[local-name()='classification']";
     public static final String CROSS_CURRICULAR_THEME = getCrossOrKeyComp("crossCurricularTheme");
     public static final String KEY_COMPETENCE = getCrossOrKeyComp("keyCompetence");
+
     @Inject
     private LanguageService languageService;
     @Inject
@@ -35,8 +37,6 @@ public class MaterialParserEstCore extends MaterialParser {
     private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
     private KeyCompetenceService keyCompetenceService;
-    @Inject
-    private TaxonService taxonService;
     @Inject
     private LicenseTypeService licenseTypeService;
 
@@ -105,7 +105,9 @@ public class MaterialParserEstCore extends MaterialParser {
         Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
         material.setIsPaid(isPaid != null && valueToUpper(isPaid).equals(YES));
         Node licenceNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='description']/*[local-name()='value']");
-        material.setLicenseType(licenseTypeService.findByName(valueToUpper(licenceNode)));
+        if (licenceNode != null) {
+            material.setLicenseType(licenseTypeService.findByName(valueToUpper(licenceNode)));
+        }
     }
 
     @Override
@@ -151,7 +153,7 @@ public class MaterialParserEstCore extends MaterialParser {
     }
 
     private List<String> getNamesForCrossCurricularOrCompetence(NodeList classifications, String crossCurricularTheme) {
-        List<String> names  = new ArrayList<>();
+        List<String> names = new ArrayList<>();
         for (int i = 0; i < classifications.getLength(); i++) {
             Node classification = classifications.item(i);
 
@@ -171,11 +173,6 @@ public class MaterialParserEstCore extends MaterialParser {
 
     private static String getCrossOrKeyComp(String keyCompetence2) {
         return "./*[local-name()='crossCurricularThemesAndCompetences']/*[local-name()='" + keyCompetence2 + "']/*[local-name()='subject']";
-    }
-
-    @Override
-    protected Taxon getTaxon(String context, Class level) {
-        return taxonService.getTaxonByEstCoreName(context, level);
     }
 
     private Language getLanguage(Document doc) {

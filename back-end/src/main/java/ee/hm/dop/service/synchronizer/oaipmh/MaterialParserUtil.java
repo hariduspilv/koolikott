@@ -49,7 +49,6 @@ public class MaterialParserUtil {
     }
 
     public static Stream<Node> nodeStreamOf(NodeList nl) {
-        return IntStream.range(0, nl.getLength())
-                .mapToObj(nl::item);
+        return IntStream.range(0, nl.getLength()).mapToObj(nl::item);
     }
 }
