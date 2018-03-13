@@ -17,24 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaxonDao extends AbstractDao<Taxon> {
-
     private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
-    public static final String EDUCATIONAL_CONTEXT = "EDUCATIONAL_CONTEXT";
-
-    public Taxon findContextByName(String name, String level) {
-        TypedQuery<Taxon> findByName = getEntityManager()
-                .createQuery("FROM Taxon t WHERE lower(t.name) = :name and level = :level", entity()) //
-                .setParameter("name", name.toLowerCase())
-                .setParameter("level", level);
-        return getSingleResult(findByName);
-    }
-
-    public List<Taxon> findTaxonByLevel(String level) {
-        TypedQuery<Taxon> findByName = getEntityManager()
-                .createQuery("FROM Taxon t WHERE level = :level", entity()) //
-                .setParameter("level", level);
-        return getList(findByName);
-    }
 
     public List<EducationalContext> findAllEducationalContext() {
         return getEntityManager()

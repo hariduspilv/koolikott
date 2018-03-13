@@ -47,34 +47,6 @@ public class TaxonDaoTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findEducationalContextByName() {
-        Long id = 1L;
-        String name = EducationalContextC.PRESCHOOLEDUCATION;
-
-        EducationalContext educationalContext = (EducationalContext) taxonDao.findContextByName(name, TaxonDao.EDUCATIONAL_CONTEXT);
-
-        assertEducationalContext(id, name, educationalContext);
-    }
-
-    @Test
-    public void findEducationalContextByNameWrongCase() {
-        Long id = 1L;
-        String name = EducationalContextC.PRESCHOOLEDUCATION;
-
-        EducationalContext educationalContext = (EducationalContext) taxonDao.findContextByName("preschooleducation", TaxonDao.EDUCATIONAL_CONTEXT);
-
-        assertEducationalContext(id, name, educationalContext);
-    }
-
-    private void assertEducationalContext(Long id, String name, EducationalContext educationalContext) {
-        assertNotNull(educationalContext);
-        assertNotNull(educationalContext.getId());
-        assertEquals(id, educationalContext.getId());
-        assertEquals(name, educationalContext.getName());
-        assertEquals(2, educationalContext.getDomains().size());
-    }
-
-    @Test
     public void findAllEducationalContext() {
         List<EducationalContext> educationalContexts = taxonDao.findAllEducationalContext();
         assertEquals(9, educationalContexts.stream().distinct().count());
