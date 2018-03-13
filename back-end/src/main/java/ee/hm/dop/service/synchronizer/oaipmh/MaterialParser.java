@@ -469,7 +469,7 @@ public abstract class MaterialParser {
                 .filter(tag -> parentValidator.apply(parent, tag))
                 .map(tag -> getTaxonNode(taxonPath, tag, levelString))
                 .filter(Objects::nonNull)
-                .map(node -> getTaxon(node, parent.getChildrenList(), level))
+                .map(node -> getTaxon(node.getTextContent(), parent.getChildrenList(), level))
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(parent);
@@ -481,13 +481,12 @@ public abstract class MaterialParser {
                 parent instanceof Subject;
     }
 
-    private Taxon getTaxon(Node node, List<Taxon> list, Class<? extends Taxon> level) {
-        String systemName = getTaxon(node.getTextContent(), level).getName();
-        return getTaxonByName(list, systemName);
-    }
-
-    private Taxon getTaxonByName(List<Taxon> topics, String systemName) {
-        return topics.stream().filter(taxon -> taxon.getName().equals(systemName)).findAny().orElse(null);
+    private Taxon getTaxon(String name, List<Taxon> list, Class<? extends Taxon> level) {
+        String systemName = getTaxon(name, level).getName();
+        return list.stream()
+                .filter(taxon -> taxon.getName().equals(systemName))
+                .findAny()
+                .orElse(null);
     }
 
     protected abstract void setTags(Material material, Document doc);
