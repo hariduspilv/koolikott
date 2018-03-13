@@ -1,19 +1,5 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.createMockBuilder;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.NoSuchElementException;
-
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
 import org.easymock.EasyMockRunner;
 import org.junit.Test;
@@ -23,8 +9,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.NoSuchElementException;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
+
 @RunWith(EasyMockRunner.class)
 public class IdentifierIteratorTest {
+
+    public static final String RESUMPTION_TOKEN = "token";
+    public static final String BASE_URL = "repositoryURL";
 
     private IdentifierIterator getIdentifierIterator(NodeList headers, String baseURL, String resumptionToken)
             throws NoSuchMethodException {
@@ -92,9 +88,6 @@ public class IdentifierIteratorTest {
 
     @Test
     public void hasNextFirstHeadersAllConsumedThenGetNewHeaders() throws Exception {
-        String baseURL = "repositoryURL";
-        String resumptionToken = "token";
-
         NodeList nodeList1 = createMock(NodeList.class);
         expect(nodeList1.getLength()).andReturn(0); // same as index ==
                                                     // headers.length()
@@ -113,9 +106,10 @@ public class IdentifierIteratorTest {
 
         ListIdentifiers listIdentifiers = createMock(ListIdentifiers.class);
         expect(listIdentifiers.getDocument()).andReturn(document);
+        expect(listIdentifiers.getResumptionToken()).andReturn(RESUMPTION_TOKEN);
 
-        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
+        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, BASE_URL, RESUMPTION_TOKEN);
+        expect(identifierIterator.newListIdentifier(BASE_URL, RESUMPTION_TOKEN)).andReturn(listIdentifiers);
 
         replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
@@ -132,15 +126,12 @@ public class IdentifierIteratorTest {
 
     @Test
     public void hasNextFirstHeadersAllConsumedThenGetNewHeadersNull() throws Exception {
-        String baseURL = "repositoryURL";
-        String resumptionToken = "token";
-
         NodeList nodeList1 = createMock(NodeList.class);
         expect(nodeList1.getLength()).andReturn(0).times(2); // same as index ==
                                                              // headers.length()
 
-        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(null);
+        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, BASE_URL, RESUMPTION_TOKEN);
+        expect(identifierIterator.newListIdentifier(BASE_URL, RESUMPTION_TOKEN)).andReturn(null);
 
         replay(nodeList1, identifierIterator);
 
@@ -153,9 +144,6 @@ public class IdentifierIteratorTest {
 
     @Test
     public void hasNextFirstHeadersAllConsumedAndNewHeadersEmpty() throws Exception {
-        String baseURL = "repositoryURL";
-        String resumptionToken = "token";
-
         NodeList nodeList1 = createMock(NodeList.class);
         expect(nodeList1.getLength()).andReturn(0); // same as index ==
                                                     // headers.length()
@@ -172,9 +160,10 @@ public class IdentifierIteratorTest {
 
         ListIdentifiers listIdentifiers = createMock(ListIdentifiers.class);
         expect(listIdentifiers.getDocument()).andReturn(document);
+        expect(listIdentifiers.getResumptionToken()).andReturn(RESUMPTION_TOKEN);
 
-        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
+        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, BASE_URL, RESUMPTION_TOKEN);
+        expect(identifierIterator.newListIdentifier(BASE_URL, RESUMPTION_TOKEN)).andReturn(listIdentifiers);
 
         replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
@@ -188,13 +177,9 @@ public class IdentifierIteratorTest {
     /**
      * This tests the flow while hasNext, get next. It does not care about
      * returning the correct nodes, it is tested in the other tests.
-     *
-     * @throws Exception
      */
     @Test
     public void consumeAll() throws Exception {
-        String baseURL = "repositoryURL";
-        String resumptionToken = "token";
 
         Element element = createMock(Element.class);
 
@@ -217,10 +202,11 @@ public class IdentifierIteratorTest {
 
         ListIdentifiers listIdentifiers = createMock(ListIdentifiers.class);
         expect(listIdentifiers.getDocument()).andReturn(document);
+        expect(listIdentifiers.getResumptionToken()).andReturn(RESUMPTION_TOKEN);
 
-        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, baseURL, resumptionToken);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(listIdentifiers);
-        expect(identifierIterator.newListIdentifier(baseURL, resumptionToken)).andReturn(null);
+        IdentifierIterator identifierIterator = getIdentifierIterator(nodeList1, BASE_URL, RESUMPTION_TOKEN);
+        expect(identifierIterator.newListIdentifier(BASE_URL, RESUMPTION_TOKEN)).andReturn(listIdentifiers);
+        expect(identifierIterator.newListIdentifier(BASE_URL, RESUMPTION_TOKEN)).andReturn(null);
 
         replay(nodeList1, nodeList2, element, document, listIdentifiers, identifierIterator);
 
