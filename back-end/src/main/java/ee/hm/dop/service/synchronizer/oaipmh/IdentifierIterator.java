@@ -19,7 +19,7 @@ public class IdentifierIterator implements Iterator<Element> {
     private String resumptionToken;
     private int index;
 
-    public IdentifierIterator(NodeList headers, String baseURL, String resumptionToken) throws Exception {
+    public IdentifierIterator(NodeList headers, String baseURL, String resumptionToken) {
         this.baseURL = baseURL;
         this.resumptionToken = resumptionToken;
         setHeaders(headers);

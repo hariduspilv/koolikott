@@ -11,6 +11,6 @@ public class PeerReviewDao extends AbstractDao<PeerReview> {
     }
 
     public List<PeerReview> getPeerReviewByURL(List<String> url) {
-        return findByFieldList("url", url);
+        return findByFieldListInList("url", url);
     }
 }

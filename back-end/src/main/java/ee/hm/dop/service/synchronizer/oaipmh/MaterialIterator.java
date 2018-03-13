@@ -17,7 +17,6 @@ import org.w3c.dom.Element;
 public class MaterialIterator implements Iterator<Material> {
 
     private static final Logger logger = LoggerFactory.getLogger(MaterialIterator.class);
-
     @Inject
     private ListIdentifiersConnector listIdentifiersConnector;
     @Inject
@@ -51,7 +50,7 @@ public class MaterialIterator implements Iterator<Material> {
         }
 
         try {
-            Document doc = getMaterialConnector.getMaterial(repository, identifier, repository.getMetadataPrefix());
+            Document doc = getMaterialConnector.getMaterial(repository, identifier);
             return materialParser.parse(doc);
         } catch (Exception e) {
             String message = "Error getting material (id = %s) from repository (url = %s).";

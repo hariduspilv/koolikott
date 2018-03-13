@@ -22,9 +22,9 @@ public class GetMaterialConnector {
     public static final String GET_MATERIAL = "Getting material with identifier: %s from repo: %s and metadataPrefix: %s";
     public static final String UNEXPECTED_ERROR = "Unexpected error while getting material from repository (url: %s)";
 
-    public Document getMaterial(Repository repository, String identifier, String metadataPrefix) throws Exception {
-        logger.info(format(GET_MATERIAL, identifier, repository.getBaseURL(), metadataPrefix));
-        GetRecord getRecord = getRecord(repository, identifier, metadataPrefix);
+    public Document getMaterial(Repository repository, String identifier) throws Exception {
+        logger.info(format(GET_MATERIAL, identifier, repository.getBaseURL(), repository.getMetadataPrefix()));
+        GetRecord getRecord = getRecord(repository, identifier);
         return getDocument(getRecord);
     }
 
@@ -35,9 +35,9 @@ public class GetMaterialConnector {
         return getRecord.getDocument();
     }
 
-    private GetRecord getRecord(Repository repository, String identifier, String metadataPrefix) {
+    private GetRecord getRecord(Repository repository, String identifier) {
         try {
-            return newGetRecord(repository, identifier, metadataPrefix);
+            return new GetRecord(repository.getBaseURL(), identifier, repository.getMetadataPrefix());
         } catch (Exception e) {
             throw new RuntimeException(format(UNEXPECTED_ERROR, repository.getBaseURL()));
         }
@@ -59,7 +59,4 @@ public class GetMaterialConnector {
         logger.error(errorString);
     }
 
-    protected GetRecord newGetRecord(Repository repository, String identifier, String metadataPrefix) throws Exception {
-        return new GetRecord(repository.getBaseURL(), identifier, metadataPrefix);
-    }
 }

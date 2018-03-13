@@ -35,14 +35,18 @@ public class RepositoryManager {
     }
 
     protected MaterialIterator getMaterialIterator() {
-        return GuiceInjector.getInjector().getInstance(MaterialIterator.class);
+        return getInstance(MaterialIterator.class);
     }
 
     protected MaterialParser getWaramuMaterialParser() {
-        return GuiceInjector.getInjector().getInstance(MaterialParserWaramu.class);
+        return getInstance(MaterialParserWaramu.class);
     }
 
     protected MaterialParser getEstCoreMaterialParser() {
-        return GuiceInjector.getInjector().getInstance(MaterialParserEstCore.class);
+        return getInstance(MaterialParserEstCore.class);
+    }
+
+    private <T> T getInstance(Class<T> type) {
+        return GuiceInjector.getInjector().getInstance(type);
     }
 }

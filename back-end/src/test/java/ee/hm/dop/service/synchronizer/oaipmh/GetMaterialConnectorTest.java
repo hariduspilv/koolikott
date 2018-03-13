@@ -28,11 +28,11 @@ public class GetMaterialConnectorTest {
         String identifier = "wrongIdentifier";
         String metadataPrefix = "metadataPrefix";
 
-        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(null);
+        expect(getMaterialConnector.getMaterial(repository, identifier)).andReturn(null);
 
         replay(getMaterialConnector, repository);
 
-        Document doc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+        Document doc = getMaterialConnector.getMaterial(repository, identifier);
 
         verify(getMaterialConnector, repository);
 
@@ -45,11 +45,11 @@ public class GetMaterialConnectorTest {
         Repository repository = createMock(Repository.class);
 
         String metadataPrefix = "metadataPrefix";
-        expect(getMaterialConnector.getMaterial(repository, null, metadataPrefix)).andReturn(null);
+        expect(getMaterialConnector.getMaterial(repository, null)).andReturn(null);
 
         replay(getMaterialConnector, repository);
 
-        Document doc = getMaterialConnector.getMaterial(repository, null, metadataPrefix);
+        Document doc = getMaterialConnector.getMaterial(repository, null);
 
         verify(getMaterialConnector, repository);
 
@@ -66,14 +66,14 @@ public class GetMaterialConnectorTest {
         String errorMsg = "Error happened";
 
         expect(repository.getBaseURL()).andReturn(null);
-        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andThrow(
+        expect(getMaterialConnector.getMaterial(repository, identifier)).andThrow(
                 new RuntimeException(errorMsg));
 
         replay(getMaterialConnector, repository);
 
         try {
             if (repository.getBaseURL() == null) {
-                getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+                getMaterialConnector.getMaterial(repository, identifier);
             }
             fail("Exception expected.");
         } catch (RuntimeException e) {
@@ -93,12 +93,12 @@ public class GetMaterialConnectorTest {
         String metadataPrefix = "metadataPrefix";
 
         expect(repository.getBaseURL()).andReturn(baseURL);
-        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(null);
+        expect(getMaterialConnector.getMaterial(repository, identifier)).andReturn(null);
 
         replay(getMaterialConnector, repository);
 
         repository.getBaseURL();
-        Document doc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+        Document doc = getMaterialConnector.getMaterial(repository, identifier);
 
         verify(getMaterialConnector, repository);
 
@@ -114,10 +114,10 @@ public class GetMaterialConnectorTest {
         GetMaterialConnector getMaterialConnector = createMock(GetMaterialConnector.class);
         Document doc = createMock(Document.class);
 
-        expect(getMaterialConnector.getMaterial(repository, identifier, metadataPrefix)).andReturn(doc);
+        expect(getMaterialConnector.getMaterial(repository, identifier)).andReturn(doc);
 
         replay(getMaterialConnector, doc);
-        Document returnedDoc = getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+        Document returnedDoc = getMaterialConnector.getMaterial(repository, identifier);
 
         verify(getMaterialConnector, doc);
 
@@ -132,7 +132,7 @@ public class GetMaterialConnectorTest {
         String metadataPrefix = "metadataPrefix";
         Repository repository = new Repository();
 
-        getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+        getMaterialConnector.getMaterial(repository, identifier);
 
     }
 
@@ -145,7 +145,7 @@ public class GetMaterialConnectorTest {
         Repository repository = getRepository();
 
         try {
-            getMaterialConnector.getMaterial(repository, identifier, metadataPrefix);
+            getMaterialConnector.getMaterial(repository, identifier);
             fail("Exception expected.");
         } catch (Exception e) {
             assertEquals(errorMessage, e.getMessage());
@@ -159,7 +159,7 @@ public class GetMaterialConnectorTest {
         String metadataPrefix = "metadataPrefix";
         Repository repository = getRepository();
 
-        GetRecord newGetRecord = getMaterialConnector.newGetRecord(repository, identifier, metadataPrefix);
+        GetRecord newGetRecord = new GetRecord(repository.getBaseURL(), identifier, repository.getMetadataPrefix());
 
         assertNotNull(newGetRecord);
     }

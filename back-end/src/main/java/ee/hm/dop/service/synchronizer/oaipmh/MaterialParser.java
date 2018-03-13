@@ -36,6 +36,7 @@ public abstract class MaterialParser {
     public static final String NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE = "No such language for '%s'. LanguageString will have no Language";
     public static final String MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED = "Material has more or less than one source, can't be mapped.";
     public static final String ERROR_PARSING_DOCUMENT_INVALID_URL_S = "Error parsing document. Invalid URL %s";
+    public static final String ERROR_PARSING_DOCUMENT_SOURCE = "Error parsing document source.";
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     private static final String[] SCHEMES = {"http", "https"};
@@ -289,7 +290,7 @@ public abstract class MaterialParser {
         try {
             material.setSource(getSource(doc));
         } catch (Exception e) {
-            throw new ParseException("Error parsing document source.", e);
+            throw new ParseException(ERROR_PARSING_DOCUMENT_SOURCE, e);
         }
     }
 

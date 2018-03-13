@@ -11,7 +11,7 @@ import org.w3c.dom.NodeList;
 
 public class ListIdentifiersConnector {
 
-    String resumptionToken;
+    private String resumptionToken;
     private NodeList headers;
     private String baseURL;
 
@@ -23,7 +23,7 @@ public class ListIdentifiersConnector {
         return this;
     }
 
-    public Iterator<Element> iterator() throws Exception {
+    public Iterator<Element> iterator() {
         return new IdentifierIterator(headers, baseURL, resumptionToken);
     }
 
