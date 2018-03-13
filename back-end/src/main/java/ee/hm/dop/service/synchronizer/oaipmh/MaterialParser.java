@@ -480,9 +480,9 @@ public abstract class MaterialParser {
     }
 
     private Taxon getTaxon(String name, List<Taxon> list, Class<? extends Taxon> level) {
-        String systemName = getTaxon(name, level).getName();
+        List<String> systemNames = getTaxonNames(name, level);
         return list.stream()
-                .filter(taxon -> taxon.getName().equals(systemName))
+                .filter(taxon -> systemNames.contains(taxon.getName()))
                 .findAny()
                 .orElse(null);
     }
@@ -523,6 +523,13 @@ public abstract class MaterialParser {
         return taxonService.getTaxonByEstCoreName(context, level);
     }
 
+    private List<String> getTaxonNames(String context, Class<? extends Taxon> level){
+        return taxonService.getTaxonsByEstCoreName(context, level).stream()
+                .map(Taxon::getName)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+    
     private Node getTaxonNode(Node taxonPath, String tag, String domain) {
         return getNode(taxonPath, taxonPath(tag, domain));
     }

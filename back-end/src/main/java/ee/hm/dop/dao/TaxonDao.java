@@ -5,7 +5,6 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +49,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .setMaxResults(1));
     }
 
-    public Taxon findTaxonByRepoName(String name, Class<? extends Taxon> level) {
+    public Taxon findTaxonByEstCoreName(String name, Class<? extends Taxon> level) {
         List<Taxon> taxons = getEntityManager()
                 .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name",
                         entity()).setParameter("name", name.toLowerCase()).getResultList();
@@ -68,6 +67,15 @@ public class TaxonDao extends AbstractDao<Taxon> {
         logger.error(String.format("Found multiple taxons for parameters: name - %s, level - %s, ids - %s",
                 ids, name, level.getSimpleName()));
         return res.get(0);
+    }
+
+    public List<Taxon> findTaxonsByEstCoreName(String name, Class<? extends Taxon> level) {
+        List<Taxon> taxons = getEntityManager()
+                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name",
+                        entity()).setParameter("name", name.toLowerCase()).getResultList();
+        return taxons.stream()
+                .filter(t -> level.isAssignableFrom(t.getClass()))
+                .collect(Collectors.toList());
     }
 
     public List<Taxon> getUserTaxons(User user) {

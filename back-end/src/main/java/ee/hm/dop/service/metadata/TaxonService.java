@@ -32,7 +32,11 @@ public class TaxonService {
     }
 
     public Taxon getTaxonByEstCoreName(String name, Class<? extends Taxon> level) {
-        return taxonDao.findTaxonByRepoName(name, level);
+        return taxonDao.findTaxonByEstCoreName(name, level);
+    }
+
+    public List<Taxon> getTaxonsByEstCoreName(String name, Class<? extends Taxon> level) {
+        return taxonDao.findTaxonsByEstCoreName(name, level);
     }
 
     public Taxon findTaxonByTranslation(String name) {

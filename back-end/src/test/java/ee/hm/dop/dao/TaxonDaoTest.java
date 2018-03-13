@@ -82,7 +82,7 @@ public class TaxonDaoTest extends DatabaseTestBase {
 
     @Test
     public void findTaxonByRepoName() {
-        Taxon taxon = taxonDao.findTaxonByRepoName("Mathematics", Domain.class);
+        Taxon taxon = taxonDao.findTaxonByEstCoreName("Mathematics", Domain.class);
 
         assertNotNull(taxon);
         assertNotNull(taxon.getId());
@@ -90,7 +90,7 @@ public class TaxonDaoTest extends DatabaseTestBase {
 
     @Test
     public void findTaxonByRepoNameIgnoreCase() {
-        Taxon taxon = taxonDao.findTaxonByRepoName("matheMAtics", Domain.class);
+        Taxon taxon = taxonDao.findTaxonByEstCoreName("matheMAtics", Domain.class);
 
         assertNotNull(taxon);
         assertNotNull(taxon.getId());
