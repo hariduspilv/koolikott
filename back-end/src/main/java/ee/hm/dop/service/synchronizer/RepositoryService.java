@@ -54,22 +54,25 @@ public class RepositoryService {
 
         long start = System.currentTimeMillis();
 
-        DateTime startSyncDateTime;
-        MaterialIterator materials;
-        try {
-            materials = repositoryManager.getMaterialsFrom(repository);
-            startSyncDateTime = DateTime.now();
-        } catch (Exception e) {
-            logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
-            return;
-        }
+        MaterialIteratorAndDate materialIteratorAndDate = getMaterialIterator(repository);
+        if (materialIteratorAndDate == null) return;
 
-        SynchronizationAudit audit = synchronize(repository, materials);
+        SynchronizationAudit audit = synchronize(repository, materialIteratorAndDate.getIterator());
 
-        repository.setLastSynchronization(startSyncDateTime);
-        updateRepositoryData(repository);
+        repository.setLastSynchronization(materialIteratorAndDate.getSyncDate());
+        repositoryDao.updateRepository(repository);
 
         logEnd(audit, start);
+    }
+
+    private MaterialIteratorAndDate getMaterialIterator(Repository repository) {
+        try {
+            MaterialIterator materials = repositoryManager.getMaterialsFrom(repository);
+            return new MaterialIteratorAndDate(materials, DateTime.now());
+        } catch (Exception e) {
+            logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
+            return null;
+        }
     }
 
     private SynchronizationAudit synchronize(Repository repository, MaterialIterator materials) {
@@ -105,7 +108,7 @@ public class RepositoryService {
     private void logEnd(SynchronizationAudit audit, long start) {
         long end = System.currentTimeMillis();
         logger.info(format("Updating materials took %s milliseconds. Successfully downloaded %s"
-                + " materials (of which %s are deleted materials) and %s materials failed to download of total %s", end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
+                        + " materials (of which %s are deleted materials) and %s materials failed to download of total %s", end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
                 audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
         logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted", audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
     }
@@ -210,7 +213,7 @@ public class RepositoryService {
                 @Override
                 public void copyProperty(Object dest, String name, Object value)
                         throws IllegalAccessException, InvocationTargetException {
-                    if (value != null && !isEmpty(value)) {
+                    if (isNotEmpty(value)) {
                         super.copyProperty(dest, name, value);
                     }
                 }
@@ -218,6 +221,10 @@ public class RepositoryService {
         } catch (Exception e) {
             logger.error("Unable to merge existing material and downloaded material from the repository", e);
         }
+    }
+
+    private boolean isNotEmpty(Object value) {
+        return value != null && !isEmpty(value);
     }
 
     private boolean isEmpty(Object value) {
@@ -228,7 +235,4 @@ public class RepositoryService {
         }
     }
 
-    private void updateRepositoryData(Repository repository) {
-        repositoryDao.updateRepository(repository);
-    }
 }
