@@ -15,8 +15,7 @@ public class RepositoryManager {
     public MaterialIterator getMaterialsFrom(Repository repository) throws Exception {
         MaterialIterator materialIterator = getMaterialIterator();
 
-        MaterialParser materialParser = getParser(repository);
-        materialIterator.setParser(materialParser);
+        materialIterator.setParser(getParser(repository));
         materialIterator.connect(repository);
 
         return materialIterator;
