@@ -208,11 +208,23 @@ public class MaterialService {
         }
 
         Material createOrUpdate = materialDao.createOrUpdate(material);
+        logCreated(isNew, createOrUpdate);
+        return createOrUpdate;
+    }
+
+    private void logCreated(boolean isNew, Material createOrUpdate) {
         if (isNew) {
             logger.info("Created material, id: " + createOrUpdate.getId());
-            logger.info("Created material, repositoryIdentifier: " + createOrUpdate.getRepositoryIdentifier());
+        } else {
+            logger.info("Updated material, id: " + createOrUpdate.getId());
         }
-        return createOrUpdate;
+        if (createOrUpdate.getRepositoryIdentifier() != null) {
+            if (isNew) {
+                logger.info("Created material, repositoryIdentifier: " + createOrUpdate.getRepositoryIdentifier());
+            } else {
+                logger.info("Updated material, repositoryIdentifier: " + createOrUpdate.getRepositoryIdentifier());
+            }
+        }
     }
 
     private boolean cantSet(Material material) {
