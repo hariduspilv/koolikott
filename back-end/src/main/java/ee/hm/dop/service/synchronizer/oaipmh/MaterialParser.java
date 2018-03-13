@@ -449,16 +449,16 @@ public abstract class MaterialParser {
         return setTaxon(taxonPath, parent, Subject.class, "subject", (t, key) -> t instanceof Domain);
     }
 
-    private Taxon setTopic(Node taxonPath, Taxon parent) {
-        return setTaxon(taxonPath, parent, Topic.class, "topic", this::topicParentValidation);
-    }
-
     private Taxon setSpecialization(Node taxonPath, Taxon parent) {
         return setTaxon(taxonPath, parent, Specialization.class, "specialization", (t, key) -> t instanceof Domain);
     }
 
     private Taxon setModule(Node taxonPath, Taxon parent) {
         return setTaxon(taxonPath, parent, Module.class, "module", (t, key) -> t instanceof Specialization);
+    }
+
+    private Taxon setTopic(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Topic.class, "topic", this::topicParentValidation);
     }
 
     private Taxon setSubTopic(Node taxonPath, Taxon parent) {
@@ -477,8 +477,8 @@ public abstract class MaterialParser {
     }
 
     private boolean topicParentValidation(Taxon parent, String tag) {
-        return parent instanceof Module && tag.equals(MaterialParserUtil.VOCATIONAL_TAXON) ||
-                parent instanceof Domain && tag.equals(MaterialParserUtil.PRESCHOOL_TAXON) ||
+        return parent instanceof Domain && tag.equals(MaterialParserUtil.PRESCHOOL_TAXON) ||
+                parent instanceof Module && tag.equals(MaterialParserUtil.VOCATIONAL_TAXON) ||
                 parent instanceof Subject;
     }
 
@@ -499,6 +499,16 @@ public abstract class MaterialParser {
 
     protected abstract void setTitles(Material material, Document doc) throws ParseException;
 
+    protected abstract void setIsPaid(Material material, Document doc);
+
+    protected abstract void setPicture(Material material, Document doc);
+
+    protected abstract void setCrossCurricularThemes(Material material, Document doc);
+
+    protected abstract void setKeyCompetences(Material material, Document doc);
+
+    protected abstract Taxon getTaxon(String context, Class level);
+
     protected abstract String getPathToContext();
 
     protected abstract String getPathToResourceType();
@@ -509,21 +519,15 @@ public abstract class MaterialParser {
 
     protected abstract String getPathToContribute();
 
-    protected abstract void setIsPaid(Material material, Document doc);
-
     protected abstract String getPathToTargetGroups();
 
     protected abstract String getPathToCurriculumLiterature();
 
-    protected abstract void setPicture(Material material, Document doc);
-
-    protected abstract void setCrossCurricularThemes(Material material, Document doc);
-
-    protected abstract void setKeyCompetences(Material material, Document doc);
-
     protected abstract String getPathToClassification();
 
-    protected abstract Taxon getTaxon(String context, Class level);
+    private Node getTaxonNode(Node taxonPath, String tag, String domain) {
+        return getNode(taxonPath, taxonPath(tag, domain));
+    }
 
     private String taxonPath(String tag, String domain) {
         return "./*[local-name()='" + tag + "']/*[local-name()='" + domain + "']";
@@ -532,9 +536,5 @@ public abstract class MaterialParser {
     private void logFail(RuntimeException e) {
         logger.error("Unexpected error while parsing document. Document may not"
                 + " match mapping or XML structure - " + e.getMessage(), e);
-    }
-
-    private Node getTaxonNode(Node taxonPath, String tag, String domain) {
-        return getNode(taxonPath, taxonPath(tag, domain));
     }
 }

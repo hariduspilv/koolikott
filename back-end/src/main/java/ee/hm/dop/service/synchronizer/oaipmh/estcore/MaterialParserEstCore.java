@@ -9,14 +9,10 @@ import javax.inject.Inject;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
-import ee.hm.dop.service.metadata.CrossCurricularThemeService;
-import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.metadata.TaxonService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.w3c.dom.Document;
@@ -24,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 public class MaterialParserEstCore extends MaterialParser {
     private static final String YES = "YES";
@@ -40,6 +37,8 @@ public class MaterialParserEstCore extends MaterialParser {
     private KeyCompetenceService keyCompetenceService;
     @Inject
     private TaxonService taxonService;
+    @Inject
+    private LicenseTypeService licenseTypeService;
 
     @Override
     protected String getPathToResourceType() {
@@ -104,7 +103,9 @@ public class MaterialParserEstCore extends MaterialParser {
     @Override
     protected void setIsPaid(Material material, Document doc) {
         Node isPaid = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='cost']/*[local-name()='value']");
-        material.setIsPaid(isPaid != null && MaterialParserUtil.valueToUpper(isPaid).equals(YES));
+        material.setIsPaid(isPaid != null && valueToUpper(isPaid).equals(YES));
+        Node licenceNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='description']/*[local-name()='value']");
+        material.setLicenseType(licenseTypeService.findByName(valueToUpper(licenceNode)));
     }
 
     @Override
