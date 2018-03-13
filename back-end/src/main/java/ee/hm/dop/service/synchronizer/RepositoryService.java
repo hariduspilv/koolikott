@@ -175,30 +175,28 @@ public class RepositoryService {
     }
 
     Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, boolean isRepoMaterial) {
-        Material updatedMaterial = null;
-
-        if (isRepoMaterial) {
-            if (newMaterial.isDeleted()) {
-                logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
-                materialService.delete(existentMaterial);
-                audit.existingMaterialDeleted();
-            } else {
-                logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
-                createPicture(newMaterial);
-                mergeTwoObjects(newMaterial, existentMaterial);
-
-                updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
-                audit.existingMaterialUpdated();
-            }
-        } else {
+        if (!isRepoMaterial) {
             logger.info("Updating material with external link - updating all fields that are currently null in DB");
             createPicture(newMaterial);
             mergeTwoObjects(existentMaterial, newMaterial);
 
-            updatedMaterial = materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE);
+            Material updatedMaterial = materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE);
             audit.existingMaterialUpdated();
+            return updatedMaterial;
         }
 
+        if (newMaterial.isDeleted()) {
+            logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
+            materialService.delete(existentMaterial);
+            audit.existingMaterialDeleted();
+            return null;
+        }
+        logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
+        createPicture(newMaterial);
+        mergeTwoObjects(newMaterial, existentMaterial);
+
+        Material updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
+        audit.existingMaterialUpdated();
         return updatedMaterial;
     }
 
