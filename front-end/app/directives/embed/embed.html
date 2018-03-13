@@ -69,7 +69,7 @@
   <div data-ng-if="(type === 'LINK' || !type) && !$ctrl.hideLink">
     <a
       data-ng-href="{{url}}"
-      data-ng-bind="url"
+      data-ng-bind="displayUrl ? displayUrl : url"
       target="_blank"
       class="embedded-material__link md-primary"
     ></a>

@@ -91,9 +91,11 @@ class controller extends Controller {
                             )
                                 this.serverCallService
                                     .makeGet('rest/user/getSignedUserData')
-                                    .then(({ data }) =>
+                                    .then(({ data }) => {
+                                        this.$scope.displayUrl = angular.copy(this.$scope.url);
                                         this.$scope.url =
                                             `${url}${url.includes('?') ? '&' : '?'}dop_token=${encodeURIComponent(data)}`
+                                        }
                                     )
                         }
                     })
