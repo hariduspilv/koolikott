@@ -12,7 +12,6 @@ import java.util.List;
 
 public class TaxonService {
 
-    public static final String EST_CORE_TAXON_MAPPING = "EstCoreTaxonMapping";
     public static final List<String> TAXON_PREFIXES = Collections.unmodifiableList(Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_"));
 
     @Inject
@@ -32,8 +31,8 @@ public class TaxonService {
         return taxonDao.findAllEducationalContext();
     }
 
-    public Taxon getTaxonByEstCoreName(String name, Class level) {
-        return taxonDao.findTaxonByRepoName(name, EST_CORE_TAXON_MAPPING, level);
+    public Taxon getTaxonByEstCoreName(String name, Class<? extends Taxon> level) {
+        return taxonDao.findTaxonByRepoName(name, level);
     }
 
     public Taxon findTaxonByTranslation(String name) {

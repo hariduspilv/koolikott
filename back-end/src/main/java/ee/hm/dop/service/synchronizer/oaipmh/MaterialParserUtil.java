@@ -1,5 +1,7 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
+import ee.hm.dop.model.Material;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -50,5 +52,12 @@ public class MaterialParserUtil {
 
     public static Stream<Node> nodeStreamOf(NodeList nl) {
         return IntStream.range(0, nl.getLength()).mapToObj(nl::item);
+    }
+
+    public static Material buildDeletedMaterial(String identifier) {
+        Material material = new Material();
+        material.setRepositoryIdentifier(identifier);
+        material.setDeleted(true);
+        return material;
     }
 }

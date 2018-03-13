@@ -1,5 +1,6 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.buildDeletedMaterial;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
 import static java.lang.String.format;
 
@@ -57,13 +58,6 @@ public class MaterialIterator implements Iterator<Material> {
             logger.error(format(message, identifier, repository.getBaseURL()), e);
             throw new RuntimeException(e);
         }
-    }
-
-    private Material buildDeletedMaterial(String identifier) {
-        Material material = new Material();
-        material.setRepositoryIdentifier(identifier);
-        material.setDeleted(true);
-        return material;
     }
 
     private boolean isDeleted(Element header) {

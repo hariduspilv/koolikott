@@ -35,12 +35,12 @@ public abstract class MaterialParser {
     public static final String MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED = "Material has more or less than one source, can't be mapped.";
     public static final String ERROR_PARSING_DOCUMENT_INVALID_URL_S = "Error parsing document. Invalid URL %s";
     public static final String ERROR_PARSING_DOCUMENT_SOURCE = "Error parsing document source.";
-    private static final String TAXON_PATH = "./*[local-name()='taxonPath']";
-    private static final String[] SCHEMES = {"http", "https"};
-    private static final String PUBLISHER = "PUBLISHER";
-    private static final String AUTHOR = "AUTHOR";
+    public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
+    public static final String PUBLISHER = "PUBLISHER";
+    public static final String AUTHOR = "AUTHOR";
+    private static final UrlValidator URL_VALIDATOR = new UrlValidator(new String[]{"http", "https"});
     private static final Map<String, String> taxonMap = MaterialParserUtil.getTaxonMap();
-    private XPath xpath = XPathFactory.newInstance().newXPath();
+    private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
@@ -115,7 +115,7 @@ public abstract class MaterialParser {
 
     private void setIdentifier(Material material, Document doc) {
         Element header = (Element) doc.getElementsByTagName("header").item(0);
-        Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
+        Node identifier = getFirst(header, "identifier");
         material.setRepositoryIdentifier(value(identifier));
     }
 
@@ -301,8 +301,7 @@ public abstract class MaterialParser {
         }
         String source = getInitialSource(nodeList);
 
-        UrlValidator urlValidator = new UrlValidator(SCHEMES);
-        if (!urlValidator.isValid(source)) {
+        if (!URL_VALIDATOR.isValid(source)) {
             logger.error(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
             throw new ParseException(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
         }
@@ -406,7 +405,6 @@ public abstract class MaterialParser {
         } catch (XPathExpressionException ignored) {
             return null;
         }
-
     }
 
     protected Node getNode(Node node, String path) {
@@ -505,10 +503,6 @@ public abstract class MaterialParser {
 
     protected abstract void setKeyCompetences(Material material, Document doc);
 
-    private Taxon getTaxon(String context, Class level){
-        return taxonService.getTaxonByEstCoreName(context, level);
-    }
-
     protected abstract String getPathToContext();
 
     protected abstract String getPathToResourceType();
@@ -524,6 +518,10 @@ public abstract class MaterialParser {
     protected abstract String getPathToCurriculumLiterature();
 
     protected abstract String getPathToClassification();
+
+    private Taxon getTaxon(String context, Class<? extends Taxon> level){
+        return taxonService.getTaxonByEstCoreName(context, level);
+    }
 
     private Node getTaxonNode(Node taxonPath, String tag, String domain) {
         return getNode(taxonPath, taxonPath(tag, domain));

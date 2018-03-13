@@ -156,7 +156,7 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected void setTitles(Material material, Document doc) throws ParseException {
+        protected void setTitles(Material material, Document doc) {
         }
 
         @Override
@@ -195,11 +195,6 @@ public class MaterialParserTest {
         }
 
         @Override
-        protected Taxon getTaxon(String context, Class level) {
-            return null;
-        }
-
-        @Override
         protected void setIsPaid(Material material, Document doc) {
         }
 
@@ -223,12 +218,10 @@ public class MaterialParserTest {
 
         @Override
         protected void setCrossCurricularThemes(Material material, Document doc) {
-
         }
 
         @Override
         protected void setKeyCompetences(Material material, Document doc) {
-
         }
 
         @Override

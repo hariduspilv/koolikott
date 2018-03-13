@@ -6,6 +6,8 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 public class TaxonDao extends AbstractDao<Taxon> {
 
+    private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
     public static final String EDUCATIONAL_CONTEXT = "EDUCATIONAL_CONTEXT";
 
     public Taxon findContextByName(String name, String level) {
@@ -47,18 +50,24 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .setMaxResults(1));
     }
 
-    public Taxon findTaxonByRepoName(String name, String repoTable, Class<? extends Taxon> level) {
+    public Taxon findTaxonByRepoName(String name, Class<? extends Taxon> level) {
         List<Taxon> taxons = getEntityManager()
-                .createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE lower(t.name) = :name",
+                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name",
                         entity()).setParameter("name", name.toLowerCase()).getResultList();
         List<Taxon> res = taxons.stream()
                 .filter(t -> level.isAssignableFrom(t.getClass()))
                 .collect(Collectors.toList());
 
-        if (CollectionUtils.isNotEmpty(res)) {
+        if (res.isEmpty()) {
+            return null;
+        }
+        if (res.size() == 1) {
             return res.get(0);
         }
-        return null;
+        String ids = res.stream().map(Taxon::getId).map(Object::toString).collect(Collectors.joining(", "));
+        logger.error(String.format("Found multiple taxons for parameters: name - %s, level - %s, ids - %s",
+                ids, name, level.getSimpleName()));
+        return res.get(0);
     }
 
     public List<Taxon> getUserTaxons(User user) {
