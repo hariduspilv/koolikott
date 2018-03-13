@@ -1,5 +1,6 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
 import static java.lang.String.format;
 
 import java.util.Iterator;
@@ -19,7 +20,6 @@ public class MaterialIterator implements Iterator<Material> {
 
     @Inject
     private ListIdentifiersConnector listIdentifiersConnector;
-
     @Inject
     private GetMaterialConnector getMaterialConnector;
 
@@ -42,10 +42,8 @@ public class MaterialIterator implements Iterator<Material> {
 
     @Override
     public Material next() {
-        Material material;
-
         Element header = identifierIterator.next();
-        String identifier = header.getElementsByTagName("identifier").item(0).getTextContent();
+        String identifier = getFirst(header, "identifier").getTextContent();
         logger.info("Next material identifier is: " + identifier);
 
         if (isDeleted(header)) {
@@ -54,14 +52,12 @@ public class MaterialIterator implements Iterator<Material> {
 
         try {
             Document doc = getMaterialConnector.getMaterial(repository, identifier, repository.getMetadataPrefix());
-            material = materialParser.parse(doc);
+            return materialParser.parse(doc);
         } catch (Exception e) {
             String message = "Error getting material (id = %s) from repository (url = %s).";
             logger.error(format(message, identifier, repository.getBaseURL()), e);
             throw new RuntimeException(e);
         }
-
-        return material;
     }
 
     private Material buildDeletedMaterial(String identifier) {

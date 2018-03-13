@@ -6,6 +6,7 @@ import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
+import ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
@@ -188,10 +190,6 @@ public class MaterialParserWaramu extends MaterialParser {
     private Language getMaterialLanguage(Element lom) {
         Node item = getFirst(lom, "language");
         return languageService.getLanguage(value(item));
-    }
-
-    private Node getFirst(Element lom, String description) {
-        return lom.getElementsByTagName(description).item(0);
     }
 
     private Element getFirstLom(Document doc) {

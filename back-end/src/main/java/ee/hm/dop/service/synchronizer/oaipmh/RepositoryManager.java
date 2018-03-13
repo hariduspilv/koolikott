@@ -23,21 +23,15 @@ public class RepositoryManager {
     }
 
     private MaterialParser getParser(Repository repository) {
-        MaterialParser parser;
-
         switch (repository.getSchema()) {
             case WARAMU_PARSER:
-                parser = getWaramuMaterialParser();
-                break;
+                return getWaramuMaterialParser();
             case ESTCORE_PARSER:
-                parser = getEstCoreMaterialParser();
-                break;
+                return getEstCoreMaterialParser();
             default:
                 throw new RuntimeException(format("No parser for schema %s or wrong repository URL",
                         repository.getSchema()));
         }
-
-        return parser;
     }
 
     protected MaterialIterator getMaterialIterator() {

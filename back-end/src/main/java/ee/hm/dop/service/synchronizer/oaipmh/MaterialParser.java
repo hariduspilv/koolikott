@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
@@ -194,7 +193,7 @@ public abstract class MaterialParser {
     }
 
     protected List<Tag> getTagsFromKeywords(NodeList nl, TagService tagService) {
-        return getNodeStream(nl)
+        return nodeStreamOf(nl)
                 .map(MaterialParserUtil::valueToLower)
                 .distinct()
                 .map(s -> mapTag(tagService, s))
@@ -389,7 +388,7 @@ public abstract class MaterialParser {
         if (node == null) {
             return "";
         }
-        return getNodeStream(node.getChildNodes())
+        return nodeStreamOf(node.getChildNodes())
                 .filter(item -> StringUtils.isNotEmpty(value(item)))
                 .map(item -> getVCardWithNewLines((CharacterData) item))
                 .findFirst()
@@ -397,12 +396,7 @@ public abstract class MaterialParser {
     }
 
     protected Stream<Node> getNodeStream(Document doc, String path) {
-        return getNodeStream(getNodeList(doc, path));
-    }
-
-    protected Stream<Node> getNodeStream(NodeList nl) {
-        return IntStream.range(0, nl.getLength())
-                .mapToObj(nl::item);
+        return nodeStreamOf(getNodeList(doc, path));
     }
 
     protected NodeList getNodeList(Node node, String path) {
@@ -432,7 +426,7 @@ public abstract class MaterialParser {
             NodeList nl = getNodeList(classifications.item(i), TAXON_PATH);
 
             if (notEmpty(nl)) {
-                nodes.addAll(getNodeStream(nl).collect(Collectors.toList()));
+                nodes.addAll(nodeStreamOf(nl).collect(Collectors.toList()));
             }
         }
         return nodes;

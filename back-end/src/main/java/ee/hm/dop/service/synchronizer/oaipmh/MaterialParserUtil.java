@@ -1,10 +1,13 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class MaterialParserUtil {
 
@@ -39,5 +42,14 @@ public class MaterialParserUtil {
 
     public static boolean isSpecialEducation(String context) {
         return context.equals(SPECIALEDUCATION);
+    }
+
+    public static Node getFirst(Element element, String description) {
+        return element.getElementsByTagName(description).item(0);
+    }
+
+    public static Stream<Node> nodeStreamOf(NodeList nl) {
+        return IntStream.range(0, nl.getLength())
+                .mapToObj(nl::item);
     }
 }
