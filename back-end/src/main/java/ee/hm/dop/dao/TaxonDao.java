@@ -50,29 +50,25 @@ public class TaxonDao extends AbstractDao<Taxon> {
     }
 
     public Taxon findTaxonByEstCoreName(String name, Class<? extends Taxon> level) {
-        List<Taxon> taxons = getEntityManager()
-                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name",
-                        entity()).setParameter("name", name.toLowerCase()).getResultList();
-        List<Taxon> res = taxons.stream()
-                .filter(t -> level.isAssignableFrom(t.getClass()))
-                .collect(Collectors.toList());
+        List<Taxon> taxons = findTaxonsByEstCoreName(name, level);
 
-        if (res.isEmpty()) {
+        if (taxons.isEmpty()) {
             return null;
         }
-        if (res.size() == 1) {
-            return res.get(0);
+        if (taxons.size() == 1) {
+            return taxons.get(0);
         }
-        String ids = res.stream().map(Taxon::getId).map(Object::toString).collect(Collectors.joining(", "));
+        String ids = taxons.stream().map(Taxon::getId).map(Object::toString).collect(Collectors.joining(", "));
         logger.error(String.format("Found multiple taxons for parameters: name - %s, level - %s, ids - %s",
                 ids, name, level.getSimpleName()));
-        return res.get(0);
+        return taxons.get(0);
     }
 
     public List<Taxon> findTaxonsByEstCoreName(String name, Class<? extends Taxon> level) {
         List<Taxon> taxons = getEntityManager()
-                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name",
-                        entity()).setParameter("name", name.toLowerCase()).getResultList();
+                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name", entity())
+                .setParameter("name", name.toLowerCase())
+                .getResultList();
         return taxons.stream()
                 .filter(t -> level.isAssignableFrom(t.getClass()))
                 .collect(Collectors.toList());
