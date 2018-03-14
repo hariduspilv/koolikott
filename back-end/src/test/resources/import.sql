@@ -271,10 +271,19 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(32, null, null, 'http://www.bieber32.com', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(33, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(33, null, null, 'http://www.bieber33.com', null, null, false, false, false);
+--Review test
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(34, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(34, null, null, 'http://www.bieber34.com', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(35, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(35, null, null, 'http://www.bieber35.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(36, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(36, null, null, 'http://www.bieber36.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(37, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(37, null, null, 'http://www.bieber37.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(38, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(38, null, null, 'http://www.bieber38.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(39, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(39, null, null, 'http://www.bieber39.com', null, null, false, false, false);
 
 
 -- Authors
@@ -546,6 +555,8 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Portfolio(id, title, originalCreator, summary) VALUES (115, 'Broken portfolio', 6, 'Beta.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (116, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
 insert into Portfolio(id, title, originalCreator, summary) VALUES (116, 'This portfolio is public. ', 2, 'Summary. Wow.');
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (117, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
+insert into Portfolio(id, title, originalCreator, summary) VALUES (117, 'This portfolio is public. ', 2, 'Summary. Wow.');
 
 -- Chapter
 
@@ -614,13 +625,27 @@ insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) 
 insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (6, 9, 104, '2014-06-01 00:00:01', true);
 insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (7, 9, 4, '2014-06-01 00:00:01', true);
 insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (15, 9, 15, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (34, 9, 34, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (35, 9, 35, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (36, 9, 36, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (37, 9, 37, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (38, 9, 38, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (39, 9, 39, '2014-06-01 00:00:01', false);
 insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (115, 9, 115, '2014-06-01 00:00:01', false);
+insert into ImproperContent(id, createdBy, learningObject, createdAt, reviewed) values (117, 9, 117, '2014-06-01 00:00:01', false);
 
 -- Reviewable Change
 
 insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (15, 9, 15, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (34, 9, 34, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (35, 9, 35, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (36, 9, 36, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (37, 9, 37, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (38, 9, 38, '2014-06-01 00:00:01', false, 'www.bieber.ee');
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (39, 9, 39, '2014-06-01 00:00:01', false, 'www.bieber.ee');
 insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource) values (8, 9, 8, '2014-06-01 00:00:01', false, 'www.bieber.ee');
 insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource, taxon) values (115, 9, 115, '2014-06-01 00:00:01', false, NULL , 1);
+insert into ReviewableChange(id, createdBy, learningObject, createdAt, reviewed, materialSource, taxon) values (117, 9, 117, '2014-06-01 00:00:01', false, NULL , 1);
 
 -- TagUpVotes
 
@@ -712,8 +737,12 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (30, 1, CURR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (31, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (32, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (33, 1, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (34, 1, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (35, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (34, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (35, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (36, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (37, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (38, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (39, 0, CURRENT_TIMESTAMP);
 
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (101, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (102, 1, CURRENT_TIMESTAMP);
@@ -730,6 +759,8 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (112, 1, CUR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (113, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (114, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (115, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (116, 0, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (117, 0, CURRENT_TIMESTAMP);
 
 -- Version
 
