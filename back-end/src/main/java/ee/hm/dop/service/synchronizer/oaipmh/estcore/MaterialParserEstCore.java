@@ -106,7 +106,7 @@ public class MaterialParserEstCore extends MaterialParser {
         material.setIsPaid(isPaid != null && valueToUpper(isPaid).equals(YES));
         Node licenceNode = getNode(doc, "//*[local-name()='estcore']/*[local-name()='rights']/*[local-name()='description']/*[local-name()='value']");
         if (licenceNode != null) {
-            material.setLicenseType(licenseTypeService.findByName(valueToUpper(licenceNode)));
+            material.setLicenseType(licenseTypeService.findByNameIgnoreCase(valueToUpper(licenceNode)));
         }
     }
 

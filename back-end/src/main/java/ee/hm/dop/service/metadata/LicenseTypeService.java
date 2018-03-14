@@ -19,4 +19,8 @@ public class LicenseTypeService {
     public LicenseType findByName(String name) {
         return licenseTypeDao.findByName(name);
     }
+
+    public LicenseType findByNameIgnoreCase(String name) {
+        return licenseTypeDao.findByNameIgnoreCase(name);
+    }
 }
