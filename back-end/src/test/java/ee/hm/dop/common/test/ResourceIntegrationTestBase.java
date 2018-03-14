@@ -26,6 +26,7 @@ import java.util.logging.Level;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
+import static java.util.Arrays.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -198,8 +199,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         @Override
         public void filter(ClientRequestContext requestContext) {
             if (token != null && username != null) {
-                requestContext.getHeaders().put("Authentication", Arrays.asList(token));
-                requestContext.getHeaders().put("Username", Arrays.asList(username));
+                requestContext.getHeaders().put("Authentication", asList(token));
+                requestContext.getHeaders().put("Username", asList(username));
             }
         }
     }
