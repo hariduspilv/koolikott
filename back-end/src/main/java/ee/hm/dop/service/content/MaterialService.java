@@ -61,6 +61,10 @@ public class MaterialService {
     @Inject
     private OriginalPictureDao originalPictureDao;
 
+    public Material findByRepository(Repository repository, String repositoryIdentifier) {
+        return materialDao.findByRepository(repository, repositoryIdentifier);
+    }
+
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
     }
