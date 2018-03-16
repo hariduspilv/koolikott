@@ -3,6 +3,7 @@ package ee.hm.dop.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ee.hm.dop.model.interfaces.IMaterial;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -57,6 +58,9 @@ public class Material extends LearningObject implements Searchable, IMaterial {
     @Column(columnDefinition = "TEXT")
     private String source;
 
+    @Column(columnDefinition = "TEXT")
+    private String embedSource;
+
     @ManyToMany(fetch = EAGER)
     @Fetch(FetchMode.SELECT)
     @JoinTable(
@@ -103,13 +107,13 @@ public class Material extends LearningObject implements Searchable, IMaterial {
     private String repositoryIdentifier;
 
     @Column(nullable = false)
-    private boolean paid = false;
+    private boolean paid;
 
     @Column(nullable = false)
     private Boolean embeddable = false;
 
     @Column(nullable = false)
-    private boolean isSpecialEducation = false;
+    private boolean isSpecialEducation;
 
     public List<LanguageString> getTitles() {
         return titles;
@@ -239,6 +243,14 @@ public class Material extends LearningObject implements Searchable, IMaterial {
         return embeddable;
     }
 
+    public String getEmbedSource() {
+        return embedSource;
+    }
+
+    public void setEmbedSource(String embedSource) {
+        this.embedSource = embedSource;
+    }
+
     @JsonIgnore
     public void setCurriculumLiterature(boolean curriculumLiterature) {
         this.curriculumLiterature = curriculumLiterature;
@@ -247,7 +259,7 @@ public class Material extends LearningObject implements Searchable, IMaterial {
     //FIXME: curriculumLiterature variable is supported as a legacy, all new materials need peer reviews
     @JsonProperty
     public Boolean isCurriculumLiterature() {
-        return curriculumLiterature || (getPeerReviews() != null && getPeerReviews().size() != 0);
+        return curriculumLiterature || (CollectionUtils.isNotEmpty(getPeerReviews()));
     }
 
     private List<LanguageString> getSanitizedHTML(List<LanguageString> descriptions) {

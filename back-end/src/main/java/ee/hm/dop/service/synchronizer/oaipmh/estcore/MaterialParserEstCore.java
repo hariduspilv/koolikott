@@ -40,7 +40,6 @@ public class MaterialParserEstCore extends MaterialParser {
     @Inject
     private LicenseTypeService licenseTypeService;
 
-    @Override
     protected String getPathToResourceType() {
         return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='learningResourceType']";
     }
@@ -150,6 +149,15 @@ public class MaterialParserEstCore extends MaterialParser {
         NodeList classifications = getNodeList(doc, LOCAL_NAME_ESTCORE_LOCAL_NAME_CLASSIFICATION);
         List<String> names = getNamesForCrossCurricularOrCompetence(classifications, KEY_COMPETENCE);
         material.setKeyCompetences(keyCompetenceService.findKeyCompetenceByName(names));
+    }
+
+    @Override
+    protected void setEmbedSource(Material material, Document doc) {
+        Node node = getNode(doc, "//*[local-name()='estcore']/*[local-name()='technical']/*[local-name()='embedCode']");
+        if (node != null) {
+            String embedSource = value(node);
+            material.setEmbedSource(embedSource);
+        }
     }
 
     private List<String> getNamesForCrossCurricularOrCompetence(NodeList classifications, String crossCurricularTheme) {
