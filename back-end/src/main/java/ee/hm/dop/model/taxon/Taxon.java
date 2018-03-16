@@ -36,6 +36,10 @@ public abstract class Taxon implements AbstractEntity {
     @Column(nullable = false, insertable = false)
     protected String name;
 
+    @JsonIgnore
+    @Column(nullable = false, insertable = false)
+    private String nameLowercase;
+
     @Column(nullable = false, name = "level")
     private String taxonLevel;
 
@@ -83,6 +87,14 @@ public abstract class Taxon implements AbstractEntity {
 
     public String getLevel() {
         return "." + this.getClass().getSimpleName();
+    }
+
+    public String getNameLowercase() {
+        return nameLowercase;
+    }
+
+    public void setNameLowercase(String nameLowercase) {
+        this.nameLowercase = nameLowercase;
     }
 
     @JsonIgnore

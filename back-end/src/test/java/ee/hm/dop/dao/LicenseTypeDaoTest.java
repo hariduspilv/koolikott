@@ -30,8 +30,8 @@ public class LicenseTypeDaoTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findAllByName() {
-        LicenseType licenseTypes = licenseTypeDao.findByNameIgnoreCase("CCBY");
+    public void findAllByName_doesnt_fail() {
+        licenseTypeDao.findByNameIgnoreCase("CCBY");
 
     }
 
