@@ -144,6 +144,11 @@ public class MaterialParserWaramu extends MaterialParser {
     protected void setKeyCompetences(Material material, Document doc) {
     }
 
+    @Override
+    protected void setEmbedSource(Material material, Document doc) {
+
+    }
+
     private void setTags(Material material, Element lom) {
         material.setTags(getTags(lom));
     }

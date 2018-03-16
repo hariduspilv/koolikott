@@ -225,6 +225,11 @@ public class MaterialParserTest {
         }
 
         @Override
+        protected void setEmbedSource(Material material, Document doc) {
+
+        }
+
+        @Override
         protected String getPathToClassification() {
             return null;
         }

@@ -66,6 +66,7 @@ public abstract class MaterialParser {
             setLanguage(material, doc);
             setDescriptions(material, doc);
             setSource(material, doc);
+            setEmbedSource(material, doc);
             setTags(material, doc);
             setLearningResourceType(material, doc);
             setPeerReview(material, doc);
@@ -503,6 +504,9 @@ public abstract class MaterialParser {
 
     protected abstract void setKeyCompetences(Material material, Document doc);
 
+    protected abstract void setEmbedSource(Material material, Document doc);
+
+
     protected abstract String getPathToContext();
 
     protected abstract String getPathToResourceType();
@@ -519,17 +523,17 @@ public abstract class MaterialParser {
 
     protected abstract String getPathToClassification();
 
-    private Taxon getTaxon(String context, Class<? extends Taxon> level){
+    private Taxon getTaxon(String context, Class<? extends Taxon> level) {
         return taxonService.getTaxonByEstCoreName(context, level);
     }
 
-    private List<String> getTaxonNames(String context, Class<? extends Taxon> level){
+    private List<String> getTaxonNames(String context, Class<? extends Taxon> level) {
         return taxonService.getTaxonsByEstCoreName(context, level).stream()
                 .map(Taxon::getName)
                 .distinct()
                 .collect(Collectors.toList());
     }
-    
+
     private Node getTaxonNode(Node taxonPath, String tag, String domain) {
         return getNode(taxonPath, taxonPath(tag, domain));
     }
