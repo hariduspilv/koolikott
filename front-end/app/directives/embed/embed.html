@@ -75,7 +75,7 @@
     ></a>
   </div>
   <div data-ng-if="type === 'TLU'">
-    {{ embedSource }}
+    <div data-ng-bind-html="embedSource"></div>
   </div>
 
   <div class="embedded-material__overlay" data-ng-class="{'is-top': !isAdminOrModerator}" data-ng-if="deleted && ($root.isViewPortfolioPage || $root.isEditPortfolioPage)"></div>
