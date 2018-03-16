@@ -19,6 +19,9 @@ public class EstCoreTaxonMapping implements AbstractEntity {
     @Column(nullable = false, insertable = false)
     private String name;
 
+    @Column(nullable = false, insertable = false)
+    private String nameLowercase;
+
     public Long getId() {
         return id;
     }
@@ -41,5 +44,13 @@ public class EstCoreTaxonMapping implements AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNameLowercase() {
+        return nameLowercase;
+    }
+
+    public void setNameLowercase(String nameLowercase) {
+        this.nameLowercase = nameLowercase;
     }
 }

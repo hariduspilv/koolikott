@@ -27,7 +27,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
     public Taxon findTaxonByName(String name) {
         return getSingleResult(getEntityManager()
-                .createQuery("SELECT t FROM Taxon t WHERE lower(t.name)=:name", entity())
+                .createQuery("SELECT t FROM Taxon t WHERE t.nameLowercase=:name", entity())
                 .setParameter("name", name.toLowerCase())
                 .setMaxResults(1));
     }
@@ -49,7 +49,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
     public List<Taxon> findTaxonsByEstCoreName(String name, Class<? extends Taxon> level) {
         List<Taxon> taxons = getEntityManager()
-                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE lower(t.name) = :name", entity())
+                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE t.nameLowercase = :name", entity())
                 .setParameter("name", name.toLowerCase())
                 .getResultList();
         return taxons.stream()
