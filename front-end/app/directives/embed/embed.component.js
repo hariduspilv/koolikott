@@ -7,7 +7,7 @@ class controller extends Controller {
             this.init(data.currentValue)
         }
     }
-    init({ uploadedFile, embeddable }) {
+    init({ uploadedFile, embeddable, embedSource }) {
         const isMaterial = this.isMaterial(this.data)
         const type = isMaterial ? this.getEmbeddedMaterialType(this.data) : this.getEmbeddedMediaType(this.data)
         const url = isMaterial ? this.getMaterialSource(this.data) : this.data.url
@@ -67,6 +67,13 @@ class controller extends Controller {
                                 encodeURIComponent('/rest/material/externalMaterial?url=' + url)
                             )
                         })
+                break
+            case 'TLU':
+                if (!isMaterial)
+                    return console.error('This is no TLU material')
+
+                this.$scope.type = type
+                this.$scope.embedSource = embedSource
                 break
             case 'SOUNDCLOUD':
             default:
