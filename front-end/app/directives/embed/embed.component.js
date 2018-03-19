@@ -68,9 +68,9 @@ class controller extends Controller {
                             )
                         })
                 break
-            case 'TLU':
+            case 'EMBEDSOURCE':
                 if (!isMaterial)
-                    return console.error('This is no TLU material')
+                    return console.error('This is no EMBEDSOURCE material')
 
                 this.$scope.type = type
                 this.$scope.embedSource = embedSource
