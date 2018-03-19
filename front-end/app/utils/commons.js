@@ -696,10 +696,7 @@ class Controller {
     isPDFLink(url) {
         return url && url.split('.').pop().toLowerCase() === "pdf"
     }
-    isTLULink(url) {
-        return url && new URL(url).hostname === "htk.tlu.ee"
-    }
-    getEmbeddedMaterialType({ source, uploadedFile }) {
+    getEmbeddedMaterialType({ source, uploadedFile, embedSource }) {
         if (!source && !uploadedFile)
             return
 
@@ -712,7 +709,7 @@ class Controller {
             case this.isPictureLink(url): return 'PICTURE'
             case this.isEbookLink(url): return 'EBOOK'
             case this.isPDFLink(url): return 'PDF'
-            case this.isTLULink(url): return 'TLU'
+            case !!embedSource: return 'EMBEDSOURCE'
         }
     }
     isAcceptedEmbeddableMediaLink(url) {
