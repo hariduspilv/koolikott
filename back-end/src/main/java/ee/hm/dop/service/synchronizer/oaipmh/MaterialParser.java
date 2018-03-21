@@ -195,7 +195,7 @@ public abstract class MaterialParser {
 
     protected List<Tag> getTagsFromKeywords(NodeList nl, TagService tagService) {
         return nodeStreamOf(nl)
-                .map(MaterialParserUtil::valueToLower)
+                .map(MaterialParserUtil::value)
                 .distinct()
                 .map(s -> mapTag(tagService, s))
                 .collect(Collectors.toList());
@@ -505,7 +505,6 @@ public abstract class MaterialParser {
     protected abstract void setKeyCompetences(Material material, Document doc);
 
     protected abstract void setEmbedSource(Material material, Document doc);
-
 
     protected abstract String getPathToContext();
 

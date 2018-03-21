@@ -38,10 +38,6 @@ public class MaterialParserUtil {
         return value(node).toUpperCase();
     }
 
-    public static String valueToLower(Node node) {
-        return value(node).toLowerCase();
-    }
-
     public static boolean isSpecialEducation(String context) {
         return context.equals(SPECIALEDUCATION);
     }

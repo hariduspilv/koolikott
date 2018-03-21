@@ -85,7 +85,6 @@ public class SearchConverter {
         visibilities.add(Visibility.PUBLIC);
         if (loggedInUser != null) {
             if (loggedInUser.getRole() == Role.ADMIN) {
-                // Add private and not listed, so admin can see all searchables
                 visibilities.add(Visibility.NOT_LISTED);
                 visibilities.add(Visibility.PRIVATE);
             } else if (loggedInUser.getRole() == Role.MODERATOR) {
