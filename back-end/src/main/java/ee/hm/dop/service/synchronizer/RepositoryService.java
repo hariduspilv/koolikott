@@ -167,10 +167,7 @@ public class RepositoryService {
         if (strategy.isOtherRepo()) {
             logger.info("Updating material with external link - updating all fields that are currently null in DB");
             createPicture(newMaterial);
-            mergeTwoObjects(existentMaterial, newMaterial);
-            Material updatedMaterial = materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE);
-            audit.existingMaterialUpdated();
-            return updatedMaterial;
+            return update(existentMaterial, newMaterial, audit);
         }
 
         if (strategy.isSameRepo()) {
@@ -182,20 +179,16 @@ public class RepositoryService {
             }
             logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
             createPicture(newMaterial);
-            mergeTwoObjects(newMaterial, existentMaterial);
-            removePictureIfMissing(newMaterial, existentMaterial);
-            Material updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
-            audit.existingMaterialUpdated();
-            return updatedMaterial;
+            return update(newMaterial, existentMaterial, audit);
         }
 
         throw new IllegalStateException("unknown strategy");
     }
 
-    private void removePictureIfMissing(Material source, Material destination) {
-        if (source.getPicture() == null){
-            destination.setPicture(null);
-        }
+    private Material update(Material source, Material destination, SynchronizationAudit audit) {
+        mergeTwoObjects(source, destination);
+        Material updatedMaterial = materialService.updateBySystem(destination, SearchIndexStrategy.SKIP_UPDATE);
+        audit.existingMaterialUpdated();
+        return updatedMaterial;
     }
-
 }
