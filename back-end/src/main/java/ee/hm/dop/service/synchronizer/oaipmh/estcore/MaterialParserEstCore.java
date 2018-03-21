@@ -15,6 +15,7 @@ import ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -82,6 +83,16 @@ public class MaterialParserEstCore extends MaterialParser {
         } catch (Exception e) {
             throw new ParseException("Error parsing and setting document titles, repository id: " + material.getRepositoryIdentifier());
         }
+    }
+
+    @Override
+    protected String getVCardWithNewLines(CharacterData characterData) {
+        return characterData.getData().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
+    }
+
+    @Override
+    protected String getElementValue(Node node) {
+        return valueToUpper(node);
     }
 
     @Override

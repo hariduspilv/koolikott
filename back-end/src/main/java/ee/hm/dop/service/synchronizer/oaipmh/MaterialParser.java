@@ -189,10 +189,6 @@ public abstract class MaterialParser {
         return null;
     }
 
-    protected String getVCardWithNewLines(CharacterData characterData) {
-        return characterData.getData().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
-    }
-
     protected List<Tag> getTagsFromKeywords(NodeList nl, TagService tagService) {
         return nodeStreamOf(nl)
                 .map(MaterialParserUtil::value)
@@ -266,10 +262,6 @@ public abstract class MaterialParser {
                 .anyMatch(MaterialParserUtil::isSpecialEducation)) {
             material.setSpecialEducation(true);
         }
-    }
-
-    protected String getElementValue(Node node) {
-        return valueToUpper(node);
     }
 
     private void setLearningResourceType(Material material, Document doc) {
@@ -505,6 +497,10 @@ public abstract class MaterialParser {
     protected abstract void setKeyCompetences(Material material, Document doc);
 
     protected abstract void setEmbedSource(Material material, Document doc);
+
+    protected abstract String getVCardWithNewLines(CharacterData characterData);
+
+    protected abstract String getElementValue(Node node);
 
     protected abstract String getPathToContext();
 

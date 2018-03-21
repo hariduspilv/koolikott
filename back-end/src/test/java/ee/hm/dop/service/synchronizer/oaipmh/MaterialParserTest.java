@@ -20,6 +20,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -227,6 +228,16 @@ public class MaterialParserTest {
         @Override
         protected void setEmbedSource(Material material, Document doc) {
 
+        }
+
+        @Override
+        protected String getVCardWithNewLines(CharacterData characterData) {
+            return null;
+        }
+
+        @Override
+        protected String getElementValue(Node node) {
+            return null;
         }
 
         @Override
