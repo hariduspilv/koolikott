@@ -1,6 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
@@ -168,7 +167,10 @@ public class RepositoryService {
         if (strategy.isOtherRepo()) {
             logger.info("Updating material with external link - updating all fields that are currently null in DB");
             createPicture(newMaterial);
-            return update(existentMaterial, newMaterial, audit);
+            mergeTwoObjects(existentMaterial, newMaterial);
+            Material updatedMaterial = materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE);
+            audit.existingMaterialUpdated();
+            return updatedMaterial;
         }
 
         if (strategy.isSameRepo()) {
@@ -180,16 +182,20 @@ public class RepositoryService {
             }
             logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
             createPicture(newMaterial);
-            return update(newMaterial, existentMaterial, audit);
+            mergeTwoObjects(newMaterial, existentMaterial);
+            removePictureIfMissing(newMaterial, existentMaterial);
+            Material updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
+            audit.existingMaterialUpdated();
+            return updatedMaterial;
         }
 
         throw new IllegalStateException("unknown strategy");
     }
 
-    private Material update(Material source, Material destination, SynchronizationAudit audit) {
-        mergeTwoObjects(source, destination);
-        Material updatedMaterial = materialService.updateBySystem(destination, SearchIndexStrategy.SKIP_UPDATE);
-        audit.existingMaterialUpdated();
-        return updatedMaterial;
+    private void removePictureIfMissing(Material source, Material destination) {
+        if (source.getPicture() == null){
+            destination.setPicture(null);
+        }
     }
+
 }
