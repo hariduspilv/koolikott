@@ -76,7 +76,7 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Material getMaterialByUrl(@QueryParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
-        return materialGetter.getOneBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
+        return materialGetter.getAnyBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
     }
 
     private User getValidCreator(@QueryParam("username") String username) {
