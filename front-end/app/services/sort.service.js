@@ -198,12 +198,12 @@ class controller extends Controller {
         return this.compareNullIsNegative(a.portfolioCount, b.portfolioCount)
     }
     byMaterialCreated(a, b) {
-        return a.materialCount - b.materialCount
+        return this.compareNullIsNegative(a.materialCount, b.materialCount)
     }
-    compareNullIsNegative(ac, bc) {
-        if (ac === undefined) ac = -1;
-        if (bc === undefined) bc = -1;
-        return ac - bc
+    compareNullIsNegative(a, b) {
+        if (a === undefined) a = -1;
+        if (b === undefined) b = -1;
+        return a - b
     }
 }
 controller.$inject = [
