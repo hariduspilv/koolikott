@@ -2,16 +2,12 @@ package ee.hm.dop.common.test;
 
 import com.google.inject.Inject;
 import ee.hm.dop.model.*;
-import ee.hm.dop.rest.administration.AdminReviewingResourceTest;
-import ee.hm.dop.rest.administration.ReviewableChangeAdminResource;
-import ee.hm.dop.rest.administration.ReviewableChangeAdminResourceTest;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.rest.filter.SecurityFilter;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-//import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -30,8 +26,11 @@ import java.util.logging.Level;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
+import static java.util.Arrays.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+//import org.glassfish.jersey.filter.LoggingFilter;
 
 /**
  * Base class for all resource integration tests.
@@ -87,7 +86,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     public Material createOrUpdateMaterial(Material updatedMaterial) {
-        return doPut(ReviewableChangeAdminResourceTest.UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
+        return doPut(MaterialResourceTest.CREATE_OR_UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
     }
 
     protected static <T> T doGet(String url, Class<? extends T> clazz) {
@@ -189,8 +188,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     @Provider
     public static class AuthenticationFilter implements ClientRequestFilter {
-        private String token = null;
-        private String username = null;
+        private String token;
+        private String username;
 
         public AuthenticationFilter(AuthenticatedUser authenticatedUser) {
             this.token = authenticatedUser.getToken();
@@ -198,10 +197,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         }
 
         @Override
-        public void filter(ClientRequestContext requestContext) throws IOException {
+        public void filter(ClientRequestContext requestContext) {
             if (token != null && username != null) {
-                requestContext.getHeaders().put("Authentication", Arrays.asList(token));
-                requestContext.getHeaders().put("Username", Arrays.asList(username));
+                requestContext.getHeaders().put("Authentication", asList(token));
+                requestContext.getHeaders().put("Username", asList(username));
             }
         }
     }

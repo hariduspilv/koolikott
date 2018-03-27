@@ -43,6 +43,7 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -137,54 +138,51 @@ public class MaterialParserWaramuTest extends BaseParserTest {
         expect(languageService.getLanguage("et")).andReturn(estonian).times(2);
         expect(languageService.getLanguage("fren")).andReturn(french);
         expect(tagService.getTagByName("grammaire")).andReturn(tag);
-        expect(resourceTypeService.getResourceTypeByName(resourceType1.getName())).andReturn(resourceType1);
-        expect(resourceTypeService.getResourceTypeByName(resourceType2.getName())).andReturn(resourceType2);
+        expect(resourceTypeService.getResourceTypeByName(newArrayList(resourceType1.getName(), resourceType2.getName())))
+                .andReturn(newArrayList(resourceType1, resourceType2));
         expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(author);
 
 
         // first taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext1.getName(), EducationalContext.class)).andReturn(educationalContext1).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName("Mina ja keskkond", Domain.class)).andReturn(domain2);
-        expect(taxonService.getTaxonByEstCoreName("Preschool Topic1", Topic.class)).andReturn(topic3);
-        expect(taxonService.getTaxonByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class))
-                .andReturn(subtopic1);
+        expect(taxonService.getTaxonsByEstCoreName("Mina ja keskkond", Domain.class)).andReturn(newArrayList(domain2));
+        expect(taxonService.getTaxonsByEstCoreName("Preschool Topic1", Topic.class)).andReturn(newArrayList(topic3));
+        expect(taxonService.getTaxonsByEstCoreName("Subtopic for Preschool Topic1", Subtopic.class)).andReturn(newArrayList(subtopic1));
 
         // second taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext3.getName(), EducationalContext.class)).andReturn(educationalContext3).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName("Language and literature", Domain.class)).andReturn(domain4);
-        expect(taxonService.getTaxonByEstCoreName(subject1.getName(), Subject.class)).andReturn(subject1);
-        expect(taxonService.getTaxonByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(topic1);
-        expect(taxonService.getTaxonByEstCoreName("Ajaarvamine", Subtopic.class)).andReturn(subtopic2);
+        expect(taxonService.getTaxonsByEstCoreName("Language and literature", Domain.class)).andReturn(newArrayList(domain4));
+        expect(taxonService.getTaxonsByEstCoreName(subject1.getName(), Subject.class)).andReturn(newArrayList(subject1));
+        expect(taxonService.getTaxonsByEstCoreName("Ajaloo algõpetus", Topic.class)).andReturn(newArrayList(topic1));
+        expect(taxonService.getTaxonsByEstCoreName("Ajaarvamine", Subtopic.class)).andReturn(newArrayList(subtopic2));
 
         // third taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext4.getName(), EducationalContext.class)).andReturn(
                 educationalContext4).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName("Computer Science", Domain.class)).andReturn(domain3);
-        expect(taxonService.getTaxonByEstCoreName("Computers and Networks", Specialization.class)).andReturn(
-                specialization);
-        expect(taxonService.getTaxonByEstCoreName("Majanduse alused", Module.class)).andReturn(module);
-        expect(taxonService.getTaxonByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(topic4);
-        expect(taxonService.getTaxonByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(
-                subtopic3);
+        expect(taxonService.getTaxonsByEstCoreName("Computer Science", Domain.class)).andReturn(newArrayList(domain3));
+        expect(taxonService.getTaxonsByEstCoreName("Computers and Networks", Specialization.class)).andReturn(newArrayList(specialization));
+        expect(taxonService.getTaxonsByEstCoreName("Majanduse alused", Module.class)).andReturn(newArrayList(module));
+        expect(taxonService.getTaxonsByEstCoreName("Vocational Education Topic1", Topic.class)).andReturn(newArrayList(topic4));
+        expect(taxonService.getTaxonsByEstCoreName("Subtopic for Vocational Education", Subtopic.class)).andReturn(newArrayList(subtopic3));
 
         // fourth taxon
         expect(taxonService.getTaxonByEstCoreName(educationalContext2.getName(), EducationalContext.class)).andReturn(
                 educationalContext2).anyTimes();
-        expect(taxonService.getTaxonByEstCoreName("Foreign language", Domain.class)).andReturn(domain1);
-        expect(taxonService.getTaxonByEstCoreName(subject2.getName(), Subject.class)).andReturn(subject2);
-        expect(taxonService.getTaxonByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(topic2);
-        expect(taxonService.getTaxonByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(subtopic4);
+        expect(taxonService.getTaxonsByEstCoreName("Foreign language", Domain.class)).andReturn(newArrayList(domain1));
+        expect(taxonService.getTaxonsByEstCoreName(subject2.getName(), Subject.class)).andReturn(newArrayList(subject2));
+        expect(taxonService.getTaxonsByEstCoreName("Eesti ajalugu", Topic.class)).andReturn(newArrayList(topic2));
+        expect(taxonService.getTaxonsByEstCoreName("Ajalooallikad", Subtopic.class)).andReturn(newArrayList(subtopic4));
 
         LanguageString title1 = languageString(french, "Subjonctif");
         LanguageString title2 = languageString(estonian, "Les exercices du subjonctif.");
 
-        List<LanguageString> titles = Lists.newArrayList(title1, title2);
+        List<LanguageString> titles = newArrayList(title1, title2);
         LanguageString description1 = languageString(french, "Exercice a completer");
         LanguageString description2 = languageString(estonian, "Veebipõhised harjutused kahtleva kõneviisi kohta.");
-        List<LanguageString> descriptions = Lists.newArrayList(description1, description2);
-        List<Tag> tags = Lists.newArrayList(tag);
-        List<ResourceType> resourceTypes = Lists.newArrayList(resourceType1, resourceType2);
-        List<Author> authors = Lists.newArrayList(author);
+        List<LanguageString> descriptions = newArrayList(description1, description2);
+        List<Tag> tags = newArrayList(tag);
+        List<ResourceType> resourceTypes = newArrayList(resourceType1, resourceType2);
+        List<Author> authors = newArrayList(author);
 
         expect(targetGroupService.getTargetGroupsByAge(13, 15)).andReturn(targetGroup6to9());
 
@@ -226,7 +224,7 @@ public class MaterialParserWaramuTest extends BaseParserTest {
         expect(languageService.getLanguage("fren")).andReturn(french);
         expect(authorService.getAuthorByFullName(author.getName(), author.getSurname())).andReturn(null);
         expect(authorService.createAuthor(author.getName(), author.getSurname())).andReturn(author);
-        List<Author> authors = Lists.newArrayList(author);
+        List<Author> authors = newArrayList(author);
 
         expect(targetGroupService.getTargetGroupsByAge(13, 15)).andReturn(targetGroup6to9());
 
@@ -330,11 +328,11 @@ public class MaterialParserWaramuTest extends BaseParserTest {
         verify(languageService);
     }
 
-    private HashSet<TargetGroup> targetGroup6to9() {
+    private List<TargetGroup> targetGroup6to9() {
         TargetGroup targetGroupGrade6 = targetGroup(TargetGroupEnum.GRADE6);
         TargetGroup targetGroupGrade7 = targetGroup(TargetGroupEnum.GRADE7);
         TargetGroup targetGroupGrade8 = targetGroup(TargetGroupEnum.GRADE8);
         TargetGroup targetGroupGrade9 = targetGroup(TargetGroupEnum.GRADE9);
-        return Sets.newHashSet(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9);
+        return newArrayList(targetGroupGrade6, targetGroupGrade7, targetGroupGrade8, targetGroupGrade9);
     }
 }

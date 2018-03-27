@@ -5,7 +5,8 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
-import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
@@ -16,23 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaxonDao extends AbstractDao<Taxon> {
-
-    public static final String EDUCATIONAL_CONTEXT = "EDUCATIONAL_CONTEXT";
-
-    public Taxon findContextByName(String name, String level) {
-        TypedQuery<Taxon> findByName = getEntityManager()
-                .createQuery("FROM Taxon t WHERE lower(t.name) = :name and level = :level", entity()) //
-                .setParameter("name", name.toLowerCase())
-                .setParameter("level", level);
-        return getSingleResult(findByName);
-    }
-
-    public List<Taxon> findTaxonByLevel(String level) {
-        TypedQuery<Taxon> findByName = getEntityManager()
-                .createQuery("FROM Taxon t WHERE level = :level", entity()) //
-                .setParameter("level", level);
-        return getList(findByName);
-    }
+    private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
 
     public List<EducationalContext> findAllEducationalContext() {
         return getEntityManager()
@@ -42,23 +27,34 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
     public Taxon findTaxonByName(String name) {
         return getSingleResult(getEntityManager()
-                .createQuery("SELECT t FROM Taxon t WHERE lower(t.name)=:name", entity())
+                .createQuery("SELECT t FROM Taxon t WHERE t.nameLowercase=:name", entity())
                 .setParameter("name", name.toLowerCase())
                 .setMaxResults(1));
     }
 
-    public Taxon findTaxonByRepoName(String name, String repoTable, Class<? extends Taxon> level) {
+    public Taxon findTaxonByEstCoreName(String name, Class<? extends Taxon> level) {
+        List<Taxon> taxons = findTaxonsByEstCoreName(name, level);
+
+        if (taxons.isEmpty()) {
+            return null;
+        }
+        if (taxons.size() == 1) {
+            return taxons.get(0);
+        }
+        String ids = taxons.stream().map(Taxon::getId).map(Object::toString).collect(Collectors.joining(", "));
+        logger.error(String.format("Found multiple taxons for parameters: name - %s, level - %s, ids - %s",
+                ids, name, level.getSimpleName()));
+        return taxons.get(0);
+    }
+
+    public List<Taxon> findTaxonsByEstCoreName(String name, Class<? extends Taxon> level) {
         List<Taxon> taxons = getEntityManager()
-                .createQuery("SELECT t.taxon FROM " + repoTable + " t WHERE lower(t.name) = :name",
-                        entity()).setParameter("name", name.toLowerCase()).getResultList();
-        List<Taxon> res = taxons.stream()
+                .createQuery("SELECT t.taxon FROM EstCoreTaxonMapping t WHERE t.nameLowercase = :name", entity())
+                .setParameter("name", name.toLowerCase())
+                .getResultList();
+        return taxons.stream()
                 .filter(t -> level.isAssignableFrom(t.getClass()))
                 .collect(Collectors.toList());
-
-        if (CollectionUtils.isNotEmpty(res)) {
-            return res.get(0);
-        }
-        return null;
     }
 
     public List<Taxon> getUserTaxons(User user) {

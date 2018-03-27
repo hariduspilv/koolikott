@@ -18,6 +18,8 @@ import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,6 +35,10 @@ public abstract class Taxon implements AbstractEntity {
 
     @Column(nullable = false, insertable = false)
     protected String name;
+
+    @JsonIgnore
+    @Column(nullable = false, insertable = false)
+    private String nameLowercase;
 
     @Column(nullable = false, name = "level")
     private String taxonLevel;
@@ -83,6 +89,14 @@ public abstract class Taxon implements AbstractEntity {
         return "." + this.getClass().getSimpleName();
     }
 
+    public String getNameLowercase() {
+        return nameLowercase;
+    }
+
+    public void setNameLowercase(String nameLowercase) {
+        this.nameLowercase = nameLowercase;
+    }
+
     @JsonIgnore
     public abstract Taxon getParent();
 
@@ -92,6 +106,10 @@ public abstract class Taxon implements AbstractEntity {
     @JsonIgnore
     public abstract Set<? extends Taxon> getChildren();
 
+    @JsonIgnore
+    public List<Taxon> getChildrenList() {
+        return new ArrayList<>(getChildren());
+    }
 
     public boolean containsTaxon(Taxon taxon) {
         if (this.equals(taxon)) {

@@ -43,6 +43,7 @@ public class MaterialServiceTest {
 
     public static final String SOURCE = "http://creatematerial.example.com";
     public static final String SOURCE_WWW = "http://www.creatematerial.example.com";
+    public static final String REPO_ID = "123";
     @TestSubject
     private MaterialService materialService = new MaterialService();
     @Mock
@@ -132,13 +133,14 @@ public class MaterialServiceTest {
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
-        expect(material.getId()).andReturn(materialId).times(3);
+        expect(material.getId()).andReturn(materialId).times(4);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getSource()).andReturn(SOURCE).times(3);
         expect(material.getPeerReviews()).andReturn(null).times(2);
         expect(material.getTitles()).andReturn(null);
         expect(material.getDescriptions()).andReturn(null);
+        expect(material.getRepositoryIdentifier()).andReturn(REPO_ID).times(2);
         material.setChanged(0);
         material.setImproper(0);
         material.setUnReviewed(0);
@@ -217,10 +219,10 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
 
-        expect(material.getId()).andReturn(materialId).times(3);
+        expect(material.getId()).andReturn(materialId).times(4);
+        expect(material.getRepositoryIdentifier()).andReturn(REPO_ID).times(2);
 
         material.setRecommendation(null);
-
         material.setRepository(repository);
 
         expect(materialDao.createOrUpdate(material)).andReturn(material);

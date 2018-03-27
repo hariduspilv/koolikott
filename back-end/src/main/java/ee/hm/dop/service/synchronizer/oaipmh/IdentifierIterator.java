@@ -10,6 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.xml.transform.TransformerException;
+
 public class IdentifierIterator implements Iterator<Element> {
 
     private static final Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
@@ -19,7 +21,7 @@ public class IdentifierIterator implements Iterator<Element> {
     private String resumptionToken;
     private int index;
 
-    public IdentifierIterator(NodeList headers, String baseURL, String resumptionToken) throws Exception {
+    public IdentifierIterator(NodeList headers, String baseURL, String resumptionToken) {
         this.baseURL = baseURL;
         this.resumptionToken = resumptionToken;
         setHeaders(headers);
@@ -49,6 +51,11 @@ public class IdentifierIterator implements Iterator<Element> {
         ListIdentifiers listIdentifiers = getListIdentifierWithToken();
         if (listIdentifiers != null) {
             setHeaders(getHeaders(listIdentifiers));
+            try {
+                this.resumptionToken = listIdentifiers.getResumptionToken();
+            } catch (TransformerException | NoSuchFieldException e) {
+                throw new NoSuchElementException("didn't find resumptiontoken");
+            }
         }
 
         return index < headers.getLength();

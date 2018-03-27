@@ -15,40 +15,37 @@ public class RepositoryManager {
     public MaterialIterator getMaterialsFrom(Repository repository) throws Exception {
         MaterialIterator materialIterator = getMaterialIterator();
 
-        MaterialParser materialParser = getParser(repository);
-        materialIterator.setParser(materialParser);
+        materialIterator.setParser(getParser(repository));
         materialIterator.connect(repository);
 
         return materialIterator;
     }
 
     private MaterialParser getParser(Repository repository) {
-        MaterialParser parser;
-
         switch (repository.getSchema()) {
             case WARAMU_PARSER:
-                parser = getWaramuMaterialParser();
-                break;
+                return getWaramuMaterialParser();
             case ESTCORE_PARSER:
-                parser = getEstCoreMaterialParser();
-                break;
+                return getEstCoreMaterialParser();
             default:
                 throw new RuntimeException(format("No parser for schema %s or wrong repository URL",
                         repository.getSchema()));
         }
-
-        return parser;
     }
 
     protected MaterialIterator getMaterialIterator() {
-        return GuiceInjector.getInjector().getInstance(MaterialIterator.class);
+        return getInstance(MaterialIterator.class);
     }
 
     protected MaterialParser getWaramuMaterialParser() {
-        return GuiceInjector.getInjector().getInstance(MaterialParserWaramu.class);
+        return getInstance(MaterialParserWaramu.class);
     }
 
     protected MaterialParser getEstCoreMaterialParser() {
-        return GuiceInjector.getInjector().getInstance(MaterialParserEstCore.class);
+        return getInstance(MaterialParserEstCore.class);
+    }
+
+    private <T> T getInstance(Class<T> type) {
+        return GuiceInjector.getInjector().getInstance(type);
     }
 }

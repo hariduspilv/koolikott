@@ -7,7 +7,7 @@ class controller extends Controller {
             this.init(data.currentValue)
         }
     }
-    init({ uploadedFile, embeddable }) {
+    init({ uploadedFile, embeddable, embedSource }) {
         const isMaterial = this.isMaterial(this.data)
         const type = isMaterial ? this.getEmbeddedMaterialType(this.data) : this.getEmbeddedMediaType(this.data)
         const url = isMaterial ? this.getMaterialSource(this.data) : this.data.url
@@ -68,6 +68,13 @@ class controller extends Controller {
                             )
                         })
                 break
+            case 'EMBEDSOURCE':
+                if (!isMaterial)
+                    return console.error('This is no EMBEDSOURCE material')
+
+                this.$scope.type = type
+                this.$scope.embedSource = embedSource
+                break
             case 'SOUNDCLOUD':
             default:
                 if (!isMaterial && type !== 'SOUNDCLOUD')
@@ -91,9 +98,11 @@ class controller extends Controller {
                             )
                                 this.serverCallService
                                     .makeGet('rest/user/getSignedUserData')
-                                    .then(({ data }) =>
+                                    .then(({ data }) => {
+                                        this.$scope.displayUrl = angular.copy(this.$scope.url);
                                         this.$scope.url =
                                             `${url}${url.includes('?') ? '&' : '?'}dop_token=${encodeURIComponent(data)}`
+                                        }
                                     )
                         }
                     })

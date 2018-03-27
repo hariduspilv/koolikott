@@ -7,9 +7,8 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import org.apache.commons.lang3.Range;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TargetGroupService {
 
@@ -45,16 +44,8 @@ public class TargetGroupService {
         }
     }
 
-    public Set<TargetGroup> getTargetGroupsByAge(int from, int to) {
-        Set<TargetGroup> targetGroups = new HashSet<>();
-        Range<Integer> range = Range.between(from, to);
-
-        for (TargetGroupEnum targetGroupEnum : TargetGroupEnum.values()) {
-            if (targetGroupEnum.getRange().isOverlappedBy(range)) {
-                targetGroups.add(getByName(targetGroupEnum.name()));
-            }
-        }
-
-        return targetGroups;
+    public List<TargetGroup> getTargetGroupsByAge(int from, int to) {
+        List<String> enumNames = TargetGroupEnum.getTargetGroupEnumNames(from, to);
+        return getByName(enumNames);
     }
 }

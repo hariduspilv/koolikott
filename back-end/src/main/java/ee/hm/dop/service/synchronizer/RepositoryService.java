@@ -1,6 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
@@ -13,16 +12,16 @@ import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.UrlUtil;
-import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 
+import static ee.hm.dop.service.synchronizer.MergeUtil.mergeTwoObjects;
 import static java.lang.String.format;
 
 public class RepositoryService {
@@ -37,12 +36,14 @@ public class RepositoryService {
     @Inject
     private MaterialService materialService;
     @Inject
-    private MaterialDao materialDao;
-    @Inject
     private PictureSaver pictureSaver;
 
     public List<Repository> getAllRepositories() {
         return repositoryDao.findAll();
+    }
+
+    public List<Repository> getAllUsedRepositories() {
+        return repositoryDao.findByFieldList("used", true);
     }
 
     public void synchronize(Repository repository) {
@@ -50,22 +51,25 @@ public class RepositoryService {
 
         long start = System.currentTimeMillis();
 
-        DateTime startSyncDateTime;
-        MaterialIterator materials;
-        try {
-            materials = repositoryManager.getMaterialsFrom(repository);
-            startSyncDateTime = DateTime.now();
-        } catch (Exception e) {
-            logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
-            return;
-        }
+        MaterialIteratorAndDate materialIteratorAndDate = getMaterialIterator(repository);
+        if (materialIteratorAndDate == null) return;
 
-        SynchronizationAudit audit = synchronize(repository, materials);
+        SynchronizationAudit audit = synchronize(repository, materialIteratorAndDate.getIterator());
 
-        repository.setLastSynchronization(startSyncDateTime);
-        updateRepositoryData(repository);
+        repository.setLastSynchronization(materialIteratorAndDate.getSyncDate());
+        repositoryDao.updateRepository(repository);
 
         logEnd(audit, start);
+    }
+
+    private MaterialIteratorAndDate getMaterialIterator(Repository repository) {
+        try {
+            MaterialIterator materials = repositoryManager.getMaterialsFrom(repository);
+            return new MaterialIteratorAndDate(materials, DateTime.now());
+        } catch (Exception e) {
+            logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
+            return null;
+        }
     }
 
     private SynchronizationAudit synchronize(Repository repository, MaterialIterator materials) {
@@ -101,7 +105,7 @@ public class RepositoryService {
     private void logEnd(SynchronizationAudit audit, long start) {
         long end = System.currentTimeMillis();
         logger.info(format("Updating materials took %s milliseconds. Successfully downloaded %s"
-                + " materials (of which %s are deleted materials) and %s materials failed to download of total %s", end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
+                        + " materials (of which %s are deleted materials) and %s materials failed to download of total %s", end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
                 audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
         logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted", audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
     }
@@ -115,19 +119,16 @@ public class RepositoryService {
     }
 
     private void handleMaterial(Repository repository, Material material, SynchronizationAudit audit) {
-        Material existentMaterial = materialDao.findByRepository(repository, material.getRepositoryIdentifier());
+        Material existentMaterial = materialService.findByRepository(repository, material.getRepositoryIdentifier());
 
         material.setRepository(repository);
-        if (repository.isEstonianPublisher()) {
-            material.setEmbeddable(true);
-        }
+        if (repository.isContentIsEmbeddable()) material.setEmbeddable(true);
 
         if (existentMaterial != null) {
-            boolean isRepoMaterial = isRepoMaterial(repository, existentMaterial);
-            updateMaterial(material, existentMaterial, audit, isRepoMaterial);
+            MaterialHandlingStrategy strategy = materialHandlingStrategy(repository, existentMaterial);
+            updateMaterial(material, existentMaterial, audit, strategy);
         } else if (!material.isDeleted()) {
-            createMaterial(material);
-            audit.newMaterialCreated();
+            createMaterial(material, audit);
         } else {
             logger.error("Material set as deleted, not updating or creating, repository id: " + material.getRepositoryIdentifier());
         }
@@ -135,28 +136,25 @@ public class RepositoryService {
         logger.info("Material handled, repository id: " + material.getRepositoryIdentifier());
     }
 
-    boolean isRepoMaterial(Repository repository, Material existentMaterial) {
-        String domainName = getDomainName(existentMaterial.getSource());
+    private MaterialHandlingStrategy materialHandlingStrategy(Repository repository, Material existentMaterial) {
+        return MaterialHandlingStrategy.of(isFromSameRepo(repository, existentMaterial));
+    }
+
+    boolean isFromSameRepo(Repository repository, Material existentMaterial) {
+        String domainName = UrlUtil.tryToGetDomainName(existentMaterial.getSource());
         return StringUtils.isNotBlank(domainName) &&
                 repository.getRepositoryURLs().stream()
                         .map(RepositoryURL::getBaseURL)
-                        .map(this::getDomainName)
+                        .map(UrlUtil::tryToGetDomainName)
+                        .filter(Objects::nonNull)
                         .anyMatch(r -> r.equals(domainName));
     }
 
-    String getDomainName(String url) {
-        try {
-            return UrlUtil.getDomainName(url);
-        } catch (Exception e) {
-            logger.error("Could not get domain name from material during synchronization - updating all metafields of the material");
-            return null;
-        }
-    }
-
-    private void createMaterial(Material material) {
+    private void createMaterial(Material material, SynchronizationAudit audit) {
         logger.info("Creating material, with repo id: ", material.getRepositoryIdentifier());
         createPicture(material);
         materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE);
+        audit.newMaterialCreated();
     }
 
     private void createPicture(Material material) {
@@ -165,66 +163,32 @@ public class RepositoryService {
         }
     }
 
-    Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, boolean isRepoMaterial) {
-        Material updatedMaterial = null;
+    Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, MaterialHandlingStrategy strategy) {
+        if (strategy.isOtherRepo()) {
+            logger.info("Updating material with external link - updating all fields that are currently null in DB");
+            createPicture(newMaterial);
+            return update(existentMaterial, newMaterial, audit);
+        }
 
-        if (isRepoMaterial) {
+        if (strategy.isSameRepo()) {
             if (newMaterial.isDeleted()) {
                 logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
                 materialService.delete(existentMaterial);
                 audit.existingMaterialDeleted();
-            } else {
-                logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
-                createPicture(newMaterial);
-                mergeTwoObjects(newMaterial, existentMaterial);
-
-                updatedMaterial = materialService.updateBySystem(existentMaterial, SearchIndexStrategy.SKIP_UPDATE);
-                audit.existingMaterialUpdated();
+                return null;
             }
-        } else {
-            logger.info("Updating material with external link - updating all fields that are currently null in DB");
+            logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
             createPicture(newMaterial);
-            mergeTwoObjects(existentMaterial, newMaterial);
-
-            updatedMaterial = materialService.updateBySystem(newMaterial, SearchIndexStrategy.SKIP_UPDATE);
-            audit.existingMaterialUpdated();
+            return update(newMaterial, existentMaterial, audit);
         }
 
+        throw new IllegalStateException("unknown strategy");
+    }
+
+    private Material update(Material source, Material destination, SynchronizationAudit audit) {
+        mergeTwoObjects(source, destination);
+        Material updatedMaterial = materialService.updateBySystem(destination, SearchIndexStrategy.SKIP_UPDATE);
+        audit.existingMaterialUpdated();
         return updatedMaterial;
-    }
-
-    /**
-     * Data from the source will be copied to the destination.
-     * If the source data is not null or empty, then existing data in the destination will be overwritten
-     *
-     * @param source Data being copied to the destination
-     * @param dest   Object into which data will be copied and overwritten
-     */
-    private void mergeTwoObjects(Object source, Object dest) {
-        try {
-            new BeanUtilsBean() {
-                @Override
-                public void copyProperty(Object dest, String name, Object value)
-                        throws IllegalAccessException, InvocationTargetException {
-                    if (value != null && !isEmpty(value)) {
-                        super.copyProperty(dest, name, value);
-                    }
-                }
-            }.copyProperties(dest, source);
-        } catch (Exception e) {
-            logger.error("Unable to merge existing material and downloaded material from the repository", e);
-        }
-    }
-
-    private boolean isEmpty(Object value) {
-        if (value instanceof List) {
-            return ((List) value).isEmpty();
-        } else {
-            return value instanceof String && ((String) value).isEmpty();
-        }
-    }
-
-    private void updateRepositoryData(Repository repository) {
-        repositoryDao.updateRepository(repository);
     }
 }

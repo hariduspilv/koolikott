@@ -15,4 +15,12 @@ public class LicenseTypeService {
     public List<LicenseType> getAllLicenseTypes() {
         return licenseTypeDao.findAll();
     }
+
+    public LicenseType findByName(String name) {
+        return licenseTypeDao.findByName(name);
+    }
+
+    public LicenseType findByNameIgnoreCase(String name) {
+        return licenseTypeDao.findByNameIgnoreCase(name);
+    }
 }

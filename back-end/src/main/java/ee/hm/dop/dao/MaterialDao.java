@@ -95,6 +95,15 @@ public class MaterialDao extends AbstractDao<Material> {
         return materialTypedQuery.getResultList();
     }
 
+    public Material findAnyBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
+        TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, getMaterialStrategy);
+        List<Material> list = materialTypedQuery.getResultList();
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
     public Material findOneBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, getMaterialStrategy);
         return getSingleResult(materialTypedQuery);

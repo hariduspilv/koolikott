@@ -1,18 +1,13 @@
 package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
-import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.content.MaterialGetter;
-import ee.hm.dop.service.content.MaterialService;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -33,7 +28,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String GET_MATERIAL_URL = "material?id=%s";
     public static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     public static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
-    public static final String CREATE_MATERIAL_URL = "material";
+    public static final String CREATE_OR_UPDATE_MATERIAL_URL = "material";
     public static final String RESTORE_MATERIAL = "admin/deleted/restore";
     public static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
     public static final String GET_MATERIAL_BY_SOURCE_URL = "material/getBySource?source=";
@@ -271,7 +266,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     private Response createMaterial(Material material) {
-        return doPut(CREATE_MATERIAL_URL, material);
+        return doPut(CREATE_OR_UPDATE_MATERIAL_URL, material);
     }
 
     private List<CrossCurricularTheme> themeList() {

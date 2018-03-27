@@ -29,6 +29,12 @@ public class LicenseTypeDaoTest extends DatabaseTestBase {
         }
     }
 
+    @Test
+    public void findAllByName_doesnt_fail() {
+        licenseTypeDao.findByNameIgnoreCase("CCBY");
+
+    }
+
     private void assertValidLicenseType(LicenseType licenseType) {
         Map<Long, String> licenseTypes = new HashMap<>();
         licenseTypes.put(1L, "CCBY");

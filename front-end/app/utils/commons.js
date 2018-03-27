@@ -696,7 +696,7 @@ class Controller {
     isPDFLink(url) {
         return url && url.split('.').pop().toLowerCase() === "pdf"
     }
-    getEmbeddedMaterialType({ source, uploadedFile }) {
+    getEmbeddedMaterialType({ source, uploadedFile, embedSource }) {
         if (!source && !uploadedFile)
             return
 
@@ -709,6 +709,7 @@ class Controller {
             case this.isPictureLink(url): return 'PICTURE'
             case this.isEbookLink(url): return 'EBOOK'
             case this.isPDFLink(url): return 'PDF'
+            case !!embedSource: return 'EMBEDSOURCE'
         }
     }
     isAcceptedEmbeddableMediaLink(url) {

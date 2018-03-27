@@ -37,16 +37,22 @@ public class MaterialGetter {
         return materialDao.findById(materialId);
     }
 
-    public List<Material> getBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
-        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
+    public List<Material> getBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {
+        String materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(initialMaterialSource));
         checkLink(materialSource);
         return materialDao.findBySource(materialSource, getMaterialStrategy);
     }
 
-    public Material getOneBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
-        materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(materialSource));
+    public Material getOneBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {
+        String materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(initialMaterialSource));
         checkLink(materialSource);
         return materialDao.findOneBySource(materialSource, getMaterialStrategy);
+    }
+
+    public Material getAnyBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {
+        String materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(initialMaterialSource));
+        checkLink(materialSource);
+        return materialDao.findAnyBySource(materialSource, getMaterialStrategy);
     }
 
     private void checkLink(String materialSource) {

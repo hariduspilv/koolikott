@@ -28,8 +28,7 @@ angular.module('koolikottApp')
             const storedMaterial = storageService.getMaterial()
             if (storedMaterial &&
                 storedMaterial.type !== ".ReducedMaterial" &&
-                storedMaterial.type !== ".AdminMaterial"
-            ) {
+                storedMaterial.type !== ".AdminMaterial") {
                 $scope.material = storedMaterial
 
                 if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
@@ -102,7 +101,7 @@ angular.module('koolikottApp')
             }, updateMaterial);
 
             function updateMaterial(newMaterial, oldMaterial) {
-                if (newMaterial !== oldMaterial) {
+                if (newMaterial && oldMaterial && newMaterial !== oldMaterial) {
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
@@ -110,8 +109,7 @@ angular.module('koolikottApp')
             }
 
             function getMaterial(success, fail) {
-                materialService.getMaterialById($route.current.params.id)
-                    .then(success, fail)
+                materialService.getMaterialById($route.current.params.id).then(success, fail)
             }
 
             function getMaterialSuccess(material) {

@@ -30,7 +30,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     public synchronized void run() {
         try {
             RepositoryService repositoryService = newRepositoryService();
-            List<Repository> repositories = repositoryService.getAllRepositories();
+            List<Repository> repositories = repositoryService.getAllUsedRepositories();
 
             logger.info(format("Synchronizing %d repositories...", repositories.size()));
 

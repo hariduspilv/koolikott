@@ -4,7 +4,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.net.URISyntaxException;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class UrlUtilTest {
 
@@ -19,6 +22,21 @@ public class UrlUtilTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void getDomainName_returns_domain() {
+        String domain = UrlUtil.tryToGetDomainName("http://www.e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
+        assertEquals("e-ope.ee", domain);
+
+        domain = UrlUtil.tryToGetDomainName("e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
+        assertEquals("e-ope.ee", domain);
+
+        domain = UrlUtil.tryToGetDomainName("www.e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
+        assertEquals("e-ope.ee", domain);
+
+        domain = UrlUtil.tryToGetDomainName("www.e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
+        assertNotEquals("koolielu.ee", domain);
+    }
 
     @Test
     public void getURLWithoutProtocolAndWWW_returns_url_without_protocol_and_www() throws Exception {

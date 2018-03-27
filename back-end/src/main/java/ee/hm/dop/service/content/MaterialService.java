@@ -61,6 +61,10 @@ public class MaterialService {
     @Inject
     private OriginalPictureDao originalPictureDao;
 
+    public Material findByRepository(Repository repository, String repositoryIdentifier) {
+        return materialDao.findByRepository(repository, repositoryIdentifier);
+    }
+
     public Material createMaterialBySystemUser(Material material, SearchIndexStrategy strategy) {
         return createMaterial(material, null, strategy);
     }
@@ -125,7 +129,7 @@ public class MaterialService {
 
         Material updatedMaterial = createOrUpdate(material);
         boolean materialChanged = reviewableChangeService.processChanges(updatedMaterial, changer, sourceBefore, ChangeProcessStrategy.processStrategy(material));
-        if (materialChanged){
+        if (materialChanged) {
             updatedMaterial = materialDao.createOrUpdate(updatedMaterial);
         }
         if (strategy.updateIndex()) {
@@ -183,7 +187,7 @@ public class MaterialService {
             logger.info("Creating material");
             material.setAdded(now());
         } else {
-            logger.info("Updating material");
+            logger.info("Updating material, id: " + materialId);
         }
         TextFieldUtil.cleanTextFields(material);
         checkKeyCompetences(material);
@@ -197,8 +201,8 @@ public class MaterialService {
         }
         material.setVisibility(Visibility.PUBLIC);
 
-        if (material.getPicture() != null){
-            if (material.getPicture().getId() == null){
+        if (material.getPicture() != null) {
+            if (material.getPicture().getId() == null) {
                 material.setPicture(null);
             } else {
                 OriginalPicture originalPicture = originalPictureDao.findById(material.getPicture().getId());
@@ -207,7 +211,24 @@ public class MaterialService {
             }
         }
 
-        return materialDao.createOrUpdate(material);
+        Material createOrUpdate = materialDao.createOrUpdate(material);
+        logCreated(isNew, createOrUpdate);
+        return createOrUpdate;
+    }
+
+    private void logCreated(boolean isNew, Material createOrUpdate) {
+        if (isNew) {
+            logger.info("Created material, id: " + createOrUpdate.getId());
+        } else {
+            logger.info("Updated material, id: " + createOrUpdate.getId());
+        }
+        if (createOrUpdate.getRepositoryIdentifier() != null) {
+            if (isNew) {
+                logger.info("Created material, repositoryIdentifier: " + createOrUpdate.getRepositoryIdentifier());
+            } else {
+                logger.info("Updated material, repositoryIdentifier: " + createOrUpdate.getRepositoryIdentifier());
+            }
+        }
     }
 
     private boolean cantSet(Material material) {

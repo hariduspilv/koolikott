@@ -4,6 +4,7 @@ import ee.hm.dop.dao.PeerReviewDao;
 import ee.hm.dop.model.PeerReview;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class PeerReviewService {
 
@@ -11,6 +12,10 @@ public class PeerReviewService {
     private PeerReviewDao peerReviewDao;
 
     public PeerReview getPeerReviewByURL(String url){
+        return peerReviewDao.getPeerReviewByURL(url);
+    }
+
+    public List<PeerReview> getPeerReviewByURL(List<String> url){
         return peerReviewDao.getPeerReviewByURL(url);
     }
 

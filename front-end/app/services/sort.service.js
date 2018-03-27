@@ -4,7 +4,7 @@
 class controller extends Controller {
     orderItems(data, sortBy) {
         this.language = this.translationService.getLanguage()
-        
+
         const isDescending = sortBy.startsWith('-')
         const methodName = sortBy.replace(/^-/, '')
         const canSort = typeof this[methodName] === 'function'
@@ -177,28 +177,33 @@ class controller extends Controller {
         )
     }
     byNewReviewed(a, b) {
-        return a.reviewedLOCount - b.reviewedLOCount
+        return this.compareNullIsNegative(a.reviewedLOCount, b.reviewedLOCount);
     }
     byImproperApproved(a, b) {
-        return a.approvedReportedLOCount - b.approvedReportedLOCount
+        return this.compareNullIsNegative(a.approvedReportedLOCount, b.approvedReportedLOCount)
     }
     byImproperDeleted(a, b) {
-        return a.deletedReportedLOCount - b.deletedReportedLOCount
+        return this.compareNullIsNegative(a.deletedReportedLOCount, b.deletedReportedLOCount)
     }
     byChangesAccepted(a, b) {
-        return a.acceptedChangedLOCount - b.acceptedChangedLOCount
+        return this.compareNullIsNegative(a.acceptedChangedLOCount, b.acceptedChangedLOCount)
     }
     byChangesRejected(a, b) {
-        return a.rejectedChangedLOCount - b.rejectedChangedLOCount
+        return this.compareNullIsNegative(a.rejectedChangedLOCount, b.rejectedChangedLOCount)
     }
     byPortfolioPublicized(a, b) {
-        return a.publicPortfolioCount - b.publicPortfolioCount
+        return this.compareNullIsNegative(a.publicPortfolioCount, b.publicPortfolioCount)
     }
     byPortfolioCreated(a, b) {
-        return a.portfolioCount - b.portfolioCount
+        return this.compareNullIsNegative(a.portfolioCount, b.portfolioCount)
     }
     byMaterialCreated(a, b) {
-        return a.materialCount - b.materialCount
+        return this.compareNullIsNegative(a.materialCount, b.materialCount)
+    }
+    compareNullIsNegative(a, b) {
+        if (a === undefined) a = -1;
+        if (b === undefined) b = -1;
+        return a - b
     }
 }
 controller.$inject = [

@@ -1,68 +1,46 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.Domain;
-import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Module;
-import ee.hm.dop.model.taxon.Specialization;
-import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Subtopic;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.model.taxon.Topic;
-import ee.hm.dop.service.useractions.PeerReviewService;
+import ee.hm.dop.model.taxon.*;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.metadata.TargetGroupService;
+import ee.hm.dop.service.metadata.*;
+import ee.hm.dop.service.useractions.PeerReviewService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
+
+import javax.inject.Inject;
+import javax.xml.xpath.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
 
 public abstract class MaterialParser {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private static final String[] SCHEMES = {"http", "https"};
+    public static final String NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE = "No such language for '%s'. LanguageString will have no Language";
+    public static final String MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED = "Material has more or less than one source, can't be mapped.";
+    public static final String ERROR_PARSING_DOCUMENT_INVALID_URL_S = "Error parsing document. Invalid URL %s";
+    public static final String ERROR_PARSING_DOCUMENT_SOURCE = "Error parsing document source.";
+    public static final String TAXON_PATH = "./*[local-name()='taxonPath']";
     public static final String PUBLISHER = "PUBLISHER";
     public static final String AUTHOR = "AUTHOR";
-    private static final Map<String, String> taxonMap;
-
-    static {
-        taxonMap = new HashMap<>();
-        taxonMap.put("preschoolTaxon", "preschoolEducation");
-        taxonMap.put("basicSchoolTaxon", "basicEducation");
-        taxonMap.put("gymnasiumTaxon", "secondaryEducation");
-        taxonMap.put("vocationalTaxon", "vocationalEducation");
-    }
-
-    private XPathFactory xPathfactory = XPathFactory.newInstance();
-    protected XPath xpath = xPathfactory.newXPath();
+    private static final UrlValidator URL_VALIDATOR = new UrlValidator(new String[]{"http", "https"});
+    private static final Map<String, String> taxonMap = MaterialParserUtil.getTaxonMap();
+    private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
     @Inject
     private ResourceTypeService resourceTypeService;
@@ -74,6 +52,8 @@ public abstract class MaterialParser {
     private AuthorService authorService;
     @Inject
     private TargetGroupService targetGroupService;
+    @Inject
+    private TaxonService taxonService;
 
     public Material parse(Document doc) throws ParseException {
         try {
@@ -86,6 +66,7 @@ public abstract class MaterialParser {
             setLanguage(material, doc);
             setDescriptions(material, doc);
             setSource(material, doc);
+            setEmbedSource(material, doc);
             setTags(material, doc);
             setLearningResourceType(material, doc);
             setPeerReview(material, doc);
@@ -133,10 +114,10 @@ public abstract class MaterialParser {
         material.setTaxons(uniqueTaxons);
     }
 
-    protected void setIdentifier(Material material, Document doc) {
+    private void setIdentifier(Material material, Document doc) {
         Element header = (Element) doc.getElementsByTagName("header").item(0);
-        Element identifier = (Element) header.getElementsByTagName("identifier").item(0);
-        material.setRepositoryIdentifier(identifier.getTextContent().trim());
+        Node identifier = getFirst(header, "identifier");
+        material.setRepositoryIdentifier(value(identifier));
     }
 
     protected void setAuthorFromVCard(List<Author> authors, String data) {
@@ -156,22 +137,21 @@ public abstract class MaterialParser {
         }
     }
 
-    protected void setPublisherFromVCard(List<Publisher> publishers, String data) {
-        if (data != null && data.length() > 0) {
+    private void setPublisherFromVCard(List<Publisher> publishers, String data) {
+        if (StringUtils.isNotEmpty(data)) {
             VCard vcard = Ezvcard.parse(data).first();
-            String name = vcard.getFormattedName().getValue();
-            String website = null;
 
-            if (vcard.getUrls() != null && vcard.getUrls().size() > 0) {
-                website = vcard.getUrls().get(0).getValue();
-            }
+            if (CollectionUtils.isNotEmpty(vcard.getUrls())) {
+                String name = vcard.getFormattedName().getValue();
+                String website = vcard.getUrls().get(0).getValue();
 
-            if (name != null && website != null) {
-                Publisher publisher = publisherService.getPublisherByName(name);
-                if (publisher == null) {
-                    publishers.add(publisherService.createPublisher(name, website));
-                } else if (!publishers.contains(publisher)) {
-                    publishers.add(publisher);
+                if (name != null && website != null) {
+                    Publisher publisher = publisherService.getPublisherByName(name);
+                    if (publisher == null) {
+                        publishers.add(publisherService.createPublisher(name, website));
+                    } else if (!publishers.contains(publisher)) {
+                        publishers.add(publisher);
+                    }
                 }
             }
         }
@@ -182,120 +162,68 @@ public abstract class MaterialParser {
         NodeList nodeList = node.getChildNodes();
 
         for (int i = 0; i < nodeList.getLength(); i++) {
-            LanguageString languageString = new LanguageString();
             Node currentNode = nodeList.item(i);
+            String text = value(currentNode);
 
-            String text = currentNode.getTextContent().trim();
-            if (!text.isEmpty()) {
-                languageString.setText(text);
-
-                if (currentNode.hasAttributes()) {
-                    String languageCode = currentNode.getAttributes().item(0).getTextContent().trim();
-                    String[] tokens = languageCode.split("-");
-
-                    Language language = languageService.getLanguage(tokens[0]);
-                    if (language != null) {
-                        languageString.setLanguage(language);
-                    } else {
-                        String message = "No such language for '%s'. LanguageString will have no Language";
-                        logger.warn(String.format(message, languageCode));
-                    }
-                }
-
-                languageStrings.add(languageString);
+            if (StringUtils.isNotEmpty(text)) {
+                languageStrings.add(new LanguageString(getLanguageCode(languageService, currentNode), text));
             }
         }
 
         return languageStrings;
     }
 
-    protected String getVCardWithNewLines(CharacterData characterData) {
-        return characterData.getData().trim().trim().replaceAll("\\n\\s*(?=(\\s*))", "\r\n");
+    private Language getLanguageCode(LanguageService languageService, Node currentNode) {
+        if (!currentNode.hasAttributes()) {
+            return null;
+        }
+        Node item = currentNode.getAttributes().item(0);
+        String languageCode = value(item);
+        String[] tokens = languageCode.split("-");
+
+        Language language = languageService.getLanguage(tokens[0]);
+        if (language != null) {
+            return language;
+        }
+        logger.warn(String.format(NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE, languageCode));
+        return null;
     }
 
-    protected List<Tag> getTagsFromKeywords(NodeList keywords, TagService tagService) {
-        List<Tag> tags = new ArrayList<>();
-        for (int i = 0; i < keywords.getLength(); i++) {
-            String keyword = keywords.item(i).getTextContent().trim().toLowerCase();
+    protected List<Tag> getTagsFromKeywords(NodeList nl, TagService tagService) {
+        return nodeStreamOf(nl)
+                .map(MaterialParserUtil::value)
+                .distinct()
+                .map(s -> mapTag(tagService, s))
+                .collect(Collectors.toList());
+    }
 
-            if (!keyword.isEmpty()) {
-                Tag tag = tagService.getTagByName(keyword);
-                if (tag == null) {
-                    tag = new Tag();
-                    tag.setName(keyword);
-                }
-
-                if (!tags.contains(tag)) {
-                    tags.add(tag);
-                }
-            }
-        }
-        return tags;
+    private Tag mapTag(TagService tagService, String s) {
+        Tag tag = tagService.getTagByName(s);
+        return tag != null ? tag : new Tag(s);
     }
 
     protected List<ResourceType> getResourceTypes(Document doc, String path) {
-        List<ResourceType> resourceTypes = new ArrayList<>();
-
-        NodeList nl = getNodeList(doc, path);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
-            String type = getElementValue(node);
-
-            ResourceType resourceType = resourceTypeService.getResourceTypeByName(type);
-            if (!resourceTypes.contains(resourceType) && resourceType != null) {
-                resourceTypes.add(resourceType);
-            }
-        }
-
-        return resourceTypes;
+        List<String> results = getNodeStream(doc, path)
+                .map(this::getElementValue)
+                .distinct()
+                .collect(Collectors.toList());
+        return resourceTypeService.getResourceTypeByName(results);
     }
 
-    protected List<PeerReview> getPeerReviews(Document doc, String path) {
-        List<PeerReview> peerReviews = new ArrayList<>();
-
-        NodeList nl = getNodeList(doc, path);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
-            String url = getElementValue(node);
-
-            PeerReview peerReview = peerReviewService.getPeerReviewByURL(url);
-            if (!peerReviews.contains(peerReview) && peerReview != null) {
-                peerReviews.add(peerReview);
-            }
-        }
-
-        return peerReviews;
+    private List<PeerReview> getPeerReviews(Document doc, String path) {
+        List<String> results = getNodeStream(doc, path)
+                .map(this::getElementValue)
+                .distinct()
+                .collect(Collectors.toList());
+        return peerReviewService.getPeerReviewByURL(results);
     }
 
-    protected void setEducationalContexts(Document doc, Set<Taxon> taxons, String path, Material material) {
-        NodeList nl = getNodeList(doc, path);
-
-        for (int i = 0; i < nl.getLength(); i++) {
-            Node node = nl.item(i);
-            String context = getElementValue(node);
-
-            EducationalContext educationalContext = (EducationalContext) getTaxon(context, EducationalContext.class);
-            setIsSpecialEducation(material, context);
-
-            if (educationalContext != null) {
-                taxons.add(educationalContext);
-            }
-        }
-    }
-
-    protected String getElementValue(Node node) {
-        return node.getTextContent().trim().toUpperCase();
-    }
-
-    protected void setTaxon(Material material, Document doc) {
+    private void setTaxon(Material material, Document doc) {
         Set<Taxon> taxons = new HashSet<>();
-        Taxon parent = null;
 
         try {
             for (Node taxonPath : getTaxonPathNodes(doc)) {
-                parent = null;
+                Taxon parent;
                 parent = setEducationalContext(taxonPath);
                 parent = setDomain(taxonPath, parent);
 
@@ -306,21 +234,32 @@ public abstract class MaterialParser {
                 parent = setTopic(taxonPath, parent);
                 parent = setSubTopic(taxonPath, parent);
 
-                taxons.add(parent);
+                if (parent != null) {
+                    taxons.add(parent);
+                }
             }
-        } catch (Exception e) {
-            taxons.add(parent);
+        } catch (Exception ignored) {
         }
 
         //Set contexts that are specified separately, not inside the taxon
-        setEducationalContexts(doc, taxons, getPathToContext(), material);
+        taxons.addAll(getEducationalContexts(doc, getPathToContext()));
+        setSpecialEducation(material, doc, getPathToContext());
 
-        taxons.removeAll(Collections.singleton(null));
         material.setTaxons(new ArrayList<>(taxons));
     }
 
-    private void setIsSpecialEducation(Material material, String context) {
-        if (context.equals("SPECIALEDUCATION")) {
+    private List<EducationalContext> getEducationalContexts(Document doc, String path) {
+        return getNodeStream(doc, path)
+                .map(this::getElementValue)
+                .map(context -> (EducationalContext) getTaxon(context, EducationalContext.class))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private void setSpecialEducation(Material material, Document doc, String path) {
+        if (getNodeStream(doc, path)
+                .map(this::getElementValue)
+                .anyMatch(MaterialParserUtil::isSpecialEducation)) {
             material.setSpecialEducation(true);
         }
     }
@@ -343,34 +282,30 @@ public abstract class MaterialParser {
         try {
             material.setSource(getSource(doc));
         } catch (Exception e) {
-            throw new ParseException("Error parsing document source.");
+            throw new ParseException(ERROR_PARSING_DOCUMENT_SOURCE, e);
         }
-
     }
 
     private String getSource(Document doc) throws ParseException, URISyntaxException {
         NodeList nodeList = getNodeList(doc, getPathToLocation());
         if (nodeList.getLength() != 1) {
-            String message = "Material has more or less than one source, can't be mapped.";
-            logger.error(message);
-            throw new ParseException(message);
+            logger.error(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
+            throw new ParseException(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
         }
+        String source = getInitialSource(nodeList);
 
-        String source = nodeList.item(0).getTextContent().trim();
-
-        URI uri = new URI(source);
-        if (uri.getScheme() == null) {
-            source = "http://" + source;
-        }
-
-        UrlValidator urlValidator = new UrlValidator(SCHEMES);
-        if (!urlValidator.isValid(source)) {
-            String message = "Error parsing document. Invalid URL %s";
-            logger.error(String.format(message, source));
-            throw new ParseException(String.format(message, source));
+        if (!URL_VALIDATOR.isValid(source)) {
+            logger.error(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
+            throw new ParseException(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
         }
 
         return source;
+    }
+
+    private String getInitialSource(NodeList nodeList) throws URISyntaxException {
+        String source = value(nodeList.item(0));
+        URI uri = new URI(source);
+        return uri.getScheme() != null ? source : "http://" + source;
     }
 
     protected void setTargetGroups(Material material, Document doc) {
@@ -378,8 +313,8 @@ public abstract class MaterialParser {
         NodeList ageRanges = getNodeList(doc, getPathToTargetGroups());
 
         for (int i = 0; i < ageRanges.getLength(); i++) {
-            String ageRange = ageRanges.item(i).getTextContent().trim();
-            String[] ranges = ageRange.split("-");
+            Node item = ageRanges.item(i);
+            String[] ranges = value(item).split("-");
 
             if (ranges.length == 2) {
                 int from = Integer.parseInt(ranges[0].trim());
@@ -390,7 +325,7 @@ public abstract class MaterialParser {
         material.setTargetGroups(new ArrayList<>(targetGroups));
     }
 
-    protected void setAuthors(Document doc, Material material) throws ParseException {
+    protected void setAuthors(Document doc, Material material) {
         List<Author> authors = new ArrayList<>();
         NodeList nodeList = getNodeList(doc, getPathToContribute());
 
@@ -407,7 +342,7 @@ public abstract class MaterialParser {
         material.setAuthors(authors);
     }
 
-    protected void setPublishersData(Document doc, Material material) {
+    private void setPublishersData(Document doc, Material material) {
         List<Publisher> publishers = new ArrayList<>();
         IssueDate issueDate = null;
         NodeList nodeList = getNodeList(doc, getPathToContribute());
@@ -422,12 +357,7 @@ public abstract class MaterialParser {
 
                 Node issueDateNode = getNode(contributorNode, "./*[local-name()='date']/*[local-name()='dateTime']");
                 if (issueDateNode != null) {
-                    DateTime dateTime = new DateTime(issueDateNode.getTextContent().trim());
-                    issueDate = new IssueDate();
-
-                    issueDate.setDay((short) dateTime.getDayOfMonth());
-                    issueDate.setMonth((short) dateTime.getMonthOfYear());
-                    issueDate.setYear(dateTime.getYear());
+                    issueDate = new IssueDate(new DateTime(value(issueDateNode)));
                 }
             }
         }
@@ -436,195 +366,118 @@ public abstract class MaterialParser {
         material.setIssueDate(issueDate);
     }
 
-    protected String getRoleString(Node contributorNode) {
+    private String getRoleString(Node contributorNode) {
         try {
             Node roleNode = getNode(contributorNode, "./*[local-name()='role']/*[local-name()='value']");
-            return roleNode.getTextContent().trim().toUpperCase();
+            return valueToUpper(roleNode);
         } catch (Exception ignored) {
             return null;
         }
     }
 
-    protected String getVCard(Node contributorNode) {
-        String vCard = "";
+    private String getVCard(Node contributorNode) {
         Node node = getNode(contributorNode, "./*[local-name()='entity']");
-
-        if (node != null) {
-            NodeList authorNodes = node.getChildNodes();
-
-            for (int j = 0; j < authorNodes.getLength(); j++) {
-                if (!authorNodes.item(j).getTextContent().trim().isEmpty()) {
-                    CharacterData characterData = (CharacterData) authorNodes.item(j);
-                    return getVCardWithNewLines(characterData);
-                }
-            }
+        if (node == null) {
+            return "";
         }
-
-        return vCard;
+        return nodeStreamOf(node.getChildNodes())
+                .filter(item -> StringUtils.isNotEmpty(value(item)))
+                .map(item -> getVCardWithNewLines((CharacterData) item))
+                .findFirst()
+                .orElse("");
     }
 
-    protected NodeList getNodeList(Document doc, String path) {
+    protected Stream<Node> getNodeStream(Document doc, String path) {
+        return nodeStreamOf(getNodeList(doc, path));
+    }
+
+    protected NodeList getNodeList(Node node, String path) {
         try {
             XPathExpression expr = xpath.compile(path);
-            return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+            return (NodeList) expr.evaluate(node, XPathConstants.NODESET);
         } catch (XPathExpressionException ignored) {
             return null;
         }
-
     }
 
-    protected Node getNode(Node parent, String path) {
+    protected Node getNode(Node node, String path) {
         try {
             XPathExpression expr = xpath.compile(path);
-            return (Node) expr.evaluate(parent, XPathConstants.NODE);
+            return (Node) expr.evaluate(node, XPathConstants.NODE);
         } catch (XPathExpressionException ignored) {
             return null;
         }
     }
 
     private List<Node> getTaxonPathNodes(Document doc) {
-        try {
-            List<Node> nodes = new ArrayList<>();
-            NodeList classifications = getNodeList(doc, getPathToClassification());
+        List<Node> nodes = new ArrayList<>();
+        NodeList classifications = getNodeList(doc, getPathToClassification());
 
-            for (int i = 0; i < classifications.getLength(); i++) {
-                Node classification = classifications.item(i);
+        for (int i = 0; i < classifications.getLength(); i++) {
+            NodeList nl = getNodeList(classifications.item(i), TAXON_PATH);
 
-                XPathExpression expr2 = xpath.compile("./*[local-name()='taxonPath']");
-                NodeList nl = (NodeList) expr2.evaluate(classification, XPathConstants.NODESET);
-
-                if (nl != null && nl.getLength() > 0) {
-                    for (int j = 0; j < nl.getLength(); j++) {
-                        nodes.add(nl.item(j));
-                    }
-                }
+            if (notEmpty(nl)) {
+                nodes.addAll(nodeStreamOf(nl).collect(Collectors.toList()));
             }
-            return nodes;
-
-        } catch (XPathExpressionException ignored) {
-            return new ArrayList<>();
         }
+        return nodes;
     }
 
     protected Taxon setEducationalContext(Node taxonPath) {
-        for (Map.Entry<String, String> tag : taxonMap.entrySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag.getKey() + "']");
-            if (node != null) {
-                return getTaxon(tag.getValue(), EducationalContext.class);
-            }
-        }
-        return null;
+        return taxonMap.entrySet().stream()
+                .filter(tag -> getNode(taxonPath, "./*[local-name()='" + tag.getKey() + "']") != null)
+                .map(tag -> getTaxon(tag.getValue(), EducationalContext.class))
+                .findFirst()
+                .orElse(null);
     }
 
-    protected Taxon setDomain(Node taxonPath, Taxon educationalContext) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "domain"));
-
-            if (node != null) {
-                List<Taxon> domains = new ArrayList<>(((EducationalContext) educationalContext).getDomains());
-                String systemName = getTaxon(node.getTextContent(), Domain.class).getName();
-
-                Taxon taxon = getTaxonByName(domains, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return educationalContext;
+    protected Taxon setDomain(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Domain.class, "domain", (t, key) -> t instanceof EducationalContext);
     }
 
-    protected Taxon setSubject(Node taxonPath, Taxon domain) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "subject"));
-
-            if (node != null) {
-                List<Taxon> subjects = new ArrayList<>(((Domain) domain).getSubjects());
-                String systemName = getTaxon(node.getTextContent(), Subject.class).getName();
-                Taxon taxon = getTaxonByName(subjects, systemName);
-
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return domain;
+    protected Taxon setSubject(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Subject.class, "subject", (t, key) -> t instanceof Domain);
     }
 
-    protected Taxon setTopic(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "topic"));
-
-            if (node != null) {
-                List<Taxon> topics = null;
-                if (parent instanceof Module && tag.equals("vocationalTaxon")) {
-                    topics = new ArrayList<>(((Module) parent).getTopics());
-                } else if (parent instanceof Domain && tag.equals("preschoolTaxon")) {
-                    topics = new ArrayList<>(((Domain) parent).getTopics());
-                } else if (parent instanceof Subject) {
-                    topics = new ArrayList<>(((Subject) parent).getTopics());
-                }
-
-                if (topics != null) {
-                    String systemName = getTaxon(node.getTextContent(), Topic.class).getName();
-                    Taxon taxon = getTaxonByName(topics, systemName);
-                    if (taxon != null)
-                        return taxon;
-                }
-            }
-        }
-
-        return parent;
+    private Taxon setSpecialization(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Specialization.class, "specialization", (t, key) -> t instanceof Domain);
     }
 
-    protected Taxon setSpecialization(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "specialization"));
-
-            if (node != null) {
-                List<Taxon> specializations = new ArrayList<>(((Domain) parent).getSpecializations());
-                String systemName = getTaxon(node.getTextContent(), Specialization.class).getName();
-                Taxon taxon = getTaxonByName(specializations, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-
-        return parent;
+    private Taxon setModule(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Module.class, "module", (t, key) -> t instanceof Specialization);
     }
 
-    protected Taxon setModule(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, taxonPath(tag, "module"));
-
-            if (node != null) {
-                List<Taxon> modules = new ArrayList<>(((Specialization) parent).getModules());
-
-                String systemName = getTaxon(node.getTextContent(), Module.class).getName();
-                Taxon taxon = getTaxonByName(modules, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-        return parent;
+    private Taxon setTopic(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Topic.class, "topic", this::topicParentValidation);
     }
 
-    protected Taxon setSubTopic(Node taxonPath, Taxon parent) {
-        for (String tag : taxonMap.keySet()) {
-            Node node = getNode(taxonPath, "./*[local-name()='" + tag + "']/*[local-name()='subtopic']");
-            if (node != null) {
-                List<Taxon> subtopics = new ArrayList<>(((Topic) parent).getSubtopics());
-
-                String systemName = getTaxon(node.getTextContent(), Subtopic.class).getName();
-                Taxon taxon = getTaxonByName(subtopics, systemName);
-                if (taxon != null)
-                    return taxon;
-            }
-        }
-        return parent;
+    private Taxon setSubTopic(Node taxonPath, Taxon parent) {
+        return setTaxon(taxonPath, parent, Subtopic.class, "subtopic", (t, key) -> t instanceof Topic);
     }
 
-    private Taxon getTaxonByName(List<Taxon> topics, String systemName) {
-        return topics.stream().filter(taxon -> taxon.getName().equals(systemName)).findAny().orElse(null);
+    private Taxon setTaxon(Node taxonPath, Taxon parent, Class<? extends Taxon> level, String levelString, BiFunction<Taxon, String, Boolean> parentValidator) {
+        return taxonMap.keySet().stream()
+                .filter(tag -> parentValidator.apply(parent, tag))
+                .map(tag -> getTaxonNode(taxonPath, tag, levelString))
+                .filter(Objects::nonNull)
+                .map(node -> getTaxon(node.getTextContent(), parent.getChildrenList(), level))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(parent);
+    }
+
+    private boolean topicParentValidation(Taxon parent, String tag) {
+        return parent instanceof Domain && tag.equals(MaterialParserUtil.PRESCHOOL_TAXON) ||
+                parent instanceof Module && tag.equals(MaterialParserUtil.VOCATIONAL_TAXON) ||
+                parent instanceof Subject;
+    }
+
+    private Taxon getTaxon(String name, List<Taxon> list, Class<? extends Taxon> level) {
+        List<String> systemNames = getTaxonNames(name, level);
+        return list.stream()
+                .filter(taxon -> systemNames.contains(taxon.getName()))
+                .findAny()
+                .orElse(null);
     }
 
     protected abstract void setTags(Material material, Document doc);
@@ -634,6 +487,20 @@ public abstract class MaterialParser {
     protected abstract void setLanguage(Material material, Document doc);
 
     protected abstract void setTitles(Material material, Document doc) throws ParseException;
+
+    protected abstract void setIsPaid(Material material, Document doc);
+
+    protected abstract void setPicture(Material material, Document doc);
+
+    protected abstract void setCrossCurricularThemes(Material material, Document doc);
+
+    protected abstract void setKeyCompetences(Material material, Document doc);
+
+    protected abstract void setEmbedSource(Material material, Document doc);
+
+    protected abstract String getVCardWithNewLines(CharacterData characterData);
+
+    protected abstract String getElementValue(Node node);
 
     protected abstract String getPathToContext();
 
@@ -645,21 +512,26 @@ public abstract class MaterialParser {
 
     protected abstract String getPathToContribute();
 
-    protected abstract void setIsPaid(Material material, Document doc);
-
     protected abstract String getPathToTargetGroups();
 
     protected abstract String getPathToCurriculumLiterature();
 
-    protected abstract void setPicture(Material material, Document doc);
-
-    protected abstract void setCrossCurricularThemes(Material material, Document doc);
-
-    protected abstract void setKeyCompetences(Material material, Document doc);
-
     protected abstract String getPathToClassification();
 
-    protected abstract Taxon getTaxon(String context, Class level);
+    private Taxon getTaxon(String context, Class<? extends Taxon> level) {
+        return taxonService.getTaxonByEstCoreName(context, level);
+    }
+
+    private List<String> getTaxonNames(String context, Class<? extends Taxon> level) {
+        return taxonService.getTaxonsByEstCoreName(context, level).stream()
+                .map(Taxon::getName)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private Node getTaxonNode(Node taxonPath, String tag, String domain) {
+        return getNode(taxonPath, taxonPath(tag, domain));
+    }
 
     private String taxonPath(String tag, String domain) {
         return "./*[local-name()='" + tag + "']/*[local-name()='" + domain + "']";

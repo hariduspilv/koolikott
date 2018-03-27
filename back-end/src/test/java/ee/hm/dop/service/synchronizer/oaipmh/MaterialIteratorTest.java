@@ -96,7 +96,7 @@ public class MaterialIteratorTest {
         Repository repository = getRepository();
 
         expectsForNext(repository, null);
-        expect(getMaterialConnector.getMaterial(repository, "identifier", repository.getMetadataPrefix()))
+        expect(getMaterialConnector.getMaterial(repository, "identifier"))
                 .andReturn(null);
 
         replayAll();
@@ -118,7 +118,7 @@ public class MaterialIteratorTest {
         Repository repository = getRepository();
 
         expectsForNext(repository, null);
-        expect(getMaterialConnector.getMaterial(repository, "identifier", repository.getMetadataPrefix()))
+        expect(getMaterialConnector.getMaterial(repository, "identifier"))
                 .andReturn(document);
 
         MaterialParserWaramu materialParserWaramu = createMock(MaterialParserWaramu.class);
@@ -147,7 +147,7 @@ public class MaterialIteratorTest {
         MaterialParserWaramu materialParserWaramu = createMock(MaterialParserWaramu.class);
 
         expectsForNext(repository, null);
-        expect(getMaterialConnector.getMaterial(repository, "identifier", repository.getMetadataPrefix()))
+        expect(getMaterialConnector.getMaterial(repository, "identifier"))
                 .andReturn(document);
         expect(materialParserWaramu.parse(document)).andReturn(material);
 

@@ -69,10 +69,13 @@
   <div data-ng-if="(type === 'LINK' || !type) && !$ctrl.hideLink">
     <a
       data-ng-href="{{url}}"
-      data-ng-bind="url"
+      data-ng-bind="displayUrl ? displayUrl : url"
       target="_blank"
       class="embedded-material__link md-primary"
     ></a>
+  </div>
+  <div data-ng-if="type === 'EMBEDSOURCE'">
+    <div data-ng-bind-html="embedSource"></div>
   </div>
 
   <div class="embedded-material__overlay" data-ng-class="{'is-top': !isAdminOrModerator}" data-ng-if="deleted && ($root.isViewPortfolioPage || $root.isEditPortfolioPage)"></div>

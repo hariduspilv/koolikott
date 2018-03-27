@@ -38,7 +38,7 @@ public class Repository implements AbstractEntity {
     private String schema;
 
     @Column
-    private boolean isEstonianPublisher;
+    private boolean contentIsEmbeddable;
 
     @Column(nullable = false)
     private String metadataPrefix;
@@ -47,6 +47,9 @@ public class Repository implements AbstractEntity {
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "repository")
     private List<RepositoryURL> repositoryURLs;
+
+    @Column(nullable = false)
+    private boolean used;
 
     public Long getId() {
         return id;
@@ -82,12 +85,12 @@ public class Repository implements AbstractEntity {
         this.schema = schema;
     }
 
-    public boolean isEstonianPublisher() {
-        return isEstonianPublisher;
+    public boolean isContentIsEmbeddable() {
+        return contentIsEmbeddable;
     }
 
-    public void setIsEstonianPublisher(boolean isEstonianPublisher) {
-        this.isEstonianPublisher = isEstonianPublisher;
+    public void setContentIsEmbeddable(boolean contentIsEmbeddable) {
+        this.contentIsEmbeddable = contentIsEmbeddable;
     }
 
     public String getMetadataPrefix() {
@@ -104,6 +107,14 @@ public class Repository implements AbstractEntity {
 
     public void setRepositoryURLs(List<RepositoryURL> repositoryURLs) {
         this.repositoryURLs = repositoryURLs;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     @Override

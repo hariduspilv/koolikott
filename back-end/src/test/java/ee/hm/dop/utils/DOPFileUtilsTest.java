@@ -7,7 +7,10 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.MediaType;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +19,11 @@ import static org.junit.Assert.*;
 public class DOPFileUtilsTest {
 
     private static final Logger logger = LoggerFactory.getLogger(DOPFileUtilsTest.class);
+
+    @Test
+    public void probingDoesntFail() {
+        DOPFileUtils.probeForMediaType("iii+kooliastme+?petajaraamat.pdf");
+    }
 
     @Test
     public void getFileAsStreamNoFile() {

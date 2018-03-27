@@ -52,14 +52,15 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public List<Entity> findById(List<Long> id) {
-        if (CollectionUtils.isEmpty(id)) {
-            return Lists.newArrayList();
-        }
-        return getList(getFindByFieldInQuery(ID, id));
+        return findByFieldListInList(ID, id);
     }
 
     public List<Entity> findAll() {
         return getList(getEntityManager().createQuery(select(), entity()));
+    }
+
+    public List<Entity> findByName(List<String> names) {
+        return findByFieldListInList(NAME, names);
     }
 
     public Entity findByName(String value) {
@@ -71,11 +72,11 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         return list.stream().findAny().orElse(null);
     }
 
-    public List<Entity> findByName(List<String> value) {
+    public List<Entity> findByFieldListInList(String field, List<? extends Serializable> value) {
         if (CollectionUtils.isEmpty(value)) {
             return Lists.newArrayList();
         }
-        return getList(getFindByFieldInQuery(NAME, value));
+        return getList(getFindByFieldInQuery(field, value));
     }
 
     public Entity findByField(String field, Object value) {
@@ -83,6 +84,9 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
     }
 
     public List<Entity> findByFieldList(String field, Object value) {
+        if (value instanceof List){
+            throw new UnsupportedOperationException("doesnt work on lists");
+        }
         return getList(getFindByFieldQuery(field, value));
     }
 

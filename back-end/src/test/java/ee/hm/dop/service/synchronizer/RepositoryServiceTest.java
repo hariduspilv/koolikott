@@ -1,6 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.RepositoryDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.MaterialService;
@@ -27,6 +26,9 @@ import static org.junit.Assert.*;
 @RunWith(EasyMockRunner.class)
 public class RepositoryServiceTest {
 
+    public static final long ORIGINAL_MATERIAL_ID = 234L;
+    public static final String IDENTIFIER = "123456Identifier";
+    public static final String IDENTIFIER2 = "123456Identifier2";
     @TestSubject
     private RepositoryService repositoryService = new RepositoryService();
     @Mock
@@ -37,8 +39,6 @@ public class RepositoryServiceTest {
     private MaterialService materialService;
     @Mock
     private RepositoryDao repositoryDao;
-    @Mock
-    private MaterialDao materialDao;
     @Mock
     private SolrEngineService solrEngineService;
     @Mock
@@ -85,12 +85,11 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material1);
-        String repositoryIdentifier1 = "123456Identifier";
-        expect(material1.getRepositoryIdentifier()).andReturn(repositoryIdentifier1).anyTimes();
+        expect(material1.getRepositoryIdentifier()).andReturn(IDENTIFIER).anyTimes();
         expect(material1.isDeleted()).andReturn(false).anyTimes();
         expect(material1.getPicture()).andReturn(null);
         material1.setRepository(repository);
-        expect(materialDao.findByRepository(repository, repositoryIdentifier1)).andReturn(null);
+        expect(materialService.findByRepository(repository, IDENTIFIER)).andReturn(null);
         expect(materialService.createMaterialBySystemUser(material1, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expect(materialIterator.hasNext()).andReturn(true);
@@ -98,12 +97,11 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material2);
-        String repositoryIdentifier2 = "123456Identifier2";
-        expect(material2.getRepositoryIdentifier()).andReturn(repositoryIdentifier2).anyTimes();
+        expect(material2.getRepositoryIdentifier()).andReturn(IDENTIFIER2).anyTimes();
         expect(material2.isDeleted()).andReturn(false).anyTimes();
         expect(material2.getPicture()).andReturn(null);
         material2.setRepository(repository);
-        expect(materialDao.findByRepository(repository, repositoryIdentifier2)).andReturn(null);
+        expect(materialService.findByRepository(repository, IDENTIFIER2)).andReturn(null);
         expect(materialService.createMaterialBySystemUser(material2, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
 
         expectUpdateRepository(repository);
@@ -129,16 +127,13 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material);
-        String repositoryIdentifier = "123456Identifier";
-        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier).anyTimes();
+        expect(material.getRepositoryIdentifier()).andReturn(IDENTIFIER).anyTimes();
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
 
         Material originalMaterial = new Material();
-        long originalMaterialId = 234l;
-        originalMaterial.setId(originalMaterialId);
-        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(
-                originalMaterial);
+        originalMaterial.setId(ORIGINAL_MATERIAL_ID);
+        expect(materialService.findByRepository(repository, IDENTIFIER)).andReturn(originalMaterial);
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(materialService.updateBySystem(material, SearchIndexStrategy.SKIP_UPDATE)).andReturn(material);
 
@@ -165,7 +160,7 @@ public class RepositoryServiceTest {
 
         expect(materialIterator.hasNext()).andReturn(true);
         expect(materialIterator.next()).andReturn(material);
-        String repositoryIdentifier = "123456Identifier";
+        String repositoryIdentifier = IDENTIFIER;
         expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier).anyTimes();
         RepositoryURL repositoryURL = new RepositoryURL();
         repositoryURL.setBaseURL("http://www.xray24.ru");
@@ -174,11 +169,9 @@ public class RepositoryServiceTest {
         material.setRepository(EasyMock.anyObject(Repository.class));
 
         Material originalMaterial = new Material();
-        long originalMaterialId = 234l;
-        originalMaterial.setId(originalMaterialId);
+        originalMaterial.setId(ORIGINAL_MATERIAL_ID);
         originalMaterial.setSource("http://www.xray24.ru");
-        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(
-                originalMaterial);
+        expect(materialService.findByRepository(repository, repositoryIdentifier)).andReturn(originalMaterial);
         expect(material.isDeleted()).andReturn(true).anyTimes();
 
         materialService.delete(originalMaterial);
@@ -206,12 +199,11 @@ public class RepositoryServiceTest {
         expect(materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE)).andReturn(new Material());
         expect(materialIterator.hasNext()).andReturn(false);
 
-        String repositoryIdentifier = "123456Identifier";
-        expect(material.getRepositoryIdentifier()).andReturn(repositoryIdentifier).anyTimes();
+        expect(material.getRepositoryIdentifier()).andReturn(IDENTIFIER).anyTimes();
         expect(material.isDeleted()).andReturn(false).anyTimes();
         expect(material.getPicture()).andReturn(null);
         material.setRepository(repository);
-        expect(materialDao.findByRepository(repository, repositoryIdentifier)).andReturn(null);
+        expect(materialService.findByRepository(repository, IDENTIFIER)).andReturn(null);
 
         expectUpdateRepository(repository);
 
@@ -272,21 +264,6 @@ public class RepositoryServiceTest {
     }
 
     @Test
-    public void getDomainName() {
-        String domain = repositoryService.getDomainName("http://www.e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
-        assertEquals("e-ope.ee", domain);
-
-        domain = repositoryService.getDomainName("e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
-        assertEquals("e-ope.ee", domain);
-
-        domain = repositoryService.getDomainName("www.e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
-        assertEquals("e-ope.ee", domain);
-
-        domain = repositoryService.getDomainName("www.e-ope.ee/_download/euni_repository/file/863/MT-Loeng-03-1-Pajuste-Noudmine-ja-pakkumine.pdf");
-        assertNotEquals("koolielu.ee", domain);
-    }
-
-    @Test
     public void isRepoMaterial() {
         Repository repository = createMock(Repository.class);
         RepositoryURL repositoryURL1 = createMock(RepositoryURL.class);
@@ -302,13 +279,13 @@ public class RepositoryServiceTest {
         expect(existingMaterial.getSource()).andReturn("www.ditmas.ee/files/t_binsol_tk.rtf");
 
         replayAll(repository, repositoryURL1, repositoryURL2, existingMaterial);
-        boolean isRepoMaterial = repositoryService.isRepoMaterial(repository, existingMaterial);
+        boolean isRepoMaterial = repositoryService.isFromSameRepo(repository, existingMaterial);
         assertTrue(isRepoMaterial);
 
-        isRepoMaterial = repositoryService.isRepoMaterial(repository, existingMaterial);
+        isRepoMaterial = repositoryService.isFromSameRepo(repository, existingMaterial);
         assertTrue(isRepoMaterial);
 
-        isRepoMaterial = repositoryService.isRepoMaterial(repository, existingMaterial);
+        isRepoMaterial = repositoryService.isFromSameRepo(repository, existingMaterial);
         assertFalse(isRepoMaterial);
 
         verifyAll(repository, repositoryURL1, repositoryURL2, existingMaterial);
@@ -336,7 +313,7 @@ public class RepositoryServiceTest {
 
         replayAll();
 
-        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), true);
+        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), MaterialHandlingStrategy.MATERIAL_IS_FROM_SAME_REPO);
 
         verifyAll();
 
@@ -367,7 +344,7 @@ public class RepositoryServiceTest {
 
         replayAll();
 
-        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), false);
+        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), MaterialHandlingStrategy.MATERIAL_IS_FROM_OTHER_REPO);
 
         verifyAll();
 
@@ -388,7 +365,7 @@ public class RepositoryServiceTest {
 
         replayAll();
 
-        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), true);
+        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), MaterialHandlingStrategy.MATERIAL_IS_FROM_SAME_REPO);
 
         verifyAll();
 
@@ -408,7 +385,7 @@ public class RepositoryServiceTest {
 
         replayAll();
 
-        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), false);
+        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), MaterialHandlingStrategy.MATERIAL_IS_FROM_OTHER_REPO);
 
         verifyAll();
 
@@ -429,7 +406,7 @@ public class RepositoryServiceTest {
 
         replayAll();
 
-        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), true);
+        Material returnedMaterial = repositoryService.updateMaterial(newMaterial, existentMaterial, new SynchronizationAudit(), MaterialHandlingStrategy.MATERIAL_IS_FROM_SAME_REPO);
 
         verifyAll();
 
@@ -452,7 +429,7 @@ public class RepositoryServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
+        replay(repositoryManager, materialIterator, materialService, repositoryDao, solrEngineService, pictureService, pictureSaver);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -462,7 +439,7 @@ public class RepositoryServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(repositoryManager, materialIterator, materialService, repositoryDao, materialDao, solrEngineService, pictureService, pictureSaver);
+        verify(repositoryManager, materialIterator, materialService, repositoryDao, solrEngineService, pictureService, pictureSaver);
 
         if (mocks != null) {
             for (Object object : mocks) {

@@ -33,24 +33,16 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
     private static final String PORTFOLIO_DELETE = "portfolio/delete";
     private static final String PORTFOLIO_RESTORE = "admin/deleted/restore";
 
-    @Inject
-    private TestDao testDao;
-
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         login(USER_ADMIN);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        restoreLearningObjectChanges(Arrays.asList(MATERIAL_15, PORTFOLIO_15));
     }
 
     @Test
     public void restoring_material_approves_everything() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        doPost(MATERIAL_DELETE, materialWithId(MATERIAL_15));
-        Material restored = doPost(MATERIAL_RESTORE, materialWithId(MATERIAL_15), Material.class);
+        assertHasWorkToDo(getMaterial(MATERIAL_34));
+        doPost(MATERIAL_DELETE, materialWithId(MATERIAL_34));
+        Material restored = doPost(MATERIAL_RESTORE, materialWithId(MATERIAL_34), Material.class);
         assertWorkIsDone(restored, ReviewType.SYSTEM_RESTORE);
     }
 
@@ -64,43 +56,43 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void deleting_material_approves_everything() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material material = doPost(MATERIAL_DELETE, materialWithId(MATERIAL_15), Material.class);
+        assertHasWorkToDo(getMaterial(MATERIAL_35));
+        Material material = doPost(MATERIAL_DELETE, materialWithId(MATERIAL_35), Material.class);
         assertWorkIsDone(material, ReviewType.SYSTEM_DELETE);
     }
 
     @Test
     public void deleting_portfolio_approves_everything() throws Exception {
-        assertHasWorkToDo(getPortfolio(PORTFOLIO_15));
-        Portfolio portfolio = doPost(PORTFOLIO_DELETE, portfolioWithId(PORTFOLIO_15), Portfolio.class);
+        assertHasWorkToDo(getPortfolio(PORTFOLIO_17));
+        Portfolio portfolio = doPost(PORTFOLIO_DELETE, portfolioWithId(PORTFOLIO_17), Portfolio.class);
         assertWorkIsDone(portfolio, ReviewType.SYSTEM_DELETE);
     }
 
     @Test
     public void approving_improper_content_approves_everything() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material proper = doPost(LO_SET_NOT_IMPROPER, materialWithId(MATERIAL_15), Material.class);
+        assertHasWorkToDo(getMaterial(MATERIAL_36));
+        Material proper = doPost(LO_SET_NOT_IMPROPER, materialWithId(MATERIAL_36), Material.class);
         assertWorkIsDone(proper, ReviewType.IMPROPER);
     }
 
     @Test
     public void approving_first_review_approves_changes_too() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material reviewed = doPost(LO_SET_FIRST_REVIEWED, materialWithId(MATERIAL_15), Material.class);
+        assertHasWorkToDo(getMaterial(MATERIAL_37));
+        Material reviewed = doPost(LO_SET_FIRST_REVIEWED, materialWithId(MATERIAL_37), Material.class);
         assertWorkIsDone(reviewed, ReviewType.FIRST);
     }
 
     @Test
     public void approving_changes_approves_only_changes() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material approvedChanges = doPost(format(LO_ACCEPT_CHANGES, MATERIAL_15), null, Material.class);
+        assertHasWorkToDo(getMaterial(MATERIAL_38));
+        Material approvedChanges = doPost(format(LO_ACCEPT_CHANGES, MATERIAL_38), null, Material.class);
         assertWorkIsDone(approvedChanges, ReviewType.CHANGE);
     }
 
     @Test
     public void rejecting_changes_reviews_only_changes() throws Exception {
-        assertHasWorkToDo(getMaterial(MATERIAL_15));
-        Material rejectedChanges = doPost(format(LO_REJECT_CHANGES, MATERIAL_15), null, Material.class);
+        assertHasWorkToDo(getMaterial(MATERIAL_39));
+        Material rejectedChanges = doPost(format(LO_REJECT_CHANGES, MATERIAL_39), null, Material.class);
         assertWorkIsDone(rejectedChanges, ReviewType.CHANGE);
     }
 
@@ -128,14 +120,5 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
         } else {
             assertFalse(learningObject.isDeleted());
         }
-    }
-
-    private void restoreLearningObjectChanges(List<Long> learningObjectId) {
-        EntityTransaction transaction = DbUtils.getTransaction();
-        if (!transaction.isActive()) {
-            transaction.begin();
-        }
-        testDao.restoreAdminReviewingTest(learningObjectId);
-        DbUtils.closeTransaction();
     }
 }
