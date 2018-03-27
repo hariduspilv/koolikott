@@ -5,7 +5,19 @@
 * TLÜ materjalide kuvamine eKoolikotis iFrame'i abil [#311](https://github.com/hariduspilv/koolikott/issues/311)
 
 
-## e-Koolikott [1.16.0](https://github.com/hariduspilv/koolikott/milestone/15) (testimisel)
+## e-Koolikott [1.16.2](https://github.com/hariduspilv/koolikott/milestone/15)
+
+### Muutunud
+* Statistika aineekspertide tegevuste kohta - täiendused [#228](https://github.com/hariduspilv/koolikott/issues/228)
+
+
+## e-Koolikott [1.16.1](https://github.com/hariduspilv/koolikott/milestone/15)
+
+### Muutunud
+* Statistika aineekspertide tegevuste kohta - täiendused [#228](https://github.com/hariduspilv/koolikott/issues/228)
+
+
+## e-Koolikott [1.16.0](https://github.com/hariduspilv/koolikott/milestone/15)
 
 ### Muutunud
 * Statistika aineekspertide tegevuste kohta [#228](https://github.com/hariduspilv/koolikott/issues/228)
