@@ -23,7 +23,7 @@
 * Statistika aineekspertide tegevuste kohta [#228](https://github.com/hariduspilv/koolikott/issues/228)
 
 
-## e-Koolikott [1.15.0](https://github.com/hariduspilv/koolikott/milestone/14) (testimisel)
+## e-Koolikott [1.15.0](https://github.com/hariduspilv/koolikott/milestone/14)
 
 ### Muutunud
 * Kogumiku koostamise modaali täiendused [#295](https://github.com/hariduspilv/koolikott/issues/295)
