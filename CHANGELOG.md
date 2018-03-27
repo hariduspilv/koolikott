@@ -1,3 +1,10 @@
+## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/17) (testimisel)
+
+### Muutunud
+* OAI-PMH protokolli täiendused tulenevalt vara.e-koolikott.ee rakenduse liidestamisega [#309](https://github.com/hariduspilv/koolikott/issues/309)
+* TLÜ materjalide kuvamine eKoolikotis iFrame'i abil [#311](https://github.com/hariduspilv/koolikott/issues/311)
+
+
 ## e-Koolikott [1.16.0](https://github.com/hariduspilv/koolikott/milestone/15) (testimisel)
 
 ### Muutunud
