@@ -3,6 +3,8 @@ package ee.hm.dop.service.synchronizer;
 import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.ExecutorUtil;
 
+import javax.persistence.EntityTransaction;
+
 public abstract class DopDaemonProcess {
 
     public abstract void run();
@@ -18,7 +20,8 @@ public abstract class DopDaemonProcess {
     }
 
     protected void beginTransaction() {
-        DbUtils.getTransaction().begin();
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) transaction.begin();
     }
 
 }

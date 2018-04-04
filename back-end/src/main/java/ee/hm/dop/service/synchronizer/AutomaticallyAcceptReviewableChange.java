@@ -33,11 +33,11 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
     @Override
     public synchronized void run() {
         try {
+            beginTransaction();
             ReviewableChangeDao reviewableChangeDao = newReviewableChangeDao();
             List<AdminLearningObject> allUnreviewed = reviewableChangeDao.findAllUnreviewed();
 
             logger.info(String.format("Automatic ReviewableChange Acceptor found a total of %s changes",  allUnreviewed.size()));
-            beginTransaction();
 
             int accepted = 0;
             DateTime _10DaysBefore = DateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));
@@ -53,10 +53,11 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
                 }
             }
 
-            closeTransaction();
             logger.info("Automatic ReviewableChange Acceptor has finished execution, updated changes: " + accepted);
         } catch (Exception e) {
             logger.error("Unexpected error while automatically accepting ReviewableChange", e);
+        } finally {
+            closeTransaction();
         }
     }
 

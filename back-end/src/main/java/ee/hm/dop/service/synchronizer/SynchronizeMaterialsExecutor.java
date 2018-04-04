@@ -29,6 +29,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     @Override
     public synchronized void run() {
         try {
+            beginTransaction();
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();
 
@@ -50,6 +51,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
         } finally {
             logger.info("Updating Solr index after synchronizing all materials");
             updateSolrIndex();
+            closeTransaction();
         }
     }
 
