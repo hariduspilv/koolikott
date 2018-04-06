@@ -698,7 +698,7 @@ class controller extends Controller {
             console.log(this.$scope.material);
 
             this.serverCallService
-                [this.locals.isEditMode ? 'makePut' : 'makePost'](this.locals.isEditMode ? 'rest/material' : 'rest/material/create', this.$scope.material)
+                .makePost(this.locals.isEditMode ? 'rest/material/update' : 'rest/material/create', this.$scope.material)
                 .then(({ data: material }) => {
                     const done = () => {
                         this.$scope.isUpdateMode

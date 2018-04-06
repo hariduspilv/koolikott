@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('koolikottApp')
-    .service('materialService', ['serverCallService' , 'authenticatedUserService', MaterialService]);
+    .service('materialService', ['serverCallService' , MaterialService]);
 
-function MaterialService(serverCallService, authenticatedUserService) {
+function MaterialService(serverCallService) {
 
     function getMaterialById(id) {
         return serverCallService.makeGet("rest/material", {id})
@@ -17,10 +17,11 @@ function MaterialService(serverCallService, authenticatedUserService) {
             'type': '.Material',
             'id': material.id
         };
-        //todo ips unify with portfolio increaseViewCount
         return serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
             .then(response => {
-                return response.data;
+                if (response.data){
+                    return response.data;
+                }
             });
     }
 

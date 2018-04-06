@@ -28,7 +28,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String GET_MATERIAL_URL = "material?id=%s";
     public static final String GET_BY_CREATOR_URL = "material/getByCreator?username=%s";
     public static final String GET_BY_CREATOR_COUNT_URL = "material/getByCreator/count?username=%s";
-    public static final String CREATE_OR_UPDATE_MATERIAL_URL = "material";
+    public static final String CREATE_MATERIAL_URL = "material/create";
+    public static final String UPDATE_MATERIAL_URL = "material/update";
     public static final String RESTORE_MATERIAL = "admin/deleted/restore";
     public static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
     public static final String GET_MATERIAL_BY_SOURCE_URL = "material/getBySource?source=";
@@ -266,7 +267,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     private Response createMaterial(Material material) {
-        return doPut(CREATE_OR_UPDATE_MATERIAL_URL, material);
+        if (material.getId() == null) {
+            return doPost(CREATE_MATERIAL_URL, material);
+        }
+        return doPost(UPDATE_MATERIAL_URL, material);
     }
 
     private List<CrossCurricularTheme> themeList() {

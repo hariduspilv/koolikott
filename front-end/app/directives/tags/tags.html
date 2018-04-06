@@ -5,14 +5,12 @@
   <md-chips
     data-ng-model="upvotes"
     readonly="true"
-    data-md-removable="$root.isEditPortfolioMode"
+    data-md-removable="$ctrl.isAllowedToRemove()"
     data-md-on-remove="$ctrl.removeTag($chip.tag)">
     <md-chip-template dop-tag-custom-chip>
       <md-button
         data-ng-if="
-          !$ctrl.authenticatedUserService.isRestricted() &&
-          !$ctrl.authenticatedUserService.isAdmin() &&
-          !$root.isEditPortfolioMode"
+          $ctrl.authenticatedUserService.isUserOrModerator() && !$root.isEditPortfolioMode"
         class="md-icon-button"
         ng-click="$ctrl.reportTag($event)"
         >
@@ -33,14 +31,14 @@
         {{$chip.tag}}
       </a>
       <md-button
-        data-ng-if="$ctrl.isAllowed() && !$chip.tagUpVote"
+        data-ng-if="$ctrl.isAllowedToAdd() && !$chip.tagUpVote"
         class="md-icon-button"
         data-ng-click="$ctrl.upVote($chip)"
         >
         <md-icon data-md-colors="{ color: 'grey-500' }">plus_one</md-icon>
       </md-button>
       <md-button
-        data-ng-if="$ctrl.isAllowed() && $chip.tagUpVote"
+        data-ng-if="$ctrl.isAllowedToAdd() && $chip.tagUpVote"
         class="md-icon-button"
         data-ng-click="$ctrl.removeUpVote($chip)"
         >
@@ -54,7 +52,7 @@
   <form
     name="addTagForm"
     id="addTagForm"
-    data-ng-if="$ctrl.isAllowed()"
+    data-ng-if="$ctrl.isAllowedToAdd()"
     data-ng-submit="$ctrl.addTag()"
     >
     <md-autocomplete

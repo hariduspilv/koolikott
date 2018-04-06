@@ -113,14 +113,16 @@ class controller extends Controller {
                 this.$scope.upvotes = this.sortTagsByUpVoteCount(this.$scope.upvotes)
             })
     }
-    isAllowed() {
-        return this.authenticatedUserService.isAuthenticated()
-            && !this.authenticatedUserService.isRestricted()
+    isAllowedToAdd() {
+        return this.authenticatedUserService.isUserPlus()
+    }
+    isAllowedToRemove() {
+        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject);
     }
     removeUpVote(upVoteForm) {
         this.removedTag = upVoteForm
         this.tagsService
-            .removeUpVote(upVoteForm)
+            .removeUpVote(upVoteForm.tagUpVote)
             .then(() => {
                 if (this.removedTag) {
                     this.removedTag.tagUpVote = null

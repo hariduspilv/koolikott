@@ -20,8 +20,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
@@ -86,7 +84,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     }
 
     public Material createOrUpdateMaterial(Material updatedMaterial) {
-        return doPut(MaterialResourceTest.CREATE_OR_UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
+        if (updatedMaterial.getId() == null) {
+            return doPost(MaterialResourceTest.CREATE_MATERIAL_URL, updatedMaterial, Material.class);
+        }
+        return doPost(MaterialResourceTest.UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
     }
 
     protected static <T> T doGet(String url, Class<? extends T> clazz) {

@@ -54,8 +54,8 @@ public class TagUpVoteResource extends BaseResource {
     }
 
     @GET
-    @Path("report")
     @PermitAll
+    @Path("report")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
@@ -70,9 +70,9 @@ public class TagUpVoteResource extends BaseResource {
     }
 
     @POST
+    @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("delete")
     public void removeUpVote(TagUpVote tagUpVote) {
         if (tagUpVote == null) {
             throw notFound();

@@ -14,9 +14,12 @@ function portfolioService(serverCallService) {
             });
     }
 
-    //todo ips unify with material increaseViewCount
     function increaseViewCount(portfolio) {
-        return serverCallService.makePost("rest/learningObject/increaseViewCount", portfolio)
+        let viewCountParams = {
+            'type': '.Portfolio',
+            'id': portfolio.id
+        };
+        return serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
             .then(response => {
                 if (response.data) {
                     return response.data;

@@ -65,37 +65,25 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                 )
         },
 
-        getTagUpVotes(params, successCallback, failCallback) {
-            if (successCallback) {
-                serverCallService.makeGet("rest/tagUpVotes/report", params, successCallback, failCallback);
-            } else {
-                return serverCallService.makeGet("rest/tagUpVotes/report", params)
-                    .then(response => {
-                       return response.data;
-                    });
-            }
+        getTagUpVotes(params) {
+            return serverCallService.makeGet("rest/tagUpVotes/report", params)
+                .then(response => {
+                   return response.data;
+                });
         },
 
-        addUpVote(params, successCallback, failCallback) {
-            if (successCallback) {
-                serverCallService.makePut("rest/tagUpVotes", params, successCallback, failCallback);
-            } else {
-                return serverCallService.makePut("rest/tagUpVotes", params)
-                    .then(response => {
-                        return response.data;
-                    });
-            }
+        addUpVote(params) {
+            return serverCallService.makePut("rest/tagUpVotes", params)
+                .then(response => {
+                    return response.data;
+                });
         },
 
-        removeUpVote(params, successCallback, failCallback) {
-            if (successCallback) {
-                serverCallService.makePost('rest/tagUpVotes/delete', params.tagUpVote, successCallback, failCallback);
-            } else {
-                return serverCallService.makePost('rest/tagUpVotes/delete', params.tagUpVote)
-                    .then(response => {
-                        return response.data;
-                    });
-            }
+        removeUpVote(params) {
+            return serverCallService.makePost('rest/tagUpVotes/delete', params)
+                .then(response => {
+                    return response.data;
+                });
         },
     }
 }

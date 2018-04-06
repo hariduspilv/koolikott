@@ -124,14 +124,14 @@ class controller extends Controller {
         this.$location.url('/portfolio/edit?id=' + this.$route.current.params.id)
     }
     updatePortfolio() {
-    this.updateChaptersStateFromEditors()
-    this.serverCallService
-        .makePost('rest/portfolio/update', this.storageService.getPortfolio())
-        .then(({ data: portfolio }) => {
-            if (portfolio)
-                this.storageService.setPortfolio(portfolio)
-        })
-}
+        this.updateChaptersStateFromEditors()
+        this.serverCallService
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+            .then(({ data: portfolio }) => {
+                if (portfolio)
+                    this.storageService.setPortfolio(portfolio)
+            })
+    }
     toggleCommentSection() {
         this.$scope.commentsOpen = !this.$scope.commentsOpen
     }

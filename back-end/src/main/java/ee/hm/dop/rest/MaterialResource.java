@@ -84,17 +84,6 @@ public class MaterialResource extends BaseResource {
         return userService.getUserByUsername(username);
     }
 
-    @PUT
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Material createOrUpdateMaterial(Material material) {
-        if (material.getId() == null) {
-            return materialService.createMaterial(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
-        }
-        return materialService.update(material, getLoggedInUser(), SearchIndexStrategy.UPDATE_INDEX);
-    }
-
     @POST
     @Path("create")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
