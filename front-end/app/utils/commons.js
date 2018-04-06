@@ -508,11 +508,11 @@ function focusInput(elementID) {
 }
 
 function isMaterial(type) {
-    return type === ".Material" || type === ".ReducedMaterial"
+    return type === ".Material" || type === ".ReducedMaterial" || type === ".AdminMaterial"
 }
 
 function isPortfolio(type) {
-    return type === ".Portfolio" || type === ".ReducedPortfolio"
+    return type === ".Portfolio" || type === ".ReducedPortfolio" || type === ".AdminPortfolio"
 }
 
 function countOccurrences(value, text) {

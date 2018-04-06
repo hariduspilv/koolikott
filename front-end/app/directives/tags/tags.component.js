@@ -144,8 +144,16 @@ class controller extends Controller {
                 if (tag === removedTag)
                     this.learningObject.tags.splice(idx, 1)
             })
-            this.isPortfolio(this.learningObject) ? this.storageService.setPortfolio(this.learningObject) :
-            this.isMaterial(this.learningObject) && this.storageService.setMaterial(this.learningObject)
+            if (this.isMaterial(this.learningObject)) {
+                this.serverCallService
+                    .makePost('rest/material/update', this.learningObject)
+                    .then(({ data: material }) => {
+                        this.storageService.setMaterial(material)
+                    })
+            } else if (this.isPortfolio(this.learningObject)) {
+                //todo
+                this.storageService.setPortfolio(this.learningObject)
+            }
         }
     }
     addTag() {

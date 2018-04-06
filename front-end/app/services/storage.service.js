@@ -8,6 +8,17 @@ angular.module('koolikottApp')
             var material = null;
             var storageService = {};
 
+            storageService.setLearningObject = function (item) {
+                if (item){
+                    const {type} = item;
+                    if (isMaterial(type)){
+                        storageService.setMaterial(item)
+                    } else if (isPortfolio(type)){
+                        storageService.setPortfolio(item)
+                    }
+                }
+            }
+
             storageService.setPortfolio = function (item) {
                 portfolio = item;
             };
