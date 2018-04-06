@@ -95,8 +95,8 @@ public class LoginService {
 
     private AuthenticatedUser createAuthenticatedUser(User user) {
         //TODO: this should run in a separate thread
-        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-//        Person person = null;
+//        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
+        Person person = null;
         return createAuthenticatedUser(makeUser(user, person));
     }
 

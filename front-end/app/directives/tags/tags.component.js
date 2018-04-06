@@ -151,8 +151,11 @@ class controller extends Controller {
                         this.storageService.setMaterial(material)
                     })
             } else if (this.isPortfolio(this.learningObject)) {
-                //todo
-                this.storageService.setPortfolio(this.learningObject)
+                this.serverCallService
+                    .makePost('rest/portfolio/update', this.learningObject)
+                    .then(({ data: portfolio }) => {
+                        this.storageService.setPortfolio(portfolio)
+                    })
             }
         }
     }
