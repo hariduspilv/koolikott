@@ -183,7 +183,7 @@
               <span class="md-caption caption-light">
                 <span data-translate="AUTHORS"></span>:
               </span>
-              <a data-ng-href="#" data-ng-click="getAuthorSearchURL($event, author.name, author.surname)"
+              <a data-ng-href="{{getAuthorSearchURL(author.name, author.surname)}}"
                  data-ng-repeat="author in material.authors">
                 {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
               </a>
@@ -198,16 +198,17 @@
               </a>
             </p>
             <!-- Publisher -->
-            <p class="md-body-2" data-ng-if="material.publishers">
+            <p class="md-body-2 card-lg__link" data-ng-if="material.publishers">
               <span class="md-caption caption-light">
                 <span data-ng-if="material.publishers && material.publishers.length === 1"
                       data-translate="PUBLISHER"></span>
                 <span data-ng-if="material.publishers && material.publishers.length > 1"
                       data-translate="PUBLISHERS"></span>
               </span>
-              <span data-ng-repeat="publisher in material.publishers">
+              <a data-ng-href="{{getPublisherSearchURL(publisher.name)}}"
+                 data-ng-repeat="publisher in material.publishers">
                 {{publisher.name}}{{$last ? '' : ', '}}
-              </span>
+              </a>
             </p>
             <!-- Created (time) -->
             <p class="md-body-2">

@@ -1,81 +1,86 @@
 'use strict'
 
-angular.module('koolikottApp')
-.controller('profileController',
-[
-    '$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService',
-    function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
+{
+class controller extends Controller {
+    constructor(...args){
+        super(...args)
+        if (!this.$scope.user) this.getUser();
 
-        function init() {
-            if (!$scope.user) getUser();
-
-            if ($route.current.params.username) {
-                getUsersMaterials();
-                getUsersPortfolios();
-            }
+        if (this.$route.current.params.username) {
+            this.getUsersMaterials();
+            this.getUsersPortfolios();
         }
-
-        function getUser() {
-            const userParams = {
-                'username': $route.current.params.username
-            };
-            serverCallService.makeGet("rest/user", userParams)
-                .then((result)=>{
-                    const {data} = result;
-                    if (!isEmpty(data)) {
-                        $scope.user = data;
-                    } else {
-                        getUserFail();
-                    }
-                }, ()=>{getUserFail()})
-        }
-
-        function getUserFail() {
-            console.log('Getting user failed.');
-            $location.url('/');
-        }
-
-        function getUsersMaterials() {
-            serverCallService.makeGet("rest/material/getByCreator", params())
-                .then((result)=>{
-                    const {data} = result;
-                    if (!isEmpty(data)) {
-                        $scope.materials = data.items;
-                    } else {
-                        getUsersMaterialsFail();
-                    }
-                }, ()=>{getUsersMaterialsFail()});
-        }
-
-        function getUsersMaterialsFail() {
-            console.log('Failed to get materials.');
-        }
-
-        function getUsersPortfolios() {
-            serverCallService.makeGet("rest/portfolio/getByCreator", params())
-                .then((result)=>{
-                    const {data} = result;
-                    if (!isEmpty(data)) {
-                        $scope.portfolios = data.items;
-                    } else {
-                        getUsersPortfoliosFail();
-                    }
-                }, ()=>{
-                    getUsersPortfoliosFail()
-                });
-        }
-
-        function getUsersPortfoliosFail() {
-            console.log('Failed to get portfolios.');
-        }
-
-        function params() {
-            return {
-                'username': $route.current.params.username,
-                'maxResults': 1000
-            };
-        }
-
-        init();
     }
-]);
+
+    getUser() {
+        const userParams = {
+            'username': this.$route.current.params.username
+        };
+        this.serverCallService.makeGet("rest/user", userParams)
+            .then(({data}) => {
+                if (!isEmpty(data)) {
+                    this.$scope.user = data;
+                } else {
+                    this.getUserFail();
+                }
+            }, () => {
+                this.getUserFail()
+            })
+    }
+
+    getUserFail() {
+        console.log('Getting user failed.');
+        this.$location.url('/');
+    }
+
+    getUsersMaterials() {
+        this.serverCallService.makeGet("rest/material/getByCreator", this.params())
+            .then(({data}) => {
+                if (!isEmpty(data)) {
+                    this.$scope.materials = data.items;
+                } else {
+                    this.getUsersMaterialsFail();
+                }
+            }, () => {
+                this.getUsersMaterialsFail()
+            });
+    }
+
+    getUsersMaterialsFail() {
+        console.log('Failed to get materials.');
+    }
+
+    getUsersPortfolios() {
+        this.serverCallService.makeGet("rest/portfolio/getByCreator", this.params())
+            .then(({data}) => {
+                if (!isEmpty(data)) {
+                    this.$scope.portfolios = data.items;
+                } else {
+                    this.getUsersPortfoliosFail();
+                }
+            }, () => {
+                this.getUsersPortfoliosFail()
+            });
+    }
+
+    getUsersPortfoliosFail() {
+        console.log('Failed to get portfolios.');
+    }
+
+    params() {
+        return {
+            'username': this.$route.current.params.username,
+            'maxResults': 1000
+        };
+    }
+}
+
+controller.$inject = [
+    '$scope',
+    '$route',
+    'authenticatedUserService',
+    'serverCallService',
+    '$location'
+]
+angular.module('koolikottApp').controller('profileController', controller)
+}

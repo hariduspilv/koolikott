@@ -202,11 +202,12 @@ angular.module('koolikottApp')
             $scope.formatMaterialUpdatedDate = (updatedDate) => formatDateToDayMonthYear(updatedDate);
             $scope.isNullOrZeroLength = (arg) => !arg || !arg.length;
 
-            $scope.getAuthorSearchURL = ($event, firstName, surName) => {
-                $event.preventDefault();
+            $scope.getAuthorSearchURL = (firstName, surName) => {
+                return `/search/result?q=author:"${firstName} ${surName}"&type=all`;
+            };
 
-                searchService.setQuery('author:"' + firstName + " " + surName + '"');
-                $location.url(searchService.getURL());
+            $scope.getPublisherSearchURL = (name) => {
+                return `/search/result?q=publisher:"${name}"&type=all`;
             };
 
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
