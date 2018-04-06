@@ -110,7 +110,6 @@ angular.module('koolikottApp')
                     templateUrl: 'views/profile/profile.html',
                     controller: 'profileController',
                     controllerAs: '$ctrl',
-                    resolve: UserPathResolver
                 })
                 .when('/:username/materials', {
                     templateUrl: 'views/profile/materials/materials.html',

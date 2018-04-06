@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd "${0%/*}"; if [ "$1" != "T" ]; then gnome-terminal -e "'$0' T"; exit; fi;
+
+cd ../docker
+sudo docker-compose stop
+sudo docker-compose up
+
+sleep 10

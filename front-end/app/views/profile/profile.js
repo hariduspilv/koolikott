@@ -5,15 +5,9 @@ angular.module('koolikottApp')
 [
     '$scope', '$route', 'authenticatedUserService', 'serverCallService', '$location', 'alertService',
     function ($scope, $route, authenticatedUserService, serverCallService, $location, alertService) {
-        var params;
 
         function init() {
             if (!$scope.user) getUser();
-
-            params = {
-                'username': $route.current.params.username,
-                'maxResults': 1000
-            };
 
             if ($route.current.params.username) {
                 getUsersMaterials();
@@ -22,19 +16,18 @@ angular.module('koolikottApp')
         }
 
         function getUser() {
-            var userParams = {
+            const userParams = {
                 'username': $route.current.params.username
             };
-            var url = "rest/user";
-            serverCallService.makeGet(url, userParams, getUserSuccess, getUserFail);
-        }
-
-        function getUserSuccess(user) {
-            if (isEmpty(user)) {
-                getUserFail();
-            } else {
-                $scope.user = user;
-            }
+            serverCallService.makeGet("rest/user", userParams)
+                .then((result)=>{
+                    const {data} = result;
+                    if (!isEmpty(data)) {
+                        $scope.user = data;
+                    } else {
+                        getUserFail();
+                    }
+                }, ()=>{getUserFail()})
         }
 
         function getUserFail() {
@@ -43,16 +36,15 @@ angular.module('koolikottApp')
         }
 
         function getUsersMaterials() {
-            var url = "rest/material/getByCreator";
-            serverCallService.makeGet(url, params, getUsersMaterialsSuccess, getUsersMaterialsFail);
-        }
-
-        function getUsersMaterialsSuccess(data) {
-            if (isEmpty(data)) {
-                getUsersMaterialsFail();
-            } else {
-                $scope.materials = data.items;
-            }
+            serverCallService.makeGet("rest/material/getByCreator", params())
+                .then((result)=>{
+                    const {data} = result;
+                    if (!isEmpty(data)) {
+                        $scope.materials = data.items;
+                    } else {
+                        getUsersMaterialsFail();
+                    }
+                }, ()=>{getUsersMaterialsFail()});
         }
 
         function getUsersMaterialsFail() {
@@ -60,20 +52,28 @@ angular.module('koolikottApp')
         }
 
         function getUsersPortfolios() {
-            var url = "rest/portfolio/getByCreator";
-            serverCallService.makeGet(url, params, getUsersPortfoliosSuccess, getUsersPortfoliosFail);
-        }
-
-        function getUsersPortfoliosSuccess(data) {
-            if (isEmpty(data)) {
-                getUsersPortfoliosFail();
-            } else {
-                $scope.portfolios = data.items;
-            }
+            serverCallService.makeGet("rest/portfolio/getByCreator", params())
+                .then((result)=>{
+                    const {data} = result;
+                    if (!isEmpty(data)) {
+                        $scope.portfolios = data.items;
+                    } else {
+                        getUsersPortfoliosFail();
+                    }
+                }, ()=>{
+                    getUsersPortfoliosFail()
+                });
         }
 
         function getUsersPortfoliosFail() {
             console.log('Failed to get portfolios.');
+        }
+
+        function params() {
+            return {
+                'username': $route.current.params.username,
+                'maxResults': 1000
+            };
         }
 
         init();
