@@ -9,4 +9,7 @@ public enum Visibility {
     public boolean isPublic(){
         return this == PUBLIC;
     }
+    public boolean isNotPublic(){
+        return this != PUBLIC;
+    }
 }

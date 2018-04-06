@@ -248,6 +248,13 @@
           </span>
           {{portfolio.added | date:'dd.MM.yyyy'}}
         </p>
+        <!-- Published/Added -->
+        <p class="md-body-2" data-ng-if="portfolio.publishedAt">
+          <span class="md-caption caption-light">
+            <span data-translate="ADDED"></span>:
+          </span>
+          {{portfolio.publishedAt | date:'dd.MM.yyyy'}}
+        </p>
       </md-content>
       <md-divider class="md-default-theme"></md-divider>
       <md-content class="card-lg__container">

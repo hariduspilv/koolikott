@@ -1,8 +1,14 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.interfaces.IPortfolio;
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +40,12 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @JoinColumn(name = "originalCreator", nullable = false)
     private User originalCreator;
 
+    @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime publishedAt;
+
     public String getTitle() {
         return title;
     }
@@ -47,7 +59,6 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     }
 
     public void setSummary(String summary) {
-
         this.summary = getSanitizedHTML(summary);
     }
 
@@ -72,5 +83,13 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
             summary = LO_ALLOWED_HTML_TAGS_POLICY.sanitize(summary);
         }
         return summary;
+    }
+
+    public DateTime getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(DateTime publishedAt) {
+        this.publishedAt = publishedAt;
     }
 }
