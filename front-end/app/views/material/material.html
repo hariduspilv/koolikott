@@ -181,7 +181,12 @@
             <!-- Author(s) -->
             <p class="md-body-2 card-lg__link" data-ng-if="!isNullOrZeroLength(material.authors)">
               <span class="md-caption caption-light">
-                <span data-translate="AUTHORS"></span>:
+                <span data-ng-if="material.authors.length === 1">
+                  <span data-translate="AUTHOR"></span>:
+                </span>
+                <span data-ng-if="material.authors.length > 1">
+                  <span data-translate="AUTHORS"></span>:
+                </span>
               </span>
               <a data-ng-href="{{getAuthorSearchURL(author.name, author.surname)}}"
                  data-ng-repeat="author in material.authors">
