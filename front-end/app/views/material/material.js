@@ -121,7 +121,7 @@ angular.module('koolikottApp')
             }
 
             function getMaterialFail() {
-                log('Getting materials failed. Redirecting to landing page');
+                console.log('Getting materials failed. Redirecting to landing page');
                 alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
                 $location.url("/");
             }
@@ -247,7 +247,7 @@ angular.module('koolikottApp')
 
             $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
-                editMaterialScope.material = $scope.material;
+                editMaterialScope.material = angular.copy($scope.material);
 
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
