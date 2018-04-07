@@ -1,12 +1,9 @@
 'use strict';
+{
+class controller extends Controller {
 
-angular.module('koolikottApp')
-    .factory('portfolioService', ['serverCallService', portfolioService]);
-
-function portfolioService(serverCallService) {
-
-    function getPortfolioById(id) {
-        return serverCallService.makeGet("rest/portfolio", {'id': id})
+    getPortfolioById(id) {
+        return this.serverCallService.makeGet("rest/portfolio", {'id': id})
             .then((response) => {
                 if (response.data) {
                     return response.data;
@@ -14,22 +11,22 @@ function portfolioService(serverCallService) {
             });
     }
 
-    function increaseViewCount(portfolio) {
+    increaseViewCount(portfolio) {
         let viewCountParams = {
             'type': '.Portfolio',
             'id': portfolio.id
         };
-        return serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
+        return this.serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
             .then(response => {
                 if (response.data) {
                     return response.data;
                 }
             });
     }
+}
 
-
-    return {
-        getPortfolioById: getPortfolioById,
-        increaseViewCount: increaseViewCount
-    }
+controller.$inject = [
+    'serverCallService',
+]
+factory('portfolioService', controller)
 }

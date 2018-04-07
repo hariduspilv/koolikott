@@ -1,32 +1,30 @@
 'use strict';
+{
+class controller extends Controller {
 
-angular.module('koolikottApp')
-    .service('materialService', ['serverCallService' , MaterialService]);
-
-function MaterialService(serverCallService) {
-
-    function getMaterialById(id) {
-        return serverCallService.makeGet("rest/material", {id})
+    getMaterialById(id) {
+        return this.serverCallService.makeGet("rest/material", {id})
             .then((response) => {
                 return response.data;
             });
     }
 
-    function increaseViewCount(material) {
+    increaseViewCount(material) {
         let viewCountParams = {
             'type': '.Material',
             'id': material.id
         };
-        return serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
+        return this.serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
             .then(response => {
                 if (response.data){
                     return response.data;
                 }
             });
     }
+}
 
-    return {
-        getMaterialById: getMaterialById,
-        increaseViewCount: increaseViewCount
-    }
+controller.$inject = [
+    'serverCallService',
+]
+factory('materialService', controller)
 }
