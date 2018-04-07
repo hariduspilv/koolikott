@@ -40,7 +40,11 @@ class controller {
         return this.isModerator() || this.isAdmin()
     }
     isModeratorOrAdminOrCreator(learningObject) {
-        return this.isModerator() || this.isAdmin() || learningObject && this.getUser().id === learningObject.creator.id
+        if (this.isModeratorOrAdmin()){
+            return;
+        }
+        const user = this.getUser();
+        return learningObject && user && user.id === learningObject.creator.id
     }
     getUser() {
         const authenticatedUser = this.getAuthenticatedUser()

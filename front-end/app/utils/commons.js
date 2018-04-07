@@ -229,7 +229,7 @@ function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         return;
     }
 
-    var languageStringValue;
+    let languageStringValue;
 
     if (values.length === 1) {
         languageStringValue = values[0].text;

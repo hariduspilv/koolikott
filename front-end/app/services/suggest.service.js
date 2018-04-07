@@ -1,47 +1,33 @@
-/**
-* Created by joonas on 17.08.16.
-*/
 'use strict';
+{
+class controller extends Controller {
 
-angular.module('koolikottApp')
-.factory('suggestService',
-[
-    '$http', 'serverCallService',
-    function ($http, serverCallService) {
+    getSuggestURLbase() {
+        return "rest/suggest/";
+    }
 
-        var suggestURLbase = "rest/suggest/";
-        var suggestSystemTagURLbase = "rest/suggest/tag";
-        var suggest = {
-            query: '',
-            data: '',
-            selectedItem: '',
-            searchText: ''
-        };
+    getSuggestSystemTagURLbase() {
+        return "rest/suggest/tag";
+    }
 
-        return {
-            getSuggestURLbase: function() {
-                return suggestURLbase;
-            },
+    getURL(query) {
+        return this.getSuggestURLbase() + "?q=" + query;
+    }
 
-            getSuggestSystemTagURLbase: function() {
-                return suggestSystemTagURLbase;
-            },
-
-            getURL: function(query) {
-                return this.getSuggestURLbase() + "?q=" + query;
-            },
-
-            suggest: function(query, url) {
-                if (query == null) {
-                    return [];
-                }
-
-                return serverCallService.makeGet(url, {q: query})
-                .then(function(response) {
-                    return response.data;
-                });
-            }
+    suggest(query, url) {
+        if (query == null) {
+            return [];
         }
 
+        return this.serverCallService.makeGet(url, {q: query})
+            .then(function(response) {
+                return response.data;
+            });
     }
-]);
+}
+
+controller.$inject = [
+    'serverCallService',
+]
+factory('suggestService', controller)
+}

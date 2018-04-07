@@ -3,10 +3,10 @@
 angular.module('koolikottApp')
     .factory('storageService',
         function () {
-            var portfolio = null;
-            var emptyPortfolio = null;
-            var material = null;
-            var storageService = {};
+            let portfolio = null;
+            let emptyPortfolio = null;
+            let material = null;
+            let storageService = {};
 
             storageService.setLearningObject = function (item) {
                 if (item){
