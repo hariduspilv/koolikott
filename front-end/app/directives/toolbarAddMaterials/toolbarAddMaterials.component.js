@@ -6,7 +6,7 @@ class controller extends Controller {
         if (this.$rootScope.isEditPortfolioMode) {
             this.isPortfolioEdit = true
             this.portfolio = this.storageService.getPortfolio()
-            this.chapter = window.embedInsertionChapterIdx + ''
+            this.chapter = window.embedInsertionChapterIdx || -1;
         } else
             this.loadUserPortfolios()
     }
