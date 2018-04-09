@@ -296,7 +296,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = portfolioWithTitle("With chapters");
 
         Material json = materialWithSource("http://www.november.juliet.ru");
-        Material createdMaterial = doPut(CREATE_MATERIAL_URL, json, Material.class);
+        Material createdMaterial = createOrUpdateMaterial(json);
 
         Chapter firstChapter = chapter("First chapter");
         firstChapter.setContentRows(Lists.newArrayList(new ContentRow(Lists.newArrayList(createdMaterial))));
@@ -306,7 +306,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         assertNotNull(createdPortfolio);
         assertNotNull(createdPortfolio.getId());
-        assertEquals(((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getSource(), doPut(CREATE_MATERIAL_URL, createdMaterial, Material.class).getSource());
+        String expected = createOrUpdateMaterial(createdMaterial).getSource();
+        String actual = ((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getSource();
+        assertEquals(actual, expected);
     }
 
     private Material materialWithSource(String source) {
