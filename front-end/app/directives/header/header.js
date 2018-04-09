@@ -238,10 +238,9 @@ class controller extends Controller {
             this.$scope.isHeaderRed = false
         }
 
-        if (!this.authenticatedUserService.isAdmin() &&
-            !this.authenticatedUserService.isModerator()
-        )
+        if (!this.authenticatedUserService.isModeratorOrAdmin()){
             return setDefault()
+        }
 
         const path = this.$location.path()
         const isDashboard = path.startsWith('/dashboard')
@@ -419,11 +418,7 @@ directive('dopHeader', {
     scope: true,
     templateUrl: 'directives/header/header.html',
     link($scope, $element, $attr, $ctrl) {
-        let scrollTimer,
-            detailedSearch = document.getElementById('detailedSearch'),
-            $detailedSearch = angular.element(detailedSearch),
-            $header = document.getElementById('md-toolbar-header'),
-            isSuggestVisible = false
+        let  isSuggestVisible = false
 
         const checkWindowWidth = () => {
             if ($ctrl.isNVP())

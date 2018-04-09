@@ -86,39 +86,6 @@ class controller extends Controller {
 
         this.$location.url('/' + this.searchService.getSearchURLbase() + this.searchService.getQueryURL())
     }
-    /*loadMostLiked() {
-        this.isSearchResultPage()
-            ? this.loadMostLikedOrderedByLikes()
-            : this.serverCallService
-                .makeGet('rest/search/mostLiked', {
-                    maxResults: SIDE_ITEMS_AMOUNT
-                })
-                .then(({ data }) => {
-                    if (data)
-                        this.$scope.mostLikedList = data
-                })
-    }
-    loadMostLikedOrderedByLikes() {
-        // What is the point of all these sort ops??
-        const originalSort = this.searchService.getSort()
-        const originalSortDirection = this.searchService.getSortDirection()
-        this.searchService.setSort('like_score')
-        this.searchService.setSortDirection('desc')
-        this.searchService.setSort(originalSort)
-        this.searchService.setSortDirection(originalSortDirection)
-
-        this.serverCallService
-            .makeGet('rest/search?'+this.searchService.getQueryURL(true), {
-                limit: SIDE_ITEMS_AMOUNT
-            })
-            .then(({ data }) => {
-                if (data)
-                    this.$scope.mostLikedList = data.items
-            })
-    }
-    isSearchResultPage() {
-        return this.$location.url().startsWith('/' + this.searchService.getSearchURLbase())
-    }*/
 }
 controller.$inject = [
     '$scope',

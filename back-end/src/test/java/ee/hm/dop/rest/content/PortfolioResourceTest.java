@@ -27,7 +27,6 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
     private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
 
-    private static final String CREATE_MATERIAL_URL = "material";
     public static final String NEW_SUBCHAPTER = "New subchapter";
     public static final String NEW_CHAPTER_1 = "New chapter 1";
     public static final String NEW_COOL_SUBCHAPTER = "New cool subchapter";

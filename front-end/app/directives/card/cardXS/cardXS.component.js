@@ -10,8 +10,9 @@ class controller extends Controller {
                 this.storageService.setMaterial(this.learningObject)
                 this.$location.path('/material').search({ id })
             } else {
-                this.materialService.getMaterialById(this.learningObject.id).then(result=>{
-                    this.storageService.setMaterial(result);
+                this.materialService.getMaterialById(this.learningObject.id).then(learningObject=>{
+                    this.modifyRootScope(learningObject);
+                    this.storageService.setMaterial(learningObject);
                     this.$location.path('/material').search({ id })
                 })
             }
@@ -21,16 +22,26 @@ class controller extends Controller {
                 this.storageService.setPortfolio(this.learningObject)
                 this.$location.path('/portfolio').search({id})
             } else {
-                this.porfolioService.getPortfolioById(this.learningObject.id).then(result=>{
-                    this.storageService.setPortfolio(result);
+                this.porfolioService.getPortfolioById(this.learningObject.id).then(learningObject=>{
+                    this.modifyRootScope(learningObject);
+                    this.storageService.setPortfolio(learningObject);
                     this.$location.path('/portfolio').search({id})
                 })
             }
         }
     }
+
+    modifyRootScope(learningObject) {
+        this.$rootScope.learningObjectPrivate = learningObject && ['PRIVATE'].includes(learningObject.visibility)
+        this.$rootScope.learningObjectImproper = learningObject && learningObject.improper > 0
+        this.$rootScope.learningObjectDeleted = learningObject && learningObject.deleted === true
+        this.$rootScope.learningObjectChanged = learningObject && learningObject.changed > 0
+        this.$rootScope.learningObjectUnreviewed = learningObject && !!learningObject.unReviewed
+    }
 }
-controller.$inject = [
+    controller.$inject = [
     '$location',
+    '$rootScope',
     'translationService',
     'storageService',
     'materialService',
