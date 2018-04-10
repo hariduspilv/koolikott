@@ -61,17 +61,11 @@ public class ApplicationLauncher {
     }
 
     private static void acceptReviewableChange() {
-//        AutomaticallyAcceptReviewableChange.acceptReviewableChangeHandle =
-        Executors.newSingleThreadExecutor().submit(() -> {
-            automaticallyAcceptReviewableChange.run();
-        });
+        Executors.newSingleThreadExecutor().submit(() -> automaticallyAcceptReviewableChange.run());
     }
 
     private static void synchronizeMaterials() {
-//        SynchronizeMaterialsExecutor.synchronizeMaterialHandle =
-        Executors.newSingleThreadExecutor().submit(() -> {
-            synchronizeMaterialsExecutor.run();
-        });
+        Executors.newSingleThreadExecutor().submit(() -> synchronizeMaterialsExecutor.run());
     }
 
     private static void startExecutors() {

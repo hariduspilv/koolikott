@@ -19,6 +19,10 @@ public abstract class DopDaemonProcess {
         DbUtils.closeTransaction();
     }
 
+    protected void closeEntityManager() {
+        DbUtils.closeEntityManager();
+    }
+
     protected void beginTransaction() {
         EntityTransaction transaction = DbUtils.getTransaction();
         if (!transaction.isActive()) transaction.begin();

@@ -54,10 +54,11 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
             }
 
             logger.info("Automatic ReviewableChange Acceptor has finished execution, updated changes: " + accepted);
+            closeTransaction();
         } catch (Exception e) {
             logger.error("Unexpected error while automatically accepting ReviewableChange", e);
         } finally {
-            closeTransaction();
+            closeEntityManager();
         }
     }
 
