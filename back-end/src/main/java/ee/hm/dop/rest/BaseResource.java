@@ -20,6 +20,7 @@ import ee.hm.dop.utils.ConfigurationProperties;
 import org.apache.commons.configuration.Configuration;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
 
 public class BaseResource {
@@ -50,6 +51,10 @@ public class BaseResource {
 
     public static String decode(String string) throws UnsupportedEncodingException {
         return URLDecoder.decode(string, UTF_8);
+    }
+
+    protected Response redirect(URI authenticationUri) {
+        return Response.temporaryRedirect(authenticationUri).build();
     }
 
     protected HttpServletRequest getRequest() {
