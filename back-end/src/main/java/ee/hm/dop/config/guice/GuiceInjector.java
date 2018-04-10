@@ -68,13 +68,7 @@ public class GuiceInjector {
     }
 
     private static void removeModule(com.google.inject.Module module, List<com.google.inject.Module> list) {
-        Iterator<com.google.inject.Module> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            com.google.inject.Module original = iterator.next();
-            if (original.getClass() == module.getClass()) {
-                iterator.remove();
-            }
-        }
+        list.removeIf(original -> original.getClass() == module.getClass());
     }
 
     private static com.google.inject.Module newModule(Class<?> testModuleClass) {

@@ -45,19 +45,15 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                 closeTransaction();
             }
 
+            closeTransaction();
             logger.info("Synchronization repository service finished execution.");
         } catch (Exception e) {
             logger.error("Unexpected error while synchronizing materials.", e);
         } finally {
             logger.info("Updating Solr index after synchronizing all materials");
-            updateSolrIndex();
-            closeTransaction();
+            solrEngineService.updateIndex();
+            closeEntityManager();
         }
-    }
-
-    private void updateSolrIndex() {
-        logger.info("Updating Search Engine index...");
-        solrEngineService.updateIndex();
     }
 
     /**

@@ -1,19 +1,16 @@
 package ee.hm.dop.service.login;
 
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.stuudium.StuudiumUser;
+import org.apache.commons.codec.digest.HmacUtils;
+import org.apache.commons.configuration.Configuration;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.stuudium.StuudiumUser;
-import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration.Configuration;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 public class StuudiumService {
 

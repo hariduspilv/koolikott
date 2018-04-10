@@ -66,9 +66,11 @@ public class ChapterMigration extends DopDaemonProcess {
             logger.info(String.format("Chapters that didn't need migration: %s, because they have no blocks, rows or subchapters", noRowsNoSubChapters));
             logger.info(String.format("Chapters that were migrated: %s ", chaptersMigrated));
             logger.info(String.format("Chapters that need to cleanup their rows: %s, because they have blocks already", chaptersThatNeedCleanUp));
-        } catch (Exception e) {
             closeTransaction();
+        } catch (Exception e) {
             logger.info("Chapter migration unexpected error ", e);
+        } finally {
+            closeEntityManager();
         }
 
     }
