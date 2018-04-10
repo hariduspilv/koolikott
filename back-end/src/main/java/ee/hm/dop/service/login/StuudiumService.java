@@ -1,10 +1,5 @@
 package ee.hm.dop.service.login;
 
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
-
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +9,8 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration.Configuration;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 public class StuudiumService {
 
@@ -37,6 +34,10 @@ public class StuudiumService {
                 .request().accept(MediaType.APPLICATION_JSON).get();
 
         return response.readEntity(StuudiumUser.class);
+    }
+
+    public String getServerUrl() {
+        return configuration.getString(SERVER_ADDRESS);
     }
 
     public String getAuthorizationUrl() {

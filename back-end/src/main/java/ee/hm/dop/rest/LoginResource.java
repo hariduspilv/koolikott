@@ -37,7 +37,9 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String LOGIN_REDIRECT_WITH_TOKEN = "../#!/loginRedirect?token=";
+    private static final String STUUDIUM_LOGIN_REDIRECT_WITH_TOKEN = "/#!/loginRedirect?token=";
     private static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "../#!/loginRedirect";
+    private static final String STUUDIUM_LOGIN_REDIRECT_WITHOUT_TOKEN = "/#!/loginRedirect";
     public static final String SSL_CLIENT_S_DN = "SSL_CLIENT_S_DN";
 
     @Inject
@@ -114,7 +116,8 @@ public class LoginResource extends BaseResource {
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
     public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
-                                               @QueryParam("idCode") String idCode, @QueryParam("language") String languageCode) throws Exception {
+                                               @QueryParam("idCode") String idCode,
+                                               @QueryParam("language") String languageCode) throws Exception {
         return loginService.mobileIDAuthenticate(phoneNumber, idCode, languageService.getLanguage(languageCode));
     }
 
@@ -138,15 +141,17 @@ public class LoginResource extends BaseResource {
     }
 
     private Response authenticateWithStuudiumToken(String token) throws URISyntaxException {
-        URI location;
+        URI location = getLocation(token);
+        return Response.temporaryRedirect(location).build();
+    }
+
+    private URI getLocation(String token) throws URISyntaxException {
         try {
             AuthenticatedUser authenticatedUser = stuudiumService.authenticate(token);
-            location = new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());
+            return new URI(stuudiumService.getServerUrl() + STUUDIUM_LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());
         } catch (Exception e) {
-            e.printStackTrace();
-            location = new URI(LOGIN_REDIRECT_WITHOUT_TOKEN);
+            return new URI(stuudiumService.getServerUrl() + STUUDIUM_LOGIN_REDIRECT_WITHOUT_TOKEN);
         }
-        return Response.temporaryRedirect(location).build();
     }
 
     private String getIdCodeFromRequest() {
@@ -181,8 +186,7 @@ public class LoginResource extends BaseResource {
     }
 
     private URI getStuudiumAuthenticationURI() throws URISyntaxException {
-        return new URI(format(STUUDIUM_AUTHENTICATION_URL, stuudiumService.getAuthorizationUrl(),
-                stuudiumService.getClientId()));
+        return new URI(format(STUUDIUM_AUTHENTICATION_URL, stuudiumService.getAuthorizationUrl(), stuudiumService.getClientId()));
     }
 
     private String getEkoolCallbackUrl() {
