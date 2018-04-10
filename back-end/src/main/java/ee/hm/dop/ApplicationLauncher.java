@@ -55,9 +55,7 @@ public class ApplicationLauncher {
     }
 
     private static void migrateChapters() {
-        Executors.newSingleThreadExecutor().submit(() -> {
-            chapterMigration.run();
-        });
+        Executors.newSingleThreadExecutor().submit(() -> chapterMigration.run());
     }
 
     private static void acceptReviewableChange() {

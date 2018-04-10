@@ -51,14 +51,9 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
             logger.error("Unexpected error while synchronizing materials.", e);
         } finally {
             logger.info("Updating Solr index after synchronizing all materials");
-            updateSolrIndex();
+            solrEngineService.updateIndex();
             closeEntityManager();
         }
-    }
-
-    private void updateSolrIndex() {
-        logger.info("Updating Search Engine index...");
-        solrEngineService.updateIndex();
     }
 
     /**
