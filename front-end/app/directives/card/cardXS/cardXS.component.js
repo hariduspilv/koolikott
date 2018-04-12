@@ -16,13 +16,12 @@ class controller extends Controller {
                     this.$location.path('/material').search({ id })
                 })
             }
-        }
-        if (isPortfolio(this.learningObject.type)) {
+        } else if (isPortfolio(this.learningObject.type)) {
             if (this.learningObject.type === '.Portfolio') {
                 this.storageService.setPortfolio(this.learningObject)
                 this.$location.path('/portfolio').search({id})
             } else {
-                this.porfolioService.getPortfolioById(this.learningObject.id).then(learningObject=>{
+                this.portfolioService.getPortfolioById(this.learningObject.id).then(learningObject=>{
                     this.modifyRootScope(learningObject);
                     this.storageService.setPortfolio(learningObject);
                     this.$location.path('/portfolio').search({id})
