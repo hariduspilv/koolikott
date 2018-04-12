@@ -3,7 +3,12 @@
   <form name="addPortfolioForm">
     <md-toolbar class="md-accent">
       <div class="md-toolbar-tools" flex>
-        <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
+        <div data-ng-if="!isEditPortfolio">
+          <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
+        </div>
+        <div data-ng-if="isEditPortfolio">
+          <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_EDIT_LABEL"></h2>
+        </div>
         <span flex></span>
         <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
                    aria-label="Sulge kogumiku lisamise modaalaken">
