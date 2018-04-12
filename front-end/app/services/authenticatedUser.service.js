@@ -41,7 +41,7 @@ class controller {
     }
     isModeratorOrAdminOrCreator(learningObject) {
         if (this.isModeratorOrAdmin()){
-            return;
+            return true;
         }
         const user = this.getUser();
         return learningObject && user && user.id === learningObject.creator.id
