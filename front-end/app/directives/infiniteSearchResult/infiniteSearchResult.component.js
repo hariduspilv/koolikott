@@ -40,7 +40,8 @@ class controller extends Controller {
         }]
 
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
-        this.search(true)
+        this.search(true);
+        this.$rootScope.$on('logout:success', this.search.bind(this));
     }
     setParams() {
         if (!this.params)
@@ -134,6 +135,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$element',
     '$timeout',
     '$translate',
