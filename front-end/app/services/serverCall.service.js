@@ -40,13 +40,13 @@ class controller extends Controller {
             })
 
         this.$http(config)
-            .then(function (response) {
+            .then((response)=> {
                 if (method === "HEAD") {
                     successCallback(response.headers);
                 } else {
                     successCallback(response.data);
                 }
-            }, function (response) {
+            }, (response)=> {
                 if (response.status == '419') {
                     this.authenticatedUserService.removeAuthenticatedUser();
                     this.makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
