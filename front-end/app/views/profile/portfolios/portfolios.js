@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('userPortfoliosController',
 [
-    '$scope', '$route', 'authenticatedUserService',
-    function ($scope, $route, authenticatedUserService) {
+    '$scope', '$route', 'authenticatedUserService', '$translate', 'serverCallService',
+    function ($scope, $route, authenticatedUserService, $translate, serverCallService) {
         function init() {
             $scope.cache = false;
             $scope.url = "rest/portfolio/getByCreator";
@@ -16,12 +16,32 @@ angular.module('koolikottApp')
             setTitle();
         }
 
+        function emptyTitle() {
+            $translate('PROFILE_PAGE_TITLE_PORTFOLIOS').then((value) => {
+                $scope.title = (value.replace('${user}', ''));
+            })
+        }
+
         function setTitle() {
-            var user = authenticatedUserService.getUser();
+            const user = authenticatedUserService.getUser();
             if (user && $route.current.params.username === user.username) {
                 $scope.title = 'MYPROFILE_PAGE_TITLE_PORTFOLIOS';
             } else {
-                $scope.title = 'PROFILE_PAGE_TITLE_PORTFOLIOS';
+                const userParams = {
+                    'username': $route.current.params.username
+                };
+                serverCallService.makeGet("rest/user", userParams)
+                .then(({data: user}) => {
+                    if (user){
+                        $translate('PROFILE_PAGE_TITLE_PORTFOLIOS').then((value) =>{
+                            $scope.title = value.replace('${user}', `${user.name} ${user.surname}`);
+                        })
+                    } else {
+                        emptyTitle();
+                    }
+                }, ()=>{
+                    emptyTitle();
+                })
             }
         }
 
