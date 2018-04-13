@@ -205,10 +205,12 @@
             <!-- Publisher -->
             <p class="md-body-2 card-lg__link" data-ng-if="material.publishers">
               <span class="md-caption caption-light">
-                <span data-ng-if="material.publishers && material.publishers.length === 1"
-                      data-translate="PUBLISHER"></span>:
-                <span data-ng-if="material.publishers && material.publishers.length > 1"
-                      data-translate="PUBLISHERS"></span>:
+                <span data-ng-if="material.publishers && material.publishers.length === 1">
+                  <span data-translate="PUBLISHER"></span>:
+                </span>
+                <span data-ng-if="material.publishers && material.publishers.length > 1">
+                  <span data-translate="PUBLISHERS"></span>:
+                </span>
               </span>
               <a data-ng-href="{{getPublisherSearchURL(publisher.name)}}"
                  data-ng-repeat="publisher in material.publishers">
