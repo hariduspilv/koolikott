@@ -168,7 +168,7 @@ class controller extends Controller {
                 this.toastService.show('PORTFOLIO_DELETED')
                 this.portfolio.deleted = true
                 this.$rootScope.learningObjectDeleted = true
-                this.$rootScope.isEditPortfolioMode = false;
+                this.$location.url('/portfolio?id=' + this.$route.current.params.id)
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
             })
     }
