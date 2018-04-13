@@ -7,7 +7,6 @@ class controller extends Controller {
             if (this.authenticatedUserService.isAdmin() ||
                 this.authenticatedUserService.isModerator()
             )
-                console.info('%c@todo: Creator of this material is admin or moderator. Should “Restrict material creator” button be hidden or disabled?', 'color: blue')
 
             this.$scope.toggleRestrict = this.toggleRestrict.bind(this)
             this.setState(this.$scope.learningObject.creator)
