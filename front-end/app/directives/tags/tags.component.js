@@ -7,6 +7,7 @@ class controller extends Controller {
     $onInit() {
         this.newTag = {}
         this.showMoreTags = false
+        this.deleteQueryIsRunning = false
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.getTagUpVotes()
 
@@ -82,16 +83,14 @@ class controller extends Controller {
                     this.allUpvotes = sorted
                     this.$scope.upvotes = this.allUpvotes.slice(0, 10)
                     this.showMoreTags = true
-                } else
+                } else {
+                    this.allUpvotes = sorted
                     this.$scope.upvotes = sorted
+                    this.showMoreTags = false
+                }
 
                 this.setNewTags()
             })
-    }
-    sortTagsByUpVoteCount(tags) {
-        return Array.isArray(tags)
-            ? tags.sort((a, b) => b.upVoteCount - a.upVoteCount)
-            : tags
     }
     isLoggedOutAndHasNoTags() {
         return !this.authenticatedUserService.isAuthenticated()
@@ -119,6 +118,9 @@ class controller extends Controller {
     isAllowedToRemove() {
         return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject);
     }
+    isDeleteQueryRunning(){
+        return this.deleteQueryIsRunning
+    }
     removeUpVote(upVoteForm) {
         this.removedTag = upVoteForm
         this.tagsService
@@ -143,19 +145,22 @@ class controller extends Controller {
             this.learningObject.tags.forEach((tag, idx) => {
                 if (tag === removedTag)
                     this.learningObject.tags.splice(idx, 1)
-            })
+            });
+            this.deleteQueryIsRunning = true;
             if (this.isMaterial(this.learningObject)) {
                 this.serverCallService
                     .makePost('rest/material/update', this.learningObject)
                     .then(({ data: material }) => {
-                        this.storageService.setMaterial(material)
+                        this.addTagSuccess(material)
+                        this.deleteQueryIsRunning = false
                     })
             } else if (this.isPortfolio(this.learningObject)) {
                 this.updateChaptersStateFromEditors()
                 this.serverCallService
                     .makePost('rest/portfolio/update', this.learningObject)
                     .then(({ data: portfolio }) => {
-                        this.storageService.setPortfolio(portfolio)
+                        this.addTagSuccess(portfolio)
+                        this.deleteQueryIsRunning = false
                     })
             }
         }
@@ -164,9 +169,7 @@ class controller extends Controller {
         if (this.newTag && this.newTag.tagName && this.learningObject && this.learningObject.id) {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
-                .then(({ data }) =>
-                    this.addTagSuccess(data)
-                )
+                .then(({ data }) => this.addTagSuccess(data))
             this.newTag.tagName = null
         }
     }

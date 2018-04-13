@@ -5,15 +5,12 @@
   <md-chips
     data-ng-model="upvotes"
     readonly="true"
-    data-md-removable="$ctrl.isAllowedToRemove()"
-    data-md-on-remove="$ctrl.removeTag($chip.tag)">
+  >
     <md-chip-template dop-tag-custom-chip>
       <md-button
-        data-ng-if="
-          $ctrl.authenticatedUserService.isUserOrModerator() && !$root.isEditPortfolioMode"
+        data-ng-if="$ctrl.authenticatedUserService.isUserOrModerator() && !$root.isEditPortfolioMode"
         class="md-icon-button"
-        ng-click="$ctrl.reportTag($event)"
-        >
+        ng-click="$ctrl.reportTag($event)">
         <md-icon
           class="material-icons md-light md-48"
           data-md-colors="{ color: 'grey-400' }"
@@ -46,6 +43,23 @@
           <span data-translate="TAG_TOOLTIP_REMOVE_UPVOTE"></span>
         </md-tooltip>
         <md-icon data-md-colors="{ color: 'grey-500' }">undo</md-icon>
+      </md-button>
+      <md-button
+        data-ng-if="$ctrl.isAllowedToRemove() && $ctrl.isDeleteQueryRunning()"
+        class="md-icon-button">
+        <md-tooltip>
+          <span data-translate="DELETE_TAG_WAIT"></span>
+        </md-tooltip>
+        <md-icon data-md-colors="{ color: 'grey-500' }">hourglass_empty</md-icon>
+      </md-button>
+      <md-button
+                 data-ng-if="$ctrl.isAllowedToRemove() && !$ctrl.isDeleteQueryRunning()"
+                 class="md-icon-button"
+                 data-ng-click="$ctrl.removeTag($chip.tag)">
+        <md-tooltip>
+          <span data-translate="DELETE_TAG"></span>
+        </md-tooltip>
+        <md-icon>close</md-icon>
       </md-button>
     </md-chip-template>
   </md-chips>

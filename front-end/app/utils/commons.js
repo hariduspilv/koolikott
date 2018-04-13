@@ -946,6 +946,23 @@ class Controller {
 
         return tmp.textContent || tmp.innerText || ''
     }
+    sortTagsByUpVoteCount(tags) {
+        return Array.isArray(tags)
+            ? tags.sort((a, b) => {
+                const diff = b.upVoteCount - a.upVoteCount;
+                if (diff !== 0){
+                    return diff;
+                }
+                if (a.tag < b.tag){
+                    return -1;
+                }
+                if (a.tag > b.tag){
+                    return 1;
+                }
+                return 0;
+            })
+            : tags
+    }
 }
 
 /**

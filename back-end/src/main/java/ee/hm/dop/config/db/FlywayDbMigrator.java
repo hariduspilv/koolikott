@@ -24,6 +24,7 @@ public class FlywayDbMigrator implements DatabaseMigrator {
         Flyway flyway = new Flyway();
         flyway.setDataSource(getUrl(), getUser(), getPassword());
         flyway.setBaselineOnMigrate(true);
+        flyway.setPlaceholderReplacement(false);
         try {
             flyway.setOutOfOrder(true);
             flyway.repair();
