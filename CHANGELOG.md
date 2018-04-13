@@ -1,4 +1,15 @@
-## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/17) (testimisel)
+## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17) (testimisel)
+
+### Muutunud
+* Materjali detailvaate muudatused -> Detailvaate dünaamiliste lingide loomine #312 [#312](https://github.com/hariduspilv/koolikott/issues/312)
+* Materjali detailvaate muudatused -> Võtmesõnade kustutamine olemasolevalt materjalilt [#313](https://github.com/hariduspilv/koolikott/issues/313)
+* Kogumiku detailvaate muudatused -> Lisamise kuupäeva tekitamine [#314](https://github.com/hariduspilv/koolikott/issues/314)
+* Kogumiku detailvaate muudatused -> Detailvaate dünaamiliste linkide loomine [#315](https://github.com/hariduspilv/koolikott/issues/315)
+* Kogumiku detailvaate muudatused -> Võtmesõnade kustutamine olemasolevalt kogumikult vaatamisvaates, nn. read-only-mode [#316](https://github.com/hariduspilv/koolikott/issues/316)
+* Kogumiku detailvaate muudatused -> Võtmesõnade kustutamine olemasolevalt kogumikult muutmisvaates (nn edit-mode's) [#317](https://github.com/hariduspilv/koolikott/issues/317)
+
+
+## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/16) (testimisel)
 
 ### Muutunud
 * OAI-PMH protokolli täiendused tulenevalt vara.e-koolikott.ee rakenduse liidestamisega [#309](https://github.com/hariduspilv/koolikott/issues/309)
