@@ -10,7 +10,7 @@ angular.module('koolikottApp')
             $scope.url = "rest/portfolio/getByCreator";
             $scope.params = {
                 'maxResults': 20,
-                'username': authenticatedUserService.getUser().username
+                'username': $route.current.params.username
             };
 
             setTitle();

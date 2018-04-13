@@ -121,7 +121,6 @@ angular.module('koolikottApp')
                     templateUrl: 'views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
                     controllerAs: '$ctrl',
-                    resolve: UserPathResolver
                 })
                 .when('/:username/favorites', {
                     templateUrl: 'views/profile/favorites/favorites.html',
