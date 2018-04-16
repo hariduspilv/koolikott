@@ -689,13 +689,16 @@ class controller extends Controller {
             if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
                 this.$scope.material.publishers[0] = null
 
+            const firstAuthor = this.$scope.material.authors[0];
+            if (firstAuthor && !(firstAuthor.surname || firstAuthor.name)){
+                this.$scope.material.authors[0] = null
+            }
+
             this.$scope.material.peerReviews = Object.assign([], this.$scope.peerReviews);
             this.$scope.material.peerReviews.forEach((peerReview, i) => {
                 if (!peerReview || !peerReview.url)
                     this.$scope.material.peerReviews.splice(i, 1)
             })
-
-            console.log(this.$scope.material);
 
             this.serverCallService
                 .makePost(this.locals.isEditMode ? 'rest/material/update' : 'rest/material/create', this.$scope.material)
