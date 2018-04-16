@@ -110,7 +110,7 @@ public class MaterialServiceTest {
             materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE);
             fail("Exception expected.");
         } catch (IllegalArgumentException e) {
-            assertEquals("Error creating Material, material already exists.", e.getMessage());
+            assertTrue(e.getMessage().startsWith("Error creating Material, material already exists:"));
         }
 
         verify(materialDao);
