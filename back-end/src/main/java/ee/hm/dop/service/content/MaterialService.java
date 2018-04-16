@@ -89,7 +89,7 @@ public class MaterialService {
 
     private void mustBeNewMaterial(Material material) {
         if (material.getId() != null || materialWithSameSourceExists(material)) {
-            throw new IllegalArgumentException("Error creating Material, material already exists.");
+            throw new IllegalArgumentException(String.format("Error creating Material, material already exists: id %s, source: %s", material.getId(), material.getSource()));
         }
     }
 
