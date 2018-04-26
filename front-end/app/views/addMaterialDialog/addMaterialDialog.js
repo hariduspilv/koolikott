@@ -367,7 +367,7 @@ class controller extends Controller {
                          * @todo this.stripHtml is a temporary solution until
                          * existing content is migrated in the DB
                          */
-                        description: this.stripHtml(findText('descriptions', lang)) || '',
+                        description: findText('descriptions', lang) || '',
                     }
                 }),
             {}
