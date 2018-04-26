@@ -1,4 +1,4 @@
-## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17) (testimisel)
+## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17) (prelives testimisel)
 
 ### Muutunud
 * Materjali detailvaate muudatused -> Detailvaate dünaamiliste lingide loomine #312 [#312](https://github.com/hariduspilv/koolikott/issues/312)
@@ -9,14 +9,14 @@
 * Kogumiku detailvaate muudatused -> Võtmesõnade kustutamine olemasolevalt kogumikult muutmisvaates (nn edit-mode's) [#317](https://github.com/hariduspilv/koolikott/issues/317)
 
 
-## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/16) (testimisel)
+## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/16) (prelives testimisel)
 
 ### Muutunud
 * OAI-PMH protokolli täiendused tulenevalt vara.e-koolikott.ee rakenduse liidestamisega [#309](https://github.com/hariduspilv/koolikott/issues/309)
 * TLÜ materjalide kuvamine eKoolikotis iFrame'i abil [#311](https://github.com/hariduspilv/koolikott/issues/311)
 
 
-## e-Koolikott [1.16.2](https://github.com/hariduspilv/koolikott/milestone/15)
+## e-Koolikott [1.16.2](https://github.com/hariduspilv/koolikott/milestone/15) (lives)
 
 ### Muutunud
 * Statistika aineekspertide tegevuste kohta - täiendused [#228](https://github.com/hariduspilv/koolikott/issues/228)
