@@ -15,7 +15,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 public class EkoolService {
     private final Logger logger = LoggerFactory.getLogger(EkoolService.class);
-
     @Inject
     private Configuration configuration;
     @Inject
@@ -52,15 +50,18 @@ public class EkoolService {
         MultivaluedMap<String, String> params = new MultivaluedStringMap();
         params.add("access_token", ekoolToken.getAccessToken());
 
-        Entity<MultivaluedMap<String, String>> entity = Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE);
-        logger.info(entity.toString());
-        logger.info("Basic " + generateAuthHeaderHash());
+
+        String value = "Basic " + generateAuthHeaderHash();
+        logger.info(value);
+        Entity<MultivaluedMap<String, String>> entity1 = Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE);
+        logger.info(entity1.toString());
         Response response = client.target(getUserDataUrl()).request()
-                .header("Authorization", "Basic " + generateAuthHeaderHash())
-                .post(entity);
+                .header("Authorization", value)
+                .post(entity1);
         logger.info(String.valueOf(response.getStatus()));
-        logger.info(response.getEntity().toString());
-        return response.readEntity(Person.class);
+        Person entity = response.readEntity(Person.class);
+        logger.info(entity.toString());
+        return entity;
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {
