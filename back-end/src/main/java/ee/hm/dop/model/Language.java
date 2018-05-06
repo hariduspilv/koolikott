@@ -39,7 +39,7 @@ public class Language implements AbstractEntity {
     @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "LanguageKeyCodes", joinColumns = @JoinColumn(name = "lang"))
     @Column(name = "code")
-    List<String> codes;
+    private List<String> codes;
 
     @Column
     private Long priorityOrder;

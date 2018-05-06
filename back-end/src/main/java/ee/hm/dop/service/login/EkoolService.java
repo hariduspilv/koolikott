@@ -47,23 +47,21 @@ public class EkoolService {
         MultivaluedMap<String, String> params = new MultivaluedStringMap();
         params.add("access_token", ekoolToken.getAccessToken());
 
-        return client.target(getUserDataUrl()).request() //
-                .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE)) //
+        return client.target(getUserDataUrl()).request()
+                .header("Authorization", "Basic " + generateAuthHeaderHash())
+                .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE))
                 .readEntity(Person.class);
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {
-        MultivaluedMap<String, String> tokenRequestParams = new MultivaluedStringMap();
-        tokenRequestParams.add("grant_type", "authorization_code");
-        tokenRequestParams.add("redirect_uri", redirectUrl);
-        tokenRequestParams.add("code", code);
-
-        Entity<MultivaluedMap<String, String>> entity = Entity.entity(tokenRequestParams,
-                APPLICATION_FORM_URLENCODED_TYPE);
+        MultivaluedMap<String, String> params = new MultivaluedStringMap();
+        params.add("grant_type", "authorization_code");
+        params.add("redirect_uri", redirectUrl);
+        params.add("code", code);
 
         return client.target(getEkoolTokenUrl()).request()
-                .header("Authorization", "Basic " + generateAuthHeaderHash()) //
-                .post(entity) //
+                .header("Authorization", "Basic " + generateAuthHeaderHash())
+                .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE))
                 .readEntity(EkoolToken.class);
     }
 
