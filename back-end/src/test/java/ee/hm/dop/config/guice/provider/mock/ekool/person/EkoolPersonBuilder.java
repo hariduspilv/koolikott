@@ -8,7 +8,21 @@ import ee.hm.dop.config.guice.provider.mock.ekool.EkoolResponse;
 import ee.hm.dop.config.guice.provider.mock.rs.client.Builder;
 import ee.hm.dop.model.ekool.Person;
 
+import java.util.Base64;
+
+import static org.junit.Assert.assertEquals;
+
 public class EkoolPersonBuilder extends Builder {
+
+    private static final String AUTH_HEADER_HASH = "Basic "
+            + Base64.getEncoder().encodeToString("koolikott:9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m".getBytes());
+
+    @Override
+    public Builder header(String name, Object value) {
+        assertEquals("Authorization", name);
+        assertEquals(AUTH_HEADER_HASH, value);
+        return this;
+    }
 
     @Override
     public Response post(Entity<?> entity) {

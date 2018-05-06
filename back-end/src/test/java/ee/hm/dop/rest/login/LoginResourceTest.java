@@ -203,11 +203,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void ekoolAuthenticateSuccess() {
         Response response = doGet("login/ekool/success?code=123456789");
         String url = response.getHeaderString("Location");
-        boolean hasToken = false;
-        if (url.contains("token")) {
-            hasToken = true;
-        }
-        assertEquals(true, hasToken);
+        assertEquals(true, url.contains("token"));
         assertEquals(307, response.getStatus());
 
         logout();
@@ -216,15 +212,9 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void ekoolAuthenticateSuccessTwo() {
-
         Response response = doGet("login/ekool/success?code=987654321");
         String url = response.getHeaderString("Location");
-
-        boolean hasToken = false;
-        if (url.contains("token")) {
-            hasToken = true;
-        }
-        assertEquals(true, hasToken);
+        assertEquals(true, url.contains("token"));
         assertEquals(307, response.getStatus());
 
         logout();
