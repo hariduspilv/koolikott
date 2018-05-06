@@ -8,7 +8,6 @@ import ee.hm.dop.utils.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
