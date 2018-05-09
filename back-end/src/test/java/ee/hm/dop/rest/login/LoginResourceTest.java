@@ -45,7 +45,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.*;
 
-@Ignore
 public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     public static final String LOGIN_ID_CARD = "login/idCard";

@@ -47,22 +47,11 @@ public class EkoolService {
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
-        MultivaluedMap<String, String> params = new MultivaluedStringMap();
-        params.add("access_token", ekoolToken.getAccessToken());
-
-
-        String value = "Bearer " + ekoolToken.getAccessToken();
-        logger.info(value);
-        Entity<MultivaluedMap<String, String>> entity1 = Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE);
-        logger.info(entity1.toString());
-        Response response = client.target(getUserDataUrl()).request()
-                .header("Authorization", value)
+        return client.target(getUserDataUrl()).request()
+                .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
-                .get();
-        logger.info(String.valueOf(response.getStatus()));
-        Person entity = response.readEntity(Person.class);
-        logger.info(entity.toString());
-        return entity;
+                .get()
+                .readEntity(Person.class);
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {
