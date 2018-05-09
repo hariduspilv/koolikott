@@ -51,7 +51,7 @@ public class EkoolService {
         params.add("access_token", ekoolToken.getAccessToken());
 
 
-        String value = "Bearer " + generateAuthHeaderHash();
+        String value = "Bearer " + ekoolToken.getAccessToken();
         logger.info(value);
         Entity<MultivaluedMap<String, String>> entity1 = Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE);
         logger.info(entity1.toString());
