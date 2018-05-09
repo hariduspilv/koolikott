@@ -57,7 +57,8 @@ public class EkoolService {
         logger.info(entity1.toString());
         Response response = client.target(getUserDataUrl()).request()
                 .header("Authorization", value)
-                .post(entity1);
+                .header("Content-type", "application/x-www-form-urlencoded")
+                .get();
         logger.info(String.valueOf(response.getStatus()));
         Person entity = response.readEntity(Person.class);
         logger.info(entity.toString());
