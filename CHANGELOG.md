@@ -7,7 +7,7 @@
 ## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17) (prelives testimisel)
 
 ### Muutunud
-* Materjali detailvaate muudatused -> Detailvaate dünaamiliste lingide loomine #312 [#312](https://github.com/hariduspilv/koolikott/issues/312)
+* Materjali detailvaate muudatused -> Detailvaate dünaamiliste lingide loomine [#312](https://github.com/hariduspilv/koolikott/issues/312)
 * Materjali detailvaate muudatused -> Võtmesõnade kustutamine olemasolevalt materjalilt [#313](https://github.com/hariduspilv/koolikott/issues/313)
 * Kogumiku detailvaate muudatused -> Lisamise kuupäeva tekitamine [#314](https://github.com/hariduspilv/koolikott/issues/314)
 * Kogumiku detailvaate muudatused -> Detailvaate dünaamiliste linkide loomine [#315](https://github.com/hariduspilv/koolikott/issues/315)
