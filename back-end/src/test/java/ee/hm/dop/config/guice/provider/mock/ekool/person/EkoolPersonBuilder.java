@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class EkoolPersonBuilder extends Builder {
 
-    private static final String AUTH_HEADER_HASH = "Basic "
+    private static final String AUTH_HEADER_HASH = "Bearer "
             + Base64.getEncoder().encodeToString("koolikott:9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m".getBytes());
 
     @Override
@@ -31,7 +31,7 @@ public class EkoolPersonBuilder extends Builder {
         String token = tokenRequestParams.get("access_token").get(0);
       
         if (token == null) {
-            throw new RuntimeException("Invalid token: " + token);
+            throw new RuntimeException("Invalid token: null");
         }
         if(!token.equals("shdsajhfuh5484618") && !token.equals("54fdsgffs4566fds51dsds4g") ) {
         	throw new RuntimeException("Invalid token: " + token);

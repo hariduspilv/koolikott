@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class EkoolToken {
 
     @JsonProperty("access_token")
-    String accessToken;
+    private String accessToken;
 
     public String getAccessToken() {
         return accessToken;
