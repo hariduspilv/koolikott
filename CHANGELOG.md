@@ -1,3 +1,9 @@
+## e-Koolikott [1.18.1](https://github.com/hariduspilv/koolikott/milestone/17) (prelives testimisel)
+
+### Muutunud
+* Kirjeldusest vorminduse kadumine #318 [#318](https://github.com/hariduspilv/koolikott/issues/318)
+* eKooli autentimise muudatus #320 [#320](https://github.com/hariduspilv/koolikott/issues/320)
+
 ## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17) (prelives testimisel)
 
 ### Muutunud
