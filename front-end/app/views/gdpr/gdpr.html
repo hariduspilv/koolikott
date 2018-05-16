@@ -31,40 +31,27 @@
         data-ng-click="$ctrl.clear()"
         aria-label="Tühjenda filtriväljad"
       ></md-button>
-      <md-button
-        class="md-raised md-primary statistics-filter__submit"
-        data-ng-class="{fetching: fetching}"
-        data-ng-click="$ctrl.getStatistics()"
-        aria-label="Käivita filter"
+      <md-button data-ng-show="!addNewRow"
+                 class="md-raised md-primary statistics-filter__submit"
+                 data-ng-click="$ctrl.toggleNewRow()"
+                 aria-label="Lisa uus rida"
       >
-        <div class="spinner"><md-progress-circular data-md-diameter="20"></md-progress-circular></div>
-        <span data-translate="DO_FILTER"></span>
-        <md-icon>arrow_forward</md-icon>
+        <span data-translate="Lisa uus rida"></span>
+        <md-icon>arrow_downward</md-icon>
       </md-button>
-      <md-menu>
-        <md-button
-          class="md-raised md-primary statistics-filter__download"
-          data-ng-class="{fetching: fetchingDownload}"
-          data-ng-click="$ctrl.openDownloadMenu($mdMenu, $event)"
-          aria-label="Lae andmed alla"
-          md-menu-origin
-        >
-          <div class="spinner"><md-progress-circular data-md-diameter="20"></md-progress-circular></div>
-          <span data-translate="DO_DOWNLOAD"></span>
-          <md-icon>arrow_downward</md-icon>
-        </md-button>
-        <md-menu-content>
-          <md-menu-item><md-button data-ng-click="$ctrl.downloadStatistics('xlsx')">xlsx</md-button></md-menu-item>
-          <md-menu-item><md-button data-ng-click="$ctrl.downloadStatistics('xls')">xls</md-button></md-menu-item>
-          <md-menu-item><md-button data-ng-click="$ctrl.downloadStatistics('csv')">csv</md-button></md-menu-item>
-        </md-menu-content>
-      </md-menu>
+      <md-button data-ng-show="addNewRow"
+                 class="md-raised md-primary statistics-filter__submit"
+                 data-ng-click="$ctrl.toggleNewRow()"
+                 aria-label="Peida uus rida"
+      >
+        <span data-translate="Peida uus rida"></span>
+        <md-icon>arrow_upward</md-icon>
+      </md-button>
     </div>
   </md-content>
   <md-table-container>
 
-    <!--<table data-ng-if="data.rows && data.rows.length" md-table class="statistics-table">-->
-    <table data-ng-if="true" md-table class="statistics-table">
+    <table data-ng-if="data" md-table class="statistics-table">
       <colgroup>
         <col width="40%">
         <col width="20%">
@@ -80,7 +67,7 @@
           <span data-translate="Versioon"></span>
         </th>
         <th md-column>
-          <span data-translate="Kehtib alates"></span>
+          <span data-translate="Kehtiv alates"></span>
         </th>
         <th md-column>
           <span></span>
@@ -88,45 +75,51 @@
       </tr>
       </thead>
       <tbody md-body>
-      <tr md-row data-ng-repeat="domainOrSubjectRow in data.rows track by $index">
-        <!-- display this column if querying by an expert -->
-        <td md-cell data-ng-if="isExpertsSelectVisible" class="statistics-table__educational-context-cell">
-          <span data-translate="{{domainOrSubjectRow.educationalContext.name.toUpperCase()}}"></span>
+      <tr md-row data-ng-if="addNewRow">
+        <td md-cell class="dashboard-cell">
+          <input type="text" ng-model="newAgreement.url">
         </td>
-        <td md-cell class="statistics-table__domain-or-subject-cell">
-          <strong data-translate="{{'DOMAIN_' + domainOrSubjectRow.domain.name.toUpperCase()}}"></strong>
-          <span data-ng-if="domainOrSubjectRow.subject"> › </span>
-          <span data-ng-if="domainOrSubjectRow.subject" data-translate="{{'SUBJECT_' + domainOrSubjectRow.subject.name.toUpperCase()}}"></span>
+        <td md-cell class="dashboard-cell dashboard-cell--title">
+          <input type="text" ng-model="newAgreement.version">
         </td>
-        <!-- display this column if querying by taxon -->
-        <td md-cell data-ng-if="!isExpertsSelectVisible" class="statistics-table__expert-cell">
-          <span data-ng-if="domainOrSubjectRow.noUsersFound" class="text-light" data-translate="NO_USERS_FOUND"></span>
-          <span data-ng-if="!domainOrSubjectRow.noUsersFound" data-ng-bind="domainOrSubjectRow.user.name + ' ' + domainOrSubjectRow.user.surname"></span>
+        <td md-cell class="dashboard-cell dashboard-cell--date">
+          <md-datepicker
+            data-ng-model="newAgreement.validFrom"
+            data-md-placeholder="{{'SELECT_DATE' | translate}}"
+            data-md-open-on-focus
+            data-md-min-date="maxDate"
+            aria-label="Vali lõppkuupäev"
+          ></md-datepicker>
         </td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.reviewedLOCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.approvedReportedLOCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.deletedReportedLOCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.acceptedChangedLOCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.rejectedChangedLOCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.publicPortfolioCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.portfolioCount"></span></td>
-        <td md-cell><span data-ng-bind="domainOrSubjectRow.materialCount"></span></td>
+        <td md-cell class="dashboard-cell dashboard-cell--type-icon">
+          <md-button
+            class="md-raised md-primary statistics-filter__download"
+            data-ng-click="$ctrl.addAgreement()"
+            aria-label="Lisa"
+          >
+            <span data-translate="Lisa"></span>
+          </md-button>
+        </td>
+      </tr>
+      <tr md-row data-ng-repeat="agreement in data track by $index">
+        <td md-cell class="dashboard-cell">
+          <a ng-href="#" data-ng-click="$ctrl.moveToPage(agreement.url)">
+            <span data-ng-bind="agreement.url"></span>
+          </a>
+        </td>
+        <td md-cell class="dashboard-cell dashboard-cell--title">
+          <span data-ng-bind="agreement.version"></span>
+        </td>
+        <td md-cell class="dashboard-cell dashboard-cell--date">
+          <span data-ng-bind="$ctrl.formatDateToDayMonthYear(agreement.validFrom)"></span>
+        </td>
+        <td md-cell class="dashboard-cell dashboard-cell--type-icon">
+          <a href="#" data-ng-click="confirmMaterialDeletion(agreement)">
+            <md-icon title="Kustuta" class="material-icons sidenav__icon">delete_forever</md-icon>
+          </a>
+        </td>
       </tr>
       </tbody>
-      <tfoot data-ng-if="data.sum && page === numPages">
-      <tr>
-        <th md-cell></th>
-        <th md-cell data-translate="TOTAL"></th>
-        <th md-cell data-ng-bind="data.sum.reviewedLOCount"></th>
-        <th md-cell data-ng-bind="data.sum.approvedReportedLOCount"></th>
-        <th md-cell data-ng-bind="data.sum.deletedReportedLOCount"></th>
-        <th md-cell data-ng-bind="data.sum.acceptedChangedLOCount"></th>
-        <th md-cell data-ng-bind="data.sum.rejectedChangedLOCount"></th>
-        <th md-cell data-ng-bind="data.sum.publicPortfolioCount"></th>
-        <th md-cell data-ng-bind="data.sum.portfolioCount"></th>
-        <th md-cell data-ng-bind="data.sum.materialCount"></th>
-      </tr>
-      </tfoot>
     </table>
   </md-table-container>
   <md-table-pagination

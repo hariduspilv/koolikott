@@ -28,16 +28,14 @@ public class AgreementAdminResource extends BaseResource {
     @POST
     @RolesAllowed({RoleString.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Agreement> saveAgreement(Agreement agreement) {
-        User user = getLoggedInUser();
-        agreementService.save(user, agreement);
-        return agreementService.findAllValid(user);
+    public Agreement saveAgreement(Agreement agreement) {
+        return agreementService.save(agreement, getLoggedInUser());
     }
 
-    @DELETE
-    @Path("favorite")
-    @RolesAllowed({RoleString.USER})
-    public void deleteAgreement(@QueryParam("id") long id) {
-        agreementService.deleteAgreement(id, getLoggedInUser());
+    @POST
+    @Path("delete")
+    @RolesAllowed({RoleString.ADMIN})
+    public void deleteAgreement(Agreement agreement) {
+        agreementService.deleteAgreement(agreement, getLoggedInUser());
     }
 }
