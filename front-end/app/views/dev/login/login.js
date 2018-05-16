@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('devLoginController',
 [
-    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', '$rootScope',
-    function($scope, serverCallService, $route, authenticatedUserService, $location, $rootScope) {
+    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', '$rootScope', 'dialogService',
+    function($scope, serverCallService, $route, authenticatedUserService, $location, $rootScope, dialogService) {
         var idCode = $route.current.params.idCode;
         var params = {};
         serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail);
@@ -16,14 +16,32 @@ angular.module('koolikottApp')
                 log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
-                if (authUser.authenticatedUser){
+                if (authUser.status){
                     authenticatedUser = authUser.authenticatedUser;
+                    $rootScope.justLoggedIn = true;
+                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                    serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
                 } else {
-                    authenticatedUser = authUser;
+                    dialogService.showConfirmationDialog(
+                        'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
+                        'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
+                        'ALERT_CONFIRM_POSITIVE',
+                        'ALERT_CONFIRM_NEGATIVE',
+                        () => {
+                            authUser.userConfirmed = true;
+                            serverCallService.makePost('rest/login/finalizeLogin', authUser)
+                                .then((response) => {
+                                    authenticatedUser = response.data;
+                                    $rootScope.justLoggedIn = true;
+                                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                                    serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+                                }
+                            )
+                        },
+                        ()=>{
+                            loginFail();
+                        });
                 }
-                $rootScope.justLoggedIn = true;
-                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
         }
 

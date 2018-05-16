@@ -19,7 +19,8 @@ public class AgreementDao extends AbstractDao<Agreement> {
         return getSingleResult(entityManager
                 .createQuery("select a from Agreement a " +
                         "where a.validFrom < :validFrom " +
-                        "and a.deleted = false", entity())
+                        "and a.deleted = false " +
+                        "order by a.validFrom desc, a.id desc", entity())
                 .setParameter("validFrom", DateTime.now())
                 .setMaxResults(1));
     }
