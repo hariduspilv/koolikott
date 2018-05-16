@@ -17,14 +17,15 @@ import javax.ws.rs.ext.Provider;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.junit.Test;
 
 public class LogoutResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void testLogout() {
-        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI.idCode, new GenericType<AuthenticatedUser>() {
-        });
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI.idCode, new GenericType<UserStatus>() {
+        }).getAuthenticatedUser();
         assertNotNull(authenticatedUser.getToken());
         String token = authenticatedUser.getToken();
 

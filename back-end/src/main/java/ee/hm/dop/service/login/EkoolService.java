@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EkoolService {
-    private final Logger logger = LoggerFactory.getLogger(EkoolService.class);
     @Inject
     private Configuration configuration;
     @Inject

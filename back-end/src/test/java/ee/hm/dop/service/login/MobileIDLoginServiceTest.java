@@ -1,10 +1,7 @@
 package ee.hm.dop.service.login;
 
 import static ee.hm.dop.service.login.MobileIDLoginService.ESTONIAN_CALLING_CODE;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.newCapture;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -19,12 +16,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
-import org.easymock.EasyMockRunner;
-import org.easymock.IAnswer;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
+import org.easymock.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +41,10 @@ public class MobileIDLoginServiceTest {
     private MobileIDSOAPService mobileIDSOAPService;
     @Mock
     private AuthenticationStateDao authenticationStateDao;
+    @Mock
+    private TokenGenerator tokenGenerator;
+    @Mock
+    private AuthenticationStateService authenticationStateService;
 
     @Test
     public void authenticate() throws Exception {
@@ -56,8 +52,8 @@ public class MobileIDLoginServiceTest {
 
         expect(mobileIDSOAPService.authenticate(PHONE_NUMBER, ID_CODE, LANGUAGE_EST)).andReturn(mobileAuthenticateResponse);
 
-        Capture<AuthenticationState> capturedAuthenticationState = newCapture();
-        expectCreateAuthenticationState(capturedAuthenticationState);
+        AuthenticationState capturedAuthenticationState = authenticationState(mobileAuthenticateResponse);
+        expect(authenticationStateService.save(mobileAuthenticateResponse)).andReturn(capturedAuthenticationState);
 
         replayAll();
 
@@ -65,7 +61,7 @@ public class MobileIDLoginServiceTest {
 
         verifyAll();
 
-        validateAuthenticationState(capturedAuthenticationState, mobileAuthenticateResponse);
+        validateAuthenticationState(mobileAuthenticateResponse, capturedAuthenticationState);
         validateMobileIDSecurityCodes(mobileIDSecurityCodes, mobileAuthenticateResponse, capturedAuthenticationState);
     }
 
@@ -75,9 +71,8 @@ public class MobileIDLoginServiceTest {
 
         expect(mobileIDSOAPService.authenticate(ESTONIAN_CALLING_CODE + PHONE_NUMBER1, ID_CODE1, LANGUAGE_EST)).andReturn(
                 mobileAuthenticateResponse);
-
-        Capture<AuthenticationState> capturedAuthenticationState = newCapture();
-        expectCreateAuthenticationState(capturedAuthenticationState);
+        AuthenticationState capturedAuthenticationState = authenticationState(mobileAuthenticateResponse);
+        expect(authenticationStateService.save(mobileAuthenticateResponse)).andReturn(capturedAuthenticationState);
 
         replayAll();
 
@@ -85,7 +80,7 @@ public class MobileIDLoginServiceTest {
 
         verifyAll();
 
-        validateAuthenticationState(capturedAuthenticationState, mobileAuthenticateResponse);
+        validateAuthenticationState(mobileAuthenticateResponse, capturedAuthenticationState);
         validateMobileIDSecurityCodes(mobileIDSecurityCodes, mobileAuthenticateResponse, capturedAuthenticationState);
     }
 
@@ -128,16 +123,21 @@ public class MobileIDLoginServiceTest {
         assertFalse(isAuthenticated);
     }
 
-    private void expectCreateAuthenticationState(Capture<AuthenticationState> capturedAuthenticationState) {
-        expect(authenticationStateDao.createAuthenticationState(EasyMock.capture(capturedAuthenticationState)))
-                .andAnswer(capturedAuthenticationState::getValue);
+    private AuthenticationState authenticationState() {
+        AuthenticationState state = new AuthenticationState();
+        state.setSessionCode(SESSION_CODE);
+        state.setToken(SOME_TOKEN);
+        return state;
     }
 
-    private AuthenticationState authenticationState() {
-        AuthenticationState authenticationState = new AuthenticationState();
-        authenticationState.setSessionCode(SESSION_CODE);
-        authenticationState.setToken(SOME_TOKEN);
-        return authenticationState;
+    private AuthenticationState authenticationState(MobileAuthenticateResponse response) {
+        AuthenticationState state = authenticationState();
+        state.setIdCode(response.getIdCode());
+        state.setName(response.getName());
+        state.setSurname(response.getSurname());
+        state.setSessionCode(response.getSessionCode());
+        state.setCreated(DateTime.now());
+        return state;
     }
 
     private static Language language(String eng) {
@@ -146,25 +146,24 @@ public class MobileIDLoginServiceTest {
         return language;
     }
 
-    private void validateAuthenticationState(Capture<AuthenticationState> capturedAuthenticationState,
-            MobileAuthenticateResponse response) {
-        assertEquals(response.getIdCode(), capturedAuthenticationState.getValue().getIdCode());
-        assertEquals(response.getName(), capturedAuthenticationState.getValue().getName());
-        assertEquals(response.getSurname(), capturedAuthenticationState.getValue().getSurname());
-        assertEquals(response.getSessionCode(), capturedAuthenticationState.getValue().getSessionCode());
-        DateTime created = capturedAuthenticationState.getValue().getCreated();
+    private void validateAuthenticationState(MobileAuthenticateResponse response, AuthenticationState value) {
+        assertEquals(response.getIdCode(), value.getIdCode());
+        assertEquals(response.getName(), value.getName());
+        assertEquals(response.getSurname(), value.getSurname());
+        assertEquals(response.getSessionCode(), value.getSessionCode());
+        DateTime created = value.getCreated();
         assertFalse(created.isAfterNow());
     }
 
     private void validateMobileIDSecurityCodes(MobileIDSecurityCodes mobileIDSecurityCodes,
-            MobileAuthenticateResponse response, Capture<AuthenticationState> capturedAuthenticationState) {
+                                               MobileAuthenticateResponse response, AuthenticationState value) {
         assertEquals(response.getChallengeID(), mobileIDSecurityCodes.getChallengeId());
-        assertNotNull(capturedAuthenticationState.getValue().getToken());
-        assertEquals(capturedAuthenticationState.getValue().getToken(), mobileIDSecurityCodes.getToken());
+        assertNotNull(value.getToken());
+        assertEquals(value.getToken(), mobileIDSecurityCodes.getToken());
     }
 
     private void replayAll(Object... mocks) {
-        replay(authenticationStateDao, mobileIDSOAPService);
+        replay(authenticationStateDao, mobileIDSOAPService, authenticationStateService);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -174,7 +173,7 @@ public class MobileIDLoginServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(authenticationStateDao, mobileIDSOAPService);
+        verify(authenticationStateDao, mobileIDSOAPService, authenticationStateService);
 
         if (mocks != null) {
             for (Object object : mocks) {

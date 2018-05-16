@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.xml.soap.SOAPException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 
 import static java.lang.String.format;
 
@@ -40,7 +38,8 @@ public class LoginService {
     private AuthenticationStateDao authenticationStateDao;
     @Inject
     private IEhisSOAPService ehisSOAPService;
-    private SecureRandom random = new SecureRandom();
+    @Inject
+    private TokenGenerator tokenGenerator;
 
     /**
      * Try to log in with the given id code and if that fails, create a new user
@@ -94,31 +93,18 @@ public class LoginService {
     }
 
     private AuthenticatedUser createAuthenticatedUser(User user) {
-        //TODO: this should run in a separate thread
         Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-//        Person person = null;
-        return createAuthenticatedUser(makeUser(user, person));
-    }
-
-    private AuthenticatedUser makeUser(User user, Person person) {
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setUser(user);
-        authenticatedUser.setPerson(person);
-        return authenticatedUser;
+        return createAuthenticatedUser(new AuthenticatedUser(user, person));
     }
 
     private AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser) {
         try {
-            authenticatedUser.setToken(secureToken());
+            authenticatedUser.setToken(tokenGenerator.secureToken());
             return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         } catch (DuplicateTokenException e) {
-            authenticatedUser.setToken(secureToken());
+            authenticatedUser.setToken(tokenGenerator.secureToken());
             return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
-    }
-
-    private String secureToken() {
-        return new BigInteger(130, random).toString(32);
     }
 
     public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language) throws Exception {

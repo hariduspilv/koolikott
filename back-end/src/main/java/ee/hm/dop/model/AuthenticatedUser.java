@@ -42,6 +42,15 @@ public class AuthenticatedUser implements AbstractEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime loginDate = now();
 
+    public AuthenticatedUser() {
+    }
+
+    public AuthenticatedUser(User user, Person person) {
+        this.user = user;
+        this.firstLogin = user.isNewUser();
+        this.person = person;
+    }
+
     public Long getId() {
         return id;
     }

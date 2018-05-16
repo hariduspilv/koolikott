@@ -1,19 +1,15 @@
 package ee.hm.dop.service.login;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
-import javax.inject.Inject;
-import javax.xml.soap.SOAPException;
-
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.xml.soap.SOAPException;
 
 public class MobileIDLoginService {
 
@@ -24,8 +20,8 @@ public class MobileIDLoginService {
     private MobileIDSOAPService mobileIDSOAPService;
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
-    private SecureRandom random = new SecureRandom();
+    @Inject
+    private AuthenticationStateService authenticationStateService;
 
     public MobileIDSecurityCodes authenticate(String phoneNumber, String idCode, Language language) throws Exception {
         if (!phoneNumber.startsWith("+")) {
@@ -41,7 +37,7 @@ public class MobileIDLoginService {
             return null;
         }
 
-        AuthenticationState authenticationState = saveResponseToAuthenticationState(mobileAuthenticateResponse);
+        AuthenticationState authenticationState = authenticationStateService.save(mobileAuthenticateResponse);
 
         MobileIDSecurityCodes mobileIDSecurityCodes = new MobileIDSecurityCodes();
         mobileIDSecurityCodes.setChallengeId(mobileAuthenticateResponse.getChallengeID());
@@ -56,18 +52,6 @@ public class MobileIDLoginService {
             return false;
         }
         return mobileIDSOAPService.isAuthenticated(authenticationState);
-    }
-
-    private AuthenticationState saveResponseToAuthenticationState(MobileAuthenticateResponse mobileAuthenticateResponse) {
-        AuthenticationState authenticationState = new AuthenticationState();
-        String token = new BigInteger(130, random).toString(32);
-        authenticationState.setToken(token);
-        authenticationState.setCreated(new DateTime());
-        authenticationState.setSessionCode(mobileAuthenticateResponse.getSessionCode());
-        authenticationState.setIdCode(mobileAuthenticateResponse.getIdCode());
-        authenticationState.setName(mobileAuthenticateResponse.getName());
-        authenticationState.setSurname(mobileAuthenticateResponse.getSurname());
-        return authenticationStateDao.createAuthenticationState(authenticationState);
     }
 
 }

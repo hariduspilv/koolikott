@@ -5,7 +5,6 @@ angular.module('koolikottApp')
 [
     '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
     function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog) {
-        var instance;
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
 
@@ -17,14 +16,19 @@ angular.module('koolikottApp')
             if (isEmpty(authenticatedUser)) {
                 loginFail();
             } else {
-                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                debugger;
+                if (authenticatedUser.authenticatedUser){
+                    authenticatedUserService.setAuthenticatedUser(authenticatedUser.authenticatedUser);
+                } else {
+                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                }
                 $rootScope.justLoggedIn = true;
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
         }
 
         function loginFail() {
-            log('Logging in failed.');
+            console.log('Logging in failed.');
             $mdDialog.hide();
             alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             enableLogin();
@@ -94,7 +98,7 @@ angular.module('koolikottApp')
             } else {
                 mobileIdChallengeReceivedCallback(mobileIDSecurityCodes.challengeId);
 
-                var params = {
+                const params = {
                     'token': mobileIDSecurityCodes.token
                 };
 
@@ -104,8 +108,7 @@ angular.module('koolikottApp')
 
         function loginWithOAuth(path) {
             localStorage.removeItem(LOGIN_ORIGIN);
-            localStorage.setItem(LOGIN_ORIGIN,
-                $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.$$url);
+            localStorage.setItem(LOGIN_ORIGIN, $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.$$url);
             window.location = path;
         }
 
@@ -113,7 +116,7 @@ angular.module('koolikottApp')
             if (isEmpty(data)) {
                 loginFail();
             } else {
-                var authenticatedUser = authenticatedUserService.getAuthenticatedUser();
+                let authenticatedUser = authenticatedUserService.getAuthenticatedUser();
                 authenticatedUser.user.role = data;
                 finishLogin(authenticatedUser);
             }
@@ -147,7 +150,7 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(token) {
-                var params = {
+                const params = {
                     'token': token
                 };
 
@@ -164,7 +167,7 @@ angular.module('koolikottApp')
                 mobileIdLoginFailCallback = failCallback;
                 mobileIdChallengeReceivedCallback = challengeReceivedCallback;
 
-                var params = {
+                const params = {
                     'phoneNumber': phoneNumber,
                     'idCode': idCode,
                     'language': language

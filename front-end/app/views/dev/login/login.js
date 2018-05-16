@@ -16,9 +16,14 @@ angular.module('koolikottApp')
                 log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
-                authenticatedUser = authUser;
+                if (authUser.authenticatedUser){
+                    authenticatedUser = authUser.authenticatedUser;
+                } else {
+                    authenticatedUser = authUser;
+                }
                 $rootScope.justLoggedIn = true;
-                getRole();
+                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+                serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
         }
 
@@ -32,11 +37,6 @@ angular.module('koolikottApp')
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
             $location.url('/' + authenticatedUser.user.username);
             $rootScope.$broadcast('login:success')
-        }
-
-        function getRole() {
-            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
         }
 
         function getRoleSuccess(data) {

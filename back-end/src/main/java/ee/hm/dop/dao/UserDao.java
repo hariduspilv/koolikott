@@ -1,15 +1,10 @@
 package ee.hm.dop.dao;
 
-import java.math.BigDecimal;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Role;
+
 import java.math.BigInteger;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.enums.Role;
-import ee.hm.dop.model.User;
 
 public class UserDao extends AbstractDao<User> {
 

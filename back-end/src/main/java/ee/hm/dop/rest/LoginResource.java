@@ -2,17 +2,10 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
+import ee.hm.dop.service.login.*;
+import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import ee.hm.dop.service.login.EkoolService;
 import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.login.LoginService;
-import ee.hm.dop.service.login.StuudiumService;
-import ee.hm.dop.service.login.TaatService;
-import org.opensaml.common.SAMLObject;
-import org.opensaml.common.binding.BasicSAMLMessageContext;
-import org.opensaml.saml2.binding.encoding.HTTPRedirectDeflateEncoder;
-import org.opensaml.saml2.core.AuthnRequest;
-import org.opensaml.ws.message.encoder.MessageEncodingException;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -21,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
@@ -36,24 +28,32 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    private static final String LOGIN_REDIRECT_WITH_TOKEN = "/#!/loginRedirect?token=";
+    public static final String LOGIN_REDIRECT_WITH_TOKEN = "/#!/loginRedirect?token=";
     private static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "/#!/loginRedirect";
     private static final String SSL_CLIENT_S_DN = "SSL_CLIENT_S_DN";
 
     @Inject
     private LoginService loginService;
     @Inject
-    private TaatService taatService;
+    private LoginNewService loginNewService;
     @Inject
     private EkoolService ekoolService;
     @Inject
     private StuudiumService stuudiumService;
     @Inject
-    private HTTPRedirectDeflateEncoder encoder;
-    @Inject
     private AuthenticatedUserService authenticatedUserService;
     @Inject
     private LanguageService languageService;
+
+    @POST
+    @Path("/finalizeLogin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AuthenticatedUser permissionConfirm(UserStatus userStatus) {
+        if (userStatus != null && userStatus.isUserConfirmed()) {
+            return loginNewService.finalizeLogin(userStatus);
+        }
+        return null;
+    }
 
     @GET
     @Path("/idCard")
@@ -66,26 +66,6 @@ public class LoginResource extends BaseResource {
     }
 
     @GET
-    @Path("/taat")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String taatLogin() throws MessageEncodingException {
-        BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService.buildMessageContext(getResponse());
-        encoder.encode(context);
-        return null;
-    }
-
-    @POST
-    @Path("/taat")
-    public Response taatAuthenticate(MultivaluedMap<String, String> formParams) throws URISyntaxException {
-        AuthenticatedUser authenticatedUser = taatService.authenticate(
-                formParams.getFirst("SAMLResponse"),
-                formParams.getFirst("RelayState"));
-        URI location = new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken());
-
-        return redirect(location);
-    }
-
-    @GET
     @Path("ekool")
     public Response ekoolAuthenticate() throws URISyntaxException {
         return redirect(getEkoolAuthenticationURI());
@@ -94,14 +74,13 @@ public class LoginResource extends BaseResource {
     @GET
     @Path("ekool/success")
     public Response ekoolAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
-        URI location = getEkoolLocation(code);
-        return redirect(location);
+        return redirect(getEkoolLocation(code));
     }
 
     @GET
     @Path("stuudium")
     public Response stuudiumAuthenticate(@QueryParam("token") String token) throws URISyntaxException {
-        return token == null ? redirectToStuudium() : authenticateWithStuudiumToken(token);
+        return token != null ? authenticateWithStuudiumToken(token) : redirectToStuudium();
     }
 
     @GET

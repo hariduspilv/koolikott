@@ -10,9 +10,15 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.RoleSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
+
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -52,6 +58,19 @@ public class User implements AbstractEntity {
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
+
+    @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "User_Agreement",
+            joinColumns = {@JoinColumn(name = "user")},
+            inverseJoinColumns = {@JoinColumn(name = "agreement")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user", "agreement"}))
+    private List<Agreement> agreements;
+
+    @Transient
+    @JsonIgnore
+    private boolean newUser;
 
     @JsonIgnore
     public String getFullName(){
@@ -123,5 +142,21 @@ public class User implements AbstractEntity {
 
     public void setUserTaxons(List<Taxon> userTaxons) {
         this.userTaxons = userTaxons;
+    }
+
+    public List<Agreement> getAgreements() {
+        return agreements;
+    }
+
+    public void setAgreements(List<Agreement> agreements) {
+        this.agreements = agreements;
+    }
+
+    public boolean isNewUser() {
+        return newUser;
+    }
+
+    public void setNewUser(boolean newUser) {
+        this.newUser = newUser;
     }
 }

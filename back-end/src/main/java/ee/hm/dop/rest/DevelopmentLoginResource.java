@@ -8,18 +8,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.login.LoginService;
+import ee.hm.dop.service.login.LoginNewService;
+import ee.hm.dop.service.login.dto.UserStatus;
 
 @Path("dev/")
 public class DevelopmentLoginResource {
 
     @Inject
-    private LoginService loginService;
+    private LoginNewService loginService;
 
     @GET
     @Path("/login/{idCode}")
     @Produces(MediaType.APPLICATION_JSON)
-    public AuthenticatedUser logIn(@PathParam("idCode") String idCode) {
+    public UserStatus logIn(@PathParam("idCode") String idCode) {
         return loginService.login(idCode, null, null);
     }
 }

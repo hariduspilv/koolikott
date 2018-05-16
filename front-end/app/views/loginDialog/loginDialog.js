@@ -26,7 +26,7 @@ class controller extends Controller {
             this.$scope.loginButtonFlag = true
             this.authenticationService.loginWithIdCard()
         }
-        this.$scope.taatAuth = () => this.authenticationService.loginWithTaat()
+        // this.$scope.taatAuth = () => this.authenticationService.loginWithTaat()
         this.$scope.ekoolAuth = () => this.authenticationService.loginWithEkool()
         this.$scope.stuudiumAuth = () => this.authenticationService.loginWithStuudium()
         this.$scope.mobileIdAuth = () => {
