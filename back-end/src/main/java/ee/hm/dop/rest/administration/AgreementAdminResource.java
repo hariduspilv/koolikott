@@ -1,7 +1,6 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.Agreement;
-import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.login.AgreementService;
@@ -23,6 +22,14 @@ public class AgreementAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Agreement> getAgreements() {
         return agreementService.findAllValid(getLoggedInUser());
+    }
+
+    @POST
+    @Path("validate")
+    @RolesAllowed({RoleString.ADMIN})
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean validate(Agreement agreement) {
+        return agreementService.isValid(agreement, getLoggedInUser());
     }
 
     @POST

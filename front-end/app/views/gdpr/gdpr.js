@@ -17,7 +17,7 @@
             this.$scope.addAgreement = this.addAgreement.bind(this)
             this.$scope.toggleNewRow = this.toggleNewRow.bind(this)
             this.$scope.moveToPage = this.moveToPage.bind(this)
-            this.$scope.maxDate = new Date()
+            this.$scope.minDate = new Date()
             this.$scope.perPage = 100
             this.$scope.page = 1
             this.$scope.numPages = 1
@@ -57,10 +57,23 @@
         }
 
         addAgreement() {
+            this.$scope.newAgreement.$error = false;
             this.serverCallService
-                .makePost('rest/admin/agreement', this.$scope.newAgreement)
-                .then(() => {
-                    this.getAgreements();
+                .makePost('rest/admin/agreement/validate', this.$scope.newAgreement)
+                .then((response) => {
+                    if (!(response.status === 200 && response.data)) {
+                        this.$scope.newAgreement.$error = true;
+                    }  else {
+                        this.serverCallService
+                            .makePost('rest/admin/agreement', this.$scope.newAgreement)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    this.getAgreements();
+                                    this.$scope.newAgreement = {}
+                                    this.$scope.addNewRow = false;
+                                }
+                            })
+                    }
                 })
         }
 
@@ -84,16 +97,19 @@
             this.sortService.orderItems(this.$scope.allRows, order)
             this.paginate(this.$scope.page, this.$scope.perPage)
         }
+
         toggleInfoText() {
             this.setInfoTextHeight()
             this.$scope.isInfoTextOpen = !this.$scope.isInfoTextOpen
         }
+
         paginate(page, perPage) {
             const startIdx = (page - 1) * perPage
             this.$scope.page = page
             this.$scope.data.rows = this.$scope.allRows.slice(startIdx, startIdx + perPage)
         }
     }
+
     controller.$inject = [
         '$scope',
         '$translate',
