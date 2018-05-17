@@ -16,7 +16,6 @@ angular.module('koolikottApp')
             if (isEmpty(authenticatedUser)) {
                 loginFail();
             } else {
-                debugger;
                 if (authenticatedUser.authenticatedUser){
                     authenticatedUserService.setAuthenticatedUser(authenticatedUser.authenticatedUser);
                 } else {

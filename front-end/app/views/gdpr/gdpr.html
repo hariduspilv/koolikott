@@ -1,7 +1,7 @@
-<md-card class="md-data-table statistics-card">
+<md-card class="md-data-table">
   <md-toolbar class="md-table-toolbar md-default">
     <div class="md-toolbar-tools">
-      <h2 class="md-headline" data-translate="GDPR tingimused" data-flex></h2>
+      <h2 class="md-headline" data-translate="GDPR_HEADING" data-flex></h2>
       <md-button
         class="statistics-info-text-toggle text-small"
         data-md-colors="{color: 'grey-500'}"
@@ -21,53 +21,44 @@
   >
     <div data-translate="GDPR_INFO_TEXT"></div>
   </md-content>
-  <md-content class="statistics-filter" data-layout-padding>
-    <div class="statistics-filter__inputs" data-layout-gt-sm="row" data-layout-align="center center">
-    </div>
-    <div class="statistics-filter__buttons" data-layout="row" data-layout-align="end center">
-      <md-button
-        class="statistics-filter__clear"
-        data-translate="CLEAR_FORM"
-        data-ng-click="$ctrl.clear()"
-        aria-label="Tühjenda filtriväljad"
-      ></md-button>
+  <md-content  data-layout-padding>
+    <div data-layout="row" data-layout-align="end center">
       <md-button data-ng-show="!addNewRow"
-                 class="md-raised md-primary statistics-filter__submit"
+                 class="md-raised md-primary"
                  data-ng-click="$ctrl.toggleNewRow()"
                  aria-label="Lisa uus rida"
       >
-        <span data-translate="Lisa uus rida"></span>
+        <span data-translate="GDPR_ADD_NEW_ROW"></span>
         <md-icon>arrow_downward</md-icon>
       </md-button>
       <md-button data-ng-show="addNewRow"
-                 class="md-raised md-primary statistics-filter__submit"
+                 class="md-raised md-primary"
                  data-ng-click="$ctrl.toggleNewRow()"
                  aria-label="Peida uus rida"
       >
-        <span data-translate="Peida uus rida"></span>
+        <span data-translate="GDPR_HIDE_NEW_ROW"></span>
         <md-icon>arrow_upward</md-icon>
       </md-button>
     </div>
   </md-content>
   <md-table-container>
-
-    <table data-ng-if="data" md-table class="statistics-table">
+    <table data-ng-if="data" md-table>
       <colgroup>
-        <col width="40%">
+        <col width="500%">
         <col width="20%">
         <col width="20%">
-        <col width="20%">
+        <col width="10%">
       </colgroup>
       <thead md-head md-order="sortBy" md-on-reorder="sort">
       <tr md-row>
-        <th md-column>
-          <span data-translate="Link"></span>
+        <th md-column md-order-by="byVersion">
+          <span data-translate="GDPR_LINK"></span>
         </th>
-        <th md-column>
-          <span data-translate="Versioon"></span>
+        <th md-column md-order-by="byUrl">
+          <span data-translate="GDPR_VERSION"></span>
         </th>
-        <th md-column>
-          <span data-translate="Kehtiv alates"></span>
+        <th md-column md-order-by="byValidFrom">
+          <span data-translate="GDPR_VALIDFROM"></span>
         </th>
         <th md-column>
           <span></span>
@@ -77,10 +68,16 @@
       <tbody md-body>
       <tr md-row data-ng-show="addNewRow">
         <td md-cell class="dashboard-cell">
-          <input type="text" ng-model="newAgreement.url">
+          <md-input-container layout-fill>
+            <label></label>
+            <input type="text" ng-model="newAgreement.url">
+          </md-input-container>
         </td>
         <td md-cell class="dashboard-cell dashboard-cell--title">
-          <input type="text" ng-model="newAgreement.version">
+          <md-input-container layout-fill>
+            <label></label>
+            <input type="text" ng-model="newAgreement.version">
+          </md-input-container>
         </td>
         <td md-cell class="dashboard-cell dashboard-cell--date">
           <md-datepicker
@@ -98,16 +95,16 @@
             data-ng-click="$ctrl.addAgreement()"
             aria-label="Lisa"
           >
-            <span data-translate="Lisa"></span>
+            <span data-translate="GDPR_ADD"></span>
           </md-button>
-          <div ng-if="newAgreement.$error" style="color:red">
-            Selline juba eksisteerib
+          <div ng-if="newAgreement.$error" class="text-error">
+            <span data-translate="GDPR_AGREEMENT_EXISTS"></span>
           </div>
         </td>
       </tr>
       <tr md-row data-ng-repeat="agreement in data track by $index">
         <td md-cell class="dashboard-cell">
-          <a ng-href="#" data-ng-click="$ctrl.moveToPage(agreement.url)">
+          <a href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}">
             <span data-ng-bind="agreement.url"></span>
           </a>
         </td>
@@ -119,7 +116,7 @@
         </td>
         <td md-cell class="dashboard-cell dashboard-cell--type-icon">
           <a href="#" data-ng-click="confirmMaterialDeletion(agreement)">
-            <md-icon title="Kustuta" class="material-icons sidenav__icon">delete_forever</md-icon>
+            <md-icon title="{{'GDPR_DELETE' | translate}}" class="material-icons sidenav__icon">delete_forever</md-icon>
           </a>
         </td>
       </tr>
@@ -127,7 +124,6 @@
     </table>
   </md-table-container>
   <md-table-pagination
-    class="statistics-pagination"
     data-ng-if="numPages > 1"
     data-md-limit="perPage"
     data-md-page="page"
