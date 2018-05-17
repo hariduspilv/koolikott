@@ -32,8 +32,6 @@ public class LoginService {
     @Inject
     private UserService userService;
     @Inject
-    private MobileIDLoginService mobileIDLoginService;
-    @Inject
     private AuthenticatedUserDao authenticatedUserDao;
     @Inject
     private AuthenticationStateDao authenticationStateDao;
@@ -41,8 +39,6 @@ public class LoginService {
     private IEhisSOAPService ehisSOAPService;
     @Inject
     private TokenGenerator tokenGenerator;
-    @Inject
-    private LoginNewService loginNewService;
 
     /**
      * Try to log in with the given id code and if that fails, create a new user
