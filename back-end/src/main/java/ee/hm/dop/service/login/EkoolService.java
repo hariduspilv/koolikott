@@ -13,15 +13,12 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class EkoolService {
     @Inject
@@ -30,6 +27,8 @@ public class EkoolService {
     private Client client;
     @Inject
     private LoginService loginService;
+    @Inject
+    private LoginNewService loginNewService;
 
     public String getAuthorizationUrl() {
         return configuration.getString(EKOOL_URL_AUTHORIZE);
@@ -39,10 +38,10 @@ public class EkoolService {
         return configuration.getString(EKOOL_CLIENT_ID);
     }
 
-    public AuthenticatedUser authenticate(String code, String redirectUrl) {
+    public UserStatus authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
         Person person = getPerson(ekoolToken);
-        return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
+        return loginNewService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
     }
 
     private Person getPerson(EkoolToken ekoolToken) {

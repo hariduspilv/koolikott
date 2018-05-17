@@ -64,6 +64,21 @@ public class LoginNewService {
         return loggedIn(authenticate(user));
     }
 
+    public UserStatus login(AuthenticationState authenticationState) {
+        if (authenticationState == null) {
+            return null;
+        }
+
+        if (hasExpired(authenticationState)) {
+            authenticationStateDao.delete(authenticationState);
+            return null;
+        }
+
+        UserStatus authenticatedUser = login(authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname());
+        authenticationStateDao.delete(authenticationState);
+        return authenticatedUser;
+    }
+
     public AuthenticatedUser finalizeLogin(UserStatus userStatus) {
         AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userStatus.getToken());
         if (state == null) {

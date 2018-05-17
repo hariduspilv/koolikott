@@ -9,6 +9,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
+import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.joda.time.DateTime;
@@ -40,6 +41,8 @@ public class LoginService {
     private IEhisSOAPService ehisSOAPService;
     @Inject
     private TokenGenerator tokenGenerator;
+    @Inject
+    private LoginNewService loginNewService;
 
     /**
      * Try to log in with the given id code and if that fails, create a new user
@@ -105,18 +108,5 @@ public class LoginService {
             authenticatedUser.setToken(tokenGenerator.secureToken());
             return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
-    }
-
-    public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language) throws Exception {
-        return mobileIDLoginService.authenticate(phoneNumber, idCode, language);
-    }
-
-    public AuthenticatedUser validateMobileIDAuthentication(String token) throws SOAPException {
-        if (!mobileIDLoginService.isAuthenticated(token)) {
-            logger.info("Authentication not valid.");
-            return null;
-        }
-        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
-        return login(authenticationState);
     }
 }

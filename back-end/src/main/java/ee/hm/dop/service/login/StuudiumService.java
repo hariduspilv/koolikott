@@ -1,7 +1,7 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.stuudium.StuudiumUser;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration.Configuration;
 
@@ -20,10 +20,12 @@ public class StuudiumService {
     private Client client;
     @Inject
     private LoginService loginService;
+    @Inject
+    private LoginNewService loginNewService;
 
-    public AuthenticatedUser authenticate(String token) {
+    public UserStatus authenticate(String token) {
         StuudiumUser stuudiumUser = getStuudiumUser(token);
-        return loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
+        return loginNewService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
     }
 
     private StuudiumUser getStuudiumUser(String token) {

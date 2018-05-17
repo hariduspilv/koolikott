@@ -11,16 +11,20 @@ angular.module('koolikottApp')
 
         var authenticatedUser;
 
-        function loginSuccess(authUser) {
-            if (isEmpty(authUser)) {
+        function authenticateUser(authenticatedUser2) {
+            authenticatedUser = authenticatedUser2;
+            $rootScope.justLoggedIn = true;
+            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+        }
+
+        function loginSuccess(userStatus) {
+            if (isEmpty(userStatus)) {
                 log("No data returned by logging in with id code:" + idCode);
                 $location.url('/');
             } else {
-                if (authUser.status){
-                    authenticatedUser = authUser.authenticatedUser;
-                    $rootScope.justLoggedIn = true;
-                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                    serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+                if (userStatus.statusOk){
+                    authenticateUser(userStatus.authenticatedUser);
                 } else {
                     dialogService.showConfirmationDialog(
                         'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
@@ -28,13 +32,10 @@ angular.module('koolikottApp')
                         'ALERT_CONFIRM_POSITIVE',
                         'ALERT_CONFIRM_NEGATIVE',
                         () => {
-                            authUser.userConfirmed = true;
-                            serverCallService.makePost('rest/login/finalizeLogin', authUser)
+                            userStatus.userConfirmed = true;
+                            serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                                 .then((response) => {
-                                    authenticatedUser = response.data;
-                                    $rootScope.justLoggedIn = true;
-                                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                                    serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+                                    authenticateUser(response.data);
                                 }
                             )
                         },

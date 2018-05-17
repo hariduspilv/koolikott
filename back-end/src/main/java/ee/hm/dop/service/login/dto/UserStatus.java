@@ -4,7 +4,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 
 public class UserStatus {
 
-    private boolean status;
+    private boolean statusOk;
     private boolean userConfirmed;
     private String token;
     private Long agreementId;
@@ -12,7 +12,7 @@ public class UserStatus {
 
     public static UserStatus missingPermissions(String token, Long agreementId){
         UserStatus status = new UserStatus();
-        status.setStatus(false);
+        status.setStatusOk(false);
         status.setToken(token);
         status.setAgreementId(agreementId);
         return status;
@@ -20,17 +20,17 @@ public class UserStatus {
 
     public static UserStatus loggedIn(AuthenticatedUser authenticatedUser){
         UserStatus status = new UserStatus();
-        status.setStatus(true);
+        status.setStatusOk(true);
         status.setAuthenticatedUser(authenticatedUser);
         return status;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isStatusOk() {
+        return statusOk;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatusOk(boolean statusOk) {
+        this.statusOk = statusOk;
     }
 
     public String getToken() {

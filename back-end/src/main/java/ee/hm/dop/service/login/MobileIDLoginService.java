@@ -5,6 +5,7 @@ import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,17 @@ public class MobileIDLoginService {
     private AuthenticationStateDao authenticationStateDao;
     @Inject
     private AuthenticationStateService authenticationStateService;
+    @Inject
+    private LoginNewService loginNewService;
+
+    public UserStatus validateMobileIDAuthentication(String token) throws SOAPException {
+        if (!isAuthenticated(token)) {
+            logger.info("Authentication not valid.");
+            return null;
+        }
+        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
+        return loginNewService.login(authenticationState);
+    }
 
     public MobileIDSecurityCodes authenticate(String phoneNumber, String idCode, Language language) throws Exception {
         if (!phoneNumber.startsWith("+")) {
