@@ -7,6 +7,7 @@ import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration.Configuration;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -298,8 +299,8 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(mobileIDSecurityCodes.getChallengeId());
 
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileIDSecurityCodes.getToken()));
-        AuthenticatedUser authenticatedUser = isValid.readEntity(new GenericType<AuthenticatedUser>() {
-        });
+        AuthenticatedUser authenticatedUser = isValid.readEntity(new GenericType<UserStatus>() {
+        }).getAuthenticatedUser();
 
         assertNotNull(authenticatedUser.getToken());
         User user = authenticatedUser.getUser();
@@ -471,7 +472,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     }
 
     private AuthenticatedUser loginWithId(ClientRequestFilter filter) {
-        return getTarget(LOGIN_ID_CARD, filter).request()
-                .accept(MediaType.APPLICATION_JSON).get(AuthenticatedUser.class);
+        UserStatus status = getTarget(LOGIN_ID_CARD, filter).request().accept(MediaType.APPLICATION_JSON).get(UserStatus.class);
+        return status != null ? status.getAuthenticatedUser() : null;
     }
 }

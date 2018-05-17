@@ -20,12 +20,11 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static ee.hm.dop.rest.LoginResource.LOGIN_REDIRECT_WITH_TOKEN;
-
 @Deprecated
 @Path("login")
 public class TaatLoginResource extends BaseResource{
 
+    public static final String LOGIN_REDIRECT_WITH_TOKEN_OLD = "/#!/loginRedirect?token=";
     @Inject
     private TaatService taatService;
     @Inject
@@ -46,6 +45,6 @@ public class TaatLoginResource extends BaseResource{
         AuthenticatedUser authenticatedUser = taatService.authenticate(
                 formParams.getFirst("SAMLResponse"),
                 formParams.getFirst("RelayState"));
-        return redirect(new URI(LOGIN_REDIRECT_WITH_TOKEN + authenticatedUser.getToken()));
+        return redirect(new URI(LOGIN_REDIRECT_WITH_TOKEN_OLD + authenticatedUser.getToken()));
     }
 }

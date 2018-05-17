@@ -12,17 +12,44 @@ angular.module('koolikottApp')
         var mobileIdLoginFailCallback;
         var mobileIdChallengeReceivedCallback;
 
-        function loginSuccess(authenticatedUser) {
+        function authenticateUser(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
                 loginFail();
             } else {
-                if (authenticatedUser.authenticatedUser){
-                    authenticatedUserService.setAuthenticatedUser(authenticatedUser.authenticatedUser);
-                } else {
-                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                }
                 $rootScope.justLoggedIn = true;
+                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+            }
+        }
+
+        function showGdprModalAndAct(userStatus) {
+            dialogService.showConfirmationDialog(
+                'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
+                'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
+                'ALERT_CONFIRM_POSITIVE',
+                'ALERT_CONFIRM_NEGATIVE',
+                () => {
+                    userStatus.userConfirmed = true;
+                    serverCallService.makePost('rest/login/finalizeLogin', userStatus)
+                        .then((response) => {
+                                authenticateUser(response.data);
+                            }
+                        )
+                },
+                () => {
+                    loginFail();
+                });
+        }
+
+        function loginSuccess(userStatus) {
+            if (isEmpty(userStatus)) {
+                loginFail();
+            } else {
+                if (userStatus.statusOk){
+                    authenticateUser(userStatus.authenticatedUser);
+                } else {
+                    showGdprModalAndAct(userStatus);
+                }
             }
         }
 
@@ -148,13 +175,18 @@ angular.module('koolikottApp')
                 loginWithOAuth("/rest/login/stuudium");
             },
 
-            authenticateUsingOAuth: function(token) {
+            authenticateUsingOAuth: function(token, agreement) {
                 const params = {
                     'token': token
                 };
 
-                serverCallService.makeGet("rest/login/getAuthenticatedUser", params, loginSuccess, loginFail);
-                isOAuthAuthentication = true;
+                if (!agreement){
+                    serverCallService.makeGet("rest/login/getAuthenticatedUser", params, authenticateUser, loginFail);
+                    isOAuthAuthentication = true;
+                } else {
+                    params.agreementId = agreement;
+                    showGdprModalAndAct(params);
+                }
             },
 
             loginWithMobileId: function(phoneNumber, idCode, language, successCallback, failCallback, challengeReceivedCallback) {
