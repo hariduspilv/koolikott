@@ -17,7 +17,7 @@
             this.$scope.addAgreement = this.addAgreement.bind(this)
             this.$scope.toggleNewRow = this.toggleNewRow.bind(this)
             this.$scope.minDate = new Date()
-            this.$scope.perPage = 2
+            this.$scope.perPage = 20
             this.$scope.page = 1
             this.$scope.numPages = 1
 
@@ -30,12 +30,13 @@
 
         toggleNewRow() {
             this.$scope.addNewRow = !this.$scope.addNewRow;
+            this.$scope.newAgreement.$error = false;
         }
 
         confirmMaterialDeletion(agreement) {
             this.dialogService.showConfirmationDialog(
-                'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
-                'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
+                'GDPR_DELETE_DIALOG_TITLE',
+                'GDPR_DELETE_DIALOG_CONTENT',
                 'ALERT_CONFIRM_POSITIVE',
                 'ALERT_CONFIRM_NEGATIVE',
                 () => {
@@ -47,9 +48,9 @@
             this.serverCallService
                 .makeGet('rest/admin/agreement')
                 .then(res => {
-                    this.$scope.data = res.data
+                    this.$scope.alldata = res.data
                     this.$scope.page = 1
-                    this.$scope.numPages = Math.ceil(this.$scope.data.length / this.$scope.perPage)
+                    this.$scope.numPages = Math.ceil(this.$scope.alldata.length / this.$scope.perPage)
                     this.paginate(this.$scope.page, this.$scope.perPage)
                     this.sort(this.$scope.sortBy)
                 })
@@ -93,7 +94,7 @@
 
         sort(order) {
             this.$scope.sortBy = order
-            this.sortService.orderItems(this.$scope.data, order)
+            this.sortService.orderItems(this.$scope.alldata, order)
             this.paginate(this.$scope.page, this.$scope.perPage)
         }
 
@@ -105,7 +106,7 @@
         paginate(page, perPage) {
             const startIdx = (page - 1) * perPage
             this.$scope.page = page
-            this.$scope.data.rows = this.$scope.data.slice(startIdx, startIdx + perPage)
+            this.$scope.data = this.$scope.alldata.slice(startIdx, startIdx + perPage)
         }
     }
 
