@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog', 'dialogService'
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog, dialogService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
 
