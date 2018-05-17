@@ -181,10 +181,11 @@ angular.module('koolikottApp')
                 };
 
                 if (!agreement){
-                    serverCallService.makeGet("rest/login/getAuthenticatedUser", params, authenticateUser, loginFail);
                     isOAuthAuthentication = true;
+                    serverCallService.makeGet("rest/login/getAuthenticatedUser", params, authenticateUser, loginFail);
                 } else {
                     params.agreementId = agreement;
+                    isOAuthAuthentication = true;
                     showGdprModalAndAct(params);
                 }
             },
