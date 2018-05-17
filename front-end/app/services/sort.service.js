@@ -205,6 +205,15 @@ class controller extends Controller {
         if (b === undefined) b = -1;
         return a - b
     }
+    byVersion(a, b) {
+        return this.compareStrings(a.version, b.version)
+    }
+    byUrl(a, b) {
+        return this.compareStrings(a.url, b.url)
+    }
+    byValidFrom(a, b) {
+        return this.compareDates(a.validFrom, b.validFrom)
+    }
 }
 controller.$inject = [
     '$translate',

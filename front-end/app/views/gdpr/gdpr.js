@@ -7,18 +7,17 @@
             this.$scope.data = {}
             this.$scope.newAgreement = {}
             this.$scope.addNewRow = false;
+            this.$scope.isInfoTextOpen = false
 
             this.getAgreements()
 
-            this.$scope.isInfoTextOpen = false
             this.$scope.sort = this.sort.bind(this)
             this.$scope.paginate = this.paginate.bind(this)
             this.$scope.confirmMaterialDeletion = this.confirmMaterialDeletion.bind(this)
             this.$scope.addAgreement = this.addAgreement.bind(this)
             this.$scope.toggleNewRow = this.toggleNewRow.bind(this)
-            this.$scope.moveToPage = this.moveToPage.bind(this)
             this.$scope.minDate = new Date()
-            this.$scope.perPage = 100
+            this.$scope.perPage = 2
             this.$scope.page = 1
             this.$scope.numPages = 1
 
@@ -27,10 +26,6 @@
             window.addEventListener('resize', this.setInfoTextHeight)
             this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.setInfoTextHeight))
             setTimeout(this.setInfoTextHeight)
-        }
-
-        moveToPage(url) {
-            this.$window.open(url);
         }
 
         toggleNewRow() {
@@ -52,7 +47,11 @@
             this.serverCallService
                 .makeGet('rest/admin/agreement')
                 .then(res => {
-                    return this.$scope.data = res.data;
+                    this.$scope.data = res.data
+                    this.$scope.page = 1
+                    this.$scope.numPages = Math.ceil(this.$scope.data.length / this.$scope.perPage)
+                    this.paginate(this.$scope.page, this.$scope.perPage)
+                    this.sort(this.$scope.sortBy)
                 })
         }
 
@@ -63,7 +62,7 @@
                 .then((response) => {
                     if (!(response.status === 200 && response.data)) {
                         this.$scope.newAgreement.$error = true;
-                    }  else {
+                    } else {
                         this.serverCallService
                             .makePost('rest/admin/agreement', this.$scope.newAgreement)
                             .then((response) => {
@@ -94,7 +93,7 @@
 
         sort(order) {
             this.$scope.sortBy = order
-            this.sortService.orderItems(this.$scope.allRows, order)
+            this.sortService.orderItems(this.$scope.data, order)
             this.paginate(this.$scope.page, this.$scope.perPage)
         }
 
@@ -106,7 +105,7 @@
         paginate(page, perPage) {
             const startIdx = (page - 1) * perPage
             this.$scope.page = page
-            this.$scope.data.rows = this.$scope.allRows.slice(startIdx, startIdx + perPage)
+            this.$scope.data.rows = this.$scope.data.slice(startIdx, startIdx + perPage)
         }
     }
 
