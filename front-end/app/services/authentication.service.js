@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog', 'dialogService',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog, dialogService) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
 
@@ -23,22 +23,21 @@ angular.module('koolikottApp')
         }
 
         function showGdprModalAndAct(userStatus) {
-            dialogService.showConfirmationDialog(
-                'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
-                'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
-                'ALERT_CONFIRM_POSITIVE',
-                'ALERT_CONFIRM_NEGATIVE',
-                () => {
+            $mdDialog.show({
+                templateUrl: 'views/agreement/agreementDialog.html',
+                controller: 'agreementDialogController',
+            }).then((res)=>{
+                if (!res){
+                    loginFail();
+                } else {
                     userStatus.userConfirmed = true;
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                                 authenticateUser(response.data);
                             }
                         )
-                },
-                () => {
-                    loginFail();
-                });
+                }
+            })
         }
 
         function loginSuccess(userStatus) {

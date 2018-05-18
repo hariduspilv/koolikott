@@ -3,16 +3,13 @@
 angular.module('koolikottApp')
 .controller('devLoginController',
 [
-    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', '$rootScope', 'dialogService',
-    function($scope, serverCallService, $route, authenticatedUserService, $location, $rootScope, dialogService) {
+    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', '$rootScope', 'alertService', '$mdDialog',
+    function($scope, serverCallService, $route, authenticatedUserService, $location, $rootScope, alertService, $mdDialog) {
         var idCode = $route.current.params.idCode;
         var params = {};
         serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail);
 
-        var authenticatedUser;
-
-        function authenticateUser(authenticatedUser2) {
-            authenticatedUser = authenticatedUser2;
+        function authenticateUser(authenticatedUser) {
             $rootScope.justLoggedIn = true;
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
             serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
@@ -26,33 +23,33 @@ angular.module('koolikottApp')
                 if (userStatus.statusOk){
                     authenticateUser(userStatus.authenticatedUser);
                 } else {
-                    dialogService.showConfirmationDialog(
-                        'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
-                        'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
-                        'ALERT_CONFIRM_POSITIVE',
-                        'ALERT_CONFIRM_NEGATIVE',
-                        () => {
+                    $mdDialog.show({
+                        templateUrl: 'views/agreement/agreementDialog.html',
+                        controller: 'agreementDialogController',
+                    }).then((res)=>{
+                        if (!res){
+                            loginFail();
+                        } else {
                             userStatus.userConfirmed = true;
                             serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                                 .then((response) => {
-                                    authenticateUser(response.data);
-                                }
-                            )
-                        },
-                        ()=>{
-                            loginFail();
-                        });
+                                        authenticateUser(response.data);
+                                    }
+                                )
+                        }
+                    })
                 }
             }
         }
 
         function loginFail() {
-            log('Login failed.');
+            console.log('Login failed.');
+            alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             authenticatedUserService.removeAuthenticatedUser();
             $location.url('/');
         }
 
-        function finishLogin() {
+        function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
             $location.url('/' + authenticatedUser.user.username);
             $rootScope.$broadcast('login:success')
@@ -62,9 +59,9 @@ angular.module('koolikottApp')
             if (isEmpty(data)) {
                 loginFail();
             } else {
-                authenticatedUserService.removeAuthenticatedUser();
+                const authenticatedUser = authenticatedUserService.getAuthenticatedUser();
                 authenticatedUser.user.role = data;
-                finishLogin();
+                finishLogin(authenticatedUser);
             }
         }
     }
