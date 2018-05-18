@@ -34,6 +34,8 @@ angular.module('koolikottApp')
                             serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                                 .then((response) => {
                                         authenticateUser(response.data);
+                                    }, () => {
+                                        loginFail();
                                     }
                                 )
                         }
