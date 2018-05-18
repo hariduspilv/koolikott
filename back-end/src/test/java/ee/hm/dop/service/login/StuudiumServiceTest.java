@@ -39,8 +39,6 @@ public class StuudiumServiceTest {
     @Mock
     private Client client;
     @Mock
-    private LoginService loginService;
-    @Mock
     private WebTarget target;
     @Mock
     private Builder builder;
@@ -62,6 +60,7 @@ public class StuudiumServiceTest {
 
         Response response = createMock(Response.class);
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+        UserStatus userStatus = UserStatus.loggedIn(authenticatedUser);
 
         expect(configuration.getString(STUUDIUM_URL_GENERALDATA)).andReturn(generalDataURL);
         expect(configuration.getString(STUUDIUM_CLIENT_ID)).andReturn(clientID);
@@ -77,8 +76,8 @@ public class StuudiumServiceTest {
 
         expect(response.readEntity(StuudiumUser.class)).andReturn(stuudiumUser);
 
-        expect(loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
-                .andReturn(authenticatedUser);
+        expect(loginNewService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
+                .andReturn(userStatus);
 
         replayAll(response);
 
@@ -91,7 +90,7 @@ public class StuudiumServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(configuration, loginService, client, target, builder);
+        replay(configuration, loginNewService, client, target, builder);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -101,7 +100,7 @@ public class StuudiumServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(configuration, loginService, client, target, builder);
+        verify(configuration, loginNewService, client, target, builder);
 
         if (mocks != null) {
             for (Object object : mocks) {

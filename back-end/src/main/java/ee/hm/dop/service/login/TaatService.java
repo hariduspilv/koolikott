@@ -18,8 +18,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.xml.security.utils.Base64;
@@ -61,7 +61,7 @@ public class TaatService {
     @Inject
     private AuthenticationStateDao authenticationStateDao;
     @Inject
-    private LoginService loginService;
+    private LoginNewService loginService;
     @Inject
     private SignatureValidator validator;
     private static final SecureRandom random = new SecureRandom();
@@ -101,7 +101,7 @@ public class TaatService {
         return context;
     }
 
-    public AuthenticatedUser authenticate(String responseMessage, String authenticationStateToken) {
+    public UserStatus authenticate(String responseMessage, String authenticationStateToken) {
         validateAuthenticationToken(authenticationStateToken);
 
         Response response = getResponse(responseMessage);
@@ -111,7 +111,7 @@ public class TaatService {
         return login(dataMap);
     }
 
-    private AuthenticatedUser login(Map<String, String> dataMap) {
+    private UserStatus login(Map<String, String> dataMap) {
         return loginService.login(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
     }
 

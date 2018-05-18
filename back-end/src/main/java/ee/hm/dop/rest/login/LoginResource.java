@@ -28,7 +28,7 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
-    private static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
+    public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
 
     @Inject
     private LoginNewService loginNewService;

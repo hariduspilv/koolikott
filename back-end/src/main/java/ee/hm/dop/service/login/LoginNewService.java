@@ -29,7 +29,7 @@ import static java.lang.String.format;
 public class LoginNewService {
     private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
 
-    private static Logger logger = LoggerFactory.getLogger(LoginService.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginNewService.class);
 
     @Inject
     private UserService userService;
@@ -61,6 +61,8 @@ public class LoginNewService {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
             return missingPermissions(state.getToken(), latestAgreement.getId());
         }
+
+        logger.info(format("User with id %s logged in", user.getId()));
         return loggedIn(authenticate(user));
     }
 
@@ -89,22 +91,22 @@ public class LoginNewService {
             authenticationStateDao.delete(state);
             return null;
         }
+        if (userStatus.getAgreementId() != null) {
+            throw new RuntimeException("No agreement for token: " + userStatus.getToken());
+        }
 
         User user = getExistingOrNewUser(state);
-        if (userStatus.getAgreementId() != null) {
-            Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
-            user.getAgreements().add(agreement);
-            userDao.createOrUpdate(user);
-        }
+        Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
+        user.getAgreements().add(agreement);
+        userDao.createOrUpdate(user);
+
         AuthenticatedUser authenticate = authenticate(user);
         authenticationStateDao.delete(state);
+
+        logger.info(format("User with id %s finalized login and logged in", user.getId()));
         return authenticate;
     }
 
-    /**
-     * used for backwards compitability
-     */
-    @Deprecated
     private AuthenticatedUser finalizeLogin(String idCode, String name, String surname) {
         return authenticate(getExistingOrNewUser(idCode, name, surname));
     }
@@ -128,6 +130,7 @@ public class LoginNewService {
         if (newUser == null) {
             throw new RuntimeException(format("User with id %s tried to log in after creating account, but failed.", idCode));
         }
+        logger.info("System created new user with id %s", newUser.getId());
         newUser.setNewUser(true);
         return newUser;
     }

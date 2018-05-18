@@ -1,32 +1,26 @@
 package ee.hm.dop.service.login;
 
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_GENERALDATA;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_TOKEN;
-import static java.lang.String.format;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
-import static org.apache.xml.security.utils.Base64.encode;
-
-import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MultivaluedMap;
-
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 
+import javax.inject.Inject;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MultivaluedMap;
+
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static java.lang.String.format;
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
+import static org.apache.xml.security.utils.Base64.encode;
+
 public class EkoolService {
     @Inject
     private Configuration configuration;
     @Inject
     private Client client;
-    @Inject
-    private LoginService loginService;
     @Inject
     private LoginNewService loginNewService;
 

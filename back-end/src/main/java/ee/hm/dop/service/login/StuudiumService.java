@@ -19,8 +19,6 @@ public class StuudiumService {
     @Inject
     private Client client;
     @Inject
-    private LoginService loginService;
-    @Inject
     private LoginNewService loginNewService;
 
     public UserStatus authenticate(String token) {

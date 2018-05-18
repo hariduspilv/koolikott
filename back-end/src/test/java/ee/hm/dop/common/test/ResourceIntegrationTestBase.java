@@ -42,7 +42,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     private static AuthenticationFilter authenticationFilter;
 
     @Inject
-    private static Configuration configuration;
+    protected static Configuration configuration;
 
     protected User login(TestUser testUser) {
         return login(testUser.idCode);
