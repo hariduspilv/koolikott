@@ -91,7 +91,7 @@ public class LoginNewService {
             authenticationStateDao.delete(state);
             return null;
         }
-        if (userStatus.getAgreementId() != null) {
+        if (userStatus.getAgreementId() == null) {
             throw new RuntimeException("No agreement for token: " + userStatus.getToken());
         }
 
