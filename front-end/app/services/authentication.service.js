@@ -81,8 +81,7 @@ angular.module('koolikottApp')
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/' + authenticatedUser.user.username);
             } else if (isOAuthAuthentication) {
-                var url = localStorage.getItem(LOGIN_ORIGIN);
-                $location.url(url);
+                $location.url(localStorage.getItem(LOGIN_ORIGIN));
             }
 
             enableLogin();
@@ -150,6 +149,14 @@ angular.module('koolikottApp')
         }
 
         return {
+
+            loginSuccess: function (userStatus) {
+                loginSuccess(userStatus);
+            },
+
+            loginFail: function () {
+                loginFail();
+            },
 
             logout: function() {
                 serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
