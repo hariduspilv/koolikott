@@ -17,27 +17,23 @@
     class="statistics-info-text text-small"
     data-ng-class="{'is-open': isInfoTextOpen}"
     data-md-colors="{color: 'grey-600'}"
-    data-layout-padding
   >
-    <div data-translate="GDPR_INFO_TEXT"></div>
+    <div data-translate="GDPR_INFO_TEXT" data-layout-padding></div>
   </md-content>
-  <md-content  data-layout-padding>
+  <md-content data-layout-padding>
     <div data-layout="row" data-layout-align="end center">
-      <md-button data-ng-show="!addNewRow"
-                 class="md-raised md-primary"
+      <md-button class="md-raised md-primary"
                  data-ng-click="$ctrl.toggleNewRow()"
                  aria-label="Lisa uus rida"
       >
-        <span data-translate="GDPR_ADD_NEW_ROW"></span>
-        <md-icon>arrow_downward</md-icon>
-      </md-button>
-      <md-button data-ng-show="addNewRow"
-                 class="md-raised md-primary"
-                 data-ng-click="$ctrl.toggleNewRow()"
-                 aria-label="Peida uus rida"
-      >
-        <span data-translate="GDPR_HIDE_NEW_ROW"></span>
-        <md-icon>arrow_upward</md-icon>
+        <div data-ng-show="!addNewRow">
+          <span data-translate="GDPR_ADD_NEW_ROW"></span>
+          <md-icon>arrow_downward</md-icon>
+        </div>
+        <div data-ng-show="addNewRow">
+          <span data-translate="GDPR_HIDE_NEW_ROW"></span>
+          <md-icon>arrow_upward</md-icon>
+        </div>
       </md-button>
     </div>
   </md-content>
