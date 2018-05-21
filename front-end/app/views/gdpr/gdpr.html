@@ -39,24 +39,18 @@
   </md-content>
   <md-table-container>
     <table data-ng-if="data" md-table class="table-fixed">
-      <colgroup>
-        <col width="45%">
-        <col width="20%">
-        <col width="20%">
-        <col width="15%">
-      </colgroup>
       <thead md-head md-order="sortBy" md-on-reorder="sort">
       <tr md-row>
-        <th md-column md-order-by="byUrl">
+        <th md-column md-order-by="byUrl" width="45%">
           <span data-translate="GDPR_LINK"></span>
         </th>
-        <th md-column md-order-by="byVersion">
+        <th md-column md-order-by="byVersion" width="20%">
           <span data-translate="GDPR_VERSION"></span>
         </th>
-        <th md-column md-order-by="byValidFrom">
+        <th md-column md-order-by="byValidFrom" width="20%">
           <span data-translate="GDPR_VALIDFROM"></span>
         </th>
-        <th md-column>
+        <th md-column width="15%">
           <span></span>
         </th>
       </tr>
