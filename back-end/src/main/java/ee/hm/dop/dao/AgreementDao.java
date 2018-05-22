@@ -57,9 +57,10 @@ public class AgreementDao extends AbstractDao<Agreement> {
                 "FROM User_Agreement\n" +
                 "WHERE user NOT IN (SELECT user\n" +
                 "               FROM User_Agreement\n" +
-                "               WHERE agreement != :newId)\n" +
+                "               WHERE agreement = :newId)\n" +
                 "      AND agreement IN (:previousIds)")
                 .setParameter("newId", newAgreement.getId())
-                .setParameter("previousIds", previousIds);
+                .setParameter("previousIds", previousIds)
+                .executeUpdate();
     }
 }

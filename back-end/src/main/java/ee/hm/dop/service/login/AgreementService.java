@@ -42,7 +42,7 @@ public class AgreementService {
         agreement.setCreatedBy(user);
         Agreement newAgreement = agreementDao.createOrUpdate(agreement);
         if (newAgreement != null){
-            List<Agreement> previousDeletedAgreements = agreementDao.findMatchingDeletedAgreements(agreement);
+            List<Agreement> previousDeletedAgreements = agreementDao.findMatchingDeletedAgreements(newAgreement);
             if (isNotEmpty(previousDeletedAgreements)){
                 agreementDao.updateUserAgreementsForUsersWhoAgreedToPreviousVersion(previousDeletedAgreements, newAgreement);
             }
