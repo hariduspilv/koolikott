@@ -26,7 +26,6 @@ angular.module('koolikottApp')
             $mdDialog.show({
                 templateUrl: 'views/agreement/agreementDialog.html',
                 controller: 'agreementDialogController',
-                escapeToClose: false
             }).then((res)=>{
                 if (!res){
                     loginFail();
