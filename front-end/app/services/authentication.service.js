@@ -151,6 +151,7 @@ angular.module('koolikottApp')
         return {
 
             loginSuccess: function (userStatus) {
+                isOAuthAuthentication = true;
                 loginSuccess(userStatus);
             },
 

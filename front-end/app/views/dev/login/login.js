@@ -15,6 +15,7 @@ angular.module('koolikottApp')
 
         function loginFail() {
             authenticationService.loginFail()
+            $location.url("/");
         }
     }
 ]);
