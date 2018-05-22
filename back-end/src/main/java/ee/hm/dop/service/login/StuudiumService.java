@@ -19,11 +19,11 @@ public class StuudiumService {
     @Inject
     private Client client;
     @Inject
-    private LoginNewService loginNewService;
+    private LoginService loginService;
 
     public UserStatus authenticate(String token) {
         StuudiumUser stuudiumUser = getStuudiumUser(token);
-        return loginNewService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
+        return loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
     }
 
     private StuudiumUser getStuudiumUser(String token) {

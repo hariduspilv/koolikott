@@ -2,11 +2,8 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.model.Agreement;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.login.dto.UserStatus;
@@ -20,17 +17,16 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
-import static ee.hm.dop.service.login.dto.UserStatus.missingPermissions;
+import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
+import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
 
-public class LoginNewService {
+public class LoginService {
     private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
 
-    private static Logger logger = LoggerFactory.getLogger(LoginNewService.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginService.class);
 
     @Inject
     private UserService userService;
@@ -45,7 +41,7 @@ public class LoginNewService {
     @Inject
     private AgreementDao agreementDao;
     @Inject
-    private UserDao userDao;
+    private UserAgreementDao userAgreementDao;
 
     public UserStatus login(String idCode, String name, String surname) {
         Agreement latestAgreement = agreementDao.findLatestAgreement();
@@ -55,12 +51,11 @@ public class LoginNewService {
         User user = userService.getUserByIdCode(idCode);
         if (user == null) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
-            return missingPermissions(state.getToken(), latestAgreement.getId());
+            return missingPermissionsNewUser(state.getToken(), latestAgreement.getId());
         }
-        List<Long> agreementIds = user.getAgreements().stream().map(Agreement::getId).collect(Collectors.toList());
-        if (!agreementIds.contains(latestAgreement.getId())) {
+        if (userAgreementDao.agreementDoesntExist(user.getId(), latestAgreement.getId())) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
-            return missingPermissions(state.getToken(), latestAgreement.getId());
+            return missingPermissionsExistingUser(state.getToken(), latestAgreement.getId());
         }
 
         logger.info(format("User with id %s logged in", user.getId()));
@@ -98,14 +93,38 @@ public class LoginNewService {
 
         User user = getExistingOrNewUser(state);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
-        user.getAgreements().add(agreement);
-        userDao.createOrUpdate(user);
+        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+        }
 
         AuthenticatedUser authenticate = authenticate(user);
         authenticationStateDao.delete(state);
 
         logger.info(format("User with id %s finalized login and logged in", user.getId()));
         return authenticate;
+    }
+
+    public void rejectAgreement(UserStatus userStatus) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userStatus.getToken());
+        if (state == null) {
+            return;
+        }
+
+        if (hasExpired(state)) {
+            authenticationStateDao.delete(state);
+            return;
+        }
+        if (userStatus.getAgreementId() == null) {
+            throw new RuntimeException("No agreement for token: " + userStatus.getToken());
+        }
+        User user = userService.getUserByIdCode(state.getIdCode());
+        if (user == null) {
+            return;
+        }
+        Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
+        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, false));
+        }
     }
 
     private AuthenticatedUser finalizeLogin(String idCode, String name, String surname) {
@@ -133,8 +152,8 @@ public class LoginNewService {
         }
         logger.info("System created new user with id %s", newUser.getId());
         newUser.setNewUser(true);
-        if (newUser.getAgreements() == null){
-            newUser.setAgreements(new ArrayList<>());
+        if (newUser.getUserAgreements() == null) {
+            newUser.setUserAgreements(new ArrayList<>());
         }
         return newUser;
     }
@@ -143,5 +162,14 @@ public class LoginNewService {
         Interval interval = new Interval(state.getCreated(), new DateTime());
         Duration duration = new Duration(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR);
         return interval.toDuration().isLongerThan(duration);
+    }
+
+    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+        User_Agreement userAgreement = new User_Agreement();
+        userAgreement.setUser(user);
+        userAgreement.setAgreement(agreement);
+        userAgreement.setAgreed(agreed);
+        userAgreement.setCreatedAt(DateTime.now());
+        return userAgreement;
     }
 }

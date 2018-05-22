@@ -35,32 +35,38 @@ public class AgreementDao extends AbstractDao<Agreement> {
                 .setParameter("version", agreement.getVersion()));
     }
 
-    public List<Agreement> findMatchingDeletedAgreements(Agreement agreement) {
-        return getList(entityManager
+    public Agreement findMatchingDeletedAgreement(Agreement agreement) {
+        return getSingleResult(entityManager
                 .createQuery("select a from Agreement a " +
                         "where a.validFrom = :validFrom " +
                         "and a.version = :version " +
                         "and a.id != :id " +
-                        "and a.deleted = true", entity())
+                        "and a.deleted = true " +
+                        "order by a.id desc", entity())
                 .setParameter("validFrom", agreement.getValidFrom())
                 .setParameter("version", agreement.getVersion())
-                .setParameter("id", agreement.getId()));
+                .setParameter("id", agreement.getId())
+                .setMaxResults(1));
     }
 
-    public void updateUserAgreementsForUsersWhoAgreedToPreviousVersion(List<Agreement> previousAgreements, Agreement newAgreement) {
-        List<Long> previousIds = previousAgreements.stream().map(Agreement::getId).collect(Collectors.toList());
+    public void updateUserAgreementsForUsersWhoAgreedToPreviousVersion(Agreement previousAgreement, Agreement newAgreement) {
         entityManager.createNativeQuery("" +
-                "INSERT INTO User_Agreement (user, agreement)\n" +
+                "INSERT INTO User_Agreement (user, agreement, agreed, createdAt)\n" +
                 "SELECT\n" +
-                "  DISTINCT user,\n" +
-                "  :newId\n" +
-                "FROM User_Agreement\n" +
-                "WHERE user NOT IN (SELECT user\n" +
+                "  ua.user,\n" +
+                "  :newId,\n" +
+                "  ua.agreed,\n" +
+                "  ua.createdAt\n" +
+                "FROM User_Agreement ua\n" +
+                "WHERE ua.user NOT IN (SELECT user\n" +
                 "               FROM User_Agreement\n" +
-                "               WHERE agreement = :newId)\n" +
-                "      AND agreement IN (:previousIds)")
+                "               WHERE agreed = TRUE\n" +
+                "               AND agreement = :newId)\n" +
+                "      AND ua.agreed = TRUE \n" +
+                "      AND ua.agreement = :previousId " +
+                "      LIMIT 1")
                 .setParameter("newId", newAgreement.getId())
-                .setParameter("previousIds", previousIds)
+                .setParameter("previousId", previousAgreement.getId())
                 .executeUpdate();
     }
 }

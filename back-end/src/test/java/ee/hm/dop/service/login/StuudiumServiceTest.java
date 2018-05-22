@@ -43,7 +43,7 @@ public class StuudiumServiceTest {
     @Mock
     private Builder builder;
     @Mock
-    private LoginNewService loginNewService;
+    private LoginService loginService;
 
     @Test
     public void authenticate() {
@@ -76,7 +76,7 @@ public class StuudiumServiceTest {
 
         expect(response.readEntity(StuudiumUser.class)).andReturn(stuudiumUser);
 
-        expect(loginNewService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
+        expect(loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
                 .andReturn(userStatus);
 
         replayAll(response);
@@ -90,7 +90,7 @@ public class StuudiumServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(configuration, loginNewService, client, target, builder);
+        replay(configuration, loginService, client, target, builder);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -100,7 +100,7 @@ public class StuudiumServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(configuration, loginNewService, client, target, builder);
+        verify(configuration, loginService, client, target, builder);
 
         if (mocks != null) {
             for (Object object : mocks) {

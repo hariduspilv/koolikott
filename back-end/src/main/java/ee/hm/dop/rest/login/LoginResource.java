@@ -31,7 +31,7 @@ public class LoginResource extends BaseResource {
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
 
     @Inject
-    private LoginNewService loginNewService;
+    private LoginService loginService;
     @Inject
     private EkoolService ekoolService;
     @Inject
@@ -47,7 +47,16 @@ public class LoginResource extends BaseResource {
     @Path("/finalizeLogin")
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser permissionConfirm(UserStatus userStatus) {
-        return confirmed(userStatus) ? loginNewService.finalizeLogin(userStatus) : null;
+        return confirmed(userStatus) ? loginService.finalizeLogin(userStatus) : null;
+    }
+
+    @POST
+    @Path("/rejectAgreement")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void permissionReject(UserStatus userStatus) {
+        if (userStatus.isExistingUser()) {
+            loginService.rejectAgreement(userStatus);
+        }
     }
 
     @GET
@@ -55,7 +64,7 @@ public class LoginResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
-        return isAuthValid(req) ? loginNewService.login(getIdCode(req), getName(req), getSurname(req)) : null;
+        return isAuthValid(req) ? loginService.login(getIdCode(req), getName(req), getSurname(req)) : null;
     }
 
     @GET

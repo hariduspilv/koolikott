@@ -61,7 +61,7 @@ public class TaatService {
     @Inject
     private AuthenticationStateDao authenticationStateDao;
     @Inject
-    private LoginNewService loginService;
+    private LoginService loginService;
     @Inject
     private SignatureValidator validator;
     private static final SecureRandom random = new SecureRandom();

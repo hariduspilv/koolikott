@@ -42,7 +42,7 @@ public class TaatServiceTest {
     @Mock
     private AuthenticationStateDao authenticationStateDao;
     @Mock
-    private LoginNewService loginService;
+    private LoginService loginService;
     @Mock
     private SignatureValidator validator;
 

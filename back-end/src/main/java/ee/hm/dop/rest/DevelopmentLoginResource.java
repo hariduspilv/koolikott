@@ -7,15 +7,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.login.LoginNewService;
+import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.service.login.dto.UserStatus;
 
 @Path("dev/")
 public class DevelopmentLoginResource {
 
     @Inject
-    private LoginNewService loginService;
+    private LoginService loginService;
 
     @GET
     @Path("/login/{idCode}")

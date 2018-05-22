@@ -28,7 +28,12 @@ angular.module('koolikottApp')
                 controller: 'agreementDialogController',
             }).then((res)=>{
                 if (!res){
-                    loginFail();
+                    if (userStatus.existingUser){
+                        serverCallService.makePost('rest/login/rejectAgreement', userStatus)
+                            .then(() => loginFail())
+                    } else {
+                        loginFail();
+                    }
                 } else {
                     userStatus.userConfirmed = true;
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)

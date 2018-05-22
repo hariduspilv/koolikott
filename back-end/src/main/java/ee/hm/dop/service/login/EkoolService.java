@@ -22,7 +22,7 @@ public class EkoolService {
     @Inject
     private Client client;
     @Inject
-    private LoginNewService loginNewService;
+    private LoginService loginService;
 
     public String getAuthorizationUrl() {
         return configuration.getString(EKOOL_URL_AUTHORIZE);
@@ -35,7 +35,7 @@ public class EkoolService {
     public UserStatus authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
         Person person = getPerson(ekoolToken);
-        return loginNewService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
+        return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
     }
 
     private Person getPerson(EkoolToken ekoolToken) {

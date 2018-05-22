@@ -24,7 +24,7 @@ public class MobileIDLoginService {
     @Inject
     private AuthenticationStateService authenticationStateService;
     @Inject
-    private LoginNewService loginNewService;
+    private LoginService loginService;
 
     public UserStatus validateMobileIDAuthentication(String token) throws SOAPException {
         if (!isAuthenticated(token)) {
@@ -32,7 +32,7 @@ public class MobileIDLoginService {
             return null;
         }
         AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
-        return loginNewService.login(authenticationState);
+        return loginService.login(authenticationState);
     }
 
     public MobileIDSecurityCodes authenticate(String phoneNumber, String idCode, Language language) throws Exception {
