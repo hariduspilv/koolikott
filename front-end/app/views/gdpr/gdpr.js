@@ -17,6 +17,7 @@
             this.$scope.addAgreement = this.addAgreement.bind(this)
             this.$scope.toggleNewRow = this.toggleNewRow.bind(this)
             this.$scope.minDate = new Date()
+            this.$scope.maxDate = new Date(2038, 0, 19, 0, 0, 0, 0)
             this.$scope.perPage = 20
             this.$scope.page = 1
             this.$scope.numPages = 1
