@@ -63,8 +63,7 @@ public class AgreementDao extends AbstractDao<Agreement> {
                 "               WHERE agreed = TRUE\n" +
                 "               AND agreement = :newId)\n" +
                 "      AND ua.agreed = TRUE \n" +
-                "      AND ua.agreement = :previousId " +
-                "      LIMIT 1")
+                "      AND ua.agreement = :previousId ")
                 .setParameter("newId", newAgreement.getId())
                 .setParameter("previousId", previousAgreement.getId())
                 .executeUpdate();
