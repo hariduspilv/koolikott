@@ -189,16 +189,17 @@ angular.module('koolikottApp')
                 loginWithOAuth("/rest/login/stuudium");
             },
 
-            authenticateUsingOAuth: function(token, agreement) {
+            authenticateUsingOAuth: function(token, agreement, existingUser) {
                 const params = {
                     'token': token
                 };
 
                 isOAuthAuthentication = true;
-                if (!agreement){
+                if (!(agreement || existingUser)){
                     serverCallService.makeGet("rest/login/getAuthenticatedUser", params, authenticateUser, loginFail);
                 } else {
                     params.agreementId = agreement;
+                    params.existingUser = existingUser;
                     showGdprModalAndAct(params);
                 }
             },
