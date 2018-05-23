@@ -1,3 +1,11 @@
+## e-Koolikott [1.19.0](https://github.com/hariduspilv/koolikott/milestone/18) 
+
+### Muutunud
+* GDPR - Uue kasutaja loogika realiseerimine [#321](https://github.com/hariduspilv/koolikott/issues/321)
+* GDPR - Olemasoleva kasutaja loogika realiseerimine [#322](https://github.com/hariduspilv/koolikott/issues/322)
+* GDPR - Admin kasutaja funktsionaalsuse loomine kasutustingimuste versioonide halduseks [#323](https://github.com/hariduspilv/koolikott/issues/323)
+
+
 ## e-Koolikott [1.18.1](https://github.com/hariduspilv/koolikott/milestone/17) (prelives testimisel)
 
 ### Muutunud
