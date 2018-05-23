@@ -14,6 +14,8 @@ import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import javax.persistence.*;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements AbstractEntity {
@@ -52,6 +54,13 @@ public class User implements AbstractEntity {
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
+
+    @OneToMany(mappedBy = "user", fetch = LAZY)
+    private List<User_Agreement> userAgreements;
+
+    @Transient
+    @JsonIgnore
+    private boolean newUser;
 
     @JsonIgnore
     public String getFullName(){
@@ -123,5 +132,21 @@ public class User implements AbstractEntity {
 
     public void setUserTaxons(List<Taxon> userTaxons) {
         this.userTaxons = userTaxons;
+    }
+
+    public boolean isNewUser() {
+        return newUser;
+    }
+
+    public void setNewUser(boolean newUser) {
+        this.newUser = newUser;
+    }
+
+    public List<User_Agreement> getUserAgreements() {
+        return userAgreements;
+    }
+
+    public void setUserAgreements(List<User_Agreement> userAgreements) {
+        this.userAgreements = userAgreements;
     }
 }

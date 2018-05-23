@@ -101,6 +101,12 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
+                .when('/dashboard/gdpr', {
+                    templateUrl: 'views/gdpr/gdpr.html',
+                    controller: 'gdprController',
+                    controllerAs: '$ctrl',
+                    permissions: ['ADMIN']
+                })
                 .when('/loginRedirect', {
                     templateUrl: 'views/loginRedirect/loginRedirect.html',
                     controller: 'loginRedirectController',

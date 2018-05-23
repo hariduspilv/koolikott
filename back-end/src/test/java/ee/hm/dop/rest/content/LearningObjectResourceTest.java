@@ -132,7 +132,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void dislikeMaterial_sets_it_as_not_liked()  {
         login(USER_PEETER);
-        Material material = getMaterial(MATERIAL_5);
+        Material material = getMaterial(MATERIAL_6);
 
         doPost(DISLIKE_URL, material);
         UserLike userDislike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
@@ -143,7 +143,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void removeUserLike_removes_like_from_material()  {
         login(USER_PEETER);
-        Material material = getMaterial(MATERIAL_5);
+        Material material = getMaterial(MATERIAL_7);
 
         doPost(LIKE_URL, material);
         doPost(REMOVE_USER_LIKE_URL, material);

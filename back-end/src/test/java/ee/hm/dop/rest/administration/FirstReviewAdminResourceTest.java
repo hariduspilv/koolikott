@@ -92,13 +92,13 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void unreviewed_learningObject_after_being_set_reviewed_is_reviewed() throws Exception {
         login(USER_ADMIN);
-        Material material = getMaterial(MATERIAL_2);
+        Material material = getMaterial(MATERIAL_15);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
         Response updateResponse = doPost(SET_REVIEWED, material);
         assertEquals(Response.Status.OK.getStatusCode(), updateResponse.getStatus());
 
-        Material materialAfter = getMaterial(MATERIAL_2);
+        Material materialAfter = getMaterial(MATERIAL_15);
         assertEquals("Is Reviewed",0, materialAfter.getUnReviewed());
     }
 

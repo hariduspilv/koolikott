@@ -3,50 +3,19 @@
 angular.module('koolikottApp')
 .controller('devLoginController',
 [
-    '$scope', 'serverCallService', '$route', 'authenticatedUserService', '$location', '$rootScope',
-    function($scope, serverCallService, $route, authenticatedUserService, $location, $rootScope) {
-        var idCode = $route.current.params.idCode;
-        var params = {};
-        serverCallService.makeGet("rest/dev/login/" + idCode, params, loginSuccess, loginFail);
+    'serverCallService', '$rootScope', '$route', 'authenticatedUserService', '$location', 'authenticationService',
+    function(serverCallService, $rootScope, $route, authenticatedUserService, $location, authenticationService) {
+        const idCode = $route.current.params.idCode;
+        serverCallService.makeGet("rest/dev/login/" + idCode, {}, loginSuccess, loginFail);
 
-        var authenticatedUser;
-
-        function loginSuccess(authUser) {
-            if (isEmpty(authUser)) {
-                log("No data returned by logging in with id code:" + idCode);
-                $location.url('/');
-            } else {
-                authenticatedUser = authUser;
-                $rootScope.justLoggedIn = true;
-                getRole();
-            }
+        function loginSuccess(userStatus) {
+            $rootScope.afterAuthRedirectURL = "/portfolios";
+            authenticationService.loginSuccess(userStatus);
         }
 
         function loginFail() {
-            log('Login failed.');
-            authenticatedUserService.removeAuthenticatedUser();
-            $location.url('/');
-        }
-
-        function finishLogin() {
-            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            $location.url('/' + authenticatedUser.user.username);
-            $rootScope.$broadcast('login:success')
-        }
-
-        function getRole() {
-            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
-        }
-
-        function getRoleSuccess(data) {
-            if (isEmpty(data)) {
-                loginFail();
-            } else {
-                authenticatedUserService.removeAuthenticatedUser();
-                authenticatedUser.user.role = data;
-                finishLogin();
-            }
+            authenticationService.loginFail()
+            $location.url("/");
         }
     }
 ]);

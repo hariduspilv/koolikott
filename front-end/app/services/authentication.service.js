@@ -5,7 +5,6 @@ angular.module('koolikottApp')
 [
     '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
     function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog) {
-        var instance;
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
 
@@ -13,18 +12,55 @@ angular.module('koolikottApp')
         var mobileIdLoginFailCallback;
         var mobileIdChallengeReceivedCallback;
 
-        function loginSuccess(authenticatedUser) {
+        function authenticateUser(authenticatedUser) {
             if (isEmpty(authenticatedUser)) {
                 loginFail();
             } else {
-                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 $rootScope.justLoggedIn = true;
+                authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
         }
 
+        function showGdprModalAndAct(userStatus) {
+            $mdDialog.show({
+                templateUrl: 'views/agreement/agreementDialog.html',
+                controller: 'agreementDialogController',
+            }).then((res)=>{
+                if (!res){
+                    if (userStatus.existingUser){
+                        serverCallService.makePost('rest/login/rejectAgreement', userStatus)
+                            .then(() => loginFail())
+                    } else {
+                        loginFail();
+                    }
+                } else {
+                    userStatus.userConfirmed = true;
+                    serverCallService.makePost('rest/login/finalizeLogin', userStatus)
+                        .then((response) => {
+                                authenticateUser(response.data);
+                            }, () => {
+                                loginFail();
+                            }
+                        )
+                }
+            })
+        }
+
+        function loginSuccess(userStatus) {
+            if (isEmpty(userStatus)) {
+                loginFail();
+            } else {
+                if (userStatus.statusOk){
+                    authenticateUser(userStatus.authenticatedUser);
+                } else {
+                    showGdprModalAndAct(userStatus);
+                }
+            }
+        }
+
         function loginFail() {
-            log('Logging in failed.');
+            console.log('Logging in failed.');
             $mdDialog.hide();
             alertService.setErrorAlert('ERROR_LOGIN_FAILED');
             enableLogin();
@@ -50,8 +86,7 @@ angular.module('koolikottApp')
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/' + authenticatedUser.user.username);
             } else if (isOAuthAuthentication) {
-                var url = localStorage.getItem(LOGIN_ORIGIN);
-                $location.url(url);
+                $location.url(localStorage.getItem(LOGIN_ORIGIN));
             }
 
             enableLogin();
@@ -94,7 +129,7 @@ angular.module('koolikottApp')
             } else {
                 mobileIdChallengeReceivedCallback(mobileIDSecurityCodes.challengeId);
 
-                var params = {
+                const params = {
                     'token': mobileIDSecurityCodes.token
                 };
 
@@ -104,8 +139,7 @@ angular.module('koolikottApp')
 
         function loginWithOAuth(path) {
             localStorage.removeItem(LOGIN_ORIGIN);
-            localStorage.setItem(LOGIN_ORIGIN,
-                $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.$$url);
+            localStorage.setItem(LOGIN_ORIGIN, $rootScope.afterAuthRedirectURL ? $rootScope.afterAuthRedirectURL : $location.$$url);
             window.location = path;
         }
 
@@ -113,13 +147,22 @@ angular.module('koolikottApp')
             if (isEmpty(data)) {
                 loginFail();
             } else {
-                var authenticatedUser = authenticatedUserService.getAuthenticatedUser();
+                let authenticatedUser = authenticatedUserService.getAuthenticatedUser();
                 authenticatedUser.user.role = data;
                 finishLogin(authenticatedUser);
             }
         }
 
         return {
+
+            loginSuccess: function (userStatus) {
+                isOAuthAuthentication = true;
+                loginSuccess(userStatus);
+            },
+
+            loginFail: function () {
+                loginFail();
+            },
 
             logout: function() {
                 serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
@@ -146,13 +189,19 @@ angular.module('koolikottApp')
                 loginWithOAuth("/rest/login/stuudium");
             },
 
-            authenticateUsingOAuth: function(token) {
-                var params = {
+            authenticateUsingOAuth: function(token, agreement, existingUser) {
+                const params = {
                     'token': token
                 };
 
-                serverCallService.makeGet("rest/login/getAuthenticatedUser", params, loginSuccess, loginFail);
                 isOAuthAuthentication = true;
+                if (!(agreement || existingUser)){
+                    serverCallService.makeGet("rest/login/getAuthenticatedUser", params, authenticateUser, loginFail);
+                } else {
+                    params.agreementId = agreement;
+                    params.existingUser = existingUser;
+                    showGdprModalAndAct(params);
+                }
             },
 
             loginWithMobileId: function(phoneNumber, idCode, language, successCallback, failCallback, challengeReceivedCallback) {
@@ -164,7 +213,7 @@ angular.module('koolikottApp')
                 mobileIdLoginFailCallback = failCallback;
                 mobileIdChallengeReceivedCallback = challengeReceivedCallback;
 
-                var params = {
+                const params = {
                     'phoneNumber': phoneNumber,
                     'idCode': idCode,
                     'language': language

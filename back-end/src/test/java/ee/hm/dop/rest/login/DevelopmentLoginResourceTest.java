@@ -12,6 +12,7 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.junit.Test;
 
 public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
@@ -20,7 +21,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void existing_user_can_use_dev_login() {
-        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + USER_MATI.idCode, AuthenticatedUser.class);
+        AuthenticatedUser authenticatedUser  = doGet(DEV_LOGIN + USER_MATI.idCode, UserStatus.class).getAuthenticatedUser();
         assertNotNull(authenticatedUser.getToken());
         validateUser(authenticatedUser.getUser(), USER_MATI, TestLayer.REST);
     }

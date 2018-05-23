@@ -1,0 +1,39 @@
+<md-dialog aria-label="Sisselogimise modaalaken" class="login-dialog" flex="50" esc-key="cancel()">
+  <md-toolbar>
+    <div data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2 data-translate="AGREEMENT_DIALOG_HEADER"
+        ></h2>
+        <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge sisselogimise modaalaken">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <md-content data-layout-padding>
+      <p><span data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
+      <p>
+        <a target="_blank" href="{{'AGREEMENT_DIALOG_LINK_HREF' | translate}}">
+          <span data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
+        </a>
+      </p>
+      <div data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+        <md-button
+          class="md-raised md-secondary"
+          aria-label="Ei nõustu, väljun"
+          data-ng-click="cancel()"
+        >
+          <span data-translate="AGREEMENT_DIALOG_ACTION_NO"></span>
+        </md-button>
+        <md-button
+          class="md-raised md-primary"
+          aria-label="Nõustun ja sisenen"
+          data-ng-click="agree()"
+        >
+          <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
+        </md-button>
+      </div>
+    </md-content>
+  </md-dialog-content>
+</md-dialog>

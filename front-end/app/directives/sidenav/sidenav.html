@@ -166,6 +166,17 @@
             </div>
           </a>
         </li>
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="gdpr" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/gdpr')}"
+             data-ng-href="/dashboard/gdpr">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">gavel</md-icon>
+              <span data-translate="GDPR_SIDEMENU" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
       </ul>
     </div>
     <!-- END My Pofile -->

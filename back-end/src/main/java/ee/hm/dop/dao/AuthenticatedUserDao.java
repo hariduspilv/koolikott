@@ -16,7 +16,7 @@ public class AuthenticatedUserDao extends AbstractDao<AuthenticatedUser> {
     }
 
     public AuthenticatedUser findAuthenticatedUserByToken(String token) {
-        return super.findByField("token", token);
+        return findByField("token", token);
     }
 
     public void delete(AuthenticatedUser authenticatedUser) {

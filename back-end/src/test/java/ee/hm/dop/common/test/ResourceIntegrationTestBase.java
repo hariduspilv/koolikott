@@ -5,6 +5,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.rest.filter.SecurityFilter;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
@@ -41,7 +42,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     private static AuthenticationFilter authenticationFilter;
 
     @Inject
-    private static Configuration configuration;
+    protected static Configuration configuration;
 
     protected User login(TestUser testUser) {
         return login(testUser.idCode);
@@ -51,8 +52,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         if (authenticationFilter != null) {
             logout();
         }
-        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + idCode, new GenericType<AuthenticatedUser>() {
-        });
+        AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + idCode, new GenericType<UserStatus>() {
+        }).getAuthenticatedUser();
 
         assertNotNull("Login failed", authenticatedUser.getToken());
         assertNotNull("Login failed", authenticatedUser.getUser().getUsername());

@@ -1,16 +1,14 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.dao.AuthenticatedUserDao;
+import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
-import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
+import ee.hm.dop.service.login.dto.UserStatus;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.useractions.UserService;
-import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
@@ -18,14 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.xml.soap.SOAPException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.util.ArrayList;
 
+import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
+import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
+import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
 
 public class LoginService {
-
     private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
 
     private static Logger logger = LoggerFactory.getLogger(LoginService.class);
@@ -33,104 +31,146 @@ public class LoginService {
     @Inject
     private UserService userService;
     @Inject
-    private MobileIDLoginService mobileIDLoginService;
+    private AuthenticationStateService authenticationStateService;
     @Inject
-    private AuthenticatedUserDao authenticatedUserDao;
+    private AuthenticatedUserService authenticatedUserService;
     @Inject
     private AuthenticationStateDao authenticationStateDao;
     @Inject
     private IEhisSOAPService ehisSOAPService;
-    private SecureRandom random = new SecureRandom();
+    @Inject
+    private AgreementDao agreementDao;
+    @Inject
+    private UserAgreementDao userAgreementDao;
 
-    /**
-     * Try to log in with the given id code and if that fails, create a new user
-     * and log in with that.
-     */
-    public AuthenticatedUser login(String idCode, String name, String surname) {
-        AuthenticatedUser authenticatedUser = login(idCode);
-        if (authenticatedUser != null) {
-            logger.info(format("User %s with id %s logged in.", authenticatedUser.getUser().getUsername(), idCode));
-            return authenticatedUser;
+    public UserStatus login(String idCode, String name, String surname) {
+        Agreement latestAgreement = agreementDao.findLatestAgreement();
+        if (latestAgreement == null) {
+            return loggedIn(finalizeLogin(idCode, name, surname));
         }
-        logger.info(format("User with id %s could not log in, trying to create account. ", idCode));
-
-        // Create new user account
-        userService.create(idCode, name, surname);
-        AuthenticatedUser newUser = login(idCode);
-        if (newUser == null) {
-            throw new RuntimeException(format("User with id %s tried to log in after creating account, but failed.", idCode));
+        User user = userService.getUserByIdCode(idCode);
+        if (user == null) {
+            AuthenticationState state = authenticationStateService.save(idCode, name, surname);
+            return missingPermissionsNewUser(state.getToken(), latestAgreement.getId());
+        }
+        if (userAgreementDao.agreementDoesntExist(user.getId(), latestAgreement.getId())) {
+            AuthenticationState state = authenticationStateService.save(idCode, name, surname);
+            logger.info(format("User with id %s doesn't have agreement", user.getId()));
+            return missingPermissionsExistingUser(state.getToken(), latestAgreement.getId());
         }
 
-        newUser.setFirstLogin(true);
-        logger.info(format("User %s with id %s logged in for the first time.", newUser.getUser().getUsername(), idCode));
-        return newUser;
+        logger.info(format("User with id %s logged in", user.getId()));
+        return loggedIn(authenticate(user));
     }
 
-    /**
-     * Log in (or create an user and log in) using data in an
-     * authenticationState.
-     */
-    public AuthenticatedUser login(AuthenticationState authenticationState) {
+    public UserStatus login(AuthenticationState authenticationState) {
         if (authenticationState == null) {
             return null;
         }
 
-        // Make sure the token is not expired
-        Interval interval = new Interval(authenticationState.getCreated(), new DateTime());
-        Duration duration = new Duration(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR);
-        if (interval.toDuration().isLongerThan(duration)) {
+        if (hasExpired(authenticationState)) {
             authenticationStateDao.delete(authenticationState);
             return null;
         }
 
-        AuthenticatedUser authenticatedUser = login(authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname());
+        UserStatus authenticatedUser = login(authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname());
         authenticationStateDao.delete(authenticationState);
         return authenticatedUser;
     }
 
-    private AuthenticatedUser login(String idCode) {
-        User user = userService.getUserByIdCode(idCode);
-        return user != null ? createAuthenticatedUser(user) : null;
-    }
-
-    private AuthenticatedUser createAuthenticatedUser(User user) {
-        //TODO: this should run in a separate thread
-        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-//        Person person = null;
-        return createAuthenticatedUser(makeUser(user, person));
-    }
-
-    private AuthenticatedUser makeUser(User user, Person person) {
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-        authenticatedUser.setUser(user);
-        authenticatedUser.setPerson(person);
-        return authenticatedUser;
-    }
-
-    private AuthenticatedUser createAuthenticatedUser(AuthenticatedUser authenticatedUser) {
-        try {
-            authenticatedUser.setToken(secureToken());
-            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
-        } catch (DuplicateTokenException e) {
-            authenticatedUser.setToken(secureToken());
-            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
-        }
-    }
-
-    private String secureToken() {
-        return new BigInteger(130, random).toString(32);
-    }
-
-    public MobileIDSecurityCodes mobileIDAuthenticate(String phoneNumber, String idCode, Language language) throws Exception {
-        return mobileIDLoginService.authenticate(phoneNumber, idCode, language);
-    }
-
-    public AuthenticatedUser validateMobileIDAuthentication(String token) throws SOAPException {
-        if (!mobileIDLoginService.isAuthenticated(token)) {
-            logger.info("Authentication not valid.");
+    public AuthenticatedUser finalizeLogin(UserStatus userStatus) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userStatus.getToken());
+        if (state == null) {
             return null;
         }
-        AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
-        return login(authenticationState);
+
+        if (hasExpired(state)) {
+            authenticationStateDao.delete(state);
+            return null;
+        }
+        if (userStatus.getAgreementId() == null) {
+            throw new RuntimeException("No agreement for token: " + userStatus.getToken());
+        }
+
+        User user = getExistingOrNewUser(state);
+        Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
+        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+        }
+
+        AuthenticatedUser authenticate = authenticate(user);
+        authenticationStateDao.delete(state);
+
+        logger.info(format("User with id %s finalized login and logged in", user.getId()));
+        return authenticate;
+    }
+
+    public void rejectAgreement(UserStatus userStatus) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userStatus.getToken());
+        if (state == null) {
+            return;
+        }
+
+        if (hasExpired(state)) {
+            authenticationStateDao.delete(state);
+            return;
+        }
+        if (userStatus.getAgreementId() == null) {
+            throw new RuntimeException("No agreement for token: " + userStatus.getToken());
+        }
+        User user = userService.getUserByIdCode(state.getIdCode());
+        if (user == null) {
+            return;
+        }
+        Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
+        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, false));
+        }
+    }
+
+    private AuthenticatedUser finalizeLogin(String idCode, String name, String surname) {
+        return authenticate(getExistingOrNewUser(idCode, name, surname));
+    }
+
+    private AuthenticatedUser authenticate(User user) {
+        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
+        return authenticatedUserService.save(new AuthenticatedUser(user, person));
+    }
+
+    private User getExistingOrNewUser(AuthenticationState state) {
+        return getExistingOrNewUser(state.getIdCode(), state.getName(), state.getSurname());
+    }
+
+    private User getExistingOrNewUser(String idCode, String firstname, String surname) {
+        User existingUser = userService.getUserByIdCode(idCode);
+        if (existingUser != null) {
+            return existingUser;
+        }
+        userService.create(idCode, firstname, surname);
+        User newUser = userService.getUserByIdCode(idCode);
+        if (newUser == null) {
+            throw new RuntimeException(format("User with id %s tried to log in after creating account, but failed.", idCode));
+        }
+        logger.info("System created new user with id %s", newUser.getId());
+        newUser.setNewUser(true);
+        if (newUser.getUserAgreements() == null) {
+            newUser.setUserAgreements(new ArrayList<>());
+        }
+        return newUser;
+    }
+
+    private boolean hasExpired(AuthenticationState state) {
+        Interval interval = new Interval(state.getCreated(), new DateTime());
+        Duration duration = new Duration(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR);
+        return interval.toDuration().isLongerThan(duration);
+    }
+
+    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+        User_Agreement userAgreement = new User_Agreement();
+        userAgreement.setUser(user);
+        userAgreement.setAgreement(agreement);
+        userAgreement.setAgreed(agreed);
+        userAgreement.setCreatedAt(DateTime.now());
+        return userAgreement;
     }
 }

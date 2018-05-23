@@ -1,30 +1,22 @@
 package ee.hm.dop.service.login;
 
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_GENERALDATA;
-import static ee.hm.dop.utils.ConfigurationProperties.EKOOL_URL_TOKEN;
-import static java.lang.String.format;
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
-import static org.apache.xml.security.utils.Base64.encode;
+import ee.hm.dop.model.ekool.EkoolToken;
+import ee.hm.dop.model.ekool.Person;
+import ee.hm.dop.service.login.dto.UserStatus;
+import org.apache.commons.configuration.Configuration;
+import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.ekool.EkoolToken;
-import ee.hm.dop.model.ekool.Person;
-import org.apache.commons.configuration.Configuration;
-import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static java.lang.String.format;
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
+import static org.apache.xml.security.utils.Base64.encode;
 
 public class EkoolService {
-    private final Logger logger = LoggerFactory.getLogger(EkoolService.class);
     @Inject
     private Configuration configuration;
     @Inject
@@ -40,7 +32,7 @@ public class EkoolService {
         return configuration.getString(EKOOL_CLIENT_ID);
     }
 
-    public AuthenticatedUser authenticate(String code, String redirectUrl) {
+    public UserStatus authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
         Person person = getPerson(ekoolToken);
         return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
