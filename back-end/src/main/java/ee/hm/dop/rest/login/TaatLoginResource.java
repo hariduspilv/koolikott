@@ -62,7 +62,7 @@ public class TaatLoginResource extends BaseResource {
         if (status.isStatusOk()) {
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }
-        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString()));
+        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser()));
     }
 
     private URI redirectFailure() throws URISyntaxException {
