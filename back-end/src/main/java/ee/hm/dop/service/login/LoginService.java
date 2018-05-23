@@ -55,6 +55,7 @@ public class LoginService {
         }
         if (userAgreementDao.agreementDoesntExist(user.getId(), latestAgreement.getId())) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
+            logger.info(format("User with id %s doesn't have agreement", user.getId()));
             return missingPermissionsExistingUser(state.getToken(), latestAgreement.getId());
         }
 
