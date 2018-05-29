@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+
 public class PortfolioCopier {
 
     @Inject
@@ -52,7 +54,9 @@ public class PortfolioCopier {
         copy.setBlocks(chapter.getBlocks());
         copy.setContentRows(chapter.getContentRows());
         copy.setSubchapters(copyChapters(chapter.getSubchapters()));
-        copy.setBlocks(chapter.getBlocks().stream().map(this::copyBlock).collect(Collectors.toCollection(ArrayList::new)));
+        if (isNotEmpty(chapter.getBlocks())) {
+            copy.setBlocks(chapter.getBlocks().stream().map(this::copyBlock).collect(Collectors.toCollection(ArrayList::new)));
+        }
         return copy;
     }
 
