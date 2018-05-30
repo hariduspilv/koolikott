@@ -55,6 +55,7 @@ public class User implements AbstractEntity {
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<User_Agreement> userAgreements;
 
