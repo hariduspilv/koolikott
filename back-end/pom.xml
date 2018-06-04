@@ -11,7 +11,7 @@
         <hibernate.version>4.3.11.Final</hibernate.version>
         <jetty.version>9.4.6.v20170531</jetty.version>
         <jackson.version>2.9.1</jackson.version>
-        <mysql.java.version>8.0.11</mysql.java.version>
+        <mysql.java.version>5.1.35</mysql.java.version>
         <jersey.version>2.26</jersey.version>
         <google.guice.version>4.1.0</google.guice.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
