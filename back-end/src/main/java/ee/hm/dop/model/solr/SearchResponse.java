@@ -5,9 +5,18 @@ import java.util.Map;
 public class SearchResponse {
 
     private Response response;
+    private Map<String, Response> grouped;
     private ResponseHeader responseHeader;
     private String status;
     private Map<String, String> statusMessages;
+
+    public Map<String, Response> getGrouped() {
+        return grouped;
+    }
+
+    public void setGrouped(Map<String, Response> grouped) {
+        this.grouped = grouped;
+    }
 
     public Response getResponse() {
         return response;

@@ -1,10 +1,10 @@
-<md-dialog aria-label="Sisselogimise modaalaken" class="login-dialog" flex="50" esc-key="cancel()">
+<md-dialog id="gdpr-dialog" aria-label="Sisselogimise modaalaken" class="login-dialog" flex="50" esc-key="cancel()">
   <md-toolbar>
-    <div data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+    <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
       <div class="md-toolbar-tools" data-layout-align="space-between center">
         <h2 data-translate="AGREEMENT_DIALOG_HEADER"
         ></h2>
-        <md-button ng-click="cancel()" class="md-icon-button" aria-label="Sulge sisselogimise modaalaken">
+        <md-button id="gdpr-login-cancel-button" ng-click="cancel()" class="md-icon-button" aria-label="Sulge sisselogimise modaalaken">
           <md-icon>close</md-icon>
         </md-button>
       </div>
@@ -12,14 +12,15 @@
   </md-toolbar>
   <md-dialog-content>
     <md-content data-layout-padding>
-      <p><span data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
+      <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
       <p>
-        <a target="_blank" href="{{'AGREEMENT_DIALOG_LINK_HREF' | translate}}">
-          <span data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
+        <a id="gdpr-agreement-link" target="_blank" href="{{'AGREEMENT_DIALOG_LINK_HREF' | translate}}">
+          <span id="gdpr-agreement-link-text" data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
         </a>
       </p>
-      <div data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+      <div id="gdpr-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
         <md-button
+          id="gdpr-agreement-cancel-button"
           class="md-raised md-secondary"
           aria-label="Ei nõustu, väljun"
           data-ng-click="cancel()"
@@ -27,6 +28,7 @@
           <span data-translate="AGREEMENT_DIALOG_ACTION_NO"></span>
         </md-button>
         <md-button
+          id="gdpr-agreement-accept-button"
           class="md-raised md-primary"
           aria-label="Nõustun ja sisenen"
           data-ng-click="agree()"

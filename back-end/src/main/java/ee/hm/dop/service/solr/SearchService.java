@@ -3,11 +3,7 @@ package ee.hm.dop.service.solr;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserFavoriteDao;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
@@ -17,8 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.lang.String.format;
 
 public class SearchService {
 
@@ -44,42 +38,55 @@ public class SearchService {
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
-        String queryString = SearchConverter.composeQueryString(query, searchFilter);
+        String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SearchConverter.getSort(searchFilter);
 
-        SearchResponse searchResponse = search(start, limit, queryString, sort);
+        SearchResponse searchResponse = search(start, limit, solrQuery, sort, searchFilter.isGrouped(), query);
 
         // empty query hits every solr index causing massive results
-        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()) {
+        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
             searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
-        }
 
         return handleResult(limit, searchFilter, searchResponse);
     }
 
 
-    private SearchResponse search(long start, Long limit, String queryString, String sort) {
-        if (limit == null || limit == 0) {
-            return solrEngineService.search(queryString, start, sort);
-        }
-        return solrEngineService.search(queryString, start, sort, limit);
+    private SearchResponse search(long start, Long limit, String queryString, String sort, Boolean isGrouped, String query) {
+        if (limit == null || limit == 0) return solrEngineService.search(queryString, start, sort, isGrouped, query);
+        return solrEngineService.search(queryString, start, sort, limit, isGrouped, query);
     }
 
     private SearchResult handleResult(Long limit, SearchFilter searchFilter, SearchResponse searchResponse) {
-        SearchResult searchResult = new SearchResult();
+        Map<String, Response> groups = searchResponse.getGrouped();
         Response response = searchResponse.getResponse();
-        if (response != null) {
-            List<Document> documents = response.getDocuments();
-            List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser());
-            List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
+        if (groups != null) return getGroupedSearchResult(limit, searchFilter, groups);
+        if (response != null) return getSearchResult(limit, searchFilter, response);
+        return new SearchResult();
+    }
 
-            searchResult.setStart(response.getStart());
-            searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
-
-            if (limit == null || limit > 0) {
-                searchResult.setItems(sortedSearchable);
-            }
+    private SearchResult getGroupedSearchResult(Long limit, SearchFilter searchFilter, Map<String, Response> groups) {
+        SearchResult searchResult = new SearchResult();
+        Map<String, SearchResult> resultGroups = new HashMap<>();
+        for (Map.Entry<String, Response> group : groups.entrySet()) {
+            String groupName = group.getKey().split(":")[0];
+            SearchResult groupResult = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
+            resultGroups.put(groupName, groupResult);
         }
+
+        searchResult.setGroups(resultGroups);
+        return searchResult;
+    }
+
+    private SearchResult getSearchResult(Long limit, SearchFilter searchFilter, Response response) {
+        SearchResult searchResult = new SearchResult();
+        List<Document> documents = response.getDocuments();
+        List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser());
+        List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
+
+        searchResult.setStart(response.getStart());
+        searchResult.setTotalResults(response.getTotalResults() - documents.size() + sortedSearchable.size());
+
+        if (limit == null || limit > 0) searchResult.setItems(sortedSearchable);
         return searchResult;
     }
 
@@ -89,7 +96,8 @@ public class SearchService {
         if (CollectionUtils.isNotEmpty(learningObjectIds)) {
             reducedLearningObjectDao.findAllById(learningObjectIds).forEach(searchable -> {
                 if (loggedInUser != null) {
-                    UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
+                    UserFavorite userFavorite = userFavoriteDao.
+                            findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
                     searchable.setFavorite(userFavorite != null);
                 }
                 unsortedSearchable.add(searchable);

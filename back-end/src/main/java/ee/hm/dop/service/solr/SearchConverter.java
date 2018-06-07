@@ -30,18 +30,15 @@ public class SearchConverter {
     }
 
     private static String getQueryString(SearchFilter searchFilter, String tokenizedQueryString, String filtersAsQuery) {
-        if (StringUtils.isEmpty(filtersAsQuery)) {
-            return SearchService.EMPTY;
-        }
-        if (StringUtils.isEmpty(tokenizedQueryString)) {
-            return filtersAsQuery;
-        }
+        if (StringUtils.isEmpty(filtersAsQuery)) return SearchService.EMPTY;
+        if (StringUtils.isEmpty(tokenizedQueryString)) return filtersAsQuery;
+
         String queryString = format("((%s)", tokenizedQueryString);
 
         //Search for full phrase also, as they are more relevant
-        if (fullPhraseSearch(tokenizedQueryString)) {
+        if (fullPhraseSearch(tokenizedQueryString))
             queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
-        }
+
         return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
     }
 

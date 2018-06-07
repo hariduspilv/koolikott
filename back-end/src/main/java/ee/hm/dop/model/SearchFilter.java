@@ -2,7 +2,6 @@ package ee.hm.dop.model;
 
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -32,6 +31,15 @@ public class SearchFilter {
     private User requestingUser;
     private String searchType = "AND";
     private List<Long> excluded;
+    private boolean grouped = false;
+
+    public boolean isGrouped() {
+        return grouped;
+    }
+
+    public void setGrouped(boolean grouped) {
+        this.grouped = grouped;
+    }
 
     public boolean isEmptySearch() {
         return isEmpty(taxon) &&
@@ -225,10 +233,6 @@ public class SearchFilter {
             this.direction = direction;
         }
 
-        public String getValue() {
-            return direction;
-        }
-
         public static SortDirection getByValue(String value) {
             for (SortDirection sortDirection : SortDirection.values()) {
                 if (sortDirection.getValue().equalsIgnoreCase(value)) {
@@ -236,6 +240,10 @@ public class SearchFilter {
                 }
             }
             return null;
+        }
+
+        public String getValue() {
+            return direction;
         }
     }
 

@@ -2,10 +2,12 @@ package ee.hm.dop.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class SearchResult {
 
     private List<Searchable> items;
+    private Map<String, SearchResult> groups;
     private long totalResults;
     private long start;
 
@@ -19,6 +21,14 @@ public class SearchResult {
         this.items = items;
         this.totalResults = totalResults;
         this.start = start;
+    }
+
+    public Map<String, SearchResult> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Map<String, SearchResult> groups) {
+        this.groups = groups;
     }
 
     public List<Searchable> getItems() {

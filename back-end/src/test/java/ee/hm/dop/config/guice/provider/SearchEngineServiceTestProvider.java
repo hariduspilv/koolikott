@@ -1,12 +1,5 @@
 package ee.hm.dop.config.guice.provider;
 
-import static org.apache.commons.lang3.ArrayUtils.contains;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.inject.Provider;
@@ -17,6 +10,13 @@ import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.service.solr.SolrEngineService;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.commons.lang3.ArrayUtils.contains;
 
 /**
  * Guice provider of Search Engine Service.
@@ -35,6 +35,7 @@ public class SearchEngineServiceTestProvider implements Provider<SolrEngineServi
 class SolrEngineServiceMock implements SolrEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
+    private static final Map<String, List<Document>> groupedSearchResponses;
 
     private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
@@ -44,6 +45,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     static {
         searchResponses = new HashMap<>();
+        groupedSearchResponses = new HashMap<>();
 
         addArabicQuery();
         addBigQuery();
@@ -240,6 +242,33 @@ class SolrEngineServiceMock implements SolrEngineService {
         searchResponses.put(query, result);
     }
 
+    private static void addGroupedSearchQueryKaru() {
+        String query = "((karu) OR (\"karu\")) AND (type:\"material\" OR type:\"portfolio\") AND (visibility:\"public\" OR visibility:\"not_listed\" OR visibility:\"private\"";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 7L);
+        groupedSearchResponses.put(query, result);
+    }
+
+    private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
+        List<Document> documents = new ArrayList<>();
+        for (Long id : identifiers) {
+            addNewDocument(documents, id);
+        }
+
+        return documents;
+    }
+
+    private static void addNewDocument(List<Document> documents, Long id) {
+        Document newDocument = new Document();
+        newDocument.setId(Long.toString(id));
+
+        if (contains(portfolioIds, id)) {
+            newDocument.setType("portfolio");
+        } else {
+            newDocument.setType("material");
+        }
+
+        documents.add(newDocument);
+    }
 
     @Override
     public SearchResponse search(String query, long start, String sort, long limit) {
@@ -251,6 +280,11 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
+    public SearchResponse search(String query, long start, String sort, long limit, boolean isSearchGrouped, String originalQuery) {
+        return null;
+    }
+
+    @Override
     public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
         return null;
     }
@@ -258,6 +292,11 @@ class SolrEngineServiceMock implements SolrEngineService {
     @Override
     public SearchResponse search(String query, long start, String sort) {
         return search(query, start, sort, RESULTS_PER_PAGE);
+    }
+
+    @Override
+    public SearchResponse search(String query, long start, String sort, boolean isSearchGrouped, String originalQuery) {
+        return null;
     }
 
     private SearchResponse searchWithoutSorting(String query, long start, long limit) {
@@ -300,27 +339,5 @@ class SolrEngineServiceMock implements SolrEngineService {
     @Override
     public void updateIndex() {
 
-    }
-
-    private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
-        List<Document> documents = new ArrayList<>();
-        for (Long id : identifiers) {
-            addNewDocument(documents, id);
-        }
-
-        return documents;
-    }
-
-    private static void addNewDocument(List<Document> documents, Long id) {
-        Document newDocument = new Document();
-        newDocument.setId(Long.toString(id));
-
-        if (contains(portfolioIds, id)) {
-            newDocument.setType("portfolio");
-        } else {
-            newDocument.setType("material");
-        }
-
-        documents.add(newDocument);
     }
 }

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -35,22 +36,39 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Singleton
 public class SolrService implements SolrEngineService {
 
+    static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
+    static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
+    static final String SOLR_STATUS_BUSY = "busy";
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
     private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=%d";
+    private static final String SEARCH_GROUPED_PATH = "select?q=%1$s&sort=%2$s&wt=json&start=%3$d&group.limit=%4$d&group=true";
+    private static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
+    private static final String GROUP_QUERY = "&group.query=";
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
-    static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
-    static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
-    static final String SOLR_STATUS_BUSY = "busy";
-
     @Inject
     private Client client;
     @Inject
     private Configuration configuration;
     private SolrClient solrClient;
     private SolrIndexThread indexThread;
+
+    static String getTokenizedQueryString(String query) {
+        StringBuilder sb = new StringBuilder();
+        if (isNotBlank(query)) {
+            query = query.replaceAll("\\+", " ");
+            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
+            while (tokenizer.hasMoreTokens()) {
+                sb.append(tokenizer.nextToken());
+                if (tokenizer.hasMoreTokens()) {
+                    sb.append(" ");
+                }
+            }
+        }
+        return sb.toString();
+    }
 
     @Inject
     public void postConstruct() {
@@ -71,10 +89,27 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
+    public SearchResponse search(String query, long start, String sort, boolean isSearchGrouped, String originalQuery) {
+        if (isSearchGrouped) search(query, start, sort, RESULTS_PER_PAGE, true, originalQuery);
+        return search(query, start, sort, RESULTS_PER_PAGE);
+    }
+
+    @Override
     public SearchResponse search(String query, long start, String sort, long limit) {
         return executeCommand(
-                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start,
-                        Math.min(limit, RESULTS_PER_PAGE)));
+                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
+    }
+
+    @Override
+    public SearchResponse search(String query, long start, String sort, long limit,
+                                 boolean isSearchGrouped, String originalQuery) {
+        String searchGroupedPath = String.format("%s%s", SEARCH_GROUPED_PATH,
+                GROUPING_KEYS.stream().map(group -> GROUP_QUERY + group + ":%5$s").collect(Collectors.joining()));
+        if (isSearchGrouped) return executeCommand(
+                format(searchGroupedPath, encodeQuery(query), formatSort(sort), start,
+                        Math.min(limit, RESULTS_PER_PAGE), originalQuery));
+
+        return search(query, start, sort, limit);
     }
 
     @Override
@@ -153,21 +188,6 @@ public class SolrService implements SolrEngineService {
         return serverUrl + path;
     }
 
-    static String getTokenizedQueryString(String query) {
-        StringBuilder sb = new StringBuilder();
-        if (isNotBlank(query)) {
-            query = query.replaceAll("\\+", " ");
-            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
-            while (tokenizer.hasMoreTokens()) {
-                sb.append(tokenizer.nextToken());
-                if (tokenizer.hasMoreTokens()) {
-                    sb.append(" ");
-                }
-            }
-        }
-        return sb.toString();
-    }
-
     private String encodeQuery(String query) {
         try {
             return URLEncoder.encode(query, UTF_8.name());
@@ -182,9 +202,8 @@ public class SolrService implements SolrEngineService {
 
     private class SolrIndexThread extends Thread {
         public static final int _1_SEC = 1000;
-        private boolean updateIndex;
-
         private final Object lock = new Object();
+        private boolean updateIndex;
 
         public void updateIndex() {
             synchronized (lock) {
