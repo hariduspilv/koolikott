@@ -281,7 +281,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     @Override
     public SearchResponse search(String query, long start, String sort, long limit, boolean isSearchGrouped, String originalQuery) {
-        return null;
+        return search(query, start, sort, limit);
     }
 
     @Override
@@ -296,7 +296,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     @Override
     public SearchResponse search(String query, long start, String sort, boolean isSearchGrouped, String originalQuery) {
-        return null;
+        return search(query, start, sort, RESULTS_PER_PAGE);
     }
 
     private SearchResponse searchWithoutSorting(String query, long start, long limit) {

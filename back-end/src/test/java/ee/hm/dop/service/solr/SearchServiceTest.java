@@ -540,9 +540,9 @@ public class SearchServiceTest extends SearchServiceTestUtil {
         learningObjects.addAll(collectPortfoliosFrom(searchables));
 
         if (limit == null) {
-            expect(solrEngineService.search(tokenizedQuery, start, expectedSort)).andReturn(searchResponse);
+            expect(solrEngineService.search(tokenizedQuery, start, expectedSort, searchFilter.isGrouped(), query)).andReturn(searchResponse);
         } else {
-            expect(solrEngineService.search(tokenizedQuery, start, expectedSort, limit)).andReturn(searchResponse);
+            expect(solrEngineService.search(tokenizedQuery, start, expectedSort, limit, searchFilter.isGrouped(), query)).andReturn(searchResponse);
         }
 
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()) {
