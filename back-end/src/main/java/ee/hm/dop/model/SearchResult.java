@@ -23,6 +23,10 @@ public class SearchResult {
         this.start = start;
     }
 
+    public SearchResult(Map<String, SearchResult> groups) {
+        this.groups = groups;
+    }
+
     public Map<String, SearchResult> getGroups() {
         return groups;
     }

@@ -62,9 +62,7 @@ public class SolrService implements SolrEngineService {
             DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
             while (tokenizer.hasMoreTokens()) {
                 sb.append(tokenizer.nextToken());
-                if (tokenizer.hasMoreTokens()) {
-                    sb.append(" ");
-                }
+                if (tokenizer.hasMoreTokens()) sb.append(" ");
             }
         }
         return sb.toString();
@@ -89,20 +87,33 @@ public class SolrService implements SolrEngineService {
         Long itemLimit = searchRequest.getItemLimit() == 0
                 ? RESULTS_PER_PAGE
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
-        String searchPath = getSearchPath(searchRequest.getGrouping());
+
+        return executeCommand(getSearchCommand(searchRequest, itemLimit));
+    }
+
+    private String getSearchCommand(SearchRequest searchRequest, Long itemLimit) {
+        String searchPath = searchRequest.getGrouping().isAnyGrouping() ? SEARCH_GROUPED_PATH : SEARCH_PATH;
         String command = format(searchPath,
                 encodeQuery(searchRequest.getSolrQuery()),
                 formatSort(searchRequest.getSort()),
                 searchRequest.getFirstItem(),
-                itemLimit,
-                searchRequest.getOriginalQuery());
-        return executeCommand(command);
+                itemLimit);
+        if (searchRequest.getGrouping().isAnyGrouping()) command = getGroupingCommand(searchRequest, command);
+        return command;
     }
 
-    private String getSearchPath(SearchGrouping grouping) {
-        if (!grouping.isGrouped()) return SEARCH_PATH;
-        return String.format("%s%s", SEARCH_GROUPED_PATH,
-                GROUPING_KEYS.stream().map(group -> GROUP_QUERY + group + ":%5$s").collect(Collectors.joining()));
+    private String getGroupingCommand(SearchRequest searchRequest, String command) {
+        String groupSearchPath;
+        groupSearchPath = GROUPING_KEYS.stream()
+                .map(group -> GROUP_QUERY + group + ":" + encodeQuery(searchRequest.getOriginalQuery()))
+                .collect(Collectors.joining());
+        if (searchRequest.getGrouping().isPhraseGrouping()) {
+            groupSearchPath += GROUPING_KEYS.stream()
+                    .map(group -> GROUP_QUERY + group + ":" + encodeQuery("\"" + searchRequest.getOriginalQuery() + "\""))
+                    .collect(Collectors.joining());
+        }
+        command += groupSearchPath;
+        return command;
     }
 
     @Override
@@ -120,9 +131,7 @@ public class SolrService implements SolrEngineService {
             return null;
         }
 
-        if (qr.getSuggesterResponse() == null) {
-            return null;
-        }
+        if (qr.getSuggesterResponse() == null) return null;
         List<Suggestion> combinedSuggestions = new ArrayList<>();
 
         if (suggestionStrategy.suggestTag()) {

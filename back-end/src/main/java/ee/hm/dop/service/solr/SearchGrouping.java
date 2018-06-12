@@ -1,9 +1,17 @@
 package ee.hm.dop.service.solr;
 
 public enum SearchGrouping {
-    GROUP_ALL, GROUP_NONE;
+    GROUP_SIMILAR, GROUP_NONE, GROUP_PHRASE;
 
-    public boolean isGrouped() {
-        return this == GROUP_ALL;
+    public boolean isSimilarGrouping() {
+        return this == GROUP_SIMILAR;
+    }
+
+    public boolean isPhraseGrouping() {
+        return this == GROUP_PHRASE;
+    }
+
+    public boolean isAnyGrouping() {
+        return this != GROUP_NONE;
     }
 }

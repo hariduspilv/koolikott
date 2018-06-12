@@ -23,9 +23,7 @@ public class SearchConverter {
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
 
         String queryString = getQueryString(searchFilter, tokenizedQueryString, filtersAsQuery);
-        if (queryString.isEmpty()) {
-            throw new RuntimeException("No query string and filters present.");
-        }
+        if (queryString.isEmpty()) throw new RuntimeException("No query string and filters present.");
         return queryString;
     }
 
@@ -36,12 +34,15 @@ public class SearchConverter {
         String queryString = format("((%s)", tokenizedQueryString);
 
         //Search for full phrase also, as they are more relevant
-        if (fullPhraseSearch(tokenizedQueryString))
+        if (!isExactSearch(tokenizedQueryString))
             queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
 
         return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
     }
 
+    public static boolean isPhrase(String query) {
+        return query.split("\\s+").length > 1;
+    }
 
     public static String getSort(SearchFilter searchFilter) {
         if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
@@ -154,13 +155,9 @@ public class SearchConverter {
             List<String> filters = new ArrayList<>();
 
             for (TargetGroup targetGroup : searchFilter.getTargetGroups()) {
-                if (targetGroup != null) {
-                    filters.add(format("target_group:\"%s\"", targetGroup.getId()));
-                }
+                if (targetGroup != null) filters.add(format("target_group:\"%s\"", targetGroup.getId()));
             }
-            if (filters.size() == 1) {
-                return filters.get(0);
-            }
+            if (filters.size() == 1) return filters.get(0);
             return "(" + StringUtils.join(filters, SearchService.OR) + ")";
         }
         return SearchService.EMPTY;
@@ -269,9 +266,7 @@ public class SearchConverter {
         List<String> taxons = new LinkedList<>();
         List<String> joinedTaxons = new ArrayList<>();
 
-        if (taxonList == null) {
-            return SearchService.EMPTY;
-        }
+        if (taxonList == null) return SearchService.EMPTY;
 
         for (Taxon taxon : taxonList) {
             if (taxon instanceof Subtopic) {
@@ -286,13 +281,9 @@ public class SearchConverter {
                 Domain domain = ((Topic) taxon).getDomain();
                 Module module = ((Topic) taxon).getModule();
 
-                if (subject != null) {
-                    taxon = subject;
-                } else if (domain != null) {
-                    taxon = domain;
-                } else if (module != null) {
-                    taxon = module;
-                }
+                if (subject != null) taxon = subject;
+                else if (domain != null) taxon = domain;
+                else if (module != null) taxon = module;
             }
 
             if (taxon instanceof Subject) {
@@ -330,9 +321,9 @@ public class SearchConverter {
         return joinedTaxons.isEmpty() ? SearchService.EMPTY : "(" + StringUtils.join(joinedTaxons, SearchService.OR) + ")";
     }
 
-    private static boolean fullPhraseSearch(String tokenizedQueryString) {
-        return !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_TAG_PREFIX)
-                && !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_RECOMMENDED_PREFIX)
-                && !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_AUTHOR_PREFIX);
+    private static boolean isExactSearch(String tokenizedQueryString) {
+        return (tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_TAG_PREFIX)
+                || tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_RECOMMENDED_PREFIX)
+                || tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_AUTHOR_PREFIX));
     }
 }

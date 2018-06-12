@@ -18,6 +18,8 @@ public class SearchService {
 
     public static final String MATERIAL_TYPE = "material";
     public static final String PORTFOLIO_TYPE = "portfolio";
+    public static final String SIMILAR_RESULT = "similar";
+    public static final String EXACT_RESULT = "exact";
     public static final String ALL_TYPE = "all";
     public static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
     public static final String SEARCH_BY_TAG_PREFIX = "tag:";
@@ -58,8 +60,10 @@ public class SearchService {
         searchRequest.setSort(sort);
         searchRequest.setFirstItem(firstItem);
         searchRequest.setItemLimit(limit);
-        if (searchFilter.isGrouped()) searchRequest.setGrouping(SearchGrouping.GROUP_ALL);
-        else searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
+        if (searchFilter.isGrouped()) {
+            if (SearchConverter.isPhrase(query)) searchRequest.setGrouping(SearchGrouping.GROUP_PHRASE);
+            else searchRequest.setGrouping(SearchGrouping.GROUP_SIMILAR);
+        } else searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
 
         return searchRequest;
     }
@@ -75,13 +79,22 @@ public class SearchService {
     private SearchResult getGroupedSearchResult(Long limit, SearchFilter searchFilter, Map<String, Response> groups) {
         SearchResult searchResult = new SearchResult();
         Map<String, SearchResult> resultGroups = new HashMap<>();
+        Map<String, SearchResult> similarResultGroups = new HashMap<>();
+        Map<String, SearchResult> exactResultGroups = new HashMap<>();
         for (Map.Entry<String, Response> group : groups.entrySet()) {
-            String groupName = group.getKey().split(":")[0];
+            String[] groupKey = group.getKey().split(":");
             SearchResult groupResult = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
-            resultGroups.put(groupName, groupResult);
+            if (groupKey[1].startsWith("\"")) exactResultGroups.put(groupKey[0], groupResult);
+            else similarResultGroups.put(groupKey[0], groupResult);
         }
-
-        searchResult.setGroups(resultGroups);
+        if (exactResultGroups.isEmpty()) searchResult.setGroups(similarResultGroups);
+        else {
+            SearchResult similarResult = new SearchResult(similarResultGroups);
+            SearchResult exactResult = new SearchResult(exactResultGroups);
+            resultGroups.put(SIMILAR_RESULT, similarResult);
+            resultGroups.put(EXACT_RESULT, exactResult);
+            searchResult.setGroups(resultGroups);
+        }
         return searchResult;
     }
 
