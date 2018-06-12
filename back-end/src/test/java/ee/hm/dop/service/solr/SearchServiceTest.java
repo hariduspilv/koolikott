@@ -539,15 +539,11 @@ public class SearchServiceTest extends SearchServiceTestUtil {
         learningObjects.addAll(collectMaterialsFrom(searchables));
         learningObjects.addAll(collectPortfoliosFrom(searchables));
 
-        if (limit == null) {
-            expect(solrEngineService.search(tokenizedQuery, start, expectedSort, searchFilter.isGrouped(), query)).andReturn(searchResponse);
-        } else {
-            expect(solrEngineService.search(tokenizedQuery, start, expectedSort, limit, searchFilter.isGrouped(), query)).andReturn(searchResponse);
-        }
+        expect(solrEngineService.search(anyObject(SearchRequest.class))).andReturn(searchResponse);
 
-        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()) {
+        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
             expect(learningObjectDao.findAllNotDeleted()).andReturn(totalResults);
-        }
+
         expect(reducedLearningObjectDao.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
             for (Long id : learningObjectIdentifiers) {

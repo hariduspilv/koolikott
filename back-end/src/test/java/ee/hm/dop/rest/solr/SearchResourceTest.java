@@ -384,15 +384,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private String buildQueryURL(String query, int start, Long limit, SearchFilter searchFilter) {
         String queryURL = "search?";
-        if (query != null) {
-            queryURL += "q=" + encodeQuery(query);
-        }
-        if (start != 0) {
-            queryURL += "&start=" + start;
-        }
-        if (limit != null) {
-            queryURL += "&limit=" + limit;
-        }
+        if (query != null) queryURL += "q=" + encodeQuery(query);
+        if (start != 0) queryURL += "&start=" + start;
+        if (limit != null) queryURL += "&limit=" + limit;
+
         if (searchFilter.getTaxons() != null) {
             for (Taxon taxon : searchFilter.getTaxons()) {
                 queryURL += "&taxon=" + taxon.getId();

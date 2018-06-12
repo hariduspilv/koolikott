@@ -38,10 +38,8 @@ public class SearchService {
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
-        String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
-        String sort = SearchConverter.getSort(searchFilter);
-
-        SearchResponse searchResponse = search(start, limit, solrQuery, sort, searchFilter.isGrouped(), query);
+        SearchRequest searchRequest = buildSearchRequest(query, searchFilter, start, limit);
+        SearchResponse searchResponse = solrEngineService.search(searchRequest);
 
         // empty query hits every solr index causing massive results
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
@@ -50,10 +48,20 @@ public class SearchService {
         return handleResult(limit, searchFilter, searchResponse);
     }
 
+    public SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
+        String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
+        String sort = SearchConverter.getSort(searchFilter);
 
-    private SearchResponse search(long start, Long limit, String queryString, String sort, Boolean isGrouped, String query) {
-        if (limit == null || limit == 0) return solrEngineService.search(queryString, start, sort, isGrouped, query);
-        return solrEngineService.search(queryString, start, sort, limit, isGrouped, query);
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.setOriginalQuery(query);
+        searchRequest.setSolrQuery(solrQuery);
+        searchRequest.setSort(sort);
+        searchRequest.setFirstItem(firstItem);
+        searchRequest.setItemLimit(limit);
+        if (searchFilter.isGrouped()) searchRequest.setGrouping(SearchGrouping.GROUP_ALL);
+        else searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
+
+        return searchRequest;
     }
 
     private SearchResult handleResult(Long limit, SearchFilter searchFilter, SearchResponse searchResponse) {

@@ -9,6 +9,7 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
+import ee.hm.dop.service.solr.SearchRequest;
 import ee.hm.dop.service.solr.SolrEngineService;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ class SolrEngineServiceMock implements SolrEngineService {
     private static final Long[] portfolioIds = {TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_2, TestConstants.PORTFOLIO_3, TestConstants.PORTFOLIO_4};
 
     private static final int RESULTS_PER_PAGE = 3;
+    private static final int RESULTS_LIMIT = 24;
 
     static {
         searchResponses = new HashMap<>();
@@ -261,27 +263,16 @@ class SolrEngineServiceMock implements SolrEngineService {
         Document newDocument = new Document();
         newDocument.setId(Long.toString(id));
 
-        if (contains(portfolioIds, id)) {
-            newDocument.setType("portfolio");
-        } else {
-            newDocument.setType("material");
-        }
+        if (contains(portfolioIds, id)) newDocument.setType("portfolio");
+        else newDocument.setType("material");
 
         documents.add(newDocument);
     }
 
     @Override
-    public SearchResponse search(String query, long start, String sort, long limit) {
-        if (sort == null) {
-            return searchWithoutSorting(query, start, limit);
-        } else {
-            return searchWithSorting(query, sort, start, limit);
-        }
-    }
-
-    @Override
-    public SearchResponse search(String query, long start, String sort, long limit, boolean isSearchGrouped, String originalQuery) {
-        return search(query, start, sort, limit);
+    public SearchResponse search(SearchRequest searchRequest) {
+        if (searchRequest.getSort() == null) return searchWithoutSorting(searchRequest);
+        else return searchWithSorting(searchRequest);
     }
 
     @Override
@@ -289,29 +280,21 @@ class SolrEngineServiceMock implements SolrEngineService {
         return null;
     }
 
-    @Override
-    public SearchResponse search(String query, long start, String sort) {
-        return search(query, start, sort, RESULTS_PER_PAGE);
-    }
-
-    @Override
-    public SearchResponse search(String query, long start, String sort, boolean isSearchGrouped, String originalQuery) {
-        return search(query, start, sort, RESULTS_PER_PAGE);
-    }
-
-    private SearchResponse searchWithoutSorting(String query, long start, long limit) {
-        if (!searchResponses.containsKey(query)) {
-            return new SearchResponse();
-        }
-
+    private SearchResponse searchWithoutSorting(SearchRequest searchRequest) {
+        String query = searchRequest.getSolrQuery();
+        long start = searchRequest.getFirstItem();
+        Long limit = searchRequest.getItemLimit();
+        if (!searchResponses.containsKey(query)) return new SearchResponse();
         List<Document> allDocuments = searchResponses.get(query);
         return getSearchResponse(start, limit, allDocuments);
     }
 
-    private SearchResponse searchWithSorting(String query, String sort, long start, long limit) {
-        if (!sortedSearchResponses.contains(query, sort)) {
-            return new SearchResponse();
-        }
+    private SearchResponse searchWithSorting(SearchRequest searchRequest) {
+        String query = searchRequest.getSolrQuery();
+        String sort = searchRequest.getSort();
+        long start = searchRequest.getFirstItem();
+        Long limit = searchRequest.getItemLimit();
+        if (!sortedSearchResponses.contains(query, sort)) return new SearchResponse();
 
         List<Document> allDocuments = sortedSearchResponses.get(query, sort);
         return getSearchResponse(start, limit, allDocuments);
@@ -319,8 +302,9 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     private SearchResponse getSearchResponse(long start, long limit, List<Document> allDocuments) {
         List<Document> selectedDocuments = new ArrayList<>();
-        for (int i = 0; i < allDocuments.size(); i++) {
-            if (i >= start && i < start + RESULTS_PER_PAGE && selectedDocuments.size() < limit) {
+        limit = limit == 0 ? RESULTS_LIMIT : limit;
+        for (int i = (int) start; i < allDocuments.size(); i++) {
+            if (i < start + RESULTS_PER_PAGE && selectedDocuments.size() < limit) {
                 selectedDocuments.add(allDocuments.get(i));
             }
         }

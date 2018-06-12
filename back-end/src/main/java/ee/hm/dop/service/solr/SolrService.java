@@ -84,32 +84,25 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public SearchResponse search(String query, long start, String sort) {
-        return search(query, start, sort, RESULTS_PER_PAGE);
+    public SearchResponse search(SearchRequest searchRequest) {
+
+        Long itemLimit = searchRequest.getItemLimit() == 0
+                ? RESULTS_PER_PAGE
+                : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
+        String searchPath = getSearchPath(searchRequest.getGrouping());
+        String command = format(searchPath,
+                encodeQuery(searchRequest.getSolrQuery()),
+                formatSort(searchRequest.getSort()),
+                searchRequest.getFirstItem(),
+                itemLimit,
+                searchRequest.getOriginalQuery());
+        return executeCommand(command);
     }
 
-    @Override
-    public SearchResponse search(String query, long start, String sort, boolean isSearchGrouped, String originalQuery) {
-        if (isSearchGrouped) search(query, start, sort, RESULTS_PER_PAGE, true, originalQuery);
-        return search(query, start, sort, RESULTS_PER_PAGE);
-    }
-
-    @Override
-    public SearchResponse search(String query, long start, String sort, long limit) {
-        return executeCommand(
-                format(SEARCH_PATH, encodeQuery(query), formatSort(sort), start, Math.min(limit, RESULTS_PER_PAGE)));
-    }
-
-    @Override
-    public SearchResponse search(String query, long start, String sort, long limit,
-                                 boolean isSearchGrouped, String originalQuery) {
-        String searchGroupedPath = String.format("%s%s", SEARCH_GROUPED_PATH,
+    private String getSearchPath(SearchGrouping grouping) {
+        if (!grouping.isGrouped()) return SEARCH_PATH;
+        return String.format("%s%s", SEARCH_GROUPED_PATH,
                 GROUPING_KEYS.stream().map(group -> GROUP_QUERY + group + ":%5$s").collect(Collectors.joining()));
-        if (isSearchGrouped) return executeCommand(
-                format(searchGroupedPath, encodeQuery(query), formatSort(sort), start,
-                        Math.min(limit, RESULTS_PER_PAGE), originalQuery));
-
-        return search(query, start, sort, limit);
     }
 
     @Override
