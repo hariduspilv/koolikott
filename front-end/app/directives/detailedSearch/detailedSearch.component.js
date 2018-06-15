@@ -295,9 +295,9 @@ class controller extends Controller {
                 : ''
     }
     parseSimpleSearchQuery(query) {
-        const titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g
-        const descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g
-        const authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g
+        const titleRegex = /(^|\s)(title:([^\s"]\S*)|title:"(.*?)"|title:)/g
+        const descriptionRegex = /(^|\s)(description:([^\s"]\S*)|description:"(.*?)"|description:|summary:([^\s"]\S*)|summary:"(.*?)"|summary:)/g
+        const authorRegex = /(^|\s)(author:([^\s"]\S*)|author:"(.*?)"|author:)/g
         const clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g
         const specialEducationalNeedRegex = /(^|\s)(HEV|"Hariduslik erivajadus")(?=\s|$)/g
 

@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class SearchService {
@@ -28,6 +30,7 @@ public class SearchService {
     public static final String AND = " AND ";
     public static final String OR = " OR ";
     public static final String EMPTY = "";
+    private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -77,25 +80,44 @@ public class SearchService {
     }
 
     private SearchResult getGroupedSearchResult(Long limit, SearchFilter searchFilter, Map<String, Response> groups) {
-        SearchResult searchResult = new SearchResult();
-        Map<String, SearchResult> resultGroups = new HashMap<>();
-        Map<String, SearchResult> similarResultGroups = new HashMap<>();
+        SearchResult searchResult = new SearchResult(new HashMap<>());
+        searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
+        Map<String, SearchResult> similarResultGroups = new HashMap<>();
+        Pattern matchPattern = Pattern.compile(GROUP_MATCH_PATTERN);
         for (Map.Entry<String, Response> group : groups.entrySet()) {
-            String[] groupKey = group.getKey().split(":");
+            Matcher matcher = matchPattern.matcher(group.getKey());
+            if (!matcher.matches()) continue;
+            boolean isExactResult = matcher.group(2).startsWith("\"");
+            String groupName = matcher.group(1);
+            String groupType = matcher.group(3);
             SearchResult groupResult = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
-            if (groupKey[1].startsWith("\"")) exactResultGroups.put(groupKey[0], groupResult);
-            else similarResultGroups.put(groupKey[0], groupResult);
+            if (isExactResult) addToResults(exactResultGroups, groupName, groupType, groupResult);
+            else addToResults(similarResultGroups, groupName, groupType, groupResult);
+            if (searchResult.getStart() == -1) searchResult.setStart(groupResult.getStart());
         }
-        if (exactResultGroups.isEmpty()) searchResult.setGroups(similarResultGroups);
-        else {
-            SearchResult similarResult = new SearchResult(similarResultGroups);
-            SearchResult exactResult = new SearchResult(exactResultGroups);
-            resultGroups.put(SIMILAR_RESULT, similarResult);
-            resultGroups.put(EXACT_RESULT, exactResult);
-            searchResult.setGroups(resultGroups);
+        if (exactResultGroups.isEmpty()) {
+            searchResult.setGroups(similarResultGroups);
+            searchResult.setTotalResults(getGroupsItemSum(similarResultGroups));
+        } else {
+            searchResult.getGroups().put(SIMILAR_RESULT, new SearchResult(similarResultGroups));
+            searchResult.getGroups().put(EXACT_RESULT, new SearchResult(exactResultGroups));
+            searchResult.setTotalResults(getGroupsItemSum(similarResultGroups) + getGroupsItemSum(exactResultGroups));
         }
         return searchResult;
+    }
+
+    private long getGroupsItemSum(Map<String, SearchResult> resultGroups) {
+        return resultGroups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
+    }
+
+    private void addToResults(Map<String, SearchResult> resultGroups, String groupName,
+                              String groupType, SearchResult groupResult) {
+        if (!resultGroups.containsKey(groupType)) resultGroups.put(groupType, new SearchResult(new HashMap<>()));
+        long resultsInGroup = groupResult.getTotalResults();
+        long resultsInType = resultGroups.get(groupType).getTotalResults();
+        resultGroups.get(groupType).getGroups().put(groupName, groupResult);
+        resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
     }
 
     private SearchResult getSearchResult(Long limit, SearchFilter searchFilter, Response response) {

@@ -42,12 +42,18 @@ public class SolrService implements SolrEngineService {
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
-    private static final String SEARCH_PATH = "select?q=%s&sort=%s&wt=json&start=%d&rows=%d";
-    private static final String SEARCH_GROUPED_PATH = "select?q=%1$s&sort=%2$s&wt=json&start=%3$d&group.limit=%4$d&group=true";
+    private static final String SEARCH_PATH = "select?q=%1$s" +
+            "&sort=%2$s" +
+            "&wt=json" +
+            "&start=%3$d" +
+            "&rows=%4$d";
+    private static final String SEARCH_PATH_GROUPING = "&group=true&group.format=simple";
     private static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
     private static final String GROUP_QUERY = "&group.query=";
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
+    private static final String TYPE_MATERIAL = " AND type:\"material\"";
+    private static final String TYPE_PORTFOLIO = " AND type:\"portfolio\"";
     @Inject
     private Client client;
     @Inject
@@ -83,7 +89,6 @@ public class SolrService implements SolrEngineService {
 
     @Override
     public SearchResponse search(SearchRequest searchRequest) {
-
         Long itemLimit = searchRequest.getItemLimit() == 0
                 ? RESULTS_PER_PAGE
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
@@ -92,28 +97,32 @@ public class SolrService implements SolrEngineService {
     }
 
     private String getSearchCommand(SearchRequest searchRequest, Long itemLimit) {
-        String searchPath = searchRequest.getGrouping().isAnyGrouping() ? SEARCH_GROUPED_PATH : SEARCH_PATH;
+        String searchPath = searchRequest.getGrouping().isAnyGrouping()
+                ? SEARCH_PATH + SEARCH_PATH_GROUPING
+                : SEARCH_PATH;
         String command = format(searchPath,
                 encodeQuery(searchRequest.getSolrQuery()),
                 formatSort(searchRequest.getSort()),
                 searchRequest.getFirstItem(),
                 itemLimit);
-        if (searchRequest.getGrouping().isAnyGrouping()) command = getGroupingCommand(searchRequest, command);
+        if (searchRequest.getGrouping().isAnyGrouping()) command += getGroupingCommand(searchRequest);
         return command;
     }
 
-    private String getGroupingCommand(SearchRequest searchRequest, String command) {
-        String groupSearchPath;
-        groupSearchPath = GROUPING_KEYS.stream()
-                .map(group -> GROUP_QUERY + group + ":" + encodeQuery(searchRequest.getOriginalQuery()))
-                .collect(Collectors.joining());
+    private String getGroupingCommand(SearchRequest searchRequest) {
+        String groupSearchPathMaterial = getGroupsForQuery(searchRequest.getOriginalQuery() + TYPE_MATERIAL);
+        String groupSearchPathPortfolio = getGroupsForQuery(searchRequest.getOriginalQuery() + TYPE_PORTFOLIO);
         if (searchRequest.getGrouping().isPhraseGrouping()) {
-            groupSearchPath += GROUPING_KEYS.stream()
-                    .map(group -> GROUP_QUERY + group + ":" + encodeQuery("\"" + searchRequest.getOriginalQuery() + "\""))
-                    .collect(Collectors.joining());
+            groupSearchPathMaterial += getGroupsForQuery("\"" + searchRequest.getOriginalQuery() + "\"" + TYPE_MATERIAL);
+            groupSearchPathPortfolio += getGroupsForQuery("\"" + searchRequest.getOriginalQuery() + "\"" + TYPE_PORTFOLIO);
         }
-        command += groupSearchPath;
-        return command;
+        return groupSearchPathMaterial + groupSearchPathPortfolio;
+    }
+
+    private String getGroupsForQuery(String query) {
+        return GROUPING_KEYS.stream()
+                .map(groupName -> GROUP_QUERY + groupName + ":" + encodeQuery(query))
+                .collect(Collectors.joining());
     }
 
     @Override

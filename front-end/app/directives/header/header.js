@@ -106,9 +106,7 @@ class controller extends Controller {
         this.$scope.keyPressed = (evt) => {
             switch(evt.keyCode) {
                 case 8: // backspace
-                    if (this.$scope.inlineSuggestion)
-                        evt.preventDefault()
-
+                    if (this.$scope.inlineSuggestion) evt.preventDefault()
                     this.$scope.doInlineSuggestion = false
                     break
                 case 13: // enter
@@ -126,13 +124,11 @@ class controller extends Controller {
         }
 
         this.$scope.clickOutside = () => {
-            if (this.$rootScope.dontCloseSearch)
-                this.$rootScope.dontCloseSearch = false
+            if (this.$rootScope.dontCloseSearch) this.$rootScope.dontCloseSearch = false
         }
 
         this.$scope.$watch('detailedSearch.mainField', (newValue, oldValue) => {
-            if (newValue != oldValue)
-                this.$scope.searchFields.searchQuery = newValue || ''
+            if (newValue != oldValue) this.$scope.searchFields.searchQuery = newValue || ''
         }, true)
 
         this.$scope.$watch('searchFields.searchQuery', this.processSearchQuery.bind(this), true)
@@ -143,8 +139,7 @@ class controller extends Controller {
 
         this.$scope.$watch(() => this.searchService.getQuery(), (query) => {
             // Search query is not updated from search service while detailed search is open
-            if (!query || !this.$scope.detailedSearch.isVisible)
-                this.$scope.searchFields.searchQuery = query
+            if (!query || !this.$scope.detailedSearch.isVisible) this.$scope.searchFields.searchQuery = query
         }, true)
 
         this.$scope.$watch(() => this.translationService.getLanguage(), (language) => {
@@ -294,6 +289,8 @@ class controller extends Controller {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
+        this.searchService.setIsGrouped(true)
+        console.log(this.searchService.getURL())
         this.$location.url(this.searchService.getURL())
     }
     closeDetailedSearch() {
@@ -320,8 +317,7 @@ class controller extends Controller {
         this.$scope.inlineSuggestion = ''
     }
     processSearchQuery(newValue, oldValue) {
-        if (newValue != oldValue && !newValue)
-            this.clearInlineSuggestion()
+        if (newValue !== oldValue && !newValue) this.clearInlineSuggestion()
 
         this.$scope.searchFields.searchQuery = newValue || ''
 
@@ -331,8 +327,7 @@ class controller extends Controller {
         if (this.$scope.detailedSearch.isVisible)
             this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery
 
-        if (this.dontSearch)
-            this.dontSearch = false
+        if (this.dontSearch) this.dontSearch = false
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()

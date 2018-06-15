@@ -1,73 +1,73 @@
-.upload-file-error{
-    color: rgb(221,44,0);
-    font-size: 12px;
-    text-align: center;
+.upload-file-error {
+  color: rgb(221, 44, 0);
+  font-size: 12px;
+  text-align: center;
 }
 
 .disabled-option {
-    color: rgba(0, 0, 0, 0.26);
+  color: rgba(0, 0, 0, 0.26);
 }
 
 .invalid-url-message.ng-hide {
-    // In some cases url validation message is visible even when it shouldn't
-    display: none !important;
+  // In some cases url validation message is visible even when it shouldn't
+  display: none !important;
 }
 
 .checkbox--material-author {
-    margin-top: 28px;
-    margin-bottom: 27px;
+  margin-top: 28px;
+  margin-bottom: 27px;
 }
 
 .button-material-language {
-    border-bottom: 2px solid $gray-600-light;
-    color: $gray;
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    text-align: left;
-    border-radius: 0;
-    width: 100%;
+  border-bottom: 2px solid $gray-600-light;
+  color: $gray;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+  border-radius: 0;
+  width: 100%;
 
+  @media (min-width: $layout-breakpoint-xs) {
+    margin-left: $md-padding / 2;
+    margin-right: $md-padding / 2;
+  }
+
+  &:first-child {
     @media (min-width: $layout-breakpoint-xs) {
-        margin-left: $md-padding / 2;
-        margin-right: $md-padding / 2;
+      margin-left: 0;
     }
 
-    &:first-child {
-        @media (min-width: $layout-breakpoint-xs) {
-            margin-left: 0;
-        }
+    @media (min-width: $layout-breakpoint-sm) {
+      margin-left: $md-padding / 2;
+    }
+  }
 
-        @media (min-width: $layout-breakpoint-sm) {
-            margin-left: $md-padding / 2;
-        }
+  &:last-child {
+    @media (min-width: $layout-breakpoint-xs) {
+      margin-right: 0;
     }
 
-    &:last-child {
-        @media (min-width: $layout-breakpoint-xs) {
-            margin-right: 0;
-        }
-
-        @media (min-width: $layout-breakpoint-sm) {
-            margin-right: $md-padding / 2;
-        }
+    @media (min-width: $layout-breakpoint-sm) {
+      margin-right: $md-padding / 2;
     }
+  }
 
-    &.is-selected,
-    &:hover,
-    &:focus {
-        border-color: rgb(3,169,244);
-    }
+  &.is-selected,
+  &:hover,
+  &:focus {
+    border-color: rgb(3, 169, 244);
+  }
 }
 
 .button-material-language__icon {
-    position: absolute;
-    right: 0%;
-    top: 6px;
+  position: absolute;
+  right: 0%;
+  top: 6px;
 
-    .button-material-language.is-selected &,
-    .button-material-language:hover &,
-    .button-material-language:focus & {
-        color: rgb(3,169,244);
-    }
+  .button-material-language.is-selected &,
+  .button-material-language:hover &,
+  .button-material-language:focus & {
+    color: rgb(3, 169, 244);
+  }
 }

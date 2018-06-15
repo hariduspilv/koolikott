@@ -13,8 +13,7 @@ class controller extends Controller {
         )
     }
     onLocationChange(newValue, oldValue) {
-        if (newValue !== oldValue)
-            this.setParams(newValue.q)
+        if (newValue !== oldValue) this.setParams(newValue.q)
     }
     setParams(q) {
         q  ?  this.searchService.setQuery(q)
@@ -37,19 +36,18 @@ class controller extends Controller {
             recommended: this.searchService.isRecommended(),
             sort: this.searchService.getSort(),
             sortDirection: this.searchService.getSortDirection(),
+            isGrouped: this.searchService.isGrouped(),
         }
         Object.keys(params).forEach((param) => {
             const value = params[param]
 
-            if ((param == 'taxon' && (!value || !value[0])) ||
-                (param == 'paid' && value !== false) ||
-                (param == 'type' && (!value || !this.searchService.isValidType(value))) ||
-                (param == 'specialEducation' && value !== true)
-            )
-                return
+            if ((param === 'taxon' && (!value || !value[0])) ||
+                (param === 'paid' && value !== false) ||
+                (param === 'type' && (!value || !this.searchService.isValidType(value))) ||
+                (param === 'specialEducation' && value !== true)
+            ) return
 
-            if (typeof value !== 'undefined' && value !== '')
-                this.$scope.params[param] = value
+            if (typeof value !== 'undefined' && value !== '') this.$scope.params[param] = value
         })
     }
 }

@@ -1,0 +1,17 @@
+.button-grouping-filter {
+  padding: 0 12px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 16px;
+  color: $color-selected-menu;
+  background: $selected-gray;
+}
+
+&.active {
+  color: $white;
+  background: $md-primary;
+}
+
+.button-grouping-filter.active:hover {
+  background: $color-selected-menu;
+}
