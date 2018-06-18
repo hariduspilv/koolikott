@@ -9,7 +9,7 @@
   }"
   data-click-outside="clickOutside()"
   outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown"
-  >
+>
   <div class="md-toolbar-tools" layout="row" layout-align="start center">
     <!-- logo and menu button -->
     <div class="navbar-logo-area" data-ng-if="!mobileSearch.isVisible">
@@ -18,7 +18,8 @@
         <md-button class="md-icon-button" data-ng-click="toggleSidenav('left')" id="header-show-sidenav-button">
           <md-icon class="md-48">menu</md-icon>
         </md-button>
-        <md-button data-ng-if="isEditModeAndNotEditView" data-ng-click="$root.back(); closeDetailedSearch()" data-ng-class="{'md-icon-button': isMobileView}">
+        <md-button data-ng-if="isEditModeAndNotEditView" data-ng-click="$root.back(); closeDetailedSearch()"
+                   data-ng-class="{'md-icon-button': isMobileView}">
           <md-icon class="md-48">arrow_backward</md-icon>
           <span hide-xs hide-sm data-translate="BACK"></span>
         </md-button>
@@ -32,8 +33,10 @@
       </div>
     </div>
     <!-- search bar with filter icon -->
-    <div class="navbar-search-area" data-ng-class="{'has-mobile-search-open layout-align-start-center': mobileSearch.isVisible}">
-      <md-button aria-label="Tagasi" class="md-icon-button" data-ng-click="closeMobileSearch(true)" data-ng-if="mobileSearch.isVisible">
+    <div class="navbar-search-area"
+         data-ng-class="{'has-mobile-search-open layout-align-start-center': mobileSearch.isVisible}">
+      <md-button aria-label="Tagasi" class="md-icon-button" data-ng-click="closeMobileSearch(true)"
+                 data-ng-if="mobileSearch.isVisible">
         <md-icon class="md-48">arrow_backward</md-icon>
       </md-button>
 
@@ -65,7 +68,8 @@
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
             </md-item-template>
           </md-autocomplete>
-          <span class="inline-suggestion"><span class="suggestion-hidden">{{hiddenInline}}</span>{{inlineSuggestion}}</span>
+          <span class="inline-suggestion"><span
+            class="suggestion-hidden">{{hiddenInline}}</span>{{inlineSuggestion}}</span>
         </md-input-container>
         <div class="navbar-search-filter-text" data-hide-xs data-hide-sm>
           Filter
@@ -145,7 +149,8 @@
               </md-button>
             </md-menu-item>
             <md-menu-item data-ng-if="canShowTour">
-              <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-click="openTour()" id="help-menu">
+              <md-button aria-label="Mine Kuidas e-Koolikotti kasutada leheküljele" data-ng-click="openTour()"
+                         id="help-menu">
                 <span data-translate="HELP_PAGE_LINK_TITLE"></span>
               </md-button>
             </md-menu-item>
@@ -190,13 +195,15 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div class="button-container" ng-class="{'padding-left-52': $root.isEditPortfolioMode}" data-ng-if="$root.isEditPortfolioMode">
+      <div class="button-container" ng-class="{'padding-left-52': $root.isEditPortfolioMode}"
+           data-ng-if="$root.isEditPortfolioMode">
         <md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
-                    data-ng-click="openTour(true)">
-            <md-tooltip><span data-translate="HEADER_EDIT_TOOLTIP_HELP"></span></md-tooltip>
-            <md-icon>help</md-icon>
-         </md-button>
-        <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju" class="md-icon-button header-save-button">
+                   data-ng-click="openTour(true)">
+          <md-tooltip><span data-translate="HEADER_EDIT_TOOLTIP_HELP"></span></md-tooltip>
+          <md-icon>help</md-icon>
+        </md-button>
+        <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju"
+                   class="md-icon-button header-save-button">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
           <md-icon>done</md-icon>
         </md-button>

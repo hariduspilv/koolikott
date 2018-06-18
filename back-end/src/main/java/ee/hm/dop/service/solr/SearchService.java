@@ -58,6 +58,7 @@ public class SearchService {
         String sort = SearchConverter.getSort(searchFilter);
 
         SearchRequest searchRequest = new SearchRequest();
+        if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
         searchRequest.setOriginalQuery(query);
         searchRequest.setSolrQuery(solrQuery);
         searchRequest.setSort(sort);

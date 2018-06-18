@@ -4,6 +4,7 @@ import ee.hm.dop.model.solr.SearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.utils.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -110,11 +111,12 @@ public class SolrService implements SolrEngineService {
     }
 
     private String getGroupingCommand(SearchRequest searchRequest) {
-        String groupSearchPathMaterial = getGroupsForQuery(searchRequest.getOriginalQuery() + TYPE_MATERIAL);
-        String groupSearchPathPortfolio = getGroupsForQuery(searchRequest.getOriginalQuery() + TYPE_PORTFOLIO);
+        String query = StringUtils.isBlank(searchRequest.getOriginalQuery()) ? "\"\"" : searchRequest.getOriginalQuery();
+        String groupSearchPathMaterial = getGroupsForQuery(query + TYPE_MATERIAL);
+        String groupSearchPathPortfolio = getGroupsForQuery(query + TYPE_PORTFOLIO);
         if (searchRequest.getGrouping().isPhraseGrouping()) {
-            groupSearchPathMaterial += getGroupsForQuery("\"" + searchRequest.getOriginalQuery() + "\"" + TYPE_MATERIAL);
-            groupSearchPathPortfolio += getGroupsForQuery("\"" + searchRequest.getOriginalQuery() + "\"" + TYPE_PORTFOLIO);
+            groupSearchPathMaterial += getGroupsForQuery("\"" + query + "\"" + TYPE_MATERIAL);
+            groupSearchPathPortfolio += getGroupsForQuery("\"" + query + "\"" + TYPE_PORTFOLIO);
         }
         return groupSearchPathMaterial + groupSearchPathPortfolio;
     }

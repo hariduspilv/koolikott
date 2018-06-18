@@ -113,7 +113,9 @@ class controller extends Controller {
                     if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase()))
                         this.processSearchQuery(this.$scope.searchFields.searchQuery)
 
-                    angular.element(document.querySelector('#header-search-input')).controller('mdAutocomplete').hidden = true
+                    angular.element(document.querySelector('#header-search-input'))
+                        .controller('mdAutocomplete')
+                        .hidden = true
                     document.getElementById('header-search-input').blur()
                     this.$scope.doInlineSuggestion = false
                     break
@@ -128,7 +130,7 @@ class controller extends Controller {
         }
 
         this.$scope.$watch('detailedSearch.mainField', (newValue, oldValue) => {
-            if (newValue != oldValue) this.$scope.searchFields.searchQuery = newValue || ''
+            if (newValue !== oldValue) this.$scope.searchFields.searchQuery = newValue || ''
         }, true)
 
         this.$scope.$watch('searchFields.searchQuery', this.processSearchQuery.bind(this), true)
@@ -290,7 +292,6 @@ class controller extends Controller {
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
         this.searchService.setIsGrouped(true)
-        console.log(this.searchService.getURL())
         this.$location.url(this.searchService.getURL())
     }
     closeDetailedSearch() {
@@ -322,7 +323,8 @@ class controller extends Controller {
         this.$scope.searchFields.searchQuery = newValue || ''
 
         if (newValue !== oldValue && !this.$scope.detailedSearch.isVisible && (!this.dontSearch || newValue))
-            this.$timeout(this.search, SEARCH_DELAY)
+            if (!newValue) this.$timeout(this.$location.url('/'), SEARCH_DELAY)
+            else this.$timeout(this.search, SEARCH_DELAY)
         else
         if (this.$scope.detailedSearch.isVisible)
             this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery

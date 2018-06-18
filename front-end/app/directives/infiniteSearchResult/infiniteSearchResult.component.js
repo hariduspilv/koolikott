@@ -52,7 +52,7 @@ class controller extends Controller {
         this.search(true);
         this.$rootScope.$on('logout:success', this.search.bind(this));
     }
-     mapGroups(groupName) {
+     static mapGroups(groupName) {
         switch (groupName) {
             case 'author': return 'GROUPS_AUTHORS'
             case 'description': return 'GROUPS_DESCRIPTIONS'
@@ -158,7 +158,7 @@ class controller extends Controller {
         Object.entries(groups).forEach(([name, content]) => {
             if (name === 'material' || name === 'portfolio') groupType = name
             if (content.hasOwnProperty('items')) {
-                const mappedName = this.mapGroups(name)
+                const mappedName = controller.mapGroups(name)
                 if (groupType === 'material')
                     this.$scope.filterGroups[mappedName].countMaterial = content.totalResults
                 if (groupType === 'portfolio')

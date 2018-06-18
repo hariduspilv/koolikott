@@ -10,7 +10,7 @@ class controller extends Controller {
 
         if (this.taxon) {
             this.$scope.taxonName = this.getTaxonTranslation(this.taxon)
-            
+
             const parentEdCtx = this.taxon.parentId
                 ? this.taxonService.getEducationalContext(this.taxon)
                 : {}
@@ -18,7 +18,7 @@ class controller extends Controller {
             // Taxon is EducationalContext
             if (this.taxon.domains)
                 this.checkTaxonLevelAndAssignValues('.EducationalContext', this.taxon.domains)
-            
+
             // Taxon is Domain
             else if (this.taxon.parentLevel === '.EducationalContext') {
                 if (parentEdCtx.name === 'PRESCHOOLEDUCATION')
@@ -60,14 +60,13 @@ class controller extends Controller {
         )
     }
     toggleChildren(id) {
-        if (this.$scope.materialCount == 0)
-            return
-        
-        if (this.$scope.opened)
-            return this.$scope.opened = false
+        if (this.$scope.materialCount === 0) return
+
+        if (this.$scope.opened) return this.$scope.opened = false
 
         window.scrollTo(0,0)
         this.searchService.setTaxon([id])
+        this.searchService.setIsGrouped(false)
         this.$location.url(this.searchService.getURL())
         this.$scope.opened = true
     }

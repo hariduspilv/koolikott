@@ -40,8 +40,7 @@
 
 <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="card-container">
   <div data-ng-repeat="item in items | itemGroupFilter:filterGroups:isGrouped track by $index"
-       class="card-container__item"
-       flex-xs="grow">
+       class="card-container__item" flex-xs="grow">
     <dop-card-sm learning-object="item"></dop-card-sm>
   </div>
 </div>
