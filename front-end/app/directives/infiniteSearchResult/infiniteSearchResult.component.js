@@ -2,8 +2,10 @@
 
 {
 class controller extends Controller {
-    $onChanges({ title, subtitle, filter, params }) {
+    $onChanges({ title, subtitle, filter, params, exactTitle, similarTitle }) {
         if (title && title.currentValue !== title.previousValue) this.setTitle()
+        if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitlesExact()
+        if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitlesSimilar()
         if (subtitle && subtitle.currentValue !== subtitle.previousValue) this.$scope.subtitle = subtitle.currentValue
         if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
 
@@ -64,20 +66,31 @@ class controller extends Controller {
     }
     setTitle() {
         const t = (key) => this.$translate.instant(key)
-
+        this.$translate.onReady().then(() => this.$scope.title = this.getTitle(t, this.title, this.totalResults))
+    }
+    getTitle(t, title, totalResults) {
+        return title ? t(title)
+            : this.$scope.searching ? t('SEARCH_RESULTS')
+                : !totalResults ? t('SEARCH_RESULT_NO_RESULT')
+                    : totalResults === 1 ? `${t('SEARCH_RESULT_1_RESULT_PART_1')} <strong>${totalResults}</strong> ${t('SEARCH_RESULT_1_RESULT_PART_2')}`
+                        : totalResults > 1 ? `${t('SEARCH_RESULT_PART_1')} <strong>${totalResults}</strong> ${t('SEARCH_RESULT_PART_2')}`
+                            : ''
+    }
+    setPhraseTitlesExact() {
+        const t = (key) => this.$translate.instant(key)
         this.$translate.onReady().then(() =>
-            this.$scope.title = this.title
-                ? t(this.title)
-                : this.$scope.searching
-                    ? t('SEARCH_RESULTS')
-                    : !this.totalResults
-                        ? t('SEARCH_RESULT_NO_RESULT')
-                        : this.totalResults === 1
-                            ? `${t('SEARCH_RESULT_1_RESULT_PART_1')} <strong>${this.totalResults}</strong> ${t('SEARCH_RESULT_1_RESULT_PART_2')}`
-                            : this.totalResults > 1
-                                ? `${t('SEARCH_RESULT_PART_1')} <strong>${this.totalResults}</strong> ${t('SEARCH_RESULT_PART_2')}`
-                                : ''
+            this.$scope.exactTitle = this.getTitle(t, this.exactTitle, this.totalPhraseResults['exact'])
         )
+    }
+    setPhraseTitlesSimilar() {
+        const t = (key) => this.$translate.instant(key)
+        this.$translate.onReady().then(() =>
+            this.$scope.similarTitle = this.getTitle(t, this.similarTitle, this.totalPhraseResults['similar'])
+        )
+    }
+    setPhraseTitles() {
+        this.setPhraseTitlesExact()
+        this.setPhraseTitlesSimilar()
     }
     resetSort() {
         this.params.sort = this.initialParams.sort
@@ -139,6 +152,7 @@ class controller extends Controller {
             ? 'phraseGrouping' : 'grouping'
             : 'noGrouping'
 
+        this.totalPhraseResults = {}
         let foundItems = this.extractItemsFromGroups(data.groups)
         ;[].push.apply(this.$scope.items, foundItems)
 
@@ -148,14 +162,17 @@ class controller extends Controller {
         this.searchCount++
         this.$scope.searching = false
 
-        this.setTitle()
+        this.$scope.showFilterGroups === 'phraseGrouping' ? this.setPhraseTitles() : this.setTitle()
         this.searchMoreIfNecessary()
     }
     extractItemsFromGroups(groups, groupType, searchType) {
         let allItems = []
         Object.entries(groups).forEach(([name, content]) => {
             if (name === 'material' || name === 'portfolio') groupType = name
-            if (name === 'exact' || name === 'similar') searchType = name
+            if (name === 'exact' || name === 'similar') {
+                searchType = name
+                this.totalPhraseResults[name] = content.totalResults
+            }
             if (content.hasOwnProperty('items')) {
                 const mappedName = controller.mapGroups(name)
                 if (groupType === 'material') {
@@ -242,6 +259,8 @@ component('dopInfiniteSearchResult', {
         filter: '<',
         cache: '<?',
         isPreferred: '<',
+        exactTitle: '<',
+        similarTitle: '<',
     },
     templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
     controller
