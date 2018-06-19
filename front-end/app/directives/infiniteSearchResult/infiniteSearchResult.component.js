@@ -143,9 +143,10 @@ class controller extends Controller {
         ;[].push.apply(this.$scope.items, foundItems)
 
         this.totalResults = data.totalResults
+        this.$scope.filterGroups['all'].countMaterial = this.totalResults
+
         this.searchCount++
         this.$scope.searching = false
-        this.$scope.filterGroups['all'].countMaterial = this.totalResults
 
         this.setTitle()
         this.searchMoreIfNecessary()
