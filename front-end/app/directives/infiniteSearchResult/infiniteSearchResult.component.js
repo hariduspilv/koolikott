@@ -145,26 +145,25 @@ class controller extends Controller {
         this.totalResults = data.totalResults
         this.searchCount++
         this.$scope.searching = false
-        this.$scope.filterGroups['GROUPS_ALL'].countMaterial = this.totalResults
+        this.$scope.filterGroups['all'].countMaterial = this.totalResults
 
         this.setTitle()
         this.searchMoreIfNecessary()
     }
     extractItemsFromGroups(groups, groupType, searchType) {
         let allItems = []
-
         Object.entries(groups).forEach(([name, content]) => {
             if (name === 'material' || name === 'portfolio') groupType = name
             if (name === 'exact' || name === 'similar') searchType = name
             if (content.hasOwnProperty('items')) {
                 const mappedName = controller.mapGroups(name)
-                if (groupType && groupType === 'material') {
-                    if (searchType && searchType === 'exact')
+                if (groupType === 'material') {
+                    if (searchType === 'exact')
                         this.$scope.filterGroupsExact[mappedName].countMaterial = content.totalResults
                     else this.$scope.filterGroups[mappedName].countMaterial = content.totalResults
                 }
-                if (groupType && groupType === 'portfolio') {
-                    if (searchType && searchType === 'exact')
+                if (groupType === 'portfolio') {
+                    if (searchType === 'exact')
                         this.$scope.filterGroupsExact[mappedName].countPortfolio = content.totalResults
                     this.$scope.filterGroups[mappedName].countPortfolio = content.totalResults
                 }
@@ -215,7 +214,7 @@ class controller extends Controller {
     selectPortfolioGroup(groupId, isExact) {
         let groups = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
         const isAllActive = groups['all'].isMaterialActive
-        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter()
+        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(groups)
         groups[groupId].isPortfolioActive = !groups[groupId].isPortfolioActive
     }
     static disableAllGroupsForFilter(filter) {

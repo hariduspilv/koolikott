@@ -25,11 +25,11 @@
                  class="button-grouping-filter"
                  data-ng-click="$ctrl.selectMaterialGroup(groupId)"
                  data-ng-class="{ 'active': groupValue.isMaterialActive }">
-        <md-icon data-ng-if="groupValue.name != 'GROUPS_ALL'" class="material-icons sidenav__icon">book</md-icon>
+        <md-icon data-ng-if="groupId != 'all'" class="material-icons sidenav__icon">book</md-icon>
         {{groupValue.countMaterial}}
       </md-button>
       <md-button id="{{groupId}}_PortfolioButton"
-                 data-ng-if="groupValue.name != 'GROUPS_ALL'"
+                 data-ng-if="groupId != 'all'"
                  class="button-grouping-filter"
                  data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
                  data-ng-class="{ 'active': groupValue.isPortfolioActive }">
@@ -48,11 +48,11 @@
                  class="button-grouping-filter"
                  data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
                  data-ng-class="{ 'active': groupValue.isMaterialActive}">
-        <md-icon data-ng-if="groupValue.name != 'GROUPS_ALL'" class="material-icons sidenav__icon">book</md-icon>
+        <md-icon data-ng-if="groupId != 'all'" class="material-icons sidenav__icon">book</md-icon>
         {{groupValue.countMaterial}}
       </md-button>
       <md-button id="{{groupId}}ExactPortfolioButton"
-                 data-ng-if="groupValue.name != 'GROUPS_ALL'"
+                 data-ng-if="groupId != 'all'"
                  class="button-grouping-filter"
                  data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
                  data-ng-class="{ 'active': groupValue.isPortfolioActive}">
