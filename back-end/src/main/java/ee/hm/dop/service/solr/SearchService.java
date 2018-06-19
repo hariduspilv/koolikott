@@ -101,8 +101,8 @@ public class SearchService {
             searchResult.setGroups(similarResultGroups);
             searchResult.setTotalResults(getGroupsItemSum(similarResultGroups));
         } else {
-            searchResult.getGroups().put(SIMILAR_RESULT, new SearchResult(similarResultGroups));
-            searchResult.getGroups().put(EXACT_RESULT, new SearchResult(exactResultGroups));
+            searchResult.getGroups().put(SIMILAR_RESULT, new SearchResult(similarResultGroups, getGroupsItemSum(similarResultGroups)));
+            searchResult.getGroups().put(EXACT_RESULT, new SearchResult(exactResultGroups, getGroupsItemSum(exactResultGroups)));
             searchResult.setTotalResults(getGroupsItemSum(similarResultGroups) + getGroupsItemSum(exactResultGroups));
         }
         return searchResult;

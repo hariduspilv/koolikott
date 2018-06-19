@@ -218,8 +218,7 @@ class controller extends Controller {
         this.setHeaderColor = this.setHeaderColor.bind(this)
         this.$timeout(this.setHeaderColor)
         const onLearningObjectAdminStatusChange = (currentValue, previousValue) => {
-            if (currentValue !== previousValue)
-                this.setHeaderColor()
+            if (currentValue !== previousValue) this.setHeaderColor()
         }
         this.$rootScope.$watch('learningObjectPrivate', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectDeleted', onLearningObjectAdminStatusChange)
@@ -235,17 +234,14 @@ class controller extends Controller {
             this.$scope.isHeaderRed = false
         }
 
-        if (!this.authenticatedUserService.isModeratorOrAdmin()){
-            return setDefault()
-        }
+        if (!this.authenticatedUserService.isModeratorOrAdmin()) return setDefault()
 
         const path = this.$location.path()
         const isDashboard = path.startsWith('/dashboard')
         const isMaterial = path.startsWith('/material')
         const isPortfolio = path.startsWith('/portfolio')
 
-        if (!isMaterial && !isPortfolio && !isDashboard)
-            return setDefault()
+        if (!isMaterial && !isPortfolio && !isDashboard) return setDefault()
 
         const {
             learningObjectPrivate,
@@ -273,25 +269,24 @@ class controller extends Controller {
             ))
         )
         this.$rootScope.$broadcast(
-            this.$scope.isHeaderRed
-                ? 'header:red'
-                : 'header:default'
+            this.$scope.isHeaderRed ? 'header:red' : 'header:default'
         )
     }
     setLanguage(language) {
         const shouldReload = this.$scope.selectedLanguage !== language
-
         this.translationService.setLanguage(language)
         this.$scope.selectedLanguage = language
-
-        if (shouldReload)
-            window.location.reload()
+        if (shouldReload) window.location.reload()
     }
     search() {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
-        this.searchService.setIsGrouped(true)
+        if (!this.$scope.searchFields.searchQuery) {
+            this.searchService.setSort('added')
+            this.searchService.setSortDirection('desc')
+        }
+        this.searchService.setIsGrouped(!!this.$scope.searchFields.searchQuery)
         this.$location.url(this.searchService.getURL())
     }
     closeDetailedSearch() {
@@ -323,8 +318,7 @@ class controller extends Controller {
         this.$scope.searchFields.searchQuery = newValue || ''
 
         if (newValue !== oldValue && !this.$scope.detailedSearch.isVisible && (!this.dontSearch || newValue))
-            if (!newValue) this.$timeout(this.$location.url('/'), SEARCH_DELAY)
-            else this.$timeout(this.search, SEARCH_DELAY)
+            this.$timeout(this.search, SEARCH_DELAY)
         else
         if (this.$scope.detailedSearch.isVisible)
             this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery
@@ -431,7 +425,7 @@ directive('dopHeader', {
         setTimeout(() => {
             const headerInput = document.getElementById('header-search-input')
 
-            headerInput.addEventListener('focus', () => isSuggestVisible = headerInput.value != '')
+            headerInput.addEventListener('focus', () => isSuggestVisible = headerInput.value !== '')
             headerInput.addEventListener('blur', () => isSuggestVisible = false)
         })
     },

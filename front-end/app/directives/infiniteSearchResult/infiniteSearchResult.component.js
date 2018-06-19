@@ -4,12 +4,8 @@
 class controller extends Controller {
     $onChanges({ title, subtitle, filter, params }) {
         if (title && title.currentValue !== title.previousValue) this.setTitle()
-
-        if (subtitle && subtitle.currentValue !== subtitle.previousValue)
-            this.$scope.subtitle = subtitle.currentValue
-
-        if (filter && filter.currentValue !== filter.previousValue)
-            this.$scope.filter = filter.currentValue
+        if (subtitle && subtitle.currentValue !== subtitle.previousValue) this.$scope.subtitle = subtitle.currentValue
+        if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
 
         if (params && !params.isFirstChange() && this.params) {
             this.initialParams = Object.assign({}, this.params)
@@ -22,9 +18,8 @@ class controller extends Controller {
         this.initialParams = Object.assign({}, this.params)
 
         this.$scope.items = []
-        this.$scope.shownItems = []
-        this.$scope.groups = []
         this.$scope.filterGroups = {}
+        this.$scope.filterGroupsExact = {}
         this.$scope.searching = false
         this.$scope.sortOptions = [{
             option: 'MOST_LIKED',
@@ -39,14 +34,14 @@ class controller extends Controller {
             field: 'views',
             direction: 'desc'
         }]
-        this.createGroup('GROUPS_TITLES', 0, 0)
-        this.createGroup('GROUPS_TAGS', 0, 0)
-        this.createGroup('GROUPS_DESCRIPTIONS', 0, 0)
-        this.createGroup('GROUPS_AUTHORS', 0, 0)
-        this.createGroup('GROUPS_PUBLISHERS', 0, 0)
-        this.createGroup('GROUPS_ALL', 0, 0)
-
-        this.$scope.selectedFilters = {foundFrom: []}
+        this.createMultipleGroups(
+            ['GROUPS_TITLES', 'titles'],
+            ['GROUPS_TAGS', 'tags'],
+            ['GROUPS_AUTHORS', 'authors'],
+            ['GROUPS_DESCRIPTIONS', 'descriptions'],
+            ['GROUPS_PUBLISHERS', 'publishers'],
+            ['GROUPS_ALL', 'all'],
+        )
 
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
         this.search(true);
@@ -54,11 +49,11 @@ class controller extends Controller {
     }
      static mapGroups(groupName) {
         switch (groupName) {
-            case 'author': return 'GROUPS_AUTHORS'
-            case 'description': return 'GROUPS_DESCRIPTIONS'
-            case 'publisher': return 'GROUPS_PUBLISHERS'
-            case 'tag': return 'GROUPS_TAGS'
-            case 'title': return 'GROUPS_TITLES'
+            case 'author': return 'authors'
+            case 'description': return 'descriptions'
+            case 'publisher': return 'publishers'
+            case 'tag': return 'tags'
+            case 'title': return 'titles'
         }
     }
     setParams() {
@@ -99,13 +94,10 @@ class controller extends Controller {
     }
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
-
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
 
         this.$scope.searching = true
         this.$scope.start = this.searchCount * this.maxResults
-
-        this.$scope.isGrouped = this.params.isGrouped
 
         this.params.limit = this.maxResults
         this.params.maxResults = this.maxResults
@@ -124,6 +116,7 @@ class controller extends Controller {
     searchSuccess(data) {
         if (!data || !data.items) return this.searchFail()
         if (data.start === 0) this.$scope.items.splice(0, this.$scope.items.length)
+        this.$scope.showFilterGroups = 'noGrouping'
 
         ;[].push.apply(this.$scope.items, data.items)
 
@@ -135,11 +128,16 @@ class controller extends Controller {
         this.searchMoreIfNecessary()
     }
     groupedSearchSuccess(data) {
-        if (!data || !data.groups || data.totalResults === 0) return this.searchFail()
+        if (!data || !data.groups) return this.searchFail()
         if (data.start === 0) {
             this.$scope.items.splice(0, this.$scope.items.length)
-            this.disableAllGroups()
+            controller.disableAllGroupsForFilter(this.$scope.filterGroups)
+            controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
         }
+        this.$scope.showFilterGroups = this.params.isGrouped && data.totalResults !== 0
+            ? data.groups.hasOwnProperty('exact')
+            ? 'phraseGrouping' : 'grouping'
+            : 'noGrouping'
 
         let foundItems = this.extractItemsFromGroups(data.groups)
         ;[].push.apply(this.$scope.items, foundItems)
@@ -152,24 +150,31 @@ class controller extends Controller {
         this.setTitle()
         this.searchMoreIfNecessary()
     }
-    extractItemsFromGroups(groups, groupType) {
+    extractItemsFromGroups(groups, groupType, searchType) {
         let allItems = []
 
         Object.entries(groups).forEach(([name, content]) => {
             if (name === 'material' || name === 'portfolio') groupType = name
+            if (name === 'exact' || name === 'similar') searchType = name
             if (content.hasOwnProperty('items')) {
                 const mappedName = controller.mapGroups(name)
-                if (groupType === 'material')
-                    this.$scope.filterGroups[mappedName].countMaterial = content.totalResults
-                if (groupType === 'portfolio')
+                if (groupType && groupType === 'material') {
+                    if (searchType && searchType === 'exact')
+                        this.$scope.filterGroupsExact[mappedName].countMaterial = content.totalResults
+                    else this.$scope.filterGroups[mappedName].countMaterial = content.totalResults
+                }
+                if (groupType && groupType === 'portfolio') {
+                    if (searchType && searchType === 'exact')
+                        this.$scope.filterGroupsExact[mappedName].countPortfolio = content.totalResults
                     this.$scope.filterGroups[mappedName].countPortfolio = content.totalResults
-
+                }
                 content.items.forEach((item) => {
                     item['foundFrom'] = mappedName
+                    if (searchType) item['searchType'] = searchType
                     allItems.push(item)
                 })
             }
-            else allItems = allItems.concat(this.extractItemsFromGroups(content, groupType))
+            else allItems = allItems.concat(this.extractItemsFromGroups(content, groupType, searchType))
         })
         return allItems
     }
@@ -182,27 +187,39 @@ class controller extends Controller {
             ? this.search()
             : this.expectedItemCount += this.maxResults
     }
-    createGroup(groupName, materialCount, portfolioCount) {
-        this.$scope.filterGroups[groupName] = {
-            countMaterial: materialCount,
-            countPortfolio: portfolioCount,
+    createMultipleGroups(...groups) {
+        groups.forEach((group) => {
+            this.createGroup(group[0], group[1])
+        })
+    }
+    createGroup(groupName, groupId) {
+        this.$scope.filterGroups[groupId] = controller.createNewGroup(groupName)
+        this.$scope.filterGroupsExact[groupId] = controller.createNewGroup(groupName)
+    }
+    static createNewGroup(groupName) {
+        return {
+            name: groupName,
+            countMaterial: 0,
+            countPortfolio: 0,
             isMaterialActive: false,
             isPortfolioActive: false
         }
     }
-    selectMaterialGroup(groupName) {
-        const areAllActive = this.$scope.filterGroups['GROUPS_ALL'].isMaterialActive
-        if (groupName === 'GROUPS_ALL' && !areAllActive) this.disableAllGroups()
-        if (groupName !== 'GROUPS_ALL' && areAllActive) this.disableAllGroups()
-        this.$scope.filterGroups[groupName].isMaterialActive = !this.$scope.filterGroups[groupName].isMaterialActive
+    selectMaterialGroup(groupId, isExact) {
+        let groups = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
+        const isAllActive = groups['all'].isMaterialActive
+        if (groupId === 'all' && !isAllActive) controller.disableAllGroupsForFilter(groups)
+        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(groups)
+        groups[groupId].isMaterialActive = !groups[groupId].isMaterialActive
     }
-    selectPortfolioGroup(groupName) {
-        const areAllActive = this.$scope.filterGroups['GROUPS_ALL'].isMaterialActive
-        if (groupName !== 'GROUPS_ALL' && areAllActive) this.disableAllGroups()
-        this.$scope.filterGroups[groupName].isPortfolioActive = !this.$scope.filterGroups[groupName].isPortfolioActive
+    selectPortfolioGroup(groupId, isExact) {
+        let groups = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
+        const isAllActive = groups['all'].isMaterialActive
+        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter()
+        groups[groupId].isPortfolioActive = !groups[groupId].isPortfolioActive
     }
-    disableAllGroups() {
-        Object.entries(this.$scope.filterGroups).forEach(([name, content]) => {
+    static disableAllGroupsForFilter(filter) {
+        Object.entries(filter).forEach(([name, content]) => {
             content.isMaterialActive = false
             content.isPortfolioActive = false
         })

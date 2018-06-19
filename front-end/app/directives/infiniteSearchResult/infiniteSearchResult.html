@@ -17,18 +17,44 @@
 </div>
 <h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
 
-<div data-ng-show="isGrouped" id="grouping-selection-buttons" data-layout="row">
+<div data-ng-show="showFilterGroups !== 'noGrouping'" id="grouping-selection-buttons" data-layout="row">
   <section data-layout="row" data-layout-xs="column" layout-wrap>
-    <div data-ng-repeat="(groupName, groupValue) in filterGroups">
-      <span data-translate="{{groupName}}"></span>
-      <md-button class="button-grouping-filter" data-ng-click="$ctrl.selectMaterialGroup(groupName)"
-                 data-ng-class="{ 'active': groupValue.isMaterialActive}">
-        <md-icon data-ng-if="groupName != 'GROUPS_ALL'" class="material-icons sidenav__icon">book</md-icon>
+    <div data-ng-repeat="(groupId, groupValue) in filterGroups">
+      <span data-translate="{{groupValue.name}}"></span>
+      <md-button id="{{groupId}}_MaterialButton"
+                 class="button-grouping-filter"
+                 data-ng-click="$ctrl.selectMaterialGroup(groupId)"
+                 data-ng-class="{ 'active': groupValue.isMaterialActive }">
+        <md-icon data-ng-if="groupValue.name != 'GROUPS_ALL'" class="material-icons sidenav__icon">book</md-icon>
         {{groupValue.countMaterial}}
       </md-button>
-      <md-button data-ng-if="groupName != 'GROUPS_ALL'"
+      <md-button id="{{groupId}}_PortfolioButton"
+                 data-ng-if="groupValue.name != 'GROUPS_ALL'"
                  class="button-grouping-filter"
-                 data-ng-click="$ctrl.selectPortfolioGroup(groupName)"
+                 data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
+                 data-ng-class="{ 'active': groupValue.isPortfolioActive }">
+        <md-icon class="material-icons sidenav__icon">description</md-icon>
+        {{groupValue.countPortfolio}}
+      </md-button>
+    </div>
+  </section>
+</div>
+
+<div data-ng-if="showFilterGroups === 'phraseGrouping'" id="exact-grouping-selection-buttons" data-layout="row">
+  <section data-layout="row" data-layout-xs="column" layout-wrap>
+    <div data-ng-repeat="(groupId, groupValue) in filterGroupsExact">
+      <span data-translate="{{groupValue.name}}"></span>
+      <md-button id="{{groupId}}ExactMaterialButton"
+                 class="button-grouping-filter"
+                 data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
+                 data-ng-class="{ 'active': groupValue.isMaterialActive}">
+        <md-icon data-ng-if="groupValue.name != 'GROUPS_ALL'" class="material-icons sidenav__icon">book</md-icon>
+        {{groupValue.countMaterial}}
+      </md-button>
+      <md-button id="{{groupId}}ExactPortfolioButton"
+                 data-ng-if="groupValue.name != 'GROUPS_ALL'"
+                 class="button-grouping-filter"
+                 data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
                  data-ng-class="{ 'active': groupValue.isPortfolioActive}">
         <md-icon class="material-icons sidenav__icon">description</md-icon>
         {{groupValue.countPortfolio}}
@@ -37,9 +63,8 @@
   </section>
 </div>
 
-
 <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="card-container">
-  <div data-ng-repeat="item in items | itemGroupFilter:filterGroups:isGrouped track by $index"
+  <div data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
        class="card-container__item" flex-xs="grow">
     <dop-card-sm learning-object="item"></dop-card-sm>
   </div>

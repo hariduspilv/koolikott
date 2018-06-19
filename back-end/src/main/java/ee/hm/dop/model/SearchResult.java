@@ -36,6 +36,11 @@ public class SearchResult {
         this.groups = groups;
     }
 
+    public SearchResult(Map<String, SearchResult> groups, long totalResults) {
+        this.groups = groups;
+        this.totalResults = totalResults;
+    }
+
     public Map<String, SearchResult> getGroups() {
         return groups;
     }
