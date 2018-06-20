@@ -22,7 +22,7 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_NO_RESULT_SIMILAR', 'Ühtegi osalist vastet ei leitud');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_NO_RESULT_SIMILAR', 'No partial results found.');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_NO_RESULT_SIMILAR', 'Результатов не найдено.');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_NO_RESULT_SIMILAR', 'Ühtegi osalist vastet ei leitud.');
 
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_1_RESULT_PART_1_SIMILAR', 'Otsingule leidus');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_1_RESULT_PART_1_SIMILAR', 'Search returned');
