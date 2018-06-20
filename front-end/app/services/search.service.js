@@ -235,10 +235,7 @@ class controller extends Controller {
     }
     isFavorites() {
         const { favorites } = this.$location.search()
-
-        if (favorites)
-            this.setIsFavorites(favorites === 'true')
-
+        if (favorites) this.setIsFavorites(favorites === 'true')
         return this.search.isFavorites
     }
     isRecommended() {
@@ -251,7 +248,9 @@ class controller extends Controller {
     }
     isGrouped() {
         const { isGrouped } = this.$location.search()
+
         if (isGrouped) this.setIsGrouped(isGrouped === 'true')
+        if (!this.getQuery()) this.setIsGrouped(false)
         return this.search.isGrouped
     }
     clearFieldsNotInSimpleSearch() {

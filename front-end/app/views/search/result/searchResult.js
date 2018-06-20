@@ -16,8 +16,7 @@ class controller extends Controller {
         if (newValue !== oldValue) this.setParams(newValue.q)
     }
     setParams(q) {
-        q  ?  this.searchService.setQuery(q)
-        : q = this.searchService.getQuery()
+        q  ?  this.searchService.setQuery(q) : q = this.searchService.getQuery()
 
         this.$scope.params = { q, start: 0 }
         const params = {

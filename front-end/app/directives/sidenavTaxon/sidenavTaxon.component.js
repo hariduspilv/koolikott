@@ -16,8 +16,7 @@ class controller extends Controller {
                 : {}
 
             // Taxon is EducationalContext
-            if (this.taxon.domains)
-                this.checkTaxonLevelAndAssignValues('.EducationalContext', this.taxon.domains)
+            if (this.taxon.domains) this.checkTaxonLevelAndAssignValues('.EducationalContext', this.taxon.domains)
 
             // Taxon is Domain
             else if (this.taxon.parentLevel === '.EducationalContext') {
@@ -50,9 +49,7 @@ class controller extends Controller {
             () => localStorage.getItem(this.getTaxonCountKey()),
             (newCount, oldCount) => {
                 if (newCount && newCount !== oldCount)
-                    this.$scope.materialCount = localStorage.getItem(
-                        this.getTaxonCountKey()
-                    )
+                    this.$scope.materialCount = localStorage.getItem(this.getTaxonCountKey())
             }
         )
         this.$scope.$watch(() => this.$location.url(), () =>
@@ -66,7 +63,7 @@ class controller extends Controller {
 
         window.scrollTo(0,0)
         this.searchService.setTaxon([id])
-        this.searchService.setIsGrouped(false)
+        this.searchService.getQuery() ? this.searchService.setIsGrouped(true) : this.searchService.setIsGrouped(false)
         this.$location.url(this.searchService.getURL())
         this.$scope.opened = true
     }

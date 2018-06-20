@@ -63,7 +63,9 @@
                            id="header-simple-search-input"
                            md-menu-class="suggest-dropdown"
                            ng-model-options="{ debounce: 200 }"
-                           placeholder="{{$root.isEditPortfolioPage ? getTranslation('HEADER_SEARCH_PLACEHOLDER') : ''}}">
+                           placeholder="{{$root.isEditPortfolioPage
+                           ? getTranslation('HEADER_PORTFOLIO_SEARCH_PLACEHOLDER')
+                           : getTranslation('HEADER_DEFAULT_SEARCH_PLACEHOLDER')}}">
             <md-item-template>
               <span md-highlight-text="searchFields.searchQuery">{{ suggestion }}</span>
             </md-item-template>

@@ -66,27 +66,54 @@ class controller extends Controller {
     }
     setTitle() {
         const t = (key) => this.$translate.instant(key)
-        this.$translate.onReady().then(() => this.$scope.title = this.getTitle(t, this.title, this.totalResults))
+        const translationsKeys = {
+            noResults: 'SEARCH_RESULT_NO_RESULT',
+            singleResultPart1: 'SEARCH_RESULT_1_RESULT_PART_1',
+            singleResultPart2: 'SEARCH_RESULT_1_RESULT_PART_2',
+            multipleResultsPart1: 'SEARCH_RESULT_PART_1',
+            multipleResultsPart2: 'SEARCH_RESULT_PART_2',
+        }
+        this.$translate.onReady().then(() => this.$scope.title = this.buildTitle(
+            t, this.title, this.totalResults, translationsKeys
+        ))
     }
-    getTitle(t, title, totalResults) {
+    buildTitle(t, title, totalResults, translationsKeys) {
+        const singleResult = `${t(translationsKeys.singleResultPart1)} <strong>${totalResults}</strong> ${t(translationsKeys.singleResultPart2)}`
+        const multipleResults = `${t(translationsKeys.multipleResultsPart1)} <strong>${totalResults}</strong> ${t(translationsKeys.multipleResultsPart2)}`
         return title ? t(title)
             : this.$scope.searching ? t('SEARCH_RESULTS')
-                : !totalResults ? t('SEARCH_RESULT_NO_RESULT')
-                    : totalResults === 1 ? `${t('SEARCH_RESULT_1_RESULT_PART_1')} <strong>${totalResults}</strong> ${t('SEARCH_RESULT_1_RESULT_PART_2')}`
-                        : totalResults > 1 ? `${t('SEARCH_RESULT_PART_1')} <strong>${totalResults}</strong> ${t('SEARCH_RESULT_PART_2')}`
+                : !totalResults ? t(translationsKeys.noResults)
+                    : totalResults === 1 ? singleResult
+                        : totalResults > 1 ? multipleResults
                             : ''
     }
     setPhraseTitlesExact() {
         const t = (key) => this.$translate.instant(key)
+        const translationsKeys = {
+            noResults: 'SEARCH_RESULT_NO_RESULT_EXACT',
+            singleResultPart1: 'SEARCH_RESULT_1_RESULT_PART_1_EXACT',
+            singleResultPart2: 'SEARCH_RESULT_1_RESULT_PART_2_EXACT',
+            multipleResultsPart1: 'SEARCH_RESULT_PART_1_EXACT',
+            multipleResultsPart2: 'SEARCH_RESULT_PART_2_EXACT',
+        }
         this.$translate.onReady().then(() =>
-            this.$scope.exactTitle = this.getTitle(t, this.exactTitle, this.totalPhraseResults['exact'])
-        )
+            this.$scope.exactTitle = this.buildTitle(
+                t, this.exactTitle, this.totalPhraseResults['exact'], translationsKeys
+            ))
     }
     setPhraseTitlesSimilar() {
         const t = (key) => this.$translate.instant(key)
+        const translationsKeys = {
+            noResults: 'SEARCH_RESULT_NO_RESULT_SIMILAR',
+            singleResultPart1: 'SEARCH_RESULT_1_RESULT_PART_1_SIMILAR',
+            singleResultPart2: 'SEARCH_RESULT_1_RESULT_PART_2_SIMILAR',
+            multipleResultsPart1: 'SEARCH_RESULT_PART_1_SIMILAR',
+            multipleResultsPart2: 'SEARCH_RESULT_PART_2_SIMILAR',
+        }
         this.$translate.onReady().then(() =>
-            this.$scope.similarTitle = this.getTitle(t, this.similarTitle, this.totalPhraseResults['similar'])
-        )
+            this.$scope.similarTitle = this.buildTitle(
+                t, this.similarTitle, this.totalPhraseResults['similar'], translationsKeys
+            ))
     }
     setPhraseTitles() {
         this.setPhraseTitlesExact()
