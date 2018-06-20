@@ -46,7 +46,7 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'HEADER_PORTFOLIO_SEARCH_PLACEHOLDER', 'Otsi siit materjale sellesse kogumikku pealkirja, kirjelduse, võtmesõna, autori, väljaandja järgi');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'HEADER_PORTFOLIO_SEARCH_PLACEHOLDER', 'Search for new materials by title, description, tag, author, publisher');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'HEADER_PORTFOLIO_SEARCH_PLACEHOLDER', 'Otsi pealkirja, kirjelduse, võtmesõna, autori, väljaandja järgi');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'HEADER_PORTFOLIO_SEARCH_PLACEHOLDER', 'Otsi siit materjale sellesse kogumikku pealkirja, kirjelduse, võtmesõna, autori, väljaandja järgi');
 
 SET foreign_key_checks = 1;
 
