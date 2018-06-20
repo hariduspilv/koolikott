@@ -20,42 +20,54 @@ class controller extends Controller {
         this.initialParams = Object.assign({}, this.params)
 
         this.$scope.items = []
+        this.$scope.sortOptions = []
         this.$scope.filterGroups = {}
         this.$scope.filterGroupsExact = {}
         this.$scope.searching = false
-        this.$scope.sortOptions = [{
-            option: 'MOST_LIKED',
-            field: 'like_score',
-            direction: 'desc'
-        }, {
-            option: 'ADDED_DATE_DESC',
-            field: 'added',
-            direction: 'desc'
-        }, {
-            option: 'VIEW_COUNT_DESC',
-            field: 'views',
-            direction: 'desc'
-        }]
-        this.createMultipleGroups(
-            ['GROUPS_TITLES', 'titles'],
-            ['GROUPS_TAGS', 'tags'],
-            ['GROUPS_AUTHORS', 'authors'],
-            ['GROUPS_DESCRIPTIONS', 'descriptions'],
-            ['GROUPS_PUBLISHERS', 'publishers'],
+        this.createMultipleSortOptions(
+            ['ADDED_DATE_DESC', 'added', 'desc'],
+            ['ADDED_DATE_ASC', 'added', 'asc'],
+        )
+        this.createMultipleFilterGroups(
+            ['GROUPS_TITLES', 'title'],
+            ['GROUPS_TAGS', 'tag'],
+            ['GROUPS_AUTHORS', 'author'],
+            ['GROUPS_DESCRIPTIONS', 'description'],
+            ['GROUPS_PUBLISHERS', 'publisher'],
             ['GROUPS_ALL', 'all'],
         )
-
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
-        this.search(true);
-        this.$rootScope.$on('logout:success', this.search.bind(this));
+        this.search(true)
+        this.$rootScope.$on('logout:success', this.search.bind(this))
     }
-     static mapGroups(groupName) {
-        switch (groupName) {
-            case 'author': return 'authors'
-            case 'description': return 'descriptions'
-            case 'publisher': return 'publishers'
-            case 'tag': return 'tags'
-            case 'title': return 'titles'
+    createMultipleSortOptions(...options) {
+        options.forEach((option) =>
+            this.$scope.sortOptions.push(controller.createSortOption(option[0], option[1], option[2]))
+        )
+    }
+    static createSortOption(optionKey, fieldValue, sortDirection) {
+        return {
+            option: optionKey,
+            field: fieldValue,
+            direction: sortDirection,
+        }
+    }
+    createMultipleFilterGroups(...groups) {
+        groups.forEach((group) => {
+            this.createSingleFilterGroup(group[0], group[1])
+        })
+    }
+    createSingleFilterGroup(groupName, groupId) {
+        this.$scope.filterGroups[groupId] = controller.createFilterGroupModel(groupName)
+        this.$scope.filterGroupsExact[groupId] = controller.createFilterGroupModel(groupName)
+    }
+    static createFilterGroupModel(groupName) {
+        return {
+            name: groupName,
+            countMaterial: 0,
+            countPortfolio: 0,
+            isMaterialActive: false,
+            isPortfolioActive: false
         }
     }
     setParams() {
@@ -151,7 +163,7 @@ class controller extends Controller {
             {},
             false,
             !!this.cache
-        );
+        )
     }
     searchSuccess(data) {
         if (!data || !data.items) return this.searchFail()
@@ -176,7 +188,7 @@ class controller extends Controller {
         }
         this.$scope.showFilterGroups = this.params.isGrouped && data.totalResults !== 0
             ? data.groups.hasOwnProperty('exact')
-            ? 'phraseGrouping' : 'grouping'
+                ? 'phraseGrouping' : 'grouping'
             : 'noGrouping'
 
         this.totalPhraseResults = {}
@@ -201,19 +213,18 @@ class controller extends Controller {
                 this.totalPhraseResults[name] = content.totalResults
             }
             if (content.hasOwnProperty('items')) {
-                const mappedName = controller.mapGroups(name)
                 if (groupType === 'material') {
                     if (searchType === 'exact')
-                        this.$scope.filterGroupsExact[mappedName].countMaterial = content.totalResults
-                    else this.$scope.filterGroups[mappedName].countMaterial = content.totalResults
+                        this.$scope.filterGroupsExact[name].countMaterial = content.totalResults
+                    else this.$scope.filterGroups[name].countMaterial = content.totalResults
                 }
                 if (groupType === 'portfolio') {
                     if (searchType === 'exact')
-                        this.$scope.filterGroupsExact[mappedName].countPortfolio = content.totalResults
-                    this.$scope.filterGroups[mappedName].countPortfolio = content.totalResults
+                        this.$scope.filterGroupsExact[name].countPortfolio = content.totalResults
+                    this.$scope.filterGroups[name].countPortfolio = content.totalResults
                 }
                 content.items.forEach((item) => {
-                    item['foundFrom'] = mappedName
+                    item['foundFrom'] = name
                     if (searchType) item['searchType'] = searchType
                     allItems.push(item)
                 })
@@ -230,24 +241,6 @@ class controller extends Controller {
         this.$scope.items.length < this.expectedItemCount && !this.allResultsLoaded()
             ? this.search()
             : this.expectedItemCount += this.maxResults
-    }
-    createMultipleGroups(...groups) {
-        groups.forEach((group) => {
-            this.createGroup(group[0], group[1])
-        })
-    }
-    createGroup(groupName, groupId) {
-        this.$scope.filterGroups[groupId] = controller.createNewGroup(groupName)
-        this.$scope.filterGroupsExact[groupId] = controller.createNewGroup(groupName)
-    }
-    static createNewGroup(groupName) {
-        return {
-            name: groupName,
-            countMaterial: 0,
-            countPortfolio: 0,
-            isMaterialActive: false,
-            isPortfolioActive: false
-        }
     }
     selectMaterialGroup(groupId, isExact) {
         let groups = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
