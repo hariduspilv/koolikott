@@ -1,23 +1,3 @@
-'use strict'
-
-/*angular.module('koolikottApp')
-    .filter('itemGroupFilter', () => {
-
-
-        return function (items, filtersGroups, filterGroupsExact, isGrouped) {
-
-            if (isGrouped === 'noGrouping') return items
-
-            if (filtersGroups['all'].isMaterialActive) return items
-            return items.filter((item) => {
-                let isMaterialActive = filtersGroups[item.foundFrom].isMaterialActive && item.type.toLowerCase().includes('material')
-                let isPortfolioActive = filtersGroups[item.foundFrom].isPortfolioActive && item.type.toLowerCase().includes('portfolio')
-                return isMaterialActive || isPortfolioActive
-            })
-        }
-    })*/
-
-
 function isItemActive(filterGroups, item) {
     let isMaterialActive = filterGroups[item.foundFrom].isMaterialActive && item.type.toLowerCase().includes('material')
     let isPortfolioActive = filterGroups[item.foundFrom].isPortfolioActive && item.type.toLowerCase().includes('portfolio')
