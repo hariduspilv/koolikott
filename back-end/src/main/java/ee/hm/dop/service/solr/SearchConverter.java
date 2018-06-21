@@ -47,9 +47,11 @@ public class SearchConverter {
     public static String getSort(SearchFilter searchFilter) {
         String sort = searchFilter.getSort();
         SearchFilter.SortDirection sortDirection = searchFilter.getSortDirection();
-        if (sort == null || sortDirection == null) return "type desc";
+        if (sort == null || sortDirection == null) return null;
         String solrSort = String.join(" ", sort, sortDirection.getValue());
-        if (!sort.equals("type")) solrSort = "type desc, " + solrSort;
+        if (sort.equals("default")) {
+            solrSort = sortDirection.getValue().equals("desc") ? "type desc, added desc" : "type desc, added asc";
+        }
         return solrSort;
     }
 

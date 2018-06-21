@@ -11,7 +11,7 @@ angular.module('koolikottApp')
         $scope.cache = false;
         $scope.url = "rest/search";
         $scope.params = {
-            'sort': 'added',
+            'sort': 'default',
             'sortDirection': 'desc',
             'limit': 20,
             'type': 'all'
