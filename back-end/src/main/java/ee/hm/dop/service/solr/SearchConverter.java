@@ -45,10 +45,12 @@ public class SearchConverter {
     }
 
     public static String getSort(SearchFilter searchFilter) {
-        if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
-            return String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection().getValue());
-        }
-        return null;
+        String sort = searchFilter.getSort();
+        SearchFilter.SortDirection sortDirection = searchFilter.getSortDirection();
+        if (sort == null || sortDirection == null) return "type desc";
+        String solrSort = String.join(" ", sort, sortDirection.getValue());
+        if (!sort.equals("type")) solrSort = "type desc, " + solrSort;
+        return solrSort;
     }
 
     /**

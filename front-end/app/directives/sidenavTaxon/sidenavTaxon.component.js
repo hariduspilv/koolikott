@@ -58,9 +58,7 @@ class controller extends Controller {
     }
     toggleChildren(id) {
         if (this.$scope.materialCount === 0) return
-
         if (this.$scope.opened) return this.$scope.opened = false
-
         window.scrollTo(0,0)
         this.searchService.setTaxon([id])
         this.searchService.getQuery() ? this.searchService.setIsGrouped(true) : this.searchService.setIsGrouped(false)

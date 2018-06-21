@@ -235,9 +235,7 @@ public class SearchFilter {
 
         public static SortDirection getByValue(String value) {
             for (SortDirection sortDirection : SortDirection.values()) {
-                if (sortDirection.getValue().equalsIgnoreCase(value)) {
-                    return sortDirection;
-                }
+                if (sortDirection.getValue().equalsIgnoreCase(value)) return sortDirection;
             }
             return null;
         }

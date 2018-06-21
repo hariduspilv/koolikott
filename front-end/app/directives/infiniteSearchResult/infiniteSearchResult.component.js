@@ -213,25 +213,31 @@ class controller extends Controller {
                 this.totalPhraseResults[name] = content.totalResults
             }
             if (content.hasOwnProperty('items')) {
-                if (groupType === 'material') {
-                    if (searchType === 'exact')
-                        this.$scope.filterGroupsExact[name].countMaterial = content.totalResults
-                    else this.$scope.filterGroups[name].countMaterial = content.totalResults
-                }
-                if (groupType === 'portfolio') {
-                    if (searchType === 'exact')
-                        this.$scope.filterGroupsExact[name].countPortfolio = content.totalResults
-                    this.$scope.filterGroups[name].countPortfolio = content.totalResults
-                }
-                content.items.forEach((item) => {
-                    item['foundFrom'] = name
-                    if (searchType) item['searchType'] = searchType
-                    allItems.push(item)
-                })
+                this.setGroupItemsCount(groupType, searchType, name, content)
+                this.updateItemAttributes(content, name, searchType, allItems)
             }
             else allItems = allItems.concat(this.extractItemsFromGroups(content, groupType, searchType))
         })
         return allItems
+    }
+    updateItemAttributes(content, name, searchType, allItems) {
+        content.items.forEach((item) => {
+            item['foundFrom'] = name
+            if (searchType) item['searchType'] = searchType
+            allItems.push(item)
+        })
+    }
+    setGroupItemsCount(groupType, searchType, name, content) {
+        if (groupType === 'material') {
+            if (searchType === 'exact')
+                this.$scope.filterGroupsExact[name].countMaterial = content.totalResults
+            else this.$scope.filterGroups[name].countMaterial = content.totalResults
+        }
+        if (groupType === 'portfolio') {
+            if (searchType === 'exact')
+                this.$scope.filterGroupsExact[name].countPortfolio = content.totalResults
+            this.$scope.filterGroups[name].countPortfolio = content.totalResults
+        }
     }
     searchFail() {
         this.$scope.searching = false
