@@ -25,20 +25,20 @@
     <section data-layout="row" data-layout-xs="column" layout-wrap>
       <div data-ng-repeat="(groupId, groupValue) in filterGroups">
         <span data-translate="{{groupValue.name}}"></span>
-        <md-button id="{{groupId}}-material-button"
-                   class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectMaterialGroup(groupId)"
-                   data-ng-class="{ 'active': groupValue.isMaterialActive }">
-          <md-icon data-ng-if="groupId != 'all'" class="material-icons sidenav__icon">book</md-icon>
-          {{groupValue.countMaterial}}
-        </md-button>
         <md-button id="{{groupId}}-portfolio-button"
                    data-ng-if="groupId != 'all'"
                    class="button-grouping-filter"
                    data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
                    data-ng-class="{ 'active': groupValue.isPortfolioActive }">
-          <md-icon class="material-icons sidenav__icon">description</md-icon>
+          <md-icon class="material-icons sidenav__icon">book</md-icon>
           {{groupValue.countPortfolio}}
+        </md-button>
+        <md-button id="{{groupId}}-material-button"
+                   class="button-grouping-filter"
+                   data-ng-click="$ctrl.selectMaterialGroup(groupId)"
+                   data-ng-class="{ 'active': groupValue.isMaterialActive }">
+          <md-icon data-ng-if="groupId != 'all'" class="material-icons sidenav__icon">description</md-icon>
+          {{groupValue.countMaterial}}
         </md-button>
       </div>
     </section>
@@ -52,20 +52,20 @@
     <section data-layout="row" data-layout-xs="column" layout-wrap>
       <div data-ng-repeat="(groupId, groupValue) in filterGroupsExact">
         <span data-translate="{{groupValue.name}}"></span>
-        <md-button id="{{groupId}}-exact-material-button"
-                   class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
-                   data-ng-class="{ 'active': groupValue.isMaterialActive}">
-          <md-icon data-ng-if="groupId != 'all'" class="material-icons sidenav__icon">book</md-icon>
-          {{groupValue.countMaterial}}
-        </md-button>
         <md-button id="{{groupId}}-exact-portfolio-button"
                    data-ng-if="groupId != 'all'"
                    class="button-grouping-filter"
                    data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
                    data-ng-class="{ 'active': groupValue.isPortfolioActive}">
-          <md-icon class="material-icons sidenav__icon">description</md-icon>
+          <md-icon class="material-icons sidenav__icon">book</md-icon>
           {{groupValue.countPortfolio}}
+        </md-button>
+        <md-button id="{{groupId}}-exact-material-button"
+                   class="button-grouping-filter"
+                   data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
+                   data-ng-class="{ 'active': groupValue.isMaterialActive}">
+          <md-icon data-ng-if="groupId != 'all'" class="material-icons sidenav__icon">description</md-icon>
+          {{groupValue.countMaterial}}
         </md-button>
       </div>
     </section>

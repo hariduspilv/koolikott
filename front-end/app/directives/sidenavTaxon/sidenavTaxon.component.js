@@ -61,7 +61,11 @@ class controller extends Controller {
         if (this.$scope.opened) return this.$scope.opened = false
         window.scrollTo(0,0)
         this.searchService.setTaxon([id])
-        this.searchService.getQuery() ? this.searchService.setIsGrouped(true) : this.searchService.setIsGrouped(false)
+        if (!this.searchService.getQuery()) {
+            this.searchService.setSort('default')
+            this.searchService.setSortDirection('desc')
+            this.searchService.setIsGrouped(false)
+        } else this.searchService.setIsGrouped(true)
         this.$location.url(this.searchService.getURL())
         this.$scope.opened = true
     }
