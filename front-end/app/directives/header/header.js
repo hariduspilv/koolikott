@@ -282,6 +282,11 @@ class controller extends Controller {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
+        this.handleSorting()
+        this.searchService.setIsGrouped(!!this.$scope.searchFields.searchQuery)
+        this.$location.url(this.searchService.getURL())
+    }
+    handleSorting() {
         if (!this.$scope.searchFields.searchQuery) {
             this.searchService.setSort('default')
             this.searchService.setSortDirection('desc')
@@ -289,8 +294,6 @@ class controller extends Controller {
             this.searchService.setSort('added')
             this.searchService.setSortDirection('desc')
         }
-        this.searchService.setIsGrouped(!!this.$scope.searchFields.searchQuery)
-        this.$location.url(this.searchService.getURL())
     }
     closeDetailedSearch() {
         this.$timeout(() => {

@@ -32,7 +32,7 @@ public class SearchService {
     public static final String EMPTY = "";
 
     private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
-    private static final int GROUP_NAME = 1;
+    private static final int GROUP_FOUND_FROM = 1;
     private static final int QUERY_FIRST_LETTER = 2;
     private static final int GROUP_TYPE = 3;
 
@@ -100,11 +100,13 @@ public class SearchService {
         for (Map.Entry<String, Response> group : groups.entrySet()) {
             Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
             if (!groupKeyMatcher.matches()) continue;
-            SearchResult groupResult = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
-            boolean isExactResult = groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"");
-            if (isExactResult) addToResults(exactResultGroups, groupResult, groupKeyMatcher);
-            else addToResults(similarResultGroups, groupResult, groupKeyMatcher);
-            if (searchResult.getStart() == -1) searchResult.setStart(groupResult.getStart());
+            SearchResult singleGroup = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
+
+            if (groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
+                addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
+            } else addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
+
+            if (searchResult.getStart() == -1) searchResult.setStart(singleGroup.getStart());
         }
         addResultsTogether(searchResult, exactResultGroups, similarResultGroups);
         return searchResult;
@@ -129,12 +131,13 @@ public class SearchService {
         return groups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
     }
 
-    private void addToResults(Map<String, SearchResult> resultGroups, SearchResult groupResult, Matcher groupKeyMatcher) {
+    private void addToResults(Map<String, SearchResult> resultGroups, SearchResult singleGroup, Matcher groupKeyMatcher) {
         String groupType = groupKeyMatcher.group(GROUP_TYPE);
         if (!resultGroups.containsKey(groupType)) resultGroups.put(groupType, new SearchResult(new HashMap<>()));
-        long resultsInGroup = groupResult.getTotalResults();
+        long resultsInGroup = singleGroup.getTotalResults();
         long resultsInType = resultGroups.get(groupType).getTotalResults();
-        resultGroups.get(groupType).getGroups().put(groupKeyMatcher.group(GROUP_NAME), groupResult);
+
+        resultGroups.get(groupType).getGroups().put(groupKeyMatcher.group(GROUP_FOUND_FROM), singleGroup);
         resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
     }
 
