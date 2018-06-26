@@ -1,3 +1,5 @@
+'use strict'
+
 function isItemActive(filterGroups, item) {
     let isMaterialActive = filterGroups[item.foundFrom].isMaterialActive && item.type.toLowerCase().includes('material')
     let isPortfolioActive = filterGroups[item.foundFrom].isPortfolioActive && item.type.toLowerCase().includes('portfolio')

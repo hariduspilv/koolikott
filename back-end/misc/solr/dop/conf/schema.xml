@@ -135,7 +135,7 @@
     <field name="recommendation_timestamp" type="date" indexed="true" stored="false" multiValued="false"/>
     <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
     <field name="creator" type="string" indexed="true" stored="false" multiValued="false"/>
-    <field name="visibility" type="string" indexed="true" stored="false" multiValued="false"/>
+    <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="false"/>
     <field name="favored_by_user" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
 

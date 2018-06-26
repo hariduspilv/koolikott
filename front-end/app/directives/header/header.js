@@ -283,7 +283,7 @@ class controller extends Controller {
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
         this.handleSorting()
-        this.searchService.setIsGrouped(!!this.$scope.searchFields.searchQuery)
+        this.searchService.setIsGrouped(Boolean(this.$scope.searchFields.searchQuery))
         this.$location.url(this.searchService.getURL())
     }
     handleSorting() {
