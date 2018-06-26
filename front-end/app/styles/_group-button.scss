@@ -1,10 +1,12 @@
 .button-grouping-filter {
-  padding: 0 12px;
-  height: 28px;
+  margin-left: 2px;
+  margin-right: 4px;
   line-height: 28px;
   border-radius: 16px;
   color: $color-selected-menu;
   background: $selected-gray;
+  min-height: 34px;
+  min-width: 65px;
 }
 
 &.active {
@@ -14,4 +16,8 @@
 
 .button-grouping-filter.active:hover {
   background: $color-selected-menu;
+}
+
+.group_btn__icon {
+  color: $gray-600-light;
 }
