@@ -41,7 +41,7 @@ public class LearningObjectResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId,  Tag newTag) {
+    public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
         return tagService.addSystemTag(learningObjectId, newTag, getLoggedInUser());
     }
 

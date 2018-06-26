@@ -30,7 +30,11 @@ public class SearchService {
     public static final String AND = " AND ";
     public static final String OR = " OR ";
     public static final String EMPTY = "";
+
     private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
+    private static final int GROUP_NAME = 1;
+    private static final int QUERY_FIRST_LETTER = 2;
+    private static final int GROUP_TYPE = 3;
 
     @Inject
     private SolrEngineService solrEngineService;
@@ -40,6 +44,10 @@ public class SearchService {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private LearningObjectDao learningObjectDao;
+
+    private static boolean isPhrase(String query) {
+        return query.split("\\s+").length > 1;
+    }
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
@@ -53,7 +61,7 @@ public class SearchService {
         return handleResult(limit, searchFilter, searchResponse);
     }
 
-    public SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
+    private SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SearchConverter.getSort(searchFilter);
 
@@ -64,18 +72,21 @@ public class SearchService {
         searchRequest.setSort(sort);
         searchRequest.setFirstItem(firstItem);
         searchRequest.setItemLimit(limit);
-        if (searchFilter.isGrouped()) {
-            if (SearchConverter.isPhrase(query)) searchRequest.setGrouping(SearchGrouping.GROUP_PHRASE);
-            else searchRequest.setGrouping(SearchGrouping.GROUP_SIMILAR);
-        } else searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
+        searchRequest.setGrouping(pickGrouping(query, searchFilter));
 
         return searchRequest;
     }
 
+    private SearchGrouping pickGrouping(String query, SearchFilter searchFilter) {
+        if (!searchFilter.isGrouped()) return SearchGrouping.GROUP_NONE;
+        if (isPhrase(query)) return SearchGrouping.GROUP_PHRASE;
+        else return SearchGrouping.GROUP_SIMILAR;
+    }
+
     private SearchResult handleResult(Long limit, SearchFilter searchFilter, SearchResponse searchResponse) {
         Map<String, Response> groups = searchResponse.getGrouped();
-        Response response = searchResponse.getResponse();
         if (groups != null) return getGroupedSearchResult(limit, searchFilter, groups);
+        Response response = searchResponse.getResponse();
         if (response != null) return getSearchResult(limit, searchFilter, response);
         return new SearchResult();
     }
@@ -85,39 +96,45 @@ public class SearchService {
         searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
         Map<String, SearchResult> similarResultGroups = new HashMap<>();
-        Pattern matchPattern = Pattern.compile(GROUP_MATCH_PATTERN);
+        Pattern groupKeyPattern = Pattern.compile(GROUP_MATCH_PATTERN);
         for (Map.Entry<String, Response> group : groups.entrySet()) {
-            Matcher matcher = matchPattern.matcher(group.getKey());
-            if (!matcher.matches()) continue;
-            boolean isExactResult = matcher.group(2).startsWith("\"");
-            String groupName = matcher.group(1);
-            String groupType = matcher.group(3);
+            Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
+            if (!groupKeyMatcher.matches()) continue;
             SearchResult groupResult = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
-            if (isExactResult) addToResults(exactResultGroups, groupName, groupType, groupResult);
-            else addToResults(similarResultGroups, groupName, groupType, groupResult);
+            boolean isExactResult = groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"");
+            if (isExactResult) addToResults(exactResultGroups, groupResult, groupKeyMatcher);
+            else addToResults(similarResultGroups, groupResult, groupKeyMatcher);
             if (searchResult.getStart() == -1) searchResult.setStart(groupResult.getStart());
         }
-        if (exactResultGroups.isEmpty()) {
-            searchResult.setGroups(similarResultGroups);
-            searchResult.setTotalResults(getGroupsItemSum(similarResultGroups));
-        } else {
-            searchResult.getGroups().put(SIMILAR_RESULT, new SearchResult(similarResultGroups, getGroupsItemSum(similarResultGroups)));
-            searchResult.getGroups().put(EXACT_RESULT, new SearchResult(exactResultGroups, getGroupsItemSum(exactResultGroups)));
-            searchResult.setTotalResults(getGroupsItemSum(similarResultGroups) + getGroupsItemSum(exactResultGroups));
-        }
+        addResultsTogether(searchResult, exactResultGroups, similarResultGroups);
         return searchResult;
     }
 
-    private long getGroupsItemSum(Map<String, SearchResult> resultGroups) {
-        return resultGroups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
+    private void addResultsTogether(SearchResult searchResult,
+                                    Map<String, SearchResult> exactResultGroups,
+                                    Map<String, SearchResult> similarResultGroups) {
+        long totalSimilarResults = sumTotalResults(similarResultGroups);
+        if (exactResultGroups.isEmpty()) {
+            searchResult.setGroups(similarResultGroups);
+            searchResult.setTotalResults(totalSimilarResults);
+        } else {
+            long totalExactResults = sumTotalResults(exactResultGroups);
+            searchResult.getGroups().put(SIMILAR_RESULT, new SearchResult(similarResultGroups, totalSimilarResults));
+            searchResult.getGroups().put(EXACT_RESULT, new SearchResult(exactResultGroups, totalExactResults));
+            searchResult.setTotalResults(totalSimilarResults + totalExactResults);
+        }
     }
 
-    private void addToResults(Map<String, SearchResult> resultGroups, String groupName,
-                              String groupType, SearchResult groupResult) {
+    private long sumTotalResults(Map<String, SearchResult> groups) {
+        return groups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
+    }
+
+    private void addToResults(Map<String, SearchResult> resultGroups, SearchResult groupResult, Matcher groupKeyMatcher) {
+        String groupType = groupKeyMatcher.group(GROUP_TYPE);
         if (!resultGroups.containsKey(groupType)) resultGroups.put(groupType, new SearchResult(new HashMap<>()));
         long resultsInGroup = groupResult.getTotalResults();
         long resultsInType = resultGroups.get(groupType).getTotalResults();
-        resultGroups.get(groupType).getGroups().put(groupName, groupResult);
+        resultGroups.get(groupType).getGroups().put(groupKeyMatcher.group(GROUP_NAME), groupResult);
         resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
     }
 
@@ -135,32 +152,30 @@ public class SearchService {
     }
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
-        List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<Searchable> unsortedSearchable = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(learningObjectIds)) {
-            reducedLearningObjectDao.findAllById(learningObjectIds).forEach(searchable -> {
-                if (loggedInUser != null) {
-                    UserFavorite userFavorite = userFavoriteDao.
-                            findFavoriteByUserAndLearningObject(searchable.getId(), loggedInUser);
-                    searchable.setFavorite(userFavorite != null);
-                }
-                unsortedSearchable.add(searchable);
-            });
-        }
+        List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(learningObjectIds)) return unsortedSearchable;
+        reducedLearningObjectDao.findAllById(learningObjectIds).forEach(searchable -> {
+            checkIfFavorite(loggedInUser, searchable);
+            unsortedSearchable.add(searchable);
+        });
         return unsortedSearchable;
     }
 
+    private void checkIfFavorite(User user, ReducedLearningObject searchable) {
+        if (user == null) return;
+        UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), user);
+        searchable.setFavorite(userFavorite != null);
+    }
 
-    private List<Searchable> sortSearchable(List<Document> indexList, List<Searchable> unsortedSearchable) {
-        Map<Long, Searchable> idToSearchable = new HashMap<>();
+    private List<Searchable> sortSearchable(List<Document> allDocuments, List<Searchable> unsortedSearchable) {
+        Map<Long, Searchable> idToSearchable = unsortedSearchable.stream()
+                .collect(Collectors.toMap(Searchable::getId, searchable -> searchable));
 
-        for (Searchable searchable : unsortedSearchable)
-            idToSearchable.put(searchable.getId(), searchable);
-
-        return indexList.stream()
+        List<Searchable> newList = allDocuments.stream()
                 .filter(document -> idToSearchable.containsKey(document.getId()))
                 .map(document -> idToSearchable.get(document.getId()))
                 .collect(Collectors.toList());
+        return newList;
     }
-
 }

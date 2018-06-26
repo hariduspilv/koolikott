@@ -31,7 +31,13 @@
         </entity>
 
         <entity name="LearningObject" pk="id"
-                query="select id, added, views, creator, visibility, licenseType from LearningObject
+                query="select id, added, views, creator, visibility, licenseType,
+                CASE
+                    WHEN visibility = 'PUBLIC' THEN '1_NOT_LISTED'
+                    WHEN visibility = 'NOT_LISTED' THEN '2_PRIVATE'
+                    ELSE '3_PUBLIC'
+                END as visibility
+                from LearningObject
                 WHERE deleted = false"
                 deltaImportQuery="select id, added, views, creator, visibility, licenseType from LearningObject
                 where id = '${dih.delta.id}'"

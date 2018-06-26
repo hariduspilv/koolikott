@@ -40,9 +40,6 @@ public class SearchConverter {
         return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
     }
 
-    public static boolean isPhrase(String query) {
-        return query.split("\\s+").length > 1;
-    }
 
     public static String getSort(SearchFilter searchFilter) {
         String sort = searchFilter.getSort();
@@ -51,6 +48,7 @@ public class SearchConverter {
         String solrSort = String.join(" ", sort, sortDirection.getValue());
         if (sort.equals("default")) {
             solrSort = sortDirection.getValue().equals("desc") ? "type desc, added desc" : "type desc, added asc";
+            if (searchFilter.getRequestingUser() != null) solrSort += ", visibility asc";
         }
         return solrSort;
     }
@@ -162,7 +160,7 @@ public class SearchConverter {
                 if (targetGroup != null) filters.add(format("target_group:\"%s\"", targetGroup.getId()));
             }
             if (filters.size() == 1) return filters.get(0);
-            return "(" + StringUtils.join(filters, SearchService.OR) + ")";
+            return filters.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
         return SearchService.EMPTY;
     }
@@ -229,14 +227,9 @@ public class SearchConverter {
             for (CrossCurricularTheme crossCurricularTheme : searchFilter.getCrossCurricularThemes()) {
                 themes.add(format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase()));
             }
-
-            if (themes.size() == 1) {
-                return themes.get(0);
-            }
-
-            return "(" + StringUtils.join(themes, SearchService.OR) + ")";
+            if (themes.size() == 1) return themes.get(0);
+            return themes.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-
         return SearchService.EMPTY;
     }
 
@@ -248,13 +241,9 @@ public class SearchConverter {
                 competences.add(format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase()));
             }
 
-            if (competences.size() == 1) {
-                return competences.get(0);
-            }
-
-            return "(" + StringUtils.join(competences, SearchService.OR) + ")";
+            if (competences.size() == 1) return competences.get(0);
+            return competences.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-
         return SearchService.EMPTY;
     }
 
@@ -318,11 +307,12 @@ public class SearchConverter {
                 return StringUtils.join(taxons, SearchService.AND);
             }
 
-            joinedTaxons.add("(" + StringUtils.join(taxons, SearchService.AND) + ")");
+            joinedTaxons.add(taxons.stream().collect(Collectors.joining(SearchService.AND, "(", ")")));
             taxons.clear();
         }
 
-        return joinedTaxons.isEmpty() ? SearchService.EMPTY : "(" + StringUtils.join(joinedTaxons, SearchService.OR) + ")";
+        return joinedTaxons.isEmpty() ? SearchService.EMPTY
+                : joinedTaxons.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
     }
 
     private static boolean isExactSearch(String tokenizedQueryString) {

@@ -1,7 +1,6 @@
 package ee.hm.dop.model;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,14 +21,6 @@ public class SearchResult {
         this.items = items;
         this.totalResults = totalResults;
         this.start = start;
-    }
-
-    public SearchResult(String... groupNames) {
-        groups = new HashMap<>();
-        for (String groupName : groupNames) {
-            SearchResult newGroup = new SearchResult();
-            groups.put(groupName, newGroup);
-        }
     }
 
     public SearchResult(Map<String, SearchResult> groups) {
