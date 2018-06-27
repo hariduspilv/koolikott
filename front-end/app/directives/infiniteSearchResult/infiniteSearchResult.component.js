@@ -256,6 +256,7 @@ class controller extends Controller {
     }
     selectMaterialGroup(groupId, isExact) {
         let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
+        if (searchGroupType[groupId].countMaterial === 0) return
         const isAllActive = searchGroupType['all'].isMaterialActive
         this.disableAllOppositeGroups(isExact)
         if (groupId === 'all' && !isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
@@ -264,6 +265,7 @@ class controller extends Controller {
     }
     selectPortfolioGroup(groupId, isExact) {
         let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
+        if (searchGroupType[groupId].countPortfolio === 0) return
         const isAllActive = searchGroupType['all'].isMaterialActive
         this.disableAllOppositeGroups(isExact)
         if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
