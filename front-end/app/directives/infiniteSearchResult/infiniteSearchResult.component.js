@@ -28,6 +28,8 @@ class controller extends Controller {
         this.createMultipleSortOptions(
             ['ADDED_DATE_DESC', 'added', 'desc'],
             ['ADDED_DATE_ASC', 'added', 'asc'],
+            ['PORTFOLIOS_FIRST', 'type', 'portfolio'],
+            ['MATERIALS_FIRST', 'type', 'material'],
         )
         this.createMultipleFilterGroups(
             ['GROUPS_TITLES', 'title'],
@@ -154,6 +156,11 @@ class controller extends Controller {
                     .sort((a, b) => direction === 'asc' ?
                         this.sortService.orderCardsByDate(a, b) :
                         this.sortService.orderCardsByDate(b, a));
+            } else if (field === 'type'){
+                this.$scope.items = this.$scope.items
+                    .sort((a, b) => direction === 'portfolio' ?
+                        this.sortService.orderPortfoliosFirst(a, b) :
+                        this.sortService.orderMaterialsFirst(a, b));
             }
         }
     }

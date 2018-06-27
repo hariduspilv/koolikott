@@ -218,6 +218,52 @@ class controller extends Controller {
         const compareDates = this.compareDates(a.added, b.added);
         return compareDates !== 0 ? compareDates : a.id - b.id;
     }
+    orderPortfoliosFirst(a, b){
+        const aPort = this.isPortfolio(a);
+        const bPort = this.isPortfolio(b);
+        if (aPort && !bPort){
+            return -1;
+        }
+        if (!aPort && bPort){
+            return 1;
+        }
+        if (aPort && bPort){
+            return this.compareDates(b.added, a.added);
+        }
+        return this.compareMaterials(a, b);
+    }
+    orderMaterialsFirst(a, b){
+        const aMat = this.isMaterial(a);
+        const bMat = this.isMaterial(b);
+        if (aMat && !bMat){
+            return -1;
+        }
+        if (!aMat && bMat){
+            return 1;
+        }
+        if (!aMat && !bMat){
+            return this.compareDates(b.added, a.added);
+        }
+        return this.compareMaterials(a, b);
+    }
+
+    compareMaterials(a, b){
+        const aResources = a.resourceTypes;
+        const bResources = b.resourceTypes;
+        if (aResources.length && !bResources.length){
+            return -1;
+        }
+        if (!aResources.length && bResources.length){
+            return 1;
+        }
+        if (!aResources.length && !bResources.length){
+            return this.compareDates(b.added, a.added);
+        }
+        const bResource = bResources.sort((a, b) => this.compareStrings(a.name, b.name))[0];
+        const aResource = aResources.sort((a, b) => this.compareStrings(a.name, b.name))[0];
+        const result = this.compareStrings(aResource.name, bResource.name);
+        return result !== 0 ? result : this.orderCardsByDate(b, a);
+    }
 }
 controller.$inject = [
     '$translate',
