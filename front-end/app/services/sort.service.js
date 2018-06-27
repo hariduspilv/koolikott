@@ -214,6 +214,10 @@ class controller extends Controller {
     byValidFrom(a, b) {
         return this.compareDates(a.validFrom, b.validFrom)
     }
+    orderCardsByDate(a, b){
+        const compareDates = this.compareDates(a.added, b.added);
+        return compareDates !== 0 ? compareDates : a.id - b.id;
+    }
 }
 controller.$inject = [
     '$translate',

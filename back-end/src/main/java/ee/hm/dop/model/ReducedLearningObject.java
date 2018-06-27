@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
+import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -37,6 +41,12 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
+
+    @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    private DateTime added;
 
     @ManyToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
     @Fetch(FetchMode.SELECT)
@@ -168,5 +178,13 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
+    }
+
+    public DateTime getAdded() {
+        return added;
+    }
+
+    public void setAdded(DateTime added) {
+        this.added = added;
     }
 }

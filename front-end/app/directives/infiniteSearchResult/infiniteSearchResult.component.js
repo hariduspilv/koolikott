@@ -146,7 +146,16 @@ class controller extends Controller {
         this.params.sort = field
         this.params.sortDirection = direction
         this.$scope.sorting = true
-        this.search(true)
+        if (!this.params.isGrouped) {
+            this.search(true)
+        } else {
+            if (field === 'added'){
+                this.$scope.items = this.$scope.items
+                    .sort((a, b) => direction === 'asc' ?
+                        this.sortService.orderCardsByDate(a, b) :
+                        this.sortService.orderCardsByDate(b, a));
+            }
+        }
     }
     allResultsLoaded() {
         return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
@@ -302,6 +311,7 @@ controller.$inject = [
     '$translate',
     'serverCallService',
     'searchService',
+    'sortService',
 ]
 component('dopInfiniteSearchResult', {
     bindings: {
