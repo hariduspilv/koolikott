@@ -322,10 +322,10 @@ class controller extends Controller {
         if (this.search.isCurriculumLiterature)
             searchURL += this.isCurriculumLiteratureURL + this.search.isCurriculumLiterature
 
-        if (typeof this.search.isFavorites === 'boolean')
+        if (typeof this.search.isFavorites === 'boolean' && this.search.isFavorites)
             searchURL += this.isFavoritesURL + this.search.isFavorites
 
-        if (typeof this.search.isRecommended === 'boolean')
+        if (typeof this.search.isRecommended === 'boolean' && this.search.isRecommended)
             searchURL += this.isRecommendedURL + this.search.isRecommended
 
         if (this.search.sort && this.search.sortDirection)
