@@ -31,9 +31,9 @@ class controller extends Controller {
         )
         this.createMultipleFilterGroups(
             ['GROUPS_TITLES', 'title'],
+            ['GROUPS_DESCRIPTIONS', 'description'],
             ['GROUPS_TAGS', 'tag'],
             ['GROUPS_AUTHORS', 'author'],
-            ['GROUPS_DESCRIPTIONS', 'description'],
             ['GROUPS_PUBLISHERS', 'publisher'],
             ['GROUPS_ALL', 'all'],
         )

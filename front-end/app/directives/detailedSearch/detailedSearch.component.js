@@ -258,6 +258,7 @@ class controller extends Controller {
         this.searchService.setIssuedFrom(this.$scope.getEffectiveIssueDate() || null)
         this.searchService.setCrossCurricularTheme(this.$scope.detailedSearch.crossCurricularTheme || null)
         this.searchService.setKeyCompetence(this.$scope.detailedSearch.keyCompetence || null)
+        this.searchService.setIsGrouped(true)
 
         if (this.$scope.detailedSearch.taxon)
             this.searchService.setTaxon([this.$scope.detailedSearch.taxon.id])
