@@ -110,8 +110,10 @@ class controller extends Controller {
                     this.$scope.doInlineSuggestion = false
                     break
                 case 13: // enter
-                    if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase()))
-                        this.processSearchQuery(this.$scope.searchFields.searchQuery)
+                    if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase())) {
+                        if (Boolean(this.$scope.searchFields.searchQuery))
+                            this.processSearchQuery(this.$scope.searchFields.searchQuery)
+                    }
 
                     angular.element(document.querySelector('#header-search-input'))
                         .controller('mdAutocomplete')
