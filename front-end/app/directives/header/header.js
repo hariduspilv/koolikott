@@ -70,8 +70,7 @@ class controller extends Controller {
         this.$scope.closeMobileSearch = (emptySearch) => {
             this.$scope.mobileSearch.isVisible = false
 
-            if (emptySearch)
-                this.$scope.detailedSearch.accessor.clearSimpleSearch()
+            if (emptySearch) this.$scope.detailedSearch.accessor.clearSimpleSearch()
         }
 
         this.$scope.$on('detailedSearch:open', () => this.$scope.detailedSearch.isVisible = true)
@@ -80,17 +79,14 @@ class controller extends Controller {
         this.$scope.$on('mobileSearch:open', this.openMobileSearch)
 
         this.$scope.suggest.doSuggest = (query) => {
-            if (query == null)
-                return []
-
+            if (query == null) return []
             this.$scope.suggest.suggestions = this.suggestService.suggest(query, this.suggestService.getSuggestURLbase())
 
             if (this.$scope.doInlineSuggestion && this.$scope.suggest.suggestions)
                 this.$scope.suggest.suggestions.then(data => {
                     const firstSuggestion = data[0]
 
-                    if (!firstSuggestion)
-                        return this.clearInlineSuggestion()
+                    if (!firstSuggestion) return this.clearInlineSuggestion()
 
                     const searchTextLength = this.$scope.searchFields.searchQuery.length
 

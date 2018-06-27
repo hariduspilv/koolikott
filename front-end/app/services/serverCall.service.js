@@ -37,10 +37,10 @@ class controller extends Controller {
                 if (method === "HEAD") successCallback(response.headers);
                 else successCallback(response.data);
             }, (response)=> {
-                if (response.status === '419') {
+                if (response.status === 419) {
                     this.authenticatedUserService.removeAuthenticatedUser();
                     this.makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
-                } else if (response.status === '401' || response.status === '403') {
+                } else if (response.status === 401 || response.status === 403) {
                     this.$location.url('/');
                 } else if (errorCallback) {
                     errorCallback(response.data, response.status);
