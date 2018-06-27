@@ -112,11 +112,16 @@ public class SolrService implements SolrEngineService {
 
     private String getGroupingCommand(SearchRequest searchRequest) {
         String query = StringUtils.isBlank(searchRequest.getOriginalQuery()) ? "\"\"" : searchRequest.getOriginalQuery();
-        String groupSearchPathMaterial = getGroupsForQuery(query + TYPE_MATERIAL);
-        String groupSearchPathPortfolio = getGroupsForQuery(query + TYPE_PORTFOLIO);
+        String groupSearchPathMaterial;
+        String groupSearchPathPortfolio;
         if (searchRequest.getGrouping().isPhraseGrouping()) {
+            groupSearchPathMaterial = getGroupsForQuery("(" + query + ")" + TYPE_MATERIAL);
+            groupSearchPathPortfolio = getGroupsForQuery("(" + query + ")" + TYPE_PORTFOLIO);
             groupSearchPathMaterial += getGroupsForQuery("\"" + query + "\"" + TYPE_MATERIAL);
             groupSearchPathPortfolio += getGroupsForQuery("\"" + query + "\"" + TYPE_PORTFOLIO);
+        } else {
+            groupSearchPathMaterial = getGroupsForQuery(query + TYPE_MATERIAL);
+            groupSearchPathPortfolio = getGroupsForQuery(query + TYPE_PORTFOLIO);
         }
         return groupSearchPathMaterial + groupSearchPathPortfolio;
     }

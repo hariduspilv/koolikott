@@ -80,17 +80,15 @@ class controller extends Controller {
     setTitle() {
         const t = (key) => this.$translate.instant(key)
         const translationsKeys = {
-            noResults: 'SEARCH_RESULT_NO_RESULT',
-            singleResultPart1: 'SEARCH_RESULT_1_RESULT_PART_1',
-            singleResultPart2: 'SEARCH_RESULT_1_RESULT_PART_2',
-            multipleResultsPart1: 'SEARCH_RESULT_PART_1',
-            multipleResultsPart2: 'SEARCH_RESULT_PART_2',
+            noResults: 'SEARCH_RESULT_NO_RESULT_WORD',
+            singleResult: 'SEARCH_RESULT_1_WORD',
+            multipleResults: 'SEARCH_RESULT_MULTIPLE_WORD',
         }
         this.$translate.onReady().then(() => this.$scope.title = this.buildTitle(
             t, this.title, this.totalResults, translationsKeys
         ))
     }
-    buildTitle(t, title, totalResults, translationsKeys) {
+/*    buildTitle(t, title, totalResults, translationsKeys) {
         const singleResult = `${t(translationsKeys.singleResultPart1)} <strong>${totalResults}</strong> ${t(translationsKeys.singleResultPart2)}`
         const multipleResults = `${t(translationsKeys.multipleResultsPart1)} <strong>${totalResults}</strong> ${t(translationsKeys.multipleResultsPart2)}`
         return title ? t(title)
@@ -99,15 +97,23 @@ class controller extends Controller {
                     : totalResults === 1 ? singleResult
                         : totalResults > 1 ? multipleResults
                             : ''
+    }*/
+    buildTitle(t, title, totalResults, translationsKeys) {
+        const singleResultTitle = t(translationsKeys.singleResult)
+        const multipleResultTitle = t(translationsKeys.multipleResults)
+        return title ? t(title)
+            : this.$scope.searching ? t('SEARCH_RESULTS')
+                : !totalResults ? t(translationsKeys.noResults)
+                    : totalResults === 1 ? singleResultTitle.replace('${query}', this.searchService.getQuery())
+                        : totalResults > 1 ? multipleResultTitle.replace('${count}', totalResults).replace('${query}', this.searchService.getQuery())
+                            : ''
     }
     setPhraseTitlesExact() {
         const t = (key) => this.$translate.instant(key)
         const translationsKeys = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_EXACT',
-            singleResultPart1: 'SEARCH_RESULT_1_RESULT_PART_1_EXACT',
-            singleResultPart2: 'SEARCH_RESULT_1_RESULT_PART_2_EXACT',
-            multipleResultsPart1: 'SEARCH_RESULT_PART_1_EXACT',
-            multipleResultsPart2: 'SEARCH_RESULT_PART_2_EXACT',
+            noResults: 'SEARCH_RESULT_NO_RESULT_EXACT_PHRASE',
+            singleResult: 'SEARCH_RESULT_1_RESULT_EXACT_PHRASE',
+            multipleResults: 'SEARCH_RESULT_MULTIPLE_RESULT_EXACT_PHRASE',
         }
         this.$translate.onReady().then(() =>
             this.$scope.exactTitle = this.buildTitle(
@@ -117,11 +123,9 @@ class controller extends Controller {
     setPhraseTitlesSimilar() {
         const t = (key) => this.$translate.instant(key)
         const translationsKeys = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_SIMILAR',
-            singleResultPart1: 'SEARCH_RESULT_1_RESULT_PART_1_SIMILAR',
-            singleResultPart2: 'SEARCH_RESULT_1_RESULT_PART_2_SIMILAR',
-            multipleResultsPart1: 'SEARCH_RESULT_PART_1_SIMILAR',
-            multipleResultsPart2: 'SEARCH_RESULT_PART_2_SIMILAR',
+            noResults: 'SEARCH_RESULT_NO_RESULT_SIMILAR_PHRASE',
+            singleResult: 'SEARCH_RESULT_1_RESULT_SIMILAR_PHRASE',
+            multipleResults: 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE',
         }
         this.$translate.onReady().then(() =>
             this.$scope.similarTitle = this.buildTitle(
@@ -296,7 +300,8 @@ controller.$inject = [
     '$element',
     '$timeout',
     '$translate',
-    'serverCallService'
+    'serverCallService',
+    'searchService',
 ]
 component('dopInfiniteSearchResult', {
     bindings: {
