@@ -1,3 +1,7 @@
+.button-grouping-filter[data-ng-disabled] {
+  background-color: $selected-gray;
+}
+
 .button-grouping-filter {
   margin-left: 2px;
   margin-right: 4px;

@@ -30,14 +30,18 @@
                    data-ng-if="groupId !== 'all'"
                    class="button-grouping-filter"
                    data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
-                   data-ng-class="{ 'active': groupValue.isPortfolioActive}">
+                   data-ng-class="{ 'active': groupValue.isPortfolioActive}"
+                   data-ng-disabled="{{groupValue.countPortfolio === 0}}">
+          <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
           <md-icon class="material-icons sidenav__icon group_btn__icon">book</md-icon>
           {{groupValue.countPortfolio}}
         </md-button>
         <md-button id="{{groupId}}-exact-material-button"
                    class="button-grouping-filter"
                    data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
-                   data-ng-class="{ 'active': groupValue.isMaterialActive}">
+                   data-ng-class="{ 'active': groupValue.isMaterialActive}"
+                   data-ng-disabled="{{groupValue.countMaterial === 0}}">
+          <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
           <md-icon data-ng-if="groupId !== 'all'" class="material-icons sidenav__icon group_btn__icon">description
           </md-icon>
           {{groupValue.countMaterial}}
@@ -57,14 +61,18 @@
                    data-ng-if="groupId !== 'all'"
                    class="button-grouping-filter"
                    data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
-                   data-ng-class="{ 'active': groupValue.isPortfolioActive }">
+                   data-ng-class="{ 'active': groupValue.isPortfolioActive }"
+                   data-ng-disabled="{{groupValue.countPortfolio === 0}}">
+          <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
           <md-icon class="material-icons sidenav__icon group_btn__icon">book</md-icon>
           {{groupValue.countPortfolio}}
         </md-button>
         <md-button id="{{groupId}}-material-button"
                    class="button-grouping-filter"
                    data-ng-click="$ctrl.selectMaterialGroup(groupId)"
-                   data-ng-class="{ 'active': groupValue.isMaterialActive }">
+                   data-ng-class="{ 'active': groupValue.isMaterialActive }"
+                   data-ng-disabled="{{groupValue.countMaterial === 0}}">
+          <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
           <md-icon data-ng-if="groupId !== 'all'" class="material-icons sidenav__icon group_btn__icon">description
           </md-icon>
           {{groupValue.countMaterial}}
