@@ -43,6 +43,14 @@ class controller extends Controller {
         this.search(true)
         this.$rootScope.$on('logout:success', this.search.bind(this))
     }
+    showPhraseGroupButtons() {
+        return this.$scope.showFilterGroups === 'phraseGrouping'
+            && this.$scope.filterGroupsExact['all'].countMaterial !== 0
+    }
+    showDefaultGroupButtons() {
+        return this.$scope.showFilterGroups !== 'noGrouping'
+            && this.$scope.filterGroups['all'].countMaterial !== 0
+    }
     createMultipleSortOptions(...options) {
         options.forEach((option) =>
             this.$scope.sortOptions.push(controller.createSortOption(option[0], option[1], option[2]))
@@ -90,22 +98,13 @@ class controller extends Controller {
             t, this.title, this.totalResults, translationsKeys
         ))
     }
-/*    buildTitle(t, title, totalResults, translationsKeys) {
-        const singleResult = `${t(translationsKeys.singleResultPart1)} <strong>${totalResults}</strong> ${t(translationsKeys.singleResultPart2)}`
-        const multipleResults = `${t(translationsKeys.multipleResultsPart1)} <strong>${totalResults}</strong> ${t(translationsKeys.multipleResultsPart2)}`
-        return title ? t(title)
-            : this.$scope.searching ? t('SEARCH_RESULTS')
-                : !totalResults ? t(translationsKeys.noResults)
-                    : totalResults === 1 ? singleResult
-                        : totalResults > 1 ? multipleResults
-                            : ''
-    }*/
     buildTitle(t, title, totalResults, translationsKeys) {
+        const noResult = t(translationsKeys.noResults)
         const singleResultTitle = t(translationsKeys.singleResult)
         const multipleResultTitle = t(translationsKeys.multipleResults)
         return title ? t(title)
             : this.$scope.searching ? t('SEARCH_RESULTS')
-                : !totalResults ? t(translationsKeys.noResults)
+                : !totalResults ? noResult.replace('${query}', this.searchService.getQuery())
                     : totalResults === 1 ? singleResultTitle.replace('${query}', this.searchService.getQuery())
                         : totalResults > 1 ? multipleResultTitle.replace('${count}', totalResults).replace('${query}', this.searchService.getQuery())
                             : ''
