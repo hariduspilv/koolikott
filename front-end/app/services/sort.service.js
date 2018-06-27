@@ -248,27 +248,17 @@ class controller extends Controller {
     }
 
     compareMaterials(a, b){
-        const aResources = a.resourceTypes;
-        const bResources = b.resourceTypes;
-        if (aResources.length && !bResources.length){
-            return -1;
-        }
-        if (!aResources.length && bResources.length){
-            return 1;
-        }
-        if (!aResources.length && !bResources.length){
-            return this.compareDates(b.added, a.added);
-        }
-        const bResource = bResources.sort((a, b) => this.compareStrings(a.name, b.name))[0];
-        const aResource = aResources.sort((a, b) => this.compareStrings(a.name, b.name))[0];
-        const result = this.compareStrings(aResource.name, bResource.name);
+        const aIcon = this.iconService.getMaterialIcon(a.resourceTypes);
+        const bIcon = this.iconService.getMaterialIcon(b.resourceTypes);
+        const result = this.compareStrings(aIcon, bIcon);
         return result !== 0 ? result : this.orderCardsByDate(b, a);
     }
 }
 controller.$inject = [
     '$translate',
     'translationService',
-    'taxonService'
+    'taxonService',
+    'iconService'
 ]
 service('sortService', controller)
 }
