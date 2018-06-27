@@ -187,9 +187,9 @@ class controller extends Controller {
             controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
         }
 
-        const showGroups = this.pickGroupView(data)
+        const groupsView = this.pickGroupView(data)
         this.totalResults = data.totalResults
-        if (showGroups !== 'phraseGrouping') this.$scope.filterGroups['all'].countMaterial = this.totalResults
+        if (groupsView !== 'phraseGrouping') this.$scope.filterGroups['all'].countMaterial = this.totalResults
 
         let foundItems = this.extractItemsFromGroups(data.groups)
         ;[].push.apply(this.$scope.items, foundItems)

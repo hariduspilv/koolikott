@@ -46,7 +46,7 @@ public class SearchService {
     private LearningObjectDao learningObjectDao;
 
     private static boolean isPhrase(String query) {
-        return query.split("\\s+").length > 1;
+        return query != null && query.split("\\s+").length > 1;
     }
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
@@ -58,7 +58,11 @@ public class SearchService {
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
             searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
 
-        return handleResult(limit, searchFilter, searchResponse);
+        Map<String, Response> groups = searchResponse.getGrouped();
+        if (groups != null) return getGroupedSearchResult(searchRequest, searchFilter, groups);
+        Response response = searchResponse.getResponse();
+        if (response != null) return getSearchResult(limit, searchFilter, response);
+        return new SearchResult();
     }
 
     private SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
@@ -67,12 +71,13 @@ public class SearchService {
 
         SearchRequest searchRequest = new SearchRequest();
         if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
-        searchRequest.setOriginalQuery(query);
         searchRequest.setSolrQuery(solrQuery);
         searchRequest.setSort(sort);
         searchRequest.setFirstItem(firstItem);
         searchRequest.setItemLimit(limit);
         searchRequest.setGrouping(pickGrouping(query, searchFilter));
+        query = isPhrase(query) ? query : "\"" + query + "\"";
+        searchRequest.setOriginalQuery(query);
 
         return searchRequest;
     }
@@ -83,15 +88,8 @@ public class SearchService {
         else return SearchGrouping.GROUP_SIMILAR;
     }
 
-    private SearchResult handleResult(Long limit, SearchFilter searchFilter, SearchResponse searchResponse) {
-        Map<String, Response> groups = searchResponse.getGrouped();
-        if (groups != null) return getGroupedSearchResult(limit, searchFilter, groups);
-        Response response = searchResponse.getResponse();
-        if (response != null) return getSearchResult(limit, searchFilter, response);
-        return new SearchResult();
-    }
-
-    private SearchResult getGroupedSearchResult(Long limit, SearchFilter searchFilter, Map<String, Response> groups) {
+    private SearchResult getGroupedSearchResult(SearchRequest searchRequest, SearchFilter searchFilter,
+                                                Map<String, Response> groups) {
         SearchResult searchResult = new SearchResult(new HashMap<>());
         searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
@@ -100,9 +98,10 @@ public class SearchService {
         for (Map.Entry<String, Response> group : groups.entrySet()) {
             Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
             if (!groupKeyMatcher.matches()) continue;
-            SearchResult singleGroup = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
+            SearchResult singleGroup = getSearchResult(searchRequest.getItemLimit(), searchFilter, group.getValue().getGroupResponse());
 
-            if (groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
+            if (searchRequest.getGrouping().isPhraseGrouping()
+                    && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
             } else addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
 
