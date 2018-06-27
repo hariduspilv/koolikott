@@ -21,7 +21,7 @@
 </div>
 <h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
 
-<div data-ng-if="!searching">
+<div data-ng-if="sorting || !searching">
   <div data-ng-if="showFilterGroups === 'phraseGrouping'" id="exact-grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
       <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroupsExact">

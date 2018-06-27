@@ -24,6 +24,7 @@ class controller extends Controller {
         this.$scope.filterGroups = {}
         this.$scope.filterGroupsExact = {}
         this.$scope.searching = false
+        this.$scope.sorting = false
         this.createMultipleSortOptions(
             ['ADDED_DATE_DESC', 'added', 'desc'],
             ['ADDED_DATE_ASC', 'added', 'asc'],
@@ -134,11 +135,13 @@ class controller extends Controller {
     resetSort() {
         this.params.sort = this.initialParams.sort
         this.params.sortDirection = this.initialParams.sortDirection
+        this.$scope.sorting = true
         this.search(true)
     }
     sort(field, direction) {
         this.params.sort = field
         this.params.sortDirection = direction
+        this.$scope.sorting = true
         this.search(true)
     }
     allResultsLoaded() {
@@ -169,6 +172,7 @@ class controller extends Controller {
         if (!data || !data.items) return this.searchFail()
         if (data.start === 0) this.$scope.items.splice(0, this.$scope.items.length)
         this.$scope.showFilterGroups = 'noGrouping'
+        this.$scope.sorting = false
 
         ;[].push.apply(this.$scope.items, data.items)
 
@@ -183,9 +187,12 @@ class controller extends Controller {
         if (!data || !data.groups) return this.searchFail()
         if (data.start === 0) {
             this.$scope.items.splice(0, this.$scope.items.length)
-            controller.disableAllGroupsForFilter(this.$scope.filterGroups)
-            controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
+            if (!this.$scope.sorting) {
+                controller.disableAllGroupsForFilter(this.$scope.filterGroups)
+                controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
+            }
         }
+        this.$scope.sorting = false
 
         const groupsView = this.pickGroupView(data)
         this.totalResults = data.totalResults
