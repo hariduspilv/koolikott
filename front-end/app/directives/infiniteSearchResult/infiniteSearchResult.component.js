@@ -90,7 +90,7 @@ class controller extends Controller {
     setTitle() {
         const t = (key) => this.$translate.instant(key)
         const translationsKeys = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_WORD',
+            noResults: 'NO_RESULTS_FOUND',
             singleResult: 'SEARCH_RESULT_1_WORD',
             multipleResults: 'SEARCH_RESULT_MULTIPLE_WORD',
         }

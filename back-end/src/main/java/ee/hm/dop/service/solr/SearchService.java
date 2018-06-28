@@ -116,11 +116,14 @@ public class SearchService {
     }
 
     private List<Long> getOrderIds(SearchRequest searchRequest) {
+        SearchGrouping oldGrouping = searchRequest.getGrouping();
         searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
-        return solrEngineService.search(searchRequest).getResponse().getDocuments()
+        List<Long> idOrder = solrEngineService.search(searchRequest).getResponse().getDocuments()
                 .stream()
                 .map(Document::getId)
                 .collect(Collectors.toList());
+        searchRequest.setGrouping(oldGrouping);
+        return idOrder;
     }
 
     private void addToResults(Map<String, SearchResult> resultGroups, SearchResult singleGroup, Matcher groupKeyMatcher) {
