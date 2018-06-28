@@ -218,11 +218,47 @@ class controller extends Controller {
         const compareDates = this.compareDates(a.added, b.added);
         return compareDates !== 0 ? compareDates : a.id - b.id;
     }
+    orderPortfoliosFirst(a, b){
+        const aPort = this.isPortfolio(a);
+        const bPort = this.isPortfolio(b);
+        if (aPort && !bPort){
+            return -1;
+        }
+        if (!aPort && bPort){
+            return 1;
+        }
+        if (aPort && bPort){
+            return this.compareDates(b.added, a.added);
+        }
+        return this.compareMaterials(a, b);
+    }
+    orderMaterialsFirst(a, b){
+        const aMat = this.isMaterial(a);
+        const bMat = this.isMaterial(b);
+        if (aMat && !bMat){
+            return -1;
+        }
+        if (!aMat && bMat){
+            return 1;
+        }
+        if (!aMat && !bMat){
+            return this.compareDates(b.added, a.added);
+        }
+        return this.compareMaterials(a, b);
+    }
+
+    compareMaterials(a, b){
+        const aIcon = this.iconService.getMaterialIcon(a.resourceTypes);
+        const bIcon = this.iconService.getMaterialIcon(b.resourceTypes);
+        const result = this.compareStrings(aIcon, bIcon);
+        return result !== 0 ? result : this.orderCardsByDate(b, a);
+    }
 }
 controller.$inject = [
     '$translate',
     'translationService',
-    'taxonService'
+    'taxonService',
+    'iconService'
 ]
 service('sortService', controller)
 }
