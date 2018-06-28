@@ -24,17 +24,17 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE', '<strong>${count} learning objects</strong> contain queries <strong>similar</strong> to "<strong>${query}</strong>"');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE', '<strong>${count} õppevaras</strong> leidub <strong>osalisi</strong> vasteid otsingule "<strong>${query}</strong>"');
 
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_NO_RESULT_WORD', 'Õppevaras ei leidu vasteid sõnale "<strong>${query}</strong>"');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_NO_RESULT_WORD', 'No learning objects contain the word "<strong>${query}</strong>"');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_NO_RESULT_WORD', 'Õppevaras ei leidu vasteid sõnale "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_NO_RESULT_WORD', 'Õppevaras ei leidu vasteid otsingule "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_NO_RESULT_WORD', 'No learning objects contain the query "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_NO_RESULT_WORD', 'Õppevaras ei leidu vasteid otsingule "<strong>${query}</strong>"');
 
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_1_WORD', '<strong>1 õppevaras</strong> leidub vaste sõnale "<strong>${query}</strong>"');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_1_WORD', '<strong>1 learning object</strong> contains the word "<strong>${query}</strong>"');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_1_WORD', '<strong>1 õppevaras</strong> leidub vaste sõnale "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_1_WORD', '<strong>1 õppevaras</strong> leidub vaste otsingule "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_1_WORD', '<strong>1 learning object</strong> contains the query "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_1_WORD', '<strong>1 õppevaras</strong> leidub vaste otsingule "<strong>${query}</strong>"');
 
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_MULTIPLE_WORD', '<strong>${count} õppevaras</strong> leidub vasteid sõnale "<strong>${query}</strong>"');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_MULTIPLE_WORD', '<strong>${count} learning objects</strong> contain the word "<strong>${query}</strong>"');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_MULTIPLE_WORD', '<strong>${count} õppevaras</strong> leidub vasteid sõnale "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'SEARCH_RESULT_MULTIPLE_WORD', '<strong>${count} õppevaras</strong> leidub vasteid otsingule "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'SEARCH_RESULT_MULTIPLE_WORD', '<strong>${count} learning objects</strong> contain the query "<strong>${query}</strong>"');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'SEARCH_RESULT_MULTIPLE_WORD', '<strong>${count} õppevaras</strong> leidub vasteid otsingule "<strong>${query}</strong>"');
 
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'HEADER_DEFAULT_SEARCH_PLACEHOLDER', 'Otsi pealkirja, kirjelduse, võtmesõna, autori, väljaandja järgi');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'HEADER_DEFAULT_SEARCH_PLACEHOLDER', 'Search by title, description, tag, author, publisher');

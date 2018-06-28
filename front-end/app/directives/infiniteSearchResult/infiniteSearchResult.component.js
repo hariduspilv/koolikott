@@ -43,13 +43,17 @@ class controller extends Controller {
         this.search(true)
         this.$rootScope.$on('logout:success', this.search.bind(this))
     }
-    showPhraseGroupButtons() {
-        return this.$scope.showFilterGroups === 'phraseGrouping'
-            && this.$scope.filterGroupsExact['all'].countMaterial !== 0
+    showExactGroupButtons() {
+        return this.$scope.showFilterGroups === 'phraseGrouping' && this.$scope.filterGroupsExact['all'].countMaterial
     }
     showDefaultGroupButtons() {
-        return this.$scope.showFilterGroups !== 'noGrouping'
-            && this.$scope.filterGroups['all'].countMaterial !== 0
+        if (this.$scope.showFilterGroups !== 'noGrouping')
+            return !this.isSingleResult() && this.$scope.filterGroups['all'].countMaterial
+        return false
+    }
+    isSingleResult() {
+        return this.$scope.filterGroups['all'].countMaterial === 1 &&
+            this.$scope.filterGroupsExact['all'].countMaterial === 1
     }
     createMultipleSortOptions(...options) {
         options.forEach((option) =>

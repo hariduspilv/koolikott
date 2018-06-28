@@ -22,7 +22,7 @@
 <h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
 
 <div data-ng-if="sorting || !searching">
-  <div data-ng-if="$ctrl.showPhraseGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
+  <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
       <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroupsExact">
         <span data-ng-style="(groupValue.isPortfolioActive || groupValue.isMaterialActive) && {'font-weight':'bold'}"
@@ -52,7 +52,8 @@
   </div>
 
   <h2 id="similar-search-result-title" class="md-headline"
-      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h2>
+      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle && !$ctrl.isSingleResult()"
+      data-ng-bind-html="similarTitle"></h2>
 
   <div data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
