@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import javax.persistence.EntityTransaction;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -207,8 +208,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void admin_can_accept_one_change() {
         Material material = getMaterial(MATERIAL_27);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
+        Response response = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_MATHEMATICS_DOMAIN.name));
+        Response response2 = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
         Material updatedMaterial = getMaterial(MATERIAL_27);
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 

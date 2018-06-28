@@ -724,7 +724,7 @@ INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (17, 1, CURR
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (18, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (19, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (20, 1, CURRENT_TIMESTAMP);
-INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (21, 1, CURRENT_TIMESTAMP);
+INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (21, 0, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (22, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (23, 1, CURRENT_TIMESTAMP);
 INSERT into FirstReview(learningObject, reviewed, createdAt) VALUES (24, 1, CURRENT_TIMESTAMP);

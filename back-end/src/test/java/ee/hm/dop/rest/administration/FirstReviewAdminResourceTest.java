@@ -31,11 +31,11 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         assertEquals("UnReviewed size, UnReviewed count", firstReviews.size(), count.longValueExact());
 
         AdminLearningObject learningObject = firstReviews.stream()
-                .filter(l -> l.getId().equals(MATERIAL_1))
+                .filter(l -> l.getId().equals(MATERIAL_21))
                 .findAny()
                 .orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
-        Response updateResponse = doPost(SET_REVIEWED, materialWithId(MATERIAL_1));
+        Response updateResponse = doPost(SET_REVIEWED, materialWithId(MATERIAL_21));
         assertEquals(Response.Status.OK.getStatusCode(), updateResponse.getStatus());
 
         List<AdminLearningObject> firstReviews2 = doGet(GET_UNREVIEWED, listTypeAdminLO());
@@ -83,14 +83,14 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void unreviewed_learningObject_is_unreviewed() throws Exception {
+    public void unreviewed_learningObject_is_unreviewed()  {
         login(USER_ADMIN);
         Material material = getMaterial(MATERIAL_2);
         assertEquals("Is reviewed", 1, material.getUnReviewed());
     }
 
     @Test
-    public void unreviewed_learningObject_after_being_set_reviewed_is_reviewed() throws Exception {
+    public void unreviewed_learningObject_after_being_set_reviewed_is_reviewed()  {
         login(USER_ADMIN);
         Material material = getMaterial(MATERIAL_15);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
@@ -103,7 +103,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void unAuthorized_user_can_not_view() throws Exception {
+    public void unAuthorized_user_can_not_view()  {
         login(USER_MATI);
         List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
         assertNull("UnReviewed list", firstReviews);
