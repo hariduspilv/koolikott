@@ -1,3 +1,9 @@
+## e-Koolikott [1.19.1](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 31.05.2018)
+
+### Muutunud
+* Kogumiku kopeerimisel ei tule originaalkogumikust peatükid kaasa [#324](https://github.com/hariduspilv/koolikott/issues/324)
+
+
 ## e-Koolikott [1.19.0](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 25.05.2018)
 
 ### Muutunud
@@ -6,13 +12,13 @@
 * GDPR - Admin kasutaja funktsionaalsuse loomine kasutustingimuste versioonide halduseks [#323](https://github.com/hariduspilv/koolikott/issues/323)
 
 
-## e-Koolikott [1.18.1](https://github.com/hariduspilv/koolikott/milestone/17)
+## e-Koolikott [1.18.1](https://github.com/hariduspilv/koolikott/milestone/17) (Toodangusse paigaldatud 17.05.2018)
 
 ### Muutunud
 * Kirjeldusest vorminduse kadumine [#318](https://github.com/hariduspilv/koolikott/issues/318)
 * eKooli autentimise muudatus [#320](https://github.com/hariduspilv/koolikott/issues/320)
 
-## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17)
+## e-Koolikott [1.18.0](https://github.com/hariduspilv/koolikott/milestone/17) (Toodangusse paigaldatud 17.05.2018)
 
 ### Muutunud
 * Materjali detailvaate muudatused -> Detailvaate dünaamiliste lingide loomine [#312](https://github.com/hariduspilv/koolikott/issues/312)
@@ -23,7 +29,7 @@
 * Kogumiku detailvaate muudatused -> Võtmesõnade kustutamine olemasolevalt kogumikult muutmisvaates (nn edit-mode's) [#317](https://github.com/hariduspilv/koolikott/issues/317)
 
 
-## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/16)
+## e-Koolikott [1.17.0](https://github.com/hariduspilv/koolikott/milestone/16) (Toodangusse paigaldatud 17.05.2018)
 
 ### Muutunud
 * OAI-PMH protokolli täiendused tulenevalt vara.e-koolikott.ee rakenduse liidestamisega [#309](https://github.com/hariduspilv/koolikott/issues/309)
