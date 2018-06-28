@@ -426,7 +426,7 @@ public class SearchServiceTest extends SearchServiceTestUtil {
     public void searchWithSorting() {
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSort("somefield");
-        searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
+        searchFilter.setSortDirection(SortDirection.DESCENDING);
         String tokenizedQuery = "((english language) OR (\"english language\")) AND (visibility:\"public\")";
         String expectedSort = "somefield desc";
 
@@ -546,9 +546,7 @@ public class SearchServiceTest extends SearchServiceTestUtil {
 
         expect(reducedLearningObjectDao.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
-            for (Long id : learningObjectIdentifiers) {
-                expect(userFavoriteDao.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
-            }
+            expect(userFavoriteDao.returnFavoredLearningObjects(learningObjectIdentifiers,loggedInUser)).andReturn(new ArrayList<>());
         }
 
         replayAll();

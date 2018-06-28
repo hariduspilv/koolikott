@@ -1,17 +1,7 @@
 package ee.hm.dop.rest.solr;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
-import ee.hm.dop.common.test.TestUser;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.ReducedMaterial;
-import ee.hm.dop.model.ReducedPortfolio;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Domain;
@@ -268,7 +258,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         String query = "tuesday";
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setSort("somefield");
-        searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
+        searchFilter.setSortDirection(SortDirection.DESCENDING);
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 

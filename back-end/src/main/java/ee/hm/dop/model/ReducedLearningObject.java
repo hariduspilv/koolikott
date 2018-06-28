@@ -84,6 +84,9 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
     @Transient
     private Boolean favorite;
 
+    @Transient
+    private Integer orderNr;
+
     public OriginalPicture getPicture() {
         return picture;
     }
@@ -186,5 +189,13 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
 
     public void setAdded(DateTime added) {
         this.added = added;
+    }
+
+    public Integer getOrderNr() {
+        return orderNr;
+    }
+
+    public void setOrderNr(Integer orderNr) {
+        this.orderNr = orderNr;
     }
 }

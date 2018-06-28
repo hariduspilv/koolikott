@@ -7,7 +7,6 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SearchResponse;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -47,10 +46,6 @@ public class SearchService {
     @Inject
     private LearningObjectDao learningObjectDao;
 
-    private static boolean isPhrase(String query) {
-        return query != null && query.split("\\s+").length > 1;
-    }
-
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
         SearchRequest searchRequest = buildSearchRequest(query, searchFilter, start, limit);
@@ -61,10 +56,14 @@ public class SearchService {
             searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
 
         Map<String, Response> groups = searchResponse.getGrouped();
-        if (groups != null) return getGroupedSearchResult(searchRequest, searchFilter, groups);
+        if (groups != null) return getGroupedSearchResult(searchRequest, searchFilter, groups, start);
         Response response = searchResponse.getResponse();
-        if (response != null) return getSearchResult(limit, searchFilter, response);
+        if (response != null) return getSearchResult(limit, searchFilter, response, new ArrayList<>(), start);
         return new SearchResult();
+    }
+
+    private static boolean isPhrase(String query) {
+        return query != null && query.split("\\s+").length > 1;
     }
 
     private SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
@@ -74,9 +73,9 @@ public class SearchService {
         }
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SearchConverter.getSort(searchFilter);
+        if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
 
         SearchRequest searchRequest = new SearchRequest();
-        if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
         searchRequest.setSolrQuery(solrQuery);
         searchRequest.setSort(sort);
         searchRequest.setFirstItem(firstItem);
@@ -91,11 +90,11 @@ public class SearchService {
     private SearchGrouping pickGrouping(String query, SearchFilter searchFilter) {
         if (!searchFilter.isGrouped()) return SearchGrouping.GROUP_NONE;
         if (isPhrase(query)) return SearchGrouping.GROUP_PHRASE;
-        else return SearchGrouping.GROUP_SIMILAR;
+        return SearchGrouping.GROUP_SIMILAR;
     }
 
     private SearchResult getGroupedSearchResult(SearchRequest searchRequest, SearchFilter searchFilter,
-                                                Map<String, Response> groups) {
+                                                Map<String, Response> groups, long start) {
         List<Long> orderIds = getOrderIds(searchRequest);
         SearchResult searchResult = new SearchResult(new HashMap<>());
         searchResult.setStart(-1);
@@ -108,7 +107,7 @@ public class SearchService {
         for (Map.Entry<String, Response> group : groups.entrySet()) {
             Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
             if (!groupKeyMatcher.matches()) continue;
-            SearchResult singleGroup = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
+            SearchResult singleGroup = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse(), orderIds, start);
 
             if (isPhraseGrouping && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
@@ -161,10 +160,10 @@ public class SearchService {
         return groups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
     }
 
-    private SearchResult getSearchResult(Long limit, SearchFilter searchFilter, Response response) {
+    private SearchResult getSearchResult(Long limit, SearchFilter searchFilter, Response response, List<Long> orderIds, long start) {
         SearchResult searchResult = new SearchResult();
         List<Document> documents = response.getDocuments();
-        List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser());
+        List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser(), orderIds, start);
         List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
         searchResult.setStart(response.getStart());
@@ -174,31 +173,36 @@ public class SearchService {
         return searchResult;
     }
 
-    private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser) {
-        List<Searchable> unsortedSearchable = new ArrayList<>();
+    private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser, List<Long> idsForOrder, long start) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(learningObjectIds)) return unsortedSearchable;
-        reducedLearningObjectDao.findAllById(learningObjectIds).forEach(searchable -> {
-            checkIfFavorite(loggedInUser, searchable);
-            unsortedSearchable.add(searchable);
-        });
-        return unsortedSearchable;
-    }
-
-    private void checkIfFavorite(User user, ReducedLearningObject searchable) {
-        if (user == null) return;
-        UserFavorite userFavorite = userFavoriteDao.findFavoriteByUserAndLearningObject(searchable.getId(), user);
-        searchable.setFavorite(userFavorite != null);
+        List<Long> first20 = new ArrayList<>(learningObjectIds);
+//        .subList(0, Math.min(learningObjectIds.size(), 20));
+        List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(first20);
+        if (loggedInUser == null) {
+            reducedLOs.forEach(e -> e.setOrderNr(orderNr(e.getId(), idsForOrder, (int) start)));
+        } else {
+            List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(first20, loggedInUser);
+            reducedLOs.forEach(e -> {
+                e.setFavorite(favored.contains(e.getId()));
+                e.setOrderNr(orderNr(e.getId(), idsForOrder, (int) start));
+            });
+        }
+        return new ArrayList<>(reducedLOs);
     }
 
     private List<Searchable> sortSearchable(List<Document> allDocuments, List<Searchable> unsortedSearchable) {
         Map<Long, Searchable> idToSearchable = unsortedSearchable.stream()
                 .collect(Collectors.toMap(Searchable::getId, searchable -> searchable));
 
-        List<Searchable> newList = allDocuments.stream()
+        return allDocuments.stream()
                 .filter(document -> idToSearchable.containsKey(document.getId()))
                 .map(document -> idToSearchable.get(document.getId()))
                 .collect(Collectors.toList());
-        return newList;
+    }
+
+    private int orderNr(Long id, List<Long> idsForOrder, int start) {
+        int i = idsForOrder.indexOf(id);
+        return start + i;
+//        (i == -1 ? idsForOrder.size() : i);
     }
 }

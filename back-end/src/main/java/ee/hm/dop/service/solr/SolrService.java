@@ -102,8 +102,8 @@ public class SolrService implements SolrEngineService {
                 ? SEARCH_PATH + SEARCH_PATH_GROUPING
                 : SEARCH_PATH;
         String command = format(searchPath,
-                encodeQuery(searchRequest.getSolrQuery()),
-                formatSort(searchRequest.getSort()),
+                encode(searchRequest.getSolrQuery()),
+                searchRequest.getSort() != null ? encode(searchRequest.getSort()) : "",
                 searchRequest.getFirstItem(),
                 itemLimit);
         if (searchRequest.getGrouping().isAnyGrouping()) command += getGroupingCommand(searchRequest);
@@ -128,7 +128,7 @@ public class SolrService implements SolrEngineService {
 
     private String getGroupsForQuery(String query) {
         return GROUPING_KEYS.stream()
-                .map(groupName -> GROUP_QUERY + groupName + ":" + encodeQuery(query))
+                .map(groupName -> GROUP_QUERY + groupName + ":" + encode(query))
                 .collect(Collectors.joining());
     }
 
@@ -206,16 +206,12 @@ public class SolrService implements SolrEngineService {
         return serverUrl + path;
     }
 
-    private String encodeQuery(String query) {
+    private String encode(String query) {
         try {
             return URLEncoder.encode(query, UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String formatSort(String sort) {
-        return sort != null ? encodeQuery(sort) : "";
     }
 
     private class SolrIndexThread extends Thread {

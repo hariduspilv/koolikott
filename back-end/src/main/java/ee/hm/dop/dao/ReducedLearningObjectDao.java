@@ -1,14 +1,19 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.ReducedLearningObject;
-import ee.hm.dop.model.ReducedMaterial;
-import ee.hm.dop.model.ReducedPortfolio;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
+import org.apache.commons.collections.CollectionUtils;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.Query;
+import javax.persistence.SqlResultSetMapping;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject> {
+
 
     public List<ReducedLearningObject> findMaterialByCreator(User creator, int start, int maxResults) {
         Query query = getEntityManager()
@@ -35,11 +40,15 @@ public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject>
     }
 
     public List<ReducedLearningObject> findAllById(List<Long> idList) {
-        return getEntityManager()
+        if (CollectionUtils.isEmpty(idList)) {
+            return new ArrayList<>();
+        }
+        List<ReducedLearningObject> reducedLearningObjects = getEntityManager()
                 .createQuery("SELECT rlo FROM ReducedLearningObject rlo " +
                         "WHERE rlo.deleted = false " +
                         "AND rlo.id in :idList", entity())
                 .setParameter("idList", idList)
                 .getResultList();
+        return reducedLearningObjects;
     }
 }

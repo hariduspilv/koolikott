@@ -28,8 +28,8 @@ class controller extends Controller {
         this.createMultipleSortOptions(
             ['ADDED_DATE_DESC', 'added', 'desc'],
             ['ADDED_DATE_ASC', 'added', 'asc'],
-            ['PORTFOLIOS_FIRST', 'type', 'portfolio'],
-            ['MATERIALS_FIRST', 'type', 'material'],
+            ['PORTFOLIOS_FIRST', 'type', 'desc'],
+            ['MATERIALS_FIRST', 'type', 'asc'],
         )
         this.createMultipleFilterGroups(
             ['GROUPS_TITLES', 'title'],
@@ -145,25 +145,32 @@ class controller extends Controller {
         this.params.sort = field
         this.params.sortDirection = direction
         this.$scope.sorting = true
-        if (!this.params.isGrouped) {
-            this.search(true)
-        } else {
-            if (field === 'added'){
-                this.$scope.items = this.$scope.items
-                    .sort((a, b) => direction === 'asc' ?
-                        this.sortService.orderCardsByDate(a, b) :
-                        this.sortService.orderCardsByDate(b, a));
-            } else if (field === 'type'){
-                this.$scope.items = this.$scope.items
-                    .sort((a, b) => direction === 'portfolio' ?
-                        this.sortService.orderPortfoliosFirst(a, b) :
-                        this.sortService.orderMaterialsFirst(a, b));
-            }
-        }
+        this.search(true)
     }
     allResultsLoaded() {
-        return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
+        if (!this.params.isGrouped){
+            return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
+        } else {
+            const totalCount = this.countTotal(this.$scope.filterGroups) + this.countTotal(this.$scope.filterGroupsExact);
+            return (this.$scope.items || []).length >= totalCount || this.$scope.start >= totalCount;
+        }
     }
+
+    countTotal(filter){
+        let totalCount = 0;
+        const object = filter;
+        for (let key in object){
+            const filterOption = object[key];
+            if (filterOption.isMaterialActive) {
+                totalCount += filterOption.countMaterial
+            }
+            if (filterOption.isPortfolioActive) {
+                totalCount += filterOption.countPortfolio
+            }
+        }
+        return totalCount;
+    }
+
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -215,8 +222,19 @@ class controller extends Controller {
         this.totalResults = data.totalResults
         if (groupsView !== 'phraseGrouping') this.$scope.filterGroups['all'].countMaterial = this.totalResults
 
-        let foundItems = this.extractItemsFromGroups(data.groups)
-        ;[].push.apply(this.$scope.items, foundItems)
+        let foundItems = this.extractItemsFromGroups(data.groups);
+        [].push.apply(this.$scope.items, foundItems)
+        if (this.params.isGrouped) {
+            this.$scope.items = this.$scope.items.sort((a, b) => {
+                if (a.orderNr === -1){
+                    console.log("Negative order on LO", a)
+                }
+                if (b.orderNr === -1){
+                    console.log("Negative order on LO" , b)
+                }
+                return a.orderNr - b.orderNr;
+            })
+        }
 
         this.searchCount++
         this.$scope.searching = false

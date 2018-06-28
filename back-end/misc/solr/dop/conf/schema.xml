@@ -123,6 +123,7 @@
     <!-- Common to ALL entities -->
     <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
     <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
+    <field name="icon" type="string" indexed="true" stored="false" required="true" multiValued="false"/>
 
     <!-- Learning Object -->
     <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>

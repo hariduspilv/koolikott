@@ -40,17 +40,22 @@ public class SearchConverter {
         return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
     }
 
-
     public static String getSort(SearchFilter searchFilter) {
         String sort = searchFilter.getSort();
-        SearchFilter.SortDirection sortDirection = searchFilter.getSortDirection();
+        SortDirection sortDirection = searchFilter.getSortDirection();
         if (sort == null || sortDirection == null) return null;
-        String solrSort = String.join(" ", sort, sortDirection.getValue());
+
         if (sort.equals("default")) {
-            solrSort = sortDirection.getValue().equals("desc") ? "type desc, added desc" : "type desc, added asc";
-            if (searchFilter.getRequestingUser() != null) solrSort += ", visibility asc";
+            String sortString = sortDirection.isDesc() ? "type desc, added desc" : "type desc, added asc";
+            if (searchFilter.getRequestingUser() != null) sortString += ", visibility asc";
+            return sortString;
+        } else if (sort.equals("type")) {
+            return sortDirection.isDesc() ? "type desc, icon asc, added desc, id desc" : "type asc, icon asc, added desc, id desc";
+        } else if (sort.equals("added")) {
+            return sortDirection.isDesc() ? "added desc, id desc" : "added asc, id asc";
+        } else {
+            return String.join(" ", sort, sortDirection.getValue());
         }
-        return solrSort;
     }
 
     /**

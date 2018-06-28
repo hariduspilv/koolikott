@@ -462,6 +462,45 @@
                             where id = '${Material_ResourceType.resourceType_id}'"/>
                 </entity>
 
+                <entity name="Icon"
+                        query="SELECT
+                                  CASE WHEN r.name = 'AUDIO'
+                                    THEN 'audiotrack'
+                                  WHEN r.name = 'IMAGE'
+                                    THEN 'image'
+                                  WHEN r.name = 'VIDEO' OR r.name = 'BROADCAST'
+                                    THEN 'ondemand_video'
+                                  WHEN r.name = 'DEMONSTRATION' OR r.name = 'PRESENTATION'
+                                    THEN 'dvr'
+                                  WHEN r.name = 'ASSESSMENT' OR r.name = 'DRILLANDPRACTICE'
+                                    THEN 'assessment'
+                                  WHEN r.name = 'TOOL' OR r.name = 'APPLICATION'
+                                    THEN 'web_asset'
+                                  WHEN r.name = 'EDUCATIONALGAME' OR r.name = 'ROLEPLAY' OR r.name = 'SIMULATION'
+                                    THEN 'casino'
+                                  WHEN r.name = 'CASESTUDY' OR r.name = 'ENQUIRYORIENTEDACTIVITY' OR r.name = 'EXPERIMENT' OR r.name = 'EXPLORATION' OR
+                                       r.name = 'OPENACTIVITY' OR r.name = 'PROJECT'
+                                    THEN 'assignment'
+                                  WHEN r.name = 'WEBSITE' OR r.name = 'WEBLOG' OR r.name = 'WIKI' OR r.name = 'GLOSSARY' OR
+                                       r.name = 'REFERENCE' OR r.name = 'BOOKMARKSHARINGPLATFORM' OR r.name = 'IMAGESHARINGPLATFORM' OR
+                                       r.name = 'REFERENCESHARINGPLATFORM' OR r.name = 'SOUNDSHARINGPLATFORM' OR r.name = 'VIDEOSHARINGPLATFORM' OR
+                                       r.name = 'OTHER' OR r.name = 'DATA'
+                                    THEN 'web'
+                                  ELSE 'description'
+                                  END AS icon
+                                FROM Material m
+                                  LEFT JOIN (
+                                              SELECT
+                                                mr.material,
+                                                mr.resourceType AS resourceType
+                                              FROM Material_ResourceType mr
+                                              WHERE mr.material = '${Material.id}'
+                                              LIMIT 1
+                                            ) a ON a.material = m.id
+                                  LEFT JOIN ResourceType r ON r.id = a.resourceType
+                                WHERE m.id = '${Material.id}'">
+                </entity>
+
                 <entity name="Material_Language"
                         query="select code as language from LanguageTable
                         where id='${Material.lang}'"/>
@@ -476,6 +515,8 @@
                     where id='${LearningObject.id}'">
 
                 <entity name="Type" query="select 'portfolio' as type"/>
+
+                <entity name="Icon" query="select 'portfolio' as icon"/>
 
                 <entity name="Chapter"
                         query="select title as chapterTitle, textValue as chapterText from Chapter
