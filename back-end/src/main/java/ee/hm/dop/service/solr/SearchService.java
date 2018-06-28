@@ -16,6 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.solr.SolrService.GROUPING_KEYS;
+
 public class SearchService {
 
     public static final String MATERIAL_TYPE = "material";
@@ -66,6 +68,10 @@ public class SearchService {
     }
 
     private SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
+        String finalQuery = query;
+        if (query != null && GROUPING_KEYS.stream().noneMatch((group) -> finalQuery.startsWith(group + ":"))) {
+            query = query.replaceAll(":", "\\\\:");
+        }
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SearchConverter.getSort(searchFilter);
 

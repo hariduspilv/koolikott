@@ -49,7 +49,7 @@ public class SolrService implements SolrEngineService {
             "&start=%3$d" +
             "&rows=%4$d";
     private static final String SEARCH_PATH_GROUPING = "&group=true&group.format=simple";
-    private static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
+    static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
     private static final String GROUP_QUERY = "&group.query=";
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
