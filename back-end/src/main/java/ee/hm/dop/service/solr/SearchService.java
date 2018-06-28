@@ -90,25 +90,47 @@ public class SearchService {
 
     private SearchResult getGroupedSearchResult(SearchRequest searchRequest, SearchFilter searchFilter,
                                                 Map<String, Response> groups) {
+        List<Long> orderIds = getOrderIds(searchRequest);
         SearchResult searchResult = new SearchResult(new HashMap<>());
         searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
         Map<String, SearchResult> similarResultGroups = new HashMap<>();
         Pattern groupKeyPattern = Pattern.compile(GROUP_MATCH_PATTERN);
+        boolean isPhraseGrouping = searchRequest.getGrouping().isPhraseGrouping();
+        long limit = searchRequest.getItemLimit();
+
         for (Map.Entry<String, Response> group : groups.entrySet()) {
             Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
             if (!groupKeyMatcher.matches()) continue;
-            SearchResult singleGroup = getSearchResult(searchRequest.getItemLimit(), searchFilter, group.getValue().getGroupResponse());
+            SearchResult singleGroup = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse());
 
-            if (searchRequest.getGrouping().isPhraseGrouping()
-                    && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
+            if (isPhraseGrouping && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
             } else addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
 
             if (searchResult.getStart() == -1) searchResult.setStart(singleGroup.getStart());
         }
+
         addResultsTogether(searchResult, exactResultGroups, similarResultGroups);
         return searchResult;
+    }
+
+    private List<Long> getOrderIds(SearchRequest searchRequest) {
+        searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
+        return solrEngineService.search(searchRequest).getResponse().getDocuments()
+                .stream()
+                .map(Document::getId)
+                .collect(Collectors.toList());
+    }
+
+    private void addToResults(Map<String, SearchResult> resultGroups, SearchResult singleGroup, Matcher groupKeyMatcher) {
+        String groupType = groupKeyMatcher.group(GROUP_TYPE);
+        if (!resultGroups.containsKey(groupType)) resultGroups.put(groupType, new SearchResult(new HashMap<>()));
+        long resultsInGroup = singleGroup.getTotalResults();
+        long resultsInType = resultGroups.get(groupType).getTotalResults();
+
+        resultGroups.get(groupType).getGroups().put(groupKeyMatcher.group(GROUP_FOUND_FROM), singleGroup);
+        resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
     }
 
     private void addResultsTogether(SearchResult searchResult,
@@ -128,16 +150,6 @@ public class SearchService {
 
     private long sumTotalResults(Map<String, SearchResult> groups) {
         return groups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
-    }
-
-    private void addToResults(Map<String, SearchResult> resultGroups, SearchResult singleGroup, Matcher groupKeyMatcher) {
-        String groupType = groupKeyMatcher.group(GROUP_TYPE);
-        if (!resultGroups.containsKey(groupType)) resultGroups.put(groupType, new SearchResult(new HashMap<>()));
-        long resultsInGroup = singleGroup.getTotalResults();
-        long resultsInType = resultGroups.get(groupType).getTotalResults();
-
-        resultGroups.get(groupType).getGroups().put(groupKeyMatcher.group(GROUP_FOUND_FROM), singleGroup);
-        resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
     }
 
     private SearchResult getSearchResult(Long limit, SearchFilter searchFilter, Response response) {
