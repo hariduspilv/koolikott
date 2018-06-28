@@ -47,13 +47,7 @@ class controller extends Controller {
         return this.$scope.showFilterGroups === 'phraseGrouping' && this.$scope.filterGroupsExact['all'].countMaterial
     }
     showDefaultGroupButtons() {
-        if (this.$scope.showFilterGroups !== 'noGrouping')
-            return !this.isSingleResult() && this.$scope.filterGroups['all'].countMaterial
-        return false
-    }
-    isSingleResult() {
-        return this.$scope.filterGroups['all'].countMaterial === 1 &&
-            this.$scope.filterGroupsExact['all'].countMaterial === 1
+        return this.$scope.showFilterGroups !== 'noGrouping' && this.$scope.filterGroups['all'].countMaterial
     }
     createMultipleSortOptions(...options) {
         options.forEach((option) =>

@@ -52,8 +52,7 @@
   </div>
 
   <h2 id="similar-search-result-title" class="md-headline"
-      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle && !$ctrl.isSingleResult()"
-      data-ng-bind-html="similarTitle"></h2>
+      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h2>
 
   <div data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
