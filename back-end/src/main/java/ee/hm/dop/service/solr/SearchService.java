@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.solr.SolrService.GROUPING_KEYS;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class SearchService {
 
@@ -178,14 +179,12 @@ public class SearchService {
         List<Long> first20 = new ArrayList<>(learningObjectIds);
 //        .subList(0, Math.min(learningObjectIds.size(), 20));
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(first20);
-        if (loggedInUser == null) {
-            reducedLOs.forEach(e -> e.setOrderNr(orderNr(e.getId(), idsForOrder, (int) start)));
-        } else {
+        if (loggedInUser != null) {
             List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(first20, loggedInUser);
-            reducedLOs.forEach(e -> {
-                e.setFavorite(favored.contains(e.getId()));
-                e.setOrderNr(orderNr(e.getId(), idsForOrder, (int) start));
-            });
+            reducedLOs.forEach(e -> e.setFavorite(favored.contains(e.getId())));
+        }
+        if (isNotEmpty(idsForOrder)) {
+            reducedLOs.forEach(e -> e.setOrderNr(orderNr(e.getId(), idsForOrder, (int) start)));
         }
         return new ArrayList<>(reducedLOs);
     }
