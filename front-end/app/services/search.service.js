@@ -5,6 +5,7 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
+        this.groups = ['title', 'tag', 'description', 'author', 'publisher']
         this.searchURLbase = 'search/result?'
         this.taxonURL = '&taxon='
         this.paidURL = '&paid='
@@ -251,6 +252,7 @@ class controller extends Controller {
 
         if (isGrouped) this.setIsGrouped(isGrouped === 'true')
         if (!this.getQuery()) this.setIsGrouped(false)
+        else if (this.groups.some((group) => this.getQuery().startsWith(group + ':'))) this.setIsGrouped(false)
         return this.search.isGrouped
     }
     clearFieldsNotInSimpleSearch() {
