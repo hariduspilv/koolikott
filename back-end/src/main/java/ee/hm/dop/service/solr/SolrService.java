@@ -29,7 +29,6 @@ public class SolrService implements SolrEngineService {
     static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
     static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
     static final String SOLR_STATUS_BUSY = "busy";
-    static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;

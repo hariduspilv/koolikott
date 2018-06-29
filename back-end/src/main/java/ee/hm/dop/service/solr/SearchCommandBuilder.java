@@ -5,15 +5,18 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SolrService.GROUPING_KEYS;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SearchCommandBuilder {
 
+    private static final List<String> PORTFOLIO_KEYS = Arrays.asList("title", "tag", "summary", "author", "publisher");
+    private static final List<String> MATERIAL_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
+    private static final List<String> UNIQUE_KEYS = Arrays.asList("title", "tag", "description", "summary", "author", "publisher");
     private static final String SEARCH_PATH = "select?q=%1$s" +
             "&sort=%2$s" +
             "&wt=json" +
@@ -25,16 +28,10 @@ public class SearchCommandBuilder {
     private static final String TYPE_PORTFOLIO = " AND type:\"portfolio\"";
 
     public static String getSearchCommand(SolrSearchRequest searchRequest, Long itemLimit) {
-        String searchPath = searchRequest.getGrouping().isAnyGrouping()
-                ? SEARCH_PATH + SEARCH_PATH_GROUPING
-                : SEARCH_PATH;
-        String command = format(searchPath,
-                encode(searchRequest.getSolrQuery()),
-                searchRequest.getSort() != null ? encode(searchRequest.getSort()) : "",
-                searchRequest.getFirstItem(),
-                itemLimit);
-        if (searchRequest.getGrouping().isAnyGrouping()) command += getGroupingCommand(searchRequest);
-        return command;
+        if (searchRequest.getGrouping().isNoGrouping()) {
+            return searchCommand(searchRequest, itemLimit, SEARCH_PATH);
+        }
+        return searchCommand(searchRequest, itemLimit, SEARCH_PATH + SEARCH_PATH_GROUPING) + getGroupingCommand(searchRequest);
     }
 
     public static boolean isPhrase(String query) {
@@ -48,7 +45,7 @@ public class SearchCommandBuilder {
     }
 
     public static String clearGroupingKeysSearch(String query) {
-        if (query != null && GROUPING_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
+        if (query != null && UNIQUE_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
             return query.replaceAll(":", "\\\\:");
         }
         return query;
@@ -58,10 +55,18 @@ public class SearchCommandBuilder {
         return "\"" + query + "\"";
     }
 
+    private static String searchCommand(SolrSearchRequest searchRequest, Long itemLimit, String searchPath) {
+        return format(searchPath,
+                encode(searchRequest.getSolrQuery()),
+                searchRequest.getSort() != null ? encode(searchRequest.getSort()) : "",
+                searchRequest.getFirstItem(),
+                itemLimit);
+    }
+
     private static String getGroupingCommand(SolrSearchRequest searchRequest) {
         String query = StringUtils.isBlank(searchRequest.getOriginalQuery()) ? "\"\"" : searchRequest.getOriginalQuery();
-        String groupSearchPathMaterial = buildPath(searchRequest, query, GROUPING_KEYS, TYPE_MATERIAL);
-        String groupSearchPathPortfolio = buildPath(searchRequest, query, GROUPING_KEYS, TYPE_PORTFOLIO);
+        String groupSearchPathMaterial = buildPath(searchRequest, query, MATERIAL_KEYS, TYPE_MATERIAL);
+        String groupSearchPathPortfolio = buildPath(searchRequest, query, PORTFOLIO_KEYS, TYPE_PORTFOLIO);
         return groupSearchPathMaterial + groupSearchPathPortfolio;
     }
 

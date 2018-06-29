@@ -62,9 +62,8 @@ public class SearchService {
         Map<String, Response> groups = searchResponse.getGrouped();
         if (groups != null) {
             List<Long> orderIds = getOrderIds(searchRequest);
-            return getGroupedSearchResult(groups, orderIds,
-                    searchRequest.getGrouping(), searchRequest.getItemLimit(),
-                    searchFilter.getRequestingUser());
+            return getGroupedSearchResult(groups, orderIds, searchRequest.getGrouping(),
+                    searchRequest.getItemLimit(), searchFilter.getRequestingUser());
         }
         Response response = searchResponse.getResponse();
         if (response != null) {
@@ -91,8 +90,8 @@ public class SearchService {
     }
 
     private List<Long> getOrderIds(SolrSearchRequest searchRequest) {
-        return solrEngineService.limitlessSearch(searchRequest).getResponse().getDocuments()
-                .stream()
+        return solrEngineService.limitlessSearch(searchRequest)
+                .getResponse().getDocuments().stream()
                 .map(Document::getId)
                 .collect(Collectors.toList());
     }
@@ -112,7 +111,9 @@ public class SearchService {
 
             if (isPhraseGrouping && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
-            } else addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
+            } else {
+                addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
+            }
 
             if (searchResult.getStart() == -1) searchResult.setStart(singleGroup.getStart());
         }

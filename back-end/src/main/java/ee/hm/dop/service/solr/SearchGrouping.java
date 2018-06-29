@@ -14,4 +14,8 @@ public enum SearchGrouping {
     public boolean isAnyGrouping() {
         return this != GROUP_NONE;
     }
+
+    public boolean isNoGrouping() {
+        return this == GROUP_NONE;
+    }
 }
