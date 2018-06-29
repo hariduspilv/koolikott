@@ -3,8 +3,8 @@
   "version": "1.19.1",
   "dependencies": {
     "angular": "1.6.4",
-    "angular-animate": "1.6.4",
-    "angular-aria": "1.5.9",
+    "angular-animate": "1.7.2",
+    "angular-aria": "1.7.2",
     "angular-click-outside": "2.10.1",
     "angular-material": "^1.1.5",
     "angular-material-data-table": "0.10.9",
@@ -28,7 +28,7 @@
     "cssua.js": "cssuseragent#^2.1.31",
     "lodash": "^4.17.2",
     "angular-socialshare": "angularjs-socialshare#^2.3.4",
-    "angular-messages": "1.6.1",
+    "angular-messages": "1.7.2",
     "bluebird": "^3.4.7",
     "jquery-truncate-html": "^0.0.1",
     "core.js": "^2.5.1",
@@ -41,7 +41,6 @@
   "resolutions": {
     "angular": "1.6.4",
     "jquery": "2.2.4",
-    "angular-animate": "1.6.4",
     "medium-editor": "5.23.2"
   }
 }
