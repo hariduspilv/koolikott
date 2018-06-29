@@ -149,40 +149,12 @@ class controller extends Controller {
         this.search(true)
     }
     allResultsLoaded() {
-        if (!this.params.isGrouped){
+        if (!this.params.isGrouped) {
             return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
         } else {
-            //const totalCount = this.countTotal(this.$scope.filterGroups) + this.countTotal(this.$scope.filterGroupsExact);
             return (this.$scope.items || []).length >= this.selectedCount || this.$scope.start >= this.selectedCount;
         }
     }
-    countMaxSelected() {
-        this.selectedCount = 0
-        Object.entries(this.$scope.filterGroups).forEach(([name, content]) => {
-            if (content.isMaterialActive) this.selectedCount = this.selectedCount + content.countMaterial
-            if (content.isPortfolioActive) this.selectedCount = this.selectedCount + content.countPortfolio
-        })
-        if (this.$scope.showFilterGroups !== 'phraseGrouping') return
-        Object.entries(this.$scope.filterGroupsExact).forEach(([name, content]) => {
-            if (content.isMaterialActive) this.selectedCount = this.selectedCount + content.countMaterial
-            if (content.isPortfolioActive) this.selectedCount = this.selectedCount + content.countPortfolio
-        })
-    }
-    countTotal(filter) {
-        let totalCount = 0;
-        const object = filter;
-        for (let key in object){
-            const filterOption = object[key];
-            if (filterOption.isMaterialActive) {
-                totalCount += filterOption.countMaterial
-            }
-            if (filterOption.isPortfolioActive) {
-                totalCount += filterOption.countPortfolio
-            }
-        }
-        return totalCount;
-    }
-
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -316,7 +288,7 @@ class controller extends Controller {
         if (groupId === 'all' && !isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
         if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
         searchGroupType[groupId].isMaterialActive = !searchGroupType[groupId].isMaterialActive
-        this.countMaxSelected()
+        this.countAllInSelected()
     }
     selectPortfolioGroup(groupId, isExact) {
         let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
@@ -325,7 +297,18 @@ class controller extends Controller {
         this.disableAllOppositeGroups(isExact)
         if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
         searchGroupType[groupId].isPortfolioActive = !searchGroupType[groupId].isPortfolioActive
-        this.countMaxSelected()
+        this.countAllInSelected()
+    }
+    countAllInSelected() {
+        this.selectedCount = 0
+        this.countSelected(this.$scope.filterGroups)
+        if (this.$scope.showFilterGroups === 'phraseGrouping') this.countSelected(this.$scope.filterGroupsExact)
+    }
+    countSelected(filterGroup) {
+        Object.entries(filterGroup).forEach(([name, content]) => {
+            if (content.isMaterialActive) this.selectedCount = this.selectedCount + content.countMaterial
+            if (content.isPortfolioActive) this.selectedCount = this.selectedCount + content.countPortfolio
+        })
     }
     static disableAllGroupsForFilter(filter) {
         Object.entries(filter).forEach(([name, content]) => {

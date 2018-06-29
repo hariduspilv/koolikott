@@ -100,9 +100,12 @@ public class SolrService implements SolrEngineService {
     @Override
     public SearchResponse limitlessSearch(SearchRequest searchRequest) {
         SearchGrouping initialGrouping = searchRequest.getGrouping();
+        long initialStart = searchRequest.getFirstItem();
         searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
+        searchRequest.setFirstItem(0);
         SearchResponse response = executeCommand(getSearchCommand(searchRequest, (long) 2147483647));
         searchRequest.setGrouping(initialGrouping);
+        searchRequest.setFirstItem(initialStart);
         return response;
     }
 
