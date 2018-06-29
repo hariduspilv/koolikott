@@ -5,7 +5,7 @@ import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.model.taxon.*;
 
 import java.util.Arrays;
@@ -54,8 +54,8 @@ public class SearchServiceTestUtil {
         return searchables.stream().map(Searchable::getId).collect(Collectors.toList());
     }
 
-    public static SearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
-        SearchResponse searchResponse = new SearchResponse();
+    public static SolrSearchResponse createSearchResponseWithDocuments(List<Searchable> searchables, long start, long totalResults) {
+        SolrSearchResponse searchResponse = new SolrSearchResponse();
         searchResponse.setResponse(makeResponse(searchables, start, totalResults));
         return searchResponse;
     }

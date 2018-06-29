@@ -6,7 +6,7 @@ import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -15,7 +15,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SolrService.GROUPING_KEYS;
+import static ee.hm.dop.service.solr.SearchCommandBuilder.clearGroupingKeysSearch;
+import static ee.hm.dop.service.solr.SearchCommandBuilder.isPhrase;
+import static ee.hm.dop.service.solr.SearchCommandBuilder.pickGrouping;
+import static ee.hm.dop.service.solr.SearchCommandBuilder.quotify;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class SearchService {
@@ -47,68 +50,65 @@ public class SearchService {
     @Inject
     private LearningObjectDao learningObjectDao;
 
-    private static boolean isPhrase(String query) {
-        return query != null && query.split("\\s+").length > 1;
-    }
-
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
-        SearchRequest searchRequest = buildSearchRequest(query, searchFilter, start, limit);
-        SearchResponse searchResponse = solrEngineService.search(searchRequest);
+        SolrSearchRequest searchRequest = buildSearchRequest(query, searchFilter, start, limit);
+        SolrSearchResponse searchResponse = solrEngineService.search(searchRequest);
 
         // empty query hits every solr index causing massive results
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
             searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
 
         Map<String, Response> groups = searchResponse.getGrouped();
-        if (groups != null) return getGroupedSearchResult(searchRequest, searchFilter, groups);
+        if (groups != null) {
+            List<Long> orderIds = getOrderIds(searchRequest);
+            return getGroupedSearchResult(groups, orderIds,
+                    searchRequest.getGrouping(), searchRequest.getItemLimit(),
+                    searchFilter.getRequestingUser());
+        }
         Response response = searchResponse.getResponse();
-        if (response != null) return getSearchResult(limit, searchFilter, response, new ArrayList<>());
+        if (response != null) {
+            List<Long> orderIds = new ArrayList<>();
+            return getSearchResult(limit, response, orderIds, searchFilter.getRequestingUser());
+        }
         return new SearchResult();
     }
 
-    private SearchRequest buildSearchRequest(String query, SearchFilter searchFilter, long firstItem, Long limit) {
-        String finalQuery = query;
-        if (query != null && GROUPING_KEYS.stream().noneMatch((group) -> finalQuery.startsWith(group + ":"))) {
-            query = query.replaceAll(":", "\\\\:");
-        }
+    private SolrSearchRequest buildSearchRequest(String queryInput, SearchFilter searchFilter, long firstItem, Long limit) {
+        String query = clearGroupingKeysSearch(queryInput);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SearchConverter.getSort(searchFilter);
         if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
 
-        SearchRequest searchRequest = new SearchRequest();
+        SolrSearchRequest searchRequest = new SolrSearchRequest();
         searchRequest.setSolrQuery(solrQuery);
         searchRequest.setSort(sort);
         searchRequest.setFirstItem(firstItem);
         searchRequest.setItemLimit(limit);
         searchRequest.setGrouping(pickGrouping(query, searchFilter));
-        query = isPhrase(query) ? query : "\"" + query + "\"";
-        searchRequest.setOriginalQuery(query);
-
+        searchRequest.setOriginalQuery(isPhrase(query) ? query : quotify(query));
         return searchRequest;
     }
 
-    private SearchGrouping pickGrouping(String query, SearchFilter searchFilter) {
-        if (!searchFilter.isGrouped()) return SearchGrouping.GROUP_NONE;
-        if (isPhrase(query)) return SearchGrouping.GROUP_PHRASE;
-        return SearchGrouping.GROUP_SIMILAR;
+    private List<Long> getOrderIds(SolrSearchRequest searchRequest) {
+        return solrEngineService.limitlessSearch(searchRequest).getResponse().getDocuments()
+                .stream()
+                .map(Document::getId)
+                .collect(Collectors.toList());
     }
 
-    private SearchResult getGroupedSearchResult(SearchRequest searchRequest, SearchFilter searchFilter,
-                                                Map<String, Response> groups) {
-        List<Long> orderIds = getOrderIds(searchRequest);
+    private SearchResult getGroupedSearchResult(Map<String, Response> groups, List<Long> orderIds, SearchGrouping grouping, Long limit, User user) {
         SearchResult searchResult = new SearchResult(new HashMap<>());
         searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
         Map<String, SearchResult> similarResultGroups = new HashMap<>();
         Pattern groupKeyPattern = Pattern.compile(GROUP_MATCH_PATTERN);
-        boolean isPhraseGrouping = searchRequest.getGrouping().isPhraseGrouping();
-        long limit = searchRequest.getItemLimit();
+        boolean isPhraseGrouping = grouping.isPhraseGrouping();
 
         for (Map.Entry<String, Response> group : groups.entrySet()) {
             Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
             if (!groupKeyMatcher.matches()) continue;
-            SearchResult singleGroup = getSearchResult(limit, searchFilter, group.getValue().getGroupResponse(), orderIds);
+            SearchResult singleGroup = getSearchResult(limit, group.getValue().getGroupResponse(), orderIds, user);
 
             if (isPhraseGrouping && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
@@ -119,13 +119,6 @@ public class SearchService {
 
         addResultsTogether(searchResult, exactResultGroups, similarResultGroups);
         return searchResult;
-    }
-
-    private List<Long> getOrderIds(SearchRequest searchRequest) {
-        return solrEngineService.limitlessSearch(searchRequest).getResponse().getDocuments()
-                .stream()
-                .map(Document::getId)
-                .collect(Collectors.toList());
     }
 
     private void addToResults(Map<String, SearchResult> resultGroups, SearchResult singleGroup, Matcher groupKeyMatcher) {
@@ -157,10 +150,10 @@ public class SearchService {
         return groups.values().stream().mapToLong(SearchResult::getTotalResults).sum();
     }
 
-    private SearchResult getSearchResult(Long limit, SearchFilter searchFilter, Response response, List<Long> orderIds) {
+    private SearchResult getSearchResult(Long limit, Response response, List<Long> orderIds, User user) {
         SearchResult searchResult = new SearchResult();
         List<Document> documents = response.getDocuments();
-        List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, searchFilter.getRequestingUser(), orderIds);
+        List<Searchable> unsortedSearchable = retrieveSearchedItems(documents, user, orderIds);
         List<Searchable> sortedSearchable = sortSearchable(documents, unsortedSearchable);
 
         searchResult.setStart(response.getStart());
@@ -172,11 +165,9 @@ public class SearchService {
 
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
-        List<Long> first20 = new ArrayList<>(learningObjectIds);
-//        .subList(0, Math.min(learningObjectIds.size(), 20));
-        List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(first20);
+        List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
         if (loggedInUser != null) {
-            List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(first20, loggedInUser);
+            List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(learningObjectIds, loggedInUser);
             reducedLOs.forEach(e -> e.setFavorite(favored.contains(e.getId())));
         }
         if (isNotEmpty(idsForOrder)) {

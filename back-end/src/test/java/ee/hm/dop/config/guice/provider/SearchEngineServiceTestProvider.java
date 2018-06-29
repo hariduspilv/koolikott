@@ -7,9 +7,9 @@ import com.google.inject.Singleton;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
-import ee.hm.dop.service.solr.SearchRequest;
+import ee.hm.dop.service.solr.SolrSearchRequest;
 import ee.hm.dop.service.solr.SolrEngineService;
 
 import java.util.ArrayList;
@@ -270,13 +270,13 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
-    public SearchResponse search(SearchRequest searchRequest) {
+    public SolrSearchResponse search(SolrSearchRequest searchRequest) {
         if (searchRequest.getSort() == null) return searchWithoutSorting(searchRequest);
         else return searchWithSorting(searchRequest);
     }
 
     @Override
-    public SearchResponse limitlessSearch(SearchRequest searchRequest) {
+    public SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest) {
         return null;
     }
 
@@ -285,27 +285,27 @@ class SolrEngineServiceMock implements SolrEngineService {
         return null;
     }
 
-    private SearchResponse searchWithoutSorting(SearchRequest searchRequest) {
+    private SolrSearchResponse searchWithoutSorting(SolrSearchRequest searchRequest) {
         String query = searchRequest.getSolrQuery();
         long start = searchRequest.getFirstItem();
         Long limit = searchRequest.getItemLimit();
-        if (!searchResponses.containsKey(query)) return new SearchResponse();
+        if (!searchResponses.containsKey(query)) return new SolrSearchResponse();
         List<Document> allDocuments = searchResponses.get(query);
         return getSearchResponse(start, limit, allDocuments);
     }
 
-    private SearchResponse searchWithSorting(SearchRequest searchRequest) {
+    private SolrSearchResponse searchWithSorting(SolrSearchRequest searchRequest) {
         String query = searchRequest.getSolrQuery();
         String sort = searchRequest.getSort();
         long start = searchRequest.getFirstItem();
         Long limit = searchRequest.getItemLimit();
-        if (!sortedSearchResponses.contains(query, sort)) return new SearchResponse();
+        if (!sortedSearchResponses.contains(query, sort)) return new SolrSearchResponse();
 
         List<Document> allDocuments = sortedSearchResponses.get(query, sort);
         return getSearchResponse(start, limit, allDocuments);
     }
 
-    private SearchResponse getSearchResponse(long start, long limit, List<Document> allDocuments) {
+    private SolrSearchResponse getSearchResponse(long start, long limit, List<Document> allDocuments) {
         List<Document> selectedDocuments = new ArrayList<>();
         limit = limit == 0 ? RESULTS_LIMIT : limit;
         for (int i = (int) start; i < allDocuments.size(); i++) {
@@ -319,7 +319,7 @@ class SolrEngineServiceMock implements SolrEngineService {
         response.setStart(start);
         response.setTotalResults(allDocuments.size());
 
-        SearchResponse searchResponse = new SearchResponse();
+        SolrSearchResponse searchResponse = new SolrSearchResponse();
         searchResponse.setResponse(response);
 
         return searchResponse;

@@ -1,14 +1,9 @@
 package ee.hm.dop.service.solr;
 
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
-import ee.hm.dop.utils.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.*;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.Suggestion;
@@ -21,18 +16,12 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.solr.SearchCommandBuilder.getSearchCommand;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
-import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Singleton
 public class SolrService implements SolrEngineService {
@@ -44,36 +33,14 @@ public class SolrService implements SolrEngineService {
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
-    private static final String SEARCH_PATH = "select?q=%1$s" +
-            "&sort=%2$s" +
-            "&wt=json" +
-            "&start=%3$d" +
-            "&rows=%4$d";
-    private static final String SEARCH_PATH_GROUPING = "&group=true&group.format=simple";
-    private static final String GROUP_QUERY = "&group.query=";
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
-    private static final String TYPE_MATERIAL = " AND type:\"material\"";
-    private static final String TYPE_PORTFOLIO = " AND type:\"portfolio\"";
     @Inject
     private Client client;
     @Inject
     private Configuration configuration;
     private SolrClient solrClient;
     private SolrIndexThread indexThread;
-
-    static String getTokenizedQueryString(String query) {
-        StringBuilder sb = new StringBuilder();
-        if (isNotBlank(query)) {
-            query = query.replaceAll("\\+", " ");
-            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
-            while (tokenizer.hasMoreTokens()) {
-                sb.append(tokenizer.nextToken());
-                if (tokenizer.hasMoreTokens()) sb.append(" ");
-            }
-        }
-        return sb.toString();
-    }
 
     @Inject
     public void postConstruct() {
@@ -89,7 +56,7 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public SearchResponse search(SearchRequest searchRequest) {
+    public SolrSearchResponse search(SolrSearchRequest searchRequest) {
         Long itemLimit = searchRequest.getItemLimit() == 0
                 ? RESULTS_PER_PAGE
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
@@ -98,50 +65,15 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public SearchResponse limitlessSearch(SearchRequest searchRequest) {
+    public SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest) {
         SearchGrouping initialGrouping = searchRequest.getGrouping();
         long initialStart = searchRequest.getFirstItem();
         searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
         searchRequest.setFirstItem(0);
-        SearchResponse response = executeCommand(getSearchCommand(searchRequest, (long) 2147483647));
+        SolrSearchResponse response = executeCommand(getSearchCommand(searchRequest, (long) 2147483647));
         searchRequest.setGrouping(initialGrouping);
         searchRequest.setFirstItem(initialStart);
         return response;
-    }
-
-    private String getSearchCommand(SearchRequest searchRequest, Long itemLimit) {
-        String searchPath = searchRequest.getGrouping().isAnyGrouping()
-                ? SEARCH_PATH + SEARCH_PATH_GROUPING
-                : SEARCH_PATH;
-        String command = format(searchPath,
-                encode(searchRequest.getSolrQuery()),
-                searchRequest.getSort() != null ? encode(searchRequest.getSort()) : "",
-                searchRequest.getFirstItem(),
-                itemLimit);
-        if (searchRequest.getGrouping().isAnyGrouping()) command += getGroupingCommand(searchRequest);
-        return command;
-    }
-
-    private String getGroupingCommand(SearchRequest searchRequest) {
-        String query = StringUtils.isBlank(searchRequest.getOriginalQuery()) ? "\"\"" : searchRequest.getOriginalQuery();
-        String groupSearchPathMaterial;
-        String groupSearchPathPortfolio;
-        if (searchRequest.getGrouping().isPhraseGrouping()) {
-            groupSearchPathMaterial = getGroupsForQuery("(" + query + ")" + TYPE_MATERIAL);
-            groupSearchPathPortfolio = getGroupsForQuery("(" + query + ")" + TYPE_PORTFOLIO);
-            groupSearchPathMaterial += getGroupsForQuery("\"" + query + "\"" + TYPE_MATERIAL);
-            groupSearchPathPortfolio += getGroupsForQuery("\"" + query + "\"" + TYPE_PORTFOLIO);
-        } else {
-            groupSearchPathMaterial = getGroupsForQuery(query + TYPE_MATERIAL);
-            groupSearchPathPortfolio = getGroupsForQuery(query + TYPE_PORTFOLIO);
-        }
-        return groupSearchPathMaterial + groupSearchPathPortfolio;
-    }
-
-    private String getGroupsForQuery(String query) {
-        return GROUPING_KEYS.stream()
-                .map(groupName -> GROUP_QUERY + groupName + ":" + encode(query))
-                .collect(Collectors.joining());
     }
 
     @Override
@@ -179,17 +111,17 @@ public class SolrService implements SolrEngineService {
     }
 
     private boolean isIndexingInProgress() {
-        SearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
+        SolrSearchResponse response = executeCommand(SOLR_DATAIMPORT_STATUS);
         return response.getStatus().equals(SOLR_STATUS_BUSY);
     }
 
-    SearchResponse executeCommand(String command) {
-        SearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON).get(SearchResponse.class);
+    SolrSearchResponse executeCommand(String command) {
+        SolrSearchResponse searchResponse = getTarget(command).request(MediaType.APPLICATION_JSON).get(SolrSearchResponse.class);
         logCommand(command, searchResponse);
         return searchResponse;
     }
 
-    private void logCommand(String command, SearchResponse searchResponse) {
+    private void logCommand(String command, SolrSearchResponse searchResponse) {
         long responseCode = searchResponse.getResponseHeader().getStatus();
 
         String statusMessages = "";
@@ -216,14 +148,6 @@ public class SolrService implements SolrEngineService {
     private String getFullURL(String path) {
         String serverUrl = configuration.getString(SEARCH_SERVER);
         return serverUrl + path;
-    }
-
-    private String encode(String query) {
-        try {
-            return URLEncoder.encode(query, UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private class SolrIndexThread extends Thread {

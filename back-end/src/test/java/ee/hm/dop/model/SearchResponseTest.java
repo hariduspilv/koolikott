@@ -5,7 +5,7 @@ import ee.hm.dop.common.test.GuiceTestRunner;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.ResponseHeader;
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -158,8 +158,8 @@ public class SearchResponseTest {
                 "    }\n" +
                 "}";
 
-        SearchResponse searchResponse = mapper.readValue(searchResult, SearchResponse.class);
-        SearchResponse searchResponseGrouped = mapper.readValue(searchResultGrouped, SearchResponse.class);
+        SolrSearchResponse searchResponse = mapper.readValue(searchResult, SolrSearchResponse.class);
+        SolrSearchResponse searchResponseGrouped = mapper.readValue(searchResultGrouped, SolrSearchResponse.class);
 
         assertNotNull(searchResponse);
         assertNotNull(searchResponseGrouped);
@@ -218,7 +218,7 @@ public class SearchResponseTest {
                 "        }\n" + //
                 "      }";
 
-        SearchResponse searchResponse = mapper.readValue(searchResult, SearchResponse.class);
+        SolrSearchResponse searchResponse = mapper.readValue(searchResult, SolrSearchResponse.class);
         assertNotNull(searchResponse);
         assertNotNull(searchResponse.getResponse());
         assertNotNull(searchResponse.getResponse().getDocuments());
@@ -257,7 +257,7 @@ public class SearchResponseTest {
                 "          \"code\": 400\n" + "        }\n" + //
                 "      }";
 
-        SearchResponse searchResponse = mapper.readValue(searchResult, SearchResponse.class);
+        SolrSearchResponse searchResponse = mapper.readValue(searchResult, SolrSearchResponse.class);
         assertNotNull(searchResponse);
         assertNull(searchResponse.getResponse());
         assertEquals("testStatus", searchResponse.getStatus());

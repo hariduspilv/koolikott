@@ -2,7 +2,7 @@ package ee.hm.dop.model.solr;
 
 import java.util.Map;
 
-public class SearchResponse {
+public class SolrSearchResponse {
 
     private Response response;
     private Map<String, Response> grouped;

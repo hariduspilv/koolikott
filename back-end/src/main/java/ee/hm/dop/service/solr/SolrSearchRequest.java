@@ -1,6 +1,6 @@
 package ee.hm.dop.service.solr;
 
-public class SearchRequest {
+public class SolrSearchRequest {
     private String solrQuery;
     private String originalQuery;
     private long firstItem;

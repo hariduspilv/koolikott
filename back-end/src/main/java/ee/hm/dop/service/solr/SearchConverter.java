@@ -4,6 +4,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.*;
+import ee.hm.dop.utils.tokenizer.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -13,8 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SearchConverter {
 
@@ -25,6 +26,19 @@ public class SearchConverter {
         String queryString = getQueryString(searchFilter, tokenizedQueryString, filtersAsQuery);
         if (queryString.isEmpty()) throw new RuntimeException("No query string and filters present.");
         return queryString;
+    }
+
+    private static String getTokenizedQueryString(String query) {
+        StringBuilder sb = new StringBuilder();
+        if (isNotBlank(query)) {
+            query = query.replaceAll("\\+", " ");
+            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
+            while (tokenizer.hasMoreTokens()) {
+                sb.append(tokenizer.nextToken());
+                if (tokenizer.hasMoreTokens()) sb.append(" ");
+            }
+        }
+        return sb.toString();
     }
 
     private static String getQueryString(SearchFilter searchFilter, String tokenizedQueryString, String filtersAsQuery) {
