@@ -276,6 +276,11 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
+    public SearchResponse limitlessSearch(SearchRequest searchRequest) {
+        return null;
+    }
+
+    @Override
     public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
         return null;
     }

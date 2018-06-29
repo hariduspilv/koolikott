@@ -9,7 +9,10 @@ public interface SolrEngineService {
 
     SearchResponse search(SearchRequest searchRequest);
 
+    SearchResponse limitlessSearch(SearchRequest searchRequest);
+
     List<String> suggest(String query, SuggestionStrategy suggestionStrategy);
 
     void updateIndex();
+
 }

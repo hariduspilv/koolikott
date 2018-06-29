@@ -40,6 +40,7 @@ public class SolrService implements SolrEngineService {
     static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
     static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
     static final String SOLR_STATUS_BUSY = "busy";
+    static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
     private static final int RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
@@ -49,7 +50,6 @@ public class SolrService implements SolrEngineService {
             "&start=%3$d" +
             "&rows=%4$d";
     private static final String SEARCH_PATH_GROUPING = "&group=true&group.format=simple";
-    static final List<String> GROUPING_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
     private static final String GROUP_QUERY = "&group.query=";
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
@@ -95,6 +95,15 @@ public class SolrService implements SolrEngineService {
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
 
         return executeCommand(getSearchCommand(searchRequest, itemLimit));
+    }
+
+    @Override
+    public SearchResponse limitlessSearch(SearchRequest searchRequest) {
+        SearchGrouping initialGrouping = searchRequest.getGrouping();
+        searchRequest.setGrouping(SearchGrouping.GROUP_NONE);
+        SearchResponse response = executeCommand(getSearchCommand(searchRequest, (long) 2147483647));
+        searchRequest.setGrouping(initialGrouping);
+        return response;
     }
 
     private String getSearchCommand(SearchRequest searchRequest, Long itemLimit) {
