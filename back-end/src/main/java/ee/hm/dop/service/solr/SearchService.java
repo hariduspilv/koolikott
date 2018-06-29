@@ -37,6 +37,7 @@ public class SearchService {
     public static final String EMPTY = "";
 
     private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
+    public static final Pattern GROUP_KEY_PATTERN = Pattern.compile(GROUP_MATCH_PATTERN);
     private static final int GROUP_FOUND_FROM = 1;
     private static final int QUERY_FIRST_LETTER = 2;
     private static final int GROUP_TYPE = 3;
@@ -101,15 +102,13 @@ public class SearchService {
         searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
         Map<String, SearchResult> similarResultGroups = new HashMap<>();
-        Pattern groupKeyPattern = Pattern.compile(GROUP_MATCH_PATTERN);
-        boolean isPhraseGrouping = grouping.isPhraseGrouping();
 
         for (Map.Entry<String, Response> group : groups.entrySet()) {
-            Matcher groupKeyMatcher = groupKeyPattern.matcher(group.getKey());
+            Matcher groupKeyMatcher = GROUP_KEY_PATTERN.matcher(group.getKey());
             if (!groupKeyMatcher.matches()) continue;
             SearchResult singleGroup = getSearchResult(limit, group.getValue().getGroupResponse(), orderIds, user);
 
-            if (isPhraseGrouping && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
+            if (grouping.isPhraseGrouping() && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
             } else {
                 addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
@@ -128,7 +127,11 @@ public class SearchService {
         long resultsInGroup = singleGroup.getTotalResults();
         long resultsInType = resultGroups.get(groupType).getTotalResults();
 
-        resultGroups.get(groupType).getGroups().put(groupKeyMatcher.group(GROUP_FOUND_FROM), singleGroup);
+        String key = groupKeyMatcher.group(GROUP_FOUND_FROM);
+        if (groupType.equals("portfolio") && key.equals("summary")) {
+            key = "description";
+        }
+        resultGroups.get(groupType).getGroups().put(key, singleGroup);
         resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
     }
 
