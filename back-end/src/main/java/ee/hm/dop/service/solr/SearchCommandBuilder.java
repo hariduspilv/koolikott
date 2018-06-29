@@ -44,11 +44,14 @@ public class SearchCommandBuilder {
         return SearchGrouping.GROUP_SIMILAR;
     }
 
-    public static String clearGroupingKeysSearch(String query) {
-        if (query != null && UNIQUE_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
-            return query.replaceAll(":", "\\\\:");
+    public static String clearQuerySearch(String query) {
+        if (query == null) {
+            return null;
         }
-        return query;
+        if (UNIQUE_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
+            return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
+        }
+        return query.replaceAll("\"", "");
     }
 
     public static String quotify(String query) {

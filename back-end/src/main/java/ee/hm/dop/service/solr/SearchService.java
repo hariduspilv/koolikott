@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SearchCommandBuilder.clearGroupingKeysSearch;
+import static ee.hm.dop.service.solr.SearchCommandBuilder.clearQuerySearch;
 import static ee.hm.dop.service.solr.SearchCommandBuilder.isPhrase;
 import static ee.hm.dop.service.solr.SearchCommandBuilder.pickGrouping;
 import static ee.hm.dop.service.solr.SearchCommandBuilder.quotify;
@@ -75,7 +75,7 @@ public class SearchService {
     }
 
     private SolrSearchRequest buildSearchRequest(String queryInput, SearchFilter searchFilter, long firstItem, Long limit) {
-        String query = clearGroupingKeysSearch(queryInput);
+        String query = clearQuerySearch(queryInput);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SearchConverter.getSort(searchFilter);
         if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
