@@ -95,10 +95,7 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         Material material = getMaterial(MATERIAL_15);
         assertEquals("Is Reviewed",1, material.getUnReviewed());
 
-        Response updateResponse = doPost(SET_REVIEWED, material);
-        assertEquals(Response.Status.OK.getStatusCode(), updateResponse.getStatus());
-
-        Material materialAfter = getMaterial(MATERIAL_15);
+        Material materialAfter = doPost(SET_REVIEWED, material, Material.class);
         assertEquals("Is Reviewed",0, materialAfter.getUnReviewed());
     }
 
