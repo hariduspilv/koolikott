@@ -144,13 +144,19 @@ class controller extends Controller {
         this.params.sort = this.initialParams.sort
         this.params.sortDirection = this.initialParams.sortDirection
         this.$scope.sorting = true
-        this.search(true)
+        this.searchService.setSort('default')
+        this.searchService.setSortDirection('desc')
+        // this.search(true)
+        this.$location.url(this.searchService.getURL())
     }
     sort(field, direction) {
         this.params.sort = field
+        this.searchService.setSort(field)
         this.params.sortDirection = direction
+        this.searchService.setSortDirection(direction)
         this.$scope.sorting = true
-        this.search(true)
+        // this.search(true)
+        this.$location.url(this.searchService.getURL())
     }
     allResultsLoaded() {
         if (!this.params.isGrouped) {
@@ -332,6 +338,7 @@ controller.$inject = [
     '$element',
     '$timeout',
     '$translate',
+    '$location',
     'serverCallService',
     'searchService',
     'sortService',

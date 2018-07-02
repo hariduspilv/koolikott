@@ -286,13 +286,8 @@ class controller extends Controller {
         this.$location.url(this.searchService.getURL())
     }
     handleSorting() {
-        if (!this.$scope.searchFields.searchQuery) {
-            this.searchService.setSort('default')
-            this.searchService.setSortDirection('desc')
-        } else {
-            this.searchService.setSort('added')
-            this.searchService.setSortDirection('desc')
-        }
+        this.searchService.setSort('default')
+        this.searchService.setSortDirection('desc')
     }
     closeDetailedSearch() {
         this.$timeout(() => {
