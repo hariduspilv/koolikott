@@ -15,10 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SearchCommandBuilder.clearQuerySearch;
-import static ee.hm.dop.service.solr.SearchCommandBuilder.isPhrase;
-import static ee.hm.dop.service.solr.SearchCommandBuilder.pickGrouping;
-import static ee.hm.dop.service.solr.SearchCommandBuilder.quotify;
+import static ee.hm.dop.service.solr.SearchCommandBuilder.*;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class SearchService {
@@ -60,10 +57,9 @@ public class SearchService {
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
             searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
 
-        Map<String, Response> groups = searchResponse.getGrouped();
-        if (groups != null) {
+        if (searchResponse.getGrouped() != null) {
             List<Long> orderIds = getOrderIds(searchRequest);
-            return getGroupedSearchResult(groups, orderIds, searchRequest.getGrouping(),
+            return getGroupedSearchResult(searchResponse, orderIds, searchRequest.getGrouping(),
                     searchRequest.getItemLimit(), searchFilter.getRequestingUser());
         }
         Response response = searchResponse.getResponse();
@@ -97,7 +93,9 @@ public class SearchService {
                 .collect(Collectors.toList());
     }
 
-    private SearchResult getGroupedSearchResult(Map<String, Response> groups, List<Long> orderIds, SearchGrouping grouping, Long limit, User user) {
+    private SearchResult getGroupedSearchResult(SolrSearchResponse searchResponse, List<Long> orderIds,
+                                                SearchGrouping grouping, Long limit, User user) {
+        Map<String, Response> groups = searchResponse.getGrouped();
         SearchResult searchResult = new SearchResult(new HashMap<>());
         searchResult.setStart(-1);
         Map<String, SearchResult> exactResultGroups = new HashMap<>();
@@ -110,14 +108,13 @@ public class SearchService {
 
             if (grouping.isPhraseGrouping() && groupKeyMatcher.group(QUERY_FIRST_LETTER).startsWith("\"")) {
                 addToResults(exactResultGroups, singleGroup, groupKeyMatcher);
-            } else {
-                addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
-            }
+            } else addToResults(similarResultGroups, singleGroup, groupKeyMatcher);
 
             if (searchResult.getStart() == -1) searchResult.setStart(singleGroup.getStart());
         }
 
-        addResultsTogether(searchResult, exactResultGroups, similarResultGroups);
+        addResultsTogether(searchResult, exactResultGroups, similarResultGroups,
+                searchResponse.getExactResultCount(), searchResponse.getSimilarResultCount());
         return searchResult;
     }
 
@@ -137,15 +134,21 @@ public class SearchService {
 
     private void addResultsTogether(SearchResult searchResult,
                                     Map<String, SearchResult> exactResultGroups,
-                                    Map<String, SearchResult> similarResultGroups) {
+                                    Map<String, SearchResult> similarResultGroups,
+                                    long exactResultCount, long similarResultCount) {
         long totalSimilarResults = sumTotalResults(similarResultGroups);
         if (exactResultGroups.isEmpty()) {
             searchResult.setGroups(similarResultGroups);
             searchResult.setTotalResults(totalSimilarResults);
+            searchResult.setDistinctIdCount(exactResultCount);
         } else {
             long totalExactResults = sumTotalResults(exactResultGroups);
-            searchResult.getGroups().put(SIMILAR_RESULT, new SearchResult(similarResultGroups, totalSimilarResults));
-            searchResult.getGroups().put(EXACT_RESULT, new SearchResult(exactResultGroups, totalExactResults));
+            SearchResult similarResults = new SearchResult(similarResultGroups, totalSimilarResults);
+            similarResults.setDistinctIdCount(similarResultCount);
+            SearchResult exactResults = new SearchResult(exactResultGroups, totalExactResults);
+            exactResults.setDistinctIdCount(exactResultCount);
+            searchResult.getGroups().put(SIMILAR_RESULT, similarResults);
+            searchResult.getGroups().put(EXACT_RESULT, exactResults);
             searchResult.setTotalResults(totalSimilarResults + totalExactResults);
         }
     }

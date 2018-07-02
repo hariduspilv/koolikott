@@ -10,6 +10,7 @@ public class SearchResult {
     private Map<String, SearchResult> groups;
     private long totalResults;
     private long start;
+    private long distinctIdCount;
 
     public SearchResult() {
         items = Collections.emptyList();
@@ -30,6 +31,14 @@ public class SearchResult {
     public SearchResult(Map<String, SearchResult> groups, long totalResults) {
         this.groups = groups;
         this.totalResults = totalResults;
+    }
+
+    public long getDistinctIdCount() {
+        return distinctIdCount;
+    }
+
+    public void setDistinctIdCount(long distinctIdCount) {
+        this.distinctIdCount = distinctIdCount;
     }
 
     public Map<String, SearchResult> getGroups() {

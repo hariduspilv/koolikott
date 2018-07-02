@@ -26,6 +26,10 @@ class controller extends Controller {
         this.$scope.filterGroupsExact = {}
         this.$scope.searching = false
         this.$scope.sorting = false
+        this.distinctCount = {
+            similar: 0,
+            exact: 0
+        }
         this.createMultipleSortOptions(
             ['ADDED_DATE_DESC', 'added', 'desc'],
             ['ADDED_DATE_ASC', 'added', 'asc'],
@@ -121,7 +125,7 @@ class controller extends Controller {
         }
         this.$translate.onReady().then(() =>
             this.$scope.exactTitle = this.buildTitle(
-                t, this.exactTitle, this.$scope.filterGroupsExact['all'].countMaterial, translationsKeys
+                t, this.exactTitle, this.distinctCount.exact, translationsKeys
             ))
     }
     setPhraseTitlesSimilar() {
@@ -133,7 +137,7 @@ class controller extends Controller {
         }
         this.$translate.onReady().then(() =>
             this.$scope.similarTitle = this.buildTitle(
-                t, this.similarTitle, this.$scope.filterGroups['all'].countMaterial, translationsKeys
+                t, this.similarTitle, this.distinctCount.similar, translationsKeys
             ))
     }
     setPhraseTitles() {
@@ -214,18 +218,15 @@ class controller extends Controller {
 
         const groupsView = this.pickGroupView(data)
         this.totalResults = data.totalResults
-        if (groupsView !== 'phraseGrouping') this.$scope.filterGroups['all'].countMaterial = this.totalResults
+        if (groupsView !== 'phraseGrouping') {
+            this.$scope.filterGroups['all'].countMaterial = data.totalResults
+            this.totalResults = data.distinctIdCount
+        }
 
         let foundItems = this.extractItemsFromGroups(data.groups);
         [].push.apply(this.$scope.items, foundItems)
         if (this.params.isGrouped) {
             this.$scope.items = this.$scope.items.sort((a, b) => {
-                if (a.orderNr === -1){
-                    console.log("Negative order on LO", a)
-                }
-                if (b.orderNr === -1){
-                    console.log("Negative order on LO" , b)
-                }
                 return a.orderNr - b.orderNr;
             })
         }
@@ -259,8 +260,14 @@ class controller extends Controller {
     detectSearchType(key, currentSearchType, content) {
         if (key === 'exact' || key === 'similar') {
             currentSearchType = key
-            if (key === 'exact') this.$scope.filterGroupsExact['all'].countMaterial = content.totalResults
-            else this.$scope.filterGroups['all'].countMaterial = content.totalResults
+            if (key === 'exact') {
+                this.$scope.filterGroupsExact['all'].countMaterial = content.totalResults
+                this.distinctCount.exact = content.distinctIdCount
+            }
+            else {
+                this.$scope.filterGroups['all'].countMaterial = content.totalResults
+                this.distinctCount.similar = content.distinctIdCount
+            }
         }
         return currentSearchType
     }
