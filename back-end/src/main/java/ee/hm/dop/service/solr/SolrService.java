@@ -66,14 +66,12 @@ public class SolrService implements SolrEngineService {
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
 
         SolrSearchResponse response = executeCommand(getSearchCommand(searchRequest, itemLimit));
-        if (searchRequest.getGrouping().isPhraseGrouping()) {
+        if (searchRequest.getGrouping().isAnyGrouping()) {
             SolrSearchResponse countResponse = executeCommand(getCountCommand(searchRequest));
             countResponse.getGrouped().forEach((key, content) -> {
                 if (key.startsWith("(")) response.setSimilarResultCount(content.getGroupResponse().getTotalResults());
                 if (key.startsWith("\"")) response.setExactResultCount(content.getGroupResponse().getTotalResults());
             });
-        } else if (searchRequest.getGrouping().isSingleGrouping()) {
-            response.setExactResultCount(response.getGrouped().entrySet().iterator().next().getValue().getMatches());
         }
         return response;
     }
