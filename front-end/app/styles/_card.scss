@@ -180,9 +180,9 @@ md-card {
 .card-cover,
 .embeddedMaterial {
   &.donut_large .pattern {
-      background-color: $green1;
+      background-color: $blue2;
       .sheet {
-        @include pattern-color($green1);
+        @include pattern-color($blue2);
       }
     }
   &.description .pattern {
