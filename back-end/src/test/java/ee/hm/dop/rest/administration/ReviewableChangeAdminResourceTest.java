@@ -208,13 +208,13 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void admin_can_accept_one_change() {
         Material material = getMaterial(MATERIAL_27);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-        Response response = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        Response response2 = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_27);
+        TagDTO tagDto = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
+        assertHas((Material) tagDto.getLearningObject(), TAXON_MATHEMATICS_DOMAIN);
+        TagDTO tagDto2 = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name), TagDTO.class);
+        Material updatedMaterial = (Material) tagDto2.getLearningObject();
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
-        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_27), listOfChanges());
-        ReviewableChange oneChange = reviewableChanges.get(0);
+        ReviewableChange oneChange = doGet(format(GET_CHANGES_BY_ID, MATERIAL_27), listOfChanges()).get(0);
 
         Material updatedMaterial1 = doPost(format(ACCEPT_ONE_CHANGES_URL, MATERIAL_27, oneChange.getId()), null, Material.class);
         assertFalse(updatedMaterial1.getChanged() == 0);
