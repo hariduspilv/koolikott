@@ -139,6 +139,7 @@ class controller extends Controller {
 
         this.$scope.$watch(() => this.searchService.getQuery(), (query) => {
             // Search query is not updated from search service while detailed search is open
+            if (query == null) this.dontSearch = true
             if (!query || !this.$scope.detailedSearch.isVisible) this.$scope.searchFields.searchQuery = query
         }, true)
 
@@ -327,7 +328,7 @@ class controller extends Controller {
         if (this.$scope.detailedSearch.isVisible)
             this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery
 
-        if (this.dontSearch) this.dontSearch = false
+        if (this.dontSearch && newValue != null) this.dontSearch = false
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
