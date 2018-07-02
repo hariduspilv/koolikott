@@ -5,9 +5,7 @@ class controller extends Controller {
     makeCall(url, method, params, includeAuthentication, successCallback, errorCallback, finallyCallback, transformRequest, cache) {
         let headers = {};
 
-        if (includeAuthentication) {
-            this.setAuthorization(headers);
-        }
+        if (includeAuthentication) this.setAuthorization(headers);
 
         let config = {
             method: method,
@@ -16,15 +14,10 @@ class controller extends Controller {
             cache: !!cache
         };
 
-        if (method === 'POST' || method === 'PUT') {
-            config.data = params;
-        } else {
-            config.params = params;
-        }
+        if (method === 'POST' || method === 'PUT') config.data = params;
+        else config.params = params;
 
-        if (transformRequest) {
-            config.transformRequest = transformRequest;
-        }
+        if (transformRequest) config.transformRequest = transformRequest;
 
         if (!successCallback)
             return this.$http(config).catch(response => {
@@ -41,16 +34,13 @@ class controller extends Controller {
 
         this.$http(config)
             .then((response)=> {
-                if (method === "HEAD") {
-                    successCallback(response.headers);
-                } else {
-                    successCallback(response.data);
-                }
+                if (method === "HEAD") successCallback(response.headers);
+                else successCallback(response.data);
             }, (response)=> {
-                if (response.status == '419') {
+                if (response.status === 419) {
                     this.authenticatedUserService.removeAuthenticatedUser();
                     this.makeCall(url, method, params, false, successCallback, errorCallback, finallyCallback, transformRequest);
-                } else if (response.status == '401' || response.status == '403') {
+                } else if (response.status === 401 || response.status === 403) {
                     this.$location.url('/');
                 } else if (errorCallback) {
                     errorCallback(response.data, response.status);

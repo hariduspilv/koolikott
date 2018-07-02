@@ -7,8 +7,11 @@ class controller extends Controller {
         this.domains = []
         this.subjects = []
 
-        this.domainSubjectList = this.taxonGroupingService.getDomainSubjectList(this.learningObject.taxons)
-        this.targetGroups = this.targetGroupService.getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
+        this.domainSubjectList = this.taxonGroupingService
+            .getDomainSubjectList(this.learningObject.taxons)
+
+        this.targetGroups = this.targetGroupService
+            .getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
 
         this.$scope.learningObject = this.learningObject
     }

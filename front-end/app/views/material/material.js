@@ -53,8 +53,8 @@ angular.module('koolikottApp')
             };
 
             function getContentType() {
-                var baseUrl = document.location.origin;
-                var materialSource = getSource($scope.material);
+                const baseUrl = document.location.origin
+                const materialSource = getSource($scope.material)
                 // If the initial type is a LINK, try to ask the type from our proxy
                 if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
                     if (!baseUrl.startsWith("http://localhost:3001")) {
@@ -65,7 +65,7 @@ angular.module('koolikottApp')
                 }
                 if (materialSource) {
                     $scope.sourceType = matchType(getSource($scope.material));
-                    if ($scope.sourceType == "EBOOK" && isIE()) $scope.material.source += "?archive=true";
+                    if ($scope.sourceType === "EBOOK" && isIE()) $scope.material.source += "?archive=true";
                 }
             }
 
@@ -74,7 +74,7 @@ angular.module('koolikottApp')
                     $scope.sourceType = $scope.fallbackType;
                     return;
                 }
-                var filename = response()['content-disposition'].match(/filename="(.+)"/)[1];
+                const filename = response()['content-disposition'].match(/filename="(.+)"/)[1]
                 $scope.sourceType = matchType(filename);
             }
 

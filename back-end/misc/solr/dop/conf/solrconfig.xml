@@ -16,9 +16,9 @@
  limitations under the License.
 -->
 
-<!-- 
+<!--
      For more details about configurations options that may appear in
-     this file, see http://wiki.apache.org/solr/SolrConfigXml. 
+     this file, see http://wiki.apache.org/solr/SolrConfigXml.
 -->
 <config>
     <!-- In all configuration below, a prefix of "solr." for class names
@@ -118,8 +118,7 @@
          solr.RAMDirectoryFactory is memory based, not
          persistent, and doesn't work with replication.
       -->
-    <directoryFactory name="DirectoryFactory"
-                      class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
+    <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
 
 
         <!-- These will be used if you are using the solr.HdfsDirectoryFactory,

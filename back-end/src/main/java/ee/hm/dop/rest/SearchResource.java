@@ -1,14 +1,10 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.metadata.*;
-import ee.hm.dop.service.solr.SearchConverter;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
-import org.apache.commons.lang.BooleanUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -58,7 +54,8 @@ public class SearchResource extends BaseResource {
                                @QueryParam("isORSearch") boolean isORSearch,
                                @QueryParam("recommended") boolean recommended,
                                @QueryParam("favorites") boolean favorites,
-                               @QueryParam("excluded") List<Long> excluded) {
+                               @QueryParam("excluded") List<Long> excluded,
+                               @QueryParam("isGrouped") boolean isGrouped) {
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
@@ -72,8 +69,8 @@ public class SearchResource extends BaseResource {
         searchFilter.setCrossCurricularThemes(crossCurricularThemeService.getCrossCurricularThemeById(crossCurricularThemeIds));
         searchFilter.setKeyCompetences(keyCompetenceService.getKeyCompetenceById(keyCompetenceIds));
         searchFilter.setCurriculumLiterature(isCurriculumLiterature);
-        searchFilter.setSort(sort);
-        searchFilter.setSortDirection(SearchFilter.SortDirection.getByValue(sortDirection));
+        searchFilter.setSort(SortType.getByValue(sort));
+        searchFilter.setSortDirection(SortDirection.getByValue(sortDirection));
         searchFilter.setCreator(creator);
         searchFilter.setRequestingUser(getLoggedInUser());
         searchFilter.setMyPrivates(myPrivates);
@@ -81,6 +78,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setRecommended(recommended);
         searchFilter.setFavorites(favorites);
         searchFilter.setSearchType(isORSearch ? "OR" : "AND");
+        searchFilter.setGrouped(isGrouped);
         return searchService.search(query, NumberUtils.nvl(start, 0L), limit, searchFilter);
     }
 

@@ -10,15 +10,14 @@ class controller extends Controller {
 
         if (this.taxon) {
             this.$scope.taxonName = this.getTaxonTranslation(this.taxon)
-            
+
             const parentEdCtx = this.taxon.parentId
                 ? this.taxonService.getEducationalContext(this.taxon)
                 : {}
 
             // Taxon is EducationalContext
-            if (this.taxon.domains)
-                this.checkTaxonLevelAndAssignValues('.EducationalContext', this.taxon.domains)
-            
+            if (this.taxon.domains) this.checkTaxonLevelAndAssignValues('.EducationalContext', this.taxon.domains)
+
             // Taxon is Domain
             else if (this.taxon.parentLevel === '.EducationalContext') {
                 if (parentEdCtx.name === 'PRESCHOOLEDUCATION')
@@ -46,13 +45,10 @@ class controller extends Controller {
         }
 
         this.$scope.toggleChildren = this.toggleChildren.bind(this)
-        this.$scope.$watch(
-            () => localStorage.getItem(this.getTaxonCountKey()),
+        this.$scope.$watch(() => localStorage.getItem(this.getTaxonCountKey()),
             (newCount, oldCount) => {
-                if (newCount && newCount !== oldCount)
-                    this.$scope.materialCount = localStorage.getItem(
-                        this.getTaxonCountKey()
-                    )
+            if (newCount && newCount !== oldCount)
+                    this.$scope.materialCount = localStorage.getItem(this.getTaxonCountKey())
             }
         )
         this.$scope.$watch(() => this.$location.url(), () =>
@@ -60,16 +56,20 @@ class controller extends Controller {
         )
     }
     toggleChildren(id) {
-        if (this.$scope.materialCount == 0)
-            return
-        
-        if (this.$scope.opened)
-            return this.$scope.opened = false
-
+        if (this.$scope.materialCount === 0) return
+        if (this.$scope.opened) return this.$scope.opened = false
         window.scrollTo(0,0)
         this.searchService.setTaxon([id])
+        this.handleOrderAndGrouping()
         this.$location.url(this.searchService.getURL())
         this.$scope.opened = true
+    }
+    handleOrderAndGrouping() {
+        if (!this.searchService.getQuery()) {
+            this.searchService.setSort('default')
+            this.searchService.setSortDirection('desc')
+            this.searchService.setIsGrouped(false)
+        } else this.searchService.setIsGrouped(true)
     }
     checkTaxonLevelAndAssignValues(level, children) {
         if (this.taxon.level === level && children.length > 0) {

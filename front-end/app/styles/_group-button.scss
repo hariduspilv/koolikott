@@ -1,0 +1,31 @@
+.button-grouping-filter[disabled] {
+  background-color: $selected-gray;
+}
+
+.button-grouping-filter {
+  margin-left: 2px;
+  margin-right: 4px;
+  line-height: 28px;
+  border-radius: 16px;
+  color: $color-selected-menu;
+  background: $selected-gray;
+  min-height: 34px;
+  min-width: 65px;
+}
+
+&.active {
+  color: $white;
+  background: $color-selected-menu;
+}
+
+.button-grouping-filter.active:hover {
+  background: $md-primary;
+}
+
+.group_btn__icon {
+  color: $gray-600-light;
+}
+
+.active .group_btn__icon{
+  color: $color-selected-icon;
+}

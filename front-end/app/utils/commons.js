@@ -618,35 +618,31 @@ class Controller {
         return languageStringValue
     }
     getLanguageString(values, language) {
-        if (!language)
-            return null
+        if (!language) return null
 
-        for (var i = 0; i < values.length; i++)
-            if (values[i].language === language)
-                return values[i].text
+        for (let i = 0; i < values.length; i++)
+            if (values[i].language === language) return values[i].text
     }
     formatNameToInitials(name) {
         if (name)
             return this.arrayToInitials(name.split(' '))
     }
     formatSurnameToInitialsButLast(surname) {
-        if (!surname)
-            return
+        if (!surname) return
 
-        var array = surname.split(' ')
-        var last = array.length - 1
-        var res = ''
+        const array = surname.split(' ')
+        let last = array.length - 1
+        let res = ''
 
-        if (last > 0)
-            res = this.arrayToInitials(array.slice(0, last)) + ' '
+        if (last > 0) res = this.arrayToInitials(array.slice(0, last)) + ' '
 
         res += array[last]
         return res
     }
     arrayToInitials(array) {
-        var res = ''
+        let res = ''
 
-        for (var i = 0; i < array.length; i++)
+        for (let i = 0; i < array.length; i++)
             res += array[i].charAt(0).toUpperCase() + '. '
 
         return res.trim()
@@ -736,7 +732,7 @@ class Controller {
     }
     isIE() {
         return (
-            navigator.appName == 'Microsoft Internet Explorer' ||
+            navigator.appName === 'Microsoft Internet Explorer' ||
             !!(navigator.userAgent.match(/Trident/) ||
             navigator.userAgent.match(/rv 11/))
         )
@@ -849,8 +845,7 @@ class Controller {
         return true
     }
     scrollToElement(element, duration = 200, offset = 0) {
-        if (typeof element === 'string')
-            element = document.querySelector(element)
+        if (typeof element === 'string') element = document.querySelector(element)
 
         if (element) {
             const startTime = Date.now()
@@ -950,15 +945,9 @@ class Controller {
         return Array.isArray(tags)
             ? tags.sort((a, b) => {
                 const diff = b.upVoteCount - a.upVoteCount;
-                if (diff !== 0){
-                    return diff;
-                }
-                if (a.tag < b.tag){
-                    return -1;
-                }
-                if (a.tag > b.tag){
-                    return 1;
-                }
+                if (diff !== 0) return diff;
+                if (a.tag < b.tag) return -1;
+                if (a.tag > b.tag) return 1;
                 return 0;
             })
             : tags

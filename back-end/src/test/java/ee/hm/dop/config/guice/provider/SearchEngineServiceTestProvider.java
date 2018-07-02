@@ -1,12 +1,5 @@
 package ee.hm.dop.config.guice.provider;
 
-import static org.apache.commons.lang3.ArrayUtils.contains;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.inject.Provider;
@@ -14,9 +7,17 @@ import com.google.inject.Singleton;
 import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
+import ee.hm.dop.service.solr.SolrSearchRequest;
 import ee.hm.dop.service.solr.SolrEngineService;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.commons.lang3.ArrayUtils.contains;
 
 /**
  * Guice provider of Search Engine Service.
@@ -35,15 +36,18 @@ public class SearchEngineServiceTestProvider implements Provider<SolrEngineServi
 class SolrEngineServiceMock implements SolrEngineService {
 
     private static final Map<String, List<Document>> searchResponses;
+    private static final Map<String, List<Document>> groupedSearchResponses;
 
     private static final Table<String, String, List<Document>> sortedSearchResponses = HashBasedTable.create();
 
     private static final Long[] portfolioIds = {TestConstants.PORTFOLIO_1, TestConstants.PORTFOLIO_2, TestConstants.PORTFOLIO_3, TestConstants.PORTFOLIO_4};
 
     private static final int RESULTS_PER_PAGE = 3;
+    private static final int RESULTS_LIMIT = 24;
 
     static {
         searchResponses = new HashMap<>();
+        groupedSearchResponses = new HashMap<>();
 
         addArabicQuery();
         addBigQuery();
@@ -223,7 +227,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     private static void addSortedQuery() {
         String query = "((tuesday) OR (\"tuesday\")) AND (visibility:\"public\")";
-        String sort = "somefield desc";
+        String sort = "type desc, added desc, visibility asc, id desc";
         List<Document> result = createDocumentsWithIdentifiers(2L, 6L);
         sortedSearchResponses.put(query, sort, result);
     }
@@ -240,66 +244,10 @@ class SolrEngineServiceMock implements SolrEngineService {
         searchResponses.put(query, result);
     }
 
-
-    @Override
-    public SearchResponse search(String query, long start, String sort, long limit) {
-        if (sort == null) {
-            return searchWithoutSorting(query, start, limit);
-        } else {
-            return searchWithSorting(query, sort, start, limit);
-        }
-    }
-
-    @Override
-    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
-        return null;
-    }
-
-    @Override
-    public SearchResponse search(String query, long start, String sort) {
-        return search(query, start, sort, RESULTS_PER_PAGE);
-    }
-
-    private SearchResponse searchWithoutSorting(String query, long start, long limit) {
-        if (!searchResponses.containsKey(query)) {
-            return new SearchResponse();
-        }
-
-        List<Document> allDocuments = searchResponses.get(query);
-        return getSearchResponse(start, limit, allDocuments);
-    }
-
-    private SearchResponse searchWithSorting(String query, String sort, long start, long limit) {
-        if (!sortedSearchResponses.contains(query, sort)) {
-            return new SearchResponse();
-        }
-
-        List<Document> allDocuments = sortedSearchResponses.get(query, sort);
-        return getSearchResponse(start, limit, allDocuments);
-    }
-
-    private SearchResponse getSearchResponse(long start, long limit, List<Document> allDocuments) {
-        List<Document> selectedDocuments = new ArrayList<>();
-        for (int i = 0; i < allDocuments.size(); i++) {
-            if (i >= start && i < start + RESULTS_PER_PAGE && selectedDocuments.size() < limit) {
-                selectedDocuments.add(allDocuments.get(i));
-            }
-        }
-
-        Response response = new Response();
-        response.setDocuments(selectedDocuments);
-        response.setStart(start);
-        response.setTotalResults(allDocuments.size());
-
-        SearchResponse searchResponse = new SearchResponse();
-        searchResponse.setResponse(response);
-
-        return searchResponse;
-    }
-
-    @Override
-    public void updateIndex() {
-
+    private static void addGroupedSearchQueryKaru() {
+        String query = "((karu) OR (\"karu\")) AND (type:\"material\" OR type:\"portfolio\") AND (visibility:\"public\" OR visibility:\"not_listed\" OR visibility:\"private\"";
+        List<Document> result = createDocumentsWithIdentifiers(1L, 7L);
+        groupedSearchResponses.put(query, result);
     }
 
     private static List<Document> createDocumentsWithIdentifiers(Long... identifiers) {
@@ -315,12 +263,70 @@ class SolrEngineServiceMock implements SolrEngineService {
         Document newDocument = new Document();
         newDocument.setId(Long.toString(id));
 
-        if (contains(portfolioIds, id)) {
-            newDocument.setType("portfolio");
-        } else {
-            newDocument.setType("material");
-        }
+        if (contains(portfolioIds, id)) newDocument.setType("portfolio");
+        else newDocument.setType("material");
 
         documents.add(newDocument);
+    }
+
+    @Override
+    public SolrSearchResponse search(SolrSearchRequest searchRequest) {
+        if (searchRequest.getSort() == null) return searchWithoutSorting(searchRequest);
+        else return searchWithSorting(searchRequest);
+    }
+
+    @Override
+    public SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest) {
+        return null;
+    }
+
+    @Override
+    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
+        return null;
+    }
+
+    private SolrSearchResponse searchWithoutSorting(SolrSearchRequest searchRequest) {
+        String query = searchRequest.getSolrQuery();
+        long start = searchRequest.getFirstItem();
+        Long limit = searchRequest.getItemLimit();
+        if (!searchResponses.containsKey(query)) return new SolrSearchResponse();
+        List<Document> allDocuments = searchResponses.get(query);
+        return getSearchResponse(start, limit, allDocuments);
+    }
+
+    private SolrSearchResponse searchWithSorting(SolrSearchRequest searchRequest) {
+        String query = searchRequest.getSolrQuery();
+        String sort = searchRequest.getSort();
+        long start = searchRequest.getFirstItem();
+        Long limit = searchRequest.getItemLimit();
+        if (!sortedSearchResponses.contains(query, sort)) return new SolrSearchResponse();
+
+        List<Document> allDocuments = sortedSearchResponses.get(query, sort);
+        return getSearchResponse(start, limit, allDocuments);
+    }
+
+    private SolrSearchResponse getSearchResponse(long start, long limit, List<Document> allDocuments) {
+        List<Document> selectedDocuments = new ArrayList<>();
+        limit = limit == 0 ? RESULTS_LIMIT : limit;
+        for (int i = (int) start; i < allDocuments.size(); i++) {
+            if (i < start + RESULTS_PER_PAGE && selectedDocuments.size() < limit) {
+                selectedDocuments.add(allDocuments.get(i));
+            }
+        }
+
+        Response response = new Response();
+        response.setDocuments(selectedDocuments);
+        response.setStart(start);
+        response.setTotalResults(allDocuments.size());
+
+        SolrSearchResponse searchResponse = new SolrSearchResponse();
+        searchResponse.setResponse(response);
+
+        return searchResponse;
+    }
+
+    @Override
+    public void updateIndex() {
+
     }
 }

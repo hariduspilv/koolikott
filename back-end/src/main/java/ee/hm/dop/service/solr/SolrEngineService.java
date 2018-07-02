@@ -1,15 +1,15 @@
 package ee.hm.dop.service.solr;
 
-import java.util.List;
-
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
+
+import java.util.List;
 
 public interface SolrEngineService {
 
-    SearchResponse search(String query, long start, String sort);
+    SolrSearchResponse search(SolrSearchRequest searchRequest);
 
-    SearchResponse search(String query, long start, String sort, long limit);
+    SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest);
 
     List<String> suggest(String query, SuggestionStrategy suggestionStrategy);
 

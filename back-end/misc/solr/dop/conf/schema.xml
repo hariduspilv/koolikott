@@ -123,6 +123,7 @@
     <!-- Common to ALL entities -->
     <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
     <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
+    <field name="icon" type="string" indexed="true" stored="false" required="true" multiValued="false"/>
 
     <!-- Learning Object -->
     <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
@@ -135,7 +136,7 @@
     <field name="recommendation_timestamp" type="date" indexed="true" stored="false" multiValued="false"/>
     <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
     <field name="creator" type="string" indexed="true" stored="false" multiValued="false"/>
-    <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="false"/>
     <field name="favored_by_user" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
@@ -509,7 +510,7 @@
         </analyzer>
     </fieldType>
 
-    <!-- 
+    <!--
       Example of using PathHierarchyTokenizerFactory at index time, so
       queries for paths match documents at that path, or in descendent paths
     -->
@@ -521,7 +522,7 @@
             <tokenizer class="solr.KeywordTokenizerFactory"/>
         </analyzer>
     </fieldType>
-    <!-- 
+    <!--
       Example of using PathHierarchyTokenizerFactory at query time, so
       queries for paths match documents at that path, or in ancestor paths
     -->

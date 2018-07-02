@@ -1,17 +1,7 @@
 package ee.hm.dop.rest.solr;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
-import ee.hm.dop.common.test.TestUser;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.ReducedMaterial;
-import ee.hm.dop.model.ReducedPortfolio;
-import ee.hm.dop.model.ResourceType;
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Domain;
@@ -35,7 +25,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     private static final int RESULTS_PER_PAGE = 3;
 
     @Test
-    public void getMostLiked() throws Exception {
+    public void getMostLiked() {
         List<Searchable> results = doGet("search/mostLiked?maxResults=12", new GenericType<List<Searchable>>() {
         });
         assertTrue(CollectionUtils.isNotEmpty(results));
@@ -267,8 +257,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithSorting() {
         String query = "tuesday";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSort("somefield");
-        searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
+        searchFilter.setSort(SortType.DEFAULT);
+        searchFilter.setSortDirection(SortDirection.DESCENDING);
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
 
@@ -384,15 +374,10 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private String buildQueryURL(String query, int start, Long limit, SearchFilter searchFilter) {
         String queryURL = "search?";
-        if (query != null) {
-            queryURL += "q=" + encodeQuery(query);
-        }
-        if (start != 0) {
-            queryURL += "&start=" + start;
-        }
-        if (limit != null) {
-            queryURL += "&limit=" + limit;
-        }
+        if (query != null) queryURL += "q=" + encodeQuery(query);
+        if (start != 0) queryURL += "&start=" + start;
+        if (limit != null) queryURL += "&limit=" + limit;
+
         if (searchFilter.getTaxons() != null) {
             for (Taxon taxon : searchFilter.getTaxons()) {
                 queryURL += "&taxon=" + taxon.getId();
@@ -417,7 +402,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
             queryURL += "&curriculumLiterature=true";
         }
         if (searchFilter.getSort() != null) {
-            queryURL += "&sort=" + searchFilter.getSort();
+            queryURL += "&sort=" + searchFilter.getSort().getValue();
         }
         if (searchFilter.getSortDirection() != null) {
             queryURL += "&sortDirection=" + searchFilter.getSortDirection().getValue();

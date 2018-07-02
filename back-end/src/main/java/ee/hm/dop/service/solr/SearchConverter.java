@@ -1,9 +1,11 @@
 package ee.hm.dop.service.solr;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.*;
+import ee.hm.dop.utils.tokenizer.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -13,8 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SolrService.getTokenizedQueryString;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SearchConverter {
 
@@ -23,34 +25,34 @@ public class SearchConverter {
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
 
         String queryString = getQueryString(searchFilter, tokenizedQueryString, filtersAsQuery);
-        if (queryString.isEmpty()) {
-            throw new RuntimeException("No query string and filters present.");
-        }
+        if (queryString.isEmpty()) throw new RuntimeException("No query string and filters present.");
         return queryString;
     }
 
+    private static String getTokenizedQueryString(String query) {
+        StringBuilder sb = new StringBuilder();
+        if (isNotBlank(query)) {
+            query = query.replaceAll("\\+", " ");
+            DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(query);
+            while (tokenizer.hasMoreTokens()) {
+                sb.append(tokenizer.nextToken());
+                if (tokenizer.hasMoreTokens()) sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
     private static String getQueryString(SearchFilter searchFilter, String tokenizedQueryString, String filtersAsQuery) {
-        if (StringUtils.isEmpty(filtersAsQuery)) {
-            return SearchService.EMPTY;
-        }
-        if (StringUtils.isEmpty(tokenizedQueryString)) {
-            return filtersAsQuery;
-        }
+        if (StringUtils.isEmpty(filtersAsQuery)) return SearchService.EMPTY;
+        if (StringUtils.isEmpty(tokenizedQueryString)) return filtersAsQuery;
+
         String queryString = format("((%s)", tokenizedQueryString);
 
         //Search for full phrase also, as they are more relevant
-        if (fullPhraseSearch(tokenizedQueryString)) {
+        if (!isExactSearch(tokenizedQueryString))
             queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
-        }
+
         return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
-    }
-
-
-    public static String getSort(SearchFilter searchFilter) {
-        if (searchFilter.getSort() != null && searchFilter.getSortDirection() != null) {
-            return String.join(" ", searchFilter.getSort(), searchFilter.getSortDirection().getValue());
-        }
-        return null;
     }
 
     /**
@@ -157,14 +159,10 @@ public class SearchConverter {
             List<String> filters = new ArrayList<>();
 
             for (TargetGroup targetGroup : searchFilter.getTargetGroups()) {
-                if (targetGroup != null) {
-                    filters.add(format("target_group:\"%s\"", targetGroup.getId()));
-                }
+                if (targetGroup != null) filters.add(format("target_group:\"%s\"", targetGroup.getId()));
             }
-            if (filters.size() == 1) {
-                return filters.get(0);
-            }
-            return "(" + StringUtils.join(filters, SearchService.OR) + ")";
+            if (filters.size() == 1) return filters.get(0);
+            return filters.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
         return SearchService.EMPTY;
     }
@@ -231,14 +229,9 @@ public class SearchConverter {
             for (CrossCurricularTheme crossCurricularTheme : searchFilter.getCrossCurricularThemes()) {
                 themes.add(format("cross_curricular_theme:\"%s\"", crossCurricularTheme.getName().toLowerCase()));
             }
-
-            if (themes.size() == 1) {
-                return themes.get(0);
-            }
-
-            return "(" + StringUtils.join(themes, SearchService.OR) + ")";
+            if (themes.size() == 1) return themes.get(0);
+            return themes.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-
         return SearchService.EMPTY;
     }
 
@@ -250,13 +243,9 @@ public class SearchConverter {
                 competences.add(format("key_competence:\"%s\"", keyCompetence.getName().toLowerCase()));
             }
 
-            if (competences.size() == 1) {
-                return competences.get(0);
-            }
-
-            return "(" + StringUtils.join(competences, SearchService.OR) + ")";
+            if (competences.size() == 1) return competences.get(0);
+            return competences.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-
         return SearchService.EMPTY;
     }
 
@@ -272,9 +261,7 @@ public class SearchConverter {
         List<String> taxons = new LinkedList<>();
         List<String> joinedTaxons = new ArrayList<>();
 
-        if (taxonList == null) {
-            return SearchService.EMPTY;
-        }
+        if (taxonList == null) return SearchService.EMPTY;
 
         for (Taxon taxon : taxonList) {
             if (taxon instanceof Subtopic) {
@@ -289,13 +276,9 @@ public class SearchConverter {
                 Domain domain = ((Topic) taxon).getDomain();
                 Module module = ((Topic) taxon).getModule();
 
-                if (subject != null) {
-                    taxon = subject;
-                } else if (domain != null) {
-                    taxon = domain;
-                } else if (module != null) {
-                    taxon = module;
-                }
+                if (subject != null) taxon = subject;
+                else if (domain != null) taxon = domain;
+                else if (module != null) taxon = module;
             }
 
             if (taxon instanceof Subject) {
@@ -326,16 +309,17 @@ public class SearchConverter {
                 return StringUtils.join(taxons, SearchService.AND);
             }
 
-            joinedTaxons.add("(" + StringUtils.join(taxons, SearchService.AND) + ")");
+            joinedTaxons.add(taxons.stream().collect(Collectors.joining(SearchService.AND, "(", ")")));
             taxons.clear();
         }
 
-        return joinedTaxons.isEmpty() ? SearchService.EMPTY : "(" + StringUtils.join(joinedTaxons, SearchService.OR) + ")";
+        return joinedTaxons.isEmpty() ? SearchService.EMPTY
+                : joinedTaxons.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
     }
 
-    private static boolean fullPhraseSearch(String tokenizedQueryString) {
-        return !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_TAG_PREFIX)
-                && !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_RECOMMENDED_PREFIX)
-                && !tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_AUTHOR_PREFIX);
+    private static boolean isExactSearch(String tokenizedQueryString) {
+        return (tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_TAG_PREFIX)
+                || tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_RECOMMENDED_PREFIX)
+                || tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_AUTHOR_PREFIX));
     }
 }

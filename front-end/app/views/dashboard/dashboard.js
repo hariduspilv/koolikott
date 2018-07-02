@@ -7,11 +7,11 @@ angular.module('koolikottApp')
     function ($scope, authenticatedUserService) {
 
         function init() {
-            var user = authenticatedUserService.getUser();
+            const user = authenticatedUserService.getUser()
             if (user && user.userTaxons && user.userTaxons.length > 0) {
                 $scope.url = "rest/search";
 
-                var taxons = [];
+                let taxons = []
                 user.userTaxons.forEach(function (entry) {
                     taxons.push(entry.id);
                 });

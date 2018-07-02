@@ -2,12 +2,15 @@ package ee.hm.dop.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class SearchResult {
 
     private List<Searchable> items;
+    private Map<String, SearchResult> groups;
     private long totalResults;
     private long start;
+    private long distinctIdCount;
 
     public SearchResult() {
         items = Collections.emptyList();
@@ -19,6 +22,31 @@ public class SearchResult {
         this.items = items;
         this.totalResults = totalResults;
         this.start = start;
+    }
+
+    public SearchResult(Map<String, SearchResult> groups) {
+        this.groups = groups;
+    }
+
+    public SearchResult(Map<String, SearchResult> groups, long totalResults) {
+        this.groups = groups;
+        this.totalResults = totalResults;
+    }
+
+    public long getDistinctIdCount() {
+        return distinctIdCount;
+    }
+
+    public void setDistinctIdCount(long distinctIdCount) {
+        this.distinctIdCount = distinctIdCount;
+    }
+
+    public Map<String, SearchResult> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Map<String, SearchResult> groups) {
+        this.groups = groups;
     }
 
     public List<Searchable> getItems() {

@@ -217,13 +217,8 @@ class controller extends Controller {
 
         this.$scope.$broadcast('targetGroupSelector:clear')
 
-        if (this.$rootScope.isEditPortfolioMode)
-            this.$scope.detailedSearch.type = 'material'
-
+        if (this.$rootScope.isEditPortfolioMode) this.$scope.detailedSearch.type = 'material'
         this.$scope.$parent.clearTaxonSelector()
-
-        if (this.accessor && typeof this.accessor.clearSimpleSearch === 'function')
-            this.accessor.clearSimpleSearch()
     }
     setUsedResourceTypes(resourceTypes) {
         this.$scope.usedResourceTypes = resourceTypes
@@ -258,6 +253,7 @@ class controller extends Controller {
         this.searchService.setIssuedFrom(this.$scope.getEffectiveIssueDate() || null)
         this.searchService.setCrossCurricularTheme(this.$scope.detailedSearch.crossCurricularTheme || null)
         this.searchService.setKeyCompetence(this.$scope.detailedSearch.keyCompetence || null)
+        this.searchService.setIsGrouped(true)
 
         if (this.$scope.detailedSearch.taxon)
             this.searchService.setTaxon([this.$scope.detailedSearch.taxon.id])
@@ -295,9 +291,9 @@ class controller extends Controller {
                 : ''
     }
     parseSimpleSearchQuery(query) {
-        const titleRegex = /(^|\s)(title:([^\s\"]\S*)|title:\"(.*?)\"|title:)/g
-        const descriptionRegex = /(^|\s)(description:([^\s\"]\S*)|description:\"(.*?)\"|description:|summary:([^\s\"]\S*)|summary:\"(.*?)\"|summary:)/g
-        const authorRegex = /(^|\s)(author:([^\s\"]\S*)|author:\"(.*?)\"|author:)/g
+        const titleRegex = /(^|\s)(title:([^\s"]\S*)|title:"(.*?)"|title:)/g
+        const descriptionRegex = /(^|\s)(description:([^\s"]\S*)|description:"(.*?)"|description:|summary:([^\s"]\S*)|summary:"(.*?)"|summary:)/g
+        const authorRegex = /(^|\s)(author:([^\s"]\S*)|author:"(.*?)"|author:)/g
         const clilRegex = /(^|\s)(LAK|"Lõimitud aine- ja keeleõpe")(?=\s|$)/g
         const specialEducationalNeedRegex = /(^|\s)(HEV|"Hariduslik erivajadus")(?=\s|$)/g
 

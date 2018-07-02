@@ -41,7 +41,7 @@ public class UserFavoriteService {
     }
 
     public UserFavorite hasFavorited(Long id, User loggedInUser) {
-        if(id == null || loggedInUser == null) return null;
+        if (id == null || loggedInUser == null) return null;
         return userFavoriteDao.findFavoriteByUserAndLearningObject(id, loggedInUser);
     }
 

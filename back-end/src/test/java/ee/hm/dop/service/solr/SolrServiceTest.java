@@ -1,30 +1,9 @@
 package ee.hm.dop.service.solr;
 
-import static ee.hm.dop.service.solr.SolrService.SOLR_DATAIMPORT_STATUS;
-import static ee.hm.dop.service.solr.SolrService.SOLR_IMPORT_PARTIAL;
-import static ee.hm.dop.service.solr.SolrService.SOLR_STATUS_BUSY;
-import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.ResponseHeader;
-import ee.hm.dop.model.solr.SearchResponse;
-import ee.hm.dop.service.solr.SolrService;
+import ee.hm.dop.model.solr.SolrSearchResponse;
 import org.apache.commons.configuration.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -33,15 +12,26 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static ee.hm.dop.service.solr.SolrService.*;
+import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 @RunWith(EasyMockRunner.class)
 public class SolrServiceTest {
 
-    private final String serverUrl = "server/url/";
-
     private static final int RESULTS_PER_PAGE = 24;
-
     private static final String SOLR_STATUS_IDLE = "idle";
-
+    private final String serverUrl = "server/url/";
     @TestSubject
     private SolrService solrService = new SolrService();
     @Mock
@@ -78,9 +68,11 @@ public class SolrServiceTest {
 
         setUpSearch(urlQuery, 4L, start, doc3, doc4, doc1, doc2);
 
+        SolrSearchRequest searchRequest = getSearchRequest(query, 0);
+
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, 0, null);
+        SolrSearchResponse searchResponse = solrService.search(searchRequest);
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
@@ -107,9 +99,12 @@ public class SolrServiceTest {
 
         setUpSearch(urlQuery, 1L, start, doc5);
 
+        SolrSearchRequest searchRequest = getSearchRequest(query, 0);
+        searchRequest.setSort("author asc");
+
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, 0, "author asc");
+        SolrSearchResponse searchResponse = solrService.search(searchRequest);
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
@@ -136,9 +131,12 @@ public class SolrServiceTest {
 
         setUpSearch(urlQuery, 2L, Long.valueOf(start), doc2, doc1);
 
+        SolrSearchRequest searchRequest = getSearchRequest(query, start);
+        searchRequest.setFirstItem(start);
+
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, start, null);
+        SolrSearchResponse searchResponse = solrService.search(searchRequest);
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
@@ -192,18 +190,20 @@ public class SolrServiceTest {
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setStatus(555);
 
-        SearchResponse searchResponse = new SearchResponse();
+        SolrSearchResponse searchResponse = new SolrSearchResponse();
         searchResponse.setResponseHeader(responseHeader);
+        SolrSearchRequest searchRequest = getSearchRequest(query, 0);
 
         expect(configuration.getString(SEARCH_SERVER)).andReturn(serverUrl).times(2);
 
         expect(client.target(serverUrl + urlQuery)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(searchResponse);
+        expect(builder.get(eq(SolrSearchResponse.class))).andReturn(searchResponse);
+
 
         replayAll();
 
-        SearchResponse resultResponse = solrService.search(query, 0, null);
+        SolrSearchResponse resultResponse = solrService.search(searchRequest);
 
         verifyAll();
 
@@ -217,7 +217,7 @@ public class SolrServiceTest {
 
         replayAll();
 
-        SearchResponse searchResponse = solrService.search(query, 0, null);
+        SolrSearchResponse searchResponse = solrService.search(getSearchRequest(query, 0));
         List<Document> result = searchResponse.getResponse().getDocuments();
 
         verifyAll();
@@ -227,12 +227,18 @@ public class SolrServiceTest {
         assertEquals(0, searchResponse.getResponseHeader().getStatus());
     }
 
+    private SolrSearchRequest getSearchRequest(String query, long start) {
+        SolrSearchRequest searchRequest = new SolrSearchRequest();
+        searchRequest.setSolrQuery(query);
+        searchRequest.setFirstItem(start);
+        searchRequest.setSort(null);
+        return searchRequest;
+    }
+
     private void setUpSearch(String urlQuery, Long totalResults, Long start, Document... docs) {
         List<Document> documents = new ArrayList<>();
 
-        for (Document document : docs) {
-            documents.add(document);
-        }
+        Collections.addAll(documents, docs);
 
         Response response = new Response();
         response.setDocuments(documents);
@@ -242,7 +248,7 @@ public class SolrServiceTest {
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setStatus(0);
 
-        SearchResponse searchResponse = new SearchResponse();
+        SolrSearchResponse searchResponse = new SolrSearchResponse();
         searchResponse.setResponse(response);
         searchResponse.setResponseHeader(responseHeader);
 
@@ -250,7 +256,7 @@ public class SolrServiceTest {
 
         expect(client.target(serverUrl + urlQuery)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(searchResponse);
+        expect(builder.get(eq(SolrSearchResponse.class))).andReturn(searchResponse);
     }
 
     @Test
@@ -258,14 +264,14 @@ public class SolrServiceTest {
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setStatus(0);
 
-        SearchResponse importResponse = new SearchResponse();
+        SolrSearchResponse importResponse = new SolrSearchResponse();
         importResponse.setResponseHeader(responseHeader);
 
-        SearchResponse statusResponseBusy = new SearchResponse();
+        SolrSearchResponse statusResponseBusy = new SolrSearchResponse();
         statusResponseBusy.setStatus(SOLR_STATUS_BUSY);
         statusResponseBusy.setResponseHeader(responseHeader);
 
-        SearchResponse statusResponseIdle = new SearchResponse();
+        SolrSearchResponse statusResponseIdle = new SolrSearchResponse();
         statusResponseIdle.setStatus(SOLR_STATUS_IDLE);
         statusResponseIdle.setResponseHeader(responseHeader);
 
@@ -274,15 +280,15 @@ public class SolrServiceTest {
         expect(configuration.getString(SEARCH_SERVER)).andReturn(solrLocation).anyTimes();
         expect(client.target(solrLocation + SOLR_IMPORT_PARTIAL)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(importResponse);
+        expect(builder.get(eq(SolrSearchResponse.class))).andReturn(importResponse);
 
         expect(client.target(solrLocation + SOLR_DATAIMPORT_STATUS)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(statusResponseBusy);
+        expect(builder.get(eq(SolrSearchResponse.class))).andReturn(statusResponseBusy);
 
         expect(client.target(solrLocation + SOLR_DATAIMPORT_STATUS)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(statusResponseIdle);
+        expect(builder.get(eq(SolrSearchResponse.class))).andReturn(statusResponseIdle);
 
         replayAll();
 
@@ -301,26 +307,25 @@ public class SolrServiceTest {
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setStatus(status);
 
-        SearchResponse searchResponse = createMock(SearchResponse.class);
+        SolrSearchResponse searchResponse = createMock(SolrSearchResponse.class);
 
         expect(configuration.getString(SEARCH_SERVER)).andReturn(serverUrl).times(2);
         expect(client.target(serverUrl + command)).andReturn(target);
         expect(target.request(MediaType.APPLICATION_JSON)).andReturn(builder);
-        expect(builder.get(eq(SearchResponse.class))).andReturn(searchResponse);
+        expect(builder.get(eq(SolrSearchResponse.class))).andReturn(searchResponse);
 
         expect(searchResponse.getResponseHeader()).andReturn(responseHeader).anyTimes();
         expect(searchResponse.getStatusMessages()).andReturn(null);
 
         replayAll(searchResponse);
 
-        SearchResponse result = solrService.executeCommand(command);
+        SolrSearchResponse result = solrService.executeCommand(command);
 
         verifyAll(searchResponse);
 
         assertEquals(searchResponse, result);
         assertEquals(status, result.getResponseHeader().getStatus());
     }
-
 
 
     private void verifyAll(Object... mocks) {

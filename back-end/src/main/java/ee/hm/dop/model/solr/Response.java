@@ -1,10 +1,13 @@
 package ee.hm.dop.model.solr;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class Response {
+
+    @JsonProperty("doclist")
+    private Response groupResponse;
 
     @JsonProperty("docs")
     private List<Document> documents;
@@ -14,6 +17,25 @@ public class Response {
 
     @JsonProperty("start")
     private long start;
+
+    @JsonProperty("matches")
+    private long matches;
+
+    public long getMatches() {
+        return matches;
+    }
+
+    public void setMatches(long matches) {
+        this.matches = matches;
+    }
+
+    public Response getGroupResponse() {
+        return groupResponse;
+    }
+
+    public void setGroupResponse(Response groupResponse) {
+        this.groupResponse = groupResponse;
+    }
 
     public List<Document> getDocuments() {
         return documents;

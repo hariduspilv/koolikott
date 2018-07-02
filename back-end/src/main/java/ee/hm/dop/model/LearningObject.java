@@ -262,7 +262,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.deleted = deleted;
     }
 
-    @JsonSerialize(using = DateTimeSerializer.class)
     public DateTime getAdded() {
         return added;
     }

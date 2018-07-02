@@ -1,7 +1,6 @@
 package ee.hm.dop.rest.filter;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.service.login.LogoutService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 import static ee.hm.dop.config.guice.GuiceInjector.getInjector;
 
@@ -25,7 +23,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     public Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         String token = requestContext.getHeaderString("Authentication");
 
         if (token != null) {

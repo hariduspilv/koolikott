@@ -1,5 +1,9 @@
 <div data-layout="row" data-layout-align="space-between center">
-  <h2 class="md-headline" data-ng-if="title" data-ng-bind-html="title"></h2>
+  <h2 id="search-result-title" class="md-headline" data-ng-if="showFilterGroups !== 'phraseGrouping' && title"
+      data-ng-bind-html="title"></h2>
+  <h2 id="exact-search-result-title" class="md-headline"
+      data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
+      data-ng-bind-html="exactTitle"></h2>
   <md-input-container data-ng-if="filter" flex-xs="60" flex-sm="30" flex-gt-sm="20">
     <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
       <md-option
@@ -16,13 +20,80 @@
   </md-input-container>
 </div>
 <h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
-<div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="card-container">
-  <div data-ng-repeat="item in items track by $index" class="card-container__item" flex-xs="grow">
+
+<div data-ng-if="sorting || !searching">
+  <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
+    <section data-layout="row" data-layout-xs="column" layout-wrap>
+      <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroupsExact">
+        <span data-ng-style="(groupValue.isPortfolioActive || groupValue.isMaterialActive) && {'font-weight':'bold'}"
+              data-translate="{{groupValue.name}}"></span>
+        <md-button id="{{groupId}}-exact-portfolio-button"
+                   data-ng-if="groupId !== 'all'"
+                   class="button-grouping-filter"
+                   data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
+                   data-ng-class="{ 'active': groupValue.isPortfolioActive}"
+                   data-ng-disabled="{{groupValue.countPortfolio === 0}}">
+          <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
+          <md-icon class="material-icons sidenav__icon group_btn__icon">book</md-icon>
+          {{groupValue.countPortfolio}}
+        </md-button>
+        <md-button id="{{groupId}}-exact-material-button"
+                   class="button-grouping-filter"
+                   data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
+                   data-ng-class="{ 'active': groupValue.isMaterialActive}"
+                   data-ng-disabled="{{groupValue.countMaterial === 0}}">
+          <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
+          <md-icon data-ng-if="groupId !== 'all'" class="material-icons sidenav__icon group_btn__icon">description
+          </md-icon>
+          {{groupValue.countMaterial}}
+        </md-button>
+      </div>
+    </section>
+  </div>
+
+  <h2 id="similar-search-result-title" class="md-headline"
+      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h2>
+
+  <div data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row">
+    <section data-layout="row" data-layout-xs="column" layout-wrap>
+      <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroups">
+        <span data-ng-style="(groupValue.isPortfolioActive || groupValue.isMaterialActive) && {'font-weight':'bold'}"
+              data-translate="{{groupValue.name}}"></span>
+        <md-button id="{{groupId}}-portfolio-button"
+                   data-ng-if="groupId !== 'all'"
+                   class="button-grouping-filter"
+                   data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
+                   data-ng-class="{ 'active': groupValue.isPortfolioActive }"
+                   data-ng-disabled="{{groupValue.countPortfolio === 0}}">
+          <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
+          <md-icon class="material-icons sidenav__icon group_btn__icon">book</md-icon>
+          {{groupValue.countPortfolio}}
+        </md-button>
+        <md-button id="{{groupId}}-material-button"
+                   class="button-grouping-filter"
+                   data-ng-click="$ctrl.selectMaterialGroup(groupId)"
+                   data-ng-class="{ 'active': groupValue.isMaterialActive }"
+                   data-ng-disabled="{{groupValue.countMaterial === 0}}">
+          <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
+          <md-icon data-ng-if="groupId !== 'all'" class="material-icons sidenav__icon group_btn__icon">description
+          </md-icon>
+          {{groupValue.countMaterial}}
+        </md-button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="margin-top-36 card-container">
+  <div data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
+       class="card-container__item" flex-xs="grow">
     <dop-card-sm learning-object="item"></dop-card-sm>
   </div>
 </div>
+
 <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
-  <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center" data-translate="SEARCH_LOADING"></p>
+  <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
+     data-translate="SEARCH_LOADING"></p>
   <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
     <md-progress-circular></md-progress-circular>
   </div>

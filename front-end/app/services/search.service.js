@@ -5,6 +5,7 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
+        this.groups = ['title', 'tag', 'description', 'author', 'publisher']
         this.searchURLbase = 'search/result?'
         this.taxonURL = '&taxon='
         this.paidURL = '&paid='
@@ -21,6 +22,7 @@ class controller extends Controller {
         this.isRecommendedURL = '&recommended='
         this.sortURL = '&sort='
         this.sortDirectionURL = '&sortDirection='
+        this.isGroupedURL = '&isGrouped='
         this.search = {
             query: '',
             taxons: [],
@@ -36,7 +38,8 @@ class controller extends Controller {
             isCurriculumLiterature: '',
             isPreferred: '',
             sort: '',
-            sortDirection: ''
+            sortDirection: '',
+            isGrouped: ''
         }
 
         const searchObject = this.$location.search()
@@ -59,7 +62,7 @@ class controller extends Controller {
     arrayToLowerCase(upperCaseArray) {
         const lowerCaseArray = []
 
-        for (i = 0; i < upperCaseArray.length; i++)
+        for (let i = 0; i < upperCaseArray.length; i++)
             if (upperCaseArray[i] && this.isString(upperCaseArray[i]))
                 lowerCaseArray.push(upperCaseArray[i].toLowerCase())
 
@@ -68,7 +71,7 @@ class controller extends Controller {
     arrayToUpperCase(lowerCaseArray) {
         const upperCaseArray = []
 
-        for (i = 0; i < lowerCaseArray.length; i++)
+        for (let i = 0; i < lowerCaseArray.length; i++)
             if (lowerCaseArray[i] && this.isString(lowerCaseArray[i]))
                 upperCaseArray.push(lowerCaseArray[i].toUpperCase())
 
@@ -128,6 +131,9 @@ class controller extends Controller {
     setSortDirection(sortDirection) {
         this.search.sortDirection = sortDirection
     }
+    setIsGrouped(isGrouped) {
+        this.search.isGrouped = isGrouped
+    }
     queryExists() {
         const searchObject = this.$location.search()
         return !!(
@@ -148,82 +154,52 @@ class controller extends Controller {
     }
     getQuery() {
         const { q } = this.$location.search()
-
-        if (q)
-            this.setQuery(q)
-
+        if (q) this.setQuery(q)
         return this.search.query
     }
     getTaxon() {
         const { taxon } = this.$location.search()
-
-        if (taxon)
-            this.setTaxon(this.asArray(taxon))
-
+        if (taxon) this.setTaxon(this.asArray(taxon))
         return this.search.taxons
     }
     isPaid() {
         const { paid } = this.$location.search()
-
-        if (paid)
-            this.setPaid(paid.toString() === 'true')
-
+        if (paid) this.setPaid(paid.toString() === 'true')
         return this.search.paid
     }
     getType() {
         const { type } = this.$location.search()
-
-        if (type)
-            this.setType(type)
-
+        if (type) this.setType(type)
         return this.search.type
     }
     getLanguage() {
         const { language } = this.$location.search()
-
-        if (language)
-            this.setLanguage(language)
-
+        if (language) this.setLanguage(language)
         return this.search.language
     }
     getTargetGroups() {
-        var { targetGroup } = this.$location.search()
-
-        if (targetGroup)
-            this.setTargetGroups(targetGroup)
-
+        const { targetGroup } = this.$location.search()
+        if (targetGroup) this.setTargetGroups(targetGroup)
         return this.arrayToUpperCase(this.search.targetGroups)
     }
     getResourceType() {
         const { resourceType } = this.$location.search()
-
-        if (resourceType)
-            this.setResourceType(resourceType)
-
+        if (resourceType) this.setResourceType(resourceType)
         return this.search.resourceType
     }
     isSpecialEducation() {
         const { specialEducation } = this.$location.search()
-
-        if (specialEducation)
-            this.setIsSpecialEducation(specialEducation === 'true')
-
+        if (specialEducation) this.setIsSpecialEducation(specialEducation === 'true')
         return this.search.isSpecialEducation
     }
     getIssuedFrom() {
         const { issuedFrom } = this.$location.search()
-
-        if (issuedFrom)
-            this.setIssuedFrom(issuedFrom)
-
+        if (issuedFrom) this.setIssuedFrom(issuedFrom)
         return this.search.issuedFrom
     }
     getCrossCurricularTheme() {
         const { crossCurricularTheme } = this.$location.search()
-
-        if (crossCurricularTheme)
-            this.setCrossCurricularTheme(crossCurricularTheme)
-
+        if (crossCurricularTheme) this.setCrossCurricularTheme(crossCurricularTheme)
         return this.search.crossCurricularTheme
     }
     getKeyCompetence() {
@@ -260,10 +236,7 @@ class controller extends Controller {
     }
     isFavorites() {
         const { favorites } = this.$location.search()
-
-        if (favorites)
-            this.setIsFavorites(favorites === 'true')
-
+        if (favorites) this.setIsFavorites(favorites === 'true')
         return this.search.isFavorites
     }
     isRecommended() {
@@ -274,12 +247,20 @@ class controller extends Controller {
 
         return this.search.isRecommended
     }
+    isGrouped() {
+        const { isGrouped } = this.$location.search()
+
+        if (isGrouped) this.setIsGrouped(isGrouped === 'true')
+        if (!this.getQuery()) this.setIsGrouped(false)
+        else if (this.groups.some((group) => this.getQuery().startsWith(group + ':'))) this.setIsGrouped(false)
+        return this.search.isGrouped
+    }
     clearFieldsNotInSimpleSearch() {
-        this.search.taxons = ''
+        this.search.taxons = []
         this.search.paid = ''
         this.search.type = ''
         this.search.language = ''
-        this.search.targetGroups = ''
+        this.search.targetGroups = []
         this.search.resourceType = ''
         this.search.isSpecialEducation = ''
         this.search.issuedFrom = ''
@@ -301,13 +282,11 @@ class controller extends Controller {
     getQueryURL(isBackendQuery) {
         let searchURL = 'q='
 
-        if (this.search.query)
-            searchURL += this.escapeQuery(this.search.query)
+        if (this.search.query) searchURL += this.escapeQuery(this.search.query)
 
         if (this.search.taxons)
-            for (var i = 0; i < this.search.taxons.length; i++)
-                if (this.search.taxons[i])
-                    searchURL += this.taxonURL + this.search.taxons[i]
+            for (let i = 0; i < this.search.taxons.length; i++)
+                if (this.search.taxons[i]) searchURL += this.taxonURL + this.search.taxons[i]
 
         if (this.search.paid.toString() === 'false')
             searchURL += this.paidURL + this.search.paid;
@@ -319,7 +298,7 @@ class controller extends Controller {
             searchURL += this.languageURL + this.search.language
 
         if (this.search.targetGroups)
-            for (var i = 0; i < this.search.targetGroups.length; i++)
+            for (let i = 0; i < this.search.targetGroups.length; i++)
                 searchURL += this.targetGroupsURL + (
                     // Enums are case sensitive, so they must be uppercase for the back-end query
                     isBackendQuery && this.search.targetGroups[i]
@@ -345,14 +324,16 @@ class controller extends Controller {
         if (this.search.isCurriculumLiterature)
             searchURL += this.isCurriculumLiteratureURL + this.search.isCurriculumLiterature
 
-        if (typeof this.search.isFavorites === 'boolean')
+        if (typeof this.search.isFavorites === 'boolean' && this.search.isFavorites)
             searchURL += this.isFavoritesURL + this.search.isFavorites
 
-        if (typeof this.search.isRecommended === 'boolean')
+        if (typeof this.search.isRecommended === 'boolean' && this.search.isRecommended)
             searchURL += this.isRecommendedURL + this.search.isRecommended
 
         if (this.search.sort && this.search.sortDirection)
             searchURL += this.sortURL + this.search.sort + this.sortDirectionURL + this.search.sortDirection
+
+        if (this.search.isGrouped) searchURL += this.isGroupedURL + this.search.isGrouped
 
         return searchURL
     }

@@ -5,7 +5,7 @@ import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.UserFavoriteDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.TargetGroupEnum;
-import ee.hm.dop.model.solr.SearchResponse;
+import ee.hm.dop.model.solr.*;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.EasyMockRunner;
@@ -425,8 +425,8 @@ public class SearchServiceTest extends SearchServiceTestUtil {
     @Test
     public void searchWithSorting() {
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSort("somefield");
-        searchFilter.setSortDirection(SearchFilter.SortDirection.DESCENDING);
+        searchFilter.setSort(SortType.ADDED);
+        searchFilter.setSortDirection(SortDirection.DESCENDING);
         String tokenizedQuery = "((english language) OR (\"english language\")) AND (visibility:\"public\")";
         String expectedSort = "somefield desc";
 
@@ -531,7 +531,7 @@ public class SearchServiceTest extends SearchServiceTestUtil {
 
     private void testSearch(String query, String tokenizedQuery, String expectedSort, List<Searchable> searchables,
                             long start, Long limit, long totalResults, SearchFilter searchFilter, User loggedInUser) {
-        SearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
+        SolrSearchResponse searchResponse = createSearchResponseWithDocuments(searchables, start, totalResults);
 
         List<ReducedLearningObject> learningObjects = new ArrayList<>();
         List<Long> learningObjectIdentifiers = getIdentifiers(searchables);
@@ -539,20 +539,14 @@ public class SearchServiceTest extends SearchServiceTestUtil {
         learningObjects.addAll(collectMaterialsFrom(searchables));
         learningObjects.addAll(collectPortfoliosFrom(searchables));
 
-        if (limit == null) {
-            expect(solrEngineService.search(tokenizedQuery, start, expectedSort)).andReturn(searchResponse);
-        } else {
-            expect(solrEngineService.search(tokenizedQuery, start, expectedSort, limit)).andReturn(searchResponse);
-        }
+        expect(solrEngineService.search(anyObject(SolrSearchRequest.class))).andReturn(searchResponse);
 
-        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch()) {
+        if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
             expect(learningObjectDao.findAllNotDeleted()).andReturn(totalResults);
-        }
+
         expect(reducedLearningObjectDao.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {
-            for (Long id : learningObjectIdentifiers) {
-                expect(userFavoriteDao.findFavoriteByUserAndLearningObject(id, loggedInUser)).andReturn(null);
-            }
+            expect(userFavoriteDao.returnFavoredLearningObjects(learningObjectIdentifiers,loggedInUser)).andReturn(new ArrayList<>());
         }
 
         replayAll();

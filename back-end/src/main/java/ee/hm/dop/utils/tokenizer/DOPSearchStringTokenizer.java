@@ -37,11 +37,7 @@ public class DOPSearchStringTokenizer {
 
         // Reset anyway
         newPosition = -1;
-
-        if (currentPosition >= maxPosition) {
-            throw new NoSuchElementException();
-        }
-
+        if (currentPosition >= maxPosition) throw new NoSuchElementException();
         return parse();
     }
 
@@ -50,33 +46,19 @@ public class DOPSearchStringTokenizer {
 
         if (currentPosition < maxPosition) {
             char c = source.charAt(currentPosition);
-
-            if (c == QUOTES) {
-                token = parseExactMatch();
-            } else if (c == 'a') {
-                token = parseAuthor();
-            } else if (c == 'd') {
-                token = parseDescription();
-            } else if (c == 'p') {
-                token = parsePublisher();
-            } else if (c == 'r') {
-                token = parseRecommended();
-            } else if (c == 's') {
-                token = parseSummary();
-            } else if (c == 't') {
+            if (c == QUOTES) token = parseExactMatch();
+            else if (c == 'a') token = parseAuthor();
+            else if (c == 'd') token = parseDescription();
+            else if (c == 'p') token = parsePublisher();
+            else if (c == 'r') token = parseRecommended();
+            else if (c == 's') token = parseSummary();
+            else if (c == 't') {
                 token = parseTitle();
-                if (token == null) {
-                    token = parseTag();
-                }
-            } else if (c == '+') {
-                token = parseMustHave();
-            } else if (c == '-') {
-                token = parseMustNotHave();
-            }
+                if (token == null) token = parseTag();
+            } else if (c == '+') token = parseMustHave();
+            else if (c == '-') token = parseMustNotHave();
 
-            if (token == null) {
-                token = parseRegular();
-            }
+            if (token == null) token = parseRegular();
         }
 
         return token;
@@ -154,20 +136,14 @@ public class DOPSearchStringTokenizer {
 
     private String extractTokenValue(String keyword) {
         int position = currentPosition;
-
-        if (position + keyword.length() >= maxPosition) {
-            return null;
-        }
-
+        if (position + keyword.length() >= maxPosition) return null;
         String value = null;
         char c;
 
         if (startsWithKeyword(keyword, position)) {
             position += keyword.length();
             c = source.charAt(position);
-            if (c == QUOTES) {
-                position++;
-            }
+            if (c == QUOTES) position++;
 
             int tokenStartPos = position;
             int closingQuotes = getClosingQuotes(position);
@@ -198,9 +174,7 @@ public class DOPSearchStringTokenizer {
 
         while (!Character.isWhitespace(c)) {
             position++;
-            if (position >= maxPosition) {
-                break;
-            }
+            if (position >= maxPosition) break;
 
             c = source.charAt(position);
         }
@@ -230,14 +204,11 @@ public class DOPSearchStringTokenizer {
         int closingQuotes = getClosingQuotes(position);
         if (c == QUOTES && closingQuotes != -1) {
             token = new ExactMatchToken(source.substring(position, closingQuotes));
-
             // Consumes the closing "
             position = closingQuotes + 1;
-
             // Update global position
             currentPosition = position;
         }
-
         return token;
     }
 

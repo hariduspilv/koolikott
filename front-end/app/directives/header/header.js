@@ -70,8 +70,7 @@ class controller extends Controller {
         this.$scope.closeMobileSearch = (emptySearch) => {
             this.$scope.mobileSearch.isVisible = false
 
-            if (emptySearch)
-                this.$scope.detailedSearch.accessor.clearSimpleSearch()
+            if (emptySearch) this.$scope.detailedSearch.accessor.clearSimpleSearch()
         }
 
         this.$scope.$on('detailedSearch:open', () => this.$scope.detailedSearch.isVisible = true)
@@ -80,17 +79,14 @@ class controller extends Controller {
         this.$scope.$on('mobileSearch:open', this.openMobileSearch)
 
         this.$scope.suggest.doSuggest = (query) => {
-            if (query == null)
-                return []
-
+            if (query == null) return []
             this.$scope.suggest.suggestions = this.suggestService.suggest(query, this.suggestService.getSuggestURLbase())
 
             if (this.$scope.doInlineSuggestion && this.$scope.suggest.suggestions)
                 this.$scope.suggest.suggestions.then(data => {
                     const firstSuggestion = data[0]
 
-                    if (!firstSuggestion)
-                        return this.clearInlineSuggestion()
+                    if (!firstSuggestion) return this.clearInlineSuggestion()
 
                     const searchTextLength = this.$scope.searchFields.searchQuery.length
 
@@ -106,16 +102,18 @@ class controller extends Controller {
         this.$scope.keyPressed = (evt) => {
             switch(evt.keyCode) {
                 case 8: // backspace
-                    if (this.$scope.inlineSuggestion)
-                        evt.preventDefault()
-
+                    if (this.$scope.inlineSuggestion) evt.preventDefault()
                     this.$scope.doInlineSuggestion = false
                     break
                 case 13: // enter
-                    if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase()))
-                        this.processSearchQuery(this.$scope.searchFields.searchQuery)
+                    if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase())) {
+                        if (Boolean(this.$scope.searchFields.searchQuery))
+                            this.processSearchQuery(this.$scope.searchFields.searchQuery)
+                    }
 
-                    angular.element(document.querySelector('#header-search-input')).controller('mdAutocomplete').hidden = true
+                    angular.element(document.querySelector('#header-search-input'))
+                        .controller('mdAutocomplete')
+                        .hidden = true
                     document.getElementById('header-search-input').blur()
                     this.$scope.doInlineSuggestion = false
                     break
@@ -126,13 +124,11 @@ class controller extends Controller {
         }
 
         this.$scope.clickOutside = () => {
-            if (this.$rootScope.dontCloseSearch)
-                this.$rootScope.dontCloseSearch = false
+            if (this.$rootScope.dontCloseSearch) this.$rootScope.dontCloseSearch = false
         }
 
         this.$scope.$watch('detailedSearch.mainField', (newValue, oldValue) => {
-            if (newValue != oldValue)
-                this.$scope.searchFields.searchQuery = newValue || ''
+            if (newValue !== oldValue) this.$scope.searchFields.searchQuery = newValue || ''
         }, true)
 
         this.$scope.$watch('searchFields.searchQuery', this.processSearchQuery.bind(this), true)
@@ -143,8 +139,8 @@ class controller extends Controller {
 
         this.$scope.$watch(() => this.searchService.getQuery(), (query) => {
             // Search query is not updated from search service while detailed search is open
-            if (!query || !this.$scope.detailedSearch.isVisible)
-                this.$scope.searchFields.searchQuery = query
+            if (query == null) this.dontSearch = true
+            if (!query || !this.$scope.detailedSearch.isVisible) this.$scope.searchFields.searchQuery = query
         }, true)
 
         this.$scope.$watch(() => this.translationService.getLanguage(), (language) => {
@@ -221,8 +217,7 @@ class controller extends Controller {
         this.setHeaderColor = this.setHeaderColor.bind(this)
         this.$timeout(this.setHeaderColor)
         const onLearningObjectAdminStatusChange = (currentValue, previousValue) => {
-            if (currentValue !== previousValue)
-                this.setHeaderColor()
+            if (currentValue !== previousValue) this.setHeaderColor()
         }
         this.$rootScope.$watch('learningObjectPrivate', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectDeleted', onLearningObjectAdminStatusChange)
@@ -238,17 +233,14 @@ class controller extends Controller {
             this.$scope.isHeaderRed = false
         }
 
-        if (!this.authenticatedUserService.isModeratorOrAdmin()){
-            return setDefault()
-        }
+        if (!this.authenticatedUserService.isModeratorOrAdmin()) return setDefault()
 
         const path = this.$location.path()
         const isDashboard = path.startsWith('/dashboard')
         const isMaterial = path.startsWith('/material')
         const isPortfolio = path.startsWith('/portfolio')
 
-        if (!isMaterial && !isPortfolio && !isDashboard)
-            return setDefault()
+        if (!isMaterial && !isPortfolio && !isDashboard) return setDefault()
 
         const {
             learningObjectPrivate,
@@ -276,25 +268,26 @@ class controller extends Controller {
             ))
         )
         this.$rootScope.$broadcast(
-            this.$scope.isHeaderRed
-                ? 'header:red'
-                : 'header:default'
+            this.$scope.isHeaderRed ? 'header:red' : 'header:default'
         )
     }
     setLanguage(language) {
         const shouldReload = this.$scope.selectedLanguage !== language
-
         this.translationService.setLanguage(language)
         this.$scope.selectedLanguage = language
-
-        if (shouldReload)
-            window.location.reload()
+        if (shouldReload) window.location.reload()
     }
     search() {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
+        this.handleSorting()
+        this.searchService.setIsGrouped(Boolean(this.$scope.searchFields.searchQuery))
         this.$location.url(this.searchService.getURL())
+    }
+    handleSorting() {
+        this.searchService.setSort('default')
+        this.searchService.setSortDirection('desc')
     }
     closeDetailedSearch() {
         this.$timeout(() => {
@@ -320,8 +313,7 @@ class controller extends Controller {
         this.$scope.inlineSuggestion = ''
     }
     processSearchQuery(newValue, oldValue) {
-        if (newValue != oldValue && !newValue)
-            this.clearInlineSuggestion()
+        if (newValue !== oldValue && !newValue) this.clearInlineSuggestion()
 
         this.$scope.searchFields.searchQuery = newValue || ''
 
@@ -331,8 +323,7 @@ class controller extends Controller {
         if (this.$scope.detailedSearch.isVisible)
             this.$scope.detailedSearch.queryIn = this.$scope.searchFields.searchQuery
 
-        if (this.dontSearch)
-            this.dontSearch = false
+        if (this.dontSearch && newValue != null) this.dontSearch = false
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
@@ -434,7 +425,7 @@ directive('dopHeader', {
         setTimeout(() => {
             const headerInput = document.getElementById('header-search-input')
 
-            headerInput.addEventListener('focus', () => isSuggestVisible = headerInput.value != '')
+            headerInput.addEventListener('focus', () => isSuggestVisible = headerInput.value !== '')
             headerInput.addEventListener('blur', () => isSuggestVisible = false)
         })
     },
