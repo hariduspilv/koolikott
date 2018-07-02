@@ -123,9 +123,9 @@
     <!-- Common to ALL entities -->
     <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
     <field name="type" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
-    <field name="icon" type="string" indexed="true" stored="false" required="true" multiValued="false"/>
 
     <!-- Learning Object -->
+    <field name="icon" type="string" indexed="true" stored="false" required="false" multiValued="false"/>
     <field name="target_group" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="cross_curricular_theme" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <field name="key_competence" type="text_general" indexed="true" stored="false" multiValued="true"/>
