@@ -98,15 +98,19 @@ class controller extends Controller {
         ))
     }
     buildTitle(t, title, totalResults, translationsKeys) {
-        const noResult = t(translationsKeys.noResults)
-        const singleResultTitle = t(translationsKeys.singleResult)
-        const multipleResultTitle = t(translationsKeys.multipleResults)
-        return title ? t(title)
-            : this.$scope.searching ? t('SEARCH_RESULTS')
-                : !totalResults ? noResult.replace('${query}', this.searchService.getQuery())
-                    : totalResults === 1 ? singleResultTitle.replace('${query}', this.searchService.getQuery())
-                        : totalResults > 1 ? multipleResultTitle.replace('${count}', totalResults).replace('${query}', this.searchService.getQuery())
-                            : ''
+        const query = this.searchService.getQuery()
+        let newTitle = ''
+        if (!totalResults) newTitle = t(translationsKeys.noResults).replace('${query}', this.searchService.getQuery())
+        else if (totalResults === 1) {
+            newTitle = t(translationsKeys.singleResult)
+            newTitle = query ? newTitle.replace('${query}', query) : newTitle.replace('\"${query}\"', '')
+        }
+        else if (totalResults > 1) {
+            newTitle = t(translationsKeys.multipleResults)
+            newTitle = query ? newTitle.replace('${count}', totalResults).replace('${query}', query)
+                : newTitle.replace('${count}', totalResults).replace('${query}', '').replace(/"/g, '')
+        }
+        return title ? t(title) : this.$scope.searching ? t('SEARCH_RESULTS') : newTitle
     }
     setPhraseTitlesExact() {
         const t = (key) => this.$translate.instant(key)
