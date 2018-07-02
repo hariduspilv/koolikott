@@ -173,8 +173,8 @@
 
     <!-- Portfolio -->
     <field name="summary" type="text_general" indexed="true" stored="false"/>
-    <field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    <field name="chapterText" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <!--<field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
+    <!--<field name="chapterText" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
 
     <!-- catchall field, containing all other searchable text fields (implemented
          via copyField further on in this schema  -->
@@ -206,8 +206,8 @@
     <copyField source="resource_type" dest="text"/>
     <copyField source="license_type" dest="text"/>
     <copyField source="summary" dest="text"/>
-    <copyField source="chapterTitle" dest="text"/>
-    <copyField source="chapterText" dest="text"/>
+    <!--<copyField source="chapterTitle" dest="text"/>-->
+    <!--<copyField source="chapterText" dest="text"/>-->
     <copyField source="language" dest="text"/>
     <copyField source="publisher" dest="text"/>
     <copyField source="peerReview" dest="text"/>
@@ -225,8 +225,8 @@
     <copyField source="resource_type" dest="suggest_phrase"/>
     <copyField source="license_type" dest="suggest_phrase"/>
     <copyField source="summary" dest="suggest_phrase"/>
-    <copyField source="chapterTitle" dest="suggest_phrase"/>
-    <copyField source="chapterText" dest="suggest_phrase"/>
+    <!--<copyField source="chapterTitle" dest="suggest_phrase"/>-->
+    <!--<copyField source="chapterText" dest="suggest_phrase"/>-->
     <copyField source="language" dest="suggest_phrase"/>
     <copyField source="publisher" dest="suggest_phrase"/>
 
