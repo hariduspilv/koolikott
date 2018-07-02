@@ -425,7 +425,7 @@ public class SearchServiceTest extends SearchServiceTestUtil {
     @Test
     public void searchWithSorting() {
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSort("somefield");
+        searchFilter.setSort(SortType.ADDED);
         searchFilter.setSortDirection(SortDirection.DESCENDING);
         String tokenizedQuery = "((english language) OR (\"english language\")) AND (visibility:\"public\")";
         String expectedSort = "somefield desc";

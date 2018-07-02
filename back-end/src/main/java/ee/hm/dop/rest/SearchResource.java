@@ -1,9 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.SortDirection;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
@@ -72,7 +69,7 @@ public class SearchResource extends BaseResource {
         searchFilter.setCrossCurricularThemes(crossCurricularThemeService.getCrossCurricularThemeById(crossCurricularThemeIds));
         searchFilter.setKeyCompetences(keyCompetenceService.getKeyCompetenceById(keyCompetenceIds));
         searchFilter.setCurriculumLiterature(isCurriculumLiterature);
-        searchFilter.setSort(sort);
+        searchFilter.setSort(SortType.getByValue(sort));
         searchFilter.setSortDirection(SortDirection.getByValue(sortDirection));
         searchFilter.setCreator(creator);
         searchFilter.setRequestingUser(getLoggedInUser());

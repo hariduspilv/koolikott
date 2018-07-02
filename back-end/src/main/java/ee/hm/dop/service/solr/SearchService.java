@@ -77,7 +77,7 @@ public class SearchService {
     private SolrSearchRequest buildSearchRequest(String queryInput, SearchFilter searchFilter, long firstItem, Long limit) {
         String query = clearQuerySearch(queryInput);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
-        String sort = SearchConverter.getSort(searchFilter);
+        String sort = SortBuilder.getSort(searchFilter);
         if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
 
         SolrSearchRequest searchRequest = new SolrSearchRequest();

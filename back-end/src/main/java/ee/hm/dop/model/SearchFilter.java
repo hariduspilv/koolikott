@@ -22,7 +22,7 @@ public class SearchFilter {
     private List<KeyCompetence> keyCompetences;
     private List<Visibility> visibility;
     private boolean isCurriculumLiterature;
-    private String sort;
+    private SortType sort;
     private SortDirection sortDirection;
     private boolean myPrivates;
     private boolean recommended;
@@ -32,14 +32,6 @@ public class SearchFilter {
     private String searchType = "AND";
     private List<Long> excluded;
     private boolean grouped = false;
-
-    public boolean isGrouped() {
-        return grouped;
-    }
-
-    public void setGrouped(boolean grouped) {
-        this.grouped = grouped;
-    }
 
     public boolean isEmptySearch() {
         return isEmpty(taxon) &&
@@ -54,6 +46,14 @@ public class SearchFilter {
                 isEmpty(keyCompetences) &&
                 !isCurriculumLiterature &&
                 creator == null && !recommended && !favorites;
+    }
+
+    public boolean isGrouped() {
+        return grouped;
+    }
+
+    public void setGrouped(boolean grouped) {
+        this.grouped = grouped;
     }
 
     public List<Long> getExcluded() {
@@ -160,11 +160,11 @@ public class SearchFilter {
         this.isCurriculumLiterature = isCurriculumLiterature;
     }
 
-    public String getSort() {
+    public SortType getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(SortType sort) {
         this.sort = sort;
     }
 

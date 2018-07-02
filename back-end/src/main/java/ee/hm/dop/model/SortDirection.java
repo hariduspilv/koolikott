@@ -23,4 +23,12 @@ public enum SortDirection {
     public boolean isDesc(){
         return this == DESCENDING;
     }
+
+    public boolean recentFirst(){
+        return isDesc();
+    }
+
+    public boolean portfoliosFirst(){
+        return isDesc();
+    }
 }

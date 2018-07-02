@@ -25,7 +25,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     private static final int RESULTS_PER_PAGE = 3;
 
     @Test
-    public void getMostLiked() throws Exception {
+    public void getMostLiked() {
         List<Searchable> results = doGet("search/mostLiked?maxResults=12", new GenericType<List<Searchable>>() {
         });
         assertTrue(CollectionUtils.isNotEmpty(results));
@@ -257,7 +257,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     public void searchWithSorting() {
         String query = "tuesday";
         SearchFilter searchFilter = new SearchFilter();
-        searchFilter.setSort("somefield");
+        searchFilter.setSort(SortType.DEFAULT);
         searchFilter.setSortDirection(SortDirection.DESCENDING);
         int start = 0;
         SearchResult searchResult = doGet(buildQueryURL(query, start, null, searchFilter), SearchResult.class);
@@ -402,7 +402,7 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
             queryURL += "&curriculumLiterature=true";
         }
         if (searchFilter.getSort() != null) {
-            queryURL += "&sort=" + searchFilter.getSort();
+            queryURL += "&sort=" + searchFilter.getSort().getValue();
         }
         if (searchFilter.getSortDirection() != null) {
             queryURL += "&sortDirection=" + searchFilter.getSortDirection().getValue();
