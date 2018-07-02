@@ -1,3 +1,17 @@
+## e-Koolikott [1.20.0](https://github.com/hariduspilv/koolikott/milestone/19) 
+
+### Muutunud
+* Tühi otsing -> Tühja otsingu f-se eemaldamine [#325](https://github.com/hariduspilv/koolikott/issues/325)
+* Otsingu algatamine -> Otsinguribale placeholderi teksti lisamine [#326](https://github.com/hariduspilv/koolikott/issues/326)
+* Otsingu algatamine -> Kogumiku muutmise vaates otsingu ribal placeholderi teksti muutmine [#327](https://github.com/hariduspilv/koolikott/issues/327)
+* Otsingu parameetrid -> Otsingu metaandmete piiramine [#328](https://github.com/hariduspilv/koolikott/issues/328)
+* Ühe sõna otsitulemuste kuvamise loogika -> Otsingutulemuste kuvamine [#329](https://github.com/hariduspilv/koolikott/issues/329)
+* Ühe sõna otsitulemuste kuvamise loogika -> Otsingutulemuste kiirfiltreering [#330](https://github.com/hariduspilv/koolikott/issues/330)
+* Fraasi otsingu otsitulemuste kuvamise loogika -> Otsingutulemuste kuvamine [#331](https://github.com/hariduspilv/koolikott/issues/331)
+* Fraasi otsingu otsitulemuste kuvamise loogika -> Otsingutulemuste kiirfiltreering [#332](https://github.com/hariduspilv/koolikott/issues/332)
+* MS20 otsingu töödest tulenevalt front-endi refaktoreerimine [#333](https://github.com/hariduspilv/koolikott/issues/333)
+
+
 ## e-Koolikott [1.19.0](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 25.05.2018)
 
 ### Muutunud
