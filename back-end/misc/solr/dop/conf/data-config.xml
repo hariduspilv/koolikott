@@ -464,7 +464,10 @@
 
                 <entity name="Icon"
                         query="SELECT
-                                  CASE WHEN r.name = 'AUDIO'
+                                  CASE
+                                  WHEN r.name IS NULL
+                                    THEN 'z__donut_large'
+                                  WHEN r.name = 'AUDIO'
                                     THEN 'audiotrack'
                                   WHEN r.name = 'IMAGE'
                                     THEN 'image'

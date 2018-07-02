@@ -4,7 +4,7 @@
 class controller extends Controller {
     getMaterialIcon(resourceTypes) {
         if (!Array.isArray(resourceTypes) || !resourceTypes.length)
-            return 'description'
+            return 'donut_large'
 
         for (let { name } of resourceTypes)
             switch(name.trim()) {

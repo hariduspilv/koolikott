@@ -179,6 +179,12 @@ md-card {
 
 .card-cover,
 .embeddedMaterial {
+  &.donut_large .pattern {
+      background-color: $green1;
+      .sheet {
+        @include pattern-color($green1);
+      }
+    }
   &.description .pattern {
       background-color: $green1;
       .sheet {
