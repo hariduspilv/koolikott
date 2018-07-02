@@ -184,9 +184,10 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void admin_can_revert_all_changes() {
         Material material = getMaterial(MATERIAL_26);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_26), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_26), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_26);
+        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_26), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
+        assertHas((Material) tagDTO.getLearningObject(), TAXON_MATHEMATICS_DOMAIN);
+        TagDTO tagDTO2 = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_26), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name), TagDTO.class);
+        Material updatedMaterial = (Material) tagDTO2.getLearningObject();
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
         Material updatedMaterial1 = doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_26), null, Material.class);
