@@ -217,13 +217,8 @@ class controller extends Controller {
 
         this.$scope.$broadcast('targetGroupSelector:clear')
 
-        if (this.$rootScope.isEditPortfolioMode)
-            this.$scope.detailedSearch.type = 'material'
-
+        if (this.$rootScope.isEditPortfolioMode) this.$scope.detailedSearch.type = 'material'
         this.$scope.$parent.clearTaxonSelector()
-
-        if (this.accessor && typeof this.accessor.clearSimpleSearch === 'function')
-            this.accessor.clearSimpleSearch()
     }
     setUsedResourceTypes(resourceTypes) {
         this.$scope.usedResourceTypes = resourceTypes

@@ -3,9 +3,10 @@
 angular.module('koolikottApp')
 .controller('userPortfoliosController',
 [
-    '$scope', '$route', 'authenticatedUserService', '$translate', 'serverCallService',
-    function ($scope, $route, authenticatedUserService, $translate, serverCallService) {
+    '$scope', '$route', 'authenticatedUserService', '$translate', 'serverCallService', 'searchService',
+    function ($scope, $route, authenticatedUserService, $translate, serverCallService, searchService) {
         function init() {
+            searchService.setQuery(null)
             $scope.cache = false;
             $scope.url = "rest/portfolio/getByCreator";
             $scope.params = {
