@@ -1,10 +1,10 @@
 package ee.hm.dop.service.solr;
 
 public enum SearchGrouping {
-    GROUP_SIMILAR, GROUP_NONE, GROUP_PHRASE;
+    GROUP_WORD, GROUP_NONE, GROUP_PHRASE;
 
-    public boolean isSimilarGrouping() {
-        return this == GROUP_SIMILAR;
+    public boolean isSingleGrouping() {
+        return this == GROUP_WORD;
     }
 
     public boolean isPhraseGrouping() {

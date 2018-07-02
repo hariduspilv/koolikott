@@ -3,7 +3,10 @@ package ee.hm.dop.service.solr;
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
 import org.apache.commons.configuration.Configuration;
-import org.apache.solr.client.solrj.*;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.Suggestion;
@@ -16,10 +19,12 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.solr.SearchCommandBuilder.getCountCommand;
 import static ee.hm.dop.service.solr.SearchCommandBuilder.getSearchCommand;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 
@@ -60,7 +65,17 @@ public class SolrService implements SolrEngineService {
                 ? RESULTS_PER_PAGE
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
 
-        return executeCommand(getSearchCommand(searchRequest, itemLimit));
+        SolrSearchResponse response = executeCommand(getSearchCommand(searchRequest, itemLimit));
+        if (searchRequest.getGrouping().isPhraseGrouping()) {
+            SolrSearchResponse countResponse = executeCommand(getCountCommand(searchRequest));
+            countResponse.getGrouped().forEach((key, content) -> {
+                if (key.startsWith("(")) response.setSimilarResultCount(content.getGroupResponse().getTotalResults());
+                if (key.startsWith("\"")) response.setExactResultCount(content.getGroupResponse().getTotalResults());
+            });
+        } else if (searchRequest.getGrouping().isSingleGrouping()) {
+            response.setExactResultCount(response.getGrouped().entrySet().iterator().next().getValue().getMatches());
+        }
+        return response;
     }
 
     @Override
@@ -74,6 +89,7 @@ public class SolrService implements SolrEngineService {
         searchRequest.setFirstItem(initialStart);
         return response;
     }
+
 
     @Override
     public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {

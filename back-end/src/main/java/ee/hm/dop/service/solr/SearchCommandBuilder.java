@@ -22,39 +22,47 @@ public class SearchCommandBuilder {
             "&wt=json" +
             "&start=%3$d" +
             "&rows=%4$d";
-    private static final String SEARCH_PATH_GROUPING = "&group=true&group.format=simple";
+    private static final String SEARCH_PATH_GROUPING = "&group=true" +
+            "&group.format=simple" +
+            "&stats=true" +
+            "&stats.field=id" +
+            "&stats.calcdistinct=true";
     private static final String GROUP_QUERY = "&group.query=";
     private static final String TYPE_MATERIAL = " AND type:\"material\"";
     private static final String TYPE_PORTFOLIO = " AND type:\"portfolio\"";
 
-    public static String getSearchCommand(SolrSearchRequest searchRequest, Long itemLimit) {
+    static String getSearchCommand(SolrSearchRequest searchRequest, Long itemLimit) {
         if (searchRequest.getGrouping().isNoGrouping()) {
             return searchCommand(searchRequest, itemLimit, SEARCH_PATH);
         }
         return searchCommand(searchRequest, itemLimit, SEARCH_PATH + SEARCH_PATH_GROUPING) + getGroupingCommand(searchRequest);
     }
 
-    public static boolean isPhrase(String query) {
+    static String getCountCommand(SolrSearchRequest searchRequest) {
+        String query = searchRequest.getOriginalQuery();
+        String path = format(SEARCH_PATH, encode(searchRequest.getSolrQuery()), "", 0, 1);
+        return path + SEARCH_PATH_GROUPING + GROUP_QUERY + encode(parenthasize(query)) + GROUP_QUERY + encode(quotify(query));
+    }
+
+    static boolean isPhrase(String query) {
         return query != null && query.split("\\s+").length > 1;
     }
 
-    public static SearchGrouping pickGrouping(String query, SearchFilter searchFilter) {
+    static SearchGrouping pickGrouping(String query, SearchFilter searchFilter) {
         if (!searchFilter.isGrouped()) return SearchGrouping.GROUP_NONE;
         if (isPhrase(query)) return SearchGrouping.GROUP_PHRASE;
-        return SearchGrouping.GROUP_SIMILAR;
+        return SearchGrouping.GROUP_WORD;
     }
 
-    public static String clearQuerySearch(String query) {
-        if (query == null) {
-            return null;
-        }
+    static String clearQuerySearch(String query) {
+        if (query == null) return null;
         if (UNIQUE_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
             return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
         }
         return query.replaceAll("\"", "");
     }
 
-    public static String quotify(String query) {
+    static String quotify(String query) {
         return "\"" + query + "\"";
     }
 
@@ -73,12 +81,12 @@ public class SearchCommandBuilder {
         return groupSearchPathMaterial + groupSearchPathPortfolio;
     }
 
-    private static String buildPath(SolrSearchRequest searchRequest, String query, List<String> groupingKeysMaterial, String typeMaterial) {
+    private static String buildPath(SolrSearchRequest searchRequest, String query, List<String> groupingKeys, String type) {
         if (searchRequest.getGrouping().isPhraseGrouping()) {
-            return getGroupsForQuery(groupingKeysMaterial, parenthasize(query) + typeMaterial)
-                    + getGroupsForQuery(groupingKeysMaterial, quotify(query) + typeMaterial);
+            return getGroupsForQuery(groupingKeys, parenthasize(query) + type)
+                    + getGroupsForQuery(groupingKeys, quotify(query) + type);
         } else {
-            return getGroupsForQuery(groupingKeysMaterial, query + typeMaterial);
+            return getGroupsForQuery(groupingKeys, query + type);
         }
     }
 

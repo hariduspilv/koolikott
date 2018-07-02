@@ -9,6 +9,24 @@ public class SolrSearchResponse {
     private ResponseHeader responseHeader;
     private String status;
     private Map<String, String> statusMessages;
+    private long exactResultCount;
+    private long similarResultCount;
+
+    public long getExactResultCount() {
+        return exactResultCount;
+    }
+
+    public void setExactResultCount(long exactResultCount) {
+        this.exactResultCount = exactResultCount;
+    }
+
+    public long getSimilarResultCount() {
+        return similarResultCount;
+    }
+
+    public void setSimilarResultCount(long similarResultCount) {
+        this.similarResultCount = similarResultCount;
+    }
 
     public Map<String, Response> getGrouped() {
         return grouped;

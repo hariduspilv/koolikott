@@ -18,6 +18,17 @@ public class Response {
     @JsonProperty("start")
     private long start;
 
+    @JsonProperty("matches")
+    private long matches;
+
+    public long getMatches() {
+        return matches;
+    }
+
+    public void setMatches(long matches) {
+        this.matches = matches;
+    }
+
     public Response getGroupResponse() {
         return groupResponse;
     }
