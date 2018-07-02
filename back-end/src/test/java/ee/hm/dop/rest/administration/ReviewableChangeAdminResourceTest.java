@@ -39,7 +39,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public static final String REVERT_ALL_CHANGES_URL = "admin/changed/%s/revertAll";
     public static final String REVERT_ONE_CHANGES_URL = "admin/changed/%s/revertOne/%s";
     public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
-    public static final String UPDATE_MATERIAL_URL = "material";
     public static final String SET_IMPROPER = "impropers";
 
     public static final String BIEBER_ORIGINAL = "http://www.bieber%s.com";
@@ -61,8 +60,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void changes_are_registered_on_adding_new_system_tag() {
         Material material = getMaterial(MATERIAL_16);
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_16);
+        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_16), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
+        Material updatedMaterial = (Material) tagDTO.getLearningObject();
         assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN);
     }
 
@@ -70,8 +69,8 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public void changes_are_not_registered_on_removing_an_existing_system_tag() {
         Material material = getMaterial(MATERIAL_17);
         assertDoesntHave(material, TAXON_FOREIGNLANGUAGE_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_17), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_17);
+        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_17), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name), TagDTO.class);
+        Material updatedMaterial = (Material) tagDTO.getLearningObject();
         assertHas(updatedMaterial, TAXON_FOREIGNLANGUAGE_DOMAIN);
         updatedMaterial.setTags(new ArrayList<>());
         Material updatedMaterial2 = createOrUpdateMaterial(updatedMaterial);
