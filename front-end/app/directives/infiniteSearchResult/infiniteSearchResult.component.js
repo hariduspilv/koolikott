@@ -15,12 +15,12 @@ class controller extends Controller {
         }
     }
     $onInit() {
-        $('body').materialScrollTop()
         if (!this.url) this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
         this.selectedCount = 0
 
+        $('body').materialScrollTop()
         this.$scope.items = []
         this.$scope.sortOptions = []
         this.$scope.filterGroups = {}
@@ -339,6 +339,9 @@ class controller extends Controller {
         if (isExact) controller.disableAllGroupsForFilter(this.$scope.filterGroups)
         else controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
     }
+    isLoggedIn() {
+        return this.authenticatedUserService.isAuthenticated()
+    }
 }
 controller.$inject = [
     '$scope',
@@ -350,6 +353,7 @@ controller.$inject = [
     'serverCallService',
     'searchService',
     'sortService',
+    'authenticatedUserService'
 ]
 component('dopInfiniteSearchResult', {
     bindings: {

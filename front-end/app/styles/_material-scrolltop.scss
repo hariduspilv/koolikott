@@ -1,7 +1,3 @@
-$mst-gutter: 23px; // Gap from corner (default: $column-gutter)
-$mst-button-size: 56px; // Size of circle button (default: rem-calc(56))
-$mst-icon: true !default; // Set false if you want to use your own sign directly inside html span element
-
 // ==========================================================================
 //   Mixins for material-scrolltop
 // ==========================================================================
@@ -25,6 +21,10 @@ $mst-icon: true !default; // Set false if you want to use your own sign directly
 //   Stylesheet
 // ==========================================================================
 
+@mixin mst-icon {
+  background: url(/images/top-arrow.svg) $gray-600-light no-repeat center 50%;
+}
+
 .material-scrolltop {
   display: block;
   position: fixed;
@@ -36,21 +36,17 @@ $mst-icon: true !default; // Set false if you want to use your own sign directly
   overflow: hidden;
   outline: none;
   border: none;
-  border-radius: 2px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, .5);
+  box-shadow: 0 3px 10px $gray-n;
   cursor: hand;
   border-radius: 50%;
-  background: $color-primary;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   @include prefixer(transition, all 0.3s cubic-bezier(0.25, 0.25, 0, 1));
-  @if $mst-icon {
-    @extend %mst-icon;
-  }
+  @include mst-icon;
 
   &:hover {
-    background-color: $color-primary;
+    background-color: $gray-600-light;
     text-decoration: none;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, .5), 0 3px 15px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 10px $gray-n, 0 3px 15px $gray-n;
   }
 
   &::before {
@@ -58,16 +54,18 @@ $mst-icon: true !default; // Set false if you want to use your own sign directly
     content: "";
     width: 0;
     border-radius: 100%;
-    background: mix($color-primary, $sidenav-color, 85%);
-    @if $mst-icon {
-      @extend %mst-icon;
-    }
+    background: mix($gray-600-light, $sidenav-color, 85%);
+    @include mst-icon;
   }
 
   &:active::before {
     width: 120%;
     padding-top: 120%;
     @include prefixer(transition, all .2s ease-out);
+  }
+
+  &.higher {
+    bottom: $mst-gutter-bottom-high;
   }
 
   &.reveal {
@@ -82,8 +80,3 @@ $mst-icon: true !default; // Set false if you want to use your own sign directly
   }
 }
 
-%mst-icon {
-  background-image: url(/images/top-arrow.svg);
-  background-position: center 50%;
-  background-repeat: no-repeat;
-}

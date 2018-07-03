@@ -1,7 +1,10 @@
-<md-fab-speed-dial data-ng-show="hasPermission() && !$root.isEditPortfolioMode && (!$root.selectedMaterials || $root.selectedMaterials.length == 0)" class="md-fab-bottom-right md-scale main-fab-button ng-hide" md-open="isOpen"
-                   md-direction="up" ng-mouseenter="setFabState(true)" ng-mouseleave="setFabState(false)" id="main-fab-button">
+<md-fab-speed-dial
+  data-ng-show="hasPermission() && !$root.isEditPortfolioMode && (!$root.selectedMaterials || $root.selectedMaterials.length == 0)"
+  class="md-fab-bottom-right md-scale main-fab-button ng-hide" md-open="isOpen"
+  md-direction="up" ng-mouseenter="setFabState(true)" ng-mouseleave="setFabState(false)" id="main-fab-button">
   <md-fab-trigger>
-    <md-button ng-if="hasPermission()" aria-label="Lisa kogumik" class="md-fab main-fab" data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">
+    <md-button ng-if="hasPermission()" aria-label="Lisa kogumik" class="md-fab main-fab"
+               data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_PORTFOLIO"></span>
       </md-tooltip>
@@ -10,14 +13,16 @@
     </md-button>
   </md-fab-trigger>
   <md-fab-actions>
-    <md-button aria-label="Lisa material" class="md-fab md-mini main-fab__btn" data-ng-click="showAddMaterialDialog($event)"
+    <md-button aria-label="Lisa material" class="md-fab md-mini main-fab__btn"
+               data-ng-click="showAddMaterialDialog($event)"
                data-ng-if="hasPermission()" id="add-material">
       <md-tooltip md-direction="left">
         <span data-translate="ADD_MATERIAL"></span>
       </md-tooltip>
       <md-icon>note_add</md-icon>
     </md-button>
-    <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()" data-ng-if="$root.isViewPortfolioPage">
+    <md-button aria-label="Kopeeri kogumik" class="md-fab md-raised md-mini" data-ng-click="copyPortfolio()"
+               data-ng-if="$root.isViewPortfolioPage">
       <md-tooltip md-direction="left">
         <span data-translate="COPY_PORTFOLIO"></span>
       </md-tooltip>
