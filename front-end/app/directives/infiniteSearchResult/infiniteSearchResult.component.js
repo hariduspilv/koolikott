@@ -15,6 +15,7 @@ class controller extends Controller {
         }
     }
     $onInit() {
+        $('body').materialScrollTop()
         if (!this.url) this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
