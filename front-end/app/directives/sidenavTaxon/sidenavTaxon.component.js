@@ -65,11 +65,8 @@ class controller extends Controller {
         this.$scope.opened = true
     }
     handleOrderAndGrouping() {
-        if (!this.searchService.getQuery()) {
-            this.searchService.setSort('default')
-            this.searchService.setSortDirection('desc')
-            this.searchService.setIsGrouped(false)
-        } else this.searchService.setIsGrouped(true)
+        if (!this.searchService.getQuery()) this.searchService.setIsGrouped(false)
+        else this.searchService.setIsGrouped(true)
     }
     checkTaxonLevelAndAssignValues(level, children) {
         if (this.taxon.level === level && children.length > 0) {
