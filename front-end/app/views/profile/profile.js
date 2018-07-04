@@ -39,14 +39,14 @@ class controller extends Controller {
                 if (!isEmpty(data)) {
                     this.$scope.materials = data.items;
                 } else {
-                    this.getUsersMaterialsFail();
+                    controller.getUsersMaterialsFail();
                 }
             }, () => {
-                this.getUsersMaterialsFail()
+                controller.getUsersMaterialsFail()
             });
     }
 
-    getUsersMaterialsFail() {
+    static getUsersMaterialsFail() {
         console.log('Failed to get materials.');
     }
 

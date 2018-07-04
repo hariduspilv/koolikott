@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.Visibility;
@@ -21,6 +22,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -67,6 +69,10 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
+
+    @OneToMany(mappedBy = "learningObject", fetch = LAZY)
+    @JsonIgnore
+    private List<UserFavorite> userFavorites;
 
     @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
     private int likes;
@@ -197,5 +203,13 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
 
     public void setOrderNr(Integer orderNr) {
         this.orderNr = orderNr;
+    }
+
+    public List<UserFavorite> getUserFavorites() {
+        return userFavorites;
+    }
+
+    public void setUserFavorites(List<UserFavorite> userFavorites) {
+        this.userFavorites = userFavorites;
     }
 }

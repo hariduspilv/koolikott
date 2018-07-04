@@ -1,0 +1,82 @@
+// ==========================================================================
+//   Mixins for material-scrolltop
+// ==========================================================================
+
+@mixin prefixer($name, $argument) {
+  -webkit-#{$name}: #{$argument};
+  -ms-#{$name}: #{$argument};
+  -moz-#{$name}: #{$argument};
+  -o-#{$name}: #{$argument};
+  #{$name}: #{$argument};
+}
+
+@mixin centerer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include prefixer(transform, translate(-50%, -50%));
+}
+
+// ==========================================================================
+//   Stylesheet
+// ==========================================================================
+
+@mixin mst-icon {
+  background: url(/images/top-arrow.svg) $gray-600-light no-repeat center 50%;
+}
+
+.material-scrolltop {
+  display: block;
+  position: fixed;
+  width: 0;
+  height: 0;
+  bottom: $mst-gutter;
+  right: $mst-gutter;
+  padding: 0;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  box-shadow: 0 3px 10px $gray-n;
+  cursor: hand;
+  border-radius: 50%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  @include prefixer(transition, all 0.3s cubic-bezier(0.25, 0.25, 0, 1));
+  @include mst-icon;
+
+  &:hover {
+    background-color: $gray-600-light;
+    text-decoration: none;
+    box-shadow: 0 3px 10px $gray-n, 0 3px 15px $gray-n;
+  }
+
+  &::before {
+    @include centerer;
+    content: "";
+    width: 0;
+    border-radius: 100%;
+    background: mix($gray-600-light, $sidenav-color, 85%);
+    @include mst-icon;
+  }
+
+  &:active::before {
+    width: 120%;
+    padding-top: 120%;
+    @include prefixer(transition, all .2s ease-out);
+  }
+
+  &.higher {
+    bottom: $mst-gutter-bottom-high;
+  }
+
+  &.reveal {
+    width: $mst-button-size;
+    height: $mst-button-size;
+  }
+
+  span {
+    display: block;
+    font-size: 25px;
+    color: $sidenav-color;
+  }
+}
+

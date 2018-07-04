@@ -8,21 +8,24 @@ import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class SortBuilder {
+class SortBuilder {
 
-    public static final String PORTFOLIO_FIRST = "type desc";
-    public static final String MATERIAL_FIRST = "type asc";
-    public static final String RECENT_FIRST = "added desc";
-    public static final String EARLIEST_FIRST = "added asc";
-    public static final String VISIBILITY = "visibility asc";
-    public static final String ICON = "icon asc";
-    public static final String ID_DESC = "id desc";
-    public static final String ID_ASC = "id asc";
+    private static final String PORTFOLIO_FIRST = "type desc";
+    private static final String MATERIAL_FIRST = "type asc";
+    private static final String RECENT_FIRST = "added desc";
+    private static final String EARLIEST_FIRST = "added asc";
+    private static final String VISIBILITY = "visibility asc";
+    private static final String ICON = "icon asc";
+    private static final String ID_DESC = "id desc";
+    private static final String ID_ASC = "id asc";
 
-    public static String getSort(SearchFilter searchFilter) {
+    static String getSort(SearchFilter searchFilter) {
         SortType sort = searchFilter.getSort();
         SortDirection sortDirection = searchFilter.getSortDirection();
-        if (sort == null || sortDirection == null) return null;
+        if (sort == null || sortDirection == null) {
+            sort = SortType.DEFAULT;
+            sortDirection = SortDirection.DESCENDING;
+        }
 
         if (sort == SortType.DEFAULT) {
             return join(defaultSort(sortDirection));

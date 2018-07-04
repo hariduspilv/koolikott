@@ -91,6 +91,8 @@
   </div>
 </div>
 
+<button data-ng-class="{ 'higher': $ctrl.isLoggedIn() }" class="material-scrolltop" type="button"></button>
+
 <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
   <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
      data-translate="SEARCH_LOADING"></p>

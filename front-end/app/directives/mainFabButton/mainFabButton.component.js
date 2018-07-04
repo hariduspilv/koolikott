@@ -27,7 +27,7 @@ class controller extends Controller {
                 })
 
                 if (this.$rootScope.selectedMaterials && this.$rootScope.selectedMaterials.length > 0)
-                    for (var i = 0; i < this.$rootScope.selectedMaterials.length; i++)
+                    for (let i = 0; i < this.$rootScope.selectedMaterials.length; i++)
                         emptyPortfolio.chapters[0].contentRows.push({
                             learningObjects: [this.$rootScope.selectedMaterials[i]]
                         })

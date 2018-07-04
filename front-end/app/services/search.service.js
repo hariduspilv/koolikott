@@ -56,7 +56,7 @@ class controller extends Controller {
                         this.search[prop] = searchObject[prop]
                 }
     }
-    escapeQuery(query) {
+    static escapeQuery(query) {
         return query.replace(/\+/g, "%2B")
     }
     arrayToLowerCase(upperCaseArray) {
@@ -282,7 +282,7 @@ class controller extends Controller {
     getQueryURL(isBackendQuery) {
         let searchURL = 'q='
 
-        if (this.search.query) searchURL += this.escapeQuery(this.search.query)
+        if (this.search.query) searchURL += controller.escapeQuery(this.search.query)
 
         if (this.search.taxons)
             for (let i = 0; i < this.search.taxons.length; i++)

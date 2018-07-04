@@ -18,8 +18,9 @@ class controller extends Controller {
         if (!this.url) this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
-        this.selectedCount = 0
+        this.selectedMaxCount = 0
 
+        $('body').materialScrollTop({ offset: 300 })
         this.$scope.items = []
         this.$scope.sortOptions = []
         this.$scope.filterGroups = {}
@@ -171,6 +172,7 @@ class controller extends Controller {
                 || this.$scope.start >= this.selectedMaxCount;
         }
     }
+
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -319,14 +321,14 @@ class controller extends Controller {
         this.countAllInSelected()
     }
     countAllInSelected() {
-        this.selectedCount = 0
+        this.selectedMaxCount = 0
         this.countSelected(this.$scope.filterGroups)
         if (this.$scope.showFilterGroups === 'phraseGrouping') this.countSelected(this.$scope.filterGroupsExact)
     }
     countSelected(filterGroup) {
         Object.entries(filterGroup).forEach(([name, content]) => {
-            if (content.isMaterialActive) this.selectedCount = this.selectedCount + content.countMaterial
-            if (content.isPortfolioActive) this.selectedCount = this.selectedCount + content.countPortfolio
+            if (content.isMaterialActive) this.selectedMaxCount = this.selectedMaxCount + content.countMaterial
+            if (content.isPortfolioActive) this.selectedMaxCount = this.selectedMaxCount + content.countPortfolio
         })
     }
     static disableAllGroupsForFilter(filter) {
@@ -340,6 +342,9 @@ class controller extends Controller {
         if (isExact) controller.disableAllGroupsForFilter(this.$scope.filterGroups)
         else controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
     }
+    isLoggedIn() {
+        return this.authenticatedUserService.isAuthenticated()
+    }
 }
 controller.$inject = [
     '$scope',
@@ -348,9 +353,11 @@ controller.$inject = [
     '$timeout',
     '$translate',
     '$location',
+    '$filter',
     'serverCallService',
     'searchService',
     'sortService',
+    'authenticatedUserService',
 ]
 component('dopInfiniteSearchResult', {
     bindings: {

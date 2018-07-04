@@ -1,5 +1,5 @@
 .button-grouping-filter[disabled] {
-  background-color: $selected-gray;
+  background-color: $gray-400-light;
 }
 
 .button-grouping-filter {
@@ -8,7 +8,7 @@
   line-height: 28px;
   border-radius: 16px;
   color: $color-selected-menu;
-  background: $selected-gray;
+  background: $gray-400-light;
   min-height: 34px;
   min-width: 65px;
 }
@@ -26,6 +26,6 @@
   color: $gray-600-light;
 }
 
-.active .group_btn__icon{
+.active .group_btn__icon {
   color: $color-selected-icon;
 }
