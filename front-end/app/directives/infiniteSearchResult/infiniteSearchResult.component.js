@@ -166,7 +166,9 @@ class controller extends Controller {
         if (!this.params.isGrouped) {
             return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
         } else {
-            return (this.$scope.items || []).length >= this.selectedCount || this.$scope.start >= this.selectedCount;
+            return (this.$filter('itemGroupFilter', this.$scope.items, this.$scope.filterGroups,
+                this.$scope.filterGroupsExact, this.$scope.showFilterGroups) || []).length >= this.selectedMaxCount
+                || this.$scope.start >= this.selectedMaxCount;
         }
     }
     search(isNewSearch) {
