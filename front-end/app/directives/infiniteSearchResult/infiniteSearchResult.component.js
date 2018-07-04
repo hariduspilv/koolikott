@@ -18,7 +18,7 @@ class controller extends Controller {
         if (!this.url) this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
-        this.selectedCount = 0
+        this.selectedMaxCount = 0
 
         $('body').materialScrollTop()
         this.$scope.items = []
@@ -167,9 +167,12 @@ class controller extends Controller {
         if (!this.params.isGrouped) {
             return (this.$scope.items || []).length >= this.totalResults || this.$scope.start >= this.totalResults
         } else {
-            return (this.$scope.items || []).length >= this.selectedCount || this.$scope.start >= this.selectedCount;
+            return (this.$filter('itemGroupFilter', this.$scope.items, this.$scope.filterGroups,
+                this.$scope.filterGroupsExact, this.$scope.showFilterGroups) || []).length >= this.selectedMaxCount
+                || this.$scope.start >= this.selectedMaxCount;
         }
     }
+
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -318,14 +321,14 @@ class controller extends Controller {
         this.countAllInSelected()
     }
     countAllInSelected() {
-        this.selectedCount = 0
+        this.selectedMaxCount = 0
         this.countSelected(this.$scope.filterGroups)
         if (this.$scope.showFilterGroups === 'phraseGrouping') this.countSelected(this.$scope.filterGroupsExact)
     }
     countSelected(filterGroup) {
         Object.entries(filterGroup).forEach(([name, content]) => {
-            if (content.isMaterialActive) this.selectedCount = this.selectedCount + content.countMaterial
-            if (content.isPortfolioActive) this.selectedCount = this.selectedCount + content.countPortfolio
+            if (content.isMaterialActive) this.selectedMaxCount = this.selectedMaxCount + content.countMaterial
+            if (content.isPortfolioActive) this.selectedMaxCount = this.selectedMaxCount + content.countPortfolio
         })
     }
     static disableAllGroupsForFilter(filter) {
@@ -350,10 +353,11 @@ controller.$inject = [
     '$timeout',
     '$translate',
     '$location',
+    '$filter',
     'serverCallService',
     'searchService',
     'sortService',
-    'authenticatedUserService'
+    'authenticatedUserService',
 ]
 component('dopInfiniteSearchResult', {
     bindings: {
