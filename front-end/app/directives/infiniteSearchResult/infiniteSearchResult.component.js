@@ -20,7 +20,7 @@ class controller extends Controller {
         this.initialParams = Object.assign({}, this.params)
         this.selectedMaxCount = 0
 
-        $('body').materialScrollTop()
+        $('body').materialScrollTop({ offset: 300 })
         this.$scope.items = []
         this.$scope.sortOptions = []
         this.$scope.filterGroups = {}

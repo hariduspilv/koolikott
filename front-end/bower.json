@@ -34,8 +34,7 @@
     "core.js": "^2.5.1",
     "medium-editor": "5.23.2",
     "angular-sortable-view": "https://github.com/ipsips/angular-sortable-view.git#master",
-    "medium-button": "^1.1.2",
-    "material-scrolltop": "^1.0.1"
+    "medium-button": "^1.1.2"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
