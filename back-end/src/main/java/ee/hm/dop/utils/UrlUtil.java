@@ -29,15 +29,10 @@ public class UrlUtil {
 
         try {
             URL url = new URL(materialSource);
-            String hostName = url.getHost();
-
-            if (hostName.startsWith(WWW_PREFIX) && isValidURL(hostName.substring(4))) {
-                hostName = hostName.substring(4);
-            }
-
+            String hostName = getHostName(url);
             return String.format("%s%s", hostName, url.getFile());
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Source has no protocol");
+            throw new IllegalArgumentException("Source has no protocol, source: " + materialSource);
         }
     }
 
@@ -45,29 +40,17 @@ public class UrlUtil {
         try {
             return UrlUtil.getDomainName(url);
         } catch (Exception e) {
-            logger.error("Could not get domain name from material during synchronization - updating all metafields of the material");
+            logger.error("Could not get domain name from material during synchronization - updating all metafields of the material, url:" + url);
             return null;
         }
     }
 
-    public static String getDomainName(String url) throws URISyntaxException {
-        URI uri = new URI(url);
-        if (uri.getScheme() == null) {
-            uri = new URI("http://" + url);
-        }
-
-        String domain = uri.getHost().trim();
-        return domain.startsWith("www.") ? domain.substring(4) : domain;
-    }
-
     public static String getHost(String materialSource) {
         if (TextUtils.isBlank(materialSource)) return null;
-
         try {
-            URL url = new URL(materialSource);
-            return url.getHost();
+            return new URL(materialSource).getHost();
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Source has no protocol");
+            throw new IllegalArgumentException("Source has no protocol, source: " + materialSource);
         }
     }
 
@@ -88,8 +71,24 @@ public class UrlUtil {
             // Throws exception if protocol is not specified
             return new URL(materialSource).toString();
         } catch (MalformedURLException e) {
+            logger.error("protocol not found, source: " + materialSource);
             return DEFAULT_PROTOCOL + materialSource;
         }
+    }
+
+    private static String getDomainName(String url) throws URISyntaxException {
+        String domain = getUri(url).getHost().trim();
+        return domain.startsWith(WWW_PREFIX) ? domain.substring(4) : domain;
+    }
+
+    private static String getHostName(URL url) {
+        String hostName = url.getHost();
+        return hostName.startsWith(WWW_PREFIX) && isValidURL(hostName.substring(4)) ? hostName.substring(4) : hostName;
+    }
+
+    private static URI getUri(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        return uri.getScheme() != null ? uri : new URI(DEFAULT_PROTOCOL + url);
     }
 
     private static boolean isValidURL(String url) {
