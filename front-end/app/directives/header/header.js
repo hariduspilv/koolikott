@@ -281,13 +281,8 @@ class controller extends Controller {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
-        this.handleSorting()
         this.searchService.setIsGrouped(Boolean(this.$scope.searchFields.searchQuery))
         this.$location.url(this.searchService.getURL())
-    }
-    handleSorting() {
-        this.searchService.setSort('default')
-        this.searchService.setSortDirection('desc')
     }
     closeDetailedSearch() {
         this.$timeout(() => {
@@ -412,11 +407,8 @@ directive('dopHeader', {
         let  isSuggestVisible = false
 
         const checkWindowWidth = () => {
-            if ($ctrl.isNVP())
-                $scope.isMobileView = true
-
-            if (window.innerWidth >= BREAK_SM)
-                $scope.canShowTour = true
+            if ($ctrl.isNVP()) $scope.isMobileView = true
+            if (window.innerWidth >= BREAK_SM) $scope.canShowTour = true
         }
 
         checkWindowWidth()
