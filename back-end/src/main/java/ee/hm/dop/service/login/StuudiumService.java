@@ -30,6 +30,7 @@ public class StuudiumService {
         Response response = client.target(getUserDataUrl())
                 .queryParam("token", token)
                 .queryParam("client_id", getClientId())
+                //todo update
                 .queryParam("signature", HmacUtils.hmacSha1Hex(getClientSecret(), token))
                 .request().accept(MediaType.APPLICATION_JSON).get();
 
