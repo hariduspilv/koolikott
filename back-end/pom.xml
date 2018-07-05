@@ -181,7 +181,7 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
-            <version>4.0.0.GA</version>
+            <version>5.0.0.GA</version>
         </dependency>
         <dependency>
             <groupId>org.dspace</groupId>
