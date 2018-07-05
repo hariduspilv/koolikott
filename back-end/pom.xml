@@ -11,8 +11,7 @@
         <hibernate.version>4.3.11.Final</hibernate.version>
         <jetty.version>9.4.11.v20180605</jetty.version>
         <jackson.version>2.9.6</jackson.version>
-        <!--todo-->
-        <mysql.java.version>5.1.35</mysql.java.version>
+        <mysql.java.version>8.0.11</mysql.java.version>
         <jersey.version>2.27</jersey.version>
         <google.guice.version>4.2.0</google.guice.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -179,7 +178,6 @@
             <artifactId>joda-time</artifactId>
             <version>2.10</version>
         </dependency>
-        <!--todo-->
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
@@ -190,7 +188,6 @@
             <artifactId>oclc-harvester2</artifactId>
             <version>0.1.12</version>
         </dependency>
-        <!--todo, is it used? -->
         <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
@@ -255,8 +252,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <!--todo-->
-            <version>1.4.187</version>
+            <version>1.4.197</version>
             <scope>test</scope>
         </dependency>
 
