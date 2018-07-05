@@ -2,7 +2,7 @@
 
 cd "${0%/*}"; if [ "$1" != "T" ]; then gnome-terminal -e "'$0' T"; exit; fi;
 
-cd ../../solr-7.0.1
+cd ../../solr-7.4.0
 bin/solr stop -all
 bin/solr start
 
