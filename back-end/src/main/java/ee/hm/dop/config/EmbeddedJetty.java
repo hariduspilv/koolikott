@@ -89,10 +89,6 @@ public class EmbeddedJetty {
         }
     }
 
-    public URI getBaseUri() {
-        return server.getURI();
-    }
-
     public boolean isRunning() {
         return server != null && server.getState() != AbstractLifeCycle.STOPPED;
     }
