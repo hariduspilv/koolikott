@@ -3,6 +3,7 @@ package ee.hm.dop.service.solr;
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -19,8 +20,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -39,6 +39,7 @@ public class SolrService implements SolrEngineService {
     private static final int SUGGEST_COUNT = 5;
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
+    private static final String STATUS_MESSAGES = "Status messages: ";
     @Inject
     private Client client;
     @Inject
@@ -52,9 +53,7 @@ public class SolrService implements SolrEngineService {
     }
 
     void postConstruct(String url) {
-        solrClient = new HttpSolrClient.Builder()
-                .withBaseSolrUrl(url)
-                .build();
+        solrClient = new HttpSolrClient.Builder().withBaseSolrUrl(url).build();
         indexThread = new SolrIndexThread();
         indexThread.start();
     }
@@ -136,16 +135,8 @@ public class SolrService implements SolrEngineService {
 
     private void logCommand(String command, SolrSearchResponse searchResponse) {
         long responseCode = searchResponse.getResponseHeader().getStatus();
-
-        String statusMessages = "";
-        if (searchResponse.getStatusMessages() != null) {
-            statusMessages = "Status messages: " + searchResponse.getStatusMessages().entrySet().stream()
-                    .map(Entry::toString)
-                    .collect(Collectors.joining(";", "[", "]"));
-        }
-
         String logMessage = String.format("Solr responded with code %s, url was %s %s", responseCode,
-                configuration.getString(SEARCH_SERVER) + command, statusMessages);
+                configuration.getString(SEARCH_SERVER) + command, statusMessages(searchResponse));
 
         if (responseCode != 0) {
             logger.info(logMessage);
@@ -154,17 +145,25 @@ public class SolrService implements SolrEngineService {
         }
     }
 
+    private String statusMessages(SolrSearchResponse searchResponse) {
+        if (searchResponse.getStatusMessages() == null) {
+            return StringUtils.EMPTY;
+        }
+        return STATUS_MESSAGES + searchResponse.getStatusMessages().entrySet().stream()
+                .map(Entry::toString)
+                .collect(Collectors.joining(";", "[", "]"));
+    }
+
     private WebTarget getTarget(String path) {
         return client.target(getFullURL(path));
     }
 
     private String getFullURL(String path) {
-        String serverUrl = configuration.getString(SEARCH_SERVER);
-        return serverUrl + path;
+        return configuration.getString(SEARCH_SERVER) + path;
     }
 
     private class SolrIndexThread extends Thread {
-        public static final int _1_SEC = 1000;
+        private static final int _1_SEC = 1000;
         private final Object lock = new Object();
         private boolean updateIndex;
 
@@ -182,10 +181,10 @@ public class SolrService implements SolrEngineService {
                         synchronized (lock) {
                             updateIndex = false;
                             lock.notifyAll();
-                            logger.info("Updating Solr index.");
-                            executeCommand(SOLR_IMPORT_PARTIAL);
-                            waitForCommandToFinish();
                         }
+                        logger.info("Updating Solr index.");
+                        executeCommand(SOLR_IMPORT_PARTIAL);
+                        waitForCommandToFinish();
                     }
 
                     sleep(_1_SEC);
