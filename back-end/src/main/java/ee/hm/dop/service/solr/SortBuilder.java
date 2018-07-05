@@ -1,6 +1,8 @@
 package ee.hm.dop.service.solr;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.SearchFilter;
+import ee.hm.dop.model.SortDirection;
+import ee.hm.dop.model.SortType;
 
 import java.util.ArrayList;
 import java.util.List;
