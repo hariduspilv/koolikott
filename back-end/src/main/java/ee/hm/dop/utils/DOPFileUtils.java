@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,14 +93,10 @@ public class DOPFileUtils {
     }
 
     public static String readFileAsString(String filePath) {
-        InputStream in = null;
-        try {
-            in = getFileAsStream(filePath);
-            return IOUtils.toString(in, Charsets.UTF_8);
+        try (InputStream in = getFileAsStream(filePath)) {
+            return IOUtils.toString(in, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
