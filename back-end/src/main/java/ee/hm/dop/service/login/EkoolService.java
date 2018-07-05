@@ -11,6 +11,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
 
+import java.nio.charset.StandardCharsets;
+
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
@@ -72,7 +74,7 @@ public class EkoolService {
 
     private String generateAuthHeaderHash() {
         String authHeader = format("%s:%s", getClientId(), getClientSecret());
-        return encode(authHeader.getBytes());
+        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 
 }

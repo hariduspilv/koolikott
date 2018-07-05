@@ -223,7 +223,8 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
         searchFilter.setIssuedFrom(2011);
         searchFilter.setCurriculumLiterature(true);
         SearchResult searchResult = doGet(buildQueryURL(query, 0, null, searchFilter), SearchResult.class);
-        //todo missing assertions
+        assertEquals(0, searchResult.getTotalResults());
+        assertEquals(0, searchResult.getStart());
     }
 
     @Test
@@ -373,47 +374,47 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     private String buildQueryURL(String query, int start, Long limit, SearchFilter searchFilter) {
-        String queryURL = "search?";
-        if (query != null) queryURL += "q=" + encodeQuery(query);
-        if (start != 0) queryURL += "&start=" + start;
-        if (limit != null) queryURL += "&limit=" + limit;
+        StringBuilder queryURL = new StringBuilder("search?");
+        if (query != null) queryURL.append("q=").append(encodeQuery(query));
+        if (start != 0) queryURL.append("&start=").append(start);
+        if (limit != null) queryURL.append("&limit=").append(limit);
 
         if (searchFilter.getTaxons() != null) {
             for (Taxon taxon : searchFilter.getTaxons()) {
-                queryURL += "&taxon=" + taxon.getId();
+                queryURL.append("&taxon=").append(taxon.getId());
             }
         }
         if (!searchFilter.isPaid()) {
-            queryURL += "&paid=false";
+            queryURL.append("&paid=false");
         }
         if (searchFilter.getType() != null) {
-            queryURL += "&type=" + encodeQuery(searchFilter.getType());
+            queryURL.append("&type=").append(encodeQuery(searchFilter.getType()));
         }
         if (searchFilter.getResourceType() != null) {
-            queryURL += "&resourceType=" + encodeQuery(searchFilter.getResourceType().getName());
+            queryURL.append("&resourceType=").append(encodeQuery(searchFilter.getResourceType().getName()));
         }
         if (searchFilter.getLanguage() != null) {
-            queryURL += "&language=" + searchFilter.getLanguage().getCode();
+            queryURL.append("&language=").append(searchFilter.getLanguage().getCode());
         }
         if (searchFilter.getIssuedFrom() != null) {
-            queryURL += "&issuedFrom=" + searchFilter.getIssuedFrom();
+            queryURL.append("&issuedFrom=").append(searchFilter.getIssuedFrom());
         }
         if (searchFilter.isCurriculumLiterature()) {
-            queryURL += "&curriculumLiterature=true";
+            queryURL.append("&curriculumLiterature=true");
         }
         if (searchFilter.getSort() != null) {
-            queryURL += "&sort=" + searchFilter.getSort().getValue();
+            queryURL.append("&sort=").append(searchFilter.getSort().getValue());
         }
         if (searchFilter.getSortDirection() != null) {
-            queryURL += "&sortDirection=" + searchFilter.getSortDirection().getValue();
+            queryURL.append("&sortDirection=").append(searchFilter.getSortDirection().getValue());
         }
         if (searchFilter.isRecommended()) {
-            queryURL += "&recommended=" + searchFilter.isRecommended();
+            queryURL.append("&recommended=").append(searchFilter.isRecommended());
         }
         if (searchFilter.isFavorites()) {
-            queryURL += "&favorites=" + searchFilter.isFavorites();
+            queryURL.append("&favorites=").append(searchFilter.isFavorites());
         }
-        return queryURL;
+        return queryURL.toString();
     }
 
     private void assertMaterialIdentifiers(List<Searchable> objects, Long... learningObjectIds) {

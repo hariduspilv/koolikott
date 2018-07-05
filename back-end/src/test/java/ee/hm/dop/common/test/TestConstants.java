@@ -80,8 +80,8 @@ public class TestConstants {
     public static final TestUser USER_TO_BE_BANNED2 = new TestUser(14L, "38256133108", "user.to.be.banned2");
     public static final TestUser USER_RESTRICTED2 = new TestUser(15L, "89898989892", "restricted.user2");
 
-    public static final TestTaxon TAXON_MATHEMATICS_DOMAIN = new TestTaxon(10L, "Mathematics", "DOMAIN");
-    public static final TestTaxon TAXON_FOREIGNLANGUAGE_DOMAIN = new TestTaxon(11L, "ForeignLanguage", "DOMAIN");
+    public static final TestTaxon TAXON_MATHEMATICS_DOMAIN = new TestTaxon(10L, "Mathematics");
+    public static final TestTaxon TAXON_FOREIGNLANGUAGE_DOMAIN = new TestTaxon(11L, "ForeignLanguage");
 
     public static Material materialWithId(Long id) {
         Material material = new Material();

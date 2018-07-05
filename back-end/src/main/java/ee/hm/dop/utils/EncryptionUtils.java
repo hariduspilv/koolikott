@@ -14,7 +14,7 @@ public class EncryptionUtils {
         try {
             final Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            return cipher.doFinal(text.getBytes());
+            return cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
         } catch (Exception ignored) {
             return null;
         }

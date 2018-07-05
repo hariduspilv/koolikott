@@ -21,7 +21,7 @@ public class EmbeddedJetty {
     public static final String REST_PREFIX = "/rest";
 
     private Server server;
-    private static EmbeddedJetty instance;
+    private volatile static EmbeddedJetty instance;
 
     private EmbeddedJetty() {
     }

@@ -26,17 +26,17 @@ public class Material1Validation {
         assertEquals(LanguageC.EST, language.getCode());
         assertEquals("Estonian", language.getName());
         assertNotNull(language.getCodes());
-        assertEquals(new Long(1), material.getPicture().getId());
+        assertEquals(Long.valueOf(1), material.getPicture().getId());
         assertEquals("picture1", material.getPicture().getName());
         if (layer == TestLayer.REST) {
             assertNull(material.getPicture().getData());
         }
         assertNotNull(material.getTaxons());
         assertEquals(2, material.getTaxons().size());
-        assertEquals(new Long(2), material.getTaxons().get(0).getId());
-        assertEquals(new Long(20), material.getTaxons().get(1).getId());
+        assertEquals(Long.valueOf(2), material.getTaxons().get(0).getId());
+        assertEquals(Long.valueOf(20), material.getTaxons().get(1).getId());
         assertNotNull(material.getRepositoryIdentifier());
-        assertEquals(new Long(1), material.getCreator().getId());
+        assertEquals(Long.valueOf(1), material.getCreator().getId());
         assertFalse(material.isEmbeddable());
 
         assertEquals(2, material.getTargetGroups().size());
@@ -70,21 +70,21 @@ public class Material1Validation {
         assertNotNull(material.getPicture());
         assertNotNull(material.getTaxons());
         assertEquals(2, material.getTaxons().size());
-        assertEquals(new Long(2), material.getTaxons().get(0).getId());
+        assertEquals(Long.valueOf(2), material.getTaxons().get(0).getId());
 
         Subject biology = (Subject) material.getTaxons().get(1);
-        assertEquals(new Long(20), biology.getId());
+        assertEquals(Long.valueOf(20), biology.getId());
         assertEquals(2, biology.getDomain().getSubjects().size());
         assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
 
         if (layer == TestLayer.DAO) {
-            assertEquals(new Long(1), material.getRepository().getId());
+            assertEquals(Long.valueOf(1), material.getRepository().getId());
             assertEquals("http://repo1.ee", material.getRepository().getBaseURL());
             assertEquals("isssiiaawej", material.getRepositoryIdentifier());
         } else {
             assertNull(material.getRepository());
         }
-        assertEquals(new Long(1), material.getCreator().getId());
+        assertEquals(Long.valueOf(1), material.getCreator().getId());
         assertFalse(material.isEmbeddable());
 
         assertEquals(2, material.getTargetGroups().size());

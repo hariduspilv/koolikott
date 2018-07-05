@@ -116,13 +116,13 @@ public class Arrays extends SeleniumUser{
 			"Lloyd", "Day", "Lamont", "Flores", "Zion", "Woody", "Wolf", "Winston", "Wilton", "Topher", "Trafford", "Vortigern", "Walker", "Wayne", "Weston", "Shannon",
 			"Shelby", "Shelton", "Sherwood", "Sky", "Storm", "Taffy", "Tyrrell", "Thomas", "Ray", "Rigby", "Ronald", "Ross", "Ruby"};
 	
-	public static String[] tagsArray = {"life", "school", "followback", "art", "fashion", "sky", "beauty", "noir", "ink", "design", "craft", "beatles", "antique", 
-			"monoart", "architect", "linedesign", "style", "classical", "vintage", "vector", "focus", "exposure", "usa", "sport", "brand", "fancy", "france", "bag", 
-			"free", "musthave", "look", "foundation", "lookbook", "december", "every", "can", "people", "movingforward", "decoration", "cold", "morning", "sleepy", 
+	public static String[] tagsArray = {"life", "school", "followback", "art", "fashion", "sky", "beauty", "noir", "ink", "design", "craft", "beatles", "antique",
+			"monoart", "architect", "linedesign", "style", "classical", "vintage", "vector", "focus", "exposure", "usa", "sport", "brand", "fancy", "france", "bag",
+			"free", "musthave", "look", "foundation", "lookbook", "december", "every", "can", "people", "movingforward", "decoration", "cold", "morning", "sleepy",
 			"plot", "story", "readinglist", "imagine", "trip", "festival", "instrument", "musicnotes", "key", "rock", "mozart", "green", "summer", "reflection",
 			"sand", "seaside", "landscape", "bloom", "mountains", "ocean", "skyfall", "cloud9", "outside", "worldwide", "winter", "forest", "fall", "foliage", "orange",
-			"crowd", "team", "workout", "yoga", "geometry", "composition", "urban", "grammar", "home", "music", "done", "friends", "reality", "algebra", "workshop", 
-			"more", "unknown", "future", "contest", "famous", "addict", "memories", "road", "motivation", "plants", "textbook", "abstract", "acorn", "acronym", 
+			"crowd", "team", "workout", "yoga", "geometry", "composition", "urban", "grammar", "home", "music", "done", "friends", "reality", "algebra", "workshop",
+			"more", "unknown", "future", "contest", "famous", "addict", "memories", "road", "motivation", "plants", "textbook", "abstract", "acorn", "acronym",
 			"ad lib", "adept", "adobe", "aeon", "aerostat", "africa", "agenda", "agile", "aircraft", "alpha"};
 	
 	public static String[] mediaTitlesArray = {"Game of as rest time eyes with of this it.", "Add was music merry any truth since going.", 

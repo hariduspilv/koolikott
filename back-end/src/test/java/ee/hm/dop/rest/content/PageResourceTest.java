@@ -20,7 +20,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
         Page page = doGet("page?name=" + name + "&language=" + languageCode, Page.class);
 
         assertNotNull(page);
-        assertEquals(new Long(1L), page.getId());
+        assertEquals(Long.valueOf(1L), page.getId());
         assertEquals("About", page.getName());
         assertEquals("<h1>Meist</h1><p>Tekst siin</p>", page.getContent());
         assertEquals(languageCode, page.getLanguage().getCode());
@@ -33,7 +33,7 @@ public class PageResourceTest extends ResourceIntegrationTestBase {
         Page page = doGet("page?name=" + name + "&language=" + languageCode, Page.class);
 
         assertNotNull(page);
-        assertEquals(new Long(6), page.getId());
+        assertEquals(Long.valueOf(6), page.getId());
         assertEquals("Help", page.getName());
         assertEquals("<h1>Help</h1><p>Text here</p>", page.getContent());
         assertEquals(languageCode, page.getLanguage().getCode());

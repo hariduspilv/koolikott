@@ -59,7 +59,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
         List<ImproperContent> improperContents = doGet(format(GET_IMPROPERS_BY_ID, PORTFOLIO_3), genericType());
         assertTrue(CollectionUtils.isNotEmpty(improperContents));
         assertEquals(1, improperContents.size());
-        assertEquals(new Long(5), improperContents.get(0).getId());
+        assertEquals(Long.valueOf(5), improperContents.get(0).getId());
     }
 
     public static class ImproperContentDto{

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class StatisticsUtil {
 
-    public static final String[] USER_HEADERS = new String[]{
+    static final String[] USER_HEADERS = new String[]{
             "Haridustase",
             "Valdkond",
             "Alamvaldkond",
@@ -27,7 +27,7 @@ public class StatisticsUtil {
             "Lisatud materjale"
     };
 
-    public static final String[] TAXON_HEADERS = new String[]{
+    static final String[] TAXON_HEADERS = new String[]{
             "Haridustase",
             "Valdkond",
             "Alamvaldkond",
@@ -41,8 +41,8 @@ public class StatisticsUtil {
             "Avalikustatud kogumikke",
             "Lisatud materjale"
     };
-    public static final String NO_USER_FOUND = "Ei leitud ühtegi eksperti";
-    public static final String EMPTY_ROW = "-";
+    static final String NO_USER_FOUND = "Ei leitud ühtegi eksperti";
+    static final String EMPTY_ROW = "-";
 
     public static String[] userHeader(DateTime from, DateTime to, User user) {
         return new String[]{

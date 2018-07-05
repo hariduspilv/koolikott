@@ -45,14 +45,12 @@ public class SecurityFilterTest {
     private Capture<SecurityContext> capturedSecurityContext;
     private Capture<Response> capturedResponse;
     private AuthenticatedUserService authenticatedUserService;
-    private LogoutService logoutService;
 
     @Before
     public void setup() throws NoSuchMethodException {
         request = createMock(HttpServletRequest.class);
         session = createMock(HttpSession.class);
         authenticatedUserService = createMock(AuthenticatedUserService.class);
-        logoutService = createMock(LogoutService.class);
 
         context = createMock(ContainerRequestContext.class);
         capturedSecurityContext = newCapture();

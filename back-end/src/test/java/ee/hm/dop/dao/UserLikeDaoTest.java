@@ -22,9 +22,9 @@ public class UserLikeDaoTest extends DatabaseTestBase {
         List<Searchable> objects = userLikeDao.findMostLikedSince(now().minusDays(100), 5);
         assertEquals(3, objects.size());
 
-        assertEquals(new Long(103), objects.get(0).getId());
-        assertEquals(new Long(1), objects.get(1).getId());
-        assertEquals(new Long(2), objects.get(2).getId());
+        assertEquals(Long.valueOf(103), objects.get(0).getId());
+        assertEquals(Long.valueOf(1), objects.get(1).getId());
+        assertEquals(Long.valueOf(2), objects.get(2).getId());
     }
 
     @Test

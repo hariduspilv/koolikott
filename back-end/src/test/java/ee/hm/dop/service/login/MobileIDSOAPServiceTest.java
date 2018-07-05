@@ -278,7 +278,7 @@ public class MobileIDSOAPServiceTest extends MobileSoapTestUtil {
                 secondResponseMessage);
     }
 
-    private class MobileIDSOAPServicePartialMock extends MobileIDSOAPService {
+    private static class MobileIDSOAPServicePartialMock extends MobileIDSOAPService {
         private boolean shouldThrowException = false;
 
         @Override

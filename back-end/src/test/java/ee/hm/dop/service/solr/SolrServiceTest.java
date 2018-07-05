@@ -31,7 +31,7 @@ public class SolrServiceTest {
 
     private static final int RESULTS_PER_PAGE = 24;
     private static final String SOLR_STATUS_IDLE = "idle";
-    private final String serverUrl = "server/url/";
+    private static final String serverUrl = "server/url/";
     @TestSubject
     private SolrService solrService = new SolrService();
     @Mock

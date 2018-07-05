@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
 
-public class fabButton extends Components{
+public class FabButton extends Components{
 	
 	private static By addPortfolio = By.id("add-portfolio");
 	private static By copyPortfolioButton = By.xpath("//button[@data-ng-click='copyPortfolio()']");

@@ -28,7 +28,7 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
     private Configuration configuration;
 
     private static final Logger logger = LoggerFactory.getLogger(AutomaticallyAcceptReviewableChange.class);
-    private static Future<?> acceptReviewableChangeHandle;
+    private volatile static Future<?> acceptReviewableChangeHandle;
 
     @Override
     public synchronized void run() {

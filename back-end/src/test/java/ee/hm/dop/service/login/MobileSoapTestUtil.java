@@ -10,6 +10,7 @@ import javax.xml.soap.SOAPMessage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,8 +64,9 @@ public class MobileSoapTestUtil {
     }
 
     public static SOAPMessage createMessage(String message) throws IOException, SOAPException {
-        InputStream is = new ByteArrayInputStream(message.getBytes());
-        return MessageFactory.newInstance().createMessage(null, is);
+        try (InputStream is = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8))) {
+            return MessageFactory.newInstance().createMessage(null, is);
+        }
     }
 
     public static Map<String, String> map(String key, String value) {
