@@ -2,7 +2,7 @@ package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;

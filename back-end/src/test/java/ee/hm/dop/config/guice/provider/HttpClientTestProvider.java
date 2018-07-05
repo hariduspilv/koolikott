@@ -15,7 +15,7 @@ import com.google.inject.Singleton;
 import ee.hm.dop.config.guice.provider.mock.ekool.person.EkoolPersonWebTarget;
 import ee.hm.dop.config.guice.provider.mock.ekool.token.EkoolTokenWebTarget;
 import ee.hm.dop.config.guice.provider.mock.stuudium.stuudiumuser.StuudiumUserWebTarget;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 
 /**
  * Provider for Client.

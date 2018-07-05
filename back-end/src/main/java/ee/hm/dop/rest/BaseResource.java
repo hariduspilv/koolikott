@@ -17,7 +17,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.rest.filter.DopPrincipal;
 import ee.hm.dop.utils.ConfigurationProperties;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;

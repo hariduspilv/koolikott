@@ -1,7 +1,7 @@
 package ee.hm.dop.service.ehis;
 
 import ee.hm.dop.model.ehis.Person;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;

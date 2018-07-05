@@ -8,7 +8,7 @@ import ee.hm.dop.config.guice.provider.*;
 import ee.hm.dop.service.ehis.EhisSOAPService;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.opensaml.xml.signature.SignatureValidator;
 
 import javax.persistence.EntityManager;

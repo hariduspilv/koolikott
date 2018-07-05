@@ -3,7 +3,7 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.service.login.dto.UserStatus;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 
 import javax.inject.Inject;

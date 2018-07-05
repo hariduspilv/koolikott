@@ -4,7 +4,7 @@ import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;

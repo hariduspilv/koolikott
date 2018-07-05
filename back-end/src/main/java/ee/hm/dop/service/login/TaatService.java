@@ -21,7 +21,7 @@ import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.utils.security.KeyStoreUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.xml.security.utils.Base64;
 import org.joda.time.DateTime;
 import org.opensaml.common.SAMLObject;

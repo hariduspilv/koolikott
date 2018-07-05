@@ -11,7 +11,7 @@ public class ConfigurationTestProvider extends ConfigurationProvider {
     private static String TEST_CONFIGURATION_FILE_NAME = "test.properties";
 
     @Override
-    protected String getCustonConfigurationFilePath() {
+    protected String getCustomConfigurationFilePath() {
         return TEST_CONFIGURATION_FILE_NAME;
     }
 }

@@ -6,7 +6,7 @@ import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

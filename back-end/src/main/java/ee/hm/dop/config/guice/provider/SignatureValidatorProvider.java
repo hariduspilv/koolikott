@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import ee.hm.dop.utils.security.MetadataUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.signature.SignatureValidator;
 

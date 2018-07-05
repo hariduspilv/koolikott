@@ -5,7 +5,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.utils.security.KeyStoreUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
