@@ -1,29 +1,24 @@
 package ee.hm.dop.utils;
 
-import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import ee.hm.dop.model.UploadedFile;
 import ee.hm.dop.service.files.ZipService;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class DOPFileUtils {
     private static final Logger logger = LoggerFactory.getLogger(DOPFileUtils.class);
@@ -132,7 +127,6 @@ public class DOPFileUtils {
             targetFile.getParentFile().mkdirs();
             FileUtils.copyInputStreamToFile(inputStream, targetFile);
         } catch (IOException e) {
-            e.printStackTrace();
             logger.warn("Unable to write file: " + location);
         }
 
@@ -140,29 +134,23 @@ public class DOPFileUtils {
 
     public static void unpackArchive(InputStream inputStream, String location) {
         byte[] buffer = new byte[ZipService.COMPRESSION_MEMORY];
-        ZipInputStream zis = new ZipInputStream(inputStream);
-        try {
+        try (ZipInputStream zis = new ZipInputStream(inputStream)) {
             ZipEntry ze = zis.getNextEntry();
             while (ze != null) {
-
-                String fileName = ze.getName();
-                File newFile = new File(location + File.separator + fileName);
+                File newFile = new File(location + File.separator + ze.getName());
 
                 new File(newFile.getParent()).mkdirs();
 
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
+                try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
                 }
-
-                fos.close();
                 ze = zis.getNextEntry();
             }
 
             zis.closeEntry();
-            zis.close();
         } catch (IOException e) {
             throw new RuntimeException("File is not a subtype of an ZIP archive");
         }

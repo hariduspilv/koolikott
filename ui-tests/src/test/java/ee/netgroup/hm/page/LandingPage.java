@@ -14,19 +14,19 @@ public class LandingPage extends Page{
 	
 	public MyPortfoliosPage chooseUserType(String userType) {
 
-		if (userType == "Admin")
+		if (userType.equals("Admin"))
 			getDriver().get(Constants.admin);
 
-		if (userType == "Publisher")
+		if (userType.equals("Publisher"))
 			getDriver().get(Constants.publisher);
 
-		if (userType == "User")
+		if (userType.equals("User"))
 			getDriver().get(Constants.user);
 		
-		if (userType == "Moderator")
+		if (userType.equals("Moderator"))
 			getDriver().get(Constants.moderator);
 		
-		if (userType == "Restricted")
+		if (userType.equals("Restricted"))
 			getDriver().get(Constants.restricted);
 
 		return new MyPortfoliosPage();
