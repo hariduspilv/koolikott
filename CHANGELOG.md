@@ -1,3 +1,9 @@
+## e-Koolikott [1.20.2](https://github.com/hariduspilv/koolikott/milestone/19) 
+
+### Parandatud
+* Vaatamiste arvutamine ei tööta korrektselt [#351](https://github.com/hariduspilv/koolikott/issues/351)
+
+
 ## e-Koolikott [1.20.0](https://github.com/hariduspilv/koolikott/milestone/19) 
 
 ### Muutunud
