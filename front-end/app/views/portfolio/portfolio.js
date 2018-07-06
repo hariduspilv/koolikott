@@ -12,7 +12,7 @@ class controller extends Controller {
             storedPortfolio.type !== '.AdminPortfolio'
         ) {
             this.setPortfolio(storedPortfolio)
-            this.increaseViewCount()
+            increaseViewCount()
         } else
             this.getPortfolio()
 
@@ -54,7 +54,7 @@ class controller extends Controller {
                 .makeGet('rest/portfolio', { id })
                 .then(({ status, data }) =>
                     200 <= status && status < 300
-                        ? this.setPortfolio(data, false) || this.increaseViewCount()
+                        ? this.setPortfolio(data, false) || increaseViewCount()
                         : fail(),
                     fail
                 )
