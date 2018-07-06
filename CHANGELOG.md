@@ -18,6 +18,12 @@
 * MS20 otsingu töödest tulenevalt front-endi refaktoreerimine [#333](https://github.com/hariduspilv/koolikott/issues/333)
 
 
+## e-Koolikott [1.19.2](https://github.com/hariduspilv/koolikott/milestone/18) 
+
+### Parandatud
+* Vaatamiste arvutamine ei tööta korrektselt [#351](https://github.com/hariduspilv/koolikott/issues/351)
+
+
 ## e-Koolikott [1.19.1](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 31.05.2018)
 
 ### Muutunud
