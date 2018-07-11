@@ -227,7 +227,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     private static void addSortedQuery() {
         String query = "((tuesday) OR (\"tuesday\")) AND (visibility:\"public\")";
-        String sort = "type desc, added desc, visibility asc, id desc";
+        String sort = "views desc, added desc, id desc";
         List<Document> result = createDocumentsWithIdentifiers(2L, 6L);
         sortedSearchResponses.put(query, sort, result);
     }
