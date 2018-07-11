@@ -1,11 +1,10 @@
 package ee.hm.dop.service.solr;
 
-import com.google.common.collect.Lists;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.*;
-import ee.hm.dop.utils.tokenizer.*;
+import ee.hm.dop.utils.tokenizer.DOPSearchStringTokenizer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
@@ -49,7 +48,7 @@ public class SearchConverter {
         String queryString = format("((%s)", tokenizedQueryString);
 
         //Search for full phrase also, as they are more relevant
-        if (!isExactSearch(tokenizedQueryString))
+        if (!searchFilter.isFieldSpecificSearch())
             queryString = queryString.concat(format(" OR (\"%s\")", tokenizedQueryString));
 
         return queryString.concat(format(") %s %s", searchFilter.getSearchType(), filtersAsQuery));
@@ -317,9 +316,4 @@ public class SearchConverter {
                 : joinedTaxons.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
     }
 
-    private static boolean isExactSearch(String tokenizedQueryString) {
-        return (tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_TAG_PREFIX)
-                || tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_RECOMMENDED_PREFIX)
-                || tokenizedQueryString.toLowerCase().startsWith(SearchService.SEARCH_BY_AUTHOR_PREFIX));
-    }
 }

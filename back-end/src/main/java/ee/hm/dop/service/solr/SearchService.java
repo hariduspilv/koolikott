@@ -26,7 +26,6 @@ public class SearchService {
     public static final String EXACT_RESULT = "exact";
     public static final String ALL_TYPE = "all";
     public static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
-    public static final String SEARCH_BY_TAG_PREFIX = "tag:";
     public static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
     public static final String SEARCH_BY_AUTHOR_PREFIX = "author:";
     public static final String AND = " AND ";
@@ -71,7 +70,8 @@ public class SearchService {
     }
 
     private SolrSearchRequest buildSearchRequest(String queryInput, SearchFilter searchFilter, long firstItem, Long limit) {
-        String query = clearQuerySearch(queryInput);
+        if (isFieldSpecificSearch(queryInput)) searchFilter.setFieldSpecificSearch(true);
+        String query = clearQuerySearch(queryInput, searchFilter);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SortBuilder.getSort(searchFilter);
         if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
@@ -84,6 +84,10 @@ public class SearchService {
         searchRequest.setGrouping(pickGrouping(query, searchFilter));
         searchRequest.setOriginalQuery(isPhrase(query) ? query : quotify(query));
         return searchRequest;
+    }
+
+    private boolean isFieldSpecificSearch(String queryInput) {
+        return queryInput != null && UNIQUE_KEYS.stream().anyMatch((group) -> queryInput.startsWith(group + ":"));
     }
 
     private List<Long> getOrderIds(SolrSearchRequest searchRequest) {
