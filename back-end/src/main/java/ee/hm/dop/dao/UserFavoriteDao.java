@@ -60,7 +60,7 @@ public class UserFavoriteDao extends AbstractDao<UserFavorite> {
     public List<ReducedLearningObject> findUsersFavoritedLearningObjects(User user, int start, int maxResults) {
         String query = "SELECT rlo FROM UserFavorite uf, ReducedLearningObject rlo " +
                 "WHERE uf.creator = :creator and uf.learningObject.deleted = false and uf.learningObject.id = rlo.id " +
-                "order by uf.learningObject.visibility asc, uf.learningObject.added desc, uf.learningObject.id desc";
+                "order by uf.learningObject.added desc, uf.learningObject.id desc";
         return getEntityManager().createQuery(query, ReducedLearningObject.class)
                 .setParameter("creator", user)
                 .setFirstResult(start)

@@ -32,6 +32,15 @@ public class SearchFilter {
     private String searchType = "AND";
     private List<Long> excluded;
     private boolean grouped = false;
+    private boolean fieldSpecificSearch = false;
+
+    public boolean isFieldSpecificSearch() {
+        return fieldSpecificSearch;
+    }
+
+    public void setFieldSpecificSearch(boolean fieldSpecificSearch) {
+        this.fieldSpecificSearch = fieldSpecificSearch;
+    }
 
     public boolean isEmptySearch() {
         return isEmpty(taxon) &&

@@ -14,9 +14,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SearchCommandBuilder {
 
+    public static final List<String> UNIQUE_KEYS = Arrays.asList("title", "tag", "description", "summary", "author", "publisher", "recommended");
     private static final List<String> PORTFOLIO_KEYS = Arrays.asList("title", "tag", "summary", "author", "publisher");
     private static final List<String> MATERIAL_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
-    private static final List<String> UNIQUE_KEYS = Arrays.asList("title", "tag", "description", "summary", "author", "publisher");
     private static final String SEARCH_PATH = "select?q=%1$s" +
             "&sort=%2$s" +
             "&wt=json" +
@@ -54,9 +54,9 @@ public class SearchCommandBuilder {
         return SearchGrouping.GROUP_WORD;
     }
 
-    static String clearQuerySearch(String query) {
+    static String clearQuerySearch(String query, SearchFilter searchFilter) {
         if (query == null) return null;
-        if (UNIQUE_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
+        if (!searchFilter.isFieldSpecificSearch()) {
             return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
         }
         return query.replaceAll("\"", "");
