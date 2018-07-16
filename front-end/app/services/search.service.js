@@ -23,6 +23,7 @@ class controller extends Controller {
         this.sortURL = '&sort='
         this.sortDirectionURL = '&sortDirection='
         this.isGroupedURL = '&isGrouped='
+        this.filterURL = '&filter='
         this.search = {
             query: '',
             taxons: [],
@@ -39,7 +40,8 @@ class controller extends Controller {
             isPreferred: '',
             sort: '',
             sortDirection: '',
-            isGrouped: ''
+            isGrouped: '',
+            filter: ''
         }
 
         const searchObject = this.$location.search()
@@ -133,6 +135,9 @@ class controller extends Controller {
     }
     setIsGrouped(isGrouped) {
         this.search.isGrouped = isGrouped
+    }
+    setFilter(filter) {
+        this.search.filter = filter
     }
     queryExists() {
         const searchObject = this.$location.search()
@@ -255,6 +260,12 @@ class controller extends Controller {
         else if (this.groups.some((group) => this.getQuery().startsWith(group + ':'))) this.setIsGrouped(false)
         return this.search.isGrouped
     }
+    isFilter() {
+        const { filter } = this.$location.search()
+        if (filter) this.setFilter(filter === 'true')
+
+        return this.search.filter
+    }
     clearFieldsNotInSimpleSearch() {
         this.search.taxons = []
         this.search.paid = ''
@@ -334,6 +345,8 @@ class controller extends Controller {
             searchURL += this.sortURL + this.search.sort + this.sortDirectionURL + this.search.sortDirection
 
         if (this.search.isGrouped) searchURL += this.isGroupedURL + this.search.isGrouped
+
+        if (this.search.filter) searchURL += this.filterURL + this.search.filter
 
         return searchURL
     }

@@ -748,8 +748,8 @@ class controller extends Controller {
                 : 'mobileSearch:open'
         )
         this.$timeout(() => {
-            this.searchService.setIsFavorites(preferred ? true : false)
-            this.searchService.setIsRecommended(preferred ? true : false)
+            this.searchService.setIsFavorites(preferred)
+            this.searchService.setIsRecommended(preferred)
             this.searchService.setType('material')
             document.getElementById('header-search-input').focus()
             this.$rootScope.$broadcast('detailedSearch:search')

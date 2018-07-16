@@ -77,8 +77,7 @@ class controller extends Controller {
 
         this.$scope.clear = this.clear.bind(this)
 
-        if (this.accessor)
-            this.accessor.clear = this.clear.bind(this)
+        if (this.accessor) this.accessor.clear = this.clear.bind(this)
 
         this.$scope.getLanguageTranslationKey = (languageCode) => 'LANGUAGE_' + languageCode.toUpperCase()
         this.$scope.getEffectiveIssueDate = () =>
@@ -107,10 +106,10 @@ class controller extends Controller {
                 (!this.prefilling || newValue.main) &&
                 this.hasSearchChanged(newValue, oldValue)
             ) {
+                this.searchService.setFilter(this.isAnyFilterActive())
                 this.filterTypeSearch()
                 this.search()
-            } else if (this.prefilling)
-                this.prefilling = false
+            } else if (this.prefilling) this.prefilling = false
         }, true)
 
         this.$rootScope.$watch('isEditPortfolioMode', (newValue, oldValue) => {
@@ -131,8 +130,7 @@ class controller extends Controller {
         if (queryIn &&
             queryIn.currentValue !== queryIn.previousValue &&
             this.isVisible
-        )
-            this.parseSimpleSearchQuery(queryIn.currentValue)
+        ) this.parseSimpleSearchQuery(queryIn.currentValue)
 
         if (isVisible)
             !isVisible.currentValue
@@ -172,7 +170,7 @@ class controller extends Controller {
         }
     }
     clearHiddenFields() {
-        var educationalContext = this.$scope.detailedSearch.educationalContext;
+        let educationalContext = this.$scope.detailedSearch.educationalContext
 
         // Only curriculum literature checkbox
         if (!educationalContext || (
@@ -200,6 +198,16 @@ class controller extends Controller {
         if (educationalContext && educationalContext.id === VOCATIONAL_EDUCATION_ID)
             this.$scope.detailedSearch.targetGroups = []
     }
+    isAnyFilterActive() {
+        const s = this.$scope.detailedSearch
+        return s.paid ||
+            Boolean(s.language) ||
+            (Boolean(s.resourceType) && s.resourceType !== 'all') ||
+            Boolean(s.targetGroups.length) ||
+            (Boolean(s.taxon) && Object.keys(s.taxon).length > 1) ||
+            (Boolean(s.issueDate) && s.issueDate !== this.$scope.issueDateFirstYear)
+
+    }
     clear() {
         this.$scope.detailedSearch = {
             'main': '',
@@ -216,6 +224,7 @@ class controller extends Controller {
         }
 
         this.$scope.$broadcast('targetGroupSelector:clear')
+        this.searchService.setFilter(false)
 
         if (this.$rootScope.isEditPortfolioMode) this.$scope.detailedSearch.type = 'material'
         this.$scope.$parent.clearTaxonSelector()
@@ -272,14 +281,12 @@ class controller extends Controller {
         const { title, combinedDescription, author } = this.$scope.detailedSearch
         let query = ''
 
-        if (title)
-            query += 'title:' + addQuotesIfNecessary(title)
+        if (title) query += 'title:' + addQuotesIfNecessary(title)
 
         if (combinedDescription)
             query += ' description:' + addQuotesIfNecessary(combinedDescription) + ' summary:' + addQuotesIfNecessary(combinedDescription)
 
-        if (author)
-            query += ' author:' + addQuotesIfNecessary(author)
+        if (author) query += ' author:' + addQuotesIfNecessary(author)
 
         return query.trim()
     }
@@ -308,8 +315,7 @@ class controller extends Controller {
             main = main.replace(title[2], '')
 
             // Get token content
-            if (!firstTitle)
-                firstTitle = title[3] || title[4]
+            if (!firstTitle) firstTitle = title[3] || title[4]
         }
 
         let description
@@ -324,8 +330,7 @@ class controller extends Controller {
         while (author = authorRegex.exec(query)) {
             main = main.replace(author[2], '')
 
-            if (!firstAuthor)
-                firstAuthor = author[3] || author[4]
+            if (!firstAuthor) firstAuthor = author[3] || author[4]
         }
 
         let keyword
