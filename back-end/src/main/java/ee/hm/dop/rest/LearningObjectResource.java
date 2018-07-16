@@ -14,6 +14,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Comparator;
 
 @Path("learningObject")
 public class LearningObjectResource extends BaseResource {
@@ -78,7 +79,9 @@ public class LearningObjectResource extends BaseResource {
     @Path("usersFavorite")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        return userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12));
+        SearchResult result = userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12));
+        result.getItems().sort(Comparator.comparing(Searchable::getType).reversed());
+        return result;
     }
 
     @GET
