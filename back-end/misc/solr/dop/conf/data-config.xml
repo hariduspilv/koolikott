@@ -530,9 +530,8 @@
                 <entity name="Chapter"
                         query="select C.title as portfolioTitle from Chapter C
                         where C.portfolio = '${Portfolio.id}'
-                        or C.parentChapter in (select C2.id from Chapter C2 where C2.portfolio = '${Portfolio.id}')
                         union
-                        select P.title as title from Portfolio P
+                        select P.title as portfolioTitle from Portfolio P
                         where P.id = '${Portfolio.id}'"/>
             </entity>
         </entity>
