@@ -16,6 +16,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Comparator;
 
+import static com.google.common.primitives.Ints.min;
+
 @Path("learningObject")
 public class LearningObjectResource extends BaseResource {
 
@@ -79,8 +81,11 @@ public class LearningObjectResource extends BaseResource {
     @Path("usersFavorite")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public SearchResult getUsersFavorites(@QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
-        SearchResult result = userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12));
+        SearchResult result = userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), 0, 2147483647);
         result.getItems().sort(Comparator.comparing(Searchable::getType).reversed());
+        int stop = min(start + NumberUtils.zvl(maxResults, 12), result.getItems().size());
+        result.setItems(result.getItems().subList(start, stop));
+        result.setStart(start);
         return result;
     }
 
