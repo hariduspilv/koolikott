@@ -33,8 +33,8 @@ public class SearchService {
     public static final String EMPTY = "";
 
     private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
-    public static final Pattern GROUP_KEY_PATTERN = Pattern.compile(GROUP_MATCH_PATTERN);
-    private static final int GROUP_FOUND_FROM = 1;
+    private static final Pattern GROUP_KEY_PATTERN = Pattern.compile(GROUP_MATCH_PATTERN);
+    private static final int SEARCH_TYPE = 1;
     private static final int QUERY_FIRST_LETTER = 2;
     private static final int GROUP_TYPE = 3;
 
@@ -128,12 +128,17 @@ public class SearchService {
         long resultsInGroup = singleGroup.getTotalResults();
         long resultsInType = resultGroups.get(groupType).getTotalResults();
 
-        String key = groupKeyMatcher.group(GROUP_FOUND_FROM);
-        if (groupType.equals("portfolio") && key.equals("summary")) {
-            key = "description";
-        }
+        String key = groupKeyMatcher.group(SEARCH_TYPE);
+        key = keyMapper(groupType, key);
         resultGroups.get(groupType).getGroups().put(key, singleGroup);
         resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
+    }
+
+    private String keyMapper(String groupType, String key) {
+        if (!groupType.equals("portfolio")) return key;
+        if (key.equals("portfolioTitle")) key = "title";
+        else if (key.equals("summary")) key = "description";
+        return key;
     }
 
     private void addResultsTogether(SearchResult searchResult,
@@ -174,7 +179,8 @@ public class SearchService {
         return searchResult;
     }
 
-    private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser, List<Long> idsForOrder) {
+    private List<Searchable> retrieveSearchedItems(List<Document> documents, User
+            loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
         if (loggedInUser != null) {

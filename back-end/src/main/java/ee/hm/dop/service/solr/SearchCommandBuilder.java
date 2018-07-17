@@ -14,8 +14,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SearchCommandBuilder {
 
-    public static final List<String> UNIQUE_KEYS = Arrays.asList("title", "tag", "description", "summary", "author", "publisher", "recommended");
-    private static final List<String> PORTFOLIO_KEYS = Arrays.asList("title", "tag", "summary", "author", "publisher");
+    static final List<String> UNIQUE_KEYS = Arrays.asList("title", "portfolioTitle", "tag", "description", "summary", "author", "publisher", "recommended");
+    private static final List<String> PORTFOLIO_KEYS = Arrays.asList("portfolioTitle", "tag", "summary", "author", "publisher");
     private static final List<String> MATERIAL_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
     private static final String SEARCH_PATH = "select?q=%1$s" +
             "&sort=%2$s" +
@@ -83,11 +83,8 @@ public class SearchCommandBuilder {
 
     private static String buildPath(SolrSearchRequest searchRequest, String query, List<String> groupingKeys, String type) {
         if (searchRequest.getGrouping().isPhraseGrouping()) {
-            return getGroupsForQuery(groupingKeys, parenthasize(query) + type)
-                    + getGroupsForQuery(groupingKeys, quotify(query) + type);
-        } else {
-            return getGroupsForQuery(groupingKeys, query + type);
-        }
+            return getGroupsForQuery(groupingKeys, parenthasize(query) + type) + getGroupsForQuery(groupingKeys, quotify(query) + type);
+        } else return getGroupsForQuery(groupingKeys, query + type);
     }
 
     private static String parenthasize(String query) {

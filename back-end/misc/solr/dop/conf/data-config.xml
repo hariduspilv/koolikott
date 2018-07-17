@@ -1,5 +1,6 @@
 <dataConfig>
-    <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop?serverTimezone=Europe/Tallinn" user="root" password="root"
+    <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop?serverTimezone=Europe/Tallinn"
+                user="root" password="root"
                 readOnly="true"/>
     <document>
         <!--
@@ -521,10 +522,18 @@
 
                 <entity name="Icon" query="select 'portfolio' as icon"/>
 
-                <entity name="Chapter"
+                <!--<entity name="Chapter"
                         query="select title as chapterTitle, textValue as chapterText from Chapter
                         where portfolio = '${Portfolio.id}'
-                        or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')"/>
+                        or parentChapter in (select id from Chapter where portfolio = '${Portfolio.id}')"/>-->
+
+                <entity name="Chapter"
+                        query="select C.title as portfolioTitle from Chapter C
+                        where C.portfolio = '${Portfolio.id}'
+                        or C.parentChapter in (select C2.id from Chapter C2 where C2.portfolio = '${Portfolio.id}')
+                        union
+                        select P.title as title from Portfolio P
+                        where P.id = '${Portfolio.id}'"/>
             </entity>
         </entity>
     </document>

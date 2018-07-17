@@ -137,7 +137,7 @@
     <field name="views" type="int" indexed="true" stored="false" multiValued="false"/>
     <field name="creator" type="string" indexed="true" stored="false" multiValued="false"/>
     <field name="visibility" type="text_general" indexed="true" stored="false" multiValued="false"/>
-    <field name="favored_by_user" type="string" indexed="true" stored="true" multiValued="true"/>
+    <field name="favored_by_user" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="license_type" type="text_general" indexed="true" stored="false" multiValued="true"/>
 
     <!-- Material & Portfolio -->
@@ -173,6 +173,7 @@
 
     <!-- Portfolio -->
     <field name="summary" type="text_general" indexed="true" stored="false"/>
+    <field name="portfolioTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <!--<field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
     <!--<field name="chapterText" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
 
@@ -206,6 +207,7 @@
     <copyField source="resource_type" dest="text"/>
     <copyField source="license_type" dest="text"/>
     <copyField source="summary" dest="text"/>
+    <copyField source="portfolioTitle" dest="text"/>
     <!--<copyField source="chapterTitle" dest="text"/>-->
     <!--<copyField source="chapterText" dest="text"/>-->
     <copyField source="language" dest="text"/>
@@ -225,6 +227,7 @@
     <copyField source="resource_type" dest="suggest_phrase"/>
     <copyField source="license_type" dest="suggest_phrase"/>
     <copyField source="summary" dest="suggest_phrase"/>
+    <copyField source="portfolioTitle" dest="suggest_phrase"/>
     <!--<copyField source="chapterTitle" dest="suggest_phrase"/>-->
     <!--<copyField source="chapterText" dest="suggest_phrase"/>-->
     <copyField source="language" dest="suggest_phrase"/>
