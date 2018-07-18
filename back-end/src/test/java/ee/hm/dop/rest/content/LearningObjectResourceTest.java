@@ -159,7 +159,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         doPost(LIKE_URL, portfolio);
         UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
         assertNotNull("User like exist", userLike);
-        assertEquals("Portfolio is liked by user", true, userLike.isLiked());
+        assertTrue("Portfolio is liked by user", userLike.isLiked());
     }
 
     @Test

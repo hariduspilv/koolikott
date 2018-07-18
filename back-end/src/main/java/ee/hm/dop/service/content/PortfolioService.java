@@ -44,9 +44,8 @@ public class PortfolioService {
         solrEngineService.updateIndex();
 
         boolean loChanged = reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
-        if (loChanged) {
-            return portfolioDao.createOrUpdate(updatedPortfolio);
-        }
+        if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
+
         return updatedPortfolio;
     }
 
