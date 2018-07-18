@@ -49,7 +49,7 @@ public class SearchCommandBuilder {
         return path + SEARCH_PATH_GROUPING + GROUP_QUERY + encode(parenthasize(query)) + GROUP_QUERY + encode(quotify(query));
     }
 
-    static boolean isPhrase(String query) {
+    private static boolean isPhrase(String query) {
         return query != null && query.split("\\s+").length > 1;
     }
 
@@ -61,10 +61,28 @@ public class SearchCommandBuilder {
 
     static String sanitizeQuery(String query, SearchFilter searchFilter) {
         if (query == null) return null;
-        if (!searchFilter.isFieldSpecificSearch()) {
-            return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
-        }
-        return query.replaceAll("\"", "");
+        if (searchFilter.isFieldSpecificSearch()) return getFieldSpecificQuery(query);
+        else return getCleanQuery(query);
+    }
+
+    private static String getCleanQuery(String query) {
+        return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
+    }
+
+    private static String getFieldSpecificQuery(String query) {
+        query = query.replaceAll("\"", "");
+        String searchField = getSearchField(query);
+        query = getFieldQuery(query, searchField);
+        return searchField + ":" + quotify(query);
+    }
+
+
+    private static String getSearchField(String query) {
+        return UNIQUE_KEYS.stream().filter(query::startsWith).findAny().orElse(null);
+    }
+
+    private static String getFieldQuery(String query, String field) {
+        return query.substring(field.length());
     }
 
     static String quotify(String query) {

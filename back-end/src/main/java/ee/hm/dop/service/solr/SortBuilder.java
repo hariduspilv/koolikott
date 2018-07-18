@@ -26,43 +26,34 @@ class SortBuilder {
     private static final String ID_ASC = "id asc";
 
     static String getSort(SearchFilter searchFilter) {
-        SortType sort = searchFilter.getSort();
-        SortDirection sortDirection = searchFilter.getSortDirection();
-        if (sort == null || sortDirection == null) {
-            sort = SortType.DEFAULT;
-            sortDirection = SortDirection.DESCENDING;
-        }
+        SortType sort = searchFilter.getSort() == null ? SortType.DEFAULT : searchFilter.getSort();
+        SortDirection direction = searchFilter.getSortDirection() == null ? SortDirection.DESCENDING : searchFilter.getSortDirection();
 
-        if (sort == SortType.DEFAULT) {
-            return join(defaultSort(sortDirection));
-        } else if (sort == SortType.TYPE) {
-            return join(typeSort(sortDirection));
-        } else if (sort == SortType.ADDED) {
-            return join(addedSort(sortDirection));
-        } else {
-            return String.join(" ", sort.getValue(), sortDirection.getValue());
+        switch (sort) {
+            case DEFAULT:
+                return join(defaultSort(direction));
+            case TYPE:
+                return join(typeSort(direction));
+            case ADDED:
+                return join(addedSort(direction));
+            default:
+                return String.join(" ", sort.getValue(), direction.getValue());
         }
     }
 
 
-    private static List<String> defaultSort(SortDirection dir) {
-        if (dir.isDesc()) {
-            return newArrayList(POPULAR_FIRST, RECENT_FIRST, ID_DESC);
-        }
+    private static List<String> defaultSort(SortDirection direction) {
+        if (direction.isDesc()) return newArrayList(POPULAR_FIRST, RECENT_FIRST, ID_DESC);
         return newArrayList(POPULAR_FIRST, EARLIEST_FIRST, ID_ASC);
     }
 
-    private static ArrayList<String> addedSort(SortDirection dir) {
-        if (dir.recentFirst()) {
-            return newArrayList(RECENT_FIRST, POPULAR_FIRST, ID_DESC);
-        }
+    private static ArrayList<String> addedSort(SortDirection direction) {
+        if (direction.recentFirst()) return newArrayList(RECENT_FIRST, POPULAR_FIRST, ID_DESC);
         return newArrayList(EARLIEST_FIRST, POPULAR_FIRST, ID_ASC);
     }
 
-    private static ArrayList<String> typeSort(SortDirection dir) {
-        if (dir.portfoliosFirst()) {
-            return newArrayList(PORTFOLIO_FIRST, POPULAR_FIRST, RECENT_FIRST, ID_DESC);
-        }
+    private static ArrayList<String> typeSort(SortDirection direction) {
+        if (direction.portfoliosFirst()) return newArrayList(PORTFOLIO_FIRST, POPULAR_FIRST, RECENT_FIRST, ID_DESC);
         return newArrayList(MATERIAL_FIRST, POPULAR_FIRST, RECENT_FIRST, ID_ASC);
     }
 

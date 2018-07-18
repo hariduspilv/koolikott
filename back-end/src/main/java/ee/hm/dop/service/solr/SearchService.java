@@ -20,18 +20,17 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class SearchService {
 
-    public static final String MATERIAL_TYPE = "material";
-    public static final String PORTFOLIO_TYPE = "portfolio";
-    public static final String SIMILAR_RESULT = "similar";
-    public static final String EXACT_RESULT = "exact";
-    public static final String ALL_TYPE = "all";
-    public static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
     public static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
     public static final String SEARCH_BY_AUTHOR_PREFIX = "author:";
     public static final String AND = " AND ";
     public static final String OR = " OR ";
-    public static final String EMPTY = "";
-
+    static final String ALL_TYPE = "all";
+    static final String EMPTY = "";
+    private static final String MATERIAL_TYPE = "material";
+    private static final String PORTFOLIO_TYPE = "portfolio";
+    static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
+    private static final String SIMILAR_RESULT = "similar";
+    private static final String EXACT_RESULT = "exact";
     private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
     private static final Pattern GROUP_KEY_PATTERN = Pattern.compile(GROUP_MATCH_PATTERN);
     private static final int SEARCH_TYPE = 1;
@@ -72,7 +71,7 @@ public class SearchService {
         String query = sanitizeQuery(originalQuery, searchFilter);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SortBuilder.getSort(searchFilter);
-        if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
+        if (StringUtils.isBlank(query) || searchFilter.isFieldSpecificSearch()) searchFilter.setGrouped(false);
 
         SolrSearchRequest searchRequest = new SolrSearchRequest();
         searchRequest.setSolrQuery(solrQuery);
@@ -80,7 +79,7 @@ public class SearchService {
         searchRequest.setFirstItem(firstItem);
         searchRequest.setItemLimit(limit);
         searchRequest.setGrouping(pickGrouping(query, searchFilter));
-        searchRequest.setOriginalQuery(isPhrase(query) ? query : quotify(query));
+        searchRequest.setOriginalQuery(searchRequest.getGrouping().isPhraseGrouping() ? query : quotify(query));
         return searchRequest;
     }
 
