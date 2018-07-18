@@ -1,7 +1,7 @@
 <md-card class="portfolio-chapter card-lg" data-ng-class="$ctrl.getChapterClassNames()" id="{{slug}}">
   <!--View-->
   <md-card-content data-ng-if="!$ctrl.isEditMode">
-    <h2 class="chapter-title" data-ng-bind="chapterTitle"></h2>
+    <h2 class="chapter-title" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
     <div class="chapter-blocks">
       <div
         class="chapter-block"

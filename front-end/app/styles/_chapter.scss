@@ -77,6 +77,9 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
 
 // title view
 h2.chapter-title {
+  &.placeholder-title {
+    opacity: .5;
+  }
   .is-content-empty & {
     margin-bottom: 0;
   }
