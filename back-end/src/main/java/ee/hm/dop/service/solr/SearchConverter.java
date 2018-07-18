@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SearchConverter {
 
-    public static String composeQueryString(String query, SearchFilter searchFilter) {
+    static String composeQueryString(String query, SearchFilter searchFilter) {
         String tokenizedQueryString = getTokenizedQueryString(query);
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
 

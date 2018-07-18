@@ -48,30 +48,28 @@ public class SearchService {
     private LearningObjectDao learningObjectDao;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
-        searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
+        User user = searchFilter.getRequestingUser();
+        searchFilter.setVisibility(SearchConverter.getSearchVisibility(user));
         SolrSearchRequest searchRequest = buildSearchRequest(query, searchFilter, start, limit);
         SolrSearchResponse searchResponse = solrEngineService.search(searchRequest);
 
         // empty query hits every solr index causing massive results
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
-            searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
+            searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeletedCount());
 
         if (searchResponse.getGrouped() != null) {
-            List<Long> orderIds = getOrderIds(searchRequest);
-            return getGroupedSearchResult(searchResponse, orderIds, searchRequest.getGrouping(),
-                    searchRequest.getItemLimit(), searchFilter.getRequestingUser());
+            List<Long> orderedIds = getOrderedIds(searchRequest);
+            return getGroupedSearchResult(searchResponse, orderedIds, searchRequest.getGrouping(), limit, user);
         }
-        Response response = searchResponse.getResponse();
-        if (response != null) {
+        if (searchResponse.getResponse() != null) {
             List<Long> orderIds = new ArrayList<>();
-            return getSearchResult(limit, response, orderIds, searchFilter.getRequestingUser());
+            return getSearchResult(limit, searchResponse.getResponse(), orderIds, searchFilter.getRequestingUser());
         }
         return new SearchResult();
     }
 
-    private SolrSearchRequest buildSearchRequest(String queryInput, SearchFilter searchFilter, long firstItem, Long limit) {
-        if (isFieldSpecificSearch(queryInput)) searchFilter.setFieldSpecificSearch(true);
-        String query = clearQuerySearch(queryInput, searchFilter);
+    private SolrSearchRequest buildSearchRequest(String originalQuery, SearchFilter searchFilter, long firstItem, Long limit) {
+        String query = sanitizeQuery(originalQuery, searchFilter);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SortBuilder.getSort(searchFilter);
         if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
@@ -86,11 +84,7 @@ public class SearchService {
         return searchRequest;
     }
 
-    private boolean isFieldSpecificSearch(String queryInput) {
-        return queryInput != null && UNIQUE_KEYS.stream().anyMatch((group) -> queryInput.startsWith(group + ":"));
-    }
-
-    private List<Long> getOrderIds(SolrSearchRequest searchRequest) {
+    private List<Long> getOrderedIds(SolrSearchRequest searchRequest) {
         return solrEngineService.limitlessSearch(searchRequest)
                 .getResponse().getDocuments().stream()
                 .map(Document::getId)

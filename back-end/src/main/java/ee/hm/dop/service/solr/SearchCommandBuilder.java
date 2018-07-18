@@ -14,9 +14,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SearchCommandBuilder {
 
-    static final List<String> UNIQUE_KEYS = Arrays.asList("title", "portfolioTitle", "tag", "description", "summary", "author", "publisher", "recommended");
-    private static final List<String> PORTFOLIO_KEYS = Arrays.asList("portfolioTitle", "tag", "summary", "author", "publisher");
-    private static final List<String> MATERIAL_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
+    public static final List<String> UNIQUE_KEYS =
+            Arrays.asList("title", "portfolioTitle", "tag", "description", "summary", "author", "publisher", "recommended");
+    private static final List<String> PORTFOLIO_KEYS =
+            Arrays.asList("portfolioTitle", "tag", "summary", "author", "publisher");
+    private static final List<String> MATERIAL_KEYS =
+            Arrays.asList("title", "tag", "description", "author", "publisher");
+
     private static final String SEARCH_PATH = "select?q=%1$s" +
             "&sort=%2$s" +
             "&wt=json" +
@@ -27,6 +31,7 @@ public class SearchCommandBuilder {
             "&stats=true" +
             "&stats.field=id" +
             "&stats.calcdistinct=true";
+
     private static final String GROUP_QUERY = "&group.query=";
     private static final String TYPE_MATERIAL = " AND type:\"material\"";
     private static final String TYPE_PORTFOLIO = " AND type:\"portfolio\"";
@@ -54,7 +59,7 @@ public class SearchCommandBuilder {
         return SearchGrouping.GROUP_WORD;
     }
 
-    static String clearQuerySearch(String query, SearchFilter searchFilter) {
+    static String sanitizeQuery(String query, SearchFilter searchFilter) {
         if (query == null) return null;
         if (!searchFilter.isFieldSpecificSearch()) {
             return query.replaceAll("\"", "").replaceAll(":", "\\\\:");

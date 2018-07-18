@@ -151,7 +151,6 @@ class controller extends Controller {
         this.$scope.sorting = true
         this.searchService.setSort('default')
         this.searchService.setSortDirection('desc')
-        // this.search(true)
         this.$location.url(this.searchService.getURL())
     }
     sort(field, direction) {
@@ -160,7 +159,6 @@ class controller extends Controller {
         this.params.sortDirection = direction
         this.searchService.setSortDirection(direction)
         this.$scope.sorting = true
-        // this.search(true)
         this.$location.url(this.searchService.getURL())
     }
     allResultsLoaded() {
@@ -252,7 +250,7 @@ class controller extends Controller {
         let flatItemList = []
         Object.entries(groups).forEach(([key, content]) => {
             if (key === 'material' || key === 'portfolio') currentGroupType = key
-            currentSearchType = this.detectSearchType(key, currentSearchType, content)
+            currentSearchType = this.detectSearchTypeAndSetCounts(key, currentSearchType, content)
             if (content.hasOwnProperty('items')) {
                 this.setGroupItemsCount(currentGroupType, currentSearchType, key, content)
                 this.updateItemAttributes(flatItemList, currentSearchType, key, content)
@@ -261,7 +259,7 @@ class controller extends Controller {
         })
         return flatItemList
     }
-    detectSearchType(key, currentSearchType, content) {
+    detectSearchTypeAndSetCounts(key, currentSearchType, content) {
         if (key === 'exact' || key === 'similar') {
             currentSearchType = key
             if (key === 'exact') {

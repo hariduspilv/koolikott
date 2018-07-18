@@ -11,6 +11,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+import static ee.hm.dop.service.solr.SearchCommandBuilder.UNIQUE_KEYS;
+
 @Path("search")
 public class SearchResource extends BaseResource {
 
@@ -79,7 +81,12 @@ public class SearchResource extends BaseResource {
         searchFilter.setFavorites(favorites);
         searchFilter.setSearchType(isORSearch ? "OR" : "AND");
         searchFilter.setGrouped(isGrouped);
+        searchFilter.setFieldSpecificSearch(isQueryFieldSpecific(query));
         return searchService.search(query, NumberUtils.nvl(start, 0L), limit, searchFilter);
+    }
+
+    private boolean isQueryFieldSpecific(String queryInput) {
+        return queryInput != null && UNIQUE_KEYS.stream().anyMatch((group) -> queryInput.startsWith(group + ":"));
     }
 
     @GET

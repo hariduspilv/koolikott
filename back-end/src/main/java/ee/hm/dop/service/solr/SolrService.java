@@ -20,7 +20,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -65,14 +66,18 @@ public class SolrService implements SolrEngineService {
                 : Math.min(searchRequest.getItemLimit(), RESULTS_PER_PAGE);
 
         SolrSearchResponse response = executeCommand(getSearchCommand(searchRequest, itemLimit));
-        if (searchRequest.getGrouping().isAnyGrouping()) {
-            SolrSearchResponse countResponse = executeCommand(getCountCommand(searchRequest));
-            countResponse.getGrouped().forEach((key, content) -> {
-                if (key.startsWith("(")) response.setSimilarResultCount(content.getGroupResponse().getTotalResults());
-                if (key.startsWith("\"")) response.setExactResultCount(content.getGroupResponse().getTotalResults());
-            });
-        }
+        setDistinctResultCounts(searchRequest, response);
         return response;
+    }
+
+    private void setDistinctResultCounts(SolrSearchRequest searchRequest, SolrSearchResponse response) {
+        if (!searchRequest.getGrouping().isAnyGrouping()) return;
+        SolrSearchResponse countResponse = executeCommand(getCountCommand(searchRequest));
+        countResponse.getGrouped().forEach((key, content) -> {
+            if (key.startsWith("(")) response.setSimilarResultCount(content.getGroupResponse().getTotalResults());
+            if (key.startsWith("\"")) response.setExactResultCount(content.getGroupResponse().getTotalResults());
+        });
+
     }
 
     @Override

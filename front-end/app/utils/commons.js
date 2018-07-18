@@ -195,7 +195,7 @@ function compareDate(date1, date2) {
 function copyObject(first, second) {
     clearObject(second);
 
-    for (var k in first) {
+    for (let k in first) {
         second[k] = first[k];
     }
 }
@@ -211,7 +211,7 @@ function clearObject(object) {
  * Check if complex item (element) is in an array using comparator
  */
 Array.prototype.indexOfWithComparator = function (obj, comparator) {
-    for (var i = 0; i < this.length; i++) {
+    for (let i = 0; i < this.length; i++) {
         if (comparator(obj, this[i]) === 0) {
             return i;
         }
@@ -225,9 +225,7 @@ Array.prototype.indexOfWithComparator = function (obj, comparator) {
  * @return the string in the correct language
  */
 function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
-    if (!values || values.length === 0) {
-        return;
-    }
+    if (!values || values.length === 0) return;
 
     let languageStringValue;
 
@@ -251,11 +249,8 @@ function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
  * @return the queryed text.
  */
 function getLanguageString(values, language) {
-    if (!language) {
-        return null;
-    }
-
-    for (var i = 0; i < values.length; i++) {
+    if (!language) return null;
+    for (let i = 0; i < values.length; i++) {
         if (values[i].language === language) {
             return values[i].text;
         }
@@ -263,10 +258,7 @@ function getLanguageString(values, language) {
 }
 
 function formatIssueDate(issueDate) {
-    if (!issueDate) {
-        return;
-    }
-
+    if (!issueDate) return;
     if (issueDate.day && issueDate.month && issueDate.year) {
         // full date
         return formatDay(issueDate.day) + "." + formatMonth(issueDate.month) + "." + formatYear(issueDate.year);
@@ -299,8 +291,8 @@ function formatDateToDayMonthYear(dateString) {
 }
 
 function arrayToInitials(array) {
-    var res = "";
-    for (var i = 0; i < array.length; i++) {
+    let res = ""
+    for (let i = 0; i < array.length; i++) {
         res += wordToInitial(array[i]) + " ";
     }
 
@@ -312,32 +304,24 @@ function wordToInitial(name) {
 }
 
 function formatNameToInitials(name) {
-    if (name) {
-        return arrayToInitials(name.split(" "));
-    }
+    if (name) return arrayToInitials(name.split(" "));
 }
 
 function formatSurnameToInitialsButLast(surname) {
-    if (!surname) {
-        return;
-    }
+    if (!surname) return;
 
-    var array = surname.split(" ");
-    var last = array.length - 1;
-    var res = "";
+    let array = surname.split(" ")
+    let res = ""
+    const last = array.length - 1
 
-    if (last > 0) {
-        res = arrayToInitials(array.slice(0, last)) + " ";
-    }
+    if (last > 0) res = arrayToInitials(array.slice(0, last)) + " ";
 
     res += array[last];
     return res;
 }
 
 function isIdCodeValid(idCode) {
-    if (!idCode || idCode.length !== 11) {
-        return false;
-    }
+    if (!idCode || idCode.length !== 11) return false;
 
     var controlCode;
 
@@ -369,18 +353,14 @@ function isIdCodeValid(idCode) {
 }
 
 function containsObject(obj, list) {
-    var x;
-    for (x in list) {
-        if (list.hasOwnProperty(x) && (list[x] === obj || list[x].__proto__ === obj.__proto__)) {
-            return true;
-        }
+    for (let x in list) {
+        if (list.hasOwnProperty(x) && (list[x] === obj || list[x].__proto__ === obj.__proto__)) return true;
     }
-
     return false;
 }
 
 function createPortfolio(id) {
-    var portfolio = {
+    return {
         type: ".Portfolio",
         id: id,
         title: "",
@@ -391,7 +371,6 @@ function createPortfolio(id) {
         licenseType: "",
         picture: {}
     };
-    return portfolio;
 }
 
 function sortTags(upVoteForms) {
@@ -448,12 +427,12 @@ Array.prototype.move = function (old_index, new_index) {
 
 function isYoutubeVideo(url) {
     // regex taken from http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex #ULTIMATE YOUTUBE REGEX
-    var youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+    const youtubeUrlRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
     return url && url.match(youtubeUrlRegex);
 }
 
 function isSlideshareLink(url) {
-    var slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/;
+    const slideshareUrlRegex = /^https?:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
     return url && url.match(slideshareUrlRegex);
 }
 

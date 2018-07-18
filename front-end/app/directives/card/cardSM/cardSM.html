@@ -24,16 +24,16 @@
   <!-- content -->
   <div layout="column" flex flex-order="2" flex-order-xs="1" class="card__content-wrapper">
     <md-card-content layout="column">
-      <h3
+      <h2
         data-ng-if="$ctrl.isPortfolio(learningObject)"
         class="ellipsis ellipsis--2 ellipsis--big no-margin"
         data-ng-bind="learningObject.title"
-      ></h3>
-      <h3
+      ></h2>
+      <h2
         data-ng-if="$ctrl.isMaterial(learningObject)"
         class="ellipsis ellipsis--2 ellipsis--big no-margin"
         data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"
-      ></h3>
+      ></h2>
       <p class="md-caption ellipsis">
         <span data-ng-if="$ctrl.isPortfolio(learningObject)" class="authors">
           <span data-ng-bind="$ctrl.formatName(learningObject.creator.name)"></span>

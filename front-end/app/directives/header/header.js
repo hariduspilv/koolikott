@@ -107,7 +107,7 @@ class controller extends Controller {
                     break
                 case 13: // enter
                     if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase())) {
-                        if (Boolean(this.$scope.searchFields.searchQuery))
+                        if (this.$scope.searchFields.searchQuery)
                             this.processSearchQuery(this.$scope.searchFields.searchQuery)
                     }
 
@@ -299,9 +299,7 @@ class controller extends Controller {
     }
     openMobileSearch() {
         this.$scope.mobileSearch.isVisible = true
-        this.$timeout(() =>
-            document.getElementById('header-simple-search-input').focus()
-        )
+        this.$timeout(() => document.getElementById('header-simple-search-input').focus())
     }
     clearInlineSuggestion() {
         this.$scope.hiddenInline = ''
@@ -325,8 +323,7 @@ class controller extends Controller {
         this.serverCallService
             .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
-                if (portfolio)
-                    this.storageService.setPortfolio(portfolio)
+                if (portfolio) this.storageService.setPortfolio(portfolio)
             })
     }
     saveAndExit() {

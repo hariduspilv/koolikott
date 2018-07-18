@@ -264,8 +264,7 @@ class controller extends Controller {
         this.searchService.setKeyCompetence(this.$scope.detailedSearch.keyCompetence || null)
         this.searchService.setIsGrouped(true)
 
-        if (this.$scope.detailedSearch.taxon)
-            this.searchService.setTaxon([this.$scope.detailedSearch.taxon.id])
+        if (this.$scope.detailedSearch.taxon) this.searchService.setTaxon([this.$scope.detailedSearch.taxon.id])
 
         this.$location.url(this.searchService.getURL())
     }
