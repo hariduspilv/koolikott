@@ -3,28 +3,20 @@
 {
 class controller extends Controller {
     navigateTo() {
-        const { id } = this.learningObject
-
         if (isMaterial(this.learningObject.type)) {
-            if (this.learningObject.type === '.Material'){
-                this.storageService.setMaterial(this.learningObject)
-                this.$location.path('/material').search({ id })
-            } else {
-                this.materialService.getMaterialById(this.learningObject.id).then(learningObject=>{
-                    this.modifyRootScope(learningObject);
-                    this.storageService.setMaterial(learningObject);
-                    this.$location.path('/material').search({ id })
+            if (this.learningObject.type === '.Material') this.storageService.setMaterial(this.learningObject)
+            else {
+                this.materialService.getMaterialById(this.learningObject.id).then(learningObject => {
+                    this.modifyRootScope(learningObject)
+                    this.storageService.setMaterial(learningObject)
                 })
             }
         } else if (isPortfolio(this.learningObject.type)) {
-            if (this.learningObject.type === '.Portfolio') {
-                this.storageService.setPortfolio(this.learningObject)
-                this.$location.path('/portfolio').search({id})
-            } else {
-                this.portfolioService.getPortfolioById(this.learningObject.id).then(learningObject=>{
-                    this.modifyRootScope(learningObject);
-                    this.storageService.setPortfolio(learningObject);
-                    this.$location.path('/portfolio').search({id})
+            if (this.learningObject.type === '.Portfolio') this.storageService.setPortfolio(this.learningObject)
+            else {
+                this.portfolioService.getPortfolioById(this.learningObject.id).then(learningObject => {
+                    this.modifyRootScope(learningObject)
+                    this.storageService.setPortfolio(learningObject)
                 })
             }
         }
@@ -38,7 +30,8 @@ class controller extends Controller {
         this.$rootScope.learningObjectUnreviewed = learningObject && !!learningObject.unReviewed
     }
 }
-    controller.$inject = [
+
+controller.$inject = [
     '$location',
     '$rootScope',
     'translationService',

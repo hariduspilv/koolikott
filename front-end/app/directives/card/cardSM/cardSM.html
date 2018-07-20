@@ -5,36 +5,38 @@
   layout="column"
   layout-xs="row"
   data-ng-mouseenter="$ctrl.hoverEnter()"
-  data-ng-mouseleave="$ctrl.hoverLeave()"
-  >
-  <dop-favorite
-    data-ng-if="$ctrl.isAuthenticated()"
-    data-learning-object="learningObject"
-    hover="$ctrl.cardHover"
-  ></dop-favorite>
-  <!-- media -->
-  <dop-card-media
-    data-learning-object="learningObject"
-    data-is-authenticated="$ctrl.isAuthenticated()"
-    flex
-    flex-order="1"
-    flex-order-xs="2"
-    show-privacy="true"
-  ></dop-card-media>
-  <!-- content -->
-  <div layout="column" flex flex-order="2" flex-order-xs="1" class="card__content-wrapper">
-    <md-card-content layout="column">
-      <h2
-        data-ng-if="$ctrl.isPortfolio(learningObject)"
-        class="ellipsis ellipsis--2 ellipsis--big no-margin"
-        data-ng-bind="learningObject.title"
-      ></h2>
-      <h2
-        data-ng-if="$ctrl.isMaterial(learningObject)"
-        class="ellipsis ellipsis--2 ellipsis--big no-margin"
-        data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"
-      ></h2>
-      <p class="md-caption ellipsis">
+  data-ng-mouseleave="$ctrl.hoverLeave()">
+
+  <a data-ng-href="/{{$ctrl.isMaterial(learningObject) ? 'material' : 'portfolio'}}?id={{learningObject.id}}"
+     class="card-url">
+    <dop-favorite
+      data-ng-if="$ctrl.isAuthenticated()"
+      data-learning-object="learningObject"
+      hover="$ctrl.cardHover"
+    ></dop-favorite>
+    <!-- media -->
+    <dop-card-media
+      data-learning-object="learningObject"
+      data-is-authenticated="$ctrl.isAuthenticated()"
+      flex
+      flex-order="1"
+      flex-order-xs="2"
+      show-privacy="true"
+    ></dop-card-media>
+    <!-- content -->
+    <div layout="column" flex flex-order="2" flex-order-xs="1" class="card__content-wrapper">
+      <md-card-content layout="column">
+        <h2
+          data-ng-if="$ctrl.isPortfolio(learningObject)"
+          class="ellipsis ellipsis--2 ellipsis--big no-margin"
+          data-ng-bind="learningObject.title"
+        ></h2>
+        <h2
+          data-ng-if="$ctrl.isMaterial(learningObject)"
+          class="ellipsis ellipsis--2 ellipsis--big no-margin"
+          data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"
+        ></h2>
+        <p class="md-caption ellipsis">
         <span data-ng-if="$ctrl.isPortfolio(learningObject)" class="authors">
           <span data-ng-bind="$ctrl.formatName(learningObject.creator.name)"></span>
           <span data-ng-bind="$ctrl.formatSurname(learningObject.creator.surname)"></span>
@@ -43,44 +45,47 @@
             data-ng-if="$ctrl.isMaterial(learningObject)"
             data-ng-repeat="author in learningObject.authors track by $index"
             class="authors"
-            >
+          >
             <span data-ng-bind="$ctrl.formatName(author.name)"></span>
             <span data-ng-bind="$ctrl.formatSurname(author.surname)"></span>
             <span data-ng-bind="$index < learningObject.authors.length - 1 ? ', ' : ''">
           </span>
         </span>
-      </p>
-      <span flex></span>
-      <div layout="row" layout-align="none end">
-        <div class="md-caption" flex="50">
-          <p class="ellipsis ellipsis--2">
+        </p>
+        <span flex></span>
+        <div layout="row" layout-align="none end">
+          <div class="md-caption" flex="50">
+            <p class="ellipsis ellipsis--2">
             <span data-ng-repeat="group in $ctrl.targetGroups track by $index">
-              <span data-ng-bind="group"></span><span data-ng-bind="$index < $ctrl.targetGroups.length - 1 ? ', ' : ''"></span>
+              <span data-ng-bind="group"></span><span
+              data-ng-bind="$index < $ctrl.targetGroups.length - 1 ? ', ' : ''"></span>
             </span>
-          </p>
-        </div>
-        <div class="md-caption text-right" flex="50">
-          <p class="ellipsis ellipsis--2">
+            </p>
+          </div>
+          <div class="md-caption text-right" flex="50">
+            <p class="ellipsis ellipsis--2">
             <span data-ng-repeat="taxon in $ctrl.domainSubjectList">
-              <span data-translate="{{taxon}}"></span><span data-ng-bind="$index < $ctrl.domainSubjectList.length - 1 ? ', ' : ''"></span>
+              <span data-translate="{{taxon}}"></span><span
+              data-ng-bind="$index < $ctrl.domainSubjectList.length - 1 ? ', ' : ''"></span>
             </span>
-          </p>
+            </p>
+          </div>
         </div>
-      </div>
-    </md-card-content>
-    <span flex></span>
-    <md-divider></md-divider>
-    <md-card-actions class="md-caption" layout="row" layout-align="start center">
-      <md-icon>thumb_up</md-icon>
-      <span data-ng-bind="learningObject.likes"></span>
-      <md-icon>thumb_down</md-icon>
-      <span data-ng-bind="learningObject.dislikes"></span>
+      </md-card-content>
       <span flex></span>
-      <md-icon>comment</md-icon>
-      <span data-ng-bind="learningObject.commentCount"></span>
-      <span flex></span>
-      <md-icon>visibility</md-icon>
-      <span data-ng-bind="learningObject.views"></span>
-    </md-card-actions>
-  </div>
+      <md-divider></md-divider>
+      <md-card-actions class="md-caption" layout="row" layout-align="start center">
+        <md-icon>thumb_up</md-icon>
+        <span data-ng-bind="learningObject.likes"></span>
+        <md-icon>thumb_down</md-icon>
+        <span data-ng-bind="learningObject.dislikes"></span>
+        <span flex></span>
+        <md-icon>comment</md-icon>
+        <span data-ng-bind="learningObject.commentCount"></span>
+        <span flex></span>
+        <md-icon>visibility</md-icon>
+        <span data-ng-bind="learningObject.views"></span>
+      </md-card-actions>
+    </div>
+  </a>
 </md-card>

@@ -22,17 +22,10 @@ class controller extends Controller {
     navigateTo() {
         const { id } = this.learningObject
 
-        if (this.isMaterial(this.learningObject)) {
-            if (this.learningObject.type === '.Material'){
-                this.storageService.setMaterial(this.learningObject)
-            }
-            this.$location.path('/material').search({ id })
-        } else if (this.isPortfolio(this.learningObject)) {
-            if (this.learningObject.type === '.Portfolio'){
-                this.storageService.setPortfolio(this.learningObject)
-            }
-            this.$location.path('/portfolio').search({ id })
-        }
+        if (this.isMaterial(this.learningObject) && this.learningObject.type === '.Material')
+            this.storageService.setMaterial(this.learningObject)
+        else if (this.isPortfolio(this.learningObject) && this.learningObject.type === '.Portfolio')
+            this.storageService.setPortfolio(this.learningObject)
     }
     formatName(name) {
         if (name)
@@ -61,6 +54,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = [
+    '$window',
     '$scope',
     '$location',
     '$rootScope',
