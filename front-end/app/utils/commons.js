@@ -211,7 +211,7 @@ function clearObject(object) {
  * Check if complex item (element) is in an array using comparator
  */
 Array.prototype.indexOfWithComparator = function (obj, comparator) {
-    for (let i = 0; i < this.length; i++) {
+    for (var i = 0; i < this.length; i++) {
         if (comparator(obj, this[i]) === 0) {
             return i;
         }
@@ -226,6 +226,7 @@ Array.prototype.indexOfWithComparator = function (obj, comparator) {
  */
 function getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
     if (!values || values.length === 0) return;
+
 
     let languageStringValue;
 

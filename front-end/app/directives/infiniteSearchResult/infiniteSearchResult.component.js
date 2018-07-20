@@ -285,7 +285,7 @@ class controller extends Controller {
             if (searchType === 'exact') this.$scope.filterGroupsExact[name].countMaterial = content.totalResults
             else this.$scope.filterGroups[name].countMaterial = content.totalResults
         }
-        if (groupType === 'portfolio') {
+        else if (groupType === 'portfolio') {
             if (searchType === 'exact') this.$scope.filterGroupsExact[name].countPortfolio = content.totalResults
             else this.$scope.filterGroups[name].countPortfolio = content.totalResults
         }
@@ -299,24 +299,27 @@ class controller extends Controller {
             ? this.search()
             : this.expectedItemCount += this.maxResults
     }
-    selectMaterialGroup(groupId, isExact) {
-        let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
-        if (searchGroupType[groupId].countMaterial === 0) return
-        const isAllActive = searchGroupType['all'].isMaterialActive
+    selectMaterialFilter(groupId, isExact) {
+        let filterGroup = this.getFiltersByType(isExact)
+        if (filterGroup[groupId].countMaterial === 0) return
+        const isAllActive = filterGroup['all'].isMaterialActive
+        const disableAllGroups = (groupId !== 'all' && isAllActive) || (groupId === 'all' && !isAllActive)
         this.disableAllOppositeGroups(isExact)
-        if (groupId === 'all' && !isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
-        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
-        searchGroupType[groupId].isMaterialActive = !searchGroupType[groupId].isMaterialActive
+        if (disableAllGroups) controller.disableAllGroupsForFilter(filterGroup)
+        filterGroup[groupId].isMaterialActive = !filterGroup[groupId].isMaterialActive
         this.countAllInSelected()
     }
-    selectPortfolioGroup(groupId, isExact) {
-        let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
-        if (searchGroupType[groupId].countPortfolio === 0) return
-        const isAllActive = searchGroupType['all'].isMaterialActive
+    selectPortfolioFilter(groupId, isExact) {
+        let filterGroup = this.getFiltersByType(isExact)
+        if (filterGroup[groupId].countPortfolio === 0) return
+        const isAllActive = filterGroup['all'].isMaterialActive
         this.disableAllOppositeGroups(isExact)
-        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
-        searchGroupType[groupId].isPortfolioActive = !searchGroupType[groupId].isPortfolioActive
+        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(filterGroup)
+        filterGroup[groupId].isPortfolioActive = !filterGroup[groupId].isPortfolioActive
         this.countAllInSelected()
+    }
+    getFiltersByType(isExact) {
+        return isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
     }
     countAllInSelected() {
         this.selectedMaxCount = 0

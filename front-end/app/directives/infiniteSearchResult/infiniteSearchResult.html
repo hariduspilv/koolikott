@@ -30,7 +30,7 @@
         <md-button id="{{groupId}}-exact-portfolio-button"
                    data-ng-if="groupId !== 'all'"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
+                   data-ng-click="$ctrl.selectPortfolioFilter(groupId, true)"
                    data-ng-class="{ 'active': groupValue.isPortfolioActive}"
                    data-ng-disabled="{{groupValue.countPortfolio === 0}}">
           <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
@@ -39,7 +39,7 @@
         </md-button>
         <md-button id="{{groupId}}-exact-material-button"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
+                   data-ng-click="$ctrl.selectMaterialFilter(groupId, true)"
                    data-ng-class="{ 'active': groupValue.isMaterialActive}"
                    data-ng-disabled="{{groupValue.countMaterial === 0}}">
           <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
@@ -62,7 +62,7 @@
         <md-button id="{{groupId}}-portfolio-button"
                    data-ng-if="groupId !== 'all'"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
+                   data-ng-click="$ctrl.selectPortfolioFilter(groupId)"
                    data-ng-class="{ 'active': groupValue.isPortfolioActive }"
                    data-ng-disabled="{{groupValue.countPortfolio === 0}}">
           <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
@@ -71,7 +71,7 @@
         </md-button>
         <md-button id="{{groupId}}-material-button"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectMaterialGroup(groupId)"
+                   data-ng-click="$ctrl.selectMaterialFilter(groupId)"
                    data-ng-class="{ 'active': groupValue.isMaterialActive }"
                    data-ng-disabled="{{groupValue.countMaterial === 0}}">
           <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>

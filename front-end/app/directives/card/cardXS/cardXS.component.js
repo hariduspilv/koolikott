@@ -3,16 +3,17 @@
 {
 class controller extends Controller {
     navigateTo() {
-        if (isMaterial(this.learningObject.type)) {
-            if (this.learningObject.type === '.Material') this.storageService.setMaterial(this.learningObject)
+        const { type } = this.learningObject
+        if (isMaterial(type)) {
+            if (type === '.Material') this.storageService.setMaterial(this.learningObject)
             else {
                 this.materialService.getMaterialById(this.learningObject.id).then(learningObject => {
                     this.modifyRootScope(learningObject)
                     this.storageService.setMaterial(learningObject)
                 })
             }
-        } else if (isPortfolio(this.learningObject.type)) {
-            if (this.learningObject.type === '.Portfolio') this.storageService.setPortfolio(this.learningObject)
+        } else if (isPortfolio(type)) {
+            if (type === '.Portfolio') this.storageService.setPortfolio(this.learningObject)
             else {
                 this.portfolioService.getPortfolioById(this.learningObject.id).then(learningObject => {
                     this.modifyRootScope(learningObject)

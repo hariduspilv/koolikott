@@ -2,27 +2,24 @@
   <a
     data-ng-href="/{{$ctrl.isMaterial($ctrl.learningObject) ? 'material' : 'portfolio'}}?id={{$ctrl.learningObject.id}}"
     class="card-url">
+
     <md-card-content flex="50">
-      <h6
-        data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"
-        class="ellipsis ellipsis--2 ellipsis--small no-margin"
-        data-ng-bind="$ctrl.learningObject.title"
-      ></h6>
-      <h6
-        data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
-        class="ellipsis ellipsis--2 ellipsis--small no-margin"
-        data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"
-      ></h6>
+      <h6 data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"
+          class="ellipsis ellipsis--2 ellipsis--small no-margin"
+          data-ng-bind="$ctrl.learningObject.title">
+      </h6>
+      <h6 data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
+          class="ellipsis ellipsis--2 ellipsis--small no-margin"
+          data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)">
+      </h6>
       <p class="md-caption ellipsis">
       <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)" class="authors">
         <span data-ng-bind="$ctrl.formatNameToInitials($ctrl.learningObject.creator.name)"></span>
         <span data-ng-bind="$ctrl.formatSurnameToInitialsButLast($ctrl.learningObject.creator.surname)"></span>
       </span>
-        <span
-          data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
-          data-ng-repeat="author in $ctrl.learningObject.authors track by $index"
-          class="authors"
-        >
+        <span data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
+              data-ng-repeat="author in $ctrl.learningObject.authors track by $index"
+              class="authors">
         <span data-ng-bind="$ctrl.formatNameToInitials(author.name)"></span>
         <span data-ng-bind="$ctrl.formatSurnameToInitialsButLast(author.surname)"></span>
         <span data-ng-bind="$index < $ctrl.learningObject.authors.length - 1 ? ', ' : ''"></span>
@@ -32,7 +29,8 @@
     <dop-card-media
       data-learning-object="$ctrl.learningObject"
       flex="50"
-      data-disable-pick="true"
-    ></dop-card-media>
+      data-disable-pick="true">
+    </dop-card-media>
+
   </a>
 </md-card>
