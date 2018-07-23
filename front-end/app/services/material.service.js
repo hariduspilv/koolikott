@@ -3,7 +3,7 @@
 class controller extends Controller {
 
     getMaterialById(id) {
-        return this.serverCallService.makeGet("rest/material", {id})
+        return this.serverCallService.makeGet("rest/material", {'id': id})
             .then((response) => {
                 return response.data;
             });
