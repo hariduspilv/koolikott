@@ -203,7 +203,7 @@
     <copyField source="tag" dest="text"/>
     <copyField source="educational_context" dest="text"/>
     <!--<copyField source="domain" dest="text"/>-->
-    <copyField source="subject" dest="text"/>
+    <!--<copyField source="subject" dest="text"/>-->
     <copyField source="resource_type" dest="text"/>
     <copyField source="license_type" dest="text"/>
     <copyField source="summary" dest="text"/>
@@ -214,6 +214,7 @@
     <copyField source="publisher" dest="text"/>
     <copyField source="peerReview" dest="text"/>
     <copyField source="curriculum_literature" dest="text"/>
+
     <copyField source="source" dest="suggest_source"/>
     <copyField source="source" dest="search_source"/>
 
@@ -222,8 +223,8 @@
     <copyField source="author" dest="suggest_phrase"/>
     <copyField source="tag" dest="suggest_phrase"/>
     <copyField source="educational_context" dest="suggest_phrase"/>
-    <copyField source="domain" dest="suggest_phrase"/>
-    <copyField source="subject" dest="suggest_phrase"/>
+    <!--<copyField source="domain" dest="suggest_phrase"/>-->
+    <!--<copyField source="subject" dest="suggest_phrase"/>-->
     <copyField source="resource_type" dest="suggest_phrase"/>
     <copyField source="license_type" dest="suggest_phrase"/>
     <copyField source="summary" dest="suggest_phrase"/>
