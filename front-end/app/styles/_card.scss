@@ -20,6 +20,8 @@ md-card {
 
   & a.card-url {
     display: contents;
+    text-decoration: none;
+    color: inherit;
   }
 }
 
