@@ -202,7 +202,7 @@
     <copyField source="author" dest="text"/>
     <copyField source="tag" dest="text"/>
     <copyField source="educational_context" dest="text"/>
-    <copyField source="domain" dest="text"/>
+    <!--<copyField source="domain" dest="text"/>-->
     <copyField source="subject" dest="text"/>
     <copyField source="resource_type" dest="text"/>
     <copyField source="license_type" dest="text"/>
