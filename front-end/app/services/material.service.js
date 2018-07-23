@@ -5,7 +5,7 @@ class controller extends Controller {
     getMaterialById(id) {
         return this.serverCallService.makeGet("rest/material", {'id': id})
             .then((response) => {
-                return response.data;
+                if (response.data) return response.data;
             });
     }
 
@@ -16,7 +16,7 @@ class controller extends Controller {
         };
         return this.serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
             .then(response => {
-                if (response.data){
+                if (response.data) {
                     return response.data;
                 }
             });
