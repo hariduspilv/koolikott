@@ -1,3 +1,8 @@
+a.card-url {
+  text-decoration: none;
+  color: inherit;
+}
+
 md-card {
   margin: 0; //to overwrite AM 8px
   transition: all 0.3s;
@@ -16,11 +21,6 @@ md-card {
       display: block;
       word-break: break-all;
     }
-  }
-
-  & a.card-url {
-    text-decoration: none;
-    color: inherit;
   }
 }
 
