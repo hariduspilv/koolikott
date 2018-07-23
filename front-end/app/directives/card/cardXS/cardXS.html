@@ -1,7 +1,6 @@
-<md-card class="card-xs" data-ng-click="$ctrl.navigateTo()" layout="row">
-  <a
-    data-ng-href="/{{$ctrl.isMaterial($ctrl.learningObject) ? 'material' : 'portfolio'}}?id={{$ctrl.learningObject.id}}"
-    class="card-url">
+<a data-ng-href="/{{$ctrl.isMaterial($ctrl.learningObject) ? 'material' : 'portfolio'}}?id={{$ctrl.learningObject.id}}"
+   class="card-url">
+  <md-card class="card-xs" data-ng-click="$ctrl.navigateTo()" layout="row">
 
     <md-card-content flex="50">
       <h6 data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"
@@ -31,6 +30,5 @@
       flex="50"
       data-disable-pick="true">
     </dop-card-media>
-
-  </a>
-</md-card>
+  </md-card>
+</a>

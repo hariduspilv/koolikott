@@ -1,14 +1,14 @@
-<md-card
-  class="card-sm" data-ng-class="{ active: learningObject.selected }"
-  id="{{$ctrl.isMaterial(learningObject) ? 'material' : 'portfolio'}}-card-{{learningObject.id}}"
-  data-ng-click="$ctrl.navigateTo()"
-  layout="column"
-  layout-xs="row"
-  data-ng-mouseenter="$ctrl.hoverEnter()"
-  data-ng-mouseleave="$ctrl.hoverLeave()">
+<a data-ng-href="/{{$ctrl.isMaterial(learningObject) ? 'material' : 'portfolio'}}?id={{learningObject.id}}"
+   class="card-url">
+  <md-card
+    class="card-sm" data-ng-class="{ active: learningObject.selected }"
+    id="{{$ctrl.isMaterial(learningObject) ? 'material' : 'portfolio'}}-card-{{learningObject.id}}"
+    data-ng-click="$ctrl.navigateTo()"
+    layout="column"
+    layout-xs="row"
+    data-ng-mouseenter="$ctrl.hoverEnter()"
+    data-ng-mouseleave="$ctrl.hoverLeave()">
 
-  <a data-ng-href="/{{$ctrl.isMaterial(learningObject) ? 'material' : 'portfolio'}}?id={{learningObject.id}}"
-     class="card-url">
     <dop-favorite
       data-ng-if="$ctrl.isAuthenticated()"
       data-learning-object="learningObject"
@@ -87,5 +87,5 @@
         <span data-ng-bind="learningObject.views"></span>
       </md-card-actions>
     </div>
-  </a>
-</md-card>
+  </md-card>
+</a>
