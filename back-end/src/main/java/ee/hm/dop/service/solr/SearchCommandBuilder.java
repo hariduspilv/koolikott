@@ -45,6 +45,7 @@ public class SearchCommandBuilder {
 
     static String getCountCommand(SolrSearchRequest searchRequest) {
         String query = searchRequest.getOriginalQuery();
+        if (searchRequest.getGrouping().isSingleGrouping()) query = getCleanQuery(query);
         String path = format(SEARCH_PATH, encode(searchRequest.getSolrQuery()), "", 0, 1);
         return path + SEARCH_PATH_GROUPING + GROUP_QUERY + encode(parenthasize(query)) + GROUP_QUERY + encode(quotify(query));
     }
@@ -61,7 +62,7 @@ public class SearchCommandBuilder {
 
     static String sanitizeQuery(String query, SearchFilter searchFilter) {
         if (query == null) return null;
-        if (searchFilter.isFieldSpecificSearch()) return getFieldSpecificQuery(query);
+        if (searchFilter.isFieldSpecificSearch()) return convertFieldSpecificQuery(query);
         else return getCleanQuery(query);
     }
 
@@ -69,7 +70,7 @@ public class SearchCommandBuilder {
         return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
     }
 
-    private static String getFieldSpecificQuery(String query) {
+    private static String convertFieldSpecificQuery(String query) {
         query = query.replaceAll("\"", "");
         String searchField = getSearchField(query);
         query = getFieldQuery(query, searchField);
@@ -78,7 +79,7 @@ public class SearchCommandBuilder {
 
 
     private static String getSearchField(String query) {
-        return UNIQUE_KEYS.stream().filter(query::startsWith).findAny().orElse(null);
+        return UNIQUE_KEYS.stream().filter(query::startsWith).findAny().orElse("");
     }
 
     private static String getFieldQuery(String query, String field) {
