@@ -285,7 +285,7 @@ class controller extends Controller {
         return type === 'material' || type === 'portfolio' || type === 'all'
     }
     shouldBeGrouped() {
-        return !this.groups.some((group) => this.getQuery().startsWith(group + ':'))
+        return Boolean(this.getQuery()) && !this.groups.some((group) => this.getQuery().startsWith(group + ':'))
     }
     getSearchURLbase() {
         return this.searchURLbase
