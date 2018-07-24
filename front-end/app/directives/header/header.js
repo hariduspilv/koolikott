@@ -281,7 +281,8 @@ class controller extends Controller {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
-        this.searchService.setIsGrouped(this.searchService.shouldBeGrouped())
+        const shouldBeGrouped = this.searchService.shouldBeGrouped()
+        this.searchService.setIsGrouped(shouldBeGrouped)
         this.$location.url(this.searchService.getURL())
     }
     closeDetailedSearch() {
