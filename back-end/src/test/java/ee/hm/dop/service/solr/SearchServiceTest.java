@@ -542,7 +542,7 @@ public class SearchServiceTest extends SearchServiceTestUtil {
         expect(solrEngineService.search(anyObject(SolrSearchRequest.class))).andReturn(searchResponse);
 
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
-            expect(learningObjectDao.findAllNotDeleted()).andReturn(totalResults);
+            expect(learningObjectDao.findAllNotDeletedCount()).andReturn(totalResults);
 
         expect(reducedLearningObjectDao.findAllById(learningObjectIdentifiers)).andReturn(learningObjects);
         if (loggedInUser != null) {

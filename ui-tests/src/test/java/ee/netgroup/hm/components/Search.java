@@ -22,24 +22,24 @@ public class Search extends Components{
 
 	public static SearchResultsPage insertSearchCriteriaAndSearch(String searchString) {
 
-		if(searchString == "tag"){
+		if(searchString.equals("tag")){
 			getDriver().findElement(searchField).sendKeys("tag:"+Constants.searchTag);
 			Helpers.waitForVisibility(numberOfResultsText);
 		}	
 		
-		if(searchString == "recommended:false"){
+		if(searchString.equals("recommended:false")){
 			getDriver().findElement(searchField).sendKeys("recommended:false");
 			Helpers.waitForMilliseconds(1000);
 			Helpers.waitForVisibility(numberOfResultsText);
 		}	
 		
-		if(searchString == "recommended:true"){
+		if(searchString.equals("recommended:true")){
 			getDriver().findElement(searchField).sendKeys("recommended:true");
 			Helpers.waitForMilliseconds(1000);
 			Helpers.waitForVisibility(numberOfResultsText);
 		}	
 		
-		if(searchString == "publisher"){
+		if(searchString.equals("publisher")){
 			getDriver().findElement(searchField).sendKeys("publisher:"+Constants.searchPublisher);
 			Helpers.waitForVisibility(numberOfResultsText);
 		}	

@@ -14,9 +14,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class SearchCommandBuilder {
 
-    private static final List<String> PORTFOLIO_KEYS = Arrays.asList("title", "tag", "summary", "author", "publisher");
-    private static final List<String> MATERIAL_KEYS = Arrays.asList("title", "tag", "description", "author", "publisher");
-    private static final List<String> UNIQUE_KEYS = Arrays.asList("title", "tag", "description", "summary", "author", "publisher");
+    public static final List<String> UNIQUE_KEYS =
+            Arrays.asList("title", "portfolioTitle", "tag", "description", "summary", "author", "publisher", "recommended");
+    private static final List<String> PORTFOLIO_KEYS =
+            Arrays.asList("portfolioTitle", "tag", "summary", "author", "publisher");
+    private static final List<String> MATERIAL_KEYS =
+            Arrays.asList("title", "tag", "description", "author", "publisher");
+
     private static final String SEARCH_PATH = "select?q=%1$s" +
             "&sort=%2$s" +
             "&wt=json" +
@@ -27,6 +31,7 @@ public class SearchCommandBuilder {
             "&stats=true" +
             "&stats.field=id" +
             "&stats.calcdistinct=true";
+
     private static final String GROUP_QUERY = "&group.query=";
     private static final String TYPE_MATERIAL = " AND type:\"material\"";
     private static final String TYPE_PORTFOLIO = " AND type:\"portfolio\"";
@@ -40,11 +45,12 @@ public class SearchCommandBuilder {
 
     static String getCountCommand(SolrSearchRequest searchRequest) {
         String query = searchRequest.getOriginalQuery();
+        if (searchRequest.getGrouping().isSingleGrouping()) query = getCleanQuery(query);
         String path = format(SEARCH_PATH, encode(searchRequest.getSolrQuery()), "", 0, 1);
         return path + SEARCH_PATH_GROUPING + GROUP_QUERY + encode(parenthasize(query)) + GROUP_QUERY + encode(quotify(query));
     }
 
-    static boolean isPhrase(String query) {
+    private static boolean isPhrase(String query) {
         return query != null && query.split("\\s+").length > 1;
     }
 
@@ -54,12 +60,30 @@ public class SearchCommandBuilder {
         return SearchGrouping.GROUP_WORD;
     }
 
-    static String clearQuerySearch(String query) {
+    static String sanitizeQuery(String query, SearchFilter searchFilter) {
         if (query == null) return null;
-        if (UNIQUE_KEYS.stream().noneMatch((group) -> query.startsWith(group + ":"))) {
-            return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
-        }
-        return query.replaceAll("\"", "");
+        if (searchFilter.isFieldSpecificSearch()) return convertFieldSpecificQuery(query);
+        else return getCleanQuery(query);
+    }
+
+    private static String getCleanQuery(String query) {
+        return query.replaceAll("\"", "").replaceAll(":", "\\\\:");
+    }
+
+    private static String convertFieldSpecificQuery(String query) {
+        query = query.replaceAll("\"", "");
+        String searchField = getSearchField(query);
+        query = getFieldQuery(query, searchField);
+        return searchField + ":" + quotify(query);
+    }
+
+
+    private static String getSearchField(String query) {
+        return UNIQUE_KEYS.stream().filter(query::startsWith).findAny().orElse("");
+    }
+
+    private static String getFieldQuery(String query, String field) {
+        return query.substring(field.length());
     }
 
     static String quotify(String query) {
@@ -83,11 +107,8 @@ public class SearchCommandBuilder {
 
     private static String buildPath(SolrSearchRequest searchRequest, String query, List<String> groupingKeys, String type) {
         if (searchRequest.getGrouping().isPhraseGrouping()) {
-            return getGroupsForQuery(groupingKeys, parenthasize(query) + type)
-                    + getGroupsForQuery(groupingKeys, quotify(query) + type);
-        } else {
-            return getGroupsForQuery(groupingKeys, query + type);
-        }
+            return getGroupsForQuery(groupingKeys, parenthasize(query) + type) + getGroupsForQuery(groupingKeys, quotify(query) + type);
+        } else return getGroupsForQuery(groupingKeys, query + type);
     }
 
     private static String parenthasize(String query) {

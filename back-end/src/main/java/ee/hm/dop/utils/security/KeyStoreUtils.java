@@ -1,7 +1,7 @@
 package ee.hm.dop.utils.security;
 
 import ee.hm.dop.utils.DOPFileUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.opensaml.xml.security.Criteria;
 import org.opensaml.xml.security.CriteriaSet;
 import org.opensaml.xml.security.credential.Credential;
@@ -15,9 +15,11 @@ import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_SIGNING_ENTITY_PASSWORD;
 import static java.lang.String.format;
-import static org.apache.commons.io.IOUtils.closeQuietly;
 
 public class KeyStoreUtils {
 
@@ -26,10 +28,8 @@ public class KeyStoreUtils {
     private static KeyStore DOPkeyStore;
 
     public static KeyStore loadKeystore(String filename, String password) {
-        InputStream inputStream = null;
 
-        try {
-            inputStream = DOPFileUtils.getFileAsStream(filename);
+        try (InputStream inputStream = DOPFileUtils.getFileAsStream(filename)) {
             if (inputStream == null) {
                 throw new RuntimeException(format("Failed to load keystore in path: %s", filename));
             }
@@ -39,8 +39,6 @@ public class KeyStoreUtils {
             return keyStore;
         } catch (Exception e) {
             throw new RuntimeException(format("Failed to load keystore in path: %s", filename), e);
-        } finally {
-            closeQuietly(inputStream);
         }
     }
 

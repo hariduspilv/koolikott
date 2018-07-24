@@ -100,7 +100,7 @@ public class TaxonTest {
         assertNotEquals(taxon.hashCode(), taxon3.hashCode());
     }
 
-    private class TaxonImpl extends Taxon {
+    private static class TaxonImpl extends Taxon {
         @Override
         public Taxon getParent() {
             return null;

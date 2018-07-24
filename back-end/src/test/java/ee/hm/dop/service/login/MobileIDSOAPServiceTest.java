@@ -31,7 +31,7 @@ import ee.hm.dop.model.Language;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.metadata.LanguageService;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -278,7 +278,7 @@ public class MobileIDSOAPServiceTest extends MobileSoapTestUtil {
                 secondResponseMessage);
     }
 
-    private class MobileIDSOAPServicePartialMock extends MobileIDSOAPService {
+    private static class MobileIDSOAPServicePartialMock extends MobileIDSOAPService {
         private boolean shouldThrowException = false;
 
         @Override

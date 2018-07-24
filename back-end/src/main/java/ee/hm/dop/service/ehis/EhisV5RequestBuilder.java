@@ -1,6 +1,6 @@
 package ee.hm.dop.service.ehis;
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 
 import javax.inject.Inject;
 import javax.xml.soap.*;

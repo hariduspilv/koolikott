@@ -19,16 +19,13 @@ class controller extends Controller {
             const isFirstChange = chapter.isFirstChange()
             this.$scope.chapter = chapter.currentValue
 
-            if (!isFirstChange)
-                this.updateEditors()
+            if (!isFirstChange) this.updateEditors()
 
-            this.isEditMode
-                ? !this.$scope.chapter.title && (this.$scope.chapter.title = '')
-                : this.$scope.chapter.title
-                    ? this.$scope.chapterTitle = this.$scope.chapter.title
-                    : this.$translate('PORTFOLIO_ENTER_CHAPTER_TITLE').then(missingTitle =>
-                        this.$scope.chapterTitle = missingTitle
-                    )
+            if (this.isEditMode && !this.$scope.chapter.title) this.$scope.chapter.title = ''
+            else if (this.$scope.chapter.title) this.$scope.chapterTitle = this.$scope.chapter.title
+            else {
+                this.$translate('PORTFOLIO_ENTER_CHAPTER_TITLE').then(missingTitle => this.$scope.chapterTitle = missingTitle)
+            }
 
             // make sure there's always at least one empty block
             if (!Array.isArray(this.$scope.chapter.blocks))
@@ -748,8 +745,8 @@ class controller extends Controller {
                 : 'mobileSearch:open'
         )
         this.$timeout(() => {
-            this.searchService.setIsFavorites(preferred ? true : false)
-            this.searchService.setIsRecommended(preferred ? true : false)
+            this.searchService.setIsFavorites(preferred)
+            this.searchService.setIsRecommended(preferred)
             this.searchService.setType('material')
             document.getElementById('header-search-input').focus()
             this.$rootScope.$broadcast('detailedSearch:search')

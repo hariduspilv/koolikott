@@ -74,7 +74,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
             if (form.getTag().getId() == 1) {
                 assertEquals(1, form.getUpVoteCount());
                 assertNotNull(form.getTagUpVote());
-                assertEquals(new Long(2), form.getTagUpVote().getId());
+                assertEquals(Long.valueOf(2), form.getTagUpVote().getId());
             } else {
                 assertEquals(0, form.getUpVoteCount());
                 assertNull(form.getTagUpVote());

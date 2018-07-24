@@ -20,11 +20,7 @@ public class PortfolioConverter {
 
     public Portfolio setPortfolioUpdatableFields(Portfolio to, Portfolio from) {
         commonConvert(to, from);
-        if (changesToPublic(to, from)) {
-           to.setPublishedAt(DateTime.now());
-        } else if (changesFromPublic(to, from)){
-           to.setPublishedAt(null);
-        }
+        if (changesToPublic(to, from)) to.setPublishedAt(DateTime.now());
         to.setVisibility(from.getVisibility());
         to.setPublicationConfirmed(from.isPublicationConfirmed());
         return to;

@@ -77,10 +77,10 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(taxons);
         assertEquals(2, taxons.size());
         Subject biology = (Subject) taxons.get(0);
-        assertEquals(new Long(20), biology.getId());
+        assertEquals(Long.valueOf(20), biology.getId());
         assertEquals("Biology", biology.getName());
         Subject math = (Subject) taxons.get(1);
-        assertEquals(new Long(21), math.getId());
+        assertEquals(Long.valueOf(21), math.getId());
         assertEquals("Mathematics", math.getName());
     }
 
@@ -216,26 +216,6 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void GetMaterialsByNullSource() {
-        login(USER_PEETER);
-        doGet(GET_MATERIAL_BY_SOURCE_URL, listOfMaterials());
-    }
-
-    @Test
-    public void GetMaterialsByNonExistantSource() {
-        login(USER_PEETER);
-        List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_NOT_EXISTING, listOfMaterials());
-        assertEquals(0, materials.size());
-    }
-
-    @Test
-    public void GetMaterialsBySource() {
-        login(USER_PEETER);
-        List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_MULTIPLE_MATERIALS, listOfMaterials());
-        assertEquals(2, materials.size());
-    }
-
     @Test
     public void getOneBySource_returns_one_material_by_source() throws Exception {
         login(USER_PEETER);
@@ -244,15 +224,35 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Material source", SOURCE_ONE_MATERIAL, materialBySource.getSource());
     }
 
+    @Test(expected = RuntimeException.class)
+    public void asking_materials_by_null_source_causes_exception() {
+        login(USER_PEETER);
+        doGet(GET_MATERIAL_BY_SOURCE_URL, listOfMaterials());
+    }
+
     @Test
-    public void userCanNotDeleteRepositoryMaterial() {
+    public void asking_materials_by_source_present_in_multiple_materials_returns_multiple_materials() {
+        login(USER_PEETER);
+        List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_MULTIPLE_MATERIALS, listOfMaterials());
+        assertEquals(2, materials.size());
+    }
+
+    @Test
+    public void asking_materials_by_nonexistant_source_returns_empty_list() {
+        login(USER_PEETER);
+        List<Material> materials = doGet(GET_MATERIAL_BY_SOURCE_URL + SOURCE_NOT_EXISTING, listOfMaterials());
+        assertEquals(0, materials.size());
+    }
+
+    @Test
+    public void userCanNotDeleteRepositoryMaterial_only_admin_can() {
         login(USER_PEETER);
         Response response = doPost(MATERIAL_DELETE, materialWithId(MATERIAL_12));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
-    public void userCanNotRestoreRepositoryMaterial() {
+    public void userCanNotRestoreRepositoryMaterial_only_admin_can() {
         login(USER_PEETER);
         Response response = doPost(RESTORE_MATERIAL, materialWithId(MATERIAL_14));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());

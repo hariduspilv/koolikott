@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -51,7 +52,11 @@ public class DOPFileUtilsTest {
         final String FILE_DIRECTORY = "src/test/resources/uploads/";
         final String FILE_NAME = "uploadedFileTest.test";
 
-        DOPFileUtils.writeToFile(new ByteArrayInputStream(FILE_CONTENT.getBytes()), FILE_DIRECTORY + FILE_NAME);
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(FILE_CONTENT.getBytes(StandardCharsets.UTF_8))) {
+            DOPFileUtils.writeToFile(inputStream, FILE_DIRECTORY + FILE_NAME);
+        } catch (IOException ignored){
+
+        }
         String file_content = DOPFileUtils.readFileAsString(FILE_DIRECTORY + FILE_NAME);
         assertEquals(FILE_CONTENT, file_content);
         try {

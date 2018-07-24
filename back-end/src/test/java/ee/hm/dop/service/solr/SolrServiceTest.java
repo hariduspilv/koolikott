@@ -4,7 +4,7 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.ResponseHeader;
 import ee.hm.dop.model.solr.SolrSearchResponse;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -31,7 +31,7 @@ public class SolrServiceTest {
 
     private static final int RESULTS_PER_PAGE = 24;
     private static final String SOLR_STATUS_IDLE = "idle";
-    private final String serverUrl = "server/url/";
+    private static final String serverUrl = "server/url/";
     @TestSubject
     private SolrService solrService = new SolrService();
     @Mock

@@ -37,10 +37,6 @@ public class TranslationGroupDaoTest extends DatabaseTestBase {
 
     @Test
     public void getTranslationKeyByTranslation() {
-        Language language = new Language();
-        language.setId((long) 1);
-        language.setCode(LanguageC.EST);
-
         String translationKey = translationGroupDao.getTranslationKeyByTranslation("FOO sõnum");
         assertNotNull(translationKey);
         assertEquals("FOO", translationKey);
@@ -50,10 +46,6 @@ public class TranslationGroupDaoTest extends DatabaseTestBase {
 
     @Test
     public void getTranslationByKeyAndLangcode() {
-        Language language = new Language();
-        language.setId((long) 1);
-        language.setCode(LanguageC.EST);
-
         String translation = translationGroupDao.getTranslationByKeyAndLangcode("FOO", 1L);
         assertNotNull(translation);
         assertEquals("FOO sõnum", translation);

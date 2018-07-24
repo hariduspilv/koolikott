@@ -2,15 +2,19 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
+import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
 
 public class StuudiumService {
 
@@ -20,6 +24,12 @@ public class StuudiumService {
     private Client client;
     @Inject
     private LoginService loginService;
+    private HmacUtils hmacUtils;
+
+    @Inject
+    public void postConstruct() {
+        hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, configuration.getString(STUUDIUM_CLIENT_SECRET));
+    }
 
     public UserStatus authenticate(String token) {
         StuudiumUser stuudiumUser = getStuudiumUser(token);
@@ -30,7 +40,7 @@ public class StuudiumService {
         Response response = client.target(getUserDataUrl())
                 .queryParam("token", token)
                 .queryParam("client_id", getClientId())
-                .queryParam("signature", HmacUtils.hmacSha1Hex(getClientSecret(), token))
+                .queryParam("signature", hmacUtils.hmacHex(token))
                 .request().accept(MediaType.APPLICATION_JSON).get();
 
         return response.readEntity(StuudiumUser.class);
@@ -42,10 +52,6 @@ public class StuudiumService {
 
     public String getClientId() {
         return configuration.getString(STUUDIUM_CLIENT_ID);
-    }
-
-    private String getClientSecret() {
-        return configuration.getString(STUUDIUM_CLIENT_SECRET);
     }
 
     private String getUserDataUrl() {

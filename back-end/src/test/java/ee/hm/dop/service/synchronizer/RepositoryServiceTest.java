@@ -129,7 +129,7 @@ public class RepositoryServiceTest {
         expect(materialIterator.next()).andReturn(material);
         expect(material.getRepositoryIdentifier()).andReturn(IDENTIFIER).anyTimes();
         expect(material.getPicture()).andReturn(null);
-        material.setRepository(repository);
+        expectSetters(repository, material);
 
         Material originalMaterial = new Material();
         originalMaterial.setId(ORIGINAL_MATERIAL_ID);
@@ -448,4 +448,30 @@ public class RepositoryServiceTest {
         }
     }
 
+    private void expectSetters(Repository repository, Material material) {
+        material.setChanged(0);
+        expectLastCall();
+        material.setDeleted(false);
+        expectLastCall();
+        material.setDislikes(0);
+        expectLastCall();
+        material.setLikes(0);
+        expectLastCall();
+        material.setImproper(0);
+        expectLastCall();
+        material.setUnReviewed(0);
+        expectLastCall();
+        material.setViews(0L);
+        expectLastCall();
+        material.setPaid(false);
+        expectLastCall();
+        material.setPublicationConfirmed(false);
+        expectLastCall();
+        material.setSpecialEducation(false);
+        expectLastCall();
+        material.setRepository(repository);
+        expectLastCall();
+        material.setId(ORIGINAL_MATERIAL_ID);
+        expectLastCall();
+    }
 }

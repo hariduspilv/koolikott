@@ -173,6 +173,7 @@
 
     <!-- Portfolio -->
     <field name="summary" type="text_general" indexed="true" stored="false"/>
+    <field name="portfolioTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>
     <!--<field name="chapterTitle" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
     <!--<field name="chapterText" type="text_general" indexed="true" stored="false" multiValued="true"/>-->
 
@@ -200,18 +201,21 @@
     <copyField source="description" dest="text"/>
     <copyField source="author" dest="text"/>
     <copyField source="tag" dest="text"/>
-    <copyField source="educational_context" dest="text"/>
-    <copyField source="domain" dest="text"/>
-    <copyField source="subject" dest="text"/>
-    <copyField source="resource_type" dest="text"/>
-    <copyField source="license_type" dest="text"/>
     <copyField source="summary" dest="text"/>
+    <copyField source="portfolioTitle" dest="text"/>
+    <copyField source="publisher" dest="text"/>
+
+    <!--<copyField source="educational_context" dest="text"/>-->
+    <!--<copyField source="domain" dest="text"/>-->
+    <!--<copyField source="subject" dest="text"/>-->
+    <!--<copyField source="resource_type" dest="text"/>-->
+    <!--<copyField source="license_type" dest="text"/>-->
     <!--<copyField source="chapterTitle" dest="text"/>-->
     <!--<copyField source="chapterText" dest="text"/>-->
-    <copyField source="language" dest="text"/>
-    <copyField source="publisher" dest="text"/>
-    <copyField source="peerReview" dest="text"/>
-    <copyField source="curriculum_literature" dest="text"/>
+    <!--<copyField source="language" dest="text"/>-->
+    <!--<copyField source="peerReview" dest="text"/>-->
+    <!--<copyField source="curriculum_literature" dest="text"/>-->
+
     <copyField source="source" dest="suggest_source"/>
     <copyField source="source" dest="search_source"/>
 
@@ -219,16 +223,18 @@
     <copyField source="description" dest="suggest_phrase"/>
     <copyField source="author" dest="suggest_phrase"/>
     <copyField source="tag" dest="suggest_phrase"/>
-    <copyField source="educational_context" dest="suggest_phrase"/>
-    <copyField source="domain" dest="suggest_phrase"/>
-    <copyField source="subject" dest="suggest_phrase"/>
-    <copyField source="resource_type" dest="suggest_phrase"/>
-    <copyField source="license_type" dest="suggest_phrase"/>
     <copyField source="summary" dest="suggest_phrase"/>
+    <copyField source="portfolioTitle" dest="suggest_phrase"/>
+    <copyField source="publisher" dest="suggest_phrase"/>
+
+    <!--<copyField source="educational_context" dest="suggest_phrase"/>-->
+    <!--<copyField source="domain" dest="suggest_phrase"/>-->
+    <!--<copyField source="subject" dest="suggest_phrase"/>-->
+    <!--<copyField source="resource_type" dest="suggest_phrase"/>-->
+    <!--<copyField source="license_type" dest="suggest_phrase"/>-->
     <!--<copyField source="chapterTitle" dest="suggest_phrase"/>-->
     <!--<copyField source="chapterText" dest="suggest_phrase"/>-->
-    <copyField source="language" dest="suggest_phrase"/>
-    <copyField source="publisher" dest="suggest_phrase"/>
+    <!--<copyField source="language" dest="suggest_phrase"/>-->
 
     <copyField source="taxon_name" dest="suggest_tag"/>
     <copyField source="resource_type_name" dest="suggest_tag"/>

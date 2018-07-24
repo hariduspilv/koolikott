@@ -1,28 +1,22 @@
 package ee.hm.dop.utils.security;
 
-import static java.lang.String.format;
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
-import java.io.InputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import ee.hm.dop.utils.DOPFileUtils;
 import org.opensaml.common.xml.SAMLConstants;
 import org.opensaml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml2.metadata.provider.DOMMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
-import org.opensaml.security.MetadataCredentialResolver;
-import org.opensaml.security.MetadataCredentialResolverFactory;
-import org.opensaml.security.MetadataCriteria;
+import org.opensaml.security.*;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.security.CriteriaSet;
 import org.opensaml.xml.security.criteria.EntityIDCriteria;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.xml.parsers.*;
+import java.io.InputStream;
+
+import static java.lang.String.format;
 
 public class MetadataUtils {
 
@@ -52,17 +46,13 @@ public class MetadataUtils {
     }
 
     private static Element getElement(String credentialPath, DocumentBuilder docBuilder) throws Exception {
-        InputStream inputStream = null;
-        try {
-            inputStream = DOPFileUtils.getFileAsStream(credentialPath);
+        try (InputStream inputStream = DOPFileUtils.getFileAsStream(credentialPath)) {
             if (inputStream == null) {
                 throw new RuntimeException(format("Failed to load credentials in path: %s", credentialPath));
             }
 
             Document metaDataDocument = docBuilder.parse(inputStream);
             return metaDataDocument.getDocumentElement();
-        } finally {
-            closeQuietly(inputStream);
         }
 
     }

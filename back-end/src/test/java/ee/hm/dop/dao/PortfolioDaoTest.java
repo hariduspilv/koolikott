@@ -48,7 +48,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         assertEquals(USER_VOLDERMAR2.id, portfolio.getCreator().getId());
         assertEquals(USER_VOLDERMAR2.username, portfolio.getCreator().getUsername());
         assertNull(portfolio.getSummary());
-        assertEquals(new Long(14), portfolio.getViews());
+        assertEquals(Long.valueOf(14), portfolio.getViews());
         assertTrue(portfolio.getChapters().isEmpty());
         assertTrue(portfolio.getTags().isEmpty());
     }
@@ -110,10 +110,9 @@ public class PortfolioDaoTest extends DatabaseTestBase {
     @Test
     public void increaseViewCount() {
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(PORTFOLIO_2);
-        long originalViews = portfolio.getViews();
-        assertSame(14L, originalViews);
+        assertSame(14L, portfolio.getViews());
 
-        portfolio.setViews(++originalViews);
+        portfolio.setViews(portfolio.getViews()+1);
         portfolioDao.incrementViewCount(portfolio);
 
         Portfolio returnedPortfolio = portfolioDao.findByIdNotDeleted(PORTFOLIO_2);

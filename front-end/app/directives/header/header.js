@@ -107,7 +107,7 @@ class controller extends Controller {
                     break
                 case 13: // enter
                     if (!this.$location.url().startsWith('/' + this.searchService.getSearchURLbase())) {
-                        if (Boolean(this.$scope.searchFields.searchQuery))
+                        if (this.$scope.searchFields.searchQuery)
                             this.processSearchQuery(this.$scope.searchFields.searchQuery)
                     }
 
@@ -281,13 +281,9 @@ class controller extends Controller {
         this.searchService.setQuery(this.$scope.searchFields.searchQuery)
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setType(this.$rootScope.isEditPortfolioMode ? 'material' : 'all')
-        this.handleSorting()
-        this.searchService.setIsGrouped(Boolean(this.$scope.searchFields.searchQuery))
+        const shouldBeGrouped = this.searchService.shouldBeGrouped()
+        this.searchService.setIsGrouped(shouldBeGrouped)
         this.$location.url(this.searchService.getURL())
-    }
-    handleSorting() {
-        this.searchService.setSort('default')
-        this.searchService.setSortDirection('desc')
     }
     closeDetailedSearch() {
         this.$timeout(() => {
@@ -304,9 +300,7 @@ class controller extends Controller {
     }
     openMobileSearch() {
         this.$scope.mobileSearch.isVisible = true
-        this.$timeout(() =>
-            document.getElementById('header-simple-search-input').focus()
-        )
+        this.$timeout(() => document.getElementById('header-simple-search-input').focus())
     }
     clearInlineSuggestion() {
         this.$scope.hiddenInline = ''
@@ -330,8 +324,7 @@ class controller extends Controller {
         this.serverCallService
             .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
-                if (portfolio)
-                    this.storageService.setPortfolio(portfolio)
+                if (portfolio) this.storageService.setPortfolio(portfolio)
             })
     }
     saveAndExit() {
@@ -412,11 +405,8 @@ directive('dopHeader', {
         let  isSuggestVisible = false
 
         const checkWindowWidth = () => {
-            if ($ctrl.isNVP())
-                $scope.isMobileView = true
-
-            if (window.innerWidth >= BREAK_SM)
-                $scope.canShowTour = true
+            if ($ctrl.isNVP()) $scope.isMobileView = true
+            if (window.innerWidth >= BREAK_SM) $scope.canShowTour = true
         }
 
         checkWindowWidth()

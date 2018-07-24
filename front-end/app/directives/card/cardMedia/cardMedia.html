@@ -12,9 +12,7 @@
 
   <div class="ribbon" data-ng-if="$ctrl.isPortfolio(learningObject)"></div>
 
-  <a data-ng-href="{{'/' + learningObjectType + '?id=' + learningObject.id}}"
-     data-ng-class="coverClass"
-     data-flex-order="-1" data-flex-order-xs="1">
+  <div data-ng-class="coverClass" data-flex-order="-1" data-flex-order-xs="1">
 
     <div data-ng-if="!learningObject.picture" class="pattern">
       <div class="sheet up-left"></div>
@@ -42,5 +40,5 @@
       <md-icon data-ng-if="$ctrl.isMaterial(learningObject)" class="icon-kind">{{materialType}}
       </md-icon>
     </div>
-  </a>
+  </div>
 </div>

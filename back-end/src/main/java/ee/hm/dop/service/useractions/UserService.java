@@ -1,24 +1,21 @@
 package ee.hm.dop.service.useractions;
 
-import static java.lang.String.format;
-
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.utils.UserUtil;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.text.Normalizer;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 public class UserService {
 

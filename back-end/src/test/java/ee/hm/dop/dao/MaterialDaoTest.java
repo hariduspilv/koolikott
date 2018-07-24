@@ -124,10 +124,10 @@ public class MaterialDaoTest extends DatabaseTestBase {
         assertNotNull(taxons);
         assertEquals(2, taxons.size());
         Subject biology = (Subject) taxons.get(0);
-        assertEquals(new Long(20), biology.getId());
+        assertEquals(Long.valueOf(20), biology.getId());
         assertEquals("Biology", biology.getName());
         Subject math = (Subject) taxons.get(1);
-        assertEquals(new Long(21), math.getId());
+        assertEquals(Long.valueOf(21), math.getId());
         assertEquals("Mathematics", math.getName());
     }
 

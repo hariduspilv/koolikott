@@ -6,7 +6,7 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataParam;

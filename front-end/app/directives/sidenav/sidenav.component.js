@@ -49,8 +49,8 @@ class controller extends Controller {
                 this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
             }
             this.$rootScope.isViewPortfolioAndEdit = (
-                this.$location.url().indexOf('/portfolio') != -1 ||
-                this.$location.url().indexOf('/search') != -1
+                this.$location.url().indexOf('/portfolio') !== -1 ||
+                this.$location.url().indexOf('/search') !== -1
             )
         }, true)
         this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {

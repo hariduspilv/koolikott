@@ -22,7 +22,7 @@ public class DOPSearchStringTokenizerParameterizedTest {
     @Parameters
     public static Collection<Object[]> getTokenKeywords() {
         return Arrays.asList(
-                new Object[][] { { "author" }, { "title" }, { "description" }, { "summary" }, { "publisher" }, { "tag" } });
+                new Object[][]{{"author"}, {"title"}, {"description"}, {"summary"}, {"publisher"}, {"tag"}});
     }
 
     @Test
@@ -58,11 +58,7 @@ public class DOPSearchStringTokenizerParameterizedTest {
     public void tokenizeSpaceInsteadColon() {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(tokenKeyword + " \"Leonardo Fibonacci");
         String searchQuery = consumeTokenizer(tokenizer);
-        if (tokenKeyword.length() > 3) {
-            assertEquals(tokenKeyword + " \\\"leonardo fibonacci", searchQuery);
-        } else {
-            assertEquals(tokenKeyword + " \\\"leonardo fibonacci", searchQuery);
-        }
+        assertEquals(tokenKeyword + " \\\"leonardo fibonacci", searchQuery);
     }
 
     @Test
@@ -94,11 +90,7 @@ public class DOPSearchStringTokenizerParameterizedTest {
         DOPSearchStringTokenizer tokenizer = new DOPSearchStringTokenizer(tokenKeyword + " rest");
         String searchQuery = consumeTokenizer(tokenizer);
 
-        if (tokenKeyword.length() > 3) {
-            assertEquals(tokenKeyword + " rest", searchQuery);
-        } else {
-            assertEquals(tokenKeyword + " rest", searchQuery);
-        }
+        assertEquals(tokenKeyword + " rest", searchQuery);
     }
 
     private String consumeTokenizer(DOPSearchStringTokenizer tokenizer) {

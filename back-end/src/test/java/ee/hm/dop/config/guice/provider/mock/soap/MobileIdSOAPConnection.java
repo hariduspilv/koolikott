@@ -3,6 +3,7 @@ package ee.hm.dop.config.guice.provider.mock.soap;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -165,7 +166,7 @@ public class MobileIdSOAPConnection implements SOAPConnectionMockI {
                 + "</SOAP-ENV:Fault>" //
                 + "</SOAP-ENV:Body>" //
                 + "</SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes());
+        InputStream is = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
         SOAPMessage faultMessage = null;
         try {
             faultMessage = MessageFactory.newInstance().createMessage(null, is);

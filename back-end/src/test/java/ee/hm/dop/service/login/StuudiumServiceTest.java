@@ -20,7 +20,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

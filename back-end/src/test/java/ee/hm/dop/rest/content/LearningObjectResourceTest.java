@@ -159,7 +159,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         doPost(LIKE_URL, portfolio);
         UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
         assertNotNull("User like exist", userLike);
-        assertEquals("Portfolio is liked by user", true, userLike.isLiked());
+        assertTrue("Portfolio is liked by user", userLike.isLiked());
     }
 
     @Test
@@ -199,13 +199,13 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void increaseViewCountNotExistingMaterial() {
         login(USER_ADMIN);
-        Response response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
+        Response response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
         response = doPost(INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTS_ID));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
 
-        response = doGet(format(GET_MATERIAL_URL, (long) NOT_EXISTS_ID));
+        response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
     }
 

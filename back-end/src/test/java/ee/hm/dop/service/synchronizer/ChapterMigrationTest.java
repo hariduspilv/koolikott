@@ -6,7 +6,7 @@ import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterBlock;
 import ee.hm.dop.model.ContentRow;
 import ee.hm.dop.model.Material;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

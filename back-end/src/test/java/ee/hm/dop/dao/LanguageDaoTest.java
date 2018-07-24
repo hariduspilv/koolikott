@@ -26,7 +26,7 @@ public class LanguageDaoTest extends DatabaseTestBase {
         Language language1 = languageDao.findByCode(LanguageC.EST);
 
         assertNotNull(language1);
-        assertEquals(new Long(1), language1.getId());
+        assertEquals(Long.valueOf(1), language1.getId());
         assertEquals(LanguageC.EST, language1.getCode());
         assertEquals("Estonian", language1.getName());
         assertEquals(1, language1.getCodes().size());
@@ -34,7 +34,7 @@ public class LanguageDaoTest extends DatabaseTestBase {
 
         Language language2 = languageDao.findByCode("fr");
         assertNotNull(language2);
-        assertEquals(new Long(6), language2.getId());
+        assertEquals(Long.valueOf(6), language2.getId());
         assertEquals("fre", language2.getCode());
         assertEquals("French", language2.getName());
         assertEquals(1, language2.getCodes().size());

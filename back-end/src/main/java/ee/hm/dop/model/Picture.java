@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.*;
 
+import java.util.Arrays;
+
 import static javax.persistence.FetchType.LAZY;
 
 @MappedSuperclass
@@ -40,10 +42,12 @@ public abstract class Picture implements AbstractEntity {
     }
 
     public byte[] getData() {
-        return data;
+        if (data == null) return null;
+        return Arrays.copyOf(data, data.length);
     }
 
     public void setData(byte[] data) {
-        this.data = data;
+        this.data = data == null ? null : Arrays.copyOf(data, data.length);
+
     }
 }

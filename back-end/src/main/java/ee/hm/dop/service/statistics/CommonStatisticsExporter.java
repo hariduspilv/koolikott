@@ -48,7 +48,7 @@ public class CommonStatisticsExporter {
     }
 
     public String[] taxonHeader(NewStatisticsResult statistics, Long estId) {
-        String translationString = "";
+        StringBuilder translationString = new StringBuilder();
         List<TranslationTaxon> translationTaxons = new ArrayList<>();
         for (EducationalContextRow ecRow : statistics.getRows()) {
             for (NewStatisticsRow dRow : ecRow.getRows()) {
@@ -78,10 +78,10 @@ public class CommonStatisticsExporter {
         for (int i = 0; i < translationTaxons.size(); i++) {
             TranslationTaxon translationTaxon = translationTaxons.get(i);
             String separator = pickSeparator(translationTaxons, i, translationTaxon);
-            translationString = translationString + separator + translationTaxon.getTranslation();
+            translationString.append(separator).append(translationTaxon.getTranslation());
         }
         String ecTranslation = translationOrName(estId, statistics.getRows().get(0).getEducationalContext());
-        return StatisticsUtil.taxonHeader(statistics.getFilter().getFrom(), statistics.getFilter().getTo(), ecTranslation, translationTaxons.size() > 1, translationString);
+        return StatisticsUtil.taxonHeader(statistics.getFilter().getFrom(), statistics.getFilter().getTo(), ecTranslation, translationTaxons.size() > 1, translationString.toString());
     }
 
     private String pickSeparator(List<TranslationTaxon> rows, int i, TranslationTaxon currentRow) {

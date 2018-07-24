@@ -2,6 +2,7 @@ package ee.hm.dop.config.guice.provider.mock.ekool.token;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import ee.hm.dop.model.ekool.EkoolToken;
 public class EkoolTokenBuilder extends Builder {
 
     private static final String AUTH_HEADER_HASH = "Basic "
-            + Base64.getEncoder().encodeToString("koolikott:9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m".getBytes());
+            + Base64.getEncoder().encodeToString("koolikott:9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m".getBytes(StandardCharsets.UTF_8));
 
     private static final Map<String, EkoolToken> tokenMap;
     private static final String CODE_1 = "123456789";

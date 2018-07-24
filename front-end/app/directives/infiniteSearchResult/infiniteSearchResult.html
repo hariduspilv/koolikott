@@ -1,9 +1,9 @@
 <div data-layout="row" data-layout-align="space-between center">
-  <h2 id="search-result-title" class="md-headline" data-ng-if="showFilterGroups !== 'phraseGrouping' && title"
-      data-ng-bind-html="title"></h2>
-  <h2 id="exact-search-result-title" class="md-headline"
+  <h1 id="search-result-title" class="md-headline" data-ng-if="showFilterGroups !== 'phraseGrouping' && title"
+      data-ng-bind-html="title"></h1>
+  <h1 id="exact-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
-      data-ng-bind-html="exactTitle"></h2>
+      data-ng-bind-html="exactTitle"></h1>
   <md-input-container data-ng-if="filter" flex-xs="60" flex-sm="30" flex-gt-sm="20">
     <md-select ng-model="sortDropdown" placeholder="{{'SORT_PLACEHOLDER' | translate}}">
       <md-option
@@ -19,7 +19,7 @@
     </md-select>
   </md-input-container>
 </div>
-<h3 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h3>
+<h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
 
 <div data-ng-if="sorting || !searching">
   <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
@@ -30,7 +30,7 @@
         <md-button id="{{groupId}}-exact-portfolio-button"
                    data-ng-if="groupId !== 'all'"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectPortfolioGroup(groupId, true)"
+                   data-ng-click="$ctrl.selectPortfolioFilter(groupId, true)"
                    data-ng-class="{ 'active': groupValue.isPortfolioActive}"
                    data-ng-disabled="{{groupValue.countPortfolio === 0}}">
           <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
@@ -39,7 +39,7 @@
         </md-button>
         <md-button id="{{groupId}}-exact-material-button"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectMaterialGroup(groupId, true)"
+                   data-ng-click="$ctrl.selectMaterialFilter(groupId, true)"
                    data-ng-class="{ 'active': groupValue.isMaterialActive}"
                    data-ng-disabled="{{groupValue.countMaterial === 0}}">
           <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
@@ -51,8 +51,8 @@
     </section>
   </div>
 
-  <h2 id="similar-search-result-title" class="md-headline"
-      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h2>
+  <h1 id="similar-search-result-title" class="md-headline"
+      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h1>
 
   <div data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
@@ -62,7 +62,7 @@
         <md-button id="{{groupId}}-portfolio-button"
                    data-ng-if="groupId !== 'all'"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectPortfolioGroup(groupId)"
+                   data-ng-click="$ctrl.selectPortfolioFilter(groupId)"
                    data-ng-class="{ 'active': groupValue.isPortfolioActive }"
                    data-ng-disabled="{{groupValue.countPortfolio === 0}}">
           <md-tooltip><span data-translate="FILTER_PORTFOLIO"></span></md-tooltip>
@@ -71,7 +71,7 @@
         </md-button>
         <md-button id="{{groupId}}-material-button"
                    class="button-grouping-filter"
-                   data-ng-click="$ctrl.selectMaterialGroup(groupId)"
+                   data-ng-click="$ctrl.selectMaterialFilter(groupId)"
                    data-ng-class="{ 'active': groupValue.isMaterialActive }"
                    data-ng-disabled="{{groupValue.countMaterial === 0}}">
           <md-tooltip data-ng-if="groupId !== 'all'"><span data-translate="FILTER_MATERIAL"></span></md-tooltip>
@@ -90,6 +90,8 @@
     <dop-card-sm learning-object="item"></dop-card-sm>
   </div>
 </div>
+
+<button data-ng-class="{ 'higher': $ctrl.isLoggedIn() }" class="material-scrolltop" type="button"></button>
 
 <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
   <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"

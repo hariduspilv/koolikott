@@ -25,7 +25,7 @@ import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import ee.hm.dop.utils.EncryptionUtils;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

@@ -7,8 +7,7 @@ class controller extends Controller {
         this.domains = []
         this.subjects = []
 
-        this.domainSubjectList = this.taxonGroupingService
-            .getDomainSubjectList(this.learningObject.taxons)
+        this.domainSubjectList = this.taxonGroupingService.getDomainSubjectList(this.learningObject.taxons)
 
         this.targetGroups = this.targetGroupService
             .getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
@@ -16,31 +15,18 @@ class controller extends Controller {
         this.$scope.learningObject = this.learningObject
     }
     $doCheck() {
-        if (this.learningObject !== this.$scope.learningObject)
-            this.$scope.learningObject = this.learningObject
+        if (this.learningObject !== this.$scope.learningObject) this.$scope.learningObject = this.learningObject
     }
     navigateTo() {
-        const { id } = this.learningObject
-
-        if (this.isMaterial(this.learningObject)) {
-            if (this.learningObject.type === '.Material'){
-                this.storageService.setMaterial(this.learningObject)
-            }
-            this.$location.path('/material').search({ id })
-        } else if (this.isPortfolio(this.learningObject)) {
-            if (this.learningObject.type === '.Portfolio'){
-                this.storageService.setPortfolio(this.learningObject)
-            }
-            this.$location.path('/portfolio').search({ id })
-        }
+        const { type } = this.learningObject
+        if (type === '.Material') this.storageService.setMaterial(this.learningObject)
+        else if (type === '.Portfolio') this.storageService.setPortfolio(this.learningObject)
     }
     formatName(name) {
-        if (name)
-            return this.formatNameToInitials(name.trim())
+        if (name) return this.formatNameToInitials(name.trim())
     }
     formatSurname(surname) {
-        if (surname)
-            return this.formatSurnameToInitialsButLast(surname.trim())
+        if (surname) return this.formatSurnameToInitialsButLast(surname.trim())
     }
     isAuthenticated() {
         const authenticated =
@@ -48,8 +34,7 @@ class controller extends Controller {
             !this.authenticatedUserService.isRestricted() &&
             !this.$rootScope.isEditPortfolioPage
 
-        if (!authenticated && this.isMaterial(this.learningObject.type))
-            this.learningObject.selected = false
+        if (!authenticated && this.isMaterial(this.learningObject.type)) this.learningObject.selected = false
 
         return authenticated
     }
@@ -61,6 +46,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = [
+    '$window',
     '$scope',
     '$location',
     '$rootScope',

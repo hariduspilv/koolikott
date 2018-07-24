@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
 public class PortfolioDao extends AbstractDao<Portfolio> {
@@ -67,6 +69,9 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
      * @return a list of portfolios specified by idList
      */
     public List<LearningObject> findAllById(List<Long> idList) {
+        if (isEmpty(idList)){
+            return new ArrayList<>();
+        }
         return getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo" +
                         " WHERE type(lo) = Portfolio " +

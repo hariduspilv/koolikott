@@ -3,7 +3,7 @@ $link-color: #15c;
 $heading-color: #212121;
 $sidenav-color: #fff;
 $bg-gray: #f3f6fb;
-$border-color: rgba(0,0,0,0.12);
+$border-color: rgba(0, 0, 0, 0.12);
 $error: #dd2c00;
 $color-admin: #a2134c;
 $color-deleted: #949394;
@@ -25,6 +25,7 @@ $gray: #808080;
 $gray-600-light: #a4a4a4;
 $gray-500-light: #cfcfcf;
 $selected-gray: #eee;
+$gray-400-light: #EAEDF4;
 $border-radius: 2px;
 $main-fab: #d23f31;
 $body-lineheight: 1.6;
@@ -32,7 +33,7 @@ $small-lineheight: 1.2;
 $lines-two: 2;
 $lines-three: 3;
 $lines-four: 4;
-$hover-background-color: rgba(158,158,158,0.2);
+$hover-background-color: rgba(158, 158, 158, 0.2);
 
 //ftypography
 $heading-color: #212121;
@@ -72,7 +73,12 @@ $sidenav-width: 260px;
 $nav-button-area-width: 178px;
 $button-width: 40px;
 
-$gray-n: rgba(0,0,0,.6);
+$gray-n: rgba(0, 0, 0, .6);
 $black: #000;
 $white: #fff;
-$gray-d: rgba(0,0,0,0.87);
+$gray-d: rgba(0, 0, 0, 0.87);
+
+// Scroll button
+$mst-button-size: 39px; // Size of circle button
+$mst-gutter: 37px; // Gap from corner
+$mst-gutter-bottom-high: 95px; // Gap from bottom when logged in

@@ -21,7 +21,7 @@ public class EmbeddedJetty {
     public static final String REST_PREFIX = "/rest";
 
     private Server server;
-    private static EmbeddedJetty instance;
+    private volatile static EmbeddedJetty instance;
 
     private EmbeddedJetty() {
     }
@@ -87,10 +87,6 @@ public class EmbeddedJetty {
             server.destroy();
             server = null;
         }
-    }
-
-    public URI getBaseUri() {
-        return server.getURI();
     }
 
     public boolean isRunning() {

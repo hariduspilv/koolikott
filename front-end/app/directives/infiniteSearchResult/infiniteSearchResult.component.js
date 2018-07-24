@@ -18,8 +18,9 @@ class controller extends Controller {
         if (!this.url) this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
-        this.selectedCount = 0
+        this.selectedMaxCount = 0
 
+        $('body').materialScrollTop({ offset: 300 })
         this.$scope.items = []
         this.$scope.sortOptions = []
         this.$scope.filterGroups = {}
@@ -107,7 +108,7 @@ class controller extends Controller {
         if (!totalResults) newTitle = t(translationsKeys.noResults).replace('${query}', this.searchService.getQuery())
         else if (totalResults === 1) {
             newTitle = t(translationsKeys.singleResult)
-            newTitle = query ? newTitle.replace('${query}', query) : newTitle.replace('\"${query}\"', '')
+            newTitle = query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
         }
         else if (totalResults > 1) {
             newTitle = t(translationsKeys.multipleResults)
@@ -150,7 +151,6 @@ class controller extends Controller {
         this.$scope.sorting = true
         this.searchService.setSort('default')
         this.searchService.setSortDirection('desc')
-        // this.search(true)
         this.$location.url(this.searchService.getURL())
     }
     sort(field, direction) {
@@ -159,7 +159,6 @@ class controller extends Controller {
         this.params.sortDirection = direction
         this.searchService.setSortDirection(direction)
         this.$scope.sorting = true
-        // this.search(true)
         this.$location.url(this.searchService.getURL())
     }
     allResultsLoaded() {
@@ -171,6 +170,7 @@ class controller extends Controller {
                 || this.$scope.start >= this.selectedMaxCount;
         }
     }
+
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -250,7 +250,7 @@ class controller extends Controller {
         let flatItemList = []
         Object.entries(groups).forEach(([key, content]) => {
             if (key === 'material' || key === 'portfolio') currentGroupType = key
-            currentSearchType = this.detectSearchType(key, currentSearchType, content)
+            currentSearchType = this.detectSearchTypeAndSetCounts(key, currentSearchType, content)
             if (content.hasOwnProperty('items')) {
                 this.setGroupItemsCount(currentGroupType, currentSearchType, key, content)
                 this.updateItemAttributes(flatItemList, currentSearchType, key, content)
@@ -259,7 +259,7 @@ class controller extends Controller {
         })
         return flatItemList
     }
-    detectSearchType(key, currentSearchType, content) {
+    detectSearchTypeAndSetCounts(key, currentSearchType, content) {
         if (key === 'exact' || key === 'similar') {
             currentSearchType = key
             if (key === 'exact') {
@@ -285,7 +285,7 @@ class controller extends Controller {
             if (searchType === 'exact') this.$scope.filterGroupsExact[name].countMaterial = content.totalResults
             else this.$scope.filterGroups[name].countMaterial = content.totalResults
         }
-        if (groupType === 'portfolio') {
+        else if (groupType === 'portfolio') {
             if (searchType === 'exact') this.$scope.filterGroupsExact[name].countPortfolio = content.totalResults
             else this.$scope.filterGroups[name].countPortfolio = content.totalResults
         }
@@ -299,34 +299,37 @@ class controller extends Controller {
             ? this.search()
             : this.expectedItemCount += this.maxResults
     }
-    selectMaterialGroup(groupId, isExact) {
-        let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
-        if (searchGroupType[groupId].countMaterial === 0) return
-        const isAllActive = searchGroupType['all'].isMaterialActive
+    selectMaterialFilter(groupId, isExact) {
+        let filterGroup = this.getFiltersByType(isExact)
+        if (filterGroup[groupId].countMaterial === 0) return
+        const isAllActive = filterGroup['all'].isMaterialActive
+        const disableAllGroups = (groupId !== 'all' && isAllActive) || (groupId === 'all' && !isAllActive)
         this.disableAllOppositeGroups(isExact)
-        if (groupId === 'all' && !isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
-        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
-        searchGroupType[groupId].isMaterialActive = !searchGroupType[groupId].isMaterialActive
+        if (disableAllGroups) controller.disableAllGroupsForFilter(filterGroup)
+        filterGroup[groupId].isMaterialActive = !filterGroup[groupId].isMaterialActive
         this.countAllInSelected()
     }
-    selectPortfolioGroup(groupId, isExact) {
-        let searchGroupType = isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
-        if (searchGroupType[groupId].countPortfolio === 0) return
-        const isAllActive = searchGroupType['all'].isMaterialActive
+    selectPortfolioFilter(groupId, isExact) {
+        let filterGroup = this.getFiltersByType(isExact)
+        if (filterGroup[groupId].countPortfolio === 0) return
+        const isAllActive = filterGroup['all'].isMaterialActive
         this.disableAllOppositeGroups(isExact)
-        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(searchGroupType)
-        searchGroupType[groupId].isPortfolioActive = !searchGroupType[groupId].isPortfolioActive
+        if (groupId !== 'all' && isAllActive) controller.disableAllGroupsForFilter(filterGroup)
+        filterGroup[groupId].isPortfolioActive = !filterGroup[groupId].isPortfolioActive
         this.countAllInSelected()
+    }
+    getFiltersByType(isExact) {
+        return isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
     }
     countAllInSelected() {
-        this.selectedCount = 0
+        this.selectedMaxCount = 0
         this.countSelected(this.$scope.filterGroups)
         if (this.$scope.showFilterGroups === 'phraseGrouping') this.countSelected(this.$scope.filterGroupsExact)
     }
     countSelected(filterGroup) {
         Object.entries(filterGroup).forEach(([name, content]) => {
-            if (content.isMaterialActive) this.selectedCount = this.selectedCount + content.countMaterial
-            if (content.isPortfolioActive) this.selectedCount = this.selectedCount + content.countPortfolio
+            if (content.isMaterialActive) this.selectedMaxCount = this.selectedMaxCount + content.countMaterial
+            if (content.isPortfolioActive) this.selectedMaxCount = this.selectedMaxCount + content.countPortfolio
         })
     }
     static disableAllGroupsForFilter(filter) {
@@ -340,6 +343,9 @@ class controller extends Controller {
         if (isExact) controller.disableAllGroupsForFilter(this.$scope.filterGroups)
         else controller.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
     }
+    isLoggedIn() {
+        return this.authenticatedUserService.isAuthenticated()
+    }
 }
 controller.$inject = [
     '$scope',
@@ -348,9 +354,11 @@ controller.$inject = [
     '$timeout',
     '$translate',
     '$location',
+    '$filter',
     'serverCallService',
     'searchService',
     'sortService',
+    'authenticatedUserService',
 ]
 component('dopInfiniteSearchResult', {
     bindings: {

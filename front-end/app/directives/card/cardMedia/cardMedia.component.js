@@ -7,18 +7,13 @@ class controller extends Controller {
         this.$scope.disablePick = this.disablePick
     }
     $doCheck() {
-        if (this.learningObject !== this.$scope.learningObject)
-            this.init()
-        
-        if (this.disablePick !== this.$scope.disablePick)
-            this.$scope.disablePick = this.disablePick
+        if (this.learningObject !== this.$scope.learningObject) this.init()
+        if (this.disablePick !== this.$scope.disablePick) this.$scope.disablePick = this.disablePick
     }
     init() {
         if (this.isMaterial(this.learningObject)) {
             this.$scope.learningObjectType = 'material'
-            this.$scope.materialType = this.iconService.getMaterialIcon(
-                this.learningObject.resourceTypes
-            )
+            this.$scope.materialType = this.iconService.getMaterialIcon(this.learningObject.resourceTypes)
             this.$scope.coverClass = this.learningObject.picture
                 ? 'card-cover imaged'
                 : `card-cover material ${this.$scope.materialType}`

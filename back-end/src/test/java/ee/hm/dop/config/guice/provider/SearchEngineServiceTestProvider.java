@@ -9,8 +9,8 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
-import ee.hm.dop.service.solr.SolrSearchRequest;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.solr.SolrSearchRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -227,7 +227,7 @@ class SolrEngineServiceMock implements SolrEngineService {
 
     private static void addSortedQuery() {
         String query = "((tuesday) OR (\"tuesday\")) AND (visibility:\"public\")";
-        String sort = "type desc, added desc, visibility asc, id desc";
+        String sort = "views desc, added desc, id desc";
         List<Document> result = createDocumentsWithIdentifiers(2L, 6L);
         sortedSearchResponses.put(query, sort, result);
     }
@@ -299,7 +299,12 @@ class SolrEngineServiceMock implements SolrEngineService {
         String sort = searchRequest.getSort();
         long start = searchRequest.getFirstItem();
         Long limit = searchRequest.getItemLimit();
-        if (!sortedSearchResponses.contains(query, sort)) return new SolrSearchResponse();
+        if (!sortedSearchResponses.contains(query, sort)) {
+            if (searchResponses.containsKey(query)) {
+                List<Document> allDocuments = searchResponses.get(query);
+                return getSearchResponse(start, limit, allDocuments);
+            } else return new SolrSearchResponse();
+        }
 
         List<Document> allDocuments = sortedSearchResponses.get(query, sort);
         return getSearchResponse(start, limit, allDocuments);

@@ -49,7 +49,7 @@ public class ZipService {
                 ZipEntry ze = new ZipEntry(file);
                 zos.putNextEntry(ze);
 
-                try(FileInputStream in = new FileInputStream(sourceFolder.substring(0, sourceFolder.lastIndexOf("/")) + file)){
+                try (FileInputStream in = new FileInputStream(sourceFolder.substring(0, sourceFolder.lastIndexOf("/")) + file)) {
                     int len;
                     while ((len = in.read(buffer)) > 0) {
                         zos.write(buffer, 0, len);
@@ -79,8 +79,10 @@ public class ZipService {
 
         if (node.isDirectory()) {
             String[] subNote = node.list();
-            for (String filename : subNote) {
-                generateFileList(new File(node, filename));
+            if (subNote != null) {
+                for (String filename : subNote) {
+                    generateFileList(new File(node, filename));
+                }
             }
         }
 

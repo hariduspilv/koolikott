@@ -7,7 +7,7 @@ import ee.netgroup.hm.components.Comments;
 import ee.netgroup.hm.components.ConfirmationModal;
 import ee.netgroup.hm.components.LeftMenu;
 import ee.netgroup.hm.components.ReportImproperModal;
-import ee.netgroup.hm.components.fabButton;
+import ee.netgroup.hm.components.FabButton;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
 import ee.netgroup.hm.tests.PortfolioTests;
@@ -41,7 +41,7 @@ public class PortfolioPage extends Page{
 	private By publicVisibility = By.xpath("//button[@data-ng-click='makePublic()']");
 	
 	public AddPortfolioForm clickCopyPortfolio() {
-		return fabButton.clickCopyPortfolio();
+		return FabButton.clickCopyPortfolio();
 	}
 
 	public boolean wordWasAddedToPortfolioTitle() {

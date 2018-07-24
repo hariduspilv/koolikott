@@ -8,7 +8,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.login.dto.UserStatus;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;

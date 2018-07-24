@@ -20,22 +20,20 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class SearchService {
 
-    public static final String MATERIAL_TYPE = "material";
-    public static final String PORTFOLIO_TYPE = "portfolio";
-    public static final String SIMILAR_RESULT = "similar";
-    public static final String EXACT_RESULT = "exact";
-    public static final String ALL_TYPE = "all";
-    public static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
-    public static final String SEARCH_BY_TAG_PREFIX = "tag:";
     public static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
     public static final String SEARCH_BY_AUTHOR_PREFIX = "author:";
     public static final String AND = " AND ";
     public static final String OR = " OR ";
-    public static final String EMPTY = "";
-
+    static final String ALL_TYPE = "all";
+    static final String EMPTY = "";
+    private static final String MATERIAL_TYPE = "material";
+    private static final String PORTFOLIO_TYPE = "portfolio";
+    static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
+    private static final String SIMILAR_RESULT = "similar";
+    private static final String EXACT_RESULT = "exact";
     private static final String GROUP_MATCH_PATTERN = "^(.*?):(.).*\\sAND\\stype:\"(\\w*)\"$";
-    public static final Pattern GROUP_KEY_PATTERN = Pattern.compile(GROUP_MATCH_PATTERN);
-    private static final int GROUP_FOUND_FROM = 1;
+    private static final Pattern GROUP_KEY_PATTERN = Pattern.compile(GROUP_MATCH_PATTERN);
+    private static final int SEARCH_TYPE = 1;
     private static final int QUERY_FIRST_LETTER = 2;
     private static final int GROUP_TYPE = 3;
 
@@ -49,32 +47,31 @@ public class SearchService {
     private LearningObjectDao learningObjectDao;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
-        searchFilter.setVisibility(SearchConverter.getSearchVisibility(searchFilter.getRequestingUser()));
+        User user = searchFilter.getRequestingUser();
+        searchFilter.setVisibility(SearchConverter.getSearchVisibility(user));
         SolrSearchRequest searchRequest = buildSearchRequest(query, searchFilter, start, limit);
         SolrSearchResponse searchResponse = solrEngineService.search(searchRequest);
 
         // empty query hits every solr index causing massive results
         if (StringUtils.isBlank(query) && searchFilter.isEmptySearch())
-            searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeleted());
+            searchResponse.getResponse().setTotalResults(learningObjectDao.findAllNotDeletedCount());
 
         if (searchResponse.getGrouped() != null) {
-            List<Long> orderIds = getOrderIds(searchRequest);
-            return getGroupedSearchResult(searchResponse, orderIds, searchRequest.getGrouping(),
-                    searchRequest.getItemLimit(), searchFilter.getRequestingUser());
+            List<Long> orderedIds = getOrderedIds(searchRequest);
+            return getGroupedSearchResult(searchResponse, orderedIds, searchRequest.getGrouping(), limit, user);
         }
-        Response response = searchResponse.getResponse();
-        if (response != null) {
+        if (searchResponse.getResponse() != null) {
             List<Long> orderIds = new ArrayList<>();
-            return getSearchResult(limit, response, orderIds, searchFilter.getRequestingUser());
+            return getSearchResult(limit, searchResponse.getResponse(), orderIds, searchFilter.getRequestingUser());
         }
         return new SearchResult();
     }
 
-    private SolrSearchRequest buildSearchRequest(String queryInput, SearchFilter searchFilter, long firstItem, Long limit) {
-        String query = clearQuerySearch(queryInput);
+    private SolrSearchRequest buildSearchRequest(String originalQuery, SearchFilter searchFilter, long firstItem, Long limit) {
+        String query = sanitizeQuery(originalQuery, searchFilter);
         String solrQuery = SearchConverter.composeQueryString(query, searchFilter);
         String sort = SortBuilder.getSort(searchFilter);
-        if (StringUtils.isBlank(query)) searchFilter.setGrouped(false);
+        if (StringUtils.isBlank(query) || searchFilter.isFieldSpecificSearch()) searchFilter.setGrouped(false);
 
         SolrSearchRequest searchRequest = new SolrSearchRequest();
         searchRequest.setSolrQuery(solrQuery);
@@ -82,11 +79,11 @@ public class SearchService {
         searchRequest.setFirstItem(firstItem);
         searchRequest.setItemLimit(limit);
         searchRequest.setGrouping(pickGrouping(query, searchFilter));
-        searchRequest.setOriginalQuery(isPhrase(query) ? query : quotify(query));
+        searchRequest.setOriginalQuery(searchRequest.getGrouping().isPhraseGrouping() ? query : quotify(query));
         return searchRequest;
     }
 
-    private List<Long> getOrderIds(SolrSearchRequest searchRequest) {
+    private List<Long> getOrderedIds(SolrSearchRequest searchRequest) {
         return solrEngineService.limitlessSearch(searchRequest)
                 .getResponse().getDocuments().stream()
                 .map(Document::getId)
@@ -124,12 +121,17 @@ public class SearchService {
         long resultsInGroup = singleGroup.getTotalResults();
         long resultsInType = resultGroups.get(groupType).getTotalResults();
 
-        String key = groupKeyMatcher.group(GROUP_FOUND_FROM);
-        if (groupType.equals("portfolio") && key.equals("summary")) {
-            key = "description";
-        }
+        String key = groupKeyMatcher.group(SEARCH_TYPE);
+        key = keyMapper(groupType, key);
         resultGroups.get(groupType).getGroups().put(key, singleGroup);
         resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
+    }
+
+    private String keyMapper(String groupType, String key) {
+        if (!groupType.equals("portfolio")) return key;
+        if (key.equals("portfolioTitle")) key = "title";
+        else if (key.equals("summary")) key = "description";
+        return key;
     }
 
     private void addResultsTogether(SearchResult searchResult,
@@ -170,7 +172,8 @@ public class SearchService {
         return searchResult;
     }
 
-    private List<Searchable> retrieveSearchedItems(List<Document> documents, User loggedInUser, List<Long> idsForOrder) {
+    private List<Searchable> retrieveSearchedItems(List<Document> documents, User
+            loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
         if (loggedInUser != null) {

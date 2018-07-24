@@ -46,7 +46,7 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
                 .getResultList();
     }
 
-    public Long findAllNotDeleted() {
+    public Long findAllNotDeletedCount() {
         return (Long) getEntityManager()
                 .createQuery("SELECT count(lo) FROM LearningObject lo WHERE lo.deleted = false")
                 .getSingleResult();

@@ -5,6 +5,7 @@
 /back-end/.idea/
 /back-end/logs/
 back-end/dop.iml
+/back-end/src/main/resources/custom.properties
 
 /solr-indexer/.settings/
 /solr-indexer/.project

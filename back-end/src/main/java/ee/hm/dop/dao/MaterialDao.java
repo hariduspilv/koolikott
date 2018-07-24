@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import javax.persistence.TypedQuery;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
 public class MaterialDao extends AbstractDao<Material> {
@@ -64,6 +66,9 @@ public class MaterialDao extends AbstractDao<Material> {
     }
 
     public List<LearningObject> findAllById(List<Long> idList) {
+        if (isEmpty(idList)){
+            return new ArrayList<>();
+        }
         return getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo" +
                         " WHERE type(lo) = Material " +

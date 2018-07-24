@@ -6,7 +6,7 @@ import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
 import ee.hm.dop.service.synchronizer.ChapterMigration;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.xml.ConfigurationException;
 import org.slf4j.Logger;

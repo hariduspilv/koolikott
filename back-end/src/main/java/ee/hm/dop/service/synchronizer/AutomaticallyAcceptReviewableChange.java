@@ -6,7 +6,7 @@ import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
     private Configuration configuration;
 
     private static final Logger logger = LoggerFactory.getLogger(AutomaticallyAcceptReviewableChange.class);
-    private static Future<?> acceptReviewableChangeHandle;
+    private volatile static Future<?> acceptReviewableChangeHandle;
 
     @Override
     public synchronized void run() {

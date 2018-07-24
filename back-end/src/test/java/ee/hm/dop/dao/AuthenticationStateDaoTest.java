@@ -33,9 +33,6 @@ public class AuthenticationStateDaoTest extends DatabaseTestBase {
         AuthenticationState authenticationState = getAuthenticationState();
         AuthenticationState returnedAuthenticationState = authenticationStateDao.createAuthenticationState(authenticationState);
 
-        AuthenticationState authenticationState2 = new AuthenticationState();
-        authenticationState2.setToken(SUPER_TOKEN);
-
         try {
             authenticationStateDao.createAuthenticationState(authenticationState);
             fail("Exception expected");

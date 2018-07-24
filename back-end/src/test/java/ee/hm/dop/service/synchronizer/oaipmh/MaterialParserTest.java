@@ -138,7 +138,7 @@ public class MaterialParserTest {
         assertEquals("someValue", languageStrings.get(0).getText());
     }
 
-    private class MaterialParserImpl extends MaterialParser {
+    private static class MaterialParserImpl extends MaterialParser {
 
         @Override
         protected void setContributorsData(Material material, Document doc) {

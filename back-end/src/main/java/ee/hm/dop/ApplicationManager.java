@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,17 +34,15 @@ public class ApplicationManager {
     public static void stopApplication() throws Exception {
         logger.info(format("Stopping application on port [%s]", getRemotePort()));
 
-        BufferedWriter writer = null;
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), getRemotePort()), 10000);
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
-            write(STOP_COMMAND + "\n\r", writer);
-            logger.info("Stop command sent to application");
-            Thread.sleep(300);
+            try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))){
+                write(STOP_COMMAND + "\n\r", writer);
+                logger.info("Stop command sent to application");
+                Thread.sleep(300);
+            }
         } catch (ConnectException ce) {
             logger.info("Application is not running.");
-        } finally {
-            IOUtils.closeQuietly(writer);
         }
     }
 

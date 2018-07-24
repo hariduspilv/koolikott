@@ -142,7 +142,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         assertEquals(getAspectRatio(image1), getAspectRatio(image2), DELTA);
     }
 
-    private double getAspectRatio(BufferedImage image) {
+    private int getAspectRatio(BufferedImage image) {
         if (image.getHeight() > image.getWidth()) {
             return image.getHeight() / image.getWidth();
         } else {

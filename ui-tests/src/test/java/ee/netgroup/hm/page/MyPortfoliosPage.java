@@ -5,7 +5,7 @@ import ee.netgroup.hm.components.MaterialModal;
 import ee.netgroup.hm.components.AddPortfolioForm;
 import ee.netgroup.hm.components.LeftMenu;
 import ee.netgroup.hm.components.Search;
-import ee.netgroup.hm.components.fabButton;
+import ee.netgroup.hm.components.FabButton;
 import ee.netgroup.hm.helpers.Constants;
 import ee.netgroup.hm.helpers.Helpers;
 
@@ -15,7 +15,7 @@ public class MyPortfoliosPage extends Page{
 	private By firstPrivatePortfolio = By.xpath("//md-icon[@aria-label='visibility_off']");
 	
 	public AddPortfolioForm clickAddPortfolio() {
-		return fabButton.clickAddPortfolio();
+		return FabButton.clickAddPortfolio();
 	}
 
 	public PortfolioPage openPortfolio() {
@@ -41,7 +41,7 @@ public class MyPortfoliosPage extends Page{
 	}
 
 	public MaterialModal clickAddMaterial() {
-		return fabButton.clickAddMaterial();
+		return FabButton.clickAddMaterial();
 	}
 
 	public MyMaterialsPage clickMyMaterials() {
