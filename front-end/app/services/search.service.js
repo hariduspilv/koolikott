@@ -5,7 +5,7 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
-        this.groups = ['title', 'tag', 'description', 'author', 'publisher']
+        this.groups = ['title', 'tag', 'description', 'author', 'publisher', 'recommended', 'portfolioTitle', 'summary']
         this.searchURLbase = 'search/result?'
         this.taxonURL = '&taxon='
         this.paidURL = '&paid='
@@ -283,6 +283,9 @@ class controller extends Controller {
     }
     isValidType(type) {
         return type === 'material' || type === 'portfolio' || type === 'all'
+    }
+    shouldBeGrouped() {
+        return !this.groups.some((group) => this.getQuery().startsWith(group + ':'))
     }
     getSearchURLbase() {
         return this.searchURLbase

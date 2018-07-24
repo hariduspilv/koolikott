@@ -69,8 +69,6 @@ class controller extends Controller {
             .makeGet('rest/search', {
                 q: 'recommended:true',
                 start: 0,
-                sort: 'recommendation_timestamp',
-                sortDirection: 'desc',
                 limit: SIDE_ITEMS_AMOUNT
             }, null, null, null, null, cache)
             .then(({ data }) => {
@@ -81,11 +79,9 @@ class controller extends Controller {
     showMoreRecommendations() {
         this.searchService.setQuery('recommended:true')
         this.searchService.clearFieldsNotInSimpleSearch()
-        this.searchService.setSort('recommendation_timestamp')
-        this.searchService.setSortDirection('desc')
         this.searchService.setIsGrouped(false)
 
-        this.$location.url('/' + this.searchService.getSearchURLbase() + this.searchService.getQueryURL())
+        this.$location.url(this.searchService.getURL())
     }
 }
 controller.$inject = [
