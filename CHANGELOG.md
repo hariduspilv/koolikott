@@ -1,3 +1,19 @@
+## e-Koolikott [1.21.0](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* https://plumbr.io raportist tulenevalt backendi refaktoreerimine [#350](https://github.com/hariduspilv/koolikott/issues/350)
+* "Minu asjad" -> "Minu lemmikud" menüüs õppevara kuvamise vaikimisi järjekord [#348](https://github.com/hariduspilv/koolikott/issues/348)
+* "Minu asjad" -> "Minu materjalid" menüüs materjalide kuvamise vaikimisi järjekord [#347](https://github.com/hariduspilv/koolikott/issues/347)
+* "Minu asjad" -> "Minu kogumikud" menüüs kogumike kuvamise vaikimisi järjekord [#346](https://github.com/hariduspilv/koolikott/issues/346)
+* URL-de eristamine -> Filtreerimise URLi unikaalse parameetri loomine [#344](https://github.com/hariduspilv/koolikott/issues/344)
+* URL-de eristamine -> Täisotsingu/sõna otsingu/fraasi otsingu URLi unikaalse parameetri loomine [#343](https://github.com/hariduspilv/koolikott/issues/343)
+* Lehe alla äärde "TAGASI ÜLES" nupp lisada [#341](https://github.com/hariduspilv/koolikott/issues/341)
+* Otsingu tulemuste sorteerimine -> Sorteerimise rippmenüüst 2 valikut ära kaotada [#339](https://github.com/hariduspilv/koolikott/issues/339)
+* Otsingu tulemuste sorteerimine -> Sorteerimise rippmenüü uued valikud [#338](https://github.com/hariduspilv/koolikott/issues/338)
+* Otsingu tulemuste järjestamine -> Registreeritud kasutaja otsitulemuste järjestamine [#336](https://github.com/hariduspilv/koolikott/issues/336)
+* Otsingu tulemuste järjestamine -> Anonüümse kasutaja otsitulemuste järjestamine [#335](https://github.com/hariduspilv/koolikott/issues/335)
+
+
 ## e-Koolikott [1.20.2](https://github.com/hariduspilv/koolikott/milestone/19) 
 
 ### Parandatud
@@ -18,7 +34,7 @@
 * MS20 otsingu töödest tulenevalt front-endi refaktoreerimine [#333](https://github.com/hariduspilv/koolikott/issues/333)
 
 
-## e-Koolikott [1.19.2](https://github.com/hariduspilv/koolikott/milestone/18) 
+## e-Koolikott [1.19.2](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 09.07.2018)
 
 ### Parandatud
 * Vaatamiste arvutamine ei tööta korrektselt [#351](https://github.com/hariduspilv/koolikott/issues/351)
