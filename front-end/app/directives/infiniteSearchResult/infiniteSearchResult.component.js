@@ -108,7 +108,7 @@ class controller extends Controller {
         if (!totalResults) newTitle = t(translationsKeys.noResults).replace('${query}', this.searchService.getQuery())
         else if (totalResults === 1) {
             newTitle = t(translationsKeys.singleResult)
-            newTitle = query ? newTitle.replace('${query}', query) : newTitle.replace('\"${query}\"', '')
+            newTitle = query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
         }
         else if (totalResults > 1) {
             newTitle = t(translationsKeys.multipleResults)
