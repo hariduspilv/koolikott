@@ -83,6 +83,7 @@ class controller extends Controller {
         this.searchService.clearFieldsNotInSimpleSearch()
         this.searchService.setSort('recommendation_timestamp')
         this.searchService.setSortDirection('desc')
+        this.searchService.setIsGrouped(false)
 
         this.$location.url('/' + this.searchService.getSearchURLbase() + this.searchService.getQueryURL())
     }
