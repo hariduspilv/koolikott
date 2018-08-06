@@ -18,7 +18,6 @@
 * Otsingu tulemuste järjestamine -> Registreeritud kasutaja otsitulemuste järjestamine [#336](https://github.com/hariduspilv/koolikott/issues/336)
 * Otsingu tulemuste järjestamine -> Anonüümse kasutaja otsitulemuste järjestamine [#335](https://github.com/hariduspilv/koolikott/issues/335)
 
-
 ## e-Koolikott [1.20.2](https://github.com/hariduspilv/koolikott/milestone/19) 
 
 ### Parandatud
@@ -38,6 +37,11 @@
 * Fraasi otsingu otsitulemuste kuvamise loogika -> Otsingutulemuste kiirfiltreering [#332](https://github.com/hariduspilv/koolikott/issues/332)
 * MS20 otsingu töödest tulenevalt front-endi refaktoreerimine [#333](https://github.com/hariduspilv/koolikott/issues/333)
 
+
+## e-Koolikott [1.19.3](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 06.06.2018)
+
+### Muutunud
+* EHISe X-tee teenuse timeouti muudatus [#353](https://github.com/hariduspilv/koolikott/issues/353)
 
 ## e-Koolikott [1.19.2](https://github.com/hariduspilv/koolikott/milestone/18) (Toodangusse paigaldatud 09.07.2018)
 
