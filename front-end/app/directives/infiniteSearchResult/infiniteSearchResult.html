@@ -91,7 +91,9 @@
   </div>
 </div>
 
-<button data-ng-class="{ 'higher': $ctrl.isLoggedIn() }" class="material-scrolltop" type="button"></button>
+<button data-ng-class="{ 'higher': $ctrl.isLoggedIn() }" class="material-scrolltop" type="button">
+  <md-tooltip md-direction="left"><span data-translate="BACK_TO_THE_TOP">Back to the top</span></md-tooltip>
+</button>
 
 <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
   <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
