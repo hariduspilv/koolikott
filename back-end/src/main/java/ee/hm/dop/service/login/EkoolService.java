@@ -43,7 +43,7 @@ public class EkoolService {
     private Person getPerson(EkoolToken ekoolToken) {
         return client.target(getUserDataUrl()).request()
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
-                .header("Content-type", "application/x-www-form-urlencoded")
+                .header("Content-type", "text/html")
                 .get()
                 .readEntity(Person.class);
     }
