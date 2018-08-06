@@ -7,6 +7,8 @@ import ee.hm.dop.service.login.*;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +19,15 @@ import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static ee.hm.dop.rest.login.IdCardUtil.*;
+import static ee.hm.dop.rest.login.IdCardUtil.getIdCode;
+import static ee.hm.dop.rest.login.IdCardUtil.getName;
+import static ee.hm.dop.rest.login.IdCardUtil.getSurname;
+import static ee.hm.dop.rest.login.IdCardUtil.isAuthValid;
 import static java.lang.String.format;
 
 @Path("login")
 public class LoginResource extends BaseResource {
+    private final Logger logger = LoggerFactory.getLogger(LoginResource.class);
 
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
@@ -132,6 +138,7 @@ public class LoginResource extends BaseResource {
         try {
             return redirectSuccess(stuudiumService.authenticate(token));
         } catch (Exception e) {
+            logger.error("stuudium login failed", e);
             return redirectFailure();
         }
     }
@@ -140,6 +147,7 @@ public class LoginResource extends BaseResource {
         try {
             return redirectSuccess(ekoolService.authenticate(code, getEkoolCallbackUrl()));
         } catch (Exception e) {
+            logger.error("ekool login failed", e);
             return redirectFailure();
         }
     }
