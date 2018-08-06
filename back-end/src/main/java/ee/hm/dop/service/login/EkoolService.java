@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import java.nio.charset.StandardCharsets;
 
@@ -41,11 +42,11 @@ public class EkoolService {
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
-        return client.target(getUserDataUrl()).request()
+        Response response = client.target(getUserDataUrl()).request()
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
-                .header("Content-type", "text/html")
-                .get()
-                .readEntity(Person.class);
+                .header("Content-type", "application/x-www-form-urlencoded")
+                .get();
+        throw new RuntimeException(response.readEntity(String.class));
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {
