@@ -68,6 +68,8 @@ public interface ConfigurationProperties {
     String XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS = "xroad.ehis.v6.subsystem.member.class";
     String XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE = "xroad.ehis.v6.subsystem.member.code";
     String XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE = "xroad.ehis.v6.subsystem.subsystem.code";
+    String XROAD_EHIS_TIMEOUT_CONNECT = "xroad.ehis.timeout.connect";
+    String XROAD_EHIS_TIMEOUT_READ = "xroad.ehis.timeout.read";
 
     // EKool
     String EKOOL_CLIENT_ID = "ekool.client.id";

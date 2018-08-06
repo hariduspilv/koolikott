@@ -29,7 +29,7 @@ public class HttpClientProvider implements Provider<Client> {
     /**
      * Protected for test purpose
      */
-    protected void initClient() {
+    private void initClient() {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms

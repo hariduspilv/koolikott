@@ -14,7 +14,7 @@ import org.apache.commons.configuration2.Configuration;
 
 public class SOAPConnectionMock extends SOAPConnection {
 
-    private Map<Object, SOAPConnectionMockI> endpoints = new HashMap<>();
+    private Map<String, SOAPConnectionMockI> endpoints = new HashMap<>();
 
     public SOAPConnectionMock(Configuration configuration) {
         endpoints.put(configuration.getString(MOBILEID_ENDPOINT), new MobileIdSOAPConnection());
@@ -23,10 +23,10 @@ public class SOAPConnectionMock extends SOAPConnection {
 
     @Override
     public SOAPMessage call(SOAPMessage request, Object to) throws SOAPException {
-        SOAPConnectionMockI soapConnection = endpoints.get(to);
+        SOAPConnectionMockI soapConnection = endpoints.get(to.toString());
 
         if (soapConnection == null) {
-            throw new RuntimeException("Endpoint does not defined: " + to);
+            throw new RuntimeException("Endpoint is not defined: " + to);
         }
 
         return soapConnection.call(request, to);
