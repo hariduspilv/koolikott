@@ -8,8 +8,8 @@
     </div>
   </div>
 
-  <div flex-sm="50">
-    <h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
+  <div flex-sm="50" ng-if="recommendations.length > 0">
+    <h4 class="md-subhead" data-translate="RECOMMENDATIONS" ></h4>
 
     <div data-ng-repeat="item in recommendations" role="list" aria-label="Ava soovitatud materjal">
       <dop-card-xs data-learning-object="item"></dop-card-xs>

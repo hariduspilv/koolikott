@@ -10,12 +10,7 @@ const SIDE_ITEMS_AMOUNT = 5
 
 class controller extends Controller {
     $onInit() {
-        this.$scope.similar = [{}, {}, {}, {}, {}]
-        this.$scope.recommendations = [{}, {}, {}, {}, {}]
-
         this.$scope.$on('recommendations:updated', this.loadRecommendations.bind(this))
-        this.loadRecommendations()
-
         this.$scope.showMoreRecommendations = this.showMoreRecommendations.bind(this)
 
         /**
@@ -33,8 +28,10 @@ class controller extends Controller {
     }
     $onChanges(changes) {
         if (changes.learningObject) {
-            if (changes.learningObject.currentValue && changes.learningObject.currentValue.id)
+            if (changes.learningObject.currentValue && changes.learningObject.currentValue.id) {
                 this.loadSimilar()
+                this.loadRecommendations()
+            }
         }
     }
     getObjectIds(objects) {
@@ -63,14 +60,13 @@ class controller extends Controller {
             })
     }
     loadRecommendations() {
-        const cache = !this.authenticatedUserService.isAdmin() && !this.authenticatedUserService.isModerator()
-
         this.serverCallService
             .makeGet('rest/search', {
                 q: 'recommended:true',
+                excluded: this.learningObject.id,
                 start: 0,
                 limit: SIDE_ITEMS_AMOUNT
-            }, null, null, null, null, cache)
+            })
             .then(({ data }) => {
                 if (data)
                     this.$scope.recommendations = data.items
