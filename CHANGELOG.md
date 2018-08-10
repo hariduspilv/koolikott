@@ -1,3 +1,8 @@
+## e-Koolikott [1.21.2](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* Õppevara detailvaatel olles ei peaks soovituste sektsioonis sama IDga õppevara kuvama [#354](https://github.com/hariduspilv/koolikott/issues/354)
+
 ## e-Koolikott [1.21.1](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud
