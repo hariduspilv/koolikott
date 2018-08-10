@@ -5,11 +5,14 @@ import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import java.nio.charset.StandardCharsets;
 
@@ -19,6 +22,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.xml.security.utils.Base64.encode;
 
 public class EkoolService {
+    private static Logger logger = LoggerFactory.getLogger(EkoolService.class);
+
     @Inject
     private Configuration configuration;
     @Inject
@@ -41,11 +46,15 @@ public class EkoolService {
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
+        Response response = client.target(getUserDataUrl()).request()
+                .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
+                .header("Content-type", "text/html")
+                .get();
+        logger.info(response.readEntity(String.class));
         return client.target(getUserDataUrl()).request()
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
-                .get()
-                .readEntity(Person.class);
+                .get().readEntity(Person.class);
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {

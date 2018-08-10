@@ -29,7 +29,7 @@ public class EhisV6RequestBuilderTest {
     public void v6_generates_xml() throws Exception {
         SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage("123");
         assertTrue(message != null);
-//        File file = new File("./src/test/resources/ehis/generated_soap_v6.xml");
+//        File file = new File("./back-end/src/test/resources/ehis/generated_soap_v6.xml");
 //        try (OutputStream outputStream = new FileOutputStream(file)) {
 //            message.writeTo(outputStream);
 //            outputStream.flush();

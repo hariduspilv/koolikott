@@ -43,7 +43,10 @@ class controller {
         if (this.isModeratorOrAdmin()){
             return true;
         }
-        return this.isUser() && learningObject && this.getUser().id === learningObject.creator.id
+        if (this.getUser() && learningObject && learningObject.creator) {
+            return this.isUser() && this.getUser().id === learningObject.creator.id
+        }
+        return false;
     }
     getUser() {
         const authenticatedUser = this.getAuthenticatedUser()

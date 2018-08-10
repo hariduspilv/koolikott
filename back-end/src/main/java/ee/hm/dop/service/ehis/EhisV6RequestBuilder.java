@@ -6,10 +6,7 @@ import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
@@ -52,7 +49,7 @@ public class EhisV6RequestBuilder {
         QName objectType = envelope.createQName("objectType", iden);
         SOAPElement serviceElement = header.addHeaderElement(service).addAttribute(objectType, "SERVICE");
 
-        Map<String, String> serviceValues = new HashMap<>();
+        Map<String, String> serviceValues = new LinkedHashMap<>();
         serviceValues.put("xRoadInstance", c(XROAD_EHIS_V6_SERVICE_INSTACE));
         serviceValues.put("memberClass", c(XROAD_EHIS_V6_SERVICE_MEMBER_CLASS));
         serviceValues.put("memberCode", c(XROAD_EHIS_V6_SERVICE_MEMBER_CODE));
@@ -60,23 +57,24 @@ public class EhisV6RequestBuilder {
         serviceValues.put("serviceCode", c(XROAD_EHIS_V6_SERVICE_SERVICE_NAME));
         serviceValues.put("serviceVersion", c(XROAD_EHIS_V6_SERVICE_SERVICE_VERSION));
 
-        for (Map.Entry<String, String> serviceValue : serviceValues.entrySet()) {
-            QName elementName = envelope.createQName(serviceValue.getKey(), iden);
-            serviceElement.addChildElement(elementName).addTextNode(serviceValue.getValue());
-        }
+        addElements(envelope, iden, serviceElement, serviceValues);
 
         QName client = envelope.createQName("client", xro);
         SOAPElement clientElement = header.addHeaderElement(client).addAttribute(objectType, "SUBSYSTEM");
 
-        Map<String, String> clientValues = new HashMap<>();
+        Map<String, String> clientValues = new LinkedHashMap<>();
         clientValues.put("xRoadInstance", c(XROAD_EHIS_V6_SUBSYSTEM_INSTANCE));
         clientValues.put("memberClass", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS));
         clientValues.put("memberCode", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE));
         clientValues.put("subsystemCode", c(XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE));
 
-        for (Map.Entry<String, String> clientValue : clientValues.entrySet()) {
-            QName elementName = envelope.createQName(clientValue.getKey(), iden);
-            clientElement.addChildElement(elementName).addTextNode(clientValue.getValue());
+        addElements(envelope, iden, clientElement, clientValues);
+    }
+
+    private void addElements(SOAPEnvelope envelope, String iden, SOAPElement serviceElement, Map<String, String> values) throws SOAPException {
+        for (Map.Entry<String, String> serviceValue : values.entrySet()) {
+            QName elementName = envelope.createQName(serviceValue.getKey(), iden);
+            serviceElement.addChildElement(elementName).addTextNode(serviceValue.getValue());
         }
     }
 
