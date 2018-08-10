@@ -22,7 +22,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.xml.security.utils.Base64.encode;
 
 public class EkoolService {
-    private static Logger logger = LoggerFactory.getLogger(EkoolService.class);
 
     @Inject
     private Configuration configuration;
@@ -46,11 +45,6 @@ public class EkoolService {
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
-        Response response = client.target(getUserDataUrl()).request()
-                .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
-                .header("Content-type", "text/html")
-                .get();
-        logger.info(response.readEntity(String.class));
         return client.target(getUserDataUrl()).request()
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
