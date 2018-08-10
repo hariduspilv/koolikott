@@ -2,11 +2,12 @@
 
 ### Muutunud
 * Õppevara detailvaatel olles ei peaks soovituste sektsioonis sama IDga õppevara kuvama [#354](https://github.com/hariduspilv/koolikott/issues/354)
+* EHISe X-tee teenuse muudatus [#353](https://github.com/hariduspilv/koolikott/issues/353)
 
 ## e-Koolikott [1.21.1](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud
-* EHISe X-tee teenuse timeouti muudatus [#353](https://github.com/hariduspilv/koolikott/issues/353)
+* EHISe X-tee teenuse muudatus [#353](https://github.com/hariduspilv/koolikott/issues/353)
 
 ## e-Koolikott [1.21.0](https://github.com/hariduspilv/koolikott/milestone/20) 
 
