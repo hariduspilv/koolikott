@@ -34,8 +34,7 @@ public class DateTimeSerializerTest {
     private void serialize(String expected, DateTime date) {
         try {
             generator.writeString(expected);
-        } catch (IOException e) {
-            // ignore
+        } catch (IOException ignored) {
         }
         replay(generator, serializerProvider);
 

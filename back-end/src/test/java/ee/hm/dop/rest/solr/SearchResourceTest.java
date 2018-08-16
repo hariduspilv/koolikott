@@ -439,14 +439,11 @@ public class SearchResourceTest extends ResourceIntegrationTestBase {
     }
 
     private String encodeQuery(String query) {
-        String encodedQuery;
         try {
-            encodedQuery = URLEncoder.encode(query, UTF_8.name());
+            return URLEncoder.encode(query, UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-
-        return encodedQuery;
     }
 
 }

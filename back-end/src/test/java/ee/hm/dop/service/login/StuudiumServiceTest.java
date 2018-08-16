@@ -5,6 +5,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
 import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNotNull;
@@ -24,11 +25,9 @@ import org.apache.commons.configuration2.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
-@Ignore
 @RunWith(EasyMockRunner.class)
 public class StuudiumServiceTest {
 
@@ -44,6 +43,12 @@ public class StuudiumServiceTest {
     private Builder builder;
     @Mock
     private LoginService loginService;
+
+    @Before
+    public void setUp() throws Exception {
+        String clientSecret = "super-secret";
+        stuudiumService.postConstruct(clientSecret);
+    }
 
     @Test
     public void authenticate() {
@@ -64,7 +69,6 @@ public class StuudiumServiceTest {
 
         expect(configuration.getString(STUUDIUM_URL_GENERALDATA)).andReturn(generalDataURL);
         expect(configuration.getString(STUUDIUM_CLIENT_ID)).andReturn(clientID);
-        expect(configuration.getString(STUUDIUM_CLIENT_SECRET)).andReturn(clientSecret);
 
         expect(client.target(generalDataURL)).andReturn(target);
         expect(target.queryParam("token", token)).andReturn(target);
@@ -86,7 +90,7 @@ public class StuudiumServiceTest {
         verifyAll(response);
 
         assertNotNull(returnedAuthenticatedUser);
-        assertSame(authenticatedUser, returnedAuthenticatedUser);
+        assertSame(userStatus, returnedAuthenticatedUser);
     }
 
     private void replayAll(Object... mocks) {
