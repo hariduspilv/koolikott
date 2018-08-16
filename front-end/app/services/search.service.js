@@ -59,7 +59,10 @@ class controller extends Controller {
                 }
     }
     escapeQuery(query) {
-        return query.replace(/\+/g, "%2B").replace(/</g, "").replace(/>/g, "");
+        return query.replace(/[<>/]/g, "");
+    }
+    escapeAllQuery(query) {
+        return query.replace(/[<>/]/g, "").replace(/\+/g, "%2B");
     }
     arrayToLowerCase(upperCaseArray) {
         const lowerCaseArray = []
@@ -279,7 +282,7 @@ class controller extends Controller {
     getQueryURL(isBackendQuery) {
         let searchURL = 'q='
 
-        if (this.search.query) searchURL += this.escapeQuery(this.search.query)
+        if (this.search.query) searchURL += this.escapeAllQuery(this.search.query)
 
         if (this.search.taxons)
             for (let i = 0; i < this.search.taxons.length; i++)
