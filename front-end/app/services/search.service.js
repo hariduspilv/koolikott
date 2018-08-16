@@ -58,8 +58,11 @@ class controller extends Controller {
                         this.search[prop] = searchObject[prop]
                 }
     }
-    static escapeQuery(query) {
-        return query.replace(/\+/g, "%2B")
+    escapeQuery(query) {
+        return query.replace(/[<>/]/g, "");
+    }
+    escapeAllQuery(query) {
+        return query.replace(/[<>/]/g, "").replace(/\+/g, "%2B");
     }
     arrayToLowerCase(upperCaseArray) {
         const lowerCaseArray = []
@@ -86,7 +89,7 @@ class controller extends Controller {
         return Array.isArray(value) ? value : [value]
     }
     setQuery(query) {
-        this.search.query = query
+        this.search.query = this.escapeQuery(query)
     }
     setTaxon(taxon) {
         this.search.taxons = taxon
@@ -138,24 +141,6 @@ class controller extends Controller {
     }
     setFilter(filter) {
         this.search.filter = filter
-    }
-    queryExists() {
-        const searchObject = this.$location.search()
-        return !!(
-            searchObject.q ||
-            searchObject.taxon ||
-            searchObject.paid === 'false' ||
-            (searchObject.type && this.isValidType(searchObject.type)) ||
-            searchObject.language ||
-            searchObject.targetGroup ||
-            searchObject.resourceType ||
-            searchObject.specialEducation ||
-            searchObject.issuedFrom ||
-            searchObject.crossCurricularTheme ||
-            searchObject.keyCompetence ||
-            searchObject.curriculumLiterature ||
-            (searchObject.sort && searchObject.sortDirection)
-        )
     }
     getQuery() {
         const { q } = this.$location.search()
@@ -297,7 +282,7 @@ class controller extends Controller {
     getQueryURL(isBackendQuery) {
         let searchURL = 'q='
 
-        if (this.search.query) searchURL += controller.escapeQuery(this.search.query)
+        if (this.search.query) searchURL += this.escapeAllQuery(this.search.query)
 
         if (this.search.taxons)
             for (let i = 0; i < this.search.taxons.length; i++)

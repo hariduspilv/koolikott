@@ -124,6 +124,7 @@
       data-ng-if="!$ctrl.isStatisticsSelect"
       data-ng-model="$ctrl.taxonPath.domainSubject"
       data-ng-model-options="{trackBy: '$value.id'}"
+      data-ng-required="$ctrl.isDomainRequired.trigger && $ctrl.taxonPath.educationalContext && $ctrl.taxonPath.educationalContext.name === 'BASICEDUCATION'"
       id="taxonDomainSubjectsSelect"
       name="domainAndSubject"
       aria-label="Ainevaldkond ja teema"
