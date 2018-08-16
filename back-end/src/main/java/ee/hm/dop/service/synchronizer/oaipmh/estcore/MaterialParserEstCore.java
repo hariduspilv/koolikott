@@ -41,6 +41,7 @@ public class MaterialParserEstCore extends MaterialParser {
     @Inject
     private LicenseTypeService licenseTypeService;
 
+    @Override
     protected String getPathToResourceType() {
         return "//*[local-name()='estcore']/*[local-name()='educational']/*[local-name()='learningResourceType']";
     }
