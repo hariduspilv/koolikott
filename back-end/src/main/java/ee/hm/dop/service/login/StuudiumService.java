@@ -28,7 +28,11 @@ public class StuudiumService {
 
     @Inject
     public void postConstruct() {
-        hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, configuration.getString(STUUDIUM_CLIENT_SECRET));
+        postConstruct(configuration.getString(STUUDIUM_CLIENT_SECRET));
+    }
+
+    void postConstruct(String secret) {
+        hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
     }
 
     public UserStatus authenticate(String token) {

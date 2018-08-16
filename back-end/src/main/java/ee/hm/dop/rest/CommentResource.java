@@ -2,8 +2,6 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.useractions.CommentService;
 

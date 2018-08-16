@@ -166,13 +166,10 @@ public class MobileIdSOAPConnection implements SOAPConnectionMockI {
                 + "</SOAP-ENV:Fault>" //
                 + "</SOAP-ENV:Body>" //
                 + "</SOAP-ENV:Envelope>";
-        InputStream is = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
-        SOAPMessage faultMessage = null;
-        try {
-            faultMessage = MessageFactory.newInstance().createMessage(null, is);
+        try (InputStream is = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));) {
+            return MessageFactory.newInstance().createMessage(null, is);
         } catch (IOException e) {
             throw new RuntimeException("Failed to create SOAP Fault message.");
         }
-        return faultMessage;
     }
 }

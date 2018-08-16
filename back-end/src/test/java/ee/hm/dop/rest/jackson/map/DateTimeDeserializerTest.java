@@ -47,13 +47,12 @@ public class DateTimeDeserializerTest {
     private void deserialize(String date, DateTime expected) {
         try {
             expect(jp.getText()).andReturn(date);
-        } catch (IOException e) {
-            // ignore
+        } catch (IOException ignored) {
         }
 
         replay(jp);
 
-        DateTime result = null;
+        DateTime result;
 
         try {
             result = deserializer.deserialize(jp, null);

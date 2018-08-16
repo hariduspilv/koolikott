@@ -120,7 +120,6 @@ public class SynchronizeMaterialsExecutorTest {
      * should run once
      */
     @Deprecated
-    @Ignore
     @Test
     public void scheduleExecutionDoubleInitialization() {
         List<Repository> repositories = Collections.emptyList();

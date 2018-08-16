@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class PictureSaver {
 
     public Picture create(Picture picture) {
         if (picture.getId() != null) {
-            throw new RuntimeException("Picture already exists");
+            throw new WebApplicationException("Picture already exists", Response.Status.BAD_REQUEST);
         }
         String name = sha1Hex(picture.getData());
         picture.setName(name);
@@ -50,15 +52,14 @@ public class PictureSaver {
     public Picture createFromURL(String url) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, DEFAULT_PICTURE_FORMAT, baos);
-            baos.flush();
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+                ImageIO.write(image, DEFAULT_PICTURE_FORMAT, baos);
+                baos.flush();
 
-            OriginalPicture result = new OriginalPicture();
-            result.setData(baos.toByteArray());
-
-            baos.close();
-            return create(result);
+                OriginalPicture result = new OriginalPicture();
+                result.setData(baos.toByteArray());
+                return create(result);
+            }
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
