@@ -3,8 +3,6 @@ package ee.hm.dop.utils;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.interfaces.ILearningObject;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.function.Function;
 
 public class ValidatorUtil {
@@ -14,7 +12,7 @@ public class ValidatorUtil {
     public static final String ALREADY_EXISTS = " already exists.";
 
     public static RuntimeException permissionError() {
-        return new WebApplicationException(PERMISSION_MSG, Response.Status.FORBIDDEN);
+        return new RuntimeException(PERMISSION_MSG);
     }
 
     public static Portfolio findValid(Portfolio entity, Function<Long, Portfolio> getFromDb){

@@ -43,7 +43,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
     private static final int SM_LARGE_THUMBNAIL_WIDTH = 300;
     private static final int SM_LARGE_THUMBNAIL_HEIGHT = 200;
     private static final int LG_THUMBNAIL_WIDTH = (int) (300 * 1.1);
-    private static final int LG_LARGE_THUMBNAIL_WIDTH = (int) (600 * 1.1);
+    private static final int LG_LARGE_THUMBNAIL_WIDTH = (int) (600  * 1.1);
     private static final String TEST_IMAGE_NAME = "src/test/resources/uploads/1/bookCover.jpg";
     private static final double DELTA = 1e-15;
 
@@ -160,9 +160,7 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
         assertEquals(PictureResource.MAX_AGE_1_YEAR, cacheControl);
 
         byte[] data = thumbnailResponse.readEntity(byte[].class);
-        try (ByteArrayInputStream input = new ByteArrayInputStream(data)) {
-            return ImageIO.read(input);
-        }
+        return ImageIO.read(new ByteArrayInputStream(data));
     }
 
     private String prepareTestImage() throws IOException {

@@ -39,7 +39,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getNotExistingPortfolio() {
         Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         login(USER_VOLDERMAR2);
 
         Response response = doGet(format(GET_PORTFOLIO_URL, PORTFOLIO_7));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -171,7 +171,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         portfolio.setCreator(userWithId(USER_PEETER.id));
 
         Response response = doPost(UPDATE_PORTFOLIO_URL, portfolio);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -255,7 +255,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void copyPrivatePortfolioLoggedInAsNotCreator() {
         login(USER_MATI);
         Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -279,7 +279,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void deletePortfolioAsNotCreator() {
         login(USER_SECOND);
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test

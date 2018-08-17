@@ -13,8 +13,6 @@ import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -74,7 +72,7 @@ public class PortfolioService {
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
         ValidatorUtil.mustHaveId(portfolio);
         if (isEmpty(portfolio.getTitle())) {
-            throw new WebApplicationException("Required field title must be filled.", Response.Status.BAD_REQUEST);
+            throw new RuntimeException("Required field title must be filled.");
         }
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {

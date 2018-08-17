@@ -9,16 +9,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.solr.SearchService.EMPTY;
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SearchConverter {
@@ -28,7 +24,7 @@ public class SearchConverter {
         String filtersAsQuery = getFiltersAsQuery(searchFilter);
 
         String queryString = getQueryString(searchFilter, tokenizedQueryString, filtersAsQuery);
-        if (isEmpty(queryString)) throw new WebApplicationException("No query string and filters present.", Response.Status.BAD_REQUEST);
+        if (queryString.isEmpty()) throw new RuntimeException("No query string and filters present.");
         return queryString;
     }
 
@@ -46,7 +42,7 @@ public class SearchConverter {
     }
 
     private static String getQueryString(SearchFilter searchFilter, String tokenizedQueryString, String filtersAsQuery) {
-        if (StringUtils.isEmpty(filtersAsQuery)) return EMPTY;
+        if (StringUtils.isEmpty(filtersAsQuery)) return SearchService.EMPTY;
         if (StringUtils.isEmpty(tokenizedQueryString)) return filtersAsQuery;
 
         String queryString = format("((%s)", tokenizedQueryString);
@@ -102,7 +98,7 @@ public class SearchConverter {
     private static String getExcludedAsQuery(SearchFilter searchFilter) {
         List<Long> excluded = searchFilter.getExcluded();
         if (CollectionUtils.isEmpty(excluded)) {
-            return EMPTY;
+            return SearchService.EMPTY;
         }
         List<String> result = excluded.stream().map(id -> "-id:" + id.toString()).collect(Collectors.toList());
         return SearchService.AND + StringUtils.join(result, SearchService.AND);
@@ -113,14 +109,14 @@ public class SearchConverter {
         if (language != null) {
             return format("(language:\"%s\" OR type:\"portfolio\")", language.getCode());
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String isPaidAsQuery(SearchFilter searchFilter) {
         if (!searchFilter.isPaid()) {
             return "(paid:\"false\" OR type:\"portfolio\")";
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getVisibilityAsQuery(SearchFilter searchFilter) {
@@ -140,7 +136,7 @@ public class SearchConverter {
         if (searchFilter.getCreator() != null) {
             return "creator:" + searchFilter.getCreator();
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getTypeAsQuery(SearchFilter searchFilter) {
@@ -154,7 +150,7 @@ public class SearchConverter {
                 return format("type:\"%s\"", type);
             }
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getTargetGroupsAsQuery(SearchFilter searchFilter) {
@@ -167,7 +163,7 @@ public class SearchConverter {
             if (filters.size() == 1) return filters.get(0);
             return filters.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static void addTaxonToQuery(Taxon taxon, List<String> taxons) {
@@ -185,25 +181,25 @@ public class SearchConverter {
         if (searchFilter.getResourceType() != null) {
             return format("resource_type:\"%s\"", searchFilter.getResourceType().getName().toLowerCase());
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String isSpecialEducationAsQuery(SearchFilter searchFilter) {
         if (searchFilter.isSpecialEducation()) {
             return "special_education:\"true\"";
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getRecommendedAndFavoritesAsQuery(SearchFilter searchFilter) {
         if (!searchFilter.isRecommended() && !searchFilter.isFavorites()) {
-            return EMPTY;
+            return SearchService.EMPTY;
         }
         if (searchFilter.getRequestingUser() == null) {
             if (searchFilter.isRecommended()) {
                 return "recommended:\"true\"";
             }
-            return EMPTY;
+            return SearchService.EMPTY;
         }
         if (searchFilter.isRecommended() && searchFilter.isFavorites()) {
             return "(recommended:\"true\" OR favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\")";
@@ -214,7 +210,7 @@ public class SearchConverter {
         if (searchFilter.isFavorites()) {
             return "favored_by_user:\"" + searchFilter.getRequestingUser().getUsername() + "\"";
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String issuedFromAsQuery(SearchFilter searchFilter) {
@@ -222,7 +218,7 @@ public class SearchConverter {
             return format("(issue_date_year:[%s TO *] OR (added:[%s-01-01T00:00:00Z TO *] AND type:\"portfolio\"))",
                     searchFilter.getIssuedFrom(), searchFilter.getIssuedFrom());
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getCrossCurricularThemesAsQuery(SearchFilter searchFilter) {
@@ -235,7 +231,7 @@ public class SearchConverter {
             if (themes.size() == 1) return themes.get(0);
             return themes.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getKeyCompetencesAsQuery(SearchFilter searchFilter) {
@@ -249,14 +245,14 @@ public class SearchConverter {
             if (competences.size() == 1) return competences.get(0);
             return competences.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String isCurriculumLiteratureAsQuery(SearchFilter searchFilter) {
         if (searchFilter.isCurriculumLiterature()) {
             return "(peerReview:[* TO *] OR curriculum_literature:\"true\")";
         }
-        return EMPTY;
+        return SearchService.EMPTY;
     }
 
     private static String getTaxonsAsQuery(SearchFilter searchFilter) {
@@ -264,7 +260,7 @@ public class SearchConverter {
         List<String> taxons = new LinkedList<>();
         List<String> joinedTaxons = new ArrayList<>();
 
-        if (taxonList == null) return EMPTY;
+        if (taxonList == null) return SearchService.EMPTY;
 
         for (Taxon taxon : taxonList) {
             if (taxon instanceof Subtopic) {
@@ -316,7 +312,7 @@ public class SearchConverter {
             taxons.clear();
         }
 
-        return joinedTaxons.isEmpty() ? EMPTY
+        return joinedTaxons.isEmpty() ? SearchService.EMPTY
                 : joinedTaxons.stream().collect(Collectors.joining(SearchService.OR, "(", ")"));
     }
 

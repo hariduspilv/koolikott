@@ -9,8 +9,6 @@ import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -39,6 +37,6 @@ public class CommentService {
 
     private void mustBeValidComment(Comment comment) {
         if (isEmpty(comment.getText()) || comment.getId() != null)
-            throw new WebApplicationException("Comment is missing text or already exists.", Response.Status.BAD_REQUEST);
+            throw new RuntimeException("Comment is missing text or already exists.");
     }
 }

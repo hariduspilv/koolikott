@@ -18,14 +18,18 @@ public class LanguageDeserializer extends JsonDeserializer<Language> {
 
     @Override
     public Language deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+        Language language = null;
         LanguageService languageService = GuiceInjector.getInjector().getInstance(LanguageService.class);
-        if (isEmpty(jp.getText())) {
-            return null;
+        String langCode = jp.getText();
+
+        if (!isEmpty(langCode)) {
+            language = languageService.getLanguage(jp.getText());
+
+            if (language == null) {
+                throw new RuntimeException("Language does not exist " + jp.getText());
+            }
         }
-        Language language = languageService.getLanguage(jp.getText());
-        if (language == null) {
-            throw new RuntimeException("Language does not exist " + jp.getText());
-        }
+
         return language;
     }
 }

@@ -46,7 +46,7 @@ public class CommentResourceTest extends ResourceIntegrationTestBase {
     public void addPortfolioCommentToPrivatePortfolioAsNotCreator() {
         login(USER_MATI);
         Response response = doPost(POST_COMMENT_PORTFOLIO_URL, commentForm(SUCH_COMMENT, portfolioWithId(PORTFOLIO_7)));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 
     @Test

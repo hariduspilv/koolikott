@@ -1,15 +1,27 @@
 package ee.hm.dop.rest.administration;
 
+import com.google.inject.Inject;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.*;
+import ee.hm.dop.dao.TestDao;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.enums.ReviewType;
+import ee.hm.dop.utils.DbUtils;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import javax.persistence.EntityTransaction;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.lang.String.format;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     private static final String LO_SET_NOT_IMPROPER = "admin/improper/setProper";
