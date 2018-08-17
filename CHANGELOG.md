@@ -1,3 +1,8 @@
+## e-Koolikott [1.21.3](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* Back-endi refaktoreerimine (Internal Server Error asendada 403'ga) [#361](https://github.com/hariduspilv/koolikott/issues/361)
+
 ## e-Koolikott [1.21.2](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud
