@@ -36,10 +36,11 @@ public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void restoring_portfolio_approves_everything() throws Exception {
-        assertHasWorkToDo(getPortfolio(PORTFOLIO_15));
-        doPost(PORTFOLIO_DELETE, portfolioWithId(PORTFOLIO_15));
-        Portfolio restored = doPost(PORTFOLIO_RESTORE, portfolioWithId(PORTFOLIO_15), Portfolio.class);
-        assertWorkIsDone(restored, ReviewType.SYSTEM_RESTORE);
+        Portfolio initialPortfolio = getPortfolio(PORTFOLIO_15);
+        assertHasWorkToDo(initialPortfolio);
+        Portfolio deletedPortfolio = doPost(PORTFOLIO_DELETE, portfolioWithId(initialPortfolio.getId()), Portfolio.class);
+        Portfolio restoredPortfolio = doPost(PORTFOLIO_RESTORE, portfolioWithId(deletedPortfolio.getId()), Portfolio.class);
+        assertWorkIsDone(restoredPortfolio, ReviewType.SYSTEM_RESTORE);
     }
 
     @Test
