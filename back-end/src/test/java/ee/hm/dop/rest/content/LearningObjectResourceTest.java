@@ -2,7 +2,7 @@ package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.*;
-import org.junit.Ignore;
+import ee.hm.dop.service.content.dto.TagDTO;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -38,10 +38,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(PORTFOLIO_8);
         assertFalse("Tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG)));
 
-        Response response = doPut(format(ADD_TAG_URL, PORTFOLIO_8), tag(TEST_TAG));
-        assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
-
-        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_8);
+        Portfolio portfolioAfter = doPut(format(ADD_TAG_URL, PORTFOLIO_8), tag(TEST_TAG), Portfolio.class);
         assertTrue("Tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_TAG)));
     }
 
@@ -59,9 +56,9 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Portfolio portfolio = getPortfolio(PORTFOLIO_16);
         assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
 
-        doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_16), tag(TEST_SYSTEM_TAG));
+        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_16), tag(TEST_SYSTEM_TAG), TagDTO.class);
 
-        Portfolio portfolioAfter = getPortfolio(PORTFOLIO_16);
+        Portfolio portfolioAfter = (Portfolio) tagDTO.getLearningObject();
         assertTrue("System tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
     }
 
@@ -111,7 +108,8 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         LearningObject learningObject = getPortfolio(PORTFOLIO_8);
 
         doPost(SET_TO_FAVOURITE_URL, learningObject);
-        doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
+        UserFavorite userFavorite = doGet(format(GET_FAVOURITE_URL, PORTFOLIO_8), UserFavorite.class);
+        assertNotNull("has been set as favorite", userFavorite);
         doPost(DELETE_FAVOURITE_URL, portfolioWithId(PORTFOLIO_8));
 
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);

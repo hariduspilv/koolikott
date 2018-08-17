@@ -36,18 +36,15 @@
           data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)"
         ></h2>
         <p class="md-caption ellipsis">
-        <span data-ng-if="$ctrl.isPortfolio(learningObject)" class="authors">
+        <span data-ng-if="$ctrl.isPortfolio(learningObject)">
           <span data-ng-bind="$ctrl.formatName(learningObject.creator.name)"></span>
           <span data-ng-bind="$ctrl.formatSurname(learningObject.creator.surname)"></span>
         </span>
-          <span
-            data-ng-if="$ctrl.isMaterial(learningObject)"
-            data-ng-repeat="author in learningObject.authors track by $index"
-            class="authors"
-          >
+        <span data-ng-if="$ctrl.isMaterial(learningObject)">
+          <span data-ng-repeat="author in learningObject.authors track by $index">
             <span data-ng-bind="$ctrl.formatName(author.name)"></span>
             <span data-ng-bind="$ctrl.formatSurname(author.surname)"></span>
-            <span data-ng-bind="$index < learningObject.authors.length - 1 ? ', ' : ''">
+            <span data-ng-bind="$index < learningObject.authors.length - 1 ? ', ' : ''"></span>
           </span>
         </span>
         </p>

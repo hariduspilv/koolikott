@@ -59,10 +59,10 @@ class controller extends Controller {
                 }
     }
     escapeQuery(query) {
-        return query.replace(/[<>/]/g, "");
+        return query && query.replace(/[<>/]/g, "");
     }
     escapeAllQuery(query) {
-        return query.replace(/[<>/]/g, "").replace(/\+/g, "%2B");
+        return query && query.replace(/[<>/]/g, "").replace(/\+/g, "%2B");
     }
     arrayToLowerCase(upperCaseArray) {
         const lowerCaseArray = []
