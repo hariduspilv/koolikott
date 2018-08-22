@@ -7,6 +7,7 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Provider
 public class DopClientRequestFilter implements ClientRequestFilter {
@@ -14,9 +15,27 @@ public class DopClientRequestFilter implements ClientRequestFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
-        logger.info(requestContext.getUri().toString());
-        if (requestContext.getEntity() != null) {
-            logger.info(requestContext.getEntity().toString());
+        String logString = "";
+        if (requestContext.getMethod() != null) {
+            logString += "\n\tMETHOD: " + requestContext.getMethod();
         }
+        if (requestContext.getUri() != null) {
+            logString += "\n\tURL: " + requestContext.getUri().toString();
+        }
+        String headers = headers(requestContext);
+        if (!headers.isEmpty()) {
+            logString += "\n\tHEADERS: " + headers;
+        }
+        if (requestContext.hasEntity()) {
+            logString += "\n\tENTITY: " + requestContext.getEntity().toString();
+        }
+        logger.info(logString);
     }
+
+    private String headers(ClientRequestContext requestContext) {
+        return requestContext.getHeaders().keySet().stream()
+                .map(key -> key + ":" + requestContext.getHeaderString(key))
+                .collect(Collectors.joining(", "));
+    }
+
 }
