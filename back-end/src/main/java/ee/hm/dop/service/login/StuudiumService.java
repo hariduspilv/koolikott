@@ -41,23 +41,13 @@ public class StuudiumService {
     }
 
     private StuudiumUser getStuudiumUser(String token) {
-        if (configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)){
-            Response response = client.target(getUserDataUrl())
-                    .queryParam("token", token)
-                    .queryParam("client_id", getClientId())
-                    .queryParam("signature", hmacUtils.hmacHex(token))
-                    .request()
-                    .accept(MediaType.TEXT_HTML).get();
-            logger.info(response.readEntity(String.class));
-        }
-
         Response response = client.target(getUserDataUrl())
                 .queryParam("token", token)
                 .queryParam("client_id", getClientId())
                 .queryParam("signature", hmacUtils.hmacHex(token))
                 .request()
                 .accept(MediaType.APPLICATION_JSON).get();
-
+        logAsString(response);
         return response.readEntity(StuudiumUser.class);
     }
 
@@ -71,6 +61,13 @@ public class StuudiumService {
 
     private String getUserDataUrl() {
         return configuration.getString(STUUDIUM_URL_GENERALDATA);
+    }
+
+    private void logAsString(Response response) {
+        if (configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)){
+            response.bufferEntity();
+            logger.info(response.readEntity(String.class));
+        }
     }
 
 }

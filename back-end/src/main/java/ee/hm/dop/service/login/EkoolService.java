@@ -47,18 +47,12 @@ public class EkoolService {
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
-        if (configuration.getBoolean(EKOOL_EXTRA_LOGGING)){
-            Response response = client.target(getUserDataUrl()).request()
-                    .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
-                    .header("Content-type", "text/html")
-                    .get();
-            logger.info(response.readEntity(String.class));
-        }
-
-        return client.target(getUserDataUrl()).request()
+        Response response = client.target(getUserDataUrl()).request()
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
-                .get().readEntity(Person.class);
+                .get();
+        logAsString(response);
+        return response.readEntity(Person.class);
     }
 
     private EkoolToken getEkoolToken(String code, String redirectUrl) {
@@ -67,18 +61,11 @@ public class EkoolService {
         params.add("redirect_uri", redirectUrl);
         params.add("code", code);
 
-        if (configuration.getBoolean(EKOOL_EXTRA_LOGGING)){
-            Response response = client.target(getEkoolTokenUrl()).request()
-                    .header("Authorization", "Basic " + generateAuthHeaderHash())
-                    .header("Content-type", "text/html")
-                    .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
-            logger.info(response.readEntity(String.class));
-        }
-
-        return client.target(getEkoolTokenUrl()).request()
+        Response response = client.target(getEkoolTokenUrl()).request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash())
-                .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE))
-                .readEntity(EkoolToken.class);
+                .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
+        logAsString(response);
+        return response.readEntity(EkoolToken.class);
     }
 
     private String getEkoolTokenUrl() {
@@ -98,4 +85,10 @@ public class EkoolService {
         return encode(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 
+    private void logAsString(Response response) {
+        if (configuration.getBoolean(EKOOL_EXTRA_LOGGING)) {
+            response.bufferEntity();
+            logger.info(response.readEntity(String.class));
+        }
+    }
 }
