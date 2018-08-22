@@ -1,6 +1,8 @@
 package ee.hm.dop.rest.filter;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.rest.filter.dto.DopPrincipal;
+import ee.hm.dop.rest.filter.dto.DopSecurityContext;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

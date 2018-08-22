@@ -1,4 +1,4 @@
-package ee.hm.dop.rest.filter;
+package ee.hm.dop.rest.filter.dto;
 
 import java.security.Principal;
 

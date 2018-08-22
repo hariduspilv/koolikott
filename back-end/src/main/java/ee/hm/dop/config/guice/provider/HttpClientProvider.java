@@ -5,6 +5,7 @@ import javax.ws.rs.client.ClientBuilder;
 
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import ee.hm.dop.rest.filter.DopClientRequestFilter;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -37,5 +38,6 @@ public class HttpClientProvider implements Provider<Client> {
         client = ClientBuilder.newClient(clientConfig);
         client.register(JacksonFeature.class);
         client.register(ObjectMapperProvider.class);
+        client.register(new DopClientRequestFilter());
     }
 }

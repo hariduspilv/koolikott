@@ -6,8 +6,6 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Encoded;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -15,7 +13,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
-import ee.hm.dop.rest.filter.DopPrincipal;
+import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import ee.hm.dop.utils.ConfigurationProperties;
 import org.apache.commons.configuration2.Configuration;
 

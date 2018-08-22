@@ -8,6 +8,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
+import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import org.easymock.EasyMockRunner;
 import org.easymock.TestSubject;
 import org.junit.Test;

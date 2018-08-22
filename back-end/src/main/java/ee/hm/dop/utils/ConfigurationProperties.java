@@ -91,6 +91,8 @@ public interface ConfigurationProperties {
     String DOCUMENT_MAX_FILE_SIZE = "file.document.upload.max.size";
     String FILE_REVIEW_DIRECTORY = "file.review.directory";
 
+    String REQUEST_EXTRA_LOGGING = "request.extra.logging";
+
     String MAX_FEED_ITEMS = "feed.items.max";
 
     String AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES = "automatically.accept.reviewableChanges.days";

@@ -1,4 +1,6 @@
-package ee.hm.dop.rest.filter;
+package ee.hm.dop.rest.filter.dto;
+
+import ee.hm.dop.rest.filter.dto.DopPrincipal;
 
 import java.security.Principal;
 
