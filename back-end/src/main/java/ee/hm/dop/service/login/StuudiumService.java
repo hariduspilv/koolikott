@@ -66,7 +66,7 @@ public class StuudiumService {
     private void logAsString(Response response) {
         if (configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)){
             response.bufferEntity();
-            logger.info(response.readEntity(String.class));
+            logger.info("getStuudiumUser" + response.readEntity(String.class));
         }
     }
 
