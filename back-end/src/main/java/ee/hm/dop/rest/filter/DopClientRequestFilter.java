@@ -16,6 +16,9 @@ public class DopClientRequestFilter implements ClientRequestFilter {
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
         String logString = "";
+        if (requestContext.getUri() != null){
+            logString += requestContext.getUri().getAuthority() + requestContext.getUri().getPath();
+        }
         if (requestContext.getMethod() != null) {
             logString += "\n\tMETHOD: " + requestContext.getMethod();
         }
