@@ -3,7 +3,6 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.service.login.dto.UserStatus;
-import ee.hm.dop.utils.ConfigurationProperties;
 import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.slf4j.Logger;
@@ -51,7 +50,7 @@ public class EkoolService {
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
                 .get();
-        logAsString(response);
+        logAsString("getPerson", response);
         return response.readEntity(Person.class);
     }
 
@@ -64,7 +63,7 @@ public class EkoolService {
         Response response = client.target(getEkoolTokenUrl()).request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash())
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
-        logAsString(response);
+        logAsString("getToken", response);
         return response.readEntity(EkoolToken.class);
     }
 
@@ -85,10 +84,10 @@ public class EkoolService {
         return encode(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 
-    private void logAsString(Response response) {
+    private void logAsString(String reason, Response response) {
         if (configuration.getBoolean(EKOOL_EXTRA_LOGGING)) {
             response.bufferEntity();
-            logger.info(response.readEntity(String.class));
+            logger.info(reason + " " + response.readEntity(String.class));
         }
     }
 }
