@@ -1,15 +1,14 @@
 package ee.hm.dop.service.login;
 
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.stuudium.StuudiumUser;
+import ee.hm.dop.service.login.dto.UserStatus;
+import org.apache.commons.codec.digest.HmacUtils;
+import org.apache.commons.configuration2.Configuration;
+import org.easymock.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation.Builder;
@@ -17,16 +16,15 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.stuudium.StuudiumUser;
-import ee.hm.dop.service.login.dto.UserStatus;
-import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration2.Configuration;
-import org.easymock.EasyMockRunner;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_EXTRA_LOGGING;
+import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 @RunWith(EasyMockRunner.class)
 public class StuudiumServiceTest {
@@ -67,6 +65,7 @@ public class StuudiumServiceTest {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         UserStatus userStatus = UserStatus.loggedIn(authenticatedUser);
 
+        expect(configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)).andReturn(false);
         expect(configuration.getString(STUUDIUM_URL_GENERALDATA)).andReturn(generalDataURL);
         expect(configuration.getString(STUUDIUM_CLIENT_ID)).andReturn(clientID);
 

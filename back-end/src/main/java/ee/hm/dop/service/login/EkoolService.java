@@ -3,6 +3,7 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.service.login.dto.UserStatus;
+import ee.hm.dop.utils.ConfigurationProperties;
 import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.xml.security.utils.Base64.encode;
 
 public class EkoolService {
+    private static Logger logger = LoggerFactory.getLogger(EkoolService.class);
 
     @Inject
     private Configuration configuration;
@@ -45,6 +47,14 @@ public class EkoolService {
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
+        if (configuration.getBoolean(EKOOL_EXTRA_LOGGING)){
+            Response response = client.target(getUserDataUrl()).request()
+                    .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
+                    .header("Content-type", "text/html")
+                    .get();
+            logger.info(response.readEntity(String.class));
+        }
+
         return client.target(getUserDataUrl()).request()
                 .header("Authorization", "Bearer " + ekoolToken.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
@@ -56,6 +66,14 @@ public class EkoolService {
         params.add("grant_type", "authorization_code");
         params.add("redirect_uri", redirectUrl);
         params.add("code", code);
+
+        if (configuration.getBoolean(EKOOL_EXTRA_LOGGING)){
+            Response response = client.target(getEkoolTokenUrl()).request()
+                    .header("Authorization", "Basic " + generateAuthHeaderHash())
+                    .header("Content-type", "text/html")
+                    .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
+            logger.info(response.readEntity(String.class));
+        }
 
         return client.target(getEkoolTokenUrl()).request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash())

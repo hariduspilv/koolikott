@@ -5,18 +5,18 @@ import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration2.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.STUUDIUM_URL_GENERALDATA;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 public class StuudiumService {
+    private static Logger logger = LoggerFactory.getLogger(StuudiumService.class);
 
     @Inject
     private Configuration configuration;
@@ -41,11 +41,22 @@ public class StuudiumService {
     }
 
     private StuudiumUser getStuudiumUser(String token) {
+        if (configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)){
+            Response response = client.target(getUserDataUrl())
+                    .queryParam("token", token)
+                    .queryParam("client_id", getClientId())
+                    .queryParam("signature", hmacUtils.hmacHex(token))
+                    .request()
+                    .accept(MediaType.TEXT_HTML).get();
+            logger.info(response.readEntity(String.class));
+        }
+
         Response response = client.target(getUserDataUrl())
                 .queryParam("token", token)
                 .queryParam("client_id", getClientId())
                 .queryParam("signature", hmacUtils.hmacHex(token))
-                .request().accept(MediaType.APPLICATION_JSON).get();
+                .request()
+                .accept(MediaType.APPLICATION_JSON).get();
 
         return response.readEntity(StuudiumUser.class);
     }

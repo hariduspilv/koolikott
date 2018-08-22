@@ -1,3 +1,8 @@
+## e-Koolikott [1.21.4](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* Partnerite päringute logimine ja logimise sisse/välja lülitamine [#362](https://github.com/hariduspilv/koolikott/issues/363)
+
 ## e-Koolikott [1.21.3](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud

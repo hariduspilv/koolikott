@@ -72,6 +72,7 @@ public interface ConfigurationProperties {
     String XROAD_EHIS_TIMEOUT_READ = "xroad.ehis.timeout.read";
 
     // EKool
+    String EKOOL_EXTRA_LOGGING = "ekool.extra.logging";
     String EKOOL_CLIENT_ID = "ekool.client.id";
     String EKOOL_CLIENT_SECRET = "ekool.client.secret";
     String EKOOL_URL_AUTHORIZE = "ekool.url.authorize";
@@ -79,6 +80,7 @@ public interface ConfigurationProperties {
     String EKOOL_URL_GENERALDATA = "ekool.url.generaldata";
 
     // Stuudium
+    String STUUDIUM_EXTRA_LOGGING = "stuudium.extra.logging";
     String STUUDIUM_CLIENT_ID = "stuudium.client.id";
     String STUUDIUM_CLIENT_SECRET = "stuudium.client.secret";
     String STUUDIUM_URL_AUTHORIZE = "stuudium.url.authorize";
