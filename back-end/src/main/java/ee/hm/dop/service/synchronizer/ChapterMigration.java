@@ -104,7 +104,6 @@ public class ChapterMigration extends DopDaemonProcess {
         chapterDao.updateChapterText(Arrays.asList(chapter.getId()));
     }
 
-    @Override
     public void stop() {
 
     }

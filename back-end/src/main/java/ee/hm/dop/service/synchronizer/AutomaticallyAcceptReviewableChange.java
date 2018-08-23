@@ -84,7 +84,6 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
         timer.scheduleAtFixedRate(timerTask, getInitialDelay(hourOfDayToExecute), DAYS.toMillis(1));
     }
 
-    @Override
     public void stop() {
         if (acceptReviewableChangeHandle == null) {
             logger.info("Automatically accepting ReviewableChange not scheduled for running.");

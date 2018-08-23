@@ -82,7 +82,6 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
         timer.scheduleAtFixedRate(timerTask, initialDelay, period);
     }
 
-    @Override
     public synchronized void stop() {
         if (synchronizeMaterialHandle == null) {
             logger.info("Synchronization repository service not scheduled for running.");

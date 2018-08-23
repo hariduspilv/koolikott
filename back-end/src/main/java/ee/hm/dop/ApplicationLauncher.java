@@ -3,6 +3,7 @@ package ee.hm.dop;
 import com.google.inject.Singleton;
 import ee.hm.dop.config.EmbeddedJetty;
 import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
 import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
 import ee.hm.dop.service.synchronizer.ChapterMigration;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
@@ -35,6 +36,8 @@ public class ApplicationLauncher {
     @Inject
     private static AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
     @Inject
+    private static AuthenticationStateCleaner authenticationStateCleaner;
+    @Inject
     private static ChapterMigration chapterMigration;
 
     public static void startApplication() {
@@ -51,6 +54,7 @@ public class ApplicationLauncher {
             synchronizeMaterials();
             acceptReviewableChange();
             migrateChapters();
+            authenticationStateCleaner();
         }
     }
 
@@ -64,6 +68,10 @@ public class ApplicationLauncher {
 
     private static void synchronizeMaterials() {
         Executors.newSingleThreadExecutor().submit(() -> synchronizeMaterialsExecutor.run());
+    }
+
+    private static void authenticationStateCleaner() {
+        Executors.newSingleThreadExecutor().submit(() -> authenticationStateCleaner.run());
     }
 
     private static void startExecutors() {

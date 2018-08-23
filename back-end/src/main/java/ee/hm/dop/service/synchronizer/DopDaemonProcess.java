@@ -9,8 +9,6 @@ public abstract class DopDaemonProcess {
 
     public abstract void run();
 
-    public abstract void stop();
-
     long getInitialDelay(int hourOfDayToExecute) {
         return ExecutorUtil.getInitialDelay(hourOfDayToExecute);
     }
