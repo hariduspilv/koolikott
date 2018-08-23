@@ -170,15 +170,6 @@ public class MaterialDaoTest extends DatabaseTestBase {
     }
 
     @Test
-    public void findByCreator() {
-        List<LearningObject> materials = materialDao.findByCreator(userWithId(1L), 0, Integer.MAX_VALUE);
-        List<Long> collect = materials.stream().map(Searchable::getId).collect(Collectors.toList());
-        assertTrue(collect.containsAll(asList(MATERIAL_8, MATERIAL_4, MATERIAL_1)));
-
-        assertMaterial1((Material) materials.stream().filter(m -> m.getId().equals(MATERIAL_1)).findAny().orElseThrow(RuntimeException::new), TestLayer.DAO);
-    }
-
-    @Test
     public void update() {
         Material changedMaterial = new Material();
         changedMaterial.setId(MATERIAL_9);

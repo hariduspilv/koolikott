@@ -151,7 +151,7 @@ public class RepositoryService {
     }
 
     private void createMaterial(Material material, SynchronizationAudit audit) {
-        logger.info("Creating material, with repo id: ", material.getRepositoryIdentifier());
+        logger.info("Creating material, with repo id: " + material.getRepositoryIdentifier());
         createPicture(material);
         materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE);
         audit.newMaterialCreated();

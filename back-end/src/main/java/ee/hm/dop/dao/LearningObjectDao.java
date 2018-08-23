@@ -77,11 +77,6 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         createOrUpdate(learningObject);
     }
 
-    public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
-        String queryString = "SELECT lo FROM LearningObject lo WHERE lo.creator.id = :creatorId AND lo.deleted = false order by added desc";
-        return findByCreatorInner(creator, start, maxResults, queryString);
-    }
-
     protected List<LearningObject> findByCreatorInner(User creator, int start, int maxResults, String queryString) {
         TypedQuery<LearningObject> typedQuery = getEntityManager()
                 .createQuery(queryString, entity())

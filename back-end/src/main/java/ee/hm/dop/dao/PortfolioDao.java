@@ -102,10 +102,6 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
                 .getResultList();
     }
 
-    public void incrementViewCount(LearningObject learningObject) {
-        learningObjectDao.incrementViewCount(learningObject);
-    }
-
     public void delete(LearningObject learningObject) {
         learningObjectDao.delete(learningObject);
     }

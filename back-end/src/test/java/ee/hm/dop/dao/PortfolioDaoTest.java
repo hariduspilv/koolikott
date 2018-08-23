@@ -21,6 +21,8 @@ public class PortfolioDaoTest extends DatabaseTestBase {
     private PortfolioDao portfolioDao;
     @Inject
     private UserDao userDao;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     private int threadsDone;
 
@@ -113,7 +115,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         assertSame(14L, portfolio.getViews());
 
         portfolio.setViews(portfolio.getViews()+1);
-        portfolioDao.incrementViewCount(portfolio);
+        learningObjectDao.incrementViewCount(portfolio);
 
         Portfolio returnedPortfolio = portfolioDao.findByIdNotDeleted(PORTFOLIO_2);
         assertSame(15L, returnedPortfolio.getViews());
@@ -135,7 +137,7 @@ public class PortfolioDaoTest extends DatabaseTestBase {
                 portfolio.setId(2L);
 
                 for (int i = 0; i < 10; i++) {
-                    portfolioDao.incrementViewCount(portfolio);
+                    learningObjectDao.incrementViewCount(portfolio);
                 }
 
                 threadsDone++;

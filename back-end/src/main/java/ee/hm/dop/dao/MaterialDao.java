@@ -88,13 +88,6 @@ public class MaterialDao extends AbstractDao<Material> {
         return getSingleResult(query);
     }
 
-    public List<LearningObject> findByCreator(User creator, int start, int maxResults) {
-        String queryString = "SELECT lo FROM LearningObject lo WHERE " +
-                "type(lo) = Material AND " +
-                "lo.creator.id = :creatorId AND lo.deleted = false order by added desc";
-        return learningObjectDao.findByCreatorInner(creator, start, maxResults, queryString);
-    }
-
     public List<Material> findBySource(String materialSource, GetMaterialStrategy getMaterialStrategy) {
         TypedQuery<Material> materialTypedQuery = getMaterialTypedQuery(materialSource, getMaterialStrategy);
         return materialTypedQuery.getResultList();
@@ -152,10 +145,6 @@ public class MaterialDao extends AbstractDao<Material> {
                 .createQuery("FROM Material mat WHERE mat.deleted = false ORDER BY added DESC, id DESC", entity())
                 .setFirstResult(startPosition).setMaxResults(numberOfMaterials)
                 .getResultList();
-    }
-
-    public void incrementViewCount(LearningObject learningObject) {
-        learningObjectDao.incrementViewCount(learningObject);
     }
 
     @Override
