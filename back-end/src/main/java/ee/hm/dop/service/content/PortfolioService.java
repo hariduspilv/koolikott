@@ -43,10 +43,11 @@ public class PortfolioService {
         originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
-        solrEngineService.updateIndex();
 
         boolean loChanged = reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
+
+        solrEngineService.updateIndex();
 
         return updatedPortfolio;
     }

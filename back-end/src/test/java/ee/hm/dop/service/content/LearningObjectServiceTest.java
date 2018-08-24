@@ -34,8 +34,6 @@ public class LearningObjectServiceTest {
     private LearningObjectService learningObjectService = new LearningObjectService();
     @Mock
     private LearningObjectDao learningObjectDao;
-    @Mock
-    private SolrEngineService solrEngineService;
 
     @Test
     public void incrementViewCount() {
@@ -44,7 +42,6 @@ public class LearningObjectServiceTest {
         Portfolio originalPortfolio = createMock(Portfolio.class);
         expect(learningObjectDao.findById(portfolio.getId())).andReturn(originalPortfolio);
         learningObjectDao.incrementViewCount(originalPortfolio);
-        solrEngineService.updateIndex();
 
         replayAll(originalPortfolio);
 
@@ -72,7 +69,7 @@ public class LearningObjectServiceTest {
     }
 
     private void replayAll(Object... mocks) {
-        replay(learningObjectDao, solrEngineService);
+        replay(learningObjectDao);
 
         if (mocks != null) {
             for (Object object : mocks) {
@@ -82,7 +79,7 @@ public class LearningObjectServiceTest {
     }
 
     private void verifyAll(Object... mocks) {
-        verify(learningObjectDao, solrEngineService);
+        verify(learningObjectDao);
 
         if (mocks != null) {
             for (Object object : mocks) {

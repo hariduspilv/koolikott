@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
 
 import static java.lang.String.format;
@@ -41,18 +42,18 @@ public class MaterialProxy {
         String attachmentLocation = attachmentLocation(get, DopConstants.PDF_EXTENSION, DopConstants.PDF_MIME_TYPE);
         if (attachmentLocation.equals(DopConstants.CONTENT_DISPOSITION)) {
             String contentDisposition = get.getResponseHeaders(DopConstants.CONTENT_DISPOSITION)[0].getValue().replace("attachment", "Inline");
-            return buildContentDispositionResponse(get.getResponseBody(), contentDisposition);
+            return buildContentDispositionResponse(get.getResponseBodyAsStream(), contentDisposition);
         }
         if (attachmentLocation.equals(DopConstants.CONTENT_TYPE)) {
             // Content-Disposition is missing, try to extract the filename from url instead
             String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
             String contentDisposition = format("Inline; filename=\"%s\"", fileName);
-            return buildContentDispositionResponse(get.getResponseBody(), contentDisposition);
+            return buildContentDispositionResponse(get.getResponseBodyAsStream(), contentDisposition);
         }
         return Response.noContent().build();
     }
 
-    private Response buildContentDispositionResponse(byte[] responseBody, String contentDisposition) throws IOException {
+    private Response buildContentDispositionResponse(InputStream responseBody, String contentDisposition) throws IOException {
         return Response.ok(responseBody, DopConstants.PDF_MIME_TYPE).header(DopConstants.CONTENT_DISPOSITION,
                 contentDisposition).build();
     }

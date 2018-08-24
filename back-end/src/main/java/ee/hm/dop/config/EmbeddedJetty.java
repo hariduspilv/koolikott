@@ -1,6 +1,5 @@
 package ee.hm.dop.config;
 
-import java.net.URI;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
