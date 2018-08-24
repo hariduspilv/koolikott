@@ -32,11 +32,11 @@ import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 @Singleton
 public class SolrService implements SolrEngineService {
 
-    static final int DEFAULT_RESULTS_PER_PAGE = 24;
     static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
     static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
     static final String SOLR_STATUS_BUSY = "busy";
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
+    private static final int DEFAULT_RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
     private static final String SUGGEST_URL = "/suggest";
     private static final String SUGGEST_TAG_URL = "/suggest_tag";
@@ -187,10 +187,10 @@ public class SolrService implements SolrEngineService {
                         synchronized (lock) {
                             updateIndex = false;
                             lock.notifyAll();
-                            logger.info("Updating Solr index.");
-                            executeCommand(SOLR_IMPORT_PARTIAL);
-                            waitForCommandToFinish();
                         }
+                        logger.info("Updating Solr index.");
+                        executeCommand(SOLR_IMPORT_PARTIAL);
+                        waitForCommandToFinish();
                     }
                     sleep(_0_1_SEC);
                 }
