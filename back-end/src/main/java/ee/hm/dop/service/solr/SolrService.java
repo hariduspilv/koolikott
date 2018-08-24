@@ -169,6 +169,7 @@ public class SolrService implements SolrEngineService {
 
     private class SolrIndexThread extends Thread {
         private static final int _1_SEC = 1000;
+        private static final int _0_1_SEC = 100;
         private final Object lock = new Object();
         private boolean updateIndex;
 
@@ -186,13 +187,12 @@ public class SolrService implements SolrEngineService {
                         synchronized (lock) {
                             updateIndex = false;
                             lock.notifyAll();
+                            logger.info("Updating Solr index.");
+                            executeCommand(SOLR_IMPORT_PARTIAL);
+                            waitForCommandToFinish();
                         }
-                        logger.info("Updating Solr index.");
-                        executeCommand(SOLR_IMPORT_PARTIAL);
-                        waitForCommandToFinish();
                     }
-
-                    sleep(_1_SEC);
+                    sleep(_0_1_SEC);
                 }
             } catch (InterruptedException e) {
                 logger.info("Solr indexing thread interrupted.");
@@ -200,8 +200,9 @@ public class SolrService implements SolrEngineService {
         }
 
         private void waitForCommandToFinish() throws InterruptedException {
+            int count = 0;
             while (isIndexingInProgress()) {
-                sleep(_1_SEC);
+                sleep(_1_SEC + _0_1_SEC * 2 * count++);
             }
         }
     }
