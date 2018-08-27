@@ -28,6 +28,7 @@ public class ApplicationLauncher {
     private static final int DEFAULT_SERVER_PORT = 8080;
     private static final int MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY = 1;
     private static final int AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY = 2;
+    private static final int AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY = 3;
 
     @Inject
     private static Configuration configuration;
@@ -77,6 +78,7 @@ public class ApplicationLauncher {
     private static void startExecutors() {
         synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
         automaticallyAcceptReviewableChange.scheduleExecution(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY);
+        authenticationStateCleaner.scheduleExecution(AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY);
     }
 
     private static void startCommandListener() {

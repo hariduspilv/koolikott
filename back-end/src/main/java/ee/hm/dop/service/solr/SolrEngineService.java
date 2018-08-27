@@ -13,6 +13,8 @@ public interface SolrEngineService {
 
     List<String> suggest(String query, SuggestionStrategy suggestionStrategy);
 
+    void fullImport();
+
     void updateIndex();
 
 }
