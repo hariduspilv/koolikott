@@ -334,4 +334,8 @@ class SolrEngineServiceMock implements SolrEngineService {
     public void updateIndex() {
 
     }
+
+    @Override
+    public void fullImport() {
+    }
 }

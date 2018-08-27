@@ -46,13 +46,13 @@ public class RepositoryService {
         return repositoryDao.findByFieldList("used", true);
     }
 
-    public void synchronize(Repository repository) {
+    public SynchronizationAudit synchronize(Repository repository) {
         logStart(repository);
 
         long start = System.currentTimeMillis();
 
         MaterialIteratorAndDate materialIteratorAndDate = getMaterialIterator(repository);
-        if (materialIteratorAndDate == null) return;
+        if (materialIteratorAndDate == null) return null;
 
         SynchronizationAudit audit = synchronize(repository, materialIteratorAndDate.getIterator());
 
@@ -60,6 +60,7 @@ public class RepositoryService {
         repositoryDao.updateRepository(repository);
 
         logEnd(audit, start);
+        return audit;
     }
 
     private MaterialIteratorAndDate getMaterialIterator(Repository repository) {
