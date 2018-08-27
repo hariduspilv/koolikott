@@ -37,12 +37,12 @@
                 deltaImportQuery="select id, added, views, creator, visibility, licenseType from LearningObject
                 where id = '${dih.delta.id}'"
                 deltaQuery="select id from LearningObject
-                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}'
-                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}')
+                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dih.last_index_time}'
+                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dih.last_index_time}')
                     AND deleted = false"
                 deletedPkQuery="select id from LearningObject
-                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}'
-                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dataimporter.last_index_time}')
+                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dih.last_index_time}'
+                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dih.last_index_time}')
                     AND deleted = true">
 
             <entity name="LearningObject_TargetGroup"
