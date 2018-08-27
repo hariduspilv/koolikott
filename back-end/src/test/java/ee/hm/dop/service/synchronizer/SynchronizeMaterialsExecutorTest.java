@@ -2,6 +2,7 @@ package ee.hm.dop.service.synchronizer;
 
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
@@ -9,7 +10,6 @@ import org.easymock.TestSubject;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -42,7 +42,6 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Test
     public void synchronizeMaterials() {
-
         Repository repository1 = createMock(Repository.class);
         Repository repository2 = createMock(Repository.class);
 
@@ -51,14 +50,16 @@ public class SynchronizeMaterialsExecutorTest {
         repositories.add(repository2);
 
         expect(repositoryService.getAllUsedRepositories()).andReturn(repositories);
-
         expectLastCall();
 
-        repositoryService.synchronize(repository1);
-        repositoryService.synchronize(repository2);
+        SynchronizationAudit audit = new SynchronizationAudit();
+        audit.successfullyDownloaded();
+        expect(repositoryService.synchronize(repository1)).andReturn(audit);
+        expect(repositoryService.synchronize(repository2)).andReturn(audit);
 
         replay(repositoryService, repository1, repository2);
 
+        waitingTestFix();
         synchronizeMaterialsExecutor.run();
 
         verify(repositoryService, repository1, repository2);
@@ -81,7 +82,6 @@ public class SynchronizeMaterialsExecutorTest {
 
     @Test
     public void scheduleExecution() {
-
         Repository repository1 = createMock(Repository.class);
         Repository repository2 = createMock(Repository.class);
 
@@ -93,21 +93,17 @@ public class SynchronizeMaterialsExecutorTest {
 
         expectLastCall();
 
-        repositoryService.synchronize(repository1);
-        repositoryService.synchronize(repository2);
-        solrEngineService.updateIndex();
+        SynchronizationAudit audit = new SynchronizationAudit();
+        audit.successfullyDownloaded();
+        expect(repositoryService.synchronize(repository1)).andReturn(audit);
+        expect(repositoryService.synchronize(repository2)).andReturn(audit);
+        solrEngineService.fullImport();
 
         replay(repositoryService, repository1, repository2, solrEngineService);
 
         synchronizeMaterialsExecutor.scheduleExecution(1);
 
-        synchronized (lock) {
-            try {
-                // Have to wait for the initial delay and thread execution
-                lock.wait(20);
-            } catch (InterruptedException e) {
-            }
-        }
+        waitingTestFix();
 
         verify(repositoryService, repository1, repository2, solrEngineService);
 
@@ -116,29 +112,16 @@ public class SynchronizeMaterialsExecutorTest {
         assertFalse(mockExecutor.transactionStarted);
     }
 
-    /**
-     * should run once
-     */
-    @Deprecated
     @Test
-    public void scheduleExecutionDoubleInitialization() {
-        List<Repository> repositories = Collections.emptyList();
-        expect(repositoryService.getAllUsedRepositories()).andReturn(repositories).times(2);
-        solrEngineService.updateIndex();
-        expectLastCall().times(2);
+    public void index_is_not_updated_on_empty_import() {
+        expect(repositoryService.getAllUsedRepositories()).andReturn(Collections.emptyList());
+        expectLastCall();
 
         replay(repositoryService, solrEngineService);
 
         synchronizeMaterialsExecutor.scheduleExecution(1);
-        synchronizeMaterialsExecutor.scheduleExecution(1);
 
-        synchronized (lock) {
-            try {
-                // Have to wait for the initial delay and thread execution
-                lock.wait(20);
-            } catch (InterruptedException e) {
-            }
-        }
+        waitingTestFix();
 
         verify(repositoryService, solrEngineService);
     }
@@ -191,7 +174,6 @@ public class SynchronizeMaterialsExecutorTest {
     }
 
     private class SynchronizeMaterialsExecutorMock extends SynchronizeMaterialsExecutor {
-
         private boolean transactionStarted;
         private boolean transactionWasStarted;
 
@@ -222,6 +204,21 @@ public class SynchronizeMaterialsExecutorTest {
             }*/
 
             transactionStarted = false;
+        }
+
+        @Override
+        protected void closeEntityManager(){
+
+        }
+    }
+
+    private void waitingTestFix() {
+        synchronized (lock) {
+            try {
+                // Have to wait for the initial delay and thread execution
+                lock.wait(20);
+            } catch (InterruptedException e) {
+            }
         }
     }
 }
