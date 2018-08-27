@@ -91,13 +91,7 @@ public class AutomaticallyAcceptReviewableChangeTest {
         replay(reviewableChangeDao, configuration);
         automaticallyAcceptReviewableChange.scheduleExecution(1);
 
-        synchronized (lock) {
-            try {
-                // Have to wait for the initial delay and thread execution
-                lock.wait(20);
-            } catch (InterruptedException e) {
-            }
-        }
+        waitingTestFix();
 
         verify(reviewableChangeDao, configuration);
 
@@ -105,6 +99,16 @@ public class AutomaticallyAcceptReviewableChangeTest {
         assertEquals(true, reviewableChange1.isReviewed());
         assertNotNull(reviewableChange1.getReviewedAt());
         assertEquals(ReviewStatus.ACCEPTED_AUTOMATICALLY, reviewableChange1.getStatus());
+    }
+
+    private void waitingTestFix() {
+        synchronized (lock) {
+            try {
+                // Have to wait for the initial delay and thread execution
+                lock.wait(60);
+            } catch (InterruptedException e) {
+            }
+        }
     }
 
 
@@ -136,6 +140,10 @@ public class AutomaticallyAcceptReviewableChangeTest {
 
         @Override
         protected void closeTransaction() {
+        }
+
+        @Override
+        protected void closeEntityManager() {
         }
     }
 }
