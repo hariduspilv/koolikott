@@ -143,6 +143,7 @@ angular.module('koolikottApp')
                             getSignedUserData()
                         } else {
                             $scope.material.iframeSource = $sce.trustAsResourceUrl($scope.material.source);
+                            $scope.material.linkSource = $scope.material.source;
                         }
                     }
                 }
