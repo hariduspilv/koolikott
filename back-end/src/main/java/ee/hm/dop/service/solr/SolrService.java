@@ -203,7 +203,7 @@ public class SolrService implements SolrEngineService {
                             lock.notifyAll();
                         }
                         OffsetDateTime start = OffsetDateTime.now();
-                        logger.info("Solr full import");
+                        logger.info("Solr full import start");
                         executeCommand(SOLR_IMPORT_FULL);
                         waitForCommandToFinish();
                         Duration duration = Duration.between(start, OffsetDateTime.now());
@@ -215,7 +215,7 @@ public class SolrService implements SolrEngineService {
                             lock.notifyAll();
                         }
                         OffsetDateTime start = OffsetDateTime.now();
-                        logger.info("Solr delta import");
+                        logger.info("Solr delta import start");
                         executeCommand(SOLR_IMPORT_PARTIAL);
                         waitForCommandToFinish();
                         Duration duration = Duration.between(start, OffsetDateTime.now());
