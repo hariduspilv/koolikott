@@ -4,12 +4,10 @@ import com.google.inject.Singleton;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,7 +28,6 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
     @Override
     public synchronized void run() {
-        List<SynchronizationAudit> audits = new ArrayList<>();
         try {
             beginTransaction();
             RepositoryService repositoryService = newRepositoryService();
@@ -43,8 +40,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                 //For every repository make a new transaction - one fail will not roll back all repositories
                 beginTransaction();
 
-                SynchronizationAudit audit = repositoryService.synchronize(repository);
-                if (audit != null) audits.add(audit);
+                repositoryService.synchronize(repository);
 
                 closeTransaction();
             }
@@ -54,16 +50,16 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
         } catch (Exception e) {
             logger.error("Unexpected error while synchronizing materials.", e);
         } finally {
-            if (audits.stream().anyMatch(SynchronizationAudit::changeOccured)) {
-                logger.info("Solr full import after synchronizing all materials");
-                solrEngineService.fullImport();
-            } else {
-                logger.info("Synchronizing materials doesn't need solr update");
-            }
+            logger.info("Updating Solr index after synchronizing all materials");
+            solrEngineService.updateIndex();
             closeEntityManager();
         }
     }
 
+    /**
+     * Can be started twice. Please refactor, meanwhile use with care
+     */
+    @Deprecated
     public void scheduleExecution(int hourOfDayToExecute) {
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -81,8 +77,9 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
         Timer timer = new Timer();
         long initialDelay = getInitialDelay(hourOfDayToExecute);
+        long period = DAYS.toMillis(1);
 
-        timer.scheduleAtFixedRate(timerTask, initialDelay, DAYS.toMillis(1));
+        timer.scheduleAtFixedRate(timerTask, initialDelay, period);
     }
 
     public synchronized void stop() {

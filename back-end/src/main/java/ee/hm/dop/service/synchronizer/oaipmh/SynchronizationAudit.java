@@ -9,12 +9,6 @@ public class SynchronizationAudit {
     private long existingMaterialsDeleted;
     private long newMaterialsCreated;
 
-    public boolean changeOccured() {
-        return successfullyDownloaded > 0 || deletedMaterialsDownloaded > 0 ||
-                existingMaterialsUpdated > 0 || existingMaterialsDeleted > 0 ||
-                newMaterialsCreated > 0;
-    }
-
     public long getFailedToDownload() {
         return failedToDownload;
     }

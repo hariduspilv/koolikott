@@ -7,11 +7,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static java.util.concurrent.TimeUnit.DAYS;
-
 @Singleton
 public class AuthenticationStateCleaner extends DopDaemonProcess{
 
@@ -38,23 +33,5 @@ public class AuthenticationStateCleaner extends DopDaemonProcess{
 
     protected AuthenticationStateDao newAuthenticationStateDao() {
         return GuiceInjector.getInjector().getInstance(AuthenticationStateDao.class);
-    }
-
-    public void scheduleExecution(int hourOfDayToExecute) {
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    logger.info("Starting authentication state cleaner");
-                    AuthenticationStateCleaner.this.run();
-                } catch (Exception e) {
-                    logger.error("Unexpected error while cleaning authentication state", e);
-                }
-                logger.info("Finished authentication state cleaner");
-            }
-        };
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, getInitialDelay(hourOfDayToExecute), DAYS.toMillis(1));
     }
 }

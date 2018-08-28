@@ -62,6 +62,10 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
         }
     }
 
+    /**
+     * Can be started twice. Please refactor, meanwhile use with care
+     */
+    @Deprecated
     public void scheduleExecution(int hourOfDayToExecute) {
         TimerTask timerTask = new TimerTask() {
             @Override

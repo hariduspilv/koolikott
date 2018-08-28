@@ -33,7 +33,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 public class SolrService implements SolrEngineService {
 
     static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";
-    static final String SOLR_IMPORT_FULL = "dataimport?command=full-import&wt=json";
     static final String SOLR_DATAIMPORT_STATUS = "dataimport?command=status&wt=json";
     static final String SOLR_STATUS_BUSY = "busy";
     private static final Logger logger = LoggerFactory.getLogger(SolrService.class);
@@ -71,6 +70,16 @@ public class SolrService implements SolrEngineService {
         return response;
     }
 
+    private void setDistinctResultCounts(SolrSearchRequest searchRequest, SolrSearchResponse response) {
+        if (!searchRequest.getGrouping().isAnyGrouping()) return;
+        SolrSearchResponse countResponse = executeCommand(getCountCommand(searchRequest));
+        countResponse.getGrouped().forEach((key, content) -> {
+            if (key.startsWith("(")) response.setSimilarResultCount(content.getGroupResponse().getTotalResults());
+            if (key.startsWith("\"")) response.setExactResultCount(content.getGroupResponse().getTotalResults());
+        });
+
+    }
+
     @Override
     public SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest) {
         SearchGrouping initialGrouping = searchRequest.getGrouping();
@@ -82,6 +91,7 @@ public class SolrService implements SolrEngineService {
         searchRequest.setFirstItem(initialStart);
         return response;
     }
+
 
     @Override
     public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
@@ -113,23 +123,8 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public void fullImport() {
-        indexThread.fullImport();
-    }
-
-    @Override
     public void updateIndex() {
-        indexThread.deltaImport();
-    }
-
-    private void setDistinctResultCounts(SolrSearchRequest searchRequest, SolrSearchResponse response) {
-        if (!searchRequest.getGrouping().isAnyGrouping()) return;
-        SolrSearchResponse countResponse = executeCommand(getCountCommand(searchRequest));
-        countResponse.getGrouped().forEach((key, content) -> {
-            if (key.startsWith("(")) response.setSimilarResultCount(content.getGroupResponse().getTotalResults());
-            if (key.startsWith("\"")) response.setExactResultCount(content.getGroupResponse().getTotalResults());
-        });
-
+        indexThread.updateIndex();
     }
 
     private boolean isIndexingInProgress() {
@@ -176,18 +171,11 @@ public class SolrService implements SolrEngineService {
         private static final int _1_SEC = 1000;
         private static final int _0_1_SEC = 100;
         private final Object lock = new Object();
-        private boolean deltaImport;
-        private boolean fullImport;
+        private boolean updateIndex;
 
-        public void fullImport() {
+        public void updateIndex() {
             synchronized (lock) {
-                fullImport = true;
-            }
-        }
-
-        public void deltaImport() {
-            synchronized (lock) {
-                deltaImport = true;
+                updateIndex = true;
             }
         }
 
@@ -195,21 +183,12 @@ public class SolrService implements SolrEngineService {
         public void run() {
             try {
                 while (true) {
-                    if (fullImport) {
+                    if (updateIndex) {
                         synchronized (lock) {
-                            fullImport = false;
+                            updateIndex = false;
                             lock.notifyAll();
                         }
-                        logger.info("Solr full import");
-                        executeCommand(SOLR_IMPORT_FULL);
-                        waitForCommandToFinish();
-                    }
-                    if (deltaImport) {
-                        synchronized (lock) {
-                            deltaImport = false;
-                            lock.notifyAll();
-                        }
-                        logger.info("Solr delta import");
+                        logger.info("Updating Solr index.");
                         executeCommand(SOLR_IMPORT_PARTIAL);
                         waitForCommandToFinish();
                     }
