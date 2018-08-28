@@ -53,10 +53,6 @@ angular.module('koolikottApp')
             };
 
             function getContentType() {
-                if ($scope.material.embedSource) {
-                    $scope.sourceType = 'EMBEDSOURCE';
-                    return;
-                }
                 const baseUrl = document.location.origin
                 const materialSource = getSource($scope.material)
                 // If the initial type is a LINK, try to ask the type from our proxy
@@ -147,6 +143,7 @@ angular.module('koolikottApp')
                             getSignedUserData()
                         } else {
                             $scope.material.iframeSource = $sce.trustAsResourceUrl($scope.material.source);
+                            $scope.material.linkSource = $scope.material.source;
                         }
                     }
                 }
@@ -177,7 +174,7 @@ angular.module('koolikottApp')
             };
 
             $scope.getMaterialEducationalContexts = () => {
-                let educationalContexts = [];
+                var educationalContexts = [];
                 if (!$scope.material || !$scope.material.taxons) return;
 
                 $scope.material.taxons.forEach((taxon) => {
