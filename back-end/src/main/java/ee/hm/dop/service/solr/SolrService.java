@@ -203,6 +203,7 @@ public class SolrService implements SolrEngineService {
                         logger.info("Solr full import");
                         executeCommand(SOLR_IMPORT_FULL);
                         waitForCommandToFinish();
+                        logger.info("Solr full import has finished");
                     }
                     if (deltaImport) {
                         synchronized (lock) {
@@ -212,6 +213,7 @@ public class SolrService implements SolrEngineService {
                         logger.info("Solr delta import");
                         executeCommand(SOLR_IMPORT_PARTIAL);
                         waitForCommandToFinish();
+                        logger.info("Solr delta import has finished");
                     }
                     sleep(_0_1_SEC);
                 }
