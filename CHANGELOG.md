@@ -1,4 +1,9 @@
-## e-Koolikott [1.21.4](https://github.com/hariduspilv/koolikott/milestone/20) 
+## e-Koolikott [1.21.6](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* vara.e-koolikott.ee täisimpordi loogika täiendused [#363](https://github.com/hariduspilv/koolikott/issues/363)
+
+## e-Koolikott [1.21.4; 1.21.5](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud
 * Partnerite päringute logimine ja logimise sisse/välja lülitamine [#362](https://github.com/hariduspilv/koolikott/issues/363)
