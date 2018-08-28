@@ -20,6 +20,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -200,20 +202,24 @@ public class SolrService implements SolrEngineService {
                             fullImport = false;
                             lock.notifyAll();
                         }
+                        OffsetDateTime start = OffsetDateTime.now();
                         logger.info("Solr full import");
                         executeCommand(SOLR_IMPORT_FULL);
                         waitForCommandToFinish();
-                        logger.info("Solr full import has finished");
+                        Duration duration = Duration.between(start, OffsetDateTime.now());
+                        logger.info("Solr full import has finished {} or {} seconds", duration, duration.getSeconds());
                     }
                     if (deltaImport) {
                         synchronized (lock) {
                             deltaImport = false;
                             lock.notifyAll();
                         }
+                        OffsetDateTime start = OffsetDateTime.now();
                         logger.info("Solr delta import");
                         executeCommand(SOLR_IMPORT_PARTIAL);
                         waitForCommandToFinish();
-                        logger.info("Solr delta import has finished");
+                        Duration duration = Duration.between(start, OffsetDateTime.now());
+                        logger.info("Solr delta import has finished {} or {} seconds", duration, duration.getSeconds());
                     }
                     sleep(_0_1_SEC);
                 }
