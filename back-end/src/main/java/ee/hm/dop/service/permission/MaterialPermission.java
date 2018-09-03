@@ -9,19 +9,13 @@ public class MaterialPermission implements PermissionItem {
 
     @Override
     public boolean canView(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        if (!(learningObject instanceof IMaterial)) return false;
         return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
     }
 
     @Override
     public boolean canInteract(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
+        if (!(learningObject instanceof IMaterial)) return false;
         return isPublic(learningObject) || UserUtil.isAdmin(user);
-    }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (learningObject == null || !(learningObject instanceof IMaterial)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
 }

@@ -18,10 +18,4 @@ public class PortfolioPermission implements PermissionItem {
         if (!(learningObject instanceof IPortfolio)) return false;
         return isPublic(learningObject) || UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
     }
-
-    @Override
-    public boolean canUpdate(User user, ILearningObject learningObject) {
-        if (!(learningObject instanceof IPortfolio)) return false;
-        return UserUtil.isAdminOrModerator(user) || UserUtil.isCreator(learningObject, user);
-    }
 }
