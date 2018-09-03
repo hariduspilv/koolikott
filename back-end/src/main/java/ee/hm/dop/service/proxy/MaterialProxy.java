@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 
 import static java.lang.String.format;
@@ -34,9 +35,9 @@ public class MaterialProxy {
 
         try {
             client.executeMethod(get);
-        } catch (UnknownHostException | IllegalArgumentException e) {
-            logger.info("Could not contact host, returning empty response: " + e.getMessage());
-            return Response.noContent().build();
+        } catch (UnknownHostException | IllegalArgumentException | ConnectException e) {
+            logger.info("Could not contact host {}. Error: {}. Returning empty response.", url_param, e.getMessage(), e);
+            return noContent();
         }
 
         String attachmentLocation = attachmentLocation(get, DopConstants.PDF_EXTENSION, DopConstants.PDF_MIME_TYPE);
@@ -46,11 +47,11 @@ public class MaterialProxy {
         }
         if (attachmentLocation.equals(DopConstants.CONTENT_TYPE)) {
             // Content-Disposition is missing, try to extract the filename from url instead
-            String fileName = url_param.substring(url_param.lastIndexOf("/") + 1, url_param.length());
+            String fileName = url_param.substring(url_param.lastIndexOf("/") + 1);
             String contentDisposition = format("Inline; filename=\"%s\"", fileName);
             return buildContentDispositionResponse(get.getResponseBodyAsStream(), contentDisposition);
         }
-        return Response.noContent().build();
+        return noContent();
     }
 
     private Response buildContentDispositionResponse(InputStream responseBody, String contentDisposition) throws IOException {
@@ -82,5 +83,9 @@ public class MaterialProxy {
             return DopConstants.CONTENT_TYPE;
         }
         return "Invalid";
+    }
+
+    private Response noContent() {
+        return Response.noContent().build();
     }
 }
