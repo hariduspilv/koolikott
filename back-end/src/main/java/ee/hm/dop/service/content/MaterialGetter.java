@@ -10,6 +10,8 @@ import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +45,6 @@ public class MaterialGetter {
         return materialDao.findBySource(materialSource, getMaterialStrategy);
     }
 
-    public Material getOneBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {
-        String materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(initialMaterialSource));
-        checkLink(materialSource);
-        return materialDao.findOneBySource(materialSource, getMaterialStrategy);
-    }
-
     public Material getAnyBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {
         String materialSource = UrlUtil.getURLWithoutProtocolAndWWW(UrlUtil.processURL(initialMaterialSource));
         checkLink(materialSource);
@@ -57,7 +53,7 @@ public class MaterialGetter {
 
     private void checkLink(String materialSource) {
         if (materialSource == null) {
-            throw new RuntimeException("No material source link provided");
+            throw new WebApplicationException("No material source link provided", Response.Status.BAD_REQUEST);
         }
     }
 

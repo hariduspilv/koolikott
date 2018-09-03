@@ -6,11 +6,12 @@ import ee.hm.dop.model.User;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static ee.hm.dop.utils.UserUtil.mustBeAdmin;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 public class AgreementService {
 
@@ -34,7 +35,7 @@ public class AgreementService {
     public Agreement save(Agreement agreement, User user) {
         mustBeAdmin(user);
         if (agreement.getVersion() == null || agreement.getValidFrom() == null){
-            throw new RuntimeException("missing data");
+            throw new WebApplicationException("missing version or validFrom", Response.Status.BAD_REQUEST);
         }
         agreement.setValidFrom(agreement.getValidFrom().withTimeAtStartOfDay());
         agreement.setVersion(agreement.getVersion().trim());

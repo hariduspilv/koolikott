@@ -63,7 +63,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void adding_tag_with_same_name_throws_an_error()  {
+    public void adding_tag_with_same_name_doesnt_add_it()  {
         login(USER_PEETER);
 
         Portfolio portfolio = getPortfolio(PORTFOLIO_8);
@@ -73,7 +73,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Add regular tag", Status.OK.getStatusCode(), response.getStatus());
 
         Response response2 = doPut(format(ADD_TAG_URL, PORTFOLIO_8), tag(TEST_TAG_2));
-        assertEquals("Add tag with same name", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response2.getStatus());
+        assertEquals("Add tag with same name", Status.OK.getStatusCode(), response2.getStatus());
     }
 
     @Test

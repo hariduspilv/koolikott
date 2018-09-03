@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -224,10 +225,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Material source", SOURCE_ONE_MATERIAL, materialBySource.getSource());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void asking_materials_by_null_source_causes_exception() {
+    @Test
+    public void asking_materials_by_null_source_is_a_bad_request() {
         login(USER_PEETER);
-        doGet(GET_MATERIAL_BY_SOURCE_URL, listOfMaterials());
+        Response response = doGet(GET_MATERIAL_BY_SOURCE_URL);
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test

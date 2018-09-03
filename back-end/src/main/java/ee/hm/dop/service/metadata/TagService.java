@@ -24,8 +24,6 @@ public class TagService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private TagService tagService;
-    @Inject
     private TagConverter tagConverter;
     @Inject
     private LearningObjectService learningObjectService;
@@ -46,7 +44,6 @@ public class TagService {
         ValidatorUtil.mustHaveEntity(learningObject);
 
         LearningObject newLearningObject = addTag(learningObject, tag, user);
-        //todo why does system tag return tag dto
         return tagConverter.addChangeReturnTagDto(tag.getName(), newLearningObject, user);
     }
 
@@ -57,7 +54,7 @@ public class TagService {
 
         List<Tag> tags = learningObject.getTags();
         if (tags.contains(newTag)) {
-            throw new RuntimeException("Learning Object already contains tag");
+            return learningObject;
         }
 
         tags.add(newTag);
