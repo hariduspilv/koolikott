@@ -1,6 +1,8 @@
 package ee.hm.dop.service.metadata;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.TagDao;
@@ -54,7 +56,7 @@ public class TagService {
 
         List<Tag> tags = learningObject.getTags();
         if (tags.contains(newTag)) {
-            return learningObject;
+            throw new WebApplicationException("tag already exists", Response.Status.BAD_REQUEST);
         }
 
         tags.add(newTag);
