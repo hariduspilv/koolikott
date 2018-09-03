@@ -32,7 +32,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String CREATE_MATERIAL_URL = "material/create";
     public static final String UPDATE_MATERIAL_URL = "material/update";
     public static final String RESTORE_MATERIAL = "admin/deleted/restore";
-    public static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?url=%s";
+    public static final String EXTERNAL_MATERIAL_URL = "material/externalMaterial?id=%s&url=%s";
     public static final String GET_MATERIAL_BY_SOURCE_URL = "material/getBySource?source=";
     public static final String GET_ONE_MATERIAL_BY_SOURCE_URL = "material/getOneBySource?source=";
     public static final String SOURCE_ONE_MATERIAL = "https://www.youtube.com/watch?v=gSWbx3CvVUk";
@@ -262,7 +262,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getProxyUrl_returns_external_material_if_it_exists() throws Exception {
-        Response response = doGet(format(EXTERNAL_MATERIAL_URL, getMaterial(MATERIAL_3).getSource()), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        Response response = doGet(format(EXTERNAL_MATERIAL_URL, MATERIAL_3, getMaterial(MATERIAL_3).getSource()), MediaType.APPLICATION_OCTET_STREAM_TYPE);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         int available = response.readEntity(InputStream.class).available();
         assertTrue("Response input stream", available > 0);

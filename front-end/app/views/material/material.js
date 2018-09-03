@@ -63,7 +63,7 @@ angular.module('koolikottApp')
                 if (materialSource && (matchType(materialSource) === 'LINK' || !materialSource.startsWith(baseUrl))) {
                     if (!baseUrl.startsWith("http://localhost:3001")) {
                         $scope.fallbackType = matchType(materialSource);
-                        $scope.proxyUrl = baseUrl + "/rest/material/externalMaterial?url=" + encodeURIComponent($scope.material.source);
+                        $scope.proxyUrl = `${baseUrl}/rest/material/externalMaterial?id=${$scope.material.id}&url=${encodeURIComponent($scope.material.source)}`;
                         serverCallService.makeHead($scope.proxyUrl, {}, probeContentSuccess, probeContentFail);
                     }
                 }

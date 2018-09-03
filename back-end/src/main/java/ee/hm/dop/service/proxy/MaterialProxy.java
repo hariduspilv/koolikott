@@ -28,7 +28,7 @@ import static java.lang.String.format;
 public class MaterialProxy {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public Response getProxyUrl(String url_param) throws IOException {
+    public Response getProxyUrl(Long id, String url_param) throws IOException {
         HttpClient client = new HttpClient();
         client.setHostConfiguration(hostConfig(url_param));
         GetMethod get = getMethod(url_param);
@@ -36,7 +36,7 @@ public class MaterialProxy {
         try {
             client.executeMethod(get);
         } catch (UnknownHostException | IllegalArgumentException | ConnectException e) {
-            logger.info("Could not contact host {}. Error: {}. Returning empty response.", url_param, e.getMessage(), e);
+            logger.info("Could not contact host {}. LearningObject id: {} Error: {}. Returning empty response.", url_param, id, e.getMessage(), e);
             return noContent();
         }
 

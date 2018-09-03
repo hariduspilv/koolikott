@@ -52,7 +52,7 @@ class controller extends Controller {
                     this.$scope.url = this.getPDFJSURL(url)
                 } else
                     this.serverCallService
-                        .makeHead('/rest/material/externalMaterial?url=' + encodeURIComponent(url))
+                        .makeHead(`/rest/material/externalMaterial?id=${this.data.id}&url=${encodeURIComponent(url)}`)
                         .then(({ headers }) => {
                             const { 'content-disposition': contentDisposition } = headers()
                             const proxyType = contentDisposition && this.getEmbeddedMaterialType({
@@ -64,7 +64,7 @@ class controller extends Controller {
 
                             this.$scope.type = 'PDF'
                             this.$scope.url = this.getPDFJSURL(
-                                encodeURIComponent('/rest/material/externalMaterial?url=' + url)
+                                encodeURIComponent(`/rest/material/externalMaterial?id=${this.data.id}&url=${url}`)
                             )
                         })
                 break
