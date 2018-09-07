@@ -1,3 +1,8 @@
+## e-Koolikott [1.21.7](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* Plumbr statistika kood [#364](https://github.com/hariduspilv/koolikott/issues/364)
+
 ## e-Koolikott [1.21.6](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud

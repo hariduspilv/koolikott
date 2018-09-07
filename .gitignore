@@ -7,6 +7,8 @@
 back-end/dop.iml
 /back-end/src/main/resources/custom.properties
 
+/scripts/plumbr_script
+
 /solr-indexer/.settings/
 /solr-indexer/.project
 /solr-indexer/.classpath
