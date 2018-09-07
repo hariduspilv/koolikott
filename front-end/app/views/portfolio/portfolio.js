@@ -53,7 +53,7 @@ class controller extends Controller {
             this.serverCallService
                 .makeGet('rest/portfolio', { id })
                 .then(({ status, data }) =>
-                    200 <= status && status < 300
+                    200 <= status && status < 300 && data
                         ? this.setPortfolio(data, false) || this.increaseViewCount()
                         : fail(),
                     fail
