@@ -78,19 +78,6 @@ angular.module('koolikottApp')
             }
         }
 
-        function eKoolLoginFail() {
-            console.log('Logging in failed.');
-            $mdDialog.hide();
-            alertService.setErrorAlert15s('ERROR_LOGIN_FAILED_EKOOL');
-            enableLogin();
-            authenticatedUserService.removeAuthenticatedUser();
-
-            if (isOAuthAuthentication) {
-                localStorage.removeItem(LOGIN_ORIGIN);
-                $location.url('/');
-            }
-        }
-
         function idCodeLoginFail(msg) {
             console.log('Logging in failed.');
             $mdDialog.hide();
@@ -98,10 +85,9 @@ angular.module('koolikottApp')
             enableLogin();
             authenticatedUserService.removeAuthenticatedUser();
 
-            if (isOAuthAuthentication) {
-                localStorage.removeItem(LOGIN_ORIGIN);
-                $location.url('/');
-            }
+            localStorage.removeItem(LOGIN_ORIGIN);
+            $location.url('/');
+
         }
 
         function finishLogin(authenticatedUser) {
