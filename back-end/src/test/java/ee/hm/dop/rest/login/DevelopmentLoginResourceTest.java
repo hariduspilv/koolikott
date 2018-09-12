@@ -1,19 +1,15 @@
 package ee.hm.dop.rest.login;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.User;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
@@ -34,8 +30,7 @@ public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void cant_log_in_without_idCode() {
-        Response response = doGet(null);
+        Response response = doGet(DEV_LOGIN);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
-
     }
 }
