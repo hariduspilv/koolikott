@@ -1,15 +1,14 @@
 package ee.hm.dop.config.guice.provider.mock.stuudium.stuudiumuser;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.config.guice.provider.mock.rs.client.Builder;
 import ee.hm.dop.config.guice.provider.mock.stuudium.StuudiumResponse;
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import org.apache.commons.codec.digest.HmacUtils;
+
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StuudiumUserBuilder extends Builder {
 
@@ -49,7 +48,7 @@ public class StuudiumUserBuilder extends Builder {
     }
 
     private void validateToken(String token) {
-        if (token == null || !token.equals("987654")) {
+        if (token == null || !(token.equals("987654") || token.equals("123223"))) {
             throw new RuntimeException("Invalid token: " + token);
         }
     }

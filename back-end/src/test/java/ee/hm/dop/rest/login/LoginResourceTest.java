@@ -85,12 +85,10 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals(307, response.getStatus());
 
         logout();
-
     }
 
     @Test
     public void ekoolAuthenticateSuccessTwo() {
-
         Response response = doGet("login/ekool/success?code=987654321");
         String url = response.getHeaderString("Location");
         assertTrue(url.contains("token"));
@@ -115,9 +113,10 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String url = response.getHeaderString("Location");
         assertFalse(url.contains("token"));
         assertEquals(307, response.getStatus());
+
+        logout();
     }
 
-    @Ignore
     @Test
     public void stuudiumAuthenticateSuccess() {
         Response response = doGet("login/stuudium?token=987654");
@@ -128,7 +127,6 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         logout();
     }
 
-    @Ignore
     @Test
     public void stuudium_user_without_id_code_returns_missing_id_message() {
         Response response = doGet("login/stuudium?token=123223");
@@ -146,6 +144,8 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
         assertFalse(url.contains("token"));
         assertEquals(307, response.getStatus());
+
+        logout();
     }
 
     @Test

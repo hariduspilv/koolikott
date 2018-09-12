@@ -15,7 +15,6 @@ public class StuudiumUserWebTarget extends WebTargetMock {
     public Builder request() {
         StuudiumUserBuilder stuudiumUserBuilder = new StuudiumUserBuilder(params);
         params = new MultivaluedStringMap();
-
         return stuudiumUserBuilder;
     }
 
