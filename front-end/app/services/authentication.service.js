@@ -219,10 +219,12 @@ angular.module('koolikottApp')
                 const {token, agreement, existingUser, eKoolLoginMissingIdCode, stuudiumLoginMissingIdCode} = inputParams;
                 if (eKoolLoginMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
+                    return;
                 }
 
                 if (stuudiumLoginMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_STUUDIUM');
+                    return;
                 }
 
                 isOAuthAuthentication = true;
