@@ -4,6 +4,8 @@ import ee.hm.dop.model.AuthenticatedUser;
 
 public class UserStatus {
 
+    private boolean eKoolLoginMissingIdCode;
+    private boolean stuudiumLoginMissingIdCode;
     private boolean statusOk;
     private boolean existingUser;
     private boolean userConfirmed;
@@ -35,12 +37,40 @@ public class UserStatus {
         return status;
     }
 
+    public static UserStatus missingEkoolIdCode() {
+        UserStatus userStatus = new UserStatus();
+        userStatus.seteKoolLoginMissingIdCode(true);
+        return userStatus;
+    }
+
+    public static UserStatus missingStuudiumIdCode() {
+        UserStatus userStatus = new UserStatus();
+        userStatus.setStuudiumLoginMissingIdCode(true);
+        return userStatus;
+    }
+
     public boolean isStatusOk() {
         return statusOk;
     }
 
     public void setStatusOk(boolean statusOk) {
         this.statusOk = statusOk;
+    }
+
+    public boolean iseKoolLoginMissingIdCode() {
+        return eKoolLoginMissingIdCode;
+    }
+
+    public boolean isStuudiumLoginMissingIdCode() {
+        return stuudiumLoginMissingIdCode;
+    }
+
+    public void seteKoolLoginMissingIdCode(boolean eKoolLoginMissingIdCode) {
+        this.eKoolLoginMissingIdCode = eKoolLoginMissingIdCode;
+    }
+
+    public void setStuudiumLoginMissingIdCode(boolean stuudiumLoginMissingIdCode) {
+        this.stuudiumLoginMissingIdCode = stuudiumLoginMissingIdCode;
     }
 
     public String getToken() {

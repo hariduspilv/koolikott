@@ -15,21 +15,10 @@ public class StuudiumUserBuilder extends Builder {
 
     private MultivaluedMap<String, String> params;
 
-    private static final Map<String, StuudiumUser> results;
+    private static final Map<String, StuudiumUser> results = map();
 
     private static final String STUUDIUM_CLIENT_ID = "123456789CLIENTID123456789";
     private static final String STUUDIUM_CLIENT_SECRET = "999888777TEST666555444";
-
-    static {
-        results = new HashMap<>();
-
-        StuudiumUser stuudiumUser = new StuudiumUser();
-        stuudiumUser.setIdCode("10203020100");
-        stuudiumUser.setFirstName("Juhan");
-        stuudiumUser.setLastName("Juulius Teesaar");
-
-        results.put("987654", stuudiumUser);
-    }
 
     public StuudiumUserBuilder(MultivaluedMap<String, String> params) {
         this.params = params;
@@ -71,4 +60,18 @@ public class StuudiumUserBuilder extends Builder {
         }
     }
 
+    private static Map<String, StuudiumUser> map() {
+        Map<String, StuudiumUser> results = new HashMap<>();
+        results.put("987654", user("10203020100", "Juhan", "Juulius Teesaar"));
+        results.put("123223", user(null, "Mida", "Iganes Iganes"));
+        return results;
+    }
+
+    private static StuudiumUser user(String idCode, String mida, String iganes_iganes) {
+        StuudiumUser stuudiumUser1 = new StuudiumUser();
+        stuudiumUser1.setIdCode(idCode);
+        stuudiumUser1.setFirstName(mida);
+        stuudiumUser1.setLastName(iganes_iganes);
+        return stuudiumUser1;
+    }
 }

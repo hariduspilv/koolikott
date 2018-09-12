@@ -13,17 +13,20 @@ public class EkoolPersonBuilder extends Builder {
 
     private static final String AUTH_HEADER_HASH1 = "Bearer shdsajhfuh5484618";
     private static final String AUTH_HEADER_HASH2 = "Bearer 54fdsgffs4566fds51dsds4g";
+    private static final String AUTH_HEADER_HASH3 = "Bearer 3453455sdfjbljkabsfb";
     private static Person person = null;
 
     @Override
     public Builder header(String name, Object value) {
         if (name.equals("Authorization")) {
             assertEquals("Authorization", name);
-            assertTrue(AUTH_HEADER_HASH1.equals(value) || AUTH_HEADER_HASH2.equals(value));
+            assertTrue(AUTH_HEADER_HASH1.equals(value) || AUTH_HEADER_HASH2.equals(value) || AUTH_HEADER_HASH3.equals(value));
             if (AUTH_HEADER_HASH1.equals(value)){
                 person = person1();
             } else if (AUTH_HEADER_HASH2.equals(value)){
                 person = person2();
+            } else if (AUTH_HEADER_HASH3.equals(value)) {
+                person = person3();
             }
         } else if (name.equals("Content-Type")){
             assertEquals("Content-Type", name);
@@ -43,6 +46,10 @@ public class EkoolPersonBuilder extends Builder {
 
     private Person person2() {
         return person("firstname2", "lastname2", "222222");
+    }
+
+    private Person person3() {
+        return person("firstname3", "lastname3", "");
     }
 
     private Person person(String firstname1, String lastname1, String s) {

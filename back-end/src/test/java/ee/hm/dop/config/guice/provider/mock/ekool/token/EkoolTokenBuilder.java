@@ -20,22 +20,10 @@ public class EkoolTokenBuilder extends Builder {
     private static final String AUTH_HEADER_HASH = "Basic "
             + Base64.getEncoder().encodeToString("koolikott:9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m".getBytes(StandardCharsets.UTF_8));
 
-    private static final Map<String, EkoolToken> tokenMap;
+    private static final Map<String, EkoolToken> tokenMap = initMap();
     private static final String CODE_1 = "123456789";
     private static final String CODE_2 = "987654321";
-
-    static {
-        tokenMap = new HashMap<>();
-
-        EkoolToken token1 = new EkoolToken();
-
-        token1.setAccessToken("shdsajhfuh5484618");
-        tokenMap.put(CODE_1, token1);
-
-        EkoolToken token2 = new EkoolToken();
-        token2.setAccessToken("54fdsgffs4566fds51dsds4g");
-        tokenMap.put(CODE_2, token2);
-    }
+    private static final String CODE_3 = "123123456";
 
     @Override
     public Builder header(String name, Object value) {
@@ -60,5 +48,19 @@ public class EkoolTokenBuilder extends Builder {
         }
 
         return new EkoolResponse(ekoolToken);
+    }
+
+    private static HashMap<String, EkoolToken> initMap() {
+        HashMap<String, EkoolToken> tokenMap = new HashMap<>();
+        tokenMap.put(CODE_1, getEkoolToken("shdsajhfuh5484618"));
+        tokenMap.put(CODE_2, getEkoolToken("54fdsgffs4566fds51dsds4g"));
+        tokenMap.put(CODE_3, getEkoolToken("3453455sdfjbljkabsfb"));
+        return tokenMap;
+    }
+
+    private static EkoolToken getEkoolToken(String accessToken) {
+        EkoolToken token1 = new EkoolToken();
+        token1.setAccessToken(accessToken);
+        return token1;
     }
 }

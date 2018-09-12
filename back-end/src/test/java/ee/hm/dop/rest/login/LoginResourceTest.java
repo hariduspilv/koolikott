@@ -90,9 +90,20 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void ekoolAuthenticateSuccessTwo() {
+
         Response response = doGet("login/ekool/success?code=987654321");
         String url = response.getHeaderString("Location");
-        assertEquals(true, url.contains("token"));
+        assertTrue(url.contains("token"));
+        assertEquals(307, response.getStatus());
+
+        logout();
+    }
+
+    @Test
+    public void eKool_authentication_without_id_code_returns_missin_id_message() {
+        Response response = doGet("login/ekool/success?code=123123456");
+        String url = response.getHeaderString("Location");
+        assertTrue(url.contains("eKoolLoginMissingIdCode=true"));
         assertEquals(307, response.getStatus());
 
         logout();
@@ -102,27 +113,27 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void ekoolAuthenticateFail() {
         Response response = doGet("login/ekool/success?code=000000");
         String url = response.getHeaderString("Location");
-
-        boolean hasToken = false;
-        if (url.contains("token")) {
-            hasToken = true;
-        }
-        assertEquals(false, hasToken);
+        assertFalse(url.contains("token"));
         assertEquals(307, response.getStatus());
-
     }
 
+    @Ignore
     @Test
     public void stuudiumAuthenticateSuccess() {
         Response response = doGet("login/stuudium?token=987654");
         String url = response.getHeaderString("Location");
+        assertTrue(url.contains("token"));
+        assertEquals(307, response.getStatus());
 
-        boolean hasToken = false;
-        if (url.contains("token")) {
-            hasToken = true;
-        }
+        logout();
+    }
 
-        assertEquals(true, hasToken);
+    @Ignore
+    @Test
+    public void stuudium_user_without_id_code_returns_missing_id_message() {
+        Response response = doGet("login/stuudium?token=123223");
+        String url = response.getHeaderString("Location");
+        assertTrue(url.contains("stuudiumLoginMissingIdCode=true"));
         assertEquals(307, response.getStatus());
 
         logout();
@@ -133,12 +144,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         Response response = doGet("login/stuudium?token=000000");
         String url = response.getHeaderString("Location");
 
-        boolean hasToken = false;
-        if (url.contains("token")) {
-            hasToken = true;
-        }
-
-        assertEquals(false, hasToken);
+        assertFalse(url.contains("token"));
         assertEquals(307, response.getStatus());
     }
 

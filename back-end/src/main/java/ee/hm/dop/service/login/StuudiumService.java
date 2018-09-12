@@ -5,6 +5,7 @@ import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,9 @@ public class StuudiumService {
 
     public UserStatus authenticate(String token) {
         StuudiumUser stuudiumUser = getStuudiumUser(token);
+        if (StringUtils.isBlank(stuudiumUser.getIdCode())) {
+            return UserStatus.missingStuudiumIdCode();
+        }
         return loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
     }
 

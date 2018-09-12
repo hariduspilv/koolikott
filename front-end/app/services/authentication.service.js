@@ -78,6 +78,32 @@ angular.module('koolikottApp')
             }
         }
 
+        function eKoolLoginFail() {
+            console.log('Logging in failed.');
+            $mdDialog.hide();
+            alertService.setErrorAlert15s('ERROR_LOGIN_FAILED_EKOOL');
+            enableLogin();
+            authenticatedUserService.removeAuthenticatedUser();
+
+            if (isOAuthAuthentication) {
+                localStorage.removeItem(LOGIN_ORIGIN);
+                $location.url('/');
+            }
+        }
+
+        function idCodeLoginFail(msg) {
+            console.log('Logging in failed.');
+            $mdDialog.hide();
+            alertService.setErrorAlert15s(msg);
+            enableLogin();
+            authenticatedUserService.removeAuthenticatedUser();
+
+            if (isOAuthAuthentication) {
+                localStorage.removeItem(LOGIN_ORIGIN);
+                $location.url('/');
+            }
+        }
+
         function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
 
@@ -189,17 +215,25 @@ angular.module('koolikottApp')
                 loginWithOAuth("/rest/login/stuudium");
             },
 
-            authenticateUsingOAuth: function(token, agreement, existingUser) {
-                const params = {
-                    'token': token
-                };
+            authenticateUsingOAuth: function(inputParams) {
+                const {token, agreement, existingUser, eKoolLoginMissingIdCode, stuudiumLoginMissingIdCode} = inputParams;
+                if (eKoolLoginMissingIdCode) {
+                    idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
+                }
+
+                if (stuudiumLoginMissingIdCode) {
+                    idCodeLoginFail('ERROR_LOGIN_FAILED_STUUDIUM');
+                }
 
                 isOAuthAuthentication = true;
                 if (!(agreement || existingUser)){
-                    serverCallService.makeGet("rest/login/getAuthenticatedUser", params, authenticateUser, loginFail);
+                    serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
                 } else {
-                    params.agreementId = agreement;
-                    params.existingUser = existingUser;
+                    const params = {
+                        token,
+                        agreementId : agreement,
+                        existingUser
+                    }
                     showGdprModalAndAct(params);
                 }
             },

@@ -23,7 +23,7 @@ public class MaterialTests {
 				.addDescription()
 				.addMaterialLicenseType()
 				.selectEducation()
-				.selectSubjectArea()
+				.selectSubjectAreNa()
 				.selectTargetGroup()
 				.clickAdditionalData()
 				.uploadIllustration()
