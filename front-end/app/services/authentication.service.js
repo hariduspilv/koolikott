@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog', 'toastService',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog, toastService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
 
@@ -81,7 +81,7 @@ angular.module('koolikottApp')
         function idCodeLoginFail(msg) {
             console.log('Logging in failed.');
             $mdDialog.hide();
-            alertService.setErrorAlert15s(msg);
+            toastService.show(msg, 15000);
             enableLogin();
             authenticatedUserService.removeAuthenticatedUser();
 
@@ -202,13 +202,13 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                const {token, agreement, existingUser, eKoolLoginMissingIdCode, stuudiumLoginMissingIdCode} = inputParams;
-                if (eKoolLoginMissingIdCode) {
+                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode} = inputParams;
+                if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
                 }
 
-                if (stuudiumLoginMissingIdCode) {
+                if (stuudiumUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_STUUDIUM');
                     return;
                 }

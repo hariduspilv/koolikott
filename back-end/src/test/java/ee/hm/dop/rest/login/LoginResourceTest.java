@@ -101,7 +101,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void eKool_authentication_without_id_code_returns_missin_id_message() {
         Response response = doGet("login/ekool/success?code=123123456");
         String url = response.getHeaderString("Location");
-        assertTrue(url.contains("eKoolLoginMissingIdCode=true"));
+        assertTrue(url.contains("eKoolUserMissingIdCode=true"));
         assertEquals(307, response.getStatus());
 
         logout();
@@ -131,7 +131,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public void stuudium_user_without_id_code_returns_missing_id_message() {
         Response response = doGet("login/stuudium?token=123223");
         String url = response.getHeaderString("Location");
-        assertTrue(url.contains("stuudiumLoginMissingIdCode=true"));
+        assertTrue(url.contains("stuudiumUserMissingIdCode=true"));
         assertEquals(307, response.getStatus());
 
         logout();

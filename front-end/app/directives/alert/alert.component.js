@@ -5,7 +5,7 @@ class controller extends Controller {
     $onInit() {
         this.$scope.$watch(
             () => this.alertService.getAlert(),
-            ({ message, timeout = 3000 }) => {
+            ({ message, timeout = 5000 }) => {
                 if (message) {
                     this.toastService.show(message, timeout)
                     this.alertService.clearMessage()

@@ -1,10 +1,11 @@
 package ee.hm.dop.service.login;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class EkoolService {
     public UserStatus authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
         Person person = getPerson(ekoolToken);
-        if (StringUtils.isBlank(person.getIdCode())) {
+        if (isBlank(person.getIdCode())) {
             return UserStatus.missingEkoolIdCode();
         }
         return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName());

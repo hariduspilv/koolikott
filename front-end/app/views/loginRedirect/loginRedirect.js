@@ -5,7 +5,6 @@ angular.module('koolikottApp')
 [
     'authenticationService', '$route',
     function(authenticationService, $route) {
-        const params = $route.current.params;
-        authenticationService.authenticateUsingOAuth(params);
+        authenticationService.authenticateUsingOAuth($route.current.params);
     }
 ]);

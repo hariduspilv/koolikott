@@ -4,8 +4,8 @@ import ee.hm.dop.model.AuthenticatedUser;
 
 public class UserStatus {
 
-    private boolean eKoolLoginMissingIdCode;
-    private boolean stuudiumLoginMissingIdCode;
+    private boolean eKoolUserMissingIdCode;
+    private boolean stuudiumUserMissingIdCode;
     private boolean statusOk;
     private boolean existingUser;
     private boolean userConfirmed;
@@ -39,13 +39,13 @@ public class UserStatus {
 
     public static UserStatus missingEkoolIdCode() {
         UserStatus userStatus = new UserStatus();
-        userStatus.seteKoolLoginMissingIdCode(true);
+        userStatus.seteKoolUserMissingIdCode(true);
         return userStatus;
     }
 
     public static UserStatus missingStuudiumIdCode() {
         UserStatus userStatus = new UserStatus();
-        userStatus.setStuudiumLoginMissingIdCode(true);
+        userStatus.setStuudiumUserMissingIdCode(true);
         return userStatus;
     }
 
@@ -57,20 +57,20 @@ public class UserStatus {
         this.statusOk = statusOk;
     }
 
-    public boolean iseKoolLoginMissingIdCode() {
-        return eKoolLoginMissingIdCode;
+    public boolean iseKoolUserMissingIdCode() {
+        return eKoolUserMissingIdCode;
     }
 
-    public boolean isStuudiumLoginMissingIdCode() {
-        return stuudiumLoginMissingIdCode;
+    public boolean isStuudiumUserMissingIdCode() {
+        return stuudiumUserMissingIdCode;
     }
 
-    public void seteKoolLoginMissingIdCode(boolean eKoolLoginMissingIdCode) {
-        this.eKoolLoginMissingIdCode = eKoolLoginMissingIdCode;
+    public void seteKoolUserMissingIdCode(boolean eKoolUserMissingIdCode) {
+        this.eKoolUserMissingIdCode = eKoolUserMissingIdCode;
     }
 
-    public void setStuudiumLoginMissingIdCode(boolean stuudiumLoginMissingIdCode) {
-        this.stuudiumLoginMissingIdCode = stuudiumLoginMissingIdCode;
+    public void setStuudiumUserMissingIdCode(boolean stuudiumUserMissingIdCode) {
+        this.stuudiumUserMissingIdCode = stuudiumUserMissingIdCode;
     }
 
     public String getToken() {
