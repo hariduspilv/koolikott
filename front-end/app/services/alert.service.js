@@ -19,7 +19,6 @@ factory('alertService', class {
         this.alert.message = message
         this.alert.type = 'alert-danger'
         this.alert.timeout = 15000
-
     }
 
 })
