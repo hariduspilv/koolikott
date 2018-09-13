@@ -16,9 +16,9 @@ angular.module('koolikottApp')
         });
 
         instance = {
-            show: function(translationKey) {
+            show: function(translationKey, hideDelay) {
                 $translate(translationKey).then(translatedStr =>
-                    $mdToast.show($mdToast.simple().position('right bottom').content(translatedStr))
+                    $mdToast.show($mdToast.simple().position('right bottom').content(translatedStr).hideDelay(hideDelay))
                 )
             },
 
