@@ -3,10 +3,10 @@
 angular.module('koolikottApp')
     .controller('materialController', [
         '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
-        'searchService', '$location', 'alertService', 'authenticatedUserService', 'dialogService',
+        'searchService', '$location', 'authenticatedUserService', 'dialogService',
         'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce',
         function ($scope, serverCallService, $route, translationService, $rootScope,
-                  searchService, $location, alertService, authenticatedUserService, dialogService,
+                  searchService, $location, authenticatedUserService, dialogService,
                   toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce) {
 
             $scope.showMaterialContent = false;
@@ -111,7 +111,7 @@ angular.module('koolikottApp')
             function getMaterialSuccess(material) {
                 if (isEmpty(material)) {
                     console.log('No data returned by getting material. Redirecting to landing page');
-                    alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
+                    toastService.show('ERROR_MATERIAL_NOT_FOUND');
                     $location.url("/");
                 } else {
                     $scope.material = material;
@@ -126,7 +126,7 @@ angular.module('koolikottApp')
 
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
-                alertService.setErrorAlert('ERROR_MATERIAL_NOT_FOUND');
+                toastService.show('ERROR_MATERIAL_NOT_FOUND');
                 $location.url("/");
             }
 

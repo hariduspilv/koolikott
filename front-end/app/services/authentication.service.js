@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', 'alertService', '$mdDialog', 'toastService',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, alertService, $mdDialog, toastService) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
 
@@ -62,7 +62,7 @@ angular.module('koolikottApp')
         function loginFail() {
             console.log('Logging in failed.');
             $mdDialog.hide();
-            alertService.setErrorAlert('ERROR_LOGIN_FAILED');
+            toastService.show('ERROR_LOGIN_FAILED');
             enableLogin();
             authenticatedUserService.removeAuthenticatedUser();
 
@@ -105,7 +105,7 @@ angular.module('koolikottApp')
             localStorage.removeItem(LOGIN_ORIGIN);
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
-            alertService.setErrorAlert('LOGIN_SUCCESS');
+            toastService.show('LOGIN_SUCCESS');
 
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();

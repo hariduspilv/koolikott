@@ -70,7 +70,7 @@ class controller extends Controller {
     }
     fetchPortfolio() {
         const fail = () => {
-            this.alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND')
+            this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
             this.$location.url('/')
         }
         this.serverCallService
@@ -148,11 +148,11 @@ controller.$inject = [
     '$timeout',
     '$document',
     '$translate',
-    'alertService',
     'authenticatedUserService',
     'dialogService',
     'serverCallService',
     'storageService',
+    'toastService',
 ]
 angular.module('koolikottApp').controller('editPortfolioController', controller)
 }

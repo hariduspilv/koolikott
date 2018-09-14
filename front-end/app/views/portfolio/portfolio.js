@@ -46,7 +46,7 @@ class controller extends Controller {
     getPortfolio() {
         const { id } = this.$route.current.params
         const fail = () => {
-            this.alertService.setErrorAlert('ERROR_PORTFOLIO_NOT_FOUND')
+            this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
             this.$location.url('/')
         }
         if (id)
@@ -105,11 +105,11 @@ controller.$inject = [
     '$route',
     '$location',
     '$timeout',
-    'alertService',
     'authenticatedUserService',
     'eventService',
     'serverCallService',
     'storageService',
+    'toastService',
 ]
 angular.module('koolikottApp').controller('portfolioController', controller)
 }
