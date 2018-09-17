@@ -15,7 +15,7 @@ import org.hibernate.annotations.Where;
 public class Specialization extends Taxon {
 
     @OneToMany(mappedBy = "specialization")
-    @Where(clause = "used = 'true'")
+    @Where(clause = "used = 1")
     private Set<Module> modules;
 
     @JsonIgnore

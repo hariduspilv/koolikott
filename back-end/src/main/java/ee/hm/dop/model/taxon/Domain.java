@@ -18,7 +18,7 @@ public class Domain extends Taxon {
     private Set<Subject> subjects;
 
     @OneToMany(mappedBy = "domain")
-    @Where(clause = "used = 'true'")
+    @Where(clause = "used = 1")
     private Set<Topic> topics;
 
     @JsonIgnore

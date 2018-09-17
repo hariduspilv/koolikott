@@ -14,7 +14,7 @@ import org.hibernate.annotations.Where;
 public class Subject extends Taxon {
 
     @OneToMany(mappedBy = "subject")
-    @Where(clause = "used = 'true'")
+    @Where(clause = "used = 1")
     private Set<Topic> topics;
 
     @JsonIgnore

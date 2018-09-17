@@ -15,7 +15,7 @@ import org.hibernate.annotations.Where;
 public class EducationalContext extends Taxon {
 
     @OneToMany(mappedBy = "educationalContext")
-    @Where(clause = "used = 'true'")
+    @Where(clause = "used = 1")
     private Set<Domain> domains;
 
     @JsonIgnore
