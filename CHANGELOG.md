@@ -1,3 +1,8 @@
+## e-Koolikott [1.21.8](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* ekoolist ja stuudiumist tulevate isikukoodita kasutajate loogika täiendus [#367](https://github.com/hariduspilv/koolikott/issues/367)
+
 ## e-Koolikott [1.21.7](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud
