@@ -4,14 +4,11 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.util.Set;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.annotations.Where;
 
 @Entity
 @DiscriminatorValue("DOMAIN")
@@ -21,7 +18,12 @@ public class Domain extends Taxon {
     private Set<Subject> subjects;
 
     @OneToMany(mappedBy = "domain")
+    @Where(clause = "used = 'true'")
     private Set<Topic> topics;
+
+    @JsonIgnore
+    @Column(nullable = false, insertable = false)
+    private boolean used;
 
     @OneToMany(mappedBy = "domain")
     private Set<Specialization> specializations;
@@ -83,5 +85,15 @@ public class Domain extends Taxon {
         Set<Topic> topics = getTopics();
         if (CollectionUtils.isNotEmpty(topics)) return topics;
         return getSpecializations();
+    }
+
+    @Override
+    public boolean isUsed() {
+        return used;
+    }
+
+    @Override
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }

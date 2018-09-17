@@ -40,6 +40,10 @@ public abstract class Taxon implements AbstractEntity {
     @Column(nullable = false, insertable = false)
     private String nameLowercase;
 
+    @JsonIgnore
+    @Column(nullable = false, insertable = false)
+    private boolean used;
+
     @Column(nullable = false, name = "level")
     private String taxonLevel;
 
@@ -166,5 +170,13 @@ public abstract class Taxon implements AbstractEntity {
 
     public void setTranslationKey(String translationKey) {
         this.translationKey = translationKey;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }
