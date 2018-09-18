@@ -20,7 +20,7 @@ class controller extends Controller {
 
             // Taxon is Domain
             else if (this.taxon.parentLevel === '.EducationalContext') {
-                if (parentEdCtx.name === 'PRESCHOOLEDUCATION')
+                if (parentEdCtx.name === 'PRESCHOOLEDUCATION' || parentEdCtx.name === 'VOCATIONALEDUCATION')
                     this.checkTaxonLevelAndAssignValues('.Domain', this.taxon.topics)
                 if (parentEdCtx.name === 'BASICEDUCATION' || parentEdCtx.name === 'SECONDARYEDUCATION')
                     this.checkTaxonLevelAndAssignValues('.Domain', this.taxon.subjects)
