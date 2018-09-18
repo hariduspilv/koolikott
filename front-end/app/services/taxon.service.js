@@ -48,27 +48,7 @@ angular.module('koolikottApp').factory('taxonService', ['eventService',
                 return taxon.level === level ? taxon : null;
             }
 
-            if (taxon.level === constants.DOMAIN) {
-                return taxon.level === level ? taxon : getTaxonByLevel(taxonMap['t' + taxon.parentId], level);
-            }
-
-            if (taxon.level === constants.SUBJECT) {
-                return taxon.level === level ? taxon : getTaxonByLevel(taxonMap['t' + taxon.parentId], level);
-            }
-
-            if (taxon.level === constants.TOPIC) {
-                return taxon.level === level ? taxon : getTaxonByLevel(taxonMap['t' + taxon.parentId], level);
-            }
-
-            if (taxon.level === constants.SUBTOPIC) {
-                return taxon.level === level ? taxon : getTaxonByLevel(taxonMap['t' + taxon.parentId], level);
-            }
-
-            if (taxon.level === constants.SPECIALIZATION) {
-                return taxon.level === level ? taxon : getTaxonByLevel(taxonMap['t' + taxon.parentId], level);
-            }
-
-            if (taxon.level === constants.MODULE) {
+            if (constants.includes(taxon.level)) {
                 return taxon.level === level ? taxon : getTaxonByLevel(taxonMap['t' + taxon.parentId], level);
             }
         }
@@ -155,7 +135,6 @@ angular.module('koolikottApp').factory('taxonService', ['eventService',
             getSpecialization: getSpecialization,
             getModule: getModule,
             getTaxon: getTaxon,
-            setSidenavTaxons: setSidenavTaxons,
             getSidenavTaxons: getSidenavTaxons,
             getTaxonTranslationKey: getTaxonTranslationKey,
             isTaxonMapLoaded: isTaxonMapLoaded
