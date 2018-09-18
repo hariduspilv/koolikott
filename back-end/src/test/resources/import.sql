@@ -67,88 +67,88 @@ insert into AuthenticationState(id, token) values (2, 'taatAuthenticateTestToken
 
 -- EducationalContext
 
-insert into Taxon(id, name, nameLowerCase, level) values (1, 'PRESCHOOLEDUCATION', 'preschooleducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (1);
-insert into Taxon(id, name, nameLowerCase, level) values (2, 'BASICEDUCATION', 'basiceducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (2);
-insert into Taxon(id, name, nameLowerCase, level) values (3, 'SECONDARYEDUCATION', 'secondaryeducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (3);
-insert into Taxon(id, name, nameLowerCase, level) values (4, 'HIGHEREDUCATION', 'highereducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (4);
-insert into Taxon(id, name, nameLowerCase, level) values (5, 'VOCATIONALEDUCATION', 'vocationaleducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (5);
-insert into Taxon(id, name, nameLowerCase, level) values (6, 'CONTINUINGEDUCATION', 'continuingeducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (6);
-insert into Taxon(id, name, nameLowerCase, level) values (7, 'TEACHEREDUCATION', 'teachereducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (7);
-insert into Taxon(id, name, nameLowerCase, level) values (8, 'SPECIALEDUCATION', 'specialeducation', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (8);
-insert into Taxon(id, name, nameLowerCase, level) values (9, 'OTHER', 'other', 'EDUCATIONAL_CONTEXT');
-insert into EducationalContext(id) values (9);
+insert into Taxon(id, name, nameLowerCase, level, used) values (1, 'PRESCHOOLEDUCATION', 'preschooleducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (1, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (2, 'BASICEDUCATION', 'basiceducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (2, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (3, 'SECONDARYEDUCATION', 'secondaryeducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (3, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (4, 'HIGHEREDUCATION', 'highereducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (4, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (5, 'VOCATIONALEDUCATION', 'vocationaleducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (5, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (6, 'CONTINUINGEDUCATION', 'continuingeducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (6, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (7, 'TEACHEREDUCATION', 'teachereducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (7, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (8, 'SPECIALEDUCATION', 'specialeducation', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (8, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (9, 'OTHER', 'other', 'EDUCATIONAL_CONTEXT', 1);
+insert into EducationalContext(id, used) values (9, 1);
 
 -- Domain
 
-insert into Taxon(id, name, nameLowerCase, level) values (10, 'Mathematics', 'mathematics', 'DOMAIN');
-insert into Domain(id, educationalContext) values (10, 1);
-insert into Taxon(id, name, nameLowerCase, level) values (11, 'ForeignLanguage', 'foreignlanguage', 'DOMAIN');
-insert into Domain(id, educationalContext) values (11, 1);
-insert into Taxon(id, name, nameLowerCase, level) values (12, 'DomainWithTopics', 'domainwithtopics', 'DOMAIN');
-insert into Domain(id, educationalContext) values (12, 6);
-insert into Taxon(id, name, nameLowerCase, level) values (13, 'SecondaryDomain', 'secondarydomain', 'DOMAIN');
-insert into Domain(id, educationalContext) values (13, 3);
-insert into Taxon(id, name, nameLowerCase, level) values (14, 'Computer_science', 'computer_science', 'DOMAIN');
-insert into Domain(id, educationalContext) values (14, 5);
+insert into Taxon(id, name, nameLowerCase, level, used) values (10, 'Mathematics', 'mathematics', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (10, 1, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (11, 'ForeignLanguage', 'foreignlanguage', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (11, 1, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (12, 'DomainWithTopics', 'domainwithtopics', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (12, 6, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (13, 'SecondaryDomain', 'secondarydomain', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (13, 3, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (14, 'Computer_science', 'computer_science', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (14, 5, 1);
 
 -- Subject
 
-insert into Taxon(id, name, nameLowerCase, level) values (20, 'Biology', 'biology', 'SUBJECT');
-insert into Subject(id, domain) values (20, 10);
-insert into Taxon(id, name, nameLowerCase, level) values (21, 'Mathematics', 'mathematics', 'SUBJECT');
-insert into Subject(id, domain) values (21, 10);
-insert into Taxon(id, name, nameLowerCase, level) values (22, 'SecondarySubject', 'secondarysubject', 'SUBJECT');
-insert into Subject(id, domain) values (22, 13);
+insert into Taxon(id, name, nameLowerCase, level, used) values (20, 'Biology', 'biology', 'SUBJECT', 1);
+insert into Subject(id, domain, used) values (20, 10, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (21, 'Mathematics', 'mathematics', 'SUBJECT', 1);
+insert into Subject(id, domain, used) values (21, 10, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (22, 'SecondarySubject', 'secondarysubject', 'SUBJECT', 1);
+insert into Subject(id, domain, used) values (22, 13, 1);
 
 -- Specialization
 
-insert into Taxon(id, name, nameLowerCase, level) values (40, 'Computers_and_Networks', 'computers_and_networks', 'SPECIALIZATION');
-insert into Specialization(id, domain) values (40, 14);
+insert into Taxon(id, name, nameLowerCase, level, used) values (40, 'Computers_and_Networks', 'computers_and_networks', 'SPECIALIZATION', 1);
+insert into Specialization(id, domain, used) values (40, 14, 1);
 
 -- Module
 
-insert into Taxon(id, name, nameLowerCase, level) values (50, 'IT_õigus', 'it_õigus', 'MODULE');
-insert into Module(id, specialization) values (50, 40);
-insert into Taxon(id, name, nameLowerCase, level) values (51, 'Kommunikatsioon', 'kommunikatsioon', 'MODULE');
-insert into Module(id, specialization) values (51, 40);
+insert into Taxon(id, name, nameLowerCase, level, used) values (50, 'IT_õigus', 'it_õigus', 'MODULE', 1);
+insert into Module(id, specialization, used) values (50, 40, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (51, 'Kommunikatsioon', 'kommunikatsioon', 'MODULE', 1);
+insert into Module(id, specialization, used) values (51, 40, 1);
 
 -- Topics from Subjects
 
-insert into Taxon(id, name, nameLowerCase, level) values (30, 'Algebra', 'algebra', 'TOPIC');
-insert into Topic(id, subject) values (30, 21);
-insert into Taxon(id, name, nameLowerCase, level) values (31, 'Trigonometria', 'trigonometria', 'TOPIC');
-insert into Topic(id, subject) values (31, 21);
+insert into Taxon(id, name, nameLowerCase, level, used) values (30, 'Algebra', 'algebra', 'TOPIC', 1);
+insert into Topic(id, subject, used) values (30, 21, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (31, 'Trigonometria', 'trigonometria', 'TOPIC', 1);
+insert into Topic(id, subject, used) values (31, 21, 1);
 
 -- Topics from Domain
 
-insert into Taxon(id, name, nameLowerCase, level) values (32, 'EstoniaAndTheWould', 'estoniaandthewould', 'TOPIC');
-insert into Topic(id, domain) values (32, 12);
-insert into Taxon(id, name, nameLowerCase, level) values (33, 'VogaisTonicas', 'vogaistonicas', 'TOPIC');
-insert into Topic(id, domain) values (33, 12);
+insert into Taxon(id, name, nameLowerCase, level, used) values (32, 'EstoniaAndTheWould', 'estoniaandthewould', 'TOPIC', 1);
+insert into Topic(id, domain, used) values (32, 12, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (33, 'VogaisTonicas', 'vogaistonicas', 'TOPIC', 1);
+insert into Topic(id, domain, used) values (33, 12, 1);
 
 -- Topics from Module
 
-insert into Taxon(id, name, nameLowerCase, level) values (34, 'Infoühiskonna_tehnoloogiad', 'infoühiskonna_tehnoloogiad', 'TOPIC');
-insert into Topic(id, module) values (34, 50);
-insert into Taxon(id, name, nameLowerCase, level) values (35, 'Arvuti_töövahendina', 'arvuti_töövahendina', 'TOPIC');
-insert into Topic(id, module) values (35, 51);
+insert into Taxon(id, name, nameLowerCase, level, used) values (34, 'Infoühiskonna_tehnoloogiad', 'infoühiskonna_tehnoloogiad', 'TOPIC', 1);
+insert into Topic(id, module, used) values (34, 50, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (35, 'Arvuti_töövahendina', 'arvuti_töövahendina', 'TOPIC', 1);
+insert into Topic(id, module, used) values (35, 51, 1);
 
 -- Subtopic
 
-insert into Taxon(id, name, nameLowerCase, level) values (60, 'arvsõna', 'arvsõna', 'SUBTOPIC');
-insert into Subtopic(id, topic) values (60, 30);
-insert into Taxon(id, name, nameLowerCase, level) values (61, 'konkurents', 'konkurents', 'SUBTOPIC');
-insert into Subtopic(id, topic) values (61, 32);
-insert into Taxon(id, name, nameLowerCase, level) values (62, 'tehnoloogia_ja_ühiskond', 'tehnoloogia_ja_ühiskond', 'SUBTOPIC');
-insert into Subtopic(id, topic) values (62, 34);
+insert into Taxon(id, name, nameLowerCase, level, used) values (60, 'arvsõna', 'arvsõna', 'SUBTOPIC', 1);
+insert into Subtopic(id, topic, used) values (60, 30, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (61, 'konkurents', 'konkurents', 'SUBTOPIC', 1);
+insert into Subtopic(id, topic, used) values (61, 32, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (62, 'tehnoloogia_ja_ühiskond', 'tehnoloogia_ja_ühiskond', 'SUBTOPIC', 1);
+insert into Subtopic(id, topic, used) values (62, 34, 1);
 
 -- UserTaxon
 

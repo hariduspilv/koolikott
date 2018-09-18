@@ -2,12 +2,10 @@ package ee.hm.dop.model.taxon;
 
 import static javax.persistence.FetchType.LAZY;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 import java.util.Set;
 
@@ -18,7 +16,12 @@ public class Subtopic extends Taxon {
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "topic", nullable = false)
+    @Where(clause = "used = 1")
     private Topic topic;
+
+    @JsonIgnore
+    @Column(nullable = false, insertable = false)
+    private boolean used;
 
     public Topic getTopic() {
         return topic;
@@ -44,5 +47,15 @@ public class Subtopic extends Taxon {
     @Override
     public Set<? extends Taxon> getChildren() {
         return null;
+    }
+
+    @Override
+    public boolean isUsed() {
+        return used;
+    }
+
+    @Override
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }

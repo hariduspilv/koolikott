@@ -4,20 +4,22 @@ import static javax.persistence.FetchType.LAZY;
 
 import java.util.Set;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
 @DiscriminatorValue("SUBJECT")
 public class Subject extends Taxon {
 
     @OneToMany(mappedBy = "subject")
+    @Where(clause = "used = 1")
     private Set<Topic> topics;
+
+    @JsonIgnore
+    @Column(nullable = false, insertable = false)
+    private boolean used;
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
@@ -56,5 +58,15 @@ public class Subject extends Taxon {
     @Override
     public Set<? extends Taxon> getChildren() {
         return getTopics();
+    }
+
+    @Override
+    public boolean isUsed() {
+        return used;
+    }
+
+    @Override
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }
