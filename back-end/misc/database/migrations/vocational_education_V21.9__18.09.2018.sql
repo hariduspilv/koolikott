@@ -349,10 +349,27 @@ insert into LearningObject_Taxon (learningObject, taxon)
 select learningObject, 155
 from LearningObject_Taxon
 where taxon = 154;
-
 UPDATE LearningObject_Taxon SET taxon = 158 where taxon = 137;
 UPDATE LearningObject_Taxon SET taxon = 171 where taxon = 138;
 UPDATE LearningObject_Taxon SET taxon = 151 where taxon = 139;
+
+UPDATE User_Taxon SET taxon = 169 where taxon = 128;
+UPDATE User_Taxon SET taxon = 153 where taxon = 129;
+UPDATE User_Taxon SET taxon = 170 where taxon = 130;
+UPDATE User_Taxon SET taxon = 168 where taxon = 131;
+UPDATE User_Taxon SET taxon = 156 where taxon = 132;
+UPDATE User_Taxon SET taxon = 161 where taxon = 133;
+UPDATE User_Taxon SET taxon = 161 where taxon = 134;
+UPDATE User_Taxon SET taxon = 162 where taxon = 135;
+UPDATE User_Taxon SET taxon = 154 where taxon = 136;
+-- ühest taxonist 2
+insert into User_Taxon (user, taxon)
+select user, 155
+from User_Taxon
+where taxon = 154;
+UPDATE User_Taxon SET taxon = 158 where taxon = 137;
+UPDATE User_Taxon SET taxon = 171 where taxon = 138;
+UPDATE User_Taxon SET taxon = 151 where taxon = 139;
 
 -- disable old taxons
 update Taxon set used = 0 where id in (128,129,130,131,132,133,134,135,136, 137, 138, 139);
