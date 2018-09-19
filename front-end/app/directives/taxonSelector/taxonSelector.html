@@ -37,11 +37,11 @@
 
   <!-- Domain -->
   <md-input-container
-    data-ng-show="$ctrl.taxonPath.educationalContext.id && !$ctrl.isBasicOrSecondaryEducation()"
+    data-ng-show="$ctrl.taxonPath.educationalContext.id  && $ctrl.taxonPath.educationalContext.name === 'PRESCHOOLEDUCATION'"
     class="md-block"
     flex
     >
-    <label for="taxonDomainSelect">
+    <label for="taxonDomainForPreschooleducationSelect">
       <span data-translate="TAXON_PATH_DOMAIN"></span>
     </label>
     <!-- Duplicating the whole select here because ng-multiple doesn't work. See https://github.com/angular/material/issues/9705 -->
@@ -51,7 +51,7 @@
       data-ng-model="$ctrl.taxonPath.domain"
       data-ng-model-options="{trackBy: '$value.id'}"
       data-ng-required="$ctrl.isDomainRequired.trigger"
-      id="taxonDomainSelect"
+      id="taxonDomainForPreschooleducationSelect"
       name="domain"
       aria-label="Ainevaldkond"
       >
@@ -67,7 +67,7 @@
       data-ng-model="$ctrl.taxonPath.domain"
       data-ng-model-options="{trackBy: '$value.id'}"
       data-ng-required="$ctrl.isDomainRequired.trigger"
-      id="taxonDomainSelect"
+      id="taxonDomainForPreschooleducationSelect"
       name="domain"
       aria-label="Ainevaldkond"
       >
@@ -88,6 +88,63 @@
         data-ng-message="required"
         class="validation-messages"
         data-translate="PORTFOLIO_DOMAIN_REQUIRED"
+      ></div>
+    </div>
+  </md-input-container>
+
+  <!-- Domain for vocational education-->
+  <md-input-container
+    data-ng-show="$ctrl.taxonPath.educationalContext.id && $ctrl.taxonPath.educationalContext.name === 'VOCATIONALEDUCATION'"
+    class="md-block"
+    flex
+  >
+    <label for="taxonDomainForVocationaleducationSelect">
+      <span data-translate="VOCATIONAL_EDUCATION_DOMAIN"></span>
+    </label>
+    <!-- Duplicating the whole select here because ng-multiple doesn't work. See https://github.com/angular/material/issues/9705 -->
+    <md-select
+      data-ng-if="$ctrl.isStatisticsSelect"
+      multiple
+      data-ng-model="$ctrl.taxonPath.domain"
+      data-ng-model-options="{trackBy: '$value.id'}"
+      data-ng-required="$ctrl.isDomainRequired.trigger"
+      id="taxonDomainForVocationaleducationSelect"
+      name="domain"
+      aria-label="Ainevaldkond"
+    >
+      <md-option
+        ng-value="domain"
+        ng-repeat="domain in $ctrl.taxonPath.educationalContext.domains | orderBy: $ctrl.translateTaxon"
+      >
+        <span data-translate="DOMAIN_{{domain.name.toUpperCase()}}"></span>
+      </md-option>
+    </md-select>
+    <md-select
+      data-ng-if="!$ctrl.isStatisticsSelect"
+      data-ng-model="$ctrl.taxonPath.domain"
+      data-ng-model-options="{trackBy: '$value.id'}"
+      data-ng-required="$ctrl.isDomainRequired.trigger"
+      id="taxonDomainForVocationaleducationSelect"
+      name="domain"
+      aria-label="Ainevaldkond"
+    >
+      <md-option
+        data-ng-if="$ctrl.isSearch"
+        data-translate="SELECT_DOMAIN"
+        ng-click="$ctrl.reset($ctrl.taxonPath.educationalContext)"
+      ></md-option>
+      <md-option
+        data-ng-value="domain"
+        data-ng-repeat="domain in $ctrl.taxonPath.educationalContext.domains | orderBy: $ctrl.translateTaxon"
+        data-ng-click="$ctrl.selectTaxon(domain)"
+        data-translate="DOMAIN_{{domain.name.toUpperCase()}}"
+      ></md-option>
+    </md-select>
+    <div data-ng-messages="taxonForm.domain.$error">
+      <div
+        data-ng-message="required"
+        class="validation-messages"
+        data-translate="VOCATIONAL_EDUCATION_DOMAIN_REQUIRED"
       ></div>
     </div>
   </md-input-container>
@@ -286,7 +343,7 @@
     flex
     >
     <label for="taxonTopicSelect">
-      <span data-translate="TAXON_PATH_TOPIC"></span>
+      <span data-translate="{{$ctrl.taxonPath.educationalContext.name === 'VOCATIONALEDUCATION' ? 'VOCATIONAL_EDUCATION_TOPIC' : 'TAXON_PATH_TOPIC' | translate}}"></span>
     </label>
     <md-select data-ng-model="$ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic" aria-label="Teema"
                ng-model-options="{trackBy: '$value.id'}">
