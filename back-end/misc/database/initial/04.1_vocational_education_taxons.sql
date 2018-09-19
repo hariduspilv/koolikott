@@ -36,3 +36,25 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (136, 136, 'Tehnika,_to
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (137, 137, 'Tervishoid');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (138, 138, 'Transporditeenused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name) VALUES (139, 139, 'Ärindus_ja_haldus');
+
+delete from Topic where id = 10300;
+delete from EstCoreTaxonMapping where taxon = 10300;
+delete from Taxon where id = 10300;
+delete from Module where id = 20104;
+delete from EstCoreTaxonMapping where taxon = 20104;
+delete from Taxon where id = 20104;
+delete from Module where id = 20103;
+delete from EstCoreTaxonMapping where taxon = 20103;
+delete from Taxon where id = 20103;
+delete from Module where id = 20102;
+delete from EstCoreTaxonMapping where taxon = 20102;
+delete from Taxon where id = 20102;
+delete from Module where id = 20101;
+delete from EstCoreTaxonMapping where taxon = 20101;
+delete from Taxon where id = 20101;
+delete from Module where id = 20100;
+delete from EstCoreTaxonMapping where taxon = 20100;
+delete from Taxon where id = 20100;
+delete from Specialization where id = 20000;
+delete from EstCoreTaxonMapping where taxon = 20000;
+delete from Taxon where id = 20000;
