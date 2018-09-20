@@ -2,7 +2,7 @@
    layout-align="space-between center"
    data-ng-click="toggleChildren(taxon.id)"
    data-ng-class="{'has-children': hasChildren, 'is-opened': opened && hasChildren, 'is-active': isActive, 'is-disabled': materialCount == 0}">
-  <div layout="row" layout-align="center center">
+  <div layout="row" layout-align="center center" class="layout-width-90">
     <md-icon class="material-icons sidenav__icon">{{icon}}</md-icon>
     <span data-translate="{{taxonName}}" class="sidenav__name"></span>
   </div>

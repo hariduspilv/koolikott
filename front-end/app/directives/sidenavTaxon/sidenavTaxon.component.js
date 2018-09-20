@@ -24,8 +24,6 @@ class controller extends Controller {
                     this.checkTaxonLevelAndAssignValues('.Domain', this.taxon.topics)
                 if (parentEdCtx.name === 'BASICEDUCATION' || parentEdCtx.name === 'SECONDARYEDUCATION')
                     this.checkTaxonLevelAndAssignValues('.Domain', this.taxon.subjects)
-                if (parentEdCtx.name === 'VOCATIONALEDUCATION')
-                    this.checkTaxonLevelAndAssignValues('.Domain', this.taxon.specializations)
 
             // Taxon is Subject or Specialization
             } else if (this.taxon.parentLevel === '.Domain') {
