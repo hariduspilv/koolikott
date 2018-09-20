@@ -16,4 +16,9 @@ md-toast {
   padding: 10px 6px;
 }
 
+@media (min-width: 1280px) {
+  md-toast .md-toast-content {
+    max-width: 568px;
+  }
+}
 
