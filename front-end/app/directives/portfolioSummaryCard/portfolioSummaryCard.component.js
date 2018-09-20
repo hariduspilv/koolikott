@@ -42,6 +42,7 @@ class controller extends Controller {
         this.$scope.portfolio = this.portfolio
         this.$scope.commentsOpen = false
         this.$scope.pageUrl = this.$location.absUrl()
+        this.$scope.isVocationalOnly = false
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -153,6 +154,14 @@ class controller extends Controller {
     getTaxonObject() {
         if (this.portfolio && this.portfolio.taxons)
             this.$scope.taxonObject = this.taxonGroupingService.getTaxonObject(this.portfolio.taxons)
+
+        if (this.$scope.taxonObject.educationalContexts) {
+            const txObj = this.$scope.taxonObject.educationalContexts
+            if (txObj.includes('VOCATIONALEDUCATION') && !txObj.includes('PRESCHOOLEDUCATION') && !txObj.includes('BASICEDUCATION') && !txObj.includes('SECONDARYEDUCATION'))
+                this.$scope.isVocationalOnly = true
+            else
+                this.$scope.isVocationalOnly = false
+        }
     }
     showEditMetadataDialog() {
         this.storageService.setPortfolio(this.portfolio)
