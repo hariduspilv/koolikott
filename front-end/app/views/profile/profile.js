@@ -20,7 +20,7 @@ class controller extends Controller {
             .then(({data: user}) => {
                 if (!isEmpty(user)) {
                     this.$scope.user = user;
-                    $translate('PROFILE_PAGE_TITLE_PORTFOLIOS').then((value) => {
+                    this.$translate('PROFILE_PAGE_TITLE_PORTFOLIOS').then((value) => {
                         this.$scope.title = value.replace('${user}', `${user.name} ${user.surname}`);
                     })
                 } else {
