@@ -1,3 +1,8 @@
+## e-Koolikott [1.21.9](https://github.com/hariduspilv/koolikott/milestone/20) 
+
+### Muutunud
+* Lisada süsteemi kutsehariduse taksonoomia [#366](https://github.com/hariduspilv/koolikott/issues/366)
+
 ## e-Koolikott [1.21.8](https://github.com/hariduspilv/koolikott/milestone/20) 
 
 ### Muutunud
