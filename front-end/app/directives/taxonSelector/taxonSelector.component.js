@@ -130,11 +130,11 @@ class controller extends Controller {
             this.taxonPath.domain = this.taxonService.getDomain(this.taxon)
             this.taxonPath.subject = this.taxonService.getSubject(this.taxon)
 
-            if (this.taxonPath.subject)
+            if (this.taxonPath.subject) {
                 this.taxonPath.domainSubject = this.taxonPath.subject
-            else
-            if (this.taxonPath.domain)
+            } else if (this.taxonPath.domain){
                 this.taxonPath.domainSubject = this.taxonPath.domain
+            }
 
             this.taxonPath.specialization = this.taxonService.getSpecialization(this.taxon)
             this.taxonPath.module = this.taxonService.getModule(this.taxon)

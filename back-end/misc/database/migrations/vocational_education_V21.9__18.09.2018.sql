@@ -323,9 +323,9 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_TRANSPORDIVAHENDITE_JUHTIMINE', 'Transpordivahendite juhtimine');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_TRANSPORDIVAHENDITE_JUHTIMINE', 'Transport means management');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_TRANSPORDIVAHENDITE_JUHTIMINE', 'Transpordivahendite juhtimine');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_KESKKONNAKAITSE', 'Keskkonnakaitse');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_KESKKONNAKAITSE', 'Community sanitation');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_KESKKONNAKAITSE', 'Keskkonnakaitse');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_KESKKONNAKAITSE', 'Keskkonnakaitse');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_KESKKONNAKAITSE', 'Community sanitation');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_KESKKONNAKAITSE', 'Keskkonnakaitse');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_MILITAARÕPE', 'Militaarõpe');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_MILITAARÕPE', 'Military and defense');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_MILITAARÕPE', 'Militaarõpe');
