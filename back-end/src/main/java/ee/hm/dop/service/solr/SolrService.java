@@ -202,6 +202,7 @@ public class SolrService implements SolrEngineService {
                             fullImport = false;
                             lock.notifyAll();
                         }
+                        sleep(_1_SEC); //so updating happens after transaction is done
                         OffsetDateTime start = OffsetDateTime.now();
                         logger.info("Solr full import start");
                         executeCommand(SOLR_IMPORT_FULL);
@@ -214,6 +215,7 @@ public class SolrService implements SolrEngineService {
                             deltaImport = false;
                             lock.notifyAll();
                         }
+                        sleep(_0_1_SEC); //so updating happens after transaction is done
                         OffsetDateTime start = OffsetDateTime.now();
                         logger.info("Solr delta import start");
                         executeCommand(SOLR_IMPORT_PARTIAL);
