@@ -91,7 +91,7 @@
             <!-- Domain -->
             <div flex>
               <p class="md-caption caption-light">
-                <span data-translate="{{isVocationalOnly ? 'VOCATIONAL_EDUCATION_DOMAIN' : 'DETAIL_VIEW_DOMAIN' | translate}}"></span>
+                <span data-translate="{{isVocationalOnly ? 'VOCATIONAL_EDUCATION_DOMAIN' : 'DETAIL_VIEW_DOMAIN'}}"></span>
               </p>
               <p class="ellipsis ellipsis--2 ellipsis--medium">
                 <span data-ng-repeat="taxon in taxonObject.domainGroup track by $index">
@@ -104,7 +104,7 @@
             <!-- Topic -->
             <div flex data-ng-if="taxonObject.topics.length">
               <p class="md-caption caption-light">
-                <span data-translate="TAXON_PATH_TOPIC"></span>
+                <span data-translate="{{isVocationalOnly ? 'VOCATIONAL_EDUCATION_TOPIC' : 'TAXON_PATH_TOPIC'}}"></span>
               </p>
               <p class="ellipsis ellipsis--2 ellipsis--medium">
                 <span data-ng-repeat="topic in taxonObject.topics track by $index">

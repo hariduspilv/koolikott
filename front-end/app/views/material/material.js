@@ -15,7 +15,6 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.materialCommentsOpen = false;
-            $scope.isVocationalOnly = false;
 
             const licenceTypeMap = {
                 'CCBY': ['by'],
@@ -233,11 +232,7 @@ angular.module('koolikottApp')
                 if ($scope.material && $scope.material.taxons) {
                     $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.material.taxons);
                 }
-                const txObj = $scope.taxonObject.educationalContexts
-                if (txObj.includes('VOCATIONALEDUCATION') && !txObj.includes('PRESCHOOLEDUCATION') && !txObj.includes('BASICEDUCATION') && !txObj.includes('SECONDARYEDUCATION'))
-                    $scope.isVocationalOnly = true
-                else
-                    $scope.isVocationalOnly = false
+                $scope.isVocationalOnly = _.every($scope.taxonObject.educationalContexts, o => o === 'VOCATIONALEDUCATION')
             }
 
             function getSignedUserData() {

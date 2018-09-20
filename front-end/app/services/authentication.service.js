@@ -81,7 +81,7 @@ angular.module('koolikottApp')
         function idCodeLoginFail(msg) {
             console.log('Logging in failed.');
             $mdDialog.hide();
-            toastService.show(msg, 15000);
+            toastService.show(msg, 35000, 'user-missing-id');
             enableLogin();
             authenticatedUserService.removeAuthenticatedUser();
 

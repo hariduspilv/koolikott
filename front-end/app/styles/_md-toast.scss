@@ -4,9 +4,16 @@
 }
 
 md-toast {
+  &.user-missing-id {
+    .md-toast-content {
+      font-size: 18px;
+    }
+  }
   position: fixed;
 }
 
 .md-toast-text {
   padding: 10px 6px;
 }
+
+
