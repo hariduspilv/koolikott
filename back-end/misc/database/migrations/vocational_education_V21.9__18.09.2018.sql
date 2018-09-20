@@ -1,3 +1,5 @@
+USE dop;
+
 -- domains
 insert into Taxon(used, id, name, level, nameLowercase) values (1, 150, 'Humanitaaria', 'DOMAIN', 'humanitaaria');
 insert into Domain(used, id, educationalContext) values (1, 150, 4);

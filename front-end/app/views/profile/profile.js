@@ -17,9 +17,12 @@ class controller extends Controller {
             'username': this.$route.current.params.username
         };
         this.serverCallService.makeGet("rest/user", userParams)
-            .then(({data}) => {
-                if (!isEmpty(data)) {
-                    this.$scope.user = data;
+            .then(({data: user}) => {
+                if (!isEmpty(user)) {
+                    this.$scope.user = user;
+                    $translate('PROFILE_PAGE_TITLE_PORTFOLIOS').then((value) => {
+                        this.$scope.title = value.replace('${user}', `${user.name} ${user.surname}`);
+                    })
                 } else {
                     this.getUserFail();
                 }
@@ -28,26 +31,17 @@ class controller extends Controller {
             })
     }
 
-    getUserFail() {
-        console.log('Getting user failed.');
-        this.$location.url('/');
-    }
-
     getUsersMaterials() {
         this.serverCallService.makeGet("rest/material/getByCreator", this.params())
             .then(({data}) => {
                 if (!isEmpty(data)) {
                     this.$scope.materials = data.items;
                 } else {
-                    controller.getUsersMaterialsFail();
+                    this.getUsersMaterialsFail();
                 }
             }, () => {
-                controller.getUsersMaterialsFail()
+                this.getUsersMaterialsFail()
             });
-    }
-
-    static getUsersMaterialsFail() {
-        console.log('Failed to get materials.');
     }
 
     getUsersPortfolios() {
@@ -61,6 +55,15 @@ class controller extends Controller {
             }, () => {
                 this.getUsersPortfoliosFail()
             });
+    }
+
+    getUserFail() {
+        console.log('Getting user failed.');
+        this.$location.url('/');
+    }
+
+    getUsersMaterialsFail() {
+        console.log('Failed to get materials.');
     }
 
     getUsersPortfoliosFail() {
@@ -80,7 +83,8 @@ controller.$inject = [
     '$route',
     'authenticatedUserService',
     'serverCallService',
-    '$location'
+    '$location',
+    '$translate'
 ]
 angular.module('koolikottApp').controller('profileController', controller)
 }

@@ -2,7 +2,7 @@
   <h1 class="md-display-1" data-ng-bind="user.name+' '+user.surname"></h1>
 </div>
 <div data-layout="row">
-  <h2 class="md-headline" data-translate="PROFILE_PAGE_TITLE_PORTFOLIOS"></h2>
+  <h2 class="md-headline" data-ng-bind="title"></h2>
 </div>
 <div class="card-container">
   <div data-ng-repeat="item in portfolios track by item.id" class="card-container__item">

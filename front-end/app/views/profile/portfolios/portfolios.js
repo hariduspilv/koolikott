@@ -28,10 +28,7 @@ angular.module('koolikottApp')
             if (user && $route.current.params.username === user.username) {
                 $scope.title = 'MYPROFILE_PAGE_TITLE_PORTFOLIOS';
             } else {
-                const userParams = {
-                    'username': $route.current.params.username
-                };
-                serverCallService.makeGet("rest/user", userParams)
+                serverCallService.makeGet("rest/user", {'username': $route.current.params.username})
                 .then(({data: user}) => {
                     if (user){
                         $translate('PROFILE_PAGE_TITLE_PORTFOLIOS').then((value) =>{
