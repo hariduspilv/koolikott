@@ -15,6 +15,7 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.materialCommentsOpen = false;
+            $('body').materialScrollTop({ offset: 300 })
 
             const licenceTypeMap = {
                 'CCBY': ['by'],
