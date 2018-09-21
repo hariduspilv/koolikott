@@ -35,9 +35,9 @@
     </div>
   </md-input-container>
 
-  <!-- Domain -->
+  <!-- Domain for preschooleducation-->
   <md-input-container
-    data-ng-show="$ctrl.taxonPath.educationalContext.id  && $ctrl.taxonPath.educationalContext.name === 'PRESCHOOLEDUCATION'"
+    data-ng-show="$ctrl.taxonPath.educationalContext.id  && $ctrl.isPreschoolorHobbyactivity()"
     class="md-block"
     flex
     >
@@ -272,7 +272,7 @@
 
   <!-- Subject -->
   <md-input-container
-    data-ng-show="!$ctrl.isStatisticsSelect && $ctrl.taxonPath.domain && !$ctrl.isBasicOrSecondaryEducation() && $ctrl.taxonPath.domain.subjects.length > 0"
+    data-ng-show="!$ctrl.isStatisticsSelect && $ctrl.taxonPath.domain && !$ctrl.isBasicOrSecondaryEducation() && $ctrl.isPreschoolorHobbyactivity() && $ctrl.taxonPath.domain.subjects.length > 0"
     class="md-block"
     flex
     >
