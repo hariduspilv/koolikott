@@ -72,13 +72,19 @@ class controller extends Controller {
     reset(parentTaxon) {
         this.taxon = parentTaxon;
     };
+
+    isPreschoolorHobbyactivity() {
+        if (this.taxonPath.educationalContext) {
+            const { name } = this.taxonPath.educationalContext
+            return name === 'PRESCHOOLEDUCATION' || name === 'HOBBYACTIVITIES'
+        }
+
+    }
     isBasicOrSecondaryEducation() {
-        if (!this.taxonPath.educationalContext)
-            return false
-
-        const { name } = this.taxonPath.educationalContext
-
-        return name === 'BASICEDUCATION' || name === 'SECONDARYEDUCATION'
+        if (this.taxonPath.educationalContext) {
+            const { name } = this.taxonPath.educationalContext
+            return name === 'PRESCHOOLEDUCATION' || name === 'SECONDARYEDUCATION'
+        }
     }
     translateTaxon(taxon) {
         return this.$filter('translate')(taxon.level.toUpperCase().substr(1) + '_' + taxon.name.toUpperCase())
