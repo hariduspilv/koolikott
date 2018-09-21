@@ -35,6 +35,7 @@ public class TransactionFilter implements Filter {
         } finally {
             closeEntityManager();
         }
+        logger.info("transaction is done");
     }
 
     @Override
