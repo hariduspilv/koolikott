@@ -1,0 +1,30 @@
+<md-fab-speed-dial
+  md-open="$ctrl.isOpen"
+  md-direction="left"
+  data-ng-show="$ctrl.isVisible()"
+  class="md-scale share"
+>
+  <md-fab-trigger>
+    <md-button
+      aria-label="{{ 'BUTTON_SHARE' | translate }}"
+      class="md-icon-button share__btn share__btn--trigger"
+    >
+      <md-tooltip md-direction="bottom">
+        <span data-translate="BUTTON_SHARE"></span>
+      </md-tooltip>
+      <md-icon class="share__icon">share</md-icon>
+    </md-button>
+  </md-fab-trigger>
+  <md-fab-actions>
+    <div data-ng-repeat="item in $ctrl.shareMediaPlaces track by $index">
+      <md-button
+        class="md-fab md-raised md-mini share__btn share__btn--{{item.provider}}"
+        aria-label="{{item.provider}}"
+        data-ng-click="$ctrl.share($event, item)"
+      >
+        <span class="share__icon {{item.icon}}"></span>
+      </md-button>
+    </div>
+  </md-fab-actions>
+  <span id="shareGoogleFakeButton" class="ng-hide"></span>
+</md-fab-speed-dial>
