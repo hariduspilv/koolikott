@@ -175,9 +175,8 @@ public class SolrService implements SolrEngineService {
     }
 
     private class SolrIndexThread extends Thread {
-        private static final int _2_SEC = 2000;
+        private static final int _5_SEC = 5000;
         private static final int _1_SEC = 1000;
-        private static final int _0_5_SEC = 500;
         private static final int _0_1_SEC = 100;
         private final Object lock = new Object();
         private boolean deltaImport;
@@ -204,7 +203,7 @@ public class SolrService implements SolrEngineService {
                             fullImport = false;
                             lock.notifyAll();
                         }
-                        sleep(_2_SEC); //so updating happens after transaction is done
+                        sleep(_5_SEC); //so updating happens after transaction is done
                         OffsetDateTime start = OffsetDateTime.now();
                         logger.info("Solr full import start");
                         executeCommand(SOLR_IMPORT_FULL);
@@ -217,7 +216,7 @@ public class SolrService implements SolrEngineService {
                             deltaImport = false;
                             lock.notifyAll();
                         }
-                        sleep(_0_5_SEC); //so updating happens after transaction is done
+                        sleep(_1_SEC); //so updating happens after transaction is done
                         OffsetDateTime start = OffsetDateTime.now();
                         logger.info("Solr delta import start");
                         executeCommand(SOLR_IMPORT_PARTIAL);
