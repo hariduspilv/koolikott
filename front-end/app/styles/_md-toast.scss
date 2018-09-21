@@ -16,9 +16,9 @@ md-toast {
   padding: 10px 6px;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: $layout-breakpoint-md) {
   md-toast .md-toast-content {
-    max-width: 568px;
+    max-width: $md-toast-content-max-width;
   }
 }
 
