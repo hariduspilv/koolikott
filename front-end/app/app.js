@@ -17,7 +17,8 @@ let app = angular.module('koolikottApp', [
     'ngMessages',
     'angular-tour',
     'angularScreenfull',
-    'angular-sortable-view'
+    'angular-sortable-view',
+    'monospaced.qrcode'
 ]);
 
 let provideProvider = null;

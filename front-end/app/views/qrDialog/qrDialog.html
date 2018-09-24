@@ -1,22 +1,19 @@
 <md-dialog aria-label="Qr Code Modal" flex-gt-sm="75" flex id="qr-code-modal"
            class="fullscreen-dialog">
-  <form name="addPortfolioForm">
-    <md-toolbar class="md-accent">
+  <form name="qrCodeModal">
+
       <div class="md-toolbar-tools" flex>
-        <div data-ng-if="!isEditPortfolio">
-          <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
-        </div>
-        <div data-ng-if="isEditPortfolio">
-          <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_EDIT_LABEL"></h2>
-        </div>
         <span flex></span>
-        <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
-                   aria-label="Sulge kogumiku lisamise modaalaken">
+        <md-button ng-click="cancel()" id="qr-dialog-close" class="md-icon-button"
+                   aria-label="Sulge qr koodi modaalaken">
           <md-icon>close</md-icon>
         </md-button>
       </div>
-    </md-toolbar>
-    <md-content class="md-padding">
-    </md-content>
+
+    <md-dialog-content class="md-padding">
+      <div layout="row" layout-align="center center">
+        <qrcode data={{location}} error-correction-level="L" size="800"></qrcode>
+      </div>
+    </md-dialog-content>
   </form>
 </md-dialog>

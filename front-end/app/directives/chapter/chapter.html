@@ -1,7 +1,16 @@
 <md-card class="portfolio-chapter card-lg" data-ng-class="$ctrl.getChapterClassNames()" id="{{slug}}">
   <!--View-->
   <md-card-content data-ng-if="!$ctrl.isEditMode">
+    <div class="card-menus" layout="row">
+      <div ng-click="$ctrl.showQrCodeDialog(slug)">
+        <md-tooltip><span data-translate="TOOLTIP_SHOW_QR_CODE"></span></md-tooltip>
+        <md-button class="md-icon-button">
+          <img src="../images/qrcode-scan.svg">
+        </md-button>
+      </div>
+    </div>
     <h2 class="chapter-title" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
+
     <div class="chapter-blocks">
       <div
         class="chapter-block"

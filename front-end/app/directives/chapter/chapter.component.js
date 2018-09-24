@@ -82,6 +82,7 @@ class controller extends Controller {
             })
         }
     }
+
     $onDestroy() {
         if (this.isEditMode) {
             document.removeEventListener('click', this.onClickOutside)
@@ -926,6 +927,17 @@ class controller extends Controller {
             this.$embedToolbarScope.$digest()
         }
     }
+    showQrCodeDialog(slug) {
+        this.$mdDialog.show({
+            templateUrl: 'views/qrDialog/qrDialog.html',
+            controller: 'qrDialogController',
+            fullscreen: true,
+            locals: {
+                slug
+            },
+            clickOutsideToClose: true,
+        })
+    };
 }
 controller.$inject = [
     '$scope',

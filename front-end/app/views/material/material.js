@@ -52,6 +52,17 @@ angular.module('koolikottApp')
                 $scope.commentsOpen = !$scope.commentsOpen;
             };
 
+            $scope.showQrCodeDialog = () => {
+
+                $mdDialog.show({
+                    templateUrl: 'views/qrDialog/qrDialog.html',
+                    controller: 'qrDialogController',
+                    fullscreen: true,
+                    locals: {},
+                    clickOutsideToClose: true,
+                })
+            };
+
             function getContentType() {
                 if ($scope.material.embedSource) {
                     $scope.sourceType = 'EMBEDSOURCE';
