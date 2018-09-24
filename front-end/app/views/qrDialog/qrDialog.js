@@ -5,7 +5,6 @@
         constructor(...args) {
             super(...args)
 
-            debugger;
             const location = this.$location.absUrl()
             if (this.locals.slug) {
                 if (!location.substring(0, location.indexOf('#')))
