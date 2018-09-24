@@ -7,6 +7,7 @@ class controller extends Controller {
 
         this.groups = ['title', 'tag', 'description', 'author', 'publisher', 'recommended', 'portfolioTitle', 'summary']
         this.searchURLbase = 'search/result?'
+        this.types = ['portfolio', 'material', 'all']
         this.taxonURL = '&taxon='
         this.paidURL = '&paid='
         this.typeURL = '&type='
@@ -63,27 +64,6 @@ class controller extends Controller {
     }
     escapeAllQuery(query) {
         return query && query.replace(/[<>/]/g, "").replace(/\+/g, "%2B");
-    }
-    arrayToLowerCase(upperCaseArray) {
-        const lowerCaseArray = []
-
-        for (let i = 0; i < upperCaseArray.length; i++)
-            if (upperCaseArray[i] && this.isString(upperCaseArray[i]))
-                lowerCaseArray.push(upperCaseArray[i].toLowerCase())
-
-        return lowerCaseArray
-    }
-    arrayToUpperCase(lowerCaseArray) {
-        const upperCaseArray = []
-
-        for (let i = 0; i < lowerCaseArray.length; i++)
-            if (lowerCaseArray[i] && this.isString(lowerCaseArray[i]))
-                upperCaseArray.push(lowerCaseArray[i].toUpperCase())
-
-        return upperCaseArray
-    }
-    isString(value) {
-        return typeof value === 'string' || value instanceof String
     }
     asArray(value) {
         return Array.isArray(value) ? value : [value]
@@ -194,34 +174,22 @@ class controller extends Controller {
     }
     getKeyCompetence() {
         const { keyCompetence } = this.$location.search()
-
-        if (keyCompetence)
-            this.setKeyCompetence(keyCompetence)
-
+        if (keyCompetence) this.setKeyCompetence(keyCompetence)
         return this.search.keyCompetence
     }
     getSort() {
         const { sort } = this.$location.search()
-
-        if (sort)
-            this.setSort(sort)
-
+        if (sort) this.setSort(sort)
         return this.search.sort
     }
     getSortDirection() {
         const { sortDirection } = this.$location.search()
-
-        if (sortDirection)
-            this.setSortDirection(sortDirection)
-
+        if (sortDirection) this.setSortDirection(sortDirection)
         return this.search.sortDirection
     }
     isCurriculumLiterature() {
         const { curriculumLiterature } = this.$location.search()
-
-        if (curriculumLiterature)
-            this.setIsCurriculumLiterature(curriculumLiterature === 'true')
-
+        if (curriculumLiterature) this.setIsCurriculumLiterature(curriculumLiterature === 'true')
         return this.search.isCurriculumLiterature
     }
     isFavorites() {
@@ -231,15 +199,11 @@ class controller extends Controller {
     }
     isRecommended() {
         const { recommended } = this.$location.search()
-
-        if (recommended)
-            this.setIsRecommended(recommended === 'true')
-
+        if (recommended) this.setIsRecommended(recommended === 'true')
         return this.search.isRecommended
     }
     isGrouped() {
         const { isGrouped } = this.$location.search()
-
         if (isGrouped) this.setIsGrouped(isGrouped === 'true')
         if (!this.getQuery()) this.setIsGrouped(false)
         else if (this.groups.some((group) => this.getQuery().startsWith(group + ':'))) this.setIsGrouped(false)
@@ -248,7 +212,6 @@ class controller extends Controller {
     isFilter() {
         const { filter } = this.$location.search()
         if (filter) this.setFilter(filter === 'true')
-
         return this.search.filter
     }
     clearFieldsNotInSimpleSearch() {
@@ -267,7 +230,7 @@ class controller extends Controller {
         this.search.sortDirection = ''
     }
     isValidType(type) {
-        return type === 'material' || type === 'portfolio' || type === 'all'
+        return this.types.includes(type)
     }
     shouldBeGrouped() {
         const query = this.search.query

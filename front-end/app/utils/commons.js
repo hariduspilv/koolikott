@@ -932,7 +932,29 @@ class Controller {
             })
             : tags
     }
+    isString(value) {
+        return typeof value === 'string' || value instanceof String
+    }
+    arrayToLowerCase(upperCaseArray) {
+        const lowerCaseArray = []
+
+        for (let i = 0; i < upperCaseArray.length; i++)
+            if (upperCaseArray[i] && this.isString(upperCaseArray[i]))
+                lowerCaseArray.push(upperCaseArray[i].toLowerCase())
+
+        return lowerCaseArray
+    }
+    arrayToUpperCase(lowerCaseArray) {
+        const upperCaseArray = []
+
+        for (let i = 0; i < lowerCaseArray.length; i++)
+            if (lowerCaseArray[i] && this.isString(lowerCaseArray[i]))
+                upperCaseArray.push(lowerCaseArray[i].toUpperCase())
+
+        return upperCaseArray
+    }
 }
+
 
 /**
  * Convenience methods for creating angular controllers, diectives, components,

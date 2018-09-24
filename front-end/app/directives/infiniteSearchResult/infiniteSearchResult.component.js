@@ -22,21 +22,18 @@ class controller extends Controller {
 
         $('body').materialScrollTop({ offset: 300 })
         this.$scope.items = []
-        this.$scope.sortOptions = []
+        this.$scope.sortOptions = [
+            {option: 'ADDED_DATE_DESC', field: 'added', direction:'desc'},
+            {option: 'ADDED_DATE_ASC', field: 'added', direction:'asc'},
+            {option: 'PORTFOLIOS_FIRST', field: 'type', direction:'desc'},
+            {option: 'MATERIALS_FIRST', field: 'type', direction:'asc'},
+        ]
         this.$scope.filterGroups = {}
         this.$scope.filterGroupsExact = {}
-        this.$scope.searching = false
-        this.$scope.sorting = false
         this.distinctCount = {
             similar: 0,
             exact: 0
         }
-        this.createMultipleSortOptions(
-            ['ADDED_DATE_DESC', 'added', 'desc'],
-            ['ADDED_DATE_ASC', 'added', 'asc'],
-            ['PORTFOLIOS_FIRST', 'type', 'desc'],
-            ['MATERIALS_FIRST', 'type', 'asc'],
-        )
         this.createMultipleFilterGroups(
             ['GROUPS_TITLES', 'title'],
             ['GROUPS_DESCRIPTIONS', 'description'],
@@ -54,18 +51,6 @@ class controller extends Controller {
     }
     showDefaultGroupButtons() {
         return this.$scope.showFilterGroups !== 'noGrouping' && this.$scope.filterGroups['all'].countMaterial
-    }
-    createMultipleSortOptions(...options) {
-        options.forEach((option) =>
-            this.$scope.sortOptions.push(controller.createSortOption(option[0], option[1], option[2]))
-        )
-    }
-    static createSortOption(optionKey, fieldValue, sortDirection) {
-        return {
-            option: optionKey,
-            field: fieldValue,
-            direction: sortDirection,
-        }
     }
     createMultipleFilterGroups(...groups) {
         groups.forEach((group) => {
@@ -186,10 +171,7 @@ class controller extends Controller {
             this.url,
             this.params,
             this.params.isGrouped ? this.groupedSearchSuccess.bind(this) : this.searchSuccess.bind(this),
-            this.searchFail.bind(this),
-            {},
-            false,
-            !!this.cache
+            this.searchFail.bind(this)
         )
     }
     searchSuccess(data) {
