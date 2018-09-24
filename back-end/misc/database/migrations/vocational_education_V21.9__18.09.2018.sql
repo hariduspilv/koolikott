@@ -5,7 +5,7 @@ insert into Taxon(used, id, name, level, nameLowercase) values (1, 150, 'Humanit
 insert into Domain(used, id, educationalContext) values (1, 150, 4);
 insert into Taxon(used, id, name, level, nameLowercase) values (1, 162, 'Sotsiaal-_ja_käitumisteadused', 'DOMAIN', 'sotsiaal-_ja_käitumisteadused');
 insert into Domain(used, id, educationalContext) values (1, 162, 4);
-insert into Taxon(used, id, name, level, nameLowercase) values (1, 163, 'Ajakirjandus-_ja_infolevi', 'DOMAIN', 'ajakirjandus-_ja_infolevi');
+insert into Taxon(used, id, name, level, nameLowercase) values (1, 163, 'Ajakirjandus_ja_infolevi', 'DOMAIN', 'ajakirjandus_ja_infolevi');
 insert into Domain(used, id, educationalContext) values (1, 163, 4);
 insert into Taxon(used, id, name, level, nameLowercase) values (1, 164, 'Bioteadused', 'DOMAIN', 'bioteadused');
 insert into Domain(used, id, educationalContext) values (1, 164, 4);
@@ -118,7 +118,7 @@ INSERT INTO Topic(used, id, domain) VALUES (1, 55033, 170);
 -- estcore
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (150, 150, 'Humanitaaria', 'humanitaaria');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (162, 162, 'Sotsiaal-_ja_käitumisteadused', 'sotsiaal-_ja_käitumisteadused');
-INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (163, 163, 'Ajakirjandus-_ja_infolevi', 'ajakirjandus-_ja_infolevi');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (163, 163, 'Ajakirjandus_ja_infolevi', 'ajakirjandus_ja_infolevi');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (164, 164, 'Bioteadused', 'bioteadused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (165, 165, 'Füüsikalised_loodusteadused', 'füüsikalised_loodusteadused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (166, 166, 'Matemaatika_ja_statistika', 'matemaatika_ja_statistika');
@@ -178,9 +178,9 @@ INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'DOMAIN_SOTSIAAL-_JA_KÄITUMISTEADUSED', 'Sotsiaal-ja käitumisteadused');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'DOMAIN_SOTSIAAL-_JA_KÄITUMISTEADUSED', 'Social and behavioral science');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'DOMAIN_SOTSIAAL-_JA_KÄITUMISTEADUSED', 'Sotsiaal- ja käitumisteadused');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'DOMAIN_AJAKIRJANDUS-_JA_INFOLEVI', 'Ajakirjandus- ja infolevi');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'DOMAIN_AJAKIRJANDUS-_JA_INFOLEVI', 'Journalism and information');
-INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'DOMAIN_AJAKIRJANDUS-_JA_INFOLEVI', 'Ajakirjandus- ja infolevi');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'DOMAIN_AJAKIRJANDUS_JA_INFOLEVI', 'Ajakirjandus ja infolevi');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'DOMAIN_AJAKIRJANDUS_JA_INFOLEVI', 'Journalism and information');
+INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'DOMAIN_AJAKIRJANDUS_JA_INFOLEVI', 'Ajakirjandus ja infolevi');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'DOMAIN_ÄRINDUS_JA_HALDUS', 'Ärindus ja haldus');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'DOMAIN_ÄRINDUS_JA_HALDUS', 'Business and administration');
 INSERT INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'DOMAIN_ÄRINDUS_JA_HALDUS', 'Ärindus ja haldus');
