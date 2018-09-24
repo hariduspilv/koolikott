@@ -6,7 +6,6 @@
   },
   "repository": {},
   "devDependencies": {
-    "angular-qrcode": "^7.2.0",
     "autoprefixer": "^6.7.0",
     "babel-preset-env": "^1.6.1",
     "compression": "^1.6.1",
