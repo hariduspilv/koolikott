@@ -28,7 +28,7 @@ public class TaxonDTO extends Taxon {
     @JsonIgnore
     @Override
     public Taxon getParent() {
-        return this;
+        return null;
     }
 
     @JsonIgnore
