@@ -71,19 +71,18 @@ public class SearchCommandBuilder {
     }
 
     private static String convertFieldSpecificQuery(String query) {
-        query = query.replaceAll("\"", "");
-        String searchField = getSearchField(query);
-        query = getFieldQuery(query, searchField);
-        return searchField + ":" + quotify(query);
+        String clearQuery = query.replaceAll("\"", "");
+        String field = getSearchField(clearQuery);
+        String search = getSearchQuery(clearQuery, field);
+        return field + ":" + quotify(search);
     }
-
 
     private static String getSearchField(String query) {
         return UNIQUE_KEYS.stream().filter(query::startsWith).findAny().orElse("");
     }
 
-    private static String getFieldQuery(String query, String field) {
-        return query.substring(field.length());
+    private static String getSearchQuery(String query, String field) {
+        return query.substring(field.length()+1);
     }
 
     static String quotify(String query) {
