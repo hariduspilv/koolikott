@@ -224,16 +224,6 @@ class controller extends Controller {
         if (this.portfolio)
             this.portfolio.recommendation = recommendation
     }
-    showQrCodeDialog () {
-
-        this.$mdDialog.show({
-            templateUrl: 'views/qrDialog/qrDialog.html',
-            controller: 'qrDialogController',
-            fullscreen: true,
-            locals: {},
-            clickOutsideToClose: true,
-        })
-    };
 }
 controller.$inject = [
     '$scope',

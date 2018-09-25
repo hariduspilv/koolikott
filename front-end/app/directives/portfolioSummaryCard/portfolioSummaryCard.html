@@ -11,10 +11,8 @@
             data-title="portfolio.title"
             data-object="portfolio"
           ></dop-share>
-          <div data-ng-if="!$root.isEditPortfolioMode" ng-click="$ctrl.showQrCodeDialog()">
-            <md-tooltip><span data-translate="TOOLTIP_SHOW_QR_CODE"></span></md-tooltip>
-            <md-button class="md-icon-button qr-code">
-            </md-button>
+          <div data-ng-if="!$root.isEditPortfolioMode">
+            <dop-qr data-location="{{pageUrl}}"></dop-qr>
           </div>
           <md-menu ng-if="dotsAreShowing() || $root.isEditPortfolioMode && canEdit()">
             <md-button class="md-icon-button" ng-click="$mdMenu.open($event)" id="material-menu">
