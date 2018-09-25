@@ -5,6 +5,7 @@
         constructor(...args) {
             super(...args)
 
+            debugger
             if (this.locals.slug)
                 this.$scope.location = this.locals.location.origin + this.locals.location.pathname + this.locals.location.search + '#' + this.locals.slug
             else

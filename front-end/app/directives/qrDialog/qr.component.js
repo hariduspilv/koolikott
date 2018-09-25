@@ -7,12 +7,8 @@
 
             this.showQrCodeDialog = () => {
 
-                debugger
-                console.log(this.location)
-                console.log(this.title)
-                console.log(this.slug)
                 this.$mdDialog.show({
-                    templateUrl: 'views/qrDialog/qrDialog.html',
+                    templateUrl: 'directives/qrDialog/qrDialog.html',
                     controller: 'qrDialogController',
                     fullscreen: true,
                     locals: {
