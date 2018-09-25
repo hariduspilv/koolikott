@@ -15,6 +15,7 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.materialCommentsOpen = false;
+            $scope.location = $location.absUrl()
             $('body').materialScrollTop({ offset: 300 })
 
             const licenceTypeMap = {
@@ -51,17 +52,6 @@ angular.module('koolikottApp')
 
             $scope.toggleCommentSection = () => {
                 $scope.commentsOpen = !$scope.commentsOpen;
-            };
-
-            $scope.showQrCodeDialog = () => {
-
-                $mdDialog.show({
-                    templateUrl: 'views/qrDialog/qrDialog.html',
-                    controller: 'qrDialogController',
-                    fullscreen: true,
-                    locals: {},
-                    clickOutsideToClose: true,
-                })
             };
 
             function getContentType() {

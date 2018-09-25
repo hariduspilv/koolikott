@@ -31,12 +31,7 @@
               <dop-share
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
-              <div ng-click="showQrCodeDialog()">
-                <md-tooltip><span data-translate="TOOLTIP_SHOW_QR_CODE"></span></md-tooltip>
-                <md-button
-                  class="md-icon-button qr-code">
-                </md-button>
-              </div>
+              <dop-qr data-location="{{location}}"></dop-qr>
               <md-menu ng-show="dotsAreShowing()">
                 <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>

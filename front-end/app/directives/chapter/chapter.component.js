@@ -12,6 +12,7 @@ const ICON_SVG_CONTENTS = {
 }
 const EMBED_INSERTION_MARKER = '<div class="material-insertion-marker"></div>'
 class controller extends Controller {
+
     $onChanges({ chapter }) {
         if (chapter && chapter.currentValue !== chapter.previousValue) {
             this.embedCache = this.embedCache || {}
@@ -38,7 +39,9 @@ class controller extends Controller {
                 })
         }
     }
+
     $onInit() {
+        this.$scope.location = this.$location.absUrl()
         this.$scope.$watch('chapter.title', (title) =>
             this.$scope.slug = this.getSlug(`chapter-${this.index + 1}`)
         )
@@ -927,17 +930,6 @@ class controller extends Controller {
             this.$embedToolbarScope.$digest()
         }
     }
-    showQrCodeDialog(slug) {
-        this.$mdDialog.show({
-            templateUrl: 'views/qrDialog/qrDialog.html',
-            controller: 'qrDialogController',
-            fullscreen: true,
-            locals: {
-                slug
-            },
-            clickOutsideToClose: true,
-        })
-    };
 }
 controller.$inject = [
     '$scope',
@@ -952,6 +944,7 @@ controller.$inject = [
     'serverCallService',
     'translationService',
     'searchService',
+    '$location'
 ]
 component('dopChapter', {
     bindings: {
