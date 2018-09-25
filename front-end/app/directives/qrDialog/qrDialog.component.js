@@ -30,17 +30,24 @@
         }
 
     }
-
     controller.$inject = [
-        '$scope',
-        '$translate',
-        'serverCallService',
-        'sortService',
-        'dialogService',
-        '$window',
-        '$mdDialog',
+        '$rootScope',
         '$location',
-        'locals'
+        '$mdDialog',
+        '$timeout',
+        '$translate',
+        'authenticatedUserService',
+        'Socialshare',
+        'FB_APP_ID',
+        'GOOGLE_SHARE_CLIENT_ID'
     ]
-    angular.module('koolikottApp').controller('qrDialogController', controller)
+
+    component('dopQr', {
+        bindings: {
+            title: '<',
+            object: '<'
+        },
+        templateUrl: 'directives/share/share.html',
+        controller
+    })
 }

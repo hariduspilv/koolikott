@@ -51,8 +51,8 @@ INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 50215, 'Muusi
 INSERT INTO Topic(used, id, domain) VALUES (1, 50215, 168);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 55999, 'Meediatehnoloogiad', 'TOPIC', 'meediatehnoloogiad');
 INSERT INTO Topic(used, id, domain) VALUES (1, 55999, 168);
-INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 50212, 'Disain_ja_Käsitöö', 'TOPIC', 'disain_ja_käsitöö');
-INSERT INTO Topic(used, id, domain) VALUES (1, 50212, 150);
+INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 55212, 'Disain_ja_Käsitöö', 'TOPIC', 'disain_ja_käsitöö');
+INSERT INTO Topic(used, id, domain) VALUES (1, 55212, 150);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 50414, 'Kaubandus', 'TOPIC', 'kaubandus');
 INSERT INTO Topic(used, id, domain) VALUES (1, 50414, 151);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 50413, 'Äriteenused', 'TOPIC', 'äriteenused');
@@ -116,6 +116,10 @@ INSERT INTO Topic(used, id, domain) VALUES (1, 55033, 170);
 
 
 -- estcore
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (168, 168, 'Kunstid', 'kunstid');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (169, 169, 'Arhitektuur_ja_ehitus', 'arhitektuur_ja_ehitus');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (170, 170, 'Isikuteenindus', 'isikuteenindus');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (171, 171, 'Transporditeenused', 'transporditeenused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (150, 150, 'Humanitaaria', 'humanitaaria');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (162, 162, 'Sotsiaal-_ja_käitumisteadused', 'sotsiaal-_ja_käitumisteadused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (163, 163, 'Ajakirjandus_ja_infolevi', 'ajakirjandus_ja_infolevi');
@@ -136,7 +140,7 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (160, 16
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (161, 161, 'Turvamine', 'turvamine') ;
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (50215, 50215, 'Muusika_ja_esituskunstid', 'muusika_ja_esituskunstid') ;
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (55999, 55999, 'Meediatehnoloogiad', 'meediatehnoloogiad') ;
-INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (50212, 50212, 'Disain_ja_Käsitöö', 'disain_ja_käsitöö') ;
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (55212, 55212, 'Disain_ja_Käsitöö', 'disain_ja_käsitöö') ;
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (50414, 50414, 'Kaubandus', 'kaubandus') ;
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (50413, 50413, 'Äriteenused', 'äriteenused') ;
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (50421, 50421, 'Õigusteenused', 'õigusteenused') ;
