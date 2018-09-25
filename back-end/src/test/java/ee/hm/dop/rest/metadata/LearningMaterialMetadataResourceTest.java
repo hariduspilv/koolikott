@@ -1,18 +1,33 @@
 package ee.hm.dop.rest.metadata;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.enums.TargetGroupEnum;
-import ee.hm.dop.model.taxon.*;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Taxon;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 
@@ -33,6 +48,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     public static final String MATHEMATICS = "Mathematics";
     public static final String ALGEBRA = "Algebra";
     public static final String TRIGONOMETRIA = "Trigonometria";
+    public static final List<String> MATH_TOPICS = Arrays.asList(ALGEBRA, TRIGONOMETRIA);
 
     @Test
     public void getEducationalContext() {
@@ -42,32 +58,37 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
 
         assertEquals(9, educationalContexts.stream().distinct().count());
 
-        int domains = 0, subjects = 0;
-
         for (EducationalContext educationalContext : educationalContexts) {
             if (educationalContext.getName().equals(EducationalContextC.PRESCHOOLEDUCATION)) {
+                assertEquals(2, educationalContext.getDomains().size());
                 for (Domain domain : educationalContext.getDomains()) {
-                    domains++;
                     if (domain.getName().equals(MATHEMATICS)) {
+                        assertEquals(2, domain.getSubjects().size());
                         for (Subject subject : domain.getSubjects()) {
-                            subjects++;
                             if (subject.getName().equals(MATHEMATICS)) {
                                 assertEquals(2, subject.getTopics().size());
-                                Topic[] topics = new Topic[2];
-                                subject.getTopics().toArray(topics);
-                                assertTrue(topics[0].getName().equals(ALGEBRA)
-                                        || topics[0].getName().equals(TRIGONOMETRIA));
-                                assertTrue(topics[1].getName().equals(ALGEBRA)
-                                        || topics[1].getName().equals(TRIGONOMETRIA));
+                                List<String> topicNames = subject.getTopics().stream().map(Taxon::getName).collect(Collectors.toList());
+                                assertEquals(topicNames, MATH_TOPICS);
                             }
                         }
                     }
                 }
             }
         }
+    }
 
-        assertEquals(2, domains);
-        assertEquals(2, subjects);
+    @Test
+    public void disabled_domain_is_not_seen_on_educational_context() {
+        EducationalContext teacherEducation = (EducationalContext) doGet(String.format(GET_TAXON_URL, TAXON_TEACHER_EDUCATION.id), Taxon.class);
+        Set<Domain> domains = teacherEducation.getDomains();
+        assertEquals(1, domains.size());
+        Domain usedTaxon = domains.iterator().next();
+        assertEquals(TAXON_USED_DOMAIN.id, usedTaxon.getId());
+        assertEquals(TAXON_USED_DOMAIN.name, usedTaxon.getName());
+        Domain notUsedDomain = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_UNUSED_DOMAIN.id), Taxon.class);
+        assertNotNull(notUsedDomain);
+        assertEquals(TAXON_UNUSED_DOMAIN.id, notUsedDomain.getId());
+        assertEquals(TAXON_UNUSED_DOMAIN.name, notUsedDomain.getName());
     }
 
     @Test
@@ -84,7 +105,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     }
 
     @Test
-    public void getUsedLanguages_returns_languages_used_in_materials() throws Exception {
+    public void getUsedLanguages_returns_languages_used_in_materials() {
         List<String> expectedNames = Arrays.asList("Estonian", "Russian", "English", "Arabic", "Portuguese");
         verifyGetLanguages(expectedNames, GET_USED_LANGUAGES_URL);
     }

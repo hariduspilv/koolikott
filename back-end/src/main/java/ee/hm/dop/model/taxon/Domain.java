@@ -15,6 +15,7 @@ import org.hibernate.annotations.Where;
 public class Domain extends Taxon {
 
     @OneToMany(mappedBy = "domain")
+    @Where(clause = "used = 1")
     private Set<Subject> subjects;
 
     @OneToMany(mappedBy = "domain")
@@ -26,6 +27,7 @@ public class Domain extends Taxon {
     private boolean used;
 
     @OneToMany(mappedBy = "domain")
+    @Where(clause = "used = 1")
     private Set<Specialization> specializations;
 
     @JsonIgnore

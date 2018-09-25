@@ -98,6 +98,10 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (13, 'SecondaryDo
 insert into Domain(id, educationalContext, used) values (13, 3, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (14, 'Computer_science', 'computer_science', 'DOMAIN', 1);
 insert into Domain(id, educationalContext, used) values (14, 5, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (15, 'Unused_Taxon', 'unused_taxon', 'DOMAIN', 0);
+insert into Domain(id, educationalContext, used) values (15, 7, 0);
+insert into Taxon(id, name, nameLowerCase, level, used) values (16, 'Used_Taxon', 'used_taxon', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (16, 7, 1);
 
 -- Subject
 
