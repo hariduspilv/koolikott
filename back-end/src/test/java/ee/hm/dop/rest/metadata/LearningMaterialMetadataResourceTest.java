@@ -67,7 +67,7 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
                         for (Subject subject : domain.getSubjects()) {
                             if (subject.getName().equals(MATHEMATICS)) {
                                 assertEquals(2, subject.getTopics().size());
-                                List<String> topicNames = subject.getTopics().stream().map(Taxon::getName).collect(Collectors.toList());
+                                List<String> topicNames = subject.getTopics().stream().map(Taxon::getName).sorted().collect(Collectors.toList());
                                 assertEquals(topicNames, MATH_TOPICS);
                             }
                         }
