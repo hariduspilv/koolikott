@@ -37,7 +37,7 @@ insert into Taxon(used, id, name, level, nameLowercase) values (1, 160, 'Keskkon
 insert into Domain(used, id, educationalContext) values (1, 160, 4);
 insert into Taxon(used, id, name, level, nameLowercase) values (1, 161, 'Turvamine', 'DOMAIN', 'turvamine');
 insert into Domain(used, id, educationalContext) values (1, 161, 4);
-insert into Taxon(used, id, name, level, nameLowercase) values (1, 168, 'Kunstid', 'DOMAIN', 'turvamine');
+insert into Taxon(used, id, name, level, nameLowercase) values (1, 168, 'Kunstid', 'DOMAIN', 'kunstid');
 insert into Domain(used, id, educationalContext) values (1, 168, 4);
 insert into Taxon(used, id, name, level, nameLowercase) values (1, 169, 'Arhitektuur_ja_ehitus', 'DOMAIN', 'arhitektuur_ja_ehitus');
 insert into Domain(used, id, educationalContext) values (1, 169, 4);
