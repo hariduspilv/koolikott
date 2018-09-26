@@ -1,5 +1,5 @@
 <dataConfig>
-    <dataSource driver="com.mysql.cj.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop?serverTimezone=Europe/Tallinn"
+    <dataSource driver="com.mysql.cj.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop?serverTimezone=UTC"
                 user="root" password="root"
                 readOnly="true"/>
     <document>
