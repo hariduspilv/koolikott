@@ -1,5 +1,5 @@
 <dataConfig>
-    <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop?serverTimezone=Europe/Tallinn"
+    <dataSource driver="com.mysql.cj.jdbc.Driver" url="jdbc:mysql://127.0.0.1/dop?serverTimezone=Europe/Tallinn"
                 user="root" password="root"
                 readOnly="true"/>
     <document>
@@ -80,7 +80,8 @@
                     query="select IFNULL(2 * SUM(ul.isLiked) - COUNT(*), 0) as like_score from UserLike ul where ul.learningObject='${LearningObject.id}'"/>
 
             <entity name="LearningObject_Recommended"
-                    query="select r.added as recommendation_timestamp, if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'"/>
+                    query="select r.added as recommendation_timestamp,
+                    if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'"/>
 
             <entity name="LicenseType"
                     query="select name as license_type from LicenseType where id='${LearningObject.licenseType}'"/>
