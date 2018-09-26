@@ -6,10 +6,9 @@
             super(...args)
 
             debugger
-            if (this.locals.slug)
-                this.$scope.location = this.locals.location.origin + this.locals.location.pathname + this.locals.location.search + '#' + this.locals.slug
-            else
-                this.$scope.location = this.locals.location.origin + this.locals.location.pathname + this.locals.location.search
+
+            const location = this.locals.location.origin + this.locals.location.pathname + this.locals.location.search
+            this.$scope.location = (this.locals.slug) ? location + '#' + this.locals.slug : location
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide();
