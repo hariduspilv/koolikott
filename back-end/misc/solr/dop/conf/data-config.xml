@@ -37,12 +37,20 @@
                 deltaImportQuery="select id, added, views, creator, visibility, licenseType from LearningObject
                 where id = '${dih.delta.id}'"
                 deltaQuery="select id from LearningObject
-                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dih.last_index_time}'
-                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dih.last_index_time}')
+                    where
+                    (
+                        CONVERT_TZ(DATE_ADD(added, INTERVAL 5 MINUTE), @@session.time_zone, '+00:00') > '${dih.last_index_time}'
+                        OR
+                        CONVERT_TZ(DATE_ADD(added, INTERVAL 5 MINUTE), @@session.time_zone, '+00:00') > '${dih.last_index_time}'
+                    )
                     AND deleted = false"
                 deletedPkQuery="select id from LearningObject
-                    where (CONVERT_TZ(added, @@session.time_zone, '+00:00') > '${dih.last_index_time}'
-                    OR CONVERT_TZ(lastInteraction, @@session.time_zone, '+00:00') > '${dih.last_index_time}')
+                    where
+                    (
+                        CONVERT_TZ(DATE_ADD(added, INTERVAL 5 MINUTE), @@session.time_zone, '+00:00') > '${dih.last_index_time}'
+                        OR
+                        CONVERT_TZ(DATE_ADD(added, INTERVAL 5 MINUTE), @@session.time_zone, '+00:00') > '${dih.last_index_time}'
+                    )
                     AND deleted = true">
 
             <entity name="LearningObject_TargetGroup"
@@ -81,7 +89,8 @@
 
             <entity name="LearningObject_Recommended"
                     query="select r.added as recommendation_timestamp,
-                    if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'"/>
+                    if (lo.recommendation is not null, 1, 0) as recommended from Recommendation r
+                    right join LearningObject lo on r.id = lo.recommendation where lo.id = '${LearningObject.id}'"/>
 
             <entity name="LicenseType"
                     query="select name as license_type from LicenseType where id='${LearningObject.licenseType}'"/>
