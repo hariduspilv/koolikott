@@ -140,6 +140,10 @@ md-dialog.login-dialog {
   background: url("../images/qrcode-scan.svg") no-repeat center;
 }
 
+.fit-content {
+  max-width: fit-content;
+}
+
 // Fix for window resize not calculating height correctly https://github.com/angular/material/issues/4513
 body > .md-dialog-container {
     @media screen and (max-width: $layout-breakpoint-xs) {
