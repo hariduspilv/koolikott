@@ -9,7 +9,7 @@
         <div layout="column" flex flex-gt-xs="75">
           <!-- Headline -->
           <div class="card-lg__container card-lg__container--padding-l-r-t" layout="row">
-            <h1 class="learning-object-title" flex="80" flex-gt-sm="85">
+            <h1 class="learning-object-title" flex="80" flex-gt-sm="80">
               <a data-ng-if="sourceType === 'LINK' && !material.embeddable"
                  data-ng-href="{{material.source}}" target="_blank">
                 <span data-ng-bind="getCorrectLanguageString(material.titles)"></span>
@@ -31,7 +31,9 @@
               <dop-share
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
+              <div data-ng-if="!material.deleted">
               <dop-qr data-location="{{location}}"></dop-qr>
+              </div>
               <md-menu ng-show="dotsAreShowing()">
                 <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>

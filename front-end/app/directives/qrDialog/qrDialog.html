@@ -1,5 +1,5 @@
 <md-dialog aria-label="Qr Code Modal" flex-gt-sm="75" flex id="qr-code-modal"
-           class="fullscreen-dialog">
+           class="fullscreen-dialog fit-content">
   <form name="qrCodeModal">
       <div class="md-toolbar-tools" flex>
         <span flex></span>
@@ -9,7 +9,7 @@
         </md-button>
       </div>
     <md-content class="md-padding">
-      <div layout="row" layout-align="center center">
+      <div layout="row" layout-align="center center" data-ng-style="qrStyle">
         <qrcode data={{location}} error-correction-level="L" size={{size}}></qrcode>
       </div>
     </md-content>
