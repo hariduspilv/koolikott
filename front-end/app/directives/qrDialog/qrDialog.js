@@ -22,7 +22,6 @@
         checkResolution() {
             this.resolutionCheckInterval = this.$interval(() => {
                 let width = window.innerWidth
-                let qrCode = angular.element(document.querySelector('#qrContent'))
                 this.$scope.size = width >= 1920 ? 700 :
                     (width < 1920 && width > 1280) ? 650 :
                         (width < 1280 && width > 960) ? 600 :
