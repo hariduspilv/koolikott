@@ -953,6 +953,33 @@ class Controller {
 
         return upperCaseArray
     }
+    countSelected(filterGroup){
+        let count = 0;
+        Object.entries(filterGroup).forEach(([name, content]) => {
+            if (content.isMaterialActive) {
+                count += content.countMaterial
+            }
+            if (content.isPortfolioActive) {
+                count += content.countPortfolio
+            }
+        })
+        return count;
+    }
+    disableAllGroupsForFilter(filter) {
+        Object.entries(filter).forEach(([name, content]) => {
+            content.isMaterialActive = false
+            content.isPortfolioActive = false
+        })
+    }
+    filterModel(groupName) {
+        return {
+            name: groupName,
+            countMaterial: 0,
+            countPortfolio: 0,
+            isMaterialActive: false,
+            isPortfolioActive: false
+        }
+    }
 }
 
 
