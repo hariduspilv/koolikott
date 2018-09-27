@@ -103,12 +103,9 @@ class controller extends Controller {
         this.params.maxResults = this.maxResults
         this.params.start = this.$scope.start
 
-        this.serverCallService.makeGet(
-            this.url,
-            this.params,
-            this.params.isGrouped ? this.groupedSearchSuccess.bind(this) : this.searchSuccess.bind(this),
-            this.searchFail.bind(this)
-        )
+        this.serverCallService.makeGet(this.url, this.params).then(({data}) => {
+            this.params.isGrouped ? this.groupedSearchSuccess(data) : this.searchSuccess(data)
+        }, () => {this.searchFail()})
     }
     searchSuccess(data) {
         if (!data || !data.items) return this.searchFail()
