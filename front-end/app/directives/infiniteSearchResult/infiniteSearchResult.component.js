@@ -4,8 +4,8 @@
 class controller extends Controller {
     $onChanges({ title, subtitle, filter, params, exactTitle, similarTitle, description }) {
         if (title && title.currentValue !== title.previousValue) this.setTitle()
-        if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitlesExact()
-        if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitlesSimilar()
+        if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
+        if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitleSimilar()
         if (subtitle && subtitle.currentValue !== subtitle.previousValue) this.$scope.subtitle = subtitle.currentValue
         if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
         if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
@@ -44,38 +44,36 @@ class controller extends Controller {
     }
     setTitle() {
         this.$translate.onReady().then(() =>
-            this.$scope.title = this.buildTitle(this.t(), this.title, this.totalResults, this.titleTranslations)
+            this.$scope.title = this.buildTitle(this.title, this.totalResults, this.titleTranslations)
         )
     }
-    setPhraseTitlesExact() {
+    setPhraseTitleExact() {
         this.$translate.onReady().then(() =>
-            this.$scope.exactTitle = this.buildTitle(this.t(), this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+            this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
         )
     }
-    setPhraseTitlesSimilar() {
+    setPhraseTitleSimilar() {
         this.$translate.onReady().then(() =>
-            this.$scope.similarTitle = this.buildTitle(this.t(), this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+            this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
         )
     }
-    t() {
-        return (key) => this.$translate.instant(key);
-    }
-    buildTitle(t, title, totalResults, translations) {
+    buildTitle(title, results, translations) {
+        let t = (key) => this.$translate.instant(key);
         return title ? t(title) :
             this.$scope.searching ? t('SEARCH_RESULTS') :
-                this.replaceTitleContent(totalResults, t, translations, this.searchService.getQuery())
+                this.replaceTitleContent(results, t, this.searchService.getQuery(), translations)
     }
     setPhraseTitles() {
-        this.setPhraseTitlesExact()
-        this.setPhraseTitlesSimilar()
+        this.setPhraseTitleExact()
+        this.setPhraseTitleSimilar()
     }
     resetSort() {
-        this.sortInner(this.initialParams.sort, this.initialParams.sortDirection, 'default', 'desc');
+        this.sortInner();
     }
     sort(field, direction) {
         this.sortInner(field, direction, field, direction);
     }
-    sortInner(field, direction, sField, sDirection) {
+    sortInner(field = this.initialParams.sort, direction = this.initialParams.sortDirection, sField = 'default', sDirection = 'desc') {
         this.params.sort = field
         this.params.sortDirection = direction
         this.searchService.setSort(sField)

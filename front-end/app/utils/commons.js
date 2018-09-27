@@ -980,16 +980,16 @@ class Controller {
             isPortfolioActive: false
         }
     }
-    replaceTitleContent(totalResults, translate, translations, query) {
-        if (!totalResults) {
-            return translate(translations.none).replace('${query}', query)
-        } else if (totalResults === 1) {
-            let newTitle = translate(translations.single)
+    replaceTitleContent(results, t, query, translations) {
+        if (!results) {
+            return t(translations.none).replace('${query}', query)
+        } else if (results === 1) {
+            let newTitle = t(translations.single)
             return query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
-        } else if (totalResults > 1) {
-            let newTitle = translate(translations.multiple)
-            return query ? newTitle.replace('${count}', totalResults).replace('${query}', query)
-                : newTitle.replace('${count}', totalResults).replace('${query}', '').replace(/"/g, '')
+        } else if (results > 1) {
+            let newTitle = t(translations.multiple)
+            return query ? newTitle.replace('${count}', results).replace('${query}', query)
+                : newTitle.replace('${count}', results).replace('${query}', '').replace(/"/g, '')
         }
         return '';
     }
