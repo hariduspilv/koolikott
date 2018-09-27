@@ -17,24 +17,18 @@
             this.$scope.$on('$destroy', () =>
                 this.$interval.cancel(this.resolutionCheckInterval)
             )
+            $(window).resize(() => {
+                this.checkResolution()
+            })
         }
 
         checkResolution() {
-            this.resolutionCheckInterval = this.$interval(() => {
-                let width = window.innerWidth
-                this.$scope.size = width >= 1920 ? 700 :
-                    (width < 1920 && width > 1280) ? 650 :
-                        (width < 1280 && width > 960) ? 600 :
-                            (width < 960 && width > 768) ? 500 :
-                                (width < 768) ? 250 : 200
-
-                this.$scope.qrStyle = width >= 1920 ? {'padding': '9px 75px 75px'} :
-                    (width < 1920 && width > 1280) ? {'padding': '6px 70px 70px'} :
-                        (width < 1280 && width > 960) ? {'padding': '0px 64px 64px'} :
-                            (width < 960 && width > 768) ? {'padding': '0px 54px 54px'} :
-                                (width < 768) ? {'padding': '0px 27px 27px'} : {'padding': '0px 27px 27px'}
-
-            }, 20)
+            var width = window.innerWidth
+            this.$scope.size = width >= 1920 ? 700 :
+                (width < 1920 && width > 1280) ? 650 :
+                    (width < 1280 && width > 960) ? 600 :
+                        (width < 960 && width > 768) ? 500 :
+                            (width < 768) ? 250 : 200
         }
     }
 
