@@ -144,6 +144,24 @@ md-dialog.login-dialog {
   max-width: fit-content;
 }
 
+.qr-padding {
+  @media (min-width: $layout-breakpoint-lg) {
+    padding: 9px 75px 75px;
+  }
+  @media (max-width: $layout-breakpoint-lg)  {
+    padding: 9px 75px 75px;
+  }
+  @media (max-width: $layout-breakpoint-md) {
+    padding: 6px 70px 70px;
+  }
+  @media (max-width: $layout-breakpoint-sm) {
+    padding: 0px 64px 64px;
+  }
+  @media (max-width: $layout-breakpoint-xs) {
+    padding: 0px 27px 27px;
+  }
+}
+
 // Fix for window resize not calculating height correctly https://github.com/angular/material/issues/4513
 body > .md-dialog-container {
     @media screen and (max-width: $layout-breakpoint-xs) {
