@@ -30,7 +30,6 @@ class controller extends Controller {
         this.$rootScope.$on('logout:success', this.search.bind(this))
         this.search(true)
     }
-
     showExactGroupButtons() {
         return this.$scope.showFilterGroups === 'phraseGrouping' && this.$scope.filterGroupsExact['all'].countMaterial
     }
@@ -44,61 +43,43 @@ class controller extends Controller {
         this.expectedItemCount = this.maxResults
     }
     setTitle() {
-        const t = (key) => this.$translate.instant(key)
         this.$translate.onReady().then(() =>
-            this.$scope.title = this.buildTitle(t, this.title, this.totalResults, this.titleTranslations)
+            this.$scope.title = this.buildTitle(this.t(), this.title, this.totalResults, this.titleTranslations)
         )
     }
-    buildTitle(t, title, totalResults, translationsKeys) {
-        return title ? t(title) :
-                this.$scope.searching ? t('SEARCH_RESULTS') :
-                    this.buildNewTitle(totalResults, t, translationsKeys)
-    }
-
-    buildNewTitle(totalResults, translate, translationsKeys) {
-        const query = this.searchService.getQuery()
-        if (!totalResults) {
-            return translate(translationsKeys.noResults).replace('${query}', query)
-        } else if (totalResults === 1) {
-            let newTitle = translate(translationsKeys.singleResult)
-            return query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
-        } else if (totalResults > 1) {
-            let newTitle = translate(translationsKeys.multipleResults)
-            return query ? newTitle.replace('${count}', totalResults).replace('${query}', query)
-                : newTitle.replace('${count}', totalResults).replace('${query}', '').replace(/"/g, '')
-        }
-        return '';
-    }
-
     setPhraseTitlesExact() {
-        const t = (key) => this.$translate.instant(key)
         this.$translate.onReady().then(() =>
-            this.$scope.exactTitle = this.buildTitle(t, this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+            this.$scope.exactTitle = this.buildTitle(this.t(), this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
         )
     }
     setPhraseTitlesSimilar() {
-        const t = (key) => this.$translate.instant(key)
         this.$translate.onReady().then(() =>
-            this.$scope.similarTitle = this.buildTitle(t, this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+            this.$scope.similarTitle = this.buildTitle(this.t(), this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
         )
+    }
+    t() {
+        return (key) => this.$translate.instant(key);
+    }
+    buildTitle(t, title, totalResults, translations) {
+        return title ? t(title) :
+            this.$scope.searching ? t('SEARCH_RESULTS') :
+                this.replaceTitleContent(totalResults, t, translations, this.searchService.getQuery())
     }
     setPhraseTitles() {
         this.setPhraseTitlesExact()
         this.setPhraseTitlesSimilar()
     }
     resetSort() {
-        this.params.sort = this.initialParams.sort
-        this.params.sortDirection = this.initialParams.sortDirection
-        this.searchService.setSort('default')
-        this.searchService.setSortDirection('desc')
-        this.$scope.sorting = true
-        this.$location.url(this.searchService.getURL())
+        this.sortInner(this.initialParams.sort, this.initialParams.sortDirection, 'default', 'desc');
     }
     sort(field, direction) {
+        this.sortInner(field, direction, field, direction);
+    }
+    sortInner(field, direction, sField, sDirection) {
         this.params.sort = field
         this.params.sortDirection = direction
-        this.searchService.setSort(field)
-        this.searchService.setSortDirection(direction)
+        this.searchService.setSort(sField)
+        this.searchService.setSortDirection(sDirection)
         this.$scope.sorting = true
         this.$location.url(this.searchService.getURL())
     }
@@ -111,7 +92,6 @@ class controller extends Controller {
                 || this.$scope.start >= this.selectedMaxCount;
         }
     }
-
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -301,19 +281,19 @@ class controller extends Controller {
             all: this.filterModel('GROUPS_ALL'),
         };
         this.titleTranslations = {
-            noResults: 'NO_RESULTS_FOUND',
-            singleResult: 'SEARCH_RESULT_1_WORD',
-            multipleResults: 'SEARCH_RESULT_MULTIPLE_WORD',
+            none: 'NO_RESULTS_FOUND',
+            single: 'SEARCH_RESULT_1_WORD',
+            multiple: 'SEARCH_RESULT_MULTIPLE_WORD',
         }
         this.phaseTitlesExact = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_EXACT_PHRASE',
-            singleResult: 'SEARCH_RESULT_1_RESULT_EXACT_PHRASE',
-            multipleResults: 'SEARCH_RESULT_MULTIPLE_RESULT_EXACT_PHRASE',
+            none: 'SEARCH_RESULT_NO_RESULT_EXACT_PHRASE',
+            single: 'SEARCH_RESULT_1_RESULT_EXACT_PHRASE',
+            multiple: 'SEARCH_RESULT_MULTIPLE_RESULT_EXACT_PHRASE',
         }
         this.phaseTitlesSimilar = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_SIMILAR_PHRASE',
-            singleResult: 'SEARCH_RESULT_1_RESULT_SIMILAR_PHRASE',
-            multipleResults: 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE',
+            none: 'SEARCH_RESULT_NO_RESULT_SIMILAR_PHRASE',
+            single: 'SEARCH_RESULT_1_RESULT_SIMILAR_PHRASE',
+            multiple: 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE',
         }
     }
 }
