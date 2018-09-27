@@ -22,3 +22,7 @@ md-toast {
   }
 }
 
+md-toast .md-toast-content span {
+  flex: auto !important;
+}
+
