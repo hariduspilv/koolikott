@@ -20,6 +20,7 @@
   </md-input-container>
 </div>
 <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
+<h2 data-ng-if="description" data-translate="{{description}}"></h2>
 
 <div data-ng-if="sorting || !searching">
   <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">

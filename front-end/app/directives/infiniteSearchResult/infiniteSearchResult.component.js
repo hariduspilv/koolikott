@@ -2,12 +2,13 @@
 
 {
 class controller extends Controller {
-    $onChanges({ title, subtitle, filter, params, exactTitle, similarTitle }) {
+    $onChanges({ title, subtitle, filter, params, exactTitle, similarTitle, description }) {
         if (title && title.currentValue !== title.previousValue) this.setTitle()
         if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitlesExact()
         if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitlesSimilar()
         if (subtitle && subtitle.currentValue !== subtitle.previousValue) this.$scope.subtitle = subtitle.currentValue
         if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
+        if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
 
         if (params && !params.isFirstChange() && this.params) {
             this.initialParams = Object.assign({}, this.params)
@@ -348,6 +349,7 @@ component('dopInfiniteSearchResult', {
         url: '<?',
         title: '<',
         subtitle: '<',
+        description: '<',
         filter: '<',
         cache: '<?',
         isPreferred: '<',
