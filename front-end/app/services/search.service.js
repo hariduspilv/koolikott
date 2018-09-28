@@ -25,6 +25,7 @@ class controller extends Controller {
         this.sortDirectionURL = '&sortDirection='
         this.isGroupedURL = '&isGrouped='
         this.filterURL = '&filter='
+        this.materialTitleURL = '&materialTitle='
         this.search = {
             query: '',
             taxons: [],
@@ -42,7 +43,8 @@ class controller extends Controller {
             sort: '',
             sortDirection: '',
             isGrouped: '',
-            filter: ''
+            filter: '',
+            materialTitle: '',
         }
 
         const searchObject = this.$location.search()
@@ -118,6 +120,9 @@ class controller extends Controller {
     }
     setIsGrouped(isGrouped) {
         this.search.isGrouped = isGrouped
+    }
+    setMaterialTitle(title){
+        this.search.materialTitle = title
     }
     setFilter(filter) {
         this.search.filter = filter
@@ -299,6 +304,8 @@ class controller extends Controller {
         if (this.search.isGrouped) searchURL += this.isGroupedURL + this.search.isGrouped
 
         if (this.search.filter) searchURL += this.filterURL + this.search.filter
+
+        if (this.search.materialTitle) searchURL += this.materialTitleURL + this.search.materialTitle
 
         return searchURL
     }
