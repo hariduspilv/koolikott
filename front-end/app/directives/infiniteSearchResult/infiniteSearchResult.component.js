@@ -162,29 +162,30 @@ class controller extends Controller {
     extractItemsFromGroups(groups, currentGroupType, currentSearchType) {
         let flatItemList = []
         Object.entries(groups).forEach(([key, content]) => {
-            if (key === 'material' || key === 'portfolio') currentGroupType = key
-            currentSearchType = this.detectSearchTypeAndSetCounts(key, currentSearchType, content)
+            if (key === 'material' || key === 'portfolio') {
+                currentGroupType = key
+            }
+            if (key === 'exact' || key === 'similar') {
+                currentSearchType = key
+            }
+            this.setCounts(key, content)
             if (content.hasOwnProperty('items')) {
                 this.setGroupItemsCount(currentGroupType, currentSearchType, key, content)
                 this.updateItemAttributes(flatItemList, currentSearchType, key, content)
+            } else {
+                flatItemList = flatItemList.concat(this.extractItemsFromGroups(content, currentGroupType, currentSearchType))
             }
-            else flatItemList = flatItemList.concat(this.extractItemsFromGroups(content, currentGroupType, currentSearchType))
         })
         return flatItemList
     }
-    detectSearchTypeAndSetCounts(key, currentSearchType, content) {
-        if (key === 'exact' || key === 'similar') {
-            currentSearchType = key
-            if (key === 'exact') {
-                this.$scope.filterGroupsExact['all'].countMaterial = content.totalResults
-                this.distinctCount.exact = content.distinctIdCount
-            }
-            else {
-                this.$scope.filterGroups['all'].countMaterial = content.totalResults
-                this.distinctCount.similar = content.distinctIdCount
-            }
+    setCounts(key, content) {
+        if (key === 'exact') {
+            this.$scope.filterGroupsExact['all'].countMaterial = content.totalResults
+            this.distinctCount.exact = content.distinctIdCount
+        } else if (key === 'similar') {
+            this.$scope.filterGroups['all'].countMaterial = content.totalResults
+            this.distinctCount.similar = content.distinctIdCount
         }
-        return currentSearchType
     }
     updateItemAttributes(allItems, searchType, groupName, content) {
         content.items.forEach((item) => {
