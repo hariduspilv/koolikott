@@ -11,8 +11,28 @@ class controller extends Controller {
         if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
 
         if (params && !params.isFirstChange() && this.params) {
-            this.initialParams = Object.assign({}, this.params)
-            this.search(true)
+            const c = params.currentValue;
+            const p = params.previousValue;
+            if (   !this.equals(c.q, p.q)
+                || !this.arrayEquals(c.taxon, p.taxon)
+                || !this.equals(c.paid, p.paid)
+                || !this.equals(c.type, p.type)
+                || !this.equals(c.language, p.language)
+                || !this.arrayEquals(c.targetGroup, p.targetGroup)
+                || !this.equals(c.resourceType, p.resourceType)
+                || !this.equals(c.curriculumLiterature, p.curriculumLiterature)
+                || !this.equals(c.specialEducation, p.specialEducation)
+                || !this.equals(c.issuedFrom, p.issuedFrom)
+                || !this.equals(c.crossCurricularTheme, p.crossCurricularTheme)
+                || !this.equals(c.keyCompetence, p.keyCompetence)
+                || !this.equals(c.favorites, p.favorites)
+                || !this.equals(c.recommended, p.recommended)
+                || !this.equals(c.sort, p.sort)
+                || !this.equals(c.sortDirection, p.sortDirection)
+                || !this.equals(c.isGrouped, p.isGrouped)) {
+                this.initialParams = Object.assign({}, this.params)
+                this.search(true)
+            }
         }
     }
     $onInit() {
@@ -24,7 +44,6 @@ class controller extends Controller {
         $('body').materialScrollTop({ offset: 300 })
         this.$scope.items = []
         this.buildConstants();
-        this.$scope.filterGroupsExact = angular.copy(this.$scope.filterGroups);
         this.distinctCount = { similar: 0, exact: 0 }
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
         this.$rootScope.$on('logout:success', this.search.bind(this))
@@ -150,6 +169,18 @@ class controller extends Controller {
 
         this.$scope.showFilterGroups === 'phraseGrouping' ? this.setPhraseTitles() : this.setTitle()
         this.searchMoreIfNecessary()
+
+        for (const param in this.params) {
+            if (this.params.hasOwnProperty(param)) {
+                if (param.startsWith('material')) {
+                    const lowerCase = param.substr('material'.length).toLowerCase();
+                    this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase].isMaterialActive = true
+                } else if (param.startsWith('portfolio')) {
+                    const lowerCase = param.substr('portfolio'.length).toLowerCase();
+                    this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase].isPortfolioActive = true
+                }
+            }
+        }
     }
     pickGroupView(data) {
         const groupView = data.totalResults !== 0
@@ -217,45 +248,71 @@ class controller extends Controller {
     }
     searchMoreIfNecessary() {
         this.$scope.items.length < this.expectedItemCount && !this.allResultsLoaded()
-            ? this.search()
-            : this.expectedItemCount += this.maxResults
+            ? this.search() : this.expectedItemCount += this.maxResults
     }
     selectMaterialFilter(groupId, isExact) {
         let filterGroup = this.getFiltersByType(isExact)
-        if (filterGroup[groupId].countMaterial === 0) return
-        const isAllActive = filterGroup['all'].isMaterialActive
-        const disableAllGroups = (groupId !== 'all' && isAllActive) || (groupId === 'all' && !isAllActive)
-        this.disableAllOppositeGroups(isExact)
-        if (disableAllGroups) this.disableAllGroupsForFilter(filterGroup)
-        filterGroup[groupId].isMaterialActive = !filterGroup[groupId].isMaterialActive
-        this.countAllInSelected()
-        // this.searchService.setMaterialTitle(true)
-        // this.$location.url(this.searchService.getURL())
+        if (filterGroup[groupId].countMaterial === 0) {
+            return
+        }
+        if (this.allIsOrWas(filterGroup, groupId)) {
+            this.clearAllSearchOptions()
+            this.clearAllFilters();
+        } else {
+            if (this.searchService.isExact() !== isExact){
+                this.clearAllSearchOptions()
+            }
+            this.disableAllOppositeGroups(isExact)
+        }
+        this.flipState(filterGroup, groupId, isExact, "material", "isMaterialActive");
     }
+
     selectPortfolioFilter(groupId, isExact) {
         let filterGroup = this.getFiltersByType(isExact)
-        if (filterGroup[groupId].countPortfolio === 0) return
-        const isAllActive = filterGroup['all'].isMaterialActive
+        if (filterGroup[groupId].countPortfolio === 0) {
+            return
+        }
+        if (this.searchService.isExact() !== isExact){
+            this.clearAllSearchOptions()
+        }
         this.disableAllOppositeGroups(isExact)
-        if (groupId !== 'all' && isAllActive) this.disableAllGroupsForFilter(filterGroup)
-        filterGroup[groupId].isPortfolioActive = !filterGroup[groupId].isPortfolioActive
-        this.countAllInSelected()
+
+        this.flipState(filterGroup, groupId, isExact, "portfolio", "isPortfolioActive");
     }
+
+    clearAllFilters() {
+        this.disableAllGroupsForFilter(this.$scope.filterGroups)
+        this.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
+    }
+
+    flipState(filterGroup, groupId, isExact, loType, isActiveProp) {
+        filterGroup[groupId][isActiveProp] = !filterGroup[groupId][isActiveProp]
+        this.countAllInSelected()
+        this.searchService.search[loType + this.toTitleCase(groupId)] = filterGroup[groupId][isActiveProp] ? "true" : '';
+        this.searchService.setIsExact(isExact);
+        this.$location.url(this.searchService.getURL())
+    }
+
+    clearAllSearchOptions() {
+        Object.entries(this.$scope.filterGroups).forEach(([name, content]) => {
+            this.searchService.search["material" + this.toTitleCase(name)] = '';
+            this.searchService.search["portfolio" + this.toTitleCase(name)] = '';
+        })
+    }
+
     getFiltersByType(isExact) {
         return isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
     }
     countAllInSelected() {
+        this.selectedMaxCount = 0;
         this.selectedMaxCount += this.countSelected(this.$scope.filterGroups)
         if (this.$scope.showFilterGroups === 'phraseGrouping') {
             this.selectedMaxCount += this.countSelected(this.$scope.filterGroupsExact)
         }
     }
     disableAllOppositeGroups(isExact) {
-        if (this.$scope.showFilterGroups !== 'phraseGrouping') return
-        if (isExact) {
-            this.disableAllGroupsForFilter(this.$scope.filterGroups)
-        } else {
-            this.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
+        if (this.$scope.showFilterGroups === 'phraseGrouping') {
+            this.disableAllGroupsForFilter(isExact ? this.$scope.filterGroups : this.$scope.filterGroupsExact)
         }
     }
     isLoggedIn() {
@@ -273,9 +330,10 @@ class controller extends Controller {
             description: this.filterModel('GROUPS_DESCRIPTIONS'),
             tag: this.filterModel('GROUPS_TAGS'),
             author: this.filterModel('GROUPS_AUTHORS'),
-            publisher: this.filterModel('GROUPS_AUTHORS'),
+            publisher: this.filterModel('GROUPS_PUBLISHERS'),
             all: this.filterModel('GROUPS_ALL'),
         };
+        this.$scope.filterGroupsExact = angular.copy(this.$scope.filterGroups);
         this.titleTranslations = {
             none: 'NO_RESULTS_FOUND',
             single: 'SEARCH_RESULT_1_WORD',
