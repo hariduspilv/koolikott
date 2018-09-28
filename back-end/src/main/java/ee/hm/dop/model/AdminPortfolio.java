@@ -15,6 +15,7 @@ public class AdminPortfolio extends AdminLearningObject implements IPortfolio {
     @Column(nullable = false)
     private String title;
 
+    @Override
     public String getTitle() {
         return title;
     }

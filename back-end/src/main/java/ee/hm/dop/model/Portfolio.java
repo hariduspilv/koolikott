@@ -16,10 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
+import static org.apache.commons.lang3.StringUtils.left;
 
 @Entity
 public class Portfolio extends LearningObject implements Searchable, IPortfolio {

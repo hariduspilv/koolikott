@@ -3,8 +3,8 @@
 {
 class controller extends Controller {
     navigateTo() {
-        const { type } = this.learningObject
-        if (isMaterial(type)) {
+
+        if (this.isMaterial(this.learningObject)) {
             if (type === '.Material') this.storageService.setMaterial(this.learningObject)
             else {
                 this.materialService.getMaterialById(this.learningObject.id).then(learningObject => {
@@ -12,7 +12,7 @@ class controller extends Controller {
                     this.storageService.setMaterial(learningObject)
                 })
             }
-        } else if (isPortfolio(type)) {
+        } else if (this.isPortfolio(this.learningObject)) {
             if (type === '.Portfolio') this.storageService.setPortfolio(this.learningObject)
             else {
                 this.portfolioService.getPortfolioById(this.learningObject.id).then(learningObject => {

@@ -14,6 +14,7 @@ public class ReducedPortfolio extends ReducedLearningObject implements IPortfoli
     @Column(nullable = false)
     private String title;
 
+    @Override
     public String getTitle() {
         return title;
     }

@@ -579,6 +579,13 @@ class Controller {
                 language
             )
     }
+    getUrl(learningObject) {
+        if (this.isMaterial(learningObject)) {
+            return 'material?name=' + this.getCorrectLanguageTitle(learningObject)
+        }
+        else
+            return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
+    }
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
             return
