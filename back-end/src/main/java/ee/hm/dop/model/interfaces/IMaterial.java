@@ -2,8 +2,10 @@ package ee.hm.dop.model.interfaces;
 
 
 import ee.hm.dop.model.LanguageString;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +19,9 @@ public interface IMaterial extends ILearningObject{
     List<LanguageString> getTitles();
 
     default List<LanguageString> getTitlesForUrl() {
-        return getTitles().stream()
+        List<LanguageString> titles = getTitles();
+        if (CollectionUtils.isEmpty(titles)) return new ArrayList<>();
+        return titles.stream()
                 .map(t -> new LanguageString(t.getLanguage(), formatTextForUrl(t.getText())))
                 .collect(Collectors.toList());
     }

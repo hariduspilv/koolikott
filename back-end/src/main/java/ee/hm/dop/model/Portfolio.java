@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.interfaces.IPortfolio;
@@ -10,21 +11,14 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
-import java.text.Normalizer;
+import javax.persistence.*;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
-import static org.apache.commons.lang3.StringUtils.left;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Portfolio extends LearningObject implements Searchable, IPortfolio {
 
     @Column(nullable = false)
