@@ -41,14 +41,14 @@ class controller extends Controller {
             materialTag: this.searchService.getMaterialTag(),
             materialAuthor: this.searchService.getMaterialAuthor(),
             materialPublisher: this.searchService.getMaterialPublisher(),
-            materialAll: this.searchService.getMaterialAll(),
             portfolioTitle: this.searchService.getPortfolioTitle(),
             portfolioDescription: this.searchService.getPortfolioDescription(),
             portfolioTag: this.searchService.getPortfolioTag(),
             portfolioAuthor: this.searchService.getPortfolioAuthor(),
             portfolioPublisher: this.searchService.getPortfolioPublisher(),
-            portfolioAll: this.searchService.getPortfolioAll(),
+            all: this.searchService.getAll(),
             isExact: this.searchService.isExact(),
+            details: this.searchService.getDetails(),
         }
         Object.keys(params).forEach((param) => {
             const value = params[param]

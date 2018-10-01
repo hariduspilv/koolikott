@@ -30,6 +30,10 @@ class controller extends Controller {
                 || !this.equals(c.sort, p.sort)
                 || !this.equals(c.sortDirection, p.sortDirection)
                 || !this.equals(c.isGrouped, p.isGrouped)) {
+                this.clearAllSearchOptions()
+                this.searchService.setIsExact('');
+                this.searchService.setDetails('');
+                this.$location.url(this.searchService.getURL())
                 this.initialParams = Object.assign({}, this.params)
                 this.search(true)
             }
@@ -172,16 +176,25 @@ class controller extends Controller {
 
         for (const param in this.params) {
             if (this.params.hasOwnProperty(param)) {
-                if (param.startsWith('material')) {
-                    const lowerCase = param.substr('material'.length).toLowerCase();
-                    this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase].isMaterialActive = true
+                if (param === 'all'){
+                    this.setActive(param, '', "countMaterial", "isMaterialActive");
+                } else if (param.startsWith('material')) {
+                    this.setActive(param, 'material', "countMaterial", "isMaterialActive");
                 } else if (param.startsWith('portfolio')) {
-                    const lowerCase = param.substr('portfolio'.length).toLowerCase();
-                    this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase].isPortfolioActive = true
+                    this.setActive(param, 'portfolio', "countPortfolio", "isPortfolioActive");
                 }
             }
         }
     }
+
+    setActive(param, substring, countType, activeType) {
+        const lowerCase = !substring ? param : param.substr(substring.length).toLowerCase();
+        const element = this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase];
+        if (element[countType] > 0) {
+            element[activeType] = true
+        }
+    }
+
     pickGroupView(data) {
         const groupView = data.totalResults !== 0
             ? data.groups.hasOwnProperty('exact')
@@ -288,8 +301,13 @@ class controller extends Controller {
     flipState(filterGroup, groupId, isExact, loType, isActiveProp) {
         filterGroup[groupId][isActiveProp] = !filterGroup[groupId][isActiveProp]
         this.countAllInSelected()
-        this.searchService.search[loType + this.toTitleCase(groupId)] = filterGroup[groupId][isActiveProp] ? "true" : '';
+        if (groupId === 'all'){
+            this.searchService.setAll(filterGroup[groupId][isActiveProp] ? "true" : '');
+        } else {
+            this.searchService.search[loType + this.toTitleCase(groupId)] = filterGroup[groupId][isActiveProp] ? "true" : '';
+        }
         this.searchService.setIsExact(isExact);
+        this.searchService.setDetails(this.selectedMaxCount > 0 ? "true" : "");
         this.$location.url(this.searchService.getURL())
     }
 
@@ -298,6 +316,7 @@ class controller extends Controller {
             this.searchService.search["material" + this.toTitleCase(name)] = '';
             this.searchService.search["portfolio" + this.toTitleCase(name)] = '';
         })
+        this.searchService.setAll('');
     }
 
     getFiltersByType(isExact) {

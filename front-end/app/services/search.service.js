@@ -7,6 +7,7 @@ class controller extends Controller {
 
         this.groups = ['title', 'tag', 'description', 'author', 'publisher', 'recommended', 'portfolioTitle', 'summary']
         this.searchURLbase = 'search/result?'
+        this.qURL = '&q='
         this.types = ['portfolio', 'material', 'all']
         this.taxonURL = '&taxon='
         this.paidURL = '&paid='
@@ -30,14 +31,14 @@ class controller extends Controller {
         this.materialTagURL = '&materialTag='
         this.materialAuthorURL = '&materialAuthor='
         this.materialPublisherURL = '&materialPublisher='
-        this.materialAllURL = '&materialAll='
+        this.allURL = '&all='
         this.portfolioTitleURL = '&portfolioTitle='
         this.portfolioDescriptionURL = '&portfolioDescription='
         this.portfolioTagURL = '&portfolioTag='
         this.portfolioAuthorURL = '&portfolioAuthor='
         this.portfolioPublisherURL = '&portfolioPublisher='
-        this.portfolioAllURL = '&portfolioAll='
         this.isExactURL = '&isExact='
+        this.detailsURL = '&details='
         this.search = {
             query: '',
             taxons: [],
@@ -61,14 +62,14 @@ class controller extends Controller {
             materialTag: '',
             materialAuthor: '',
             materialPublisher: '',
-            materialAll: '',
+            all: '',
             portfolioTitle: '',
             portfolioDescription: '',
             portfolioTag: '',
             portfolioAuthor: '',
             portfolioPublisher: '',
-            portfolioAll: '',
-            isExact: ''
+            isExact: '',
+            details: ''
         }
 
         const searchObject = this.$location.search()
@@ -139,6 +140,9 @@ class controller extends Controller {
     setIsExact(isExact) {
         this.search.isExact = isExact
     }
+    setDetails(details) {
+        this.search.details = details
+    }
     setSort(sort) {
         this.search.sort = sort
     }
@@ -163,8 +167,8 @@ class controller extends Controller {
     setMaterialPublisher(publisher){
         this.search.materialPublisher = publisher
     }
-    setMaterialAll(all){
-        this.search.materialAll = all
+    setAll(all){
+        this.search.all = all
     }
     setPortfolioTitle(title){
         this.search.portfolioTitle = title
@@ -180,12 +184,6 @@ class controller extends Controller {
     }
     setPortfolioPublisher(publisher){
         this.search.portfolioPublisher = publisher
-    }
-    setPortfolioAll(all){
-        this.search.portfolioAll = all
-    }
-    disableAllMaterial(){
-        this.search.materialTitle = ''
     }
     setFilter(filter) {
         this.search.filter = filter
@@ -280,10 +278,10 @@ class controller extends Controller {
         if (materialPublisher) this.setMaterialPublisher(materialPublisher)
         return this.search.materialPublisher
     }
-    getMaterialAll() {
-        const { materialAll } = this.$location.search()
-        if (materialAll) this.setMaterialAll(materialAll)
-        return this.search.materialAll
+    getAll() {
+        const { all } = this.$location.search()
+        if (all) this.setAll(all)
+        return this.search.all
     }
     getPortfolioTitle() {
         const { portfolioTitle } = this.$location.search()
@@ -310,11 +308,6 @@ class controller extends Controller {
         if (portfolioPublisher) this.setPortfolioPublisher(portfolioPublisher)
         return this.search.portfolioPublisher
     }
-    getPortfolioAll() {
-        const { portfolioAll } = this.$location.search()
-        if (portfolioAll) this.setPortfolioAll(portfolioAll)
-        return this.search.portfolioAll
-    }
     isCurriculumLiterature() {
         const { curriculumLiterature } = this.$location.search()
         if (curriculumLiterature) this.setIsCurriculumLiterature(curriculumLiterature === 'true')
@@ -334,6 +327,11 @@ class controller extends Controller {
         const { isExact } = this.$location.search()
         if (isExact) this.setIsExact(isExact === 'true')
         return this.search.isExact
+    }
+    getDetails() {
+        const { details } = this.$location.search()
+        if (details) this.setDetails(details === 'true')
+        return this.search.details
     }
     isGrouped() {
         const { isGrouped } = this.$location.search()
@@ -376,76 +374,54 @@ class controller extends Controller {
         return this.searchURLbase + this.getQueryURL(isBackendQuery)
     }
     getQueryURL(isBackendQuery) {
-        let searchURL = 'q='
+        let searchURL = ''
 
-        if (this.search.query) searchURL += this.escapeAllQuery(this.search.query)
+        if (this.search.details) searchURL += this.detailsURL + this.search.details
+        if (this.search.query) searchURL += this.qURL + this.escapeAllQuery(this.search.query)
+        if (this.search.isGrouped) searchURL += this.isGroupedURL + this.search.isGrouped
 
-        if (this.search.taxons)
-            for (let i = 0; i < this.search.taxons.length; i++)
+        if (this.search.taxons) {
+            for (let i = 0; i < this.search.taxons.length; i++) {
                 if (this.search.taxons[i]) searchURL += this.taxonURL + this.search.taxons[i]
+            }
+        }
 
-        if (this.search.paid.toString() === 'false')
-            searchURL += this.paidURL + this.search.paid;
-
-        if (this.search.type && this.isValidType(this.search.type))
-            searchURL += this.typeURL + this.search.type
-
-        if (this.search.language)
-            searchURL += this.languageURL + this.search.language
-
-        if (this.search.targetGroups)
-            for (let i = 0; i < this.search.targetGroups.length; i++)
+        if (this.search.targetGroups) {
+            for (let i = 0; i < this.search.targetGroups.length; i++) {
                 searchURL += this.targetGroupsURL + (
                     // Enums are case sensitive, so they must be uppercase for the back-end query
                     isBackendQuery && this.search.targetGroups[i]
                         ? this.search.targetGroups[i].toUpperCase()
                         : this.search.targetGroups[i]
                 )
+            }
+        }
 
-        if (this.search.resourceType)
-            searchURL += this.resourceTypeURL + this.search.resourceType
-
-        if (this.search.isSpecialEducation.toString() === 'true')
-            searchURL += this.isSpecialEducationURL + this.search.isSpecialEducation
-
-        if (this.search.issuedFrom)
-            searchURL += this.issuedFromURL + this.search.issuedFrom
-
-        if (this.search.crossCurricularTheme)
-            searchURL += this.crossCurricularThemeURL + this.search.crossCurricularTheme
-
-        if (this.search.keyCompetence)
-            searchURL += this.keyCompetenceURL + this.search.keyCompetence
-
-        if (this.search.isCurriculumLiterature)
-            searchURL += this.isCurriculumLiteratureURL + this.search.isCurriculumLiterature
-
-        if (typeof this.search.isFavorites === 'boolean' && this.search.isFavorites)
-            searchURL += this.isFavoritesURL + this.search.isFavorites
-
-        if (typeof this.search.isRecommended === 'boolean' && this.search.isRecommended)
-            searchURL += this.isRecommendedURL + this.search.isRecommended
-
-        if (this.search.sort && this.search.sortDirection)
-            searchURL += this.sortURL + this.search.sort + this.sortDirectionURL + this.search.sortDirection
-
-        if (this.search.isGrouped) searchURL += this.isGroupedURL + this.search.isGrouped
-
+        if (this.search.resourceType) searchURL += this.resourceTypeURL + this.search.resourceType
+        if (this.search.isSpecialEducation.toString() === 'true') searchURL += this.isSpecialEducationURL + this.search.isSpecialEducation
+        if (this.search.issuedFrom) searchURL += this.issuedFromURL + this.search.issuedFrom
+        if (this.search.crossCurricularTheme) searchURL += this.crossCurricularThemeURL + this.search.crossCurricularTheme
+        if (this.search.keyCompetence) searchURL += this.keyCompetenceURL + this.search.keyCompetence
+        if (this.search.isCurriculumLiterature) searchURL += this.isCurriculumLiteratureURL + this.search.isCurriculumLiterature
+        if (typeof this.search.isFavorites === 'boolean' && this.search.isFavorites) searchURL += this.isFavoritesURL + this.search.isFavorites
+        if (typeof this.search.isRecommended === 'boolean' && this.search.isRecommended) searchURL += this.isRecommendedURL + this.search.isRecommended
         if (this.search.filter) searchURL += this.filterURL + this.search.filter
-
+        if (this.search.type && this.isValidType(this.search.type)) searchURL += this.typeURL + this.search.type
+        if (this.search.paid.toString() === 'false') searchURL += this.paidURL + this.search.paid;
+        if (this.search.language) searchURL += this.languageURL + this.search.language
+        if (this.search.isExact) searchURL += this.isExactURL + this.search.isExact
         if (this.search.materialTitle) searchURL += this.materialTitleURL + this.search.materialTitle
         if (this.search.materialDescription) searchURL += this.materialDescriptionURL + this.search.materialDescription
         if (this.search.materialTag) searchURL += this.materialTagURL + this.search.materialTag
         if (this.search.materialAuthor) searchURL += this.materialAuthorURL + this.search.materialAuthor
         if (this.search.materialPublisher) searchURL += this.materialPublisherURL + this.search.materialPublisher
-        if (this.search.materialAll) searchURL += this.materialAllURL + this.search.materialAll
         if (this.search.portfolioTitle) searchURL += this.portfolioTitleURL + this.search.portfolioTitle
         if (this.search.portfolioDescription) searchURL += this.portfolioDescriptionURL + this.search.portfolioDescription
         if (this.search.portfolioTag) searchURL += this.portfolioTagURL + this.search.portfolioTag
         if (this.search.portfolioAuthor) searchURL += this.portfolioAuthorURL + this.search.portfolioAuthor
         if (this.search.portfolioPublisher) searchURL += this.portfolioPublisherURL + this.search.portfolioPublisher
-        if (this.search.portfolioAll) searchURL += this.portfolioAllURL + this.search.portfolioAll
-        if (this.search.isExact) searchURL += this.isExactURL + this.search.isExact
+        if (this.search.all) searchURL += this.allURL + this.search.all
+        if (this.search.sort && this.search.sortDirection) searchURL += this.sortURL + this.search.sort + this.sortDirectionURL + this.search.sortDirection
 
         return searchURL
     }
