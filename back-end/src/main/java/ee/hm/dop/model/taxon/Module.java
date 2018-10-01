@@ -1,19 +1,21 @@
 package ee.hm.dop.model.taxon;
 
-import static javax.persistence.FetchType.EAGER;
-
-import java.util.Set;
-
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("MODULE")
 public class Module extends Taxon {
 
-    @OneToMany(fetch = EAGER, mappedBy = "module")
+    @OneToMany(mappedBy = "module")
     @Where(clause = "used = 1")
     private Set<Topic> topics;
 
