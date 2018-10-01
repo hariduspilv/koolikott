@@ -16,7 +16,6 @@ public class Subtopic extends Taxon {
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "topic", nullable = false)
-    @Where(clause = "used = 1")
     private Topic topic;
 
     @JsonIgnore
