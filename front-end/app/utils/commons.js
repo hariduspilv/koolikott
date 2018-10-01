@@ -912,6 +912,17 @@ class Controller {
                 ''
             )
     }
+    arrayEquals(array1,array2){
+        if (!array1 && !array2) return true
+        if (!array1 || !array2) return false
+        return array1.length === array2.length && array1.every((value, index) => value === array2[index])
+    }
+    equals(element1, element2){
+        if (!element1 && !element2) return true
+        if (!element1 || !element2) return false
+        return element1 === element2;
+
+    }
     issueDateToDate(issueDate) {
         return issueDate && (
             issueDate.day && issueDate.month && issueDate.year
@@ -972,12 +983,6 @@ class Controller {
         })
         return count;
     }
-    disableAllGroupsForFilter(filter) {
-        Object.entries(filter).forEach(([name, content]) => {
-            content.isMaterialActive = false
-            content.isPortfolioActive = false
-        })
-    }
     filterModel(groupName) {
         return {
             name: groupName,
@@ -986,6 +991,34 @@ class Controller {
             isMaterialActive: false,
             isPortfolioActive: false
         }
+    }
+    replaceTitleContent(results, t, query, translations) {
+        if (!results) {
+            return t(translations.none).replace('${query}', query)
+        } else if (results === 1) {
+            let newTitle = t(translations.single)
+            return query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
+        } else if (results > 1) {
+            let newTitle = t(translations.multiple)
+            return query ? newTitle.replace('${count}', results).replace('${query}', query)
+                : newTitle.replace('${count}', results).replace('${query}', '').replace(/"/g, '')
+        }
+        return '';
+    }
+    toTitleCase(str) {
+        return str.replace(/\w\S*/g, (txt)  => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+        );
+    }
+    disableAllGroupsForFilter(filter) {
+        Object.entries(filter).forEach(([name, content]) => {
+            content.isMaterialActive = false
+            content.isPortfolioActive = false
+        })
+    }
+    allIsOrWas(filterGroup, groupId) {
+        const allActiveExists = filterGroup['all'].isMaterialActive;
+        const currentIsAll = groupId === 'all';
+        return !currentIsAll && allActiveExists || currentIsAll && !allActiveExists;
     }
 }
 

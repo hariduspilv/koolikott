@@ -4,15 +4,35 @@
 class controller extends Controller {
     $onChanges({ title, subtitle, filter, params, exactTitle, similarTitle, description }) {
         if (title && title.currentValue !== title.previousValue) this.setTitle()
-        if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitlesExact()
-        if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitlesSimilar()
+        if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
+        if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitleSimilar()
         if (subtitle && subtitle.currentValue !== subtitle.previousValue) this.$scope.subtitle = subtitle.currentValue
         if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
         if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
 
         if (params && !params.isFirstChange() && this.params) {
-            this.initialParams = Object.assign({}, this.params)
-            this.search(true)
+            const c = params.currentValue;
+            const p = params.previousValue;
+            if (   !this.equals(c.q, p.q)
+                || !this.arrayEquals(c.taxon, p.taxon)
+                || !this.equals(c.paid, p.paid)
+                || !this.equals(c.type, p.type)
+                || !this.equals(c.language, p.language)
+                || !this.arrayEquals(c.targetGroup, p.targetGroup)
+                || !this.equals(c.resourceType, p.resourceType)
+                || !this.equals(c.curriculumLiterature, p.curriculumLiterature)
+                || !this.equals(c.specialEducation, p.specialEducation)
+                || !this.equals(c.issuedFrom, p.issuedFrom)
+                || !this.equals(c.crossCurricularTheme, p.crossCurricularTheme)
+                || !this.equals(c.keyCompetence, p.keyCompetence)
+                || !this.equals(c.favorites, p.favorites)
+                || !this.equals(c.recommended, p.recommended)
+                || !this.equals(c.sort, p.sort)
+                || !this.equals(c.sortDirection, p.sortDirection)
+                || !this.equals(c.isGrouped, p.isGrouped)) {
+                this.initialParams = Object.assign({}, this.params)
+                this.search(true)
+            }
         }
     }
     $onInit() {
@@ -24,13 +44,11 @@ class controller extends Controller {
         $('body').materialScrollTop({ offset: 300 })
         this.$scope.items = []
         this.buildConstants();
-        this.$scope.filterGroupsExact = angular.copy(this.$scope.filterGroups);
         this.distinctCount = { similar: 0, exact: 0 }
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
         this.$rootScope.$on('logout:success', this.search.bind(this))
         this.search(true)
     }
-
     showExactGroupButtons() {
         return this.$scope.showFilterGroups === 'phraseGrouping' && this.$scope.filterGroupsExact['all'].countMaterial
     }
@@ -44,61 +62,41 @@ class controller extends Controller {
         this.expectedItemCount = this.maxResults
     }
     setTitle() {
-        const t = (key) => this.$translate.instant(key)
         this.$translate.onReady().then(() =>
-            this.$scope.title = this.buildTitle(t, this.title, this.totalResults, this.titleTranslations)
+            this.$scope.title = this.buildTitle(this.title, this.totalResults, this.titleTranslations)
         )
     }
-    buildTitle(t, title, totalResults, translationsKeys) {
+    setPhraseTitleExact() {
+        this.$translate.onReady().then(() =>
+            this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+        )
+    }
+    setPhraseTitleSimilar() {
+        this.$translate.onReady().then(() =>
+            this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+        )
+    }
+    buildTitle(title, results, translations) {
+        let t = (key) => this.$translate.instant(key);
         return title ? t(title) :
-                this.$scope.searching ? t('SEARCH_RESULTS') :
-                    this.buildNewTitle(totalResults, t, translationsKeys)
-    }
-
-    buildNewTitle(totalResults, translate, translationsKeys) {
-        const query = this.searchService.getQuery()
-        if (!totalResults) {
-            return translate(translationsKeys.noResults).replace('${query}', query)
-        } else if (totalResults === 1) {
-            let newTitle = translate(translationsKeys.singleResult)
-            return query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
-        } else if (totalResults > 1) {
-            let newTitle = translate(translationsKeys.multipleResults)
-            return query ? newTitle.replace('${count}', totalResults).replace('${query}', query)
-                : newTitle.replace('${count}', totalResults).replace('${query}', '').replace(/"/g, '')
-        }
-        return '';
-    }
-
-    setPhraseTitlesExact() {
-        const t = (key) => this.$translate.instant(key)
-        this.$translate.onReady().then(() =>
-            this.$scope.exactTitle = this.buildTitle(t, this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
-        )
-    }
-    setPhraseTitlesSimilar() {
-        const t = (key) => this.$translate.instant(key)
-        this.$translate.onReady().then(() =>
-            this.$scope.similarTitle = this.buildTitle(t, this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
-        )
+            this.$scope.searching ? t('SEARCH_RESULTS') :
+                this.replaceTitleContent(results, t, this.searchService.getQuery(), translations)
     }
     setPhraseTitles() {
-        this.setPhraseTitlesExact()
-        this.setPhraseTitlesSimilar()
+        this.setPhraseTitleExact()
+        this.setPhraseTitleSimilar()
     }
     resetSort() {
-        this.params.sort = this.initialParams.sort
-        this.params.sortDirection = this.initialParams.sortDirection
-        this.searchService.setSort('default')
-        this.searchService.setSortDirection('desc')
-        this.$scope.sorting = true
-        this.$location.url(this.searchService.getURL())
+        this.sortInner();
     }
     sort(field, direction) {
+        this.sortInner(field, direction, field, direction);
+    }
+    sortInner(field = this.initialParams.sort, direction = this.initialParams.sortDirection, sField = 'default', sDirection = 'desc') {
         this.params.sort = field
         this.params.sortDirection = direction
-        this.searchService.setSort(field)
-        this.searchService.setSortDirection(direction)
+        this.searchService.setSort(sField)
+        this.searchService.setSortDirection(sDirection)
         this.$scope.sorting = true
         this.$location.url(this.searchService.getURL())
     }
@@ -111,7 +109,6 @@ class controller extends Controller {
                 || this.$scope.start >= this.selectedMaxCount;
         }
     }
-
     search(isNewSearch) {
         if (isNewSearch) this.setParams()
         if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
@@ -123,12 +120,9 @@ class controller extends Controller {
         this.params.maxResults = this.maxResults
         this.params.start = this.$scope.start
 
-        this.serverCallService.makeGet(
-            this.url,
-            this.params,
-            this.params.isGrouped ? this.groupedSearchSuccess.bind(this) : this.searchSuccess.bind(this),
-            this.searchFail.bind(this)
-        )
+        this.serverCallService.makeGet(this.url, this.params).then(({data}) => {
+            this.params.isGrouped ? this.groupedSearchSuccess(data) : this.searchSuccess(data)
+        }, () => {this.searchFail()})
     }
     searchSuccess(data) {
         if (!data || !data.items) return this.searchFail()
@@ -175,6 +169,18 @@ class controller extends Controller {
 
         this.$scope.showFilterGroups === 'phraseGrouping' ? this.setPhraseTitles() : this.setTitle()
         this.searchMoreIfNecessary()
+
+        for (const param in this.params) {
+            if (this.params.hasOwnProperty(param)) {
+                if (param.startsWith('material')) {
+                    const lowerCase = param.substr('material'.length).toLowerCase();
+                    this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase].isMaterialActive = true
+                } else if (param.startsWith('portfolio')) {
+                    const lowerCase = param.substr('portfolio'.length).toLowerCase();
+                    this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase].isPortfolioActive = true
+                }
+            }
+        }
     }
     pickGroupView(data) {
         const groupView = data.totalResults !== 0
@@ -187,29 +193,30 @@ class controller extends Controller {
     extractItemsFromGroups(groups, currentGroupType, currentSearchType) {
         let flatItemList = []
         Object.entries(groups).forEach(([key, content]) => {
-            if (key === 'material' || key === 'portfolio') currentGroupType = key
-            currentSearchType = this.detectSearchTypeAndSetCounts(key, currentSearchType, content)
+            if (key === 'material' || key === 'portfolio') {
+                currentGroupType = key
+            }
+            if (key === 'exact' || key === 'similar') {
+                currentSearchType = key
+            }
+            this.setCounts(key, content)
             if (content.hasOwnProperty('items')) {
                 this.setGroupItemsCount(currentGroupType, currentSearchType, key, content)
                 this.updateItemAttributes(flatItemList, currentSearchType, key, content)
+            } else {
+                flatItemList = flatItemList.concat(this.extractItemsFromGroups(content, currentGroupType, currentSearchType))
             }
-            else flatItemList = flatItemList.concat(this.extractItemsFromGroups(content, currentGroupType, currentSearchType))
         })
         return flatItemList
     }
-    detectSearchTypeAndSetCounts(key, currentSearchType, content) {
-        if (key === 'exact' || key === 'similar') {
-            currentSearchType = key
-            if (key === 'exact') {
-                this.$scope.filterGroupsExact['all'].countMaterial = content.totalResults
-                this.distinctCount.exact = content.distinctIdCount
-            }
-            else {
-                this.$scope.filterGroups['all'].countMaterial = content.totalResults
-                this.distinctCount.similar = content.distinctIdCount
-            }
+    setCounts(key, content) {
+        if (key === 'exact') {
+            this.$scope.filterGroupsExact['all'].countMaterial = content.totalResults
+            this.distinctCount.exact = content.distinctIdCount
+        } else if (key === 'similar') {
+            this.$scope.filterGroups['all'].countMaterial = content.totalResults
+            this.distinctCount.similar = content.distinctIdCount
         }
-        return currentSearchType
     }
     updateItemAttributes(allItems, searchType, groupName, content) {
         content.items.forEach((item) => {
@@ -241,45 +248,71 @@ class controller extends Controller {
     }
     searchMoreIfNecessary() {
         this.$scope.items.length < this.expectedItemCount && !this.allResultsLoaded()
-            ? this.search()
-            : this.expectedItemCount += this.maxResults
+            ? this.search() : this.expectedItemCount += this.maxResults
     }
     selectMaterialFilter(groupId, isExact) {
         let filterGroup = this.getFiltersByType(isExact)
-        if (filterGroup[groupId].countMaterial === 0) return
-        const isAllActive = filterGroup['all'].isMaterialActive
-        const disableAllGroups = (groupId !== 'all' && isAllActive) || (groupId === 'all' && !isAllActive)
-        this.disableAllOppositeGroups(isExact)
-        if (disableAllGroups) this.disableAllGroupsForFilter(filterGroup)
-        filterGroup[groupId].isMaterialActive = !filterGroup[groupId].isMaterialActive
-        this.countAllInSelected()
-        // this.searchService.setMaterialTitle(true)
-        // this.$location.url(this.searchService.getURL())
+        if (filterGroup[groupId].countMaterial === 0) {
+            return
+        }
+        if (this.allIsOrWas(filterGroup, groupId)) {
+            this.clearAllSearchOptions()
+            this.clearAllFilters();
+        } else {
+            if (this.searchService.isExact() !== isExact){
+                this.clearAllSearchOptions()
+            }
+            this.disableAllOppositeGroups(isExact)
+        }
+        this.flipState(filterGroup, groupId, isExact, "material", "isMaterialActive");
     }
+
     selectPortfolioFilter(groupId, isExact) {
         let filterGroup = this.getFiltersByType(isExact)
-        if (filterGroup[groupId].countPortfolio === 0) return
-        const isAllActive = filterGroup['all'].isMaterialActive
+        if (filterGroup[groupId].countPortfolio === 0) {
+            return
+        }
+        if (this.searchService.isExact() !== isExact){
+            this.clearAllSearchOptions()
+        }
         this.disableAllOppositeGroups(isExact)
-        if (groupId !== 'all' && isAllActive) this.disableAllGroupsForFilter(filterGroup)
-        filterGroup[groupId].isPortfolioActive = !filterGroup[groupId].isPortfolioActive
-        this.countAllInSelected()
+
+        this.flipState(filterGroup, groupId, isExact, "portfolio", "isPortfolioActive");
     }
+
+    clearAllFilters() {
+        this.disableAllGroupsForFilter(this.$scope.filterGroups)
+        this.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
+    }
+
+    flipState(filterGroup, groupId, isExact, loType, isActiveProp) {
+        filterGroup[groupId][isActiveProp] = !filterGroup[groupId][isActiveProp]
+        this.countAllInSelected()
+        this.searchService.search[loType + this.toTitleCase(groupId)] = filterGroup[groupId][isActiveProp] ? "true" : '';
+        this.searchService.setIsExact(isExact);
+        this.$location.url(this.searchService.getURL())
+    }
+
+    clearAllSearchOptions() {
+        Object.entries(this.$scope.filterGroups).forEach(([name, content]) => {
+            this.searchService.search["material" + this.toTitleCase(name)] = '';
+            this.searchService.search["portfolio" + this.toTitleCase(name)] = '';
+        })
+    }
+
     getFiltersByType(isExact) {
         return isExact ? this.$scope.filterGroupsExact : this.$scope.filterGroups
     }
     countAllInSelected() {
+        this.selectedMaxCount = 0;
         this.selectedMaxCount += this.countSelected(this.$scope.filterGroups)
         if (this.$scope.showFilterGroups === 'phraseGrouping') {
             this.selectedMaxCount += this.countSelected(this.$scope.filterGroupsExact)
         }
     }
     disableAllOppositeGroups(isExact) {
-        if (this.$scope.showFilterGroups !== 'phraseGrouping') return
-        if (isExact) {
-            this.disableAllGroupsForFilter(this.$scope.filterGroups)
-        } else {
-            this.disableAllGroupsForFilter(this.$scope.filterGroupsExact)
+        if (this.$scope.showFilterGroups === 'phraseGrouping') {
+            this.disableAllGroupsForFilter(isExact ? this.$scope.filterGroups : this.$scope.filterGroupsExact)
         }
     }
     isLoggedIn() {
@@ -297,23 +330,24 @@ class controller extends Controller {
             description: this.filterModel('GROUPS_DESCRIPTIONS'),
             tag: this.filterModel('GROUPS_TAGS'),
             author: this.filterModel('GROUPS_AUTHORS'),
-            publisher: this.filterModel('GROUPS_AUTHORS'),
+            publisher: this.filterModel('GROUPS_PUBLISHERS'),
             all: this.filterModel('GROUPS_ALL'),
         };
+        this.$scope.filterGroupsExact = angular.copy(this.$scope.filterGroups);
         this.titleTranslations = {
-            noResults: 'NO_RESULTS_FOUND',
-            singleResult: 'SEARCH_RESULT_1_WORD',
-            multipleResults: 'SEARCH_RESULT_MULTIPLE_WORD',
+            none: 'NO_RESULTS_FOUND',
+            single: 'SEARCH_RESULT_1_WORD',
+            multiple: 'SEARCH_RESULT_MULTIPLE_WORD',
         }
         this.phaseTitlesExact = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_EXACT_PHRASE',
-            singleResult: 'SEARCH_RESULT_1_RESULT_EXACT_PHRASE',
-            multipleResults: 'SEARCH_RESULT_MULTIPLE_RESULT_EXACT_PHRASE',
+            none: 'SEARCH_RESULT_NO_RESULT_EXACT_PHRASE',
+            single: 'SEARCH_RESULT_1_RESULT_EXACT_PHRASE',
+            multiple: 'SEARCH_RESULT_MULTIPLE_RESULT_EXACT_PHRASE',
         }
         this.phaseTitlesSimilar = {
-            noResults: 'SEARCH_RESULT_NO_RESULT_SIMILAR_PHRASE',
-            singleResult: 'SEARCH_RESULT_1_RESULT_SIMILAR_PHRASE',
-            multipleResults: 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE',
+            none: 'SEARCH_RESULT_NO_RESULT_SIMILAR_PHRASE',
+            single: 'SEARCH_RESULT_1_RESULT_SIMILAR_PHRASE',
+            multiple: 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE',
         }
     }
 }

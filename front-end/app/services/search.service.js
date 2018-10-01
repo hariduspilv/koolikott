@@ -26,6 +26,18 @@ class controller extends Controller {
         this.isGroupedURL = '&isGrouped='
         this.filterURL = '&filter='
         this.materialTitleURL = '&materialTitle='
+        this.materialDescriptionURL = '&materialDescription='
+        this.materialTagURL = '&materialTag='
+        this.materialAuthorURL = '&materialAuthor='
+        this.materialPublisherURL = '&materialPublisher='
+        this.materialAllURL = '&materialAll='
+        this.portfolioTitleURL = '&portfolioTitle='
+        this.portfolioDescriptionURL = '&portfolioDescription='
+        this.portfolioTagURL = '&portfolioTag='
+        this.portfolioAuthorURL = '&portfolioAuthor='
+        this.portfolioPublisherURL = '&portfolioPublisher='
+        this.portfolioAllURL = '&portfolioAll='
+        this.isExactURL = '&isExact='
         this.search = {
             query: '',
             taxons: [],
@@ -45,6 +57,18 @@ class controller extends Controller {
             isGrouped: '',
             filter: '',
             materialTitle: '',
+            materialDescription: '',
+            materialTag: '',
+            materialAuthor: '',
+            materialPublisher: '',
+            materialAll: '',
+            portfolioTitle: '',
+            portfolioDescription: '',
+            portfolioTag: '',
+            portfolioAuthor: '',
+            portfolioPublisher: '',
+            portfolioAll: '',
+            isExact: ''
         }
 
         const searchObject = this.$location.search()
@@ -112,6 +136,9 @@ class controller extends Controller {
     setIsRecommended(isRecommended) {
         this.search.isRecommended = isRecommended
     }
+    setIsExact(isExact) {
+        this.search.isExact = isExact
+    }
     setSort(sort) {
         this.search.sort = sort
     }
@@ -123,6 +150,42 @@ class controller extends Controller {
     }
     setMaterialTitle(title){
         this.search.materialTitle = title
+    }
+    setMaterialDescription(description){
+        this.search.materialDescription = description
+    }
+    setMaterialTag(tag){
+        this.search.materialTag = tag
+    }
+    setMaterialAuthor(author){
+        this.search.materialAuthor = author
+    }
+    setMaterialPublisher(publisher){
+        this.search.materialPublisher = publisher
+    }
+    setMaterialAll(all){
+        this.search.materialAll = all
+    }
+    setPortfolioTitle(title){
+        this.search.portfolioTitle = title
+    }
+    setPortfolioDescription(description){
+        this.search.portfolioDescription = description
+    }
+    setPortfolioTag(tag){
+        this.search.portfolioTag = tag
+    }
+    setPortfolioAuthor(author){
+        this.search.portfolioAuthor = author
+    }
+    setPortfolioPublisher(publisher){
+        this.search.portfolioPublisher = publisher
+    }
+    setPortfolioAll(all){
+        this.search.portfolioAll = all
+    }
+    disableAllMaterial(){
+        this.search.materialTitle = ''
     }
     setFilter(filter) {
         this.search.filter = filter
@@ -192,6 +255,66 @@ class controller extends Controller {
         if (sortDirection) this.setSortDirection(sortDirection)
         return this.search.sortDirection
     }
+    getMaterialTitle() {
+        const { materialTitle } = this.$location.search()
+        if (materialTitle) this.setMaterialTitle(materialTitle)
+        return this.search.materialTitle
+    }
+    getMaterialDescription() {
+        const { materialDescription } = this.$location.search()
+        if (materialDescription) this.setMaterialDescription(materialDescription)
+        return this.search.materialDescription
+    }
+    getMaterialTag() {
+        const { materialTag } = this.$location.search()
+        if (materialTag) this.setMaterialTag(materialTag)
+        return this.search.materialTag
+    }
+    getMaterialAuthor() {
+        const { materialAuthor } = this.$location.search()
+        if (materialAuthor) this.setMaterialAuthor(materialAuthor)
+        return this.search.materialAuthor
+    }
+    getMaterialPublisher() {
+        const { materialPublisher } = this.$location.search()
+        if (materialPublisher) this.setMaterialPublisher(materialPublisher)
+        return this.search.materialPublisher
+    }
+    getMaterialAll() {
+        const { materialAll } = this.$location.search()
+        if (materialAll) this.setMaterialAll(materialAll)
+        return this.search.materialAll
+    }
+    getPortfolioTitle() {
+        const { portfolioTitle } = this.$location.search()
+        if (portfolioTitle) this.setPortfolioTitle(portfolioTitle)
+        return this.search.portfolioTitle
+    }
+    getPortfolioDescription() {
+        const { portfolioDescription } = this.$location.search()
+        if (portfolioDescription) this.setPortfolioDescription(portfolioDescription)
+        return this.search.portfolioDescription
+    }
+    getPortfolioTag() {
+        const { portfolioTag } = this.$location.search()
+        if (portfolioTag) this.setPortfolioTag(portfolioTag)
+        return this.search.portfolioTag
+    }
+    getPortfolioAuthor() {
+        const { portfolioAuthor } = this.$location.search()
+        if (portfolioAuthor) this.setPortfolioAuthor(portfolioAuthor)
+        return this.search.portfolioAuthor
+    }
+    getPortfolioPublisher() {
+        const { portfolioPublisher } = this.$location.search()
+        if (portfolioPublisher) this.setPortfolioPublisher(portfolioPublisher)
+        return this.search.portfolioPublisher
+    }
+    getPortfolioAll() {
+        const { portfolioAll } = this.$location.search()
+        if (portfolioAll) this.setPortfolioAll(portfolioAll)
+        return this.search.portfolioAll
+    }
     isCurriculumLiterature() {
         const { curriculumLiterature } = this.$location.search()
         if (curriculumLiterature) this.setIsCurriculumLiterature(curriculumLiterature === 'true')
@@ -206,6 +329,11 @@ class controller extends Controller {
         const { recommended } = this.$location.search()
         if (recommended) this.setIsRecommended(recommended === 'true')
         return this.search.isRecommended
+    }
+    isExact() {
+        const { isExact } = this.$location.search()
+        if (isExact) this.setIsExact(isExact === 'true')
+        return this.search.isExact
     }
     isGrouped() {
         const { isGrouped } = this.$location.search()
@@ -306,6 +434,18 @@ class controller extends Controller {
         if (this.search.filter) searchURL += this.filterURL + this.search.filter
 
         if (this.search.materialTitle) searchURL += this.materialTitleURL + this.search.materialTitle
+        if (this.search.materialDescription) searchURL += this.materialDescriptionURL + this.search.materialDescription
+        if (this.search.materialTag) searchURL += this.materialTagURL + this.search.materialTag
+        if (this.search.materialAuthor) searchURL += this.materialAuthorURL + this.search.materialAuthor
+        if (this.search.materialPublisher) searchURL += this.materialPublisherURL + this.search.materialPublisher
+        if (this.search.materialAll) searchURL += this.materialAllURL + this.search.materialAll
+        if (this.search.portfolioTitle) searchURL += this.portfolioTitleURL + this.search.portfolioTitle
+        if (this.search.portfolioDescription) searchURL += this.portfolioDescriptionURL + this.search.portfolioDescription
+        if (this.search.portfolioTag) searchURL += this.portfolioTagURL + this.search.portfolioTag
+        if (this.search.portfolioAuthor) searchURL += this.portfolioAuthorURL + this.search.portfolioAuthor
+        if (this.search.portfolioPublisher) searchURL += this.portfolioPublisherURL + this.search.portfolioPublisher
+        if (this.search.portfolioAll) searchURL += this.portfolioAllURL + this.search.portfolioAll
+        if (this.search.isExact) searchURL += this.isExactURL + this.search.isExact
 
         return searchURL
     }

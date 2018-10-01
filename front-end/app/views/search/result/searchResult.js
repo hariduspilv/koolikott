@@ -36,18 +36,33 @@ class controller extends Controller {
             sort: this.searchService.getSort(),
             sortDirection: this.searchService.getSortDirection(),
             isGrouped: this.searchService.isGrouped(),
+            materialTitle: this.searchService.getMaterialTitle(),
+            materialDescription: this.searchService.getMaterialDescription(),
+            materialTag: this.searchService.getMaterialTag(),
+            materialAuthor: this.searchService.getMaterialAuthor(),
+            materialPublisher: this.searchService.getMaterialPublisher(),
+            materialAll: this.searchService.getMaterialAll(),
+            portfolioTitle: this.searchService.getPortfolioTitle(),
+            portfolioDescription: this.searchService.getPortfolioDescription(),
+            portfolioTag: this.searchService.getPortfolioTag(),
+            portfolioAuthor: this.searchService.getPortfolioAuthor(),
+            portfolioPublisher: this.searchService.getPortfolioPublisher(),
+            portfolioAll: this.searchService.getPortfolioAll(),
+            isExact: this.searchService.isExact(),
         }
         Object.keys(params).forEach((param) => {
             const value = params[param]
-
-            if ((param === 'taxon' && (!value || !value[0])) ||
-                (param === 'paid' && value !== false) ||
-                (param === 'type' && (!value || !this.searchService.isValidType(value))) ||
-                (param === 'specialEducation' && value !== true)
-            ) return
-
-            if (typeof value !== 'undefined' && value !== '') this.$scope.params[param] = value
+            if (this.validParams(param, value)) return
+            this.$scope.params[param] = value
         })
+    }
+
+    validParams(param, value) {
+        return (param === 'taxon' && (!value || !value[0])) ||
+            (param === 'paid' && value !== false) ||
+            (param === 'type' && (!value || !this.searchService.isValidType(value))) ||
+            (param === 'specialEducation' && value !== true) ||
+            (typeof value === 'undefined' || value === '');
     }
 }
 controller.$inject = [
