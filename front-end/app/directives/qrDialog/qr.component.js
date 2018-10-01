@@ -13,7 +13,8 @@
                     fullscreen: true,
                     locals: {
                         location,
-                        slug: this.slug
+                        slug: this.slug,
+                        title: this.title
                     },
                     clickOutsideToClose: true,
                 })
@@ -30,7 +31,8 @@
     component('dopQr', {
         bindings: {
             location: '@',
-            slug: '@'
+            slug: '@',
+            title: '@'
         },
         controller,
         template: `

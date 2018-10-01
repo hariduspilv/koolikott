@@ -2,7 +2,7 @@
   <!--View-->
   <md-card-content data-ng-if="!$ctrl.isEditMode">
     <div class="card-menus" layout="row">
-      <dop-qr data-location="{{location}}" data-slug="{{slug}}"></dop-qr>
+      <dop-qr data-location="{{location}}" data-slug="{{slug}}" data-title="{{$ctrl.replaceSpacesAndCharacters(chapter.title)}}"></dop-qr>
     </div>
     <h2 class="chapter-title" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
 

@@ -33,13 +33,13 @@
       <md-icon>drag_handle</md-icon>
     </span>
     <a
-      href="#{{chapter.slug}}"
+      ng-href="{{makeChapterUrl(chapter.slug, chapter.title)}}"
       class="sidenav__header"
       md-ink-ripple
       draggable="false"
       data-layout="row"
       data-layout-align="start center"
-      data-ng-click="gotoChapter(chapter.slug, $event)"
+      data-ng-click="gotoChapter(chapter.slug, chapter.title, $event)"
       >
       <span class="sidenav__name" data-ng-bind="chapter.title"></span>
     </a>

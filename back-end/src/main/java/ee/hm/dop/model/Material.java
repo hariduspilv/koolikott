@@ -121,11 +121,6 @@ public class Material extends LearningObject implements Searchable, IMaterial {
         return titles;
     }
 
-    public List<LanguageString> getTitlesForUrl() {
-        titles.forEach(t -> t.setText(left(Normalizer.normalize(t.getText(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replaceAll("\\s+", "_"), 20)));
-        return titles;
-    }
-
     public void setTitles(List<LanguageString> titles) {
         this.titles = titles;
     }

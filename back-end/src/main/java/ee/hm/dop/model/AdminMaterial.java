@@ -26,6 +26,7 @@ public class AdminMaterial extends AdminLearningObject implements IMaterial {
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "title"}))
     private List<LanguageString> titles;
 
+    @Override
     public List<LanguageString> getTitles() {
         return titles;
     }

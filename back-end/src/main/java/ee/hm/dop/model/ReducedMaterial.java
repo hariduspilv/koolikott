@@ -43,6 +43,7 @@ public class ReducedMaterial extends ReducedLearningObject implements IMaterial 
             uniqueConstraints = @UniqueConstraint(columnNames = {"material", "resourceType"}))
     private List<ResourceType> resourceTypes;
 
+    @Override
     public List<LanguageString> getTitles() {
         return titles;
     }

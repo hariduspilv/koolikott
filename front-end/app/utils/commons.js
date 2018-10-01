@@ -487,14 +487,6 @@ function focusInput(elementID) {
     $parent.find('input')[0].focus();
 }
 
-function isMaterial(type) {
-    return type === ".Material" || type === ".ReducedMaterial" || type === ".AdminMaterial"
-}
-
-function isPortfolio(type) {
-    return type === ".Portfolio" || type === ".ReducedPortfolio" || type === ".AdminPortfolio"
-}
-
 function countOccurrences(value, text) {
     let count = 0;
     let index = text.indexOf(value);
@@ -579,12 +571,28 @@ class Controller {
                 language
             )
     }
+    getCorrectLanguageTitleForMaterialUrl({title, titlesForUrl, language} = {}) {
+        return !this.dependencyExists('translationService')
+            ? ''
+            : title || titlesForUrl && this.getUserDefinedLanguageString(
+            titlesForUrl,
+            this.translationService.getLanguage(),
+            language
+        )
+    }
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return 'material?name=' + this.getCorrectLanguageTitle(learningObject)
+            return 'material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
         }
         else
             return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
+    }
+
+    replaceSpacesAndCharacters(title) {
+        let titleForUrl = title.replace(/\s+/g, '_')
+        titleForUrl = titleForUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+        titleForUrl = titleForUrl.substring(0, 20)
+        return titleForUrl
     }
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)

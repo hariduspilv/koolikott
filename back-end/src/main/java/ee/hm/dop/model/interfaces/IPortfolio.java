@@ -15,6 +15,7 @@ public interface IPortfolio extends ILearningObject{
     String getTitle();
 
     default String getTitleForUrl() {
-        return left(Normalizer.normalize(getTitle(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replaceAll("\\s+", "_"), 20);
+        return left(Normalizer.normalize(getTitle(), Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .replaceAll("[\\s+\\p{P}\\p{S}]", "_"), 20);
     }
 }
