@@ -1,3 +1,9 @@
+## e-Koolikott [1.22.1](https://github.com/hariduspilv/koolikott/milestone/23) 
+
+### Muutunud
+* "minu kogumikud" vaade ei avane teatud tingimustel  [#369](https://github.com/hariduspilv/koolikott/issues/369)
+
+
 ## e-Koolikott [1.22.0](https://github.com/hariduspilv/koolikott/milestone/23) 
 
 ### Muutunud
