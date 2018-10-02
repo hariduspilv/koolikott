@@ -68,6 +68,14 @@ public class MaterialDaoTest extends DatabaseTestBase {
     }
 
     @Test
+    public void material_TitlesForUrl_returns_title_without_diacritics_and_with_length_of_twenty_chars() {
+        Material material = materialDao.findByIdNotDeleted(MATERIAL_6);
+        assertEquals("Eesti keele õpik üheksandale klassile", material.getTitles().get(0).getText());
+        assertEquals("Eesti_keele_opik_uhe", material.getTitlesForUrl().get(0).getText());
+        assertEquals(20, material.getTitlesForUrl().get(0).getText().length());
+    }
+
+    @Test
     public void materialViews() {
         Material material = materialDao.findByIdNotDeleted(MATERIAL_3);
         assertEquals(Long.valueOf(300), material.getViews());

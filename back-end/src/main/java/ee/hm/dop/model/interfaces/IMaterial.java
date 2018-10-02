@@ -2,6 +2,7 @@ package ee.hm.dop.model.interfaces;
 
 
 import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.utils.tokenizer.TitleUtils;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.text.Normalizer;
@@ -19,14 +20,13 @@ public interface IMaterial extends ILearningObject{
     List<LanguageString> getTitles();
 
     default List<LanguageString> getTitlesForUrl() {
-        List<LanguageString> titles = getTitles();
-        if (CollectionUtils.isEmpty(titles)) return new ArrayList<>();
-        return titles.stream()
+        if (CollectionUtils.isEmpty(getTitles())) return new ArrayList<>();
+        return getTitles().stream()
                 .map(t -> new LanguageString(t.getLanguage(), formatTextForUrl(t.getText())))
                 .collect(Collectors.toList());
     }
 
     default String formatTextForUrl(String text) {
-        return left(Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").replaceAll("[\\s+\\p{P}\\p{S}]", "_"), 20);
+        return TitleUtils.makeEncodingFriendly(text);
     }
 }

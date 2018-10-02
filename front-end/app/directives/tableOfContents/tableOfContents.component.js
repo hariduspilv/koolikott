@@ -33,14 +33,6 @@ class controller extends Controller {
         }
     }
 
-    replaceSpacesAndCharacters(title) {
-        let titleForUrl = title.replace(/\s+/g, '_')
-        titleForUrl = titleForUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-        titleForUrl = titleForUrl.substring(0, 20)
-        return titleForUrl.replace(/[\W_]/g, "_")
-    }
-
-
     setScrollPositionBasedOnLocationHash() {
         const setScroll = () => {
             const slug = this.$location.hash()
