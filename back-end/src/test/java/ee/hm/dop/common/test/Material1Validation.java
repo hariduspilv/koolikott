@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 public class Material1Validation {
 
     public static void assertMaterial1(Material material, TestLayer layer) {
+        assertEquals("Matemaatika_opik_uhe", material.getTitlesForUrl().get(0).getText());
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
         assertEquals(2, material.getDescriptions().size());

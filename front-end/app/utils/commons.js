@@ -591,8 +591,7 @@ class Controller {
     replaceSpacesAndCharacters(title) {
         let titleForUrl = title.replace(/\s+/g, '_')
         titleForUrl = titleForUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-        titleForUrl = titleForUrl.substring(0, 20)
-        return titleForUrl
+        return titleForUrl.substring(0, 20)
     }
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
