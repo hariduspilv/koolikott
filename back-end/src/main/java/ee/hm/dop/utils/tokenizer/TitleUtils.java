@@ -10,6 +10,9 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class TitleUtils {
 
     public static final int MAX_TITLE_LENGTH = 20;
+    public static final String SPACES_PUNCTUATION_SYMBOLS = "[\\s+\\p{P}\\p{S}]";
+    public static final String CONSECUTIVE_UNDERSCORES = "\\_+";
+    public static final String DIACRITICAL_MARKS = "\\p{InCombiningDiacriticalMarks}+";
 
     public static String makeEncodingFriendly(String title) {
         return isNotBlank(title) ? left(replaceChars(title), MAX_TITLE_LENGTH) : "";
@@ -17,8 +20,8 @@ public class TitleUtils {
 
     public static String replaceChars(String title) {
         return normalize(trim(title), Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-                .replaceAll("[\\s+\\p{P}\\p{S}]", "_")
-                .replaceAll("\\_+", "_");
+                .replaceAll(DIACRITICAL_MARKS, "")
+                .replaceAll(SPACES_PUNCTUATION_SYMBOLS, "_")
+                .replaceAll(CONSECUTIVE_UNDERSCORES, "_");
     }
 }

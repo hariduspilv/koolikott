@@ -574,11 +574,7 @@ class Controller {
     getCorrectLanguageTitleForMaterialUrl({title, titlesForUrl, language} = {}) {
         return !this.dependencyExists('translationService')
             ? ''
-            : title || titlesForUrl && this.getUserDefinedLanguageString(
-            titlesForUrl,
-            this.translationService.getLanguage(),
-            language
-        )
+            : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
     }
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {

@@ -11,7 +11,6 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,6 +19,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.model.taxon.TaxonLevel.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
@@ -266,6 +266,46 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         int available = response.readEntity(InputStream.class).available();
         assertTrue("Response input stream", available > 0);
+    }
+
+    @Test
+    public void get_material_with_taxons_EC_DOMAIN_TOPIC() {
+        Material material = getMaterial(MATERIAL_40);
+
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(3, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(2).getTaxonLevel());
+    }
+
+    @Test
+    public void get_material_with_taxons_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC() {
+        Material material = getMaterial(MATERIAL_41);
+
+        List<Taxon> taxons = material.getTaxons();
+        assertEquals(5, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
+        assertEquals(SUBJECT, taxons.get(2).getTaxonLevel());
+        assertEquals(TOPIC,taxons.get(3).getTaxonLevel());
+        assertEquals(SUBTOPIC,taxons.get(4).getTaxonLevel());
+    }
+
+    @Test
+    public void get_material_with_taxons_EC_DOMAIN_SPECIALIZATION_MODULE_TOPIC_SUBTOPIC() {
+        int i = 0;
+        Material material = getMaterial(MATERIAL_42);
+
+        List<Taxon> taxons = material.getTaxons();
+        assertEquals(6, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(i++).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(i++).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(i++).getTaxonLevel());
+        assertEquals(SPECIALIZATION,taxons.get(i++).getTaxonLevel());
+        assertEquals(MODULE,taxons.get(i++).getTaxonLevel());
+        assertEquals(SUBTOPIC,taxons.get(i++).getTaxonLevel());
     }
 
     private Response createMaterial(Material material) {
