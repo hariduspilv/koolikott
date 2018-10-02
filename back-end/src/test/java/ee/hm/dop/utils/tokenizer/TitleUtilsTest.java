@@ -60,4 +60,14 @@ public class TitleUtilsTest {
     public void title_with_arabic_characters() {
         assertEquals("العنوان_العربي", TitleUtils.makeEncodingFriendly("العنوان العربي"));
     }
+
+    @Test
+    public void title_symbols_replaced_with_underscores_more_than_one_consecutive_underscore_replaced_with_single() {
+        assertEquals("Title_", TitleUtils.makeEncodingFriendly("Title @£¤$%&/{[]}()=)"));
+    }
+
+    @Test
+    public void title_with_long_space_between_words_multiple_underscore_replaced_with_single() {
+        assertEquals("Best_Title", TitleUtils.makeEncodingFriendly("Best       Title"));
+    }
 }

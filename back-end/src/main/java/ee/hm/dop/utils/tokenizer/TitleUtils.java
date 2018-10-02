@@ -18,6 +18,7 @@ public class TitleUtils {
     public static String replaceChars(String title) {
         return normalize(trim(title), Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-                .replaceAll("[\\s+\\p{P}\\p{S}]", "_");
+                .replaceAll("[\\s+\\p{P}\\p{S}]", "_")
+                .replaceAll("\\_+", "_");
     }
 }
