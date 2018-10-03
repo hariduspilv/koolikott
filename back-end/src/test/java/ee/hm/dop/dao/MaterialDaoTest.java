@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import static ee.hm.dop.utils.tokenizer.TitleUtils.MAX_TITLE_LENGTH;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
@@ -70,9 +71,7 @@ public class MaterialDaoTest extends DatabaseTestBase {
     @Test
     public void material_TitlesForUrl_returns_title_without_diacritics_and_with_length_of_twenty_chars() {
         Material material = materialDao.findByIdNotDeleted(MATERIAL_6);
-        assertEquals("Eesti keele õpik üheksandale klassile", material.getTitles().get(0).getText());
-        assertEquals("Eesti_keele_opik_uhe", material.getTitlesForUrl().get(0).getText());
-        assertEquals(20, material.getTitlesForUrl().get(0).getText().length());
+        assertEquals(MAX_TITLE_LENGTH, material.getTitlesForUrl().get(0).getText().length());
     }
 
     @Test

@@ -48,7 +48,7 @@ public class TitleUtilsTest {
 
     @Test
     public void title_with_russian_characters_russian_characters_will_not_be_replaced() {
-        assertEquals("это_русскии_заголово", TitleUtils.makeEncodingFriendly("это русский заголовок"));
+        assertEquals("это_русскии_заголовок", TitleUtils.makeEncodingFriendly("это русский заголовок"));
     }
 
     @Test

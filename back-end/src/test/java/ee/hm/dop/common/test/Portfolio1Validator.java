@@ -22,7 +22,6 @@ public class Portfolio1Validator {
         assertNotNull(portfolio);
         assertEquals(PORTFOLIO_1, portfolio.getId());
         assertEquals("The_new_stock_market", portfolio.getTitleForUrl());
-        assertEquals(MAX_TITLE_LENGTH, portfolio.getTitleForUrl().length());
         assertEquals("The new stock market", portfolio.getTitle());
         assertEquals(new DateTime("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
         assertEquals(new DateTime("2004-12-29T08:00:01.000+02:00"), portfolio.getUpdated());

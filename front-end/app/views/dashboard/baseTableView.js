@@ -129,11 +129,18 @@ class controller extends Controller {
         )
     }
     getLearningObjectUrl(learningObject) {
+
         if (learningObject)
+
             return this.isPortfolio(learningObject)
-                ? '/portfolio?id=' + learningObject.id
-                : '/material?id=' + learningObject.id
+                ? '/portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
+                : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
     }
+
+    formatTitleForUrl(learningObject) {
+        return this.replaceSpacesAndCharacters(this.getUserDefinedLanguageString(learningObject.titles, this.currentLanguage, language));
+    }
+
     onSort(order) {
         this.sortService.orderItems(
             this.filteredCollection !== null
