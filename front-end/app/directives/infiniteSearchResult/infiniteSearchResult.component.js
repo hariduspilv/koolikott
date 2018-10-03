@@ -268,15 +268,7 @@ class controller extends Controller {
         if (filterGroup[groupId].countMaterial === 0) {
             return
         }
-        if (this.allIsOrWas(filterGroup, groupId)) {
-            this.clearAllSearchOptions()
-            this.clearAllFilters();
-        } else {
-            if (this.searchService.isExact() !== isExact){
-                this.clearAllSearchOptions()
-            }
-            this.disableAllOppositeGroups(isExact)
-        }
+        this.unselectPreviousFilters(filterGroup, groupId, isExact);
         this.flipState(filterGroup, groupId, isExact, "material", "isMaterialActive");
     }
 
@@ -285,18 +277,22 @@ class controller extends Controller {
         if (filterGroup[groupId].countPortfolio === 0) {
             return
         }
+        this.unselectPreviousFilters(filterGroup, groupId, isExact);
+        this.disableAllOppositeGroups(isExact)
+
+        this.flipState(filterGroup, groupId, isExact, "portfolio", "isPortfolioActive");
+    }
+
+    unselectPreviousFilters(filterGroup, groupId, isExact) {
         if (this.allIsOrWas(filterGroup, groupId)) {
             this.clearAllSearchOptions()
             this.clearAllFilters();
         } else {
-            if (this.searchService.isExact() !== isExact){
+            if (this.searchService.isExact() !== isExact) {
                 this.clearAllSearchOptions()
             }
             this.disableAllOppositeGroups(isExact)
         }
-        this.disableAllOppositeGroups(isExact)
-
-        this.flipState(filterGroup, groupId, isExact, "portfolio", "isPortfolioActive");
     }
 
     clearAllFilters() {
