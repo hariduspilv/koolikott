@@ -65,6 +65,9 @@ public interface BaseClassForTests {
     Long MATERIAL_37 = TestConstants.MATERIAL_37;
     Long MATERIAL_38 = TestConstants.MATERIAL_38;
     Long MATERIAL_39 = TestConstants.MATERIAL_39;
+    Long MATERIAL_40 = TestConstants.MATERIAL_40;
+    Long MATERIAL_41 = TestConstants.MATERIAL_41;
+    Long MATERIAL_42 = TestConstants.MATERIAL_42;
 
     Long PORTFOLIO_1 = TestConstants.PORTFOLIO_1;
     Long PORTFOLIO_2 = TestConstants.PORTFOLIO_2;
