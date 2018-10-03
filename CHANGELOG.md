@@ -8,7 +8,7 @@
 
 ### Muutunud
 * Õppevara detailvaadetele lisada "ÜLES" nupp [#360](https://github.com/hariduspilv/koolikott/issues/360)
-* Õppevaradele QR koodi genereerimine ja kuvamine [#367](https://github.com/hariduspilv/koolikott/issues/367)
+* Õppevaradele QR koodi genereerimine ja kuvamine [#357](https://github.com/hariduspilv/koolikott/issues/357)
 * OPIQ materjalide kuvamine e-Koolikoti esilehel [#368](https://github.com/hariduspilv/koolikott/issues/368)
 
 ## e-Koolikott [1.21.9](https://github.com/hariduspilv/koolikott/milestone/20) 
