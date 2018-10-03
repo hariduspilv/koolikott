@@ -74,9 +74,6 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio update(Portfolio portfolio) {
-        if (portfolio.getTitle() != null && portfolio.getTitle().contains("GermanException")){
-            throw new RuntimeException("GermanException save fail");
-        }
         return portfolioService.update(portfolio, getLoggedInUser());
     }
 
