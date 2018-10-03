@@ -2,6 +2,12 @@
 
 {
 class controller extends Controller {
+    $onDestroy(){
+        this.clearAllSearchOptions()
+        this.searchService.setIsExact('');
+        this.searchService.setDetails('');
+    }
+
     $onChanges({ title, subtitle, filter, params, exactTitle, similarTitle, description }) {
         if (title && title.currentValue !== title.previousValue) this.setTitle()
         if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
@@ -43,12 +49,7 @@ class controller extends Controller {
         if (!this.url) this.url = 'rest/search'
 
         this.initialParams = Object.assign({}, this.params)
-        this.selectedMaxCount = 0
-
-        $('body').materialScrollTop({ offset: 300 })
-        this.$scope.items = []
         this.buildConstants();
-        this.distinctCount = { similar: 0, exact: 0 }
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
         this.$rootScope.$on('logout:success', this.search.bind(this))
         this.search(true)
@@ -182,13 +183,18 @@ class controller extends Controller {
                     this.setActive(param, 'material', "countMaterial", "isMaterialActive");
                 } else if (param.startsWith('portfolio')) {
                     this.setActive(param, 'portfolio', "countPortfolio", "isPortfolioActive");
+                } else if (param === 'isExact'){
+                    this.searchService.search[param] = "true";
+                } else if (param === 'details'){
+                    this.searchService.search[param] = "true";
                 }
             }
         }
     }
 
-    setActive(param, substring, countType, activeType) {
-        const lowerCase = !substring ? param : param.substr(substring.length).toLowerCase();
+    setActive(param, loType, countType, activeType) {
+        const lowerCase = !loType ? param : param.substr(loType.length).toLowerCase();
+        this.searchService.search[param] = "true";
         const element = this.$scope[this.params.isExact ? "filterGroupsExact" : "filterGroups"][lowerCase];
         if (element[countType] > 0) {
             element[activeType] = true
@@ -288,7 +294,7 @@ class controller extends Controller {
             this.clearAllSearchOptions()
             this.clearAllFilters();
         } else {
-            if (this.searchService.isExact() !== isExact) {
+            if (!this.equals(this.searchService.isExact(), isExact)) {
                 this.clearAllSearchOptions()
             }
             this.disableAllOppositeGroups(isExact)
@@ -340,6 +346,10 @@ class controller extends Controller {
         return this.authenticatedUserService.isAuthenticated()
     }
     buildConstants() {
+        $('body').materialScrollTop({ offset: 300 })
+        this.$scope.items = []
+        this.selectedMaxCount = 0
+        this.distinctCount = { similar: 0, exact: 0 }
         this.$scope.sortOptions = [
             {option: 'ADDED_DATE_DESC', field: 'added', direction: 'desc'},
             {option: 'ADDED_DATE_ASC', field: 'added', direction: 'asc'},
