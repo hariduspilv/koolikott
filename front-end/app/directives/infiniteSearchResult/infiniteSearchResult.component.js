@@ -33,13 +33,15 @@ class controller extends Controller {
                 || !this.equals(c.keyCompetence, p.keyCompetence)
                 || !this.equals(c.favorites, p.favorites)
                 || !this.equals(c.recommended, p.recommended)
-                || !this.equals(c.sort, p.sort)
-                || !this.equals(c.sortDirection, p.sortDirection)
                 || !this.equals(c.isGrouped, p.isGrouped)) {
                 this.clearAllSearchOptions()
                 this.searchService.setIsExact('');
                 this.searchService.setDetails('');
                 this.$location.url(this.searchService.getURL())
+                this.initialParams = Object.assign({}, this.params)
+                this.search(true)
+            } else if (!this.equals(c.sort, p.sort)
+                    || !this.equals(c.sortDirection, p.sortDirection)) {
                 this.initialParams = Object.assign({}, this.params)
                 this.search(true)
             }
@@ -98,8 +100,6 @@ class controller extends Controller {
         this.sortInner(field, direction, field, direction);
     }
     sortInner(field = this.initialParams.sort, direction = this.initialParams.sortDirection, sField = 'default', sDirection = 'desc') {
-        this.params.sort = field
-        this.params.sortDirection = direction
         this.searchService.setSort(sField)
         this.searchService.setSortDirection(sDirection)
         this.$scope.sorting = true
