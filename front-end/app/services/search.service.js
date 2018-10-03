@@ -398,7 +398,7 @@ class controller extends Controller {
         }
 
         if (this.search.resourceType) searchURL += this.resourceTypeURL + this.search.resourceType
-        if (this.search.isSpecialEducation.toString() === 'true') searchURL += this.isSpecialEducationURL + this.search.isSpecialEducation
+        if (this.search.isSpecialEducation && this.search.isSpecialEducation.toString() === 'true') searchURL += this.isSpecialEducationURL + this.search.isSpecialEducation
         if (this.search.issuedFrom) searchURL += this.issuedFromURL + this.search.issuedFrom
         if (this.search.crossCurricularTheme) searchURL += this.crossCurricularThemeURL + this.search.crossCurricularTheme
         if (this.search.keyCompetence) searchURL += this.keyCompetenceURL + this.search.keyCompetence
@@ -407,7 +407,7 @@ class controller extends Controller {
         if (typeof this.search.isRecommended === 'boolean' && this.search.isRecommended) searchURL += this.isRecommendedURL + this.search.isRecommended
         if (this.search.filter) searchURL += this.filterURL + this.search.filter
         if (this.search.type && this.isValidType(this.search.type)) searchURL += this.typeURL + this.search.type
-        if (this.search.paid.toString() === 'false') searchURL += this.paidURL + this.search.paid;
+        if (this.search.paid && this.search.paid.toString() === 'false') searchURL += this.paidURL + this.search.paid;
         if (this.search.language) searchURL += this.languageURL + this.search.language
         if (this.search.isExact) searchURL += this.isExactURL + this.search.isExact
         if (this.search.materialTitle) searchURL += this.materialTitleURL + this.search.materialTitle
