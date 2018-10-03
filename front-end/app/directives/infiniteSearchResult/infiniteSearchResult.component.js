@@ -285,8 +285,14 @@ class controller extends Controller {
         if (filterGroup[groupId].countPortfolio === 0) {
             return
         }
-        if (this.searchService.isExact() !== isExact){
+        if (this.allIsOrWas(filterGroup, groupId)) {
             this.clearAllSearchOptions()
+            this.clearAllFilters();
+        } else {
+            if (this.searchService.isExact() !== isExact){
+                this.clearAllSearchOptions()
+            }
+            this.disableAllOppositeGroups(isExact)
         }
         this.disableAllOppositeGroups(isExact)
 
