@@ -501,6 +501,10 @@ class controller extends Controller {
                 !this.$scope.chapter.blocks.find(b => b.htmlContent)
         })
     }
+
+    isSampleChapterTitle() {
+        return (this.$scope.chapter.title === "")
+    }
     getBlockClassNames(idx) {
         const { narrow } = this.$scope.chapter.blocks[idx]
         const classNames = {
