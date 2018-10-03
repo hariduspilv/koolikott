@@ -270,42 +270,32 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void get_material_with_taxons_EC_DOMAIN_TOPIC() {
+        login(USER_ADMIN);
         Material material = getMaterial(MATERIAL_40);
 
-        List<Taxon> taxons = material.getTaxons();
-        assertNotNull(taxons);
-        assertEquals(3, taxons.size());
-        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
-        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
-        assertEquals(TOPIC, taxons.get(2).getTaxonLevel());
+        validate_EC_DOMAIN_TOPIC(material);
+        Material updatedMaterial = doPost(UPDATE_MATERIAL_URL, material, Material.class);
+        validate_EC_DOMAIN_TOPIC(updatedMaterial);
     }
 
     @Test
     public void get_material_with_taxons_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC() {
+        login(USER_ADMIN);
         Material material = getMaterial(MATERIAL_41);
 
-        List<Taxon> taxons = material.getTaxons();
-        assertEquals(5, taxons.size());
-        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
-        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
-        assertEquals(SUBJECT, taxons.get(2).getTaxonLevel());
-        assertEquals(TOPIC,taxons.get(3).getTaxonLevel());
-        assertEquals(SUBTOPIC,taxons.get(4).getTaxonLevel());
+        validate_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC(material);
+        Material updatedMaterial = doPost(UPDATE_MATERIAL_URL, material, Material.class);
+        validate_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC(updatedMaterial);
     }
 
     @Test
     public void get_material_with_taxons_EC_DOMAIN_SPECIALIZATION_MODULE_TOPIC_SUBTOPIC() {
-        int i = 0;
+        login(USER_ADMIN);
         Material material = getMaterial(MATERIAL_42);
 
-        List<Taxon> taxons = material.getTaxons();
-        assertEquals(6, taxons.size());
-        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(i++).getTaxonLevel());
-        assertEquals(DOMAIN, taxons.get(i++).getTaxonLevel());
-        assertEquals(TOPIC, taxons.get(i++).getTaxonLevel());
-        assertEquals(SPECIALIZATION,taxons.get(i++).getTaxonLevel());
-        assertEquals(MODULE,taxons.get(i++).getTaxonLevel());
-        assertEquals(SUBTOPIC,taxons.get(i++).getTaxonLevel());
+        validate_ALL_THE_TAXONLEVELS(material);
+        Material updatedMaterial = doPost(UPDATE_MATERIAL_URL, material, Material.class);
+        validate_ALL_THE_TAXONLEVELS(updatedMaterial);
     }
 
     private Response createMaterial(Material material) {
@@ -340,5 +330,36 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private GenericType<List<Material>> listOfMaterials() {
         return new GenericType<List<Material>>() {
         };
+    }
+
+    public void validate_EC_DOMAIN_TOPIC(Material material) {
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(3, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(2).getTaxonLevel());
+    }
+
+    public void validate_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC(Material material) {
+        List<Taxon> taxons = material.getTaxons();
+        assertEquals(5, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
+        assertEquals(SUBJECT, taxons.get(2).getTaxonLevel());
+        assertEquals(TOPIC,taxons.get(3).getTaxonLevel());
+        assertEquals(SUBTOPIC,taxons.get(4).getTaxonLevel());
+    }
+
+    public void validate_ALL_THE_TAXONLEVELS(Material material) {
+        int i = 0;
+        List<Taxon> taxons = material.getTaxons();
+        assertEquals(6, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(i++).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(i++).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(i++).getTaxonLevel());
+        assertEquals(SPECIALIZATION,taxons.get(i++).getTaxonLevel());
+        assertEquals(MODULE,taxons.get(i++).getTaxonLevel());
+        assertEquals(SUBTOPIC,taxons.get(i++).getTaxonLevel());
     }
 }
