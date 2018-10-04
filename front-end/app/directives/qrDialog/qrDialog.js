@@ -7,7 +7,7 @@
 
             this.checkResolution()
 
-            const location = this.getLocation()
+            const location = this.locals.location.origin + this.locals.location.pathname + '?id=' + this.$location.search().id
             this.$scope.location = (this.locals.slug) ? location  + '&chapterName=' + this.locals.title +  '#' + this.locals.slug : location
 
             this.$scope.cancel = () => {
@@ -17,12 +17,6 @@
             $(window).resize(() => {
                 this.checkResolution()
             })
-        }
-
-        getLocation() {
-            return (this.$location.url().includes('name')) ?
-                this.locals.location.origin + this.$location.url().split('name')[0] + 'id=' + this.$location.search().id :
-                this.locals.location.origin + this.$location.url()
         }
 
         checkResolution() {
