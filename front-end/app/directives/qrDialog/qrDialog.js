@@ -14,9 +14,6 @@
                 this.$mdDialog.hide();
             };
 
-            this.$scope.$on('$destroy', () =>
-                this.$interval.cancel(this.resolutionCheckInterval)
-            )
             $(window).resize(() => {
                 this.checkResolution()
             })
