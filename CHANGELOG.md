@@ -60,7 +60,6 @@
 * "Minu asjad" -> "Minu materjalid" menüüs materjalide kuvamise vaikimisi järjekord [#347](https://github.com/hariduspilv/koolikott/issues/347)
 * "Minu asjad" -> "Minu kogumikud" menüüs kogumike kuvamise vaikimisi järjekord [#346](https://github.com/hariduspilv/koolikott/issues/346)
 * URL-de eristamine -> Filtreerimise URLi unikaalse parameetri loomine [#344](https://github.com/hariduspilv/koolikott/issues/344)
-* URL-de eristamine -> Täisotsingu/sõna otsingu/fraasi otsingu URLi unikaalse parameetri loomine [#343](https://github.com/hariduspilv/koolikott/issues/343)
 * Lehe alla äärde "TAGASI ÜLES" nupp lisada [#341](https://github.com/hariduspilv/koolikott/issues/341)
 * Otsingu tulemuste sorteerimine -> Sorteerimise rippmenüüst 2 valikut ära kaotada [#339](https://github.com/hariduspilv/koolikott/issues/339)
 * Otsingu tulemuste sorteerimine -> Sorteerimise rippmenüü uued valikud [#338](https://github.com/hariduspilv/koolikott/issues/338)
