@@ -94,11 +94,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getByCreator() {
+    public void everybody_can_ask_for_mati_materials() {
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, USER_MATI.username), SearchResult.class);
-
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(collect.containsAll(asList(MATERIAL_8, MATERIAL_4, MATERIAL_1)));
+    }
+
+    @Test
+    public void everybody_can_ask_for_taxon_user_materials() {
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, USER_TAXON_USER.username), SearchResult.class);
+        List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
+        assertTrue(collect.containsAll(asList(MATERIAL_40, MATERIAL_41, MATERIAL_42)));
     }
 
     @Test
