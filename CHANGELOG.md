@@ -1,8 +1,15 @@
+## e-Koolikott [1.23.0](https://github.com/hariduspilv/koolikott/milestone/24) 
+
+### Muutunud
+* Õppevarade URL'i lisada õppevarade täispikk pealkiri ja kogumikele lisaks ka peatüki pealkiri [#365](https://github.com/hariduspilv/koolikott/issues/365)
+* URL-de eristamine: Täpsete ja osaliste otsitulemuste parameetrite loomine [#345](https://github.com/hariduspilv/koolikott/issues/345)
+* Otsingutulemuses materjali kaardil sihtgrupi ja taxonoomia uuendamise muudatus [#370](https://github.com/hariduspilv/koolikott/issues/370)
+* Kogumiku koostamisel vanuse komponent ära peita [#376](https://github.com/hariduspilv/koolikott/issues/376)
+
 ## e-Koolikott [1.22.1](https://github.com/hariduspilv/koolikott/milestone/23) 
 
 ### Muutunud
-* "minu kogumikud" vaade ei avane teatud tingimustel  [#369](https://github.com/hariduspilv/koolikott/issues/369)
-
+* "minu kogumikud" vaade ei avane teatud tingimustel [#369](https://github.com/hariduspilv/koolikott/issues/369)
 
 ## e-Koolikott [1.22.0](https://github.com/hariduspilv/koolikott/milestone/23) 
 

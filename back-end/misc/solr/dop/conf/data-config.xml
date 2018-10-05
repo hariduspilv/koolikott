@@ -11,9 +11,11 @@
          -->
 
         <entity name="Taxon" pk="id"
-                query="select concat((FLOOR(RAND() * 90000001) + 10000000), Taxon.id) as id,
-                Translation.translation as taxon_name from Translation
-                right join Taxon on Translation.translationKey LIKE CONCAT('%_', upper(Taxon.name))">
+                query="
+                    select concat((FLOOR(RAND() * 90000001) + 10000000), Taxon.id) as id, Translation.translation as taxon_name
+                    from Translation
+                           right join Taxon on Translation.translationKey LIKE CONCAT('%_', upper(Taxon.name))
+                    where Taxon.used = 1">
             <entity name="Type" query="select 'material' as type"/>
         </entity>
 

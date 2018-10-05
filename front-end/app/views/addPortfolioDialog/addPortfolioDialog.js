@@ -62,6 +62,9 @@ angular.module('koolikottApp')
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.licenseType = $scope.allRightsReserved
                     })
+                    $scope.$watch('newPortfolio.taxons[0]', (selectedValue, previousValue) => {
+                        onTaxonsChange(selectedValue, previousValue)
+                    })
                     $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
@@ -69,6 +72,15 @@ angular.module('koolikottApp')
 
                     getMaxPictureSize();
                 }
+
+                function onTaxonsChange(currentValue, previousValue) {
+                    if (currentValue &&
+                        currentValue !== previousValue &&
+                        currentValue.taxonLevel === "EDUCATIONAL_CONTEXT"
+                    )
+                        $scope.educationalContextName = currentValue.name
+                }
+
 
                 $scope.cancel = function () {
                     $mdDialog.hide();
@@ -112,7 +124,6 @@ angular.module('koolikottApp')
                         $location.url('/portfolio/edit?id=' + portfolio.id)
                     }
                 }
-
                 function createPortfolioFailed() {
                     log('Creating portfolio failed.');
                 }

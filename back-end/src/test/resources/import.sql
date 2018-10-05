@@ -51,6 +51,7 @@ insert into User(id, userName, name, surName, idCode, role, publisher) values (1
 insert into User(id, userName, name, surName, idCode, role, publisher) values (13, 'user.to.be.banned1', 'Whiskey', 'Tango', '38256133107', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (14, 'user.to.be.banned2', 'November', 'Juliet', '38256133108', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (15, 'restricted.user2', 'Restricted', 'User', '89898989892', 'RESTRICTED', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (16, 'taxon.user', 'Taxon', 'User', '11111111111', 'MODERATOR', null);
 
 -- UserTourData
 
@@ -102,6 +103,13 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (15, 'Unused_Taxo
 insert into Domain(id, educationalContext, used) values (15, 7, 0);
 insert into Taxon(id, name, nameLowerCase, level, used) values (16, 'Used_Taxon', 'used_taxon', 'DOMAIN', 1);
 insert into Domain(id, educationalContext, used) values (16, 7, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (17, 'Arvutiteadused', 'arvutiteadused', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (17, 5, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (18, 'Secondary_with_subtopic', 'Secondary_with_subtopic', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (18, 3, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (19, 'Specialization_module_topic_subtopic', 'specialization_module_topic_subtopic', 'DOMAIN', 1);
+insert into Domain(id, educationalContext, used) values (19, 8, 1);
+
 
 -- Subject
 
@@ -111,11 +119,15 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (21, 'Mathematics
 insert into Subject(id, domain, used) values (21, 10, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (22, 'SecondarySubject', 'secondarysubject', 'SUBJECT', 1);
 insert into Subject(id, domain, used) values (22, 13, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (23, 'SecondarySubject2', 'secondarysubject2', 'SUBJECT', 1);
+insert into Subject(id, domain, used) values (23, 18, 1);
 
 -- Specialization
 
 insert into Taxon(id, name, nameLowerCase, level, used) values (40, 'Computers_and_Networks', 'computers_and_networks', 'SPECIALIZATION', 1);
 insert into Specialization(id, domain, used) values (40, 14, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (41, 'Special', 'special', 'SPECIALIZATION', 1);
+insert into Specialization(id, domain, used) values (41, 19, 1);
 
 -- Module
 
@@ -123,6 +135,8 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (50, 'IT_õigus',
 insert into Module(id, specialization, used) values (50, 40, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (51, 'Kommunikatsioon', 'kommunikatsioon', 'MODULE', 1);
 insert into Module(id, specialization, used) values (51, 40, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (52, 'Module_for_special', 'module_for_special', 'MODULE', 1);
+insert into Module(id, specialization, used) values (52, 41, 1);
 
 -- Topics from Subjects
 
@@ -130,6 +144,8 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (30, 'Algebra', '
 insert into Topic(id, subject, used) values (30, 21, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (31, 'Trigonometria', 'trigonometria', 'TOPIC', 1);
 insert into Topic(id, subject, used) values (31, 21, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (37, 'Topic_from_subject', 'Topic_from_subject', 'TOPIC', 1);
+insert into Topic(id, subject, used) values (37, 23, 1);
 
 -- Topics from Domain
 
@@ -137,6 +153,8 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (32, 'EstoniaAndT
 insert into Topic(id, domain, used) values (32, 12, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (33, 'VogaisTonicas', 'vogaistonicas', 'TOPIC', 1);
 insert into Topic(id, domain, used) values (33, 12, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (36, 'Info-ja_kommunikatsioonitehnoloogia', 'info-ja_kommunikatsioonitehnoloogia', 'TOPIC', 1);
+insert into Topic(id, domain, used) values (36, 17, 1);
 
 -- Topics from Module
 
@@ -144,6 +162,8 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (34, 'Infoühisko
 insert into Topic(id, module, used) values (34, 50, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (35, 'Arvuti_töövahendina', 'arvuti_töövahendina', 'TOPIC', 1);
 insert into Topic(id, module, used) values (35, 51, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (38, 'Module_from_subject', 'module_from_subject', 'TOPIC', 1);
+insert into Topic(id, module, used) values (38, 52, 1);
 
 -- Subtopic
 
@@ -153,6 +173,11 @@ insert into Taxon(id, name, nameLowerCase, level, used) values (61, 'konkurents'
 insert into Subtopic(id, topic, used) values (61, 32, 1);
 insert into Taxon(id, name, nameLowerCase, level, used) values (62, 'tehnoloogia_ja_ühiskond', 'tehnoloogia_ja_ühiskond', 'SUBTOPIC', 1);
 insert into Subtopic(id, topic, used) values (62, 34, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (63, 'tehnoloogia_ja_ühiskond', 'tehnoloogia_ja_ühiskond', 'SUBTOPIC', 1);
+insert into Subtopic(id, topic, used) values (63, 37, 1);
+insert into Taxon(id, name, nameLowerCase, level, used) values (64, 'Subtopic_from_topic', 'subtopic_from_topic', 'SUBTOPIC', 1);
+insert into Subtopic(id, topic, used) values (64, 38, 1);
+
 
 -- UserTaxon
 
@@ -160,6 +185,8 @@ INSERT INTO User_Taxon(user, taxon) VALUES (12, 1);
 INSERT INTO User_Taxon(user, taxon) VALUES (12, 10);
 INSERT INTO User_Taxon(user, taxon) VALUES (12, 21);
 INSERT INTO User_Taxon(user, taxon) VALUES (12, 31);
+INSERT INTO User_Taxon(user, taxon) VALUES (16, 21);
+INSERT INTO User_Taxon(user, taxon) VALUES (16, 31);
 
 -- EstCore taxon mapping
 
@@ -175,12 +202,24 @@ insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (9, 9, 'o
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (10, 10, 'Mathematics', 'mathematics');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (11, 11, 'Foreign language', 'foreign language');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (12, 12, 'DomainWithTopics', 'domainwithtopics');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (17, 17, 'Arvutiteadused', 'arvutiteadused');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (18, 18, 'Secondary_with_subtopic', 'secondary_with_subtopic');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (19, 19, 'Specialization_module_topic_subtopic', 'specialization_module_topic_subtopic');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (20, 20, 'Biology', 'biology');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (21, 21, 'Mathematics', 'mathematics');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (22, 22, 'SecondarySubject', 'secondarysubject');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (23, 23, 'SecondarySubject2', 'secondarysubject2');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (30, 30, 'Algebra', 'algebra');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (31, 31, 'Trigonometria', 'trigonometria');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (32, 32, 'EstoniaAndTheWould', 'estoniaandthewould');
 insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (33, 33, 'VogaisTonicas', 'vogaistonicas');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (36, 36, 'Info-ja_kommunikatsioonitehnoloogia', 'info-ja_kommunikatsioonitehnoloogia');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (37, 37, 'Topic_from_subject', 'topic_from_subject');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (41, 41, 'Special', 'special');
+insert into EstCoreTaxonMapping(id, taxon, name, nameLowercase) values (52, 52, 'Module_for_special', 'module_for_special');
+
+
+
 
 -- Recommendations
 
@@ -288,7 +327,12 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(38, null, null, 'http://www.bieber38.com', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(39, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(39, null, null, 'http://www.bieber39.com', null, null, false, false, false);
-
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(40, '1911-09-01 00:00:01', null, 0, null, 16, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(40, null, null, 'http://www.bieber39.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(41, '1911-09-01 00:00:01', null, 0, null, 16, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(41, null, null, 'http://www.bieber39.com', null, null, false, false, false);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(42, '1911-09-01 00:00:01', null, 0, null, 16, false, null, 'PUBLIC', null);
+insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(42, null, null, 'http://www.bieber39.com', null, null, false, false, false);
 
 -- Authors
 
@@ -381,6 +425,28 @@ insert into LearningObject_Taxon(learningObject, taxon) values(3,5); -- VOCATION
 insert into LearningObject_Taxon(learningObject, taxon) values(4,6); -- CONTINUINGEDUCATION
 insert into LearningObject_Taxon(learningObject, taxon) values(5,4); -- HIGHEREDUCATION
 insert into LearningObject_Taxon(learningObject, taxon) values(7,5); -- VOCATIONALEDUCATION
+
+insert into LearningObject_Taxon(learningObject, taxon) values(40,5); -- VOCATIONALEDUCATION/
+insert into LearningObject_Taxon(learningObject, taxon) values(40,17); -- VOCATIONALEDUCATION/IT/
+insert into LearningObject_Taxon(learningObject, taxon) values(40,36); -- VOCATIONALEDUCATION/IT/IT-and-communication
+
+insert into LearningObject_Taxon(learningObject, taxon) values(41,3); -- SECONDARYEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(41,18); -- SECONDARYEDUCATION/DOMAIN
+insert into LearningObject_Taxon(learningObject, taxon) values(41,23); -- SECONDARYEDUCATION/DOMAIN/SUBJECT
+insert into LearningObject_Taxon(learningObject, taxon) values(41,37); -- SECONDARYEDUCATION/DOMAIN/SUBJECT/TOPIC
+insert into LearningObject_Taxon(learningObject, taxon) values(41,63); -- SECONDARYEDUCATION/DOMAIN/SUBJECT/TOPIC/SUBTOPIC
+
+
+
+insert into LearningObject_Taxon(learningObject, taxon) values(42,8); --  SPECIALEDUCATION
+insert into LearningObject_Taxon(learningObject, taxon) values(42,19); -- SPECIALEDUCATION/DOMAIN/
+insert into LearningObject_Taxon(learningObject, taxon) values(42,38); -- SPECIALEDUCATION/DOMAIN/SPECIAL/
+insert into LearningObject_Taxon(learningObject, taxon) values(42,41); -- SPECIALEDUCATION/DOMAIN/SPECIAL/MODULE/
+insert into LearningObject_Taxon(learningObject, taxon) values(42,52); -- SPECIALEDUCATION/DOMAIN/SPECIAL/MODULE/TOPIC/
+insert into LearningObject_Taxon(learningObject, taxon) values(42,64); -- SPECIALEDUCATION/DOMAIN/SPECIAL/MODULE/TOPIC/SUBTOPIC
+
+
+
 
 -- ResourceType
 

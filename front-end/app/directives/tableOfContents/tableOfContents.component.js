@@ -3,6 +3,8 @@
 {
 class controller extends Controller {
     $onInit() {
+
+        this.$scope.location = (this.$location.absUrl().substring(0, this.$location.absUrl().indexOf('#'))) ? this.$location.absUrl().split('&chapterName')[0] : this.$location.absUrl()
         this.$scope.authUser = this.authenticatedUserService.isAuthenticated()
         this.$scope.$watch(() => this.storageService.getPortfolio(), (portfolio) => {
             this.$scope.portfolio = portfolio
@@ -15,17 +17,22 @@ class controller extends Controller {
             this.updateChapterEditorsFromState.bind(this)
             this.setChapters()
         }
-        this.$scope.gotoChapter = (slug, evt) => {
+        this.$scope.gotoChapter = (slug, title, evt) => {
             evt.preventDefault()
 
-            // setting hash directly causes page to jump instantly
-            history.pushState({}, '', this.$location.url().split('#')[0]+'#'+slug)
+            const titleForUrl = this.replaceSpacesAndCharacters(title)
+
+            history.pushState({}, '', this.$location.url().split('&chapterName')[0] + '&chapterName=' + titleForUrl + '#'+slug)
             this.scrollToElement('#'+slug, 500, 80)
 
             if (window.innerWidth < BREAK_LG)
                 this.$mdSidenav('left').close()
         }
+       this.$scope.makeChapterUrl = (slug, title) => {
+            return this.$location.absUrl().split('&chapterName')[0] + '&chapterName=' + this.replaceSpacesAndCharacters(title) + '#' + slug
+        }
     }
+
     setScrollPositionBasedOnLocationHash() {
         const setScroll = () => {
             const slug = this.$location.hash()

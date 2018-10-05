@@ -9,11 +9,13 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.text.Normalizer;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
+import static org.apache.commons.lang3.StringUtils.left;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"repositoryIdentifier", "repository"})})

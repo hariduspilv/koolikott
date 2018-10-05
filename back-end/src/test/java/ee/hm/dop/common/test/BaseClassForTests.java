@@ -25,6 +25,7 @@ public interface BaseClassForTests {
     TestUser USER_TO_BE_BANNED1 = TestConstants.USER_TO_BE_BANNED1;
     TestUser USER_TO_BE_BANNED2 = TestConstants.USER_TO_BE_BANNED2;
     TestUser USER_RESTRICTED2 = TestConstants.USER_RESTRICTED2;
+    TestUser USER_TAXON_USER = TestConstants.USER_TAXON_USER;
 
     Long MATERIAL_1 = TestConstants.MATERIAL_1;
     Long MATERIAL_2 = TestConstants.MATERIAL_2;
@@ -65,6 +66,9 @@ public interface BaseClassForTests {
     Long MATERIAL_37 = TestConstants.MATERIAL_37;
     Long MATERIAL_38 = TestConstants.MATERIAL_38;
     Long MATERIAL_39 = TestConstants.MATERIAL_39;
+    Long MATERIAL_40 = TestConstants.MATERIAL_40;
+    Long MATERIAL_41 = TestConstants.MATERIAL_41;
+    Long MATERIAL_42 = TestConstants.MATERIAL_42;
 
     Long PORTFOLIO_1 = TestConstants.PORTFOLIO_1;
     Long PORTFOLIO_2 = TestConstants.PORTFOLIO_2;

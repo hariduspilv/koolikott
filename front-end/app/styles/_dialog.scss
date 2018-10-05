@@ -168,3 +168,19 @@ body > .md-dialog-container {
         height: 100vh !important;
     }
 }
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .qr-ie {
+    @media (min-width: $layout-breakpoint-lg) {
+      max-width: 45% !important;
+    }
+    @media (max-width: $layout-breakpoint-lg)  {
+      max-width: 65% !important;
+    }
+    @media (max-width: $layout-breakpoint-md) {
+      max-width: 80% !important;
+    }
+  }
+}
+
+
+

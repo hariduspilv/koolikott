@@ -7,7 +7,7 @@ class controller extends Controller {
     }
     $onChanges({ learningObject }) {
         // When asynchronous learningObject request finishes after component init
-        if (learningObject && learningObject.currentValue && !learningObject.previousValue)
+        if (learningObject && learningObject.currentValue !== learningObject.previousValue)
             this.getFavoriteData()
     }
     getFavoriteData() {
@@ -21,6 +21,7 @@ class controller extends Controller {
                         if (data && data.id)
                             this.hasFavorited = true
                     })
+            else this.hasFavorited = false
         }
     }
     favorite($event) {

@@ -56,7 +56,7 @@ public class TagService {
 
         List<Tag> tags = learningObject.getTags();
         if (tags.contains(newTag)) {
-            throw new WebApplicationException("tag already exists", Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(String.format("Tag already exists. Lo: %s. Tags: %s", learningObject.getId(), tags), Response.Status.BAD_REQUEST);
         }
 
         tags.add(newTag);

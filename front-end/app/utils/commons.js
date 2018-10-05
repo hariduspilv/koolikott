@@ -487,14 +487,6 @@ function focusInput(elementID) {
     $parent.find('input')[0].focus();
 }
 
-function isMaterial(type) {
-    return type === ".Material" || type === ".ReducedMaterial" || type === ".AdminMaterial"
-}
-
-function isPortfolio(type) {
-    return type === ".Portfolio" || type === ".ReducedPortfolio" || type === ".AdminPortfolio"
-}
-
 function countOccurrences(value, text) {
     let count = 0;
     let index = text.indexOf(value);
@@ -579,6 +571,23 @@ class Controller {
                 language
             )
     }
+    getCorrectLanguageTitleForMaterialUrl({title, titlesForUrl, language} = {}) {
+        return !this.dependencyExists('translationService')
+            ? ''
+            : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
+    }
+    getUrl(learningObject) {
+        if (this.isMaterial(learningObject)) {
+            return 'material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
+        }
+        else
+            return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
+    }
+
+    replaceSpacesAndCharacters(title) {
+        return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
+    }
+
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
             return
@@ -905,6 +914,17 @@ class Controller {
                 ''
             )
     }
+    arrayEquals(array1,array2){
+        if (!array1 && !array2) return true
+        if (!array1 || !array2) return false
+        return array1.length === array2.length && array1.every((value, index) => value === array2[index])
+    }
+    equals(element1, element2){
+        if (!element1 && !element2) return true
+        if (!element1 || !element2) return false
+        return element1 === element2;
+
+    }
     issueDateToDate(issueDate) {
         return issueDate && (
             issueDate.day && issueDate.month && issueDate.year
@@ -952,6 +972,55 @@ class Controller {
                 upperCaseArray.push(lowerCaseArray[i].toUpperCase())
 
         return upperCaseArray
+    }
+    countSelected(filterGroup){
+        let count = 0;
+        Object.entries(filterGroup).forEach(([name, content]) => {
+            if (content.isMaterialActive) {
+                count += content.countMaterial
+            }
+            if (content.isPortfolioActive) {
+                count += content.countPortfolio
+            }
+        })
+        return count;
+    }
+    filterModel(groupName) {
+        return {
+            name: groupName,
+            countMaterial: 0,
+            countPortfolio: 0,
+            isMaterialActive: false,
+            isPortfolioActive: false
+        }
+    }
+    replaceTitleContent(results, t, query, translations) {
+        if (!results) {
+            return t(translations.none).replace('${query}', query)
+        } else if (results === 1) {
+            let newTitle = t(translations.single)
+            return query ? newTitle.replace('${query}', query) : newTitle.replace('${query}', '').replace(/"/g, '')
+        } else if (results > 1) {
+            let newTitle = t(translations.multiple)
+            return query ? newTitle.replace('${count}', results).replace('${query}', query)
+                : newTitle.replace('${count}', results).replace('${query}', '').replace(/"/g, '')
+        }
+        return '';
+    }
+    toTitleCase(str) {
+        return str.replace(/\w\S*/g, (txt)  => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+        );
+    }
+    disableAllGroupsForFilter(filter) {
+        Object.entries(filter).forEach(([name, content]) => {
+            content.isMaterialActive = false
+            content.isPortfolioActive = false
+        })
+    }
+    allIsOrWas(filterGroup, groupId) {
+        const allActiveExists = filterGroup['all'].isMaterialActive;
+        const currentIsAll = groupId === 'all';
+        return !currentIsAll && allActiveExists || currentIsAll && !allActiveExists;
     }
 }
 

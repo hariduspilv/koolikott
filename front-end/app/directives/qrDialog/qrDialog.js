@@ -7,16 +7,13 @@
 
             this.checkResolution()
 
-            const location = this.locals.location.origin + this.locals.location.pathname + this.locals.location.search
-            this.$scope.location = (this.locals.slug) ? location + '#' + this.locals.slug : location
+            const location = this.locals.location.origin + this.locals.location.pathname + '?id=' + this.$location.search().id
+            this.$scope.location = (this.locals.slug) ? location  + '&chapterName=' + this.locals.title +  '#' + this.locals.slug : location
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide();
             };
 
-            this.$scope.$on('$destroy', () =>
-                this.$interval.cancel(this.resolutionCheckInterval)
-            )
             $(window).resize(() => {
                 this.checkResolution()
             })

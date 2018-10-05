@@ -11,7 +11,6 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,6 +19,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.model.taxon.TaxonLevel.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
@@ -94,11 +94,17 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void getByCreator() {
+    public void everybody_can_ask_for_mati_materials() {
         SearchResult result = doGet(format(GET_BY_CREATOR_URL, USER_MATI.username), SearchResult.class);
-
         List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
         assertTrue(collect.containsAll(asList(MATERIAL_8, MATERIAL_4, MATERIAL_1)));
+    }
+
+    @Test
+    public void everybody_can_ask_for_taxon_user_materials() {
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, USER_TAXON_USER.username), SearchResult.class);
+        List<Long> collect = result.getItems().stream().map(Searchable::getId).collect(Collectors.toList());
+        assertTrue(collect.containsAll(asList(MATERIAL_40, MATERIAL_41, MATERIAL_42)));
     }
 
     @Test
@@ -268,6 +274,36 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertTrue("Response input stream", available > 0);
     }
 
+    @Test
+    public void get_material_with_taxons_EC_DOMAIN_TOPIC() {
+        login(USER_ADMIN);
+        Material material = getMaterial(MATERIAL_40);
+
+        validate_EC_DOMAIN_TOPIC(material);
+        Material updatedMaterial = doPost(UPDATE_MATERIAL_URL, material, Material.class);
+        validate_EC_DOMAIN_TOPIC(updatedMaterial);
+    }
+
+    @Test
+    public void get_material_with_taxons_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC() {
+        login(USER_ADMIN);
+        Material material = getMaterial(MATERIAL_41);
+
+        validate_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC(material);
+        Material updatedMaterial = doPost(UPDATE_MATERIAL_URL, material, Material.class);
+        validate_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC(updatedMaterial);
+    }
+
+    @Test
+    public void get_material_with_taxons_EC_DOMAIN_SPECIALIZATION_MODULE_TOPIC_SUBTOPIC() {
+        login(USER_ADMIN);
+        Material material = getMaterial(MATERIAL_42);
+
+        validate_ALL_THE_TAXONLEVELS(material);
+        Material updatedMaterial = doPost(UPDATE_MATERIAL_URL, material, Material.class);
+        validate_ALL_THE_TAXONLEVELS(updatedMaterial);
+    }
+
     private Response createMaterial(Material material) {
         if (material.getId() == null) {
             return doPost(CREATE_MATERIAL_URL, material);
@@ -300,5 +336,36 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     private GenericType<List<Material>> listOfMaterials() {
         return new GenericType<List<Material>>() {
         };
+    }
+
+    public void validate_EC_DOMAIN_TOPIC(Material material) {
+        List<Taxon> taxons = material.getTaxons();
+        assertNotNull(taxons);
+        assertEquals(3, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(2).getTaxonLevel());
+    }
+
+    public void validate_EC_DOMAIN_SUBJECT_TOPIC_SUBTOPIC(Material material) {
+        List<Taxon> taxons = material.getTaxons();
+        assertEquals(5, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
+        assertEquals(SUBJECT, taxons.get(2).getTaxonLevel());
+        assertEquals(TOPIC,taxons.get(3).getTaxonLevel());
+        assertEquals(SUBTOPIC,taxons.get(4).getTaxonLevel());
+    }
+
+    public void validate_ALL_THE_TAXONLEVELS(Material material) {
+        int i = 0;
+        List<Taxon> taxons = material.getTaxons();
+        assertEquals(6, taxons.size());
+        assertEquals(EDUCATIONAL_CONTEXT, taxons.get(i++).getTaxonLevel());
+        assertEquals(DOMAIN, taxons.get(i++).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(i++).getTaxonLevel());
+        assertEquals(SPECIALIZATION,taxons.get(i++).getTaxonLevel());
+        assertEquals(MODULE,taxons.get(i++).getTaxonLevel());
+        assertEquals(SUBTOPIC,taxons.get(i++).getTaxonLevel());
     }
 }
