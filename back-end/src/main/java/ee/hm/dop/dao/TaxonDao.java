@@ -26,7 +26,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
     public Taxon findTaxonByName(String name) {
         return getSingleResult(getEntityManager()
-                .createQuery("SELECT t FROM Taxon t WHERE t.nameLowercase=:name", entity())
+                .createQuery("SELECT t FROM Taxon t WHERE t.nameLowercase=:name and t.used = 1", entity())
                 .setParameter("name", name.toLowerCase())
                 .setMaxResults(1));
     }
