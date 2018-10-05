@@ -51,6 +51,7 @@ insert into User(id, userName, name, surName, idCode, role, publisher) values (1
 insert into User(id, userName, name, surName, idCode, role, publisher) values (13, 'user.to.be.banned1', 'Whiskey', 'Tango', '38256133107', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (14, 'user.to.be.banned2', 'November', 'Juliet', '38256133108', 'USER', null);
 insert into User(id, userName, name, surName, idCode, role, publisher) values (15, 'restricted.user2', 'Restricted', 'User', '89898989892', 'RESTRICTED', null);
+insert into User(id, userName, name, surName, idCode, role, publisher) values (16, 'taxon.user', 'Taxon', 'User', '11111111111', 'MODERATOR', null);
 
 -- UserTourData
 
@@ -184,6 +185,8 @@ INSERT INTO User_Taxon(user, taxon) VALUES (12, 1);
 INSERT INTO User_Taxon(user, taxon) VALUES (12, 10);
 INSERT INTO User_Taxon(user, taxon) VALUES (12, 21);
 INSERT INTO User_Taxon(user, taxon) VALUES (12, 31);
+INSERT INTO User_Taxon(user, taxon) VALUES (16, 21);
+INSERT INTO User_Taxon(user, taxon) VALUES (16, 31);
 
 -- EstCore taxon mapping
 
@@ -324,11 +327,11 @@ insert into LearningObject(id, added, updated, views, picture, creator, deleted,
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(38, null, null, 'http://www.bieber38.com', null, null, false, false, false);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(39, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(39, null, null, 'http://www.bieber39.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(40, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(40, '1911-09-01 00:00:01', null, 0, null, 16, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(40, null, null, 'http://www.bieber39.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(41, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(41, '1911-09-01 00:00:01', null, 0, null, 16, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(41, null, null, 'http://www.bieber39.com', null, null, false, false, false);
-insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(42, '1911-09-01 00:00:01', null, 0, null, null, false, null, 'PUBLIC', null);
+insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility, licenseType) values(42, '1911-09-01 00:00:01', null, 0, null, 16, false, null, 'PUBLIC', null);
 insert into Material(id, lang, issueDate, source, repository, repositoryIdentifier, paid, isSpecialEducation, embeddable) values(42, null, null, 'http://www.bieber39.com', null, null, false, false, false);
 
 -- Authors
