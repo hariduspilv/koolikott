@@ -42,7 +42,7 @@ controller.$inject = [
 ]
 component('dopCardXs', {
     bindings: {
-        learningObject: '='
+        learningObject: '<'
     },
     templateUrl: 'directives/card/cardXS/cardXS.html',
     controller

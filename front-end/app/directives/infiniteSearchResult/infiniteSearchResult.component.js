@@ -53,7 +53,7 @@ class controller extends Controller {
         this.initialParams = Object.assign({}, this.params)
         this.buildConstants();
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
-        this.$rootScope.$on('logout:success', this.search.bind(this))
+        /*this.$rootScope.$on('logout:success', this.search.bind(this))*/
         this.search(true)
     }
     showExactGroupButtons() {

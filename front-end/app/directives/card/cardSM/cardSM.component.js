@@ -7,13 +7,22 @@ class controller extends Controller {
         this.domains = []
         this.subjects = []
 
-        this.domainSubjectList = this.taxonGroupingService.getDomainSubjectList(this.learningObject.taxons)
+        this.getDomainSubjectList();
 
         this.targetGroups = this.targetGroupService
             .getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
 
         this.$scope.learningObject = this.learningObject
     }
+
+    getDomainSubjectList() {
+        this.domainSubjectList = this.taxonGroupingService.getDomainSubjectList(this.learningObject.taxons)
+    }
+
+    $onChanges(event) {
+        if (event.learningObject.previousValue != event.learningObject.currentValue) this.getDomainSubjectList()
+    }
+
     $doCheck() {
         if (this.learningObject !== this.$scope.learningObject) this.$scope.learningObject = this.learningObject
     }
@@ -44,6 +53,7 @@ class controller extends Controller {
     hoverLeave() {
         this.cardHover = false
     }
+
 }
 controller.$inject = [
     '$window',
@@ -54,12 +64,13 @@ controller.$inject = [
     'authenticatedUserService',
     'targetGroupService',
     'storageService',
-    'taxonGroupingService'
+    'taxonGroupingService',
+    'materialService',
+    'portfolioService'
 ]
 component('dopCardSm', {
     bindings: {
-        learningObject: '=',
-        chapter: '=?'
+        learningObject: '<'
     },
     templateUrl: 'directives/card/cardSM/cardSM.html',
     controller

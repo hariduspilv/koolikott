@@ -43,6 +43,7 @@ class controller extends Controller {
         this.$scope.logout = () => {
             this.authenticationService.logout()
             this.$location.url('/')
+            this.closeDetailedSearch()
         }
 
         this.$scope.showLogin = (targetEvent) =>
