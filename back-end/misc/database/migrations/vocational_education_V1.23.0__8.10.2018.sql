@@ -1,7 +1,7 @@
 USE dop;
-update Taxon set used = 0 where id in (150, 152, 153, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 55999, 55212, 50414, 50413, 50421, 50561, 50714, 57163, 57162, 50715, 57161, 50724, 50711, 50721, 50723, 50999, 55998, 50912, 55001, 50912, 55001, 55033, 51015, 51031, 51041, 51043, 51042, 51021);
+update Taxon set used = 0 where id in (150, 152, 153, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 55999, 55212, 50414, 50413, 50421, 50561, 50714, 57163, 57162, 50715, 57161, 50724, 50711, 50721, 50723, 50999, 55998, 50912, 55001, 50912, 55001, 55033, 51015, 51031, 51041, 51043, 51042, 51021, 50811);
 update Domain set used = 0 where id in (150, 152, 153, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167);
-update Topic set used = 0 where id in (55999, 55212, 50414, 50413, 50421, 50561, 50714, 57163, 57162, 50715, 57161, 50724, 50711, 50721, 50723, 50999, 55998, 50912, 55001, 50912, 55001, 55033, 51015, 51031, 51041, 51043, 51042, 51021);
+update Topic set used = 0 where id in (50811, 55999, 55212, 50414, 50413, 50421, 50561, 50714, 57163, 57162, 50715, 57161, 50724, 50711, 50721, 50723, 50999, 55998, 50912, 55001, 50912, 55001, 55033, 51015, 51031, 51041, 51043, 51042, 51021);
 
 insert into Taxon(used, id, name, level, nameLowercase) values (0, 172, 'Keel', 'DOMAIN', 'keel');
 insert into Domain(used, id, educationalContext) values (0, 172, 4);
@@ -102,6 +102,8 @@ INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59036, 'Trans
 INSERT INTO Topic(used, id, domain) VALUES (1, 59036, 171);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59037, 'Haridus', 'TOPIC', 'haridus');
 INSERT INTO Topic(used, id, domain) VALUES (1, 59037, 181);
+INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59038, 'Audiovisuaalsed_tehnikad_ja_meedia_tootmine', 'TOPIC', 'audiovisuaalsed_tehnikad_ja_meedia_tootmine');
+INSERT INTO Topic(used, id, domain) VALUES (1, 59038, 168);
 
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (172, 172, 'Keel', 'keel');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (173, 173, 'Bioloogia_ja_sellega_seotud_teadused', 'bioloogia_ja_sellega_seotud_teadused');
@@ -150,6 +152,7 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59034, 
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59035, 59035, 'Sõjandus_ja_riigikaitse', 'sõjandus_ja_riigikaitse');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59036, 59036, 'Transporditeenused', 'transporditeenused');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59037, 59037, 'Haridus', 'haridus');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59038, 59038, 'Audiovisuaalsed_tehnikad_ja_meedia_tootmine', 'audiovisuaalsed_tehnikad_ja_meedia_tootmine');
 
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'DOMAIN_KEEL', 'Keel');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'DOMAIN_KEEL', 'Language');
@@ -292,6 +295,10 @@ INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) V
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_HARIDUS', 'Haridus');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_HARIDUS', 'Education');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_HARIDUS', 'Haridus');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_AUDIOVISUAALSED_TEHNIKAD_JA_MEEDIA_TOOTMINE', 'Audiovisuaalsed tehnikad ja meedia tootmine');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_AUDIOVISUAALSED_TEHNIKAD_JA_MEEDIA_TOOTMINE', 'Audio-visual techniques and media production');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_AUDIOVISUAALSED_TEHNIKAD_JA_MEEDIA_TOOTMINE', 'Audiovisuaalsed tehnikad ja meedia tootmine');
+
 
 UPDATE LearningObject_Taxon SET taxon = 168 where taxon = 55999;
 UPDATE User_Taxon SET taxon = 168 where taxon = 55999;
