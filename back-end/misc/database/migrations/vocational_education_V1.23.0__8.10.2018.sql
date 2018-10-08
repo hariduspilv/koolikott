@@ -58,7 +58,7 @@ INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59014, 'Elekt
 INSERT INTO Topic(used, id, domain) VALUES (1, 59014, 154);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59015, 'Elektroonika_ja_automaatika', 'TOPIC', 'elektroonika_ja_automaatika');
 INSERT INTO Topic(used, id, domain) VALUES (1, 59015, 154);
-INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59016, 'Mehaanika_ja_metallitöötlus', 'TOPIC', 'mehaanika_ja_metallitöötlus');
+INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59016, 'Mehaanika_ja_metallitöö', 'TOPIC', 'mehaanika_ja_metallitöö');
 INSERT INTO Topic(used, id, domain) VALUES (1, 59016, 154);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59017, 'Mootorliikurid,_laevandus-_ja_lennundustehnika', 'TOPIC', 'mootorliikurid,_laevandus-_ja_lennundustehnika');
 INSERT INTO Topic(used, id, domain) VALUES (1, 59017, 154);
@@ -130,7 +130,7 @@ INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59012, 
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59013, 59013, 'Keemiatehnoloogia_ja-_protsessid', 'keemiatehnoloogia_ja-_protsessid');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59014, 59014, 'Elektrienergia_ja_energeetika', 'elektrienergia_ja_energeetika');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59015, 59015, 'Elektroonika_ja_automaatika', 'elektroonika_ja_automaatika');
-INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59016, 59016, 'Mehaanika_ja_metallitöötlus', 'mehaanika_ja_metallitöötlus');
+INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59016, 59016, 'Mehaanika_ja_metallitöö', 'mehaanika_ja_metallitöö');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59017, 59017, 'Mootorliikurid,_laevandus-_ja_lennundustehnika', 'mootorliikurid,_laevandus-_ja_lennundustehnika');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59018, 59018, 'Toiduainete_töötlemine', 'toiduainete_töötlemine');
 INSERT INTO EstCoreTaxonMapping (id, taxon, name, nameLowercase) VALUES (59019, 59019, 'Materjalide_töötlemine_(klaas,_paber,_plast,_puit)', 'materjalide_töötlemine_(klaas,_paber,_plast,_puit)');
@@ -229,9 +229,9 @@ INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) V
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_ELEKTROONIKA_JA_AUTOMAATIKA', 'Elektroonika ja automaatika');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_ELEKTROONIKA_JA_AUTOMAATIKA', 'Electronics and automation');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_ELEKTROONIKA_JA_AUTOMAATIKA', 'Elektroonika ja automaatika');
-INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_MEHAANIKA_JA_METALLITÖÖTLUS', 'Mehaanika ja metallitöötlus');
-INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_MEHAANIKA_JA_METALLITÖÖTLUS', 'Mechanics and metal processing');
-INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_MEHAANIKA_JA_METALLITÖÖTLUS', 'Mehaanika ja metallitöötlus');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_MEHAANIKA_JA_METALLITÖÖ', 'Mehaanika ja metallitöötlus');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_MEHAANIKA_JA_METALLITÖÖ', 'Mechanics and metal processing');
+INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_MEHAANIKA_JA_METALLITÖÖ', 'Mehaanika ja metallitöötlus');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (1, 'TOPIC_MOOTORLIIKURID,_LAEVANDUS-_JA_LENNUNDUSTEHNIKA', 'Mootorliikurid, laevandus- ja lennundustehnika');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (3, 'TOPIC_MOOTORLIIKURID,_LAEVANDUS-_JA_LENNUNDUSTEHNIKA', 'Motor locomotives, shipping and aviation equipment');
 INSERT IGNORE INTO Translation (translationGroup, translationKey, translation) VALUES (2, 'TOPIC_MOOTORLIIKURID,_LAEVANDUS-_JA_LENNUNDUSTEHNIKA', 'Mootorliikurid, laevandus- ja lennundustehnika');
