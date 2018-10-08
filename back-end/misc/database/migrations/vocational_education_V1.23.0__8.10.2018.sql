@@ -317,3 +317,16 @@ UPDATE LearningObject_Taxon SET taxon = 180 where taxon in (161, 51031);
 UPDATE User_Taxon SET taxon = 180 where taxon in (161, 51031);
 UPDATE LearningObject_Taxon SET taxon = 171 where taxon in (51041, 51043, 51042);
 UPDATE User_Taxon SET taxon = 171 where taxon in (51041, 51043, 51042);
+
+update ReviewableChange set taxon = 168 where taxon = 55999;
+update ReviewableChange set taxon = 4 where taxon in (50212, 150, 152, 50421);
+update ReviewableChange set taxon = 151 where taxon in (50413, 50414);
+update ReviewableChange set taxon = 175 where taxon in (153, 50561);
+update ReviewableChange set taxon = 154 where taxon in (50714, 57163, 57162, 50715, 57161);
+update ReviewableChange set taxon = 155 where taxon in (50724, 50711, 50721, 50723, 50999);
+update ReviewableChange set taxon = 169 where taxon = 55998;
+update ReviewableChange set taxon = 156 where taxon = 50811;
+update ReviewableChange set taxon = 158 where taxon in (50912, 159);
+update ReviewableChange set taxon = 170 where taxon in (55033, 51015);
+update ReviewableChange set taxon = 180 where taxon in (161, 51031);
+update ReviewableChange set taxon = 171 where taxon in (51041, 51043, 51042);
