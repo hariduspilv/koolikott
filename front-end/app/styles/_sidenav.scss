@@ -277,13 +277,20 @@ md-sidenav._md-locked-open, md-sidenav._md-locked-open._md-closed, md-sidenav._m
   width: 259px;
 }
 
-.sidenav__footer-logo{  
-  padding:0 22px;
+.sidenav__footer-logo-container{
+  padding:6px 22px;
 }
 
 @media (max-width: 1279px){
-  .sidenav__footer-logo{  
+  .sidenav__footer-logo-container{  
     padding: 12px 22px;
   }
+}
+
+.sidenav__footer-logo{
+  background-image: url('../images/esf-logo.png');
+  height: 75px;
+  background-size: 130px auto;
+  background-repeat: no-repeat;
 }
 
