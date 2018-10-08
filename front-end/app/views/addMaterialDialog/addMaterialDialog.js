@@ -125,7 +125,7 @@ class controller extends Controller {
             currentValue !== previousValue &&
             currentValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT
         )
-            this.$scope.educationalContextId = currentValue.id
+            this.$scope.educationalContextName = currentValue.name
     }
     onMaterialSourceChange(currentValue, previousValue) {
         if (this.$scope.addMaterialForm.source) {

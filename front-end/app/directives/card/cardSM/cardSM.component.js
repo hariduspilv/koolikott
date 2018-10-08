@@ -20,7 +20,7 @@ class controller extends Controller {
     }
 
     $onChanges(event) {
-        if (event.learningObject.previousValue != event.learningObject.currentValue) this.getDomainSubjectList()
+        if ( event && event.learningObject.previousValue !== event.learningObject.currentValue) this.getDomainSubjectList()
     }
 
     $doCheck() {

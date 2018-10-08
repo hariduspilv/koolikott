@@ -1,8 +1,15 @@
+## e-Koolikott [1.23.0](https://github.com/hariduspilv/koolikott/milestone/24) 
+
+### Muutunud
+* Õppevarade URL'i lisada õppevarade täispikk pealkiri ja kogumikele lisaks ka peatüki pealkiri [#365](https://github.com/hariduspilv/koolikott/issues/365)
+* URL-de eristamine: Täpsete ja osaliste otsitulemuste parameetrite loomine [#345](https://github.com/hariduspilv/koolikott/issues/345)
+* Otsingutulemuses materjali kaardil sihtgrupi ja taxonoomia uuendamise muudatus [#370](https://github.com/hariduspilv/koolikott/issues/370)
+* Kogumiku koostamisel vanuse komponent ära peita [#376](https://github.com/hariduspilv/koolikott/issues/376)
+
 ## e-Koolikott [1.22.1](https://github.com/hariduspilv/koolikott/milestone/23) 
 
 ### Muutunud
-* "minu kogumikud" vaade ei avane teatud tingimustel  [#369](https://github.com/hariduspilv/koolikott/issues/369)
-
+* "minu kogumikud" vaade ei avane teatud tingimustel [#369](https://github.com/hariduspilv/koolikott/issues/369)
 
 ## e-Koolikott [1.22.0](https://github.com/hariduspilv/koolikott/milestone/23) 
 
@@ -60,7 +67,6 @@
 * "Minu asjad" -> "Minu materjalid" menüüs materjalide kuvamise vaikimisi järjekord [#347](https://github.com/hariduspilv/koolikott/issues/347)
 * "Minu asjad" -> "Minu kogumikud" menüüs kogumike kuvamise vaikimisi järjekord [#346](https://github.com/hariduspilv/koolikott/issues/346)
 * URL-de eristamine -> Filtreerimise URLi unikaalse parameetri loomine [#344](https://github.com/hariduspilv/koolikott/issues/344)
-* URL-de eristamine -> Täisotsingu/sõna otsingu/fraasi otsingu URLi unikaalse parameetri loomine [#343](https://github.com/hariduspilv/koolikott/issues/343)
 * Lehe alla äärde "TAGASI ÜLES" nupp lisada [#341](https://github.com/hariduspilv/koolikott/issues/341)
 * Otsingu tulemuste sorteerimine -> Sorteerimise rippmenüüst 2 valikut ära kaotada [#339](https://github.com/hariduspilv/koolikott/issues/339)
 * Otsingu tulemuste sorteerimine -> Sorteerimise rippmenüü uued valikud [#338](https://github.com/hariduspilv/koolikott/issues/338)

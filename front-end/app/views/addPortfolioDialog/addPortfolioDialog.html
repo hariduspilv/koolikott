@@ -76,6 +76,7 @@
 
       <!-- Target groups -->
       <dop-target-group-selector
+        data-ng-if="educationalContextName !== 'VOCATIONALEDUCATION'"
         data-target-groups="newPortfolio.targetGroups"
         data-is-required="{trigger: true}"
         data-on-change="newPortfolio.targetGroups = targetGroups"
