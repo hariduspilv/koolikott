@@ -34,7 +34,11 @@ angular.module('koolikottApp')
                         $scope.newPortfolio.licenseType = portfolioClone.licenseType;
                         $scope.newPortfolio.summary = portfolioClone.summary;
                         $scope.newPortfolio.taxons = portfolioClone.taxons;
-                        $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
+                        if (taxonService.getEducationalContext($scope.newPortfolio.taxons[0]).name === 'VOCATIONALEDUCATION')
+                            $scope.newPortfolio.targetGroups = []
+                         else
+                            $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
+
                         $scope.newPortfolio.tags = portfolioClone.tags;
                         if (portfolioClone.picture) {
                             $scope.newPortfolio.picture = portfolioClone.picture;
@@ -86,10 +90,11 @@ angular.module('koolikottApp')
                         $scope.isVocationalEducation = true
                         $scope.newPortfolio.targetGroups = []
                     }
+                    else if (isVocational(currentValue))
+                        $scope.isVocationalEducation = true
                     else
                         $scope.isVocationalEducation = false
                 }
-
 
                 $scope.cancel = function () {
                     $mdDialog.hide();
