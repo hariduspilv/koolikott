@@ -55,7 +55,7 @@ class controller extends Controller {
 
         this.$scope.$watch('newPicture', this.onNewPictureChange.bind(this))
         this.$scope.$watch('newFile', this.onNewFileChange.bind(this))
-        this.$scope.$watch('material.taxons[0]', this.onTaxonsChange.bind(this), false)
+        this.$scope.$watch('material.taxons', this.onTaxonsChange.bind(this), true)
         this.$scope.$watch('material.source', this.onMaterialSourceChange.bind(this), true)
         this.$scope.$watchCollection('invalidPicture', this.onInvalidPictureChange.bind(this))
         this.$scope.$watch(
@@ -120,12 +120,15 @@ class controller extends Controller {
                 })
         }
     }
+    isVocational(currentValue) {
+        return !currentValue.filter(lo => lo.name !== "VOCATIONALEDUCATION").length;
+    }
     onTaxonsChange(currentValue, previousValue) {
         if (currentValue &&
-            currentValue !== previousValue &&
-            currentValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT
-        )
-            this.$scope.educationalContextName = currentValue.name
+            currentValue !== previousValue && this.isVocational(currentValue))
+            this.$scope.isVocationalEducation = true
+        else
+            this.$scope.isVocationalEducation = false
     }
     onMaterialSourceChange(currentValue, previousValue) {
         if (this.$scope.addMaterialForm.source) {

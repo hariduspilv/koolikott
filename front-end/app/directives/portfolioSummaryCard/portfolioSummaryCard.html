@@ -262,6 +262,7 @@
       <md-divider class="md-default-theme"></md-divider>
       <md-content class="card-lg__container">
         <!--Target groups-->
+        <div data-ng-if="!isVocationalOnly">
         <p class="md-body-2">
           <span class="md-caption caption-light">
             <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>:
@@ -274,6 +275,7 @@
           ></span>
           </span>
         </p>
+        </div>
         <!-- Licence -->
         <p class="md-body-2" layout="row" layout-align="start start" data-ng-if="portfolio.licenseType">
               <span class="md-caption caption-light">

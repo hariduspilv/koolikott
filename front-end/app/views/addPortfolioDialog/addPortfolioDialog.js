@@ -62,9 +62,9 @@ angular.module('koolikottApp')
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.licenseType = $scope.allRightsReserved
                     })
-                    $scope.$watch('newPortfolio.taxons[0]', (selectedValue, previousValue) => {
+                    $scope.$watch('newPortfolio.taxons', (selectedValue, previousValue) => {
                         onTaxonsChange(selectedValue, previousValue)
-                    })
+                    }, true)
                     $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
@@ -73,12 +73,16 @@ angular.module('koolikottApp')
                     getMaxPictureSize();
                 }
 
+                function isVocational(currentValue) {
+                    return !currentValue.filter(lo => lo.name !== "VOCATIONALEDUCATION").length;
+                }
+
                 function onTaxonsChange(currentValue, previousValue) {
                     if (currentValue &&
-                        currentValue !== previousValue &&
-                        currentValue.taxonLevel === "EDUCATIONAL_CONTEXT"
-                    )
-                        $scope.educationalContextName = currentValue.name
+                        currentValue !== previousValue && isVocational(currentValue))
+                        $scope.isVocationalEducation = true
+                    else
+                        $scope.isVocationalEducation = false
                 }
 
 
