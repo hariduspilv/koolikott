@@ -74,7 +74,10 @@ angular.module('koolikottApp')
                 }
 
                 function isVocational(currentValue) {
-                    return !currentValue.filter(lo => lo.name !== "VOCATIONALEDUCATION").length;
+                    return !currentValue
+                        .map(c => taxonService.getEducationalContext(c))
+                        .filter(lo => (lo.name !== 'VOCATIONALEDUCATION'))
+                        .length;
                 }
 
                 function onTaxonsChange(currentValue, previousValue) {

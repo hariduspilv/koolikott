@@ -121,7 +121,10 @@ class controller extends Controller {
         }
     }
     isVocational(currentValue) {
-        return !currentValue.filter(lo => lo.name !== "VOCATIONALEDUCATION").length;
+        return !currentValue
+            .map(c => this.taxonService.getEducationalContext(c))
+            .filter(lo => (lo.name !== 'VOCATIONALEDUCATION'))
+            .length;
     }
     onTaxonsChange(currentValue, previousValue) {
         if (currentValue &&
