@@ -56,7 +56,6 @@ class controller extends Controller {
 
 }
 controller.$inject = [
-    '$window',
     '$scope',
     '$location',
     '$rootScope',
@@ -64,9 +63,7 @@ controller.$inject = [
     'authenticatedUserService',
     'targetGroupService',
     'storageService',
-    'taxonGroupingService',
-    'materialService',
-    'portfolioService'
+    'taxonGroupingService'
 ]
 component('dopCardSm', {
     bindings: {
