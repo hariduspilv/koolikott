@@ -132,6 +132,8 @@ class controller extends Controller {
             this.$scope.isVocationalEducation = true
             this.$scope.material.targetGroups = []
         }
+        else if (this.isVocational(currentValue))
+            this.$scope.isVocationalEducation = true
         else
             this.$scope.isVocationalEducation = false
     }
@@ -580,17 +582,24 @@ class controller extends Controller {
 
                 const educationalContext = this.taxonService.getEducationalContext(storedPortfolio.taxons[0])
 
-                if (educationalContext)
+                if (educationalContext) {
                     this.$scope.educationalContextId = educationalContext.id
+                    this.$scope.educationaContextName = educationalContext.name
+                }
             }
 
             if (Array.isArray(storedPortfolio.tags))
                 this.$scope.material.tags = storedPortfolio.tags.slice()
 
-            if (Array.isArray(storedPortfolio.targetGroups))
+            if (Array.isArray(storedPortfolio.targetGroups) && this.isNotVocationalEducation())
                 this.$scope.material.targetGroups = storedPortfolio.targetGroups.slice()
         }
     }
+
+    isNotVocationalEducation() {
+        return this.$scope.educationaContextName !== 'VOCATIONALEDUCATION';
+    }
+
     setMaterialSourceLangugeges(data) {
         this.$scope.languages = data
         this.setDefaultMaterialMetadataLanguage()
