@@ -250,6 +250,7 @@
           <!-- Metadata 2 -->
           <md-content class="card-lg__container">
             <!-- Age -->
+            <div data-ng-if="!isVocationalOnly">
             <p class="md-body-2">
               <span class="md-caption caption-light">
                 <span data-translate="DETAIL_VIEW_TARGET_GROUP" id="targetgroup-close"></span>:
@@ -261,6 +262,7 @@
                 <span data-ng-if="isNullOrZeroLength(targetGroups)" data-translate="UNKNOWN"></span>
               </span>
             </p>
+            </div>
             <!-- Key competences -->
             <p class="md-body-2 ellipsis ellipsis--4 ellipsis--medium-4" data-ng-if="material.keyCompetences.length">
               <span class="md-caption caption-light">
