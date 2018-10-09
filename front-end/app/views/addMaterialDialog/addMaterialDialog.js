@@ -128,8 +128,10 @@ class controller extends Controller {
     }
     onTaxonsChange(currentValue, previousValue) {
         if (currentValue &&
-            currentValue !== previousValue && this.isVocational(currentValue))
+            currentValue !== previousValue && this.isVocational(currentValue)) {
             this.$scope.isVocationalEducation = true
+            this.$scope.material.targetGroups = []
+        }
         else
             this.$scope.isVocationalEducation = false
     }

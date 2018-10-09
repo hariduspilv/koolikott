@@ -82,8 +82,10 @@ angular.module('koolikottApp')
 
                 function onTaxonsChange(currentValue, previousValue) {
                     if (currentValue &&
-                        currentValue !== previousValue && isVocational(currentValue))
+                        currentValue !== previousValue && isVocational(currentValue)) {
                         $scope.isVocationalEducation = true
+                        $scope.newPortfolio.targetGroups = []
+                    }
                     else
                         $scope.isVocationalEducation = false
                 }
