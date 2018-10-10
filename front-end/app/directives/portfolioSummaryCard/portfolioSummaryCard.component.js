@@ -20,9 +20,8 @@ class controller extends Controller {
         this.getTaxonObject = this.getTaxonObject.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
 
-        this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', this.getTaxonObject)
-        this.eventService.subscribe(this.$scope, 'portfolio:reloadTaxonObject', this.getTaxonObject)
-        this.eventService.notify('portfolio:reloadTaxonObject')
+        this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', () => {
+            this.getTaxonObject()})
 
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
