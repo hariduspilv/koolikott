@@ -14,7 +14,6 @@ class controller extends Controller {
         this.$scope.learningObject = this.learningObject
         this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', () => {
             this.getDomainSubjectList()
-            console.log('juust')
         })
     }
 
