@@ -12,6 +12,10 @@ class controller extends Controller {
         this.getTargetGroups();
 
         this.$scope.learningObject = this.learningObject
+        this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', () => {
+            this.getDomainSubjectList()
+            console.log('juust')
+        })
     }
 
     getTargetGroups() {
@@ -70,7 +74,8 @@ controller.$inject = [
     'authenticatedUserService',
     'targetGroupService',
     'storageService',
-    'taxonGroupingService'
+    'taxonGroupingService',
+    'eventService'
 ]
 component('dopCardSm', {
     bindings: {
