@@ -7,6 +7,8 @@ class controller extends Controller {
         this.domains = []
         this.subjects = []
 
+        $clamp(document.getElementById('domainSubjectList'), {clamp: 3})
+
         this.getDomainSubjectList();
 
         this.getTargetGroups();

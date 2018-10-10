@@ -36,7 +36,8 @@
     "angular-sortable-view": "https://github.com/ipsips/angular-sortable-view.git#master",
     "medium-button": "^1.1.2",
     "angular-qrcode": "^7.2.0",
-    "unorm": "^1.4.1"
+    "unorm": "^1.4.1",
+    "clamp-js": "*"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
