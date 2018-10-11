@@ -1,3 +1,9 @@
+## e-Koolikott [1.23.1](https://github.com/hariduspilv/koolikott/milestone/24) 
+
+### Muutunud
+* Lisada e-Koolikoti lehele struktuuritoetuse logo [#373](https://github.com/hariduspilv/koolikott/issues/373)
+* Kutsehariduse taksonoomia muudatus [#375](https://github.com/hariduspilv/koolikott/issues/375)
+
 ## e-Koolikott [1.23.0](https://github.com/hariduspilv/koolikott/milestone/24) 
 
 ### Muutunud
