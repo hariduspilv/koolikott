@@ -297,7 +297,7 @@
             ></dop-target-group-selector>
           </div>
           <!-- Key competences -->
-          <div flex-sm="35" flex-md="30" flex-gt-lg="30" flex-lg="35" class="chips-container" data-ng-if="$ctrl.isBasicOrSecondaryEducation()">
+          <div flex-sm="35" flex-md="30" flex-gt-lg="30" flex-lg="35" class="chips-container" data-ng-if="!isVocationalEducation && isBasicOrSecondaryEducation">
             <md-chips
               ng-model="material.keyCompetences"
               md-autocomplete-snap
@@ -338,7 +338,7 @@
             ></div>
           </div>
           <!-- Cross-curricular themes -->
-          <div flex-sm="45" flex-md="45" flex-gt-lg="40" flex-lg="40" class="chips-container" data-ng-if="$ctrl.isBasicOrSecondaryEducation()">
+          <div flex-sm="45" flex-md="45" flex-gt-lg="40" flex-lg="40" class="chips-container" data-ng-if="!isVocationalEducation && isBasicOrSecondaryEducation">
             <md-chips
               ng-model="material.crossCurricularThemes"
               md-autocomplete-snap

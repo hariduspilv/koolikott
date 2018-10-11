@@ -29,6 +29,7 @@ angular.module('koolikottApp')
                     $scope.portfolio = portfolio;
                     $scope.newPortfolio.chapters = portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
+                    $scope.isVocationalEducation = true
 
                     if ($scope.portfolio.id != null) {
                         $scope.isEditPortfolio = true;

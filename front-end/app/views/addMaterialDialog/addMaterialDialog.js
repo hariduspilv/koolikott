@@ -25,6 +25,8 @@ class controller extends Controller {
         this.$scope.licenseTypes = []
         this.$scope.resourceTypes = []
         this.$scope.selectedLanguage = this.translationService.getLanguage()
+        this.$scope.isVocationalEducation = true
+        this.$scope.isBasicOrSecondaryEducation = false
 
         this.fetchMaxPictureSize()
         this.fetchMaxFileSize()
@@ -121,16 +123,18 @@ class controller extends Controller {
         }
     }
 
-    onTaxonsChange(currentValue, previousValue) {
-        if (currentValue &&
-            currentValue !== previousValue && isVocational(this.taxonService, currentValue)) {
+    onTaxonsChange(currentValue) {
+        if (currentValue && isVocational(this.taxonService, currentValue)) {
+            this.$scope.isBasicOrSecondaryEducation = false
             this.$scope.isVocationalEducation = true
             this.$scope.material.targetGroups = []
-        }
-        else if (isVocational(this.taxonService, currentValue))
-            this.$scope.isVocationalEducation = true
-        else
+        } else if (isBasicOrSecondaryeducation(this.taxonService, currentValue)) {
+            this.$scope.isBasicOrSecondaryEducation = true
             this.$scope.isVocationalEducation = false
+        } else {
+            this.$scope.isVocationalEducation = false
+            this.$scope.isBasicOrSecondaryEducation = false
+        }
     }
     onMaterialSourceChange(currentValue, previousValue) {
         if (this.$scope.addMaterialForm.source) {
