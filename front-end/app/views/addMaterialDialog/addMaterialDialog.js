@@ -25,6 +25,8 @@ class controller extends Controller {
         this.$scope.licenseTypes = []
         this.$scope.resourceTypes = []
         this.$scope.selectedLanguage = this.translationService.getLanguage()
+        this.$scope.isVocationalEducation = true
+        this.$scope.isBasicOrSecondaryEducation = false
 
         this.fetchMaxPictureSize()
         this.fetchMaxFileSize()
@@ -55,7 +57,7 @@ class controller extends Controller {
 
         this.$scope.$watch('newPicture', this.onNewPictureChange.bind(this))
         this.$scope.$watch('newFile', this.onNewFileChange.bind(this))
-        this.$scope.$watch('material.taxons[0]', this.onTaxonsChange.bind(this), false)
+        this.$scope.$watch('material.taxons', this.onTaxonsChange.bind(this), true)
         this.$scope.$watch('material.source', this.onMaterialSourceChange.bind(this), true)
         this.$scope.$watchCollection('invalidPicture', this.onInvalidPictureChange.bind(this))
         this.$scope.$watch(
@@ -120,12 +122,19 @@ class controller extends Controller {
                 })
         }
     }
-    onTaxonsChange(currentValue, previousValue) {
-        if (currentValue &&
-            currentValue !== previousValue &&
-            currentValue.level === this.taxonService.constants.EDUCATIONAL_CONTEXT
-        )
-            this.$scope.educationalContextName = currentValue.name
+
+    onTaxonsChange(currentValue) {
+        if (currentValue && isVocational(this.taxonService, currentValue)) {
+            this.$scope.isBasicOrSecondaryEducation = false
+            this.$scope.isVocationalEducation = true
+            this.$scope.material.targetGroups = []
+        } else if (isBasicOrSecondaryeducation(this.taxonService, currentValue)) {
+            this.$scope.isBasicOrSecondaryEducation = true
+            this.$scope.isVocationalEducation = false
+        } else {
+            this.$scope.isVocationalEducation = false
+            this.$scope.isBasicOrSecondaryEducation = false
+        }
     }
     onMaterialSourceChange(currentValue, previousValue) {
         if (this.$scope.addMaterialForm.source) {
@@ -322,7 +331,7 @@ class controller extends Controller {
         input.blur()
     }
     isBasicOrSecondaryEducation () {
-        return this.$scope.educationalContextId === 2 || this.$scope.educationalContextId === 3
+        return this.$scope.educationalContextName === 'BASICEDUCATION'|| this.$scope.educationalContextName === 'SECONDARYEDUCATION'
     }
     isURLInvalid() {
         if (this.$scope.addMaterialForm && this.$scope.addMaterialForm.source && this.$scope.addMaterialForm.source.$viewValue) {
@@ -543,7 +552,7 @@ class controller extends Controller {
         const educationalContext = this.taxonService.getEducationalContext(this.$scope.material.taxons[0])
 
         if (educationalContext)
-            this.$scope.educationalContextId = educationalContext.id
+            this.$scope.educationalContextName = educationalContext.name
 
         if (!this.$scope.material.crossCurricularThemes)
             this.$scope.material.crossCurricularThemes = []
@@ -572,17 +581,23 @@ class controller extends Controller {
 
                 const educationalContext = this.taxonService.getEducationalContext(storedPortfolio.taxons[0])
 
-                if (educationalContext)
-                    this.$scope.educationalContextId = educationalContext.id
+                if (educationalContext) {
+                    this.$scope.educationaContextName = educationalContext.name
+                }
             }
 
             if (Array.isArray(storedPortfolio.tags))
                 this.$scope.material.tags = storedPortfolio.tags.slice()
 
-            if (Array.isArray(storedPortfolio.targetGroups))
+            if (Array.isArray(storedPortfolio.targetGroups) && this.isNotVocationalEducation())
                 this.$scope.material.targetGroups = storedPortfolio.targetGroups.slice()
         }
     }
+
+    isNotVocationalEducation() {
+        return this.$scope.educationaContextName !== 'VOCATIONALEDUCATION';
+    }
+
     setMaterialSourceLangugeges(data) {
         this.$scope.languages = data
         this.setDefaultMaterialMetadataLanguage()

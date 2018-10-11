@@ -14,6 +14,10 @@ angular.module('koolikottApp')
                 $scope.$watch('newPicture', onNewPictureChange.bind(this));
                 $scope.$watchCollection('invalidPicture', onInvalidPictureChange.bind(this));
 
+                function getTargetGroups(portfolioClone) {
+                    return taxonService.getEducationalContext($scope.newPortfolio.taxons[0]).name === 'VOCATIONALEDUCATION' ? [] : portfolioClone.targetGroups;
+                }
+
                 function init() {
                     let portfolio = storageService.getEmptyPortfolio();
 
@@ -25,6 +29,7 @@ angular.module('koolikottApp')
                     $scope.portfolio = portfolio;
                     $scope.newPortfolio.chapters = portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
+                    $scope.isVocationalEducation = true
 
                     if ($scope.portfolio.id != null) {
                         $scope.isEditPortfolio = true;
@@ -34,7 +39,8 @@ angular.module('koolikottApp')
                         $scope.newPortfolio.licenseType = portfolioClone.licenseType;
                         $scope.newPortfolio.summary = portfolioClone.summary;
                         $scope.newPortfolio.taxons = portfolioClone.taxons;
-                        $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
+                        $scope.newPortfolio.targetGroups = getTargetGroups(portfolioClone);
+
                         $scope.newPortfolio.tags = portfolioClone.tags;
                         if (portfolioClone.picture) {
                             $scope.newPortfolio.picture = portfolioClone.picture;
@@ -62,9 +68,9 @@ angular.module('koolikottApp')
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.licenseType = $scope.allRightsReserved
                     })
-                    $scope.$watch('newPortfolio.taxons[0]', (selectedValue, previousValue) => {
+                    $scope.$watch('newPortfolio.taxons', (selectedValue, previousValue) => {
                         onTaxonsChange(selectedValue, previousValue)
-                    })
+                    }, true)
                     $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
@@ -73,14 +79,18 @@ angular.module('koolikottApp')
                     getMaxPictureSize();
                 }
 
+
                 function onTaxonsChange(currentValue, previousValue) {
                     if (currentValue &&
-                        currentValue !== previousValue &&
-                        currentValue.taxonLevel === "EDUCATIONAL_CONTEXT"
-                    )
-                        $scope.educationalContextName = currentValue.name
+                        currentValue !== previousValue && isVocational(taxonService, currentValue)) {
+                        $scope.isVocationalEducation = true
+                        $scope.newPortfolio.targetGroups = []
+                    }
+                    else if (isVocational(taxonService, currentValue))
+                        $scope.isVocationalEducation = true
+                    else
+                        $scope.isVocationalEducation = false
                 }
-
 
                 $scope.cancel = function () {
                     $mdDialog.hide();

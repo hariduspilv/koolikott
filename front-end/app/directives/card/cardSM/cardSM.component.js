@@ -9,10 +9,17 @@ class controller extends Controller {
 
         this.getDomainSubjectList();
 
-        this.targetGroups = this.targetGroupService
-            .getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
+        this.getTargetGroups();
 
         this.$scope.learningObject = this.learningObject
+        this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', () => {
+            this.getDomainSubjectList()
+        })
+    }
+
+    getTargetGroups() {
+        this.targetGroups = this.targetGroupService
+            .getConcentratedLabelByTargetGroups(this.learningObject.targetGroups || [])
     }
 
     getDomainSubjectList() {
@@ -20,7 +27,10 @@ class controller extends Controller {
     }
 
     $onChanges(event) {
-        if ( event && event.learningObject.previousValue !== event.learningObject.currentValue) this.getDomainSubjectList()
+        if ( event && event.learningObject.previousValue !== event.learningObject.currentValue) {
+            this.getDomainSubjectList()
+            this.getTargetGroups()
+        }
     }
 
     $doCheck() {
@@ -56,17 +66,14 @@ class controller extends Controller {
 
 }
 controller.$inject = [
-    '$window',
     '$scope',
-    '$location',
     '$rootScope',
-    'translationService',
     'authenticatedUserService',
     'targetGroupService',
     'storageService',
     'taxonGroupingService',
-    'materialService',
-    'portfolioService'
+    'eventService',
+    'translationService'
 ]
 component('dopCardSm', {
     bindings: {

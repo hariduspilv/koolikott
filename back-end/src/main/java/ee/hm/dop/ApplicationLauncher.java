@@ -5,7 +5,6 @@ import ee.hm.dop.config.EmbeddedJetty;
 import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
 import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
-import ee.hm.dop.service.synchronizer.ChapterMigration;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
 import org.apache.commons.configuration2.Configuration;
 import org.opensaml.DefaultBootstrap;
@@ -38,8 +37,6 @@ public class ApplicationLauncher {
     private static AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
     @Inject
     private static AuthenticationStateCleaner authenticationStateCleaner;
-    @Inject
-    private static ChapterMigration chapterMigration;
 
     public static void startApplication() {
         GuiceInjector.init();
@@ -54,13 +51,8 @@ public class ApplicationLauncher {
             initOpenSaml();
             synchronizeMaterials();
             acceptReviewableChange();
-            migrateChapters();
             authenticationStateCleaner();
         }
-    }
-
-    private static void migrateChapters() {
-        Executors.newSingleThreadExecutor().submit(() -> chapterMigration.run());
     }
 
     private static void acceptReviewableChange() {
