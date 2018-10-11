@@ -152,6 +152,8 @@
 
 .learning-object-title {
   margin: 0;
+  position: relative;
+  z-index: 2;
 }
 
 // New styles
@@ -240,4 +242,8 @@
 
 .card-lg__licenses {
   margin-left: $md-padding/8;
+}
+
+.higherIndex {
+  z-index: 10;
 }

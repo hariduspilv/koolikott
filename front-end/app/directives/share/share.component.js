@@ -137,6 +137,16 @@ class controller extends Controller {
                 angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click')
         }
     }
+    addStyle() {
+        const element = document.getElementsByClassName('card-menus')
+        element[0].style.cssText = "z-index: 10"
+    }
+
+    removeStyle() {
+        const element = document.getElementsByClassName('card-menus')
+        element[0].style.cssText = "z-index: 1"
+        this.isOpen = false
+    }
 }
 controller.$inject = [
     '$rootScope',

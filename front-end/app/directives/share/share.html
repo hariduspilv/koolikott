@@ -1,10 +1,10 @@
-<div>
 <md-fab-speed-dial
   md-open="$ctrl.isOpen"
   md-direction="left"
   data-ng-show="$ctrl.isVisible()"
   class="md-scale share"
-  style="display:initial"
+  data-ng-click="$ctrl.addStyle()"
+  outside-click="$ctrl.removeStyle()"
   >
   <md-fab-trigger>
     <md-button
@@ -30,4 +30,3 @@
   </md-fab-actions>
   <span id="shareGoogleFakeButton" class="ng-hide"></span>
 </md-fab-speed-dial>
-</div>
