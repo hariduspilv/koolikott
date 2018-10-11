@@ -120,19 +120,14 @@ class controller extends Controller {
                 })
         }
     }
-    isVocational(currentValue) {
-        return !currentValue
-            .map(c => this.taxonService.getEducationalContext(c))
-            .filter(lo => (lo.name !== 'VOCATIONALEDUCATION'))
-            .length;
-    }
+
     onTaxonsChange(currentValue, previousValue) {
         if (currentValue &&
-            currentValue !== previousValue && this.isVocational(currentValue)) {
+            currentValue !== previousValue && isVocational(this.taxonService, currentValue)) {
             this.$scope.isVocationalEducation = true
             this.$scope.material.targetGroups = []
         }
-        else if (this.isVocational(currentValue))
+        else if (isVocational(this.taxonService, currentValue))
             this.$scope.isVocationalEducation = true
         else
             this.$scope.isVocationalEducation = false
@@ -332,7 +327,7 @@ class controller extends Controller {
         input.blur()
     }
     isBasicOrSecondaryEducation () {
-        return this.$scope.educationalContextId === 2 || this.$scope.educationalContextId === 3
+        return this.$scope.educationalContextName === 'BASICEDUCATION'|| this.$scope.educationalContextName === 'SECONDARYEDUCATION'
     }
     isURLInvalid() {
         if (this.$scope.addMaterialForm && this.$scope.addMaterialForm.source && this.$scope.addMaterialForm.source.$viewValue) {
@@ -553,7 +548,7 @@ class controller extends Controller {
         const educationalContext = this.taxonService.getEducationalContext(this.$scope.material.taxons[0])
 
         if (educationalContext)
-            this.$scope.educationalContextId = educationalContext.id
+            this.$scope.educationalContextName = educationalContext.name
 
         if (!this.$scope.material.crossCurricularThemes)
             this.$scope.material.crossCurricularThemes = []
@@ -583,7 +578,6 @@ class controller extends Controller {
                 const educationalContext = this.taxonService.getEducationalContext(storedPortfolio.taxons[0])
 
                 if (educationalContext) {
-                    this.$scope.educationalContextId = educationalContext.id
                     this.$scope.educationaContextName = educationalContext.name
                 }
             }

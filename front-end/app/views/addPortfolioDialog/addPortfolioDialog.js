@@ -14,6 +14,10 @@ angular.module('koolikottApp')
                 $scope.$watch('newPicture', onNewPictureChange.bind(this));
                 $scope.$watchCollection('invalidPicture', onInvalidPictureChange.bind(this));
 
+                function getTargetGroups(portfolioClone) {
+                    return taxonService.getEducationalContext($scope.newPortfolio.taxons[0]).name === 'VOCATIONALEDUCATION' ? [] : portfolioClone.targetGroups;
+                }
+
                 function init() {
                     let portfolio = storageService.getEmptyPortfolio();
 
@@ -34,10 +38,7 @@ angular.module('koolikottApp')
                         $scope.newPortfolio.licenseType = portfolioClone.licenseType;
                         $scope.newPortfolio.summary = portfolioClone.summary;
                         $scope.newPortfolio.taxons = portfolioClone.taxons;
-                        if (taxonService.getEducationalContext($scope.newPortfolio.taxons[0]).name === 'VOCATIONALEDUCATION')
-                            $scope.newPortfolio.targetGroups = []
-                         else
-                            $scope.newPortfolio.targetGroups = portfolioClone.targetGroups;
+                        $scope.newPortfolio.targetGroups = getTargetGroups(portfolioClone);
 
                         $scope.newPortfolio.tags = portfolioClone.tags;
                         if (portfolioClone.picture) {
@@ -77,20 +78,14 @@ angular.module('koolikottApp')
                     getMaxPictureSize();
                 }
 
-                function isVocational(currentValue) {
-                    return !currentValue
-                        .map(c => taxonService.getEducationalContext(c))
-                        .filter(lo => (lo.name !== 'VOCATIONALEDUCATION'))
-                        .length;
-                }
 
                 function onTaxonsChange(currentValue, previousValue) {
                     if (currentValue &&
-                        currentValue !== previousValue && isVocational(currentValue)) {
+                        currentValue !== previousValue && isVocational(taxonService, currentValue)) {
                         $scope.isVocationalEducation = true
                         $scope.newPortfolio.targetGroups = []
                     }
-                    else if (isVocational(currentValue))
+                    else if (isVocational(taxonService, currentValue))
                         $scope.isVocationalEducation = true
                     else
                         $scope.isVocationalEducation = false

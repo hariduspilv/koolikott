@@ -7,8 +7,6 @@ class controller extends Controller {
         this.domains = []
         this.subjects = []
 
-        $clamp(document.getElementById('domainSubjectList'), {clamp: 3})
-
         this.getDomainSubjectList();
 
         this.getTargetGroups();
@@ -69,14 +67,13 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
-    '$location',
     '$rootScope',
-    'translationService',
     'authenticatedUserService',
     'targetGroupService',
     'storageService',
     'taxonGroupingService',
-    'eventService'
+    'eventService',
+    'translationService'
 ]
 component('dopCardSm', {
     bindings: {
