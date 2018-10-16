@@ -10,7 +10,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
@@ -65,6 +67,9 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio create(Portfolio portfolio) {
+        if (portfolio.getTitle().contains("PiretPiret")){
+            throw new WebApplicationException("Piret Exception", Response.Status.GONE);
+        }
         return portfolioService.create(portfolio, getLoggedInUser());
     }
 
@@ -74,6 +79,9 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio update(Portfolio portfolio) {
+        if (portfolio.getTitle().contains("PiretPiret")){
+            throw new WebApplicationException("Piret Exception", Response.Status.GONE);
+        }
         return portfolioService.update(portfolio, getLoggedInUser());
     }
 
