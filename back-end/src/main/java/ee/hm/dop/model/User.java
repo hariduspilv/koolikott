@@ -37,6 +37,9 @@ public class User implements AbstractEntity {
     @Column(unique = true, nullable = false)
     private String idCode;
 
+    @Column(columnDefinition = "TEXT")
+    private String userLocation;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -150,4 +153,13 @@ public class User implements AbstractEntity {
     public void setUserAgreements(List<User_Agreement> userAgreements) {
         this.userAgreements = userAgreements;
     }
+
+    public String getUserLocation() {
+        return userLocation;
+    }
+
+    public void setUserLocation(String userLocation) {
+        this.userLocation = userLocation;
+    }
+
 }

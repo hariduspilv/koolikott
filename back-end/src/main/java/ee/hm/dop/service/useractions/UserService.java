@@ -118,6 +118,12 @@ public class UserService {
         existingUser.setUserTaxons(taxons);
         return userDao.createOrUpdate(existingUser);
     }
+    public User updateUserLocation(User loggedInUser, String location) {
+        User existingUser = getUserByUsername(loggedInUser.getUsername());
+        existingUser.setUserLocation(location);
+        return userDao.createOrUpdate(existingUser);
+
+    }
 
     private User setRole(User user, Role from, Role to) {
         user = getUserByUsername(user.getUsername());

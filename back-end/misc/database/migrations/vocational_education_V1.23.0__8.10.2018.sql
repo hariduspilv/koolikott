@@ -3,6 +3,11 @@ update Taxon set used = 0 where id in (150, 152, 153, 158, 159, 160, 161, 162, 1
 update Domain set used = 0 where id in (150, 152, 153, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167);
 update Topic set used = 0 where id in (50811, 55999, 55212, 50414, 50413, 50421, 50561, 50714, 57163, 57162, 50715, 57161, 50724, 50711, 50721, 50723, 50999, 55998, 50912, 55001, 50912, 55001, 55033, 51015, 51031, 51041, 51043, 51042, 51021);
 
+
+
+update Domain set used = 1 where id = 158;
+update Taxon set used = 1 where id = 158;
+
 insert into Taxon(used, id, name, level, nameLowercase) values (0, 172, 'Keel', 'DOMAIN', 'keel');
 insert into Domain(used, id, educationalContext) values (0, 172, 4);
 insert into Taxon(used, id, name, level, nameLowercase) values (0, 173, 'Bioloogia_ja_sellega_seotud_teadused', 'DOMAIN', 'bioloogia_ja_sellega_seotud_teadused');
@@ -95,6 +100,8 @@ INSERT INTO Topic(used, id, domain) VALUES (1, 59032, 170);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59033, 'Majutamine_ja_toitlustamine', 'TOPIC', 'majutamine_ja_toitlustamine');
 INSERT INTO Topic(used, id, domain) VALUES (1, 59033, 170);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59034, 'Reisimine,_turism_ja_vaba_aja_veetmine', 'TOPIC', 'reisimine,_turism_ja_vaba_aja_veetmine');
+
+update
 INSERT INTO Topic(used, id, domain) VALUES (1, 59034, 170);
 INSERT INTO Taxon(used, id, name, level, nameLowercase) values (1, 59035, 'Sõjandus_ja_riigikaitse', 'TOPIC', 'sõjandus_ja_riigikaitse');
 INSERT INTO Topic(used, id, domain) VALUES (1, 59035, 180);

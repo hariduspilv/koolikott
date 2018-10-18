@@ -4,14 +4,12 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.UserLocation;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -46,6 +44,26 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getLoggedInUserRole() {
         return getLoggedInUser().getRole().toString();
+    }
+
+    @GET
+    @Path("getLocation")
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getUserLocation() {
+        return getLoggedInUser().getUserLocation();
+    }
+
+    @POST
+    @Path("saveLocation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public User updateUserLocation(UserLocation userLocation) {
+        if (isBlank(userLocation.getLocation())){
+
+        }
+        return userService.updateUserLocation(getLoggedInUser(), userLocation.getLocation());
     }
 
 }
