@@ -11,6 +11,6 @@ public class VersionResource extends BaseResource{
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getVersion() {
-        return "1.23.1";
+        return "1.23.2";
     }
 }
