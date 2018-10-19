@@ -365,7 +365,7 @@ class controller extends Controller {
         };
         this.$scope.filterGroupsExact = angular.copy(this.$scope.filterGroups);
         this.titleTranslations = {
-            none: 'NO_RESULTS_FOUND',
+            none: 'NO_RESULTS_AT_THIS_TIME',
             single: 'SEARCH_RESULT_1_WORD',
             multiple: 'SEARCH_RESULT_MULTIPLE_WORD',
         }
