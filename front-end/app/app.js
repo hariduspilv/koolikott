@@ -222,8 +222,8 @@ function isHomePage(path) {
     return path === '/';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocationService', '$interval',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocationService, $interval) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', '$interval',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, $interval) {
         let $on = $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -233,8 +233,10 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             let isLoggedIn = authenticatedUserService.isAuthenticated();
             let locationUpdateInterval
 
-            if (isLoggedIn)
-                locationUpdateInterval = $interval(userLocationService.postUserLocation(user), 5000)
+            if (isLoggedIn && !locationUpdateInterval)
+                locationUpdateInterval = $interval(() => {
+                    userLocatorService.saveUserLocation()
+                }, 10000)
             else
                 $interval.cancel(locationUpdateInterval)
 

@@ -51,6 +51,9 @@ public class UserResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     @Produces(MediaType.TEXT_PLAIN)
     public String getUserLocation() {
+        if (isBlank(getLoggedInUser().getUserLocation())) {
+            throw badRequest("User does not have saved location.");
+        }
         return getLoggedInUser().getUserLocation();
     }
 
@@ -60,9 +63,6 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public User updateUserLocation(UserLocation userLocation) {
-        if (isBlank(userLocation.getLocation())){
-
-        }
         return userService.updateUserLocation(getLoggedInUser(), userLocation.getLocation());
     }
 
