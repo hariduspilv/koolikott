@@ -16,9 +16,17 @@ public class TestUser {
         this.lastName = lastName;
     }
 
+    public TestUser(Long id, String idCode, String username, String location) {
+        this.id = id;
+        this.idCode = idCode;
+        this.username = username;
+        this.location = location;
+    }
+
     public Long id;
     public String idCode;
     public String username;
     public String firstName;
     public String lastName;
+    public String location;
 }

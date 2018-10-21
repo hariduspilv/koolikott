@@ -231,14 +231,13 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             var user = authenticatedUserService.getUser();
             var isViewMyProfile = isViewMyProfilePage($location, user);
             let isLoggedIn = authenticatedUserService.isAuthenticated();
-            let locationUpdateInterval
 
-            if (isLoggedIn && !locationUpdateInterval)
-                locationUpdateInterval = $interval(() => {
-                    userLocatorService.saveUserLocation()
-                }, 10000)
+            if (isLoggedIn && !userLocatorService.startTimer()) {
+                userLocatorService.stopTimer()
+                userLocatorService.startTimer()
+            }
             else
-                $interval.cancel(locationUpdateInterval)
+                userLocatorService.stopTimer()
 
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);

@@ -3,35 +3,32 @@
 angular.module('koolikottApp')
     .factory('userLocatorService',
         [
-            '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService',
-            function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService ) {
+            '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', '$interval',
+            function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, $interval ) {
 
-                function getUser(){
-                    return authenticatedUserService.getUser()
-                }
-
-                function saveUserLocation() {
-                    debugger
-                    serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
-                }
-
-                function getUserLocation() {
-                    return serverCallService.makeGet('rest/user/getLocation').then((response) => {
-                        if (response.data) return response.data
-                    });
-                }
+                let updateTimer
 
                 return {
-                    getUser: function() {
-                        getUser()
-                    },
 
                     getUserLocation: function() {
-                        getUserLocation()
+                        return serverCallService.makeGet('rest/user/getLocation').then((response) => {
+                            debugger
+                            if (response.data) return response.data
+                        });
                     },
 
                     saveUserLocation: function() {
-                        saveUserLocation()
+                        serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
+                    },
+
+                    startTimer: function() {
+                        updateTimer = $interval(function (){
+                        serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
+                        }, 10000)
+                    },
+
+                    stopTimer: function() {
+                        $interval.cancel(updateTimer)
                     }
                 }
             }

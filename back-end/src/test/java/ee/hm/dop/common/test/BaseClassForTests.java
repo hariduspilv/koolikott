@@ -26,6 +26,7 @@ public interface BaseClassForTests {
     TestUser USER_TO_BE_BANNED2 = TestConstants.USER_TO_BE_BANNED2;
     TestUser USER_RESTRICTED2 = TestConstants.USER_RESTRICTED2;
     TestUser USER_TAXON_USER = TestConstants.USER_TAXON_USER;
+    TestUser USER_WITH_LOCATION = TestConstants.USER_WITH_LOCATION;
 
     Long MATERIAL_1 = TestConstants.MATERIAL_1;
     Long MATERIAL_2 = TestConstants.MATERIAL_2;

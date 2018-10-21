@@ -4,7 +4,6 @@ import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.model.taxon.UserLocation;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.text.WordUtils;
@@ -121,9 +120,8 @@ public class UserService {
     }
     public User updateUserLocation(User loggedInUser, String userLocation) {
         User existingUser = getUserById(loggedInUser.getId());
-        existingUser.setUserLocation(userLocation);
+        existingUser.setLocation(userLocation);
         return userDao.createOrUpdate(existingUser);
-
     }
 
     private User getUserById(Long id) {

@@ -1,4 +1,4 @@
-package ee.hm.dop.model.taxon;
+package ee.hm.dop.model.user;
 
 public class UserLocation {
 

@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.taxon.UserLocation;
+import ee.hm.dop.model.user.UserLocation;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -51,19 +51,23 @@ public class UserResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     @Produces(MediaType.TEXT_PLAIN)
     public String getUserLocation() {
-        if (isBlank(getLoggedInUser().getUserLocation())) {
+        if (isBlank(getLoggedInUserLocation())) {
             throw badRequest("User does not have saved location.");
         }
-        return getLoggedInUser().getUserLocation();
+        return getLoggedInUserLocation();
     }
 
     @POST
     @Path("saveLocation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public User updateUserLocation(UserLocation userLocation) {
         return userService.updateUserLocation(getLoggedInUser(), userLocation.getLocation());
+    }
+
+    public String getLoggedInUserLocation() {
+        return getLoggedInUser().getLocation();
     }
 
 }

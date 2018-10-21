@@ -171,8 +171,8 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         clientConfig.register(MultiPartFeature.class);
         clientConfig.register(LoggingFeature.class);
 
-        Client client = ClientBuilder.newClient(clientConfig)
-                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.FINE.getName());
+        Client client = ClientBuilder.newClient(clientConfig);
+//                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_CLIENT, Level.FINE.getName());
         client.register(JacksonFeature.class);
         if (clientRequestFilter != null) {
             client.register(clientRequestFilter);

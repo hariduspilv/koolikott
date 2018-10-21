@@ -92,6 +92,7 @@ angular.module('koolikottApp')
 
         function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            userLocatorService.getUserLocation()
 
             if ($rootScope.afterAuthRedirectURL) {
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
@@ -118,7 +119,6 @@ angular.module('koolikottApp')
         }
 
         function logoutSuccess(data) {
-            userLocatorService.postUserLocation()
             authenticatedUserService.removeAuthenticatedUser();
             $rootScope.$broadcast('logout:success');
             enableLogin();
@@ -178,6 +178,7 @@ angular.module('koolikottApp')
             },
 
             logout: function() {
+                userLocatorService.saveUserLocation();
                 serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
             },
 
