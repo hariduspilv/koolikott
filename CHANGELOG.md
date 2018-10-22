@@ -1,3 +1,11 @@
+## e-Koolikott [1.23.2](https://github.com/hariduspilv/koolikott/milestone/24) 
+
+### Muutunud
+* Filtris kutsehariduse puhul rippmenüüst valikuid tehes ei kuvata "Kõik" väärtust kasutajale välja [#384](https://github.com/hariduspilv/koolikott/issues/384) 
+* "Sisukord" menüüs taksnonoomiatele tooltipi kuvamine [#383](https://github.com/hariduspilv/koolikott/issues/383)
+* Asendada tekst, mis kuvatakse, kui sisupuus ei leidu ühtegi õppevara [#377](https://github.com/hariduspilv/koolikott/issues/377)
+* Plumbr skripti uuendamine [#380](https://github.com/hariduspilv/koolikott/issues/380)
+
 ## e-Koolikott [1.23.1](https://github.com/hariduspilv/koolikott/milestone/24) 
 
 ### Muutunud
