@@ -96,7 +96,9 @@ angular.module('koolikottApp')
                     authenticatedUserService.setAuthenticatedUser(authenticatedUser);
 
                     if ($rootScope.afterAuthRedirectURL) {
-                        $location.url($rootScope.previousLocation);
+                        $location.url(response);
+                    } else if (response) {
+                        $location.url(response.data)
                     } else if ($rootScope.afterAuthRedirectURL && previousLocation) {
                         $location.url(previousLocation)
                     } else if (authenticatedUser.firstLogin) {
