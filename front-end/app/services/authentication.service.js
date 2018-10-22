@@ -7,6 +7,7 @@ angular.module('koolikottApp')
     function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
+        $rootScope.showLocationDialog = true;
 
         var mobileIdLoginSuccessCallback;
         var mobileIdLoginFailCallback;
@@ -20,6 +21,15 @@ angular.module('koolikottApp')
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
                 serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
             }
+        }
+
+        function showLocationDialog() {
+            $mdDialog.show({
+                templateUrl: 'views/locationDialog/locationDialog.html',
+                controller: 'locationDialogController',
+                clickOutsideToClose: true
+            })
+
         }
 
         function showGdprModalAndAct(userStatus) {
@@ -91,25 +101,19 @@ angular.module('koolikottApp')
         }
 
         function finishLogin(authenticatedUser) {
-            userLocatorService.getUserLocation().then((response) => {
-                if (response.data) {
-                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            if ($rootScope.showLocationDialog)
+                showLocationDialog();
 
-                    if ($rootScope.afterAuthRedirectURL) {
-                        $location.url(response);
-                    } else if (response) {
-                        $location.url(response.data)
-                    } else if ($rootScope.afterAuthRedirectURL && previousLocation) {
-                        $location.url(previousLocation)
-                    } else if (authenticatedUser.firstLogin) {
-                        $location.url('/' + authenticatedUser.user.username);
-                    } else if (isOAuthAuthentication) {
-                        $location.url(localStorage.getItem(LOGIN_ORIGIN));
-                    }
+            if ($rootScope.afterAuthRedirectURL) {
+                $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
+            } else if (authenticatedUser.firstLogin) {
+                $location.url('/' + authenticatedUser.user.username);
+            } else if (isOAuthAuthentication) {
+                $location.url(localStorage.getItem(LOGIN_ORIGIN));
+            }
 
-                    enableLogin();
-                }
-            });
+            enableLogin();
             localStorage.removeItem(LOGIN_ORIGIN);
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;

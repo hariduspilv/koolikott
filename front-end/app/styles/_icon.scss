@@ -42,6 +42,10 @@ md-chip-template .md-button.md-icon-button {
   float: left;
 }
 
+.width-85 {
+  width: 85px !important;
+}
+
 // md-icon-button height/width override
 .md-icon-button--44px-sm {
   @media (min-width: $layout-breakpoint-sm) {

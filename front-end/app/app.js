@@ -237,7 +237,6 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             if (isLoggedIn)
                 userLocatorService.startTimer()
 
-
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
