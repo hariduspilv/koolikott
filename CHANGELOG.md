@@ -4,8 +4,8 @@
 * Filtris kutsehariduse puhul rippmenüüst valikuid tehes ei kuvata "Kõik" väärtust kasutajale välja [#384](https://github.com/hariduspilv/koolikott/issues/384) 
 * "Sisukord" menüüs taksnonoomiatele tooltipi kuvamine [#383](https://github.com/hariduspilv/koolikott/issues/383)
 * Asendada tekst,mis kuvatakse,kui sisupuus ei leidu ühtegi õppevara (materjali ega kogumiku) [#377](https://github.com/hariduspilv/koolikott/issues/377)
-* #373 ESF logo : sotsiaalfondi logo, turvakasti ümber pole vaja, hele taust.
-* #383 - "Sisukord" menüüs taksnonoomiatele tooltipi kuvamine
+* ESF logo : sotsiaalfondi logo, turvakasti ümber pole vaja, hele taust. [#373](https://github.com/hariduspilv/koolikott/issues/373)
+* "Sisukord" menüüs taksnonoomiatele tooltipi kuvamine [#383](https://github.com/hariduspilv/koolikott/issues/383)
 
 ## e-Koolikott [1.23.1](https://github.com/hariduspilv/koolikott/milestone/24) 
 
