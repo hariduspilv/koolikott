@@ -132,7 +132,6 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         login(USER_ADMIN);
         String location = doGet(USER_LOCATION, MediaType.TEXT_PLAIN_TYPE, String.class);
         assertTrue(!StringUtils.isBlank(location));
-
     }
 
     @Test
