@@ -232,12 +232,11 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             var isViewMyProfile = isViewMyProfilePage($location, user);
             let isLoggedIn = authenticatedUserService.isAuthenticated();
 
-            if (isLoggedIn && !userLocatorService.startTimer()) {
-                userLocatorService.stopTimer()
+            userLocatorService.stopTimer()
+
+            if (isLoggedIn)
                 userLocatorService.startTimer()
-            }
-            else
-                userLocatorService.stopTimer()
+
 
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);

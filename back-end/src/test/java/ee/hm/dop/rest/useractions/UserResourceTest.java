@@ -7,6 +7,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import javax.ws.rs.core.*;
@@ -23,6 +24,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public static final String RESTRICT_USER = "user/restrictUser";
     public static final String USER_ROLE = "user/role";
     public static final String GET_SIGNED_USER_DATA = "user/getSignedUserData";
+    public static final String USER_LOCATION = "user/getLocation";
+
+
 
     @Test
     public void getUser_returns_user() {
@@ -115,13 +119,20 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Role.USER, nonRestrictedUser.getRole());
     }
 
-
     @Test
     public void database_has_some_users() {
         login(USER_ADMIN);
         List<User> allUsers = doGet("user/all", new GenericType<List<User>>() {
         });
         assertTrue(CollectionUtils.isNotEmpty(allUsers));
+    }
+
+    @Test
+    public void user_has_location() {
+        login(USER_ADMIN);
+        String location = doGet(USER_LOCATION, MediaType.TEXT_PLAIN_TYPE, String.class);
+        assertTrue(!StringUtils.isBlank(location));
+
     }
 
     @Test

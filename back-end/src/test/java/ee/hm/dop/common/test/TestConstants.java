@@ -75,7 +75,7 @@ public class TestConstants {
     public static final TestUser USER_VOLDERMAR2 = new TestUser(4L, "15066990099", "voldemar.vapustav2");
     public static final TestUser USER_MAASIKAS_VAARIKAS = new TestUser(6L, "39011220013", "mati.maasikas-vaarikas");
     public static final TestUser USER_MYTESTUSER = new TestUser(7L, "78912378912", "my.testuser");
-    public static final TestUser USER_ADMIN = new TestUser(8L, "89898989898", "admin.admin");
+    public static final TestUser USER_ADMIN = new TestUser(8L, "89898989898", "admin.admin", "/material?id=666");
     public static final TestUser USER_SECOND = new TestUser(9L, "89012378912", "second.testuser");
     public static final TestUser USER_RESTRICTED = new TestUser(11L, "89898989890", "restricted.user");
     public static final TestUser USER_MODERATOR = new TestUser(12L, "38211120031", "biffy.clyro");

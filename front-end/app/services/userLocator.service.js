@@ -4,27 +4,27 @@ angular.module('koolikottApp')
     .factory('userLocatorService',
         [
             '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', '$interval',
-            function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, $interval ) {
+            function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, $interval) {
 
-                let updateTimer
+                let updateTimer;
+
+                function saveUserLocation() {
+                    if (authenticatedUserService.isAuthenticated())
+                        serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
+                }
 
                 return {
 
                     getUserLocation: function() {
-                        return serverCallService.makeGet('rest/user/getLocation').then((response) => {
-                            debugger
-                            if (response.data) return response.data
-                        });
+                        return serverCallService.makeGet('rest/user/getLocation')
                     },
 
                     saveUserLocation: function() {
-                        serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
+                        saveUserLocation()
                     },
 
                     startTimer: function() {
-                        updateTimer = $interval(function (){
-                        serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
-                        }, 10000)
+                        updateTimer = $interval(saveUserLocation, 10000)
                     },
 
                     stopTimer: function() {

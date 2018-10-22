@@ -91,18 +91,23 @@ angular.module('koolikottApp')
         }
 
         function finishLogin(authenticatedUser) {
-            authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            userLocatorService.getUserLocation()
+            userLocatorService.getUserLocation().then((response) => {
+                if (response.data) {
+                    authenticatedUserService.setAuthenticatedUser(authenticatedUser);
 
-            if ($rootScope.afterAuthRedirectURL) {
-                $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
-            } else if (authenticatedUser.firstLogin) {
-                $location.url('/' + authenticatedUser.user.username);
-            } else if (isOAuthAuthentication) {
-                $location.url(localStorage.getItem(LOGIN_ORIGIN));
-            }
+                    if ($rootScope.afterAuthRedirectURL) {
+                        $location.url($rootScope.previousLocation);
+                    } else if ($rootScope.afterAuthRedirectURL && previousLocation) {
+                        $location.url(previousLocation)
+                    } else if (authenticatedUser.firstLogin) {
+                        $location.url('/' + authenticatedUser.user.username);
+                    } else if (isOAuthAuthentication) {
+                        $location.url(localStorage.getItem(LOGIN_ORIGIN));
+                    }
 
-            enableLogin();
+                    enableLogin();
+                }
+            });
             localStorage.removeItem(LOGIN_ORIGIN);
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
@@ -179,6 +184,7 @@ angular.module('koolikottApp')
 
             logout: function() {
                 userLocatorService.saveUserLocation();
+                userLocatorService.stopTimer();
                 serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
             },
 
