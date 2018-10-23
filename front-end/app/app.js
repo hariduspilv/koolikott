@@ -237,6 +237,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             if (isLoggedIn)
                 userLocatorService.startTimer()
 
+            $rootScope.isAdmin = authenticatedUserService.isAdmin();
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
@@ -248,7 +249,11 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage));
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage) || !$rootScope.isAdmin);
+            if ($rootScope.isAdmin) {
+                $rootScope.isUserTabOpen = false
+                $rootScope.isAdminTabOpen = true
+            }
 
             if ($rootScope.justLoggedIn) {
                 $rootScope.$broadcast('tour:start:firstTime');

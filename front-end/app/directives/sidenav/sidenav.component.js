@@ -11,6 +11,7 @@ class controller extends Controller {
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.toggleSidenav = () => this.$mdSidenav('left').toggle()
 
+
         // List of taxon icons
         this.$scope.taxonIcons = [
             'extension',
