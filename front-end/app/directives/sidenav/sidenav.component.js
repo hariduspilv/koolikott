@@ -67,8 +67,11 @@ class controller extends Controller {
         this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
         this.$scope.updateUserCounts();
 
-        if (!this.$scope.isAuthenticated)
+        if (!this.$scope.isAuthenticated) {
             this.$rootScope.isUserTabOpen = false
+            this.$rootScope.isAdminTabOpen = false
+        }
+
     }
     isLocationActive(menuLocation) {
         if (!this.$scope.user)

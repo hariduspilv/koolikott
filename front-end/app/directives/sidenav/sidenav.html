@@ -22,6 +22,80 @@
   <md-divider></md-divider>
 
   <uib-accordion close-others="false">
+    <!-- BEGIN Admin -->
+    <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode && isAdminUser()" class="panel-default"
+         is-open="$rootScope.isAdminTabOpen">
+      <uib-accordion-heading>
+        <a id="Admin" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
+           layout-align="space-between center" data-ng-class="{'is-opened': $rootScope.isAdminTabOpen}"
+           data-ng-click="updateUserCounts()">
+          <div layout="row" layout-align="center center">
+            <span data-translate="ADMIN_TAB" class="sidenav__name"></span>
+          </div>
+          <md-icon class="material-icons sidenav__icon sidenav__icon--animate">keyboard_arrow_right</md-icon>
+        </a>
+      </uib-accordion-heading>
+      <ul class="sidenav__list">
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
+          <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}"
+             data-ng-href="/dashboard/moderators"
+             data-ng-click="updateCount('moderators')">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">face</md-icon>
+              <span data-translate="MODERATORS_TAB" class="sidenav__name"></span>
+            </div>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="moderatorsCount"></span>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
+          <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/restrictedUsers')}"
+             data-ng-href="/dashboard/restrictedUsers" data-ng-click="updateCount('restrictedUsers')">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">block</md-icon>
+              <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
+            </div>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="restrictedUsersCount"></span>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="deleted" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/deleted')}"
+             data-ng-href="/dashboard/deleted" data-ng-click="updateCount('deleted')">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">delete_forever</md-icon>
+              <span data-translate="DELETED_LEARNING_OBJECTS" class="sidenav__name"></span>
+            </div>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="deletedCount"></span>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="expertStatistics" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/stat/expert')}"
+             data-ng-href="/dashboard/stat/expert">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">insert_chart</md-icon>
+              <span data-translate="EXPERT_STATISTICS" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="gdpr" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/gdpr')}"
+             data-ng-href="/dashboard/gdpr">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">gavel</md-icon>
+              <span data-translate="GDPR_SIDEMENU" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
     <!-- BEGIN My Profile -->
     <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default"
          is-open="$root.isUserTabOpen">
@@ -107,42 +181,6 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="changesCount"></span>
           </a>
         </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
-          <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}"
-             data-ng-href="/dashboard/moderators"
-             data-ng-click="updateCount('moderators')">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">face</md-icon>
-              <span data-translate="MODERATORS_TAB" class="sidenav__name"></span>
-            </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="moderatorsCount"></span>
-          </a>
-        </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
-          <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row"
-             layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/restrictedUsers')}"
-             data-ng-href="/dashboard/restrictedUsers" data-ng-click="updateCount('restrictedUsers')">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">block</md-icon>
-              <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
-            </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="restrictedUsersCount"></span>
-          </a>
-        </li>
-        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
-          <a id="deleted" class="sidenav__header" md-ink-ripple layout="row"
-             layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/deleted')}"
-             data-ng-href="/dashboard/deleted" data-ng-click="updateCount('deleted')">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">delete_forever</md-icon>
-              <span data-translate="DELETED_LEARNING_OBJECTS" class="sidenav__name"></span>
-            </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="deletedCount"></span>
-          </a>
-        </li>
         <!--Must be hidden for now-->
         <!--<li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="statistics" class="sidenav__header" md-ink-ripple layout="row"
@@ -155,28 +193,6 @@
             </div>
           </a>
         </li>-->
-        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
-          <a id="expertStatistics" class="sidenav__header" md-ink-ripple layout="row"
-             layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/stat/expert')}"
-             data-ng-href="/dashboard/stat/expert">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">insert_chart</md-icon>
-              <span data-translate="EXPERT_STATISTICS" class="sidenav__name"></span>
-            </div>
-          </a>
-        </li>
-        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
-          <a id="gdpr" class="sidenav__header" md-ink-ripple layout="row"
-             layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/gdpr')}"
-             data-ng-href="/dashboard/gdpr">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">gavel</md-icon>
-              <span data-translate="GDPR_SIDEMENU" class="sidenav__name"></span>
-            </div>
-          </a>
-        </li>
       </ul>
     </div>
     <!-- END My Pofile -->
