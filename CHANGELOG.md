@@ -1,4 +1,4 @@
-## e-Koolikott [1.23.2](https://github.com/hariduspilv/koolikott/milestone/24) 
+## e-Koolikott [1.23.2](https://github.com/hariduspilv/koolikott/milestone/24) (Toodangusse paigaldatud 22.10.2018)
 
 ### Muutunud
 * Filtris kutsehariduse puhul rippmenüüst valikuid tehes ei kuvata "Kõik" väärtust kasutajale välja [#384](https://github.com/hariduspilv/koolikott/issues/384) 
@@ -6,13 +6,13 @@
 * Asendada tekst, mis kuvatakse, kui sisupuus ei leidu ühtegi õppevara [#377](https://github.com/hariduspilv/koolikott/issues/377)
 * Plumbr skripti uuendamine [#380](https://github.com/hariduspilv/koolikott/issues/380)
 
-## e-Koolikott [1.23.1](https://github.com/hariduspilv/koolikott/milestone/24) 
+## e-Koolikott [1.23.1](https://github.com/hariduspilv/koolikott/milestone/24) (Toodangusse paigaldatud 22.10.2018)
 
 ### Muutunud
 * Lisada e-Koolikoti lehele struktuuritoetuse logo [#373](https://github.com/hariduspilv/koolikott/issues/373)
 * Kutsehariduse taksonoomia muudatus [#375](https://github.com/hariduspilv/koolikott/issues/375)
 
-## e-Koolikott [1.23.0](https://github.com/hariduspilv/koolikott/milestone/24) 
+## e-Koolikott [1.23.0](https://github.com/hariduspilv/koolikott/milestone/24) (Toodangusse paigaldatud 22.10.2018)
 
 ### Muutunud
 * Õppevarade URL'i lisada õppevarade täispikk pealkiri ja kogumikele lisaks ka peatüki pealkiri [#365](https://github.com/hariduspilv/koolikott/issues/365)
