@@ -5,7 +5,6 @@ class controller extends Controller {
         constructor(...args) {
             super(...args)
 
-            this.$rootScope.showLoginDialog = true;
             this.$scope.agree = () => {
                 this.userLocatorService.getUserLocation().then((response) => {
                     if (response.data)
