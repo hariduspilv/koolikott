@@ -22,6 +22,20 @@
   <md-divider></md-divider>
 
   <uib-accordion close-others="false">
+    <!-- Kasutusjuhendid -->
+    <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode && isAdminUser()" class="panel-default">
+      <uib-accordion-heading>
+        <a id="userManual" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
+           layout-align="space-between center"
+           data-ng-class="{'is-active': isLocationActive('/dashboard/gdpr')}"
+           data-ng-href="/dashboard/gdpr">
+          <div layout="row" layout-align="center center">
+            <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>
+          </div>
+          <md-icon class="material-icons sidenav__icon sidenav__icon--animate">keyboard_arrow_right</md-icon>
+        </a>
+      </uib-accordion-heading>
+    </div>
     <!-- BEGIN Admin -->
     <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode && isAdminUser()" class="panel-default"
          is-open="$root.isAdminTabOpen">
@@ -91,6 +105,17 @@
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">gavel</md-icon>
               <span data-translate="GDPR_SIDEMENU" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="userManualEdit" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/userManualEdit')}"
+             data-ng-href="/dashboard/userManualEdit">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">library_books</md-icon>
+              <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>
             </div>
           </a>
         </li>

@@ -107,6 +107,12 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
+                .when('/dashboard/userManualEdit', {
+                    templateUrl: 'views/userManualsAdmin/userManualsAdmin.html',
+                    controller: 'userManualsAdminController',
+                    controllerAs: '$ctrl',
+                    permissions: ['ADMIN']
+                })
                 .when('/loginRedirect', {
                     templateUrl: 'views/loginRedirect/loginRedirect.html',
                     controller: 'loginRedirectController',
