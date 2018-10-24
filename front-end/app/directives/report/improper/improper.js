@@ -5,7 +5,6 @@ const SHOW_GENERAL_REPORT_MODAL_HASH = 'dialog-report-general'
 
 class controller extends Controller {
     $onInit() {
-        this.$rootScope.showLocationDialog = true;
         this.$scope.data = {
             reportingReasons: [],
             reportingText: '',
@@ -41,6 +40,7 @@ class controller extends Controller {
             this.authenticatedUserService.isAuthenticated()
         ) {
             this.removeHash()
+            this.$rootScope.showLocationDialog = false
             !this.loginDialog
                 ? this.showReportDialog()
                 : this.loginDialog.then(() => {
@@ -109,7 +109,6 @@ class controller extends Controller {
         )
     }
     showLoginDialog(targetEvent) {
-        this.$rootScope.showLocationDialog = false
 
         this.addHash()
 
