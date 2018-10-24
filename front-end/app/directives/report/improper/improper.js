@@ -109,10 +109,11 @@ class controller extends Controller {
         )
     }
     showLoginDialog(targetEvent) {
+        this.$rootScope.showLocationDialog = false
+
         this.addHash()
 
         loginDialogController.$inject.push('title')
-
         this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
             controller: loginDialogController,
@@ -125,7 +126,6 @@ class controller extends Controller {
             targetEvent
         })
         .catch(this.removeHash)
-        this.$rootScope.showLocationDialog = false
 
         setTimeout(() =>
             setTimeout(() =>
