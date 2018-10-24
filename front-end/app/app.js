@@ -281,6 +281,10 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
 
             $rootScope.hasAppInitated = true;
+
+            window.onbeforeunload = function() {
+                userLocatorService.saveUserLocation()
+            }
         });
     }]);
 

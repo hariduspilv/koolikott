@@ -122,7 +122,7 @@ angular.module('koolikottApp')
             }
 
             userLocatorService.getUserLocation().then((response) => {
-                if (response.data &&$rootScope.showLocationDialog) {
+                if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
                     showLocationDialog()
                     $rootScope.locationDialogIsOpen = true
                 }
