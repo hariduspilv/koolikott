@@ -121,8 +121,11 @@ angular.module('koolikottApp')
                 mobileIdLoginSuccessCallback();
             }
 
-            if ($rootScope.showLocationDialog)
-                showLocationDialog();
+            userLocatorService.getUserLocation().then((response) => {
+                if (response.data &&$rootScope.showLocationDialog) {
+                    showLocationDialog()
+                }
+            });
 
             $rootScope.justLoggedIn = true;
             $timeout(() =>
