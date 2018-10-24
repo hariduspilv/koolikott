@@ -234,7 +234,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
 
             userLocatorService.stopTimer()
 
-            if (isLoggedIn)
+            if (isLoggedIn && !$rootScope.locationDialogIsOpen)
                 userLocatorService.startTimer()
 
             $rootScope.isAdmin = authenticatedUserService.isAdmin();

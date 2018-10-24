@@ -10,12 +10,15 @@ class controller extends Controller {
                     if (response.data)
                         this.$location.url(response.data)
 
-                this.$mdDialog.hide(true)
+                    this.$mdDialog.hide(true)
+                    this.$rootScope.locationDialogIsOpen = false
                 })
             }
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide()
+                this.$rootScope.locationDialogIsOpen = false
+                this.userLocatorService.startTimer()
             }
         }
     $onDestroy() {
