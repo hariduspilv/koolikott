@@ -5,19 +5,17 @@
         constructor(...args) {
             super(...args)
             this.$scope.data = {}
-            this.$scope.newAgreement = {}
+            this.$scope.newUserManual = {}
             this.$scope.addNewRow = false;
             this.$scope.isInfoTextOpen = false
 
-            this.getAgreements()
+            this.getUserManuals()
 
             this.$scope.sort = this.sort.bind(this)
             this.$scope.paginate = this.paginate.bind(this)
             this.$scope.confirmMaterialDeletion = this.confirmMaterialDeletion.bind(this)
-            this.$scope.addAgreement = this.addAgreement.bind(this)
+            this.$scope.addUserManual = this.addUserManual.bind(this)
             this.$scope.toggleNewRow = this.toggleNewRow.bind(this)
-            this.$scope.minDate = new Date()
-            this.$scope.maxDate = new Date(2038, 0, 19, 0, 0, 0, 0)
             this.$scope.perPage = 20
             this.$scope.page = 1
             this.$scope.numPages = 1
@@ -34,20 +32,20 @@
             this.$scope.newAgreement.$error = false;
         }
 
-        confirmMaterialDeletion(agreement) {
+        confirmMaterialDeletion(userManual) {
             this.dialogService.showConfirmationDialog(
-                'GDPR_DELETE_DIALOG_TITLE',
-                'GDPR_DELETE_DIALOG_CONTENT',
+                'USER_MANUALS_DELETE_DIALOG_TITLE',
+                'USER_MANUALS_DELETE_DIALOG_CONTENT',
                 'ALERT_CONFIRM_POSITIVE',
                 'ALERT_CONFIRM_NEGATIVE',
                 () => {
-                    this.deleteAgreement(agreement)
+                    this.deleteUserManual(userManual)
                 });
         };
 
-        getAgreements() {
+        getUserManuals() {
             this.serverCallService
-                .makeGet('rest/admin/agreement')
+                .makeGet('rest/admin/userManuals')
                 .then(res => {
                     this.$scope.alldata = res.data
                     this.$scope.page = 1
@@ -57,7 +55,7 @@
                 })
         }
 
-        addAgreement() {
+        addUserManual() {
             this.$scope.newAgreement.$error = false;
             this.serverCallService
                 .makePost('rest/admin/agreement/validate', this.$scope.newAgreement)
@@ -66,10 +64,10 @@
                         this.$scope.newAgreement.$error = true;
                     } else {
                         this.serverCallService
-                            .makePost('rest/admin/agreement', this.$scope.newAgreement)
+                            .makePost('rest/admin/userManuals', this.$scope.newAgreement)
                             .then((response) => {
                                 if (response.status === 200) {
-                                    this.getAgreements();
+                                    this.getUserManuals();
                                     this.$scope.newAgreement = {}
                                     this.$scope.addNewRow = false;
                                 }
@@ -78,11 +76,11 @@
                 })
         }
 
-        deleteAgreement(agreement) {
+        deleteUserManual(userManual) {
             this.serverCallService
-                .makePost('rest/admin/agreement/delete', agreement)
+                .makePost('rest/admin/userManuals/delete', userManual)
                 .then(() => {
-                    this.getAgreements();
+                    this.getUserManuals();
                 })
         }
 

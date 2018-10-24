@@ -1,8 +1,6 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.UserManuals;
-import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -15,8 +13,4 @@ public class UserManualsDao extends AbstractDao<UserManuals> {
     }
 
     public void delete(UserManuals userManuals) { entityManager.remove(userManuals);}
-
-
-
-
 }

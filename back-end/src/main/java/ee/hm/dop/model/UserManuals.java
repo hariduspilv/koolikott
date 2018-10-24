@@ -35,7 +35,7 @@ public class UserManuals implements AbstractEntity{
     private String url;
 
     @Column
-    private String urlToText;
+    private String textUrl;
 
     @Column(nullable = false)
     private boolean deleted;
@@ -69,9 +69,9 @@ public class UserManuals implements AbstractEntity{
         this.url = url;
     }
 
-    public String getUrlToText() { return urlToText; }
+    public String getTextUrl() { return textUrl; }
 
-    public void setUrlToText(String urlToText) { this.urlToText = urlToText; }
+    public void setTextUrl(String textUrl) { this.textUrl = textUrl; }
 
     public DateTime getCreatedAt() { return createdAt; }
 

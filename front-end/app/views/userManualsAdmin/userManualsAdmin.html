@@ -15,7 +15,7 @@
           <md-icon>arrow_downward</md-icon>
         </div>
         <div data-ng-show="addNewRow">
-          <span data-translate="GDPR_HIDE_NEW_ROW"></span>
+          <span data-translate="USER_MANUALS_HIDE_NEW_ROW"></span>
           <md-icon>arrow_upward</md-icon>
         </div>
       </md-button>
@@ -25,14 +25,14 @@
     <table data-ng-if="data" md-table class="table-fixed">
       <thead md-head md-order="sortBy" md-on-reorder="sort">
       <tr md-row>
-        <th md-column md-order-by="byUrl" width="45%">
-          <span data-translate="GDPR_LINK"></span>
+        <th md-column md-order-by="byTitle" width="25%">
+          <span data-translate="USER_MANUALS_TITLE"></span>
         </th>
-        <th md-column md-order-by="byVersion" width="20%">
-          <span data-translate="GDPR_VERSION"></span>
+        <th md-column md-order-by="byUrl" width="25%">
+          <span data-translate="USER_MANUALS_LINK"></span>
         </th>
-        <th md-column md-order-by="byValidFrom" width="20%">
-          <span data-translate="GDPR_VALIDFROM"></span>
+        <th md-column md-order-by="byTextUrl" width="25%">
+          <span data-translate="USER_MANUALS_TEXT_LINK"></span>
         </th>
         <th md-column width="15%">
           <span></span>
@@ -44,54 +44,49 @@
         <td md-cell class="dashboard-cell">
           <md-input-container layout-fill>
             <label></label>
-            <input type="text" ng-model="newAgreement.url">
+            <input type="text" ng-model="newUserManual.title">
           </md-input-container>
         </td>
-        <td md-cell class="dashboard-cell dashboard-cell--title">
+        <td md-cell class="dashboard-cell">
           <md-input-container layout-fill>
             <label></label>
-            <input type="text" ng-model="newAgreement.version">
+            <input type="text" ng-model="newUserManual.url"
+                   placeholder="{{ 'HTTP_WORD' | translate }}">
           </md-input-container>
         </td>
-        <td md-cell class="dashboard-cell dashboard-cell--date">
-          <md-datepicker
-            data-ng-model="newAgreement.validFrom"
-            data-md-placeholder="{{'SELECT_DATE' | translate}}"
-            data-md-open-on-focus
-            data-md-min-date="minDate"
-            data-md-max-date="maxDate"
-            aria-label="Vali lõppkuupäev"
-          ></md-datepicker>
+        <td md-cell class="dashboard-cell">
+          <md-input-container layout-fill>
+            <label></label>
+            <input type="text" ng-model="newUserManual.textUrl"
+                   placeholder="{{ 'HTTP_WORD' | translate }}">
+          </md-input-container>
         </td>
         <td md-cell class="dashboard-cell dashboard-cell--type-icon">
           <md-button
             class="md-raised md-primary statistics-filter__download"
-            data-ng-disabled="! (newAgreement.url && newAgreement.version && newAgreement.validFrom)"
-            data-ng-click="$ctrl.addAgreement()"
+            data-ng-disabled="! (newUserManual.title && newUserManual.url && newUserManual.textUrl)"
+            data-ng-click="$ctrl.addUserManual"
             aria-label="Lisa"
           >
-            <span data-translate="GDPR_ADD"></span>
+            <span data-translate="USER_MANUALS_ADD"></span>
           </md-button>
-          <div ng-if="newAgreement.$error" class="text-error">
-            <span data-translate="GDPR_AGREEMENT_EXISTS"></span>
-          </div>
         </td>
       </tr>
-      <tr md-row data-ng-repeat="agreement in data track by $index">
+      <tr md-row data-ng-repeat="userManual in data track by $index">
+        <td md-cell class="dashboard-cell dashboard-cell--title">
+          <span data-ng-bind="userManual.title"></span>
+        </td>
         <td md-cell class="dashboard-cell">
-          <a target="_blank" href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}">
-            <span data-ng-bind="agreement.url"></span>
+          <a target="_blank" href="{{userManual.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}">
+            <span data-ng-bind="userManual.url"></span>
           </a>
         </td>
-        <td md-cell class="dashboard-cell dashboard-cell--title">
-          <span data-ng-bind="agreement.version"></span>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--date">
-          <span data-ng-bind="$ctrl.formatDateToDayMonthYear(agreement.validFrom)"></span>
+        <td md-cell class="dashboard-cell">
+          <span data-ng-bind="userManual.textUrl"></span>
         </td>
         <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-          <a href="#" data-ng-click="confirmMaterialDeletion(agreement)">
-            <md-icon title="{{'GDPR_DELETE' | translate}}" class="material-icons sidenav__icon">delete_forever</md-icon>
+          <a href="#" data-ng-click="confirmMaterialDeletion(userManual)">
+            <md-icon title="{{'USER_MANUALS_DELETE' | translate}}" class="material-icons sidenav__icon">delete_forever</md-icon>
           </a>
         </td>
       </tr>
