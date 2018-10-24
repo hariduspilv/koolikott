@@ -102,18 +102,16 @@ angular.module('koolikottApp')
 
         function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            if ($rootScope.showLocationDialog)
-                showLocationDialog();
-
             if ($rootScope.afterAuthRedirectURL) {
+
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/' + authenticatedUser.user.username);
             } else if (isOAuthAuthentication) {
                 $location.url(localStorage.getItem(LOGIN_ORIGIN));
             }
-
             enableLogin();
+
             localStorage.removeItem(LOGIN_ORIGIN);
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
@@ -122,6 +120,12 @@ angular.module('koolikottApp')
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();
             }
+
+            userLocatorService.getUserLocation().then((response) => {
+                if (response.data &&$rootScope.showLocationDialog) {
+                    showLocationDialog()
+                }
+            });
 
             $rootScope.justLoggedIn = true;
             $timeout(() =>
