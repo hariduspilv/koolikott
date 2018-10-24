@@ -45,6 +45,15 @@ class controller extends Controller {
             if (newValue)
                 this.$scope.taxon = newValue
         })
+
+        this.$scope.$watch(() => this.$rootScope.isAdminTabOpen, (newValue) => {
+            if (newValue)
+                this.$rootScope.isUserTabOpen = false })
+
+        this.$scope.$watch(() => this.$rootScope.isUserTabOpen, (newValue) => {
+            if (newValue)
+                this.$rootScope.isAdminTabOpen = false })
+
         this.$scope.$watch(() => this.$location.url(), () => {
             if (this.$location.url() === '/'){
                 this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
