@@ -42,7 +42,7 @@
       <uib-accordion-heading>
         <a id="Admin" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isAdminTabOpen}"
-           data-ng-click="updateUserCounts()">
+           data-ng-click="updateUserCounts(); closeOtherTabs($event)">
           <div layout="row" layout-align="center center">
             <span data-translate="ADMIN_TAB" class="sidenav__name"></span>
           </div>
@@ -127,7 +127,7 @@
       <uib-accordion-heading>
         <a id="myProfile" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isUserTabOpen}"
-           data-ng-click="updateUserCounts()">
+           data-ng-click="updateUserCounts(); closeOtherTabs($event)">
           <div layout="row" layout-align="center center">
             <span data-translate="MY_PROFILE" class="sidenav__name"></span>
           </div>
@@ -230,12 +230,13 @@
       ></dop-table-of-contents>
     </div>
 
-    <div uib-accordion-group class="panel-default" is-open="isTaxonomyOpen"
-         data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode">
+    <div uib-accordion-group class="panel-default"
+         data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode"
+         is-open="$root.isTaxonomyOpen">
       <uib-accordion-heading>
         <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
-           layout-align="space-between center" data-ng-class="{'is-opened': isTaxonomyOpen}"
-           data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary')">
+           layout-align="space-between center" data-ng-class="{'is-opened': $root.isTaxonomyOpen}"
+           data-ng-click="changeTaxonomyDataAndVisibility('sidebar', 'primary'); closeOtherTabs($event)">
           <div layout="row" layout-align="center center">
             <span data-translate="TABLE_OF_CONTENTS" class="sidenav__name"></span>
           </div>
