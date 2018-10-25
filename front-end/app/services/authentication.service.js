@@ -140,6 +140,7 @@ angular.module('koolikottApp')
             $rootScope.$broadcast('logout:success');
             enableLogin();
             userLocatorService.stopTimer();
+            $rootScope.showLocationDialog = true;
         }
 
         function logoutFail(data, status) {

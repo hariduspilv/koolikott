@@ -29,7 +29,7 @@ class controller extends Controller {
                 this.setPortfolio(newPortfolio)
         })
         this.$scope.$watch(() => this.$location.search().id, (newValue, oldValue) => {
-            if (nv !== oldValue)
+            if (newValue !== oldValue)
                 this.$route.reload()
         }, true)
 
