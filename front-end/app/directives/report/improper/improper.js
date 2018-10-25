@@ -5,7 +5,6 @@ const SHOW_GENERAL_REPORT_MODAL_HASH = 'dialog-report-general'
 
 class controller extends Controller {
     $onInit() {
-        this.$rootScope.showLocationDialog = true;
         this.$scope.data = {
             reportingReasons: [],
             reportingText: '',
@@ -49,6 +48,7 @@ class controller extends Controller {
                 })
         }
     }
+
     showReportDialog(targetEvent) {
         this.$scope.reasons.then(reasons =>
             this.$mdDialog
@@ -109,10 +109,11 @@ class controller extends Controller {
         )
     }
     showLoginDialog(targetEvent) {
+        this.$rootScope.showLocationDialog = false
+
         this.addHash()
 
         loginDialogController.$inject.push('title')
-
         this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
             controller: loginDialogController,
@@ -125,7 +126,6 @@ class controller extends Controller {
             targetEvent
         })
         .catch(this.removeHash)
-        this.$rootScope.showLocationDialog = false
 
         setTimeout(() =>
             setTimeout(() =>

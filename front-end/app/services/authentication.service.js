@@ -29,7 +29,7 @@ angular.module('koolikottApp')
                 controller: 'locationDialogController',
                 clickOutsideToClose: true
             })
-
+            userLocatorService.stopTimer()
         }
 
         function showGdprModalAndAct(userStatus) {
@@ -122,8 +122,9 @@ angular.module('koolikottApp')
             }
 
             userLocatorService.getUserLocation().then((response) => {
-                if (response.data &&$rootScope.showLocationDialog) {
+                if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
                     showLocationDialog()
+                    $rootScope.locationDialogIsOpen = true
                 }
             });
 
@@ -137,6 +138,8 @@ angular.module('koolikottApp')
             authenticatedUserService.removeAuthenticatedUser();
             $rootScope.$broadcast('logout:success');
             enableLogin();
+            userLocatorService.stopTimer();
+            $rootScope.showLocationDialog = true;
         }
 
         function logoutFail(data, status) {
