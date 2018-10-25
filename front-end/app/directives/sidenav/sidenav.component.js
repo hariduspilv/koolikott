@@ -6,7 +6,7 @@ class controller extends Controller {
         this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
         this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated()
-        this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
+        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.toggleSidenav = () => this.$mdSidenav('left').toggle()
@@ -35,6 +35,7 @@ class controller extends Controller {
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
+        this.$scope.closeOtherTabs = this.closeOtherTabs.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
         this.$scope.isAdminUser = this.isAdminUser.bind(this)
 
@@ -46,23 +47,16 @@ class controller extends Controller {
                 this.$scope.taxon = newValue
         })
 
-        this.$scope.$watch(() => this.$rootScope.isAdminTabOpen, (newValue) => {
-            if (newValue)
-                this.$rootScope.isUserTabOpen = false })
-
-        this.$scope.$watch(() => this.$rootScope.isUserTabOpen, (newValue) => {
-            if (newValue)
-                this.$rootScope.isAdminTabOpen = false })
-
         this.$scope.$watch(() => this.$location.url(), () => {
-            if (this.$location.url() === '/'){
+            /*if (this.$location.url() === '/'){
                 this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
-            }
+            }*/
             this.$rootScope.isViewPortfolioAndEdit = (
                 this.$location.url().indexOf('/portfolio') !== -1 ||
                 this.$location.url().indexOf('/search') !== -1
             )
         }, true)
+
         this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {
             this.userChange()
         }, true)
@@ -74,7 +68,7 @@ class controller extends Controller {
         this.$scope.user = this.authenticatedUserService.getUser();
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
-        this.$scope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
+        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
         this.$scope.updateUserCounts();
 
         if (!this.$scope.isAuthenticated) {
@@ -191,6 +185,20 @@ class controller extends Controller {
         if (this.authenticatedUserService.isAdmin()) {
             this.updateCount('moderators')
             this.updateCount('restrictedUsers')
+        }
+    }
+    closeOtherTabs(evt) {
+        if (evt.currentTarget.id === 'Admin') {
+            this.$rootScope.isUserTabOpen = false
+            this.$rootScope.isTaxonomyOpen = false
+        }
+        else if (evt.currentTarget.id === 'myProfile') {
+            this.$rootScope.isAdminTabOpen = false
+            this.$rootScope.isTaxonomyOpen = false
+        }
+        else {
+            this.$rootScope.isAdminTabOpen = false
+            this.$rootScope.isUserTabOpen = false
         }
     }
 }
