@@ -40,7 +40,6 @@ class controller extends Controller {
             this.authenticatedUserService.isAuthenticated()
         ) {
             this.removeHash()
-            this.$rootScope.showLocationDialog = false
             !this.loginDialog
                 ? this.showReportDialog()
                 : this.loginDialog.then(() => {
