@@ -122,6 +122,7 @@ angular.module('koolikottApp')
             }
 
             userLocatorService.getUserLocation().then((response) => {
+                console.log('showLocation in authentication service: ' + $rootScope.showLocationDialog)
                 if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
                     showLocationDialog()
                     $rootScope.locationDialogIsOpen = true

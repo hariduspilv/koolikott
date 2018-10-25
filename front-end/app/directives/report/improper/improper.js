@@ -49,7 +49,9 @@ class controller extends Controller {
                 })
         }
     }
+
     showReportDialog(targetEvent) {
+        console.log('showLocation in improper - showReportDialog: ' + this.$rootScope.showLocationDialog)
         this.$scope.reasons.then(reasons =>
             this.$mdDialog
                 .show({
@@ -109,6 +111,8 @@ class controller extends Controller {
         )
     }
     showLoginDialog(targetEvent) {
+        this.$rootScope.showLocationDialog = false
+        console.log('showLocation in improper - showLogin: ' + this.$rootScope.showLocationDialog)
 
         this.addHash()
 
