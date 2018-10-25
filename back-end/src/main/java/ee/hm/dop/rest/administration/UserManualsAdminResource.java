@@ -27,14 +27,6 @@ public class UserManualsAdminResource extends BaseResource {
         return userManualsService.findAllUserManuals();
     }
 
-/*    @POST
-    @Path("validate")
-    @RolesAllowed({RoleString.ADMIN})
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean validate(Agreement agreement) {
-        return agreementService.isValid(agreement, getLoggedInUser());
-    }*/
-
     @POST
     @RolesAllowed({RoleString.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)

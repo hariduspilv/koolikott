@@ -22,7 +22,7 @@ public class UserManualsService {
     private UserManualsDao userManualsDao;
 
     public List<UserManuals> findAllUserManuals(){
-        return userManualsDao.getUserManuals();
+        return userManualsDao.findAll();
     }
 
 /*    public boolean isValid(Agreement agreement, User user) {
@@ -54,7 +54,7 @@ public class UserManualsService {
         mustBeAdmin(user);
         UserManuals dbUserManual = userManualsDao.findById(userManuals.getId());
         if (dbUserManual != null){
-            userManualsDao.delete(dbUserManual);
+            userManualsDao.remove(dbUserManual);
         }
     }
 }
