@@ -28,8 +28,8 @@ class controller extends Controller {
             if (newPortfolio !== oldPortfolio)
                 this.setPortfolio(newPortfolio)
         })
-        this.$scope.$watch(() => this.$location.url().split('&chapterName')[0], (newValue, oldValue) => {
-            if (newValue.split('dialog-report-general')[0] !== oldValue)
+        this.$scope.$watch(() => this.$location.search().id, (newValue, oldValue) => {
+            if (nv !== oldValue)
                 this.$route.reload()
         }, true)
 
