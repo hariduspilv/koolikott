@@ -2,8 +2,24 @@
   <md-toolbar class="md-table-toolbar md-default">
     <div class="md-toolbar-tools">
       <h2 class="md-headline" data-translate="USER_MANUALS_HEADING" data-flex></h2>
+      <md-button
+        class="statistics-info-text-toggle text-small"
+        data-md-colors="{color: 'grey-500'}"
+        data-ng-click="$ctrl.toggleInfoText()"
+        aria-label="Ava infotekst"
+      >
+        <span data-ng-if="!isInfoTextOpen" data-translate="OPEN_INFO_TEXT"></span>
+        <span data-ng-if="isInfoTextOpen" data-translate="CLOSE_INFO_TEXT"></span>
+      </md-button>
     </div>
   </md-toolbar>
+  <md-content
+    class="statistics-info-text text-small"
+    data-ng-class="{'is-open': isInfoTextOpen}"
+    data-md-colors="{color: 'grey-600'}"
+  >
+    <div data-translate="GDPR_INFO_TEXT" data-layout-padding></div>
+  </md-content>
   <md-content data-layout-padding>
     <div data-layout="row" data-layout-align="end center">
       <md-button class="md-raised md-primary"
@@ -65,7 +81,7 @@
           <md-button
             class="md-raised md-primary statistics-filter__download"
             data-ng-disabled="! (newUserManual.title && newUserManual.url && newUserManual.textUrl)"
-            data-ng-click="$ctrl.addUserManual"
+            data-ng-click="$ctrl.addUserManual()"
             aria-label="Lisa"
           >
             <span data-translate="USER_MANUALS_ADD"></span>

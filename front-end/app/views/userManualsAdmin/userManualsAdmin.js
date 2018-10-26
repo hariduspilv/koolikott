@@ -29,7 +29,6 @@
 
         toggleNewRow() {
             this.$scope.addNewRow = !this.$scope.addNewRow;
-            this.$scope.newAgreement.$error = false;
         }
 
         confirmMaterialDeletion(userManual) {
@@ -56,22 +55,13 @@
         }
 
         addUserManual() {
-            this.$scope.newAgreement.$error = false;
             this.serverCallService
-                .makePost('rest/admin/agreement/validate', this.$scope.newAgreement)
+                .makePost('rest/admin/userManuals', this.$scope.newUserManual)
                 .then((response) => {
-                    if (!(response.status === 200 && response.data)) {
-                        this.$scope.newAgreement.$error = true;
-                    } else {
-                        this.serverCallService
-                            .makePost('rest/admin/userManuals', this.$scope.newAgreement)
-                            .then((response) => {
-                                if (response.status === 200) {
-                                    this.getUserManuals();
-                                    this.$scope.newAgreement = {}
-                                    this.$scope.addNewRow = false;
-                                }
-                            })
+                    if (response.status === 200) {
+                        this.getUserManuals();
+                        this.$scope.newAgreement = {}
+                        this.$scope.addNewRow = false;
                     }
                 })
         }

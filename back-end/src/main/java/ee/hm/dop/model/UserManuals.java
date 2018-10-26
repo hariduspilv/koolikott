@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -26,19 +27,17 @@ public class UserManuals implements AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "createdBy")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnore
     private User createdBy;
 
     @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String url;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String textUrl;
-
-    @Column(nullable = false)
-    private boolean deleted;
 
     @Override
     public Long getId() {
@@ -77,11 +76,4 @@ public class UserManuals implements AbstractEntity{
 
     public void setCreatedAt(DateTime createdAt) { this.createdAt = createdAt; }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
 }
