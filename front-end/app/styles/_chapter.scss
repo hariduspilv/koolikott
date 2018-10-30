@@ -821,6 +821,11 @@ md-input-container.chapter-title {
   display: block;
 }
 
+.chapter-embed-card__user-manual {
+  display: flex;
+  justify-content: space-between;
+}
+
 .chapter-embed-card__deleted-message {
   display: block;
   text-transform: uppercase;

@@ -1,125 +1,40 @@
-<md-card class="md-data-table">
-  <md-toolbar class="md-table-toolbar md-default">
-    <div class="md-toolbar-tools">
-      <h2 class="md-headline" data-translate="GDPR_HEADING" data-flex></h2>
-      <md-button
-        class="statistics-info-text-toggle text-small"
-        data-md-colors="{color: 'grey-500'}"
-        data-ng-click="$ctrl.toggleInfoText()"
-        aria-label="Ava infotekst"
-      >
-        <span data-ng-if="!isInfoTextOpen" data-translate="OPEN_INFO_TEXT"></span>
-        <span data-ng-if="isInfoTextOpen" data-translate="CLOSE_INFO_TEXT"></span>
-      </md-button>
-    </div>
-  </md-toolbar>
-  <md-content
-    class="statistics-info-text text-small"
-    data-ng-class="{'is-open': isInfoTextOpen}"
-    data-md-colors="{color: 'grey-600'}"
-  >
-    <div data-translate="GDPR_INFO_TEXT" data-layout-padding></div>
-  </md-content>
-  <md-content data-layout-padding>
-    <div data-layout="row" data-layout-align="end center">
-      <md-button class="md-raised md-primary"
-                 data-ng-click="$ctrl.toggleNewRow()"
-                 aria-label="Lisa uus rida"
-      >
-        <div data-ng-show="!addNewRow">
-          <span data-translate="GDPR_ADD_NEW_ROW"></span>
-          <md-icon>arrow_downward</md-icon>
-        </div>
-        <div data-ng-show="addNewRow">
-          <span data-translate="GDPR_HIDE_NEW_ROW"></span>
-          <md-icon>arrow_upward</md-icon>
-        </div>
-      </md-button>
-    </div>
-  </md-content>
-  <md-table-container>
-    <table data-ng-if="data" md-table class="table-fixed">
-      <thead md-head md-order="sortBy" md-on-reorder="sort">
-      <tr md-row>
-        <th md-column md-order-by="byUrl" width="45%">
-          <span data-translate="GDPR_LINK"></span>
-        </th>
-        <th md-column md-order-by="byVersion" width="20%">
-          <span data-translate="GDPR_VERSION"></span>
-        </th>
-        <th md-column md-order-by="byValidFrom" width="20%">
-          <span data-translate="GDPR_VALIDFROM"></span>
-        </th>
-        <th md-column width="15%">
-          <span></span>
-        </th>
-      </tr>
-      </thead>
-      <tbody md-body>
-      <tr md-row data-ng-show="addNewRow">
-        <td md-cell class="dashboard-cell">
-          <md-input-container layout-fill>
-            <label></label>
-            <input type="text" ng-model="newAgreement.url">
-          </md-input-container>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--title">
-          <md-input-container layout-fill>
-            <label></label>
-            <input type="text" ng-model="newAgreement.version">
-          </md-input-container>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--date">
-          <md-datepicker
-            data-ng-model="newAgreement.validFrom"
-            data-md-placeholder="{{'SELECT_DATE' | translate}}"
-            data-md-open-on-focus
-            data-md-min-date="minDate"
-            data-md-max-date="maxDate"
-            aria-label="Vali lõppkuupäev"
-          ></md-datepicker>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-          <md-button
-            class="md-raised md-primary statistics-filter__download"
-            data-ng-disabled="! (newAgreement.url && newAgreement.version && newAgreement.validFrom)"
-            data-ng-click="$ctrl.addAgreement()"
-            aria-label="Lisa"
-          >
-            <span data-translate="GDPR_ADD"></span>
-          </md-button>
-          <div ng-if="newAgreement.$error" class="text-error">
-            <span data-translate="GDPR_AGREEMENT_EXISTS"></span>
+<h1 class="md-headline" data-translate="USER_GUIDE_PAGE"></h1>
+<div class="margin-top-36 card-container card-container--center">
+  <div data-ng-repeat="video in videos" class="card-container__item"
+       flex-xs="100">
+    <md-card class="card-sm-userguide _md layout-xs-row layout-column">
+      <div class="embedded-material">
+        <div class="embed-responsive embed-responsive-16by9">
+          <div class="embed-responsive-container">
+            <youtube-video
+              video-url="video.url"
+              player-width="'768'"
+              player-height="'432'"
+              class="embed-item embed-responsive-item"
+            ></youtube-video>
           </div>
-        </td>
-      </tr>
-      <tr md-row data-ng-repeat="agreement in data track by $index">
-        <td md-cell class="dashboard-cell">
-          <a target="_blank" href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}">
-            <span data-ng-bind="agreement.url"></span>
-          </a>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--title">
-          <span data-ng-bind="agreement.version"></span>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--date">
-          <span data-ng-bind="$ctrl.formatDateToDayMonthYear(agreement.validFrom)"></span>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-          <a href="#" data-ng-click="confirmMaterialDeletion(agreement)">
-            <md-icon title="{{'GDPR_DELETE' | translate}}" class="material-icons sidenav__icon">delete_forever</md-icon>
-          </a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </md-table-container>
-  <md-table-pagination
-    data-ng-if="numPages > 1"
-    data-md-limit="perPage"
-    data-md-page="page"
-    data-md-total="{{alldata.length}}"
-    data-md-on-paginate="paginate"
-    data-md-page-select
-  ></md-table-pagination>
-</md-card>
+        </div>
+        <div class="user-guide-padding">
+          <div class="chapter-embed-card__caption chapter-embed-card__user-manual">
+            <h4 class="chapter-embed-card__title user-guide-margin" data-ng-bind="video.title"></h4>
+            <p class="chapter-embed-card__source user-guide-margin">
+              <span data-translate="USER_GUIDE_READ_MORE"></span>
+              <a
+                data-ng-href="{{video.textUrl}}"
+                data-ng-click="$event.stopPropagation()"
+                target="_blank"
+                data-ng-bind="video.textUrl"
+              ></a>
+            </p>
+          </div>
+          <p class="user-guide-margin">
+            <span data-translate="USER_GUIDE_ADDED"></span>:
+            <span style="display: inline" class="chapter-embed-card__title"
+                  data-ng-bind="video.createdAt | date : 'dd-MM-yyyy'"></span>
+          </p>
+        </div>
+      </div>
+    </md-card>
+  </div>
+</div>
+

@@ -21,7 +21,6 @@ public class UserManualsAdminResource extends BaseResource {
     private UserManualsService userManualsService;
 
     @GET
-    @RolesAllowed({RoleString.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
     public List<UserManuals> getUserManuals() {
         return userManualsService.findAllUserManuals();

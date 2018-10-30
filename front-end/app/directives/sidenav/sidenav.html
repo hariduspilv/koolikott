@@ -22,13 +22,14 @@
   <md-divider></md-divider>
 
   <uib-accordion close-others="false">
-    <!-- Kasutusjuhendid -->
+    <!-- User Guide -->
     <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default">
       <uib-accordion-heading>
         <a id="userManual" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center"
-           data-ng-class="{'is-active': isLocationActive('/dashboard/gdpr')}"
-           href="/dashboard/gdpr">
+           data-ng-class="{'is-active': isLocationActive('/usermanuals')}"
+            data-ng-click="$event.stopPropagation()"
+            data-ng-href="/usermanuals">
           <div layout="row" layout-align="center center">
             <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>
           </div>
@@ -110,8 +111,8 @@
         <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="userManualsAdmin" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/usermanuals')}"
-             data-ng-href="/dashboard/usermanuals">
+             data-ng-class="{'is-active': isLocationActive('/dashboard/usermanualsAdmin')}"
+             data-ng-href="/dashboard/usermanualsAdmin">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">library_books</md-icon>
               <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>

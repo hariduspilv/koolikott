@@ -60,7 +60,7 @@
                 .then((response) => {
                     if (response.status === 200) {
                         this.getUserManuals();
-                        this.$scope.newAgreement = {}
+                        this.$scope.newUserManual = {}
                         this.$scope.addNewRow = false;
                     }
                 })
