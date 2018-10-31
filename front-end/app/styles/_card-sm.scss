@@ -134,6 +134,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+  flex-direction: column;
 
 
   @media (min-width: $layout-breakpoint-xs) {
