@@ -20,10 +20,10 @@
             <p class="chapter-embed-card__source user-guide-margin">
               <span data-translate="USER_GUIDE_READ_MORE"></span>
               <a
-                data-ng-href="{{video.textUrl}}"
+                href="{{video.textUrl.startsWith('http') ? video.textUrl : 'http://' + video.textUrl}}"
                 data-ng-click="$event.stopPropagation()"
                 target="_blank"
-                data-ng-bind="video.textUrl"
+                data-ng-bind="'USER_GUIDE_HITSA_PAGE' | translate"
               ></a>
             </p>
           </div>
