@@ -25,7 +25,21 @@
   max-width: 90%;
 }
 
+.content-container-user-manual {
+  transition: 0.2s;
+  max-width: $layout-breakpoint-md;
+  padding: ($md-toolbar-height + $md-padding) $md-padding $md-padding;
 
+  @media (min-width: $layout-breakpoint-md) {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: calc(#{$sidenav-width} + #{$md-padding});
+    padding-right: 0;
+  }
+  .card-container {
+    justify-content: left;
+  }
+}
 
 .card-container {
   display: flex;
@@ -84,5 +98,5 @@
 
 .user-guide-read-more-margins {
   min-width: 175px;
-  margin-right: -20px
+  margin-right: -10px
 }
