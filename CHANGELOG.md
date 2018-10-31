@@ -1,3 +1,11 @@
+## e-Koolikott [1.24.0](https://github.com/hariduspilv/koolikott/milestone/24) 
+
+### Muutunud
+* Sisseloginud kasutaja asukohta lehel salvestatakse ning uuesti sisselogimisel on kasutajal võimalik suunduda viimati külastatud asukohale [#355](https://github.com/hariduspilv/koolikott/issues/355)
+* Ikooni asemel kuvatakse kasutajale Logi Sisse nupp [#378](https://github.com/hariduspilv/koolikott/issues/378)
+* Kasutusjuhendite sisestamine ja kuvamine, ADMIN-idel võimalik lisada kasutusjuhendeid [#379](https://github.com/hariduspilv/koolikott/issues/379)
+* Uus menüüpunkt Admin, nähtav ainult Admin rolliga kasutajatele [#386](https://github.com/hariduspilv/koolikott/issues/386)
+
 ## e-Koolikott [1.23.2](https://github.com/hariduspilv/koolikott/milestone/24) 
 
 ### Muutunud
