@@ -15,9 +15,10 @@
           </div>
         </div>
         <div class="user-guide-padding">
-          <div class="chapter-embed-card__caption chapter-embed-card__user-manual">
+          <div class="chapter-embed-card__caption chapter-embed-card__user-manual card-title-max-height-50">
             <h4 class="chapter-embed-card__title user-guide-margin" data-ng-bind="video.title"></h4>
-            <p class="chapter-embed-card__source user-guide-margin">
+            <p style="min-width: 155px" class="chapter-embed-card__source user-guide-margin"
+            data-ng-if="video.textUrl">
               <span data-translate="USER_GUIDE_READ_MORE"></span>
               <a
                 href="{{video.textUrl.startsWith('http') ? video.textUrl : 'http://' + video.textUrl}}"
@@ -27,11 +28,11 @@
               ></a>
             </p>
           </div>
-          <p class="user-guide-margin">
+          </p>     <p class="user-guide-margin">
             <span data-translate="USER_GUIDE_ADDED"></span>:
             <span style="display: inline" class="chapter-embed-card__title"
-                  data-ng-bind="video.createdAt | date : 'dd-MM-yyyy'"></span>
-          </p>
+                  data-ng-bind="video.createdAt | date : 'dd.MM.yyyy'"></span>
+
         </div>
       </div>
     </md-card>

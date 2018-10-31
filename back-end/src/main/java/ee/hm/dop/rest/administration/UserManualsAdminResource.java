@@ -7,10 +7,7 @@ import ee.hm.dop.service.login.UserManualsService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -29,6 +26,7 @@ public class UserManualsAdminResource extends BaseResource {
     @POST
     @RolesAllowed({RoleString.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public UserManuals saveUserManual(UserManuals userManuals) {
         return userManualsService.save(userManuals, getLoggedInUser());
     }

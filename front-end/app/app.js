@@ -249,7 +249,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage) || !$rootScope.isAdmin);
+            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage));
             if ($rootScope.isAdmin) {
                 $rootScope.isUserTabOpen = false
                 $rootScope.isAdminTabOpen = true

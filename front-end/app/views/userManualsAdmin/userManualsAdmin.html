@@ -39,15 +39,15 @@
   </md-content>
   <md-table-container>
     <table data-ng-if="data" md-table class="table-fixed">
-      <thead md-head md-order="sortBy" md-on-reorder="sort">
+      <thead md-head md-order-by="byCreatedAt" md-on-reorder="sort">
       <tr md-row>
-        <th md-column md-order-by="byTitle" width="25%">
+        <th md-column  width="25%">
           <span data-translate="USER_MANUALS_TITLE"></span>
         </th>
-        <th md-column md-order-by="byUrl" width="25%">
+        <th md-column width="25%">
           <span data-translate="USER_MANUALS_LINK"></span>
         </th>
-        <th md-column md-order-by="byTextUrl" width="25%">
+        <th md-column width="25%">
           <span data-translate="USER_MANUALS_TEXT_LINK"></span>
         </th>
         <th md-column width="15%">
@@ -56,6 +56,25 @@
       </tr>
       </thead>
       <tbody md-body>
+      <tr md-row data-ng-repeat="userManual in data track by $index">
+        <td md-cell class="dashboard-cell dashboard-cell--title">
+          <span data-ng-bind="userManual.title"></span>
+        </td>
+        <td md-cell class="dashboard-cell">
+          <a target="_blank" href="{{userManual.url.startsWith('http') ? userManual.url : 'http://' + userManual.url}}">
+            <span data-ng-bind="userManual.url"></span>
+          </a>
+        </td>
+        <td md-cell class="dashboard-cell">
+          <a target="_blank" href="{{userManual.textUrl.startsWith('http') ? userManual.textUrl : 'http://' + userManual.textUrl}}">
+            <span data-ng-bind="userManual.textUrl"></span>
+          </a>
+        </td>
+        <td md-cell class="dashboard-cell dashboard-cell--type-icon">
+          <a href="#" data-ng-click="confirmMaterialDeletion(userManual)">
+            <md-icon title="{{'USER_MANUALS_DELETE' | translate}}" class="material-icons sidenav__icon">delete_forever</md-icon>
+          </a>
+        </td>
       <tr md-row data-ng-show="addNewRow">
         <td md-cell class="dashboard-cell">
           <md-input-container layout-fill>
@@ -80,7 +99,7 @@
         <td md-cell class="dashboard-cell dashboard-cell--type-icon">
           <md-button
             class="md-raised md-primary statistics-filter__download"
-            data-ng-disabled="! (newUserManual.title && newUserManual.url && newUserManual.textUrl)"
+            data-ng-disabled="! (newUserManual.title && newUserManual.url)"
             data-ng-click="$ctrl.addUserManual()"
             aria-label="Lisa"
           >
@@ -88,25 +107,6 @@
           </md-button>
         </td>
       </tr>
-      <tr md-row data-ng-repeat="userManual in data track by $index">
-        <td md-cell class="dashboard-cell dashboard-cell--title">
-          <span data-ng-bind="userManual.title"></span>
-        </td>
-        <td md-cell class="dashboard-cell">
-          <a target="_blank" href="{{userManual.url.startsWith('http') ? userManual.url : 'http://' + userManual.url}}">
-            <span data-ng-bind="userManual.url"></span>
-          </a>
-        </td>
-        <td md-cell class="dashboard-cell">
-          <a target="_blank" href="{{userManual.textUrl.startsWith('http') ? userManual.textUrl : 'http://' + userManual.textUrl}}">
-            <span data-ng-bind="userManual.textUrl"></span>
-          </a>
-        </td>
-        <td md-cell class="dashboard-cell dashboard-cell--type-icon">
-          <a href="#" data-ng-click="confirmMaterialDeletion(userManual)">
-            <md-icon title="{{'USER_MANUALS_DELETE' | translate}}" class="material-icons sidenav__icon">delete_forever</md-icon>
-          </a>
-        </td>
       </tr>
       </tbody>
     </table>

@@ -14,6 +14,17 @@ import javax.persistence.*;
 @Entity
 public class UserManuals implements AbstractEntity{
 
+    public UserManuals(DateTime createdAt, User createdBy, String title, String url, String textUrl) {
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.title = title;
+        this.url = url;
+        this.textUrl = textUrl;
+    }
+
+    public UserManuals() {
+    }
+
     @Id
     @GeneratedValue
     private Long id;
