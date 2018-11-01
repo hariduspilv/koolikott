@@ -97,14 +97,18 @@ class controller extends Controller {
 
             this.serverCallService
                 .makePost('rest/comment', body)
-                .then(({ status, data }) =>
-                    status < 200 || 300 <= status
-                        ? undo()
-                        : this.isPortfolio(response.data)
-                            ? this.storageService.setPortfolio(response.data)
-                            : this.storageService.setMaterial(response.data),
-                    undo
-                )
+                .then(({status, data}) => {
+                    if (status < 200 || 300 <= status) {
+                        undo()
+                    } else {
+                        this.$scope.newComment.text = ''
+                        if (this.isPortfolio(response.data)) {
+                            (this.storageService.setPortfolio(response.data))
+                        } else {
+                            this.storageService.setMaterial(response.data), undo
+                        }
+                    }
+                })
         }
     }
     reportComment(evt) {
