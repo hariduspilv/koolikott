@@ -119,6 +119,17 @@
             </div>
           </a>
         </li>
+        <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
+          <a id="landingPageAdmin" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/landingPageAdmin')}"
+             data-ng-href="/dashboard/landingPageAdmin">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">info</md-icon>
+              <span data-translate="LANDING_PAGE_TAB" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
       </ul>
     </div>
     <!-- BEGIN My Profile -->
