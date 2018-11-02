@@ -54,6 +54,7 @@ class controller extends Controller {
         this.buildConstants();
         this.$scope.nextPage = () => this.$timeout(this.search.bind(this))
         this.search(true)
+        this.$scope.isEditMode = false
     }
     showExactGroupButtons() {
         return this.$scope.showFilterGroups === 'phraseGrouping' && this.$scope.filterGroupsExact['all'].countMaterial
@@ -343,6 +344,11 @@ class controller extends Controller {
     }
     isLoggedIn() {
         return this.authenticatedUserService.isAuthenticated()
+    }
+
+    isAdmin() {
+        return this.authenticatedUserService.isAdmin()
+
     }
     buildConstants() {
         $('body').materialScrollTop({ offset: 300 })

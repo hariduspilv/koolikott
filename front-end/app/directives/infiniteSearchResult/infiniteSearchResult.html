@@ -4,7 +4,7 @@
   <h1 id="exact-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
       data-ng-bind-html="exactTitle"></h1>
-  <md-button data-ng-click="editLandingPage" id="material-edit">
+  <md-button data-ng-if="$ctrl.isAdmin()" data-ng-click="$ctrl.editLandingPage()" id="material-edit">
     <md-icon md-menu-align-target>edit</md-icon>
     <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>
   </md-button>

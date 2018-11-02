@@ -57,15 +57,15 @@
       </thead>
       <tbody md-body>
       <tr md-row data-ng-repeat="userManual in data track by $index">
-        <td md-cell class="dashboard-cell dashboard-cell--title">
+        <td md-cell class="dashboard-cell dashboard-cell--title td-word-wrap">
           <span data-ng-bind="userManual.title"></span>
         </td>
-        <td md-cell class="dashboard-cell">
+        <td md-cell class="dashboard-cell td-word-wrap">
           <a target="_blank" href="{{userManual.url.startsWith('http') ? userManual.url : 'http://' + userManual.url}}">
             <span data-ng-bind="userManual.url"></span>
           </a>
         </td>
-        <td md-cell class="dashboard-cell">
+        <td md-cell class="dashboard-cell td-word-wrap">
           <a target="_blank" href="{{userManual.textUrl.startsWith('http') ? userManual.textUrl : 'http://' + userManual.textUrl}}">
             <span data-ng-bind="userManual.textUrl"></span>
           </a>
@@ -76,24 +76,27 @@
           </a>
         </td>
       <tr md-row data-ng-show="addNewRow">
-        <td md-cell class="dashboard-cell">
+        <td md-cell class="dashboard-cell dashboard-cell--word-wrap">
           <md-input-container layout-fill>
             <label></label>
-            <input type="text" ng-model="newUserManual.title">
+            <textarea ng-model="newUserManual.title">
+            </textarea>
           </md-input-container>
         </td>
-        <td md-cell class="dashboard-cell">
+        <td md-cell class="dashboard-cell dashboard-cell--word-wrap">
           <md-input-container layout-fill>
             <label></label>
-            <input type="text" ng-model="newUserManual.url"
+            <textarea type="text" ng-model="newUserManual.url"
                    placeholder="{{ 'HTTP_WORD' | translate }}">
+            </textarea>
           </md-input-container>
         </td>
-        <td md-cell class="dashboard-cell">
+        <td md-cell class="dashboard-cell dashboard-cell--word-wrap">
           <md-input-container layout-fill>
             <label></label>
-            <input type="text" ng-model="newUserManual.textUrl"
+            <textarea type="text" ng-model="newUserManual.textUrl"
                    placeholder="{{ 'HTTP_WORD' | translate }}">
+            </textarea>
           </md-input-container>
         </td>
         <td md-cell class="dashboard-cell dashboard-cell--type-icon">
