@@ -113,12 +113,6 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/dashboard/landingPageAdmin', {
-                    templateUrl: 'views/landingPageAdmin/landingPageAdmin.html',
-                    controller: 'userManualsAdminController',
-                    controllerAs: '$ctrl',
-                    permissions: ['ADMIN']
-                })
                 .when('/usermanuals', {
                     templateUrl: 'views/userManual/userManual.html',
                     controller: 'userManualsController',

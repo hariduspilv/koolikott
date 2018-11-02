@@ -380,6 +380,10 @@ class controller extends Controller {
             multiple: 'SEARCH_RESULT_MULTIPLE_RESULT_SIMILAR_PHRASE',
         }
     }
+
+    editLandingPage() {
+        this.$scope.isEditMode = true
+    }
 }
 controller.$inject = [
     '$scope',
