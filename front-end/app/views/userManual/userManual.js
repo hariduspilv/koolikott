@@ -5,6 +5,7 @@
         constructor(...args) {
             super(...args)
             this.getUserManuals();
+            $('body').materialScrollTop({ offset: 300 })
         }
 
         getUserManuals() {
@@ -16,11 +17,15 @@
                     }
                 });
         }
+        isLoggedIn() {
+            return this.authenticatedUserService.isAuthenticated()
+        }
     }
 
     controller.$inject = [
         '$scope',
         'serverCallService',
+        'authenticatedUserService',
     ]
     angular.module('koolikottApp').controller('userManualsController', controller)
 }
