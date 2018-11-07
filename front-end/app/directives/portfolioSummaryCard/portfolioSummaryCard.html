@@ -284,7 +284,7 @@
           <span class="card-lg__licenses">
                 <span class="license" data-ng-class="'license--' + type" data-ng-repeat="type in getLicenseIconList()">
                   <md-tooltip md-direction="top">
-                    <span data-ng-bind="type.toUpperCase()"></span>
+                    <span data-translate="LICENSETYPE_LONG_NAME_{{portfolio.licenseType.name.toUpperCase()}}"></span>
                   </md-tooltip>
                 </span>
                 <span data-ng-if="!getLicenseIconList().length" data-ng-switch data-on="portfolio.licenseType.name">
