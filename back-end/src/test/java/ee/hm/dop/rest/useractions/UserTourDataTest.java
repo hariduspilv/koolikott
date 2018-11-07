@@ -17,7 +17,7 @@ public class UserTourDataTest extends ResourceIntegrationTestBase {
     @Test
     public void not_logged_in_user_can_not_get_tour() throws Exception {
         Response response = doGet(USER_TOUR_URL);
-        assertEquals("User not logged in", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals("User not logged in", Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test

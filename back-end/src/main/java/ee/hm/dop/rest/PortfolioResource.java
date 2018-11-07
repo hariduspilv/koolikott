@@ -68,16 +68,6 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio create(Portfolio portfolio) {
-        if (portfolio.getTitle().contains("PiretPiret")) {
-            throw new WebApplicationException("Piret Exception", Response.Status.GONE);
-        }
-        if (CollectionUtils.isNotEmpty(portfolio.getChapters())) {
-            boolean containsError = portfolio.getChapters().stream()
-                    .filter(c -> c.getTitle() != null)
-                    .anyMatch(c -> c.getTitle().contains("PiretPiret"));
-            if (containsError)
-                throw new WebApplicationException("Piret Exception", Response.Status.GONE);
-        }
         return portfolioService.create(portfolio, getLoggedInUser());
     }
 
@@ -87,16 +77,6 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio update(Portfolio portfolio) {
-        if (portfolio.getTitle().contains("PiretPiret")) {
-            throw new WebApplicationException("Piret Exception", Response.Status.GONE);
-        }
-        if (CollectionUtils.isNotEmpty(portfolio.getChapters())) {
-            boolean containsError = portfolio.getChapters().stream()
-                    .filter(c -> c.getTitle() != null)
-                    .anyMatch(c -> c.getTitle().contains("PiretPiret"));
-            if (containsError)
-                throw new WebApplicationException("Piret Exception", Response.Status.GONE);
-        }
         return portfolioService.update(portfolio, getLoggedInUser());
     }
 
