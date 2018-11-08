@@ -315,21 +315,6 @@
     >
       <!-- Reviews placeholder -->
       <div class="review"></div>
-      <!-- Container for comments button -->
-      <div>
-        <md-button
-          class="md-icon-button comments__button"
-          data-ng-click="toggleCommentSection()"
-          id="show-comments"
-        >
-          <md-icon class="comments__icon">comment</md-icon>
-          <md-tooltip md-direction="top">
-            <span data-ng-if="isLoggedIn()" data-translate="COMMENTS_TITLE"></span>
-            <span data-ng-if="!isLoggedIn()" data-translate="TOOLTIP_LOG_IN_TO_COMMENT"></span>
-          </md-tooltip>
-        </md-button>
-        <span class="comments__count" data-ng-bind="portfolio.comments.length"></span>
-      </div>
     </div>
     <div
       data-flex
