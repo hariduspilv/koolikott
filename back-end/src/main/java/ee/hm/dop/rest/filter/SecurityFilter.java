@@ -5,7 +5,6 @@ import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import ee.hm.dop.rest.filter.dto.DopSecurityContext;
 import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +41,7 @@ public class SecurityFilter implements ContainerRequestFilter {
                 logger.error("user request header and username do not match: " + username);
                 return;
             }
-            if (!isSessionValid(authenticatedUser)) {
+            if (SessionUtil.sessionInValid(authenticatedUser)) {
                 sessionExpired(requestContext, authenticatedUser);
                 logger.error("session has expired" + username);
                 return;
@@ -64,10 +63,6 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     public void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
-    }
-
-    private boolean isSessionValid(AuthenticatedUser authenticatedUser) {
-        return SessionUtil.isSessionValid(authenticatedUser);
     }
 
     protected AuthenticatedUserService authenticatedUserService() {
