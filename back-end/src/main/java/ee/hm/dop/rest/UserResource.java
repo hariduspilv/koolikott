@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import static ee.hm.dop.service.login.SessionUtil.minRemaining;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import javax.annotation.security.RolesAllowed;
@@ -54,7 +55,15 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public UserSession getSessionTime() {
-        return new UserSession(SessionUtil.minRemaining(getAuthenticatedUser()));
+        return new UserSession(minRemaining(getAuthenticatedUser()));
+    }
+
+    @POST
+    @Path("/prolongSession")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    public UserSession updateSessionTime() {
+        return new UserSession(minRemaining(authenticatedUserService.prolongSession(getAuthenticatedUser())));
     }
 
     @GET

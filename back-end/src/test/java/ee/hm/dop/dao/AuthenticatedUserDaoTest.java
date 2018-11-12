@@ -7,9 +7,11 @@ import static org.junit.Assert.fail;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 public class AuthenticatedUserDaoTest extends DatabaseTestBase {
@@ -85,6 +87,8 @@ public class AuthenticatedUserDaoTest extends DatabaseTestBase {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setToken(token);
         authenticatedUser.setUser(user);
+        authenticatedUser.setLoginDate(DateTime.now());
+        authenticatedUser.setSessionTime(SessionUtil.sessionTime(DateTime.now()));
         return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
     }
 

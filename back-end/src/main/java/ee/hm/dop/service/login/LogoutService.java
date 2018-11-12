@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
+import org.joda.time.DateTime;
 
 public class LogoutService {
 
@@ -12,6 +13,8 @@ public class LogoutService {
 
     public void logout(AuthenticatedUser authenticatedUser) {
         if (authenticatedUser != null) {
+            authenticatedUser.setSessionTime(DateTime.now());
+            authenticatedUser.setLoggedOut(true);
             authenticatedUserDao.delete(authenticatedUser);
         }
     }

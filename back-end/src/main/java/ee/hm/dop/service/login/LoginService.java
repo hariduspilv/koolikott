@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
+import static ee.hm.dop.service.login.SessionUtil.sessionTime;
 import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
+import static org.joda.time.DateTime.now;
 
 public class LoginService {
     private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
@@ -134,7 +136,8 @@ public class LoginService {
 
     private AuthenticatedUser authenticate(User user) {
         Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        return authenticatedUserService.save(new AuthenticatedUser(user, person));
+        DateTime now = now();
+        return authenticatedUserService.save(new AuthenticatedUser(user, person, now, sessionTime(now)));
     }
 
     private User getExistingOrNewUser(AuthenticationState state) {
@@ -170,7 +173,7 @@ public class LoginService {
         userAgreement.setUser(user);
         userAgreement.setAgreement(agreement);
         userAgreement.setAgreed(agreed);
-        userAgreement.setCreatedAt(DateTime.now());
+        userAgreement.setCreatedAt(now());
         return userAgreement;
     }
 }

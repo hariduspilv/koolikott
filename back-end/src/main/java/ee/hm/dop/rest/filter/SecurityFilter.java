@@ -32,18 +32,15 @@ public class SecurityFilter implements ContainerRequestFilter {
             AuthenticatedUser authenticatedUser = authenticatedUserService().getAuthenticatedUserByToken(token);
             if (authenticatedUser == null) {
                 userHasAlreadyLoggedOut(requestContext);
-                logger.error("user has already logged out");
                 return;
             }
             String username = authenticatedUser.getUser().getUsername();
             if (!username.equals(requestContext.getHeaderString("Username"))) {
-                requestHeaderAndUsernameDontMatch(requestContext, authenticatedUser);
-                logger.error("user request header and username do not match: " + username);
+                requestHeaderAndUsernameDontMatch(requestContext, username);
                 return;
             }
             if (SessionUtil.sessionInValid(authenticatedUser)) {
-                sessionExpired(requestContext, authenticatedUser);
-                logger.error("session has expired" + username);
+                sessionExpired(requestContext, username);
                 return;
             }
 
@@ -53,16 +50,19 @@ public class SecurityFilter implements ContainerRequestFilter {
         }
     }
 
-    public void sessionExpired(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+    private void sessionExpired(ContainerRequestContext requestContext, String username) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+        logger.error("session has expired" + username);
     }
 
-    public void requestHeaderAndUsernameDontMatch(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+    private void requestHeaderAndUsernameDontMatch(ContainerRequestContext requestContext, String username) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+        logger.error("user request header and username do not match: " + username);
     }
 
-    public void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
+    private void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+        logger.error("user has already logged out");
     }
 
     protected AuthenticatedUserService authenticatedUserService() {

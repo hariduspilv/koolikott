@@ -14,14 +14,14 @@ public class SessionUtil {
     }
 
     public static boolean sessionValid(AuthenticatedUser authenticatedUser) {
-        return maxTime(authenticatedUser).isAfterNow();
+        return authenticatedUser.getSessionTime().isAfterNow();
     }
 
     public static int minRemaining(AuthenticatedUser authenticatedUser) {
-        return Minutes.minutesBetween(new Instant(), maxTime(authenticatedUser).toInstant()).getMinutes();
+        return Minutes.minutesBetween(new Instant(), authenticatedUser.getSessionTime().toInstant()).getMinutes();
     }
 
-    private static DateTime maxTime(AuthenticatedUser authenticatedUser) {
-        return authenticatedUser.getLoginDate().plusMinutes(SESSION_TIME_MIN);
+    public static DateTime sessionTime(DateTime loginDate) {
+        return loginDate.plusMinutes(SESSION_TIME_MIN);
     }
 }

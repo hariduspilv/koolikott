@@ -25,9 +25,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public static final String RESTRICT_USER = "user/restrictUser";
     public static final String USER_ROLE = "user/role";
     public static final String SESSION_TIME = "user/sessionTime";
+    public static final String PROLONG_SESSION = "user/prolongSession";
     public static final String GET_SIGNED_USER_DATA = "user/getSignedUserData";
     public static final String USER_LOCATION = "user/getLocation";
-
 
     @Test
     public void getUser_returns_user() {
@@ -78,7 +78,11 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void session_is_less_than_120_min() {
         login(USER_ADMIN);
         UserSession session = doGet(SESSION_TIME, UserSession.class);
-        assertTrue(120 > session.getMinRemaning());
+        assertTrue(120 >= session.getMinRemaning());
+        UserSession prolongedSession = doPost(PROLONG_SESSION, null, UserSession.class);
+        assertTrue(120 >= prolongedSession.getMinRemaning());
+        UserSession askSessionAgain = doGet(SESSION_TIME, UserSession.class);
+        assertTrue(120 >= askSessionAgain.getMinRemaning());
     }
 
     @Test

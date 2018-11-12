@@ -33,8 +33,13 @@ public class AuthenticatedUser implements AbstractEntity {
     @Column
     private boolean firstLogin;
 
+    @JsonIgnore
     @Column
     private boolean deleted;
+
+    @JsonIgnore
+    @Column
+    private boolean loggedOut;
 
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "person")
@@ -43,15 +48,27 @@ public class AuthenticatedUser implements AbstractEntity {
     @JsonIgnore
     @Column(nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime loginDate = now();
+    private DateTime loginDate;
+
+    @JsonIgnore
+    @Column(nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime sessionTime;
+
+    @JsonIgnore
+    @Column
+    private Integer sessionNumber;
 
     public AuthenticatedUser() {
     }
 
-    public AuthenticatedUser(User user, Person person) {
+    public AuthenticatedUser(User user, Person person, DateTime loginDate, DateTime sessionTime) {
         this.user = user;
         this.firstLogin = user.isNewUser();
         this.person = person;
+        this.loginDate = loginDate;
+        this.sessionTime = sessionTime;
+        this.sessionNumber = 1;
     }
 
     public Long getId() {
@@ -108,5 +125,29 @@ public class AuthenticatedUser implements AbstractEntity {
 
     public void setLoginDate(DateTime loginDate) {
         this.loginDate = loginDate;
+    }
+
+    public boolean isLoggedOut() {
+        return loggedOut;
+    }
+
+    public void setLoggedOut(boolean loggedOut) {
+        this.loggedOut = loggedOut;
+    }
+
+    public DateTime getSessionTime() {
+        return sessionTime;
+    }
+
+    public void setSessionTime(DateTime sessionTime) {
+        this.sessionTime = sessionTime;
+    }
+
+    public Integer getSessionNumber() {
+        return sessionNumber;
+    }
+
+    public void setSessionNumber(Integer sessionNumber) {
+        this.sessionNumber = sessionNumber;
     }
 }
