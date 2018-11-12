@@ -17,10 +17,6 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;
 
-    public ImproperContent findByLearningObjectAndCreator(LearningObject learningObject, User creator) {
-        return findByField("learningObject", learningObject, "createdBy", creator, "reviewed", false);
-    }
-
     public List<AdminLearningObject> findAllUnreviewed() {
         List<BigInteger> resultList = getEntityManager()
                 .createNativeQuery("SELECT\n" +

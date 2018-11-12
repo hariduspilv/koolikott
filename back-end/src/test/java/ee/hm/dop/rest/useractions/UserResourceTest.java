@@ -6,6 +6,7 @@ import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.user.UserSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -23,9 +24,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public static final String GET_TAXON_URL = "learningMaterialMetadata/taxon?taxonId=%s";
     public static final String RESTRICT_USER = "user/restrictUser";
     public static final String USER_ROLE = "user/role";
+    public static final String SESSION_TIME = "user/sessionTime";
     public static final String GET_SIGNED_USER_DATA = "user/getSignedUserData";
     public static final String USER_LOCATION = "user/getLocation";
-
 
 
     @Test
@@ -71,6 +72,13 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void user_must_be_logged_in_to_get_signedUserData() {
         Response response = doGet(GET_SIGNED_USER_DATA, MediaType.TEXT_PLAIN_TYPE);
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void session_is_less_than_120_min() {
+        login(USER_ADMIN);
+        UserSession session = doGet(SESSION_TIME, UserSession.class);
+        assertTrue(120 > session.getMinRemaning());
     }
 
     @Test

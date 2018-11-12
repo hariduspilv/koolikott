@@ -16,11 +16,11 @@ public class AuthenticatedUserDao extends AbstractDao<AuthenticatedUser> {
     }
 
     public AuthenticatedUser findAuthenticatedUserByToken(String token) {
-        return findByField("token", token);
+        return findByField("token", token, "deleted", false);
     }
 
     public void delete(AuthenticatedUser authenticatedUser) {
-        AuthenticatedUser merged = getEntityManager().merge(authenticatedUser);
-        getEntityManager().remove(merged);
+        authenticatedUser.setDeleted(true);
+        createOrUpdate(authenticatedUser);
     }
 }

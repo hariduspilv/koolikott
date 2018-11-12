@@ -7,9 +7,12 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.user.UserLocation;
+import ee.hm.dop.model.user.UserSession;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.useractions.UserService;
 
@@ -44,6 +47,14 @@ public class UserResource extends BaseResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getLoggedInUserRole() {
         return getLoggedInUser().getRole().toString();
+    }
+
+    @GET
+    @Path("/sessionTime")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    public UserSession getSessionTime() {
+        return new UserSession(SessionUtil.minRemaining(getAuthenticatedUser()));
     }
 
     @GET

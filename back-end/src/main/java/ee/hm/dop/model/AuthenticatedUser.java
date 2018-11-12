@@ -31,7 +31,10 @@ public class AuthenticatedUser implements AbstractEntity {
     private String token;
 
     @Column
-    private boolean firstLogin = false;
+    private boolean firstLogin;
+
+    @Column
+    private boolean deleted;
 
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "person")
@@ -81,6 +84,14 @@ public class AuthenticatedUser implements AbstractEntity {
 
     public void setFirstLogin(boolean firstLogin) {
         this.firstLogin = firstLogin;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Person getPerson() {

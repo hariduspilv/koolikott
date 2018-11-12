@@ -3,6 +3,7 @@ package ee.hm.dop.rest.filter;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import ee.hm.dop.rest.filter.dto.DopSecurityContext;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -66,8 +67,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     }
 
     private boolean isSessionValid(AuthenticatedUser authenticatedUser) {
-        DateTime yesterday = DateTime.now().minusDays(1);
-        return yesterday.isBefore(authenticatedUser.getLoginDate());
+        return SessionUtil.isSessionValid(authenticatedUser);
     }
 
     protected AuthenticatedUserService authenticatedUserService() {
