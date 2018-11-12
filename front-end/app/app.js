@@ -214,17 +214,13 @@ function isEditPortfolioPage(path) {
     return path === '/portfolio/edit';
 }
 
-function isSearchPage($location) {
-    return $location.url().indexOf("/search") != -1
-}
-
 function isHomePage(path) {
     return path === '/';
 }
 
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', '$interval',
     function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, $interval) {
-        let $on = $rootScope.$on('$routeChangeSuccess', function () {
+        $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
             var path = $location.path();

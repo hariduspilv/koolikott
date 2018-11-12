@@ -24,7 +24,7 @@ angular.module('koolikottApp')
                     },
 
                     startTimer: function() {
-                        updateTimer = $interval(saveUserLocation, 60000)
+                        updateTimer = $interval(saveUserLocation, 60000) //1 min
                     },
 
                     stopTimer: function() {
