@@ -1,6 +1,6 @@
 <div data-layout="row" data-layout-align="space-between center">
-  <h1 id="search-result-title" class="md-headline" style="display: none"
-      data-ng-if="(showFilterGroups !== 'phraseGrouping' && title) && !isEditMode"
+  <h1 id="search-result-title" class="md-headline"
+      data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
       data-ng-bind-html="title"></h1>
   <h1 id="exact-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
