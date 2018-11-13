@@ -327,14 +327,7 @@
       <dop-rating
         data-ng-if="!$root.isEditPortfolioMode && portfolio.type"
         data-portfolio="portfolio"
-        data-like-message="{{ 'PORTFOLIO_LIKED' | translate }}"
-        data-dislike-message="{{ 'PORTFOLIO_DISLIKED' | translate }}"
       ></dop-rating>
     </div>
   </md-card-actions>
-  <!-- SECTION 3: Comments -->
-  <dop-comments-card
-    data-learning-object="portfolio"
-    data-is-open="commentsOpen"
-  ></dop-comments-card>
 </md-card>

@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.metadata;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.LandingPageObject;
 import ee.hm.dop.model.enums.LanguageC;
 import org.junit.Test;
 
@@ -53,6 +54,13 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
     public void language_must_be_specified() {
         Response response = doGet("translation");
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void translations_for_landing_page() {
+        LandingPageObject landingPageObject = doGet("translation/landingPage/admin", LandingPageObject.class);
+        assertEquals(3, landingPageObject.getNotices().size());
+        assertEquals(3, landingPageObject.getDescriptions().size());
     }
 
     @Test

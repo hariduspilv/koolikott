@@ -40,7 +40,6 @@ class controller extends Controller {
         }, true)
 
         this.$scope.portfolio = this.portfolio
-        this.$scope.commentsOpen = false
         this.$scope.pageUrl = this.$location.absUrl()
 
 
@@ -50,7 +49,6 @@ class controller extends Controller {
         this.$scope.isLoggedIn = this.isLoggedIn.bind(this)
         this.$scope.isRestricted = this.isRestricted.bind(this)
         this.$scope.editPortfolio = this.editPortfolio.bind(this)
-        this.$scope.toggleCommentSection = this.toggleCommentSection.bind(this)
         this.$scope.getPortfolioEducationalContexts = this.getPortfolioEducationalContexts.bind(this)
         this.$scope.showEditMetadataDialog = this.showEditMetadataDialog.bind(this)
         this.$scope.confirmPortfolioDeletion = this.confirmPortfolioDeletion.bind(this)
@@ -132,9 +130,6 @@ class controller extends Controller {
                 if (portfolio)
                     this.storageService.setPortfolio(portfolio)
             })
-    }
-    toggleCommentSection() {
-        this.$scope.commentsOpen = !this.$scope.commentsOpen
     }
     getPortfolioEducationalContexts() {
         if (!this.portfolio || !this.portfolio.taxons)
@@ -244,9 +239,7 @@ controller.$inject = [
 ]
 component('dopPortfolioSummaryCard', {
     bindings: {
-        portfolio: '=',
-        comment: '=',
-        onAddComment: '&'
+        portfolio: '='
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

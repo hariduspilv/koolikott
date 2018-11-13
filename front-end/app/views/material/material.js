@@ -14,7 +14,6 @@ angular.module('koolikottApp')
             $scope.pageUrl = $location.absUrl();
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
-            $scope.materialCommentsOpen = false;
             $scope.location = $location.absUrl()
             $('body').materialScrollTop({ offset: 300 })
 
@@ -49,10 +48,6 @@ angular.module('koolikottApp')
                     getContentType();
                 }
             });
-
-            $scope.toggleCommentSection = () => {
-                $scope.commentsOpen = !$scope.commentsOpen;
-            };
 
             function getContentType() {
                 if ($scope.material.embedSource) {
