@@ -577,6 +577,15 @@ insert into Translation(translationGroup, translationKey, translation) values (3
 insert into Translation(translationGroup, translationKey, translation) values (3, 'FEED_MATERIAL_TITLE', 'New material "%s"');
 insert into Translation(translationGroup, translationKey, translation) values (3, 'DOMAIN_FOREIGNLANGUAGE', 'ForeignLanguage');
 
+-- Landing Page
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'LANDING_PAGE_DESCRIPTION', 'Avalehe kirjeldus');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'LANDING_PAGE_DESCRIPTION', 'Landing page description');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'LANDING_PAGE_DESCRIPTION', 'Avalehe kirjeldus VENE KEELES');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (1, 'LANDING_PAGE_NOTICE', '');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (3, 'LANDING_PAGE_NOTICE', '');
+INSERT INTO Translation(translationGroup, translationKey, translation) VALUES (2, 'LANDING_PAGE_NOTICE', '');
+
+
 -- Page
 
 -- Estonian
