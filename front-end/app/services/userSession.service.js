@@ -11,13 +11,14 @@
             if (this.authenticatedUserService.isAuthenticated()) {
                 this.getSessionTime()
                     .then(({data: session}) => {
-                        console.log(session);
                         if (session.continueSession && session.minRemaining > 0 && session.minRemaining <= 10) {
                             if (!this.$rootScope.sessionDialogIsOpen) {
                                 this.$rootScope.sessionDialogIsOpen = true
                                 this.$mdDialog.show({
                                     templateUrl: 'views/sessionDialog/sessionDialog.html',
                                     controller: 'sessionDialogController',
+                                    clickOutsideToClose: false,
+                                    escapeToClose: false,
                                 }).then((data) => {
                                     if (data){
                                         this.updateSession(data);
@@ -25,17 +26,25 @@
                                 })
                             }
                         } else if (session.minRemaining === 0){
-                            if (!this.$rootScope.sessionExpiredDialogIsOpen) {
-                                this.$rootScope.sessionExpiredDialogIsOpen = true
-                                this.$mdDialog.show({
-                                    templateUrl: 'views/sessionDialog/sessionExpiredDialog.html',
-                                    controller: 'sessionExpiredDialogController',
+                            this.terminateSession()
+                                .then(()=>{
+                                    this.authenticatedUserService.removeAuthenticatedUser()
+                                    this.$mdDialog.show({
+                                        templateUrl: 'views/sessionDialog/sessionExpiredDialog.html',
+                                        controller: 'sessionExpiredDialogController',
+                                        clickOutsideToClose: true,
+                                        escapeToClose: true,
+                                    })
+                                    this.$rootScope.$broadcast("sessionDialog:stop");
+                                    this.stopTimer();
                                 })
-                                this.$rootScope.$broadcast("sessionDialog:stop");
-                            }
                         }
                     })
             }
+        }
+
+        terminateSession() {
+            return this.serverCallService.makePost('rest/user/terminateSession');
         }
 
         updateSession(session) {

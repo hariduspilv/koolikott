@@ -29,7 +29,7 @@ public class SessionResource extends BaseResource {
     private SessionService sessionService;
 
     @GET
-    @Path("/sessionTime")
+    @Path("sessionTime")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public UserSession getSessionTime() {
@@ -38,7 +38,7 @@ public class SessionResource extends BaseResource {
     }
 
     @POST
-    @Path("/updateSession")
+    @Path("updateSession")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public UserSession updateSessionTime(UserSession userSession) {
@@ -47,7 +47,7 @@ public class SessionResource extends BaseResource {
     }
 
     @POST
-    @Path("/terminateSession")
+    @Path("terminateSession")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public void terminateSession() {

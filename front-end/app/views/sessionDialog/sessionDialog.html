@@ -2,17 +2,15 @@
   <md-toolbar>
     <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
       <div class="md-toolbar-tools" data-layout-align="space-between center">
-        <h2 data-translate="LOCATION_DIALOG_HEADER"
+        <h2 data-translate="Sessioon on aegumas"
         ></h2>
-        <md-button id="location-restore-cancel-button" ng-click="cancel()" class="md-icon-button" aria-label="Sulge asukoha taastamise modaalaken">
-          <md-icon>close</md-icon>
-        </md-button>
       </div>
     </div>
   </md-toolbar>
   <md-dialog-content>
     <md-content data-layout-padding>
-      <h2 ng-bind="session"></h2> aaaaaaaaa
+      <h2>Session on aegumas. Pikenda?</h2>
+      <h2 ng-bind="session.minRemaining"></h2>
       <div id="location-restore-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
         <md-button
           id="location-restore-cancel-button"

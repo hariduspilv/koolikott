@@ -198,7 +198,7 @@ angular.module('koolikottApp')
                 userLocatorService.saveUserLocation();
                 userLocatorService.stopTimer();
                 userSessionService.stopTimer();
-                serverCallService.makePost("rest/user/logout", {}, logoutSuccess, logoutFail);
+                serverCallService.makePost("rest/user/session/logout", {}, logoutSuccess, logoutFail);
             },
 
             loginWithIdCard: function() {
