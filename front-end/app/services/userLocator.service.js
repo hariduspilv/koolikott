@@ -14,7 +14,7 @@ class controller extends Controller {
     }
 
     startTimer() {
-        this.updateTimer = this.$interval(this.saveUserLocation.bind(this), 60000) //1 min
+        this.updateTimer = this.$interval(this.saveUserLocation.bind(this), 60e3) //1 min
     }
 
     stopTimer() {

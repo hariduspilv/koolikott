@@ -6,25 +6,18 @@
             super(...args)
 
             this.sessionTime();
-            const sessionTimeInterval = this.$interval(this.sessionTime.bind(this), 1000);
+            const sessionTimeInterval = this.$interval(this.sessionTime.bind(this), 10e3); //10sec
 
             this.$scope.agree = () => {
                 this.$mdDialog.hide({continueSession: true})
-                this.$rootScope.sessionDialogIsOpen = false
             }
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide({continueSession: false})
-                this.$rootScope.sessionDialogIsOpen = false
             }
 
             this.$scope.$on('$destroy', () => {
                 this.$interval.cancel(sessionTimeInterval)
-            })
-
-            this.$scope.$on('sessionDialog:stop', () => {
-                this.$mdDialog.hide()
-                this.$rootScope.sessionDialogIsOpen = false
             })
         }
 

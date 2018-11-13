@@ -9,18 +9,6 @@ class controller extends Controller {
             });
     }
 
-    increaseViewCount(portfolio) {
-        let viewCountParams = {
-            'type': '.Portfolio',
-            'id': portfolio.id
-        };
-        return this.serverCallService.makePost("rest/learningObject/increaseViewCount", viewCountParams)
-            .then(response => {
-                if (response.data) {
-                    return response.data;
-                }
-            });
-    }
 }
 
 controller.$inject = [

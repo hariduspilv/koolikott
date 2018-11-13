@@ -5,20 +5,15 @@
         constructor(...args) {
             super(...args)
 
-            this.$scope.agree = () => {
-                this.$mdDialog.hide({continueSession: true})
-                this.$rootScope.sessionDialogIsOpen = false
+            this.$scope.cancel = () => {
+                this.$mdDialog.hide()
             }
         }
     }
 
     controller.$inject = [
         '$scope',
-        '$rootScope',
         '$mdDialog',
-        'userSessionService',
-        '$location',
-        '$interval',
     ]
 
     angular.module('koolikottApp').controller('sessionExpiredDialogController', controller)

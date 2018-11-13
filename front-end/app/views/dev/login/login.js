@@ -3,19 +3,18 @@
 angular.module('koolikottApp')
 .controller('devLoginController',
 [
-    'serverCallService', '$rootScope', '$route', 'authenticatedUserService', '$location', 'authenticationService',
-    function(serverCallService, $rootScope, $route, authenticatedUserService, $location, authenticationService) {
+    'serverCallService', '$rootScope', '$route', '$location', 'authenticationService',
+    function(serverCallService, $rootScope, $route, $location, authenticationService) {
         const idCode = $route.current.params.idCode;
-        serverCallService.makeGet("rest/dev/login/" + idCode, {}, loginSuccess, loginFail);
-
-        function loginSuccess(userStatus) {
-            $rootScope.afterAuthRedirectURL = "/portfolios";
-            authenticationService.loginSuccess(userStatus);
-        }
-
-        function loginFail() {
-            authenticationService.loginFail()
-            $location.url("/");
-        }
+        serverCallService.makeGet(`rest/dev/login/${idCode}`)
+            .then(({data}) => {
+                    this.$rootScope.afterAuthRedirectURL = "/portfolios";
+                    authenticationService.loginSuccess(data);
+                }, () => {
+                    authenticationService.loginFail()
+                    $location.url("/");
+                }
+            )
+        ;
     }
 ]);

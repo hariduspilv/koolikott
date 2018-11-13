@@ -17,7 +17,7 @@ angular.module('koolikottApp')
         }
 
         function setTitle() {
-            var user = authenticatedUserService.getUser();
+            const user = authenticatedUserService.getUser();
             if (user && $route.current.params.username === user.username) {
                 $scope.title = 'MYPROFILE_PAGE_TITLE_MATERIALS';
             } else {

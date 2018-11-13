@@ -46,6 +46,12 @@ class controller extends Controller {
             this.closeDetailedSearch()
         }
 
+        this.$scope.terminateSession = () => {
+            this.authenticationService.terminate()
+            this.$location.url('/')
+            this.closeDetailedSearch()
+        }
+
         this.$scope.showLogin = (targetEvent) =>
             this.$mdDialog.show({
                 templateUrl: 'views/loginDialog/loginDialog.html',
@@ -78,6 +84,7 @@ class controller extends Controller {
         this.$scope.$on('detailedSearch:close', () => this.$scope.detailedSearch.isVisible = false)
         this.$scope.$on('detailedSearch:empty', this.closeDetailedSearch)
         this.$scope.$on('mobileSearch:open', this.openMobileSearch)
+        this.$scope.$on('sessionService:terminateSession', this.$scope.terminateSession)
 
         this.$scope.suggest.doSuggest = (query) => {
             if (query == null) return []

@@ -19,7 +19,10 @@ angular.module('koolikottApp')
             } else {
                 $rootScope.justLoggedIn = true;
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+                serverCallService.makeGet("rest/user/role")
+                    .then(({data}) => {
+                        getRoleSuccess(data)
+                    }, () => loginFail);
             }
         }
 
@@ -134,17 +137,6 @@ angular.module('koolikottApp')
             )
         }
 
-        function logoutSuccess() {
-            authenticatedUserService.removeAuthenticatedUser();
-            $rootScope.$broadcast('logout:success');
-            enableLogin();
-            $rootScope.showLocationDialog = true;
-        }
-
-        function logoutFail(data, status) {
-            //ignore
-        }
-
         function disableLogin() {
             isAuthenticationInProgress = true;
         }
@@ -183,6 +175,19 @@ angular.module('koolikottApp')
             }
         }
 
+        function endSession(url) {
+            userLocatorService.saveUserLocation();
+            userLocatorService.stopTimer();
+            $rootScope.showLocationDialog = true;
+            userSessionService.stopTimer();
+            serverCallService.makePost(url)
+                .then(() => {
+                    authenticatedUserService.removeAuthenticatedUser();
+                    $rootScope.$broadcast('logout:success');
+                    enableLogin();
+                });
+        }
+
         return {
 
             loginSuccess: function (userStatus) {
@@ -195,10 +200,11 @@ angular.module('koolikottApp')
             },
 
             logout: function() {
-                userLocatorService.saveUserLocation();
-                userLocatorService.stopTimer();
-                userSessionService.stopTimer();
-                serverCallService.makePost("rest/user/session/logout", {}, logoutSuccess, logoutFail);
+                endSession('rest/user/logout')
+            },
+
+            terminate: function() {
+                endSession('rest/user/terminateSession')
             },
 
             loginWithIdCard: function() {
