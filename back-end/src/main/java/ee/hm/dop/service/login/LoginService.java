@@ -8,6 +8,7 @@ import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import ee.hm.dop.service.useractions.SessionService;
 import ee.hm.dop.service.useractions.UserService;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -44,6 +45,8 @@ public class LoginService {
     private AgreementDao agreementDao;
     @Inject
     private UserAgreementDao userAgreementDao;
+    @Inject
+    private SessionService sessionService;
 
     public UserStatus login(String idCode, String name, String surname) {
         Agreement latestAgreement = agreementDao.findLatestAgreement();
@@ -137,7 +140,7 @@ public class LoginService {
     private AuthenticatedUser authenticate(User user) {
         Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
         DateTime now = now();
-        return authenticatedUserService.save(new AuthenticatedUser(user, person, now, sessionTime(now)));
+        return sessionService.startSession(new AuthenticatedUser(user, person, now, sessionTime(now)));
     }
 
     private User getExistingOrNewUser(AuthenticationState state) {

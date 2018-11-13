@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNotNull;
 public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
 
     public static final String DEV_LOGIN = "dev/login/";
-    public static final String LOGOUT = "logout";
+    public static final String LOGOUT = "user/logout";
     private static String RESOURCE_BASE_URL;
     private static AuthenticationFilter authenticationFilter;
 

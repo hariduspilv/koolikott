@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService', 'userSessionService',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService, userSessionService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
@@ -134,11 +134,10 @@ angular.module('koolikottApp')
             )
         }
 
-        function logoutSuccess(data) {
+        function logoutSuccess() {
             authenticatedUserService.removeAuthenticatedUser();
             $rootScope.$broadcast('logout:success');
             enableLogin();
-            userLocatorService.stopTimer();
             $rootScope.showLocationDialog = true;
         }
 
@@ -198,7 +197,8 @@ angular.module('koolikottApp')
             logout: function() {
                 userLocatorService.saveUserLocation();
                 userLocatorService.stopTimer();
-                serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
+                userSessionService.stopTimer();
+                serverCallService.makePost("rest/user/logout", {}, logoutSuccess, logoutFail);
             },
 
             loginWithIdCard: function() {
@@ -209,10 +209,6 @@ angular.module('koolikottApp')
                 disableLogin();
                 serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
             },
-
-            /*loginWithTaat: function() {
-                loginWithOAuth("/rest/login/taat");
-            },*/
 
             loginWithEkool : function() {
                 loginWithOAuth("/rest/login/ekool");

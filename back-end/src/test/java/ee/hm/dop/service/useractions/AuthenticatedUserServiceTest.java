@@ -1,5 +1,25 @@
 package ee.hm.dop.service.useractions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.ehis.Institution;
+import ee.hm.dop.model.ehis.Person;
+import ee.hm.dop.model.ehis.Role;
+import ee.hm.dop.utils.EncryptionUtils;
+import ee.hm.dop.utils.security.KeyStoreUtils;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.configuration2.Configuration;
+import org.easymock.EasyMockRunner;
+import org.easymock.Mock;
+import org.easymock.TestSubject;
+import org.joda.time.DateTime;
+import org.json.JSONObject;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.STUDENT;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_FILENAME;
 import static ee.hm.dop.utils.ConfigurationProperties.KEYSTORE_PASSWORD;
@@ -13,38 +33,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.ehis.Institution;
-import ee.hm.dop.model.ehis.Person;
-import ee.hm.dop.model.ehis.Role;
-import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import ee.hm.dop.utils.security.KeyStoreUtils;
-import ee.hm.dop.utils.EncryptionUtils;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.configuration2.Configuration;
-import org.easymock.EasyMockRunner;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
-import org.joda.time.DateTime;
-import org.json.JSONObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 @RunWith(EasyMockRunner.class)
 public class AuthenticatedUserServiceTest {
 
     @TestSubject
     private AuthenticatedUserService authenticatedUserService = new AuthenticatedUserService();
-
     @Mock
     private Configuration configuration;
 
     @Test
-    public void getSignedUserData() throws Exception {
+    public void service_returns_signed_user_data() throws Exception {
         Role role = new Role();
         role.setInstitutionalRole(STUDENT);
         role.setSchoolYear("2");

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.user.UserData;
+import ee.hm.dop.model.user.UserSession;
 import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.login.TokenGenerator;
 import ee.hm.dop.utils.EncryptionUtils;
@@ -23,24 +24,6 @@ public class AuthenticatedUserService {
     private AuthenticatedUserDao authenticatedUserDao;
     @Inject
     private Configuration configuration;
-    @Inject
-    private TokenGenerator tokenGenerator;
-
-    public AuthenticatedUser prolongSession(AuthenticatedUser authenticatedUser){
-        authenticatedUser.setSessionTime(SessionUtil.sessionTime(DateTime.now()));
-        authenticatedUser.setSessionNumber(authenticatedUser.getSessionNumber() != null ? authenticatedUser.getSessionNumber() + 1 : 1);
-        return authenticatedUserDao.createOrUpdate(authenticatedUser);
-    }
-
-    public AuthenticatedUser save(AuthenticatedUser authenticatedUser) {
-        try {
-            authenticatedUser.setToken(tokenGenerator.secureToken());
-            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
-        } catch (DuplicateTokenException e) {
-            authenticatedUser.setToken(tokenGenerator.secureToken());
-            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
-        }
-    }
 
     public AuthenticatedUser getAuthenticatedUserByToken(String token) {
         return authenticatedUserDao.findAuthenticatedUserByToken(token);

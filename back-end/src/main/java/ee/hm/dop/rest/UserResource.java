@@ -1,21 +1,22 @@
 package ee.hm.dop.rest;
 
-import static ee.hm.dop.service.login.SessionUtil.minRemaining;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.model.user.UserLocation;
+import ee.hm.dop.service.useractions.AuthenticatedUserService;
+import ee.hm.dop.service.useractions.UserService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.user.UserLocation;
-import ee.hm.dop.model.user.UserSession;
-import ee.hm.dop.service.login.SessionUtil;
-import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import ee.hm.dop.service.useractions.UserService;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Path("user")
 public class UserResource extends BaseResource {
@@ -51,30 +52,15 @@ public class UserResource extends BaseResource {
     }
 
     @GET
-    @Path("/sessionTime")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public UserSession getSessionTime() {
-        return new UserSession(minRemaining(getAuthenticatedUser()));
-    }
-
-    @POST
-    @Path("/prolongSession")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public UserSession updateSessionTime() {
-        return new UserSession(minRemaining(authenticatedUserService.prolongSession(getAuthenticatedUser())));
-    }
-
-    @GET
     @Path("getLocation")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     @Produces(MediaType.TEXT_PLAIN)
     public String getUserLocation() {
-        if (isBlank(getLoggedInUserLocation())) {
+        User loggedInUser = getLoggedInUser();
+        if (isBlank(loggedInUser.getLocation())) {
             throw badRequest("User does not have saved location.");
         }
-        return getLoggedInUserLocation();
+        return loggedInUser.getLocation();
     }
 
     @POST
@@ -84,10 +70,6 @@ public class UserResource extends BaseResource {
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public User updateUserLocation(UserLocation userLocation) {
         return userService.updateUserLocation(getLoggedInUser(), userLocation.getLocation());
-    }
-
-    public String getLoggedInUserLocation() {
-        return getLoggedInUser().getLocation();
     }
 
 }

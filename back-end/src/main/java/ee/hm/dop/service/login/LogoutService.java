@@ -11,11 +11,4 @@ public class LogoutService {
     @Inject
     private AuthenticatedUserDao authenticatedUserDao;
 
-    public void logout(AuthenticatedUser authenticatedUser) {
-        if (authenticatedUser != null) {
-            authenticatedUser.setSessionTime(DateTime.now());
-            authenticatedUser.setLoggedOut(true);
-            authenticatedUserDao.delete(authenticatedUser);
-        }
-    }
 }

@@ -22,8 +22,8 @@ import javax.ws.rs.core.UriInfo;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import ee.hm.dop.service.login.LogoutService;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
@@ -189,7 +189,7 @@ public class SecurityFilterTest {
         expect(context.getHeaderString("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
-        expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusDays(1).minusSeconds(1));
+        expect(authenticatedUser.getSessionTime()).andReturn(DateTime.now().minusDays(1).minusSeconds(1));
         expect(context.getHeaderString("Username")).andReturn("realUsername");
         expect(user.getUsername()).andReturn("realUsername");
 
@@ -206,6 +206,7 @@ public class SecurityFilterTest {
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
         expect(authenticatedUser.getLoginDate()).andReturn(LocalDateTime.now().toDateTime(DateTimeZone.UTC)).times(0, 1);
+        expect(authenticatedUser.getSessionTime()).andReturn(LocalDateTime.now().plusMinutes(SessionUtil.SESSION_TIME_MIN).toDateTime(DateTimeZone.UTC)).times(0, 1);
         expect(context.getHeaderString("Username")).andReturn(returnedUser);
         expect(user.getUsername()).andReturn("realUsername");
         if (success)

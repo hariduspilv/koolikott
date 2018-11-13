@@ -20,7 +20,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.junit.Test;
 
-public class LogoutResourceTest extends ResourceIntegrationTestBase {
+public class SessionResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void testLogout() {

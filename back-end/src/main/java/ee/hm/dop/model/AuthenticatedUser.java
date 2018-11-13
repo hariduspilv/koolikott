@@ -41,6 +41,10 @@ public class AuthenticatedUser implements AbstractEntity {
     @Column
     private boolean loggedOut;
 
+    @JsonIgnore
+    @Column
+    private boolean declined;
+
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "person")
     private Person person;
@@ -149,5 +153,13 @@ public class AuthenticatedUser implements AbstractEntity {
 
     public void setSessionNumber(Integer sessionNumber) {
         this.sessionNumber = sessionNumber;
+    }
+
+    public boolean isDeclined() {
+        return declined;
+    }
+
+    public void setDeclined(boolean declined) {
+        this.declined = declined;
     }
 }

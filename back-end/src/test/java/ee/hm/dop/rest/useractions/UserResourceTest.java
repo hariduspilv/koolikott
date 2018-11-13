@@ -1,7 +1,6 @@
 package ee.hm.dop.rest.useractions;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
@@ -25,7 +24,8 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public static final String RESTRICT_USER = "user/restrictUser";
     public static final String USER_ROLE = "user/role";
     public static final String SESSION_TIME = "user/sessionTime";
-    public static final String PROLONG_SESSION = "user/prolongSession";
+    public static final String UPDATE_SESSION = "user/updateSession";
+    public static final String TERMINATE_SESSION = "user/terminateSession";
     public static final String GET_SIGNED_USER_DATA = "user/getSignedUserData";
     public static final String USER_LOCATION = "user/getLocation";
 
@@ -78,11 +78,21 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void session_is_less_than_120_min() {
         login(USER_ADMIN);
         UserSession session = doGet(SESSION_TIME, UserSession.class);
-        assertTrue(120 >= session.getMinRemaning());
-        UserSession prolongedSession = doPost(PROLONG_SESSION, null, UserSession.class);
-        assertTrue(120 >= prolongedSession.getMinRemaning());
+        assertTrue(120 >= session.getMinRemaining());
+        UserSession prolongedSession = doPost(UPDATE_SESSION, continueSession(), UserSession.class);
+        assertTrue(120 >= prolongedSession.getMinRemaining());
         UserSession askSessionAgain = doGet(SESSION_TIME, UserSession.class);
-        assertTrue(120 >= askSessionAgain.getMinRemaning());
+        assertTrue(120 >= askSessionAgain.getMinRemaining());
+    }
+
+    @Test
+    public void terminate_session_terminates_session() {
+        login(USER_ADMIN);
+        UserSession session = doGet(SESSION_TIME, UserSession.class);
+        assertTrue(120 >= session.getMinRemaining());
+        doPost(TERMINATE_SESSION, null, UserSession.class);
+        Response response = doGet(SESSION_TIME);
+        assertEquals(419, response.getStatus());
     }
 
     @Test
@@ -160,5 +170,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         assertEquals(updatedUser.getUserTaxons(), taxons);
     }
 
-
+    private UserSession continueSession() {
+        UserSession json = new UserSession();
+        json.setContinueSession(true);
+        return json;
+    }
 }

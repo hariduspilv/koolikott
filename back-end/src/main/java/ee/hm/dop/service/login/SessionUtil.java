@@ -7,7 +7,7 @@ import org.joda.time.Minutes;
 
 public class SessionUtil {
 
-    public static final int SESSION_TIME_MIN = 2 * 60;
+    public static final int SESSION_TIME_MIN = 2;
 
     public static boolean sessionInValid(AuthenticatedUser authenticatedUser) {
         return !sessionValid(authenticatedUser);
