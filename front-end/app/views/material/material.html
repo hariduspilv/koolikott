@@ -332,15 +332,9 @@
              layout-align="center stretch">
           <!-- Ratings area -->
           <dop-rating data-ng-if="material.type" data-material="material"
-                      like-message="{{ 'MATERIAL_LIKED' | translate }}"
-                      dislike-message="{{ 'MATERIAL_DISLIKED' | translate }}"></dop-rating>
+                      ></dop-rating>
         </div>
       </md-card-actions>
-      <!-- SECTION 3: Comments -->
-      <dop-comments-card
-        data-learning-object="material"
-        data-is-open="commentsOpen"
-      ></dop-comments-card>
     </md-card>
   </div>
   <aside flex-gt-sm="25">
