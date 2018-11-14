@@ -50,7 +50,6 @@ public class TranslationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(RoleString.ADMIN)
     public void update(LandingPageObject landingPageObject) {
-        System.out.println(landingPageObject);
         translationService.update(landingPageObject);
     }
 
