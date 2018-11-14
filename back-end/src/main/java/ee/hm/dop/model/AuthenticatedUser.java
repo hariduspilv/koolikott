@@ -66,7 +66,7 @@ public class AuthenticatedUser implements AbstractEntity {
     @Column
     private Integer sessionNumber;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private LoginFrom loginFrom;
 
