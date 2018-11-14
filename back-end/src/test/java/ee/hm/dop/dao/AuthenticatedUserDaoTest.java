@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
@@ -88,7 +89,8 @@ public class AuthenticatedUserDaoTest extends DatabaseTestBase {
         authenticatedUser.setToken(token);
         authenticatedUser.setUser(user);
         authenticatedUser.setLoginDate(DateTime.now());
-        authenticatedUser.setSessionTime(SessionUtil.sessionTime(DateTime.now()));
+        authenticatedUser.setSessionTime(DateTime.now().plusMinutes(15));
+        authenticatedUser.setLoginFrom(LoginFrom.DEV);
         return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
     }
 

@@ -1,6 +1,7 @@
 package ee.hm.dop.service.login;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacUtils;
@@ -79,7 +80,7 @@ public class StuudiumServiceTest {
 
         expect(response.readEntity(StuudiumUser.class)).andReturn(stuudiumUser);
 
-        expect(loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName())) //
+        expect(loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName(), LoginFrom.STUUDIUM)) //
                 .andReturn(userStatus);
 
         replayAll(response);

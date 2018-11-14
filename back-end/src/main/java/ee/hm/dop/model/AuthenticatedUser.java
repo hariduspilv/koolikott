@@ -5,6 +5,8 @@ import static org.joda.time.DateTime.now;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,6 +15,7 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ee.hm.dop.model.ehis.Person;
+import ee.hm.dop.model.enums.LoginFrom;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -63,16 +66,21 @@ public class AuthenticatedUser implements AbstractEntity {
     @Column
     private Integer sessionNumber;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private LoginFrom loginFrom;
+
     public AuthenticatedUser() {
     }
 
-    public AuthenticatedUser(User user, Person person, DateTime loginDate, DateTime sessionTime) {
+    public AuthenticatedUser(User user, Person person, LoginFrom loginFrom, DateTime loginDate, DateTime sessionTime) {
         this.user = user;
         this.firstLogin = user.isNewUser();
         this.person = person;
         this.loginDate = loginDate;
         this.sessionTime = sessionTime;
         this.sessionNumber = 1;
+        this.loginFrom = loginFrom;
     }
 
     public Long getId() {
@@ -161,5 +169,13 @@ public class AuthenticatedUser implements AbstractEntity {
 
     public void setDeclined(boolean declined) {
         this.declined = declined;
+    }
+
+    public LoginFrom getLoginFrom() {
+        return loginFrom;
+    }
+
+    public void setLoginFrom(LoginFrom loginFrom) {
+        this.loginFrom = loginFrom;
     }
 }

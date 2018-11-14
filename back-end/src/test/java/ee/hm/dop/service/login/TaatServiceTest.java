@@ -3,6 +3,7 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.rest.login.LoginTestUtil;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.utils.security.KeyStoreUtils;
@@ -160,7 +161,7 @@ public class TaatServiceTest {
         String idCode = "11111111111";
         AuthenticatedUser authenticatedUser = createMock(AuthenticatedUser.class);
         UserStatus userStatus = UserStatus.loggedIn(authenticatedUser);
-        expect(loginService.login(idCode, "TestTäisnimi", "TestPerenimi")).andReturn(userStatus);
+        expect(loginService.login(idCode, "TestTäisnimi", "TestPerenimi", LoginFrom.TAAT)).andReturn(userStatus);
 
         validator.validate(EasyMock.anyObject(Signature.class));
 

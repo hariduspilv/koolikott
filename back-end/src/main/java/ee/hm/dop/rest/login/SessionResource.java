@@ -1,7 +1,13 @@
 package ee.hm.dop.rest.login;
 
-import static ee.hm.dop.service.login.SessionUtil.minRemaining;
-import static java.lang.String.format;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.model.user.UserSession;
+import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.useractions.SessionService;
+import org.apache.commons.configuration2.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -11,13 +17,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.model.user.UserSession;
-import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.useractions.SessionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static ee.hm.dop.service.login.SessionUtil.minRemaining;
+import static ee.hm.dop.utils.ConfigurationProperties.SESSION_ALERT_MINS;
+import static java.lang.String.format;
 
 @Path("user")
 @RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR })
@@ -27,6 +29,8 @@ public class SessionResource extends BaseResource {
 
     @Inject
     private SessionService sessionService;
+    @Inject
+    private Configuration configuration;
 
     @GET
     @Path("sessionTime")
@@ -35,6 +39,12 @@ public class SessionResource extends BaseResource {
     public UserSession getSessionTime() {
         AuthenticatedUser user = getAuthenticatedUser();
         return new UserSession(minRemaining(user), !user.isDeclined());
+    }
+
+    @GET
+    @Path("sessionAlertTime")
+    public String getSessionAlertTime() {
+        return configuration.getString(SESSION_ALERT_MINS);
     }
 
     @POST

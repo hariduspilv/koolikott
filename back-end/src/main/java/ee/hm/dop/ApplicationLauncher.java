@@ -3,6 +3,7 @@ package ee.hm.dop;
 import com.google.inject.Singleton;
 import ee.hm.dop.config.EmbeddedJetty;
 import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
 import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
 import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
@@ -28,6 +29,7 @@ public class ApplicationLauncher {
     private static final int MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY = 1;
     private static final int AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY = 2;
     private static final int AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY = 3;
+    private static final int AUTHENTICATED_USER_CLEANER_HOUR_OF_DAY = 4;
 
     @Inject
     private static Configuration configuration;
@@ -37,6 +39,8 @@ public class ApplicationLauncher {
     private static AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
     @Inject
     private static AuthenticationStateCleaner authenticationStateCleaner;
+    @Inject
+    private static AuthenticatedUserCleaner authenticatedUserCleaner;
 
     public static void startApplication() {
         GuiceInjector.init();
@@ -51,6 +55,7 @@ public class ApplicationLauncher {
             initOpenSaml();
             synchronizeMaterials();
             acceptReviewableChange();
+            authenticatedUserCleaner();
             authenticationStateCleaner();
         }
     }
@@ -67,10 +72,15 @@ public class ApplicationLauncher {
         Executors.newSingleThreadExecutor().submit(() -> authenticationStateCleaner.run());
     }
 
+    private static void authenticatedUserCleaner() {
+        Executors.newSingleThreadExecutor().submit(() -> authenticatedUserCleaner.run());
+    }
+
     private static void startExecutors() {
         synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
         automaticallyAcceptReviewableChange.scheduleExecution(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY);
         authenticationStateCleaner.scheduleExecution(AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY);
+        authenticatedUserCleaner.scheduleExecution(AUTHENTICATED_USER_CLEANER_HOUR_OF_DAY);
     }
 
     private static void startCommandListener() {

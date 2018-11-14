@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.login;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.login.*;
@@ -32,7 +33,7 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s";
+    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
@@ -72,7 +73,7 @@ public class LoginResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
-        return isAuthValid(req) ? loginService.login(getIdCode(req), getName(req), getSurname(req)) : null;
+        return isAuthValid(req) ? loginService.login(getIdCode(req), getName(req), getSurname(req), LoginFrom.ID_CARD) : null;
     }
 
     @GET
@@ -165,7 +166,7 @@ public class LoginResource extends BaseResource {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM, getServerAddress(), true));
         }
 
-        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser()));
+        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser(), status.getLoginFrom().name()));
     }
 
     private URI redirectFailure() throws URISyntaxException {

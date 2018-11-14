@@ -225,7 +225,7 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode} = inputParams;
+                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -243,7 +243,8 @@ angular.module('koolikottApp')
                     const params = {
                         token,
                         agreementId : agreement,
-                        existingUser
+                        existingUser,
+                        loginFrom
                     }
                     showGdprModalAndAct(params);
                 }

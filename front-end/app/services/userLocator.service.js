@@ -23,7 +23,6 @@ class controller extends Controller {
 }
 
 controller.$inject = [
-    '$http',
     '$interval',
     '$location',
     'serverCallService',

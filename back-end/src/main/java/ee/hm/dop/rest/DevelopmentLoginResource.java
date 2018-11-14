@@ -7,6 +7,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.service.login.dto.UserStatus;
 
@@ -20,6 +21,6 @@ public class DevelopmentLoginResource {
     @Path("/login/{idCode}")
     @Produces(MediaType.APPLICATION_JSON)
     public UserStatus logIn(@PathParam("idCode") String idCode) {
-        return loginService.login(idCode, null, null);
+        return loginService.login(idCode, null, null, LoginFrom.DEV);
     }
 }

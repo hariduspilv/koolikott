@@ -21,21 +21,36 @@
             })
         }
 
+        emptyTitle() {
+            $translate('SESSION_IS_EXPIRING_MESSAGE').then((value) => {
+                this.$scope.message = value.replace('${minRemaining}', `x`);
+            })
+        }
+
         sessionTime() {
             this.userSessionService.getSessionTime()
                 .then(({data: session}) => {
-                    this.$scope.session = session;
+                    if (session.minRemaining) {
+                        this.$translate('SESSION_IS_EXPIRING_MESSAGE').then((value) => {
+                            this.$scope.message = value.replace('${minRemaining}', `${session.minRemaining}`);
+                        })
+                    } else {
+                        this.emptyTitle();
+                    }
+                }, () => {
+                    this.emptyTitle();
                 })
         }
     }
 
     controller.$inject = [
         '$scope',
-        '$rootScope',
         '$mdDialog',
-        'userSessionService',
         '$location',
         '$interval',
+        '$translate',
+        '$rootScope',
+        'userSessionService',
     ]
 
     angular.module('koolikottApp').controller('sessionDialogController', controller)

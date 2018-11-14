@@ -206,7 +206,7 @@ public class SecurityFilterTest {
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
         expect(authenticatedUser.getLoginDate()).andReturn(LocalDateTime.now().toDateTime(DateTimeZone.UTC)).times(0, 1);
-        expect(authenticatedUser.getSessionTime()).andReturn(LocalDateTime.now().plusMinutes(SessionUtil.SESSION_TIME_MIN).toDateTime(DateTimeZone.UTC)).times(0, 1);
+        expect(authenticatedUser.getSessionTime()).andReturn(LocalDateTime.now().plusMinutes(15).toDateTime(DateTimeZone.UTC)).times(0, 1);
         expect(context.getHeaderString("Username")).andReturn(returnedUser);
         expect(user.getUsername()).andReturn("realUsername");
         if (success)

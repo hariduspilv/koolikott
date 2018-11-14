@@ -59,7 +59,7 @@ INSERT INTO UserTourData(id, user, generalTour, editTour) VALUES (1, 1, 1, 0);
 
 -- AuthenticatedUser
 
-insert into AuthenticatedUser(id, user_id, token, firstLogin, person, deleted, loggedOut, declined) values (1, 1, 'token', false, null, 0, 0, 0);
+insert into AuthenticatedUser(id, user_id, token, firstLogin, person, deleted, loggedOut, declined, loginFrom) values (1, 1, 'token', false, null, 0, 0, 0, 'DEV');
 
 -- AuthenticationState
 

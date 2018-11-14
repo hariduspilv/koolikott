@@ -4,31 +4,34 @@
     class controller extends Controller {
         handleUserSession() {
             if (this.authenticatedUserService.isAuthenticated()) {
-                this.getSessionTime()
-                    .then(({data: session}) => {
-                        if (session.continueSession && session.minRemaining > 0 && session.minRemaining <= 10) {
-                            if (!this.sessionDialogIsOpen) {
-                                this.sessionDialogIsOpen = true
-                                this.$mdDialog.show({
-                                    templateUrl: 'views/sessionDialog/sessionDialog.html',
-                                    controller: 'sessionDialogController',
-                                    clickOutsideToClose: false,
-                                    escapeToClose: false,
-                                }).then((data) => {
-                                    this.updateSession(data);
+                this.getSessionAlert()
+                    .then(({data: alertTime}) => {
+                        this.getSessionTime()
+                            .then(({data: session}) => {
+                                if (session.continueSession && session.minRemaining > 0 && session.minRemaining <= alertTime.parseInt()) {
+                                    if (!this.sessionDialogIsOpen) {
+                                        this.sessionDialogIsOpen = true
+                                        this.$mdDialog.show({
+                                            templateUrl: 'views/sessionDialog/sessionDialog.html',
+                                            controller: 'sessionDialogController',
+                                            clickOutsideToClose: false,
+                                            escapeToClose: false,
+                                        }).then((data) => {
+                                            this.updateSession(data);
+                                            this.sessionDialogIsOpen = false;
+                                        })
+                                    }
+                                } else if (session.minRemaining <= 0) {
                                     this.sessionDialogIsOpen = false;
-                                })
-                            }
-                        } else if (session.minRemaining <= 0){
-                            this.sessionDialogIsOpen = false;
-                            this.$rootScope.$broadcast("sessionService:terminateSession");
-                            this.$mdDialog.show({
-                                templateUrl: 'views/sessionDialog/sessionExpiredDialog.html',
-                                controller: 'sessionExpiredDialogController',
-                                clickOutsideToClose: true,
-                                escapeToClose: true,
+                                    this.$rootScope.$broadcast("sessionService:terminateSession");
+                                    this.$mdDialog.show({
+                                        templateUrl: 'views/sessionDialog/sessionExpiredDialog.html',
+                                        controller: 'sessionExpiredDialogController',
+                                        clickOutsideToClose: true,
+                                        escapeToClose: true,
+                                    })
+                                }
                             })
-                        }
                     })
             }
         }
@@ -39,6 +42,10 @@
 
         getSessionTime() {
             return this.serverCallService.makeGet('rest/user/sessionTime');
+        }
+
+        getSessionAlert() {
+            return this.serverCallService.makeGet('rest/user/sessionAlertTime');
         }
 
         startTimer() {

@@ -1,6 +1,7 @@
 package ee.hm.dop.service.login.dto;
 
 import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.enums.LoginFrom;
 
 public class UserStatus {
 
@@ -12,21 +13,24 @@ public class UserStatus {
     private String token;
     private Long agreementId;
     private AuthenticatedUser authenticatedUser;
+    private LoginFrom loginFrom;
 
-    public static UserStatus missingPermissionsNewUser(String token, Long agreementId){
+    public static UserStatus missingPermissionsNewUser(String token, Long agreementId, LoginFrom loginFrom){
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
         status.setAgreementId(agreementId);
+        status.setLoginFrom(loginFrom);
         return status;
     }
 
-    public static UserStatus missingPermissionsExistingUser(String token, Long agreementId){
+    public static UserStatus missingPermissionsExistingUser(String token, Long agreementId, LoginFrom loginFrom){
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
         status.setAgreementId(agreementId);
         status.setExistingUser(true);
+        status.setLoginFrom(loginFrom);
         return status;
     }
 
@@ -111,5 +115,13 @@ public class UserStatus {
 
     public void setExistingUser(boolean existingUser) {
         this.existingUser = existingUser;
+    }
+
+    public LoginFrom getLoginFrom() {
+        return loginFrom;
+    }
+
+    public void setLoginFrom(LoginFrom loginFrom) {
+        this.loginFrom = loginFrom;
     }
 }

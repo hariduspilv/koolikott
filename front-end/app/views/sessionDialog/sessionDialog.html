@@ -2,15 +2,14 @@
   <md-toolbar>
     <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
       <div class="md-toolbar-tools" data-layout-align="space-between center">
-        <h2 data-translate="Sessioon on aegumas"
+        <h2 data-translate="SESSION_IS_EXPIRING_HEADER"
         ></h2>
       </div>
     </div>
   </md-toolbar>
   <md-dialog-content>
     <md-content data-layout-padding>
-      <h2>Session on aegumas. Pikenda?</h2>
-      <h2 ng-bind="session.minRemaining"></h2>
+      <p><span id="location-restore-text" ng-bind="message"></span></p>
       <div id="location-restore-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
         <md-button
           id="location-restore-cancel-button"
