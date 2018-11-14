@@ -4,7 +4,6 @@
       <span data-translate="VIEW_COUNT"></span>
     </md-tooltip>
     <md-icon class="rating__icon">remove_red_eye</md-icon>
-    <span class="rating__number" data-ng-if="$ctrl.material" data-ng-bind="$ctrl.material.views ? $ctrl.material.views : '0'"></span>
-    <span class="rating__number" data-ng-if="$ctrl.portfolio" data-ng-bind="$ctrl.portfolio.views ? $ctrl.portfolio.views : '0'"></span>
+    <span class="rating__number" data-ng-bind="$ctrl.material.views || $ctrl.portfolio.views || '0'"></span>
   </div>
 </div>
