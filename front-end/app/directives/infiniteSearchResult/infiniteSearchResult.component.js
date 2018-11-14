@@ -7,6 +7,7 @@
 
             this.landingPageLanguages = ['ET', 'EN', 'RU']
             this.initEmptyLandingPageEdit()
+            this.getNoticeAndTranslationString()
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0]
         }
 
@@ -451,10 +452,17 @@
             return isFilled;
         }
 
-        getDescription(data) {
-            return data.descriptions.find(obj => {
-                return obj.language === this.translationService.getLanguage()
-            }).text
+        getNoticeAndTranslationString() {
+            this.serverCallService
+                .makeGet('rest/translation/landingPage')
+                .then(({data}) => {
+                    this.$scope.description = data.descriptions.find(obj => {
+                        return obj.language === this.translationService.getLanguage()
+                    }).text
+                    this.$scope.notice = data.notices.find(obj => {
+                        return obj.language === this.translationService.getLanguage()
+                    }).text
+            })
         }
 
         setNoticesAndDescriptions() {
@@ -462,15 +470,7 @@
             this.serverCallService
                 .makeGet('rest/translation/landingPage/admin')
                 .then(({data}) => {
-                    console.log(data);
                     this.$scope.landingPageTexts = data
-                    this.$scope.description = data.descriptions.find(obj => {
-                        return obj.language === this.translationService.getLanguage()
-                    }).text
-                    this.$scope.notice = data.notices.find(obj => {
-                        return obj.language === this.translationService.getLanguage()
-                    }).text
-                    this.getDescription(data)
                     const languageCodeMap = {
                         ET: 'est',
                         EN: 'eng',
