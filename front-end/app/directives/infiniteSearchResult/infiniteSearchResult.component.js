@@ -7,7 +7,10 @@
 
             this.landingPageLanguages = ['ET', 'EN', 'RU']
             this.initEmptyLandingPageEdit()
-            this.getNoticeAndTranslationString()
+            this.isLandingPage()
+            if (this.isLandingPage()) {
+                this.getNoticeAndTranslationString()
+            }
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0]
         }
 
@@ -17,7 +20,7 @@
             this.searchService.setDetails('');
         }
 
-        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice}) {
+        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home}) {
             if (title && title.currentValue !== title.previousValue) this.setTitle()
             if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
             if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitleSimilar()
@@ -25,6 +28,7 @@
             if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
             if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
             if (notice && notice.currentValue !== notice.previousValue) this.$scope.notice = notice.currentValue
+            if (home && home.currentValue !== home.previousValue) this.$scope.home = home.currentValue
 
             if (params && !params.isFirstChange() && this.params) {
                 const c = params.currentValue;
@@ -432,7 +436,9 @@
         }
 
         cancelEdit() {
+
             this.$scope.isEditMode = false
+            this.setNoticesAndDescriptions()
         }
 
 
@@ -551,13 +557,13 @@
                         this.toastService.show('LANDING_PAGE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.isEditMode = false
-                        window.location.reload(true)
+                        this.getNoticeAndTranslationString()
                     }
                 })
         }
 
         isLandingPage() {
-            return this.url === 'rest/search'
+            return this.$scope.$ctrl.home
         }
     }
 
@@ -581,13 +587,12 @@
             url: '<?',
             title: '<',
             subtitle: '<',
-            description: '<',
             filter: '<',
             cache: '<?',
             isPreferred: '<',
             exactTitle: '<',
             similarTitle: '<',
-            notice: '<',
+            home: '<',
         },
         templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
         controller
