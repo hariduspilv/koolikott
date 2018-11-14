@@ -5,7 +5,7 @@
   <h1 id="exact-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
       data-ng-bind-html="exactTitle"></h1>
-  <h1 data-ng-if="notice && !isEditMode && $ctrl.isLandingPage()"
+  <h1 data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
       class="md-headline"
       data-ng-bind="notice"></h1>
   <!-- Edit landing page description and notice -->
@@ -116,7 +116,7 @@
 </div>
 <div data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
-  <p data-ng-if="description && !isEditMode && $ctrl.isLandingPage()" data-ng-bind="description"></p>
+  <p data-ng-if="description && !isEditMode && $ctrl.isLandingPage() && !filter" data-ng-bind="description"></p>
   <md-button style="min-width: 0px"
              data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
              data-ng-click="$ctrl.editLandingPage()"
