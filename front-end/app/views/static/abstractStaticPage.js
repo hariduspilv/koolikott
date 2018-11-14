@@ -7,12 +7,10 @@ angular.module('koolikottApp')
     function($scope, serverCallService, translationService, $sce) {
         function getPage(pageLanguage) {
 
-            var params = {
+            serverCallService.makeGet("rest/page", {
                 'name': $scope.pageName,
                 'language': pageLanguage
-            };
-            var url = "rest/page";
-            serverCallService.makeGet(url, params, getPageSuccess, getPageFail);
+            }, getPageSuccess, getPageFail);
         }
 
         function getPageSuccess(data) {

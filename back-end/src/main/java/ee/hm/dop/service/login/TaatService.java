@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.configuration2.Configuration;
@@ -112,7 +113,7 @@ public class TaatService {
     }
 
     private UserStatus login(Map<String, String> dataMap) {
-        return loginService.login(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME));
+        return loginService.login(dataMap.get(ID_CODE), dataMap.get(NAME), dataMap.get(SURNAME), LoginFrom.TAAT);
     }
 
     private void validateAuthenticationToken(String authenticationStateToken) {

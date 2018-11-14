@@ -3,6 +3,7 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.Language;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.login.dto.UserStatus;
@@ -32,7 +33,22 @@ public class MobileIDLoginService {
             return null;
         }
         AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
-        return loginService.login(authenticationState);
+        return login(authenticationState, LoginFrom.MOB_ID);
+    }
+
+    public UserStatus login(AuthenticationState authenticationState, LoginFrom loginFrom) {
+        if (authenticationState == null) {
+            return null;
+        }
+
+        if (loginService.hasExpired(authenticationState)) {
+            authenticationStateDao.delete(authenticationState);
+            return null;
+        }
+
+        UserStatus authenticatedUser = loginService.login(authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname(), loginFrom);
+        authenticationStateDao.delete(authenticationState);
+        return authenticatedUser;
     }
 
     public MobileIDSecurityCodes authenticate(String phoneNumber, String idCode, Language language) throws Exception {

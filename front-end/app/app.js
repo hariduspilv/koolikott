@@ -214,17 +214,13 @@ function isEditPortfolioPage(path) {
     return path === '/portfolio/edit';
 }
 
-function isSearchPage($location) {
-    return $location.url().indexOf("/search") != -1
-}
-
 function isHomePage(path) {
     return path === '/';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', '$interval',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, $interval) {
-        let $on = $rootScope.$on('$routeChangeSuccess', function () {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
+        $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
             var path = $location.path();
@@ -233,10 +229,14 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             let isLoggedIn = authenticatedUserService.isAuthenticated();
 
             userLocatorService.stopTimer()
+            userSessionService.stopTimer()
 
             if (isLoggedIn && !$rootScope.locationDialogIsOpen)
                 userLocatorService.startTimer()
 
+            if (isLoggedIn) {
+                userSessionService.startTimer()
+            }
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);

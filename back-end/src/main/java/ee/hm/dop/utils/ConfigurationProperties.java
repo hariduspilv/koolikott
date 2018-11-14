@@ -92,8 +92,8 @@ public interface ConfigurationProperties {
     String FILE_REVIEW_DIRECTORY = "file.review.directory";
 
     String REQUEST_EXTRA_LOGGING = "request.extra.logging";
-
     String MAX_FEED_ITEMS = "feed.items.max";
-
     String AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES = "automatically.accept.reviewableChanges.days";
+    String SESSION_DURATION_MINS = "session.duration.mins";
+    String SESSION_ALERT_MINS = "session.duration.mins";
 }

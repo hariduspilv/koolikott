@@ -1,25 +1,22 @@
 package ee.hm.dop.service.useractions;
 
-import static org.joda.time.DateTime.now;
-
-import java.security.PrivateKey;
-
-import javax.inject.Inject;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.ehis.Person;
-import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.model.user.UserData;
+import ee.hm.dop.model.user.UserSession;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.login.TokenGenerator;
+import ee.hm.dop.utils.EncryptionUtils;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.utils.security.KeyStoreUtils;
-import ee.hm.dop.utils.EncryptionUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration2.Configuration;
 import org.joda.time.DateTime;
+
+import javax.inject.Inject;
+import java.security.PrivateKey;
 
 public class AuthenticatedUserService {
 
@@ -27,27 +24,14 @@ public class AuthenticatedUserService {
     private AuthenticatedUserDao authenticatedUserDao;
     @Inject
     private Configuration configuration;
-    @Inject
-    private TokenGenerator tokenGenerator;
-
-    public AuthenticatedUser save(AuthenticatedUser authenticatedUser) {
-        try {
-            authenticatedUser.setToken(tokenGenerator.secureToken());
-            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
-        } catch (DuplicateTokenException e) {
-            authenticatedUser.setToken(tokenGenerator.secureToken());
-            return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
-        }
-    }
 
     public AuthenticatedUser getAuthenticatedUserByToken(String token) {
         return authenticatedUserDao.findAuthenticatedUserByToken(token);
     }
 
     public String signUserData(AuthenticatedUser authenticatedUser) {
-        UserData userData = new UserData(authenticatedUser.getPerson());
         ObjectMapper mapper = new ObjectMapper();
-        String userDataStr = tryToMap(userData, mapper);
+        String userDataStr = tryToMap(new UserData(authenticatedUser.getPerson()), mapper);
 
         PrivateKey privateKey = KeyStoreUtils.getDOPSigningCredential(configuration).getPrivateKey();
         final byte[] cipherText = EncryptionUtils.encrypt(userDataStr, privateKey);
@@ -60,27 +44,6 @@ public class AuthenticatedUserService {
             return mapper.writeValueAsString(userData);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private static final class UserData {
-
-        @JsonSerialize(using = DateTimeSerializer.class)
-        private DateTime createdAt;
-        private Person authCtx;
-
-        UserData(Person authCtx) {
-            this.authCtx = authCtx;
-            createdAt = now();
-        }
-
-        public DateTime getCreatedAt() {
-            return createdAt;
-        }
-
-        public Person getAuthCtx() {
-            return authCtx;
         }
     }
 }

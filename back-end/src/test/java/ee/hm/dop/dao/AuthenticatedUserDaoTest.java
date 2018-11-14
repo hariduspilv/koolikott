@@ -7,110 +7,111 @@ import static org.junit.Assert.fail;
 import javax.inject.Inject;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
+import ee.hm.dop.model.enums.LoginFrom;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 public class AuthenticatedUserDaoTest extends DatabaseTestBase {
 
+    public static final String TOKEN = "123123";
+    public static final String TOKEN2 = "123122";
     @Inject
     private AuthenticatedUserDao authenticatedUserDao;
-
     @Inject
     private UserDao userDao;
 
     @Test
-    public void createAuthenticatedUser() {
-        User user = getUser();
+    public void user_can_be_authenticated() {
+        User user = user();
 
-        AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");
+        AuthenticatedUser newAuthenticatedUser = authenticate(user, TOKEN);
+        assertEquals(user, newAuthenticatedUser.getUser());
 
-        assertEquals(user, returnedAuthenticatedUser.getUser());
-
-        authenticatedUserDao.delete(returnedAuthenticatedUser);
-        userDao.delete(user);
+        cleanUp(user, newAuthenticatedUser);
     }
 
     @Test
-    public void createAuthenticatedUserSameToken() {
-        User user = getUser();
-
-        AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");
-
-        AuthenticatedUser authenticatedUser2 = new AuthenticatedUser();
-        authenticatedUser2.setToken("123123");
-        authenticatedUser2.setUser(user);
-
+    public void authenticated_user_must_have_unique_token() {
+        User user = user();
+        AuthenticatedUser authenticatedUser = authenticate(user, TOKEN);
         try {
-            authenticatedUserDao.createAuthenticatedUser(authenticatedUser2);
+            authenticate(user, TOKEN);
             fail("Exception expected");
         } catch (DuplicateTokenException e) {
             // expected
         }
-
-        authenticatedUserDao.delete(returnedAuthenticatedUser);
-        userDao.delete(user);
+        cleanUp(user, authenticatedUser);
     }
 
     @Test
-    public void createAuthenticatedUserTwice() {
-        User user = getUser();
+    public void authenticated_user_can_be_created_many_times_for_user_with_different_token() {
+        User user = user();
 
-        AuthenticatedUser authenticatedUser1 = createAuthenticatedUser(user, "token1");
-
-        AuthenticatedUser authenticatedUser2 = createAuthenticatedUser(user, "token2");
+        AuthenticatedUser authenticatedUser1 = authenticate(user, TOKEN);
+        AuthenticatedUser authenticatedUser2 = authenticate(user, TOKEN2);
 
         AuthenticatedUser returnedUser1 = authenticatedUserDao.createAuthenticatedUser(authenticatedUser1);
         AuthenticatedUser returnedUser2 = authenticatedUserDao.createAuthenticatedUser(authenticatedUser2);
 
-        assertEquals(authenticatedUser1.getUser(), authenticatedUserDao.findAuthenticatedUserByToken("token1")
-                .getUser());
-        assertEquals(authenticatedUser2.getUser(), authenticatedUserDao.findAuthenticatedUserByToken("token2")
-                .getUser());
+        assertEquals(authenticatedUser1.getUser(), authenticatedUserDao.findAuthenticatedUserByToken(TOKEN).getUser());
+        assertEquals(authenticatedUser2.getUser(), authenticatedUserDao.findAuthenticatedUserByToken(TOKEN2).getUser());
 
-        authenticatedUserDao.delete(returnedUser1);
-        authenticatedUserDao.delete(returnedUser2);
-        userDao.delete(user);
+        cleanUp(user, returnedUser1, returnedUser2);
     }
 
     @Test
-    public void findAuthenticatedUserByToken() {
-        User user = getUser();
+    public void user_can_be_found_by_token() {
+        User user = user();
 
-        AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");
+        AuthenticatedUser authenticatedUser = authenticate(user, TOKEN);
+        assertEquals(TOKEN, authenticatedUserDao.findAuthenticatedUserByToken(TOKEN).getToken());
 
-        assertEquals("123123", authenticatedUserDao.findAuthenticatedUserByToken("123123").getToken());
-
-        authenticatedUserDao.delete(returnedAuthenticatedUser);
-        userDao.delete(user);
+        cleanUp(user, authenticatedUser);
     }
 
     @Test
-    public void delete() {
-        User user = getUser();
-        AuthenticatedUser returnedAuthenticatedUser = createAuthenticatedUser(user, "123123");
+    public void deleted_authenticated_user_cannot_be_found_by_token() {
+        User user = user();
+        AuthenticatedUser authenticatedUser = authenticate(user, TOKEN);
 
-        authenticatedUserDao.delete(returnedAuthenticatedUser);
-        assertNull(authenticatedUserDao.findAuthenticatedUserByToken("123123"));
+        authenticatedUserDao.delete(authenticatedUser);
+        assertNull(authenticatedUserDao.findAuthenticatedUserByToken(TOKEN));
 
-        userDao.delete(user);
+        cleanUp(user, authenticatedUser);
     }
 
-    private AuthenticatedUser createAuthenticatedUser(User user, String token) {
+    private AuthenticatedUser authenticate(User user, String token) {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser();
         authenticatedUser.setToken(token);
         authenticatedUser.setUser(user);
+        authenticatedUser.setLoginDate(DateTime.now());
+        authenticatedUser.setSessionTime(DateTime.now().plusMinutes(15));
+        authenticatedUser.setLoginFrom(LoginFrom.DEV);
         return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
     }
 
-    private User getUser() {
+    private User user() {
         User user = new User();
         user.setName("Mati2");
         user.setSurname("Maasikas2");
         user.setUsername("mati2.maasikas2");
         user.setIdCode("12345678969");
         return userDao.createOrUpdate(user);
+    }
+
+    private void cleanUp(User user, AuthenticatedUser authenticatedUser) {
+        authenticatedUserDao.remove(authenticatedUser);
+        userDao.delete(user);
+    }
+
+    private void cleanUp(User user, AuthenticatedUser returnedUser1, AuthenticatedUser returnedUser2) {
+        authenticatedUserDao.remove(returnedUser1);
+        authenticatedUserDao.remove(returnedUser2);
+        userDao.delete(user);
     }
 
 }

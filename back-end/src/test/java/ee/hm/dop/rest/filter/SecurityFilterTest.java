@@ -22,12 +22,14 @@ import javax.ws.rs.core.UriInfo;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import ee.hm.dop.service.login.LogoutService;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +77,6 @@ public class SecurityFilterTest {
         String token = "token";
 
         expect(context.getHeaderString("Authentication")).andReturn(token);
-//        expect(request.getHeader("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(null);
         context.abortWith(EasyMock.capture(capturedResponse));
 
@@ -150,7 +151,6 @@ public class SecurityFilterTest {
 
         setExpects(token, authenticatedUser, user, "realUsername", true);
 
-//        expect(context.getUriInfo()).andReturn(uriInfo);
         expect(uriInfo.getRequestUri()).andReturn(new URI("https://www.boo.com/foo/duuu"));
 
         replay(uriInfo, request, session, context, authenticatedUserService, authenticatedUser, user);
@@ -189,7 +189,7 @@ public class SecurityFilterTest {
         expect(context.getHeaderString("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
-        expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusDays(1).minusSeconds(1));
+        expect(authenticatedUser.getSessionTime()).andReturn(DateTime.now().minusDays(1).minusSeconds(1));
         expect(context.getHeaderString("Username")).andReturn("realUsername");
         expect(user.getUsername()).andReturn("realUsername");
 
@@ -203,11 +203,10 @@ public class SecurityFilterTest {
 
     private void setExpects(String token, AuthenticatedUser authenticatedUser, User user, String returnedUser, boolean success) {
         expect(context.getHeaderString("Authentication")).andReturn(token);
-//        expect(request.getHeader("Authentication")).andReturn(token);
         expect(authenticatedUserService.getAuthenticatedUserByToken(token)).andReturn(authenticatedUser);
         expect(authenticatedUser.getUser()).andReturn(user);
-        expect(authenticatedUser.getLoginDate()).andReturn(DateTime.now().minusHours(2)).times(0, 1);
-//        expect(request.getHeader("Username")).andReturn(returnedUser);
+        expect(authenticatedUser.getLoginDate()).andReturn(LocalDateTime.now().toDateTime(DateTimeZone.UTC)).times(0, 1);
+        expect(authenticatedUser.getSessionTime()).andReturn(LocalDateTime.now().plusMinutes(15).toDateTime(DateTimeZone.UTC)).times(0, 1);
         expect(context.getHeaderString("Username")).andReturn(returnedUser);
         expect(user.getUsername()).andReturn("realUsername");
         if (success)

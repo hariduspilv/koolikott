@@ -30,11 +30,7 @@ class controller extends Controller {
 controller.$inject = [
     '$scope',
     '$rootScope',
-    '$translate',
     '$mdDialog',
-    'authenticationService',
-    'translationService',
-    'authenticatedUserService',
     'userLocatorService',
     '$location'
 ]

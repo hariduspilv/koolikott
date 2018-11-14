@@ -3,8 +3,8 @@ package ee.hm.dop.rest.filter;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import ee.hm.dop.rest.filter.dto.DopSecurityContext;
+import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,18 +32,15 @@ public class SecurityFilter implements ContainerRequestFilter {
             AuthenticatedUser authenticatedUser = authenticatedUserService().getAuthenticatedUserByToken(token);
             if (authenticatedUser == null) {
                 userHasAlreadyLoggedOut(requestContext);
-                logger.error("user has already logged out");
                 return;
             }
             String username = authenticatedUser.getUser().getUsername();
             if (!username.equals(requestContext.getHeaderString("Username"))) {
-                requestHeaderAndUsernameDontMatch(requestContext, authenticatedUser);
-                logger.error("user request header and username do not match: " + username);
+                requestHeaderAndUsernameDontMatch(requestContext, username);
                 return;
             }
-            if (!isSessionValid(authenticatedUser)) {
-                sessionExpired(requestContext, authenticatedUser);
-                logger.error("session has expired" + username);
+            if (SessionUtil.sessionInValid(authenticatedUser)) {
+                sessionExpired(requestContext, username);
                 return;
             }
 
@@ -53,21 +50,19 @@ public class SecurityFilter implements ContainerRequestFilter {
         }
     }
 
-    public void sessionExpired(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+    private void sessionExpired(ContainerRequestContext requestContext, String username) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+        logger.error("session has expired" + username);
     }
 
-    public void requestHeaderAndUsernameDontMatch(ContainerRequestContext requestContext, AuthenticatedUser authenticatedUser) {
+    private void requestHeaderAndUsernameDontMatch(ContainerRequestContext requestContext, String username) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
+        logger.error("user request header and username do not match: " + username);
     }
 
-    public void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
+    private void userHasAlreadyLoggedOut(ContainerRequestContext requestContext) {
         requestContext.abortWith(Response.status(HTTP_AUTHENTICATION_TIMEOUT).build());
-    }
-
-    private boolean isSessionValid(AuthenticatedUser authenticatedUser) {
-        DateTime yesterday = DateTime.now().minusDays(1);
-        return yesterday.isBefore(authenticatedUser.getLoginDate());
+        logger.error("user has already logged out");
     }
 
     protected AuthenticatedUserService authenticatedUserService() {

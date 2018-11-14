@@ -1,35 +1,31 @@
-'use strict';
+class controller extends Controller {
+    constructor(...args) {
+        super(...args)
+        this.updateTimer = undefined;
+    }
 
-angular.module('koolikottApp')
-    .factory('userLocatorService',
-        [
-            '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', '$interval',
-            function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, $interval) {
+    saveUserLocation() {
+        if (this.authenticatedUserService.isAuthenticated())
+            this.serverCallService.makePost('rest/user/saveLocation', {location: this.$location.url()})
+    }
 
-                let updateTimer;
+    getUserLocation() {
+        return this.serverCallService.makeGet('rest/user/getLocation')
+    }
 
-                function saveUserLocation() {
-                    if (authenticatedUserService.isAuthenticated())
-                        serverCallService.makePost('rest/user/saveLocation', {location : $location.url()})
-                }
+    startTimer() {
+        this.updateTimer = this.$interval(this.saveUserLocation.bind(this), 60e3) //1 min
+    }
 
-                return {
+    stopTimer() {
+        this.$interval.cancel(this.updateTimer)
+    }
+}
 
-                    getUserLocation: function() {
-                        return serverCallService.makeGet('rest/user/getLocation')
-                    },
-
-                    saveUserLocation: function() {
-                        saveUserLocation()
-                    },
-
-                    startTimer: function() {
-                        updateTimer = $interval(saveUserLocation, 60000)
-                    },
-
-                    stopTimer: function() {
-                        $interval.cancel(updateTimer)
-                    }
-                }
-            }
-        ]);
+controller.$inject = [
+    '$interval',
+    '$location',
+    'serverCallService',
+    'authenticatedUserService',
+]
+factory('userLocatorService', controller)

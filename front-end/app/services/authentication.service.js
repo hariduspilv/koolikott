@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService', 'userSessionService',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService, userSessionService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
@@ -19,7 +19,10 @@ angular.module('koolikottApp')
             } else {
                 $rootScope.justLoggedIn = true;
                 authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-                serverCallService.makeGet("rest/user/role", {}, getRoleSuccess, loginFail);
+                serverCallService.makeGet("rest/user/role")
+                    .then(({data}) => {
+                        getRoleSuccess(data)
+                    }, () => loginFail);
             }
         }
 
@@ -134,18 +137,6 @@ angular.module('koolikottApp')
             )
         }
 
-        function logoutSuccess(data) {
-            authenticatedUserService.removeAuthenticatedUser();
-            $rootScope.$broadcast('logout:success');
-            enableLogin();
-            userLocatorService.stopTimer();
-            $rootScope.showLocationDialog = true;
-        }
-
-        function logoutFail(data, status) {
-            //ignore
-        }
-
         function disableLogin() {
             isAuthenticationInProgress = true;
         }
@@ -184,6 +175,19 @@ angular.module('koolikottApp')
             }
         }
 
+        function endSession(url) {
+            userLocatorService.saveUserLocation();
+            userLocatorService.stopTimer();
+            $rootScope.showLocationDialog = true;
+            userSessionService.stopTimer();
+            serverCallService.makePost(url)
+                .then(() => {
+                    authenticatedUserService.removeAuthenticatedUser();
+                    $rootScope.$broadcast('logout:success');
+                    enableLogin();
+                });
+        }
+
         return {
 
             loginSuccess: function (userStatus) {
@@ -196,9 +200,11 @@ angular.module('koolikottApp')
             },
 
             logout: function() {
-                userLocatorService.saveUserLocation();
-                userLocatorService.stopTimer();
-                serverCallService.makePost("rest/logout", {}, logoutSuccess, logoutFail);
+                endSession('rest/user/logout')
+            },
+
+            terminate: function() {
+                endSession('rest/user/terminateSession')
             },
 
             loginWithIdCard: function() {
@@ -210,10 +216,6 @@ angular.module('koolikottApp')
                 serverCallService.makeGet("rest/login/idCard", {}, loginSuccess, loginFail);
             },
 
-            /*loginWithTaat: function() {
-                loginWithOAuth("/rest/login/taat");
-            },*/
-
             loginWithEkool : function() {
                 loginWithOAuth("/rest/login/ekool");
             },
@@ -223,7 +225,7 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode} = inputParams;
+                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -241,7 +243,8 @@ angular.module('koolikottApp')
                     const params = {
                         token,
                         agreementId : agreement,
-                        existingUser
+                        existingUser,
+                        loginFrom
                     }
                     showGdprModalAndAct(params);
                 }

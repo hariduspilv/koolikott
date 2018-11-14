@@ -2,6 +2,7 @@ package ee.hm.dop.service.login;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacAlgorithms;
@@ -42,7 +43,7 @@ public class StuudiumService {
         if (isBlank(stuudiumUser.getIdCode())) {
             return UserStatus.missingStuudiumIdCode();
         }
-        return loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName());
+        return loginService.login(stuudiumUser.getIdCode(), stuudiumUser.getFirstName(), stuudiumUser.getLastName(), LoginFrom.STUUDIUM);
     }
 
     private StuudiumUser getStuudiumUser(String token) {

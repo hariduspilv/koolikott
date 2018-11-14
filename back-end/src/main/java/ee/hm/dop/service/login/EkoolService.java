@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
+import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
@@ -48,7 +49,7 @@ public class EkoolService {
         if (isBlank(person.getIdCode())) {
             return UserStatus.missingEkoolIdCode();
         }
-        return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName());
+        return loginService.login(person.getIdCode(), person.getFirstName(), person.getLastName(), LoginFrom.EKOOL);
     }
 
     private Person getPerson(EkoolToken ekoolToken) {
