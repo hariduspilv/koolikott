@@ -55,16 +55,18 @@
               aria-label="Ava/sulge hooldusteade"
               id="open-additional-info"
               class="md-primary no-margin"
-              data-ng-click="maintenanceNotice.isVisible = !maintenanceNotice.isVisible"
+              data-ng-click="$ctrl.maintenanceVisible()"
             >
               <span data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></span>
-              <md-icon>{{ maintenanceNotice.isVisible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
+              <md-icon>{{ visible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
             </md-button>
-            <div data-ng-show="maintenanceNotice.isVisible" style="width: 100%">
+            <div data-ng-if="visible" style="width: 100%">
               <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                 <label data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></label>
-                <textarea name="notice" ng-model="noticesAndDescriptions[lang].notice"
-                          id="add-landing-page-notice-input"></textarea>
+                <textarea name="notice"
+                          ng-model="noticesAndDescriptions[lang].notice"
+                          id="add-landing-page-notice-input"
+                rows="2"></textarea>
               </md-input-container>
             </div>
           </div>

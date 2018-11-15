@@ -7,7 +7,6 @@
 
             this.landingPageLanguages = ['ET', 'EN', 'RU']
             this.initEmptyLandingPageEdit()
-            this.isLandingPage()
             if (this.isLandingPage()) {
                 this.getNoticeAndTranslationString()
             }
@@ -438,6 +437,7 @@
         cancelEdit() {
 
             this.$scope.isEditMode = false
+            this.$scope.visible = false
             this.setNoticesAndDescriptions()
         }
 
@@ -557,6 +557,7 @@
                         this.toastService.show('LANDING_PAGE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.isEditMode = false
+                        this.$scope.visible = false
                         this.getNoticeAndTranslationString()
                     }
                 })
@@ -565,7 +566,12 @@
         isLandingPage() {
             return this.$scope.$ctrl.home
         }
+
+
+        maintenanceVisible() {
+            return this.$scope.visible = !this.$scope.visible
     }
+}
 
     controller.$inject = [
         '$scope',
@@ -580,6 +586,7 @@
         'authenticatedUserService',
         'toastService',
         'translationService',
+        '$route',
     ]
     component('dopInfiniteSearchResult', {
         bindings: {
