@@ -5,6 +5,37 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
+        window.addEventListener('scroll', (e) => {
+
+            let allElements = document.querySelectorAll('.portfolio-chapter')
+
+            allElements.forEach( (el) => {
+                if (this.isElementInViewport(el)) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (!window.location.href.includes('&chapterName') && !window.location.hash.includes(el.id)) {
+                        let url = this.$location.url().split('#')[0] + '#' + el.id;
+                        this.$location.url(url)
+                        history.pushState({}, '', url)
+                    }
+                    else if (window.location.href.includes('&chapterName') && !window.location.hash.includes(el.id)) {
+                        let url = this.$location.url().split('&chapterName')[0] + '#' + el.id;
+                        this.$location.url(url)
+                        history.pushState({}, '', url)
+                    }
+                }
+            })
+            /*if (this.isElementInViewport(element = document.querySelector('.portfolio-chapter'))) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('visible: ' + element.id)
+            } else {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('not visible')
+            }*/
+        });
+
         $('body').materialScrollTop({ offset: 300 })
         const storedPortfolio = this.storageService.getPortfolio()
 
@@ -45,6 +76,7 @@ class controller extends Controller {
                 this.setPortfolio(value)
         })
     }
+
     getPortfolio() {
         const { id } = this.$route.current.params
         const fail = () => {
@@ -74,6 +106,20 @@ class controller extends Controller {
                     .makePost('rest/learningObject/increaseViewCount', createPortfolio(this.$scope.portfolio.id))
         }, 1000)
     }
+
+    isElementInViewport (el) {
+        if (typeof jQuery === "function" && el instanceof jQuery) {
+            el = el[0];
+        }
+
+        let rect = el.getBoundingClientRect();
+
+        return (
+            rect.top >= -100 && rect.top <= 440 &&
+            rect.left >= 0
+        );
+    }
+
     setPortfolio(portfolio, isLocallyStored = true) {
         this.$scope.portfolio = portfolio
         this.storageService.setPortfolio(portfolio)
