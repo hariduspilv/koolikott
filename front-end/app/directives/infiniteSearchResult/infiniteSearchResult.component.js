@@ -586,7 +586,6 @@
         'authenticatedUserService',
         'toastService',
         'translationService',
-        '$route',
     ]
     component('dopInfiniteSearchResult', {
         bindings: {
