@@ -32,7 +32,7 @@ public class TranslationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTranslations() {
-        return Response.ok(translationService.getTranslations()).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_120).build();
+        return Response.ok(translationService.getTranslations()).header(HttpHeaders.CACHE_CONTROL, 0).build();
     }
 
 
