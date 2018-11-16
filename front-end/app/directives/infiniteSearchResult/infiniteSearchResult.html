@@ -9,7 +9,7 @@
       class="md-headline"
       data-ng-bind="notice"></h1>
   <!-- Edit landing page description and notice -->
-  <form name="updateLandingPageForm" style="width: 100%" data-ng-if="isEditMode">
+  <form name="updateLandingPageForm" flex="100" class="flex flex-col" data-ng-if="isEditMode">
     <md-dialog-content>
       <div
         data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
@@ -48,7 +48,7 @@
             </md-icon>
           </md-button>
         </div>
-        <div data-flex-order="3" style="width: 100%">
+        <div data-flex-order="3" flex="100" class="flex flex-col">
           <div layout="column" layout-align="start start"
                data-ng-if="isEditMode">
             <md-button
@@ -60,7 +60,7 @@
               <span data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></span>
               <md-icon>{{ visible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
             </md-button>
-            <div data-ng-if="visible" style="width: 100%">
+            <div data-ng-if="visible" class="maintenance-width">
               <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                 <label data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></label>
                 <textarea name="notice"
