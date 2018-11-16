@@ -1,3 +1,14 @@
+## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/issues/?jql=project%20%3D%20EK%20AND%20fixVersion%20%3D%201.25.0) 
+
+### Muutunud
+* Esilehe teavitustekst sisestamine [EK-49](https://projektid.hitsa.ee/jira/browse/EK-49)
+* Esilehe teavitusteksti kuvamine [EK-50](https://projektid.hitsa.ee/jira/browse/EK-50)
+* Kasutussessiooni muutmine ja sessiooni lõppemisel kasutaja teavitamine [EK-51](https://projektid.hitsa.ee/jira/browse/EK-51)
+* Detailvaatel litsentsi ikooni tooltipis kuvatakse litsentsi täispikk nimetus [EK-75](https://projektid.hitsa.ee/jira/browse/EK-75)
+* Materjali ja kogumiku modaalidele lisaks litsentsi nimetusele lisatud litsentsi lühend [EK-76](https://projektid.hitsa.ee/jira/browse/EK-76)
+* Detailvaatest kommenteerimise, ja up/down like nupud ära peita [EK-77](https://projektid.hitsa.ee/jira/browse/EK-77)
+* Rohkem logimist sisselogimisel [EK-93](https://projektid.hitsa.ee/jira/browse/EK-93)
+
 ## e-Koolikott [1.24.0](https://github.com/hariduspilv/koolikott/milestone/24) 
 
 ### Muutunud
