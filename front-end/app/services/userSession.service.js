@@ -8,7 +8,7 @@
                     .then(({data: alertTime}) => {
                         this.getSessionTime()
                             .then(({data: session}) => {
-                                if (session.continueSession && session.minRemaining > 0 && session.minRemaining <= alertTime.parseInt()) {
+                                if (session.continueSession && session.minRemaining > 0 && session.minRemaining <= parseInt(alertTime)) {
                                     if (!this.sessionDialogIsOpen) {
                                         this.sessionDialogIsOpen = true
                                         this.$mdDialog.show({
