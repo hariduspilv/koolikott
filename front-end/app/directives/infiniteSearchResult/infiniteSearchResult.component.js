@@ -11,6 +11,7 @@
                 this.getNoticeAndTranslationString()
             }
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0]
+            this.$rootScope.$on('logout:success', () =>  this.$scope.isEditMode = false);
         }
 
         $onDestroy() {
@@ -18,6 +19,8 @@
             this.searchService.setIsExact('');
             this.searchService.setDetails('');
         }
+
+
 
         $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home}) {
             if (title && title.currentValue !== title.previousValue) this.setTitle()

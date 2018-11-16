@@ -48,16 +48,13 @@ class controller extends Controller {
         })
 
         this.$scope.$watch(() => this.$location.url(), () => {
-            /*if (this.$location.url() === '/'){
-                this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
-            }*/
             this.$rootScope.isViewPortfolioAndEdit = (
                 this.$location.url().indexOf('/portfolio') !== -1 ||
                 this.$location.url().indexOf('/search') !== -1
             )
         }, true)
 
-        this.$scope.$watch(() => this.authenticatedUserService.getUser(), user => {
+        this.$scope.$watch(() => this.authenticatedUserService.getUser(), () => {
             this.userChange()
         }, true)
         this.$scope.$on('header:red', () => this.$scope.isHeaderRed = true)
