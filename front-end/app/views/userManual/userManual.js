@@ -5,7 +5,6 @@
         constructor(...args) {
             super(...args)
             this.getUserManuals();
-            $('body').materialScrollTop({ offset: 300 })
         }
 
         getUserManuals() {

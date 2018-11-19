@@ -397,7 +397,6 @@
         }
 
         buildConstants() {
-            $('body').materialScrollTop({offset: 300})
             this.$scope.items = []
             this.selectedMaxCount = 0
             this.distinctCount = {similar: 0, exact: 0}

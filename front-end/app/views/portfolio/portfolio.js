@@ -5,7 +5,6 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
-        $('body').materialScrollTop({ offset: 300 })
         const storedPortfolio = this.storageService.getPortfolio()
 
         if (storedPortfolio &&
