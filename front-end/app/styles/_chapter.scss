@@ -73,10 +73,6 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
   &.is-edit-mode md-card-content {
     min-height: 20rem;
   }
-
-  @media (max-width: 959px) {
-    margin-top: 5rem;
-  }
 }
 
 // title view
