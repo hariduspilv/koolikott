@@ -77,56 +77,48 @@
             </div>
           </div>
           <!-- Meta -->
-          <div class="card-lg__container card-lg__container--padding-l-r" layout="row">
+          <div class="card-lg__container card-lg__container--padding-l-r" layout="column">
             <!-- Education -->
-            <div flex>
+            <div flex class="ellipsis--medium">
               <p class="md-caption caption-light">
                 <span data-translate="DETAIL_VIEW_EDUCATIONAL_CONTEXT" id="taxon-close"></span>
               </p>
-              <p class="ellipsis ellipsis--2 ellipsis--medium">
                 <span data-ng-repeat="educationalContext in taxonObject.educationalContexts track by $index">
                   <span data-translate="{{educationalContext}}"></span><span
                   data-ng-bind="$index < taxonObject.educationalContexts.length - 1 ? ', ' : ''"></span>
                 </span>
                 <span data-ng-if="!taxonObject.educationalContexts.length" data-translate="UNKNOWN">Unknown</span>
-              </p>
             </div>
             <!-- Domain -->
-            <div flex>
+            <div flex class="ellipsis--medium">
               <p class="md-caption caption-light">
                 <span data-translate="{{isVocationalOnly ? 'VOCATIONAL_EDUCATION_DOMAIN' : 'DETAIL_VIEW_DOMAIN'}}"></span>
               </p>
-              <p class="ellipsis ellipsis--2 ellipsis--medium">
                 <span data-ng-repeat="taxon in taxonObject.domainGroup track by $index">
                   <span data-translate="{{taxon}}"></span><span
                   data-ng-bind="$index < taxonObject.domainGroup.length - 1 ? ', ' : ''"></span>
                 </span>
                 <span data-ng-if="!taxonObject.domainGroup.length" data-translate="UNKNOWN">Unknown</span>
-              </p>
             </div>
             <!-- Topic -->
-            <div flex data-ng-if="taxonObject.topics.length">
+            <div flex data-ng-if="taxonObject.topics.length" class="ellipsis--medium">
               <p class="md-caption caption-light">
                 <span data-translate="{{isVocationalOnly ? 'VOCATIONAL_EDUCATION_TOPIC' : 'TAXON_PATH_TOPIC'}}"></span>
               </p>
-              <p class="ellipsis ellipsis--2 ellipsis--medium">
                 <span data-ng-repeat="topic in taxonObject.topics track by $index">
                   <span data-translate="{{topic}}"></span><span
                   data-ng-bind="$index < taxonObject.topics.length - 1 ? ', ' : ''"></span>
                 </span>
-              </p>
             </div>
             <!-- Subtopic -->
-            <div flex data-ng-if="taxonObject.subtopics.length">
+            <div flex data-ng-if="taxonObject.subtopics.length" class="ellipsis--medium">
               <p class="md-caption caption-light">
                 <span data-translate="TAXON_PATH_SUBTOPIC"></span>
               </p>
-              <p class="ellipsis ellipsis--2 ellipsis--medium">
                 <span data-ng-repeat="subtopic in taxonObject.subtopics track by $index">
                   <span data-translate="{{subtopic}}"></span><span
                   data-ng-bind="$index < taxonObject.subtopics.length - 1 ? ', ' : ''"></span>
                 </span>
-              </p>
             </div>
           </div>
           <md-divider class="md-default-theme"></md-divider>
