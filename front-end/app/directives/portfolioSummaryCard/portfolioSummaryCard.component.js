@@ -17,11 +17,8 @@ class controller extends Controller {
         };
 
         this.deletePortfolio = this.deletePortfolio.bind(this)
-        this.getTaxonObject = this.getTaxonObject.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
 
-        this.eventService.subscribe(this.$scope, 'taxonService:mapInitialized', this.getTaxonObject)
-        this.eventService.subscribe(this.$scope, 'portfolio:reloadTaxonObject', this.getTaxonObject)
         this.eventService.notify('portfolio:reloadTaxonObject')
 
         // Main purpose of this watch is to handle situations
@@ -145,14 +142,6 @@ class controller extends Controller {
         })
 
         return educationalContexts
-    }
-    getTaxonObject() {
-        if (this.portfolio && this.portfolio.taxons)
-            this.$scope.taxonObject = this.taxonGroupingService.getTaxonObject(this.portfolio.taxons)
-
-        if (this.$scope.taxonObject) {
-            this.$scope.isVocationalOnly = _.every(this.$scope.taxonObject.educationalContexts, o => o === 'VOCATIONALEDUCATION')
-        }
     }
     showEditMetadataDialog() {
         this.storageService.setPortfolio(this.portfolio)

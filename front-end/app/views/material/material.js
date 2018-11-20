@@ -151,9 +151,6 @@ angular.module('koolikottApp')
                 getContentType();
                 processMaterial();
 
-                eventService.subscribe($scope, 'taxonService:mapInitialized', getTaxonObject);
-                eventService.subscribe($scope, 'material:reloadTaxonObject', getTaxonObject);
-
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.material.visibility);
@@ -221,13 +218,6 @@ angular.module('koolikottApp')
             $scope.dotsAreShowing = function () {
                 return $rootScope.learningObjectDeleted === false || $scope.isAdmin();
             };
-
-            function getTaxonObject() {
-                if ($scope.material && $scope.material.taxons) {
-                    $scope.taxonObject = taxonGroupingService.getTaxonObject($scope.material.taxons);
-                }
-                $scope.isVocationalOnly = _.every($scope.taxonObject.educationalContexts, o => o === 'VOCATIONALEDUCATION')
-            }
 
             function getSignedUserData() {
                 serverCallService.makeGet("rest/user/getSignedUserData", {}, getSignedUserDataSuccess, getSignedUserDataFail);
