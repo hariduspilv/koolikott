@@ -16,9 +16,6 @@
                     }
                 });
         }
-        isLoggedIn() {
-            return this.authenticatedUserService.isAuthenticated()
-        }
     }
 
     controller.$inject = [

@@ -7,12 +7,8 @@
             $('body').materialScrollTop({ offset: 300 })
         }
 
-        isLoggedIn() {
-            return this.authenticatedUserService.isAuthenticated()
-        }
-
-        isEditPage() {
-            return this.$location.path() === '/portfolio/edit'
+        showScrollTopHigher() {
+            return this.authenticatedUserService.isAuthenticated() && this.$location.path() !== '/portfolio/edit'
         }
     }
 
@@ -24,7 +20,7 @@
     component('dopScrollTop', {
         controller,
         template: `
-            <button data-ng-class="{ 'higher': $ctrl.isLoggedIn() && !$ctrl.isEditPage() }" class="material-scrolltop" type="button">
+            <button data-ng-class="{ 'higher': $ctrl.showScrollTopHigher() }" class="material-scrolltop" type="button">
                 <md-tooltip md-direction="left"><span data-translate="BACK_TO_THE_TOP">Back to the top</span></md-tooltip>
             </button>
         `

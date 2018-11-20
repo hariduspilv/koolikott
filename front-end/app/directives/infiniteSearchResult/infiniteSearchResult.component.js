@@ -387,10 +387,6 @@
             }
         }
 
-        isLoggedIn() {
-            return this.authenticatedUserService.isAuthenticated()
-        }
-
         isAdmin() {
             return this.authenticatedUserService.isAdmin()
 

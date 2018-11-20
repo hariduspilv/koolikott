@@ -19,7 +19,6 @@ class controller extends Controller {
         this.$scope.newComment = {}
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
-        this.$scope.isLoggedIn = () => this.authenticatedUserService.isAuthenticated();
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio, oldPortfolio) => {
             this.eventService.notify('portfolio:reloadTaxonObject')
