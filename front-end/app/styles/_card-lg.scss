@@ -26,6 +26,12 @@
     z-index: 1;
     margin-top: $md-padding * 1.5;
 
+    @media (max-width: $layout-breakpoint-sm) {
+      position: static;
+      justify-content: flex-end;
+      order: -1;
+    }
+
     .md-button {
       margin: 0;
     }
@@ -154,6 +160,11 @@
   margin: 0;
   position: relative;
   z-index: 2;
+
+  @media (max-width: $layout-breakpoint-sm) {
+    max-width: 100% !important;
+    font-size: 1.5rem;
+  }
 }
 
 // New styles
@@ -182,6 +193,11 @@
   padding: $md-padding * 1.5;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: $layout-breakpoint-sm) {
+    flex-direction: column;
+    padding-top: 0;
+  }
 
   &--border-left {
     border: none;
