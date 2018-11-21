@@ -1,4 +1,4 @@
-## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/issues/?jql=project%20%3D%20EK%20AND%20fixVersion%20%3D%201.25.0) 
+## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/issues/?jql=project%20%3D%20EK%20AND%20fixVersion%20%3D%201.25.0) (Toodangusse paigaldatud 16.11.2018)
 
 ### Muutunud
 * Esilehe teavitustekst sisestamine [EK-49](https://projektid.hitsa.ee/jira/browse/EK-49)
@@ -9,7 +9,7 @@
 * Detailvaatest kommenteerimise, ja up/down like nupud ära peita [EK-77](https://projektid.hitsa.ee/jira/browse/EK-77)
 * Rohkem logimist sisselogimisel [EK-93](https://projektid.hitsa.ee/jira/browse/EK-93)
 
-## e-Koolikott [1.24.0](https://github.com/hariduspilv/koolikott/milestone/24) 
+## e-Koolikott [1.24.0](https://github.com/hariduspilv/koolikott/milestone/24) (Toodangusse paigaldatud 07.11.2018)
 
 ### Muutunud
 * Sisseloginud kasutaja asukohta lehel salvestatakse ning uuesti sisselogimisel on kasutajal võimalik suunduda viimati külastatud asukohale [#355](https://github.com/hariduspilv/koolikott/issues/355)
