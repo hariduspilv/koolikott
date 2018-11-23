@@ -1,3 +1,9 @@
+## e-Koolikott [1.26.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10500)
+
+### Muutunud
+*
+*
+
 ## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10401) (Toodangusse paigaldatud ....11.2018)
 
 ### Muutunud
