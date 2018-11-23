@@ -1,4 +1,4 @@
-## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/issues/?jql=project%20%3D%20EK%20AND%20fixVersion%20%3D%201.25.0) (Toodangusse paigaldatud 16.11.2018)
+## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/issues/?jql=project%20%3D%20EK%20AND%20fixVersion%20%3D%201.25.0) (Toodangusse paigaldatud ....11.2018)
 
 ### Muutunud
 * Esilehe teavitustekst sisestamine [EK-49](https://projektid.hitsa.ee/jira/browse/EK-49)
