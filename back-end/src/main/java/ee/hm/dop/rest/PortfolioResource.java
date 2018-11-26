@@ -86,7 +86,7 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(Portfolio portfolio) {
-        return portfolioCopier.copy(portfolio, getLoggedInUser());
+        return portfolioService.copy(portfolio, getLoggedInUser());
     }
 
     @POST

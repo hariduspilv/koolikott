@@ -14,53 +14,30 @@ angular.module('koolikottApp')
                 $scope.$watch('newPicture', onNewPictureChange.bind(this));
                 $scope.$watchCollection('invalidPicture', onInvalidPictureChange.bind(this));
 
-                function getTargetGroups(portfolioClone) {
-                    return taxonService.getEducationalContext($scope.newPortfolio.taxons[0]).name === 'VOCATIONALEDUCATION' ? [] : portfolioClone.targetGroups;
-                }
-
                 function init() {
-                    let portfolio = storageService.getEmptyPortfolio();
-
-                    if (!portfolio) portfolio = storageService.getPortfolio();
-                    else storageService.setEmptyPortfolio(null);
+                    $scope.portfolio = getPortfolio();
+                    getMaxPictureSize();
 
                     metadataService.loadLicenseTypes(setLicenseTypes.bind(this));
                     $scope.newPortfolio = createPortfolio();
-                    $scope.portfolio = portfolio;
-                    $scope.newPortfolio.chapters = portfolio.chapters;
+                    $scope.newPortfolio.chapters = $scope.portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
                     $scope.isVocationalEducation = true
 
-                    if ($scope.portfolio.id != null) {
-                        $scope.isEditPortfolio = true;
-                        let portfolioClone = angular.copy(portfolio);
-
-                        $scope.newPortfolio.title = portfolioClone.title;
-                        $scope.newPortfolio.licenseType = portfolioClone.licenseType;
-                        $scope.newPortfolio.summary = portfolioClone.summary;
-                        $scope.newPortfolio.taxons = portfolioClone.taxons;
-                        $scope.newPortfolio.targetGroups = getTargetGroups(portfolioClone);
-
-                        $scope.newPortfolio.tags = portfolioClone.tags;
-                        if (portfolioClone.picture) {
-                            $scope.newPortfolio.picture = portfolioClone.picture;
-                            const {name, surname} = authenticatedUserService.getUser();
-                            if ($scope.newPortfolio.picture.author === `${name} ${surname}`) {
-                                $scope.isUserAuthor = true;
-                            }
-                        }
+                    $scope.mode = !$scope.portfolio.id
+                        ? 'ADD'
+                        : $scope.portfolio.copy
+                            ? 'COPY' : 'EDIT';
+                    if ($scope.mode === 'EDIT' || $scope.mode === 'COPY') {
+                        setExistingFields()
                     }
-
                     /**
                      * Immediately show license type field error in edit-mode if it is not filled to tell the user
                      * that it is now required before any changes may be saved.
                      */
-                    if ($scope.isEditPortfolio && ($scope.newPortfolio.licenseType === undefined)) {
-                        $timeout(() =>
-                            $scope.addPortfolioForm.licenseType.$setTouched()
-                        )
+                    if (($scope.mode === 'EDIT' || $scope.mode === 'COPY') && !$scope.newPortfolio.licenseType) {
+                        $timeout(() => $scope.addPortfolioForm.licenseType.$setTouched())
                     }
-
                     /**
                      * Set license type to “All rights reserved” if user chooses “Do not know” option.
                      */
@@ -68,28 +45,16 @@ angular.module('koolikottApp')
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.licenseType = $scope.allRightsReserved
                     })
-                    $scope.$watch('newPortfolio.taxons', (selectedValue, previousValue) => {
-                        onTaxonsChange(selectedValue, previousValue)
+                    $scope.$watch('newPortfolio.taxons', (selectedValue) => {
+                        $scope.isVocationalEducation = isVocational(taxonService, selectedValue);
+                        if ($scope.isVocationalEducation) {
+                            $scope.newPortfolio.targetGroups = []
+                        }
                     }, true)
                     $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
                     })
-
-                    getMaxPictureSize();
-                }
-
-
-                function onTaxonsChange(currentValue, previousValue) {
-                    if (currentValue &&
-                        currentValue !== previousValue && isVocational(taxonService, currentValue)) {
-                        $scope.isVocationalEducation = true
-                        $scope.newPortfolio.targetGroups = []
-                    }
-                    else if (isVocational(taxonService, currentValue))
-                        $scope.isVocationalEducation = true
-                    else
-                        $scope.isVocationalEducation = false
                 }
 
                 $scope.cancel = function () {
@@ -102,8 +67,12 @@ angular.module('koolikottApp')
                     if ($scope.uploadingPicture) {
                         $timeout($scope.create, 500, false);
                     } else {
-                        let url = "rest/portfolio/create";
-                        serverCallService.makePost(url, $scope.newPortfolio, createPortfolioSuccess.bind(null, true), createPortfolioFailed, savePortfolioFinally);
+                        serverCallService.makePost(
+                            "rest/portfolio/create",
+                            $scope.newPortfolio,
+                            createPortfolioSuccess.bind(null, true),
+                            createPortfolioFailed,
+                            savePortfolioFinally);
                     }
                 };
 
@@ -115,8 +84,9 @@ angular.module('koolikottApp')
                     if (portfolio) {
                         eventService.notify('portfolio:reloadTaxonObject')
 
-                        if (!Array.isArray(portfolio.chapters) || !portfolio.chapters.length)
+                        if (!Array.isArray(portfolio.chapters) || !portfolio.chapters.length) {
                             portfolio.chapters = []
+                        }
 
                         storageService.setPortfolio(portfolio)
                         $mdDialog.hide()
@@ -134,17 +104,21 @@ angular.module('koolikottApp')
                         $location.url('/portfolio/edit?id=' + portfolio.id)
                     }
                 }
-                function createPortfolioFailed() {
-                    log('Creating portfolio failed.');
-                }
 
                 $scope.update = function () {
+                    updateOrCopy("rest/portfolio/update", $scope.update);
+                };
+
+                $scope.copy = function () {
+                    updateOrCopy("rest/portfolio/copy", $scope.copy);
+                };
+
+                function updateOrCopy(url, func) {
                     $scope.isSaving = true;
 
                     if ($scope.uploadingPicture) {
-                        $timeout($scope.create, 500, false);
+                        $timeout(func, 500, false);
                     } else {
-                        let url = "rest/portfolio/update";
                         $scope.portfolio.title = $scope.newPortfolio.title;
                         $scope.portfolio.summary = $scope.newPortfolio.summary;
                         $scope.portfolio.taxons = $scope.newPortfolio.taxons;
@@ -156,25 +130,39 @@ angular.module('koolikottApp')
                             $scope.portfolio.picture = $scope.newPortfolio.picture;
                         }
 
-                        serverCallService.makePost(url, $scope.portfolio, createPortfolioSuccess.bind(null, false), createPortfolioFailed, savePortfolioFinally);
+                        serverCallService.makePost(
+                            url,
+                            $scope.portfolio,
+                            createPortfolioSuccess.bind(null, false),
+                            createPortfolioFailed,
+                            savePortfolioFinally);
                     }
-                };
+                }
+
+                function setExistingFields() {
+                    let portfolioClone = angular.copy($scope.portfolio);
+
+                    $scope.newPortfolio.title = portfolioClone.title;
+                    $scope.newPortfolio.licenseType = portfolioClone.licenseType;
+                    $scope.newPortfolio.summary = portfolioClone.summary;
+                    $scope.newPortfolio.taxons = portfolioClone.taxons;
+                    $scope.newPortfolio.targetGroups = getTargetGroups(portfolioClone);
+                    $scope.newPortfolio.tags = portfolioClone.tags;
+                    if (portfolioClone.picture) {
+                        $scope.newPortfolio.picture = portfolioClone.picture;
+                        const {name, surname} = authenticatedUserService.getUser();
+                        if ($scope.newPortfolio.picture.author === `${name} ${surname}`) {
+                            $scope.isUserAuthor = true;
+                        }
+                    }
+                }
 
                 $scope.isEmpty = function (object) {
                     return _.isEmpty(object)
                 };
 
                 $scope.isValid = function () {
-                    let portfolio = $scope.newPortfolio;
-
-                    let hasCorrectTaxon = true;
-                    angular.forEach(portfolio.taxons, (key, value) => {
-                        if (!isTaxonSet(value)) {
-                            hasCorrectTaxon = false;
-                        }
-                    });
-
-                    return $scope.addPortfolioForm.$valid && hasCorrectTaxon;
+                    return $scope.addPortfolioForm.$valid && hasCorrectTaxon();
                 };
 
                 $scope.addNewTaxon = function () {
@@ -189,19 +177,16 @@ angular.module('koolikottApp')
 
                 function isTaxonSet(index) {
                     return $scope.newPortfolio.taxons[index] && $scope.newPortfolio.taxons[index].level && $scope.newPortfolio.taxons[index].level !== ".EducationalContext";
-                };
+                }
 
                 function getMaxPictureSize() {
-                    serverCallService.makeGet('/rest/picture/maxSize', {}, getMaxPictureSizeSuccess, getMaxPictureSizeFail);
-                }
-
-                function getMaxPictureSizeSuccess(data) {
-                    $scope.maxPictureSize = data;
-                }
-
-                function getMaxPictureSizeFail() {
-                    $scope.maxPictureSize = 10;
-                    console.log('Failed to get max picture size, using 10MB as default.');
+                    serverCallService.makeGet('/rest/picture/maxSize')
+                        .then(({data: size}) => {
+                            $scope.maxPictureSize = size;
+                        }, () => {
+                            $scope.maxPictureSize = 10;
+                            console.log('Failed to get max picture size, using 10MB as default.');
+                        });
                 }
 
                 function setLicenseTypes(data) {
@@ -243,6 +228,34 @@ angular.module('koolikottApp')
                         $scope.isUserAuthor = false;
                     }
                 };
+
+                function getPortfolio() {
+                    let portfolio = storageService.getEmptyPortfolio();
+                    if (portfolio) {
+                        storageService.setEmptyPortfolio(null);
+                        return portfolio;
+                    } else {
+                        return storageService.getPortfolio();
+                    }
+                }
+
+                function getTargetGroups(portfolioClone) {
+                    return taxonService.getEducationalContext($scope.newPortfolio.taxons[0]).name === 'VOCATIONALEDUCATION' ? [] : portfolioClone.targetGroups;
+                }
+
+                function createPortfolioFailed() {
+                    console.log('Creating portfolio failed.');
+                }
+
+                function hasCorrectTaxon() {
+                    const portfolio = $scope.newPortfolio;
+                    angular.forEach(portfolio.taxons, (key, value) => {
+                        if (!isTaxonSet(value)) {
+                            return false;
+                        }
+                    });
+                    return hasCorrectTaxon;
+                }
 
                 init();
             }

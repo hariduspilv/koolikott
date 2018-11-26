@@ -395,7 +395,7 @@ function containsMaterial(materials, selectedMaterial) {
 function isVocational(taxonService, currentValue) {
     return !currentValue
         .map(c => taxonService.getEducationalContext(c))
-        .filter(lo => lo.name !== 'VOCATIONALEDUCATION')
+        .filter(lo => lo && lo.name !== 'VOCATIONALEDUCATION')
         .length;
 }
 

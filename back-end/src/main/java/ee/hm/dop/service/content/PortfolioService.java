@@ -33,13 +33,20 @@ public class PortfolioService {
     private FirstReviewAdminService firstReviewAdminService;
     @Inject
     private PortfolioPermission portfolioPermission;
+    @Inject
+    private PortfolioCopier portfolioCopier;
+
+    public Portfolio create(Portfolio portfolio, User creator) {
+        TextFieldUtil.cleanTextFields(portfolio);
+        ValidatorUtil.mustNotHaveId(portfolio);
+        validateTitle(portfolio);
+        return save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+    }
 
     public Portfolio update(Portfolio portfolio, User user) {
-        Portfolio originalPortfolio = validateUpdate(portfolio, user);
-
         TextFieldUtil.cleanTextFields(portfolio);
 
-        originalPortfolio = portfolioConverter.setPortfolioUpdatableFields(originalPortfolio, portfolio);
+        Portfolio originalPortfolio = portfolioConverter.setFieldsToExistingPortfolio(validateUpdate(portfolio, user), portfolio);
         originalPortfolio.setUpdated(now());
 
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
@@ -52,13 +59,18 @@ public class PortfolioService {
         return updatedPortfolio;
     }
 
-    public Portfolio create(Portfolio portfolio, User creator) {
-        ValidatorUtil.mustNotHaveId(portfolio);
+    public Portfolio copy(Portfolio portfolio, User loggedInUser) {
         TextFieldUtil.cleanTextFields(portfolio);
-        return doCreate(portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(portfolio), creator, creator);
+
+        Portfolio originalPortfolio = validateCopy(portfolio, loggedInUser);
+
+        Portfolio copy = portfolioConverter.setFieldsToNewPortfolio(portfolio);
+        copy.setChapters(portfolioCopier.copyChapters(originalPortfolio.getChapters()));
+
+        return save(copy, loggedInUser, originalPortfolio.getCreator());
     }
 
-    Portfolio doCreate(Portfolio portfolio, User creator, User originalCreator) {
+    private Portfolio save(Portfolio portfolio, User creator, User originalCreator) {
         portfolio.setViews(0L);
         portfolio.setCreator(creator);
         portfolio.setOriginalCreator(originalCreator);
@@ -73,14 +85,26 @@ public class PortfolioService {
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
-        ValidatorUtil.mustHaveId(portfolio);
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        if (!portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {
+            throw ValidatorUtil.permissionError();
+        }
+        validateTitle(portfolio);
+        return originalPortfolio;
+    }
+
+    private Portfolio validateCopy(Portfolio portfolio, User loggedInUser) {
+        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
+        if (!portfolioPermission.canView(loggedInUser, originalPortfolio)) {
+            throw ValidatorUtil.permissionError();
+        }
+        validateTitle(portfolio);
+        return originalPortfolio;
+    }
+
+    private void validateTitle(Portfolio portfolio) {
         if (isEmpty(portfolio.getTitle())) {
             throw new WebApplicationException("Required field title must be filled.", Response.Status.BAD_REQUEST);
         }
-        Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
-        if (portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {
-            return originalPortfolio;
-        }
-        throw ValidatorUtil.permissionError();
     }
 }

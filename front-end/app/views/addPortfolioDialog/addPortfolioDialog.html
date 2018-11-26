@@ -3,11 +3,14 @@
   <form name="addPortfolioForm">
     <md-toolbar class="md-accent">
       <div class="md-toolbar-tools" flex>
-        <div data-ng-if="!isEditPortfolio">
+        <div data-ng-if="mode === 'ADD'">
           <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_LABEL"></h2>
         </div>
-        <div data-ng-if="isEditPortfolio">
+        <div data-ng-if="mode === 'EDIT'">
           <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_EDIT_LABEL"></h2>
+        </div>
+        <div data-ng-if="mode === 'COPY'">
+          <h2 data-translate="PORTFOLIO_METADATA_TOOLBAR_COPY_LABEL"></h2>
         </div>
         <span flex></span>
         <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
@@ -221,17 +224,23 @@
                  data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
-      <md-button aria-label="Loo kogumik" data-ng-if="!isEditPortfolio" id="add-portfolio-create-button"
+      <md-button aria-label="Loo kogumik" data-ng-if="mode === 'ADD'" id="add-portfolio-create-button"
                  data-ng-disabled="!isValid() || isSaving" data-ng-click="create()"
                  class="md-primary md-raised">
         <span data-translate="BUTTON_CREATE_PORTFOLIO"></span>
         <md-icon>arrow_forward</md-icon>
       </md-button>
-      <md-button aria-label="Muuda kogumikku" data-ng-if="isEditPortfolio" id="add-portfolio-edit-button"
+      <md-button aria-label="Muuda kogumikku" data-ng-if="mode === 'EDIT'" id="add-portfolio-edit-button"
                  data-ng-disabled="!isValid() || isSaving" data-ng-click="update()"
                  class="md-primary md-raised">
         <md-icon>arrow_forward</md-icon>
         <span data-translate="BUTTON_EDIT_PORTFOLIO"></span>
+      </md-button>
+      <md-button aria-label="Kopeeri kogumikku" data-ng-if="mode === 'COPY'" id="add-portfolio-copy-button"
+                 data-ng-disabled="!isValid() || isSaving" data-ng-click="copy()"
+                 class="md-primary md-raised">
+        <md-icon>arrow_forward</md-icon>
+        <span data-translate="BUTTON_COPY_PORTFOLIO"></span>
       </md-button>
       <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
                             data-ng-show="isSaving"></md-progress-circular>

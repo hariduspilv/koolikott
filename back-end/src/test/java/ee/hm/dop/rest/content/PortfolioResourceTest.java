@@ -239,7 +239,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void copyPortfolio() {
         login(USER_PEETER);
 
-        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_1), Portfolio.class);
+        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithIdAndTitle(PORTFOLIO_1, "1"), Portfolio.class);
         assertNotNull(copiedPortfolio);
         assertEquals(Long.valueOf(2), copiedPortfolio.getCreator().getId());
         assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
@@ -254,7 +254,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void copyPrivatePortfolioLoggedInAsNotCreator() {
         login(USER_MATI);
-        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithIdAndTitle(PORTFOLIO_7, "7"));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
@@ -262,7 +262,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void copyPrivatePortfolioLoggedInAsCreator() {
         login(USER_PEETER);
 
-        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithIdAndTitle(PORTFOLIO_7, "7"));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         Portfolio copiedPortfolio = response.readEntity(Portfolio.class);
         assertEquals(USER_PEETER.id, copiedPortfolio.getOriginalCreator().getId());
@@ -344,6 +344,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     private Portfolio portfolioWithTitle(String title) {
         Portfolio portfolio = new Portfolio();
+        portfolio.setTitle(title);
+        return portfolio;
+    }
+
+    private Portfolio portfolioWithIdAndTitle(Long id, String title) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(id);
         portfolio.setTitle(title);
         return portfolio;
     }

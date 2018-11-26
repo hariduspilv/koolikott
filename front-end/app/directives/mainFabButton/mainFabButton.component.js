@@ -56,18 +56,17 @@ class controller extends Controller {
                 locals: { isEditMode: false }
             })
 
-        this.$scope.copyPortfolio = () =>
-            this.serverCallService
-                .makePost('rest/portfolio/copy', this.createPortfolio(this.$route.current.params.id))
-                .then(({ data }) => {
-                    let portfolio = data;
-                    if (portfolio) {
-                        this.storageService.setPortfolio(portfolio)
-                        this.$rootScope.openMetadataDialog = true
-                        this.$mdDialog.hide()
-                        this.$location.url('/portfolio/edit?id=' + portfolio.id)
-                    }
-                })
+        this.$scope.copyPortfolio = () => {
+            const portfolio = this.storageService.getPortfolio();
+            if (!portfolio) console.log("copying failed")
+            portfolio.copy = true;
+            this.storageService.setEmptyPortfolio(portfolio)
+            this.$mdDialog.show({
+                templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                controller: 'addPortfolioDialogController',
+                fullscreen: false
+            })
+        }
 
         this.$scope.hasPermission = () =>
             this.authenticatedUserService.getUser() && !this.authenticatedUserService.isRestricted()

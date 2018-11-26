@@ -24,7 +24,7 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
     @Inject
     private LearningObjectDao learningObjectDao;
 
-    public Portfolio findByIdNotDeleted(long objectId) {
+    public Portfolio findByIdNotDeleted(Long objectId) {
         TypedQuery<Portfolio> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM Portfolio lo " +
                         "WHERE lo.id = :id AND lo.deleted = false", entity())
@@ -33,7 +33,7 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
         return getSingleResult(findByCode);
     }
 
-    public Portfolio findDeletedById(long portfolioId) {
+    public Portfolio findDeletedById(Long portfolioId) {
         TypedQuery<Portfolio> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM Portfolio lo " +
                         "WHERE lo.id = :id AND lo.deleted = true ", entity())
@@ -41,7 +41,7 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
         return getSingleResult(findByCode);
     }
 
-    public Portfolio findById(long portfolioId) {
+    public Portfolio findById(Long portfolioId) {
         TypedQuery<Portfolio> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM Portfolio lo WHERE lo.id = :id", entity()) //
                 .setParameter("id", portfolioId);
