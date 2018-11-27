@@ -147,7 +147,10 @@ class controller extends Controller {
         this.storageService.setPortfolio(this.portfolio)
         this.$mdDialog.show({
             templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-            controller: 'addPortfolioDialogController'
+            controller: 'addPortfolioDialogController',
+            locals: {
+                mode: 'EDIT'
+            },
         })
     }
     deletePortfolio() {

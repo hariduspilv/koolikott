@@ -1,10 +1,8 @@
-
-
 angular.module('koolikottApp')
     .controller('addPortfolioDialogController',
         [
-            '$scope', '$mdDialog', '$location', '$translate', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService',
-            function ($scope, $mdDialog, $location, $translate, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService) {
+            '$scope', '$mdDialog', '$location', '$translate', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService', 'locals',
+            function ( $scope, $mdDialog, $location, $translate, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService, locals) {
                 $scope.isSaving = false;
                 $scope.showHints = true;
                 $scope.isTouched = {};
@@ -15,19 +13,17 @@ angular.module('koolikottApp')
                 $scope.$watchCollection('invalidPicture', onInvalidPictureChange.bind(this));
 
                 function init() {
-                    $scope.portfolio = getPortfolio();
+                    const portfolio = getPortfolio();
+                    $scope.portfolio = portfolio;
                     getMaxPictureSize();
 
                     metadataService.loadLicenseTypes(setLicenseTypes.bind(this));
                     $scope.newPortfolio = createPortfolio();
-                    $scope.newPortfolio.chapters = $scope.portfolio.chapters;
+                    $scope.newPortfolio.chapters = portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
                     $scope.isVocationalEducation = true
 
-                    $scope.mode = !$scope.portfolio.id
-                        ? 'ADD'
-                        : $scope.portfolio.copy
-                            ? 'COPY' : 'EDIT';
+                    $scope.mode = locals.mode;
                     if ($scope.mode === 'EDIT' || $scope.mode === 'COPY') {
                         setExistingFields()
                     }
@@ -191,7 +187,7 @@ angular.module('koolikottApp')
 
                 function setLicenseTypes(data) {
                     $scope.licenseTypes = data
-                    $scope.doNotKnow = { id: 'doNotKnow' }
+                    $scope.doNotKnow = {id: 'doNotKnow'}
                     $scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
                 }
 

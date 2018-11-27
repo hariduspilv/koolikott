@@ -44,7 +44,10 @@ class controller extends Controller {
             this.$mdDialog.show({
                 templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                 controller: 'addPortfolioDialogController',
-                fullscreen: false
+                fullscreen: false,
+                locals: {
+                    mode: 'ADD'
+                }
             })
         }
 
@@ -59,12 +62,14 @@ class controller extends Controller {
         this.$scope.copyPortfolio = () => {
             const portfolio = this.storageService.getPortfolio();
             if (!portfolio) console.log("copying failed")
-            portfolio.copy = true;
             this.storageService.setEmptyPortfolio(portfolio)
             this.$mdDialog.show({
                 templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
                 controller: 'addPortfolioDialogController',
-                fullscreen: false
+                fullscreen: false,
+                locals: {
+                    mode: 'COPY'
+                }
             })
         }
 
