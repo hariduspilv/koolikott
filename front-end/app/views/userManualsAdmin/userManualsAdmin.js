@@ -43,8 +43,7 @@
         };
 
         getUserManuals() {
-            this.serverCallService
-                .makeGet('rest/admin/userManuals')
+            this.userManualsAdminService.getUserManuals()
                 .then(res => {
                     this.$scope.alldata = res.data
                     this.$scope.page = 1
@@ -55,8 +54,7 @@
         }
 
         addUserManual() {
-            this.serverCallService
-                .makePost('rest/admin/userManuals', this.$scope.newUserManual)
+            this.userManualsAdminService.addUserManual(this.$scope.newUserManual)
                 .then((response) => {
                     if (response.status === 200) {
                         this.getUserManuals();
@@ -67,8 +65,7 @@
         }
 
         deleteUserManual(userManual) {
-            this.serverCallService
-                .makePost('rest/admin/userManuals/delete', userManual)
+            this.userManualsAdminService.deleteUserManual(userManual)
                 .then(() => {
                     this.getUserManuals();
                 })
@@ -105,7 +102,8 @@
         'serverCallService',
         'sortService',
         'dialogService',
-        '$window'
+        '$window',
+        'userManualsAdminService',
     ]
     angular.module('koolikottApp').controller('userManualsAdminController', controller)
 }

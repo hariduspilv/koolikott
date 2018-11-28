@@ -96,4 +96,12 @@ public interface ConfigurationProperties {
     String AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES = "automatically.accept.reviewableChanges.days";
     String SESSION_DURATION_MINS = "session.duration.mins";
     String SESSION_ALERT_MINS = "session.alert.mins";
+
+    // E-mail
+    String EMAIL_ADDRESS = "email.address";
+    String EMAIL_HOST = "email.host";
+    String EMAIL_PORT = "email.port";
+    String EMAIL_USERNAME = "email.username";
+    String EMAIL_PASSWORD = "email.password";
+    String EMAIL_TRANSPORT_STRATEGY = "email.transport.strategy";
 }

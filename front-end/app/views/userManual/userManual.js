@@ -8,8 +8,7 @@
         }
 
         getUserManuals() {
-            this.serverCallService
-                .makeGet('rest/admin/userManuals')
+            this.userManualsAdminService.getUserManuals()
                 .then(({data}) => {
                     if (data) {
                         this.$scope.videos = data
@@ -22,6 +21,7 @@
         '$scope',
         'serverCallService',
         'authenticatedUserService',
+        'userManualsAdminService'
     ]
     angular.module('koolikottApp').controller('userManualsController', controller)
 }
