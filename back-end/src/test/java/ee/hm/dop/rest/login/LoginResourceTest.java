@@ -281,7 +281,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
                 "serialNumber=55555555555",
                 "GN=PEETER",
                 "SN=PÄÄN",
-                "CN=PEETER\\,PÄÄN\\,55555555555",
+                "CN=PÄÄN\\,PEETER\\,55555555555",
                 "OU=authentication",
                 "O=ESTEID",
                 "C=EE");
