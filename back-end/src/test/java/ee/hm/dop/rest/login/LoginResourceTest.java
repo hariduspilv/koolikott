@@ -1,47 +1,26 @@
 package ee.hm.dop.rest.login;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.login.dto.UserStatus;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.opensaml.saml2.core.AuthnRequest;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.io.Unmarshaller;
-import org.opensaml.xml.io.UnmarshallerFactory;
-import org.opensaml.xml.util.Base64;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Provider;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterOutputStream;
 
-import static ee.hm.dop.rest.login.LoginTestUtil.*;
+import static com.google.common.collect.Lists.newArrayList;
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.*;
@@ -260,20 +239,9 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public static class LoginFilter1 implements ClientRequestFilter {
 
         @Override
-        public void filter(ClientRequestContext requestContext) throws IOException {
-            List<Object> list1 = new ArrayList<>();
-            list1.add("serialNumber=39011220011");
-            list1.add("GN=MATI");
-            list1.add("SN=MAASIKAS");
-            list1.add("CN=MATI,MAASIKAS,39011220011");
-            list1.add("OU=authentication");
-            list1.add("O=ESTEID");
-            list1.add("C=EE");
-            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
-
-            List<Object> list2 = new ArrayList<>();
-            list2.add("SUCCESS");
-            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+        public void filter(ClientRequestContext requestContext) {
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", matiMaasikasInfo());
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", newArrayList("SUCCESS"));
         }
     }
 
@@ -281,20 +249,9 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
     public static class LoginFilter2 implements ClientRequestFilter {
 
         @Override
-        public void filter(ClientRequestContext requestContext) throws IOException {
-            List<Object> list1 = new ArrayList<>();
-            list1.add("serialNumber=39011220011");
-            list1.add("GN=MATI");
-            list1.add("SN=MAASIKAS");
-            list1.add("CN=MATI,MAASIKAS,39011220011");
-            list1.add("OU=authentication");
-            list1.add("O=ESTEID");
-            list1.add("C=EE");
-            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
-
-            List<Object> list2 = new ArrayList<>();
-            list2.add("FAILED");
-            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+        public void filter(ClientRequestContext requestContext) {
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", matiMaasikasInfo());
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", newArrayList("FAILED"));
         }
     }
 
@@ -303,20 +260,31 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
 
         @Override
         public void filter(ClientRequestContext requestContext) throws IOException {
-            List<Object> list1 = new ArrayList<>();
-            list1.add("serialNumber=55555555555");
-            list1.add("GN=PEETER");
-            list1.add("SN=PÄÄN");
-            list1.add("CN=PEETER,PÄÄN,55555555555");
-            list1.add("OU=authentication");
-            list1.add("O=ESTEID");
-            list1.add("C=EE");
-            requestContext.getHeaders().put("SSL_CLIENT_S_DN", list1);
-
-            List<Object> list2 = new ArrayList<>();
-            list2.add("SUCCESS");
-            requestContext.getHeaders().put("SSL_AUTH_VERIFY", list2);
+            requestContext.getHeaders().put("SSL_CLIENT_S_DN", peeterPaanInfo());
+            requestContext.getHeaders().put("SSL_AUTH_VERIFY", newArrayList("SUCCESS"));
         }
+    }
+
+    private static List<Object> matiMaasikasInfo() {
+        return Lists.newArrayList(
+                "serialNumber=39011220011",
+                "GN=MATI",
+                "SN=MAASIKAS",
+                "CN=MAASIKAS\\,MATI\\,39011220011",
+                "OU=authentication",
+                "O=ESTEID",
+                "C=EE");
+    }
+
+    private static List<Object> peeterPaanInfo() {
+        return Lists.newArrayList(
+                "serialNumber=55555555555",
+                "GN=PEETER",
+                "SN=PÄÄN",
+                "CN=PEETER\\,PÄÄN\\,55555555555",
+                "OU=authentication",
+                "O=ESTEID",
+                "C=EE");
     }
 
     private String encodeQuery(String query) {

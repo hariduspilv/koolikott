@@ -1,7 +1,14 @@
 package ee.hm.dop.rest.login;
 
+import ee.hm.dop.service.login.dto.IdCardInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
+
+import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public class IdCardUtil {
 
@@ -11,25 +18,25 @@ public class IdCardUtil {
         return "SUCCESS".equals(request.getHeader("SSL_AUTH_VERIFY"));
     }
 
-    public static String getIdCode(HttpServletRequest request) {
-        return getString(request, 0);
+    public static IdCardInfo getInfo(HttpServletRequest request, Logger logger) {
+        Enumeration<String> headers = request.getHeaders(SSL_CLIENT_S_DN);
+        while (headers.hasMoreElements()){
+            logger.info(headers.nextElement());
+        }
+        return getIdCardInfo(request.getHeader(SSL_CLIENT_S_DN));
     }
 
-    public static String getName(HttpServletRequest request) {
-        return getString(request, 1);
+    public static IdCardInfo getIdCardInfo(String header) {
+        String between = getUserInfoFromCN(header);
+        String[] strings = between.split("\\\\,");
+        return new IdCardInfo(utf8(strings[1]), utf8(strings[0]), utf8(strings[2]));
     }
 
-    public static String getSurname(HttpServletRequest request) {
-        return getString(request, 2);
+    private static String getUserInfoFromCN(String header) {
+        return header.contains(",OU=") ? substringBetween(header, "CN=", ",OU=") : substringBetween(header, "CN=", ",C=");
     }
 
-    private static String getString(HttpServletRequest request, int i) {
-        String[] values = request.getHeader(SSL_CLIENT_S_DN).split(",");
-        return getStringInUTF8(values[i].split("=")[1]);
-    }
-
-    private static String getStringInUTF8(String item) {
-        byte[] bytes = item.getBytes(StandardCharsets.ISO_8859_1);
-        return new String(bytes, StandardCharsets.UTF_8);
+    private static String utf8(String item) {
+        return StringUtils.toEncodedString(item.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
     }
 }
