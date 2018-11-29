@@ -80,14 +80,14 @@ public class PortfolioResource extends BaseResource {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
 
-    @POST
+/*    @POST
     @Path("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
-    }
+    }*/
 
     @POST
     @Path("delete")
