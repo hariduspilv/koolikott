@@ -2,7 +2,7 @@
   <md-button class="md-raised md-primary"
              data-ng-click="$ctrl.toggleCustomerSupportForm()"
              aria-label="Ava kasutajatoe menüü"
-             data-ng-if="!showCustomerSupportDiv"
+             data-ng-if="!showCustomerSupportDialog"
              id="customerSupportButton"
   >
     <md-icon>live_help</md-icon>
@@ -10,7 +10,7 @@
   </md-button>
   <!-- Customer support form div -->
   <form name="customerSupportForm">
-    <div id="customerSupportDiv" data-ng-if="showCustomerSupportDiv" class="customer-support">
+    <div id="customerSupportDiv" data-ng-if="showCustomerSupportDialog" class="customer-support" data-click-outside="$ctrl.clickOutside()">
       <md-toolbar>
         <div class="md-toolbar-tools md-padding-double-horizontal" layout-align="space-between center">
           <h2 data-translate="CUSTOMER_SUPPORT_ASK_QUESTION"></h2>
@@ -25,7 +25,7 @@
       </md-toolbar>
       <div data-layout="column" data-ng-if="!finalStep">
       <span data-translate="CUSTOMER_SUPPORT_CHOOSE_TOPIC" class="padding-10"></span>
-      <md-input-container class="margin-10">
+      <md-input-container class="margin-10" style="z-index: 1000">
       <md-select
         placeholder="{{'CUSTOMER_SUPPORT_CHOOSE_TOPIC' | translate}}"
         name="title"
@@ -49,6 +49,9 @@
         <div data-layout="row" data-ng-if="userManualExists" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_HAS_USER_MANUAL"></span>
         </div>
+        <div data-ng-if="userManualExists" class="padding-10">
+          <span data-translate="CUSTOMER_SUPPORT_IN_CASE_OF_YES"></span>
+        </div>
       </div>
       <!-- Customer support input -->
       <div data-ng-if="showCustomerSupportInput && !userManualExists" class="padding-10">
@@ -60,7 +63,8 @@
             id="user-name"
             ng-model="customerSupport.name"
             type="text"
-            required>
+            required
+          maxlength="30">
           <div data-ng-messages="customerSupportForm.name.$error">
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_NAME_IS_MANDATORY"></div>
           </div>
@@ -82,6 +86,7 @@
         <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10" flex>
           <label data-translate="CUSTOMER_SUPPORT_MESSAGE"></label>
           <textarea
+            placeholder="{{'CUSTOMER_SUPPORT_MESSAGE_PLACEHOLDER' | translate}}"
             class="overflow-auto"
             name="message"
             id="message"
@@ -97,15 +102,8 @@
         </md-input-container>
       </div>
       <!-- Final step view -->
-      <div data-layout="column" data-ng-if="finalStep"  class="padding-10">
-        <span data-translate="CUSTOMER_SUPPORT_WILL_SEND_RESPONSE"></span>
-        <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10">
-          <input
-            name="email"
-            ng-model="customerSupport.email"
-            type="email"
-            readonly>
-        </md-input-container>
+      <div data-layout="column" data-ng-if="finalStep"  class="padding-10 final-setp">
+        <span data-ng-bind-html="finalresponse"></span>
       </div>
       <!-- step one button -->
       <div data-layout="row" data-layout-align="start end" data-ng-if="!showCustomerSupportInput && !userManualExists && !finalStep" class="button-bottom">
@@ -126,6 +124,8 @@
         </md-button>
         <md-button class="md-raised md-primary"
                    data-ng-href="/usermanuals"
+                   target="_blank"
+                   data-ng-click="$ctrl.openNewTab()"
                    aria-label="Soovin kasutusjuhendiga tutvuda"
         >
           <span data-translate="CUSTOMER_SUPPORT_YES"></span>

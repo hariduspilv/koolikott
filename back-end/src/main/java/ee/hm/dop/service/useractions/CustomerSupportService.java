@@ -45,10 +45,15 @@ public class CustomerSupportService {
             customerSupport.setSentAt(DateTime.now());
             customerSupport.setSentSuccessfully(true);
             customerSupport.setSentTries(1);
+            customerSupport.setErrorMessage("Sent successfully");
         } else {
+            customerSupport.setSentTries(2);
             customerSupport.setSentAt(DateTime.now());
             customerSupport.setErrorMessage("Failed to send mail to user");
-            sendMailService.sendEmail(sendMailService.composeEmailToSupportWhenSendFailed(customerSupport));
+            if (!sendMailService.sendEmail(sendMailService.composeEmailToSupportWhenSendFailed(customerSupport))) {
+                customerSupport.setErrorMessage("Failed to send email to HITSA support");
+                customerSupport.setSentTries(3);
+            }
 
         }
 

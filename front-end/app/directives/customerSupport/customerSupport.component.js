@@ -6,20 +6,22 @@
             super(...args)
 
             this.$scope.customerSupport = {}
-            this.$scope.showCustomerSupportDiv = false
+            this.$scope.showCustomerSupportDialog = false
             this.$scope.customerSupportFirstStep = true
 
             this.getUserManualTitles()
-            // this.getLoggedInUserData()
 
-            $(document).click(e => {
-
-                if ($(e.target).closest('#customerSupportDiv').length != 0 || $(e.target).closest('#customerSupportButton').length != 0) return false;
-                if (!this.$scope.isSaving)
-                    this.$scope.showCustomerSupportDiv = false
-            });
         }
 
+        setResponse() {
+            this.$translate('CUSTOMER_SUPPORT_WILL_SEND_RESPONSE').then((value) => {
+                this.$scope.finalresponse = (value.replace('${email}', this.$scope.customerSupport.email));
+            })
+        }
+
+        openNewTab() {
+            window.open(window.location.origin + '/usermanuals', '_blank')
+        }
 
         getUserManualTitles() {
             this.userManualsAdminService.getUserManuals()
@@ -35,6 +37,7 @@
         saveCustomerSupportRequest() {
 
             this.$scope.isSaving = true
+            this.setResponse()
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
                 .then(response => {
@@ -42,12 +45,9 @@
                             this.$scope.isSaving = false
                             this.$scope.showCustomerSupportInput = false
                             this.$scope.finalStep = true
-
-                            this.toastService.show('CUSTOMER_SUPPORT_REQUEST_SENT')
                         }
                         else {
-                            this.$scope.showCustomerSupportDiv = false
-                            this.toastService.show('CUSTOMER_SUPPORT_REQUEST_FAILED')
+                            this.$scope.showCustomerSupportDialog = false
                         }
                     }, () =>
                         this.$scope.isSaving = false
@@ -57,9 +57,7 @@
         getLoggedInUserData() {
             // const { name, surname } = this.authenticatedUserService.getUser()
             if (this.authenticatedUserService.getUser()) {
-                const poop = this.authenticatedUserService.getUser()
-                const { name, surname } = this.authenticatedUserService.getUser()
-                console.log(name + ' ' + surname)
+                const {name, surname} = this.authenticatedUserService.getUser()
                 this.$scope.customerSupport.name = name + ' ' + surname
             }
         }
@@ -71,7 +69,7 @@
 
         toggleCustomerSupportForm() {
             this.getLoggedInUserData()
-            this.$scope.showCustomerSupportDiv = true
+            this.$scope.showCustomerSupportDialog = true
         }
 
         isSendDisabled() {
@@ -84,7 +82,7 @@
 
         close() {
             this.$scope.showCustomerSupportInput = false
-            this.$scope.showCustomerSupportDiv = false
+            this.$scope.showCustomerSupportDialog = false
             this.$scope.userManualExists = false
             this.$scope.finalStep = false
             this.$scope.customerSupport = {}
@@ -92,13 +90,20 @@
 
         handleSelectChange(subject) {
 
-            console.log(subject)
             if (subject === 'Muu') {
                 this.$scope.showCustomerSupportInput = true
                 this.$scope.userManualExists = false
             } else {
                 this.$scope.showCustomerSupportInput = false
                 this.$scope.userManualExists = true
+            }
+        }
+
+        clickOutside() {
+            if (!this.$scope.isSaving) {
+                this.$scope.showCustomerSupportDialog = false
+                this.$scope.customerSupport = {}
+                this.$scope.userManualExists = false
             }
         }
 
@@ -110,6 +115,8 @@
         'toastService',
         '$scope',
         'authenticatedUserService',
+        '$location',
+        '$translate',
     ]
 
     component('dopCustomerSupport', {
