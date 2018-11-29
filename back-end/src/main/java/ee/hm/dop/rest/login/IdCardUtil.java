@@ -12,6 +12,9 @@ public class IdCardUtil {
     public static final String SSL_CLIENT_S_DN = "SSL_CLIENT_S_DN";
     public static final String SSL_AUTH_VERIFY = "SSL_AUTH_VERIFY";
     public static final String SUCCESS = "SUCCESS";
+    public static final String ID_CODE = "serialNumber";
+    public static final String FIRSTNAME = "GN";
+    public static final String SURNAME = "SN";
 
     public static boolean isAuthValid(HttpServletRequest request) {
         return SUCCESS.equals(request.getHeader(SSL_AUTH_VERIFY));
@@ -32,10 +35,10 @@ public class IdCardUtil {
     private static IdCardInfo getString(String header) {
         String[] values = header.split(",");
 
-        String idCodeValue = getValue(getPiece(values, "serialNumber"));
+        String idCodeValue = getValue(getPiece(values, ID_CODE));
         String idCodeString = idCodeValue.contains("-") ? idCodeValue.split("-")[1] : idCodeValue;
-        String firstName = getValue(getPiece(values, "GN"));
-        String surname = getValue(getPiece(values, "SN"));
+        String firstName = getValue(getPiece(values, FIRSTNAME));
+        String surname = getValue(getPiece(values, SURNAME));
         return new IdCardInfo(utf8(firstName), utf8(surname), utf8(idCodeString));
     }
 
