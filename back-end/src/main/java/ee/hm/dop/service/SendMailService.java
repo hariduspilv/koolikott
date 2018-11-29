@@ -21,15 +21,15 @@ public class SendMailService {
     private Configuration configuration;
 
     private static final Logger logger = LoggerFactory.getLogger(SendMailService.class);
-    private static final String BREAK = System.getProperty("line.separator");
+    private static final String BREAK = "<br/>";
 
     public Email composeEmailToUser(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from("HITSA Support", customerSupport.getEmail())
-                .to("Support", customerSupport.getEmail())
+                .from("e-Koolikott", customerSupport.getEmail())
+                .to(customerSupport.getName(), customerSupport.getEmail())
                 .withSubject("e-Koolikott, küsimuse kinnitus")
-                .withPlainText("Teema: " + customerSupport.getSubject() + BREAK +
-                        "Küsimus: " + customerSupport.getMessage())
+                .withHTMLText("<b>Teema:</b> " + customerSupport.getSubject() + BREAK +
+                        "<b>Küsimus:</b> " + customerSupport.getMessage())
                 .buildEmail();
     }
 
@@ -38,8 +38,8 @@ public class SendMailService {
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("e-Koolikott: " + customerSupport.getSubject())
-                .withPlainText("Küsimus: " + customerSupport.getMessage() + BREAK +
-                        "Küsija kontakt: " + customerSupport.getName() + " " + customerSupport.getEmail())
+                .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
+                        "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
                 .buildEmail();
     }
 
@@ -48,7 +48,7 @@ public class SendMailService {
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("Kasutaja ebaõnnestunud pöördumine")
-                .withPlainText("Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
+                .withHTMLText("Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
                 + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
                 + "Sisuga: " + customerSupport.getMessage() + BREAK
                 + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt()))
