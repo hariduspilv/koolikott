@@ -6,9 +6,6 @@ public class IdCardInfo {
     private String surName;
     private String idCode;
 
-    public IdCardInfo() {
-    }
-
     public IdCardInfo(String firstName, String surName, String idCode) {
         this.firstName = firstName;
         this.surName = surName;
