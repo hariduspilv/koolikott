@@ -26,15 +26,10 @@ public class CustomerSupportService {
 
     public CustomerSupport save(CustomerSupport customerSupport, User user) {
 
-        validateName(customerSupport);
-        validateEmail(customerSupport);
-
-        if (isBlank(customerSupport.getSubject()))
-            throw new WebApplicationException("Subject is empty", Response.Status.BAD_REQUEST);
-
-        if (isBlank(customerSupport.getMessage()))
-            throw new WebApplicationException("Message is empty", Response.Status.BAD_REQUEST);
-
+        customerSupport.setName(validateName(customerSupport));
+        customerSupport.setEmail(validateEmail(customerSupport));
+        if (isBlank(customerSupport.getSubject())) throw badRequest("Subject is empty");
+        if (isBlank(customerSupport.getMessage())) throw badRequest("Message is empty");
 
         customerSupport.setCreatedAt(DateTime.now());
         customerSupport.setUser(user);
@@ -54,27 +49,30 @@ public class CustomerSupportService {
                 customerSupport.setErrorMessage("Failed to send email to HITSA support");
                 customerSupport.setSentTries(3);
             }
-
         }
 
         return customerSupportDao.createOrUpdate(customerSupport);
     }
 
-    public void validateName(CustomerSupport customerSupport) {
-        if (isNotBlank(customerSupport.getName())) {
-            customerSupport.setName(StringUtils.normalizeSpace(customerSupport.getName()));
-        } else {
-            throw new WebApplicationException("Name is missing", Response.Status.BAD_REQUEST);
-        }
+    private WebApplicationException badRequest(String s) {
+        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
     }
 
-    public void validateEmail(CustomerSupport customerSupport) {
-        if (isNotBlank(customerSupport.getEmail())) {
-            customerSupport.setEmail(StringUtils.trim(customerSupport.getEmail()));
-            if (!EmailValidator.getInstance().isValid(customerSupport.getEmail()))
-                throw new WebApplicationException("Invalid email address", Response.Status.BAD_REQUEST);
-        } else {
-            throw new WebApplicationException("Email is empty", Response.Status.BAD_REQUEST);
+    private String validateName(CustomerSupport customerSupport) {
+        if (isNotBlank(customerSupport.getName())) {
+            return StringUtils.normalizeSpace(customerSupport.getName());
         }
+        throw badRequest("Name is missing");
+    }
+
+    private String validateEmail(CustomerSupport customerSupport) {
+        if (isNotBlank(customerSupport.getEmail())) {
+            String email = StringUtils.trim(customerSupport.getEmail());
+            if (EmailValidator.getInstance().isValid(email)) {
+                return email;
+            }
+            throw badRequest("Invalid email address");
+        }
+        throw badRequest("Email is empty");
     }
 }

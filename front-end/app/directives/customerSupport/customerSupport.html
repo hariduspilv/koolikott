@@ -1,6 +1,6 @@
 <div class="customer-support-parent">
   <md-button class="md-raised md-primary"
-             data-ng-click="$ctrl.toggleCustomerSupportForm()"
+             data-ng-click="$ctrl.toggleCustomerSupportDialog()"
              aria-label="Ava kasutajatoe menüü"
              data-ng-if="!showCustomerSupportDialog"
              id="customerSupportButton"
@@ -102,7 +102,7 @@
         </md-input-container>
       </div>
       <!-- Final step view -->
-      <div data-layout="column" data-ng-if="finalStep"  class="padding-10 final-setp">
+      <div data-layout="column" data-ng-if="finalStep"  class="padding-10 final-step">
         <span data-ng-bind-html="finalresponse"></span>
       </div>
       <!-- step one button -->

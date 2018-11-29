@@ -30,7 +30,6 @@
                         return um.title
                     })
                     this.$scope.titles.push('Muu')
-                    console.log(this.$scope.title)
                 })
         }
 
@@ -41,8 +40,8 @@
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
                 .then(response => {
+                        this.$scope.isSaving = false
                         if (response.status === 200) {
-                            this.$scope.isSaving = false
                             this.$scope.showCustomerSupportInput = false
                             this.$scope.finalStep = true
                         }
@@ -67,7 +66,7 @@
             this.$scope.userManualExists = false
         }
 
-        toggleCustomerSupportForm() {
+        toggleCustomerSupportDialog() {
             this.getLoggedInUserData()
             this.$scope.showCustomerSupportDialog = true
         }
