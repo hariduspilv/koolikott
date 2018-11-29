@@ -81,7 +81,7 @@ public class LoginResource extends BaseResource {
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
         logger.info(req.getHeader(SSL_CLIENT_S_DN));
-        IdCardInfo info = getInfo(req, logger);
+        IdCardInfo info = getInfo(req);
         logger.info(info.toString());
         return isAuthValid(req) ? loginService.login(info.getIdCode(), info.getFirstName(), info.getSurName(), LoginFrom.ID_CARD) : null;
     }

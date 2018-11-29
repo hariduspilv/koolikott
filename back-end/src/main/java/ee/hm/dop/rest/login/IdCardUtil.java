@@ -2,11 +2,9 @@ package ee.hm.dop.rest.login;
 
 import ee.hm.dop.service.login.dto.IdCardInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
 
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
@@ -18,11 +16,7 @@ public class IdCardUtil {
         return "SUCCESS".equals(request.getHeader("SSL_AUTH_VERIFY"));
     }
 
-    public static IdCardInfo getInfo(HttpServletRequest request, Logger logger) {
-        Enumeration<String> headers = request.getHeaders(SSL_CLIENT_S_DN);
-        while (headers.hasMoreElements()){
-            logger.info(headers.nextElement());
-        }
+    public static IdCardInfo getInfo(HttpServletRequest request) {
         return getIdCardInfo(request.getHeader(SSL_CLIENT_S_DN));
     }
 
