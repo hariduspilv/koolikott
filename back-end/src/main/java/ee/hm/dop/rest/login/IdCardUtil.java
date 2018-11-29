@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 public class IdCardUtil {
 
-    private static final String SSL_CLIENT_S_DN = "SSL_CLIENT_S_DN";
+    public static final String SSL_CLIENT_S_DN = "SSL_CLIENT_S_DN";
 
     public static boolean isAuthValid(HttpServletRequest request) {
         return "SUCCESS".equals(request.getHeader("SSL_AUTH_VERIFY"));
