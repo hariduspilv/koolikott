@@ -5,6 +5,7 @@ import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -235,6 +236,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Visibility.NOT_LISTED, updatedPortfolio.getVisibility());
     }
 
+    @Ignore
     @Test
     public void copyPortfolio() {
         login(USER_PEETER);
@@ -245,12 +247,14 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
     }
 
+    @Ignore
     @Test
     public void copyPrivatePortfolioNotLoggedIn() {
         Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void copyPrivatePortfolioLoggedInAsNotCreator() {
         login(USER_MATI);
@@ -258,6 +262,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void copyPrivatePortfolioLoggedInAsCreator() {
         login(USER_PEETER);

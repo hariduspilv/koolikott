@@ -59,7 +59,7 @@ class controller extends Controller {
                 locals: { isEditMode: false }
             })
 
-        this.$scope.copyPortfolio = () => {
+        /*this.$scope.copyPortfolio = () => {
             const portfolio = this.storageService.getPortfolio();
             if (!portfolio) console.log("copying failed")
             this.storageService.setEmptyPortfolio(portfolio)
@@ -71,7 +71,7 @@ class controller extends Controller {
                     mode: 'COPY'
                 }
             })
-        }
+        }*/
 
         this.$scope.hasPermission = () =>
             this.authenticatedUserService.getUser() && !this.authenticatedUserService.isRestricted()

@@ -4,7 +4,11 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.login.*;
+import ee.hm.dop.service.login.EkoolService;
+import ee.hm.dop.service.login.LoginService;
+import ee.hm.dop.service.login.MobileIDLoginService;
+import ee.hm.dop.service.login.StuudiumService;
+import ee.hm.dop.service.login.dto.IdCardInfo;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
@@ -13,7 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPException;
@@ -21,9 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static ee.hm.dop.rest.login.IdCardUtil.SSL_CLIENT_S_DN;
-import static ee.hm.dop.rest.login.IdCardUtil.getIdCode;
-import static ee.hm.dop.rest.login.IdCardUtil.getName;
-import static ee.hm.dop.rest.login.IdCardUtil.getSurname;
+import static ee.hm.dop.rest.login.IdCardUtil.getInfo;
 import static ee.hm.dop.rest.login.IdCardUtil.isAuthValid;
 import static java.lang.String.format;
 
@@ -75,12 +81,9 @@ public class LoginResource extends BaseResource {
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
         logger.info(req.getHeader(SSL_CLIENT_S_DN));
-        logger.info(getIdCode(req));
-        logger.info(getName(req));
-        logger.info(getSurname(req));
-        logger.info(req.toString());
-        logger.info(isAuthValid(req)+"");
-        return isAuthValid(req) ? loginService.login(getIdCode(req), getName(req), getSurname(req), LoginFrom.ID_CARD) : null;
+        IdCardInfo info = getInfo(req);
+        logger.info(info.toString());
+        return isAuthValid(req) ? loginService.login(info.getIdCode(), info.getFirstName(), info.getSurName(), LoginFrom.ID_CARD) : null;
     }
 
     @GET
