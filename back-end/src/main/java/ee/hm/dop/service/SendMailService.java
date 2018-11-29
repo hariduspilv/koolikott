@@ -25,9 +25,9 @@ public class SendMailService {
 
     public Email composeEmailToUser(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from(customerSupport.getName(), customerSupport.getEmail())
+                .from("HITSA Support", customerSupport.getEmail())
                 .to("Support", customerSupport.getEmail())
-                .withSubject("e-koolikott, küsimuse kinnitus")
+                .withSubject("e-Koolikott, küsimuse kinnitus")
                 .withPlainText("Teema: " + customerSupport.getSubject() + BREAK +
                         "Küsimus: " + customerSupport.getMessage())
                 .buildEmail();
@@ -35,9 +35,9 @@ public class SendMailService {
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from(customerSupport.getName(), customerSupport.getEmail())
-                .to("Support", configuration.getString(EMAIL_ADDRESS))
-                .withSubject("e-koolikott: " + customerSupport.getSubject())
+                .from("e-Koolikott", customerSupport.getEmail())
+                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
+                .withSubject("e-Koolikott: " + customerSupport.getSubject())
                 .withPlainText("Küsimus: " + customerSupport.getMessage() + BREAK +
                         "Küsija kontakt: " + customerSupport.getName() + " " + customerSupport.getEmail())
                 .buildEmail();
@@ -45,8 +45,8 @@ public class SendMailService {
 
     public Email composeEmailToSupportWhenSendFailed(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from(customerSupport.getName(), customerSupport.getEmail())
-                .to("Support", configuration.getString(EMAIL_ADDRESS))
+                .from("e-Koolikott", customerSupport.getEmail())
+                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("Kasutaja ebaõnnestunud pöördumine")
                 .withPlainText("Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
                 + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK

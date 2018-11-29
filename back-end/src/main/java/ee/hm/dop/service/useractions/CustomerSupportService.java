@@ -4,9 +4,17 @@ import ee.hm.dop.dao.CustomerSupportDao;
 import ee.hm.dop.model.CustomerSupport;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.SendMailService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 
 public class CustomerSupportService {
 
@@ -18,10 +26,16 @@ public class CustomerSupportService {
 
     public CustomerSupport save(CustomerSupport customerSupport, User user) {
 
-        customerSupport.setName(customerSupport.getName());
-        customerSupport.setEmail(customerSupport.getEmail());
-        customerSupport.setSubject(customerSupport.getSubject());
-        customerSupport.setMessage(customerSupport.getMessage());
+        validateName(customerSupport);
+        validateEmail(customerSupport);
+
+        if (isBlank(customerSupport.getSubject()))
+            throw new WebApplicationException("Subject is empty", Response.Status.BAD_REQUEST);
+
+        if (isBlank(customerSupport.getMessage()))
+            throw new WebApplicationException("Message is empty", Response.Status.BAD_REQUEST);
+
+
         customerSupport.setCreatedAt(DateTime.now());
         customerSupport.setUser(user);
         customerSupport.setSentTries(0);
@@ -39,5 +53,23 @@ public class CustomerSupportService {
         }
 
         return customerSupportDao.createOrUpdate(customerSupport);
+    }
+
+    public void validateName(CustomerSupport customerSupport) {
+        if (isNotBlank(customerSupport.getName())) {
+            customerSupport.setName(StringUtils.normalizeSpace(customerSupport.getName()));
+        } else {
+            throw new WebApplicationException("Name is missing", Response.Status.BAD_REQUEST);
+        }
+    }
+
+    public void validateEmail(CustomerSupport customerSupport) {
+        if (isNotBlank(customerSupport.getEmail())) {
+            customerSupport.setEmail(StringUtils.trim(customerSupport.getEmail()));
+            if (!EmailValidator.getInstance().isValid(customerSupport.getEmail()))
+                throw new WebApplicationException("Invalid email address", Response.Status.BAD_REQUEST);
+        } else {
+            throw new WebApplicationException("Email is empty", Response.Status.BAD_REQUEST);
+        }
     }
 }
