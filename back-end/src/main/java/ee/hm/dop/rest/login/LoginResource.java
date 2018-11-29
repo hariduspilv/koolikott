@@ -20,6 +20,7 @@ import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static ee.hm.dop.rest.login.IdCardUtil.SSL_CLIENT_S_DN;
 import static ee.hm.dop.rest.login.IdCardUtil.getIdCode;
 import static ee.hm.dop.rest.login.IdCardUtil.getName;
 import static ee.hm.dop.rest.login.IdCardUtil.getSurname;
@@ -73,6 +74,12 @@ public class LoginResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
+        logger.info(req.getHeader(SSL_CLIENT_S_DN));
+        logger.info(getIdCode(req));
+        logger.info(getName(req));
+        logger.info(getSurname(req));
+        logger.info(req.toString());
+        logger.info(isAuthValid(req)+"");
         return isAuthValid(req) ? loginService.login(getIdCode(req), getName(req), getSurname(req), LoginFrom.ID_CARD) : null;
     }
 
