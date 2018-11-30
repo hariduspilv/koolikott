@@ -10,7 +10,8 @@
   </md-button>
   <!-- Customer support form div -->
   <form name="customerSupportForm">
-    <div id="customerSupportDiv" data-ng-if="showCustomerSupportDialog" class="customer-support" data-click-outside="$ctrl.clickOutside()">
+    <div id="customerSupportDiv" data-ng-if="showCustomerSupportDialog" class="customer-support"
+         data-click-outside="$ctrl.clickOutside()">
       <md-toolbar>
         <div class="md-toolbar-tools md-padding-double-horizontal" layout-align="space-between center">
           <h2 data-ng-if="!finalStep" data-translate="CUSTOMER_SUPPORT_ASK_QUESTION"></h2>
@@ -25,42 +26,40 @@
         </div>
       </md-toolbar>
       <div data-layout="column" data-ng-if="!finalStep">
-      <span data-translate="CUSTOMER_SUPPORT_CHOOSE_TOPIC" class="padding-10"></span>
-      <md-input-container class="margin-10" style="z-index: 1000">
-      <md-select
-        placeholder="{{'CUSTOMER_SUPPORT_CHOOSE_TOPIC' | translate}}"
-        name="title"
-        class="no-margin"
-        data-ng-model="customerSupport.subject"
-        required
-        style="padding: 10px"
-        data-ng-change="$ctrl.handleSelectChange(customerSupport.subject)"
-      >
-
-        <md-option
-          data-ng-repeat="title in titles track by $index"
-          data-ng-value="title"
-          data-translate="{{title}}"
-        ></md-option>
-      </md-select>
-        <div data-ng-messages="customerSupportForm.subject.$error">
-          <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_TOPIC_IS_MANDATORY"></div>
-        </div>
-      </md-input-container>
-        <div data-layout="row" data-ng-if="userManualExists && !userManualsHelpedShown" class="padding-10">
+        <span data-translate="CUSTOMER_SUPPORT_CHOOSE_TOPIC" class="padding-10"></span>
+        <md-input-container class="margin-10" style="z-index: 1000">
+          <md-select
+            placeholder="{{'CUSTOMER_SUPPORT_CHOOSE_TOPIC' | translate}}"
+            name="title"
+            class="no-margin"
+            data-ng-model="customerSupport.subject"
+            required
+            style="padding: 10px"
+          >
+            <md-option
+              data-ng-repeat="title in titles track by $index"
+              data-ng-value="title"
+              data-translate="{{title}}"
+            ></md-option>
+          </md-select>
+          <div data-ng-messages="customerSupportForm.subject.$error">
+            <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_TOPIC_IS_MANDATORY"></div>
+          </div>
+        </md-input-container>
+        <div data-layout="row" data-ng-if="userManualExists && !showUserManualsHelped" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_HAS_USER_MANUAL"></span>
         </div>
-        <div data-ng-if="userManualExists && !userManualsHelpedShown" class="padding-10">
+        <div data-ng-if="userManualExists && !showUserManualsHelped" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_IN_CASE_OF_YES"></span>
         </div>
-        <div data-layout="row" data-ng-if="userManualsHelpedShown" class="padding-10">
+        <div data-layout="row" data-ng-if="showUserManualsHelped" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_DID_MANUAL_HELP"></span>
         </div>
       </div>
       <!-- Customer support input -->
       <div data-ng-if="showCustomerSupportInput && !userManualExists" class="padding-10">
         <span data-translate="CUSTOMER_SUPPORT_SPECIFY_QUESTION"></span>
-        <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10" >
+        <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10">
           <label data-translate="CUSTOMER_SUPPORT_NAME"></label>
           <input
             name="name"
@@ -68,12 +67,12 @@
             ng-model="customerSupport.name"
             type="text"
             required
-          maxlength="30">
+            maxlength="30">
           <div data-ng-messages="customerSupportForm.name.$error">
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_NAME_IS_MANDATORY"></div>
           </div>
         </md-input-container>
-        <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10" flex >
+        <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10" flex>
           <label data-translate="CUSTOMER_SUPPORT_EMAIL"></label>
           <input
             name="email"
@@ -99,18 +98,19 @@
             required
             maxlength="280"
             style="resize: none"
-          rows="3"></textarea>
+            rows="3"></textarea>
           <div data-ng-messages="customerSupportForm.message.$error">
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_MESSAGE_IS_MANDATORY"></div>
           </div>
         </md-input-container>
       </div>
       <!-- Final step view -->
-      <div data-layout="column" data-ng-if="finalStep"  class="padding-10 final-step">
+      <div data-layout="column" data-ng-if="finalStep" class="padding-10 final-step">
         <span data-ng-bind-html="finalresponse"></span>
       </div>
       <!-- step one button -->
-      <div data-layout="row" data-layout-align="start end" data-ng-if="!showCustomerSupportInput && !userManualExists && !finalStep" class="button-bottom">
+      <div data-layout="row" data-layout-align="start end"
+           data-ng-if="!showCustomerSupportInput && !userManualExists && !finalStep" class="button-bottom">
         <md-button class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.close()"
                    aria-label="Customer support close"
@@ -119,7 +119,8 @@
         </md-button>
       </div>
       <!-- step two buttons -->
-      <div data-layout="row" data-layout-align="space-between end" data-ng-if="!showCustomerSupportInput && userManualExists && !userManualsHelpedShown" class="button-bottom">
+      <div data-layout="row" data-layout-align="space-between end"
+           data-ng-if="!showCustomerSupportInput && userManualExists && !showUserManualsHelped" class="button-bottom">
         <md-button class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.showCustomerSupportInput()"
                    aria-label="Ei soovi kasutusjuhendiga tutvuda"
@@ -134,7 +135,8 @@
         </md-button>
       </div>
       <!-- step three buttons -->
-      <div data-layout="row" data-layout-align="space-between end" data-ng-if="userManualsHelpedShown" class="button-bottom">
+      <div data-layout="row" data-layout-align="space-between end" data-ng-if="showUserManualsHelped"
+           class="button-bottom">
         <md-button class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.showCustomerSupportInput()"
                    aria-label="Ei soovi kasutusjuhendiga tutvuda"
@@ -149,7 +151,8 @@
         </md-button>
       </div>
       <!-- step four buttons -->
-      <div data-layout="row" data-layout-align="space-between end" data-ng-if="showCustomerSupportInput && !userManualExists" class="button-bottom">
+      <div data-layout="row" data-layout-align="space-between end"
+           data-ng-if="showCustomerSupportInput && !userManualExists" class="button-bottom">
         <md-button class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.back()"
                    aria-label="Customer support back"
@@ -178,10 +181,7 @@
         >
           <span data-translate="CUSTOMER_SUPPORT_CLOSE"></span>
         </md-button>
-
       </div>
     </div>
-
   </form>
-
 </div>

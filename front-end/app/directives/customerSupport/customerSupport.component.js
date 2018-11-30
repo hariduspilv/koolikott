@@ -7,28 +7,22 @@
 
             this.$scope.customerSupport = {}
             this.$scope.showCustomerSupportDialog = false
-            this.$scope.userManualsHelpedShown = false
-
+            this.$scope.showUserManualsHelped = false
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
 
             this.$scope.$watch('customerSupport.subject', (selectedValue, previousValue) => {
-                console.log(selectedValue + '   ' + previousValue);
-                if (selectedValue && previousValue && selectedValue !== previousValue) {
+                if (selectedValue && selectedValue !== previousValue) {
                     this.handleSelectChange(this.$scope.customerSupport.subject)
-                    this.$scope.userManualsHelpedShown = false
+                    this.$scope.showUserManualsHelped = false
                 }
             })
-
-        }
-
-        $onChanges({customerSupport}) {
-            console.log(customerSupport)
         }
 
         clearData() {
             this.$scope.customerSupport = {}
+            this.$scope.showCustomerSupportInput = false
         }
 
         setResponse() {
@@ -39,7 +33,7 @@
 
         openNewTab() {
             this.$window.open(window.location.origin + '/usermanuals', '_blank')
-            this.$scope.userManualsHelpedShown = true
+            this.$scope.showUserManualsHelped = true
             this.$scope.allowDialogClose = false
         }
 
@@ -84,7 +78,7 @@
         showCustomerSupportInput() {
             this.$scope.showCustomerSupportInput = true
             this.$scope.userManualExists = false
-            this.$scope.userManualsHelpedShown = false
+            this.$scope.showUserManualsHelped = false
         }
 
         toggleCustomerSupportDialog() {
@@ -106,7 +100,7 @@
             this.$scope.showCustomerSupportDialog = false
             this.$scope.userManualExists = false
             this.$scope.finalStep = false
-            this.$scope.userManualsHelpedShown = false
+            this.$scope.showUserManualsHelped = false
             this.$scope.customerSupport = {}
         }
 
@@ -127,9 +121,7 @@
             }
             this.$scope.allowDialogClose = true
         }
-
     }
-
     controller.$inject = [
         'userManualsAdminService',
         'serverCallService',
@@ -141,7 +133,6 @@
         '$window',
         '$rootScope',
     ]
-
     component('dopCustomerSupport', {
         templateUrl: 'directives/customerSupport/customerSupport.html',
         controller
