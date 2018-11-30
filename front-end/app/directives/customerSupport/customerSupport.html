@@ -80,7 +80,7 @@
             ng-model="customerSupport.email"
             type="email"
             required
-            ng-pattern="/^.+@.+\..+$/">
+            ng-pattern="validPattern">
           <div data-ng-messages="customerSupportForm.email.$error">
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_EMAIL_IS_MANDATORY"></div>
             <div data-ng-message="pattern" data-translate="CUSTOMER_SUPPORT_WRONG_EMAIL_FORMAT"></div>
