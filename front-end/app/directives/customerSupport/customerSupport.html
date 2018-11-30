@@ -13,7 +13,8 @@
     <div id="customerSupportDiv" data-ng-if="showCustomerSupportDialog" class="customer-support" data-click-outside="$ctrl.clickOutside()">
       <md-toolbar>
         <div class="md-toolbar-tools md-padding-double-horizontal" layout-align="space-between center">
-          <h2 data-translate="CUSTOMER_SUPPORT_ASK_QUESTION"></h2>
+          <h2 data-ng-if="!finalStep" data-translate="CUSTOMER_SUPPORT_ASK_QUESTION"></h2>
+          <h2 data-ng-if="finalStep" data-translate="CUSTOMER_SUPPORT_THANK_YOU"></h2>
           <md-button
             ng-click="$ctrl.close()"
             class="md-icon-button"
@@ -46,11 +47,14 @@
           <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_TOPIC_IS_MANDATORY"></div>
         </div>
       </md-input-container>
-        <div data-layout="row" data-ng-if="userManualExists" class="padding-10">
+        <div data-layout="row" data-ng-if="userManualExists && !userManualsHelpedShown" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_HAS_USER_MANUAL"></span>
         </div>
-        <div data-ng-if="userManualExists" class="padding-10">
+        <div data-ng-if="userManualExists && !userManualsHelpedShown" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_IN_CASE_OF_YES"></span>
+        </div>
+        <div data-layout="row" data-ng-if="userManualsHelpedShown" class="padding-10">
+          <span data-translate="CUSTOMER_SUPPORT_DID_MANUAL_HELP"></span>
         </div>
       </div>
       <!-- Customer support input -->
@@ -115,7 +119,7 @@
         </md-button>
       </div>
       <!-- step two buttons -->
-      <div data-layout="row" data-layout-align="space-between end" data-ng-if="!showCustomerSupportInput && userManualExists" class="button-bottom">
+      <div data-layout="row" data-layout-align="space-between end" data-ng-if="!showCustomerSupportInput && userManualExists && !userManualsHelpedShown" class="button-bottom">
         <md-button class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.showCustomerSupportInput()"
                    aria-label="Ei soovi kasutusjuhendiga tutvuda"
@@ -123,8 +127,6 @@
           <span data-translate="CUSTOMER_SUPPORT_NO"></span>
         </md-button>
         <md-button class="md-raised md-primary"
-                   data-ng-href="/usermanuals"
-                   target="_blank"
                    data-ng-click="$ctrl.openNewTab()"
                    aria-label="Soovin kasutusjuhendiga tutvuda"
         >
@@ -132,6 +134,21 @@
         </md-button>
       </div>
       <!-- step three buttons -->
+      <div data-layout="row" data-layout-align="space-between end" data-ng-if="userManualsHelpedShown" class="button-bottom">
+        <md-button class="md-button md-ink-ripple"
+                   data-ng-click="$ctrl.showCustomerSupportInput()"
+                   aria-label="Ei soovi kasutusjuhendiga tutvuda"
+        >
+          <span data-translate="CUSTOMER_SUPPORT_NO_NEED_MORE_HELP"></span>
+        </md-button>
+        <md-button class="md-raised md-primary"
+                   data-ng-click="$ctrl.close()"
+                   aria-label="Soovin kasutusjuhendiga tutvuda"
+        >
+          <span data-translate="CUSTOMER_SUPPORT_YES_GOT_HELP"></span>
+        </md-button>
+      </div>
+      <!-- step four buttons -->
       <div data-layout="row" data-layout-align="space-between end" data-ng-if="showCustomerSupportInput && !userManualExists" class="button-bottom">
         <md-button class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.back()"

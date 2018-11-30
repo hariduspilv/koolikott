@@ -7,10 +7,28 @@
 
             this.$scope.customerSupport = {}
             this.$scope.showCustomerSupportDialog = false
-            this.$scope.customerSupportFirstStep = true
+            this.$scope.userManualsHelpedShown = false
+
 
             this.getUserManualTitles()
+            this.$rootScope.$on('logout:success', this.clearData.bind(this));
 
+            this.$scope.$watch('customerSupport.subject', (selectedValue, previousValue) => {
+                console.log(selectedValue + '   ' + previousValue);
+                if (selectedValue && previousValue && selectedValue !== previousValue) {
+                    this.handleSelectChange(this.$scope.customerSupport.subject)
+                    this.$scope.userManualsHelpedShown = false
+                }
+            })
+
+        }
+
+        $onChanges({customerSupport}) {
+            console.log(customerSupport)
+        }
+
+        clearData() {
+            this.$scope.customerSupport = {}
         }
 
         setResponse() {
@@ -20,7 +38,9 @@
         }
 
         openNewTab() {
-            window.open(window.location.origin + '/usermanuals', '_blank')
+            this.$window.open(window.location.origin + '/usermanuals', '_blank')
+            this.$scope.userManualsHelpedShown = true
+            this.$scope.allowDialogClose = false
         }
 
         getUserManualTitles() {
@@ -64,6 +84,7 @@
         showCustomerSupportInput() {
             this.$scope.showCustomerSupportInput = true
             this.$scope.userManualExists = false
+            this.$scope.userManualsHelpedShown = false
         }
 
         toggleCustomerSupportDialog() {
@@ -77,6 +98,7 @@
 
         back() {
             this.$scope.showCustomerSupportInput = false
+            this.handleSelectChange(this.$scope.customerSupport.subject)
         }
 
         close() {
@@ -84,6 +106,7 @@
             this.$scope.showCustomerSupportDialog = false
             this.$scope.userManualExists = false
             this.$scope.finalStep = false
+            this.$scope.userManualsHelpedShown = false
             this.$scope.customerSupport = {}
         }
 
@@ -99,11 +122,10 @@
         }
 
         clickOutside() {
-            if (!this.$scope.isSaving) {
+            if (!this.$scope.isSaving && this.$scope.allowDialogClose) {
                 this.$scope.showCustomerSupportDialog = false
-                this.$scope.customerSupport = {}
-                this.$scope.userManualExists = false
             }
+            this.$scope.allowDialogClose = true
         }
 
     }
@@ -116,6 +138,8 @@
         'authenticatedUserService',
         '$location',
         '$translate',
+        '$window',
+        '$rootScope',
     ]
 
     component('dopCustomerSupport', {
