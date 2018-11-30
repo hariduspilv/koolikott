@@ -8,6 +8,7 @@
             this.$scope.customerSupport = {}
             this.$scope.showCustomerSupportDialog = false
             this.$scope.showUserManualsHelped = false
+            this.$scope.backClickedWhileOther = false
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -92,6 +93,11 @@
 
         back() {
             this.$scope.showCustomerSupportInput = false
+            if (this.$scope.customerSupport.subject === 'Muu')
+                this.$scope.backClickedWhileOther = true
+            else
+                this.$scope.backClickedWhileOther = false
+
             this.handleSelectChange(this.$scope.customerSupport.subject)
         }
 
@@ -106,8 +112,11 @@
 
         handleSelectChange(subject) {
 
-            if (subject === 'Muu') {
+            if (subject === 'Muu' && !this.$scope.backClickedWhileOther) {
                 this.$scope.showCustomerSupportInput = true
+                this.$scope.userManualExists = false
+            } else if ((subject === 'Muu' && this.$scope.backClickedWhileOther)) {
+                this.$scope.showCustomerSupportInput = false
                 this.$scope.userManualExists = false
             } else {
                 this.$scope.showCustomerSupportInput = false
