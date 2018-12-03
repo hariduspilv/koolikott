@@ -1,4 +1,4 @@
-<div class="customer-support-parent">
+<div class="customer-support-parent" data-ng-if="$ctrl.isUserModeratorOrAdmin()">
   <md-button class="md-raised md-primary"
              data-ng-click="$ctrl.toggleCustomerSupportDialog()"
              aria-label="Ava kasutajatoe menüü"
@@ -80,7 +80,7 @@
             ng-model="customerSupport.email"
             type="email"
             required
-            ng-pattern="validPattern">
+            ng-pattern="validEmail">
           <div data-ng-messages="customerSupportForm.email.$error">
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_EMAIL_IS_MANDATORY"></div>
             <div data-ng-message="pattern" data-translate="CUSTOMER_SUPPORT_WRONG_EMAIL_FORMAT"></div>

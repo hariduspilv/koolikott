@@ -198,26 +198,6 @@ function isViewMyProfilePage($location, user) {
     return user && $location.path().startsWith('/' + user.username);
 }
 
-function isDashboardPage(path) {
-    return path.indexOf("/dashboard") !== -1;
-}
-
-function isViewMaterialPage(path) {
-    return path === '/material';
-}
-
-function isViewPortfolioPage(path) {
-    return path === '/portfolio';
-}
-
-function isEditPortfolioPage(path) {
-    return path === '/portfolio/edit';
-}
-
-function isHomePage(path) {
-    return path === '/';
-}
-
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
     function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
         $rootScope.$on('$routeChangeSuccess', function () {
@@ -238,21 +218,22 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 userSessionService.startTimer()
             }
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
-            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
-            $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
-            $rootScope.isViewMaterialPage = isViewMaterialPage(path);
-            $rootScope.isViewAdminPanelPage = isDashboardPage(path);
-            $rootScope.isViewHomePage = isHomePage(path);
-            $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage);
+            $rootScope.isUserTabOpen
+            $rootScope.isAdminTabOpen
+            $rootScope.isTaxonomyOpen
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage));
-            if ($rootScope.isAdmin) {
+            if ($rootScope.justLoggedIn && $rootScope.isAdmin) {
                 $rootScope.isUserTabOpen = false
                 $rootScope.isAdminTabOpen = true
+            }
+
+            if ($rootScope.isTaxonomyOpen) {
+                $rootScope.isUserTabOpen = false
+                $rootScope.isAdminTabOpen = false
             }
 
             if ($rootScope.justLoggedIn) {

@@ -5,11 +5,8 @@
         constructor(...args) {
             super(...args)
 
-            this.$scope.validPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            this.$scope.validEmail = VALID_EMAIL
             this.$scope.customerSupport = {}
-            this.$scope.showCustomerSupportDialog = false
-            this.$scope.showUserManualsHelped = false
-            this.$scope.backClickedWhileOther = false
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -31,6 +28,10 @@
             this.$translate('CUSTOMER_SUPPORT_WILL_SEND_RESPONSE').then((value) => {
                 this.$scope.finalresponse = (value.replace('${email}', this.$scope.customerSupport.email));
             })
+        }
+
+        isUserModeratorOrAdmin() {
+            return this.authenticatedUserService.isModeratorOrAdmin()
         }
 
         openNewTab() {
@@ -60,8 +61,7 @@
                         if (response.status === 200) {
                             this.$scope.showCustomerSupportInput = false
                             this.$scope.finalStep = true
-                        }
-                        else {
+                        } else {
                             this.$scope.showCustomerSupportDialog = false
                         }
                     }, () =>
@@ -70,9 +70,9 @@
         }
 
         getLoggedInUserData() {
-            // const { name, surname } = this.authenticatedUserService.getUser()
-            if (this.authenticatedUserService.getUser()) {
-                const {name, surname} = this.authenticatedUserService.getUser()
+            let user = this.authenticatedUserService.getUser();
+            if (user) {
+                const {name, surname} = user
                 this.$scope.customerSupport.name = name + ' ' + surname
             }
         }
@@ -89,16 +89,13 @@
         }
 
         isSendDisabled() {
-            return !(this.$scope.customerSupport.name && this.$scope.customerSupport.email && this.$scope.customerSupport.subject && this.$scope.customerSupport.message)
+            const {name, email, subject, message} = this.$scope.customerSupport;
+            return !(name && email && subject && message)
         }
 
         back() {
             this.$scope.showCustomerSupportInput = false
-            if (this.$scope.customerSupport.subject === 'Muu')
-                this.$scope.backClickedWhileOther = true
-            else
-                this.$scope.backClickedWhileOther = false
-
+            this.$scope.backClickedWhileOther = this.$scope.customerSupport.subject === 'Muu';
             this.handleSelectChange(this.$scope.customerSupport.subject)
         }
 
@@ -112,17 +109,8 @@
         }
 
         handleSelectChange(subject) {
-
-            if (subject === 'Muu' && !this.$scope.backClickedWhileOther) {
-                this.$scope.showCustomerSupportInput = true
-                this.$scope.userManualExists = false
-            } else if ((subject === 'Muu' && this.$scope.backClickedWhileOther)) {
-                this.$scope.showCustomerSupportInput = false
-                this.$scope.userManualExists = false
-            } else {
-                this.$scope.showCustomerSupportInput = false
-                this.$scope.userManualExists = true
-            }
+            this.$scope.userManualExists = subject !== 'Muu';
+            this.$scope.showCustomerSupportInput = subject !== 'Muu' ? false : !this.$scope.backClickedWhileOther;
         }
 
         clickOutside() {
