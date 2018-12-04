@@ -198,6 +198,14 @@ function isViewMyProfilePage($location, user) {
     return user && $location.path().startsWith('/' + user.username);
 }
 
+function isViewPortfolioPage(path) {
+    return path === '/portfolio';
+}
+
+function isEditPortfolioPage(path) {
+    return path === '/portfolio/edit';
+}
+
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
     function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
         $rootScope.$on('$routeChangeSuccess', function () {
