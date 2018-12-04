@@ -198,12 +198,24 @@ function isViewMyProfilePage($location, user) {
     return user && $location.path().startsWith('/' + user.username);
 }
 
+function isDashboardPage(path) {
+    return path.indexOf("/dashboard") !== -1;
+}
+
+function isViewMaterialPage(path) {
+    return path === '/material';
+}
+
 function isViewPortfolioPage(path) {
     return path === '/portfolio';
 }
 
 function isEditPortfolioPage(path) {
     return path === '/portfolio/edit';
+}
+
+function isHomePage(path) {
+    return path === '/';
 }
 
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
@@ -226,6 +238,12 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 userSessionService.startTimer()
             }
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
+            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
+            $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
+            $rootScope.isViewMaterialPage = isViewMaterialPage(path);
+            $rootScope.isViewAdminPanelPage = isDashboardPage(path);
+            $rootScope.isViewHomePage = isHomePage(path);
+            $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage);
             $rootScope.isUserTabOpen
             $rootScope.isAdminTabOpen
             $rootScope.isTaxonomyOpen

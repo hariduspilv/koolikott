@@ -18,7 +18,7 @@
                 this.$scope.taxonObject = this.taxonGroupingService.getTaxonObject(this.learningObject.taxons)
 
             if (this.$scope.taxonObject) {
-                this.$scope.isVocationalOnly = _.every(this.$scope.taxonObject.educationalContexts, o => o === 'VOCATIONALEDUCATION')
+                this.$rootScope.isVocationalOnly = _.every(this.$scope.taxonObject.educationalContexts, o => o === 'VOCATIONALEDUCATION')
             }
         }
 
@@ -30,6 +30,7 @@
         'eventService',
         '$scope',
         'taxonGroupingService',
+        '$rootScope',
     ]
 
     component('dopTaxonMeta', {
