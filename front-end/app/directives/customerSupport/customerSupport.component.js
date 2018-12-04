@@ -7,6 +7,7 @@
 
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.customerSupport = {}
+            this.$scope.backClickedWhileOther = false
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -94,9 +95,16 @@
         }
 
         back() {
-            this.$scope.showCustomerSupportInput = false
-            this.$scope.backClickedWhileOther = this.$scope.customerSupport.subject === 'Muu';
-            this.handleSelectChange(this.$scope.customerSupport.subject)
+            if (this.$scope.customerSupport.subject === 'Muu') {
+                this.$scope.customerSupport.subject = ''
+                this.$scope.userManualExists = false
+                this.$scope.showCustomerSupportInput = false
+            } else {
+
+                this.$scope.showCustomerSupportInput = false
+                this.$scope.backClickedWhileOther = true
+                this.handleSelectChange(this.$scope.customerSupport.subject)
+            }
         }
 
         close() {
@@ -110,7 +118,7 @@
 
         handleSelectChange(subject) {
             this.$scope.userManualExists = subject !== 'Muu';
-            this.$scope.showCustomerSupportInput = subject !== 'Muu' ? false : !this.$scope.backClickedWhileOther;
+            this.$scope.showCustomerSupportInput = subject === 'Muu';
         }
 
         clickOutside() {
