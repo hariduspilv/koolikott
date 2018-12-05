@@ -267,6 +267,10 @@
 .card-header--flex-basis{
   flex-basis:auto;
   display:inline-table;
+
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    flex: none !important;
+  }
 }
 
 
