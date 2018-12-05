@@ -1,8 +1,12 @@
 ## e-Koolikott [1.26.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10500)
 
 ### Muutunud
-*
-*
+* Õppevara detailvaates taksonoomiad kuvatud tulpade asemel ridadena [EK-52](https://projektid.hitsa.ee/jira/browse/EK-52)
+* Kui kogumikust koopia tegemine katkestatakse, ei tekitata rakendusse koopiat [EK-112](https://projektid.hitsa.ee/jira/browse/EK-112)
+* Kogumiku muutmisvaatele lisatud üles nupp[EK-113](https://projektid.hitsa.ee/jira/browse/EK-113)
+* e-Koolikoti uue id kaardi valmidus [EK-115](https://projektid.hitsa.ee/jira/browse/EK-115)
+* Kogumikust koopia tegemine keelatud [EK-148](https://projektid.hitsa.ee/jira/browse/EK-148)
+* Kasutajatoe funktsionaalsus [EK-117](https://projektid.hitsa.ee/jira/browse/EK-117)
 
 ## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10401) (Toodangusse paigaldatud ....11.2018)
 
