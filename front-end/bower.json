@@ -31,7 +31,7 @@
     "angular-messages": "1.7.2",
     "bluebird": "^3.4.7",
     "jquery-truncate-html": "^0.0.1",
-    "core.js": "^2.5.1",
+    "core.js": "2.5.7",
     "medium-editor": "5.23.2",
     "angular-sortable-view": "https://github.com/ipsips/angular-sortable-view.git#master",
     "medium-button": "^1.1.2",

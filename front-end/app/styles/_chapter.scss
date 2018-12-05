@@ -65,17 +65,13 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
     transition: background-color .2s;
     will-change: background-color;
 
-    @media (max-width: 959px) {
+    @media (max-width: $layout-breakpoint-sm) {
       box-shadow: none;
     }
   }
 
   &.is-edit-mode md-card-content {
     min-height: 20rem;
-  }
-
-  @media (max-width: 959px) {
-    margin-top: 5rem;
   }
 }
 
@@ -207,7 +203,7 @@ md-input-container.chapter-title {
     margin-left: 2rem;
   }
 
-  @media (max-width: 959px) {
+  @media (max-width: $layout-breakpoint-sm) {
     left: auto;
     right: 0;
     top: auto;
@@ -270,7 +266,7 @@ md-input-container.chapter-title {
     }
   }
 
-  @media (min-width: 960px) {
+  @media (min-width: $layout-breakpoint-sm) {
     .sticky {
       position: sticky;
       top: $md-toolbar-height;
@@ -278,7 +274,7 @@ md-input-container.chapter-title {
     }
   }
 
-  @media (max-width: 959px) {
+  @media (max-width: $layout-breakpoint-sm) {
     position: sticky;
     z-index: 3;
     top: 56px;
@@ -349,7 +345,7 @@ md-input-container.chapter-title {
   transition: height .2s;
   will-change: height;
 
-  @media (max-width: 959px) {
+  @media (max-width: $layout-breakpoint-sm) {
     display: block;
     float: left;
 
@@ -420,7 +416,7 @@ md-input-container.chapter-title {
     @extend .focused-chapter-button;
   }
 
-  @media (max-width: 959px) {
+  @media (max-width: $layout-breakpoint-sm) {
     width: auto !important;
     display: flex;
     flex-direction: column;
@@ -488,7 +484,7 @@ md-input-container.chapter-title {
     font-weight: 500;
   }
 
-  @media (max-width: 959px) {
+  @media (max-width: $layout-breakpoint-sm) {
     font-size: .75rem;
     display: flex;
     flex-direction: column;

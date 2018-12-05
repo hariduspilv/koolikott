@@ -22,7 +22,7 @@ public class PortfolioGetter {
     @Inject
     private PortfolioPermission portfolioPermission;
 
-    public Portfolio get(long portfolioId, User loggedInUser) {
+    public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
             return portfolioDao.findById(portfolioId);
         }

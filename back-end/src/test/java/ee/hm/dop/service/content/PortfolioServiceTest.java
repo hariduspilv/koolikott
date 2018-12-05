@@ -35,7 +35,7 @@ public class PortfolioServiceTest {
 
     @Test
     public void get() {
-        int portfolioId = 125;
+        long portfolioId = 125;
         Portfolio portfolio = createMock(Portfolio.class);
         expect(portfolioDao.findByIdNotDeleted(portfolioId)).andReturn(portfolio);
         expect(portfolioPermission.canView(null, portfolio)).andReturn(true);

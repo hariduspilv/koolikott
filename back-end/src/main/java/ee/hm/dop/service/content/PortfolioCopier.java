@@ -18,29 +18,7 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 public class PortfolioCopier {
 
-    @Inject
-    private PortfolioService portfolioService;
-    @Inject
-    private PortfolioGetter portfolioGetter;
-    @Inject
-    private PortfolioConverter portfolioConverter;
-    @Inject
-    private PortfolioPermission portfolioPermission;
-
-    public Portfolio copy(Portfolio portfolio, User loggedInUser) {
-        Portfolio originalPortfolio = portfolioGetter.findValid(portfolio);
-
-        if (!portfolioPermission.canView(loggedInUser, originalPortfolio)) {
-            throw ValidatorUtil.permissionError();
-        }
-
-        Portfolio copy = portfolioConverter.getPortfolioWithAllowedFieldsOnCreate(originalPortfolio);
-        copy.setChapters(copyChapters(originalPortfolio.getChapters()));
-
-        return portfolioService.doCreate(copy, loggedInUser, originalPortfolio.getCreator());
-    }
-
-    private List<Chapter> copyChapters(List<Chapter> chapters) {
+    public List<Chapter> copyChapters(List<Chapter> chapters) {
         if (CollectionUtils.isEmpty(chapters)) {
             return Lists.newArrayList();
         }

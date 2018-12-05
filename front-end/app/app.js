@@ -244,15 +244,22 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
             $rootScope.isViewHomePage = isHomePage(path);
             $rootScope.isViewMaterialOrPortfolioPage = !!($rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage);
+            $rootScope.isUserTabOpen
+            $rootScope.isAdminTabOpen
+            $rootScope.isTaxonomyOpen
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
             }
 
-            $rootScope.isUserTabOpen = !!($rootScope.isViewAdminPanelPage || isViewMyProfile || $rootScope.isViewMaterialPage || $rootScope.isViewPortfolioPage || $rootScope.justLoggedIn || (isLoggedIn && $rootScope.isViewHomePage));
-            if ($rootScope.isAdmin) {
+            if ($rootScope.justLoggedIn && $rootScope.isAdmin) {
                 $rootScope.isUserTabOpen = false
                 $rootScope.isAdminTabOpen = true
+            }
+
+            if ($rootScope.isTaxonomyOpen) {
+                $rootScope.isUserTabOpen = false
+                $rootScope.isAdminTabOpen = false
             }
 
             if ($rootScope.justLoggedIn) {

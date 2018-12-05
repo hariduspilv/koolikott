@@ -73,7 +73,10 @@ class controller extends Controller {
             this.$mdDialog
                 .show({
                     templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                    controller: 'addPortfolioDialogController'
+                    controller: 'addPortfolioDialogController',
+                    locals: {
+                        mode: 'EDIT'
+                    }
                 })
                 .then(() => {
                     this.isSaving = false

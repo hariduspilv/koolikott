@@ -24,3 +24,8 @@ md-select-menu[multiple] {
     background-color: #eee;
   }
 }
+
+.md-select-menu-container {
+  z-index: 1000 !important;
+}
+

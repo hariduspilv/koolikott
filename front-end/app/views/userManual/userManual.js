@@ -5,20 +5,15 @@
         constructor(...args) {
             super(...args)
             this.getUserManuals();
-            $('body').materialScrollTop({ offset: 300 })
         }
 
         getUserManuals() {
-            this.serverCallService
-                .makeGet('rest/admin/userManuals')
+            this.userManualsAdminService.getUserManuals()
                 .then(({data}) => {
                     if (data) {
                         this.$scope.videos = data
                     }
                 });
-        }
-        isLoggedIn() {
-            return this.authenticatedUserService.isAuthenticated()
         }
     }
 
@@ -26,6 +21,7 @@
         '$scope',
         'serverCallService',
         'authenticatedUserService',
+        'userManualsAdminService'
     ]
     angular.module('koolikottApp').controller('userManualsController', controller)
 }

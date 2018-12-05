@@ -387,17 +387,12 @@
             }
         }
 
-        isLoggedIn() {
-            return this.authenticatedUserService.isAuthenticated()
-        }
-
         isAdmin() {
             return this.authenticatedUserService.isAdmin()
 
         }
 
         buildConstants() {
-            $('body').materialScrollTop({offset: 300})
             this.$scope.items = []
             this.selectedMaxCount = 0
             this.distinctCount = {similar: 0, exact: 0}
