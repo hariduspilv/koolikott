@@ -4,6 +4,7 @@
              aria-label="Ava kasutajatoe menüü"
              data-ng-if="!showCustomerSupportDialog"
              id="customerSupportButton"
+
   >
     <md-icon>live_help</md-icon>
     <span data-translate="CUSTOMER_SUPPORT_HELP"></span>
@@ -11,7 +12,7 @@
   <!-- Customer support form div -->
   <form name="customerSupportForm">
     <div id="customerSupportDiv" data-ng-if="showCustomerSupportDialog" class="customer-support"
-         data-click-outside="$ctrl.clickOutside()">
+         click-outside="$ctrl.clickOutside()" outside-if-not="md-select-menu-container md-active md-clickable">
       <md-toolbar>
         <div class="md-toolbar-tools md-padding-double-horizontal" layout-align="space-between center">
           <h2 data-ng-if="!finalStep" data-translate="CUSTOMER_SUPPORT_ASK_QUESTION"></h2>
