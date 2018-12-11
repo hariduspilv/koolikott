@@ -6,13 +6,36 @@ class controller extends Controller {
         super(...args)
 
         window.addEventListener('scroll', (e) => {
-
             let allElements = document.querySelectorAll('.portfolio-chapter')
+            
+           
+         
+
+            
 
             allElements.forEach( (el) => {
+                
                 if (this.isElementInViewport(el)) {
                     e.preventDefault()
                     e.stopPropagation()
+
+                    let item = $(".sidenav__item--chapter-title a")
+                    let total = item.length
+                    for(let i = 0; i<total; i++) {
+                        let link = item.eq(i).attr("ng-href")
+                       
+                        if(link) {
+                            let id = link.split("#")[2]
+                               if(id === el.id) {
+                               item.eq(i).css("background-color", "rgba(158, 158, 158, 0.2)")
+                               }
+                               else {
+                                item.eq(i).css("background-color", "transparent")
+                               }                    
+                        }
+                    }
+  
+                    
                     if (!window.location.href.includes('&chapterName') && !window.location.hash.includes(el.id)) {
                         let url = this.$location.url().split('#')[0] + '#' + el.id;
                         this.$location.url(url)
