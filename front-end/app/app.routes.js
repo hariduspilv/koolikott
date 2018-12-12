@@ -118,6 +118,11 @@ angular.module('koolikottApp')
                     controller: 'userManualsController',
                     controllerAs: '$ctrl',
                 })
+                .when('/faq', {
+                    templateUrl: 'views/faq/faq.html',
+                    controller: 'faqController',
+                    controllerAs: '$ctrl',
+                })
                 .when('/loginRedirect', {
                     templateUrl: 'views/loginRedirect/loginRedirect.html',
                     controller: 'loginRedirectController',
