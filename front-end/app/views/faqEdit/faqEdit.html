@@ -1,0 +1,14 @@
+<div data-layout="row" data-layout-align="space-between center">
+  <h1 class="md-headline" data-translate="FAQ_PAGE"></h1>
+  <md-button style="min-width: 0px"
+             data-ng-if="$ctrl.isAdmin()"
+             data-ng-click="$ctrl.editFaq()"
+             id="faq-edit">
+    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+    <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
+  </md-button>
+</div>
+<div>
+  <dop-faq-block>
+  </dop-faq-block>
+</div>

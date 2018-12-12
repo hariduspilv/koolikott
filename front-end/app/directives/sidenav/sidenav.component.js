@@ -10,6 +10,7 @@ class controller extends Controller {
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.toggleSidenav = () => this.$mdSidenav('left').toggle()
+        this.getUserManualsCount()
 
 
         // List of taxon icons
@@ -188,15 +189,28 @@ class controller extends Controller {
         if (evt.currentTarget.id === 'Admin') {
             this.$rootScope.isUserTabOpen = false
             this.$rootScope.isTaxonomyOpen = false
+            this.$rootScope.isAboutTabOpen = false
         }
         else if (evt.currentTarget.id === 'myProfile') {
             this.$rootScope.isAdminTabOpen = false
             this.$rootScope.isTaxonomyOpen = false
-        }
-        else {
+            this.$rootScope.isAboutTabOpen = false
+        } else if (evt.currentTarget.id === 'About') {
+            this.$rootScope.isAdminTabOpen = false
+            this.$rootScope.isTaxonomyOpen = false
+            this.$rootScope.isUserTabOpen = false
+        } else {
             this.$rootScope.isAdminTabOpen = false
             this.$rootScope.isUserTabOpen = false
+            this.$rootScope.isAboutTabOpen = false
         }
+    }
+
+    getUserManualsCount() {
+        this.userManualsAdminService.getUserManuals()
+            .then(data => {
+                this.$scope.userManualsCount = data.data.length
+            })
     }
 }
 controller.$inject = [
@@ -207,7 +221,8 @@ controller.$inject = [
     '$mdSidenav',
     'authenticatedUserService',
     'userDataService',
-    'taxonService'
+    'taxonService',
+    'userManualsAdminService',
 ]
 component('dopSidenav', {
     bindings: {

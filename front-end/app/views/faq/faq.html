@@ -1,0 +1,27 @@
+<div data-layout="row" data-layout-align="space-between center">
+  <h1 class="md-headline" data-translate="FAQ_PAGE"></h1>
+  <md-button style="min-width: 0px"
+             data-ng-if="$ctrl.isAdmin() && !editMode"
+             data-ng-click="$ctrl.editFaqPage()"
+             id="faq-edit">
+    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+    <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
+  </md-button>
+  <md-button class="md-button md-ink-ripple"
+             data-ng-click="$ctrl.createFaq()"
+             aria-label="Add FAQ"
+             data-ng-if="$ctrl.isAdmin() && editMode"
+             id="customerSupportButton"
+  >
+    <md-icon>add_circle</md-icon>
+    <span data-translate="ADD_FAQ"></span>
+  </md-button>
+</div>
+<div>
+  <dop-faq-block
+    data-is-edit-mode="editMode"
+    data-faqs="faqs"
+  data-delete-faq="$ctrl.removeFaq()"
+  data-get-faqs="$ctrl.getFaqs()">
+  </dop-faq-block>
+</div>
