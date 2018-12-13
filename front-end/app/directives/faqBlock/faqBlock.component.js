@@ -36,6 +36,7 @@
             this.faqService.saveFaq(faq)
                 .then(response => {
                     if (response.status === 200) {
+                        this.createDialogOpen = false
                         this.$scope.isSaving = false
                         faq.edit = !faq.edit
                         this.getFaqs()
