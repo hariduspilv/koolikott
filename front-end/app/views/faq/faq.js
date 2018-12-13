@@ -47,6 +47,7 @@
 
         createFaq() {
             this.$scope.faqs.push(this.$scope.newFaq)
+            this.initNewFaq()
         }
 
         removeFaq() {
