@@ -61,23 +61,27 @@
 
         cancelEdit(faq) {
             if (faq.new) {
-                this.deleteFaq()
+                this.removeFaq()
             } else {
                 faq.edit = !faq.edit;
             }
         }
 
         delete(faq) {
-            this.faqService.deleteFaq(faq)
-                .then(() => {
-                    this.getFaqs()
-                })
+            this.dialogService.showDeleteConfirmationDialog(
+                'ARE_YOU_SURE_DELETE',
+                '',
+                () => this.faqService.deleteFaq(faq)
+                    .then(() => {
+                        this.getFaqs()
+                    })
+            )
         }
 
         isSubmitDisabled(faq) {
-            return (faq.questionEst === '' && faq.answerEst === '' &&
-                faq.questionEng === '' && faq.answerEng === '' &&
-                faq.questionRus === '' && faq.answerRus === '')
+            return !(faq.questionEst && faq.answerEst &&
+                faq.questionEng && faq.answerEng &&
+                faq.questionRus && faq.answerRus)
 
         }
     }
@@ -97,7 +101,7 @@
         bindings: {
             faqs: '<',
             isEditMode: '<',
-            deleteFaq: '&',
+            removeFaq: '&',
             getFaqs: '&'
         },
         templateUrl: 'directives/faqBlock/faqBlock.html',
