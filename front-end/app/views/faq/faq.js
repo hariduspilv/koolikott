@@ -6,6 +6,7 @@
             super(...args)
             this.getFaqs()
             this.initNewFaq()
+            this.$scope.editMode = false
 
         }
 

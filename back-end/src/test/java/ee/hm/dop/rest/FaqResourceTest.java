@@ -64,7 +64,12 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
         Response response = doPost(SAVE_FAQ, faq);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
 
+    }
+
+    @Test
+    public void moderator_can_not_create_or_update_faq() {
         login(USER_MODERATOR);
+        Faq faq = make("Test?", "Test Eng?", "Test Rus?", "Jah", "Yes", "Da");
         Response response2 = doPost(SAVE_FAQ, faq);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response2.getStatus());
     }
