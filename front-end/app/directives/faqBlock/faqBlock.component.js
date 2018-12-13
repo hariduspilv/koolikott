@@ -34,16 +34,16 @@
 
             this.$scope.isSaving = true
 
-            debugger
             this.faqService.saveFaq(faq)
                 .then(response => {
                     if (response.status === 200) {
                         this.$scope.isSaving = false
                         faq.edit = !faq.edit
                         this.getFaqs()
-                        debugger
+                        this.toastService.show('FAQ_SAVED')
                     } else {
                         this.$scope.isSaving = false
+                        this.toastService.show('FAQ_SAVE_FAILED')
                     }
                 })
             this.$scope.isSaving = false
@@ -74,6 +74,7 @@
                 () => this.faqService.deleteFaq(faq)
                     .then(() => {
                         this.getFaqs()
+                        this.toastService.show('FAQ_DELETED')
                     })
             )
         }
@@ -88,14 +89,12 @@
 
     controller.$inject = [
         '$scope',
-        '$rootScope',
-        '$translate',
-        '$mdDialog',
         'dialogService',
         'serverCallService',
         'translationService',
         'searchService',
         'faqService',
+        'toastService',
     ]
     component('dopFaqBlock', {
         bindings: {
