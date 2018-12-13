@@ -7,7 +7,6 @@
             this.faqLanguages = ['ET', 'EN', 'RU']
             this.$scope.activeFaqLanguage = this.faqLanguages[0]
             this.getCurrentLanguage()
-            this.isEditMode = true
 
         }
 
@@ -52,6 +51,10 @@
         getCurrentLanguage() {
             return this.translationService.getLanguage()
             console.log(lang)
+        }
+
+        isFaqEditMode() {
+            return this.editMode
         }
 
 
@@ -99,7 +102,7 @@
     component('dopFaqBlock', {
         bindings: {
             faqs: '<',
-            isEditMode: '<',
+            editMode: '<',
             removeFaq: '&',
             getFaqs: '&'
         },

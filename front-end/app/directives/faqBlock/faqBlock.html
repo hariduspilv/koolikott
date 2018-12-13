@@ -1,7 +1,7 @@
 
     <!--View-->
     <md-card class=" card-lg">
-    <md-card-content data-ng-if="!$ctrl.isEditMode" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
+    <md-card-content data-ng-if="!$ctrl.isFaqEditMode()" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
       <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.questionEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.questionEng : faq.questionRus"></h2>
       <div>
         <span data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
@@ -12,7 +12,7 @@
 
     <!-- Edit mode -->
     <form name="faqForm">
-    <md-card data-ng-if="$ctrl.isEditMode" class="portfolio-chapter card-lg faq-font" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
+    <md-card data-ng-if="$ctrl.isFaqEditMode()" class="portfolio-chapter card-lg faq-font" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
       <div>
       <md-card-content data-ng-if="!faq.edit">
         <div data-layout="row" data-layout-align="space-between center">
@@ -20,7 +20,7 @@
           <md-button class="md-icon-button chapter-pencil-button"
                      data-ng-click="$ctrl.editFaq(faq)"
                      id="faq-edit"
-                     data-ng-if="$ctrl.isEditMode">
+                     data-ng-if="$ctrl.isFaqEditMode()">
             <md-icon  class="material-icons">edit</md-icon>
             <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
           </md-button>
