@@ -48,6 +48,7 @@
         createFaq() {
             this.$scope.faqs.push(this.$scope.newFaq)
             this.initNewFaq()
+            this.createDialogOpen = true
         }
 
         removeFaq() {

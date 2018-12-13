@@ -63,6 +63,7 @@
         }
 
         cancelEdit(faq) {
+            this.createDialogOpen = false
             if (faq.new) {
                 this.removeFaq()
             } else {
@@ -104,7 +105,8 @@
             faqs: '<',
             editMode: '<',
             removeFaq: '&',
-            getFaqs: '&'
+            getFaqs: '&',
+            createDialogOpen: '='
         },
         templateUrl: 'directives/faqBlock/faqBlock.html',
         controller

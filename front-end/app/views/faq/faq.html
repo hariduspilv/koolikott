@@ -11,6 +11,7 @@
              data-ng-click="$ctrl.createFaq()"
              aria-label="Add FAQ"
              data-ng-if="$ctrl.isAdmin() && editMode"
+             ng-disabled="$ctrl.createDialogOpen"
              id="customerSupportButton"
   >
     <md-icon>add_circle</md-icon>
@@ -19,6 +20,7 @@
 </div>
 <div>
   <dop-faq-block
+    data-create-dialog-open="$ctrl.createDialogOpen"
     data-edit-mode="editMode"
     data-faqs="faqs"
     data-remove-faq="$ctrl.removeFaq()"

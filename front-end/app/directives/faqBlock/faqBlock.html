@@ -40,11 +40,12 @@
               <div ng-if="lang === 'ET'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                   <label data-translate="FAQ_QUESTION"></label>
-                  <textarea
+                  <input
                     name="question"
                     id="add-question_est"
                     ng-model="faq.questionEst"
-                    required></textarea>
+                    maxlength="100"
+                    required>
                   <div data-ng-messages="faqForm.question.$error">
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
@@ -65,11 +66,12 @@
               <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                   <label data-translate="FAQ_QUESTION"></label>
-                  <textarea
+                  <input
                     name="question"
                     id="add-question-eng"
                     ng-model="faq.questionEng"
-                    required></textarea>
+                    maxlength="100"
+                    required>
                   <div data-ng-messages="faqForm.question.$error">
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
@@ -80,7 +82,8 @@
                             ng-model="faq.answerEng"
                             id="add-answer-eng"
                             rows="2"
-                            required></textarea>
+                            required
+                            maxlength="280"></textarea>
                   <div data-ng-messages="faqForm.answer.$error">
                     <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
                   </div>
@@ -89,11 +92,12 @@
               <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                   <label data-translate="FAQ_QUESTION"></label>
-                  <textarea
+                  <input
                     name="question"
                     id="add-question-rus"
                     ng-model="faq.questionRus"
-                    required></textarea>
+                    maxlength="100"
+                    required>
                   <div data-ng-messages="faqForm.question.$error">
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
@@ -104,7 +108,8 @@
                             ng-model="faq.answerRus"
                             id="add-answer-rus"
                             rows="2"
-                            required></textarea>
+                            required
+                            maxlength="280"></textarea>
                   <div data-ng-messages="faqForm.answer.$error">
                     <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
                   </div>
