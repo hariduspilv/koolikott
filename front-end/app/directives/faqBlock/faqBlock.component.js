@@ -1,0 +1,115 @@
+'use strict'
+
+{
+    class controller extends Controller {
+        constructor(...args) {
+            super(...args)
+            this.faqLanguages = ['ET', 'EN', 'RU']
+            this.$scope.activeFaqLanguage = this.faqLanguages[0]
+            this.getCurrentLanguage()
+
+        }
+
+        toggleFaqLanguageInputs(faq, lang) {
+            faq.activeFaqLanguage = lang
+        }
+
+        isLangFilled(lang, faq) {
+            let isFilled = false;
+
+            if ((lang === 'ET') && !!(faq.answerEst && faq.questionEst))
+                isFilled = true
+
+            if ((lang === 'EN') && !!(faq.answerEng && faq.questionEng))
+                isFilled = true
+
+            if ((lang === 'RU') && !!(faq.answerRus && faq.questionRus))
+                isFilled = true
+
+            return isFilled;
+        }
+
+        save(faq) {
+
+            this.$scope.isSaving = true
+
+            this.faqService.saveFaq(faq)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.createDialogOpen = false
+                        this.$scope.isSaving = false
+                        faq.edit = !faq.edit
+                        this.getFaqs()
+                        this.toastService.show('FAQ_SAVED')
+                    } else {
+                        this.$scope.isSaving = false
+                        this.toastService.show('FAQ_SAVE_FAILED')
+                    }
+                })
+            this.$scope.isSaving = false
+        }
+
+        getCurrentLanguage() {
+            return this.translationService.getLanguage()
+            console.log(lang)
+        }
+
+        isFaqEditMode() {
+            return this.editMode
+        }
+
+
+        editFaq(faq) {
+            faq.edit = !faq.edit;
+        }
+
+        cancelEdit(faq) {
+            this.createDialogOpen = false
+            if (faq.new) {
+                this.removeFaq()
+            } else {
+                faq.edit = !faq.edit;
+            }
+        }
+
+        delete(faq) {
+            this.dialogService.showDeleteConfirmationDialog(
+                'ARE_YOU_SURE_DELETE',
+                '',
+                () => this.faqService.deleteFaq(faq)
+                    .then(() => {
+                        this.getFaqs()
+                        this.toastService.show('FAQ_DELETED')
+                    })
+            )
+        }
+
+        isSubmitDisabled(faq) {
+            return !(faq.questionEst && faq.answerEst &&
+                faq.questionEng && faq.answerEng &&
+                faq.questionRus && faq.answerRus)
+
+        }
+    }
+
+    controller.$inject = [
+        '$scope',
+        'dialogService',
+        'serverCallService',
+        'translationService',
+        'searchService',
+        'faqService',
+        'toastService',
+    ]
+    component('dopFaqBlock', {
+        bindings: {
+            faqs: '<',
+            editMode: '<',
+            removeFaq: '&',
+            getFaqs: '&',
+            createDialogOpen: '='
+        },
+        templateUrl: 'directives/faqBlock/faqBlock.html',
+        controller
+    })
+}

@@ -1,0 +1,182 @@
+
+    <!--View-->
+    <md-card class=" card-lg">
+    <md-card-content data-ng-if="!$ctrl.isFaqEditMode()" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
+      <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.questionEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.questionEng : faq.questionRus"></h2>
+      <div>
+        <span data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
+      </div>
+    </md-card-content>
+    </md-card>
+
+
+    <!-- Edit mode -->
+    <form name="faqForm">
+    <md-card data-ng-if="$ctrl.isFaqEditMode()" class="portfolio-chapter card-lg faq-font" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
+      <div>
+      <md-card-content data-ng-if="!faq.edit">
+        <div data-layout="row" data-layout-align="space-between center">
+          <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.questionEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.questionEng : faq.questionRus"></h2>
+          <md-button class="md-icon-button chapter-pencil-button"
+                     data-ng-click="$ctrl.editFaq(faq)"
+                     id="faq-edit"
+                     data-ng-if="$ctrl.isFaqEditMode()">
+            <md-icon  class="material-icons">edit</md-icon>
+            <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
+          </md-button>
+        </div>
+          <div>
+          <span data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
+        </div>
+      </md-card-content>
+        <md-card-content data-ng-if="faq.edit" >
+          <div
+            data-ng-repeat="lang in faq.faqLanguages track by $index"
+            data-ng-if="lang === faq.activeFaqLanguage && true"
+            layout="row"
+            layout-wrap>
+            <div layout-xs="column"  layout-align-xs="start stretch" layout-align="start center" flex-order="2"
+                 flex-order-gt-sm="2" flex="100" data-ng-if="true">
+              <div ng-if="lang === 'ET'" data-layout-align="start stretch" layout="column" data-flex="100">
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                  <label data-translate="FAQ_QUESTION"></label>
+                  <input
+                    name="question"
+                    id="add-question_est"
+                    ng-model="faq.questionEst"
+                    maxlength="100"
+                    required>
+                  <div data-ng-messages="faqForm.question.$error">
+                    <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                  <label data-translate="FAQ_ANSWER"></label>
+                  <textarea name="answer"
+                            ng-model="faq.answerEst"
+                            id="add-answer-est"
+                            rows="2"
+                            required
+                            maxlength="280"></textarea>
+                  <div data-ng-messages="faqForm.answer.$error">
+                    <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" data-flex="100">
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                  <label data-translate="FAQ_QUESTION"></label>
+                  <input
+                    name="question"
+                    id="add-question-eng"
+                    ng-model="faq.questionEng"
+                    maxlength="100"
+                    required>
+                  <div data-ng-messages="faqForm.question.$error">
+                    <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                  <label data-translate="FAQ_ANSWER"></label>
+                  <textarea name="answer"
+                            ng-model="faq.answerEng"
+                            id="add-answer-eng"
+                            rows="2"
+                            required
+                            maxlength="280"></textarea>
+                  <div data-ng-messages="faqForm.answer.$error">
+                    <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                  <label data-translate="FAQ_QUESTION"></label>
+                  <input
+                    name="question"
+                    id="add-question-rus"
+                    ng-model="faq.questionRus"
+                    maxlength="100"
+                    required>
+                  <div data-ng-messages="faqForm.question.$error">
+                    <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                  <label data-translate="FAQ_ANSWER"></label>
+                  <textarea name="answer"
+                            ng-model="faq.answerRus"
+                            id="add-answer-rus"
+                            rows="2"
+                            required
+                            maxlength="280"></textarea>
+                  <div data-ng-messages="faqForm.answer.$error">
+                    <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
+                  </div>
+                </md-input-container>
+              </div>
+            </div>
+            <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
+                 data-ng-if="true">
+              <!-- Landing page language -->
+              <md-button
+                class="button-material-language"
+                data-ng-repeat="_lang in faq.faqLanguages track by $index"
+                data-ng-class="{'is-selected': lang === _lang}"
+                data-ng-click="$ctrl.toggleFaqLanguageInputs(faq, _lang)"
+                flex-gt-xs="{{ faq.activeFaqLanguage === _lang ? '40' : '30' }}"
+                aria-label="{{ _lang }} button"
+              >
+                <span data-ng-bind="_lang"></span>
+                <md-icon class="button-material-language__icon"
+                         data-ng-if="$ctrl.isLangFilled(_lang, faq) || faq.activeFaqLanguage === _lang">done
+                </md-icon>
+              </md-button>
+            </div>
+            <div data-flex-order="3" flex="100" class="flex flex-col">
+            </div>
+          </div>
+          <div data-layout="row" data-layout-align="space-between center">
+            <md-button
+              aria-label="Cancel landing page edit"
+              id="landing-page-edit-cancel-button"
+              data-ng-click="$ctrl.delete(faq)"
+              class="md-button md-ink-ripple"
+            >
+              <span data-translate="BUTTON_REMOVE"></span>
+            </md-button>
+            <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
+                 data-ng-if="true">
+              <md-button
+                aria-label="Cancel landing page edit"
+                id="landing-page-edit-cancel-button"
+                data-ng-click="$ctrl.cancelEdit(faq)"
+                class="md-button md-ink-ripple"
+              >
+                <span data-translate="BUTTON_CANCEL"></span>
+              </md-button>
+              <md-button
+                aria-label="{{ 'BUTTON_ADD_FAQ' | translate }}"
+                id="update-landing-page"
+                class="md-primary"
+                data-ng-disabled="$ctrl.isSubmitDisabled(faq) || isSaving"
+                data-ng-click="$ctrl.save(faq)"
+              >
+                <span data-translate="{{ 'BUTTON_ADD_FAQ' }}"></span>
+                <md-icon>arrow_forward</md-icon>
+              </md-button>
+              <md-progress-circular
+                class="md-accent ng-hide"
+                md-mode="indeterminate"
+                md-diameter="40"
+                data-ng-show="isSaving"
+              ></md-progress-circular>
+            </div>
+
+          </div>
+        </md-card-content>
+      </div>
+    </md-card>
+    </form>
+
+  <!--Edit -->

@@ -22,19 +22,44 @@
   <md-divider></md-divider>
 
   <uib-accordion close-others="false">
-    <!-- User Guide -->
-    <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default">
+    <!-- ABOUT -->
+    <div uib-accordion-group class="panel-default"
+         is-open="$root.isAboutTabOpen">
       <uib-accordion-heading>
-        <a id="userManual" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
-           layout-align="space-between center"
-           data-ng-class="{'is-active': isLocationActive('/usermanuals')}"
-            data-ng-click="$event.stopPropagation()"
-            data-ng-href="/usermanuals">
+        <a id="About" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
+           layout-align="space-between center" data-ng-class="{'is-opened': $root.isAboutTabOpen}"
+           data-ng-click="updateUserCounts(); closeOtherTabs($event)">
           <div layout="row" layout-align="center center">
-            <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>
+            <span data-translate="ABOUT_TAB" class="sidenav__name"></span>
           </div>
+          <md-icon class="material-icons sidenav__icon sidenav__icon--animate">keyboard_arrow_right</md-icon>
         </a>
       </uib-accordion-heading>
+      <ul class="sidenav__list">
+        <li class="sidenav__item" layout="column">
+          <a id="faq" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/faq')}"
+             data-ng-href="/faq"
+            >
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">forum</md-icon>
+              <span data-translate="KKK_TAB" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column">
+          <a id="userManual" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/usermanuals')}"
+             data-ng-href="/usermanuals"
+             >
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">library_books</md-icon>
+              <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>
+            </div>
+            <span class="sidenav__count" data-ng-bind="userManualsCount"></span>
+          </a>
+        </li>
+      </ul>
     </div>
     <!-- BEGIN Admin -->
     <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode && isAdminUser()" class="panel-default"

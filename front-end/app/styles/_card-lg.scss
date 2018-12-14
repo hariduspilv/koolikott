@@ -271,7 +271,12 @@
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     flex: none !important;
   }
+}
 
+.faq-font {
+  .md-button {
+    font-weight: 500;
+  }
 }
 
 

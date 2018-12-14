@@ -448,7 +448,7 @@
             let isFilled = false;
 
             Object.keys(this.$scope.noticesAndDescriptions).forEach(key => {
-                if (lang === key && this.$scope.noticesAndDescriptions[key].title !== "") {
+                if (lang === key && !!this.$scope.noticesAndDescriptions[key].description) {
                     isFilled = true;
                 }
             });
