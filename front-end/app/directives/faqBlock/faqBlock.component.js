@@ -58,8 +58,12 @@
             return this.editMode
         }
 
+        isCreateDialogOpen() {
+            return this.createDialogOpen
+        }
 
         editFaq(faq) {
+            this.createDialogOpen = !this.createDialogOpen
             faq.edit = !faq.edit;
         }
 

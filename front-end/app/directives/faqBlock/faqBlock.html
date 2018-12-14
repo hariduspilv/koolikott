@@ -20,7 +20,7 @@
           <md-button class="md-icon-button chapter-pencil-button"
                      data-ng-click="$ctrl.editFaq(faq)"
                      id="faq-edit"
-                     data-ng-if="$ctrl.isFaqEditMode()">
+                     data-ng-if="$ctrl.isFaqEditMode() && !$ctrl.isCreateDialogOpen()">
             <md-icon  class="material-icons">edit</md-icon>
             <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
           </md-button>
@@ -142,6 +142,7 @@
               id="landing-page-edit-cancel-button"
               data-ng-click="$ctrl.delete(faq)"
               class="md-button md-ink-ripple"
+              data-ng-disabled="faq.new"
             >
               <span data-translate="BUTTON_REMOVE"></span>
             </md-button>
