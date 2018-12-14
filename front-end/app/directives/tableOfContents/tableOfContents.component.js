@@ -17,9 +17,15 @@ class controller extends Controller {
             this.updateChapterEditorsFromState.bind(this)
             this.setChapters()
         }
+
+
+        this.$scope.scrollHandler = (slug, title, evt) => {
+            console.log(slug + title + evt)
+        }
+
         this.$scope.gotoChapter = (slug, title, evt) => {
             evt.preventDefault()
-
+            
             const titleForUrl = this.replaceSpacesAndCharacters(title)
 
             if (this.$location.url().includes('#subchapter') && !this.$location.url().includes('&chapterName')) {
@@ -36,6 +42,8 @@ class controller extends Controller {
 
             if (window.innerWidth < BREAK_LG)
                 this.$mdSidenav('left').close()
+
+
         }
        this.$scope.makeChapterUrl = (slug, title) => {
             return this.$location.absUrl().split('&chapterName')[0] + '&chapterName=' + this.replaceSpacesAndCharacters(title) + '#' + slug

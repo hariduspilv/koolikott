@@ -7,45 +7,29 @@ class controller extends Controller {
 
         window.addEventListener('scroll', (e) => {
             let allElements = document.querySelectorAll('.portfolio-chapter')
-            
-           
-         
-
-            
-
+        
             allElements.forEach( (el) => {
                 
                 if (this.isElementInViewport(el)) {
                     e.preventDefault()
                     e.stopPropagation()
 
-                    let item = $(".sidenav__item--chapter-title a")
+                    let item = $(".sidenav__list .sidenav__item--chapter-title a");
                     let total = item.length
+          
                     for(let i = 0; i<total; i++) {
                         let link = item.eq(i).attr("ng-href")
-                       
                         if(link) {
-                            let id = link.split("#")[2]
-                               if(id === el.id) {
-                               item.eq(i).css("background-color", "rgba(158, 158, 158, 0.2)")
-                               }
-                               else {
-                                item.eq(i).css("background-color", "transparent")
-                               }                    
+                            let id = link.split("#")[1]
+                            item.eq(i).css("background-color",id === el.id ? "rgba(158, 158, 158, 0.2)" : "transparent")               
                         }
                     }
-  
+                    let title = $(el).find('h2').text()
+                    title = this.replaceSpacesAndCharacters(title)
+                    let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title  + '#' + el.id;
                     
-                    if (!window.location.href.includes('&chapterName') && !window.location.hash.includes(el.id)) {
-                        let url = this.$location.url().split('#')[0] + '#' + el.id;
-                        this.$location.url(url)
-                        history.pushState({}, '', url)
-                    }
-                    else if (window.location.href.includes('&chapterName') && !window.location.hash.includes(el.id)) {
-                        let url = this.$location.url().split('&chapterName')[0] + '#' + el.id;
-                        this.$location.url(url)
-                        history.pushState({}, '', url)
-                    }
+                    this.$location.url(url)
+                    history.pushState({}, '', url)
                 }
             })
             /*if (this.isElementInViewport(element = document.querySelector('.portfolio-chapter'))) {
@@ -159,7 +143,6 @@ class controller extends Controller {
             this.$timeout(() =>
                 this.$timeout(() => {
                     const entries = (selector, el = document) => el.querySelectorAll(selector).entries()
-
                     for (let [idx, el] of entries('.portfolio-chapter'))
                         for (let [subIdx, subEl] of entries('.subchapter', el))
                             subEl.id = this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
