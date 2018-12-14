@@ -30,11 +30,6 @@ angular.module('koolikottApp')
                     controller: 'helpController',
                     controllerAs: '$ctrl'
                 })
-                .when('/about', {
-                    templateUrl: 'views/static/abstractStaticPage.html',
-                    controller: 'aboutController',
-                    controllerAs: '$ctrl',
-                })
                 .when('/portfolio', {
                     templateUrl: 'views/portfolio/portfolio.html',
                     controller: 'portfolioController',

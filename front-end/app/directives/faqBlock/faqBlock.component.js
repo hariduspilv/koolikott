@@ -68,12 +68,13 @@
         }
 
         cancelEdit(faq) {
-            this.createDialogOpen = false
             if (faq.new) {
                 this.removeFaq()
             } else {
                 faq.edit = !faq.edit;
             }
+            this.createDialogOpen = false
+            this.getFaqs()
         }
 
         delete(faq) {

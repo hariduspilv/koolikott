@@ -8,6 +8,7 @@ angular.module('koolikottApp')
         const idCode = $route.current.params.idCode;
         serverCallService.makeGet('rest/dev/login/' + idCode)
             .then( function(data) {
+                    $rootScope.showLocationDialog = false;
                     $rootScope.afterAuthRedirectURL = "/portfolios";
                     authenticationService.loginSuccess(data.data);
                 }, function() {
