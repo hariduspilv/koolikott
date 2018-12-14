@@ -99,6 +99,7 @@ public interface ConfigurationProperties {
 
     // E-mail
     String EMAIL_ADDRESS = "email.address";
+    String EMAIL_NO_REPLY_ADDRESS = "email.noreply.address";
     String EMAIL_HOST = "email.host";
     String EMAIL_PORT = "email.port";
     String EMAIL_USERNAME = "email.username";

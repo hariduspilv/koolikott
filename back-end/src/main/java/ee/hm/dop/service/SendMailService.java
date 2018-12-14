@@ -25,7 +25,7 @@ public class SendMailService {
 
     public Email composeEmailToUser(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", customerSupport.getEmail())
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(customerSupport.getName(), customerSupport.getEmail())
                 .withSubject("e-Koolikott, küsimuse kinnitus")
                 .withHTMLText("<b>Teema:</b> " + customerSupport.getSubject() + BREAK +
