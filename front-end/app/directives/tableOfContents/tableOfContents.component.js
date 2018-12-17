@@ -30,12 +30,8 @@ class controller extends Controller {
 
             if (this.$location.url().includes('#subchapter') && !this.$location.url().includes('&chapterName')) {
                 history.pushState({}, '', this.$location.url().split('#subchapter')[0] + '&chapterName=' + titleForUrl + '#'+slug)
-            }
-            else if (this.$location.url().includes('&chapterName')) {
+            } else {
                 history.pushState({}, '', this.$location.url().split('&chapterName')[0] + '&chapterName=' + titleForUrl + '#' + slug)
-            }
-            else if (!this.$location.url().includes('&chapterName') && this.$location.hash()) {
-                history.pushState({}, '', this.$location.url().split('#chapter')[0] + '&chapterName=' + titleForUrl + '#' + slug)
             }
 
             this.scrollToElement('#'+slug, 500, 80)
