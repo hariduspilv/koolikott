@@ -1,3 +1,11 @@
+## e-Koolikott [1.27.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10511)
+
+### Muutunud
+* Kogumiku skrollimisel aktiveerub vasakmenüüs vastav peatükk automaatselt [EK-74](https://projektid.hitsa.ee/jira/browse/EK-74)
+* Vasakmenüü KKK leht koos kuvamis- ja haldamisfunktsionaalsusega [EK-125](https://projektid.hitsa.ee/jira/browse/EK-125)
+* Kasutajatoe kirja koopia kliendile saatja aadress konfitav properties failist [EK-172](https://projektid.hitsa.ee/jira/browse/EK-172)
+* Kasutajatoe aknas tekstifondi suurendamine [EK-173](https://projektid.hitsa.ee/jira/browse/EK-173)
+
 ## e-Koolikott [1.26.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10500)
 
 ### Muutunud
