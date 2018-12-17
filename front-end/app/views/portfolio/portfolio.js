@@ -32,15 +32,6 @@ class controller extends Controller {
                     history.pushState({}, '', url)
                 }
             })
-            /*if (this.isElementInViewport(element = document.querySelector('.portfolio-chapter'))) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('visible: ' + element.id)
-            } else {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('not visible')
-            }*/
         });
 
         $('body').materialScrollTop({ offset: 300 })
