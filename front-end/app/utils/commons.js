@@ -598,7 +598,8 @@ class Controller {
     }
 
     replaceSpacesAndCharacters(title) {
-        return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
+        if (title)
+            return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
     }
 
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
