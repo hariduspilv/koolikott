@@ -28,7 +28,10 @@
     "angular-sortable-view": "https://github.com/hariduspilv/angular-sortable-view.git#master",
     "medium-button": "^1.1.2",
     "angular-qrcode": "^7.2.0",
-    "unorm": "^1.4.1"
+    "unorm": "^1.4.1",
+    "angular-translate": "^2.18.1",
+    "angular-translate-loader-url": "^2.18.1",
+    "lodash": "^4.17.11"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
