@@ -443,6 +443,7 @@ module.exports = function (grunt) {
                     '.tmp/concat/js/services.js': '.tmp/concat/js/services.js',
                     '.tmp/concat/js/components.js': '.tmp/concat/js/components.js',
                     '.tmp/concat/js/libsAngular.js': '.tmp/concat/js/libsAngular.js',
+                    '.tmp/concat/js/libsAngularPart2.js': '.tmp/concat/js/libsAngularPart2.js',
                     '.tmp/concat/js/libs.js': '.tmp/concat/js/libs.js',
                 }
             }
