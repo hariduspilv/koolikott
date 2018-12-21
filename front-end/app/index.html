@@ -44,36 +44,41 @@
 <data-dop-customer-support></data-dop-customer-support>
 
 <!--preloader-->
-<script src="utils/preloader/preloader.js"></script>
+<!--<script src="utils/preloader/preloader.js"></script>-->
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+var element = document.getElementById("preloader");
+setTimeout(function () {
+element.parentNode.removeChild(element);
+}, 3000)
+});</script>
 
 <!-- vendor -->
-<script src="libs/medium-editor/dist/js/medium-editor.min.js"></script>
-<script src="libs/core.js/client/shim.min.js"></script>
-<script src="libs/cssua.js/cssua.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="libs/medium-editor/dist/js/medium-editor.min.js" async defer></script>
+<script src="libs/core.js/client/shim.min.js" async defer></script>
+<script src="libs/cssua.js/cssua.min.js" async defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js" async defer></script>
 <!--<script src="libs/angular/angular.min.js"></script>-->
-<script src="libs/angular-translate/angular-translate.min.js"></script>
-<script src="libs/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="libs/lodash/dist/lodash.min.js"></script>
-<script src="libs/angular-socialshare/dist/angular-socialshare.min.js"></script>
-<script src="libs/angular-messages/angular-messages.min.js"></script>
-<script src="libs/jquery-truncate-html/jquery.truncate.js"></script>
-<script src="utils/stickyfill.min.js"></script>
-<script src="libs/unorm/lib/unorm.js"></script>
-<script src="libs/moment/min/moment.min.js"></script>
-<script src="libs/rangy/rangy-core.min.js"></script>
-<script src="libs/rangy/rangy-selectionsaverestore.min.js"></script>
+<script src="libs/angular-translate/angular-translate.min.js" async defer></script>
+<script src="libs/angular-translate-loader-url/angular-translate-loader-url.min.js" async defer></script>
+<script src="https://www.youtube.com/iframe_api" async defer></script>
+<script src="libs/lodash/dist/lodash.min.js" async defer></script>
+<script src="libs/angular-socialshare/dist/angular-socialshare.min.js" async defer></script>
+<script src="libs/angular-messages/angular-messages.min.js" async defer></script>
+<script src="libs/jquery-truncate-html/jquery.truncate.js" async defer></script>
+<script src="utils/stickyfill.min.js" async defer></script>
+<script src="libs/unorm/lib/unorm.js" async defer></script>
+<script src="libs/moment/min/moment.min.js" async defer></script>
+<script src="libs/rangy/rangy-core.min.js" async defer></script>
+<script src="libs/rangy/rangy-selectionsaverestore.min.js" async defer></script>
 <script>
   window.___gcfg = {
     parsetags: 'explicit'
   };
 </script>
 <script src="https://apis.google.com/js/client:platform.js" async defer></script>
-<script src="utils/material-scrolltop.js"></script>
 
-<script src="constants.js"></script>
 
 <!-- build:js js/libsAngular.js -->
 <script src="libs/angular-material/angular-material.min.js"></script>
@@ -82,7 +87,6 @@
 <script src="libs/angular-route/angular-route.min.js"></script>
 <script src="libs/angular-youtube-mb/dist/angular-youtube-embed.min.js"></script>
 <script src="libs/angular-material-data-table/dist/md-data-table.min.js"></script>
-<script src="libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/libsAngularSecond.js -->
@@ -92,6 +96,7 @@
 <script src="libs/angular-qrcode/angular-qrcode.js"></script>
 <script src="libs/angular-animate/angular-animate.js"></script>
 <script src="libs/angular-aria/angular-aria.js"></script>
+<script src="libs/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/libs.js -->
@@ -105,6 +110,8 @@
 <script src="libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js"></script>
 <script src="libs/bluebird/js/browser/bluebird.min.js"></script>
 <script src="libs/ng-file-upload/ng-file-upload.min.js"></script>
+<script src="utils/material-scrolltop.js"></script>
+<script src="constants.js"></script>
 <!-- endbuild -->
 
 
