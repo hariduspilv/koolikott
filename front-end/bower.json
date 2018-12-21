@@ -31,5 +31,11 @@
     "unorm": "^1.4.1"
   },
   "appPath": "app",
-  "moduleName": "ranitsApp"
+  "moduleName": "ranitsApp",
+  "resolutions": {
+    "angular": "1.6.4",
+    "jquery": "2.2.4",
+    "angular-animate": "1.6.4",
+    "medium-editor": "5.23.2"
+  }
 }
