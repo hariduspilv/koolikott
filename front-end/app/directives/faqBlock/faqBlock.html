@@ -42,7 +42,7 @@
                   <label data-translate="FAQ_QUESTION"></label>
                   <input
                     name="question"
-                    id="add-question_est"
+                    id="add-question-est"
                     ng-model="faq.questionEst"
                     maxlength="100"
                     required>
@@ -138,8 +138,8 @@
           </div>
           <div data-layout="row" data-layout-align="space-between center">
             <md-button
-              aria-label="Cancel landing page edit"
-              id="landing-page-edit-cancel-button"
+              aria-label="Delete faq"
+              id="faq-delete-button"
               data-ng-click="$ctrl.delete(faq)"
               class="md-button md-ink-ripple"
               data-ng-disabled="faq.new"
@@ -149,8 +149,8 @@
             <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
                  data-ng-if="true">
               <md-button
-                aria-label="Cancel landing page edit"
-                id="landing-page-edit-cancel-button"
+                aria-label="Cancel faq edit"
+                id="faq-cancel-edit"
                 data-ng-click="$ctrl.cancelEdit(faq)"
                 class="md-button md-ink-ripple"
               >
@@ -158,7 +158,7 @@
               </md-button>
               <md-button
                 aria-label="{{ 'BUTTON_ADD_FAQ' | translate }}"
-                id="update-landing-page"
+                id="faq-save"
                 class="md-primary"
                 data-ng-disabled="$ctrl.isSubmitDisabled(faq) || isSaving"
                 data-ng-click="$ctrl.save(faq)"
@@ -168,7 +168,7 @@
               </md-button>
               <md-button
                 aria-label="{{ 'BUTTON_UPDATE_FAQ' | translate }}"
-                id="update-landing-page"
+                id="faq-update"
                 class="md-primary"
                 data-ng-disabled="$ctrl.isSubmitDisabled(faq) || isSaving"
                 data-ng-click="$ctrl.save(faq)"
