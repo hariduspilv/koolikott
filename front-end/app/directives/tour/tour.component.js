@@ -2,7 +2,7 @@
 
 {
 class controller extends Controller {
-    $onInit() {
+    /*$onInit() {
         this.currentStep = -1 // disable tour on load
         this.isOpenedByUser = false
         this.$scope.$on('tour:start:firstTime', () => this.startGeneralTour())
@@ -76,7 +76,7 @@ class controller extends Controller {
                         controllerAs: '$ctrl'
                     })
             })
-    }
+    }*/
 }
 controller.$inject = [
     '$scope',

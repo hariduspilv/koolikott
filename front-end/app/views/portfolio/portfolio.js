@@ -6,7 +6,7 @@ class controller extends Controller {
         super(...args)
 
         window.addEventListener('scroll', (e) => {
-            let allElements = document.querySelectorAll('.portfolio-chapter')
+            let allElements = Array.from(document.querySelectorAll('.portfolio-chapter'))
 
             allElements.forEach( (el) => {
 

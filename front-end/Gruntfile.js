@@ -8,6 +8,7 @@ module.exports = function (grunt) {
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
     require('es6-promise').polyfill();
+    require('es6-shim');
 
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-shell-spawn');
