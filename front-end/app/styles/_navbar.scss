@@ -109,6 +109,12 @@ md-toolbar.navbar.md-gray {
   height: 100%;
 }
 
+.responsive-placeholder {
+  @media (max-width: 1280px) and (min-width: 600px) {
+    font-size:calc(11px + (20 - 12) * ( (100vw - 600px) / ( 1280 - 600)));
+  }
+}
+
 .navbar-search {
   border-radius: 2px;
   padding: 4px 0;
