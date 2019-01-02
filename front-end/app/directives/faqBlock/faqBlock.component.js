@@ -85,6 +85,7 @@
                     .then(() => {
                         this.getFaqs()
                         this.toastService.show('FAQ_DELETED')
+                        this.createDialogOpen = false
                     })
             )
         }
