@@ -76,7 +76,7 @@ class controller extends Controller {
     isPreschoolorHobbyactivity() {
         if (this.taxonPath.educationalContext) {
             const { name } = this.taxonPath.educationalContext
-            return name === 'PRESCHOOLEDUCATION' || name === 'HOBBYACTIVITIES'
+            return name === 'PRESCHOOLEDUCATION' || name === 'NONFORMALEDUCATION'
         }
 
     }
