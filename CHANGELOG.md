@@ -1,4 +1,4 @@
-## e-Koolikott [1.27.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10511)
+## e-Koolikott [1.27.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10511) (Prelives testimisel)
 
 ### Muutunud
 * Kogumiku skrollimisel aktiveerub vasakmenüüs vastav peatükk automaatselt [EK-74](https://projektid.hitsa.ee/jira/browse/EK-74)
@@ -6,7 +6,7 @@
 * Kasutajatoe kirja koopia kliendile saatja aadress konfitav properties failist [EK-172](https://projektid.hitsa.ee/jira/browse/EK-172)
 * Kasutajatoe aknas tekstifondi suurendamine [EK-173](https://projektid.hitsa.ee/jira/browse/EK-173)
 
-## e-Koolikott [1.26.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10500)
+## e-Koolikott [1.26.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10500) (Toodangusse paigaldatud 06.12.2018)
 
 ### Muutunud
 * Õppevara detailvaates taksonoomiad kuvatud tulpade asemel ridadena [EK-52](https://projektid.hitsa.ee/jira/browse/EK-52)
@@ -16,7 +16,7 @@
 * Kogumikust koopia tegemine keelatud [EK-148](https://projektid.hitsa.ee/jira/browse/EK-148)
 * Kasutajatoe funktsionaalsus [EK-117](https://projektid.hitsa.ee/jira/browse/EK-117)
 
-## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10401) (Toodangusse paigaldatud ....11.2018)
+## e-Koolikott [1.25.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10401) (Toodangusse paigaldatud 26.11.2018)
 
 ### Muutunud
 * Esilehe teavitustekst sisestamine [EK-49](https://projektid.hitsa.ee/jira/browse/EK-49)
