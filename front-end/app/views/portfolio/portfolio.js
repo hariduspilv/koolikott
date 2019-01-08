@@ -10,28 +10,45 @@ class controller extends Controller {
 
             allElements.forEach( (el) => {
 
-                if (this.isElementInViewport(el)) {
-                    e.preventDefault()
-                    e.stopPropagation()
+                if (!this.$rootScope.isFullScreen) {
+                    if (this.isElementInViewport(el)) {
+                        e.preventDefault()
+                        e.stopPropagation()
 
-                    let item = $(".sidenav__list .sidenav__item--chapter-title a");
-                    let total = item.length
+                        let item = $(".sidenav__list .sidenav__item--chapter-title a");
+                        let total = item.length
 
-                    for(let i = 0; i<total; i++) {
-                        let link = item.eq(i).attr("ng-href")
-                        if(link) {
-                            let id = link.split("#")[1]
-                            item.eq(i).css("background-color",id === el.id ? "rgba(158, 158, 158, 0.2)" : "transparent")
+                        for (let i = 0; i < total; i++) {
+                            let link = item.eq(i).attr("ng-href")
+                            if (link) {
+                                let id = link.split("#")[1]
+                                item.eq(i).css("background-color", id === el.id ? "rgba(158, 158, 158, 0.2)" : "transparent")
+                            }
                         }
-                    }
-                    let title = $(el).find('h2').text()
-                    title = this.replaceSpacesAndCharacters(title)
-                    let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title  + '#' + el.id;
+                        let title = $(el).find('h2').text()
+                        title = this.replaceSpacesAndCharacters(title)
+                        let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title + '#' + el.id;
 
-                    this.$location.url(url)
-                    history.pushState({}, '', url)
+                        this.$location.url(url)
+                        history.pushState({}, '', url)
+                    }
                 }
             })
+        });
+
+        this.$rootScope.isFullScreen = false
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === "Escape" && this.$rootScope.isFullScreen) {
+                this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen
+                toggleFullScreen();
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (e.target.localName === 'a' && this.$rootScope.isFullScreen) {
+                this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen
+                toggleFullScreen();
+            }
         });
 
         $('body').materialScrollTop({ offset: 300 })
@@ -73,6 +90,8 @@ class controller extends Controller {
                 this.setPortfolio(value)
         })
     }
+
+
 
     getPortfolio() {
         const { id } = this.$route.current.params

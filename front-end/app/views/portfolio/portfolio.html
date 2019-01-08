@@ -1,6 +1,6 @@
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak>
   <div flex-gt-sm="75">
-    <dop-error-message ng-if="isModerator || isAdmin" data="portfolio"></dop-error-message>
+    <dop-error-message ng-if="isModerator || isAdmin" data="portfolio" id="dop-error"></dop-error-message>
     <data-dop-portfolio-summary-card
       comment="newComment"
       data-portfolio="portfolio"
@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  <aside flex-gt-sm="25">
+  <aside flex-gt-sm="25" id="aside-right">
     <data-dop-aside data-learning-object="portfolio"></data-dop-aside>
   </aside>
 </div>
