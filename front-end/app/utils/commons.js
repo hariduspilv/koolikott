@@ -383,6 +383,28 @@ function sortTags(upVoteForms) {
     }
 }
 
+function getElementsForFullScreen() {
+    let elements = [document.getElementById('md-toolbar-header'), document.getElementById('aside-right'), document.getElementById('header-and-chapters'),
+        document.getElementById('share'), document.getElementById('qr-code'), document.getElementById('dots-menu'), document.getElementById('dop-error'),
+        document.getElementById('customer-support-parent'), document.getElementById('main-fab-button'), document.getElementById('about-parent'),
+    document.getElementById('admin-parent'), document.getElementById('my-profile'), document.getElementById('taxonomy'), document.getElementById('sidenav-logo'),
+    document.getElementById('divider'), document.getElementById('version')];
+    return elements;
+}
+
+function toggleFullScreen() {
+    let elements = getElementsForFullScreen();
+    elements.forEach(el => {
+        if (el) {
+            if (el.style.display === 'none')
+                el.style.display = 'block';
+            else
+                el.style.display = 'none';
+        }
+    })
+
+}
+
 function containsMaterial(materials, selectedMaterial) {
     for (var i = 0; i < materials.length; i++) {
         var material = materials[i];

@@ -1,6 +1,6 @@
-<div data-layout="column" data-layout-gt-sm="row" data-ng-cloak>
+<div data-layout="column" data-layout-gt-sm="row" data-ng-cloak id="material-parent">
   <div flex-gt-sm="75">
-    <dop-error-message ng-if="modUser()" data="material"></dop-error-message>
+    <dop-error-message ng-if="modUser()" data="material" id="dop-error"></dop-error-message>
     <!-- same as portfolioSummaryCard in directives -->
     <md-card class="card-lg summary-card" id="material-card">
       <!-- SECTION 1 -->
@@ -29,12 +29,23 @@
             </h1>
             <div class="card-menus" layout="row">
               <dop-share
+                id="share"
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
               <div data-ng-if="!material.deleted">
-              <dop-qr data-location="{{location}}"></dop-qr>
+              <dop-qr
+                id="qr-code"
+                data-location="{{location}}"></dop-qr>
               </div>
-              <md-menu ng-show="dotsAreShowing()">
+
+                <md-button style="min-width: 0px"
+                           data-ng-click="toggleFullScreen()"
+                           id="faq-edit">
+                  <md-icon md-menu-align-target>fullscreen</md-icon>
+                  <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
+                </md-button>
+
+              <md-menu ng-show="dotsAreShowing()" id="dots-menu">
                 <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
                   <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
@@ -91,7 +102,7 @@
             ></dop-embed>
           </div>
           <!-- Tags -->
-          <dop-tags data-ng-if="material && material.id"
+          <dop-tags data-ng-if="material && material.id && !$root.isFullScreen"
                     class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material"></dop-tags>
         </div>
@@ -286,7 +297,7 @@
       </md-card-actions>
     </md-card>
   </div>
-  <aside flex-gt-sm="25">
+  <aside flex-gt-sm="25" id="aside-right">
     <data-dop-aside data-learning-object="material"></data-dop-aside>
   </aside>
 </div>

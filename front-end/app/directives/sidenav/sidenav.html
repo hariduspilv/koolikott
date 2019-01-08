@@ -7,7 +7,7 @@
             layout-align="space-between strech">
 
   <!-- Portfolio Header and Chapters -->
-  <md-toolbar class="sidenav__mobile-logo md-hue-1" layout="row" layout-align="center center">
+  <md-toolbar class="sidenav__mobile-logo md-hue-1" layout="row" layout-align="center center" id="header-and-chapters">
     <div>
       <md-icon class="material-icons pointer sidenav__icon" data-ng-click="toggleSidenav('left')">arrow_backward
       </md-icon>
@@ -24,7 +24,8 @@
   <uib-accordion close-others="false">
     <!-- ABOUT -->
     <div uib-accordion-group class="panel-default"
-         is-open="$root.isAboutTabOpen">
+         is-open="$root.isAboutTabOpen"
+    id="about-parent">
       <uib-accordion-heading>
         <a id="About" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isAboutTabOpen}"
@@ -63,7 +64,7 @@
     </div>
     <!-- BEGIN Admin -->
     <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode && isAdminUser()" class="panel-default"
-         is-open="$root.isAdminTabOpen">
+         is-open="$root.isAdminTabOpen" id="admin-parent">
       <uib-accordion-heading>
         <a id="Admin" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isAdminTabOpen}"
@@ -148,7 +149,7 @@
     </div>
     <!-- BEGIN My Profile -->
     <div uib-accordion-group data-ng-if="!$root.isEditPortfolioMode" class="panel-default"
-         is-open="$root.isUserTabOpen">
+         is-open="$root.isUserTabOpen" id="my-profile">
       <uib-accordion-heading>
         <a id="myProfile" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isUserTabOpen}"
@@ -257,7 +258,8 @@
 
     <div uib-accordion-group class="panel-default"
          data-ng-if="!$root.isViewPortfolioPage && !$root.isEditPortfolioMode"
-         is-open="$root.isTaxonomyOpen">
+         is-open="$root.isTaxonomyOpen"
+    id="taxonomy">
       <uib-accordion-heading>
         <a id="sidenavHeader" class="sidenav__header sidenav__header--main" md-ink-ripple layout="row"
            layout-align="space-between center" data-ng-class="{'is-opened': $root.isTaxonomyOpen}"
@@ -284,12 +286,12 @@
 
   <span class="flex"></span>
   
-  <div  class="sidenav__footer-logo-container">
+  <div  class="sidenav__footer-logo-container" id="sidenav-logo">
     <div class="sidenav__footer-logo"></div>
   </div>
 
-  <md-divider hide-xs hide-sm hide-md></md-divider>
-  <div>
+  <md-divider id="divider" hide-xs hide-sm hide-md></md-divider>
+  <div id="version">
     <div class="sidenav__item" layout="column" hide-xs hide-sm hide-md>
       <a class="sidenav__header sidenav__header--version-number" md-ink-ripple layout="row" layout-align="start center"
          target="_blank" href="https://github.com/e-koolikott/DOP/blob/master/CHANGELOG.md">
