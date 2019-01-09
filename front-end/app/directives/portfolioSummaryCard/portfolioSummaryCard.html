@@ -1,8 +1,8 @@
-<md-card class="card-lg summary-card">
+<md-card class="card-lg summary-card" id="summary-card">
   <!-- SECTION 1 -->
   <div data-layout-gt-xs="row">
     <!-- SECTION 1: Left -->
-    <div data-flex data-flex-gt-xs="75" data-layout="column">
+    <div data-flex data-flex-gt-xs="75" data-layout="column" id="section-left">
       <!-- Headline -->
       <div class="card-lg__container card-lg__container--padding-l-r-t" data-layout="row">
         <h1 class="learning-object-title" data-flex-gt-sm="70" data-ng-bind="portfolio.title"></h1>
@@ -72,7 +72,7 @@
         </div>
       </div>
       <!-- Meta -->
-      <dop-taxon-meta learning-object="portfolio"></dop-taxon-meta>
+      <dop-taxon-meta id="taxon-meta" learning-object="portfolio"></dop-taxon-meta>
       <md-divider class="md-default-theme"></md-divider>
       <!-- Description  -->
       <div class="card-lg__container card-lg__container--padding-l-r" class="wrapped">
@@ -80,6 +80,7 @@
       </div>
       <!-- Tags  -->
       <dop-tags
+        id="tags"
         data-ng-if="portfolio && portfolio.id"
         class="tags card-lg__container card-lg__container--padding-l-r-b"
         data-learning-object="portfolio"
@@ -87,7 +88,7 @@
       ></dop-tags>
     </div>
     <!-- SECTION 1: Right  -->
-    <div data-flex data-flex-gt-xs="25" class="card-lg__container--border-left">
+    <div data-flex data-flex-gt-xs="25" class="card-lg__container--border-left" id="section-right">
       <!-- Hidden because waiting for correct design-->
       <div class="card-media">
         <div class="ribbon"></div>
@@ -252,6 +253,7 @@
     class="card-lg__actions"
     data-layout="column"
     data-layout-gt-xs="row"
+    id="views"
   >
     <div
       data-flex

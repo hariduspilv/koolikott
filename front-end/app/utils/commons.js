@@ -384,16 +384,22 @@ function sortTags(upVoteForms) {
 }
 
 function getElementsForFullScreen() {
-    let elements = [document.getElementById('md-toolbar-header'), document.getElementById('aside-right'), document.getElementById('header-and-chapters'),
+    return [document.getElementById('md-toolbar-header'), document.getElementById('aside-right'), document.getElementById('version'),
         document.getElementById('share'), document.getElementById('qr-code'), document.getElementById('dots-menu'), document.getElementById('dop-error'),
-        document.getElementById('customer-support-parent'), document.getElementById('main-fab-button'), document.getElementById('about-parent'),
-    document.getElementById('admin-parent'), document.getElementById('my-profile'), document.getElementById('taxonomy'), document.getElementById('sidenav-logo'),
-    document.getElementById('divider'), document.getElementById('version')];
-    return elements;
+        document.getElementById('customer-support-parent'), document.getElementById('about-parent'), document.getElementById('divider'),
+        document.getElementById('admin-parent'), document.getElementById('my-profile'), document.getElementById('taxonomy'), document.getElementById('sidenav-logo'),
+        document.getElementById('top-divider'), document.getElementById('section-right'), document.getElementById('views'), document.getElementById('tags'),
+        document.getElementById('taxon-meta')];
+
+}
+
+function getFlexElements() {
+    return [document.getElementById('header-and-chapters'), document.getElementById('main-fab-button')];
 }
 
 function toggleFullScreen() {
     let elements = getElementsForFullScreen();
+    let flexElements = getFlexElements();
     elements.forEach(el => {
         if (el) {
             if (el.style.display === 'none')
@@ -401,8 +407,46 @@ function toggleFullScreen() {
             else
                 el.style.display = 'none';
         }
-    })
+    });
+    flexElements.forEach(el => {
+        if (el) {
+            if (el.style.display === 'none')
+                el.style.display = 'flex'
+            else
+                el.style.display = 'none'
+        }
+    });
+    fullScreenRemoveChapterMargin();
+    fullScreenExpandSummary()
+}
 
+function fullScreenRemoveChapterMargin() {
+    let elements =  Array.from(document.querySelectorAll('.portfolio-chapter'))
+    let summary = document.getElementById('summary-card')
+    elements.forEach(e => {
+        if (e) {
+            if (e.style.marginBottom === '')
+                e.style.marginBottom = 0
+            else
+                e.style.marginBottom = ''
+        }
+    })
+    if (summary) {
+        if (summary.style.marginBottom === '')
+            summary.style.marginBottom = 0
+        else
+            summary.style.marginBottom = ''
+    }
+}
+
+function fullScreenExpandSummary() {
+    let el = document.getElementById('section-left')
+    if (el) {
+        if (el.style.maxWidth === '')
+            el.style.maxWidth = '100%'
+        else
+            el.style.maxWidth = ''
+    }
 }
 
 function containsMaterial(materials, selectedMaterial) {

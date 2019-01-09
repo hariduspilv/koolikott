@@ -6,7 +6,7 @@
       <!-- SECTION 1 -->
       <div layout-gt-xs="row">
         <!-- SECTION 1: Left -->
-        <div layout="column" flex flex-gt-xs="75">
+        <div layout="column" flex flex-gt-xs="75" id="section-left">
           <!-- Headline -->
           <div class="card-lg__container card-lg__container--padding-l-r-t" layout="row">
             <h1 class="learning-object-title card-header--flex-basis" flex="70">
@@ -88,7 +88,7 @@
             </div>
           </div>
           <!-- Meta -->
-         <dop-taxon-meta learning-object="material"></dop-taxon-meta>
+         <dop-taxon-meta id="taxon-meta" learning-object="material"></dop-taxon-meta>
           <md-divider class="md-default-theme"></md-divider>
           <!-- Description  -->
           <div class="card-lg__container card-lg__container--padding-l-r">
@@ -102,12 +102,12 @@
             ></dop-embed>
           </div>
           <!-- Tags -->
-          <dop-tags data-ng-if="material && material.id && !$root.isFullScreen"
+          <dop-tags  id="tags" data-ng-if="material && material.id && !$root.isFullScreen"
                     class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material"></dop-tags>
         </div>
         <!-- SECTION 1: Right  -->
-        <div flex flex-gt-xs="25" class="card-lg__container--border-left">
+        <div flex flex-gt-xs="25" class="card-lg__container--border-left" id="section-right">
           <!-- Image -->
           <div class="card-media" data-ng-class="{'active': material.selected}">
             <dop-pick-material data-learning-object="material"></dop-pick-material>
@@ -272,7 +272,7 @@
       </div>
       <md-divider class="md-default-theme"></md-divider>
       <!-- SECTION 2: Actions -->
-      <md-card-actions class="card-lg__actions" layout="column" layout-gt-xs="row">
+      <md-card-actions class="card-lg__actions" layout="column" layout-gt-xs="row" id="views">
         <div flex flex-gt-xs="75" class="card-lg__container" layout="row" layout-align="space-between center">
           <!-- Container for multiple reviews -->
           <div class="review">
