@@ -1,3 +1,13 @@
+## e-Koolikott [1.28.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
+
+### Muutunud
+* JS teek kirjutab üle globaalset muutujat - parandatud [EK-89](https://projektid.hitsa.ee/jira/browse/EK-89)
+* Väliste teekide minifitseerimine [EK-90](https://projektid.hitsa.ee/jira/browse/EK-90)
+* Migreerida NG github sõltuvused hariduspilv kasutaja alla [EK-91](https://projektid.hitsa.ee/jira/browse/EK-91)
+* Esmakordselt sisseloginud kasutajatelt tuuri eemaldamine - tuur eemaldatud [EK-190](https://projektid.hitsa.ee/jira/browse/EK-190)
+* mitteformaalõppe jaotuse probleem parandatud [EK-198](https://projektid.hitsa.ee/jira/browse/EK-198)
+
+
 ## e-Koolikott [1.27.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10511) (Prelives testimisel)
 
 ### Muutunud
