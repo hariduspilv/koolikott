@@ -2,28 +2,27 @@ package ee.hm.dop.service;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PinGeneratorServiceTest {
 
     @Test
-    public void checkPinLengthAndUniqueness() {
-
+    public void pin_is_generated_as_positive_number_up_to_4_digits() {
         int randomNumber1 = PinGeneratorService.generatePin();
         int randomNumber2 = PinGeneratorService.generatePin();
 
-        String temp1 = String.valueOf(randomNumber1).substring(0,1);
-        String temp2 = String.valueOf(randomNumber2).substring(0,1);
+        assertLenght1To4Digits(randomNumber1);
+        assertLenght1To4Digits(randomNumber2);
 
-        if (temp1.substring(0,1).equalsIgnoreCase("0")){
-            assertEquals(4, String.valueOf(randomNumber1).length());
+        if (randomNumber1 == randomNumber2) {
+            randomNumber2 = PinGeneratorService.generatePin();
         }
-
-        if (temp2.substring(0,1).equalsIgnoreCase("0")){
-            assertEquals(4, String.valueOf(randomNumber2).length());
-        }
-
         assertNotEquals(randomNumber1, randomNumber2);
+    }
+
+    private void assertLenght1To4Digits(int randomNumber1) {
+        int length1 = String.valueOf(randomNumber1).length();
+        assertTrue(length1 >= 1 && length1 <= 4);
     }
 }
