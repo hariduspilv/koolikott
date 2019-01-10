@@ -28,8 +28,10 @@ class controller extends Controller {
                     title = this.replaceSpacesAndCharacters(title)
                     let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title  + '#' + el.id;
 
-                    this.$location.url(url)
-                    history.pushState({}, '', url)
+                    if (!window.location.href.includes(title)) {
+                        this.$location.url(url)
+                        history.pushState({}, '', url)
+                    }
                 }
             })
         });
