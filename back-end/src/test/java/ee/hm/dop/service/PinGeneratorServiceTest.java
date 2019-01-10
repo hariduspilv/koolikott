@@ -7,18 +7,23 @@ import static org.junit.Assert.assertNotEquals;
 
 public class PinGeneratorServiceTest {
 
-    private PinGeneratorService pinGeneratorService = new PinGeneratorService();
-
     @Test
-    public void checkRandomness() {
+    public void checkPinLengthAndUniqueness() {
 
-        int randomNumber1 = pinGeneratorService.generatePin();
-        int randomNumber2 = pinGeneratorService.generatePin();
+        int randomNumber1 = PinGeneratorService.generatePin();
+        int randomNumber2 = PinGeneratorService.generatePin();
 
-        assertEquals(4, String.valueOf(randomNumber1).length());
-        assertEquals(4, String.valueOf(randomNumber2).length());
+        String temp1 = String.valueOf(randomNumber1).substring(0,1);
+        String temp2 = String.valueOf(randomNumber2).substring(0,1);
+
+        if (temp1.substring(0,1).equalsIgnoreCase("0")){
+            assertEquals(4, String.valueOf(randomNumber1).length());
+        }
+
+        if (temp2.substring(0,1).equalsIgnoreCase("0")){
+            assertEquals(4, String.valueOf(randomNumber2).length());
+        }
 
         assertNotEquals(randomNumber1, randomNumber2);
-
     }
 }
