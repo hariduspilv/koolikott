@@ -1,3 +1,8 @@
+## e-Koolikott [1.28.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
+
+### Muutunud
+* constants.js eemaldatud minifitseerimisest [EK-203](https://projektid.hitsa.ee/jira/browse/EK-203)
+
 ## e-Koolikott [1.28.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
 
 ### Muutunud
