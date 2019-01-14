@@ -26,6 +26,13 @@ angular.module('koolikottApp')
                     $scope.toggleFullScreen();
             });
 
+            window.addEventListener('popstate',() => {
+                if ($rootScope.isFullScreen) {
+                    $rootScope.isFullScreen = !$rootScope.isFullScreen;
+                    $scope.toggleFullScreen();
+                }
+            });
+
             const licenceTypeMap = {
                 'CCBY': ['by'],
                 'CCBYSA': ['by', 'sa'],

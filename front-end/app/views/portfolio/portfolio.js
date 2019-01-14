@@ -47,8 +47,15 @@ class controller extends Controller {
             }
         });
         document.addEventListener('click', (e) => {
-            if (e.target.localName === 'a' && this.$rootScope.isFullScreen) {
+            if (e.target.localName === 'a' && this.$rootScope.isFullScreen && !document.getElementById('sidenavAccordion') ) {
                 this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen
+                toggleFullScreen();
+            }
+        });
+
+        window.addEventListener('popstate',() => {
+            if (this.$rootScope.isFullScreen) {
+                this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
                 toggleFullScreen();
             }
         });

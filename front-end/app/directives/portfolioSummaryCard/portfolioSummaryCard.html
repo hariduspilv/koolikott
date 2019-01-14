@@ -17,7 +17,9 @@
               id="qr-code"
               data-location="{{pageUrl}}"></dop-qr>
           </div>
-          <md-button style="min-width: 0px"
+
+          <md-button ng-if="!$root.isEditPortfolioMode"
+                     style="min-width: 0px"
                      data-ng-click="toggleFullScreen()"
                      id="faq-edit">
             <md-icon md-menu-align-target>fullscreen</md-icon>

@@ -8,6 +8,9 @@
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.customerSupport = {}
             this.$scope.backClickedWhileOther = false
+            this.$scope.captchaSuccess = false
+            this.$scope.captchaKey = ''
+            this.getCaptchaKey()
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -91,7 +94,7 @@
 
         isSendDisabled() {
             const {name, email, subject, message} = this.$scope.customerSupport;
-            return !(name && email && subject && message)
+            return !(name && email && subject && message && this.$scope.captchaSuccess)
         }
 
         back() {
@@ -127,6 +130,26 @@
             }
             this.$scope.allowDialogClose = true
         }
+        captchaSuccess() {
+            this.$scope.captchaSuccess = true
+        }
+        getCaptchaKey() {
+            this.serverCallService.makeGet('/rest/captcha')
+                .then(({data}) => {
+                    this.$scope.captchaKey = data
+                })
+        }
+        getLanguage(){
+            let language = this.translationService.getLanguage();
+            if (language === 'est')
+                return 'et'
+            else if (language === 'rus')
+                return 'ru'
+            else
+                return 'en'
+
+        }
+
     }
     controller.$inject = [
         'userManualsAdminService',
@@ -138,6 +161,9 @@
         '$translate',
         '$window',
         '$rootScope',
+        'vcRecaptchaService',
+        'translationService'
+
     ]
     component('dopCustomerSupport', {
         templateUrl: 'directives/customerSupport/customerSupport.html',
