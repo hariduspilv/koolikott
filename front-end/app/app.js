@@ -18,7 +18,9 @@ let app = angular.module('koolikottApp', [
     'angular-tour',
     'angularScreenfull',
     'angular-sortable-view',
-    'monospaced.qrcode'
+    'monospaced.qrcode',
+    'vcRecaptcha'
+
 ]);
 
 let provideProvider = null;

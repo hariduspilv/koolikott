@@ -105,6 +105,12 @@
           </div>
         </md-input-container>
       </div>
+      <div ng-if="showCustomerSupportInput" class="recaptcha"
+        vc-recaptcha
+        key="captchaKey"
+        on-success="$ctrl.captchaSuccess()"
+        lang="$ctrl.getLanguage()"
+      ></div>
       <!-- Final step view -->
       <div data-layout="column" data-ng-if="finalStep" class="padding-10 final-step">
         <span data-ng-bind-html="finalresponse"></span>
