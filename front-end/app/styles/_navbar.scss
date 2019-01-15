@@ -110,7 +110,7 @@ md-toolbar.navbar.md-gray {
 }
 
 .responsive-placeholder {
-  @media (max-width: 1280px) and (min-width: 600px) {
+  @media (max-width: $layout-breakpoint-md) and (min-width: $layout-breakpoint-xs) {
     font-size:calc(11px + (20 - 12) * ( (100vw - 600px) / ( 1280 - 600)));
   }
 }
