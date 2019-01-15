@@ -98,11 +98,11 @@
         }
 
         back() {
+            this.$scope.captchaSuccess = false
             if (this.$scope.customerSupport.subject === 'Muu') {
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
                 this.$scope.showCustomerSupportInput = false
-                this.$scope.captchaSuccess = false
             } else {
 
                 this.$scope.showCustomerSupportInput = false
