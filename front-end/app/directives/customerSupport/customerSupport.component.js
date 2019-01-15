@@ -102,6 +102,7 @@
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
                 this.$scope.showCustomerSupportInput = false
+                this.$scope.captchaSuccess = false
             } else {
 
                 this.$scope.showCustomerSupportInput = false
@@ -149,7 +150,6 @@
                 return 'en'
 
         }
-
     }
     controller.$inject = [
         'userManualsAdminService',

@@ -27,7 +27,7 @@
         </div>
       </md-toolbar>
       <div data-layout="column" data-ng-if="!finalStep">
-        <span data-translate="CUSTOMER_SUPPORT_ASK_OR_FAQ" class="padding-10"></span>
+        <span data-ng-if="!showCustomerSupportInput" data-translate="CUSTOMER_SUPPORT_ASK_OR_FAQ" class="padding-10"></span>
         <md-input-container class="margin-10" style="z-index: 1000">
           <md-select
             placeholder="{{'CUSTOMER_SUPPORT_CHOOSE_TOPIC' | translate}}"
