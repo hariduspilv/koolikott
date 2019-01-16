@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class CustomerSupport implements AbstractEntity{
@@ -52,6 +53,13 @@ public class CustomerSupport implements AbstractEntity{
 
     @Column(nullable = false)
     private int sentTries;
+
+    @Transient
+    private List<Object> files;
+
+    public List<Object> getFiles() {return files; }
+
+    public void setFiles(List<Object> files) {this.files = files; }
 
     public Long getId() {
         return id;

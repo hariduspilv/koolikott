@@ -12,6 +12,9 @@
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
 
+            this.$scope.fileNames = []
+            this.$scope.files = []
+
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
 
@@ -22,6 +25,19 @@
                 }
             })
         }
+
+        validateAttachments(){
+            
+
+        }
+
+        // clickToRemove(chipFileToRemove){
+        //     // let index = this.$scope.files.indexOf(chipDetails);
+        //     this.$scope.files.forEach((chipFile,index) => {
+        //         if (chipFile === chipFileToRemove)
+        //             this.$scope.files.splice(index,1)
+        //     });
+        // }
 
         clearData() {
             this.$scope.customerSupport = {}
@@ -58,6 +74,8 @@
 
             this.$scope.isSaving = true
             this.setResponse()
+            this.$scope.customerSupport.files = this.$scope.files
+
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
                 .then(response => {
@@ -150,6 +168,36 @@
                 return 'en'
 
         }
+        putFilesIntoArray(files){
+            this.$scope.files = files
+            this.$scope.fileNames = files.map(f => f.name)
+
+        }
+
+        uploadFiles(files){
+            this.$scope.files = files
+            if (files && files.length){
+                this.$scope.uploadingFile = true
+                //     angular.forEach(
+                //         files,function (file) {
+                //             // this.fileUpload = this.fileUploadService
+                //             //     .upload(file)
+                //         }
+                //     )
+                // .then(function (response) {
+                //     this.$timeout(function () {
+                //         this.$scope.result = response.data;
+                //     });
+                // }, function (response) {
+                //     if (response.status > 0) {
+                //         this.$scope.errorMsg = response.status + ': ' + response.data;
+                //     }
+                // }, function (evt) {
+                //     this.$scope.progress =
+                //         Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                // });
+            }
+        }
     }
     controller.$inject = [
         'userManualsAdminService',
@@ -162,8 +210,9 @@
         '$window',
         '$rootScope',
         'vcRecaptchaService',
-        'translationService'
-
+        'translationService',
+        '$parse',
+        '$timeout'
     ]
     component('dopCustomerSupport', {
         templateUrl: 'directives/customerSupport/customerSupport.html',

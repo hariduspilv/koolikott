@@ -4,6 +4,7 @@ import ee.hm.dop.model.CustomerSupport;
 import ee.hm.dop.utils.DateUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.simplejavamail.MailException;
+import org.simplejavamail.email.AttachmentResource;
 import org.simplejavamail.email.Email;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
@@ -12,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
@@ -34,14 +38,33 @@ public class SendMailService {
     }
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
+
+        List<AttachmentResource>attachmentResourceList = null;
+
+        if (customerSupport.getFiles() != null || !customerSupport.getFiles().isEmpty()){
+            attachmentResourceList = customerSupport.getFiles().stream().map(AttachmentResource.class::cast)
+                    .collect(Collectors.toList());
+        }
+
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("e-Koolikott: " + customerSupport.getSubject())
                 .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
                         "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
+                .withAttachments(attachmentResourceList)
                 .buildEmail();
     }
+//    public Email composeEmailToSupportWithAttachments(CustomerSupport customerSupport) {
+//        return EmailBuilder.startingBlank()
+//                .from("e-Koolikott", customerSupport.getEmail())
+//                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
+//                .withSubject("e-Koolikott: " + customerSupport.getSubject())
+//                .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
+//                        "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
+//                .withAttachments(customerSupport.getFiles())
+//                .buildEmail();
+//    }
 
     public Email composeEmailToSupportWhenSendFailed(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()

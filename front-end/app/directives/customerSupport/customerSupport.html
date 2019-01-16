@@ -105,6 +105,16 @@
           </div>
         </md-input-container>
       </div>
+      <div class="customSupportUploadFile">
+        <a href="" ngf-select="$ctrl.putFilesIntoArray($files)" multiple accept="image/*">File</a>
+            <!-- Tags  -->
+        <div>
+          <md-content class="md-padding" layout="column">
+            <md-chips ng-model="fileNames" md-removable="$ctrl.removable">
+            </md-chips>
+          </md-content>
+        </div>
+      </div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"
         vc-recaptcha
         key="captchaKey"

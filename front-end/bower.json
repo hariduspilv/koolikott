@@ -37,7 +37,8 @@
     "medium-button": "^1.1.2",
     "angular-qrcode": "^7.2.0",
     "unorm": "^1.4.1",
-    "angular-recaptcha": "^4.2.0"
+    "angular-recaptcha": "^4.2.0",
+    "ng-file-model": "*"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
