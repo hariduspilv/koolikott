@@ -65,8 +65,10 @@
                         if (response.status === 200) {
                             this.$scope.showCustomerSupportInput = false
                             this.$scope.finalStep = true
+                            this.$scope.captchaSuccess = false
                         } else {
                             this.$scope.showCustomerSupportDialog = false
+                            this.$scope.captchaSuccess = false
                         }
                     }, () =>
                         this.$scope.isSaving = false
@@ -98,6 +100,7 @@
         }
 
         back() {
+            this.$scope.captchaSuccess = false
             if (this.$scope.customerSupport.subject === 'Muu') {
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
@@ -117,6 +120,7 @@
             this.$scope.finalStep = false
             this.$scope.showUserManualsHelped = false
             this.$scope.customerSupport = {}
+            this.$scope.captchaSuccess = false
         }
 
         handleSelectChange(subject) {
@@ -149,7 +153,6 @@
                 return 'en'
 
         }
-
     }
     controller.$inject = [
         'userManualsAdminService',
