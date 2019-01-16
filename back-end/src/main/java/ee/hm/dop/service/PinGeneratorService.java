@@ -8,9 +8,9 @@ public class PinGeneratorService {
 
         SecureRandom secureRandom = new SecureRandom();
 
-        String arv = String.format("%04d", secureRandom.nextInt(10000));
+        String number = String.format("%04d", secureRandom.nextInt(10000));
 
-        return Integer.parseInt(arv);
+        return Integer.parseInt(number);
 
     }
 }
