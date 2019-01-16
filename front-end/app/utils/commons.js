@@ -419,6 +419,8 @@ function toggleFullScreen() {
                 el.classList.add("hidden")
                 document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
                 document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+                document.getElementsByClassName("content-container")[0].style.paddingLeft = "0";
+                document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
             },300)}
            
 
@@ -443,6 +445,8 @@ function toggleFullScreen() {
                     el.classList.add("hidden")
                     document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
                     document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "0";
+                    document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
                 },300)
 
             }
