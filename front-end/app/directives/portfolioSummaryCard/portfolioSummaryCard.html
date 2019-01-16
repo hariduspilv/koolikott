@@ -23,7 +23,8 @@
                      data-ng-click="toggleFullScreen()"
                      id="faq-edit">
             <md-icon md-menu-align-target>fullscreen</md-icon>
-            <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
+            <md-tooltip><span data-ng-if="!$root.isFullScreen" data-translate="FULL_SCREEN_ON"></span></md-tooltip>
+            <md-tooltip><span data-ng-if="$root.isFullScreen" data-translate="FULL_SCREEN_OFF"></span></md-tooltip>
           </md-button>
 
           <md-menu ng-if="dotsAreShowing() || $root.isEditPortfolioMode && canEdit()" id="dots-menu">
