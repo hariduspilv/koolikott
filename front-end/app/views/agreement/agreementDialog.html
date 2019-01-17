@@ -4,38 +4,57 @@
       <div class="md-toolbar-tools" data-layout-align="space-between center">
         <h2 data-translate="AGREEMENT_DIALOG_HEADER"
         ></h2>
-        <md-button id="gdpr-login-cancel-button" ng-click="cancel()" class="md-icon-button" aria-label="Sulge sisselogimise modaalaken">
+        <md-button id="gdpr-login-cancel-button" ng-click="cancel()" class="md-icon-button"
+                   aria-label="Sulge sisselogimise modaalaken">
           <md-icon>close</md-icon>
         </md-button>
       </div>
     </div>
   </md-toolbar>
-  <md-dialog-content>
-    <md-content data-layout-padding>
-      <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
-      <p>
-        <a id="gdpr-agreement-link" target="_blank" href="{{'AGREEMENT_DIALOG_LINK_HREF' | translate}}">
-          <span id="gdpr-agreement-link-text" data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
-        </a>
-      </p>
-      <div id="gdpr-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
-        <md-button
-          id="gdpr-agreement-cancel-button"
-          class="md-raised md-secondary"
-          aria-label="Ei nõustu, väljun"
-          data-ng-click="cancel()"
-        >
-          <span data-translate="AGREEMENT_DIALOG_ACTION_NO"></span>
-        </md-button>
-        <md-button
-          id="gdpr-agreement-accept-button"
-          class="md-raised md-primary"
-          aria-label="Nõustun ja sisenen"
-          data-ng-click="agree()"
-        >
-          <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
-        </md-button>
-      </div>
-    </md-content>
-  </md-dialog-content>
+  <form name="gdprDialogContent">
+    <md-dialog-content>
+      <md-content data-layout-padding>
+        <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
+        <p>
+          <a id="gdpr-agreement-link" target="_blank" href="{{'AGREEMENT_DIALOG_LINK_HREF' | translate}}">
+            <span id="gdpr-agreement-link-text" data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
+          </a>
+        </p>
+        <div id="gdpr-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+            <label data-translate="GDPR_EMAIL" style="display: block"></label>
+            <input
+              name="email"
+              id="user-email"
+              ng-model="agreementDialogEmail"
+              type="email"
+              required
+              ng-pattern="validEmail">
+            <div data-ng-messages="gdprDialogContent.email.$error">
+              <div data-ng-message="required" data-translate="GDPR_EMAIL_REQUIRED"></div>
+              <div data-ng-message="pattern" data-translate="GDPR_EMAIL_INVALID"></div>
+              <div data-ng-message="validationError" data-translate="GDPR_EMAIL_DUPLICATE"></div>
+            </div>
+          </md-input-container>
+          <md-button
+            id="gdpr-agreement-cancel-button"
+            class="md-raised md-secondary"
+            aria-label="Ei nõustu, väljun"
+            data-ng-click="cancel()"
+          >
+            <span data-translate="AGREEMENT_DIALOG_ACTION_NO"></span>
+          </md-button>
+          <md-button
+            id="gdpr-agreement-accept-button"
+            class="md-raised md-primary"
+            aria-label="Nõustun ja sisenen"
+            data-ng-disabled="$ctrl.isSubmitDisabled()"
+            data-ng-click="agree()"
+          >
+            <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
+          </md-button>
+        </div>
+      </md-content>
+    </md-dialog-content>
+  </form>
 </md-dialog>

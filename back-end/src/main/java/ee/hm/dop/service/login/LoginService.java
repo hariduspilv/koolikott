@@ -85,7 +85,7 @@ public class LoginService {
         User user = getExistingOrNewUser(state);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
 
         AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());
@@ -114,7 +114,7 @@ public class LoginService {
         }
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, false));
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
     }
 
@@ -156,11 +156,10 @@ public class LoginService {
         return interval.toDuration().isLongerThan(duration);
     }
 
-    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+    private User_Agreement createUserAgreement(User user, Agreement agreement) {
         User_Agreement userAgreement = new User_Agreement();
         userAgreement.setUser(user);
         userAgreement.setAgreement(agreement);
-        userAgreement.setAgreed(agreed);
         userAgreement.setCreatedAt(now());
         return userAgreement;
     }
