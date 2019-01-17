@@ -1,6 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.model.CustomerSupport;
+import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.utils.DateUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.simplejavamail.MailException;
@@ -70,5 +71,20 @@ public class SendMailService {
             logger.info("Failed to send e-mail", e);
             return false;
         }
+    }
+
+    public Email sendPinToUser(UserEmail userEmail) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .to(userEmail.getUser().getFullName(), userEmail.getEmail())
+                .withSubject("e-Koolikottis e-posti kinnitamine")
+                .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
+                            "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                            "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
+                            BREAK +
+                            userEmail.getPin() + BREAK + BREAK +
+                            "Pane tähele, et kood on personaalne, ära saada seda teistele kasutajatele edasi." + BREAK +
+                            "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
+                .buildEmail();
     }
 }
