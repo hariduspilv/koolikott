@@ -39,12 +39,20 @@ public class SendMailService {
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
 
-        List<AttachmentResource>attachmentResourceList = null;
+        List<AttachmentResource> collect = customerSupport.getFiles().stream()
+                .map(a -> new AttachmentResource(a.getName(), a))
+                .collect(Collectors.toList());
 
-        if (customerSupport.getFiles() != null || !customerSupport.getFiles().isEmpty()){
-            attachmentResourceList = customerSupport.getFiles().stream().map(AttachmentResource.class::cast)
-                    .collect(Collectors.toList());
-        }
+
+//        List<FileDataSource> attachmentResourceList = null;
+
+//        if (customerSupport.getFiles() != null && !customerSupport.getFiles().isEmpty()){
+//            attachmentResourceList = customerSupport.getFiles().stream().map(FileDataSource.class::cast)
+//                    .collect(Collectors.toList());
+//        }
+
+
+
 
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
@@ -52,10 +60,11 @@ public class SendMailService {
                 .withSubject("e-Koolikott: " + customerSupport.getSubject())
                 .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
                         "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
-                .withAttachments(attachmentResourceList)
+                .withAttachments(collect)
                 .buildEmail();
     }
-//    public Email composeEmailToSupportWithAttachments(CustomerSupport customerSupport) {
+
+    //    public Email composeEmailToSupportWithAttachments(CustomerSupport customerSupport) {
 //        return EmailBuilder.startingBlank()
 //                .from("e-Koolikott", customerSupport.getEmail())
 //                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))

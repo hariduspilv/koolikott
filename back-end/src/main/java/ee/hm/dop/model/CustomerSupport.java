@@ -6,6 +6,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.simplejavamail.email.AttachmentResource;
 
 import javax.persistence.*;
 import java.util.List;
@@ -55,11 +56,11 @@ public class CustomerSupport implements AbstractEntity{
     private int sentTries;
 
     @Transient
-    private List<Object> files;
+    private List<AttachedFile> files;
 
-    public List<Object> getFiles() {return files; }
+    public List<AttachedFile> getFiles() {return files; }
 
-    public void setFiles(List<Object> files) {this.files = files; }
+    public void setFiles(List<AttachedFile> files) {this.files = files; }
 
     public Long getId() {
         return id;

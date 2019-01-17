@@ -12,8 +12,10 @@
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
 
+            this.$scope.strangeFiles = []
             this.$scope.fileNames = []
             this.$scope.files = []
+
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -26,18 +28,52 @@
             })
         }
 
-        validateAttachments(){
-            
+        validateAttachmentsMultiple(files){
+
+
+            if (files.length > 3){
+                alert('More than 3 files selected')
+            }
+
+            let sumOfFilesSizes = files.map(item => item.size).reduce((prev,next) => prev + next);
+
+            let sumOfFilesSizesInMB = sumOfFilesSizes / 1024 / 1024;
+
+            if (sumOfFilesSizesInMB > 10)
+                alert('Files sizes together: '+  sumOfFilesSizesInMB.toFixed(2) + ' is more than allowed(10MB)')
+
 
         }
 
-        // clickToRemove(chipFileToRemove){
-        //     // let index = this.$scope.files.indexOf(chipDetails);
-        //     this.$scope.files.forEach((chipFile,index) => {
-        //         if (chipFile === chipFileToRemove)
-        //             this.$scope.files.splice(index,1)
-        //     });
-        // }
+        putFilesIntoArray(filesFromAir){
+
+            this.$scope.strangeFiles = filesFromAir
+
+            this.$scope.files.push(filesFromAir)
+
+            this.$scope.fileNames = filesFromAir.map(f => f.name)
+
+            this.validateAttachmentsMultiple(this.$scope.files)
+
+            filesFromAir = this.$scope.strangeFiles
+
+
+        }
+
+        clickToRemove(fileToRemove){
+
+            this.$scope.files.forEach((chipFile,index) => {
+                if (chipFile.name === fileToRemove)
+                    this.$scope.files.splice(index,1)
+                    // this.$scope.fileNames.splice(index,1)
+            });
+
+            this.$scope.strangeFiles.forEach((chipFile,index) => {
+                if (chipFile.name === fileToRemove)
+                    this.$scope.strangeFiles.splice(index,1)
+
+            });
+        }
 
         clearData() {
             this.$scope.customerSupport = {}
@@ -77,6 +113,7 @@
             this.$scope.customerSupport.files = this.$scope.files
 
 
+
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
                 .then(response => {
                         this.$scope.isSaving = false
@@ -89,6 +126,9 @@
                     }, () =>
                         this.$scope.isSaving = false
                 )
+            // this.$scope.files = []
+            // this.$scope.fileNames = []
+
         }
 
         getLoggedInUserData() {
@@ -147,7 +187,7 @@
             if (!this.$scope.isSaving && this.$scope.allowDialogClose) {
                 this.$scope.showCustomerSupportDialog = false
             }
-            this.$scope.allowDialogClose = true
+            this.$scope.allowDialogClose = false  //???
         }
         captchaSuccess() {
             this.$scope.captchaSuccess = true
@@ -168,11 +208,36 @@
                 return 'en'
 
         }
-        putFilesIntoArray(files){
-            this.$scope.files = files
-            this.$scope.fileNames = files.map(f => f.name)
 
-        }
+        // validateAttachmentsMultiple(files){
+        //
+        //
+        //     if (files.length > 3){
+        //         alert('More than 3 files selected')
+        //     }
+        //
+        //     let sumOfFilesSizes = files.map(item => item.size).reduce((prev,next) => prev + next);
+        //
+        //     let sumOfFilesSizesInMB = sumOfFilesSizes / 1024 / 1024;
+        //
+        //     if (sumOfFilesSizesInMB > 10)
+        //         alert('Files sizes together: '+  sumOfFilesSizesInMB.toFixed(2) + ' is more than allowed(10MB)')
+        //
+        //
+        // }
+        // putFilesIntoArray(filesFromAir){
+        //
+        //     this.$scope.strangeFiles = filesFromAir
+        //
+        //
+        //     this.$scope.files.push(filesFromAir)
+        //
+        //     this.$scope.fileNames = filesFromAir.map(f => f.name)
+        //
+        //     this.validateAttachmentsMultiple(filesFromAir)
+        //
+        //
+        // }
 
         uploadFiles(files){
             this.$scope.files = files

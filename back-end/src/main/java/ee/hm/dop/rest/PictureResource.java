@@ -16,8 +16,13 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
 import static ee.hm.dop.utils.DOPFileUtils.read;
@@ -85,5 +90,22 @@ public class PictureResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public int getMaxSize() {
         return configuration.getInt(MAX_FILE_SIZE);
+    }
+
+
+    @GET
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/calculateSize/{filename}")
+    public String getFileSize(@FormDataParam("picture") InputStream fileInputStream,@PathParam("filename") String pictureName){
+
+        File file = new File(pictureName);
+
+        try {
+            Files.copy(fileInputStream,file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pictureService.getFileSizeInMB(file);
     }
 }
