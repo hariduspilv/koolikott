@@ -1,0 +1,1 @@
+ALTER TABLE Material_PeerReview ADD CONSTRAINT material_peerreview UNIQUE (material, peerReview);

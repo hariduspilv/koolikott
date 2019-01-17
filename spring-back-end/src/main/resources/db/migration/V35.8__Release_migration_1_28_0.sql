@@ -1,0 +1,35 @@
+SET foreign_key_checks = 0;
+
+update Translation set translation = 'Глава' where translationKey = 'CHAPTER' and translationGroup = 2;
+update Translation set translation = 'Закрыть' where translationKey = 'CLOSE' and translationGroup = 2;
+update Translation set translation = 'Дальше' where translationKey = 'FORWARD' and translationGroup = 2;
+update Translation set translation = 'Посмотри тур' where translationKey = 'HEADER_EDIT_TOOLTIP_HELP' and translationGroup = 2;
+update Translation set translation = 'Комментарий' where translationKey = 'REPORTING_REASON_COMMENT' and translationGroup = 2;
+update Translation set translation = 'ключевое слово' where translationKey = 'REPORTING_REASON_TAG' and translationGroup = 2;
+update Translation set translation = 'Под знаком вопроса вы можете открыть виртуальный тур еще раз.' where translationKey = 'TOUR_CANCELLED_HELP' and translationGroup = 2;
+update Translation set translation = 'Здесь вы можете открыть более подробный поиск в дополнение к простому поиску.' where translationKey = 'TOUR_DETAILEDSEARCH' and translationGroup = 2;
+update Translation set translation = 'Здесь вы можете изменить статус коллекции а также сохранить коллекцию.' where translationKey = 'TOUR_EDIT_CHANGE_VISIBLITY' and translationGroup = 2;
+update Translation set translation = 'Здесь вы можете искать материалы и добавлять их в открытую коллекцию.' where translationKey = 'TOUR_EDIT_SEARCH' and translationGroup = 2;
+update Translation set translation = 'Все созданные вами главы и подглавы создаются здесь, и, нажав на них, вы попадете в нужное место в коллекции.' where translationKey = 'TOUR_EDIT_SIDENAV' and translationGroup = 2;
+update Translation set translation = 'Под вопросительным знаком вы можете снова открыть тот же виртуальный тур  и оставить отзыв о e-Koolikott, а также войти или выйти соответственно.' where translationKey = 'TOUR_HELP' and translationGroup = 2;
+update Translation set translation = 'Учебные материалы и коллекции вы можете по соответствующей таксономии.' where translationKey = 'TOUR_SIDENAV' and translationGroup = 2;
+update Translation set translation = 'You can replay the tour from question mark icon' where translationKey = 'TOUR_CANCELLED_HELP' and translationGroup = 3;
+update Translation set translation = 'From here you can access detailed search' where translationKey = 'TOUR_DETAILEDSEARCH' and translationGroup = 3;
+update Translation set translation = 'From here you can save and change status of the portfolio' where translationKey = 'TOUR_EDIT_CHANGE_VISIBLITY' and translationGroup = 3;
+update Translation set translation = 'From here you can search materials and add them to the currently open portfolio' where translationKey = 'TOUR_EDIT_SEARCH' and translationGroup = 3;
+update Translation set translation = 'All your chapters and subchapters are displayed here and by clicking on the item you are scrolled to the corresponding chapter or subchapter' where translationKey = 'TOUR_EDIT_SIDENAV' and translationGroup = 3;
+update Translation set translation = 'You can watch the tour again by clicking on the question mark' where translationKey = 'TOUR_HELP' and translationGroup = 3;
+update Translation set translation = 'In learning objects you can look up materials under a specific taxonomy' where translationKey = 'TOUR_SIDENAV' and translationGroup = 3;
+update Translation set translation = 'Report comment' where translationKey = 'COMMENT_TOOLTIP_REPORT_AS_IMPROPER' and translationGroup = 3;
+delete from Translation where translationKey = 'DELETE_CHAPTER';
+delete from Translation where translationKey = 'DELETE_MATERIAL';
+delete from Translation where translationKey = 'DELETE_SUBCHAPTER';
+delete from Translation where translationKey = 'HEADER_SEARCH_PLACEHOLDER';
+delete from Translation where translationKey = 'LOAD_IMAGE';
+delete from Translation where translationKey = 'MATERIAL_FROM_BAG';
+delete from Translation where translationKey = 'NEW_MATERIAL';
+delete from Translation where translationKey = 'NEW_PORTFOLIO_CREATED_MESSAGE';
+delete from Translation where translationKey = 'PORTFOLIO_CHAPTER_TITLE_MISSING';
+delete from Translation where translationKey = 'PORTFOLIO_SUBCHAPTER_TITLE_MISSING';
+
+SET foreign_key_checks = 1;
