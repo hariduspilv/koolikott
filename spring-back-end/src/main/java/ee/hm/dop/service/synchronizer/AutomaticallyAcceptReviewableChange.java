@@ -1,6 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import com.google.inject.Singleton;
 import ee.hm.dop.dao.ReviewableChangeDao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
@@ -26,6 +25,8 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
 
     @Inject
     private Configuration configuration;
+    @Inject
+    private ReviewableChangeDao reviewableChangeDao;
 
     private static final Logger logger = LoggerFactory.getLogger(AutomaticallyAcceptReviewableChange.class);
     private volatile static Future<?> acceptReviewableChangeHandle;
@@ -100,8 +101,7 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
     }
 
     protected ReviewableChangeDao newReviewableChangeDao() {
-        return null;
-//        return GuiceInjector.getInjector().getInstance(ReviewableChangeDao.class);
+        return reviewableChangeDao;
     }
 
     /**

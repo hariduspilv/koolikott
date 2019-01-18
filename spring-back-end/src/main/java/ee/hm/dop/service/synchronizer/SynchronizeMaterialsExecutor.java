@@ -1,6 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import com.google.inject.Singleton;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
@@ -24,6 +23,8 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
     @Inject
     private SolrEngineService solrEngineService;
+    @Inject
+    private RepositoryService repositoryService;
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
     private static Future<?> synchronizeMaterialHandle;
@@ -112,7 +113,6 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     }
 
     protected RepositoryService newRepositoryService() {
-        return null;
-//        return GuiceInjector.getInjector().getInstance(RepositoryService.class);
+        return repositoryService;
     }
 }

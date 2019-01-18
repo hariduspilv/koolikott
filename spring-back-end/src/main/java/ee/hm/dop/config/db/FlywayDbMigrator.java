@@ -4,15 +4,16 @@ import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_PASSWORD;
 import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_URL;
 import static ee.hm.dop.utils.ConfigurationProperties.DATABASE_USERNAME;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.apache.commons.configuration2.Configuration;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+import org.springframework.stereotype.Component;
 
-@Singleton
+import javax.inject.Inject;
+
+/*@Component
 public class FlywayDbMigrator implements FlywayMigrationStrategy {
 
     private static final Logger logger = LoggerFactory.getLogger(FlywayDbMigrator.class);
@@ -49,4 +50,4 @@ public class FlywayDbMigrator implements FlywayMigrationStrategy {
     private String getUrl() {
         return configuration.getString(DATABASE_URL);
     }
-}
+}*/

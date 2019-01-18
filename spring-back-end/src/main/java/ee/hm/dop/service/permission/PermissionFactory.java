@@ -6,24 +6,28 @@ import java.util.Map;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class PermissionFactory {
 
-    private static Map<Class<? extends LearningObject>, Class<? extends PermissionItem>> map = new HashMap<>();
+    private MaterialPermission materialPermission;
+    private PortfolioPermission portfolioPermission;
 
-    static {
-        register(MaterialPermission.class, Material.class);
-        register(PortfolioPermission.class, Portfolio.class);
+    private static Map<Class<? extends LearningObject>, PermissionItem> map = new HashMap<>();
+
+    {
+        register(Material.class, materialPermission);
+        register(Portfolio.class, portfolioPermission);
     }
 
-    private static void register(Class<? extends PermissionItem> learningObjectHandlerClass, Class<? extends LearningObject> learningObjectClass) {
+    private static void register(Class<? extends LearningObject> learningObjectClass, PermissionItem learningObjectHandlerClass) {
         map.put(learningObjectClass, learningObjectHandlerClass);
     }
 
-    public static PermissionItem get(Class<? extends LearningObject> clazz) {
-        return null;
-//        return GuiceInjector.getInjector().getInstance(map.get(clazz));
+    public PermissionItem get(Class<? extends LearningObject> clazz) {
+        return map.get(clazz);
     }
 }

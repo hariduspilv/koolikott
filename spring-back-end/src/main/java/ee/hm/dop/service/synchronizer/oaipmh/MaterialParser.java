@@ -1,10 +1,30 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.*;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.IssueDate;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.PeerReview;
+import ee.hm.dop.model.Publisher;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.model.taxon.Domain;
+import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Module;
+import ee.hm.dop.model.taxon.Specialization;
+import ee.hm.dop.model.taxon.Subject;
+import ee.hm.dop.model.taxon.Subtopic;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.Topic;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
-import ee.hm.dop.service.metadata.*;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.metadata.ResourceTypeService;
+import ee.hm.dop.service.metadata.TagService;
+import ee.hm.dop.service.metadata.TargetGroupService;
+import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
@@ -15,18 +35,34 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.inject.Inject;
-import javax.xml.xpath.*;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.*;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.nodeStreamOf;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 public abstract class MaterialParser {
 

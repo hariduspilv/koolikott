@@ -1,6 +1,5 @@
 package ee.hm.dop.service.synchronizer;
 
-import com.google.inject.Singleton;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -14,6 +13,8 @@ import static java.util.concurrent.TimeUnit.DAYS;
 
 @Service
 public class AuthenticationStateCleaner extends DopDaemonProcess{
+
+    private AuthenticationStateDao authenticationStateDao;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationStateCleaner.class);
 
@@ -37,8 +38,7 @@ public class AuthenticationStateCleaner extends DopDaemonProcess{
     }
 
     protected AuthenticationStateDao newAuthenticationStateDao() {
-        return null;
-//        return GuiceInjector.getInjector().getInstance(AuthenticationStateDao.class);
+        return authenticationStateDao;
     }
 
     public void scheduleExecution(int hourOfDayToExecute) {

@@ -15,6 +15,8 @@ public class LearningObjectService {
 
     @Inject
     private LearningObjectDao learningObjectDao;
+    @Inject
+    private PermissionFactory permissionFactory;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
@@ -54,6 +56,6 @@ public class LearningObjectService {
     }
 
     private PermissionItem getLearningObjectHandler(LearningObject learningObject) {
-        return PermissionFactory.get(learningObject.getClass());
+        return permissionFactory.get(learningObject.getClass());
     }
 }

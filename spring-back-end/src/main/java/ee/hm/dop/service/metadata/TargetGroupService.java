@@ -1,15 +1,13 @@
 package ee.hm.dop.service.metadata;
 
 
-import com.google.inject.Inject;
 import ee.hm.dop.dao.TargetGroupDao;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.TargetGroupEnum;
-import org.apache.commons.lang3.Range;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.inject.Inject;
+import java.util.List;
 
 @Service
 public class TargetGroupService {

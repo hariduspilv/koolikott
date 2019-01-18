@@ -1,20 +1,21 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.buildDeletedMaterial;
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
-import static java.lang.String.format;
-
-import java.util.Iterator;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.inject.Inject;
+import java.util.Iterator;
+
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.buildDeletedMaterial;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
+import static java.lang.String.format;
+
+@Component
 public class MaterialIterator implements Iterator<Material> {
 
     private static final Logger logger = LoggerFactory.getLogger(MaterialIterator.class);

@@ -1,20 +1,21 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.nodeStreamOf;
-import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
-import static java.lang.String.format;
-
-import javax.xml.transform.TransformerException;
-
 import ORG.oclc.oai.harvester2.verb.GetRecord;
 import ee.hm.dop.model.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import javax.xml.transform.TransformerException;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.nodeStreamOf;
+import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
+import static java.lang.String.format;
+
+@Component
 public class GetMaterialConnector {
     private static final Logger logger = LoggerFactory.getLogger(GetMaterialConnector.class);
     public static final String ERROR_STRING = "Found errors when getting one material from repository, errors are: ";

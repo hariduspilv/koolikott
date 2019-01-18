@@ -1,12 +1,12 @@
 package ee.hm.dop.service.synchronizer;
 
-import com.google.inject.Singleton;
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,6 +14,9 @@ import static java.util.concurrent.TimeUnit.DAYS;
 
 @Service
 public class AuthenticatedUserCleaner extends DopDaemonProcess{
+
+    @Inject
+    private AuthenticatedUserDao authenticatedUserDao;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticatedUserCleaner.class);
 
@@ -38,8 +41,7 @@ public class AuthenticatedUserCleaner extends DopDaemonProcess{
     }
 
     protected AuthenticatedUserDao newAuthenticationStateDao() {
-        return null;
-//        return GuiceInjector.getInjector().getInstance(AuthenticatedUserDao.class);
+        return authenticatedUserDao;
     }
 
     public void scheduleExecution(int hourOfDayToExecute) {

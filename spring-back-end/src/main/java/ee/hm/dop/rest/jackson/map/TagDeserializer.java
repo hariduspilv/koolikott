@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.metadata.TagService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -14,13 +16,14 @@ import java.io.IOException;
  * @author Jordan Silva
  *
  */
+@Component
+@AllArgsConstructor
 public class TagDeserializer extends JsonDeserializer<Tag> {
+
+    private TagService tagService;
 
     @Override
     public Tag deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        TagService tagService = null;
-//                GuiceInjector.getInjector().getInstance(TagService.class);
-
         String tagName = jp.getText();
         Tag tag = tagService.getTagByName(tagName);
 

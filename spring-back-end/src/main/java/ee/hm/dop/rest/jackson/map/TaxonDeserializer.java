@@ -6,15 +6,21 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.metadata.TaxonService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
+@AllArgsConstructor
 public class TaxonDeserializer extends JsonDeserializer<Taxon> {
+
+    private TaxonService taxonService;
 
     @Override
     public Taxon deserialize(JsonParser parser, DeserializationContext context) throws IOException {
         Taxon taxon = parser.readValueAs(Taxon.class);
-        return taxon != null ? getTaxonService().getTaxonById(taxon.getId()) : null;
+        return taxon != null ? taxonService.getTaxonById(taxon.getId()) : null;
 
     }
 
@@ -23,8 +29,4 @@ public class TaxonDeserializer extends JsonDeserializer<Taxon> {
         return deserialize(jp, context);
     }
 
-    private TaxonService getTaxonService() {
-        return null;
-//        return GuiceInjector.getInjector().getInstance(TaxonService.class);
-    }
 }

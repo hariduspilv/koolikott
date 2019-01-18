@@ -1,15 +1,20 @@
 package ee.hm.dop.service.synchronizer.oaipmh.waramu;
 
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.Author;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TagService;
-import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
-import ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.CharacterData;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -19,6 +24,7 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
+@Service
 public class MaterialParserWaramu extends MaterialParser {
 
     private static final String WEB_PAGE = "WEBPAGE";

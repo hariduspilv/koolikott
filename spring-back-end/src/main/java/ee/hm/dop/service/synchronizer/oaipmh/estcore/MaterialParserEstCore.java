@@ -1,28 +1,37 @@
 package ee.hm.dop.service.synchronizer.oaipmh.estcore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import javax.inject.Inject;
-
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.metadata.*;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.OriginalPicture;
+import ee.hm.dop.model.Picture;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.service.metadata.CrossCurricularThemeService;
+import ee.hm.dop.service.metadata.KeyCompetenceService;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.metadata.LicenseTypeService;
+import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
+@Service
 public class MaterialParserEstCore extends MaterialParser {
 
     private static final String YES = "YES";

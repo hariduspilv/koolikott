@@ -1,8 +1,5 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.xml.transform.TransformerException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class IdentifierIterator implements Iterator<Element> {
 

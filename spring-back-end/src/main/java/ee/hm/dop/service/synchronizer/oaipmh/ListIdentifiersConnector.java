@@ -1,14 +1,16 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
-import java.util.Iterator;
-
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
 import ee.hm.dop.utils.DateUtils;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Iterator;
+
+@Component
 public class ListIdentifiersConnector {
 
     private String resumptionToken;

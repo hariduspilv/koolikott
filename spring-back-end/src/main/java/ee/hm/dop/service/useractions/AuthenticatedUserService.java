@@ -27,7 +27,7 @@ import java.security.PrivateKey;
 public class AuthenticatedUserService {
 
     private AuthenticatedUserDao authenticatedUserDao;
-//    private Configuration configuration;
+    private Configuration configuration;
 
     public AuthenticatedUser getAuthenticatedUserByToken(String token) {
         return authenticatedUserDao.findAuthenticatedUserByToken(token);
@@ -37,8 +37,7 @@ public class AuthenticatedUserService {
         ObjectMapper mapper = new ObjectMapper();
         String userDataStr = tryToMap(new UserData(authenticatedUser.getPerson()), mapper);
 
-        PrivateKey privateKey = null;
-//                KeyStoreUtils.getDOPSigningCredential(configuration).getPrivateKey();
+        PrivateKey privateKey = KeyStoreUtils.getDOPSigningCredential(configuration).getPrivateKey();
         final byte[] cipherText = EncryptionUtils.encrypt(userDataStr, privateKey);
 
         return Base64.encodeBase64String(cipherText);
