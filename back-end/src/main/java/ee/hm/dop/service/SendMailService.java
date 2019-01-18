@@ -77,7 +77,7 @@ public class SendMailService {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), userEmail.getEmail())
-                .withSubject("e-Koolikottis e-posti kinnitamine")
+                .withSubject("e-Koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
                             "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
                             "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +

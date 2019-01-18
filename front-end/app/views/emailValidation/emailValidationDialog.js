@@ -8,6 +8,8 @@
             this.setFormToEmpty()
             this.setResponse()
             this.$scope.emailValidationForm = {}
+            this.$scope.isSending = false
+            this.$scope.input = [this.$scope.firstNum, this.$scope.secondNum, this.$scope.thirdNum, this.$scope.fourthNum]
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
             this.$scope.$watch(
@@ -16,10 +18,10 @@
                 false
             );
 
-            this.$scope.$watchCollection('emailValidationForm', () => {
+            this.$scope.checkPin = () => {
+                this.$scope.emailValidationForm.$setValidity('validationError', true)
                 if (this.$scope.emailValidationForm.$valid && this.isNotEmpty()) {
                     this.$scope.isSending = true
-                    this.$scope.emailValidationForm.$setValidity('validationError', true)
                     let pin = this.$scope.firstNum + this.$scope.secondNum + this.$scope.thirdNum + this.$scope.fourthNum
                     this.userEmailService.validatePin(this.$rootScope.userFromAuthentication, pin)
                         .then(response => {
@@ -27,13 +29,14 @@
                                 this.$mdDialog.hide(true)
                                 this.$scope.isSending = false
                             }
-                        }).catch( response => {
-                            this.$scope.emailValidationForm.$setValidity('validationError', false)
-                            this.setFormToEmpty()
-                            this.$scope.isSending = false
+                        }).catch( () => {
+                        this.$scope.emailValidationForm.$setValidity('validationError', false)
+                        this.setTouchedFalse()
+                        this.setFormToEmpty()
+                        this.$scope.isSending = false
                     })
                 }
-            })
+            }
         }
 
         setResponse() {
@@ -47,12 +50,20 @@
             this.$scope.thirdNum = ''
             this.$scope.fourthNum = ''
         }
+
         isNotEmpty() {
             return !!(this.$scope.firstNum && this.$scope.secondNum && this.$scope.thirdNum && this.$scope.fourthNum)
         }
         $onDestroy() {
             if (typeof this.unsubscribeRouteChangeSuccess === 'function')
                 this.unsubscribeRouteChangeSuccess()
+        }
+
+        setTouchedFalse() {
+            this.$scope.emailValidationForm.firstNum.$touched = !this.$scope.emailValidationForm.firstNum.$touched
+            this.$scope.emailValidationForm.secondNum.$touched = !this.$scope.emailValidationForm.secondNum.$touched
+            this.$scope.emailValidationForm.thirdNum.$touched = !this.$scope.emailValidationForm.thirdNum.$touched
+            this.$scope.emailValidationForm.fourthNum.$touched = !this.$scope.emailValidationForm.fourthNum.$touched
         }
     }
     controller.$inject = [

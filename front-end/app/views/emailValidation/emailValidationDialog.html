@@ -22,6 +22,7 @@
                 required
                 maxlength="1"
                 data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
               >
             </md-input-container>
             <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
@@ -33,6 +34,7 @@
                 required
                 maxlength="1"
                 data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
               >
             </md-input-container>
             <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
@@ -44,6 +46,7 @@
                 required
                 maxlength="1"
                 data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
               >
             </md-input-container>
             <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
@@ -55,8 +58,15 @@
                 required
                 maxlength="1"
                 data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
               >
             </md-input-container>
+            <md-progress-circular
+              class="ng-hide"
+              md-mode="indeterminate"
+              md-diameter="40"
+              data-ng-show="isSending"
+            ></md-progress-circular>
           </div>
           <div data-ng-messages="emailValidationForm.$error">
             <div data-ng-message="validationError" class="email-alert" data-translate="EMAIL_INVALID_PIN"></div>

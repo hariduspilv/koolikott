@@ -53,6 +53,12 @@
           >
             <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
           </md-button>
+          <md-progress-circular
+            class="ng-hide"
+            md-mode="indeterminate"
+            md-diameter="40"
+            data-ng-show="isSaving"
+          ></md-progress-circular>
         </div>
       </md-content>
     </md-dialog-content>

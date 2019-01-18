@@ -3,6 +3,7 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.dao.UserEmailDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
@@ -44,6 +45,8 @@ public class LoginService {
     private UserAgreementDao userAgreementDao;
     @Inject
     private SessionService sessionService;
+    @Inject
+    private UserEmailDao userEmailDao;
 
     public UserStatus login(String idCode, String name, String surname, LoginFrom loginFrom) {
         Agreement latestAgreement = agreementDao.findLatestAgreement();
@@ -57,6 +60,8 @@ public class LoginService {
         }
         if (userAgreementDao.agreementDoesntExist(user.getId(), latestAgreement.getId())) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
+            removeEmailAndSetNotActivated(user);
+
             logger.info(format("User with id %s doesn't have agreement", user.getId()));
             return missingPermissionsExistingUser(state.getToken(), latestAgreement.getId(), loginFrom);
         }
@@ -116,6 +121,14 @@ public class LoginService {
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
             userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
+    }
+
+    private void removeEmailAndSetNotActivated(User user) {
+        UserEmail userEmail = userEmailDao.findByField("user", user);
+        userEmail.setEmail(null);
+        userEmail.setActivated(false);
+        userEmail.setActivatedAt(null);
+        userEmailDao.createOrUpdate(userEmail);
     }
 
     private AuthenticatedUser finalizeLogin(String idCode, String name, String surname, LoginFrom loginFrom) {
