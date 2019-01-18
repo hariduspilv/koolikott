@@ -20,7 +20,7 @@ public class PropertiesConfig {
                 new ConfigurationPropertySource("custom properties", new Configurations().properties(System.getProperty("config")));
         log.info("loaded default props : " + defaultProps.getPropertyNames().length);
         log.info("loaded custom props : " + customProps.getPropertyNames().length);
+        env.getPropertySources().addFirst(customProps);
         env.getPropertySources().addLast(defaultProps);
-        env.getPropertySources().addLast(customProps);
     }
 }
