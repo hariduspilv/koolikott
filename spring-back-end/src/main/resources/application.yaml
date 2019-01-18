@@ -4,6 +4,8 @@ server:
   port: 8100
 
 spring:
+  profiles:
+    active: default
   jpa:
     hibernate:
       naming:
@@ -20,3 +22,6 @@ spring:
     outOfOrder: true
     baselineOnMigrate: true
     placeholderReplacement: false
+
+app:
+  devLogin: false

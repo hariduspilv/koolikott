@@ -375,6 +375,23 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>spring-live</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
         <!--<profile>
             <id>live</id>
             <build>
