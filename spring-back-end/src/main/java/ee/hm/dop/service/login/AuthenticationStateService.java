@@ -4,9 +4,11 @@ import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class AuthenticationStateService {
 
     @Inject

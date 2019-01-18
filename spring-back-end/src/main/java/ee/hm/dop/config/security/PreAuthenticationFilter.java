@@ -1,20 +1,19 @@
 package ee.hm.dop.config.security;
 
 import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import ee.hm.dop.service.login.SessionUtil;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class PreAuthenticationFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-    @Autowired
+    @Inject
     private AuthenticatedUserService authenticatedUserService;
 
     public PreAuthenticationFilter(AuthenticationManager authenticationManager) {

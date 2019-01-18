@@ -1,7 +1,7 @@
 server:
   servlet:
     contextPath: /rest
-  port: 4444
+  port: 8100
 
 spring:
   jpa:

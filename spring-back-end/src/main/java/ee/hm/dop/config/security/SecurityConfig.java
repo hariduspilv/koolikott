@@ -1,6 +1,5 @@
 package ee.hm.dop.config.security;
 
-import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,4 +21,5 @@ public class SecurityConfig {
   public PrincipalClassBasedAuthProvider<DopPrincipal> jwtAuthProvider(DbUserDetailsService dbUserDetailsService) {
     return new PrincipalClassBasedAuthProvider<>(DopPrincipal.class, dbUserDetailsService);
   }
+
 }

@@ -8,6 +8,7 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.service.solr.SearchCommandBuilder.*;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
+@Service
 public class SearchService {
 
     public static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";

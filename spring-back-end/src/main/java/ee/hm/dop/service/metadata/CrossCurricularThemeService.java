@@ -6,7 +6,9 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.CrossCurricularThemeDao;
 import ee.hm.dop.model.CrossCurricularTheme;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CrossCurricularThemeService {
 
     @Inject

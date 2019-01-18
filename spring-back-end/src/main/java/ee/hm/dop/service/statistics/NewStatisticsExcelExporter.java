@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.FileOutputStream;
@@ -26,6 +27,7 @@ import java.util.List;
 import static ee.hm.dop.service.statistics.StatisticsUtil.EMPTY_ROW;
 import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
 
+@Service
 public class NewStatisticsExcelExporter {
 
     private static final Logger logger = LoggerFactory.getLogger(NewStatisticsExcelExporter.class);

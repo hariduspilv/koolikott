@@ -107,13 +107,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     // The date when the Learning Object was added to the system
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime updated;
@@ -169,7 +169,7 @@ public abstract class LearningObject implements Searchable, ILearningObject {
      */
     @JsonIgnore
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime lastInteraction;
 
     @Column(nullable = false)

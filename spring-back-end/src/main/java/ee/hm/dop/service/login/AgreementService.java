@@ -4,6 +4,7 @@ import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.User;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -13,6 +14,7 @@ import java.util.List;
 import static ee.hm.dop.utils.UserUtil.mustBeAdmin;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
+@Service
 public class AgreementService {
 
     @Inject

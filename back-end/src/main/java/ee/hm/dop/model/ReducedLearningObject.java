@@ -45,7 +45,7 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
     private Visibility visibility;
 
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;

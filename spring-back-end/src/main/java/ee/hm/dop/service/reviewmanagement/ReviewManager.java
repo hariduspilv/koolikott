@@ -6,9 +6,11 @@ import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class ReviewManager {
 
     @Inject

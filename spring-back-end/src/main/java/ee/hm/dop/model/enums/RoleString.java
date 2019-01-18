@@ -1,8 +1,8 @@
 package ee.hm.dop.model.enums;
 
 public interface RoleString {
-    public static final String USER = "USER";
-    public static final String ADMIN = "ADMIN";
-    public static final String MODERATOR = "MODERATOR";
-    public static final String RESTRICTED = "RESTRICTED";
+    String USER = "ROLE_USER";
+    String ADMIN = "ROLE_ADMIN";
+    String MODERATOR = "ROLE_MODERATOR";
+    String RESTRICTED = "ROLE_RESTRICTED";
 }

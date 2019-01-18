@@ -6,6 +6,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Service
 public class PortfolioGetter {
 
     @Inject

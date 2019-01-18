@@ -5,7 +5,9 @@ import static java.lang.String.format;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.synchronizer.oaipmh.estcore.MaterialParserEstCore;
 import ee.hm.dop.service.synchronizer.oaipmh.waramu.MaterialParserWaramu;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RepositoryManager {
 
     private static final String WARAMU_PARSER = "waramu";

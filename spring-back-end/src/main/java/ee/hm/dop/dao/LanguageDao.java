@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.Language;
+import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -8,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+@Repository
 public class LanguageDao extends AbstractDao<Language> {
 
     public Language findByCode(String code) {

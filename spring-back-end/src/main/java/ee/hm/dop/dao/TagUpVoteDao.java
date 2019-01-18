@@ -9,7 +9,9 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class TagUpVoteDao extends AbstractDao<TagUpVote> {
 
     public void setDeleted(TagUpVote tagUpVote) {

@@ -5,6 +5,7 @@ import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserFavorite;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -13,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class UserFavoriteDao extends AbstractDao<UserFavorite> {
-
 
     public List<Long> returnFavoredLearningObjects(List<Long> idList, User loggedInUser) {
         if (loggedInUser == null || CollectionUtils.isEmpty(idList)) {

@@ -12,6 +12,7 @@ import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static ee.hm.dop.service.metadata.TaxonService.TAXON_PREFIXES;
 
+@Service
 public class ReviewableChangeAdminService {
 
     @Inject

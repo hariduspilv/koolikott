@@ -5,10 +5,12 @@ import com.google.inject.Inject;
 import ee.hm.dop.dao.UserTourDataDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserTourData;
+import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+@Service
 public class UserTourDataService {
 
     @Inject

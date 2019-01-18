@@ -6,7 +6,9 @@ import java.util.Map;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PermissionFactory {
 
     private static Map<Class<? extends LearningObject>, Class<? extends PermissionItem>> map = new HashMap<>();

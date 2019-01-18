@@ -2,10 +2,12 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.util.List;
 
+@Repository
 public class UserDao extends AbstractDao<User> {
 
     public User findUserByIdCode(String idCode) {

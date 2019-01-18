@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.security.InvalidParameterException;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static org.joda.time.DateTime.now;
 
+@Repository
 public class LearningObjectDao extends AbstractDao<LearningObject> {
 
     private static final Object lock = new Object();

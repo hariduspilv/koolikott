@@ -48,9 +48,11 @@ import org.opensaml.xml.schema.impl.XSStringImpl;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureValidator;
 import org.opensaml.xml.validation.ValidationException;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+@Service
 public class TaatService {
 
     private static final String NAME = "urn:mace:dir:attribute-def:cn";

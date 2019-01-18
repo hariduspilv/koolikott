@@ -19,7 +19,7 @@ public class AuthenticationState implements AbstractEntity {
     private String token;
 
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime created;
 
     @Column

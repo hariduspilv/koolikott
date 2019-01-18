@@ -4,7 +4,9 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.utils.UserUtil;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MaterialPermission implements PermissionItem {
 
     @Override

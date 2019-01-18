@@ -31,7 +31,7 @@ public class Repository implements AbstractEntity {
     private String baseURL;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime lastSynchronization;
 
     @Column(nullable = false, name = "schemaName")

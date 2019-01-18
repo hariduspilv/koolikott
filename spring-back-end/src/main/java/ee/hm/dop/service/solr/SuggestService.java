@@ -1,12 +1,14 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.service.SuggestionStrategy;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+@Service
 public class SuggestService {
 
     @Inject

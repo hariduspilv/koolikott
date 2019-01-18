@@ -15,7 +15,9 @@ import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserLikeService {
 
     @Inject

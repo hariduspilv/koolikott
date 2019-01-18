@@ -2,10 +2,12 @@ package ee.hm.dop.service.metadata;
 
 import ee.hm.dop.dao.ResourceTypeDao;
 import ee.hm.dop.model.ResourceType;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 
+@Service
 public class ResourceTypeService {
 
     @Inject

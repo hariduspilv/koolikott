@@ -4,7 +4,9 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.PublisherDao;
 import ee.hm.dop.model.Publisher;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PublisherService {
 
     @Inject

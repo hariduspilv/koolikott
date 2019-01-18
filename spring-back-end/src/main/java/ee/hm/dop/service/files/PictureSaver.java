@@ -8,6 +8,7 @@ import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import java.net.URL;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
+@Service
 public class PictureSaver {
 
     public static final String DEFAULT_PICTURE_FORMAT = "jpg";

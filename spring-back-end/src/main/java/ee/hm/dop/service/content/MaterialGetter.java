@@ -8,6 +8,7 @@ import ee.hm.dop.service.permission.MaterialPermission;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class MaterialGetter {
 
     @Inject

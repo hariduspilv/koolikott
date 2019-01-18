@@ -19,6 +19,8 @@ import ee.hm.dop.model.enums.LoginFrom;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class AuthenticatedUser implements AbstractEntity {
 
@@ -54,13 +56,11 @@ public class AuthenticatedUser implements AbstractEntity {
 
     @JsonIgnore
     @Column(nullable = false)
-
-    private DateTime loginDate;
+    private LocalDateTime loginDate;
 
     @JsonIgnore
     @Column(nullable = false)
-
-    private DateTime sessionTime;
+    private LocalDateTime sessionTime;
 
     @JsonIgnore
     @Column
@@ -77,8 +77,11 @@ public class AuthenticatedUser implements AbstractEntity {
         this.user = user;
         this.firstLogin = user.isNewUser();
         this.person = person;
-        this.loginDate = loginDate;
-        this.sessionTime = sessionTime;
+        this.loginDate = LocalDateTime.now();
+//        this.loginDate = loginDate;
+        this.sessionTime = LocalDateTime.now();
+        //todo
+//        this.sessionTime = sessionTime;
         this.sessionNumber = 1;
         this.loginFrom = loginFrom;
     }
@@ -131,11 +134,11 @@ public class AuthenticatedUser implements AbstractEntity {
         this.person = person;
     }
 
-    public DateTime getLoginDate() {
+    public LocalDateTime getLoginDate() {
         return loginDate;
     }
 
-    public void setLoginDate(DateTime loginDate) {
+    public void setLoginDate(LocalDateTime loginDate) {
         this.loginDate = loginDate;
     }
 
@@ -147,11 +150,11 @@ public class AuthenticatedUser implements AbstractEntity {
         this.loggedOut = loggedOut;
     }
 
-    public DateTime getSessionTime() {
+    public LocalDateTime getSessionTime() {
         return sessionTime;
     }
 
-    public void setSessionTime(DateTime sessionTime) {
+    public void setSessionTime(LocalDateTime sessionTime) {
         this.sessionTime = sessionTime;
     }
 

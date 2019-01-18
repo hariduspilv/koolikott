@@ -4,12 +4,14 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.statistics.StatisticsUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
+@Repository
 public class StatisticsDao {
     @Inject
     private EntityManager entityManager;

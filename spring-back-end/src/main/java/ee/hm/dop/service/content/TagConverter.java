@@ -10,9 +10,11 @@ import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class TagConverter {
 
     public static final String TAXON = "taxon";

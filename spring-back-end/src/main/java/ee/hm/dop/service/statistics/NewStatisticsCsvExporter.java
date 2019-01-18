@@ -11,6 +11,7 @@ import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.*;
@@ -20,6 +21,7 @@ import java.util.List;
 import static ee.hm.dop.service.statistics.StatisticsUtil.EMPTY_ROW;
 import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
 
+@Service
 public class NewStatisticsCsvExporter {
 
     private static final Logger logger = LoggerFactory.getLogger(NewStatisticsCsvExporter.class);

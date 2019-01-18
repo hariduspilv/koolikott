@@ -54,12 +54,12 @@ public class AuthenticatedUser implements AbstractEntity {
 
     @JsonIgnore
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime loginDate;
 
     @JsonIgnore
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime sessionTime;
 
     @JsonIgnore

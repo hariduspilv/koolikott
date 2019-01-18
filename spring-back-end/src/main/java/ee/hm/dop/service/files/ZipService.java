@@ -12,7 +12,9 @@ import java.util.zip.ZipOutputStream;
 import ee.hm.dop.utils.DopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ZipService {
     // Increase this number to reduce ZIP read/write times
     public static final int COMPRESSION_MEMORY = 1024;

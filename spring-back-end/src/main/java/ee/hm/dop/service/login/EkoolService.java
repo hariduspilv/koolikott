@@ -10,6 +10,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -24,7 +25,9 @@ import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.xml.security.utils.Base64.encode;
 
+@Service
 public class EkoolService {
+
     private static Logger logger = LoggerFactory.getLogger(EkoolService.class);
 
     @Inject

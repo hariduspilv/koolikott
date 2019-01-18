@@ -1,9 +1,11 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.AdminLearningObject;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class AdminLearningObjectDao extends AbstractDao<AdminLearningObject> {
 
     public List<AdminLearningObject> findByIdDeleted() {

@@ -32,13 +32,13 @@ public class CustomerSupport implements AbstractEntity{
     private boolean sentSuccessfully;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime sentAt;
 
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime createdAt;

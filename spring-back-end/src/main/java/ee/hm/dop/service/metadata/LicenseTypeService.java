@@ -6,7 +6,9 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.LicenseTypeDao;
 import ee.hm.dop.model.LicenseType;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LicenseTypeService {
 
     @Inject

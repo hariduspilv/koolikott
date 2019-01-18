@@ -10,6 +10,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -21,6 +22,7 @@ import java.util.Objects;
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 
+@Service
 public class UploadedFileService {
 
     private static final String FILENAME_TOO_LONG_RESPONSE = "{\"cause\": \"filename too long\"}";

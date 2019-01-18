@@ -2,11 +2,13 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.*;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class UserLikeDao extends AbstractDao<UserLike> {
 
     public UserLike findByLearningObjectAndUser(LearningObject learningObject, User user) {

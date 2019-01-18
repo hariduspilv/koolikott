@@ -14,9 +14,11 @@ import ee.hm.dop.service.content.TagConverter;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TagService {
 
     @Inject

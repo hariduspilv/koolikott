@@ -6,7 +6,9 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.model.Language;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LanguageService {
 
     @Inject

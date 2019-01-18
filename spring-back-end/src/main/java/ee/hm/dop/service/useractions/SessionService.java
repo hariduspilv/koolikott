@@ -10,12 +10,16 @@ import ee.hm.dop.service.login.TokenGenerator;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.apache.commons.configuration2.Configuration;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+
+import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SESSION_DURATION_MINS;
 import static org.joda.time.DateTime.now;
 
+@Service
 public class SessionService {
 
     @Inject
@@ -27,7 +31,8 @@ public class SessionService {
 
     public AuthenticatedUser startSession(User user, Person person, LoginFrom loginFrom){
         DateTime now = now();
-        return startSession(new AuthenticatedUser(user, person, loginFrom, now, sessionTime(now)));
+        return startSession(new AuthenticatedUser(user, person, loginFrom, now, now));
+//        return startSession(new AuthenticatedUser(user, person, loginFrom, now, sessionTime(now)));
     }
 
     public AuthenticatedUser updateSession(UserSession userSession, AuthenticatedUser authenticatedUser){
@@ -39,21 +44,21 @@ public class SessionService {
 
     public void terminateSession(AuthenticatedUser authenticatedUser) {
         if (authenticatedUser != null) {
-            authenticatedUser.setSessionTime(DateTime.now());
+            authenticatedUser.setSessionTime(LocalDateTime.now());
             authenticatedUserDao.delete(authenticatedUser);
         }
     }
 
     public void logout(AuthenticatedUser authenticatedUser) {
         if (authenticatedUser != null) {
-            authenticatedUser.setSessionTime(DateTime.now());
+            authenticatedUser.setSessionTime(LocalDateTime.now());
             authenticatedUser.setLoggedOut(true);
             authenticatedUserDao.delete(authenticatedUser);
         }
     }
 
     private AuthenticatedUser prolongSession(AuthenticatedUser authenticatedUser){
-        authenticatedUser.setSessionTime(sessionTime(DateTime.now()));
+        authenticatedUser.setSessionTime(sessionTime(LocalDateTime.now()));
         authenticatedUser.setSessionNumber(authenticatedUser.getSessionNumber() != null ? authenticatedUser.getSessionNumber() + 1 : 1);
         return authenticatedUserDao.createOrUpdate(authenticatedUser);
     }
@@ -63,7 +68,7 @@ public class SessionService {
         return authenticatedUserDao.createOrUpdate(authenticatedUser);
     }
 
-    private DateTime sessionTime(DateTime loginDate) {
+    private LocalDateTime sessionTime(LocalDateTime loginDate) {
         return loginDate.plusMinutes(configuration.getInt(SESSION_DURATION_MINS));
     }
 

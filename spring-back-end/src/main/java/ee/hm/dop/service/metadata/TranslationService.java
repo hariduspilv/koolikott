@@ -4,12 +4,14 @@ import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class TranslationService {
 
     public static final String DOMAIN = "DOMAIN_";

@@ -13,6 +13,7 @@ import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
+@org.springframework.stereotype.Repository
 public class MaterialDao extends AbstractDao<Material> {
     public static final String HTTP = "http://";
     public static final String HTTP_WWW = HTTP + "www.";

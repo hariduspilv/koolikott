@@ -2,10 +2,12 @@ package ee.hm.dop.service.useractions;
 
 import ee.hm.dop.dao.PeerReviewDao;
 import ee.hm.dop.model.PeerReview;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 
+@Service
 public class PeerReviewService {
 
     @Inject

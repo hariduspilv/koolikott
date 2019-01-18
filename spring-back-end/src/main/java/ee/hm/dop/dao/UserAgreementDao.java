@@ -1,7 +1,9 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.User_Agreement;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UserAgreementDao extends AbstractDao<User_Agreement> {
 
     public boolean agreementDoesntExist(Long userId, Long agreementId) {

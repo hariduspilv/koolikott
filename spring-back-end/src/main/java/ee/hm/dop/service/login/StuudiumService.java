@@ -10,6 +10,7 @@ import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
+@Service
 public class StuudiumService {
     private static Logger logger = LoggerFactory.getLogger(StuudiumService.class);
 

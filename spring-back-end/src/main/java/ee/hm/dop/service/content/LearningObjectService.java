@@ -6,9 +6,11 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.permission.PermissionItem;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class LearningObjectService {
 
     @Inject

@@ -6,9 +6,11 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class MediaService {
 
     @Inject

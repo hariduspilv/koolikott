@@ -34,7 +34,7 @@ public class Faq implements AbstractEntity{
     @Column(columnDefinition = "TEXT")
     private String answerEng;
 
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime createdAt;

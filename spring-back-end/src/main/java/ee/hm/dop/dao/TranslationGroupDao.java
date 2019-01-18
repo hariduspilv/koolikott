@@ -6,6 +6,7 @@ import ee.hm.dop.model.LandingPageString;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
 
     public TranslationGroup findTranslationGroupFor(Language language) {

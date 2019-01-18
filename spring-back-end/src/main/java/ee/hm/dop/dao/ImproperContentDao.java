@@ -4,12 +4,14 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
+import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class ImproperContentDao extends AbstractDao<ImproperContent> {
 
     @Inject

@@ -6,10 +6,12 @@ import ee.hm.dop.dao.TargetGroupDao;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import org.apache.commons.lang3.Range;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class TargetGroupService {
 
     private static final String TARGET_GROUP_TRANSLATION_PREFIX = "TARGET_GROUP_";

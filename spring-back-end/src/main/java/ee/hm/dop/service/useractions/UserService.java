@@ -9,6 +9,7 @@ import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.text.Normalizer;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
+@Service
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);

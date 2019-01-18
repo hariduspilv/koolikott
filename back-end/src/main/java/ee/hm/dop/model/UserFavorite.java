@@ -29,7 +29,7 @@ public class UserFavorite implements AbstractEntity {
     private LearningObject learningObject;
 
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;

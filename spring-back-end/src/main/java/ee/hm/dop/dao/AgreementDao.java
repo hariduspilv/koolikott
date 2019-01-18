@@ -2,10 +2,11 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.Agreement;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Repository
 public class AgreementDao extends AbstractDao<Agreement> {
 
     public List<Agreement> getValidAgreements() {

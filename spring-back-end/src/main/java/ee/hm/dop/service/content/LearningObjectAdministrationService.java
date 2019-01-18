@@ -11,10 +11,12 @@ import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 
+@Service
 public class LearningObjectAdministrationService {
 
     @Inject

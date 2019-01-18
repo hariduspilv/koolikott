@@ -8,12 +8,14 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.*;
 import ee.hm.dop.utils.UserUtil;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class NewStatisticsService {
 
     @Inject

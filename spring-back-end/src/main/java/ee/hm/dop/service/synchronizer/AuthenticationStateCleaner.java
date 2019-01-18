@@ -5,13 +5,14 @@ import ee.hm.dop.dao.AuthenticationStateDao;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
-@Singleton
+@Service
 public class AuthenticationStateCleaner extends DopDaemonProcess{
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationStateCleaner.class);

@@ -7,7 +7,9 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import ee.hm.dop.model.Version;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class VersionDao extends AbstractDao<Version> {
 
     public Version getLatestVersion() {

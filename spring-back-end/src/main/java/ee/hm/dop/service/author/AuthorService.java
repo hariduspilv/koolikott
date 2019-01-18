@@ -4,7 +4,10 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.AuthorDao;
 import ee.hm.dop.model.Author;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthorService {
 
     @Inject

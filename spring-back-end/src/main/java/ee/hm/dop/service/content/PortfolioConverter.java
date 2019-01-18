@@ -4,9 +4,11 @@ import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Portfolio;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class PortfolioConverter {
 
     @Inject

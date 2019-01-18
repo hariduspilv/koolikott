@@ -2,10 +2,12 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.Chapter;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ChapterDao extends AbstractDao<Chapter> {
 
     public List<Chapter> chaptersWithPortfolio(List<Long> ids) {

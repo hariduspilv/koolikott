@@ -46,7 +46,7 @@ public class ReviewableChange implements AbstractEntity {
     private User createdBy;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime createdAt;
@@ -59,7 +59,7 @@ public class ReviewableChange implements AbstractEntity {
     private User reviewedBy;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime reviewedAt;

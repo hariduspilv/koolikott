@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Objects;
 import static ee.hm.dop.service.synchronizer.MergeUtil.mergeTwoObjects;
 import static java.lang.String.format;
 
+@Service
 public class RepositoryService {
 
     private static final int BATCH_SIZE = 50;

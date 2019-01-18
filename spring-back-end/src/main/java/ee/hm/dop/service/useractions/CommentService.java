@@ -7,6 +7,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+@Service
 public class CommentService {
 
     @Inject

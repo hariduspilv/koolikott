@@ -6,6 +6,7 @@ import ee.hm.dop.model.enums.Size;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
+@Service
 public class PictureCutter {
     public static final Integer LG_XS_THUMBNAIL_WIDTH = 600;
     public static final Integer LG_THUMBNAIL_WIDTH = 300;

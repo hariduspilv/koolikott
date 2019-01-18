@@ -15,6 +15,7 @@ import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
 import static org.joda.time.DateTime.now;
 
+@Service
 public class LoginService {
     private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
 

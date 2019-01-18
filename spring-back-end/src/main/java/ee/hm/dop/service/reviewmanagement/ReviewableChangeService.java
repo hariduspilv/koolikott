@@ -6,6 +6,7 @@ import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
+@Service
 public class ReviewableChangeService {
 
     @Inject

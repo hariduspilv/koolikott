@@ -11,10 +11,12 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
+import org.springframework.stereotype.Repository;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
+@Repository
 public class PortfolioDao extends AbstractDao<Portfolio> {
 
     public Class<Portfolio> entity() {

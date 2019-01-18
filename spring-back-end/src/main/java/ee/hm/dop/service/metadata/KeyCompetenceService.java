@@ -6,7 +6,9 @@ import javax.inject.Inject;
 
 import ee.hm.dop.dao.KeyCompetenceDao;
 import ee.hm.dop.model.KeyCompetence;
+import org.springframework.stereotype.Service;
 
+@Service
 public class KeyCompetenceService {
 
     @Inject

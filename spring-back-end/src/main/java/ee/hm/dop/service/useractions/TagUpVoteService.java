@@ -11,9 +11,11 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class TagUpVoteService {
 
     @Inject

@@ -9,10 +9,12 @@ import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.xml.soap.SOAPException;
 
+@Service
 public class MobileIDLoginService {
 
     private static Logger logger = LoggerFactory.getLogger(MobileIDLoginService.class);

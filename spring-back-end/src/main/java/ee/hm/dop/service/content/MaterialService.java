@@ -22,6 +22,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -32,6 +33,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.joda.time.DateTime.now;
 
+@Service
 public class MaterialService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

@@ -31,7 +31,7 @@ public class Media implements AbstractEntity{
     @JoinColumn(name = "createdBy")
     private User createdBy;
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime createdAt;

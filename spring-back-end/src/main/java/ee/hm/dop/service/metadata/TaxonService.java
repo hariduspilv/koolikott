@@ -4,12 +4,14 @@ import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class TaxonService {
 
     public static final List<String> TAXON_PREFIXES = Collections.unmodifiableList(Arrays.asList("MODULE_", "DOMAIN_", "SUBJECT_", "SPECIALIZATION_", "TOPIC_", "SUBTOPIC_"));

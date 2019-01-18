@@ -40,7 +40,7 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     private Visibility visibility;
 
     @Column(nullable = false)
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime added;
@@ -58,7 +58,7 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     private boolean deleted = false;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime updated;

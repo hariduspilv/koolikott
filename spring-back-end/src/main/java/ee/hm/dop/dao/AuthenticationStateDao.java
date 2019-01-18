@@ -3,10 +3,12 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
 import java.math.BigInteger;
 
+@Repository
 public class AuthenticationStateDao extends AbstractDao<AuthenticationState> {
 
     public int deleteOlderThan(DateTime dateTime) {

@@ -38,7 +38,7 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     private User originalCreator;
 
     @Column
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime publishedAt;

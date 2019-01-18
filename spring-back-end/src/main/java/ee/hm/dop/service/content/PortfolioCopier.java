@@ -8,6 +8,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
+@Service
 public class PortfolioCopier {
 
     public List<Chapter> copyChapters(List<Chapter> chapters) {

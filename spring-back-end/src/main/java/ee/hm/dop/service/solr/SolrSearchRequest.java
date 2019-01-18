@@ -1,5 +1,7 @@
 package ee.hm.dop.service.solr;
 
+import org.springframework.stereotype.Service;
+
 public class SolrSearchRequest {
     private String solrQuery;
     private String originalQuery;

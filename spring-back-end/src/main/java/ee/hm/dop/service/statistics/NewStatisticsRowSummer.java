@@ -2,10 +2,12 @@ package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class NewStatisticsRowSummer {
 
     public NewStatisticsRow getSum(List<NewStatisticsRow> userRows) {

@@ -13,6 +13,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.Suggestion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,7 +32,7 @@ import static ee.hm.dop.service.solr.SearchCommandBuilder.getCountCommand;
 import static ee.hm.dop.service.solr.SearchCommandBuilder.getSearchCommand;
 import static ee.hm.dop.utils.ConfigurationProperties.SEARCH_SERVER;
 
-@Singleton
+@Service
 public class SolrService implements SolrEngineService {
 
     static final String SOLR_IMPORT_PARTIAL = "dataimport?command=delta-import&wt=json";

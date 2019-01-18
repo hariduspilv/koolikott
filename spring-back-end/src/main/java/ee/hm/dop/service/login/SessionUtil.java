@@ -5,6 +5,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Instant;
 import org.joda.time.Minutes;
 
+import java.time.LocalDateTime;
+
 public class SessionUtil {
 
     public static boolean sessionInValid(AuthenticatedUser authenticatedUser) {
@@ -12,10 +14,12 @@ public class SessionUtil {
     }
 
     public static boolean sessionValid(AuthenticatedUser authenticatedUser) {
-        return authenticatedUser.getSessionTime().isAfterNow();
+        return authenticatedUser.getSessionTime().isAfter(LocalDateTime.now());
     }
 
     public static int minRemaining(AuthenticatedUser authenticatedUser) {
-        return Minutes.minutesBetween(new Instant(), authenticatedUser.getSessionTime().toInstant()).getMinutes();
+        return 12;
+        //todo
+//        return Minutes.minutesBetween(new Instant(), authenticatedUser.getSessionTime().toInstant()).getMinutes();
     }
 }

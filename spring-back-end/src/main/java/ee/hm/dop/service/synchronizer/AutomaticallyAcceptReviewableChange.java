@@ -9,6 +9,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.concurrent.ScheduledFuture;
 import static ee.hm.dop.utils.ConfigurationProperties.AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES;
 import static java.util.concurrent.TimeUnit.DAYS;
 
-@Singleton
+@Service
 public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
 
     @Inject

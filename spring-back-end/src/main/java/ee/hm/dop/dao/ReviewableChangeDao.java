@@ -3,12 +3,14 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.User;
+import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class ReviewableChangeDao extends AbstractDao<ReviewableChange> {
 
     @Inject

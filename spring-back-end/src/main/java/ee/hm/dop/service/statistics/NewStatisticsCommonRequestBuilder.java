@@ -8,12 +8,14 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class NewStatisticsCommonRequestBuilder {
 
     @Inject

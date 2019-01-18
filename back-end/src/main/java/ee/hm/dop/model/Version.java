@@ -21,7 +21,7 @@ public class Version implements AbstractEntity {
 
     private String version;
 
-
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime released;

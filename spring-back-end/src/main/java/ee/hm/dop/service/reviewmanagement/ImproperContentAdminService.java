@@ -5,10 +5,12 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 
+@Service
 public class ImproperContentAdminService {
 
     @Inject

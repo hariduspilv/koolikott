@@ -5,13 +5,14 @@ import ee.hm.dop.model.ReducedMaterial;
 import ee.hm.dop.model.ReducedPortfolio;
 import ee.hm.dop.model.User;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject> {
-
 
     public List<ReducedLearningObject> findMaterialByCreator(User creator, int start, int maxResults) {
         Query query = getEntityManager()

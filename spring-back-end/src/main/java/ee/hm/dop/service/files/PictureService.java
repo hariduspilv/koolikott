@@ -5,9 +5,11 @@ import ee.hm.dop.dao.ThumbnailDao;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class PictureService {
 
     @Inject

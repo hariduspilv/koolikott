@@ -7,6 +7,7 @@ import ee.hm.dop.service.SendMailService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -15,7 +16,7 @@ import javax.ws.rs.core.Response;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-
+@Service
 public class CustomerSupportService {
 
     @Inject

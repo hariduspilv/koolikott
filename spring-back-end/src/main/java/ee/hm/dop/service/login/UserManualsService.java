@@ -5,6 +5,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserManuals;
 import ee.hm.dop.utils.UrlUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static ee.hm.dop.utils.UserUtil.mustBeAdmin;
 
+@Service
 public class UserManualsService {
 
     @Inject

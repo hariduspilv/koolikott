@@ -1,6 +1,7 @@
 package ee.hm.dop.service.ehis;
 
 import org.apache.commons.configuration2.Configuration;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.xml.soap.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_SERVICE_NAME;
 
+@Service
 public class EhisV5RequestBuilder {
 
     @Inject
