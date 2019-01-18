@@ -265,8 +265,13 @@
     </dependencies>
 
     <build>
+        <finalName>spring-kott</finalName>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
@@ -294,8 +299,8 @@
                     </archive>
                     <finalName>${project.name}</finalName>
                 </configuration>
-            </plugin>
-            <plugin>
+            </plugin>-->
+            <!--<plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
@@ -320,7 +325,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -370,7 +375,7 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
+        <!--<profile>
             <id>live</id>
             <build>
                 <plugins>
@@ -391,6 +396,6 @@
                     </resource>
                 </resources>
             </build>
-        </profile>
+        </profile>-->
     </profiles>
 </project>
