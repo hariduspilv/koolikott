@@ -119,7 +119,7 @@
 <div data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
   <p data-ng-if="description && !isEditMode && $ctrl.isLandingPage() && !filter" data-ng-bind="description"></p>
-  <md-button style="min-width: 0px"
+  <md-button style="min-width: 36px"
              data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
              data-ng-click="$ctrl.editLandingPage()"
              id="landing-page-edit">
