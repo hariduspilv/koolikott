@@ -60,7 +60,6 @@ public class LoginService {
         }
         if (userAgreementDao.agreementDoesntExist(user.getId(), latestAgreement.getId())) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
-            removeEmailAndSetNotActivated(user);
 
             logger.info(format("User with id %s doesn't have agreement", user.getId()));
             return missingPermissionsExistingUser(state.getToken(), latestAgreement.getId(), loginFrom);
@@ -120,16 +119,6 @@ public class LoginService {
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
             userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
-        }
-    }
-
-    private void removeEmailAndSetNotActivated(User user) {
-        UserEmail userEmail = userEmailDao.findByField("user", user);
-        if (userEmail != null) {
-            userEmail.setEmail(null);
-            userEmail.setActivated(false);
-            userEmail.setActivatedAt(null);
-            userEmailDao.createOrUpdate(userEmail);
         }
     }
 

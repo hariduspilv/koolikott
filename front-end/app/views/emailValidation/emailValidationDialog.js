@@ -23,7 +23,7 @@
                 if (this.$scope.emailValidationForm.$valid && this.isNotEmpty()) {
                     this.$scope.isSending = true
                     let pin = this.$scope.firstNum + this.$scope.secondNum + this.$scope.thirdNum + this.$scope.fourthNum
-                    this.userEmailService.validatePin(this.$rootScope.userFromAuthentication, pin)
+                    this.userEmailService.validatePin(this.$rootScope.userFromAuthentication, pin, this.$rootScope.email)
                         .then(response => {
                             if (response.status === 200) {
                                 this.$mdDialog.hide(true)

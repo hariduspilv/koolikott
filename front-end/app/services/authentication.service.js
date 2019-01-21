@@ -36,6 +36,7 @@ angular.module('koolikottApp')
         }
 
         function showGdprModalAndAct(userStatus) {
+            $rootScope.statusForDuplicateCheck = userStatus
             $mdDialog.show({
                 templateUrl: 'views/agreement/agreementDialog.html',
                 controller: 'agreementDialogController',
