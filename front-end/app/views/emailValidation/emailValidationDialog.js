@@ -34,6 +34,10 @@
                         this.setTouchedFalse()
                         this.setFormToEmpty()
                         this.$scope.isSending = false
+                        this.$timeout( () => {
+                            angular.element('#email-firstNum').focus()
+                        }, 10);
+
                     })
                 }
             }
@@ -72,7 +76,8 @@
         '$mdDialog',
         'authenticatedUserService',
         'userEmailService',
-        '$translate'
+        '$translate',
+        '$timeout'
     ]
 
     angular.module('koolikottApp').controller('emailValidationController', controller)

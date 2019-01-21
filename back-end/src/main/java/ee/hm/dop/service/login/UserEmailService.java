@@ -28,7 +28,7 @@ public class UserEmailService {
 
     public UserEmail save(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByField("user", userEmail.getUser());
-        if (dbUserEmail != null && dbUserEmail.getUser().getId() == userEmail.getUser().getId()) {
+        if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
             dbUserEmail.setEmail(userEmail.getEmail());
             setUserAndSendMail(dbUserEmail);
             return userEmailDao.createOrUpdate(dbUserEmail);
@@ -49,26 +49,22 @@ public class UserEmailService {
             throw badRequest("Email Empty");
         UserEmail dbUserEmail = userEmailDao.findByField("email", userEmail.getEmail());
 
-        if (dbUserEmail == null)
-            return false;
-        else
-            return true;
+        return dbUserEmail != null;
     }
 
     public UserEmail validatePin(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByField("user", userEmail.getUser());
         User_Agreement dbUserAgreement = userAgreementDao.getLatestAgreementForUser(userEmail.getUser().getId());
-        if (dbUserEmail != null) {
-            if (dbUserEmail.getPin().equals(userEmail.getPin())) {
-                dbUserEmail.setActivated(true);
-                dbUserEmail.setActivatedAt(DateTime.now());
-                dbUserAgreement.setAgreed(true);
-                userAgreementDao.createOrUpdate(dbUserAgreement);
-            } else {
-                throw badRequest("Pins not equal");
-            }
-        } else {
+        if (dbUserEmail == null)
             throw notFound("User not found");
+
+        if (dbUserEmail.getPin().equals(userEmail.getPin())) {
+            dbUserEmail.setActivated(true);
+            dbUserEmail.setActivatedAt(DateTime.now());
+            dbUserAgreement.setAgreed(true);
+            userAgreementDao.createOrUpdate(dbUserAgreement);
+        } else {
+            throw badRequest("Pins not equal");
         }
 
         return userEmailDao.createOrUpdate(dbUserEmail);

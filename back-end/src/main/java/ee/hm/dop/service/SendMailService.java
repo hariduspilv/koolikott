@@ -82,7 +82,7 @@ public class SendMailService {
                             "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
                             "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                             BREAK +
-                            userEmail.getPin() + BREAK + BREAK +
+                            "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
                             "Pane tähele, et kood on personaalne, ära saada seda teistele kasutajatele edasi." + BREAK +
                             "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
                 .buildEmail();

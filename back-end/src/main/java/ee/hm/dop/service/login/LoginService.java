@@ -125,10 +125,12 @@ public class LoginService {
 
     private void removeEmailAndSetNotActivated(User user) {
         UserEmail userEmail = userEmailDao.findByField("user", user);
-        userEmail.setEmail(null);
-        userEmail.setActivated(false);
-        userEmail.setActivatedAt(null);
-        userEmailDao.createOrUpdate(userEmail);
+        if (userEmail != null) {
+            userEmail.setEmail(null);
+            userEmail.setActivated(false);
+            userEmail.setActivatedAt(null);
+            userEmailDao.createOrUpdate(userEmail);
+        }
     }
 
     private AuthenticatedUser finalizeLogin(String idCode, String name, String surname, LoginFrom loginFrom) {

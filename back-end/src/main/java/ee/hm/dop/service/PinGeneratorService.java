@@ -5,12 +5,7 @@ import java.security.SecureRandom;
 public class PinGeneratorService {
 
     public static String generatePin() {
-
         SecureRandom secureRandom = new SecureRandom();
-
-        String number = String.format("%04d", secureRandom.nextInt(10000));
-
-        return number;
-
+        return String.format("%04d", secureRandom.nextInt(10000));
     }
 }
