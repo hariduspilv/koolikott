@@ -12,9 +12,11 @@
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
 
-            this.$scope.strangeFiles = []
             this.$scope.fileNames = []
             this.$scope.files = []
+            this.$scope.isError =false
+            this.$scope.errorMessage =''
+
 
 
             this.getUserManualTitles()
@@ -28,49 +30,17 @@
             })
         }
 
-        validateAttachmentsMultiple(files){
+        clickToRemove(fileToRemove) {
 
-
-            if (files.length > 3){
-                alert('More than 3 files selected')
-            }
-
-            let sumOfFilesSizes = files.map(item => item.size).reduce((prev,next) => prev + next);
-
-            let sumOfFilesSizesInMB = sumOfFilesSizes / 1024 / 1024;
-
-            if (sumOfFilesSizesInMB > 10)
-                alert('Files sizes together: '+  sumOfFilesSizesInMB.toFixed(2) + ' is more than allowed(10MB)')
-
-
-        }
-
-        putFilesIntoArray(filesFromAir){
-
-            this.$scope.strangeFiles = filesFromAir
-
-            this.$scope.files.push(filesFromAir)
-
-            this.$scope.fileNames = filesFromAir.map(f => f.name)
-
-            this.validateAttachmentsMultiple(this.$scope.files)
-
-            filesFromAir = this.$scope.strangeFiles
-
-
-        }
-
-        clickToRemove(fileToRemove){
-
-            this.$scope.files.forEach((chipFile,index) => {
+            this.$scope.files.forEach((chipFile, index) => {
                 if (chipFile.name === fileToRemove)
-                    this.$scope.files.splice(index,1)
-                    // this.$scope.fileNames.splice(index,1)
+                    this.$scope.files.splice(index, 1)
+                // this.$scope.fileNames.splice(index,1)
             });
 
-            this.$scope.strangeFiles.forEach((chipFile,index) => {
+            this.$scope.fileNames.forEach((chipFile, index) => {
                 if (chipFile.name === fileToRemove)
-                    this.$scope.strangeFiles.splice(index,1)
+                    this.$scope.fileNames.splice(index, 1)
 
             });
         }
@@ -106,13 +76,53 @@
                 })
         }
 
+        validateAttachmentsMultiple(files) {
+
+
+            if (files.length > 3) {
+                this.$scope.isError = true;
+                this.$scope.errorMessage = 'You have selected more than 3 files';
+            }
+
+            let sumOfFilesSizes = files.map(item => item.size).reduce((prev, next) => prev + next);
+
+            let sumOfFilesSizesInMB = sumOfFilesSizes / 1024 / 1024;
+
+            if (sumOfFilesSizesInMB > 10)
+                this.$scope.isError = true;
+                this.$scope.errorMessage = 'Added files size are more than 10MB';
+
+        }
+
+        putFilesIntoArray(filesFromAir) {
+
+            this.validateAttachmentsMultiple(filesFromAir);
+
+            this.$scope.fileNames = filesFromAir.map(f => f.name);
+
+            filesFromAir.map(file => {
+                this.convertToBase64(file).then(data => {
+                    this.$scope.files.push({name: file.name, content: data});
+                });
+            });
+        }
+
+        convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         saveCustomerSupportRequest() {
 
             this.$scope.isSaving = true
+
             this.setResponse()
+
             this.$scope.customerSupport.files = this.$scope.files
-
-
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
                 .then(response => {
@@ -126,9 +136,6 @@
                     }, () =>
                         this.$scope.isSaving = false
                 )
-            // this.$scope.files = []
-            // this.$scope.fileNames = []
-
         }
 
         getLoggedInUserData() {
@@ -189,16 +196,19 @@
             }
             this.$scope.allowDialogClose = false  //???
         }
+
         captchaSuccess() {
             this.$scope.captchaSuccess = true
         }
+
         getCaptchaKey() {
             this.serverCallService.makeGet('/rest/captcha')
                 .then(({data}) => {
                     this.$scope.captchaKey = data
                 })
         }
-        getLanguage(){
+
+        getLanguage() {
             let language = this.translationService.getLanguage();
             if (language === 'est')
                 return 'et'
@@ -208,62 +218,8 @@
                 return 'en'
 
         }
-
-        // validateAttachmentsMultiple(files){
-        //
-        //
-        //     if (files.length > 3){
-        //         alert('More than 3 files selected')
-        //     }
-        //
-        //     let sumOfFilesSizes = files.map(item => item.size).reduce((prev,next) => prev + next);
-        //
-        //     let sumOfFilesSizesInMB = sumOfFilesSizes / 1024 / 1024;
-        //
-        //     if (sumOfFilesSizesInMB > 10)
-        //         alert('Files sizes together: '+  sumOfFilesSizesInMB.toFixed(2) + ' is more than allowed(10MB)')
-        //
-        //
-        // }
-        // putFilesIntoArray(filesFromAir){
-        //
-        //     this.$scope.strangeFiles = filesFromAir
-        //
-        //
-        //     this.$scope.files.push(filesFromAir)
-        //
-        //     this.$scope.fileNames = filesFromAir.map(f => f.name)
-        //
-        //     this.validateAttachmentsMultiple(filesFromAir)
-        //
-        //
-        // }
-
-        uploadFiles(files){
-            this.$scope.files = files
-            if (files && files.length){
-                this.$scope.uploadingFile = true
-                //     angular.forEach(
-                //         files,function (file) {
-                //             // this.fileUpload = this.fileUploadService
-                //             //     .upload(file)
-                //         }
-                //     )
-                // .then(function (response) {
-                //     this.$timeout(function () {
-                //         this.$scope.result = response.data;
-                //     });
-                // }, function (response) {
-                //     if (response.status > 0) {
-                //         this.$scope.errorMsg = response.status + ': ' + response.data;
-                //     }
-                // }, function (evt) {
-                //     this.$scope.progress =
-                //         Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                // });
-            }
-        }
     }
+
     controller.$inject = [
         'userManualsAdminService',
         'serverCallService',

@@ -6,8 +6,6 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-import org.simplejavamail.email.AttachmentResource;
-
 import javax.persistence.*;
 import java.util.List;
 

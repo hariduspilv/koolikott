@@ -114,6 +114,7 @@
           </md-content>
         </div>
       </div>
+      <div ng-if="isError">{{errorMessage}}</div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"
         vc-recaptcha
         key="captchaKey"

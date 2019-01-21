@@ -1,28 +1,9 @@
 package ee.hm.dop.model;
 
-import javax.activation.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-public class AttachedFile implements DataSource {
+public class AttachedFile {
 
     private String name;
-
-    @Override
-    public InputStream getInputStream() throws IOException {
-        return null;
-    }
-
-    @Override
-    public OutputStream getOutputStream() throws IOException {
-        return null;
-    }
-
-    @Override
-    public String getContentType() {
-        return null;
-    }
+    private String content;
 
     public String getName() {
         return name;
@@ -30,5 +11,13 @@ public class AttachedFile implements DataSource {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

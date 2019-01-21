@@ -11,13 +11,14 @@ import org.simplejavamail.mailer.MailerBuilder;
 import org.simplejavamail.mailer.config.TransportStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
-
+import javax.mail.util.ByteArrayDataSource;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
 public class SendMailService {
 
@@ -40,19 +41,15 @@ public class SendMailService {
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
 
         List<AttachmentResource> collect = customerSupport.getFiles().stream()
-                .map(a -> new AttachmentResource(a.getName(), a))
+                .map(a -> {
+                    try {
+                        return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(a.getContent().substring(a.getContent().indexOf(',')+1)), "image/*"));
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-
-
-//        List<FileDataSource> attachmentResourceList = null;
-
-//        if (customerSupport.getFiles() != null && !customerSupport.getFiles().isEmpty()){
-//            attachmentResourceList = customerSupport.getFiles().stream().map(FileDataSource.class::cast)
-//                    .collect(Collectors.toList());
-//        }
-
-
-
 
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
