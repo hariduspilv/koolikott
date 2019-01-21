@@ -22,7 +22,7 @@ angular.module('koolikottApp')
                     $scope.toggleFullScreen();
             });
             document.addEventListener('click', (e) => {
-                if (e.target.localName === 'a' && $rootScope.isFullScreen)
+                if (e.target.localName === 'a' && $rootScope.isFullScreen && !document.getElementById('sidenavAccordion'))
                     $scope.toggleFullScreen();
             });
 
