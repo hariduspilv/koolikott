@@ -3,7 +3,7 @@ package ee.hm.dop.dao.specialized;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.statistics.StatisticsUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ public class StatisticsDao {
     @Inject
     private EntityManager entityManager;
 
-    public List<StatisticsQuery> reviewedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> reviewedLOCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
@@ -30,7 +30,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
-    public List<StatisticsQuery> approvedReportedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> approvedReportedLOCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
@@ -44,7 +44,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
-    public List<StatisticsQuery> rejectedReportedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> rejectedReportedLOCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
@@ -58,7 +58,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
-    public List<StatisticsQuery> acceptedChangedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> acceptedChangedLOCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
@@ -74,7 +74,7 @@ public class StatisticsDao {
     }
 
 
-    public List<StatisticsQuery> rejectedChangedLOCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> rejectedChangedLOCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  r.reviewedBy,\n" +
                 "  count(DISTINCT lo.id) AS c\n" +
@@ -89,7 +89,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
 
-    public List<StatisticsQuery> createdPortfolioCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> createdPortfolioCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  lo.creator,\n" +
                 "  count(lo.id) AS c\n" +
@@ -101,7 +101,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "lo", "added");
     }
 
-    public List<StatisticsQuery> createdPublicPortfolioCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> createdPublicPortfolioCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  lo.creator,\n" +
                 "  count(lo.id) AS c\n" +
@@ -114,7 +114,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "lo", "added");
     }
 
-    public List<StatisticsQuery> createdMaterialCount(DateTime from, DateTime to, List<Long> users, List<Long> taxons) {
+    public List<StatisticsQuery> createdMaterialCount(LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons) {
         String select = "SELECT\n" +
                 "  lo.creator,\n" +
                 "  count(lo.id) AS c\n" +
@@ -126,7 +126,7 @@ public class StatisticsDao {
         return query(select, where, groupBy, from, to, users, taxons, "lo", "added");
     }
 
-    private List<StatisticsQuery> query(String initialSelect, String initialWhere, String groupBy, DateTime from, DateTime to, List<Long> users, List<Long> taxons, String prefix, String date) {
+    private List<StatisticsQuery> query(String initialSelect, String initialWhere, String groupBy, LocalDateTime from, LocalDateTime to, List<Long> users, List<Long> taxons, String prefix, String date) {
         String select = modifySelectWithTaxons(taxons, initialSelect);
         String where = setWhere(initialWhere, from, to, taxons, prefix, date);
         Query query = entityManager.createNativeQuery(select + where + groupBy);
@@ -138,7 +138,7 @@ public class StatisticsDao {
         return CollectionUtils.isEmpty(taxons) ? select : select + "  JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
     }
 
-    private String setWhere(String where, DateTime from, DateTime to, List<Long> taxons, String prefix, String reviewedAt) {
+    private String setWhere(String where, LocalDateTime from, LocalDateTime to, List<Long> taxons, String prefix, String reviewedAt) {
         if (CollectionUtils.isNotEmpty(taxons)) {
             where += "  AND lt.taxon IN (:taxons) \n";
         }
@@ -151,7 +151,7 @@ public class StatisticsDao {
         return where;
     }
 
-    private Query setParams(Query query, DateTime from, DateTime to, List<Long> taxons, List<Long> users) {
+    private Query setParams(Query query, LocalDateTime from, LocalDateTime to, List<Long> taxons, List<Long> users) {
         if (CollectionUtils.isNotEmpty(taxons)) {
             query = query.setParameter("taxons", taxons);
         }
@@ -167,7 +167,7 @@ public class StatisticsDao {
         return query;
     }
 
-    private String firstReviewInner(DateTime from, DateTime to) {
+    private String firstReviewInner(LocalDateTime from, LocalDateTime to) {
         String fr = "SELECT ic.learningObject\n" +
                 "                        FROM FirstReview ic\n" +
                 "                        WHERE ic.learningObject = lo.id\n" +
@@ -181,7 +181,7 @@ public class StatisticsDao {
         return fr;
     }
 
-    private String improperContentInner(DateTime from, DateTime to) {
+    private String improperContentInner(LocalDateTime from, LocalDateTime to) {
         String ic = "SELECT ic.learningObject\n" +
                 "                        FROM ImproperContent ic\n" +
                 "                        WHERE ic.learningObject = lo.id\n" +

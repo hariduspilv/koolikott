@@ -8,7 +8,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class NewStatisticsByUserRowCreator {
         return rows;
     }
 
-    private NewStatisticsRow convertFromUsedDomain(User user, DomainWithChildren domain, DateTime from, DateTime to) {
+    private NewStatisticsRow convertFromUsedDomain(User user, DomainWithChildren domain, LocalDateTime from, LocalDateTime to) {
         List<Long> taxonIds = domain.getTaxonIds();
         List<Long> userIds = Lists.newArrayList(user.getId());
 
@@ -73,7 +73,7 @@ public class NewStatisticsByUserRowCreator {
         return row;
     }
 
-    private NewStatisticsRow convertFromSubject(User user, SubjectWithChildren subject, DateTime from, DateTime to) {
+    private NewStatisticsRow convertFromSubject(User user, SubjectWithChildren subject, LocalDateTime from, LocalDateTime to) {
         List<Long> userIds = Lists.newArrayList(user.getId());
         List<Long> taxonIds = subject.getTaxonIds();
 

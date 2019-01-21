@@ -38,4 +38,16 @@ public class RepositoryManager {
                         repository.getSchema()));
         }
     }
+
+    public MaterialIterator getMaterialIterator() {
+        return materialIterator;
+    }
+
+    public MaterialParserWaramu getMaterialParserWaramu() {
+        return materialParserWaramu;
+    }
+
+    public MaterialParserEstCore getMaterialParserEstCore() {
+        return materialParserEstCore;
+    }
 }

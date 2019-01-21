@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.service.metadata.TagService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 /**
@@ -17,9 +19,9 @@ import java.io.IOException;
  *
  */
 @Component
-@AllArgsConstructor
 public class TagDeserializer extends JsonDeserializer<Tag> {
 
+    @Inject
     private TagService tagService;
 
     @Override

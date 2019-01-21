@@ -21,8 +21,15 @@ import ee.hm.dop.service.content.*;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Path("portfolio")
+@RestController
+@RequestMapping("portfolio")
 public class PortfolioResource extends BaseResource {
 
     @Inject
@@ -36,69 +43,69 @@ public class PortfolioResource extends BaseResource {
     @Inject
     private PortfolioGetter portfolioGetter;
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    public Portfolio get(@QueryParam("id") long portfolioId) {
+    public Portfolio get(@RequestParam("id") long portfolioId) {
         return portfolioGetter.get(portfolioId, getLoggedInUser());
     }
 
-    @GET
-    @Path("getByCreator")
+    @GetMapping
+    @RequestMapping("getByCreator")
     @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
+    public SearchResult getByCreator(@RequestParam("username") String username, @RequestParam("start") int start, @RequestParam("maxResults") int maxResults) {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         return portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
     }
 
-    @GET
-    @Path("getByCreator/count")
+    @GetMapping
+    @RequestMapping("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
-    public Long getByCreatorCount(@QueryParam("username") String username) {
+    public Long getByCreatorCount(@RequestParam("username") String username) {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         return portfolioGetter.getCountByCreator(creator);
     }
 
-    @POST
-    @Path("create")
+    @PostMapping
+    @RequestMapping("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio create(Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
 
-    @POST
-    @Path("update")
+    @PostMapping
+    @RequestMapping("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio update(Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
 
-/*    @POST
-    @Path("copy")
+/*    @PostMapping
+    @RequestMapping("copy")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }*/
 
-    @POST
-    @Path("delete")
+    @PostMapping
+    @RequestMapping("delete")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject delete(Portfolio portfolio) {
         return learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
     }
 
-    private User getValidCreator(@QueryParam("username") String username) {
+    private User getValidCreator(@RequestParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);
     }

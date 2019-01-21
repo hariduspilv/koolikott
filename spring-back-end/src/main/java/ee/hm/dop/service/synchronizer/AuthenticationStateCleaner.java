@@ -1,7 +1,7 @@
 package ee.hm.dop.service.synchronizer;
 
 import ee.hm.dop.dao.AuthenticationStateDao;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class AuthenticationStateCleaner extends DopDaemonProcess{
         try {
             beginTransaction();
             AuthenticationStateDao authenticationStateDao = newAuthenticationStateDao();
-            DateTime _3hoursBefore = DateTime.now().minusHours(3);
+            LocalDateTime _3hoursBefore = LocalDateTime.now().minusHours(3);
             long allUnreviewed = authenticationStateDao.findCountOfOlderThan(_3hoursBefore);
             logger.info(String.format("Authentication State Cleaner found %s rows to remove",  allUnreviewed));
 

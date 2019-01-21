@@ -4,31 +4,36 @@ import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.reviewmanagement.ImproperContentService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("impropers")
+@RestController
+@RequestMapping("impropers")
 public class ImproperContentResource extends BaseResource {
 
     @Inject
     private ImproperContentService improperContentService;
 
-    @PUT
+    @PutMapping
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public ImproperContent setImproper(ImproperContent improperContent) {
         return improperContentService.save(improperContent, getLoggedInUser(), improperContent.getLearningObject());
     }
 
-    @PUT
-    @Path("setImproper")
+    @PutMapping
+    @RequestMapping("setImproper")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public ImproperContent setImproper2(ImproperContentForm form) {
         return improperContentService.save(form.getImproperContent(), getLoggedInUser(), form.getLearningObject());
     }

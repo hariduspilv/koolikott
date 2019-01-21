@@ -7,6 +7,10 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.metadata.MaterialMetadataService;
 import ee.hm.dop.service.metadata.*;
 import org.apache.http.HttpHeaders;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -18,7 +22,8 @@ import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
 import java.util.List;
 
-@Path("learningMaterialMetadata")
+@RestController
+@RequestMapping("learningMaterialMetadata")
 public class LearningMaterialMetadataResource extends BaseResource{
 
     public static final String MAX_AGE_120 = "max-age=120";
@@ -39,9 +44,9 @@ public class LearningMaterialMetadataResource extends BaseResource{
     @Inject
     private MaterialMetadataService materialMetadataService;
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("educationalContext")
+    @RequestMapping("educationalContext")
     public Response getEducationalContext() {
         List<EducationalContext> taxons = taxonService.getAllEducationalContext();
         if (taxons != null) {
@@ -51,85 +56,85 @@ public class LearningMaterialMetadataResource extends BaseResource{
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("taxon")
-    public Taxon getTaxon(@QueryParam("taxonId") Long taxonId) {
+    @RequestMapping("taxon")
+    public Taxon getTaxon(@RequestParam("taxonId") Long taxonId) {
         return taxonService.getTaxonById(taxonId);
     }
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("language")
+    @RequestMapping("language")
     public List<Language> getAllLanguages() {
         return languageService.getAll();
     }
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("targetGroup")
+    @RequestMapping("targetGroup")
     public List<TargetGroup> getTargetGroups() {
         return targetGroupService.getValues();
     }
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("resourceType")
+    @RequestMapping("resourceType")
     public List<ResourceType> getAllResourceTypes() {
         return resourceTypeService.getAllResourceTypes();
     }
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("resourceType/used")
+    @RequestMapping("resourceType/used")
     public List<ResourceType> getUsedResourceTypes() {
         return resourceTypeService.getUsedResourceTypes();
     }
 
-    @GET
-    @Path("licenseType")
+    @GetMapping
+    @RequestMapping("licenseType")
     @Produces(MediaType.APPLICATION_JSON)
     public List<LicenseType> getAllLicenseTypes() {
         return licenseTypeService.getAllLicenseTypes();
     }
 
-    @GET
-    @Path("crossCurricularTheme")
+    @GetMapping
+    @RequestMapping("crossCurricularTheme")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CrossCurricularTheme> getAllCrossCurricularThemes() {
         return crossCurricularThemeService.getAllCrossCurricularThemes();
     }
 
-    @GET
-    @Path("keyCompetence")
+    @GetMapping
+    @RequestMapping("keyCompetence")
     @Produces(MediaType.APPLICATION_JSON)
     public List<KeyCompetence> getAllCompetences() {
         return keyCompetenceService.getAllKeyCompetences();
     }
 
-    @GET
-    @Path("usedLanguages")
+    @GetMapping
+    @RequestMapping("usedLanguages")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Language> getUsedLanguages() {
         return materialMetadataService.getLanguagesUsedInMaterials();
     }
 
-    @GET
-    @Path("learningObjectReportingReasons")
+    @GetMapping
+    @RequestMapping("learningObjectReportingReasons")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReportingReasonEnum> learningObjectReportingReasonsModal() {
         return ReportingReasonEnum.learningObjectReportingReasonsModal();
     }
 
-    @GET
-    @Path("tagReportingReasons")
+    @GetMapping
+    @RequestMapping("tagReportingReasons")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReportingReasonEnum> tagReportingReasons() {
         return ReportingReasonEnum.tagReportingReasons();
     }
 
-    @GET
-    @Path("commentReportingReasons")
+    @GetMapping
+    @RequestMapping("commentReportingReasons")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReportingReasonEnum> commentReportingReasons() {
         return ReportingReasonEnum.commentReportingReasons();

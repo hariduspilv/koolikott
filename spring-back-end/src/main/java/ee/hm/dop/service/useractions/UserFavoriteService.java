@@ -6,7 +6,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -29,7 +29,7 @@ public class UserFavoriteService {
         LearningObject learningObject = learningObjectService.validateAndFind(learningObjectIn);
 
         UserFavorite userFavorite = new UserFavorite();
-        userFavorite.setAdded(DateTime.now());
+        userFavorite.setAdded(LocalDateTime.now());
         userFavorite.setCreator(loggedInUser);
         userFavorite.setLearningObject(learningObject);
 

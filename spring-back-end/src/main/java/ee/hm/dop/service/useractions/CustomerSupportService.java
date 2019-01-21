@@ -6,7 +6,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.SendMailService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -32,19 +32,19 @@ public class CustomerSupportService {
         if (isBlank(customerSupport.getSubject())) throw badRequest("Subject is empty");
         if (isBlank(customerSupport.getMessage())) throw badRequest("Message is empty");
 
-        customerSupport.setCreatedAt(DateTime.now());
+        customerSupport.setCreatedAt(LocalDateTime.now());
         customerSupport.setUser(user);
         customerSupport.setSentTries(0);
 
         if (sendMailService.sendEmail(sendMailService.composeEmailToUser(customerSupport))) {
             sendMailService.sendEmail(sendMailService.composeEmailToSupport(customerSupport));
-            customerSupport.setSentAt(DateTime.now());
+            customerSupport.setSentAt(LocalDateTime.now());
             customerSupport.setSentSuccessfully(true);
             customerSupport.setSentTries(1);
             customerSupport.setErrorMessage("Sent successfully");
         } else {
             customerSupport.setSentTries(2);
-            customerSupport.setSentAt(DateTime.now());
+            customerSupport.setSentAt(LocalDateTime.now());
             customerSupport.setErrorMessage("Failed to send mail to user");
             if (!sendMailService.sendEmail(sendMailService.composeEmailToSupportWhenSendFailed(customerSupport))) {
                 customerSupport.setErrorMessage("Failed to send email to HITSA support");

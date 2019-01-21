@@ -1,31 +1,29 @@
 package ee.hm.dop.model;
 
-import static javax.persistence.CascadeType.ALL;
-import static org.joda.time.DateTime.now;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ee.hm.dop.model.ehis.Person;
+import ee.hm.dop.model.enums.LoginFrom;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import ee.hm.dop.model.ehis.Person;
-import ee.hm.dop.model.enums.LoginFrom;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-
 import java.time.LocalDateTime;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 public class AuthenticatedUser implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
 
@@ -73,7 +71,7 @@ public class AuthenticatedUser implements AbstractEntity {
     public AuthenticatedUser() {
     }
 
-    public AuthenticatedUser(User user, Person person, LoginFrom loginFrom, DateTime loginDate, DateTime sessionTime) {
+    public AuthenticatedUser(User user, Person person, LoginFrom loginFrom, LocalDateTime loginDate, LocalDateTime sessionTime) {
         this.user = user;
         this.firstLogin = user.isNewUser();
         this.person = person;

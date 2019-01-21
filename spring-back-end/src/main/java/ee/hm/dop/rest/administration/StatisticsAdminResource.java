@@ -12,6 +12,12 @@ import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.io.CsvUtil;
 import org.apache.commons.io.FileUtils;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -22,7 +28,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 
-@Path("admin/statistics/")
+@RestController
+@RequestMapping("admin/statistics/")
 public class StatisticsAdminResource extends BaseResource {
 
     private static final String TEMP_FOLDER = CsvUtil.TEMP_FOLDER;
@@ -34,8 +41,8 @@ public class StatisticsAdminResource extends BaseResource {
     @Inject
     private NewStatisticsCsvExporter statisticsCsvExporter;
 
-    @POST
-    @RolesAllowed({RoleString.ADMIN})
+    @PostMapping
+    @Secured({RoleString.ADMIN})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public NewStatisticsResult newsearch(StatisticsFilterDto searchFilter) {
@@ -45,17 +52,17 @@ public class StatisticsAdminResource extends BaseResource {
         return statisticsService.statistics(searchFilter, getLoggedInUser());
     }
 
-    @GET
-    @Path("export/download/{filename}")
+    @GetMapping
+    @RequestMapping("export/download/{filename}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response download(@PathParam("filename") String filename) {
+    public Response download(@PathVariable("filename") String filename) {
         String[] split = filename.split("\\.");
         return buildResponse(filename, FileFormat.valueOf(split[1]));
     }
 
-    @POST
-    @Path("export")
-    @RolesAllowed({RoleString.ADMIN})
+    @PostMapping
+    @RequestMapping("export")
+    @Secured({RoleString.ADMIN})
     @Consumes(MediaType.APPLICATION_JSON)
     public String searchExport(StatisticsFilterDto filter) {
         if (filter == null || !filter.isValidExportRequest()) {

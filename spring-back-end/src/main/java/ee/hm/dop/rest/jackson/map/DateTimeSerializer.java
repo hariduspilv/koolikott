@@ -4,14 +4,17 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import ee.hm.dop.utils.DateUtils;
-import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 import java.io.IOException;
 
-public class DateTimeSerializer extends JsonSerializer<DateTime> {
+@Component
+public class DateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
-    public void serialize(DateTime date, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(LocalDateTime date, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeString(DateUtils.toJson(date));
     }
 }

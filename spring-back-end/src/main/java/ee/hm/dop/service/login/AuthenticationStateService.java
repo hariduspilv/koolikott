@@ -3,10 +3,11 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 
 @Service
 public class AuthenticationStateService {
@@ -19,7 +20,7 @@ public class AuthenticationStateService {
     public AuthenticationState save(MobileAuthenticateResponse response) {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setToken(tokenGenerator.secureToken());
-        authenticationState.setCreated(new DateTime());
+        authenticationState.setCreated(LocalDateTime.now());
         authenticationState.setSessionCode(response.getSessionCode());
         authenticationState.setIdCode(response.getIdCode());
         authenticationState.setName(response.getName());
@@ -30,7 +31,7 @@ public class AuthenticationStateService {
     public AuthenticationState save(String idCode, String firstname, String surname) {
         AuthenticationState authenticationState = new AuthenticationState();
         authenticationState.setToken(tokenGenerator.secureToken());
-        authenticationState.setCreated(new DateTime());
+        authenticationState.setCreated(LocalDateTime.now());
         authenticationState.setIdCode(idCode);
         authenticationState.setName(firstname);
         authenticationState.setSurname(surname);

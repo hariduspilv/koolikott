@@ -3,12 +3,13 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.User;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static ee.hm.dop.utils.UserUtil.mustBeAdmin;
@@ -30,7 +31,7 @@ public class AgreementService {
         if (agreement.getVersion() == null || agreement.getValidFrom() == null){
             return false;
         }
-        agreement.setValidFrom(agreement.getValidFrom().withTimeAtStartOfDay());
+        agreement.setValidFrom(agreement.getValidFrom().truncatedTo(ChronoUnit.DAYS));
         return isEmpty(agreementDao.findMatchingAgreements(agreement));
     }
 
@@ -39,9 +40,9 @@ public class AgreementService {
         if (agreement.getVersion() == null || agreement.getValidFrom() == null){
             throw new WebApplicationException("missing version or validFrom", Response.Status.BAD_REQUEST);
         }
-        agreement.setValidFrom(agreement.getValidFrom().withTimeAtStartOfDay());
+        agreement.setValidFrom(agreement.getValidFrom().truncatedTo(ChronoUnit.DAYS));
         agreement.setVersion(agreement.getVersion().trim());
-        agreement.setCreatedAt(DateTime.now());
+        agreement.setCreatedAt(LocalDateTime.now());
         agreement.setCreatedBy(user);
         Agreement newAgreement = agreementDao.createOrUpdate(agreement);
         if (newAgreement != null){

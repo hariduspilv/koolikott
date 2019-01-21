@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 public class Language implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -43,6 +43,9 @@ public class Language implements AbstractEntity {
 
     @Column
     private Long priorityOrder;
+
+    public Language() {
+    }
 
     public Long getId() {
         return id;

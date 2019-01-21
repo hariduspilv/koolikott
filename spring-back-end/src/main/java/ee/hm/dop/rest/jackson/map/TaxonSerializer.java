@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.TaxonDTO;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class TaxonSerializer extends JsonSerializer<Taxon> {
 
     @Override

@@ -18,7 +18,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @Service
 public class PortfolioService {

@@ -15,13 +15,14 @@ spring:
         jdbc:
           time_zone: UTC
   datasource:
-    url: jdbc:mysql://127.0.0.1:3310/dop?serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/dop?serverTimezone=UTC
     username: root
     password: root
   flyway:
     outOfOrder: true
     baselineOnMigrate: true
     placeholderReplacement: false
+    locations: classpath:db/migration, classpath:db/initdb, classpath:db/initdata, classpath:db/users
 
 app:
   devLogin: false

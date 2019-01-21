@@ -6,7 +6,7 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -33,7 +33,7 @@ public class CommentService {
         }
 
         comment.setCreator(loggedInUser);
-        comment.setAdded(DateTime.now());
+        comment.setAdded(LocalDateTime.now());
         originalLearningObject.getComments().add(0, comment);
         learningObjectDao.createOrUpdate(originalLearningObject);
         return originalLearningObject;

@@ -4,7 +4,7 @@ import ee.hm.dop.dao.UserManualsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserManuals;
 import ee.hm.dop.utils.UrlUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -33,7 +33,7 @@ public class UserManualsService {
         userManuals.setTitle(userManuals.getTitle().trim());
         userManuals.setUrl(UrlUtil.processURL(userManuals.getUrl()));
         userManuals.setTextUrl(UrlUtil.processURL(userManuals.getTextUrl()));
-        userManuals.setCreatedAt(DateTime.now());
+        userManuals.setCreatedAt(LocalDateTime.now());
         userManuals.setCreatedBy(user);
 
         return userManualsDao.createOrUpdate(userManuals);

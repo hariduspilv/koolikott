@@ -4,6 +4,10 @@ import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.useractions.CommentService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -12,14 +16,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-@Path("comment")
-@RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
+@RestController
+@RequestMapping("comment")
+@Secured({ RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR })
 public class CommentResource extends BaseResource {
 
     @Inject
     private CommentService commentService;
 
-    @POST
+    @PostMapping
     @Consumes("application/json")
     @Produces("application/json")
     public LearningObject addComment(AddComment form) {

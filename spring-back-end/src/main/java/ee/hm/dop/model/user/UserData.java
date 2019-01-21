@@ -3,14 +3,14 @@ package ee.hm.dop.model.user;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 public class UserData {
 
     @JsonSerialize(using = DateTimeSerializer.class)
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
     private Person authCtx;
 
     public UserData(Person authCtx) {
@@ -18,7 +18,7 @@ public class UserData {
         createdAt = now();
     }
 
-    public DateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 

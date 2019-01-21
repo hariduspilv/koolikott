@@ -13,7 +13,7 @@ import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,7 @@ public class RepositoryService {
     private MaterialIteratorAndDate getMaterialIterator(Repository repository) {
         try {
             MaterialIterator materials = repositoryManager.getMaterialsFrom(repository);
-            return new MaterialIteratorAndDate(materials, DateTime.now());
+            return new MaterialIteratorAndDate(materials, LocalDateTime.now());
         } catch (Exception e) {
             logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
             return null;

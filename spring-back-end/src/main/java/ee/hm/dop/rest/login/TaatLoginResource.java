@@ -9,6 +9,10 @@ import org.opensaml.common.binding.BasicSAMLMessageContext;
 import org.opensaml.saml2.binding.encoding.HTTPRedirectDeflateEncoder;
 import org.opensaml.saml2.core.AuthnRequest;
 import org.opensaml.ws.message.encoder.MessageEncodingException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -26,8 +30,9 @@ import static ee.hm.dop.rest.login.LoginResource.LOGIN_REDIRECT_WITH_TOKEN;
 import static ee.hm.dop.rest.login.LoginResource.LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT;
 import static java.lang.String.format;
 
+@RestController
 @Deprecated
-@Path("login")
+@RequestMapping("login")
 public class TaatLoginResource extends BaseResource {
 
     public static final String SAML_RESPONSE = "SAMLResponse";
@@ -37,8 +42,7 @@ public class TaatLoginResource extends BaseResource {
     @Inject
     private HTTPRedirectDeflateEncoder encoder;
 
-    @GET
-    @Path("/taat")
+    @GetMapping("/taat")
     @Produces(MediaType.APPLICATION_JSON)
     public String taatLogin() throws MessageEncodingException {
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService.buildMessageContext(getResponse());
@@ -46,8 +50,7 @@ public class TaatLoginResource extends BaseResource {
         return null;
     }
 
-    @POST
-    @Path("/taat")
+    @PostMapping("/taat")
     public Response taatAuthenticate(MultivaluedMap<String, String> params) throws URISyntaxException {
         try {
             UserStatus status = taatService.authenticate(params.getFirst(SAML_RESPONSE), params.getFirst(RELAY_STATE));
@@ -56,7 +59,6 @@ public class TaatLoginResource extends BaseResource {
             return redirect(redirectFailure());
         }
     }
-
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
         if (status.isStatusOk()) {

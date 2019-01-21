@@ -14,6 +14,11 @@ import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +38,8 @@ import static ee.hm.dop.rest.login.IdCardUtil.getInfo;
 import static ee.hm.dop.rest.login.IdCardUtil.isAuthValid;
 import static java.lang.String.format;
 
-@Path("login")
+@RestController
+@RequestMapping("login")
 public class LoginResource extends BaseResource {
     private final Logger logger = LoggerFactory.getLogger(LoginResource.class);
 
@@ -59,15 +65,15 @@ public class LoginResource extends BaseResource {
     @Inject
     private MobileIDLoginService mobileIDLoginService;
 
-    @POST
-    @Path("/finalizeLogin")
+    @PostMapping
+    @RequestMapping("/finalizeLogin")
     @Produces(MediaType.APPLICATION_JSON)
     public AuthenticatedUser permissionConfirm(UserStatus userStatus) {
         return confirmed(userStatus) ? loginService.finalizeLogin(userStatus) : null;
     }
 
-    @POST
-    @Path("/rejectAgreement")
+    @PostMapping
+    @RequestMapping("/rejectAgreement")
     @Produces(MediaType.APPLICATION_JSON)
     public void permissionReject(UserStatus userStatus) {
         if (userStatus.isExistingUser()) {
@@ -75,8 +81,8 @@ public class LoginResource extends BaseResource {
         }
     }
 
-    @GET
-    @Path("/idCard")
+    @GetMapping
+    @RequestMapping("/idCard")
     @Produces(MediaType.APPLICATION_JSON)
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
@@ -86,44 +92,44 @@ public class LoginResource extends BaseResource {
         return isAuthValid(req) ? loginService.login(info.getIdCode(), info.getFirstName(), info.getSurName(), LoginFrom.ID_CARD) : null;
     }
 
-    @GET
-    @Path("ekool")
+    @GetMapping
+    @RequestMapping("ekool")
     public Response ekoolAuthenticate() throws URISyntaxException {
         return redirect(getEkoolAuthenticationURI());
     }
 
-    @GET
-    @Path("ekool/success")
-    public Response ekoolAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
+    @GetMapping
+    @RequestMapping("ekool/success")
+    public Response ekoolAuthenticateSuccess(@RequestParam("code") String code) throws URISyntaxException {
         return redirect(getEkoolLocation(code));
     }
 
-    @GET
-    @Path("stuudium")
-    public Response stuudiumAuthenticate(@QueryParam("token") String token) throws URISyntaxException {
+    @GetMapping
+    @RequestMapping("stuudium")
+    public Response stuudiumAuthenticate(@RequestParam("token") String token) throws URISyntaxException {
         return token != null ? authenticateWithStuudiumToken(token) : redirectToStuudium();
     }
 
-    @GET
-    @Path("/mobileId")
+    @GetMapping
+    @RequestMapping("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
-    public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
-                                               @QueryParam("idCode") String idCode,
-                                               @QueryParam("language") String languageCode) throws Exception {
+    public MobileIDSecurityCodes mobileIDLogin(@RequestParam("phoneNumber") String phoneNumber,
+                                               @RequestParam("idCode") String idCode,
+                                               @RequestParam("language") String languageCode) throws Exception {
         return mobileIDLoginService.authenticate(phoneNumber, idCode, languageService.getLanguage(languageCode));
     }
 
-    @GET
-    @Path("/mobileId/isValid")
+    @GetMapping
+    @RequestMapping("/mobileId/isValid")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserStatus mobileIDAuthenticate(@QueryParam("token") String token) throws SOAPException {
+    public UserStatus mobileIDAuthenticate(@RequestParam("token") String token) throws SOAPException {
         return mobileIDLoginService.validateMobileIDAuthentication(token);
     }
 
-    @GET
-    @Path("/getAuthenticatedUser")
+    @GetMapping
+    @RequestMapping("/getAuthenticatedUser")
     @Produces(MediaType.APPLICATION_JSON)
-    public AuthenticatedUser getAuthenticatedUser(@QueryParam("token") String token) {
+    public AuthenticatedUser getAuthenticatedUser(@RequestParam("token") String token) {
         return authenticatedUserService.getAuthenticatedUserByToken(token);
     }
 

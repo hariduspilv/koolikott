@@ -9,7 +9,7 @@ import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,7 +59,7 @@ public class NewTaxonRowCreator {
         return Lists.newArrayList(row);
     }
 
-    private List<NewStatisticsRow> convertFromUsedDomain(List<User> users, DomainWithChildren domain, DateTime from, DateTime to) {
+    private List<NewStatisticsRow> convertFromUsedDomain(List<User> users, DomainWithChildren domain, LocalDateTime from, LocalDateTime to) {
         List<Long> taxonIds = domain.getTaxonIds();
         List<Long> userIds = users.stream().map(User::getId).collect(Collectors.toList());
         List<StatisticsQuery> reviewedLOCount = statisticsDao.reviewedLOCount(from, to, userIds, taxonIds);
@@ -93,7 +93,7 @@ public class NewTaxonRowCreator {
         return rows;
     }
 
-    private List<NewStatisticsRow> convertFromSubject(List<User> users, SubjectWithChildren subject, DateTime from, DateTime to) {
+    private List<NewStatisticsRow> convertFromSubject(List<User> users, SubjectWithChildren subject, LocalDateTime from, LocalDateTime to) {
         List<Long> taxonIds = subject.getTaxonIds();
         List<Long> userIds = users.stream().map(User::getId).collect(Collectors.toList());
 
@@ -126,7 +126,7 @@ public class NewTaxonRowCreator {
         return rows;
     }
 
-    private List<NewStatisticsRow> convertFromEmptyDomain(List<User> users, DomainWithChildren domain, DateTime from, DateTime to) {
+    private List<NewStatisticsRow> convertFromEmptyDomain(List<User> users, DomainWithChildren domain, LocalDateTime from, LocalDateTime to) {
         NewStatisticsRow row = new NewStatisticsRow();
         row.setDomainUsed(false);
         row.setEducationalContext(domain.getEducationalContext());

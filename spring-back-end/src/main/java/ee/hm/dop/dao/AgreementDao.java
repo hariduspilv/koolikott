@@ -1,7 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.Agreement;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class AgreementDao extends AbstractDao<Agreement> {
                         "where a.validFrom < :validFrom " +
                         "and a.deleted = false " +
                         "order by a.validFrom desc, a.id desc", entity())
-                .setParameter("validFrom", DateTime.now())
+                .setParameter("validFrom", LocalDateTime.now())
                 .setMaxResults(1));
     }
 

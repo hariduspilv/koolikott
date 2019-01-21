@@ -9,7 +9,7 @@ import ee.hm.dop.model.user.UserSession;
 import ee.hm.dop.service.login.TokenGenerator;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.apache.commons.configuration2.Configuration;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SESSION_DURATION_MINS;
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @Service
 public class SessionService {
@@ -30,7 +30,7 @@ public class SessionService {
     private Configuration configuration;
 
     public AuthenticatedUser startSession(User user, Person person, LoginFrom loginFrom){
-        DateTime now = now();
+        LocalDateTime now = now();
         return startSession(new AuthenticatedUser(user, person, loginFrom, now, now));
 //        return startSession(new AuthenticatedUser(user, person, loginFrom, now, sessionTime(now)));
     }

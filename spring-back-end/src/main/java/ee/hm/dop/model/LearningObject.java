@@ -17,7 +17,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
@@ -45,7 +45,7 @@ public abstract class LearningObject implements Searchable, ILearningObject {
             .toFactory();
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
@@ -107,16 +107,14 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     // The date when the Learning Object was added to the system
     @Column(nullable = false)
-
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private LocalDateTime added;
 
     @Column
-
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime updated;
+    private LocalDateTime updated;
 
     @Column(nullable = false)
     private Long views = (long) 0;
@@ -170,7 +168,7 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @JsonIgnore
     @Column
 
-    private DateTime lastInteraction;
+    private LocalDateTime lastInteraction;
 
     @Column(nullable = false)
     private boolean publicationConfirmed = false;
@@ -262,19 +260,19 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.deleted = deleted;
     }
 
-    public DateTime getAdded() {
+    public LocalDateTime getAdded() {
         return added;
     }
 
-    public void setAdded(DateTime added) {
+    public void setAdded(LocalDateTime added) {
         this.added = added;
     }
 
-    public DateTime getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(DateTime updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 
@@ -302,11 +300,11 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.dislikes = dislikes;
     }
 
-    public DateTime getLastInteraction() {
+    public LocalDateTime getLastInteraction() {
         return lastInteraction;
     }
 
-    public void setLastInteraction(DateTime lastInteraction) {
+    public void setLastInteraction(LocalDateTime lastInteraction) {
         this.lastInteraction = lastInteraction;
     }
 

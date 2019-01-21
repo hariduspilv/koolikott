@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
@@ -16,7 +17,7 @@ import javax.persistence.Id;
 public class Version implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String version;
@@ -24,7 +25,7 @@ public class Version implements AbstractEntity {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime released;
+    private LocalDateTime released;
 
     public Long getId() {
         return id;
@@ -42,11 +43,11 @@ public class Version implements AbstractEntity {
         this.version = version;
     }
 
-    public DateTime getReleased() {
+    public LocalDateTime getReleased() {
         return released;
     }
 
-    public void setReleased(DateTime released) {
+    public void setReleased(LocalDateTime released) {
         this.released = released;
     }
 }

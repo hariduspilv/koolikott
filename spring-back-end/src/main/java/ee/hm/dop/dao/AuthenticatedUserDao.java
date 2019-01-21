@@ -2,11 +2,13 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
 import java.math.BigInteger;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Repository
 public class AuthenticatedUserDao extends AbstractDao<AuthenticatedUser> {
@@ -28,24 +30,24 @@ public class AuthenticatedUserDao extends AbstractDao<AuthenticatedUser> {
         createOrUpdate(authenticatedUser);
     }
 
-    public int deleteOlderThan(DateTime dateTime) {
+    public int deleteOlderThan(LocalDateTime dateTime) {
         return getEntityManager()
                 .createNativeQuery("" +
                         "UPDATE AuthenticatedUser " +
                         "SET deleted = 1 " +
                         "WHERE sessionTime < :deleteTime " +
                         "AND deleted = 0", entity())
-                .setParameter("deleteTime", dateTime.toDate())
+                .setParameter("deleteTime", Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()))
                 .executeUpdate();
     }
 
-    public long findCountOfOlderThan(DateTime sessionTime) {
+    public long findCountOfOlderThan(LocalDateTime sessionTime) {
         return ((BigInteger) getEntityManager()
                 .createNativeQuery("" +
                         "SELECT count(id) from AuthenticatedUser " +
                         "WHERE sessionTime < :sessionTime" +
                         " AND deleted = 0")
-                .setParameter("sessionTime", sessionTime.toDate())
+                .setParameter("sessionTime", Date.from(sessionTime.atZone(ZoneId.systemDefault()).toInstant()))
                 .getSingleResult())
                 .longValue();
     }

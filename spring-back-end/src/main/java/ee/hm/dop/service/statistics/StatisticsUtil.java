@@ -5,7 +5,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.utils.DateUtils;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -44,7 +44,7 @@ public class StatisticsUtil {
     static final String NO_USER_FOUND = "Ei leitud ühtegi eksperti";
     static final String EMPTY_ROW = "-";
 
-    public static String[] userHeader(DateTime from, DateTime to, User user) {
+    public static String[] userHeader(LocalDateTime from, LocalDateTime to, User user) {
         return new String[]{
                 "Alates",
                 DateUtils.toString_ddMMyyyy(from),
@@ -55,7 +55,7 @@ public class StatisticsUtil {
         };
     }
 
-    public static String[] taxonHeader(DateTime from, DateTime to, String educationalContext, boolean plural, String others) {
+    public static String[] taxonHeader(LocalDateTime from, LocalDateTime to, String educationalContext, boolean plural, String others) {
         return new String[]{
                 "Alates",
                 DateUtils.toString_ddMMyyyy(from),

@@ -14,7 +14,7 @@ import ee.hm.dop.utils.security.KeyStoreUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration2.Configuration;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +23,11 @@ import java.security.PrivateKey;
 
 @Service
 @Transactional
-@AllArgsConstructor
 public class AuthenticatedUserService {
 
+    @Inject
     private AuthenticatedUserDao authenticatedUserDao;
+    @Inject
     private Configuration configuration;
 
     public AuthenticatedUser getAuthenticatedUserByToken(String token) {

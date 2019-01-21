@@ -9,6 +9,12 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -16,7 +22,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("admin/changed/")
+@RestController
+@RequestMapping("admin/changed/")
 public class ReviewableChangeAdminResource extends BaseResource {
 
     @Inject
@@ -28,32 +35,32 @@ public class ReviewableChangeAdminResource extends BaseResource {
     @Inject
     private LearningObjectService learningObjectService;
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public List<AdminLearningObject> getChanged() {
         return reviewableChangeAdminService.getUnReviewed(getLoggedInUser());
     }
 
-    @GET
-    @Path("count")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @GetMapping
+    @RequestMapping("count")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getCount() {
         return reviewableChangeAdminService.getUnReviewedCount(getLoggedInUser());
     }
 
-    @GET
-    @Path("{id}")
+    @GetMapping
+    @RequestMapping("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<ReviewableChange> getChanges(@PathParam("id") Long learningObjectId) {
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public List<ReviewableChange> getChanges(@PathVariable("id") Long learningObjectId) {
         return reviewableChangeService.getAllByLearningObject(learningObjectId);
     }
 
-    @POST
-    @Path("{id}/acceptAll")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject acceptAllChanges(@PathParam("id") Long learningObjectId) {
+    @PostMapping
+    @RequestMapping("{id}/acceptAll")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject acceptAllChanges(@PathVariable("id") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("learningObject query param is required.");
         }
@@ -66,51 +73,51 @@ public class ReviewableChangeAdminResource extends BaseResource {
         return learningObjectService.get(learningObjectId, loggedInUser);
     }
 
-    @POST
-    @Path("acceptAll")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @PostMapping
+    @RequestMapping("acceptAll")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject acceptAllChanges2(LearningObjectMiniDto learningObject) {
        return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject.convert(), ReviewStatus.ACCEPTED, ReviewType.CHANGE);
     }
 
-    @POST
-    @Path("{id}/revertAll")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId) {
+    @PostMapping
+    @RequestMapping("{id}/revertAll")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject revertAllChanges(@PathVariable("id") Long learningObjectId) {
         return reviewableChangeAdminService.revertAllChanges(learningObjectId, getLoggedInUser());
     }
 
-    @POST
-    @Path("revertAll")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @PostMapping
+    @RequestMapping("revertAll")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges2(LearningObjectMiniDto learningObject) {
         return reviewableChangeAdminService.revertAllChanges(learningObject.getId(), getLoggedInUser());
     }
 
-    @POST
-    @Path("{id}/acceptOne/{changeId}")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject acceptAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
+    @PostMapping
+    @RequestMapping("{id}/acceptOne/{changeId}")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject acceptAllChanges(@PathVariable("id") Long learningObjectId, @PathVariable("changeId") Long changeId) {
         return reviewableChangeAdminService.acceptOneChange(learningObjectId, changeId, getLoggedInUser());
     }
 
-    @POST
-    @Path("{id}/revertOne/{changeId}")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject revertAllChanges(@PathParam("id") Long learningObjectId, @PathParam("changeId") Long changeId) {
+    @PostMapping
+    @RequestMapping("{id}/revertOne/{changeId}")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public LearningObject revertAllChanges(@PathVariable("id") Long learningObjectId, @PathVariable("changeId") Long changeId) {
         return reviewableChangeAdminService.revertOneChange(learningObjectId, changeId, getLoggedInUser());
     }
 
-    @POST
-    @Path("acceptOne")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @PostMapping
+    @RequestMapping("acceptOne")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject acceptAllChanges2(ReviewableChange change) {
         return reviewableChangeAdminService.acceptOneChange(change.getLearningObject().getId(), change.getId(), getLoggedInUser());
     }
 
-    @POST
-    @Path("revertOne")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @PostMapping
+    @RequestMapping("revertOne")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject revertAllChanges2(ReviewableChange change) {
         return reviewableChangeAdminService.revertOneChange(change.getLearningObject().getId(), change.getId(), getLoggedInUser());
     }

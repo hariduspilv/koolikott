@@ -10,23 +10,28 @@ import javax.ws.rs.core.Response;
 
 import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.service.solr.SuggestService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Path("suggest")
+@RestController
+@RequestMapping("suggest")
 public class SuggestResource extends BaseResource {
 
     @Inject
     private SuggestService suggestService;
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    public Response suggest(@QueryParam("q") String query){
+    public Response suggest(@RequestParam("q") String query){
         return suggestService.suggest(query, SuggestionStrategy.SUGGEST_URL);
     }
 
-    @GET
-    @Path("tag")
+    @GetMapping
+    @RequestMapping("tag")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response suggestSystemTag(@QueryParam("q") String query){
+    public Response suggestSystemTag(@RequestParam("q") String query){
         return suggestService.suggest(query, SuggestionStrategy.SUGGEST_TAG);
     }
 }

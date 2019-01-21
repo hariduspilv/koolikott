@@ -18,7 +18,7 @@ public class ContentRow implements AbstractEntity {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToMany(fetch = EAGER)

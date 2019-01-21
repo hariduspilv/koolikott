@@ -10,6 +10,12 @@ import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -23,7 +29,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
 import static ee.hm.dop.utils.DOPFileUtils.read;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
-@Path("picture")
+@RequestMapping("picture")
 public class PictureResource extends BaseResource {
 
     public static final String MAX_AGE_1_YEAR = "max-age=31536000";
@@ -34,17 +40,17 @@ public class PictureResource extends BaseResource {
     @Inject
     private PictureSaver pictureSaver;
 
-    @GET
-    @Path("/{name}")
+    @GetMapping
+    @RequestMapping("/{name}")
     @Produces("image/png")
-    public Response getPictureDataByName(@PathParam("name") String pictureName) {
+    public Response getPictureDataByName(@PathVariable("name") String pictureName) {
         return getPictureResponseWithCache(pictureService.getByName(pictureName));
     }
 
-    @GET
-    @Path("thumbnail/{size}/{name}")
+    @GetMapping
+    @RequestMapping("thumbnail/{size}/{name}")
     @Produces("image/png")
-    public Response getSMThumbnailDataByName(@PathParam("size") String sizeString, @PathParam("name") String pictureName) {
+    public Response getSMThumbnailDataByName(@PathVariable("size") String sizeString, @PathVariable("name") String pictureName) {
         if (StringUtils.isBlank(sizeString)) {
             throw new UnsupportedOperationException("no size");
         }
@@ -60,8 +66,8 @@ public class PictureResource extends BaseResource {
         return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
-    @POST
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @PostMapping
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Picture uploadPicture(@FormDataParam("picture") InputStream fileInputStream) {
@@ -73,15 +79,15 @@ public class PictureResource extends BaseResource {
         return pictureSaver.create(picture);
     }
 
-    @PUT
-    @Path("/fromUrl")
+    @PutMapping
+    @RequestMapping("/fromUrl")
     @Produces(MediaType.APPLICATION_JSON)
     public Picture uploadPictureFromURL(String url) {
         return pictureSaver.createFromURL(url);
     }
 
-    @GET
-    @Path("/maxSize")
+    @GetMapping
+    @RequestMapping("/maxSize")
     @Produces(MediaType.APPLICATION_JSON)
     public int getMaxSize() {
         return configuration.getInt(MAX_FILE_SIZE);

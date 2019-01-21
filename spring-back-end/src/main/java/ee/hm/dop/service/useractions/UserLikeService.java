@@ -1,6 +1,6 @@
 package ee.hm.dop.service.useractions;
 
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,7 +53,7 @@ public class UserLikeService {
         userLike.setLearningObject(learningObject);
         userLike.setCreator(loggedInUser);
         userLike.setLiked(like.isLiked());
-        userLike.setAdded(DateTime.now());
+        userLike.setAdded(LocalDateTime.now());
         return userLikeDao.update(userLike);
     }
 

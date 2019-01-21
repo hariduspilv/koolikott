@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class TagUpVote implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)

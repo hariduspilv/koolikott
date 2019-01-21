@@ -1,7 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.*;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -38,12 +38,12 @@ public class UserLikeDao extends AbstractDao<UserLike> {
 
     public UserLike update(UserLike userLike) {
         if (userLike.getId() == null) {
-            userLike.setAdded(DateTime.now());
+            userLike.setAdded(LocalDateTime.now());
         }
         return createOrUpdate(userLike);
     }
 
-    public List<Searchable> findMostLikedSince(DateTime date, int numberOfMaterials) {
+    public List<Searchable> findMostLikedSince(LocalDateTime date, int numberOfMaterials) {
         List<Object[]> resultList = getEntityManager()
                 .createQuery(
                         "SELECT ul.learningObject, 2 * SUM(ul.isLiked) - COUNT(*) AS score" +

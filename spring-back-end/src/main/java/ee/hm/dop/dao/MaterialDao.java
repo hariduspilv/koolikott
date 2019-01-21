@@ -11,7 +11,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @org.springframework.stereotype.Repository
 public class MaterialDao extends AbstractDao<Material> {

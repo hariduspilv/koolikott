@@ -14,7 +14,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -48,7 +48,7 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private LocalDateTime added;
 
     @ManyToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
     @Fetch(FetchMode.SELECT)
@@ -189,11 +189,11 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
         this.visibility = visibility;
     }
 
-    public DateTime getAdded() {
+    public LocalDateTime getAdded() {
         return added;
     }
 
-    public void setAdded(DateTime added) {
+    public void setAdded(LocalDateTime added) {
         this.added = added;
     }
 

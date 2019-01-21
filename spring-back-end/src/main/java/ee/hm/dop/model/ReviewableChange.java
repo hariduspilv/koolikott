@@ -11,7 +11,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -19,7 +19,7 @@ import javax.persistence.*;
 public class ReviewableChange implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -49,7 +49,7 @@ public class ReviewableChange implements AbstractEntity {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private boolean reviewed = false;
@@ -62,7 +62,7 @@ public class ReviewableChange implements AbstractEntity {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime reviewedAt;
+    private LocalDateTime reviewedAt;
 
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
@@ -124,11 +124,11 @@ public class ReviewableChange implements AbstractEntity {
         this.createdBy = createdBy;
     }
 
-    public DateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(DateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -140,11 +140,11 @@ public class ReviewableChange implements AbstractEntity {
         this.reviewedBy = reviewedBy;
     }
 
-    public DateTime getReviewedAt() {
+    public LocalDateTime getReviewedAt() {
         return reviewedAt;
     }
 
-    public void setReviewedAt(DateTime reviewedAt) {
+    public void setReviewedAt(LocalDateTime reviewedAt) {
         this.reviewedAt = reviewedAt;
     }
 

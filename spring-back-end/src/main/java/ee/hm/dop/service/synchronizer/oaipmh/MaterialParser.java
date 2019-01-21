@@ -31,7 +31,7 @@ import ezvcard.VCard;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -393,7 +393,7 @@ public abstract class MaterialParser {
 
                 Node issueDateNode = getNode(contributorNode, "./*[local-name()='date']/*[local-name()='dateTime']");
                 if (issueDateNode != null) {
-                    issueDate = new IssueDate(new DateTime(value(issueDateNode)));
+                    issueDate = new IssueDate(LocalDateTime.parse(value(issueDateNode)));
                 }
             }
         }

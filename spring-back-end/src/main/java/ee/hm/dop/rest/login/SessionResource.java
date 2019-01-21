@@ -8,6 +8,12 @@ import ee.hm.dop.service.useractions.SessionService;
 import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -15,14 +21,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import static ee.hm.dop.service.login.SessionUtil.minRemaining;
 import static ee.hm.dop.utils.ConfigurationProperties.SESSION_ALERT_MINS;
 import static java.lang.String.format;
 
-@Path("user")
-@RolesAllowed({ RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR })
+@RestController
+@RequestMapping("user")
+@Secured({ RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR })
 public class SessionResource extends BaseResource {
 
     private static Logger logger = LoggerFactory.getLogger(SessionResource.class);
@@ -32,40 +38,37 @@ public class SessionResource extends BaseResource {
     @Inject
     private Configuration configuration;
 
-    @GET
-    @Path("sessionTime")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    @GetMapping
+    @RequestMapping("sessionTime")
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public UserSession getSessionTime() {
         AuthenticatedUser user = getAuthenticatedUser();
         return new UserSession(minRemaining(user), !user.isDeclined());
     }
 
-    @GET
-    @Path("sessionAlertTime")
+    @GetMapping
+    @RequestMapping(value = "sessionAlertTime", produces = MediaType.TEXT_PLAIN_VALUE)
     public String getSessionAlertTime() {
         return configuration.getString(SESSION_ALERT_MINS);
     }
 
-    @POST
-    @Path("updateSession")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    @PostMapping
+    @RequestMapping("updateSession")
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public UserSession updateSessionTime(UserSession userSession) {
         AuthenticatedUser user = sessionService.updateSession(userSession, getAuthenticatedUser());
         return new UserSession(minRemaining(user), !user.isDeclined());
     }
 
-    @POST
-    @Path("terminateSession")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
+    @PostMapping
+    @RequestMapping("terminateSession")
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public void terminateSession() {
         sessionService.terminateSession(getAuthenticatedUser());
     }
 
-    @POST
-    @Path("logout")
+    @PostMapping
+    @RequestMapping("logout")
     public void logout() {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
         sessionService.logout(authenticatedUser);

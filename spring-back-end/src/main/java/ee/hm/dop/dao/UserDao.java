@@ -22,13 +22,14 @@ public class UserDao extends AbstractDao<User> {
      * Counts the amount of users who have the same username, excluding the
      * number at the end. For example, users <i>john.smith</i> and
      * <i>john.smith2</i> are considered to have the same username.
-     *username
+     * username
+     *
      * @param username the username to search for
      * @return the count of users with the same username, excluding the number
      */
     public Long countUsersWithSameUsername(String username) {
         BigInteger count = (BigInteger) entityManager.createNativeQuery("select count(userName) from User where userName REGEXP :username")
-                .setParameter("username","\\b"+ username + "[0-9]*$\\b")
+                .setParameter("username", username + "[0-9]*$")
                 .getSingleResult();
         return count.longValue();
     }

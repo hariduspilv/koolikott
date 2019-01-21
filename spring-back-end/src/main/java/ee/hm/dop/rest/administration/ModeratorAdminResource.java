@@ -4,6 +4,9 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.useractions.UserService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -13,22 +16,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/admin/moderator/")
+@RequestMapping("/admin/moderator/")
 public class ModeratorAdminResource extends BaseResource {
 
     @Inject
     private UserService userService;
 
-    @GET
-    @RolesAllowed(RoleString.ADMIN)
+    @GetMapping
+    @Secured(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getModerators() {
         return userService.getModerators(getLoggedInUser());
     }
 
-    @GET
-    @Path("count")
-    @RolesAllowed(RoleString.ADMIN)
+    @GetMapping
+    @RequestMapping("count")
+    @Secured(RoleString.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Long getModeratorsCount() {
         return userService.getModeratorsCount(getLoggedInUser());

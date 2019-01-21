@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,7 +24,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 public class Repository implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -32,7 +32,7 @@ public class Repository implements AbstractEntity {
 
     @Column
 
-    private DateTime lastSynchronization;
+    private LocalDateTime lastSynchronization;
 
     @Column(nullable = false, name = "schemaName")
     private String schema;
@@ -60,12 +60,12 @@ public class Repository implements AbstractEntity {
     }
 
     @JsonSerialize(using = DateTimeSerializer.class)
-    public DateTime getLastSynchronization() {
+    public LocalDateTime getLastSynchronization() {
         return lastSynchronization;
     }
 
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    public void setLastSynchronization(DateTime lastSynchronization) {
+    public void setLastSynchronization(LocalDateTime lastSynchronization) {
         this.lastSynchronization = lastSynchronization;
     }
 

@@ -1,65 +1,63 @@
 package ee.hm.dop.utils;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class DateUtils {
 
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            .withZoneUTC();
+    public  static java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .withZone(ZoneId.of("UTC"));
 
-    private static DateTimeFormatter formatterWithoutMillis = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-            .withZoneUTC();
 
-    private static DateTimeFormatter ddMMyyyy_formatter = DateTimeFormat.forPattern("dd.MM.yyyy");
+    public  static java.time.format.DateTimeFormatter formatterWithoutMillis = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            .withZone(ZoneId.of("UTC"));
 
-    public static String toString_ddMMyyyy(DateTime dateTime){
-        return dateTime != null ? dateTime.toString(ddMMyyyy_formatter) : "";
+
+    public  static java.time.format.DateTimeFormatter ddMMyyyy_formatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    public static String toString_ddMMyyyy(LocalDateTime dateTime) {
+        return dateTime != null ? dateTime.format(ddMMyyyy_formatter) : "";
     }
 
     /**
      * Converts JSON date format (yyyy-MM-dd'T'HH:mm:ss.SSS'Z' or
-     * yyyy-MM-dd'T'HH:mm:ss'Z') into {@link DateTime} object.
+     * yyyy-MM-dd'T'HH:mm:ss'Z') into {@link LocalDateTime} object.
      *
-     * @param jsonDate
-     *            the date to be parsed
-     * @return the {@link DateTime} object represented by {@code jsonDate}
+     * @param jsonDate the date to be parsed
+     * @return the {@link LocalDateTime} object represented by {@code jsonDate}
      */
-    public static DateTime fromJson(String jsonDate) {
-        DateTime date;
+    public static LocalDateTime fromJson(String jsonDate) {
+        LocalDateTime date;
 
         try {
-            date = formatter.parseDateTime(jsonDate);
+            date = LocalDateTime.parse(jsonDate, formatter);
         } catch (IllegalArgumentException ex) {
-            date = formatterWithoutMillis.parseDateTime(jsonDate);
+            date = LocalDateTime.parse(jsonDate, formatterWithoutMillis);
         }
 
-        return date.withZone(DateTimeZone.getDefault());
+        return date.atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     /**
-     * Converts {@link DateTime} object into JSON format
+     * Converts {@link LocalDateTime} object into JSON format
      * (yyyy-MM-dd'T'HH:mm:ss.SSS'Z') String.
      *
-     * @param date
-     *            the date to be serialized
+     * @param date the date to be serialized
      * @return the JSON string representation of {@code date}
      */
-    public static String toJson(DateTime date) {
-        return formatter.print(date.withZone(DateTimeZone.UTC));
+    public static String toJson(LocalDateTime date) {
+        return date.format(formatter);
     }
 
     /**
-     * Converts {@link DateTime} object into String using the format
+     * Converts {@link LocalDateTime} object into String using the format
      * yyyy-MM-dd'T'HH:mm:ss'Z'.
      *
-     * @param date
-     *            the date to be serialized
+     * @param date the date to be serialized
      * @return the String representation of {@code date}
      */
-    public static String toStringWithoutMillis(DateTime date) {
-        return formatterWithoutMillis.print(date.withZone(DateTimeZone.UTC));
+    public static String toStringWithoutMillis(LocalDateTime date) {
+        LocalDateTime utc = date.atZone(ZoneId.of("UTC")).toLocalDateTime();
+        return utc.format(formatterWithoutMillis);
     }
 }

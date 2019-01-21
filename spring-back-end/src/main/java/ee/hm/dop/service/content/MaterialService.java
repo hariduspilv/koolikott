@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @Service
 public class MaterialService {

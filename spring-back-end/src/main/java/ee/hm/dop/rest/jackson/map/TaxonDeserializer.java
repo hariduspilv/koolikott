@@ -7,14 +7,17 @@ import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.metadata.TaxonService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 @Component
-@AllArgsConstructor
 public class TaxonDeserializer extends JsonDeserializer<Taxon> {
 
+    @Inject
     private TaxonService taxonService;
 
     @Override

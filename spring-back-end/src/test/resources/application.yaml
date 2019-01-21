@@ -1,0 +1,27 @@
+server:
+  servlet:
+    contextPath: /rest
+  port: 1986
+
+spring:
+  profiles:
+    active: test
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3316/dop?serverTimezone=UTC
+    username: root
+    password: root
+  flyway:
+    outOfOrder: true
+    placeholderReplacement: false
+    locations: classpath:db/migration, classpath:db/initdb, classpath:db/testdata
+
+app:
+  devLogin: true

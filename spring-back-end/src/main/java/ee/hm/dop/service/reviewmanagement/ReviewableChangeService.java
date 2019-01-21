@@ -5,7 +5,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -32,7 +32,7 @@ public class ReviewableChangeService {
         ReviewableChange reviewableChange = new ReviewableChange();
         reviewableChange.setLearningObject(learningObject);
         reviewableChange.setCreatedBy(user);
-        reviewableChange.setCreatedAt(DateTime.now());
+        reviewableChange.setCreatedAt(LocalDateTime.now());
         reviewableChange.setReviewed(false);
         if (taxon != null) {
             reviewableChange.setTaxon(taxon);

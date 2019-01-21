@@ -1,22 +1,5 @@
 package ee.hm.dop.service.login;
 
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
-import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
-
-import java.io.ByteArrayInputStream;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.enums.LoginFrom;
@@ -51,6 +34,23 @@ import org.opensaml.xml.validation.ValidationException;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_ASSERTION_CONSUMER_SERVICE_INDEX;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_CONNECTION_ID;
+import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
+import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
 
 @Service
 public class TaatService {
@@ -162,7 +162,7 @@ public class TaatService {
 
     private AuthenticationState createAuthenticationState(String token) {
         AuthenticationState authenticationState = new AuthenticationState();
-        authenticationState.setCreated(new DateTime());
+        authenticationState.setCreated(LocalDateTime.now());
         authenticationState.setToken(token);
         return authenticationStateDao.createAuthenticationState(authenticationState);
     }

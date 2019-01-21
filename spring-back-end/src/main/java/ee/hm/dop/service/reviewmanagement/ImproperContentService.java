@@ -10,7 +10,7 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ public class ImproperContentService {
 
         ImproperContent improper = new ImproperContent();
         improper.setCreatedBy(creator);
-        improper.setCreatedAt(DateTime.now());
+        improper.setCreatedAt(LocalDateTime.now());
         improper.setLearningObject(originalLearningObject);
         improper.setReportingText(improperContent.getReportingText());
         improper.setReviewed(false);

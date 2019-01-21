@@ -8,6 +8,12 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
 import ee.hm.dop.service.reviewmanagement.ImproperContentService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -15,7 +21,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("admin/improper")
+@RestController
+@RequestMapping("admin/improper")
 public class ImproperContentAdminResource extends BaseResource {
 
     @Inject
@@ -25,35 +32,35 @@ public class ImproperContentAdminResource extends BaseResource {
     @Inject
     private ImproperContentService improperContentService;
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public List<AdminLearningObject> getImproper() {
         return improperContentAdminService.getImproper(getLoggedInUser());
     }
 
-    @GET
-    @Path("/count")
+    @GetMapping
+    @RequestMapping("/count")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getImproperCount() {
         return improperContentAdminService.getImproperCount(getLoggedInUser());
     }
 
-    @POST
-    @Path("setProper")
+    @PostMapping
+    @RequestMapping("setProper")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.MODERATOR, RoleString.ADMIN})
+    @Secured({RoleString.MODERATOR, RoleString.ADMIN})
     public LearningObject setProper(LearningObjectMiniDto loDto) {
         return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), loDto.convert(), ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
     }
 
-    @GET
-    @Path("{learningObjectId}")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @GetMapping
+    @RequestMapping("{learningObjectId}")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ImproperContent> getImproperById(@PathParam("learningObjectId") Long learningObjectId) {
+    public List<ImproperContent> getImproperById(@PathVariable("learningObjectId") Long learningObjectId) {
         return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
     }
 }

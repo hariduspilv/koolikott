@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import ee.hm.dop.model.TargetGroup;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class TargetGroupSerializer extends JsonSerializer<TargetGroup> {
 
     @Override

@@ -5,7 +5,7 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
 import org.apache.commons.configuration2.Configuration;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,13 +41,13 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
             logger.info(String.format("Automatic ReviewableChange Acceptor found a total of %s changes",  allUnreviewed.size()));
 
             int accepted = 0;
-            DateTime _10DaysBefore = DateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));
+            LocalDateTime _10DaysBefore = LocalDateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));
             for (AdminLearningObject learningObject : allUnreviewed) {
                 for (ReviewableChange reviewableChange : learningObject.getReviewableChanges()) {
                     if (!reviewableChange.isReviewed() && reviewableChange.getCreatedAt().isBefore(_10DaysBefore)) {
                         accepted++;
                         reviewableChange.setReviewed(true);
-                        reviewableChange.setReviewedAt(DateTime.now());
+                        reviewableChange.setReviewedAt(LocalDateTime.now());
                         reviewableChange.setStatus(ReviewStatus.ACCEPTED_AUTOMATICALLY);
                         reviewableChangeDao.createOrUpdate(reviewableChange);
                     }

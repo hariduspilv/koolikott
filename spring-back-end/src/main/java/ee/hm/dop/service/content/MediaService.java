@@ -5,7 +5,7 @@ import ee.hm.dop.model.Media;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ public class MediaService {
         }
         media.setUrl(UrlUtil.processURL(media.getUrl()));
         media.setCreatedBy(loggedInUser);
-        media.setCreatedAt(DateTime.now());
+        media.setCreatedAt(LocalDateTime.now());
         return mediaDao.createOrUpdate(media);
     }
 

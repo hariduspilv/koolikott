@@ -2,18 +2,19 @@ package ee.hm.dop.model;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class IssueDate implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -34,9 +35,9 @@ public class IssueDate implements AbstractEntity {
         this.year = year;
     }
 
-    public IssueDate(DateTime dateTime) {
+    public IssueDate(LocalDateTime dateTime) {
         this.day = (short) dateTime.getDayOfMonth();
-        this.month = (short) dateTime.getMonthOfYear();
+        this.month = (short) dateTime.getMonthValue();
         this.year = dateTime.getYear();
     }
 

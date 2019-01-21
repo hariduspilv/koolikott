@@ -21,7 +21,6 @@ import static org.apache.commons.lang3.StringUtils.left;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"repositoryIdentifier", "repository"})})
 public class Material extends LearningObject implements Searchable, IMaterial {
 
-    @NotNull
     @ManyToMany(fetch = EAGER, cascade = {PERSIST, MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinTable(

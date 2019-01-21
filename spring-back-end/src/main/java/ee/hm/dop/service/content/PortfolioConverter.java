@@ -3,7 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Portfolio;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class PortfolioConverter {
     }
 
     private void setUpdateFields(Portfolio to, Portfolio from) {
-        if (changesToPublic(to, from)) to.setPublishedAt(DateTime.now());
+        if (changesToPublic(to, from)) to.setPublishedAt(LocalDateTime.now());
         to.setVisibility(from.getVisibility());
         to.setPublicationConfirmed(from.isPublicationConfirmed());
     }

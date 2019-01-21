@@ -8,6 +8,13 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.TagUpVoteService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -18,8 +25,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Path("tagUpVotes")
-@RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+@RestController
+@RequestMapping("tagUpVotes")
+@Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
 public class TagUpVoteResource extends BaseResource {
 
     @Inject
@@ -29,7 +37,7 @@ public class TagUpVoteResource extends BaseResource {
     @Inject
     private TagService tagService;
 
-    @PUT
+    @PutMapping
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TagUpVote upVote(TagUpVote tagUpVote) {
@@ -53,11 +61,11 @@ public class TagUpVoteResource extends BaseResource {
         return tagUpVoteService.upVote(trustTagUpVote, getLoggedInUser());
     }
 
-    @GET
+    @GetMapping
     @PermitAll
-    @Path("report")
+    @RequestMapping("report")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId) {
+    public List<TagUpVoteForm> getTagUpVotesReport(@RequestParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("LearningObject query param is required");
         }
@@ -69,8 +77,8 @@ public class TagUpVoteResource extends BaseResource {
         return Collections.emptyList();
     }
 
-    @POST
-    @Path("delete")
+    @PostMapping
+    @RequestMapping("delete")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void removeUpVote(TagUpVote tagUpVote) {

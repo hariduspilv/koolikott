@@ -8,7 +8,7 @@ import javax.persistence.TypedQuery;
 import java.security.InvalidParameterException;
 import java.util.List;
 
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @Repository
 public class LearningObjectDao extends AbstractDao<LearningObject> {

@@ -3,8 +3,9 @@ package ee.hm.dop.service;
 import ee.hm.dop.dao.FaqDao;
 import ee.hm.dop.model.Faq;
 import ee.hm.dop.model.User;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -15,6 +16,7 @@ import static ee.hm.dop.utils.UserUtil.mustBeAdmin;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
+@Transactional
 public class FaqService {
 
     @Inject
@@ -24,11 +26,10 @@ public class FaqService {
         return faqDao.findAll();
     }
 
-
     public Faq save(Faq faq, User user) {
         mustBeAdmin(user);
         validateFaq(faq);
-        faq.setCreatedAt(DateTime.now());
+        faq.setCreatedAt(LocalDateTime.now());
         return faqDao.createOrUpdate(faq);
     }
 

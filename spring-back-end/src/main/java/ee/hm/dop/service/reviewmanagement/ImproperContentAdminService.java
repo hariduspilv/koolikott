@@ -4,7 +4,7 @@ import ee.hm.dop.dao.ImproperContentDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -44,7 +44,7 @@ public class ImproperContentAdminService {
     private void setReviewed(User user, ReviewStatus reviewStatus, ImproperContent improper) {
         improper.setReviewed(true);
         improper.setReviewedBy(user);
-        improper.setReviewedAt(DateTime.now());
+        improper.setReviewedAt(LocalDateTime.now());
         improper.setStatus(reviewStatus);
         improperContentDao.createOrUpdate(improper);
     }

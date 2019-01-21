@@ -8,7 +8,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.utils.UserUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @Service
 public class FirstReviewAdminService {
@@ -55,7 +55,7 @@ public class FirstReviewAdminService {
     public void setReviewed(LearningObject learningObject, User loggedInUser, ReviewStatus reviewStatus) {
         for (FirstReview firstReview : learningObject.getFirstReviews()) {
             if (!firstReview.isReviewed()) {
-                firstReview.setReviewedAt(DateTime.now());
+                firstReview.setReviewedAt(LocalDateTime.now());
                 firstReview.setReviewedBy(loggedInUser);
                 firstReview.setReviewed(true);
                 firstReview.setStatus(reviewStatus);

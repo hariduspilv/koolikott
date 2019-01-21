@@ -10,7 +10,7 @@ import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class LearningObjectAdministrationService {
 
         Recommendation recommendation = new Recommendation();
         recommendation.setCreator(loggedInUser);
-        recommendation.setAdded(DateTime.now());
+        recommendation.setAdded(LocalDateTime.now());
         originalLearningObject.setRecommendation(recommendation);
 
         originalLearningObject = learningObjectDao.createOrUpdate(originalLearningObject);

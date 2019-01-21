@@ -9,6 +9,7 @@ import ee.hm.dop.rest.filter.DopClientRequestFilter;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.opensaml.saml2.binding.encoding.HTTPRedirectDeflateEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,6 +29,11 @@ public class HttpClientConfig {
         mapper.disable(MapperFeature.USE_GETTERS_AS_SETTERS);
 
         return mapper;
+    }
+
+    @Bean
+    public HTTPRedirectDeflateEncoder httpRedirectDeflateEncoder() {
+        return new HTTPRedirectDeflateEncoder();
     }
 
     @Bean

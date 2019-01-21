@@ -134,7 +134,6 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -179,11 +178,6 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.10</version>
         </dependency>
         <dependency>
             <groupId>org.dspace</groupId>
@@ -240,6 +234,10 @@
             <version>3.6</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
         <!--Image processing-->
         <dependency>
@@ -275,35 +273,35 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                    <debug>true</debug>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <jvmArgs>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                        <jvmArg>-Xms256m</jvmArg>
-                    </jvmArgs>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <archive>
-                        <manifest>
-                            <mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
-                        </manifest>
-                    </archive>
-                    <finalName>${project.name}</finalName>
-                </configuration>
-            </plugin>-->
+            <!--            <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.8.0</version>
+                            <configuration>
+                                <source>1.8</source>
+                                <target>1.8</target>
+                                <encoding>UTF-8</encoding>
+                                <debug>true</debug>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jar-plugin</artifactId>
+                            <version>3.1.1</version>
+                            <configuration>
+                                <jvmArgs>
+                                    <jvmArg>-Xmx1024m</jvmArg>
+                                    <jvmArg>-Xms256m</jvmArg>
+                                </jvmArgs>
+                                <failOnMissingWebXml>false</failOnMissingWebXml>
+                                <archive>
+                                    <manifest>
+                                        <mainClass>ee.hm.dop.ApplicationLauncher</mainClass>
+                                    </manifest>
+                                </archive>
+                                <finalName>${project.name}</finalName>
+                            </configuration>
+                        </plugin>-->
             <!--<plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>

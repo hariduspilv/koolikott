@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class EstCoreTaxonMapping implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne

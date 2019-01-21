@@ -6,6 +6,13 @@ import ee.hm.dop.service.files.enums.FileDirectory;
 import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -17,7 +24,8 @@ import java.io.UnsupportedEncodingException;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 
-@Path("uploadedFile")
+@RestController
+@RequestMapping("uploadedFile")
 public class UploadedFileResource extends BaseResource {
 
     public static final String REST_UPLOADED_FILE = "rest" + "/uploadedFile/"; //todo was constant
@@ -26,8 +34,8 @@ public class UploadedFileResource extends BaseResource {
     @Inject
     private UploadedFileService uploadedFileService;
 
-    @POST
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @PostMapping
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,
@@ -35,16 +43,16 @@ public class UploadedFileResource extends BaseResource {
         return uploadedFileService.uploadFile(fileInputStream, fileDetail, FileDirectory.UPDATE, REST_UPLOADED_FILE);
     }
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{id}/{filename:.*}")
-    public Response getFile(@PathParam("id") Long fileId, @PathParam("filename") String filename, @QueryParam("archive") boolean archive) throws UnsupportedEncodingException {
+    @RequestMapping("{id}/{filename:.*}")
+    public Response getFile(@PathVariable("id") Long fileId, @PathVariable("filename") String filename, @RequestParam("archive") boolean archive) throws UnsupportedEncodingException {
         if (archive) return uploadedFileService.getArchivedFile(fileId);
         return uploadedFileService.getFile(fileId, filename, FileDirectory.UPDATE);
     }
 
-    @GET
-    @Path("/maxSize")
+    @GetMapping
+    @RequestMapping("/maxSize")
     @Produces(MediaType.APPLICATION_JSON)
     public int getMaxSize() {
         return configuration.getInt(DOCUMENT_MAX_FILE_SIZE);

@@ -1,14 +1,14 @@
 package ee.hm.dop.service.synchronizer;
 
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 public class MaterialIteratorAndDate {
 
     private MaterialIterator iterator;
-    private DateTime syncDate;
+    private LocalDateTime syncDate;
 
-    public MaterialIteratorAndDate(MaterialIterator iterator, DateTime syncDate) {
+    public MaterialIteratorAndDate(MaterialIterator iterator, LocalDateTime syncDate) {
         this.iterator = iterator;
         this.syncDate = syncDate;
     }
@@ -21,11 +21,11 @@ public class MaterialIteratorAndDate {
         this.iterator = iterator;
     }
 
-    public DateTime getSyncDate() {
+    public LocalDateTime getSyncDate() {
         return syncDate;
     }
 
-    public void setSyncDate(DateTime syncDate) {
+    public void setSyncDate(LocalDateTime syncDate) {
         this.syncDate = syncDate;
     }
 }

@@ -9,7 +9,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -41,7 +41,7 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime publishedAt;
+    private LocalDateTime publishedAt;
 
     public String getTitle() {
         return title;
@@ -82,11 +82,11 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
         return summary;
     }
 
-    public DateTime getPublishedAt() {
+    public LocalDateTime getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(DateTime publishedAt) {
+    public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
     }
 }

@@ -10,7 +10,7 @@ import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -43,7 +43,7 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private LocalDateTime added;
 
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     private List<ReviewableChange> reviewableChanges;
@@ -61,7 +61,7 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime updated;
+    private LocalDateTime updated;
 
     public Long getId() {
         return id;
@@ -111,11 +111,11 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
         this.firstReviews = firstReviews;
     }
 
-    public DateTime getAdded() {
+    public LocalDateTime getAdded() {
         return added;
     }
 
-    public void setAdded(DateTime added) {
+    public void setAdded(LocalDateTime added) {
         this.added = added;
     }
 
@@ -127,11 +127,11 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
         this.improperContents = improperContents;
     }
 
-    public DateTime getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(DateTime updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 }

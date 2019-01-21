@@ -9,7 +9,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.apache.commons.collections4.CollectionUtils;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ public class StatisticsFilterDto {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime from;
+    private LocalDateTime from;
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime to;
+    private LocalDateTime to;
     private List<Taxon> taxons;
     private List<User> users;
     private FileFormat format;
@@ -43,19 +43,19 @@ public class StatisticsFilterDto {
         return CollectionUtils.isNotEmpty(users);
     }
 
-    public DateTime getFrom() {
+    public LocalDateTime getFrom() {
         return from;
     }
 
-    public void setFrom(DateTime from) {
+    public void setFrom(LocalDateTime from) {
         this.from = from;
     }
 
-    public DateTime getTo() {
+    public LocalDateTime getTo() {
         return to;
     }
 
-    public void setTo(DateTime to) {
+    public void setTo(LocalDateTime to) {
         this.to = to;
     }
 

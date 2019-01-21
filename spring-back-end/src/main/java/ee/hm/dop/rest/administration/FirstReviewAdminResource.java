@@ -9,6 +9,11 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -19,7 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("admin/firstReview/")
+@RestController
+@RequestMapping("admin/firstReview/")
 public class FirstReviewAdminResource extends BaseResource {
 
     @Inject
@@ -27,26 +33,26 @@ public class FirstReviewAdminResource extends BaseResource {
     @Inject
     private ReviewManager reviewManager;
 
-    @GET
-    @Path("unReviewed")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @GetMapping
+    @RequestMapping("unReviewed")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<AdminLearningObject> getUnReviewed() {
         return firstReviewAdminService.getUnReviewed(getLoggedInUser());
     }
 
-    @GET
-    @Path("unReviewed/count")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @GetMapping
+    @RequestMapping("unReviewed/count")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public Long getUnReviewedCount() {
         return firstReviewAdminService.getUnReviewedCount(getLoggedInUser());
     }
 
-    @POST
-    @Path("setReviewed")
+    @PostMapping
+    @RequestMapping("setReviewed")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject setReviewed(LearningObjectMiniDto learningObject) {
         return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject.convert(), ReviewStatus.ACCEPTED, ReviewType.FIRST);
     }

@@ -1,24 +1,25 @@
 package ee.hm.dop.rest;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
 import ee.hm.dop.service.atom.AtomFeedService;
 import org.apache.abdera.model.Feed;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Path("/")
+import javax.inject.Inject;
+
+@RestController
+@RequestMapping("/")
 public class AtomFeedResource extends BaseResource{
 
     @Inject
     private AtomFeedService atomFeedService;
 
-    @GET
-    @Path("{lang}/feed")
-    @Produces("application/atom+xml")
-    public Feed getMaterials(@PathParam("lang") String lang) {
+    @GetMapping
+    @RequestMapping(value = "{lang}/feed", produces = MediaType.APPLICATION_ATOM_XML_VALUE)
+    public Feed getMaterials(@PathVariable("lang") String lang) {
         return atomFeedService.getFeed(lang);
     }
 }

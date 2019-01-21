@@ -14,7 +14,7 @@ import ee.hm.dop.model.enums.Visibility;
 import org.springframework.stereotype.Repository;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.joda.time.DateTime.now;
+import static java.time.LocalDateTime.now;
 
 @Repository
 public class PortfolioDao extends AbstractDao<Portfolio> {

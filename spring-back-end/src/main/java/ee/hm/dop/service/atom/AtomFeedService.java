@@ -5,8 +5,10 @@ import static ee.hm.dop.utils.ConfigurationProperties.MAX_FEED_ITEMS;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.lang.String.format;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,17 +24,20 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Version;
 import ee.hm.dop.model.enums.LanguageC;
+import ee.hm.dop.rest.VersionResource;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.commons.configuration2.Configuration;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AtomFeedService {
 
     public static final String FEED_ID = "FEED_ID";
@@ -53,6 +58,8 @@ public class AtomFeedService {
     private TranslationGroupDao translationGroupDao;
     @Inject
     private LanguageDao languageDao;
+    @Inject
+    private VersionResource versionResource;
 
     private static Logger logger = LoggerFactory.getLogger(AtomFeedService.class);
     private int maxFeedItems;
@@ -125,7 +132,7 @@ public class AtomFeedService {
             entry.addAuthor(format("%s %s", author.getName(), author.getSurname()));
         }
 
-        entry.setUpdated(material.getAdded().toDate());
+        entry.setUpdated(Date.from(material.getAdded().atZone(ZoneId.systemDefault()).toInstant()));
         entry.addLink(format("%s/material?id=%s", configuration.getString(SERVER_ADDRESS), material.getId().toString()));
 
         return entry;
@@ -138,7 +145,7 @@ public class AtomFeedService {
         entry.setTitle(format(translateString(FEED_PORTFOLIO_TITLE), portfolio.getTitle()));
         entry.addAuthor(format("%s %s", portfolio.getOriginalCreator().getName(), portfolio.getOriginalCreator().getSurname()));
         entry.addLink(format("%s/portfolio?id=%s", configuration.getString(SERVER_ADDRESS), portfolio.getId()));
-        entry.setUpdated(portfolio.getAdded().toDate());
+        entry.setUpdated(Date.from(portfolio.getAdded().atZone(ZoneId.systemDefault()).toInstant()));
 
         return entry;
     }
@@ -149,13 +156,13 @@ public class AtomFeedService {
         entry.setId(format("version:%d", version.getId()));
         entry.setTitle(format(translateString(FEED_VERSION_TITLE), version.getVersion()));
         entry.addLink("https://github.com/hariduspilv/koolikott/blob/master/CHANGELOG.md");
-        entry.setUpdated(version.getReleased().toDate());
+        entry.setUpdated(Date.from(version.getReleased().atZone(ZoneId.systemDefault()).toInstant()));
 
         return entry;
     }
 
     private void checkVersion() {
-        String projectVersion = configuration.getString("version");
+        String projectVersion = versionResource.getVersion();
         Version persistedVersion = versionDao.getLatestVersion();
 
         if(projectVersion == null){
@@ -166,7 +173,7 @@ public class AtomFeedService {
         if (persistedVersion == null || !projectVersion.equals(persistedVersion.getVersion())){
             Version version = new Version();
             version.setVersion(projectVersion);
-            version.setReleased(new DateTime());
+            version.setReleased(LocalDateTime.now());
             versionDao.addVersion(version);
         }
     }

@@ -1,0 +1,12 @@
+insert into User(id, userName, name, surName, idCode, role) values (1, 'mati.maasikas', 'Mati', 'Maasikas', '39011220011', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (2, 'peeter.paan', 'Peeter', 'Paan', '38011550077', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (3, 'voldemar.vapustav', 'Voldemar', 'Vapustav', '37066990099', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (4, 'voldemar.vapustav2', 'Voldemar', 'Vapustav', '38103070239', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (5, 'õäöü.õäöü', 'Õäöü', 'Õäöü', '38406304916', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (6, 'mart.dev', 'dev', 'dev', '39210140032', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (7, 'ester.tester', 'Ester', 'Tester', '38202020234', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (8, 'admin.admin', 'Admin', 'Admin', '89898989898', 'ADMIN');
+insert into User(id, userName, name, surName, idCode, role) values (9, 'smallPublisher', 'Publisher', 'Publisher', '12345678900', 'USER');
+insert into User(id, userName, name, surName, idCode, role) values (10, 'second.admin', 'Second', 'Admin', '89898989899', 'ADMIN');
+insert into User(id, userName, name, surName, idCode, role) values (11, 'restricted.user', 'Restricted', 'User', '89898989890', 'RESTRICTED');
+insert into User(id, userName, name, surName, idCode, role) values (13, 'moderator.moderator', 'Moderator', 'Moderator', '35012025932', 'MODERATOR');

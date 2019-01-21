@@ -1,0 +1,21 @@
+version: "2.0"
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: dop
+    ports:
+      - 3316:3306
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+#  solr:
+#      image: solr
+#      ports:
+#       - "8983:8983"
+#      volumes:
+#        - data:/opt/solr/server/solr/mycores
+#      entrypoint:
+#        - docker-entrypoint.sh
+#        - dop
+#volumes:
+#  data:

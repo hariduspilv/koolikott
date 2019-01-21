@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class UserLike implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -35,7 +35,7 @@ public class UserLike implements AbstractEntity {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime added;
+    private LocalDateTime added;
 
     public Long getId() {
         return id;
@@ -61,11 +61,11 @@ public class UserLike implements AbstractEntity {
         this.isLiked = isLiked;
     }
 
-    public DateTime getAdded() {
+    public LocalDateTime getAdded() {
         return added;
     }
 
-    public void setAdded(DateTime added) {
+    public void setAdded(LocalDateTime added) {
         this.added = added;
     }
 

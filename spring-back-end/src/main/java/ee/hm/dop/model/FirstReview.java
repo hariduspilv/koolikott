@@ -9,7 +9,7 @@ import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -17,11 +17,11 @@ import javax.persistence.*;
 public class FirstReview implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "learningObject", nullable = false)
+    @JoinColumn(name = "learningObject")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LearningObject learningObject;
 
@@ -36,13 +36,13 @@ public class FirstReview implements AbstractEntity {
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime reviewedAt;
+    private LocalDateTime reviewedAt;
 
     @Column(nullable = false)
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
@@ -80,19 +80,19 @@ public class FirstReview implements AbstractEntity {
         this.reviewedBy = reviewedBy;
     }
 
-    public DateTime getReviewedAt() {
+    public LocalDateTime getReviewedAt() {
         return reviewedAt;
     }
 
-    public void setReviewedAt(DateTime reviewedAt) {
+    public void setReviewedAt(LocalDateTime reviewedAt) {
         this.reviewedAt = reviewedAt;
     }
 
-    public DateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(DateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

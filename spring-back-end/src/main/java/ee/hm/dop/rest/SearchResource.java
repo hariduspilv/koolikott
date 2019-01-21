@@ -5,6 +5,10 @@ import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -13,7 +17,8 @@ import java.util.List;
 
 import static ee.hm.dop.service.solr.SearchCommandBuilder.UNIQUE_KEYS;
 
-@Path("search")
+@RestController
+@RequestMapping("search")
 public class SearchResource extends BaseResource {
 
     @Inject
@@ -33,31 +38,31 @@ public class SearchResource extends BaseResource {
     @Inject
     private TargetGroupService targetGroupService;
 
-    @GET
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult search(@QueryParam("q") String query,
-                               @QueryParam("start") Long start,
-                               @QueryParam("taxon") List<Long> taxonIds,
-                               @DefaultValue("true") @QueryParam("paid") boolean paid,
-                               @QueryParam("type") String type,
-                               @QueryParam("language") String languageCode,
-                               @QueryParam("targetGroup") List<String> targetGroupNames,
-                               @QueryParam("resourceType") String resourceTypeName,
-                               @QueryParam("specialEducation") boolean isSpecialEducation,
-                               @QueryParam("issuedFrom") Integer issuedFrom,
-                               @QueryParam("crossCurricularTheme") List<Long> crossCurricularThemeIds,
-                               @QueryParam("keyCompetence") List<Long> keyCompetenceIds,
-                               @QueryParam("curriculumLiterature") boolean isCurriculumLiterature,
-                               @QueryParam("sort") String sort,
-                               @QueryParam("sortDirection") String sortDirection,
-                               @QueryParam("limit") Long limit,
-                               @QueryParam("creator") Long creator,
-                               @QueryParam("private") boolean myPrivates,
-                               @QueryParam("isORSearch") boolean isORSearch,
-                               @QueryParam("recommended") boolean recommended,
-                               @QueryParam("favorites") boolean favorites,
-                               @QueryParam("excluded") List<Long> excluded,
-                               @QueryParam("isGrouped") boolean isGrouped) {
+    public SearchResult search(@RequestParam("q") String query,
+                               @RequestParam("start") Long start,
+                               @RequestParam("taxon") List<Long> taxonIds,
+                               @RequestParam(value = "paid", defaultValue = "true") boolean paid,
+                               @RequestParam("type") String type,
+                               @RequestParam("language") String languageCode,
+                               @RequestParam("targetGroup") List<String> targetGroupNames,
+                               @RequestParam("resourceType") String resourceTypeName,
+                               @RequestParam("specialEducation") boolean isSpecialEducation,
+                               @RequestParam("issuedFrom") Integer issuedFrom,
+                               @RequestParam("crossCurricularTheme") List<Long> crossCurricularThemeIds,
+                               @RequestParam("keyCompetence") List<Long> keyCompetenceIds,
+                               @RequestParam("curriculumLiterature") boolean isCurriculumLiterature,
+                               @RequestParam("sort") String sort,
+                               @RequestParam("sortDirection") String sortDirection,
+                               @RequestParam("limit") Long limit,
+                               @RequestParam("creator") Long creator,
+                               @RequestParam("private") boolean myPrivates,
+                               @RequestParam("isORSearch") boolean isORSearch,
+                               @RequestParam("recommended") boolean recommended,
+                               @RequestParam("favorites") boolean favorites,
+                               @RequestParam("excluded") List<Long> excluded,
+                               @RequestParam("isGrouped") boolean isGrouped) {
 
         SearchFilter searchFilter = new SearchFilter();
         searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
@@ -89,10 +94,10 @@ public class SearchResource extends BaseResource {
         return queryInput != null && UNIQUE_KEYS.stream().anyMatch((group) -> queryInput.startsWith(group + ":"));
     }
 
-    @GET
-    @Path("mostLiked")
+    @GetMapping
+    @RequestMapping("mostLiked")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Searchable> getMostLiked(@QueryParam("maxResults") int maxResults) {
+    public List<Searchable> getMostLiked(@RequestParam("maxResults") int maxResults) {
         return userLikeService.getMostLiked(maxResults);
     }
 }
