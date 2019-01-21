@@ -28,7 +28,7 @@ public class SessionResourceTest extends ResourceIntegrationTestBase {
         String token = authenticatedUser.getToken();
 
         Response response = getTarget(LOGOUT, new LogoutFilter(token)).request().accept(MediaType.APPLICATION_JSON_TYPE).post(null);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Provider

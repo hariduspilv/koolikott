@@ -4,7 +4,7 @@ public enum SuggestionStrategy {
     SUGGEST_TAG,
     SUGGEST_URL;
 
-    public boolean suggestTag(){
+    public boolean suggestTag() {
         return this == SUGGEST_TAG;
     }
 }

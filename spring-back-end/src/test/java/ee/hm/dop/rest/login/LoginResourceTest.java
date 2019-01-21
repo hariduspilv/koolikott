@@ -8,6 +8,7 @@ import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.ClientRequestContext;
@@ -192,7 +193,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(mobileIDSecurityCodes.getChallengeId());
 
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", mobileIDSecurityCodes.getToken()));
-        assertEquals(204, isValid.getStatus());
+        assertEquals(HttpStatus.OK.value(), isValid.getStatus());
     }
 
     @Test
@@ -202,7 +203,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
-        assertEquals(204, response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test
@@ -212,7 +213,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = LanguageC.EST;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
-        assertEquals(204, response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test
@@ -222,14 +223,14 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         String language = LanguageC.ENG;
         Response response = doGet(String.format("login/mobileId?phoneNumber=%s&idCode=%s&language=%s",
                 encodeQuery(phoneNumber), idCode, language));
-        assertEquals(204, response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test
     public void mobileIDIsAuthenticatedInvalidSessionCode() {
         String token = "2";
         Response isValid = doGet(String.format("login/mobileId/isValid?token=%s", token));
-        assertEquals(204, isValid.getStatus());
+        assertEquals(HttpStatus.OK.value(), isValid.getStatus());
     }
 
     @Test

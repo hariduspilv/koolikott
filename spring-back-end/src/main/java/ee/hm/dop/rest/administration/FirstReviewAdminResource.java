@@ -12,6 +12,7 @@ import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,6 @@ public class FirstReviewAdminResource extends BaseResource {
     @GetMapping
     @RequestMapping("unReviewed")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
     public List<AdminLearningObject> getUnReviewed() {
         return firstReviewAdminService.getUnReviewed(getLoggedInUser());
     }
@@ -44,16 +44,14 @@ public class FirstReviewAdminResource extends BaseResource {
     @GetMapping
     @RequestMapping("unReviewed/count")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
     public Long getUnReviewedCount() {
         return firstReviewAdminService.getUnReviewedCount(getLoggedInUser());
     }
 
     @PostMapping
     @RequestMapping("setReviewed")
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject setReviewed(LearningObjectMiniDto learningObject) {
+    public LearningObject setReviewed(@RequestBody LearningObjectMiniDto learningObject) {
         return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), learningObject.convert(), ReviewStatus.ACCEPTED, ReviewType.FIRST);
     }
 }

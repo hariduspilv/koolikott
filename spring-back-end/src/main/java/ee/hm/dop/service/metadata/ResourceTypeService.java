@@ -3,11 +3,13 @@ package ee.hm.dop.service.metadata;
 import ee.hm.dop.dao.ResourceTypeDao;
 import ee.hm.dop.model.ResourceType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
+@Transactional
 public class ResourceTypeService {
 
     @Inject

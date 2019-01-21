@@ -3,13 +3,17 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 
 @Service
+@Transactional
 public class AuthenticationStateService {
 
     @Inject

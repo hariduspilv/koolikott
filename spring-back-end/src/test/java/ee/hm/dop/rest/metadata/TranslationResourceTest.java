@@ -56,7 +56,7 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void language_must_be_specified() {
         Response response = doGet("translation");
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
         LandingPageObject landingpageObject = getLandingPageObject();
 
         Response response = doPost("translation/update", landingpageObject);
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         LandingPageObject landingPageObject = doGet("translation/landingPage/admin", LandingPageObject.class);
         assertEquals("NoticeEst", landingPageObject.getNotices().get(0).getText());
@@ -82,7 +82,7 @@ public class TranslationResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void unknown_language_is_unsupported() {
         Response response = doGet(GET_TRANSLATIONS + "unSupported");
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
     private Map<String, String> getTranslations(String language) {

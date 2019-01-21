@@ -9,6 +9,7 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.*;
 import ee.hm.dop.utils.UserUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NewStatisticsService {
 
     @Inject
@@ -67,8 +69,8 @@ public class NewStatisticsService {
 
     private List<EducationalContextRow> convertECRows(Map<EducationalContext, List<NewStatisticsRow>> collect) {
         return collect.entrySet().stream()
-                        .map(entry -> new EducationalContextRow(entry.getKey(), entry.getValue()))
-                        .collect(Collectors.toList());
+                .map(entry -> new EducationalContextRow(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 
 

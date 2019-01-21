@@ -6,6 +6,7 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
+
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -31,8 +32,10 @@ public class Portfolio1Validator {
         Subject mathematics = (Subject) portfolio.getTaxons().get(0);
         assertEquals("Mathematics", mathematics.getName());
         assertEquals(Long.valueOf(21), mathematics.getId());
-        assertEquals(2, mathematics.getDomain().getSubjects().size());
-        assertEquals(2, mathematics.getDomain().getEducationalContext().getDomains().size());
+        if (layer == TestLayer.DAO) {
+            assertEquals(2, mathematics.getDomain().getSubjects().size());
+            assertEquals(2, mathematics.getDomain().getEducationalContext().getDomains().size());
+        }
 
         assertEquals(Long.valueOf(6), portfolio.getCreator().getId());
         assertEquals("mati.maasikas-vaarikas", portfolio.getCreator().getUsername());

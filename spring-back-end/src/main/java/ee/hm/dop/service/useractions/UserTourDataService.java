@@ -4,13 +4,17 @@ package ee.hm.dop.service.useractions;
 import ee.hm.dop.dao.UserTourDataDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserTourData;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 @Service
+@Transactional
 public class UserTourDataService {
 
     @Inject
@@ -18,7 +22,7 @@ public class UserTourDataService {
 
     public UserTourData getUserTourData(User user) {
         if (user == null) {
-            throw new WebApplicationException("User not logged in", Response.Status.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
 
         UserTourData userTourData = userTourDataDao.getUserTourData(user);

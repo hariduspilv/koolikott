@@ -9,6 +9,7 @@ import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NewStatisticsCommonRequestBuilder {
 
     @Inject

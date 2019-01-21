@@ -7,8 +7,10 @@ import javax.inject.Inject;
 import ee.hm.dop.dao.CrossCurricularThemeDao;
 import ee.hm.dop.model.CrossCurricularTheme;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CrossCurricularThemeService {
 
     @Inject

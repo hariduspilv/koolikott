@@ -8,7 +8,10 @@ import ee.hm.dop.service.permission.MaterialPermission;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class MaterialGetter {
 
     @Inject
@@ -55,7 +59,7 @@ public class MaterialGetter {
 
     private void checkLink(String materialSource) {
         if (materialSource == null) {
-            throw new WebApplicationException("No material source link provided", Response.Status.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No material source link provided");
         }
     }
 

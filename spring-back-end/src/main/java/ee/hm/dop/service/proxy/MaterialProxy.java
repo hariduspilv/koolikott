@@ -11,6 +11,7 @@ import org.apache.commons.httpclient.util.URIUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import static java.lang.String.format;
  * In case origins differ, we must create a substitute link
  */
 @Service
+@Transactional
 public class MaterialProxy {
     private Logger logger = LoggerFactory.getLogger(getClass());
 

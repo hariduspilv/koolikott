@@ -30,7 +30,7 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void anonymous_user_can_not_search_statistics() throws Exception {
-        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), doPost(SEARCH_STATISTICS).getStatus());
+        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), doPost(SEARCH_STATISTICS).getStatus());
     }
 
     @Test

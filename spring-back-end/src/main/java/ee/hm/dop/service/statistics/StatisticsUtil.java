@@ -5,6 +5,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.utils.DateUtils;
+
 import java.time.LocalDateTime;
 
 import java.math.BigDecimal;
@@ -75,7 +76,7 @@ public class StatisticsUtil {
     }
 
     public static String getTranslationKey(Taxon taxon) {
-        if (taxon instanceof EducationalContext){
+        if (taxon instanceof EducationalContext) {
             return taxon.getName().toUpperCase();
         }
         return taxon.getTaxonLevel().toUpperCase() + "_" + taxon.getName().toUpperCase();

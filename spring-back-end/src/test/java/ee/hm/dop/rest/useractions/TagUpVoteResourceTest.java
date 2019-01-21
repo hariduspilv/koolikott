@@ -40,7 +40,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertEquals(MATERIAL_1, returnedTagUpVote.getLearningObject().getId());
 
         Response response = doPost(DELETE_TAG_UP_VOTES, returnedTagUpVote);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -118,13 +118,13 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(returnedTagUpVote.getId());
 
         Response response = doPost(DELETE_TAG_UP_VOTES, returnedTagUpVote);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test
     public void can_not_remove_tagUpVote_that_does_not_exist() throws Exception {
         login(USER_SECOND);
-        Response response = doPost(DELETE_TAG_UP_VOTES, null);
+        Response response = doPost(DELETE_TAG_UP_VOTES, new TagUpVote());
         assertEquals("No tagUpVote", Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 

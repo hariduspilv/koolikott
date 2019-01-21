@@ -10,7 +10,9 @@ import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.SessionService;
 import ee.hm.dop.service.useractions.UserService;
+
 import java.time.LocalDateTime;
+
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.slf4j.Logger;
@@ -129,7 +131,10 @@ public class LoginService {
     }
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
-        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
+//        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
+        //todo
+        Person person = null;
+
         return sessionService.startSession(user, person, loginFrom);
     }
 

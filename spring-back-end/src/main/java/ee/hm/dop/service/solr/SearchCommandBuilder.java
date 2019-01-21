@@ -82,7 +82,7 @@ public class SearchCommandBuilder {
     }
 
     private static String getSearchQuery(String query, String field) {
-        return query.substring(field.length()+1);
+        return query.substring(field.length() + 1);
     }
 
     static String quotify(String query) {

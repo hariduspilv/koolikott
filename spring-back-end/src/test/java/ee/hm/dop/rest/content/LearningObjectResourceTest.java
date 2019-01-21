@@ -198,7 +198,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         Material materialBefore = getMaterial(MATERIAL_5);
 
         Response response = doPost(INCREASE_VIEW_COUNT_URL, materialWithId(MATERIAL_5));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         Material materialAfter = getMaterial(MATERIAL_5);
         assertEquals(Long.valueOf(materialBefore.getViews() + 1), materialAfter.getViews());
@@ -208,13 +208,13 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public void increaseViewCountNotExistingMaterial() {
         login(USER_ADMIN);
         Response response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
         response = doPost(INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTS_ID));
         assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
 
         response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
-        assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
 

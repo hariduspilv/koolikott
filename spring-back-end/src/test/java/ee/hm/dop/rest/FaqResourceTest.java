@@ -53,7 +53,7 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
         Faq savedFaq = doPost(SAVE_FAQ, faq, Faq.class);
         validate(savedFaq);
         Response response = doPost(DELETE_FAQ, savedFaq);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test

@@ -6,14 +6,18 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserFavoriteService {
 
     @Inject

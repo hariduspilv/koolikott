@@ -12,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.io.*;
@@ -22,6 +23,7 @@ import static ee.hm.dop.service.statistics.StatisticsUtil.EMPTY_ROW;
 import static ee.hm.dop.service.statistics.StatisticsUtil.NO_USER_FOUND;
 
 @Service
+@Transactional
 public class NewStatisticsCsvExporter {
 
     private static final Logger logger = LoggerFactory.getLogger(NewStatisticsCsvExporter.class);

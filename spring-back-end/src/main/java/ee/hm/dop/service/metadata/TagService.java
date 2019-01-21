@@ -14,11 +14,15 @@ import ee.hm.dop.service.content.TagConverter;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class TagService {
 
     @Inject
@@ -58,7 +62,7 @@ public class TagService {
 
         List<Tag> tags = learningObject.getTags();
         if (tags.contains(newTag)) {
-            throw new WebApplicationException(String.format("Tag already exists. Lo: %s. Tags: %s", learningObject.getId(), tags), Response.Status.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Tag already exists. Lo: %s. Tags: %s", learningObject.getId(), tags));
         }
 
         tags.add(newTag);

@@ -1,0 +1,97 @@
+<OAI-PMH xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.openarchives.org/OAI/2.0/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+    <responseDate>2015-08-03T14:33:52Z</responseDate>
+    <request verb="GetRecord" identifier="437556e69c7ee410b3ff27ad3eaec360219c3990" metadataPrefix="oai_lom">
+        http://koolitaja.eenet.ee:57219/Waramu3Web/OAIHandler
+    </request>
+    <GetRecord>
+        <record>
+            <header>
+                <identifier>
+                    oai:ait.opetaja.ee:437556e69c7ee410b3ff27ad3eaec360219c3990
+                </identifier>
+                <datestamp>2009-08-13T21:02:00Z</datestamp>
+                <setSpec>1</setSpec>
+            </header>
+            <metadata>
+                <lom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ltsc.ieee.org/xsd/LOM" xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM http://standards.ieee.org/reading/ieee/downloads/LOM/lomv1.0/xsd/lom.xsd">
+                    <general>
+                        <identifier>
+                            <catalog>1</catalog>
+                            <entry>437556e69c7ee410b3ff27ad3eaec360219c3990</entry>
+                        </identifier>
+                        <title>
+                            <string language="fr">Subjonctif</string>
+                            <string language="et">Les exercices du subjonctif.</string>
+                        </title>
+                        <language>fren</language>
+                        <description>
+                            <string language="fr">Exercice a completer</string>
+                            <string language="et">Veebipõhised harjutused kahtleva kõneviisi kohta.</string>
+                        </description>
+                    </general>
+                    <technical>
+                        <location>
+                            http://koolitaja.eenet.ee:57219/Waramu3Web/metadata?id=437556e69c7ee410b3ff27ad3eaec360219c3990
+                        </location>
+                    </technical>
+                    <lifeCycle>
+                        <contribute>
+                            <role>
+                                <source>LOMv1.0</source>
+                                <value>author</value>
+                            </role>
+                            <entity>
+                                <![CDATA[
+								BEGIN:VCARD VERSION:3.0 N:;;;; FN: ORG:Languages Online EMAIL;TYPE=internet,pref:acb@rgshw.com END:VCARD
+								]]>
+                            </entity>
+                        </contribute>
+                    </lifeCycle>
+                    <metaMetadata>
+                        <language>et</language>
+                        <identifier>
+                            <catalog>1</catalog>
+                            <entry>437556e69c7ee410b3ff27ad3eaec360219c3990</entry>
+                        </identifier>
+                    </metaMetadata>
+                    <educational>
+                        <typicalAgeRange>
+                            <string language="x-t-LRE">13 - 15</string>
+                        </typicalAgeRange>
+                        <intendedEndUserRole>
+                            <source>LREv3.0</source>
+                            <value>learner</value>
+                        </intendedEndUserRole>
+                    </educational>
+                    <rights>
+                        <cost>
+                            <source>LREv3.0</source>
+                            <value>no</value>
+                        </cost>
+                        <copyrightAndOtherRestrictions>
+                            <source>LREv3.0</source>
+                            <value>yes</value>
+                        </copyrightAndOtherRestrictions>
+                        <description>
+                            <string language="x-t-cc-url">http://en.wikipedia.org/wiki/Copyright</string>
+                        </description>
+                    </rights>
+                    <classification>
+                        <purpose>
+                            <source>LREv3.0</source>
+                            <value>discipline</value>
+                        </purpose>
+                        <taxonPath>
+                            <source>
+                                <string language="en">Estonian curriculum</string>
+                            </source>
+                            <taxon>
+                                <id>129851</id>
+                            </taxon>
+                        </taxonPath>
+                    </classification>
+                </lom>
+            </metadata>
+        </record>
+    </GetRecord>
+</OAI-PMH>

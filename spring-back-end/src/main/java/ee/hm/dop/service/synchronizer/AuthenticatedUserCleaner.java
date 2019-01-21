@@ -1,10 +1,13 @@
 package ee.hm.dop.service.synchronizer;
 
 import ee.hm.dop.dao.AuthenticatedUserDao;
+
 import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.Timer;
@@ -13,7 +16,8 @@ import java.util.TimerTask;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 @Service
-public class AuthenticatedUserCleaner extends DopDaemonProcess{
+@Transactional
+public class AuthenticatedUserCleaner extends DopDaemonProcess {
 
     @Inject
     private AuthenticatedUserDao authenticatedUserDao;
@@ -27,7 +31,7 @@ public class AuthenticatedUserCleaner extends DopDaemonProcess{
             AuthenticatedUserDao authenticationStateDao = newAuthenticationStateDao();
             LocalDateTime _3hoursBefore = LocalDateTime.now().minusHours(3);
             long allNeededToRemove = authenticationStateDao.findCountOfOlderThan(_3hoursBefore);
-            logger.info(String.format("Authentication State Cleaner found %s rows to remove",  allNeededToRemove));
+            logger.info(String.format("Authentication State Cleaner found %s rows to remove", allNeededToRemove));
 
             int deleted = authenticationStateDao.deleteOlderThan(_3hoursBefore);
 

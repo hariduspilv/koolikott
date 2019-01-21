@@ -1,7 +1,14 @@
 package ee.hm.dop.rest;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import ee.hm.dop.config.security.DopPrincipal;
+import ee.hm.dop.config.security.DopUserDetails;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.User;
+import ee.hm.dop.utils.ConfigurationProperties;
+import org.apache.commons.configuration2.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -9,17 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.User;
-import ee.hm.dop.rest.filter.dto.DopPrincipal;
-import ee.hm.dop.utils.ConfigurationProperties;
-import org.apache.commons.configuration2.Configuration;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 public class BaseResource {
 
@@ -30,12 +31,6 @@ public class BaseResource {
     private HttpServletResponse response;
     @Inject
     private Configuration configuration;
-    private SecurityContext securityContext;
-
-    @Context
-    public void setSecurityContext(SecurityContext securityContext) {
-        this.securityContext = securityContext;
-    }
 
     protected User getLoggedInUser() {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
@@ -43,8 +38,12 @@ public class BaseResource {
     }
 
     protected AuthenticatedUser getAuthenticatedUser() {
-        DopPrincipal dopPrincipal = (DopPrincipal) securityContext.getUserPrincipal();
-        return dopPrincipal != null ? dopPrincipal.getAuthenticatedUser() : null;
+        Object springPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(springPrincipal instanceof DopUserDetails)){
+            return null;
+        }
+        DopPrincipal principal = ((DopUserDetails) springPrincipal).getDopPrincipal();
+        return principal == null ? null : principal.getAuthenticatedUser();
     }
 
     public static String decode(String string) throws UnsupportedEncodingException {
@@ -63,12 +62,12 @@ public class BaseResource {
         return response;
     }
 
-    public WebApplicationException badRequest(String message) {
-        return new WebApplicationException(Response.status(HTTP_BAD_REQUEST).entity(message).build());
+    public ResponseStatusException badRequest(String message) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
     }
 
-    public WebApplicationException notFound() {
-        return new WebApplicationException(Response.status(HTTP_NOT_FOUND).build());
+    public ResponseStatusException notFound() {
+        return new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     protected String getServerAddress() {

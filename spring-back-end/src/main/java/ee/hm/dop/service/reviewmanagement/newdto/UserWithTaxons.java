@@ -10,7 +10,7 @@ public class UserWithTaxons {
     private User user;
     private List<Taxon> taxons;
 
-    public boolean hasTaxon(Taxon taxon){
+    public boolean hasTaxon(Taxon taxon) {
         return taxons.stream().anyMatch(t -> t.getId().equals(taxon.getId()));
     }
 

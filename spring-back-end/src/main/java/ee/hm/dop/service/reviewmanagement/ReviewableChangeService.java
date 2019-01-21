@@ -5,8 +5,11 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.Taxon;
 import org.apache.commons.collections.CollectionUtils;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -17,6 +20,7 @@ import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 @Service
+@Transactional
 public class ReviewableChangeService {
 
     @Inject

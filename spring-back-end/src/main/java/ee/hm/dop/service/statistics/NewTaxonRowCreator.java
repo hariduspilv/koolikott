@@ -9,10 +9,13 @@ import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
+
 import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NewTaxonRowCreator {
 
     @Inject

@@ -12,10 +12,12 @@ import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
 @Service
+@Transactional
 public class TagUpVoteService {
 
     @Inject

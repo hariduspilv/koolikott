@@ -4,13 +4,17 @@ import ee.hm.dop.dao.ImproperContentDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
+@Transactional
 public class ImproperContentAdminService {
 
     @Inject
@@ -36,7 +40,7 @@ public class ImproperContentAdminService {
         for (ImproperContent improperContent : learningObject.getImproperContents()) {
             if (!improperContent.isReviewed()) {
                 setReviewed(user, reviewStatus, improperContent);
-                learningObject.setImproper(learningObject.getImproper()-1);
+                learningObject.setImproper(learningObject.getImproper() - 1);
             }
         }
     }

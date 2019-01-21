@@ -5,8 +5,10 @@ import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.interfaces.IPortfolio;
 import ee.hm.dop.utils.UserUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PortfolioPermission implements PermissionItem {
 
     @Override

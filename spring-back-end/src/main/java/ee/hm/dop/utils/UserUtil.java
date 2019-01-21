@@ -4,6 +4,8 @@ import ee.hm.dop.model.Media;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.interfaces.ILearningObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -40,19 +42,19 @@ public class UserUtil {
 
     public static void mustBeModeratorOrAdmin(User loggedInUser) {
         if (!isAdminOrModerator(loggedInUser)) {
-            throw new WebApplicationException(MUST_BE_ADMIN_OR_MODERATOR, Response.Status.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, MUST_BE_ADMIN_OR_MODERATOR);
         }
     }
 
     public static void mustBeAdmin(User loggedInUser) {
         if (!isAdmin(loggedInUser)) {
-            throw new WebApplicationException(MUST_BE_ADMIN, Response.Status.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, MUST_BE_ADMIN);
         }
     }
 
     public static void mustBeModerator(User loggedInUser) {
         if (!isModerator(loggedInUser)) {
-            throw new WebApplicationException(MUST_BE_MODERATOR, Response.Status.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, MUST_BE_MODERATOR);
         }
     }
 }

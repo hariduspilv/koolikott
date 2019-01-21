@@ -1,7 +1,9 @@
 package ee.hm.dop.service.login;
 
 import ee.hm.dop.model.AuthenticatedUser;
+
 import java.time.LocalDateTime;
+
 import org.joda.time.Instant;
 import org.joda.time.Minutes;
 

@@ -24,10 +24,10 @@ public class MediaResourceTest extends ResourceIntegrationTestBase {
         setMedia(media);
 
         Response response = doPost("media/create/", media);
-        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
         
         Response response2 = doPost("media/update/", media);
-        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response2.getStatus());
+        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response2.getStatus());
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Node;
 
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 
 @Service
+@Transactional
 public class EhisSOAPService implements IEhisSOAPService {
 
     private static Logger logger = LoggerFactory.getLogger(EhisSOAPService.class);

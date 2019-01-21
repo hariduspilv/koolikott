@@ -14,10 +14,14 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.utils.ValidatorUtil;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserLikeService {
 
     @Inject

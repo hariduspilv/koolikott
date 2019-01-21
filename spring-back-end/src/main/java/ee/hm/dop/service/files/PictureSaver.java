@@ -8,7 +8,10 @@ import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -22,6 +25,7 @@ import java.net.URL;
 import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 @Service
+@Transactional
 public class PictureSaver {
 
     public static final String DEFAULT_PICTURE_FORMAT = "jpg";
@@ -38,7 +42,7 @@ public class PictureSaver {
 
     public Picture create(Picture picture) {
         if (picture.getId() != null) {
-            throw new WebApplicationException("Picture already exists", Response.Status.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Picture already exists");
         }
         String name = sha1Hex(picture.getData());
         picture.setName(name);
@@ -54,7 +58,7 @@ public class PictureSaver {
     public Picture createFromURL(String url) {
         try {
             BufferedImage image = ImageIO.read(new URL(url));
-            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
                 ImageIO.write(image, DEFAULT_PICTURE_FORMAT, baos);
                 baos.flush();
 

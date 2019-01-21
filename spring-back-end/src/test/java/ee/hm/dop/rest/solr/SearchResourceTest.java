@@ -19,6 +19,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import org.apache.commons.collections.CollectionUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
@@ -32,6 +33,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@Ignore
 public class SearchResourceTest extends ResourceIntegrationTestBase {
 
     private static final int RESULTS_PER_PAGE = 3;

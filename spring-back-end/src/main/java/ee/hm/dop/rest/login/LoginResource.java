@@ -14,8 +14,10 @@ import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,23 +69,21 @@ public class LoginResource extends BaseResource {
 
     @PostMapping
     @RequestMapping("/finalizeLogin")
-    @Produces(MediaType.APPLICATION_JSON)
-    public AuthenticatedUser permissionConfirm(UserStatus userStatus) {
+
+    public AuthenticatedUser permissionConfirm(@RequestBody UserStatus userStatus) {
         return confirmed(userStatus) ? loginService.finalizeLogin(userStatus) : null;
     }
 
     @PostMapping
     @RequestMapping("/rejectAgreement")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void permissionReject(UserStatus userStatus) {
+
+    public void permissionReject(@RequestBody UserStatus userStatus) {
         if (userStatus.isExistingUser()) {
             loginService.rejectAgreement(userStatus);
         }
     }
 
-    @GetMapping
-    @RequestMapping("/idCard")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping("/idCard")
     public UserStatus idCardLogin() {
         HttpServletRequest req = getRequest();
         logger.info(req.getHeader(SSL_CLIENT_S_DN));
@@ -112,7 +112,7 @@ public class LoginResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("/mobileId")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public MobileIDSecurityCodes mobileIDLogin(@RequestParam("phoneNumber") String phoneNumber,
                                                @RequestParam("idCode") String idCode,
                                                @RequestParam("language") String languageCode) throws Exception {
@@ -121,14 +121,14 @@ public class LoginResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("/mobileId/isValid")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public UserStatus mobileIDAuthenticate(@RequestParam("token") String token) throws SOAPException {
         return mobileIDLoginService.validateMobileIDAuthentication(token);
     }
 
     @GetMapping
     @RequestMapping("/getAuthenticatedUser")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public AuthenticatedUser getAuthenticatedUser(@RequestParam("token") String token) {
         return authenticatedUserService.getAuthenticatedUserByToken(token);
     }

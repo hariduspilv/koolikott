@@ -10,6 +10,7 @@ import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.text.Normalizer;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 
 @Service
+@Transactional
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -120,6 +122,7 @@ public class UserService {
         existingUser.setUserTaxons(taxons);
         return userDao.createOrUpdate(existingUser);
     }
+
     public User updateUserLocation(User loggedInUser, String userLocation) {
         User existingUser = getUserById(loggedInUser.getId());
         existingUser.setLocation(userLocation);

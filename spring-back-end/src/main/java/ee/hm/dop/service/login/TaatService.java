@@ -32,6 +32,7 @@ import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureValidator;
 import org.opensaml.xml.validation.ValidationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -53,6 +54,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.TAAT_SSO;
 import static org.opensaml.xml.Configuration.getUnmarshallerFactory;
 
 @Service
+@Transactional
 public class TaatService {
 
     private static final String NAME = "urn:mace:dir:attribute-def:cn";

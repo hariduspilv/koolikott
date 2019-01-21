@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 @Service
+@Transactional
 public class SendMailService {
 
     @Inject
@@ -51,10 +53,10 @@ public class SendMailService {
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("Kasutaja ebaõnnestunud pöördumine")
-                .withHTMLText("Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
-                + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
-                + "Sisuga: " + customerSupport.getMessage() + BREAK
-                + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt()))
+                .withHTMLText("Kasutaja: " + customerSupport.getName() + ", " + customerSupport.getEmail() + BREAK
+                        + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
+                        + "Sisuga: " + customerSupport.getMessage() + BREAK
+                        + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt()))
                 .buildEmail();
     }
 

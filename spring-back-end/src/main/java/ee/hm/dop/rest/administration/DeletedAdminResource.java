@@ -9,6 +9,7 @@ import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,15 +28,12 @@ public class DeletedAdminResource extends BaseResource {
 
     @PostMapping
     @RequestMapping("restore")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject restore(LearningObjectMiniDto loDto) {
+    public LearningObject restore(@RequestBody LearningObjectMiniDto loDto) {
        return learningObjectAdministrationService.restore(loDto.convert(), getLoggedInUser());
     }
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public List<AdminLearningObject> getDeletedPortfolios() {
         return learningObjectAdministrationService.findByIdDeleted();
@@ -43,7 +41,6 @@ public class DeletedAdminResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("count")
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getDeletedPortfoliosCount() {
         return learningObjectAdministrationService.findCountByIdDeleted();

@@ -30,7 +30,9 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.commons.configuration2.Configuration;
+
 import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -165,12 +167,12 @@ public class AtomFeedService {
         String projectVersion = versionResource.getVersion();
         Version persistedVersion = versionDao.getLatestVersion();
 
-        if(projectVersion == null){
+        if (projectVersion == null) {
             logger.error("Project version could not be obtained!");
             return;
         }
 
-        if (persistedVersion == null || !projectVersion.equals(persistedVersion.getVersion())){
+        if (persistedVersion == null || !projectVersion.equals(persistedVersion.getVersion())) {
             Version version = new Version();
             version.setVersion(projectVersion);
             version.setReleased(LocalDateTime.now());
@@ -181,7 +183,7 @@ public class AtomFeedService {
     private String translateMaterialTitle(List<LanguageString> titles) {
         String titleTranslation = translateString(FEED_MATERIAL_TITLE);
 
-        if(titleTranslation == null){
+        if (titleTranslation == null) {
             return null;
         }
 

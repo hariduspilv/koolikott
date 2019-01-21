@@ -1,0 +1,46 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header>
+                  <xtee:asutus xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:type="xsd:string">70000740</xtee:asutus>
+                  <xtee:andmekogu xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd">ehis</xtee:andmekogu>
+                  <xtee:isikukood xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:type="xsd:string">EE37804065728</xtee:isikukood>
+                  <xtee:id xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd">1d4ec56318419d9b1c265dbab5ee28436166531b</xtee:id>
+                  <xtee:nimi xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd">ehis.isiku_rollid.v1</xtee:nimi>
+                  <xtee:amet xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd"/>
+                  <xtee:toimik xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd"/>
+                  <xtee:autentija xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd">ID_CARD</xtee:autentija>
+                  <xtee:ametniknimi xmlns:xtee="http://x-tee.riik.ee/xsd/xtee.xsd">TOMMY TOMSON</xtee:ametniknimi>
+               </soapenv:Header>
+    <soapenv:Body>
+        <ns7:isiku_rollidResponse xmlns:ns7="http://producers.ehis.xtee.riik.ee/producer/ehis">
+            <paring>
+                <isikukood>45805217556</isikukood>
+            </paring>
+            <keha>
+                <isik>
+                    <isikukood>45805217556</isikukood>
+                    <eesnimi>EN_134163</eesnimi>
+                    <perenimi>PN_134163</perenimi>
+                    <oppeasutused>
+                        <oppeasutus>
+                            <id>388</id>
+                            <reg_nr>75012966</reg_nr>
+                            <nimetus>Haapsalu Põhikool</nimetus>
+                            <rollid>
+                                <roll>
+                                    <nimetus>koolijuht</nimetus>
+                                </roll>
+                                <roll>
+                                    <nimetus>õpetaja</nimetus>
+                                </roll>
+                            </rollid>
+                        </oppeasutus>
+                    </oppeasutused>
+                </isik>
+            </keha>
+        </ns7:isiku_rollidResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

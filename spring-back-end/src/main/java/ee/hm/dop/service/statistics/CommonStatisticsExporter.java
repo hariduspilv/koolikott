@@ -7,6 +7,7 @@ import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.TranslationTaxon;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 public class CommonStatisticsExporter {
 
     @Inject

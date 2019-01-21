@@ -6,6 +6,7 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.useractions.CommentService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class CommentResource extends BaseResource {
     @PostMapping
     @Consumes("application/json")
     @Produces("application/json")
-    public LearningObject addComment(AddComment form) {
+    public LearningObject addComment(@RequestBody AddComment form) {
         return commentService.addComment(form.getComment(), form.getLearningObject(), getLoggedInUser());
     }
 

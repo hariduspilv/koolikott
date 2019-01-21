@@ -6,8 +6,13 @@ import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.ValidatorUtil;
+
 import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -16,6 +21,7 @@ import javax.ws.rs.core.Response;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
+@Transactional
 public class CommentService {
 
     @Inject
@@ -41,6 +47,6 @@ public class CommentService {
 
     private void mustBeValidComment(Comment comment) {
         if (isEmpty(comment.getText()) || comment.getId() != null)
-            throw new WebApplicationException("Comment is missing text or already exists.", Response.Status.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment is missing text or already exists.");
     }
 }

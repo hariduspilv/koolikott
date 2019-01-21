@@ -11,23 +11,26 @@ import ee.hm.dop.service.statistics.NewStatisticsService;
 import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.io.CsvUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.FileInputStream;
 
 
+@Slf4j
 @RestController
 @RequestMapping("admin/statistics/")
 public class StatisticsAdminResource extends BaseResource {
@@ -43,28 +46,22 @@ public class StatisticsAdminResource extends BaseResource {
 
     @PostMapping
     @Secured({RoleString.ADMIN})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public NewStatisticsResult newsearch(StatisticsFilterDto searchFilter) {
+    public NewStatisticsResult newsearch(@RequestBody StatisticsFilterDto searchFilter) {
         if (searchFilter == null || !searchFilter.isValidSearch()) {
             throw badRequest("Search parameters invalid");
         }
         return statisticsService.statistics(searchFilter, getLoggedInUser());
     }
 
-    @GetMapping
-    @RequestMapping("export/download/{filename}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response download(@PathVariable("filename") String filename) {
+    @GetMapping(value = "export/download/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<InputStreamResource> download(@PathVariable("filename") String filename) {
         String[] split = filename.split("\\.");
         return buildResponse(filename, FileFormat.valueOf(split[1]));
     }
 
-    @PostMapping
-    @RequestMapping("export")
+    @PostMapping("export")
     @Secured({RoleString.ADMIN})
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String searchExport(StatisticsFilterDto filter) {
+    public String searchExport(@RequestBody StatisticsFilterDto filter) {
         if (filter == null || !filter.isValidExportRequest()) {
             throw badRequest("Search parameters invalid");
         }
@@ -83,16 +80,23 @@ public class StatisticsAdminResource extends BaseResource {
         return new File(filename).getName();
     }
 
-    private Response buildResponse(String filename, FileFormat format) {
-        String mediaType = DOPFileUtils.probeForMediaType(filename);
-        String fileName = "statistika_aruanne." + format.name();
-
+    private ResponseEntity<InputStreamResource> buildResponse(String filename, FileFormat format) {
         try {
+            String mediaType = DOPFileUtils.probeForMediaType(filename);
+            String fileName = "statistika_aruanne." + format.name();
             File file = FileUtils.getFile(TEMP_FOLDER + "/" + filename);
-            return Response.ok(file, mediaType)
-                    .header(DopConstants.CONTENT_DISPOSITION, "Attachment; filename*=\"UTF-8''" + DOPFileUtils.encode(fileName) + "\"; filename=\"" + fileName + "\"")
-                    .build();
-        } catch (UnsupportedEncodingException e) {
+
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(DopConstants.CONTENT_DISPOSITION, "Attachment; filename*=\"UTF-8''" + DOPFileUtils.encode(fileName) + "\"; filename=\"" + fileName + "\"");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(file.length())
+                    .contentType(MediaType.parseMediaType(mediaType))
+                    .body(resource);
+        } catch (Exception e) {
+            log.info("Downloading file failed: {}", e.getMessage(), e);
             return null;
         }
     }

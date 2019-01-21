@@ -132,8 +132,8 @@ public class PictureResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getMaxSize() {
-        Long response = doGet("picture/maxSize", Long.class);
-        assertEquals(Long.valueOf(23), response);
+        String response = doGet("picture/maxSize", String.class);
+        assertEquals(Long.valueOf(23), Long.valueOf(response));
     }
 
     private void compareAspectRatios(BufferedImage image1, BufferedImage image2) {

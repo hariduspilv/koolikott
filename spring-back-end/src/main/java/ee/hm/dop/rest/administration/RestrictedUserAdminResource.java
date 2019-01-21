@@ -26,7 +26,6 @@ public class RestrictedUserAdminResource extends BaseResource{
 
     @GetMapping
     @Secured(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
     public List<User> getRestrictedUsers() {
         return userService.getRestrictedUsers(getLoggedInUser());
     }
@@ -34,7 +33,6 @@ public class RestrictedUserAdminResource extends BaseResource{
     @GetMapping
     @RequestMapping("count")
     @Secured(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
     public Long getRestrictedUsersCount() {
         return userService.getRestrictedUsersCount(getLoggedInUser());
     }

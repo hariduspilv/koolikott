@@ -15,7 +15,7 @@ public class UserStatus {
     private AuthenticatedUser authenticatedUser;
     private LoginFrom loginFrom;
 
-    public static UserStatus missingPermissionsNewUser(String token, Long agreementId, LoginFrom loginFrom){
+    public static UserStatus missingPermissionsNewUser(String token, Long agreementId, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
@@ -24,7 +24,7 @@ public class UserStatus {
         return status;
     }
 
-    public static UserStatus missingPermissionsExistingUser(String token, Long agreementId, LoginFrom loginFrom){
+    public static UserStatus missingPermissionsExistingUser(String token, Long agreementId, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
@@ -34,7 +34,7 @@ public class UserStatus {
         return status;
     }
 
-    public static UserStatus loggedIn(AuthenticatedUser authenticatedUser){
+    public static UserStatus loggedIn(AuthenticatedUser authenticatedUser) {
         UserStatus status = new UserStatus();
         status.setStatusOk(true);
         status.setAuthenticatedUser(authenticatedUser);

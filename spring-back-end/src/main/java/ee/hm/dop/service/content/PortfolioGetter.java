@@ -7,6 +7,7 @@ import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PortfolioGetter {
 
     @Inject

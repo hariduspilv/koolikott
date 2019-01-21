@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.model.TargetGroup;
+import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TargetGroupService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,15 @@ import java.io.IOException;
 @Component
 public class TargetGroupDeserializer extends JsonDeserializer<TargetGroup> {
 
+    private static TargetGroupService targetGroupService;
+
+    public TargetGroupDeserializer() { }
+
     @Inject
-    private TargetGroupService targetGroupService;
+    public TargetGroupDeserializer(TargetGroupService targetGroupService) {
+        this.targetGroupService = targetGroupService;
+    }
+
 
     @Override
     public TargetGroup deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {

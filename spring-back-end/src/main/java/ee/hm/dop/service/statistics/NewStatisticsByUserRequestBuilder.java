@@ -8,6 +8,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class NewStatisticsByUserRequestBuilder {
 
     @Inject

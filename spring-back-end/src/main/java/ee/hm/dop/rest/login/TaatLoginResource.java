@@ -43,7 +43,7 @@ public class TaatLoginResource extends BaseResource {
     private HTTPRedirectDeflateEncoder encoder;
 
     @GetMapping("/taat")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public String taatLogin() throws MessageEncodingException {
         BasicSAMLMessageContext<SAMLObject, AuthnRequest, SAMLObject> context = taatService.buildMessageContext(getResponse());
         encoder.encode(context);

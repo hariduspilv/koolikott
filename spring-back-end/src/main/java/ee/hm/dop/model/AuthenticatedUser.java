@@ -75,11 +75,8 @@ public class AuthenticatedUser implements AbstractEntity {
         this.user = user;
         this.firstLogin = user.isNewUser();
         this.person = person;
-        this.loginDate = LocalDateTime.now();
-//        this.loginDate = loginDate;
-        this.sessionTime = LocalDateTime.now();
-        //todo
-//        this.sessionTime = sessionTime;
+        this.loginDate = loginDate;
+        this.sessionTime = sessionTime;
         this.sessionNumber = 1;
         this.loginFrom = loginFrom;
     }

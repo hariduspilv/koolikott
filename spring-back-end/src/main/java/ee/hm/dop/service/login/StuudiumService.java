@@ -11,6 +11,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.Response;
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 @Service
+@Transactional
 public class StuudiumService {
     private static Logger logger = LoggerFactory.getLogger(StuudiumService.class);
 
@@ -72,7 +74,7 @@ public class StuudiumService {
     }
 
     private void logAsString(Response response) {
-        if (configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)){
+        if (configuration.getBoolean(STUUDIUM_EXTRA_LOGGING)) {
             response.bufferEntity();
             logger.info("getStuudiumUser" + response.readEntity(String.class));
         }

@@ -37,7 +37,7 @@ public class UploadedFileResource extends BaseResource {
     @PostMapping
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
+
     public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail) throws UnsupportedEncodingException {
         return uploadedFileService.uploadFile(fileInputStream, fileDetail, FileDirectory.UPDATE, REST_UPLOADED_FILE);
@@ -53,7 +53,7 @@ public class UploadedFileResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("/maxSize")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public int getMaxSize() {
         return configuration.getInt(DOCUMENT_MAX_FILE_SIZE);
     }

@@ -13,10 +13,13 @@ import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.lang.StringUtils;
+
 import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -26,6 +29,7 @@ import static ee.hm.dop.service.synchronizer.MergeUtil.mergeTwoObjects;
 import static java.lang.String.format;
 
 @Service
+@Transactional
 public class RepositoryService {
 
     private static final int BATCH_SIZE = 50;

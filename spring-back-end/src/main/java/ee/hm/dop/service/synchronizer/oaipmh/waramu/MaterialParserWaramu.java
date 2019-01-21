@@ -10,6 +10,7 @@ import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialParser;
 import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,6 +26,7 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 @Service
+@Transactional
 public class MaterialParserWaramu extends MaterialParser {
 
     private static final String WEB_PAGE = "WEBPAGE";

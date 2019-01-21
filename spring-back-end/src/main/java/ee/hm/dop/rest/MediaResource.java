@@ -6,6 +6,7 @@ import ee.hm.dop.service.content.MediaService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class MediaResource extends BaseResource {
     private MediaService mediaService;
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_JSON)
+
     public Media get(@RequestParam("id") long mediaId) {
         return mediaService.get(mediaId);
     }
@@ -32,8 +33,8 @@ public class MediaResource extends BaseResource {
     @RequestMapping("create")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Media createMedia(Media media) {
+
+    public Media createMedia(@RequestBody Media media) {
         return mediaService.save(media, getLoggedInUser());
     }
 
@@ -41,8 +42,8 @@ public class MediaResource extends BaseResource {
     @RequestMapping("update")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Media updateMedia(Media media) {
+
+    public Media updateMedia(@RequestBody Media media) {
         return mediaService.update(media, getLoggedInUser());
     }
 

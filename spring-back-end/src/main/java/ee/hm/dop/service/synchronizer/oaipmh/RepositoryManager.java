@@ -5,10 +5,12 @@ import ee.hm.dop.service.synchronizer.oaipmh.estcore.MaterialParserEstCore;
 import ee.hm.dop.service.synchronizer.oaipmh.waramu.MaterialParserWaramu;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static java.lang.String.format;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class RepositoryManager {
 

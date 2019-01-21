@@ -7,6 +7,7 @@ import ee.hm.dop.service.login.AgreementService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class AgreementAdminResource extends BaseResource {
 
     @GetMapping
     @Secured({RoleString.ADMIN})
-    @Produces(MediaType.APPLICATION_JSON)
+
     public List<Agreement> getAgreements() {
         return agreementService.findAllValid(getLoggedInUser());
     }
@@ -33,22 +34,22 @@ public class AgreementAdminResource extends BaseResource {
     @PostMapping
     @RequestMapping("validate")
     @Secured({RoleString.ADMIN})
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean validate(Agreement agreement) {
+
+    public boolean validate(@RequestBody Agreement agreement) {
         return agreementService.isValid(agreement, getLoggedInUser());
     }
 
     @PostMapping
     @Secured({RoleString.ADMIN})
-    @Produces(MediaType.APPLICATION_JSON)
-    public Agreement saveAgreement(Agreement agreement) {
+
+    public Agreement saveAgreement(@RequestBody Agreement agreement) {
         return agreementService.save(agreement, getLoggedInUser());
     }
 
     @PostMapping
     @RequestMapping("delete")
     @Secured({RoleString.ADMIN})
-    public void deleteAgreement(Agreement agreement) {
+    public void deleteAgreement(@RequestBody Agreement agreement) {
         agreementService.deleteAgreement(agreement, getLoggedInUser());
     }
 }

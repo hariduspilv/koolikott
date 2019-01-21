@@ -7,6 +7,7 @@ import ee.hm.dop.service.useractions.UserService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@RestController
 @RequestMapping("/admin/moderator/")
 public class ModeratorAdminResource extends BaseResource {
 
@@ -24,15 +26,13 @@ public class ModeratorAdminResource extends BaseResource {
 
     @GetMapping
     @Secured(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
     public List<User> getModerators() {
         return userService.getModerators(getLoggedInUser());
     }
 
     @GetMapping
-    @RequestMapping("count")
+    @RequestMapping(value = "count")
     @Secured(RoleString.ADMIN)
-    @Produces(MediaType.APPLICATION_JSON)
     public Long getModeratorsCount() {
         return userService.getModeratorsCount(getLoggedInUser());
     }

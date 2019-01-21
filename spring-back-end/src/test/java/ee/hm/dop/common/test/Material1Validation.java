@@ -6,6 +6,7 @@ import ee.hm.dop.model.Recommendation;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import ee.hm.dop.model.taxon.Subject;
+
 import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.tokenizer.TitleUtils.MAX_TITLE_LENGTH;
@@ -82,8 +83,10 @@ public class Material1Validation {
 
         Subject biology = (Subject) material.getTaxons().get(1);
         assertEquals(Long.valueOf(20), biology.getId());
-        assertEquals(2, biology.getDomain().getSubjects().size());
-        assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
+        if (layer == TestLayer.DAO) {
+            assertEquals(2, biology.getDomain().getSubjects().size());
+            assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
+        }
 
         if (layer == TestLayer.DAO) {
             assertEquals(Long.valueOf(1), material.getRepository().getId());

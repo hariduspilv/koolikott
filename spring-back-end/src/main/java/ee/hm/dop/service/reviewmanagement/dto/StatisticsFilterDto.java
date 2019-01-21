@@ -9,6 +9,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.apache.commons.collections4.CollectionUtils;
+
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -26,20 +27,20 @@ public class StatisticsFilterDto {
     private FileFormat format;
 
     @JsonIgnore
-    public boolean isValidSearch(){
-        if (CollectionUtils.isNotEmpty(users) && CollectionUtils.isNotEmpty(taxons)){
+    public boolean isValidSearch() {
+        if (CollectionUtils.isNotEmpty(users) && CollectionUtils.isNotEmpty(taxons)) {
             return false;
         }
         return CollectionUtils.isNotEmpty(users) || CollectionUtils.isNotEmpty(taxons);
     }
 
     @JsonIgnore
-    public boolean isValidExportRequest(){
+    public boolean isValidExportRequest() {
         return isValidSearch() && format != null;
     }
 
     @JsonIgnore
-    public boolean isUserSearch(){
+    public boolean isUserSearch() {
         return CollectionUtils.isNotEmpty(users);
     }
 

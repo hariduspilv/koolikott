@@ -1,14 +1,15 @@
 package ee.hm.dop.service.metadata;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.KeyCompetenceDao;
 import ee.hm.dop.model.KeyCompetence;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import java.util.List;
 
 @Service
+@Transactional
 public class KeyCompetenceService {
 
     @Inject

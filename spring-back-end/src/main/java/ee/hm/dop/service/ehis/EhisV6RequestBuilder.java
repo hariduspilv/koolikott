@@ -2,6 +2,7 @@ package ee.hm.dop.service.ehis;
 
 import org.apache.commons.configuration2.Configuration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
@@ -12,6 +13,7 @@ import java.util.*;
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 @Service
+@Transactional
 public class EhisV6RequestBuilder {
 
     @Inject

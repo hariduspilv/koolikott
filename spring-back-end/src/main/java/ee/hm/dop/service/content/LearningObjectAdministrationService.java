@@ -10,13 +10,17 @@ import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
+@Transactional
 public class LearningObjectAdministrationService {
 
     @Inject

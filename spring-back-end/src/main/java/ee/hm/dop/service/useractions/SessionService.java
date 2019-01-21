@@ -9,8 +9,11 @@ import ee.hm.dop.model.user.UserSession;
 import ee.hm.dop.service.login.TokenGenerator;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import org.apache.commons.configuration2.Configuration;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -20,6 +23,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.SESSION_DURATION_MINS;
 import static java.time.LocalDateTime.now;
 
 @Service
+@Transactional
 public class SessionService {
 
     @Inject
@@ -29,14 +33,15 @@ public class SessionService {
     @Inject
     private Configuration configuration;
 
-    public AuthenticatedUser startSession(User user, Person person, LoginFrom loginFrom){
+    public AuthenticatedUser startSession(User user, Person person, LoginFrom loginFrom) {
         LocalDateTime now = now();
-        return startSession(new AuthenticatedUser(user, person, loginFrom, now, now));
+        //todo time
+        return startSession(new AuthenticatedUser(user, person, loginFrom, now, now.plusHours(2)));
 //        return startSession(new AuthenticatedUser(user, person, loginFrom, now, sessionTime(now)));
     }
 
-    public AuthenticatedUser updateSession(UserSession userSession, AuthenticatedUser authenticatedUser){
-        if (userSession.isContinueSession()){
+    public AuthenticatedUser updateSession(UserSession userSession, AuthenticatedUser authenticatedUser) {
+        if (userSession.isContinueSession()) {
             return prolongSession(authenticatedUser);
         }
         return declineSession(authenticatedUser);
@@ -57,13 +62,13 @@ public class SessionService {
         }
     }
 
-    private AuthenticatedUser prolongSession(AuthenticatedUser authenticatedUser){
+    private AuthenticatedUser prolongSession(AuthenticatedUser authenticatedUser) {
         authenticatedUser.setSessionTime(sessionTime(LocalDateTime.now()));
         authenticatedUser.setSessionNumber(authenticatedUser.getSessionNumber() != null ? authenticatedUser.getSessionNumber() + 1 : 1);
         return authenticatedUserDao.createOrUpdate(authenticatedUser);
     }
 
-    private AuthenticatedUser declineSession(AuthenticatedUser authenticatedUser){
+    private AuthenticatedUser declineSession(AuthenticatedUser authenticatedUser) {
         authenticatedUser.setDeclined(true);
         return authenticatedUserDao.createOrUpdate(authenticatedUser);
     }

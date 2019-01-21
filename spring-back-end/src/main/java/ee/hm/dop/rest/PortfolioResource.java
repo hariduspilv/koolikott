@@ -24,6 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,24 +45,21 @@ public class PortfolioResource extends BaseResource {
     private PortfolioGetter portfolioGetter;
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_JSON)
     public Portfolio get(@RequestParam("id") long portfolioId) {
         return portfolioGetter.get(portfolioId, getLoggedInUser());
     }
 
-    @GetMapping
-    @RequestMapping("getByCreator")
-    @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult getByCreator(@RequestParam("username") String username, @RequestParam("start") int start, @RequestParam("maxResults") int maxResults) {
+    @GetMapping("getByCreator")
+    public SearchResult getByCreator(@RequestParam("username") String username,
+                                     @RequestParam(value = "start", defaultValue = "0") int start,
+                                     @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
 
         return portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
     }
 
-    @GetMapping
-    @RequestMapping("getByCreator/count")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping("getByCreator/count")
     public Long getByCreatorCount(@RequestParam("username") String username) {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
@@ -69,39 +67,30 @@ public class PortfolioResource extends BaseResource {
         return portfolioGetter.getCountByCreator(creator);
     }
 
-    @PostMapping
-    @RequestMapping("create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping("create")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Portfolio create(Portfolio portfolio) {
+    public Portfolio create(@RequestBody Portfolio portfolio) {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
 
-    @PostMapping
-    @RequestMapping("update")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping("update")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Portfolio update(Portfolio portfolio) {
+    public Portfolio update(@RequestBody Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
 
 /*    @PostMapping
     @RequestMapping("copy")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Portfolio copy(Portfolio portfolio) {
+    public Portfolio copy(@RequestBody Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }*/
 
-    @PostMapping
-    @RequestMapping("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping("delete")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject delete(Portfolio portfolio) {
+    public LearningObject delete(@RequestBody Portfolio portfolio) {
         return learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
     }
 

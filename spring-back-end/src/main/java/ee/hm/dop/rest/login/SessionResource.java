@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,7 +56,7 @@ public class SessionResource extends BaseResource {
     @PostMapping
     @RequestMapping("updateSession")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
-    public UserSession updateSessionTime(UserSession userSession) {
+    public UserSession updateSessionTime(@RequestBody UserSession userSession) {
         AuthenticatedUser user = sessionService.updateSession(userSession, getAuthenticatedUser());
         return new UserSession(minRemaining(user), !user.isDeclined());
     }

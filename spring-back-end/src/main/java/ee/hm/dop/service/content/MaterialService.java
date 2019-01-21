@@ -23,6 +23,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -34,6 +35,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static java.time.LocalDateTime.now;
 
 @Service
+@Transactional
 public class MaterialService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

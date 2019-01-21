@@ -42,7 +42,7 @@ public class UserManualsAdminResourceTest extends ResourceIntegrationTestBase {
         UserManuals savedUserManuals = doPost(POST_USER_MANUAL, userManuals, UserManuals.class);
         validateUserManual(savedUserManuals, "Unit Test Title2");
         Response response = doPost(DELETE_USER_MANUAL, savedUserManuals);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
     @Test

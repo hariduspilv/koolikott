@@ -18,6 +18,7 @@ import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.ehis.Role;
 import ee.hm.dop.model.ehis.Role.InstitutionalRole;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,6 +27,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 @Service
+@Transactional
 public class EhisParser {
 
     private static XPath xpath = XPathFactory.newInstance().newXPath();

@@ -14,6 +14,7 @@ import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityTransaction;
 import javax.ws.rs.core.GenericType;
@@ -40,6 +41,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+@Transactional
 public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBase {
 
     public static final String GET_ALL_CHANGES = "admin/changed/";
@@ -404,11 +406,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     }
 
     private void setUnreviewed(List<Long> learningObjectId) {
-        EntityTransaction transaction = DbUtils.getTransaction();
-        if (!transaction.isActive()) {
-            transaction.begin();
-        }
         testDao.setUnReviewed(learningObjectId);
-        DbUtils.closeTransaction();
     }
 }

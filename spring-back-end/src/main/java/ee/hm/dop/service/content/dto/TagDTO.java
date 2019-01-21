@@ -7,7 +7,8 @@ public class TagDTO {
     private LearningObject learningObject;
     private String tagTypeName;
 
-    public TagDTO() {}
+    public TagDTO() {
+    }
 
     public TagDTO(LearningObject learningObject, String tagTypeName) {
         this.learningObject = learningObject;

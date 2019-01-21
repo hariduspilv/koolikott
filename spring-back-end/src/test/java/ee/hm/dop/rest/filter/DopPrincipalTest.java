@@ -7,6 +7,7 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.filter.dto.DopPrincipal;
 import org.easymock.EasyMockRunner;
 import org.easymock.TestSubject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 @RunWith(EasyMockRunner.class)
 public class DopPrincipalTest {
 

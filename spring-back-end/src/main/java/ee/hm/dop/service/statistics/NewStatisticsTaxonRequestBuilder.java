@@ -13,12 +13,14 @@ import ee.hm.dop.service.reviewmanagement.newdto.TaxonAndUserRequest;
 import ee.hm.dop.service.reviewmanagement.newdto.UserWithTaxons;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class NewStatisticsTaxonRequestBuilder {
 
     @Inject
@@ -44,7 +46,7 @@ public class NewStatisticsTaxonRequestBuilder {
                 Domain domain = (Domain) searchTaxon;
                 request.setEducationalContext(domain.getEducationalContext());
                 request.setDomain(domain);
-            } else if (searchTaxon instanceof  Subject){
+            } else if (searchTaxon instanceof Subject) {
                 Subject subject = (Subject) searchTaxon;
                 request.setEducationalContext(subject.getDomain().getEducationalContext());
                 request.setDomain(subject.getDomain());

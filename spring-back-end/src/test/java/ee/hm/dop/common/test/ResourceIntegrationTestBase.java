@@ -9,6 +9,7 @@ import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.rest.filter.SecurityFilter;
 import ee.hm.dop.service.login.dto.UserStatus;
+import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import org.apache.commons.configuration2.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
@@ -19,6 +20,7 @@ import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -53,19 +55,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
     public static final String DEV_LOGIN = "dev/login/";
     public static final String LOGOUT = "user/logout";
     private static String RESOURCE_BASE_URL;
-    private static AuthenticationFilter authenticationFilter;
 
-    protected Configuration configuration2;
-    protected static Configuration configuration;
+    private AuthenticationFilter authenticationFilter;
 
-    @Inject
-    /**
-     * using non-static field to inject static field
-     */
-    public void configuration2(Configuration configuration) {
-        configuration2 = configuration;
-        ResourceIntegrationTestBase.configuration = configuration;
-    }
+    protected Configuration configuration;
 
     protected User login(TestUser testUser) {
         return login(testUser.idCode);
@@ -93,7 +86,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
                 //ignored as test user has already logged out
                 //tests have same user logging in and out multiple times
             } else {
-                assertEquals("Logout failed", Status.NO_CONTENT.getStatusCode(), response.getStatus());
+                assertEquals("Logout failed", Status.OK.getStatusCode(), response.getStatus());
             }
             authenticationFilter = null;
         }
@@ -114,79 +107,82 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return doPost(MaterialResourceTest.UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
     }
 
-    protected static <T> T doGet(String url, Class<? extends T> clazz) {
+    protected  <T> T doGet(String url, Class<? extends T> clazz) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE, clazz);
     }
 
-    protected static <T> T doGet(String url, MediaType mediaType, Class<? extends T> clazz) {
+    protected  <T> T doGet(String url, MediaType mediaType, Class<? extends T> clazz) {
         Response response = doGet(url, mediaType);
         return response.readEntity(clazz);
     }
 
-    protected static <T> T doGet(String url, GenericType<T> genericType) {
+    protected  <T> T doGet(String url, GenericType<T> genericType) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE, genericType);
     }
 
-    protected static <T> T doGet(String url, MediaType mediaType, GenericType<T> genericType) {
+    protected  <T> T doGet(String url, MediaType mediaType, GenericType<T> genericType) {
         Response response = doGet(url, mediaType);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(genericType);
     }
 
-    protected static Response doGet(String url) {
+    protected  Response doGet(String url) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected static Response doGet(String url, MediaType mediaType) {
+    protected  Response doGet(String url, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).get(Response.class);
     }
 
-    protected static Response doGet(String url, MultivaluedMap<String, Object> headers, MediaType mediaType) {
+    protected  Response doGet(String url, MultivaluedMap<String, Object> headers, MediaType mediaType) {
         return getTarget(url).request().headers(headers).accept(mediaType).get(Response.class);
     }
 
-    protected static <T> T doPost(String url, Object json, Class<? extends T> responseClass) {
+    protected  <T> T doPost(String url, Object json, Class<? extends T> responseClass) {
         Response response = doPost(url, Entity.entity(json, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(responseClass);
     }
 
-    protected static Response doPost(String url, Entity<?> requestEntity) {
+    protected  Response doPost(String url, Entity<?> requestEntity) {
         return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected static Response doPost(String url) {
-        return doPost(url, null);
+    protected  Response doPost(String url) {
+        return doPost(url, new StatisticsFilterDto());
     }
 
-    protected static Response doPost(String url, Object json) {
+    protected  Response doPost(String url, Object json) {
         return doPost(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected static Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
+    protected  Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
-    protected static <T> T doPut(String url, Object json, Class<? extends T> clazz) {
+    protected  <T> T doPut(String url, Object json, Class<? extends T> clazz) {
         Response response = doPut(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(clazz);
     }
 
-    protected static Response doPut(String url, Object json) {
+    protected  Response doPut(String url, Object json) {
         return doPut(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected static Response doPut(String url, Entity<?> requestEntity, MediaType mediaType) {
+    protected  Response doPut(String url, Entity<?> requestEntity, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
-    protected static WebTarget getTarget(String url) {
+    protected  WebTarget getTarget(String url) {
         return getTarget(url, authenticationFilter);
     }
 
-    protected static WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
+    protected  WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
         return getClient(clientRequestFilter).target(getFullURL(url));
     }
 
-    private static Client getClient(ClientRequestFilter clientRequestFilter) {
+    private  Client getClient(ClientRequestFilter clientRequestFilter) {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
@@ -204,7 +200,7 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return client;
     }
 
-    private static String getFullURL(String path) {
+    private  String getFullURL(String path) {
         if (RESOURCE_BASE_URL == null) {
             RESOURCE_BASE_URL = format("http://localhost:%s/rest/", "1986");
         }

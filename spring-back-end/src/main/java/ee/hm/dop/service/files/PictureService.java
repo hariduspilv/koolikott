@@ -6,10 +6,12 @@ import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
 @Service
+@Transactional
 public class PictureService {
 
     @Inject

@@ -7,10 +7,12 @@ import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
 @Service
+@Transactional
 public class ReviewManager {
 
     @Inject
@@ -36,7 +38,7 @@ public class ReviewManager {
         if (type.canReviewFirstReview()) {
             firstReviewAdminService.setReviewed(originalLearningObject, user, reviewStatus);
         }
-        if (type.canReviewChange()){
+        if (type.canReviewChange()) {
             reviewableChangeAdminService.setReviewed(originalLearningObject, user, reviewStatus);
         }
     }

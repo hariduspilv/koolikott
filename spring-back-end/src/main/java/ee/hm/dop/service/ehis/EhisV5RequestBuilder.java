@@ -2,6 +2,7 @@ package ee.hm.dop.service.ehis;
 
 import org.apache.commons.configuration2.Configuration;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.xml.soap.*;
@@ -13,6 +14,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static ee.hm.dop.utils.ConfigurationProperties.EHIS_SERVICE_NAME;
 
 @Service
+@Transactional
 public class EhisV5RequestBuilder {
 
     @Inject

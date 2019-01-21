@@ -11,7 +11,10 @@ import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -21,6 +24,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static java.time.LocalDateTime.now;
 
 @Service
+@Transactional
 public class PortfolioService {
 
     @Inject
@@ -106,7 +110,7 @@ public class PortfolioService {
 
     private void validateTitle(Portfolio portfolio) {
         if (isEmpty(portfolio.getTitle())) {
-            throw new WebApplicationException("Required field title must be filled.", Response.Status.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Required field title must be filled.");
         }
     }
 }

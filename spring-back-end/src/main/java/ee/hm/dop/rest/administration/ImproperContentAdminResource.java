@@ -12,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,6 @@ public class ImproperContentAdminResource extends BaseResource {
     private ImproperContentService improperContentService;
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public List<AdminLearningObject> getImproper() {
         return improperContentAdminService.getImproper(getLoggedInUser());
@@ -41,7 +41,6 @@ public class ImproperContentAdminResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("/count")
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getImproperCount() {
         return improperContentAdminService.getImproperCount(getLoggedInUser());
@@ -49,17 +48,14 @@ public class ImproperContentAdminResource extends BaseResource {
 
     @PostMapping
     @RequestMapping("setProper")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     @Secured({RoleString.MODERATOR, RoleString.ADMIN})
-    public LearningObject setProper(LearningObjectMiniDto loDto) {
+    public LearningObject setProper(@RequestBody LearningObjectMiniDto loDto) {
         return reviewManager.setEverythingReviewedRefreshLO(getLoggedInUser(), loDto.convert(), ReviewStatus.ACCEPTED, ReviewType.IMPROPER);
     }
 
     @GetMapping
     @RequestMapping("{learningObjectId}")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
     public List<ImproperContent> getImproperById(@PathVariable("learningObjectId") Long learningObjectId) {
         return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
     }

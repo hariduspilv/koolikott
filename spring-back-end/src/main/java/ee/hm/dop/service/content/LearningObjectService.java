@@ -7,10 +7,12 @@ import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.permission.PermissionItem;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
 @Service
+@Transactional
 public class LearningObjectService {
 
     @Inject
@@ -56,6 +58,6 @@ public class LearningObjectService {
     }
 
     private PermissionItem getLearningObjectHandler(LearningObject learningObject) {
-        return permissionFactory.get(learningObject.getClass());
+        return permissionFactory.get(learningObject);
     }
 }

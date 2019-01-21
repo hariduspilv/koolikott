@@ -17,6 +17,7 @@ import ee.hm.dop.service.synchronizer.oaipmh.ParseException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -32,6 +33,7 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
 @Service
+@Transactional
 public class MaterialParserEstCore extends MaterialParser {
 
     private static final String YES = "YES";

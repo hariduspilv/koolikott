@@ -36,8 +36,10 @@ import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class MobileIDSOAPService {
 
     private static Logger logger = LoggerFactory.getLogger(MobileIDSOAPService.class);

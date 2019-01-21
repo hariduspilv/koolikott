@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TaxonService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -17,14 +18,19 @@ import java.io.IOException;
 @Component
 public class TaxonDeserializer extends JsonDeserializer<Taxon> {
 
+    private static TaxonService taxonService;
+
+    public TaxonDeserializer() { }
+
     @Inject
-    private TaxonService taxonService;
+    public TaxonDeserializer(TaxonService taxonService) {
+        this.taxonService = taxonService;
+    }
 
     @Override
     public Taxon deserialize(JsonParser parser, DeserializationContext context) throws IOException {
         Taxon taxon = parser.readValueAs(Taxon.class);
         return taxon != null ? taxonService.getTaxonById(taxon.getId()) : null;
-
     }
 
     @Override

@@ -11,8 +11,11 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.service.metadata.TaxonService.TAXON_PREFIXES;
 
 @Service
+@Transactional
 public class ReviewableChangeAdminService {
 
     @Inject

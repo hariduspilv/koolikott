@@ -10,14 +10,18 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ImproperContentService {
 
     @Inject
@@ -65,7 +69,7 @@ public class ImproperContentService {
     }
 
     private LearningObject findValid(ImproperContent improperContent, User creator, LearningObject learningObject1) {
-        if (improperContent == null || learningObject1== null) {
+        if (improperContent == null || learningObject1 == null) {
             throw new RuntimeException("Invalid Improper object.");
         }
         LearningObject learningObject = learningObjectService.get(learningObject1.getId(), creator);

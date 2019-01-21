@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -23,6 +24,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 
 @Service
+@Transactional
 public class UploadedFileService {
 
     private static final String FILENAME_TOO_LONG_RESPONSE = "{\"cause\": \"filename too long\"}";
@@ -59,7 +61,7 @@ public class UploadedFileService {
 
         File newFile = new File(path);
         if (newFile.isDirectory()) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+            return Response.status(Response.Status.OK).build();
         }
 
         if (!newFile.exists()) {

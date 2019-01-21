@@ -5,10 +5,13 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.Material;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -31,10 +34,11 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
         BigDecimal count = doGet(GET_UNREVIEWED_COUNT, BigDecimal.class);
         assertEquals("UnReviewed size, UnReviewed count", firstReviews.size(), count.longValueExact());
 
-        AdminLearningObject learningObject = firstReviews.stream()
+        Optional<AdminLearningObject> firstReview = firstReviews.stream()
                 .filter(l -> l.getId().equals(MATERIAL_21))
-                .findAny()
-                .orElseThrow(RuntimeException::new);
+                .findAny();
+        assertTrue(firstReview.isPresent());
+        AdminLearningObject learningObject = firstReview.orElseThrow(RuntimeException::new);
         Long learningObjectId = learningObject.getId();
         Material updatedMaterial = doPost(SET_REVIEWED, materialWithId(MATERIAL_21), Material.class);
         assertNotNull(updatedMaterial);
@@ -104,8 +108,8 @@ public class FirstReviewAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void unAuthorized_user_can_not_view()  {
         login(USER_MATI);
-        List<AdminLearningObject> firstReviews = doGet(GET_UNREVIEWED, listTypeAdminLO());
-        assertNull("UnReviewed list", firstReviews);
+        Response response = doGet(GET_UNREVIEWED);
+        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
     }
 
     private GenericType<List<AdminLearningObject>> listTypeAdminLO() {

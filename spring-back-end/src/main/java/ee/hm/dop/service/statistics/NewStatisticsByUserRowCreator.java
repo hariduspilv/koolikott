@@ -8,10 +8,13 @@ import ee.hm.dop.service.reviewmanagement.dto.StatisticsQuery;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsRow;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
+
 import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class NewStatisticsByUserRowCreator {
 
     @Inject

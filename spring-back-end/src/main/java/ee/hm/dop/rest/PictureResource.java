@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -29,6 +31,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
 import static ee.hm.dop.utils.DOPFileUtils.read;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
+@RestController
 @RequestMapping("picture")
 public class PictureResource extends BaseResource {
 
@@ -68,7 +71,6 @@ public class PictureResource extends BaseResource {
 
     @PostMapping
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Picture uploadPicture(@FormDataParam("picture") InputStream fileInputStream) {
         byte[] dataBase64 = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
@@ -81,14 +83,12 @@ public class PictureResource extends BaseResource {
 
     @PutMapping
     @RequestMapping("/fromUrl")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Picture uploadPictureFromURL(String url) {
+    public Picture uploadPictureFromURL(@RequestBody String url) {
         return pictureSaver.createFromURL(url);
     }
 
     @GetMapping
-    @RequestMapping("/maxSize")
-    @Produces(MediaType.APPLICATION_JSON)
+    @RequestMapping(value = "/maxSize", produces = org.springframework.http.MediaType.TEXT_PLAIN_VALUE)
     public int getMaxSize() {
         return configuration.getInt(MAX_FILE_SIZE);
     }

@@ -5,11 +5,13 @@ import ee.hm.dop.dao.TargetGroupDao;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.TargetGroupEnum;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
 
 @Service
+@Transactional
 public class TargetGroupService {
 
     private static final String TARGET_GROUP_TRANSLATION_PREFIX = "TARGET_GROUP_";

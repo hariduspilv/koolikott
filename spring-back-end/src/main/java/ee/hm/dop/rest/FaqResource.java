@@ -3,10 +3,10 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.Faq;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.FaqService;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,14 +28,14 @@ public class FaqResource extends BaseResource {
 
     @PostMapping
     @Secured(RoleString.ADMIN)
-    public Faq save(Faq faq) {
+    public Faq save(@RequestBody Faq faq) {
         return faqService.save(faq, getLoggedInUser());
     }
 
     @PostMapping
     @RequestMapping("delete")
     @Secured(RoleString.ADMIN)
-    public void delete(Faq faq) {
+    public void delete(@RequestBody Faq faq) {
          faqService.delete(faq, getLoggedInUser());
     }
 

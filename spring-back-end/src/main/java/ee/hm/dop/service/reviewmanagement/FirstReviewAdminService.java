@@ -8,8 +8,11 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.utils.UserUtil;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -19,6 +22,7 @@ import java.util.List;
 import static java.time.LocalDateTime.now;
 
 @Service
+@Transactional
 public class FirstReviewAdminService {
 
     @Inject
@@ -60,7 +64,7 @@ public class FirstReviewAdminService {
                 firstReview.setReviewed(true);
                 firstReview.setStatus(reviewStatus);
                 firstReviewDao.createOrUpdate(firstReview);
-                learningObject.setUnReviewed(learningObject.getUnReviewed()-1);
+                learningObject.setUnReviewed(learningObject.getUnReviewed() - 1);
             }
         }
     }

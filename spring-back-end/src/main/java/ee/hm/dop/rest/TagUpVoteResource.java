@@ -12,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("tagUpVotes")
-@Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
 public class TagUpVoteResource extends BaseResource {
 
     @Inject
@@ -38,9 +38,8 @@ public class TagUpVoteResource extends BaseResource {
     private TagService tagService;
 
     @PutMapping
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public TagUpVote upVote(TagUpVote tagUpVote) {
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public TagUpVote upVote(@RequestBody TagUpVote tagUpVote) {
         if (tagUpVote.getId() != null) {
             throw badRequest("TagUpVote already exists.");
         }
@@ -61,10 +60,7 @@ public class TagUpVoteResource extends BaseResource {
         return tagUpVoteService.upVote(trustTagUpVote, getLoggedInUser());
     }
 
-    @GetMapping
-    @PermitAll
-    @RequestMapping("report")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GetMapping("report")
     public List<TagUpVoteForm> getTagUpVotesReport(@RequestParam("learningObject") Long learningObjectId) {
         if (learningObjectId == null) {
             throw badRequest("LearningObject query param is required");
@@ -77,11 +73,9 @@ public class TagUpVoteResource extends BaseResource {
         return Collections.emptyList();
     }
 
-    @PostMapping
-    @RequestMapping("delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public void removeUpVote(TagUpVote tagUpVote) {
+    @PostMapping("delete")
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    public void removeUpVote(@RequestBody TagUpVote tagUpVote) {
         if (tagUpVote == null) {
             throw notFound();
         }

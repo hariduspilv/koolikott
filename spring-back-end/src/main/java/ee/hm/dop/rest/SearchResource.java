@@ -39,7 +39,7 @@ public class SearchResource extends BaseResource {
     private TargetGroupService targetGroupService;
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_JSON)
+
     public SearchResult search(@RequestParam("q") String query,
                                @RequestParam("start") Long start,
                                @RequestParam("taxon") List<Long> taxonIds,
@@ -96,7 +96,7 @@ public class SearchResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("mostLiked")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public List<Searchable> getMostLiked(@RequestParam("maxResults") int maxResults) {
         return userLikeService.getMostLiked(maxResults);
     }

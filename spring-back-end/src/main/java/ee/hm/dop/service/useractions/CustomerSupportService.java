@@ -6,17 +6,21 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.service.SendMailService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
+
 import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
+@Transactional
 public class CustomerSupportService {
 
     @Inject
@@ -55,8 +59,8 @@ public class CustomerSupportService {
         return customerSupportDao.createOrUpdate(customerSupport);
     }
 
-    private WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
+    private ResponseStatusException badRequest(String s) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
 
     private String validateName(CustomerSupport customerSupport) {

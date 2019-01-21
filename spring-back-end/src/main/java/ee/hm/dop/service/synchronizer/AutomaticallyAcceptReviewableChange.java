@@ -5,10 +5,13 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
 import org.apache.commons.configuration2.Configuration;
+
 import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,6 +24,7 @@ import static ee.hm.dop.utils.ConfigurationProperties.AUTOMATICALLY_ACCEPT_REVIE
 import static java.util.concurrent.TimeUnit.DAYS;
 
 @Service
+@Transactional
 public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
 
     @Inject
@@ -38,7 +42,7 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
             ReviewableChangeDao reviewableChangeDao = newReviewableChangeDao();
             List<AdminLearningObject> allUnreviewed = reviewableChangeDao.findAllUnreviewed();
 
-            logger.info(String.format("Automatic ReviewableChange Acceptor found a total of %s changes",  allUnreviewed.size()));
+            logger.info(String.format("Automatic ReviewableChange Acceptor found a total of %s changes", allUnreviewed.size()));
 
             int accepted = 0;
             LocalDateTime _10DaysBefore = LocalDateTime.now().minusDays(configuration.getInt(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES));

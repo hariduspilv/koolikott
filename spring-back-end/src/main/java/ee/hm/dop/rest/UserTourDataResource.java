@@ -4,6 +4,7 @@ import ee.hm.dop.model.UserTourData;
 import ee.hm.dop.service.useractions.UserTourDataService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,15 +24,14 @@ public class UserTourDataResource extends BaseResource {
     private UserTourDataService userTourDataService;
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_JSON)
+
     public UserTourData getUserTourData() {
         return userTourDataService.getUserTourData(getLoggedInUser());
     }
 
     @PutMapping
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public UserTourData addUserTourData(UserTourData userTourData) {
+    public UserTourData addUserTourData(@RequestBody UserTourData userTourData) {
         return userTourDataService.addUserTourData(userTourData, getLoggedInUser());
     }
 }

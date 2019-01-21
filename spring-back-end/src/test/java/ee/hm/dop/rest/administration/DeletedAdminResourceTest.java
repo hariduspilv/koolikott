@@ -56,7 +56,7 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
         doPost(ADD_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
 
         Response responseAfterRemove = doPost(REMOVE_RECOMMENDATION_URL, getPortfolio(PORTFOLIO_3));
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), responseAfterRemove.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), responseAfterRemove.getStatus());
         Portfolio portfolioAfterRemoveRecommend = getPortfolio(PORTFOLIO_3);
         assertNull("Portfolio has no recommendations", portfolioAfterRemoveRecommend.getRecommendation());
     }
@@ -103,8 +103,8 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void addRecommendation() {
-        User user = login(USER_ADMIN);
-        Material material = materialGetter.get(MATERIAL_3, user);
+        login(USER_ADMIN);
+        Material material = getMaterial(MATERIAL_3);
 
         Recommendation recommendation = doPost(ADD_RECOMMENDATION_URL, material, Recommendation.class);
         assertNotNull(recommendation);
@@ -113,11 +113,10 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void removeRecommendation() {
-        User user = login(USER_ADMIN);
-
-        Material material = materialGetter.get(MATERIAL_3, user);
+        login(USER_ADMIN);
+        Material material = getMaterial(MATERIAL_3);
         Response response = doPost(REMOVE_RECOMMENDATION_URL, material);
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
 }
