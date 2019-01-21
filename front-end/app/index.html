@@ -46,12 +46,12 @@
 <!--preloader-->
 <!--<script src="utils/preloader/preloader.js"></script>-->
 <script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function () {
-var element = document.getElementById("preloader");
-setTimeout(function () {
-element.parentNode.removeChild(element);
-}, 3000)
-});</script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var element = document.getElementById("preloader");
+    setTimeout(function () {
+      element.parentNode.removeChild(element);
+    }, 3000)
+  });</script>
 
 <!-- vendor -->
 <script src="libs/core.js/client/shim.min.js"></script>
@@ -157,6 +157,7 @@ element.parentNode.removeChild(element);
 <script src="services/userSession.service.js"></script>
 <script src="services/userManualsAdmin.service.js"></script>
 <script src="services/faq.service.js"></script>
+<script src="services/userEmail.service.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/controllers.js -->
@@ -182,6 +183,7 @@ element.parentNode.removeChild(element);
 <script src="views/gdpr/gdpr.js"></script>
 <script src="views/userManualsAdmin/userManualsAdmin.js"></script>
 <script src="views/userManual/userManual.js"></script>
+<script src="views/emailValidation/emailValidationDialog.js"></script>
 <script src="views/faq/faq.js"></script>
 <script src="views/locationDialog/locationDialog.js"></script>
 <script src="views/sessionDialog/sessionDialog.js"></script>
@@ -202,6 +204,7 @@ element.parentNode.removeChild(element);
 <script src="directives/input-value-control.js"></script>
 <script src="directives/esc-key.js"></script>
 <script src="directives/share/outsideClick.js"></script>
+<script src="directives/autotab/autotab.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/components.js -->
@@ -247,12 +250,19 @@ element.parentNode.removeChild(element);
 
 <script>
   if (window.location.hostname === "e-koolikott.ee") {
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-72667340-1', 'auto');
-  ga('send', 'pageview');
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-72667340-1', 'auto');
+    ga('send', 'pageview');
   }
 </script>
 

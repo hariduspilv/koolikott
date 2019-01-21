@@ -3,6 +3,7 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.dao.UserEmailDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
@@ -44,6 +45,8 @@ public class LoginService {
     private UserAgreementDao userAgreementDao;
     @Inject
     private SessionService sessionService;
+    @Inject
+    private UserEmailDao userEmailDao;
 
     public UserStatus login(String idCode, String name, String surname, LoginFrom loginFrom) {
         Agreement latestAgreement = agreementDao.findLatestAgreement();
@@ -57,6 +60,8 @@ public class LoginService {
         }
         if (userAgreementDao.agreementDoesntExist(user.getId(), latestAgreement.getId())) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
+            removeEmailAndSetNotActivated(user);
+
             logger.info(format("User with id %s doesn't have agreement", user.getId()));
             return missingPermissionsExistingUser(state.getToken(), latestAgreement.getId(), loginFrom);
         }
@@ -85,7 +90,7 @@ public class LoginService {
         User user = getExistingOrNewUser(state);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
 
         AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());
@@ -114,7 +119,17 @@ public class LoginService {
         }
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, false));
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
+        }
+    }
+
+    private void removeEmailAndSetNotActivated(User user) {
+        UserEmail userEmail = userEmailDao.findByField("user", user);
+        if (userEmail != null) {
+            userEmail.setEmail(null);
+            userEmail.setActivated(false);
+            userEmail.setActivatedAt(null);
+            userEmailDao.createOrUpdate(userEmail);
         }
     }
 
@@ -156,11 +171,10 @@ public class LoginService {
         return interval.toDuration().isLongerThan(duration);
     }
 
-    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+    private User_Agreement createUserAgreement(User user, Agreement agreement) {
         User_Agreement userAgreement = new User_Agreement();
         userAgreement.setUser(user);
         userAgreement.setAgreement(agreement);
-        userAgreement.setAgreed(agreed);
         userAgreement.setCreatedAt(now());
         return userAgreement;
     }

@@ -402,20 +402,57 @@ function toggleFullScreen() {
     let flexElements = getFlexElements();
     elements.forEach(el => {
         if (el) {
-            if (el.style.display === 'none')
-                el.style.display = 'block';
-            else
-                el.style.display = 'none';
+            if (el.classList.contains("hidden")){
+                el.style.opacity = 1
+                el.classList.remove("hidden")
+                el.classList.remove("visuallyhidden")
+                document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
+                setTimeout(function(){
+                    el.classList.add("fullscreen-block")
+
+                },300)
+                ;}
+            else{
+            el.style.opacity = 0;
+            el.classList.add("visuallyhidden")
+            setTimeout(function(){
+                el.classList.add("hidden")
+                document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
+                document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+                document.getElementsByClassName("content-container")[0].style.paddingLeft = "0";
+                document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
+            },300)}
+           
+
         }
     });
     flexElements.forEach(el => {
         if (el) {
-            if (el.style.display === 'none')
-                el.style.display = 'flex'
-            else
-                el.style.display = 'none'
+            if (el.classList.contains("hidden")){
+                el.style.opacity = 1
+                el.classList.remove("hidden")
+                el.classList.remove("visuallyhidden")
+                document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
+                setTimeout(function(){
+                    el.classList.add("fullscreen-flex")
+
+                },300)            
+            }
+            else{
+                el.style.opacity=0
+                el.classList.add("visuallyhidden")
+                setTimeout(function(){
+                    el.classList.add("hidden")
+                    document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
+                    document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "0";
+                    document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
+                },300)
+
+            }
         }
     });
+
     fullScreenRemoveChapterMargin();
     fullScreenExpandSummary()
 }
