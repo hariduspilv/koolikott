@@ -38,14 +38,22 @@
                 data-location="{{location}}"></dop-qr>
               </div>
 
-                <md-button style="min-width: 0px"
-                           data-ng-click="toggleFullScreen()"
-                           id="faq-edit"
-                           class="md-icon-button hide-on-mobile">
-                  <md-icon md-menu-align-target>fullscreen</md-icon>
-                  <md-tooltip><span data-ng-if="!$root.isFullScreen" data-translate="FULL_SCREEN_ON"></span></md-tooltip>
-                  <md-tooltip><span data-ng-if="$root.isFullScreen" data-translate="FULL_SCREEN_OFF"></span></md-tooltip>
-                </md-button>
+              <md-button data-ng-if="!$root.isFullScreen"
+                         style="min-width: 0px"
+                         data-ng-click="toggleFullScreen()"
+                         id="faq-edit"
+                         class="md-icon-button hide-on-mobile">
+                <md-icon md-menu-align-target>fullscreen</md-icon>
+                <md-tooltip><span data-ng-if="!$root.isFullScreen" data-translate="FULL_SCREEN_ON"></span></md-tooltip>
+              </md-button>
+              <md-button data-ng-if="$root.isFullScreen"
+                         style="min-width: 0px"
+                         data-ng-click="toggleFullScreen()"
+                         id="faq-edit"
+                         class="md-icon-button hide-on-mobile">
+                <md-icon md-menu-align-target>fullscreen</md-icon>
+                <md-tooltip><span data-ng-if="$root.isFullScreen" data-translate="FULL_SCREEN_OFF"></span></md-tooltip>
+              </md-button>
 
               <md-menu ng-show="dotsAreShowing()" id="dots-menu">
                 <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
