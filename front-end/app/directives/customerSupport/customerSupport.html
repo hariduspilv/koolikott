@@ -105,8 +105,8 @@
           </div>
         </md-input-container>
       </div>
-      <div ng-if="$ctrl.canAddMoreFile()" class="customSupportUploadFile">
-        <a href=""
+      <div class="customSupportUploadFile">
+        <a ng-if="$ctrl.canAddMoreFile()" href=""
            ngf-select="$ctrl.addFiles(ngfFiles)"
            ngf-change="$ctrl.changeFiles(ngfFiles)"
            ngf-keep="true"
@@ -125,8 +125,8 @@
           </md-content>
         </div>
       </div>
-      <div class="email-alert">
-        <span data-ng-if="addingFileDisabled" data-translate="ALLOWED 3 FILES"></span>
+      <div class="email-alert" style="text-align: -webkit-center;">
+        <span data-ng-if="tooManyFiles" data-translate="ALLOWED 3 FILES"></span>
         <span data-ng-if="fileSizeTooLarge" data-translate="FILES_MORE_THAN_10MB"></span>
       </div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"

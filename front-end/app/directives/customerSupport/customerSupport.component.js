@@ -60,8 +60,8 @@
         }
 
         canAddMoreFile() {
-            return true;
-            // return (this.$scope.fileSizeTogether < 11 && this.$scope.filesCount  <4)
+
+            return (!this.$scope.tooManyFiles || !this.$scope.fileSizeTooLarge)
         }
 
         remove(fileToRemove) {
@@ -81,10 +81,12 @@
 
         validateAttachments(files) {
             this.$scope.fileSizeTooLarge = false
+            this.$scope.tooManyFiles = false
             this.$scope.isFileBtnVisible = true;
 
             if (files.length > 3) {
-                this.$scope.addingFileDisabled = true
+                this.$scope.tooManyFiles = true
+                this.$scope.isFileBtnVisible = false
             }
 
             this.$scope.fileSizeTogether = files.map(item => item.size)
@@ -197,6 +199,9 @@
             this.$scope.showUserManualsHelped = false
             this.$scope.customerSupport = {}
             this.$scope.captchaSuccess = false
+            this.$scope.files = []
+            this.$scope.ngfFiles = []
+
         }
 
         handleSelectChange(subject) {
