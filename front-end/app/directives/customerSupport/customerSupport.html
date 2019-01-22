@@ -105,16 +105,30 @@
           </div>
         </md-input-container>
       </div>
-      <div class="customSupportUploadFile">
-        <a href="" ngf-select="$ctrl.putFilesIntoArray($files)" ngf-keep="true" multiple accept="image/*">File</a>
+      <div ng-if="$ctrl.canAddMoreFile()" class="customSupportUploadFile">
+        <a href=""
+           ngf-select="$ctrl.addFiles(ngfFiles)"
+           ngf-change="$ctrl.changeFiles(ngfFiles)"
+           ngf-keep="true"
+           ng-model="ngfFiles"
+           ngf-max-size="10MB"
+           multiple accept="image/*"
+        >File</a>
+        <!--ngf-max-files="3"-->
         <div>
           <md-content class="md-padding" layout="column">
-            <md-chips ng-model="fileNames" md-on-remove="$ctrl.clickToRemove($chip)" readonly="false">
+            <md-chips ng-model="files" md-on-remove="$ctrl.remove($chip)" readonly="false">
+              <md-chip-template>
+                <em>{{$chip.name}}</em>
+              </md-chip-template>
             </md-chips>
           </md-content>
         </div>
       </div>
-      <div ng-if="isError">{{errorMessage}}</div>
+      <div class="email-alert">
+        <span data-ng-if="addingFileDisabled" data-translate="ALLOWED 3 FILES"></span>
+        <span data-ng-if="fileSizeTooLarge" data-translate="FILES_MORE_THAN_10MB"></span>
+      </div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"
         vc-recaptcha
         key="captchaKey"

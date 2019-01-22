@@ -7,17 +7,15 @@
 
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.customerSupport = {}
-            this.$scope.backClickedWhileOther = false
-            this.$scope.captchaSuccess = false
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
 
-            this.$scope.fileNames = []
             this.$scope.files = []
-            this.$scope.isError =false
-            this.$scope.errorMessage =''
+            this.$scope.ngfFiles = []
 
-
+            this.$scope.isFileBtnVisible = true
+            this.$scope.fileSizeTogether = 0
+            this.$scope.filesCount = 0
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -28,21 +26,6 @@
                     this.$scope.showUserManualsHelped = false
                 }
             })
-        }
-
-        clickToRemove(fileToRemove) {
-
-            this.$scope.files.forEach((chipFile, index) => {
-                if (chipFile.name === fileToRemove)
-                    this.$scope.files.splice(index, 1)
-                // this.$scope.fileNames.splice(index,1)
-            });
-
-            this.$scope.fileNames.forEach((chipFile, index) => {
-                if (chipFile.name === fileToRemove)
-                    this.$scope.fileNames.splice(index, 1)
-
-            });
         }
 
         clearData() {
@@ -76,42 +59,70 @@
                 })
         }
 
-        validateAttachmentsMultiple(files) {
-
-
-            if (files.length > 3) {
-                this.$scope.isError = true;
-                this.$scope.errorMessage = 'You have selected more than 3 files';
-            }
-
-            let sumOfFilesSizes = files.map(item => item.size).reduce((prev, next) => prev + next);
-
-            let sumOfFilesSizesInMB = sumOfFilesSizes / 1024 / 1024;
-
-            if (sumOfFilesSizesInMB > 10)
-                this.$scope.isError = true;
-                this.$scope.errorMessage = 'Added files size are more than 10MB';
-
+        canAddMoreFile() {
+            return true;
+            // return (this.$scope.fileSizeTogether < 11 && this.$scope.filesCount  <4)
         }
 
-        putFilesIntoArray(filesFromAir) {
-
-            this.validateAttachmentsMultiple(filesFromAir);
-
-            this.$scope.fileNames = filesFromAir.map(f => f.name);
-
-            filesFromAir.map(file => {
-                this.convertToBase64(file).then(data => {
-                    this.$scope.files.push({name: file.name, content: data});
-                });
+        remove(fileToRemove) {
+            this.$scope.files.forEach((chipFile, index) => {
+                if (chipFile.name === fileToRemove.name) {
+                    this.$scope.files.splice(index, 1)
+                }
             });
+            this.$scope.ngfFiles.forEach((chipFile, index) => {
+                if (chipFile.name === fileToRemove.name) {
+                    this.$scope.ngfFiles.splice(index, 1)
+                }
+            });
+
+            this.validateAttachments(this.$scope.files);
+        }
+
+        validateAttachments(files) {
+            this.$scope.fileSizeTooLarge = false
+            this.$scope.isFileBtnVisible = true;
+
+            if (files.length > 3) {
+                this.$scope.addingFileDisabled = true
+            }
+
+            this.$scope.fileSizeTogether = files.map(item => item.size)
+                .reduce((prev, next) => prev + next, 0) / 1024 / 1024;
+
+            if (this.$scope.fileSizeTogether > 10) {
+                this.$scope.fileSizeTooLarge = true
+                this.$scope.isFileBtnVisible = false
+            }
+        }
+
+        changeFiles(uploadedFiles) {
+            this.$scope.ngfFiles = uploadedFiles;
+            this.$scope.files = [];
+            let promises = uploadedFiles.map(file => this.convertToBase64(file));
+            promises.map(p => p.then(file => this.$scope.files.push(file)))
+
+            Promise.all(promises).then(() => {
+                this.validateAttachments(this.$scope.files);
+            }).catch(rejected => console.log(rejected))
+        }
+
+        addFiles(uploadedFiles) {
+            this.$scope.files = [];
+            let promises = uploadedFiles.map(file => this.convertToBase64(file));
+            promises.map(p => p.then(file => this.$scope.files.push(file)))
+
+            Promise.all(promises).then(() => {
+                this.validateAttachments(this.$scope.files);
+                console.log(this.$scope.files);
+            }).catch(rejected => console.log(rejected))
         }
 
         convertToBase64(file) {
             return new Promise((resolve, reject) => {
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
+                reader.onload = () => resolve({name: file.name, content: reader.result, size: file.size});
                 reader.onerror = error => reject(error);
             });
         }
@@ -161,7 +172,7 @@
 
         isSendDisabled() {
             const {name, email, subject, message} = this.$scope.customerSupport;
-            return !(name && email && subject && message && this.$scope.captchaSuccess)
+            return !(name && email && subject && message && this.$scope.captchaSuccess && this.$scope.isFileBtnVisible)
         }
 
         back() {
@@ -197,7 +208,7 @@
             if (!this.$scope.isSaving && this.$scope.allowDialogClose) {
                 this.$scope.showCustomerSupportDialog = false
             }
-            this.$scope.allowDialogClose = false  //???
+            this.$scope.allowDialogClose = false
         }
 
         captchaSuccess() {
@@ -213,12 +224,7 @@
 
         getLanguage() {
             let language = this.translationService.getLanguage();
-            if (language === 'est')
-                return 'et'
-            else if (language === 'rus')
-                return 'ru'
-            else
-                return 'en'
+            return language === 'est' ? 'et' : language === 'rus' ? 'ru' : 'en';
 
         }
     }
