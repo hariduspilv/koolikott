@@ -13,6 +13,7 @@ import ee.hm.dop.service.useractions.UserService;
 
 import java.time.LocalDateTime;
 
+import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.slf4j.Logger;
@@ -92,7 +93,7 @@ public class LoginService {
         User user = getExistingOrNewUser(state);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
 
         AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());
@@ -121,7 +122,7 @@ public class LoginService {
         }
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
         if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, false));
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
     }
 
@@ -163,12 +164,11 @@ public class LoginService {
         return between.minusMillis(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR).isNegative();
     }
 
-    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+    private User_Agreement createUserAgreement(User user, Agreement agreement) {
         User_Agreement userAgreement = new User_Agreement();
         userAgreement.setUser(user);
         userAgreement.setAgreement(agreement);
-        userAgreement.setAgreed(agreed);
-        userAgreement.setCreatedAt(now());
+        userAgreement.setCreatedAt(LocalDateTime.now());
         return userAgreement;
     }
 }

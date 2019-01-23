@@ -6,6 +6,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -52,6 +53,13 @@ public class CustomerSupport implements AbstractEntity{
 
     @Column(nullable = false)
     private int sentTries;
+
+    @Transient
+    private List<AttachedFile> files;
+
+    public List<AttachedFile> getFiles() {return files; }
+
+    public void setFiles(List<AttachedFile> files) {this.files = files; }
 
     public Long getId() {
         return id;

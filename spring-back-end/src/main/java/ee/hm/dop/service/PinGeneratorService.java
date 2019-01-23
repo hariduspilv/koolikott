@@ -4,13 +4,8 @@ import java.security.SecureRandom;
 
 public class PinGeneratorService {
 
-    public static int generatePin() {
-
+    public static String generatePin() {
         SecureRandom secureRandom = new SecureRandom();
-
-        String number = String.format("%04d", secureRandom.nextInt(10000));
-
-        return Integer.parseInt(number);
-
+        return String.format("%04d", secureRandom.nextInt(10000));
     }
 }
