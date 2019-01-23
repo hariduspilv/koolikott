@@ -10,6 +10,7 @@ import org.easymock.TestSubject;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -158,6 +159,8 @@ public class SynchronizeMaterialsExecutorTest {
         verify(repositoryService, synchronizeMaterialHandle);
     }
 
+    //todo delete, probably not needed
+    @Ignore
     @Test
     public void getInitialDelay() {
         int hourOfDayToExecute = 1;

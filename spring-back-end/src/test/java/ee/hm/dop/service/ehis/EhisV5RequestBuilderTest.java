@@ -1,5 +1,6 @@
 package ee.hm.dop.service.ehis;
 
+import ee.hm.dop.common.test.DatabaseTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +16,7 @@ import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-public class EhisV5RequestBuilderTest {
+public class EhisV5RequestBuilderTest extends DatabaseTestBase {
 
     @Inject
     private EhisV5RequestBuilder ehisV5RequestBuilder;

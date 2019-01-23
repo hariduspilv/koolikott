@@ -20,7 +20,9 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+
 import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -237,7 +239,7 @@ public class LearningObjectAdministrationServiceTest {
         try {
             learningObjectAdministrationService.restore(material, user);
         } catch (RuntimeException e) {
-            assertEquals(UserUtil.MUST_BE_ADMIN, e.getMessage());
+            assertEquals(String.format("403 FORBIDDEN  \"%s\"", UserUtil.MUST_BE_ADMIN_OR_MODERATOR), e.getMessage());
         }
 
         verifyAll();
@@ -278,7 +280,7 @@ public class LearningObjectAdministrationServiceTest {
         try {
             learningObjectAdministrationService.delete(originalMaterial, user);
         } catch (RuntimeException e) {
-            assertEquals(UserUtil.MUST_BE_ADMIN_OR_MODERATOR, e.getMessage());
+            assertEquals(String.format("403 FORBIDDEN  \"%s\"", UserUtil.MUST_BE_ADMIN_OR_MODERATOR), e.getMessage());
         }
 
         verifyAll();

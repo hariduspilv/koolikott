@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.model.TargetGroup;
-import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TargetGroupService;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;

@@ -5,11 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.service.metadata.LanguageService;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.inject.Inject;
 import java.io.IOException;

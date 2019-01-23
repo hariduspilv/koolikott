@@ -14,22 +14,16 @@ import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
@@ -67,16 +61,12 @@ public class LoginResource extends BaseResource {
     @Inject
     private MobileIDLoginService mobileIDLoginService;
 
-    @PostMapping
-    @RequestMapping("/finalizeLogin")
-
+    @PostMapping("/finalizeLogin")
     public AuthenticatedUser permissionConfirm(@RequestBody UserStatus userStatus) {
         return confirmed(userStatus) ? loginService.finalizeLogin(userStatus) : null;
     }
 
-    @PostMapping
-    @RequestMapping("/rejectAgreement")
-
+    @PostMapping("/rejectAgreement")
     public void permissionReject(@RequestBody UserStatus userStatus) {
         if (userStatus.isExistingUser()) {
             loginService.rejectAgreement(userStatus);
@@ -92,8 +82,7 @@ public class LoginResource extends BaseResource {
         return isAuthValid(req) ? loginService.login(info.getIdCode(), info.getFirstName(), info.getSurName(), LoginFrom.ID_CARD) : null;
     }
 
-    @GetMapping
-    @RequestMapping("ekool")
+    @GetMapping("ekool")
     public Response ekoolAuthenticate() throws URISyntaxException {
         return redirect(getEkoolAuthenticationURI());
     }
@@ -112,16 +101,13 @@ public class LoginResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("/mobileId")
-
     public MobileIDSecurityCodes mobileIDLogin(@RequestParam("phoneNumber") String phoneNumber,
                                                @RequestParam("idCode") String idCode,
                                                @RequestParam("language") String languageCode) throws Exception {
         return mobileIDLoginService.authenticate(phoneNumber, idCode, languageService.getLanguage(languageCode));
     }
 
-    @GetMapping
-    @RequestMapping("/mobileId/isValid")
-
+    @GetMapping("/mobileId/isValid")
     public UserStatus mobileIDAuthenticate(@RequestParam("token") String token) throws SOAPException {
         return mobileIDLoginService.validateMobileIDAuthentication(token);
     }

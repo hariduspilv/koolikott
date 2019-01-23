@@ -7,9 +7,12 @@ import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.user.UserSession;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import sun.security.provider.certpath.OCSPResponse;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -35,6 +38,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public static final String TERMINATE_SESSION = "user/terminateSession";
     public static final String GET_SIGNED_USER_DATA = "user/getSignedUserData";
     public static final String USER_LOCATION = "user/getLocation";
+    public static final String REMOVE_USER_RESTRICTION = "user/removeRestriction";
 
     @Test
     public void getUser_returns_user() {
@@ -77,8 +81,8 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void user_must_be_logged_in_to_get_signedUserData() {
-        Response response = doGet(GET_SIGNED_USER_DATA, MediaType.TEXT_PLAIN_TYPE);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        Response response = doGet(GET_SIGNED_USER_DATA, MediaType.WILDCARD_TYPE);;
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -98,8 +102,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         UserSession session = doGet(SESSION_TIME, UserSession.class);
         assertTrue(120 >= session.getMinRemaining());
         doPost(TERMINATE_SESSION, null, UserSession.class);
+        authenticationFilter = null; //killing session kills logout
         Response response = doGet(SESSION_TIME);
-        assertEquals(419, response.getStatus());
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
     }
 
     @Test
@@ -123,6 +128,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         User restrictedUser = doPost(RESTRICT_USER, userToRestrict, User.class);
         assertNotNull(restrictedUser);
         assertEquals(Role.RESTRICTED, restrictedUser.getRole());
+
+        //revert
+        doPost(REMOVE_USER_RESTRICTION, restrictedUser);
     }
 
     @Test
@@ -132,6 +140,9 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
         User restrictedUser = doPost(RESTRICT_USER, userToRestrict, User.class);
         assertNotNull(restrictedUser);
         assertEquals(Role.RESTRICTED, restrictedUser.getRole());
+
+        //revert
+        doPost(REMOVE_USER_RESTRICTION, restrictedUser);
     }
 
     @Test
@@ -146,9 +157,12 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public void admin_can_unrestrict_user() {
         login(USER_ADMIN);
         User userToRemoveRestrictionFrom = getUser(USER_RESTRICTED2);
-        User nonRestrictedUser = doPost("user/removeRestriction", userToRemoveRestrictionFrom, User.class);
+        User nonRestrictedUser = doPost(REMOVE_USER_RESTRICTION, userToRemoveRestrictionFrom, User.class);
         assertNotNull(nonRestrictedUser);
         assertEquals(Role.USER, nonRestrictedUser.getRole());
+
+        //revert
+        doPost(RESTRICT_USER, nonRestrictedUser);
     }
 
     @Test

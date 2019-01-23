@@ -5,11 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.metadata.TaxonService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;

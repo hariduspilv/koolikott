@@ -7,7 +7,6 @@ import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.useractions.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,6 @@ public class UserResource extends BaseResource {
     private AuthenticatedUserService authenticatedUserService;
 
     @GetMapping
-    @RequestMapping
     public User get(@RequestParam("username") String username) {
         if (isBlank(username)) {
             throw badRequest("Username parameter is mandatory.");
@@ -37,22 +35,19 @@ public class UserResource extends BaseResource {
         return userService.getUserByUsername(username);
     }
 
-    @GetMapping
-    @RequestMapping(value = "getSignedUserData", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "getSignedUserData", produces = MediaType.TEXT_PLAIN_VALUE)
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public String getSignedUserData() {
         return authenticatedUserService.signUserData(getAuthenticatedUser());
     }
 
-    @GetMapping
-    @RequestMapping(value = "role", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "role", produces = MediaType.TEXT_PLAIN_VALUE)
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public String getLoggedInUserRole() {
         return getLoggedInUser().getRole().toString();
     }
 
-    @GetMapping
-    @RequestMapping(value = "getLocation", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "getLocation", produces = MediaType.TEXT_PLAIN_VALUE)
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public String getUserLocation() {
         User loggedInUser = getLoggedInUser();
@@ -62,8 +57,7 @@ public class UserResource extends BaseResource {
         return loggedInUser.getLocation();
     }
 
-    @PostMapping
-    @RequestMapping("saveLocation")
+    @PostMapping("saveLocation")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public User updateUserLocation(@RequestBody UserLocation userLocation) {
         return userService.updateUserLocation(getLoggedInUser(), userLocation.getLocation());

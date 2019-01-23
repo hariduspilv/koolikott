@@ -9,7 +9,7 @@ public interface ConfigurationProperties {
 
     // Server
     String SERVER_PORT = "server.port";
-    String SERVER_ADDRESS = "server.address";
+    String SERVER_ADDRESS = "server.addressurl";
     String COMMAND_LISTENER_PORT = "command.listener.port";
 
     // Search

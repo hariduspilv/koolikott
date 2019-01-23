@@ -7,6 +7,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
@@ -29,7 +30,7 @@ public class ReviewFileResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getInvalidIdFile() {
-        Response response = doGet("review/" + NOT_EXISTS_ID, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        Response response = doGet("review/" + NOT_EXISTS_ID, MediaType.WILDCARD_TYPE);
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
@@ -40,6 +41,7 @@ public class ReviewFileResourceTest extends ResourceIntegrationTestBase {
         final File tempFile = File.createTempFile(TEST_FILE_NAME, DOP_FILE_EXTENSION);
         Response response = doPost("review", Entity.entity(multipart(tempFile), MediaType.MULTIPART_FORM_DATA));
 
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
         UploadedFile uploadedFile = response.readEntity(UploadedFile.class);
         assertNotNull(uploadedFile.getId());
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());

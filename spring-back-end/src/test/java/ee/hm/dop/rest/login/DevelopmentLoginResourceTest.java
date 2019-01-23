@@ -15,13 +15,9 @@ import javax.ws.rs.core.Response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class DevelopmentLoginResourceTest extends ResourceIntegrationTestBase {
 
     public static final String NOT_EXISTING_USER = "123";
-    @LocalServerPort
-    int randomServerPort;
 
     @Test
     public void existing_user_can_use_dev_login() {

@@ -6,23 +6,34 @@ import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.service.files.enums.FileDirectory;
 import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.io.LimitedSizeInputStream;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 
+@Slf4j
 @Service
 @Transactional
 public class UploadedFileService {
@@ -40,48 +51,46 @@ public class UploadedFileService {
         return uploadedFileDao.findById(id);
     }
 
-    public Response getArchivedFile(Long fileId) {
+    public ResponseEntity<InputStreamResource> getArchivedFile(Long fileId) {
         String sourcePath = getUploadedFileById(fileId).getPath();
         File zipFile = FileUtils.getFile(sourcePath + DopConstants.ZIP_EXTENSION);
         if (zipFile.exists()) {
-            return Response.ok(zipFile).build();
+            String mediaType = DOPFileUtils.probeForMediaType(zipFile.getName());
+            return returnFileStream(mediaType, zipFile.getName(), zipFile);
         }
         String outputPath = zipService.packArchive(sourcePath, sourcePath);
-        return Response.ok(FileUtils.getFile(outputPath)).build();
+        File file = FileUtils.getFile(outputPath);
+        String mediaType = DOPFileUtils.probeForMediaType(file.getName());
+
+        return returnFileStream(mediaType, file.getName(), file);
     }
 
-    public Response getFile(Long fileId, String requestFilename, FileDirectory fileDirectory) throws UnsupportedEncodingException {
-        UploadedFile file = getUploadedFileById(fileId);
-        if (file == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+    public ResponseEntity<InputStreamResource> getFile(Long fileId, String requestFilename, FileDirectory fileDirectory) throws UnsupportedEncodingException {
+        UploadedFile uploadedFile = getUploadedFileById(fileId);
+        if (uploadedFile == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         String mediaType = DOPFileUtils.probeForMediaType(requestFilename);
-        String fileName = DOPFileUtils.getRealFilename(requestFilename, file);
-        String path = configuration.getString(fileDirectory.getDirectory()) + file.getId() + File.separator + fileName;
+        String fileName = DOPFileUtils.getRealFilename(requestFilename, uploadedFile);
+        String path = configuration.getString(fileDirectory.getDirectory()) + uploadedFile.getId() + File.separator + fileName;
 
-        File newFile = new File(path);
-        if (newFile.isDirectory()) {
-            return Response.status(Response.Status.OK).build();
+        File file = new File(path);
+        if (file.isDirectory() || !file.exists()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
-        if (!newFile.exists()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        /* Safari can serve directly decoded filenames, chrome/IE can server utf-8 encoded filenames */
-        return Response.ok(FileUtils.getFile(path), mediaType)
-                .header(DopConstants.CONTENT_DISPOSITION, "Inline; filename*=\"UTF-8''" + DOPFileUtils.encode(fileName) + "\"; filename=\"" + fileName + "\"")
-                .build();
+        return returnFileStream(mediaType, fileName, file);
     }
 
     /**
      * After creating uploaded file object to DB, upload file to server
      */
-    public Response uploadFile(InputStream fileInputStream, FormDataContentDisposition fileDetail, FileDirectory fileDirectory, String restPath) throws UnsupportedEncodingException {
-        String filenameCleaned = DOPFileUtils.cleanFileName(fileDetail.getFileName());
+    public ResponseEntity<?> uploadFile(MultipartFile file, FileDirectory fileDirectory, String restPath) throws UnsupportedEncodingException {
+        String name = file.getOriginalFilename() != null ? file.getOriginalFilename() : file.getName();
+        String filenameCleaned = DOPFileUtils.cleanFileName(name);
         String filename = DOPFileUtils.encode(filenameCleaned);
         if (filename.length() > DopConstants.MAX_NAME_LENGTH) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(FILENAME_TOO_LONG_RESPONSE).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FILENAME_TOO_LONG_RESPONSE);
         }
 
         UploadedFile newUploadedFile = uploadedFileDao.createOrUpdate(newUploadedFile(filename));
@@ -91,15 +100,20 @@ public class UploadedFileService {
         newUploadedFile.setPath(path);
         newUploadedFile.setUrl(url);
 
-        writeToFile(fileInputStream, fileDetail, path);
+        try {
+            writeToFile(file.getInputStream(), path, name);
+        } catch (IOException e) {
+            log.info("file write exception {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File write error");
+        }
 
         UploadedFile updated = uploadedFileDao.createOrUpdate(newUploadedFile);
-        return Response.status(Response.Status.CREATED).entity(updated).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
     }
 
-    private void writeToFile(InputStream fileInputStream, FormDataContentDisposition fileDetail, String path) {
+    private void writeToFile(InputStream fileInputStream, String path, String fileName) {
         LimitedSizeInputStream limitedSizeInputStream = new LimitedSizeInputStream(configuration.getInt(DOCUMENT_MAX_FILE_SIZE), fileInputStream);
-        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
+        String extension = FilenameUtils.getExtension(fileName);
         if (Objects.equals(extension, DopConstants.EBOOK_EXTENSION)) {
             DOPFileUtils.unpackArchive(limitedSizeInputStream, path);
         } else {
@@ -111,5 +125,61 @@ public class UploadedFileService {
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setName(filename);
         return uploadedFile;
+    }
+
+    public ResponseEntity<InputStreamResource> returnFileStream(String mediaType, String fileName, File file) {
+        try {
+            try {
+                InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.add(DopConstants.CONTENT_DISPOSITION, "Attachment; filename*=\"UTF-8''" + DOPFileUtils.encode(fileName) + "\"; filename=\"" + fileName + "\"");
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .contentLength(file.length())
+                        .contentType(MediaType.parseMediaType(mediaType))
+                        .body(resource);
+            } catch (Exception e) {
+                log.info("Downloading file failed: {}", e.getMessage(), e);
+                return null;
+            }
+        } catch (Exception e) {
+            log.info("Downloading file failed: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public ResponseEntity<InputStreamResource> returnFileStreamForPic(String mediaType, String fileName, long length, InputStream stream) {
+        try {
+            InputStreamResource resource = new InputStreamResource(stream);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(DopConstants.CONTENT_DISPOSITION, "Attachment; filename*=\"UTF-8''" + DOPFileUtils.encode(fileName) + "\"; filename=\"" + fileName + "\"");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .cacheControl(CacheControl.maxAge(365, TimeUnit.DAYS))
+                    .contentLength(length)
+                    .contentType(MediaType.parseMediaType(mediaType))
+                    .body(resource);
+        } catch (Exception e) {
+            log.info("Downloading file failed: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public ResponseEntity<InputStreamResource> returnFileStreamForPdf(String mediaType, InputStream stream, String disposition) {
+        try {
+            InputStreamResource resource = new InputStreamResource(stream);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(DopConstants.CONTENT_DISPOSITION, disposition);
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.parseMediaType(mediaType))
+                    .body(resource);
+        } catch (Exception e) {
+            log.info("Downloading file failed: {}", e.getMessage(), e);
+            return null;
+        }
     }
 }

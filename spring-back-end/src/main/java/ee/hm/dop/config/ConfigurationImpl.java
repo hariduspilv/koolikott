@@ -8,6 +8,7 @@ import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.commons.configuration2.sync.LockMode;
 import org.apache.commons.configuration2.sync.Synchronizer;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import java.util.Properties;
 public class ConfigurationImpl implements Configuration {
 
     @Inject
-    private ConfigurableEnvironment env;
+    private Environment env;
 
     @Override
     public Configuration subset(String s) {
@@ -162,7 +163,8 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public int getInt(String s) {
-        return 0;
+        String property = env.getProperty(s);
+        return property != null ? Integer.valueOf(property) : 0;
     }
 
     @Override

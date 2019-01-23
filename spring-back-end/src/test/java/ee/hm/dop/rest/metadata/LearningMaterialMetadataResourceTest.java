@@ -15,6 +15,7 @@ import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.core.GenericType;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@Transactional
 public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTestBase {
 
     public static final String BASE = "learningMaterialMetadata/";

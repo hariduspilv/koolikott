@@ -12,8 +12,6 @@ import javax.inject.Inject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
 public class UploadedFileDaoTest extends DatabaseTestBase {
 
     @Inject

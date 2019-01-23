@@ -6,9 +6,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import ee.hm.dop.utils.DateUtils;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Component
 public class DateTimeSerializer extends JsonSerializer<LocalDateTime> {

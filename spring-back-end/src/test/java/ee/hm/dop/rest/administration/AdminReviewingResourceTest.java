@@ -6,12 +6,14 @@ import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.enums.ReviewType;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static java.lang.String.format;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class AdminReviewingResourceTest extends ResourceIntegrationTestBase {
 
     private static final String LO_SET_NOT_IMPROPER = "admin/improper/setProper";

@@ -62,7 +62,6 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
         Faq faq = make("Test?", "Test Eng?", "Test Rus?", "Jah", "Yes", "Da");
         Response response = doPost(SAVE_FAQ, faq);
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response.getStatus());
-
     }
 
     @Test

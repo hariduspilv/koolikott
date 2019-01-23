@@ -1,11 +1,8 @@
 package ee.hm.dop.rest.filter.dto;
 
-import ee.hm.dop.rest.filter.dto.DopPrincipal;
-
-import java.security.Principal;
-
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import java.security.Principal;
 
 public class DopSecurityContext implements SecurityContext {
 

@@ -1,11 +1,14 @@
 package ee.hm.dop.service.ehis;
 
+import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.ehis.Institution;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.ehis.Role;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -17,9 +20,7 @@ import static ee.hm.dop.model.ehis.Role.InstitutionalRole.TEACHER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-public class EhisSOAPServiceTest {
+public class EhisSOAPServiceTest extends DatabaseTestBase {
 
     @Inject
     private EhisSOAPService ehisSOAPService;

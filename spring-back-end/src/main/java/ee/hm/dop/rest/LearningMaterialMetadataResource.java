@@ -1,32 +1,41 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.CrossCurricularTheme;
+import ee.hm.dop.model.KeyCompetence;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LicenseType;
+import ee.hm.dop.model.ResourceType;
+import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.ReportingReasonEnum;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.metadata.CrossCurricularThemeService;
+import ee.hm.dop.service.metadata.KeyCompetenceService;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.MaterialMetadataService;
-import ee.hm.dop.service.metadata.*;
-import org.apache.http.HttpHeaders;
+import ee.hm.dop.service.metadata.ResourceTypeService;
+import ee.hm.dop.service.metadata.TargetGroupService;
+import ee.hm.dop.service.metadata.TaxonService;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
-import java.net.HttpURLConnection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("learningMaterialMetadata")
 public class LearningMaterialMetadataResource extends BaseResource{
 
-    public static final String MAX_AGE_120 = "max-age=120";
+    public static final int MAX_AGE_120 = 120;
     @Inject
     private TaxonService taxonService;
     @Inject
@@ -45,13 +54,13 @@ public class LearningMaterialMetadataResource extends BaseResource{
     private MaterialMetadataService materialMetadataService;
 
     @GetMapping(value = "educationalContext", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getEducationalContext() {
+    public ResponseEntity<List<EducationalContext>> getEducationalContext() {
         List<EducationalContext> taxons = taxonService.getAllEducationalContext();
-        if (taxons != null) {
-//            todo why is here 2 min cache?
-            return Response.ok(taxons).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_120).build();
+        if (taxons == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+        CacheControl cacheControl = CacheControl.maxAge(120, TimeUnit.SECONDS);
+        return ResponseEntity.ok().cacheControl(cacheControl).body(taxons);
     }
 
     @GetMapping("taxon")

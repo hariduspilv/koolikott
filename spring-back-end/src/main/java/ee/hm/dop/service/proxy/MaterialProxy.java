@@ -1,5 +1,6 @@
 package ee.hm.dop.service.proxy;
 
+import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.httpclient.Header;
@@ -10,10 +11,13 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.ws.rs.core.Response;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
@@ -32,7 +36,10 @@ import static java.lang.String.format;
 public class MaterialProxy {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public Response getProxyUrl(Long id, String url_param) throws IOException {
+    @Inject
+    private UploadedFileService uploadedFileService;
+
+    public ResponseEntity<?> getProxyUrl(Long id, String url_param) throws IOException {
         HttpClient client = new HttpClient();
         client.setHostConfiguration(hostConfig(url_param));
         GetMethod get = getMethod(url_param);
@@ -58,9 +65,8 @@ public class MaterialProxy {
         return noContent();
     }
 
-    private Response buildContentDispositionResponse(InputStream responseBody, String contentDisposition) throws IOException {
-        return Response.ok(responseBody, DopConstants.PDF_MIME_TYPE).header(DopConstants.CONTENT_DISPOSITION,
-                contentDisposition).build();
+    private ResponseEntity<InputStreamResource> buildContentDispositionResponse(InputStream responseBody, String contentDisposition) throws IOException {
+        return uploadedFileService.returnFileStreamForPdf(DopConstants.PDF_MIME_TYPE, responseBody, contentDisposition);
     }
 
     private HostConfiguration hostConfig(String url_param) {
@@ -89,7 +95,7 @@ public class MaterialProxy {
         return "Invalid";
     }
 
-    private Response noContent() {
-        return Response.noContent().build();
+    public ResponseEntity<Object> noContent() {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

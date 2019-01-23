@@ -14,6 +14,7 @@ import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import java.time.LocalDateTime;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
@@ -38,6 +39,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@Transactional
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
 
     public static final String GET_MATERIAL_URL = "material?id=%s";

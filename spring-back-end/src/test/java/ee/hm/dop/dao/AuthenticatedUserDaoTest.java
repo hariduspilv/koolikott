@@ -91,7 +91,7 @@ public class AuthenticatedUserDaoTest extends DatabaseTestBase {
         authenticatedUser.setToken(token);
         authenticatedUser.setUser(user);
         authenticatedUser.setLoginDate(LocalDateTime.now());
-        authenticatedUser.setSessionTime(LocalDateTime.now().plusMinutes(15));
+        authenticatedUser.setSessionTime(LocalDateTime.now().plusHours(15));
         authenticatedUser.setLoginFrom(LoginFrom.DEV);
         return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
     }

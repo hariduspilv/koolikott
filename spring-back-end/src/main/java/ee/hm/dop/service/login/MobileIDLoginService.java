@@ -9,6 +9,8 @@ import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

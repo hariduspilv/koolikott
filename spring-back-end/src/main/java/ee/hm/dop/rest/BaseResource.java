@@ -5,6 +5,7 @@ import ee.hm.dop.config.security.DopUserDetails;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.ConfigurationProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration2.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,21 +14,18 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-
+@Slf4j
 public class BaseResource {
 
     public static final String UTF_8 = "UTF-8";
-    @Context
+    @Inject
     private HttpServletRequest request;
-    @Context
+    @Inject
     private HttpServletResponse response;
     @Inject
     private Configuration configuration;

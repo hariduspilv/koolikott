@@ -4,6 +4,9 @@ import ee.hm.dop.model.ehis.Person;
 import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Node;
@@ -29,6 +32,8 @@ public class EhisSOAPService implements IEhisSOAPService {
     private EhisParser ehisParser;
     @Inject
     private Configuration configuration;
+    @Inject
+    private Environment environment;
     @Inject
     private SOAPConnection connection;
     @Inject
@@ -57,6 +62,9 @@ public class EhisSOAPService implements IEhisSOAPService {
 
             SOAPMessage response = sendSOAPMessage(message);
             String xmlResponse = parseSOAPResponse(response);
+            if (environment.acceptsProfiles(Profiles.of("it")) && xmlResponse == null){
+                return null;
+            }
 
             logger.info(format("Received response from EHIS: %s", xmlResponse));
 
@@ -98,6 +106,9 @@ public class EhisSOAPService implements IEhisSOAPService {
     }
 
     private String parseSOAPResponse(SOAPMessage message) throws Exception {
+        if (environment.acceptsProfiles(Profiles.of("it")) && message == null){
+            return null;
+        }
         SOAPPart soapPart = message.getSOAPPart();
         SOAPEnvelope envelope = soapPart.getEnvelope();
         SOAPBody body = envelope.getBody();

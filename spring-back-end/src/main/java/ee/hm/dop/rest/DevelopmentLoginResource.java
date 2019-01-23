@@ -3,7 +3,6 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.LoginService;
 import ee.hm.dop.service.login.dto.UserStatus;
-import org.apache.commons.configuration2.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;

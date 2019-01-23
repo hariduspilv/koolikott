@@ -1,6 +1,7 @@
 package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.ResponseHeader;
@@ -20,14 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-/**
- * Tests JSON deserialization
- *
- * @author Jordan Silva
- */
-@SpringBootTest
-@RunWith(SpringRunner.class)
-public class SearchResponseTest {
+public class SearchResponseTest extends DatabaseTestBase {
 
     @Inject
     private

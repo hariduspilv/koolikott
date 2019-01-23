@@ -12,6 +12,7 @@ import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.enums.Visibility;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -26,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+@Transactional
 public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
     private static final String CREATE_PORTFOLIO_URL = "portfolio/create";
@@ -119,14 +121,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getByCreatorWithoutUsername() {
         Response response = doGet("portfolio/getByCreator");
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("Username parameter is mandatory", response.readEntity(String.class));
     }
 
     @Test
     public void getByCreatorWithBlankUsername() {
         Response response = doGet(format(GET_BY_CREATOR_URL, ""));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("Username parameter is mandatory", response.readEntity(String.class));
+        assertTrue(response.readEntity(String.class).contains("Username parameter is mandatory"));
     }
 
     @Test
@@ -134,7 +135,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         String username = "notexisting.user";
         Response response = doGet(format(GET_BY_CREATOR_URL, username));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("User does not exist with this username parameter", response.readEntity(String.class));
+        assertTrue(response.readEntity(String.class).contains("User does not exist with this username parameter"));
     }
 
     @Test
@@ -298,7 +299,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void deletePortfolioNotLoggedIn() {
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
     @Test

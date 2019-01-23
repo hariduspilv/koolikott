@@ -15,15 +15,14 @@
  *******************************************************************************/
 package ee.hm.dop.rest.atom;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import org.apache.abdera.model.Entry;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.abdera.model.Entry;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 @Produces({"application/atom+xml", "application/atom+xml;type=entry", "application/json"})
 @Consumes({"application/atom+xml", "application/atom+xml;type=entry"})

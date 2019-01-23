@@ -83,10 +83,8 @@ public class Material1Validation {
 
         Subject biology = (Subject) material.getTaxons().get(1);
         assertEquals(Long.valueOf(20), biology.getId());
-        if (layer == TestLayer.DAO) {
-            assertEquals(2, biology.getDomain().getSubjects().size());
-            assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
-        }
+        assertEquals(2, biology.getDomain().getSubjects().size());
+        assertEquals(2, biology.getDomain().getEducationalContext().getDomains().size());
 
         if (layer == TestLayer.DAO) {
             assertEquals(Long.valueOf(1), material.getRepository().getId());

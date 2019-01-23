@@ -1,9 +1,9 @@
 package ee.hm.dop.rest.filter.dto;
 
-import java.security.Principal;
-
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
+
+import java.security.Principal;
 
 public class DopPrincipal implements Principal {
 

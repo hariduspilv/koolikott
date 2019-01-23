@@ -131,10 +131,7 @@ public class LoginService {
     }
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
-//        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        //todo
-        Person person = null;
-
+        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
         return sessionService.startSession(user, person, loginFrom);
     }
 

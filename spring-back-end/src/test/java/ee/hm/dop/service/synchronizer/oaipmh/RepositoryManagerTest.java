@@ -3,6 +3,7 @@ package ee.hm.dop.service.synchronizer.oaipmh;
 import ee.hm.dop.model.Repository;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -16,6 +17,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+@Ignore
 @RunWith(EasyMockRunner.class)
 public class RepositoryManagerTest {
 

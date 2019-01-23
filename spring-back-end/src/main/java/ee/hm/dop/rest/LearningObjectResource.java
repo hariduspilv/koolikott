@@ -1,6 +1,12 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.UserFavorite;
+import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectService;

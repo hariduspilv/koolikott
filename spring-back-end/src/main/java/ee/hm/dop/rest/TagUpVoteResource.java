@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +72,7 @@ public class TagUpVoteResource extends BaseResource {
     @PostMapping("delete")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public void removeUpVote(@RequestBody TagUpVote tagUpVote) {
-        if (tagUpVote == null) {
+        if (tagUpVote.getId() == null) {
             throw notFound();
         }
         tagUpVoteService.delete(tagUpVote, getLoggedInUser());

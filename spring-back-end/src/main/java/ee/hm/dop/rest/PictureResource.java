@@ -6,10 +6,14 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
+import ee.hm.dop.service.files.UploadedFileService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpHeaders;
-import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,20 +21,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.io.ByteArrayInputStream;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
 import static ee.hm.dop.utils.DOPFileUtils.read;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
+@Slf4j
 @RestController
 @RequestMapping("picture")
 public class PictureResource extends BaseResource {
@@ -42,54 +45,54 @@ public class PictureResource extends BaseResource {
     private Configuration configuration;
     @Inject
     private PictureSaver pictureSaver;
+    @Inject
+    private UploadedFileService uploadedFileService;
 
-    @GetMapping
-    @RequestMapping("/{name}")
-    @Produces("image/png")
-    public Response getPictureDataByName(@PathVariable("name") String pictureName) {
-        return getPictureResponseWithCache(pictureService.getByName(pictureName));
+    @GetMapping(value = "/{name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<InputStreamResource> getPictureDataByName(@PathVariable("name") String pictureName) {
+        return getPictureResponseWithCache(pictureService.getByName(pictureName), pictureName);
     }
 
-    @GetMapping
-    @RequestMapping("thumbnail/{size}/{name}")
-    @Produces("image/png")
-    public Response getSMThumbnailDataByName(@PathVariable("size") String sizeString, @PathVariable("name") String pictureName) {
+    @GetMapping(value = "thumbnail/{size}/{name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<InputStreamResource> getSMThumbnailDataByName(@PathVariable("size") String sizeString, @PathVariable("name") String pictureName) {
         if (StringUtils.isBlank(sizeString)) {
             throw new UnsupportedOperationException("no size");
         }
         Size size = Size.valueOf(sizeString.toUpperCase());
-        return getPictureResponseWithCache(pictureService.getThumbnailByName(pictureName, size));
+        return getPictureResponseWithCache(pictureService.getThumbnailByName(pictureName, size), pictureName);
     }
 
-    private Response getPictureResponseWithCache(Picture picture) {
-        if (picture != null) {
-            byte[] data = picture.getData();
-            return Response.ok(data).header(HttpHeaders.CACHE_CONTROL, MAX_AGE_1_YEAR).build();
-        }
-        return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-    }
-
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Picture uploadPicture(@FormDataParam("picture") InputStream fileInputStream) {
-        byte[] dataBase64 = read(fileInputStream, configuration.getInt(MAX_FILE_SIZE));
-        byte[] data = decodeBase64(dataBase64);
+    public Picture uploadPicture(@RequestParam("picture") MultipartFile fileInputStream) {
+        try {
+            byte[] dataBase64 = read(fileInputStream.getInputStream(), configuration.getInt(MAX_FILE_SIZE));
+            byte[] data = decodeBase64(dataBase64);
 
-        Picture picture = new OriginalPicture();
-        picture.setData(data);
-        return pictureSaver.create(picture);
+            Picture picture = new OriginalPicture();
+            picture.setData(data);
+            return pictureSaver.create(picture);
+        } catch (Exception e) {
+            log.info("error uploading file: {}", e.getMessage(), e);
+            return null;
+        }
     }
 
-    @PutMapping
-    @RequestMapping("/fromUrl")
+    @PutMapping("/fromUrl")
     public Picture uploadPictureFromURL(@RequestBody String url) {
         return pictureSaver.createFromURL(url);
     }
 
-    @GetMapping
-    @RequestMapping(value = "/maxSize", produces = org.springframework.http.MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/maxSize")
     public int getMaxSize() {
         return configuration.getInt(MAX_FILE_SIZE);
+    }
+
+    private ResponseEntity<InputStreamResource> getPictureResponseWithCache(Picture picture, String pictureName) {
+        if (picture == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        byte[] data = picture.getData();
+        return uploadedFileService.returnFileStreamForPic(MediaType.IMAGE_PNG_VALUE, pictureName, data.length, new ByteArrayInputStream(data));
     }
 }

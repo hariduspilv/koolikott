@@ -3,6 +3,8 @@ package ee.hm.dop.service.synchronizer.oaipmh;
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
 import org.easymock.EasyMockRunner;
 import java.time.LocalDateTime;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
@@ -22,6 +24,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@Ignore
 @RunWith(EasyMockRunner.class)
 public class ListIdentifiersConnectorTest {
 

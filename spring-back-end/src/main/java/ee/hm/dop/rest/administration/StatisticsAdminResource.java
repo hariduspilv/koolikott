@@ -2,6 +2,7 @@ package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
+import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.reviewmanagement.dto.FileFormat;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
@@ -9,12 +10,10 @@ import ee.hm.dop.service.statistics.NewStatisticsCsvExporter;
 import ee.hm.dop.service.statistics.NewStatisticsExcelExporter;
 import ee.hm.dop.service.statistics.NewStatisticsService;
 import ee.hm.dop.utils.DOPFileUtils;
-import ee.hm.dop.utils.DopConstants;
 import ee.hm.dop.utils.io.CsvUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileInputStream;
 
 
 @Slf4j
@@ -43,6 +41,8 @@ public class StatisticsAdminResource extends BaseResource {
     private NewStatisticsExcelExporter statisticsExcelExporter;
     @Inject
     private NewStatisticsCsvExporter statisticsCsvExporter;
+    @Inject
+    private UploadedFileService uploadedFileService;
 
     @PostMapping
     @Secured({RoleString.ADMIN})
@@ -81,23 +81,9 @@ public class StatisticsAdminResource extends BaseResource {
     }
 
     private ResponseEntity<InputStreamResource> buildResponse(String filename, FileFormat format) {
-        try {
-            String mediaType = DOPFileUtils.probeForMediaType(filename);
-            String fileName = "statistika_aruanne." + format.name();
-            File file = FileUtils.getFile(TEMP_FOLDER + "/" + filename);
-
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(DopConstants.CONTENT_DISPOSITION, "Attachment; filename*=\"UTF-8''" + DOPFileUtils.encode(fileName) + "\"; filename=\"" + fileName + "\"");
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(file.length())
-                    .contentType(MediaType.parseMediaType(mediaType))
-                    .body(resource);
-        } catch (Exception e) {
-            log.info("Downloading file failed: {}", e.getMessage(), e);
-            return null;
-        }
+        String mediaType = DOPFileUtils.probeForMediaType(filename);
+        String fileName = "statistika_aruanne." + format.name();
+        File file = FileUtils.getFile(TEMP_FOLDER + "/" + filename);
+        return uploadedFileService.returnFileStream(mediaType, fileName, file);
     }
 }

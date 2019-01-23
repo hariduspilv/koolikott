@@ -19,7 +19,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -37,7 +37,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import static ee.hm.dop.utils.ConfigurationProperties.SERVER_PORT;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -50,15 +49,16 @@ import static org.junit.Assert.assertNotNull;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
+public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
 
     public static final String DEV_LOGIN = "dev/login/";
     public static final String LOGOUT = "user/logout";
-    private static String RESOURCE_BASE_URL;
-
-    private AuthenticationFilter authenticationFilter;
-
+    private String RESOURCE_BASE_URL;
+    @Inject
+    protected Environment environment;
+    @Inject
     protected Configuration configuration;
+    protected AuthenticationFilter authenticationFilter;
 
     protected User login(TestUser testUser) {
         return login(testUser.idCode);
@@ -107,82 +107,83 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return doPost(MaterialResourceTest.UPDATE_MATERIAL_URL, updatedMaterial, Material.class);
     }
 
-    protected  <T> T doGet(String url, Class<? extends T> clazz) {
+    protected <T> T doGet(String url, Class<? extends T> clazz) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE, clazz);
     }
 
-    protected  <T> T doGet(String url, MediaType mediaType, Class<? extends T> clazz) {
+    protected <T> T doGet(String url, MediaType mediaType, Class<? extends T> clazz) {
         Response response = doGet(url, mediaType);
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(clazz);
     }
 
-    protected  <T> T doGet(String url, GenericType<T> genericType) {
+    protected <T> T doGet(String url, GenericType<T> genericType) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE, genericType);
     }
 
-    protected  <T> T doGet(String url, MediaType mediaType, GenericType<T> genericType) {
+    protected <T> T doGet(String url, MediaType mediaType, GenericType<T> genericType) {
         Response response = doGet(url, mediaType);
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(genericType);
     }
 
-    protected  Response doGet(String url) {
+    protected Response doGet(String url) {
         return doGet(url, MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected  Response doGet(String url, MediaType mediaType) {
+    protected Response doGet(String url, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).get(Response.class);
     }
 
-    protected  Response doGet(String url, MultivaluedMap<String, Object> headers, MediaType mediaType) {
+    protected Response doGet(String url, MultivaluedMap<String, Object> headers, MediaType mediaType) {
         return getTarget(url).request().headers(headers).accept(mediaType).get(Response.class);
     }
 
-    protected  <T> T doPost(String url, Object json, Class<? extends T> responseClass) {
+    protected <T> T doPost(String url, Object json, Class<? extends T> responseClass) {
         Response response = doPost(url, Entity.entity(json, MediaType.APPLICATION_JSON_TYPE), MediaType.APPLICATION_JSON_TYPE);
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(responseClass);
     }
 
-    protected  Response doPost(String url, Entity<?> requestEntity) {
+    protected Response doPost(String url, Entity<?> requestEntity) {
         return doPost(url, requestEntity, MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected  Response doPost(String url) {
+    protected Response doPost(String url) {
         return doPost(url, new StatisticsFilterDto());
     }
 
-    protected  Response doPost(String url, Object json) {
+    protected Response doPost(String url, Object json) {
         return doPost(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected  Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
+    protected Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).post(requestEntity);
     }
 
-    protected  <T> T doPut(String url, Object json, Class<? extends T> clazz) {
+    protected <T> T doPut(String url, Object json, Class<? extends T> clazz) {
         Response response = doPut(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         return response.readEntity(clazz);
     }
 
-    protected  Response doPut(String url, Object json) {
+    protected Response doPut(String url, Object json) {
         return doPut(url, Entity.json(json), MediaType.APPLICATION_JSON_TYPE);
     }
 
-    protected  Response doPut(String url, Entity<?> requestEntity, MediaType mediaType) {
+    protected Response doPut(String url, Entity<?> requestEntity, MediaType mediaType) {
         return getTarget(url).request().accept(mediaType).put(requestEntity);
     }
 
-    protected  WebTarget getTarget(String url) {
+    protected WebTarget getTarget(String url) {
         return getTarget(url, authenticationFilter);
     }
 
-    protected  WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
+    protected WebTarget getTarget(String url, ClientRequestFilter clientRequestFilter) {
         return getClient(clientRequestFilter).target(getFullURL(url));
     }
 
-    private  Client getClient(ClientRequestFilter clientRequestFilter) {
+    private Client getClient(ClientRequestFilter clientRequestFilter) {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.READ_TIMEOUT, 60000); // ms
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, 60000); // ms
@@ -200,9 +201,10 @@ public abstract class ResourceIntegrationTestBase extends IntegrationTestBase {
         return client;
     }
 
-    private  String getFullURL(String path) {
+    private String getFullURL(String path) {
         if (RESOURCE_BASE_URL == null) {
-            RESOURCE_BASE_URL = format("http://localhost:%s/rest/", "1986");
+            //String property = environment.getProperty("server.port");
+            RESOURCE_BASE_URL = format("http://localhost:%s/rest/", 1986);
         }
         return RESOURCE_BASE_URL + path;
     }

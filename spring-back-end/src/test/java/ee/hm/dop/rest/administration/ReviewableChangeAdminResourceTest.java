@@ -13,6 +13,7 @@ import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.utils.DbUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 @Transactional
 public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBase {
 

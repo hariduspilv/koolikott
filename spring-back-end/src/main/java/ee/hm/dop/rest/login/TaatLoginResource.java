@@ -1,6 +1,5 @@
 package ee.hm.dop.rest.login;
 
-import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.login.TaatService;
 import ee.hm.dop.service.login.dto.UserStatus;
@@ -15,11 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.net.URI;

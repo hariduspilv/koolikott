@@ -1,6 +1,9 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -16,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @RestController

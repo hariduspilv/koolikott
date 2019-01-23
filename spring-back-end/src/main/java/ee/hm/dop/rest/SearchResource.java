@@ -1,7 +1,16 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
-import ee.hm.dop.service.metadata.*;
+import ee.hm.dop.model.SearchFilter;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.SortDirection;
+import ee.hm.dop.model.SortType;
+import ee.hm.dop.service.metadata.CrossCurricularThemeService;
+import ee.hm.dop.service.metadata.KeyCompetenceService;
+import ee.hm.dop.service.metadata.LanguageService;
+import ee.hm.dop.service.metadata.ResourceTypeService;
+import ee.hm.dop.service.metadata.TargetGroupService;
+import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
@@ -11,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import static ee.hm.dop.service.solr.SearchCommandBuilder.UNIQUE_KEYS;

@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.errorhandling;
 
-import static ee.hm.dop.utils.DbUtils.getTransaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityTransaction;
 import javax.ws.rs.WebApplicationException;
@@ -8,8 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static ee.hm.dop.utils.DbUtils.getTransaction;
 
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {

@@ -1,5 +1,6 @@
 package ee.hm.dop.service.ehis;
 
+import ee.hm.dop.common.test.DatabaseTestBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,9 +17,7 @@ import java.util.Iterator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-public class EhisV6RequestBuilderTest {
+public class EhisV6RequestBuilderTest extends DatabaseTestBase {
 
     public static final String XRO = "xro:";
     @Inject

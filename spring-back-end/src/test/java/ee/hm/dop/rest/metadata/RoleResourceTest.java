@@ -5,6 +5,7 @@ import ee.hm.dop.model.enums.Role;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ public class RoleResourceTest extends ResourceIntegrationTestBase {
     public void getRoles_returns_all_roles() {
         login(USER_ADMIN);
 
-        List<Role> roles = doGet(GET_ROLES, new GenericType<List<Role>>() {
+        List<Role> roles = doGet(GET_ROLES, MediaType.WILDCARD_TYPE, new GenericType<List<Role>>() {
         });
         List<Role> expected = new ArrayList<>(Arrays.asList(Role.values()));
         assertEquals(expected, roles);

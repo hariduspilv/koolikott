@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import ee.hm.dop.model.Language;
-import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
