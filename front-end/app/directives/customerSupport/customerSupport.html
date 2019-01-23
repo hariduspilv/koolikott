@@ -104,7 +104,7 @@
           </div>
         </md-input-container>
       </div>
-      <div class="customSupportUploadFile">
+      <div data-ng-if="isFileBtnVisible" class="customSupportUploadFile">
         <a ng-if="$ctrl.canAddMoreFile()" href=""
            ngf-select="$ctrl.addFiles(ngfFiles)"
            ngf-change="$ctrl.changeFiles(ngfFiles)"

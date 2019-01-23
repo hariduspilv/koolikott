@@ -17,22 +17,15 @@
               id="qr-code"
               data-location="{{pageUrl}}"></dop-qr>
           </div>
-
-          <md-button ng-if="!$root.isEditPortfolioMode && !$root.isFullScreen"
+          <md-button style="min-width: 0px"
                      data-ng-click="toggleFullScreen()"
                      id="faq-edit"
                      class="md-icon-button hide-on-mobile">
             <md-icon md-menu-align-target>fullscreen</md-icon>
-            <md-tooltip><span data-translate="FULL_SCREEN_ON"></span></md-tooltip>
+            <md-tooltip>
+              <span data-translate="{{$root.isFullScreen ? 'FULL_SCREEN_OFF' : 'FULL_SCREEN_ON'}}"></span>
+            </md-tooltip>
           </md-button>
-          <md-button ng-if="!$root.isEditPortfolioMode && $root.isFullScreen"
-                     data-ng-click="toggleFullScreen()"
-                     id="faq-edit"
-                     class="md-icon-button hide-on-mobile">
-            <md-icon md-menu-align-target>fullscreen</md-icon>
-            <md-tooltip><span data-translate="FULL_SCREEN_OFF"></span></md-tooltip>
-          </md-button>
-
           <md-menu ng-if="dotsAreShowing() || $root.isEditPortfolioMode && canEdit()" id="dots-menu">
             <md-button class="md-icon-button" ng-click="$mdMenu.open($event)" id="material-menu">
               <md-icon md-menu-origin>more_vert</md-icon>
