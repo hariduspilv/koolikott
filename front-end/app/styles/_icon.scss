@@ -103,3 +103,9 @@ button.md-chip-remove md-icon{
 .icon-blue {
   color: rgb(3,169,244);
 }
+
+.hide-on-mobile {
+  @media screen and (max-width: $layout-breakpoint-sm) {
+    display: none;
+  }
+}

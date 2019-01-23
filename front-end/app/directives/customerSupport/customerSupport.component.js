@@ -7,10 +7,15 @@
 
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.customerSupport = {}
-            this.$scope.backClickedWhileOther = false
-            this.$scope.captchaSuccess = false
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
+
+            this.$scope.files = []
+            this.$scope.ngfFiles = []
+
+            this.$scope.isFileBtnVisible = true
+            this.$scope.fileSizeTogether = 0
+            this.$scope.filesCount = 0
 
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
@@ -54,10 +59,82 @@
                 })
         }
 
+        canAddMoreFile() {
+
+            return (!this.$scope.tooManyFiles || !this.$scope.fileSizeTooLarge)
+        }
+
+        remove(fileToRemove) {
+            this.$scope.files.forEach((chipFile, index) => {
+                if (chipFile.name === fileToRemove.name) {
+                    this.$scope.files.splice(index, 1)
+                }
+            });
+            this.$scope.ngfFiles.forEach((chipFile, index) => {
+                if (chipFile.name === fileToRemove.name) {
+                    this.$scope.ngfFiles.splice(index, 1)
+                }
+            });
+
+            this.validateAttachments(this.$scope.files);
+        }
+
+        validateAttachments(files) {
+            this.$scope.fileSizeTooLarge = false
+            this.$scope.tooManyFiles = false
+            this.$scope.isFileBtnVisible = true;
+
+            if (files.length > 3) {
+                this.$scope.tooManyFiles = true
+                this.$scope.isFileBtnVisible = false
+            }
+
+            this.$scope.fileSizeTogether = files.map(item => item.size)
+                .reduce((prev, next) => prev + next, 0) / 1024 / 1024;
+
+            if (this.$scope.fileSizeTogether > 10) {
+                this.$scope.fileSizeTooLarge = true
+                this.$scope.isFileBtnVisible = false
+            }
+        }
+
+        changeFiles(uploadedFiles) {
+            this.$scope.ngfFiles = uploadedFiles;
+            this.$scope.files = [];
+            let promises = uploadedFiles.map(file => this.convertToBase64(file));
+            promises.map(p => p.then(file => this.$scope.files.push(file)))
+
+            Promise.all(promises).then(() => {
+                this.validateAttachments(this.$scope.files);
+            }).catch(rejected => console.log(rejected))
+        }
+
+        addFiles(uploadedFiles) {
+            this.$scope.files = [];
+            let promises = uploadedFiles.map(file => this.convertToBase64(file));
+            promises.map(p => p.then(file => this.$scope.files.push(file)))
+
+            Promise.all(promises).then(() => {
+                this.validateAttachments(this.$scope.files);
+            }).catch(rejected => console.log(rejected))
+        }
+
+        convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve({name: file.name, content: reader.result, size: file.size});
+                reader.onerror = error => reject(error);
+            });
+        }
+
         saveCustomerSupportRequest() {
 
             this.$scope.isSaving = true
+
             this.setResponse()
+
+            this.$scope.customerSupport.files = this.$scope.files
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
                 .then(response => {
@@ -96,7 +173,7 @@
 
         isSendDisabled() {
             const {name, email, subject, message} = this.$scope.customerSupport;
-            return !(name && email && subject && message && this.$scope.captchaSuccess)
+            return !(name && email && subject && message && this.$scope.captchaSuccess && this.$scope.isFileBtnVisible)
         }
 
         back() {
@@ -121,6 +198,9 @@
             this.$scope.showUserManualsHelped = false
             this.$scope.customerSupport = {}
             this.$scope.captchaSuccess = false
+            this.$scope.files = []
+            this.$scope.ngfFiles = []
+
         }
 
         handleSelectChange(subject) {
@@ -132,28 +212,27 @@
             if (!this.$scope.isSaving && this.$scope.allowDialogClose) {
                 this.$scope.showCustomerSupportDialog = false
             }
-            this.$scope.allowDialogClose = true
+            this.$scope.allowDialogClose = false
         }
+
         captchaSuccess() {
             this.$scope.captchaSuccess = true
         }
+
         getCaptchaKey() {
             this.serverCallService.makeGet('/rest/captcha')
                 .then(({data}) => {
                     this.$scope.captchaKey = data
                 })
         }
-        getLanguage(){
+
+        getLanguage() {
             let language = this.translationService.getLanguage();
-            if (language === 'est')
-                return 'et'
-            else if (language === 'rus')
-                return 'ru'
-            else
-                return 'en'
+            return language === 'est' ? 'et' : language === 'rus' ? 'ru' : 'en';
 
         }
     }
+
     controller.$inject = [
         'userManualsAdminService',
         'serverCallService',
@@ -166,7 +245,6 @@
         '$rootScope',
         'vcRecaptchaService',
         'translationService'
-
     ]
     component('dopCustomerSupport', {
         templateUrl: 'directives/customerSupport/customerSupport.html',

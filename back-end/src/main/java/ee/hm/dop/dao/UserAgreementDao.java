@@ -18,4 +18,13 @@ public class UserAgreementDao extends AbstractDao<User_Agreement> {
                 .setParameter("agreement", agreementId)
                 .setMaxResults(1)) != null;
     }
+
+    public User_Agreement getLatestAgreementForUser(Long userId) {
+        return getSingleResult(getEntityManager().createQuery("from User_Agreement ua " +
+                        "where ua.user.id = :user ORDER BY createdAt DESC", entity())
+                        .setParameter("user", userId)
+                        .setMaxResults(1));
+
+    }
+
 }

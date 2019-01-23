@@ -407,6 +407,8 @@ function toggleFullScreen() {
                 el.classList.remove("hidden")
                 el.classList.remove("visuallyhidden")
                 document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
+                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
+                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
                 setTimeout(function(){
                     el.classList.add("fullscreen-block")
 
@@ -419,7 +421,11 @@ function toggleFullScreen() {
                 el.classList.add("hidden")
                 document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
                 document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
-                document.getElementsByClassName("content-container")[0].style.paddingLeft = "0";
+                if (window.location.href.includes('/portfolio?'))
+                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
+                else
+                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "0"
+
                 document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
             },300)}
            
@@ -433,6 +439,8 @@ function toggleFullScreen() {
                 el.classList.remove("hidden")
                 el.classList.remove("visuallyhidden")
                 document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
+                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
+                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
                 setTimeout(function(){
                     el.classList.add("fullscreen-flex")
 
@@ -445,7 +453,11 @@ function toggleFullScreen() {
                     el.classList.add("hidden")
                     document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
                     document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
-                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "0";
+                    if (window.location.href.includes('/portfolio?'))
+                        document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
+                    else
+                        document.getElementsByClassName("content-container")[0].style.paddingLeft = "0"
+
                     document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
                 },300)
 

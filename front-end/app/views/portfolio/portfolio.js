@@ -10,7 +10,6 @@ class controller extends Controller {
 
             allElements.forEach( (el) => {
 
-                if (!this.$rootScope.isFullScreen) {
                     if (this.isElementInViewport(el)) {
                         e.preventDefault()
                         e.stopPropagation()
@@ -34,7 +33,6 @@ class controller extends Controller {
                             history.pushState({}, '', url)
                         }
                     }
-                }
             })
         });
 

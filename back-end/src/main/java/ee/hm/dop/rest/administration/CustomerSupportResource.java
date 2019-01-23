@@ -24,6 +24,6 @@ public class CustomerSupportResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public CustomerSupport saveCustomerSupportRequest(CustomerSupport customerSupport) {
-        return customerSupportService.save(customerSupport, getLoggedInUser());
+        return customerSupportService.save(customerSupport,getLoggedInUser());
     }
 }

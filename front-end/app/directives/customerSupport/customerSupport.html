@@ -34,7 +34,6 @@
             name="title"
             class="no-margin"
             data-ng-model="customerSupport.subject"
-            required
             style="padding: 10px"
           >
             <md-option
@@ -104,6 +103,30 @@
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_MESSAGE_IS_MANDATORY"></div>
           </div>
         </md-input-container>
+      </div>
+      <div class="customSupportUploadFile">
+        <a ng-if="$ctrl.canAddMoreFile()" href=""
+           ngf-select="$ctrl.addFiles(ngfFiles)"
+           ngf-change="$ctrl.changeFiles(ngfFiles)"
+           ngf-keep="true"
+           ng-model="ngfFiles"
+           ngf-max-size="10MB"
+           multiple accept="image/*"
+        >File</a>
+        <!--ngf-max-files="3"-->
+        <div>
+          <md-content class="md-padding" layout="column">
+            <md-chips ng-model="files" md-on-remove="$ctrl.remove($chip)" readonly="false">
+              <md-chip-template>
+                <em>{{$chip.name}}</em>
+              </md-chip-template>
+            </md-chips>
+          </md-content>
+        </div>
+      </div>
+      <div class="email-alert" style="text-align: -webkit-center;">
+        <span data-ng-if="tooManyFiles" data-translate="ALLOWED 3 FILES"></span>
+        <span data-ng-if="fileSizeTooLarge" data-translate="FILES_MORE_THAN_10MB"></span>
       </div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"
         vc-recaptcha
