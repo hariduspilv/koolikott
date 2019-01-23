@@ -31,8 +31,4 @@ public class PictureService {
         Picture existingPicture = getByName(name);
         return existingPicture != null ? pictureSaver.createOneThumbnail(existingPicture, size) : null;
     }
-
-    public String getFileSizeInMB(File file){
-        return FileUtils.byteCountToDisplaySize(file.length());
-    }
 }

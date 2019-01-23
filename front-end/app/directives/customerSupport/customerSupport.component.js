@@ -116,7 +116,6 @@
 
             Promise.all(promises).then(() => {
                 this.validateAttachments(this.$scope.files);
-                console.log(this.$scope.files);
             }).catch(rejected => console.log(rejected))
         }
 
@@ -245,9 +244,7 @@
         '$window',
         '$rootScope',
         'vcRecaptchaService',
-        'translationService',
-        '$parse',
-        '$timeout'
+        'translationService'
     ]
     component('dopCustomerSupport', {
         templateUrl: 'directives/customerSupport/customerSupport.html',

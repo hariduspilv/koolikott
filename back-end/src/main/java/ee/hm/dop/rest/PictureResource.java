@@ -91,20 +91,4 @@ public class PictureResource extends BaseResource {
         return configuration.getInt(MAX_FILE_SIZE);
     }
 
-
-    @GET
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("/calculateSize/{filename}")
-    public String getFileSize(@FormDataParam("picture") InputStream fileInputStream,@PathParam("filename") String pictureName){
-
-        File file = new File(pictureName);
-
-        try {
-            Files.copy(fileInputStream,file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return pictureService.getFileSizeInMB(file);
-    }
 }

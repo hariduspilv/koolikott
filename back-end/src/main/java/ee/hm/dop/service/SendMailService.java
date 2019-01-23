@@ -62,17 +62,6 @@ public class SendMailService {
                 .buildEmail();
     }
 
-    //    public Email composeEmailToSupportWithAttachments(CustomerSupport customerSupport) {
-//        return EmailBuilder.startingBlank()
-//                .from("e-Koolikott", customerSupport.getEmail())
-//                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
-//                .withSubject("e-Koolikott: " + customerSupport.getSubject())
-//                .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
-//                        "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
-//                .withAttachments(customerSupport.getFiles())
-//                .buildEmail();
-//    }
-
     public Email composeEmailToSupportWhenSendFailed(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
@@ -84,7 +73,6 @@ public class SendMailService {
                 + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt()))
                 .buildEmail();
     }
-
 
     public boolean sendEmail(Email email) {
         try {
