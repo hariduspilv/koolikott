@@ -3,6 +3,9 @@ server:
     contextPath: /rest
   port: 8100
 
+logging:
+  path: ./spring-logs
+
 spring:
   profiles:
     active: default
@@ -23,6 +26,9 @@ spring:
     baselineOnMigrate: true
     placeholderReplacement: false
     locations: classpath:db/migration, classpath:db/initdb, classpath:db/initdata, classpath:db/users
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false:
 
 app:
   devLogin: false
