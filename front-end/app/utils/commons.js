@@ -397,73 +397,43 @@ function getFlexElements() {
     return [document.getElementById('header-and-chapters'), document.getElementById('main-fab-button')];
 }
 
+function classListContainsHidden(el) {
+    el.style.opacity = 1
+    el.classList.remove("hidden")
+    el.classList.remove("visuallyhidden")
+    let contentContainer = document.getElementsByClassName("content-container")[0];
+    contentContainer.style.paddingTop = "5rem"
+    contentContainer.style.removeProperty('padding-right')
+    contentContainer.style.removeProperty('padding-left')
+}
+
+function classListNotContainsHidden(el) {
+    el.style.opacity = 0;
+    el.classList.add("visuallyhidden")
+    setTimeout(() => {
+        el.classList.add("hidden")
+        document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+        let contentContainer = document.getElementsByClassName("content-container")[0];
+        contentContainer.style.paddingTop = "1.5rem"
+        contentContainer.style.paddingLeft = window.location.href.includes('/portfolio?') ? "calc(110px + 1rem)": "0";
+        contentContainer.style.paddingRight = "0";
+    }, 300)
+}
+
+function resize(el, cssClass) {
+    if (el) {
+        if (el.classList.contains("hidden")) {
+            classListContainsHidden(el);
+            setTimeout(() => el.classList.add(cssClass), 300);
+        } else {
+            classListNotContainsHidden(el);
+        }
+    }
+}
+
 function toggleFullScreen() {
-    let elements = getElementsForFullScreen();
-    let flexElements = getFlexElements();
-    elements.forEach(el => {
-        if (el) {
-            if (el.classList.contains("hidden")){
-                el.style.opacity = 1
-                el.classList.remove("hidden")
-                el.classList.remove("visuallyhidden")
-                document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
-                setTimeout(function(){
-                    el.classList.add("fullscreen-block")
-
-                },300)
-                ;}
-            else{
-            el.style.opacity = 0;
-            el.classList.add("visuallyhidden")
-            setTimeout(function(){
-                el.classList.add("hidden")
-                document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
-                document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
-                if (window.location.href.includes('/portfolio?'))
-                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
-                else
-                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "0"
-
-                document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
-            },300)}
-           
-
-        }
-    });
-    flexElements.forEach(el => {
-        if (el) {
-            if (el.classList.contains("hidden")){
-                el.style.opacity = 1
-                el.classList.remove("hidden")
-                el.classList.remove("visuallyhidden")
-                document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
-                setTimeout(function(){
-                    el.classList.add("fullscreen-flex")
-
-                },300)            
-            }
-            else{
-                el.style.opacity=0
-                el.classList.add("visuallyhidden")
-                setTimeout(function(){
-                    el.classList.add("hidden")
-                    document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
-                    document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
-                    if (window.location.href.includes('/portfolio?'))
-                        document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
-                    else
-                        document.getElementsByClassName("content-container")[0].style.paddingLeft = "0"
-
-                    document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
-                },300)
-
-            }
-        }
-    });
+    getElementsForFullScreen().forEach(el => resize(el, "fullscreen-block"));
+    getFlexElements().forEach(el => resize(el, "fullscreen-flex"));
 
     fullScreenRemoveChapterMargin();
     fullScreenExpandSummary()

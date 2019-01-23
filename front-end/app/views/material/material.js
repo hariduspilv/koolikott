@@ -256,7 +256,7 @@ angular.module('koolikottApp')
             $scope.toggleFullScreen = () => {
                 $rootScope.isFullScreen = !$rootScope.isFullScreen;
                 toggleFullScreen();
-                if ($rootScope.isFullScreen) toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC');
+                if ($rootScope.isFullScreen) toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 8000);
             }
 
             $scope.edit = () => {
