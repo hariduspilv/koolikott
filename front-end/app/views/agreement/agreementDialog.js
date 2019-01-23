@@ -24,7 +24,7 @@
                 this.$scope.isSaving = true
                 this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
                 this.$rootScope.email = this.$scope.agreementDialogEmail
-                this.userEmailService.checkDuplicateEmail(this.$scope.agreementDialogEmail)
+                this.userEmailService.checkDuplicateEmail(this.$scope.agreementDialogEmail, this.$rootScope.statusForDuplicateCheck)
                     .then(response => {
                         if (response.status = 200) {
                             this.$mdDialog.hide(true)

@@ -1,7 +1,11 @@
 package ee.hm.dop.service.login;
 
+import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.dao.UserEmailDao;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.User_Agreement;
 import ee.hm.dop.service.PinGeneratorService;
@@ -24,58 +28,61 @@ public class UserEmailService {
     UserAgreementDao userAgreementDao;
 
     @Inject
+    AuthenticationStateDao authenticationStateDao;
+
+    @Inject
+    UserDao userDao;
+
+    @Inject
     private SendMailService sendMailService;
 
     public UserEmail save(UserEmail userEmail) {
-        UserEmail dbUserEmail = userEmailDao.findByField("user", userEmail.getUser());
-        if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
-            dbUserEmail.setEmail(userEmail.getEmail());
-            setUserAndSendMail(dbUserEmail);
-            return userEmailDao.createOrUpdate(dbUserEmail);
-        } else {
-            if (hasDuplicateEmail(userEmail))
-                throw badRequest("Duplicate email in database");
+        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
+        if (userEmail.getUser() == null)
+            throw badRequest("User is null");
 
-            if (userEmail.getUser() == null)
-                throw badRequest("User is null");
-            userEmail.setEmail(validateEmail(userEmail.getEmail()));
-            setUserAndSendMail(userEmail);
-            return userEmailDao.createOrUpdate(userEmail);
+        if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
+            return userEmailDao.createOrUpdate(setUserAndSendMail(dbUserEmail));
         }
+        return userEmailDao.createOrUpdate(setUserAndSendMail(userEmail));
     }
 
     public boolean hasDuplicateEmail(UserEmail userEmail) {
         if (isBlank(userEmail.getEmail()))
             throw badRequest("Email Empty");
-        UserEmail dbUserEmail = userEmailDao.findByField("email", userEmail.getEmail());
-
-        return dbUserEmail != null;
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+        User user = userDao.findUserByIdCode(state.getIdCode());
+        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail.getEmail());
+        return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
     }
 
     public UserEmail validatePin(UserEmail userEmail) {
-        UserEmail dbUserEmail = userEmailDao.findByField("user", userEmail.getUser());
+        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         User_Agreement dbUserAgreement = userAgreementDao.getLatestAgreementForUser(userEmail.getUser().getId());
         if (dbUserEmail == null)
             throw notFound("User not found");
-
-        if (dbUserEmail.getPin().equals(userEmail.getPin())) {
-            dbUserEmail.setActivated(true);
-            dbUserEmail.setActivatedAt(DateTime.now());
-            dbUserAgreement.setAgreed(true);
-            userAgreementDao.createOrUpdate(dbUserAgreement);
-        } else {
+        if (!dbUserEmail.getPin().equals(userEmail.getPin()))
             throw badRequest("Pins not equal");
-        }
+
+        dbUserEmail.setActivated(true);
+        dbUserEmail.setActivatedAt(DateTime.now());
+        dbUserEmail.setEmail(userEmail.getEmail());
+        dbUserAgreement.setAgreed(true);
+        userAgreementDao.createOrUpdate(dbUserAgreement);
+
 
         return userEmailDao.createOrUpdate(dbUserEmail);
     }
 
-    private void setUserAndSendMail(UserEmail userEmail) {
+    private UserEmail setUserAndSendMail(UserEmail userEmail) {
+        validateEmail(userEmail.getEmail());
         userEmail.setActivated(false);
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(DateTime.now());
         userEmail.setPin(PinGeneratorService.generatePin());
         sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
+        userEmail.setEmail("");
+        return userEmail;
     }
 
     private WebApplicationException badRequest(String s) {

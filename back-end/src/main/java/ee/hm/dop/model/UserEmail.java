@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import ee.hm.dop.service.login.dto.UserStatus;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -42,6 +43,9 @@ public class UserEmail implements AbstractEntity{
 
     @Column
     private String pin;
+
+    @Transient
+    private UserStatus userStatus;
 
     @Override
     public Long getId() {
@@ -94,5 +98,13 @@ public class UserEmail implements AbstractEntity{
 
     public void setPin(String pin) {
         this.pin = pin;
+    }
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }

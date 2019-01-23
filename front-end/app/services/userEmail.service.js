@@ -10,14 +10,14 @@
                 .makePost('rest/userEmail', {email: userEmail, user: user})
         }
 
-        checkDuplicateEmail(userEmail) {
+        checkDuplicateEmail(userEmail, userState) {
             return this.serverCallService
-                .makePost('rest/userEmail/check', {email: userEmail})
+                .makePost('rest/userEmail/check', {email: userEmail, userStatus: userState})
         }
 
-        validatePin(user, pin) {
+        validatePin(user, pin, email) {
             return this.serverCallService
-                .makePost('rest/userEmail/validate', {user: user, pin: pin})
+                .makePost('rest/userEmail/validate', {user: user, pin: pin, email: email})
         }
 
     }
