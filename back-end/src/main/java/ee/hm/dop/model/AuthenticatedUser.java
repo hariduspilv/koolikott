@@ -1,7 +1,6 @@
 package ee.hm.dop.model;
 
 import static javax.persistence.CascadeType.ALL;
-import static org.joda.time.DateTime.now;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

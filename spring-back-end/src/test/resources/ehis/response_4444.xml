@@ -1,0 +1,44 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:iden="http://x-road.eu/xsd/identifiers" xmlns:xro="http://x-road.eu/xsd/xroad.xsd">
+    <SOAP-ENV:Header>
+        <xro:protocolVersion>4.0</xro:protocolVersion>
+        <xro:issue>ehis</xro:issue>
+        <xro:userId>70000740</xro:userId>
+        <xro:id>1234567890</xro:id>
+        <xro:requestHash algorithmId="http://www.w3.org/2001/04/xmlenc#sha512">SbvdTTPPWhGuMf8m+qbDaBTs04i0pvh6UA2r1ujrypOtrEO/pmXp4qZVat3tr99hC52nGfOlvsd1SkPejAfHlw==</xro:requestHash>
+        <xro:service iden:objectType="SERVICE">
+            <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+            <iden:memberClass>GOV</iden:memberClass>
+            <iden:memberCode>70000740</iden:memberCode>
+            <iden:subsystemCode>ehis</iden:subsystemCode>
+            <iden:serviceCode>isikuRollid</iden:serviceCode>
+            <iden:serviceVersion>v1</iden:serviceVersion>
+        </xro:service>
+        <xro:client iden:objectType="SUBSYSTEM">
+            <iden:xRoadInstance>ee-dev</iden:xRoadInstance>
+            <iden:memberClass>COM</iden:memberClass>
+            <iden:memberCode>10137025</iden:memberCode>
+            <iden:subsystemCode>10137025-tieto</iden:subsystemCode>
+        </xro:client>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ns3:isikuRollidResponse xmlns:ns3="http://producers.ehis.xtee.riik.ee/producer/ehis">
+            <isik>
+                <isikukood>4444</isikukood>
+                <eesnimi>Nim</eesnimi>
+                <perenimi>Pereni</perenimi>
+                <oppeasutused>
+                    <oppeasutus>
+                        <id>668</id>
+                        <regNr>75002426</regNr>
+                        <nimetus>Aakre Lasteaed-Algkool</nimetus>
+                        <rollid>
+                            <roll>
+                                <nimetus>õpetaja</nimetus>
+                            </roll>
+                        </rollid>
+                    </oppeasutus>
+                </oppeasutused>
+            </isik>
+        </ns3:isikuRollidResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

@@ -1,0 +1,41 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://reos.taat.edu.ee/saml2/idp/metadata.php">
+	<md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+		<md:KeyDescriptor use="signing">
+			<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIID5zCCAs+gAwIBAgIJALdksz+EJwoIMA0GCSqGSIb3DQEBCwUAMIGJMQswCQYDVQQGEwJFRTERMA8GA1UECAwIVGFydHVtYWExDjAMBgNVBAcMBVRhcnR1MQ4wDAYDVQQKDAVFRU5ldDENMAsGA1UECwwEVEFBVDEZMBcGA1UEAwwQcmVvcy50YWF0LmVkdS5lZTEdMBsGCSqGSIb3DQEJARYOZWVuZXRAZWVuZXQuZWUwHhcNMTYwMjE2MTIyMDUxWhcNMTkwMjE1MTIyMDUxWjCBiTELMAkGA1UEBhMCRUUxETAPBgNVBAgMCFRhcnR1bWFhMQ4wDAYDVQQHDAVUYXJ0dTEOMAwGA1UECgwFRUVOZXQxDTALBgNVBAsMBFRBQVQxGTAXBgNVBAMMEHJlb3MudGFhdC5lZHUuZWUxHTAbBgkqhkiG9w0BCQEWDmVlbmV0QGVlbmV0LmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr791eXNuO4oh6ndnM9qeP4+GtXlxSZNXpxuB032YCMLSDM15LLhPBX9htk/xB98QOzZ3f1mIpvlDPxrk34m3L7qKRaeOs9Yyn66d0wLb0zIm7NGEJd0P8ay1QdoTF6Ms6q1clmGqe8xuLO6mzWGeO00eDRBlvHKC3fcKeHnjK3qV9+Oqo5nmoC2TgQVF90gIinYGEoJ1zlSj20SCWtEmtjlc42S0kzPTsyhej7KfX5h969J8ess4N3t+i00Lewx8RJgCOVlRg4wi8AZb5M9bg5GtJ9RUGpO4OIfNr2m2zL8AuV5/Ao+WwIToQEYwKL8KwHiGXTsekOhzqW5IAxLdsQIDAQABo1AwTjAdBgNVHQ4EFgQUoUTGcAZkKyleofCS2m2uC540oJIwHwYDVR0jBBgwFoAUoUTGcAZkKyleofCS2m2uC540oJIwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAceeww+/paDZqd3omnx9BLAgkOrjfpNjyvuVLPXvqhMyev6SN+fDZ+fyMwcHFmDF/0jXoCfNhPAs7t04Fl6pwuSvJl8XysIR2pzgkDUErIanaGeJu0rceNxGhOPCjY/M6YvErtc0uYxdSG0KGtsOjWTxg5Cjpdj470dbBsPlzY0bLvUobH36a2Zu2NOnqS88h5vG4IsCe83oMU0d1MkULeq3iaDyLDTs0JZtFj6Xqhlz5yrkcbt5roihsdZ5AV38bk24e8RzdPCOlpIFTffvpfdZa8ql8iVcDVffxDLwfIgTb+EADdDy5Wwe3L45xIINJcvmvuT7Kt8su5sGgI73yuA==
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</md:KeyDescriptor>
+		<md:KeyDescriptor use="encryption">
+			<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+				<ds:X509Data>
+					<ds:X509Certificate>
+						MIID5zCCAs+gAwIBAgIJALdksz+EJwoIMA0GCSqGSIb3DQEBCwUAMIGJMQswCQYDVQQGEwJFRTERMA8GA1UECAwIVGFydHVtYWExDjAMBgNVBAcMBVRhcnR1MQ4wDAYDVQQKDAVFRU5ldDENMAsGA1UECwwEVEFBVDEZMBcGA1UEAwwQcmVvcy50YWF0LmVkdS5lZTEdMBsGCSqGSIb3DQEJARYOZWVuZXRAZWVuZXQuZWUwHhcNMTYwMjE2MTIyMDUxWhcNMTkwMjE1MTIyMDUxWjCBiTELMAkGA1UEBhMCRUUxETAPBgNVBAgMCFRhcnR1bWFhMQ4wDAYDVQQHDAVUYXJ0dTEOMAwGA1UECgwFRUVOZXQxDTALBgNVBAsMBFRBQVQxGTAXBgNVBAMMEHJlb3MudGFhdC5lZHUuZWUxHTAbBgkqhkiG9w0BCQEWDmVlbmV0QGVlbmV0LmVlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr791eXNuO4oh6ndnM9qeP4+GtXlxSZNXpxuB032YCMLSDM15LLhPBX9htk/xB98QOzZ3f1mIpvlDPxrk34m3L7qKRaeOs9Yyn66d0wLb0zIm7NGEJd0P8ay1QdoTF6Ms6q1clmGqe8xuLO6mzWGeO00eDRBlvHKC3fcKeHnjK3qV9+Oqo5nmoC2TgQVF90gIinYGEoJ1zlSj20SCWtEmtjlc42S0kzPTsyhej7KfX5h969J8ess4N3t+i00Lewx8RJgCOVlRg4wi8AZb5M9bg5GtJ9RUGpO4OIfNr2m2zL8AuV5/Ao+WwIToQEYwKL8KwHiGXTsekOhzqW5IAxLdsQIDAQABo1AwTjAdBgNVHQ4EFgQUoUTGcAZkKyleofCS2m2uC540oJIwHwYDVR0jBBgwFoAUoUTGcAZkKyleofCS2m2uC540oJIwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAceeww+/paDZqd3omnx9BLAgkOrjfpNjyvuVLPXvqhMyev6SN+fDZ+fyMwcHFmDF/0jXoCfNhPAs7t04Fl6pwuSvJl8XysIR2pzgkDUErIanaGeJu0rceNxGhOPCjY/M6YvErtc0uYxdSG0KGtsOjWTxg5Cjpdj470dbBsPlzY0bLvUobH36a2Zu2NOnqS88h5vG4IsCe83oMU0d1MkULeq3iaDyLDTs0JZtFj6Xqhlz5yrkcbt5roihsdZ5AV38bk24e8RzdPCOlpIFTffvpfdZa8ql8iVcDVffxDLwfIgTb+EADdDy5Wwe3L45xIINJcvmvuT7Kt8su5sGgI73yuA==
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</md:KeyDescriptor>
+		<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://reos.taat.edu.ee/saml2/idp/SingleLogoutService.php"/>
+		<md:NameIDFormat>
+			urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+		</md:NameIDFormat>
+		<md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://reos.taat.edu.ee/saml2/idp/SSOService.php"/>
+	</md:IDPSSODescriptor>
+	<md:Organization>
+		<md:OrganizationName xml:lang="et">Teaduse Autentimise ja Autoriseerimise Taristu</md:OrganizationName>
+		<md:OrganizationName xml:lang="en">
+			Research Authentication and Authorization Infrastructure
+		</md:OrganizationName>
+		<md:OrganizationDisplayName xml:lang="et">TAAT</md:OrganizationDisplayName>
+		<md:OrganizationDisplayName xml:lang="en">TAAT</md:OrganizationDisplayName>
+		<md:OrganizationURL xml:lang="et">http://taat.edu.ee</md:OrganizationURL>
+		<md:OrganizationURL xml:lang="en">http://taat.edu.ee</md:OrganizationURL>
+	</md:Organization>
+	<md:ContactPerson contactType="technical">
+		<md:SurName>Administrator</md:SurName>
+		<md:EmailAddress>eenet@eenet.ee</md:EmailAddress>
+	</md:ContactPerson>
+</md:EntityDescriptor>
