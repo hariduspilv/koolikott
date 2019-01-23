@@ -28,7 +28,7 @@ spring:
     locations: classpath:db/migration, classpath:db/initdb, classpath:db/initdata, classpath:db/users
   jackson:
     deserialization:
-      fail-on-unknown-properties: false:
+      fail-on-unknown-properties: false
 
 app:
   devLogin: false
