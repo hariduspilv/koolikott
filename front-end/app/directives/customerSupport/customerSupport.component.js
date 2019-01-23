@@ -162,6 +162,7 @@
             this.$scope.showCustomerSupportInput = true
             this.$scope.userManualExists = false
             this.$scope.showUserManualsHelped = false
+            this.$scope.isFileBtnVisible = true
         }
 
         toggleCustomerSupportDialog() {
@@ -176,7 +177,6 @@
 
         back() {
             this.$scope.captchaSuccess = false
-            this.$scope.isFileBtnVisible = false
             if (this.$scope.customerSupport.subject === 'Muu') {
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
@@ -205,7 +205,6 @@
         handleSelectChange(subject) {
             this.$scope.userManualExists = subject !== 'Muu';
             this.$scope.showCustomerSupportInput = subject === 'Muu';
-            this.$scope.isFileBtnVisible = this.$scope.customerSupport.subject === 'Muu' ? true : false
         }
 
         clickOutside() {
