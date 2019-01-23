@@ -1,9 +1,9 @@
-## e-Koolikott [1.28.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
+## e-Koolikott [1.28.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10700) (Toodangusse paigaldatud 22.01.2019)
 
 ### Muutunud
 * constants.js eemaldatud minifitseerimisest [EK-203](https://projektid.hitsa.ee/jira/browse/EK-203)
 
-## e-Koolikott [1.28.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
+## e-Koolikott [1.28.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10700) (Toodangusse paigaldatud 22.01.2019)
 
 ### Muutunud
 * JS teek kirjutab üle globaalset muutujat - parandatud [EK-89](https://projektid.hitsa.ee/jira/browse/EK-89)
@@ -13,7 +13,7 @@
 * mitteformaalõppe jaotuse probleem parandatud [EK-198](https://projektid.hitsa.ee/jira/browse/EK-198)
 
 
-## e-Koolikott [1.27.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10511) (Prelives testimisel)
+## e-Koolikott [1.27.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10511) (Toodangusse paigaldatud 22.01.2019)
 
 ### Muutunud
 * Kogumiku skrollimisel aktiveerub vasakmenüüs vastav peatükk automaatselt [EK-74](https://projektid.hitsa.ee/jira/browse/EK-74)
