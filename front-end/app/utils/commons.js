@@ -397,70 +397,61 @@ function getFlexElements() {
     return [document.getElementById('header-and-chapters'), document.getElementById('main-fab-button')];
 }
 
+function classListContainsHidden(el) {
+    el.style.opacity = 1
+    el.classList.remove("hidden")
+    el.classList.remove("visuallyhidden")
+    document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
+    document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
+    document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
+}
+
+function classListNotContainsHidden(el) {
+    el.style.opacity = 0;
+    el.classList.add("visuallyhidden")
+    setTimeout(function () {
+        el.classList.add("hidden")
+        document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
+        document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+
+        if (window.location.href.includes('/portfolio?')
+            ? document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
+            : document.getElementsByClassName("content-container")[0].style.paddingLeft = "0")
+
+            document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
+    }, 300)
+}
+
 function toggleFullScreen() {
     let elements = getElementsForFullScreen();
     let flexElements = getFlexElements();
+
     elements.forEach(el => {
         if (el) {
             if (el.classList.contains("hidden")){
-                el.style.opacity = 1
-                el.classList.remove("hidden")
-                el.classList.remove("visuallyhidden")
-                document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
+                classListContainsHidden(el);
                 setTimeout(function(){
                     el.classList.add("fullscreen-block")
 
                 },300)
                 ;}
             else{
-            el.style.opacity = 0;
-            el.classList.add("visuallyhidden")
-            setTimeout(function(){
-                el.classList.add("hidden")
-                document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
-                document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
-                if (window.location.href.includes('/portfolio?'))
-                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
-                else
-                    document.getElementsByClassName("content-container")[0].style.paddingLeft = "0"
-
-                document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
-            },300)}
-           
-
+                classListNotContainsHidden(el);
+            }
         }
     });
+
     flexElements.forEach(el => {
         if (el) {
             if (el.classList.contains("hidden")){
-                el.style.opacity = 1
-                el.classList.remove("hidden")
-                el.classList.remove("visuallyhidden")
-                document.getElementsByClassName("content-container")[0].style.paddingTop = "5rem"
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-right')
-                document.getElementsByClassName("content-container")[0].style.removeProperty('padding-left')
+                classListContainsHidden(el);
                 setTimeout(function(){
                     el.classList.add("fullscreen-flex")
 
                 },300)            
             }
             else{
-                el.style.opacity=0
-                el.classList.add("visuallyhidden")
-                setTimeout(function(){
-                    el.classList.add("hidden")
-                    document.getElementsByClassName("content-container")[0].style.paddingTop = "1.5rem"
-                    document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
-                    if (window.location.href.includes('/portfolio?'))
-                        document.getElementsByClassName("content-container")[0].style.paddingLeft = "calc(110px + 1rem)"
-                    else
-                        document.getElementsByClassName("content-container")[0].style.paddingLeft = "0"
-
-                    document.getElementsByClassName("content-container")[0].style.paddingRight = "0";
-                },300)
-
+                classListNotContainsHidden(el);
             }
         }
     });
