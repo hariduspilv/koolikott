@@ -17,14 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -83,19 +82,19 @@ public class LoginResource extends BaseResource {
     }
 
     @GetMapping("ekool")
-    public Response ekoolAuthenticate() throws URISyntaxException {
-        return redirect(getEkoolAuthenticationURI());
+    public RedirectView ekoolAuthenticate() throws URISyntaxException {
+        return new RedirectView(getEkoolAuthenticationURI().toString());
     }
 
     @GetMapping
     @RequestMapping("ekool/success")
-    public Response ekoolAuthenticateSuccess(@RequestParam("code") String code) throws URISyntaxException {
-        return redirect(getEkoolLocation(code));
+    public RedirectView ekoolAuthenticateSuccess(@RequestParam("code") String code) throws URISyntaxException {
+        return new RedirectView(getEkoolLocation(code).toString());
     }
 
     @GetMapping
     @RequestMapping("stuudium")
-    public Response stuudiumAuthenticate(@RequestParam("token") String token) throws URISyntaxException {
+    public RedirectView stuudiumAuthenticate(@RequestParam("token") String token) throws URISyntaxException {
         return token != null ? authenticateWithStuudiumToken(token) : redirectToStuudium();
     }
 
@@ -119,12 +118,12 @@ public class LoginResource extends BaseResource {
         return authenticatedUserService.getAuthenticatedUserByToken(token);
     }
 
-    private Response redirectToStuudium() throws URISyntaxException {
-        return redirect(getStuudiumAuthenticationURI());
+    private RedirectView redirectToStuudium() throws URISyntaxException {
+        return new RedirectView(getStuudiumAuthenticationURI().toString());
     }
 
-    private Response authenticateWithStuudiumToken(String token) throws URISyntaxException {
-        return redirect(getStuudiumLocation(token));
+    private RedirectView authenticateWithStuudiumToken(String token) throws URISyntaxException {
+        return new RedirectView(getStuudiumLocation(token).toString());
     }
 
     private URI getEkoolAuthenticationURI() throws URISyntaxException {
