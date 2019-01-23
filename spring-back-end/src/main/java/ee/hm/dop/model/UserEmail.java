@@ -6,11 +6,20 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.service.login.dto.UserStatus;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import lombok.Getter;
+import lombok.Setter;
+import org.joda.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
+@Getter
+@Setter
 @Entity
 public class UserEmail implements AbstractEntity{
 
@@ -30,16 +39,14 @@ public class UserEmail implements AbstractEntity{
     private boolean activated;
 
     @Column
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime activatedAt;
+    private LocalDateTime activatedAt;
 
     @Column
     private String pin;
@@ -47,64 +54,4 @@ public class UserEmail implements AbstractEntity{
     @Transient
     private UserStatus userStatus;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public DateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(DateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public DateTime getActivatedAt() {
-        return activatedAt;
-    }
-
-    public void setActivatedAt(DateTime activatedAt) {
-        this.activatedAt = activatedAt;
-    }
-
-    public String getPin() {
-        return pin;
-    }
-
-    public void setPin(String pin) {
-        this.pin = pin;
-    }
-
-    public UserStatus getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
-    }
 }

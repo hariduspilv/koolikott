@@ -10,7 +10,7 @@ import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.User_Agreement;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,16 +25,12 @@ public class UserEmailService {
 
     @Inject
     private UserEmailDao userEmailDao;
-
     @Inject
     private UserAgreementDao userAgreementDao;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
     @Inject
     private UserDao userDao;
-
     @Inject
     private SendMailService sendMailService;
 
@@ -67,7 +63,7 @@ public class UserEmailService {
             throw badRequest("Pins not equal");
 
         dbUserEmail.setActivated(true);
-        dbUserEmail.setActivatedAt(DateTime.now());
+        dbUserEmail.setActivatedAt(LocalDateTime.now());
         dbUserEmail.setEmail(userEmail.getEmail());
         dbUserAgreement.setAgreed(true);
         userAgreementDao.createOrUpdate(dbUserAgreement);
@@ -80,7 +76,7 @@ public class UserEmailService {
         validateEmail(userEmail.getEmail());
         userEmail.setActivated(false);
         userEmail.setActivatedAt(null);
-        userEmail.setCreatedAt(DateTime.now());
+        userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setPin(PinGeneratorService.generatePin());
         sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
         userEmail.setEmail("");

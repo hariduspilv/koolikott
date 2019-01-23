@@ -1,7 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.UserEmail;
-import ee.hm.dop.service.UserEmailService;
+import ee.hm.dop.service.login.UserEmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
