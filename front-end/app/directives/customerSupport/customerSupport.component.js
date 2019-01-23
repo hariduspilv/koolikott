@@ -13,7 +13,7 @@
             this.$scope.files = []
             this.$scope.ngfFiles = []
 
-            this.$scope.isFileBtnVisible = true
+            this.$scope.isFileBtnVisible = false
             this.$scope.fileSizeTogether = 0
             this.$scope.filesCount = 0
 
@@ -61,7 +61,7 @@
 
         canAddMoreFile() {
 
-            return (!this.$scope.tooManyFiles || !this.$scope.fileSizeTooLarge)
+            return !(this.$scope.tooManyFiles || this.$scope.fileSizeTooLarge)
         }
 
         remove(fileToRemove) {
@@ -82,11 +82,9 @@
         validateAttachments(files) {
             this.$scope.fileSizeTooLarge = false
             this.$scope.tooManyFiles = false
-            this.$scope.isFileBtnVisible = true;
 
             if (files.length > 3) {
                 this.$scope.tooManyFiles = true
-                this.$scope.isFileBtnVisible = false
             }
 
             this.$scope.fileSizeTogether = files.map(item => item.size)
@@ -94,8 +92,8 @@
 
             if (this.$scope.fileSizeTogether > 10) {
                 this.$scope.fileSizeTooLarge = true
-                this.$scope.isFileBtnVisible = false
             }
+            this.canAddMoreFile();
         }
 
         changeFiles(uploadedFiles) {
@@ -178,6 +176,7 @@
 
         back() {
             this.$scope.captchaSuccess = false
+            this.$scope.isFileBtnVisible = false
             if (this.$scope.customerSupport.subject === 'Muu') {
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
@@ -200,12 +199,13 @@
             this.$scope.captchaSuccess = false
             this.$scope.files = []
             this.$scope.ngfFiles = []
-
+            this.$scope.isFileBtnVisible = false
         }
 
         handleSelectChange(subject) {
             this.$scope.userManualExists = subject !== 'Muu';
             this.$scope.showCustomerSupportInput = subject === 'Muu';
+            this.$scope.isFileBtnVisible = this.$scope.customerSupport.subject === 'Muu' ? true : false
         }
 
         clickOutside() {
