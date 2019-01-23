@@ -172,11 +172,13 @@
 
         isSendDisabled() {
             const {name, email, subject, message} = this.$scope.customerSupport;
-            return !(name && email && subject && message && this.$scope.captchaSuccess && this.$scope.isFileBtnVisible)
+            return !(name && email && subject && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge)
         }
 
         back() {
             this.$scope.captchaSuccess = false
+            this.$scope.tooManyFiles = false
+            this.$scope.fileSizeTooLarge = false
             if (this.$scope.customerSupport.subject === 'Muu') {
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
