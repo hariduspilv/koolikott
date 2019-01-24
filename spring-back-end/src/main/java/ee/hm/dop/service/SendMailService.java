@@ -40,7 +40,7 @@ public class SendMailService {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(customerSupport.getName(), customerSupport.getEmail())
-                .withSubject("e-Koolikott, küsimuse kinnitus - " + customerSupport.getSubject())
+                .withSubject("e-Koolikott, küsimuse kinnitus")
                 .withHTMLText("<b>Teema:</b> " + customerSupport.getSubject() + BREAK +
                         "<b>Küsimus:</b> " + customerSupport.getMessage())
                 .buildEmail();
@@ -72,7 +72,7 @@ public class SendMailService {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
-                .withSubject("Kasutaja ebaõnnestunud pöördumine" + customerSupport.getSubject())
+                .withSubject("Kasutaja ebaõnnestunud pöördumine")
                 .withHTMLText("Kasutaja: " + customerSupport.getName() + ", " + customerSupport.getEmail() + BREAK
                         + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
                         + "Sisuga: " + customerSupport.getMessage() + BREAK
