@@ -205,6 +205,7 @@
         }
 
         handleSelectChange(subject) {
+            this.$scope.captchaSuccess = false
             this.$scope.userManualExists = subject !== 'Muu';
             this.$scope.showCustomerSupportInput = subject === 'Muu';
         }
