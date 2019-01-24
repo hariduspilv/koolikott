@@ -107,14 +107,8 @@
             }).catch(rejected => console.log(rejected))
         }
 
-        addFiles(uploadedFiles) {
-            this.$scope.files = [];
-            let promises = uploadedFiles.map(file => this.convertToBase64(file));
-            promises.map(p => p.then(file => this.$scope.files.push(file)))
+        addFiles(){
 
-            Promise.all(promises).then(() => {
-                this.validateAttachments(this.$scope.files);
-            }).catch(rejected => console.log(rejected))
         }
 
         convertToBase64(file) {
