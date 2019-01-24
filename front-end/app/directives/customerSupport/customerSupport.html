@@ -109,16 +109,26 @@
            ng-model="ngfFiles"
            ngf-max-size="10MB"
            ngf-max-files="3"
-           multiple accept="image/*"
+           multiple
+           accept="image/*"
+           ngf-pattern="'.jpg,.png,.jpeg'"
         >
           <span data-translate="UPLOAD_FILE_INFO"/>
           </a>
         <!--ngf-max-files="3"-->
         <div>
           <md-content class="md-padding" layout="column">
-            <md-chips ng-model="files" md-on-remove="$ctrl.remove($chip)" readonly="false">
+            <md-chips ng-model="files" readonly="true" >
               <md-chip-template>
                 <em>{{$chip.name}}</em>
+                <md-button
+                  class="md-icon-button"
+                  data-ng-click="$ctrl.remove($chip)">
+                  <md-tooltip>
+                    <span data-translate="DELETE_TAG"></span>
+                  </md-tooltip>
+                  <md-icon>close</md-icon>
+                </md-button>
               </md-chip-template>
             </md-chips>
           </md-content>
