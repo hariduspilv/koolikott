@@ -1,3 +1,12 @@
+## e-Koolikott [1.29.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10701)
+
+### Muutunud
+* Õppevara detailvaates täisekraan vaate funktsionaalsus [EK-14](https://projektid.hitsa.ee/jira/browse/EK-14)
+* Kasutaja e-posti küsimise, kogumise ja valideerimise funktsionaalsus [EK-138](https://projektid.hitsa.ee/jira/browse/EK-138)
+* Kasutajatoe tagasiside vormile captcha lisamine [EK-143](https://projektid.hitsa.ee/jira/browse/EK-143)
+* Kasutajatoe tagasiside vormile faili üleslaadmise funktsionaalsus [EK-144](https://projektid.hitsa.ee/jira/browse/EK-144)
+
+
 ## e-Koolikott [1.28.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
 
 ### Muutunud
