@@ -1,4 +1,4 @@
-<div id="customer-support-parent" class="customer-support-parent" data-ng-if="$ctrl.isUserModeratorOrAdmin()">
+<div id="customer-support-parent" class="customer-support-parent" data-ng-show="$ctrl.isUserModeratorOrAdmin()">
   <md-button class="md-raised md-primary"
              data-ng-click="$ctrl.toggleCustomerSupportDialog()"
              aria-label="Ava kasutajatoe menüü"
@@ -42,7 +42,7 @@
               data-translate="{{title}}"
             ></md-option>
           </md-select>
-          <div data-ng-messages="customerSupportForm.subject.$error">
+          <div data-ng-messages="customerSupportForm.title.$error" class="padding-10">
             <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_TOPIC_IS_MANDATORY"></div>
           </div>
         </md-input-container>
@@ -132,10 +132,11 @@
         <span data-ng-if="fileSizeTooLarge" data-translate="FILES_MORE_THAN_10MB"></span>
       </div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"
-        vc-recaptcha
-        key="captchaKey"
-        on-success="$ctrl.captchaSuccess()"
-        lang="$ctrl.getLanguage()"
+           vc-recaptcha
+           key="captchaKey"
+           on-success="$ctrl.captchaSuccess()"
+           on-expire="$ctrl.captchaExpired()"
+           lang="$ctrl.getLanguage()"
       ></div>
       <!-- Final step view -->
       <div data-layout="column" data-ng-if="finalStep" class="padding-10 final-step">

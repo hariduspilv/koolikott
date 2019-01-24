@@ -232,6 +232,10 @@
             return language === 'est' ? 'et' : language === 'rus' ? 'ru' : 'en';
 
         }
+
+        captchaExpired() {
+            this.$scope.captchaSuccess = false
+        }
     }
 
     controller.$inject = [
