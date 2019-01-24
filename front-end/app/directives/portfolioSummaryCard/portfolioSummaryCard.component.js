@@ -54,6 +54,7 @@ class controller extends Controller {
         this.$scope.setRecommendation = this.setRecommendation.bind(this)
         this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
+        this.$scope.toggleFullScreen = this.toggleFullScreen.bind(this)
 
         this.$scope.getLicenseIconList = () => {
             if (this.portfolio && this.portfolio.licenseType) {
@@ -211,8 +212,15 @@ class controller extends Controller {
         if (this.portfolio)
             this.portfolio.recommendation = recommendation
     }
+
+    toggleFullScreen() {
+        this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
+        toggleFullScreen();
+        if (this.$rootScope.isFullScreen) this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 8000);
+    }
 }
 controller.$inject = [
+    '$rootScope',
     '$scope',
     '$location',
     '$mdDialog',

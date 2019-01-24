@@ -5,8 +5,10 @@ import ee.hm.dop.dao.ThumbnailDao;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
+import org.apache.commons.io.FileUtils;
 
 import javax.inject.Inject;
+import java.io.File;
 
 public class PictureService {
 

@@ -16,8 +16,12 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
 import static ee.hm.dop.utils.DOPFileUtils.read;
@@ -86,4 +90,5 @@ public class PictureResource extends BaseResource {
     public int getMaxSize() {
         return configuration.getInt(MAX_FILE_SIZE);
     }
+
 }

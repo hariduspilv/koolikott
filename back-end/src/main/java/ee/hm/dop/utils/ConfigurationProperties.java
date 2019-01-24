@@ -105,4 +105,7 @@ public interface ConfigurationProperties {
     String EMAIL_USERNAME = "email.username";
     String EMAIL_PASSWORD = "email.password";
     String EMAIL_TRANSPORT_STRATEGY = "email.transport.strategy";
+
+    //Captcha
+    String CAPTCHA_KEY = "captcha.key";
 }

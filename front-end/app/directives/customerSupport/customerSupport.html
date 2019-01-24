@@ -1,4 +1,4 @@
-<div class="customer-support-parent" data-ng-if="$ctrl.isUserModeratorOrAdmin()">
+<div id="customer-support-parent" class="customer-support-parent" data-ng-show="$ctrl.isUserModeratorOrAdmin()">
   <md-button class="md-raised md-primary"
              data-ng-click="$ctrl.toggleCustomerSupportDialog()"
              aria-label="Ava kasutajatoe menüü"
@@ -27,14 +27,13 @@
         </div>
       </md-toolbar>
       <div data-layout="column" data-ng-if="!finalStep">
-        <span data-translate="CUSTOMER_SUPPORT_ASK_OR_FAQ" class="padding-10"></span>
+        <span data-ng-if="!showCustomerSupportInput" data-translate="CUSTOMER_SUPPORT_ASK_OR_FAQ" class="padding-10"></span>
         <md-input-container class="margin-10" style="z-index: 1000">
           <md-select
             placeholder="{{'CUSTOMER_SUPPORT_CHOOSE_TOPIC' | translate}}"
             name="title"
             class="no-margin"
             data-ng-model="customerSupport.subject"
-            required
             style="padding: 10px"
           >
             <md-option
@@ -43,9 +42,6 @@
               data-translate="{{title}}"
             ></md-option>
           </md-select>
-          <div data-ng-messages="customerSupportForm.subject.$error">
-            <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_TOPIC_IS_MANDATORY"></div>
-          </div>
         </md-input-container>
         <div data-layout="row" data-ng-if="userManualExists && !showUserManualsHelped" class="padding-10">
           <span data-translate="CUSTOMER_SUPPORT_HAS_USER_MANUAL"></span>
@@ -105,6 +101,54 @@
           </div>
         </md-input-container>
       </div>
+      <div data-ng-if="showCustomerSupportInput" class="customSupportUploadFile">
+        <a type="file"
+           name="file"
+           ng-if="$ctrl.canAddMoreFile()" href=""
+           ngf-select="$ctrl.addFiles()"
+           ngf-change="$ctrl.changeFiles(ngfFiles)"
+           ngf-keep="true"
+           ng-model="ngfFiles"
+           ngf-max-size="10MB"
+           ngf-max-files="3"
+           multiple
+           accept="image/*"
+           ngf-pattern="'.jpg,.png,.jpeg,.bmp,.JPG,.PNG,.GIF,.JPEG,.BMP'"
+
+        >
+          <span data-translate="UPLOAD_FILE_INFO"/>
+        </a>
+        <div data-ng-messages="customerSupportForm.file.$error">
+          <div class="email-alert" data-ng-message="pattern" data-translate="CUSTOMER_FILE_UPLOAD_ERROR"></div>
+        </div>
+        <md-content class="md-padding" layout="column">
+          <md-chips ng-model="files" readonly="true">
+            <md-chip-template>
+              <em>{{$chip.name}}</em>
+              <md-button
+                class="md-icon-button"
+                data-ng-click="$ctrl.remove($chip)">
+                <md-tooltip>
+                  <span data-translate="DELETE_TAG"></span>
+                </md-tooltip>
+                <md-icon>close</md-icon>
+              </md-button>
+            </md-chip-template>
+          </md-chips>
+        </md-content>
+      </div>
+
+      <div class="email-alert" style="text-align: -webkit-center;">
+        <span data-ng-if="tooManyFiles" data-translate="ALLOWED 3 FILES"></span>
+        <span data-ng-if="fileSizeTooLarge" data-translate="FILES_MORE_THAN_10MB"></span>
+      </div>
+      <div ng-if="showCustomerSupportInput" class="recaptcha"
+           vc-recaptcha
+           key="captchaKey"
+           on-success="$ctrl.captchaSuccess()"
+           on-expire="$ctrl.captchaExpired()"
+           lang="$ctrl.getLanguage()"
+      ></div>
       <!-- Final step view -->
       <div data-layout="column" data-ng-if="finalStep" class="padding-10 final-step">
         <span data-ng-bind-html="finalresponse"></span>

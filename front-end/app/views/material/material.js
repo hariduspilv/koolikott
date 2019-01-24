@@ -10,11 +10,28 @@ angular.module('koolikottApp')
                   toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce) {
 
             $scope.showMaterialContent = false;
+            $rootScope.isFullScreen = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
+
+            document.addEventListener('keyup', (e) => {
+                if (e.code === "Escape" && $rootScope.isFullScreen)
+                    $scope.toggleFullScreen();
+            });
+            document.addEventListener('click', (e) => {
+                if (e.target.localName === 'a' && $rootScope.isFullScreen && !document.getElementById('sidenavAccordion'))
+                    $scope.toggleFullScreen();
+            });
+
+            window.addEventListener('popstate',() => {
+                if ($rootScope.isFullScreen) {
+                    $rootScope.isFullScreen = !$rootScope.isFullScreen;
+                    $scope.toggleFullScreen();
+                }
+            });
 
             const licenceTypeMap = {
                 'CCBY': ['by'],
@@ -158,7 +175,9 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
-                materialService.increaseViewCount($scope.material);
+                if ($scope.material)
+                    materialService.increaseViewCount($scope.material);
+
             }
 
             $scope.getLicenseIconList = () => {
@@ -232,6 +251,12 @@ angular.module('koolikottApp')
             function getSignedUserDataFail(data, status) {
                 console.log("Failed to get signed user data.")
                 $scope.material.linkSource = $scope.material.source;
+            }
+
+            $scope.toggleFullScreen = () => {
+                $rootScope.isFullScreen = !$rootScope.isFullScreen;
+                toggleFullScreen();
+                if ($rootScope.isFullScreen) toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 8000);
             }
 
             $scope.edit = () => {
@@ -327,6 +352,8 @@ angular.module('koolikottApp')
                     return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
             }
+
+
 
             $scope.setRecommendation = (recommendation) => {
                 if ($scope.material)

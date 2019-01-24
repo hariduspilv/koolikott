@@ -1,0 +1,371 @@
+package ee.hm.dop.rest.content;
+
+import com.google.common.collect.Lists;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.common.test.TestLayer;
+import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ContentRow;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.enums.Visibility;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+@Transactional
+public class PortfolioResourceTest extends ResourceIntegrationTestBase {
+
+    private static final String CREATE_PORTFOLIO_URL = "portfolio/create";
+    private static final String UPDATE_PORTFOLIO_URL = "portfolio/update";
+    public static final String GET_PORTFOLIO_URL = "portfolio?id=%s";
+    private static final String GET_BY_CREATOR_URL = "portfolio/getByCreator?username=%s";
+    private static final String GET_BY_CREATOR_COUNT_URL = "portfolio/getByCreator/count?username=%s";
+    private static final String PORTFOLIO_COPY_URL = "portfolio/copy";
+    private static final String DELETE_PORTFOLIO_URL = "portfolio/delete";
+
+    public static final String NEW_SUBCHAPTER = "New subchapter";
+    public static final String NEW_CHAPTER_1 = "New chapter 1";
+    public static final String NEW_COOL_SUBCHAPTER = "New cool subchapter";
+
+    @Test
+    public void getPortfolio() {
+        assertPortfolio1(getPortfolio(PORTFOLIO_1), TestLayer.REST);
+    }
+
+    @Test
+    public void getNotExistingPortfolio() {
+        Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsCreator() {
+        login(USER_PEETER);
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_7);
+        assertEquals(PORTFOLIO_7, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsNotCreator() {
+        login(USER_VOLDERMAR2);
+
+        Response response = doGet(format(GET_PORTFOLIO_URL, PORTFOLIO_7));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getPrivatePortfolioAsAdmin() {
+        login(USER_ADMIN);
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_7);
+        assertEquals(PORTFOLIO_7, portfolio.getId());
+        assertEquals("This portfolio is private. ", portfolio.getTitle());
+    }
+
+    @Test
+    public void getByCreator() {
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, USER_MAASIKAS_VAARIKAS.username)).readEntity(SearchResult.class);
+        List<Searchable> portfolios = result.getItems();
+        assertEquals(3, portfolios.size());
+
+        List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
+        List<Long> expectedIds = Arrays.asList(PORTFOLIO_1, PORTFOLIO_3, PORTFOLIO_14);
+        assertTrue(actualIds.containsAll(expectedIds));
+    }
+
+    @Test
+    public void getByCreatorCount_returns_same_portfolios_count_as_getByCreator_size() throws Exception {
+        List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, USER_MAASIKAS_VAARIKAS.username), SearchResult.class).getItems();
+        long count = doGet(format(GET_BY_CREATOR_COUNT_URL, USER_MAASIKAS_VAARIKAS.username), Long.class);
+        assertEquals("Portfolios size by creator, Portfolios count by creator", portfolios.size(), count);
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListed() {
+        List<Searchable> portfolios = doGet(format(GET_BY_CREATOR_URL, USER_MYTESTUSER.username), SearchResult.class).getItems();
+
+        assertEquals(1, portfolios.size());
+        assertEquals(PORTFOLIO_9, portfolios.get(0).getId());
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListedAsCreator() {
+        login(USER_MYTESTUSER);
+        assertGetByCreator();
+    }
+
+    @Test
+    public void getByCreatorWhenSomeArePrivateOrNotListedAsAdmin() {
+        login(USER_ADMIN);
+        assertGetByCreator();
+    }
+
+    @Test
+    public void getByCreatorWithoutUsername() {
+        Response response = doGet("portfolio/getByCreator");
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void getByCreatorWithBlankUsername() {
+        Response response = doGet(format(GET_BY_CREATOR_URL, ""));
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertTrue(response.readEntity(String.class).contains("Username parameter is mandatory"));
+    }
+
+    @Test
+    public void getByCreatorNotExistingUser() {
+        String username = "notexisting.user";
+        Response response = doGet(format(GET_BY_CREATOR_URL, username));
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertTrue(response.readEntity(String.class).contains("User does not exist with this username parameter"));
+    }
+
+    @Test
+    public void getByCreatorNoMaterials() {
+        SearchResult portfolios = doGet(format(GET_BY_CREATOR_URL, USER_VOLDERMAR.username), SearchResult.class);
+
+        assertEquals(0, portfolios.getItems().size());
+        assertEquals(0, portfolios.getStart());
+        assertEquals(0, portfolios.getTotalResults());
+    }
+
+    @Test
+    public void create() {
+        login(USER_MATI);
+        Portfolio createdPortfolio = createPortfolio();
+        assertNotNull(createdPortfolio);
+        assertNotNull(createdPortfolio.getId());
+        assertEquals((Long) 1L, createdPortfolio.getOriginalCreator().getId());
+        assertEquals((Long) 1L, createdPortfolio.getCreator().getId());
+    }
+
+    @Test
+    public void updateChanginMetadataNoChapters() {
+        login(USER_MATI);
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_5);
+        String originalTitle = portfolio.getTitle();
+        portfolio.setTitle("New mega nice title that I come with Yesterday night!");
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertFalse(originalTitle.equals(updatedPortfolio.getTitle()));
+        assertEquals("New mega nice title that I come with Yesterday night!", updatedPortfolio.getTitle());
+    }
+
+    @Test
+    public void updateSomeoneElsesPortfolio() {
+        login(USER_PEETER);
+
+        Portfolio portfolio = getPortfolio(105);
+        portfolio.setTitle("This is not my portfolio.");
+
+        portfolio.setCreator(userWithId(USER_PEETER.id));
+
+        Response response = doPost(UPDATE_PORTFOLIO_URL, portfolio);
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void updateCreatingChapter() {
+        login(USER_MATI);
+
+        List<Chapter> chapters = chapters(NEW_CHAPTER_1);
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_5);
+        portfolio.setChapters(chapters);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+        assertFalse(updatedPortfolio.getChapters().isEmpty());
+    }
+
+    @Test
+    public void updateCreatingChapterWithSubchapterNoMaterials() {
+        login(USER_MATI);
+
+        List<Chapter> chapters = new ArrayList<>();
+        Chapter newChapter = chapter(NEW_CHAPTER_1);
+        newChapter.setSubchapters(chapters(NEW_SUBCHAPTER));
+
+        chapters.add(newChapter);
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_5);
+        portfolio.setChapters(chapters);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertFalse(updatedPortfolio.getChapters().isEmpty());
+        assertFalse(updatedPortfolio.getChapters().get(0).getSubchapters().isEmpty());
+    }
+
+    @Test
+    public void updateCreatingChapterWithExistingChapter() {
+        login(USER_MATI);
+
+        Chapter newChapter = chapter(NEW_CHAPTER_1);
+        newChapter.setSubchapters(chapters(NEW_COOL_SUBCHAPTER));
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_5);
+        portfolio.getChapters().add(newChapter);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertFalse(updatedPortfolio.getChapters().isEmpty());
+        Chapter verify = updatedPortfolio.getChapters().get(updatedPortfolio.getChapters().size() - 1).getSubchapters().get(0);
+        assertEquals(NEW_COOL_SUBCHAPTER, verify.getTitle());
+    }
+
+    @Test
+    public void updateChangingVisibility() {
+        login(USER_PEETER);
+
+        Portfolio portfolio = getPortfolio(PORTFOLIO_6);
+        portfolio.setVisibility(Visibility.NOT_LISTED);
+
+        Portfolio updatedPortfolio = doPost(UPDATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertEquals(Visibility.NOT_LISTED, updatedPortfolio.getVisibility());
+    }
+
+    @Ignore
+    @Test
+    public void copyPortfolio() {
+        login(USER_PEETER);
+
+        Portfolio copiedPortfolio = doPost(PORTFOLIO_COPY_URL, portfolioWithIdAndTitle(PORTFOLIO_1, "1"), Portfolio.class);
+        assertNotNull(copiedPortfolio);
+        assertEquals(Long.valueOf(2), copiedPortfolio.getCreator().getId());
+        assertEquals(Long.valueOf(6), copiedPortfolio.getOriginalCreator().getId());
+    }
+
+    @Ignore
+    @Test
+    public void copyPrivatePortfolioNotLoggedIn() {
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithId(PORTFOLIO_7));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Ignore
+    @Test
+    public void copyPrivatePortfolioLoggedInAsNotCreator() {
+        login(USER_MATI);
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithIdAndTitle(PORTFOLIO_7, "7"));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Ignore
+    @Test
+    public void copyPrivatePortfolioLoggedInAsCreator() {
+        login(USER_PEETER);
+
+        Response response = doPost(PORTFOLIO_COPY_URL, portfolioWithIdAndTitle(PORTFOLIO_7, "7"));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        Portfolio copiedPortfolio = response.readEntity(Portfolio.class);
+        assertEquals(USER_PEETER.id, copiedPortfolio.getOriginalCreator().getId());
+    }
+
+    @Test
+    public void deletePortfolioAsCreator() {
+        login(USER_SECOND);
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_12));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioAsNotCreator() {
+        login(USER_SECOND);
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
+        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void deletePortfolioNotLoggedIn() {
+        Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_1));
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void createWithContent() {
+        login(USER_MATI);
+
+        Portfolio portfolio = portfolioWithTitle("With chapters");
+
+        Material json = materialWithSource("http://www.november.juliet.ru");
+        Material createdMaterial = createOrUpdateMaterial(json);
+
+        Chapter firstChapter = chapter("First chapter");
+        firstChapter.setContentRows(Lists.newArrayList(new ContentRow(Lists.newArrayList(createdMaterial))));
+        portfolio.setChapters(Lists.newArrayList(firstChapter));
+
+        Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
+
+        assertNotNull(createdPortfolio);
+        assertNotNull(createdPortfolio.getId());
+        String expected = createOrUpdateMaterial(createdMaterial).getSource();
+        String actual = ((Material) createdPortfolio.getChapters().get(0).getContentRows().get(0).getLearningObjects().get(0)).getSource();
+        assertEquals(actual, expected);
+    }
+
+    private Material materialWithSource(String source) {
+        Material material = new Material();
+        material.setSource(source);
+        return material;
+    }
+
+    private Portfolio createPortfolio() {
+        return doPost(CREATE_PORTFOLIO_URL, portfolioWithTitle("Tere"), Portfolio.class);
+    }
+
+    private void assertGetByCreator() {
+        SearchResult result = doGet(format(GET_BY_CREATOR_URL, USER_MYTESTUSER.username), SearchResult.class);
+        List<Searchable> portfolios = result.getItems();
+
+        assertEquals(3, portfolios.size());
+        List<Long> expectedIds = Arrays.asList(PORTFOLIO_9, PORTFOLIO_10, PORTFOLIO_11);
+        List<Long> actualIds = portfolios.stream().map(Searchable::getId).collect(Collectors.toList());
+        assertTrue(actualIds.containsAll(expectedIds));
+    }
+
+    private Chapter chapter(String title) {
+        Chapter newChapter = new Chapter();
+        newChapter.setTitle(title);
+        return newChapter;
+    }
+
+    private List<Chapter> chapters(String title) {
+        List<Chapter> subchapters = new ArrayList<>();
+        subchapters.add(chapter(title));
+        return subchapters;
+    }
+
+    private Portfolio portfolioWithTitle(String title) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setTitle(title);
+        return portfolio;
+    }
+
+    private Portfolio portfolioWithIdAndTitle(Long id, String title) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(id);
+        portfolio.setTitle(title);
+        return portfolio;
+    }
+}

@@ -50,7 +50,6 @@ public class CustomerSupportService {
                 customerSupport.setSentTries(3);
             }
         }
-
         return customerSupportDao.createOrUpdate(customerSupport);
     }
 

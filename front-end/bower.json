@@ -1,6 +1,6 @@
 {
   "name": "e-Koolikott",
-  "version": "1.28.1",
+  "version": "1.29.0",
   "dependencies": {
     "angular": "1.6.4",
     "angular-animate": "1.6.4",
@@ -36,7 +36,9 @@
     "angular-sortable-view": "https://github.com/hariduspilv/angular-sortable-view.git#master",
     "medium-button": "^1.1.2",
     "angular-qrcode": "^7.2.0",
-    "unorm": "^1.4.1"
+    "unorm": "^1.4.1",
+    "angular-recaptcha": "^4.2.0",
+    "ng-file-model": "*"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",

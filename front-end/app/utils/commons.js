@@ -383,6 +383,91 @@ function sortTags(upVoteForms) {
     }
 }
 
+function getElementsForFullScreen() {
+    return [document.getElementById('md-toolbar-header'), document.getElementById('aside-right'), document.getElementById('version'),
+        document.getElementById('share'), document.getElementById('qr-code'), document.getElementById('dots-menu'), document.getElementById('dop-error'),
+        document.getElementById('customer-support-parent'), document.getElementById('about-parent'), document.getElementById('divider'),
+        document.getElementById('admin-parent'), document.getElementById('my-profile'), document.getElementById('taxonomy'), document.getElementById('sidenav-logo'),
+        document.getElementById('top-divider'), document.getElementById('section-right'), document.getElementById('views'), document.getElementById('tags'),
+        document.getElementById('taxon-meta')];
+
+}
+
+function getFlexElements() {
+    return [document.getElementById('header-and-chapters'), document.getElementById('main-fab-button')];
+}
+
+function classListContainsHidden(el) {
+    el.style.opacity = 1
+    el.classList.remove("hidden")
+    el.classList.remove("visuallyhidden")
+    let contentContainer = document.getElementsByClassName("content-container")[0];
+    contentContainer.style.paddingTop = "5rem"
+    contentContainer.style.removeProperty('padding-right')
+    contentContainer.style.removeProperty('padding-left')
+}
+
+function classListNotContainsHidden(el) {
+    el.style.opacity = 0;
+    el.classList.add("visuallyhidden")
+    setTimeout(() => {
+        el.classList.add("hidden")
+        document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
+        let contentContainer = document.getElementsByClassName("content-container")[0];
+        contentContainer.style.paddingTop = "1.5rem"
+        contentContainer.style.paddingLeft = window.location.href.includes('/portfolio?') ? "calc(110px + 1rem)": "0";
+        contentContainer.style.paddingRight = "0";
+    }, 300)
+}
+
+function resize(el, cssClass) {
+    if (el) {
+        if (el.classList.contains("hidden")) {
+            classListContainsHidden(el);
+            setTimeout(() => el.classList.add(cssClass), 300);
+        } else {
+            classListNotContainsHidden(el);
+        }
+    }
+}
+
+function toggleFullScreen() {
+    getElementsForFullScreen().forEach(el => resize(el, "fullscreen-block"));
+    getFlexElements().forEach(el => resize(el, "fullscreen-flex"));
+
+    fullScreenRemoveChapterMargin();
+    fullScreenExpandSummary()
+}
+
+function fullScreenRemoveChapterMargin() {
+    let elements =  Array.from(document.querySelectorAll('.portfolio-chapter'))
+    let summary = document.getElementById('summary-card')
+    elements.forEach(e => {
+        if (e) {
+            if (e.style.marginBottom === '')
+                e.style.marginBottom = 0
+            else
+                e.style.marginBottom = ''
+        }
+    })
+    if (summary) {
+        if (summary.style.marginBottom === '')
+            summary.style.marginBottom = 0
+        else
+            summary.style.marginBottom = ''
+    }
+}
+
+function fullScreenExpandSummary() {
+    let el = document.getElementById('section-left')
+    if (el) {
+        if (el.style.maxWidth === '')
+            el.style.maxWidth = '100%'
+        else
+            el.style.maxWidth = ''
+    }
+}
+
 function containsMaterial(materials, selectedMaterial) {
     for (var i = 0; i < materials.length; i++) {
         var material = materials[i];

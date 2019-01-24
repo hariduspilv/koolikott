@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService', 'userSessionService',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService, userSessionService) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService', 'userSessionService', 'userEmailService',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService, userSessionService, userEmailService) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
@@ -36,9 +36,11 @@ angular.module('koolikottApp')
         }
 
         function showGdprModalAndAct(userStatus) {
+            $rootScope.statusForDuplicateCheck = userStatus
             $mdDialog.show({
                 templateUrl: 'views/agreement/agreementDialog.html',
                 controller: 'agreementDialogController',
+                controllerAs: '$ctrl',
             }).then((res)=>{
                 if (!res){
                     if (userStatus.existingUser){
@@ -51,12 +53,28 @@ angular.module('koolikottApp')
                     userStatus.userConfirmed = true;
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
-                                authenticateUser(response.data);
+                                userEmailService.saveEmail($rootScope.email, response.data.user)
+                                showEmailValidationModal(response)
+                                $rootScope.userFromAuthentication = response.data.user
                             }, () => {
                                 loginFail();
                             }
                         )
                 }
+            })
+        }
+
+        function showEmailValidationModal(response) {
+            $mdDialog.show({
+                templateUrl: 'views/emailValidation/emailValidationDialog.html',
+                controller: 'emailValidationController',
+                clickOutsideToClose: false,
+                escapeToClose: false,
+            }).then((res) => {
+                if (!res)
+                    loginFail()
+                 else
+                    authenticateUser(response.data);
             })
         }
 

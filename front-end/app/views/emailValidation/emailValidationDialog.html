@@ -1,0 +1,91 @@
+<md-dialog id="email-validation-dialog" aria-label="Email validation dialog" class="login-dialog" flex="50">
+  <md-toolbar>
+    <div id="email-validation-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2 data-translate="EMAIL_VALIDATION_HEADER"
+        ></h2>
+      </div>
+    </div>
+  </md-toolbar>
+  <form name="emailValidationForm">
+    <md-dialog-content>
+      <md-content data-layout-padding>
+        <p><span id="email-validation-text" data-ng-bind-html="emailDialogText"></span></p>
+        <div style="text-align: center">
+          <div data-layout-gt-sm="row" data-layout="row" data-layout-align="center center" class="center-pin">
+            <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+              <input
+                class="center-pin-input"
+                name="firstNum"
+                id="email-firstNum"
+                ng-model="firstNum"
+                type="text"
+                required
+                maxlength="1"
+                data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
+                tabindex="1"
+                auto-tab
+                md-autofocus
+              >
+            </md-input-container>
+            <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+              <input
+                class="center-pin-input"
+                name="secondNum"
+                id="email-secondNum"
+                ng-model="secondNum"
+                type="text"
+                required
+                maxlength="1"
+                data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
+                tabindex="2"
+                auto-tab
+              >
+            </md-input-container>
+            <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+              <input
+                class="center-pin-input"
+                name="thirdNum"
+                id="email-thirdNum"
+                ng-model="thirdNum"
+                type="text"
+                required
+                maxlength="1"
+                data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
+                tabindex="3"
+                auto-tab
+              >
+            </md-input-container>
+            <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+              <input
+                class="center-pin-input"
+                name="fourthNum"
+                id="email-fourthNum"
+                ng-model="fourthNum"
+                type="text"
+                required
+                maxlength="1"
+                data-ng-disabled="isSending"
+                data-ng-change="checkPin()"
+                tabindex="4"
+                autotab
+              >
+            </md-input-container>
+            <md-progress-circular
+              class="ng-hide"
+              md-mode="indeterminate"
+              md-diameter="40"
+              data-ng-show="isSending"
+            ></md-progress-circular>
+          </div>
+          <div data-ng-messages="emailValidationForm.$error">
+            <div data-ng-message="validationError" class="email-alert" data-translate="EMAIL_INVALID_PIN"></div>
+          </div>
+        </div>
+      </md-content>
+    </md-dialog-content>
+  </form>
+</md-dialog>
