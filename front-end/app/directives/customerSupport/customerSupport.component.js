@@ -13,6 +13,8 @@
             this.$scope.files = []
             this.$scope.ngfFiles = []
 
+            this.$scope.customerSupportTitle = false
+
             this.$scope.isFileBtnVisible = false
             this.$scope.fileSizeTogether = 0
             this.$scope.filesCount = 0
@@ -132,6 +134,10 @@
 
             this.setResponse()
 
+            this.$scope.customerSupport.subject = this.$scope.customerSupport.title
+            delete this.$scope.customerSupport.title
+
+
             this.$scope.customerSupport.files = this.$scope.files
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
@@ -207,6 +213,7 @@
         handleSelectChange(subject) {
             this.$scope.userManualExists = subject !== 'Muu';
             this.$scope.showCustomerSupportInput = subject === 'Muu';
+            this.$scope.customerSupportTitle = subject === 'Muu';
         }
 
         clickOutside() {
