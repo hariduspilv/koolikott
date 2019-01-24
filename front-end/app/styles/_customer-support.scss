@@ -47,6 +47,14 @@
   text-align: -webkit-center;
   text-align: -moz-center;
 
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    padding-left: 16px;
+  }
+
+  @supports (-ms-accelerator:true) {
+    padding-left: 16px;
+  }
+
 }
 .customSupportUploadFile {
 
