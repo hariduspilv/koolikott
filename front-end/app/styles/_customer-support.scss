@@ -55,6 +55,10 @@
     padding-left: 16px;
   }
 
+  @supports (-ms-ime-align:auto) {
+    padding-left: 16px;
+  }
+
 }
 .customSupportUploadFile {
 
