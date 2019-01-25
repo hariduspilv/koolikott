@@ -119,17 +119,12 @@
           <span data-ng-class="{'upload-disabled' : fileSizeTooLarge || maxFiles}" data-translate="UPLOAD_FILE_INFO"/>
         </a>
         <md-content class="md-padding" layout="column">
-          <md-chips ng-model="files" readonly="true">
+          <md-chips ng-model="files"
+                    readonly="true"
+                    md-removable="true"
+                    md-on-remove="$ctrl.remove($chip)">
             <md-chip-template>
               <em>{{$chip.name}}</em>
-              <md-button
-                class="md-icon-button"
-                data-ng-click="$ctrl.remove($chip)">
-                <md-tooltip>
-                  <span data-translate="DELETE_TAG"></span>
-                </md-tooltip>
-                <md-icon>close</md-icon>
-              </md-button>
             </md-chip-template>
           </md-chips>
         </md-content>
