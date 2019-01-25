@@ -104,23 +104,20 @@
       <div data-ng-if="showCustomerSupportInput" class="customSupportUploadFile">
         <a type="file"
            name="file"
-           ng-if="$ctrl.canAddMoreFile()" href=""
-           ngf-select="$ctrl.addFiles()"
-           ngf-change="$ctrl.changeFiles(ngfFiles)"
+           ng-disabled="fileSizeTooLarge"
+           ngf-select
+           ngf-change="$ctrl.changeFiles(ngfFiles, customerSupportForm.file)"
            ngf-keep="true"
            ng-model="ngfFiles"
-           ngf-max-size="10MB"
+           ngf-max-size="'10MB'"
+           ngf-max-total-size="'10MB'"
            ngf-max-files="3"
            multiple
            accept="image/*"
            ngf-pattern="'.jpg,.png,.jpeg,.bmp,.JPG,.PNG,.GIF,.JPEG,.BMP'"
-
         >
-          <span data-translate="UPLOAD_FILE_INFO"/>
+          <span data-ng-class="{'upload-disabled' : fileSizeTooLarge}" data-translate="UPLOAD_FILE_INFO"/>
         </a>
-        <div data-ng-messages="customerSupportForm.file.$error">
-          <div class="email-alert" data-ng-message="pattern" data-translate="CUSTOMER_FILE_UPLOAD_ERROR"></div>
-        </div>
         <md-content class="md-padding" layout="column">
           <md-chips ng-model="files" readonly="true">
             <md-chip-template>
@@ -136,11 +133,11 @@
             </md-chip-template>
           </md-chips>
         </md-content>
-      </div>
-
-      <div class="email-alert" style="text-align: -webkit-center;">
-        <span data-ng-if="tooManyFiles" data-translate="ALLOWED 3 FILES"></span>
-        <span data-ng-if="fileSizeTooLarge" data-translate="FILES_MORE_THAN_10MB"></span>
+        <div data-ng-messages="customerSupportForm.file.$error">
+          <div data-ng-message="pattern" class="email-alert" data-translate="CUSTOMER_FILE_UPLOAD_ERROR"></div>
+          <div data-ng-message="maxSize" class="email-alert" data-translate="FILES_MORE_THAN_10MB"></div>
+          <div data-ng-message="maxTotalSize" class="email-alert" data-translate="FILES_MORE_THAN_10MB"></div>
+        </div>
       </div>
       <div ng-if="showCustomerSupportInput" class="recaptcha"
            vc-recaptcha

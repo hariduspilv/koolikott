@@ -9,6 +9,8 @@
             this.$scope.customerSupport = {}
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
+            this.$scope.fileSizeTooLarge = false
+
 
             this.$scope.files = []
             this.$scope.ngfFiles = []
@@ -59,11 +61,6 @@
                 })
         }
 
-        canAddMoreFile() {
-
-            return !(this.$scope.tooManyFiles || this.$scope.fileSizeTooLarge)
-        }
-
         remove(fileToRemove) {
             this.$scope.files.forEach((chipFile, index) => {
                 if (chipFile.name === fileToRemove.name) {
@@ -81,34 +78,31 @@
 
         validateAttachments(files) {
             this.$scope.fileSizeTooLarge = false
-            this.$scope.tooManyFiles = false
 
-            if (files.length > 3) {
-                this.$scope.tooManyFiles = true
+            if(files.length !== 0){
+                this.$scope.customerSupportForm.file.$error.maxSize =false
             }
 
             this.$scope.fileSizeTogether = files.map(item => item.size)
                 .reduce((prev, next) => prev + next, 0) / 1024 / 1024;
 
             if (this.$scope.fileSizeTogether > 10) {
+                this.$scope.customerSupportForm.file.$error.maxSize = true
                 this.$scope.fileSizeTooLarge = true
             }
-            this.canAddMoreFile();
         }
 
         changeFiles(uploadedFiles) {
+            this.$scope.isSaving = true
             this.$scope.ngfFiles = uploadedFiles;
             this.$scope.files = [];
             let promises = uploadedFiles.map(file => this.convertToBase64(file));
             promises.map(p => p.then(file => this.$scope.files.push(file)))
 
             Promise.all(promises).then(() => {
+                this.$scope.isSaving = false
                 this.validateAttachments(this.$scope.files);
             }).catch(rejected => console.log(rejected))
-        }
-
-        addFiles(){
-
         }
 
         convertToBase64(file) {
