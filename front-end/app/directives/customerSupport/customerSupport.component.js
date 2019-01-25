@@ -81,12 +81,14 @@
             this.$scope.maxFiles = false
 
             if(files.length !== 0){
-                this.$scope.customerSupportForm.file.$error.maxSize =false
+                setTimeout(() =>  {
+                    this.$scope.customerSupportForm.file.$error.maxSize =false  },
+                    3000);
             }
+
             if(files.length === 3){
                 this.$scope.maxFiles = true
             }
-
 
             this.$scope.fileSizeTogether = files.map(item => item.size)
                 .reduce((prev, next) => prev + next, 0) / 1024 / 1024;
