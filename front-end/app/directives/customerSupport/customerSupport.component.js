@@ -10,7 +10,7 @@
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
             this.$scope.fileSizeTooLarge = false
-
+            this.$scope.maxFiles = false
 
             this.$scope.files = []
             this.$scope.ngfFiles = []
@@ -78,10 +78,15 @@
 
         validateAttachments(files) {
             this.$scope.fileSizeTooLarge = false
+            this.$scope.maxFiles = false
 
             if(files.length !== 0){
                 this.$scope.customerSupportForm.file.$error.maxSize =false
             }
+            if(files.length === 3){
+                this.$scope.maxFiles = true
+            }
+
 
             this.$scope.fileSizeTogether = files.map(item => item.size)
                 .reduce((prev, next) => prev + next, 0) / 1024 / 1024;

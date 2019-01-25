@@ -104,7 +104,7 @@
       <div data-ng-if="showCustomerSupportInput" class="customSupportUploadFile">
         <a type="file"
            name="file"
-           ng-disabled="fileSizeTooLarge"
+           ng-disabled="fileSizeTooLarge || maxFiles"
            ngf-select
            ngf-change="$ctrl.changeFiles(ngfFiles, customerSupportForm.file)"
            ngf-keep="true"
@@ -116,7 +116,7 @@
            accept="image/*"
            ngf-pattern="'.jpg,.png,.jpeg,.bmp,.JPG,.PNG,.GIF,.JPEG,.BMP'"
         >
-          <span data-ng-class="{'upload-disabled' : fileSizeTooLarge}" data-translate="UPLOAD_FILE_INFO"/>
+          <span data-ng-class="{'upload-disabled' : fileSizeTooLarge || maxFiles}" data-translate="UPLOAD_FILE_INFO"/>
         </a>
         <md-content class="md-padding" layout="column">
           <md-chips ng-model="files" readonly="true">
