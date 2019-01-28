@@ -197,6 +197,7 @@
             this.$scope.files = []
             this.$scope.ngfFiles = []
             this.$scope.isFileBtnVisible = false
+            this.$scope.maxFiles = false
         }
 
         handleSelectChange(subject) {

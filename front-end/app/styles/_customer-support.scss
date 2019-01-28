@@ -5,11 +5,15 @@
   min-height: 500px;
   background: white;
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 13px 19px 2px rgba(0, 0, 0, 0.14), 0px 5px 24px 4px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
+  overflow: auto;
 
-  @media screen and (max-height: 800px){
-    max-height: 600px;
+  @media screen and (max-height: $layout-height-sm) and (max-width: $layout-breakpoint-sm){
+    height: 100vh;
+    width: 320px;
     overflow: scroll;
+  }
+  @media screen and (max-width: $layout-breakpoint-xs) {
+    width: 100%
   }
 }
 
@@ -19,6 +23,10 @@
   bottom: 0;
   right: 20px;
   font-size: $font-size-15;
+
+  @media screen and (max-width: $layout-breakpoint-xs) {
+    right: 0px;
+  }
 }
 
 .margin-10 {
