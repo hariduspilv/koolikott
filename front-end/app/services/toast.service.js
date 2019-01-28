@@ -28,6 +28,9 @@ angular.module('koolikottApp')
 
             showOnRouteChange: function(content) {
                 toast = content;
+            },
+            hide: function() {
+                $mdToast.hide()
             }
         };
 

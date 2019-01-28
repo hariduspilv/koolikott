@@ -216,7 +216,11 @@ class controller extends Controller {
     toggleFullScreen() {
         this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
         toggleFullScreen();
-        if (this.$rootScope.isFullScreen) this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 8000);
+        if (this.$rootScope.isFullScreen)
+            this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
+        else {
+            this.toastService.hide()
+        }
     }
 }
 controller.$inject = [
