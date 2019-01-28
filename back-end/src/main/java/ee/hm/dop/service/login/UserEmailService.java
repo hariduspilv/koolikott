@@ -25,13 +25,13 @@ public class UserEmailService {
     private UserEmailDao userEmailDao;
 
     @Inject
-    UserAgreementDao userAgreementDao;
+    private UserAgreementDao userAgreementDao;
 
     @Inject
-    AuthenticationStateDao authenticationStateDao;
+    private AuthenticationStateDao authenticationStateDao;
 
     @Inject
-    UserDao userDao;
+    private UserDao userDao;
 
     @Inject
     private SendMailService sendMailService;

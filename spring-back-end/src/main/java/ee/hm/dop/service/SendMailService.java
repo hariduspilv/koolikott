@@ -47,6 +47,7 @@ public class SendMailService {
     }
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
+
         List<AttachmentResource> collect = customerSupport.getFiles().stream()
                 .map(a -> {
                     try {
@@ -80,7 +81,6 @@ public class SendMailService {
                 .buildEmail();
     }
 
-
     public boolean sendEmail(Email email) {
         try {
             MailerBuilder
@@ -95,6 +95,21 @@ public class SendMailService {
             logger.info("Failed to send e-mail", e);
             return false;
         }
+    }
+
+    public Email sendPinToUser(UserEmail userEmail, UserEmail email) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .to(userEmail.getUser().getFullName(), email.getEmail())
+                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
+                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
+                        BREAK +
+                        "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
+                        "Pane tähele, et kood on personaalne, ära saada seda teistele kasutajatele edasi." + BREAK +
+                        "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
+                .buildEmail();
     }
 
     public Email sendPinToUser(UserEmail userEmail) {

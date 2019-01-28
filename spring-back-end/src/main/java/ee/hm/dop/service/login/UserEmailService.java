@@ -40,7 +40,7 @@ public class UserEmailService {
             throw badRequest("User is null");
 
         if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
-            return userEmailDao.createOrUpdate(setUserAndSendMail(dbUserEmail));
+            return userEmailDao.createOrUpdate(setUserAndSendMail(dbUserEmail, userEmail));
         }
         return userEmailDao.createOrUpdate(setUserAndSendMail(userEmail));
     }
@@ -70,6 +70,17 @@ public class UserEmailService {
 
 
         return userEmailDao.createOrUpdate(dbUserEmail);
+    }
+
+    private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {
+        validateEmail(email.getEmail());
+        userEmail.setActivated(false);
+        userEmail.setActivatedAt(null);
+        userEmail.setCreatedAt(LocalDateTime.now());
+        userEmail.setPin(PinGeneratorService.generatePin());
+        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
+        userEmail.setEmail("");
+        return userEmail;
     }
 
     private UserEmail setUserAndSendMail(UserEmail userEmail) {
