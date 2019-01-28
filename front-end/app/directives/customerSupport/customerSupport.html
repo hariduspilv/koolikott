@@ -56,21 +56,6 @@
       <!-- Customer support input -->
       <div data-ng-if="showCustomerSupportInput && !userManualExists" class="padding-10">
         <span data-translate="CUSTOMER_SUPPORT_SPECIFY_QUESTION"></span>
-
-        <md-input-container ng-if="showCustomerSupportTitle" class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10">
-          <label data-translate="CUSTOMER_SUPPORT_TITLE"></label>
-          <input
-            name="title"
-            id="support-title"
-            ng-model="customerSupport.title"
-            type="text"
-            required
-            maxlength="50">
-          <div data-ng-messages="customerSupportForm.title.$error">
-            <div data-ng-message="required" data-translate="CUSTOMER_SUPPORT_TITLE_IS_MANDATORY"></div>
-          </div>
-        </md-input-container>
-
         <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10">
           <label data-translate="CUSTOMER_SUPPORT_NAME"></label>
           <input
