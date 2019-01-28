@@ -175,7 +175,7 @@
       <!-- step three buttons -->
       <div data-layout="row" data-layout-align="space-between end" data-ng-if="showUserManualsHelped"
            class="button-bottom">
-        <md-button class="md-button md-ink-ripple"
+        <md-button ng-if="finalStep" class="md-button md-ink-ripple"
                    data-ng-click="$ctrl.showCustomerSupportInput()"
                    aria-label="Ei soovi kasutusjuhendiga tutvuda"
         >
