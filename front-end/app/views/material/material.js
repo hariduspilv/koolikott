@@ -21,10 +21,6 @@ angular.module('koolikottApp')
                 if (e.code === "Escape" && $rootScope.isFullScreen)
                     $scope.toggleFullScreen();
             });
-            document.addEventListener('click', (e) => {
-                if (e.target.localName === 'a' && $rootScope.isFullScreen && !document.getElementById('sidenavAccordion'))
-                    $scope.toggleFullScreen();
-            });
 
             window.addEventListener('popstate',() => {
                 if ($rootScope.isFullScreen) {
