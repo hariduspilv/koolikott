@@ -27,6 +27,7 @@
                 tabindex="1"
                 auto-tab
                 md-autofocus
+                ng-paste="$event.preventDefault()"
               >
             </md-input-container>
             <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
@@ -38,10 +39,11 @@
                 type="text"
                 required
                 maxlength="1"
-                data-ng-disabled="isSending"
+                data-ng-disabled="isSending || !firstNum"
                 data-ng-change="checkPin()"
                 tabindex="2"
                 auto-tab
+                ng-paste="$event.preventDefault()"
               >
             </md-input-container>
             <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
@@ -53,10 +55,11 @@
                 type="text"
                 required
                 maxlength="1"
-                data-ng-disabled="isSending"
+                data-ng-disabled="isSending || !firstNum || !secondNum"
                 data-ng-change="checkPin()"
                 tabindex="3"
                 auto-tab
+                ng-paste="$event.preventDefault()"
               >
             </md-input-container>
             <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
@@ -68,10 +71,11 @@
                 type="text"
                 required
                 maxlength="1"
-                data-ng-disabled="isSending"
+                data-ng-disabled="isSending || !firstNum || !secondNum || !thirdNum"
                 data-ng-change="checkPin()"
                 tabindex="4"
                 autotab
+                ng-paste="$event.preventDefault()"
               >
             </md-input-container>
             <md-progress-circular
