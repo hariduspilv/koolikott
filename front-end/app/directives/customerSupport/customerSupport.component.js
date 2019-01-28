@@ -81,9 +81,9 @@
             this.$scope.maxFiles = false
 
             if(files.length !== 0){
-                setTimeout(() =>  {
+                this.$timeout(() =>  {
                     this.$scope.customerSupportForm.file.$error.maxSize =false  },
-                    3000);
+                    100000);
             }
 
             if(files.length === 3){
@@ -246,7 +246,8 @@
         '$window',
         '$rootScope',
         'vcRecaptchaService',
-        'translationService'
+        'translationService',
+        '$timeout'
     ]
     component('dopCustomerSupport', {
         templateUrl: 'directives/customerSupport/customerSupport.html',

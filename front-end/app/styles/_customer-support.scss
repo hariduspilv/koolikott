@@ -83,6 +83,11 @@
     > a {
       text-decoration: none;
     }
+
+  md-chips.md-default-theme .md-chips,
+  md-chips .md-chips {
+    box-shadow: none;
+  }
 }
 
 .upload-disabled {
