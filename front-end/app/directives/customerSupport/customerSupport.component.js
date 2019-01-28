@@ -19,6 +19,10 @@
             this.$scope.fileSizeTogether = 0
             this.$scope.filesCount = 0
 
+
+            this.$scope.showCustomerSupportTitle = false
+
+
             this.getUserManualTitles()
             this.$rootScope.$on('logout:success', this.clearData.bind(this));
 
@@ -127,6 +131,11 @@
 
             this.setResponse()
 
+            if(!!this.$scope.customerSupport.title) {
+
+                this.$scope.customerSupport.subject = this.$scope.customerSupport.title
+            }
+
             this.$scope.customerSupport.files = this.$scope.files
 
             this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
@@ -203,6 +212,12 @@
             this.$scope.captchaSuccess = false
             this.$scope.userManualExists = subject !== 'Muu';
             this.$scope.showCustomerSupportInput = subject === 'Muu';
+            if (this.$scope.showCustomerSupportInput) {
+                this.$scope.showCustomerSupportTitle = true
+            }
+            else{
+                this.$scope.showCustomerSupportTitle = false
+            }
         }
 
         clickOutside() {
