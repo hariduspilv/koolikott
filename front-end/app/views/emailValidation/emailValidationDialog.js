@@ -42,8 +42,8 @@
                 }
             }
 
-            document.addEventListener("keypress", (evt) => {
-                if (evt.which < 48 || evt.which > 57)
+            document.addEventListener('textInput', (evt) => {
+                if (!NUMBERS.includes(evt.data))
                     evt.preventDefault();
             });
         }
