@@ -1,3 +1,13 @@
+## e-Koolikott [1.29.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10727)
+
+### Muutunud
+* Failide üleslaadimise teavitusteksti parandused [EK-247](https://projektid.hitsa.ee/jira/browse/EK-247)
+* E-posti koodi valideerimise parandused[EK-252](https://projektid.hitsa.ee/jira/browse/EK-252)
+* Täisekraanvaate parandused [EK-258](https://projektid.hitsa.ee/jira/browse/EK-258)
+* E-posti valideerimisel koodi kleepimise keelamine [EK-254](https://projektid.hitsa.ee/jira/browse/EK-254)
+* PIN koodi saatmise parandus [EK-255](https://projektid.hitsa.ee/jira/browse/EK-255)
+* Mobiilvaate parandused [EK-257](https://projektid.hitsa.ee/jira/browse/EK-257)
+
 ## e-Koolikott [1.29.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10701)
 
 ### Muutunud

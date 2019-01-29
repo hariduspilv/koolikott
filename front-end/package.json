@@ -1,6 +1,6 @@
 {
   "name": "e-Koolikott",
-  "version": "1.29.0",
+  "version": "1.29.1",
   "dependencies": {
     "bower": "^1.6.3"
   },
